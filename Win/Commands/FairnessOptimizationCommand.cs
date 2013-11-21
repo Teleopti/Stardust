@@ -21,8 +21,10 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly ITeamBlockSizeClassifier _teamBlockSizeClassifier;
         private readonly ISelectedAgentPoints  _selectedAgentPoints;
         private readonly IShiftCategoryPoints  _shiftCategoryPoints;
+        private readonly ISwapScheduleDays _swapScheduleDays;
+        private readonly IValidateScheduleDays _validateScheduleDays;
 
-        public FairnessOptimizationCommand(IMatrixListFactory matrixListFactory, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSizeClassifier teamBlockSizeClassifier, ISelectedAgentPoints selectedAgentPoints, IShiftCategoryPoints shiftCategoryPoints)
+        public FairnessOptimizationCommand(IMatrixListFactory matrixListFactory, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSizeClassifier teamBlockSizeClassifier, ISelectedAgentPoints selectedAgentPoints, IShiftCategoryPoints shiftCategoryPoints, ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDays)
         {
             _matrixListFactory = matrixListFactory;
             _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
@@ -30,6 +32,8 @@ namespace Teleopti.Ccc.Win.Commands
             _teamBlockSizeClassifier = teamBlockSizeClassifier;
             _selectedAgentPoints = selectedAgentPoints;
             _shiftCategoryPoints = shiftCategoryPoints;
+            _swapScheduleDays = swapScheduleDays;
+            _validateScheduleDays = validateScheduleDays;
         }
 
         public void Execute(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPerson, IList<IScheduleDay> scheduleDays, IList<IShiftCategory> shiftCategories, ISchedulingOptions schedulingOptions)
@@ -41,7 +45,7 @@ namespace Teleopti.Ccc.Win.Commands
             _selectedAgentPoints.AssignAgentPoints(selectedPerson );
             _shiftCategoryPoints.AssignShiftCategoryPoints(shiftCategories );
             IDetermineTeamBlockPriority determineTeamBlockPriority = new DetermineTeamBlockPriority(_selectedAgentPoints,_shiftCategoryPoints );
-            ITeamBlockListSwapAnalyzer teamBlockListSwapAnalyzer = new TeamBlockListSwapAnalyzer(determineTeamBlockPriority );
+            ITeamBlockListSwapAnalyzer teamBlockListSwapAnalyzer = new TeamBlockListSwapAnalyzer(determineTeamBlockPriority ,_swapScheduleDays,_validateScheduleDays);
             var teamBlockFairnessOptimizer = new TeamBlockFairnessOptimizationService(constructTeamBlock, _teamBlockSizeClassifier,
                                                                             teamBlockListSwapAnalyzer);
             teamBlockFairnessOptimizer.Exectue(allVisibleMatrixes, selectedPeriod, selectedPerson, schedulingOptions, shiftCategories);

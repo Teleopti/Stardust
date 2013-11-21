@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         private bool validateBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
         {
-            return _validateScheduleDay.Validate(higherPriorityBlock,lowestPriorityBlock)
+            return _validateScheduleDay.Validate(higherPriorityBlock, lowestPriorityBlock);
         }
     }
 }
