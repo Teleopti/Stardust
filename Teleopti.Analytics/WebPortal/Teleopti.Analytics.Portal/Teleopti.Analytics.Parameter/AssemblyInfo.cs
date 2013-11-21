@@ -11,7 +11,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Teleopti AB")]
 [assembly: AssemblyProduct("Teleopti Analytics")]
-[assembly: AssemblyCopyright("Copyright © Teleopti AB 2007")]
+[assembly: AssemblyCopyright("Copyright Â© Teleopti AB 2007")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]		
 
