@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (restriction == null) return null;
 		    if (shiftList.Count == 0)
 				return shiftList;
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
+            var timeZone = TimeZoneInfo.Utc;
 
 			var workShiftsWithinPeriod = shiftList;
 
