@@ -39,7 +39,7 @@ define([
 					for (var j = 0; j < schedules.length; j++) {
 						if (currentPersons[i].Id == schedules[j].PersonId) {
 							schedules[j].Date = date;
-							currentPersons[i].AddData(schedules[j], personSchedule.TimeLine); //personSchedule.SelectedGroup());
+							currentPersons[i].AddData(schedules[j], personSchedule.TimeLine);
 						}
 					}
 				}
@@ -75,9 +75,16 @@ define([
 				groupId: options.groupid
 			},
 			success: function (people, textStatus, jqXHR) {
-				var newItems = ko.utils.arrayMap(people, function (s) {
+
+				var newPeople = lazy(people)
+						.filter(function (x) {
+							return options.personid != x.Id;
+						});
+
+				var newItems = ko.utils.arrayMap(newPeople.toArray(), function (s) {
 					return new personViewModel(s);
 				});
+				
 				personSchedule.AddPersonsToGroup(newItems);
 				options.success();
 			}
@@ -96,27 +103,19 @@ define([
 
 			});
 			
-			personSchedule.SelectedGroup.subscribe(function () {
-				if (personSchedule.Loading())
-					return;
-				if (!options.action)
-					navigation.GotoPersonSchedule(personSchedule.SelectedGroup(), options.personid, options.date);
-				else
-					navigation.GotoPersonScheduleWithAction(personSchedule.SelectedGroup(), options.personid, options.date, options.action);
-			});
-
 			ko.applyBindings(personSchedule, options.bindingElement);
-
 		},
 
 		display: function (options) {
 			var date = moment(options.date, 'YYYYMMDD');
 
 			personSchedule.Loading(true);
+			
 			personSchedule.Id(options.personid != undefined ? options.personid : options.id);
 			personSchedule.Date(date);
 
 			var deferred = $.Deferred();
+			
 			var loadPersonsAndSchedules = function () {
 				var currentGroup = options.groupid;
 				if (!currentGroup) {
@@ -128,6 +127,7 @@ define([
 				loadPersons({
 					groupid: options.groupid,
 					date: options.date,
+					personid: options.personid,
 					success: function () {
 						loadSchedules({
 							groupid: options.groupid,
@@ -141,8 +141,6 @@ define([
 				});
 			};
 
-			loadPersonsAndSchedules();
-
 			subscriptions.subscribePersonSchedule(
 				    options.personid ? options.personid : options.id,
 				    helpers.Date.ToServer(personSchedule.Date()),
@@ -151,34 +149,16 @@ define([
 
 				    	data.Id = options.personid ? options.personid : options.id;
 				    	data.Date = personSchedule.Date();
-					    
-					    var person;
-					    
-					    if (personSchedule.PersonsInGroup().length > 0) {
-					    	var existingPerson = lazy(personSchedule.PersonsInGroup())
-									.select(function (x) {
-										if (x.Id == data.Id) {
-											return x;
-										}
-									});
-					    	person = existingPerson.first();
-						    
-						    if (!person)
-						    	person = new personViewModel(data);
-							else{
-						    	person.ClearData();
-						    }
-						    person.AddData(data, personSchedule.TimeLine);
-							
-					    } else {
-					    	person = new personViewModel(data);
-						    person.AddData(data, personSchedule.TimeLine);
-						    personSchedule.AddPersonsToGroup([person]);
-					    }
 
-				    	personSchedule.SetData(data, options.groupid);
-				    	personSchedule.Loading(false);
-				    	deferred.resolve();
+				    	personSchedule.PersonsInGroup([]);
+					    
+						var person = new personViewModel(data);
+						person.AddData(data, personSchedule.TimeLine);
+						personSchedule.AddPersonsToGroup([person]);
+					    
+						personSchedule.SetData(data, options.groupid);
+					    
+						loadPersonsAndSchedules();
 				    }
 			    );
 

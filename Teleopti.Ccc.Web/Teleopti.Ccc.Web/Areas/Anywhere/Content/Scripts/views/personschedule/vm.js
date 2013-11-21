@@ -74,8 +74,6 @@ define([
 			return 0;
 		});
 
-		this.SelectedGroup = ko.observable();
-
 		this.Absences = ko.observableArray();
 		
 		this.TimeLine = new timeLineViewModel(this.PersonsInGroup); 
