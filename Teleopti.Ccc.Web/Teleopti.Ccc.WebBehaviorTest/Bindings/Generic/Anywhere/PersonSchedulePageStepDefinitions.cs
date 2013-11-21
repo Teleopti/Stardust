@@ -93,16 +93,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeTheAddActivityFormWith(Table table)
 		{
 			var form = table.CreateInstance<AddActivityFormInfo>();
-			Browser.Interactions.AssertInputValueUsingJQuery(".add-activity-form .start-time", form.StartTime.ToShortTimeString(DataMaker.Me().Culture));
-			Browser.Interactions.AssertInputValueUsingJQuery(".add-activity-form .end-time", form.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".activity-form .start-time", form.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".activity-form .end-time", form.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[Then(@"I should see the add intraday absence form with")]
 		public void ThenIShouldSeeTheAddIntradayAbsenceFormWith(Table table)
 		{
 			var form = table.CreateInstance<AddIntradayAbsenceFormInfo>();
-			Browser.Interactions.AssertInputValueUsingJQuery(".add-intraday-absence-form .start-time", form.StartTime.ToShortTimeString(DataMaker.Me().Culture));
-			Browser.Interactions.AssertInputValueUsingJQuery(".add-intraday-absence-form .end-time", form.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".intraday-absence-form .start-time", form.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".intraday-absence-form .end-time", form.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[Then(@"I should see the add full day absence form")]
@@ -114,13 +114,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see the add intraday absence form")]
 		public void ThenIShouldSeeTheAddIntradayAbsenceForm()
 		{
-			Browser.Interactions.AssertExists(".add-intraday-absence-form");
+			Browser.Interactions.AssertExists(".intraday-absence-form");
 		}
 
 		[Then(@"I should see the add activity form")]
 		public void ThenIShouldSeeTheAddctivityForm()
 		{
-			Browser.Interactions.AssertExists(".add-activity-form");
+			Browser.Interactions.AssertExists(".activity-form");
 		}
 
 		[When(@"I input these full day absence values")]
@@ -144,9 +144,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var values = table.CreateInstance<AddIntradayAbsenceFormInfo>();
 
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".add-intraday-absence-form .activity-type", values.Absence);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".add-intraday-absence-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".add-intraday-absence-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".intraday-absence-form .activity-type", values.Absence);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".intraday-absence-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".intraday-absence-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[When(@"I input these add activity values")]
@@ -154,9 +154,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var values = table.CreateInstance<AddActivityFormInfo>();
 
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".add-activity-form .activity-type", values.Activity);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".add-activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".add-activity-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".activity-form .activity-type", values.Activity);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".activity-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}
 
 		[Then(@"I should see an absence in the absence list with")]
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should not be able to select the absence '(.*)'")]
 		public void ThenIShouldBeAbleToSelectTheAbsence(string absenceName)
 		{
-			Browser.Interactions.AssertNotExists(".add-intraday-absence-form .absence-type", ".add-intraday-absence-form .absence-type:contains('" + absenceName + "')");
+			Browser.Interactions.AssertNotExists(".intraday-absence-form .absence-type", ".intraday-absence-form .absence-type:contains('" + absenceName + "')");
 		}
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
