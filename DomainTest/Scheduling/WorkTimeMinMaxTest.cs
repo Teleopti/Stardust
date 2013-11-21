@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifyCombine()
         {
         	var cat1 = new ShiftCategory("itt");
-        	var cat2 = new ShiftCategory("två");
+            var cat2 = new ShiftCategory("tvÃ¥");
         	var timeSpan = TimeSpan.FromHours(14);
         	var poss1 = new PossibleStartEndCategory {ShiftCategory = cat1, StartTime = timeSpan, EndTime = timeSpan.Add(TimeSpan.FromHours(8))};
         	var poss2 = new PossibleStartEndCategory {ShiftCategory = cat1, StartTime = timeSpan, EndTime = timeSpan.Add(TimeSpan.FromHours(8))};

@@ -4878,9 +4878,6 @@
   <data name="PersonPeriodCouldNotLoad" xml:space="preserve">
     <value>É necessário adicionar Contratos, Agendas de Contrato, Percentuais de Tempo Parcial e Equipes na página de Configurações para que seja possível carregar um Período da Pessoa.</value>
   </data>
-  <data name="AdherenceReportSettingCalculationMethodReadyTimeVSContractScheduleTime" xml:space="preserve">
-    <value>Tempo Disponível vs. Tempo Agendado em Contrato</value>
-  </data>
   <data name="ErrorMessageFromToTimeIsInvalidParameter" xml:space="preserve">
     <value>Erro! De {0} a {1} não é um intervalo válido.</value>
   </data>

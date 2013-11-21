@@ -9,13 +9,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     internal class StateManager : State
     {
 
-		#region Fields (1) 
+		#region Fields (1)
 
         private ISessionData _sessData;
 
-		#endregion Fields 
+		#endregion Fields
 
-		#region Properties (1) 
+		#region Properties (1)
 
         /// <summary>
         /// Gets the session data for logged on personItem.
@@ -26,12 +26,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             get { return _sessData; }
         }
 
-		#endregion Properties 
+		#endregion Properties
 
-		#region Methods (2) 
+		#region Methods (2)
 
 
-		// Public Methods (2) 
+		// Public Methods (2)
 
         /// <summary>
         /// Clears data kept for logged in session/personItem
@@ -50,8 +50,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             _sessData = sessionData;
         }
 
-
-		#endregion Methods 
-
+		#endregion Methods
     }
 }

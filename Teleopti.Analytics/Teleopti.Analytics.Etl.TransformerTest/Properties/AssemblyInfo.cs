@@ -12,7 +12,7 @@ using System.Security.Permissions;
 [assembly : AssemblyConfiguration("")]
 [assembly : AssemblyCompany("")]
 [assembly : AssemblyProduct("RaptorTransformerTest")]
-[assembly : AssemblyCopyright("Copyright ©  2008")]
+[assembly : AssemblyCopyright("Copyright Â© 2008")]
 [assembly : AssemblyTrademark("")]
 [assembly : AssemblyCulture("")]
 

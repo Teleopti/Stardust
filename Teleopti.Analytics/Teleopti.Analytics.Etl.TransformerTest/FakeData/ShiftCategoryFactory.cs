@@ -9,17 +9,17 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
     public sealed class ShiftCategoryFactory
     {
-        #region Constructors (1) 
+        #region Constructors (1)
 
         private ShiftCategoryFactory()
         {
         }
 
-        #endregion Constructors 
+        #endregion Constructors
 
-        #region Methods (2) 
+        #region Methods (2)
 
-        // Public Methods (1) 
+        //Â Public Methods (1)
 
         public static IList<IShiftCategory> CreateShiftCategoryCollection()
         {
@@ -38,8 +38,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             return retList;
         }
 
-
-        // Private Methods (1) 
+        // Private Methods (1)
 
         private static IShiftCategory CreateShiftCategory(string name, string shortName, Color displayColor)
         {
@@ -52,6 +51,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             return sc;
         }
 
-        #endregion Methods 
+        #endregion Methods
     }
 }

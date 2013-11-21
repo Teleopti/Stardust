@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 	        treeViewSkills.Nodes.Add(root);
 	        foreach (var skill in _skills)
 	        {
+				  if(!skill.WorkloadCollection.Any()) continue;
 		        var skillNode = new TreeNodeAdv(skill.Name);
 		        root.Nodes.Add(skillNode);
 		        foreach (var workLoad in skill.WorkloadCollection)

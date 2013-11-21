@@ -374,6 +374,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             }
             set
             {
+	            if (!(value >= TimeSpan.Zero)) return;
                 ITask oldTask = new Task(_task.Tasks, _task.AverageTaskTime, _task.AverageAfterTaskTime);
                 _task = new Task(_task.Tasks,_task.AverageTaskTime, ApplyMax(value));
                 OnTaskPeriodChange(oldTask);
@@ -397,6 +398,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             }
             set
             {
+	            if (!(value >= TimeSpan.Zero)) return;
                 ITask oldTask = new Task(_task.Tasks, _task.AverageTaskTime, _task.AverageAfterTaskTime);
                 _task = new Task(_task.Tasks,ApplyMax(value),_task.AverageAfterTaskTime);
                 OnTaskPeriodChange(oldTask);
@@ -688,6 +690,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Template
             }
             set
             {
+	            if (!(value >= 0)) return;
                 Task oldTask = new Task(_task.Tasks, _task.AverageTaskTime, _task.AverageAfterTaskTime);
                 _task = new Task(value, _task.AverageTaskTime, _task.AverageAfterTaskTime);
                 OnTaskPeriodChange(oldTask);
