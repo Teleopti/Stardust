@@ -405,6 +405,7 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockResctrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregatorTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\SameShiftCategoryBlockSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
@@ -427,6 +428,7 @@
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSingleDaySchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />

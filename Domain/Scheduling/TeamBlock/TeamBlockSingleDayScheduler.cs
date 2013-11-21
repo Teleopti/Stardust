@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 											   IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
 
 	public class TeamBlockSingleDayScheduler : ITeamBlockSingleDayScheduler
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 									  IList<IPerson> selectedPersons, DateOnly day,
 									  IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod)
 		{
+			if (roleModelShift == null) return false;
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamBlockInfo.TeamInfo, day);
 			if (isTeamBlockScheduledForSelectedPersons(selectedPersons, day, teamBlockSingleDayInfo))
 				return true;
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (_cancelMe)
 					return false;
 
-				if (!_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
+				if (!_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions) && !_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 
@@ -80,15 +82,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (bestShiftProjectionCache == null) break;
 				}
 
-				_teamScheduling.DayScheduled += onDayScheduled;
+				_teamScheduling.DayScheduled += OnDayScheduled;
 				_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, selectedPeriod);
-				_teamScheduling.DayScheduled -= onDayScheduled;
+				_teamScheduling.DayScheduled -= OnDayScheduled;
 			}
 
 			return isTeamBlockScheduledForSelectedPersons(selectedPersons, day, teamBlockSingleDayInfo);
 		}
 
-		private void onDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
 			if (temp != null)

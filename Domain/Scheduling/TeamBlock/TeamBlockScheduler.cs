@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										 IList<IPerson> selectedPersons)
 		{
 
-			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(schedulingOptions))
+			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(schedulingOptions) ||
+				_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(schedulingOptions))
 			{
 				_sameShiftCategoryBlockScheduler.DayScheduled += OnDayScheduled;
 				bool successful = _sameShiftCategoryBlockScheduler.Schedule(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);

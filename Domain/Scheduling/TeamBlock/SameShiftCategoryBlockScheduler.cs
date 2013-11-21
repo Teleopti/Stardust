@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                              DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
+		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
 	public class SameShiftCategoryBlockScheduler : ISameShiftCategoryBlockScheduler
 	{
@@ -43,18 +44,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				var roleModelShift = _roleModelSelector.Select(teamBlockInfo, dateOnly, selectedPersons.First(),  schedulingOptions);
 				if (roleModelShift == null)
+				{
+					clearBlockedShiftCategories(schedulingOptions);
 					return false;
+				}
 				var shiftCategoryToBeBlocked = roleModelShift.TheWorkShift.ShiftCategory;
 				var selectedBlockDays = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
 				foreach (var day in selectedBlockDays)
 				{
 					if (_cancelMe)
 					{
+						clearBlockedShiftCategories(schedulingOptions);
 						return false;
 					}
-					_singleDayScheduler.DayScheduled += onDayScheduled;
+					_singleDayScheduler.DayScheduled += OnDayScheduled;
 					_singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod);
-					_singleDayScheduler.DayScheduled -= onDayScheduled;
+					_singleDayScheduler.DayScheduled -= OnDayScheduled;
 				}
 
 				allSelectedDaysAreScheduled = selectedBlockDays.All(x => _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons( teamBlockInfo, x,selectedPersons));
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				schedulingOptions.NotAllowedShiftCategories.Add(shiftCategoryToBeBlocked);
 		}
 
-		private void onDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
 			if (temp != null)
