@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -51,16 +50,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 									  IList<IPerson> selectedPersons, DateOnly day,
 									  IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod)
 		{
-			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamBlockInfo.TeamInfo, day);
-			if (isTeamBlockScheduledForSelectedPersons(selectedPersons, day, teamBlockSingleDayInfo))
-				return true;
+			var teamInfo = teamBlockInfo.TeamInfo;
+			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
+			
 			var bestShiftProjectionCache = roleModelShift;
-			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Where(selectedPersons.Contains);
+			var groupMembers = teamInfo.GroupPerson.GroupMembers;
+			var selectedTeamMembers = new List<IPerson>();
+			foreach (var groupMember in groupMembers)
+			{
+				if(selectedPersons.Contains(groupMember))
+					selectedTeamMembers.Add(groupMember);
+			}
+			if (isTeamBlockScheduledForselectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
+				return true;
 
 			foreach (var person in selectedTeamMembers)
 			{
 				if (_cancelMe)
 					return false;
+
+				if (isTeamBlockScheduledForselectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo))
+					continue;
 
 				if (!_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
 				{
@@ -85,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				_teamScheduling.DayScheduled -= onDayScheduled;
 			}
 
-			return isTeamBlockScheduledForSelectedPersons(selectedPersons, day, teamBlockSingleDayInfo);
+			return isTeamBlockScheduledForselectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
 		}
 
 		private void onDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
@@ -98,9 +108,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_cancelMe = e.Cancel;
 		}
 
-		private bool isTeamBlockScheduledForSelectedPersons(IList<IPerson> selectedPersons, DateOnly day, ITeamBlockInfo teamBlockSingleDayInfo)
+		private bool isTeamBlockScheduledForselectedTeamMembers(IList<IPerson> selectedTeamMembers, DateOnly day, ITeamBlockInfo teamBlockSingleDayInfo)
 		{
-			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day, selectedPersons);
+			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day, selectedTeamMembers);
 		}
 	}
 }

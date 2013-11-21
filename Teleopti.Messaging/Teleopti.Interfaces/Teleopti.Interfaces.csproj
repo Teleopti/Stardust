@@ -179,6 +179,7 @@
     <Compile Include="Domain\IProvideCustomChangeInfo.cs" />
     <Compile Include="Domain\IProxyForId.cs" />
     <Compile Include="Domain\IRelativeDailyDifferencesByAllSkillsExtractor.cs" />
+    <Compile Include="Domain\IRemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="Domain\IReplaceLayerInSchedule.cs" />
     <Compile Include="Domain\IResourceCalculateDelayer.cs" />
     <Compile Include="Domain\IRestrictionCombiner.cs" />
@@ -273,7 +274,6 @@
     <Compile Include="Domain\IScheduleMatrixOriginalStateContainer.cs" />
     <Compile Include="Domain\IScheduleOptimizationService.cs" />
     <Compile Include="Domain\ISchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
-    <Compile Include="Domain\IBestBlockShiftCategoryFinder.cs" />
     <Compile Include="Domain\IBlockSchedulingService.cs" />
     <Compile Include="Domain\IFairnessValueCalculator.cs" />
     <Compile Include="Domain\IPreSchedulingStatusChecker.cs" />
@@ -316,7 +316,6 @@
     <Compile Include="Domain\IShiftCategoryFairnessFactors.cs" />
     <Compile Include="Domain\IShiftCategoryFairnessShiftValueCalculator.cs" />
     <Compile Include="Domain\IShiftCategoryLimitation.cs" />
-    <Compile Include="Domain\IRemoveShiftCategoryOnBestDateService.cs" />
     <Compile Include="Domain\IShiftCategoryLimitationChecker.cs" />
     <Compile Include="Domain\IShiftCreatorService.cs" />
     <Compile Include="Domain\IShiftFromMasterActivityService.cs" />
