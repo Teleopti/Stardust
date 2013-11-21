@@ -52,7 +52,7 @@ Scenario: View staffing metrics
 	| Service level percentage | 80           |
 	| Open from                | 09:00        |
 	| Open to                  | 16:00        |
-	When I view team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
+	When I view group schedules staffing metrics for '2013-04-09' and 'Direct Sales'
 	Then I should see staffing metrics for skill 'Direct Sales' with
 	| Field                   | Value  |
 	| Forecasted hours        | 11.50  |
@@ -84,7 +84,7 @@ Scenario: Push staffing metrics changes
 	| Field | Value    |
 	| Name  | Vacation |
 	| Color | Red      |
-	When I view team schedules staffing metrics for '2013-09-09' and 'Direct Sales'
+	When I view group schedules staffing metrics for '2013-09-09' and 'Direct Sales'
 	Then I should see staffing metrics for skill 'Direct Sales' with
 	| Field                   | Value  |
 	| Forecasted hours        | 11.50  |
@@ -115,7 +115,7 @@ Scenario: View skill selection
 	| Field    | Value         |
 	| Skill    | Channel Sales |
 	| Date     | 2013-04-09    |
-	When I view team schedules staffing metrics for '2013-04-09'
+	When I view group schedules staffing metrics for '2013-04-09'
 	Then I should be able to select skills
 	| Skill         |
 	| Direct Sales  |
@@ -139,7 +139,7 @@ Scenario: Remember skill selection when changing date
 	| Field | Value        |
 	| Skill | Direct Sales |
 	| Date  | 2013-04-10   |
-	And I am viewing team schedules staffing metrics for '2013-04-09' and 'Direct Sales'
+	And I am viewing group schedules staffing metrics for '2013-04-09' and 'Direct Sales'
 	When  I select date '2013-04-10'
 	Then I should see staffing metrics for skill 'Direct Sales'
 
@@ -166,6 +166,6 @@ Scenario: Remember skill selection when changing team
 	| Access to Anywhere         | true                          |
 	| View unpublished schedules | true                          |
 	And I have the role 'Anywhere Team Green And Other'	
-	And I am viewing team schedules staffing metrics for 'Team green' and '2013-04-09' and 'Direct Sales'
+	And I am viewing group schedules staffing metrics for 'Team green' and '2013-04-09' and 'Direct Sales'
 	When I select team 'Team other'
 	Then I should see staffing metrics for skill 'Direct Sales'
