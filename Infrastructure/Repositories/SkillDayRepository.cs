@@ -330,7 +330,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return skillDay;
 		}
 
-	    
+		public IEnumerable<ISkillDay> FindUpdatedSince(IScenario scenario,DateTime lastCheck)
+		{
+			return Session.CreateCriteria<SkillDay>("sd")
+				.Add(Restrictions.Eq("sd.Scenario", scenario))
+				.Add(Restrictions.Gt("sd.UpdatedOn",lastCheck))
+	            .SetFetchMode("sd.Skill", FetchMode.Join)
+				.CreateAlias("sd.Skill","skill")
+				.Add(Restrictions.Not(Property.ForName("skill.class").Eq(typeof(ChildSkill))))
+				.List<ISkillDay>();
+		}
 
 	    private static object wrapMultiCriteria(IMultiCriteria multi)
         {
