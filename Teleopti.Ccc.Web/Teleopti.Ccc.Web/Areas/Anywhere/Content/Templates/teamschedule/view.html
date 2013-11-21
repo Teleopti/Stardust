@@ -136,8 +136,10 @@
 									<!-- ko with: $parent.ShiftMenu -->
 									<div class="btn-group">
 										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
-										<a href="#" class="btn btn-small add-absence" data-bind="click: $data.AddAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
-										<a href="#" class="btn btn-small add-activity" data-bind="click: $data.AddActivity"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
+										<!-- ko if: false -->
+											<a href="#" class="btn btn-small add-intraday-absence" data-bind="click: $data.AddAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
+											<a href="#" class="btn btn-small add-activity" data-bind="click: $data.AddActivity"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
+										<!-- /ko -->
 										<a href="#" class="btn btn-small remove-absence" data-bind="click: $data.RemoveAbsence"><i class="icon-minus"></i><span data-bind="	text: $root.Resources.Absence"></span></a>
 									</div>
 									<!-- /ko -->
