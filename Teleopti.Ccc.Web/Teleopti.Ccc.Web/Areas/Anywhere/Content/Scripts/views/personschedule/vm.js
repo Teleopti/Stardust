@@ -118,6 +118,10 @@ define([
 		this.AddAbsenceForm = new addAbsenceFormViewModel();
 		this.AddingAbsence = ko.observable(false);
 
+		this.DisplayShiftMenu = ko.computed(function() {
+			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingAbsence();
+		});
+
 		this.DisplayDescriptions = ko.observable(false);
 		this.ToggleDisplayDescriptions = function () {
 			self.DisplayDescriptions(!self.DisplayDescriptions());
