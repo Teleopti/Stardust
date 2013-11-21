@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	{
 		public Task Execute()
 		{
+			BundleTable.Bundles.IgnoreList.Clear();
 			BundleTable.Bundles.IgnoreList.Ignore("*Tests.js");
 
 			registerMyTimeScripts();
@@ -22,8 +23,9 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerMyTimeScripts()
 		{
 			var cssBundle = new StyleBundle("~/MyTimeCss")
+				//using min file here due to this bug http://aspnetoptimization.codeplex.com/workitem/107
+				.Include("~/Content/bootstrap/bootstrap.min.css", new CssRewriteUrlTransform())
 				.Include(
-					"~/Content/bootstrap/bootstrap.css",
 					"~/Content/moment-datepicker/datepicker.css",
 					"~/Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css",
 					"~/Content/Scripts/jquery.qtip.css",
