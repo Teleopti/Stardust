@@ -47,7 +47,6 @@
 						<tr>
 							<th></th>
 							<th></th>
-							<th class="contract-time"><span data-bind="text: Resources.ContractTime"></span></th>
 						</tr>
 					</thead>
 					
@@ -82,14 +81,11 @@
 									<!-- /ko -->
 								</div>
 							</td>
-							<td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
 						</tr>
 						
 						<tr data-bind="if: DisplayShiftMenu">
 							<td class="shift-menu-background person-name-column"></td>
-							<td class="shift-menu-background schedule-column" colspan="2">
-								
-								
+							<td class="shift-menu-background schedule-column">
 								<div class="row-fluid space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
 									<div class="span3">
 										<!--<blockquote>-->
@@ -176,17 +172,16 @@
 									
 								</div>
 							</td>
-							
 						</tr>
 						
 
-						<tr >
-							<td colspan="3" style="background-color: white;" >
+						<!-- ko if: AddingActivity -->
+						
+						<tr>
+							<td colspan="2" style="background-color: white;" >
 								<br />
 							</td>
 						</tr>
-						
-						<!-- ko if: AddingActivity -->
 						
 						<!-- ko foreach: PersonsInGroup -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">
@@ -224,7 +219,6 @@
 									<!-- /ko -->
 								</div>
 							</td>
-							<td class="contract-time contract-time-column" data-bind="text: ContractTime"></td>
 						</tr>
 						<!-- /ko -->
 						<!-- /ko -->

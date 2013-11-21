@@ -34,12 +34,14 @@ define([
 				var currentPersons = personSchedule.PersonsInGroup();
 
 				for (var i = 0; i < currentPersons.length; i++) {
-					currentPersons[i].ClearData();
+					if (currentPersons[i].Id != options.personid) {
+						currentPersons[i].ClearData();
 
-					for (var j = 0; j < schedules.length; j++) {
-						if (currentPersons[i].Id == schedules[j].PersonId) {
-							schedules[j].Date = date;
-							currentPersons[i].AddData(schedules[j], personSchedule.TimeLine);
+						for (var j = 0; j < schedules.length; j++) {
+							if (currentPersons[i].Id == schedules[j].PersonId) {
+								schedules[j].Date = date;
+								currentPersons[i].AddData(schedules[j], personSchedule.TimeLine);
+							}
 						}
 					}
 				}
@@ -132,6 +134,7 @@ define([
 						loadSchedules({
 							groupid: options.groupid,
 							date: options.date,
+							personid: options.personid,
 							success: function () {
 								personSchedule.Loading(false);
 								deferred.resolve();
@@ -158,7 +161,12 @@ define([
 					    
 						personSchedule.SetData(data, options.groupid);
 					    
-						loadPersonsAndSchedules();
+						if (personSchedule.AddingActivity()) {
+							loadPersonsAndSchedules();
+						} else {
+							personSchedule.Loading(false);
+							deferred.resolve();
+						}
 				    }
 			    );
 

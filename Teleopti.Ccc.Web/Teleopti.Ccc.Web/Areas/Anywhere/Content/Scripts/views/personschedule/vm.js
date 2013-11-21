@@ -82,7 +82,7 @@ define([
 			if (self.SelectedPerson()) {
 				return self.SelectedPerson().Shifts()[0];
 			}
-			return "";
+			return undefined;
 		});
 		this.IsShift = ko.computed(function () {
 			if(self.Shift())
@@ -94,10 +94,13 @@ define([
 			if (self.SelectedPerson()) {
 				return self.SelectedPerson().DayOffs()[0];
 			}
-			return "";
+			return undefined;
 		});
+		
 		this.IsDayOff = ko.computed(function () {
-			return self.DayOff();
+			if (self.DayOff())
+				return true;
+			return false;
 		});
 		
 		this.FormStartPixel = ko.computed(function () {
