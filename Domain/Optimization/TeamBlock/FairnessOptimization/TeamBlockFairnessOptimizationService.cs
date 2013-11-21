@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -8,26 +9,25 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
-    public interface ITeamBlockFairnessOptimizer
+    public interface ITeamBlockFairnessOptimizationService
     {
         void Exectue(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
                                      IList<IPerson> selectedPersons, 
                                      ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories);
     }
 
-    public class TeamBlockFairnessOptimizer : ITeamBlockFairnessOptimizer
+    public class TeamBlockFairnessOptimizationService : ITeamBlockFairnessOptimizationService
     {
         private readonly IConstructTeamBlock _constructTeamBlock;
-        private readonly IDetermineTeamBlockPriority _determineTeamBlockPriority;
         private readonly ITeamBlockSizeClassifier _teamBlockSizeClassifier;
+        private readonly ITeamBlockListSwapAnalyzer _teamBlockListSwapAnalyzer;
 
-        public TeamBlockFairnessOptimizer(IConstructTeamBlock constructTeamBlock,
-                                          ITeamBlockSizeClassifier teamBlockSizeClassifier,
-                                          IDetermineTeamBlockPriority determineTeamBlockPriority)
+        public TeamBlockFairnessOptimizationService(IConstructTeamBlock constructTeamBlock,
+                                          ITeamBlockSizeClassifier teamBlockSizeClassifier, ITeamBlockListSwapAnalyzer teamBlockListSwapAnalyzer)
         {
             _constructTeamBlock = constructTeamBlock;
             _teamBlockSizeClassifier = teamBlockSizeClassifier;
-            _determineTeamBlockPriority = determineTeamBlockPriority;
+            _teamBlockListSwapAnalyzer = teamBlockListSwapAnalyzer;
         }
 
         public void Exectue(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
@@ -39,44 +39,37 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                                                                                      schedulingOptions);
             HashSet<IList<ITeamBlockInfo>> listOfMultipleLengthBlocks =
                 _teamBlockSizeClassifier.SplitTeamBlockInfo(listOfAllTeamBlock);
-            foreach (var teamBlockList in listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true))
-            {
-                analyzeListForSwapping(teamBlockList, shiftCategories);
-            }
+            Parallel.ForEach(listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true), teamBlockList => _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories));
+            //foreach (var teamBlockList in listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true))
+            //{
+            //    _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories);
+            //}
         }
 
-        private void analyzeListForSwapping(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
-        {
-            var teamBlockPriorityDefinition = new TeamBlockPriorityDefinitionInfo( _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories));
-            foreach (int higherPriority in teamBlockPriorityDefinition.HighToLowAgentPriorityList)
-            {
-                foreach (int lowerPriority in teamBlockPriorityDefinition.LowToHighAgentPriorityList)
-                {
-                    ITeamBlockInfo higherPriorityBlock = teamBlockPriorityDefinition.BlockOnAgentPriority(higherPriority);
-                    int lowestShiftCategoryPrioirty =
-                        teamBlockPriorityDefinition.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
-                    if (
-                        teamBlockPriorityDefinition.HighToLowShiftCategoryPriorityList.Any(
-                            higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPrioirty))
-                    {
-                        ITeamBlockInfo lowestPriorityBlock =
-                            teamBlockPriorityDefinition.BlockOnAgentPriority(lowerPriority);
-                        if (validateBlock(higherPriorityBlock, lowestPriorityBlock))
-                            swapBlock(higherPriorityBlock, lowestPriorityBlock);
-                    }
-                }
-            }
-        }
+        //private void analyzeListForSwapping(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
+        //{
+        //    var teamBlockPriorityDefinition = new TeamBlockPriorityDefinitionInfo( _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories));
+        //    foreach (int higherPriority in teamBlockPriorityDefinition.HighToLowAgentPriorityList)
+        //    {
+        //        foreach (int lowerPriority in teamBlockPriorityDefinition.LowToHighAgentPriorityList)
+        //        {
+        //            ITeamBlockInfo higherPriorityBlock = teamBlockPriorityDefinition.BlockOnAgentPriority(higherPriority);
+        //            int lowestShiftCategoryPrioirty =
+        //                teamBlockPriorityDefinition.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
+        //            if (
+        //                teamBlockPriorityDefinition.HighToLowShiftCategoryPriorityList.Any(
+        //                    higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPrioirty))
+        //            {
+        //                ITeamBlockInfo lowestPriorityBlock =
+        //                    teamBlockPriorityDefinition.BlockOnAgentPriority(lowerPriority);
+        //                if (validateBlock(higherPriorityBlock, lowestPriorityBlock))
+        //                    swapBlock(higherPriorityBlock, lowestPriorityBlock);
+        //            }
+        //        }
+        //    }
+        //}
 
-        private void swapBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
-        {
-            
-        }
-
-        private bool validateBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
-        {
-            return true;
-        }
+        
 
         //void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
         //{
