@@ -66,6 +66,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
+		public void VerifyNullPersonAssignmentCollection()
+		{
+			_scheduleDay.Stub(x => x.PersonAssignmentCollection())
+				.Return(null);
+			IEffectiveRestriction result =
+					_target.Combine(_scheduleDay, _restriction);
+			Assert.IsNotNull(result);
+			Assert.AreSame(_restriction, _restriction);
+		}
+
+		[Test]
 		public void VerifyAddEffectiveRestriction()
 		{
 			IPersonAssignment personAssignment = _mocks.StrictMock<IPersonAssignment>();
