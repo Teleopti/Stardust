@@ -176,7 +176,6 @@ define([
 						    personSchedule.AddPersonsToGroup([person]);
 					    }
 
-				    	//personSchedule.ClearData();
 				    	personSchedule.SetData(data, options.groupid);
 				    	personSchedule.Loading(false);
 				    	deferred.resolve();
