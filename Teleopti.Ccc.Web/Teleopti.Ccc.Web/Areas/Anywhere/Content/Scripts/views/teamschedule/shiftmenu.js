@@ -23,7 +23,7 @@ define([
 		};
 		
 		this.RemoveAbsence = function () {
-			navigation.GotoPersonScheduleAddAbsenceForm(groupid, personid, date);
+			navigation.GotoPersonSchedule(groupid, personid, date);
 		};
 	};
 });
