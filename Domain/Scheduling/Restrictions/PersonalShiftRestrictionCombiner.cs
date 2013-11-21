@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			var assignments = scheduleDay.PersonAssignmentCollection();
 
-			if (assignments.IsEmpty())
+			if (assignments == null || assignments.IsEmpty())
 				return effectiveRestriction;
 
 			var person = scheduleDay.Person;

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 			var meetings = scheduleDay.PersonMeetingCollection();
 
-			if (meetings.IsEmpty())
+			if (meetings == null || meetings.IsEmpty())
 				return effectiveRestriction;
 
 			var person = scheduleDay.Person;

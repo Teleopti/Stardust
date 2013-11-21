@@ -182,5 +182,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             Assert.AreEqual(_date, _target.CurrentDate);
         }
+
+		[Test]
+		public void ShouldNotAllowNegativeValuesInAfterTalkTimeIndex()
+		{
+			_target.AfterTalkTimeIndex = 1;
+			Assert.AreEqual(1, _target.AfterTalkTimeIndex);
+
+			_target.AfterTalkTimeIndex = -2;
+			Assert.AreEqual(1, _target.AfterTalkTimeIndex);
+		}
+
+		[Test]
+		public void ShouldNotAllowNegativeValuesInTalkTimeIndex()
+		{
+			_target.TalkTimeIndex = 1;
+			Assert.AreEqual(1, _target.TalkTimeIndex);
+
+			_target.TalkTimeIndex = -2;
+			Assert.AreEqual(1, _target.TalkTimeIndex);
+		}
+
+		[Test]
+		public void ShouldNotAllowNegativeValuesInTaskIndex()
+		{
+			_target.TaskIndex = 1;
+			Assert.AreEqual(1, _target.TaskIndex);
+
+			_target.TaskIndex = -2;
+			Assert.AreEqual(1, _target.TaskIndex);
+		}
     }
 }

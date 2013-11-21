@@ -73,8 +73,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskIndex; }
             set
             {
-                //if (!_taskOwner.IsClosed || _wl.Workload.Skill.SkillType.Description.Name == "SkillTypeEmail")
-                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork && value >= 0)
                 {
                     _taskIndex = value;
                     _taskOwner.Tasks = _taskIndex*_comparisonTasks;
@@ -125,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set
             {
                 //if (!_taskOwner.IsClosed || _wl.Workload.Skill.SkillType.ForecastSource == ForecastSource.Email)
-                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork && value >= 0)
                 {
                     _talkTimeIndex = value;
                     _taskOwner.AverageTaskTime =
@@ -147,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _afterTalkTimeIndex; }
             set
             {
-                if (_taskOwner.OpenForWork.IsOpenForIncomingWork)
+                if (_taskOwner.OpenForWork.IsOpenForIncomingWork && value > 0)
                 {
                     _afterTalkTimeIndex = value;
                     _taskOwner.AverageAfterTaskTime =

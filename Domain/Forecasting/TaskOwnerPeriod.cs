@@ -490,14 +490,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _isDirty = false;
                 _turnOffInternalRecalc = true;
 
-                IList<ITaskOwner> taskOwnerDays = TaskOwnerDayOpenCollection();
+                var taskOwnerDays = TaskOwnerDayOpenCollection();
                 if (taskOwnerDays.Count > 0)
                 {
-                    double sumValue = taskOwnerDays.Sum(t => t.TotalTasks);
-                    _totalTasks = Math.Round(sumValue, 0);
-
-                    sumValue = taskOwnerDays.Sum(t => t.Tasks);
-                    _tasks = Math.Round(sumValue, 0);
+                    _totalTasks = taskOwnerDays.Sum(t => t.TotalTasks);
+	                _tasks = taskOwnerDays.Sum(t => t.Tasks);
                 }
                 else
                 {
@@ -1207,7 +1204,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _turnOffInternalRecalc = true;
                 if (_tasks > 0)
                 {
-                    _campaignTasks = new Percent((_totalTasks / _tasks) - 1d);
+					_campaignTasks = new Percent((_totalTasks / _tasks) - 1d);
                 }
                 _turnOffInternalRecalc = false;
 
