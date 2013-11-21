@@ -32,8 +32,8 @@ Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-11-18'
 	And I select any schedule activity for 'Pierre Baldi'
-	And I initiate 'assign activity'
-	Then I should see the assign activity form
+	And I initiate 'add activity'
+	Then I should see the add activity form
 
 Scenario: View team mates schedules
 	Given I have the role 'Anywhere Team Green'
@@ -41,44 +41,30 @@ Scenario: View team mates schedules
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-11-18 |
-	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	Then I should see schedule for 'John King'
 
-Scenario: Default times today
+Scenario: Default times
 	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-18 13:20'
+	And the current time is '2013-11-17 13:20'
+# If only adding on shift
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2013-11-18 11:00 |
 	| End time       | 2013-11-18 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
-	Then I should see the assign activity form with
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
+	Then I should see the add activity form with
 	| Field      | Value |
-	| Start time | 13:20 |
-	| End time   | 17:00 |
+	| Start time | 13:30 |
+	| End time   | 14:30 |
 
-Scenario: Default times tomorrow
+# If its easy to add outside the shift, and having 2 separate layers in a PA
+Scenario: Add
 	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-18 13:20'
-	And 'Pierre Baldi' have a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-19 11:00 |
-	| End time       | 2013-11-19 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
-	Then I should see the assign activity form with
-	| Field      | Value |
-	| Start time | 11:00 |
-	| End time   | 12:00 |
-
-# If its easy to assign outside the shift, and having 2 separate layers in a PA
-Scenario: Assign
-	Given I have the role 'Anywhere Team Green'
-	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
-	And I input these assign activity values
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
+	And I input these add activity values
 	| Field      | Value |
 	| Activity   | Phone |
 	| Start time | 11:00 |
@@ -90,8 +76,8 @@ Scenario: Assign
 	| End time   | 12:00 |
 	| Color      | Green |
 	
-# If only assigning on shift
-Scenario: Assign on shift	
+# If only adding on shift
+Scenario: Add on shift	
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
@@ -99,8 +85,8 @@ Scenario: Assign on shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 11:00 |
 	| End time       | 2013-11-19 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
-	And I input these assign activity values
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
+	And I input these add activity values
 	| Field      | Value |
 	| Activity   | Lunch |
 	| Start time | 13:00 |
@@ -112,8 +98,8 @@ Scenario: Assign on shift
 	| End time   | 14:00  |
 	| Color      | Yellow |
 
-# If only assigning on shift
-Scenario: Prevent assign outside shift
+# If only addind on shift
+Scenario: Prevent add outside shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
@@ -121,16 +107,16 @@ Scenario: Prevent assign outside shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 11:00 |
 	| End time       | 2013-11-19 17:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
-	And I input these assign activity values
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
+	And I input these add activity values
 	| Field      | Value |
 	| Activity   | Phone |
 	| Start time | 17:00 |
 	| End time   | 18:00 |
 	And I initiate 'apply'
-	Then I should see the validation error 'Cannot assign activity outside shift'
+	Then I should see the validation error 'With Add Activity you cannot create a second shift'
 
-Scenario: Assign after midnight on night shift
+Scenario: Add after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
@@ -138,8 +124,8 @@ Scenario: Assign after midnight on night shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-19 22:00 |
 	| End time       | 2013-11-20 04:00 |
-	When I view person schedules assign activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
-	And I input these assign activity values
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
+	And I input these add activity values
 	| Field      | Value |
 	| Activity   | Lunch |
 	| Start time | 01:00 |
@@ -149,4 +135,25 @@ Scenario: Assign after midnight on night shift
 	| Field      | Value            |
 	| Start time | 2013-11-20 01:00 |
 	| End time   | 2013-11-20 02:00 |
+	| Color      | Yellow           |
+
+Scenario: Add over midnight on night shift
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-19 22:00 |
+	| End time       | 2013-11-20 04:00 |
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
+	And I input these add activity values
+	| Field      | Value |
+	| Activity   | Lunch |
+	| Start time | 23:00 |
+	| End time   | 01:00 |
+	And I initiate 'apply'
+	Then I should see 'Pierre Baldi' with the scheduled activity
+	| Field      | Value            |
+	| Start time | 2013-11-19 23:00 |
+	| End time   | 2013-11-20 01:00 |
 	| Color      | Yellow           |
