@@ -225,6 +225,8 @@ Scenario: Show friendly message when after leaving date
 	When I click the next day button
 	Then I should see a user-friendly message explaining I dont have anything to view
 
+# Temporary disbled to in an attempt to get a fresh Golden-repr for SmokeTest (388) /David
+@ignore
 Scenario: Navigate next date without team
 	Given I am an agent in a team with access only to my own data
 	And I view team schedule
