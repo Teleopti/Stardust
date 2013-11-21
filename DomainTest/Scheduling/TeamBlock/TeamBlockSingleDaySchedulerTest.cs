@@ -105,6 +105,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																											  _dateOnly,
 																											  _selectedPersons))
 					  .Return(false);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  new List<IPerson> { _person1 }))
+					  .Return(false);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  new List<IPerson> { _person2 }))
+					  .Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(true).Repeat.Twice();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(()=>_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
@@ -140,6 +148,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
 																											  _selectedPersons))
+					  .Return(false);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  new List<IPerson>{_person1}))
+					  .Return(false);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  new List<IPerson>{_person2}))
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false).Repeat.Twice();
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false).Repeat.Twice();

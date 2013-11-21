@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -64,13 +63,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if(selectedPersons.Contains(groupMember))
 					selectedTeamMembers.Add(groupMember);
 			}
-			if (isTeamBlockScheduledForselectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
+			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
 				return true;
 			foreach (var person in selectedTeamMembers)
 			{
 				if (_cancelMe)
 					return false;
-				if (isTeamBlockScheduledForselectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo))
+				if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo))
 					continue;
 				if (!_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions) && !_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
 				{
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				_teamScheduling.DayScheduled -= OnDayScheduled;
 			}
 
-			return isTeamBlockScheduledForselectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
+			return isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo);
 		}
 
 		public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
@@ -108,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_cancelMe = e.Cancel;
 		}
 
-		private bool isTeamBlockScheduledForselectedTeamMembers(IList<IPerson> selectedTeamMembers, DateOnly day, ITeamBlockInfo teamBlockSingleDayInfo)
+		private bool isTeamBlockScheduledForSelectedTeamMembers(IList<IPerson> selectedTeamMembers, DateOnly day, ITeamBlockInfo teamBlockSingleDayInfo)
 		{
 			return _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day, selectedTeamMembers);
 		}
