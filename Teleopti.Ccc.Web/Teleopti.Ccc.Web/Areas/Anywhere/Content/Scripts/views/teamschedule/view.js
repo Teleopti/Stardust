@@ -41,7 +41,9 @@ define([
 						return x;
 					}
 				});
-			layer.first().Selected(true);
+			var selectedLayer = layer.first();
+			if (selectedLayer)
+				selectedLayer.Selected(true);
 		};
 
 		var loadSchedules = function(options) {
