@@ -184,6 +184,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(skillDay2, result);
         }
 
+		[Test]
+		public void CanGetUpdatedSinceGivenDateTime()
+		{
+			ISkillDay skillDay = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(skillDay);
+
+			ISkillDay skillDay2 = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(skillDay2);
+
+			SetUpdatedOnForSkillDay(skillDay, -1);
+
+			SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
+
+			var result = skillDayRepository.FindUpdatedSince(_scenario, skillDay.UpdatedOn.GetValueOrDefault().AddMinutes(-1));
+
+			result.Single().Should().Be.EqualTo(skillDay2);
+		}
+
         /// <summary>
         /// Determines whether this instance [can find skill days].
         /// </summary>
