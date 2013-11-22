@@ -80,13 +80,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 		private static void cancelPersonalActivity(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
-			var layers = personAssignment.PersonalLayers().ToList();
+			var layers = personAssignment.PersonalActivities().ToList();
 			foreach (IPersonalShiftLayer layer in layers)
 			{
 				var layerPeriod = layer.Period;
 				if (!layerPeriod.Intersect(period)) continue;
 
-				personAssignment.RemoveLayer(layer);
+				personAssignment.RemoveActivity(layer);
 
 				var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
 				foreach (var dateTimePeriod in newPeriods)

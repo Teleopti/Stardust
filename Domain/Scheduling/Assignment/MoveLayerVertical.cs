@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			if (layer is IMainShiftLayer)
 			{
-				var layers = createNewCollectionOfLayers(personAssignment.MainLayers(), layer, positionMove);
-				personAssignment.ClearMainLayers();
+				var layers = createNewCollectionOfLayers(personAssignment.MainActivities(), layer, positionMove);
+				personAssignment.ClearMainActivities();
 				foreach (var newMainLayer in layers)
 				{
 					personAssignment.AddActivity(newMainLayer.Payload, newMainLayer.Period);
@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (layer is IPersonalShiftLayer)
 			{
-				var layers = createNewCollectionOfLayers(personAssignment.PersonalLayers(), layer, positionMove);
-				personAssignment.ClearPersonalLayers();
+				var layers = createNewCollectionOfLayers(personAssignment.PersonalActivities(), layer, positionMove);
+				personAssignment.ClearPersonalActivities();
 				foreach (var newPersonalLayer in layers)
 				{
 					personAssignment.AddPersonalActivity(newPersonalLayer.Payload, newPersonalLayer.Period);
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (layer is IOvertimeShiftLayer)
 			{
-				var layers = createNewCollectionOfLayers(personAssignment.OvertimeLayers(), layer, positionMove);
-				personAssignment.ClearOvertimeLayers();
+				var layers = createNewCollectionOfLayers(personAssignment.OvertimeActivities(), layer, positionMove);
+				personAssignment.ClearOvertimeActivities();
 				foreach (IOvertimeShiftLayer newOvertimeShiftLayer in layers)
 				{
 					personAssignment.AddOvertimeActivity(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period,

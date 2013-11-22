@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Playback())
             {
                 _target.Handle(_cancelOvertimeCommandDto);
-                scheduleDay.PersonAssignment().OvertimeLayers().Should().Be.Empty();
+                scheduleDay.PersonAssignment().OvertimeActivities().Should().Be.Empty();
             }
         }
 
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelOvertimeCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelOvertimeCommandDto);
-				scheduleDay.PersonAssignment().OvertimeLayers().Should().Be.Empty();
+				scheduleDay.PersonAssignment().OvertimeActivities().Should().Be.Empty();
 			}
 		}
     }

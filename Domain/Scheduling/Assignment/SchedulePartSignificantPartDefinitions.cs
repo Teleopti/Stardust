@@ -82,14 +82,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public bool HasPersonalShift()
         {
             IPersonAssignment assignmentToCheck = _schedulePart.PersonAssignment();
-            if (assignmentToCheck != null) return assignmentToCheck.PersonalLayers().Any();
+            if (assignmentToCheck != null) return assignmentToCheck.PersonalActivities().Any();
             return false;
         }
 
         public bool HasOvertimeShift()
         {
             IPersonAssignment assignmentToCheck = _schedulePart.PersonAssignment();
-            if(assignmentToCheck != null) return assignmentToCheck.OvertimeLayers().Any();
+            if(assignmentToCheck != null) return assignmentToCheck.OvertimeActivities().Any();
             return false;
         }
 

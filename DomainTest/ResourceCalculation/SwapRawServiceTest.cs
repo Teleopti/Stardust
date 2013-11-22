@@ -226,8 +226,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAssignment().MainLayers().Count());
-				Assert.AreEqual(1, _scheduleDayTwoPersonOne.PersonAssignment().MainLayers().Count());
+				Assert.AreEqual(0, _scheduleDayOnePersonOne.PersonAssignment().MainActivities().Count());
+				Assert.AreEqual(1, _scheduleDayTwoPersonOne.PersonAssignment().MainActivities().Count());
 			}
 		}
 
@@ -255,8 +255,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignment().PersonalLayers().Count());
-				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAssignment().PersonalLayers().Count());
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignment().PersonalActivities().Count());
+				Assert.AreEqual(1, _scheduleDayOnePersonOne.PersonAssignment().PersonalActivities().Count());
 				Assert.IsTrue(_scheduleDayOnePersonOne.SignificantPart() == SchedulePartView.PersonalShift);
 			}
 		}
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				_swapRawService.Swap(_schedulePartModifyAndRollbackService, _selectionOne, _selectionTwo, _locks);
 
-				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignment().OvertimeLayers().Count());
+				Assert.AreEqual(0, _scheduleDayTwoPersonOne.PersonAssignment().OvertimeActivities().Count());
 			}	
 		}
 

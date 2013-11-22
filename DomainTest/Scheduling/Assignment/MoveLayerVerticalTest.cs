@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers());
+			var orgLayers = new List<IMainShiftLayer>(ass.MainActivities());
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveUp(ass, lastLayer);
 			//new instances - cant check for equality
-			var res = ass.MainLayers().ToArray();
+			var res = ass.MainActivities().ToArray();
 			res[0].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[1].Period.Should().Be.EqualTo(lastLayer.Period);
 			res[2].Period.Should().Be.EqualTo(middleLayer.Period);
@@ -36,14 +36,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var orgLayers = ass.OvertimeLayers().ToList();
+			var orgLayers = ass.OvertimeActivities().ToList();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveUp(ass, lastLayer);
 			//new instances - cant check for equality
-			var res = ass.OvertimeLayers().ToArray();
+			var res = ass.OvertimeActivities().ToArray();
 			res[0].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[1].Period.Should().Be.EqualTo(lastLayer.Period);
 			res[2].Period.Should().Be.EqualTo(middleLayer.Period);
@@ -54,13 +54,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreePersonalLayers();
-			var orgLayers = ass.PersonalLayers().ToArray();
+			var orgLayers = ass.PersonalActivities().ToArray();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 			target.MoveUp(ass, lastLayer);
 			//new instances - cant check for equality
-			var res = ass.PersonalLayers().ToArray();
+			var res = ass.PersonalActivities().ToArray();
 			res[0].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[1].Period.Should().Be.EqualTo(lastLayer.Period);
 			res[2].Period.Should().Be.EqualTo(middleLayer.Period);
@@ -71,14 +71,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			var orgLayers = new List<IMainShiftLayer>(ass.MainLayers());
+			var orgLayers = new List<IMainShiftLayer>(ass.MainActivities());
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveDown(ass, firstLayer);
 			//new instances - cant check for equality
-			var res = ass.MainLayers().ToArray();
+			var res = ass.MainActivities().ToArray();
 			res[0].Period.Should().Be.EqualTo(middleLayer.Period);
 			res[1].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[2].Period.Should().Be.EqualTo(lastLayer.Period);
@@ -89,14 +89,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var orgLayers = ass.OvertimeLayers().ToList();
+			var orgLayers = ass.OvertimeActivities().ToList();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 
 			target.MoveDown(ass, firstLayer);
 			//new instances - cant check for equality
-			var res = ass.OvertimeLayers().ToArray();
+			var res = ass.OvertimeActivities().ToArray();
 			res[0].Period.Should().Be.EqualTo(middleLayer.Period);
 			res[1].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[2].Period.Should().Be.EqualTo(lastLayer.Period);
@@ -107,13 +107,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var target = new MoveLayerVertical();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreePersonalLayers();
-			var orgLayers = ass.PersonalLayers().ToArray();
+			var orgLayers = ass.PersonalActivities().ToArray();
 			var firstLayer = orgLayers[0];
 			var middleLayer = orgLayers[1];
 			var lastLayer = orgLayers[2];
 			target.MoveDown(ass, firstLayer);
 			//new instances - cant check for equality
-			var res = ass.PersonalLayers().ToArray();
+			var res = ass.PersonalActivities().ToArray();
 			res[0].Period.Should().Be.EqualTo(middleLayer.Period);
 			res[1].Period.Should().Be.EqualTo(firstLayer.Period);
 			res[2].Period.Should().Be.EqualTo(lastLayer.Period);
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			ass.AddPersonalActivity(activityToLookFor, new DateTimePeriod());
 			ass.AddPersonalActivity(new Activity("d"), new DateTimePeriod());
 
-			target.MoveUp(ass, ass.PersonalLayers().Last());
+			target.MoveUp(ass, ass.PersonalActivities().Last());
 
-			ass.PersonalLayers().Last().Payload.Should().Be.SameInstanceAs(activityToLookFor);
+			ass.PersonalActivities().Last().Payload.Should().Be.SameInstanceAs(activityToLookFor);
 		}
 
 		[Test]
@@ -144,9 +144,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			ass.AddOvertimeActivity(activityToLookFor, new DateTimePeriod(),null);
 			ass.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(), null);
 
-			target.MoveDown(ass, ass.OvertimeLayers().First());
+			target.MoveDown(ass, ass.OvertimeActivities().First());
 
-			ass.OvertimeLayers().Last().Payload.Should().Be.SameInstanceAs(activityToLookFor);
+			ass.OvertimeActivities().Last().Payload.Should().Be.SameInstanceAs(activityToLookFor);
 		}
 	}
 }

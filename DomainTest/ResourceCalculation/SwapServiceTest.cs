@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IScheduleDay> retList = service.SwapAssignments(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, retList[0].PersonAssignment().MainActivities().Count());
         }
 
 

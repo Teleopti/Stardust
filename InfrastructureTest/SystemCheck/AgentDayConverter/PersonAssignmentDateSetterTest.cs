@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			                                                               SetupFixtureForAssembly.loggedOnPerson,
 			                                                               new DateTimePeriod(start, start.AddHours(8)),
 			                                                               new ShiftCategory("d"), new Scenario("d"));
-			PersistAndRemoveFromUnitOfWork(pa.MainLayers().First().Payload);
+			PersistAndRemoveFromUnitOfWork(pa.MainActivities().First().Payload);
 			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);
 			PersistAndRemoveFromUnitOfWork(pa);

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 		protected override void Then(IScheduleRange myScheduleRange)
 		{
-			myScheduleRange.ScheduledDay(date).PersonAssignment().ShiftLayers.Count()
+			myScheduleRange.ScheduledDay(date).PersonAssignment().Activities.Count()
 			               .Should().Be.EqualTo(2);
 		}
 	} 

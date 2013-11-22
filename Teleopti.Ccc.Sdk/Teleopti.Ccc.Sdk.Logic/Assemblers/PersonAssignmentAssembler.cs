@@ -34,15 +34,15 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             };
 					if (entity.ShiftCategory != null)
 					{
-						retDto.MainShift = CreateMainShiftDto(entity.MainLayers(), entity.ShiftCategory, entity.Person);						
+						retDto.MainShift = CreateMainShiftDto(entity.MainActivities(), entity.ShiftCategory, entity.Person);						
 					}
-	        var personalLayers = entity.PersonalLayers();
+	        var personalLayers = entity.PersonalActivities();
 					if (personalLayers.Any())
 					{
 						var personalShift = CreatePersonalShiftDto(personalLayers, entity.Person);
 						retDto.PersonalShiftCollection.Add(personalShift);
 					}
-	        var overtimeLayers = entity.OvertimeLayers();
+	        var overtimeLayers = entity.OvertimeActivities();
 					if (overtimeLayers.Any())
 					{
 						var overtimeShift = CreateOvertimeShiftDto(overtimeLayers, entity.Person);

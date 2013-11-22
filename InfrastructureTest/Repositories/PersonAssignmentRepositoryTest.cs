@@ -105,8 +105,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             IPersonAssignment org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Person.Name, loadedAggregateFromDatabase.Person.Name);
-            Assert.AreEqual(org.PersonalLayers().Count(), loadedAggregateFromDatabase.PersonalLayers().Count());
-            Assert.AreEqual(org.OvertimeLayers().Count(), loadedAggregateFromDatabase.OvertimeLayers().Count());
+            Assert.AreEqual(org.PersonalActivities().Count(), loadedAggregateFromDatabase.PersonalActivities().Count());
+            Assert.AreEqual(org.OvertimeActivities().Count(), loadedAggregateFromDatabase.OvertimeActivities().Count());
         }
 
 			[Test]
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.Activities));
         }
 
 	    [Test]
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			    });
 		    Assert.AreEqual(ass.Id, loaded.Id);
 		    Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
-		    Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftLayers));
+		    Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.Activities));
 	    }
 
 			[Test]
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.IsTrue(retList.Contains(agAssValid));
             Assert.AreEqual(1, retList.Count);
-						Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].ShiftLayers));
+						Assert.IsTrue(LazyLoadingManager.IsInitialized(retList[0].Activities));
         }
 
         [Test]

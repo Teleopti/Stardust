@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     break;
                 case SchedulePartView.PersonalShift:
 					personAssignment = schedulePart.PersonAssignment();
-		            var layer = personAssignment.PersonalLayers().FirstOrDefault();
+		            var layer = personAssignment.PersonalActivities().FirstOrDefault();
                     if (layer != null)
                     {
                         start = layer.Period.StartDateTimeLocal(schedulePart.TimeZone);

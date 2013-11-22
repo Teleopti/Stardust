@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 
 		private static bool checkCover(IPersonAssignment personAssignment, DateTimePeriod period)
 		{
-			return personAssignment.PersonalLayers().All(personalLayer => period.Contains(personalLayer.Period));
+			return personAssignment.PersonalActivities().All(personalLayer => period.Contains(personalLayer.Period));
 		}
 	}
 }

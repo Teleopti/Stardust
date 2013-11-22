@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			LazyLoadingManager.IsInitialized(dbConflict.Person).Should().Be.True();
 			LazyLoadingManager.IsInitialized(dbConflict.UpdatedBy).Should().Be.True();
-			LazyLoadingManager.IsInitialized(dbConflict.ShiftLayers.Single().Payload).Should().Be.True();
-			LazyLoadingManager.IsInitialized(dbConflict.OvertimeLayers().Single().DefinitionSet).Should().Be.True();
+			LazyLoadingManager.IsInitialized(dbConflict.Activities.Single().Payload).Should().Be.True();
+			LazyLoadingManager.IsInitialized(dbConflict.OvertimeActivities().Single().DefinitionSet).Should().Be.True();
 			LazyLoadingManager.IsInitialized(dbConflict.ShiftCategory).Should().Be.True();
 			LazyLoadingManager.IsInitialized(dbConflict.Scenario).Should().Be.True();
 		}

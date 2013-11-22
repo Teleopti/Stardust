@@ -77,13 +77,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 			private static void cancelOvertime(IPersonAssignment personAssignment, DateTimePeriod period)
 			{
-				var layers = personAssignment.OvertimeLayers().ToList();
+				var layers = personAssignment.OvertimeActivities().ToList();
 				foreach (var layer in layers)
 				{
 					var layerPeriod = layer.Period;
 					if (!layerPeriod.Intersect(period)) continue;
 
-					personAssignment.RemoveLayer(layer);
+					personAssignment.RemoveActivity(layer);
 
 					var newPeriods = layerPeriod.ExcludeDateTimePeriod(period);
 					foreach (var dateTimePeriod in newPeriods)

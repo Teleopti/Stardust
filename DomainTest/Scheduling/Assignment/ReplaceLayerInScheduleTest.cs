@@ -63,11 +63,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.PersonAssignment().MainLayers();
+			var orgLayerCollection = scheduleDay.PersonAssignment().MainActivities();
 
 			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.PersonAssignment().MainLayers();
+			var newLayerCollection = scheduleDay.PersonAssignment().MainActivities();
 			orgLayerCollection.Count().Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.First();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
@@ -81,11 +81,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddPersonalLayer().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.PersonAssignment().PersonalLayers();
+			var orgLayerCollection = scheduleDay.PersonAssignment().PersonalActivities();
 
 			target.Replace(scheduleDay, orgLayerCollection.Single(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.PersonAssignment().PersonalLayers();
+			var newLayerCollection = scheduleDay.PersonAssignment().PersonalActivities();
 			orgLayerCollection.Count().Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.Single();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
@@ -99,18 +99,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddOvertime().CreatePart();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.PersonAssignment().OvertimeLayers().ToList();
+			var orgLayerCollection = scheduleDay.PersonAssignment().OvertimeActivities().ToList();
 
 			target.Replace(scheduleDay, orgLayerCollection.Single(), newPayload, newPeriod);
 
-			var newLayerCollection = scheduleDay.PersonAssignment().OvertimeLayers();
+			var newLayerCollection = scheduleDay.PersonAssignment().OvertimeActivities();
 			orgLayerCollection.Count.Should().Be.EqualTo(newLayerCollection.Count());
 			var newLayer = newLayerCollection.Single();
 			newLayer.Payload.Should().Be.SameInstanceAs(newPayload);
 			newLayer.Period.Should().Be.EqualTo(newPeriod);
 			newLayer.DefinitionSet.Should()
 							.Be.SameInstanceAs(
-								scheduleDay.PersonAssignment().OvertimeLayers()
+								scheduleDay.PersonAssignment().OvertimeActivities()
 													 .Single()
 													 .DefinitionSet);
 		}
@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddMainShiftLayer()
 											.AddPersonalLayer()
 											.CreatePart();
-			target.Replace(scheduleDay, scheduleDay.PersonAssignment().MainLayers().First(), newActivity, new DateTimePeriod());
-			scheduleDay.PersonAssignment().MainLayers().First().Payload
+			target.Replace(scheduleDay, scheduleDay.PersonAssignment().MainActivities().First(), newActivity, new DateTimePeriod());
+			scheduleDay.PersonAssignment().MainActivities().First().Payload
 				.Should().Be.SameInstanceAs(newActivity);
 		}
 
@@ -142,8 +142,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddPersonalLayer()
 											.AddMainShiftLayer()
 											.CreatePart();
-			target.Replace(scheduleDay, scheduleDay.PersonAssignment().PersonalLayers().First(), newActivity, new DateTimePeriod());
-			scheduleDay.PersonAssignment().PersonalLayers().First().Payload
+			target.Replace(scheduleDay, scheduleDay.PersonAssignment().PersonalActivities().First(), newActivity, new DateTimePeriod());
+			scheduleDay.PersonAssignment().PersonalActivities().First().Payload
 				.Should().Be.SameInstanceAs(newActivity);
 		}
 
@@ -158,8 +158,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddOvertime()
 											.AddMainShiftLayer()
 											.CreatePart();
-			target.Replace(scheduleDay, scheduleDay.PersonAssignment().OvertimeLayers().First(), newActivity, new DateTimePeriod());
-			scheduleDay.PersonAssignment().OvertimeLayers().First().Payload
+			target.Replace(scheduleDay, scheduleDay.PersonAssignment().OvertimeActivities().First(), newActivity, new DateTimePeriod());
+			scheduleDay.PersonAssignment().OvertimeActivities().First().Payload
 				.Should().Be.SameInstanceAs(newActivity);
 		}
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var orgAss = scheduleDay.PersonAssignment();
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
-			var orgLayerCollection = scheduleDay.PersonAssignment().MainLayers();
+			var orgLayerCollection = scheduleDay.PersonAssignment().MainActivities();
 
 			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
 
@@ -198,15 +198,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				.AddMainShiftLayer()
 				.CreatePart();
 
-			var firstMainShiftLayer = scheduleDay.PersonAssignment().MainLayers().First();
-			var secondMainShiftLayer = scheduleDay.PersonAssignment().MainLayers().Skip(1).First();
+			var firstMainShiftLayer = scheduleDay.PersonAssignment().MainActivities().First();
+			var secondMainShiftLayer = scheduleDay.PersonAssignment().MainActivities().Skip(1).First();
 		
 			var newPayload = new Activity("d");
 			var newPeriod = new DateTimePeriod();
 			
 			target.Replace(scheduleDay, secondMainShiftLayer, newPayload, newPeriod);
 
-			scheduleDay.PersonAssignment().MainLayers().First().Should().Be.SameInstanceAs(firstMainShiftLayer);
+			scheduleDay.PersonAssignment().MainActivities().First().Should().Be.SameInstanceAs(firstMainShiftLayer);
 		}
 	}
 }

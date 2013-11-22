@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (_mock.Playback())
 			{
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignment().PersonalLayers().Should().Be.Empty();
+				scheduleDay.PersonAssignment().PersonalActivities().Should().Be.Empty();
 			}
 		}
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelPersonalActivityCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignment().PersonalLayers().Should().Be.Empty();
+				scheduleDay.PersonAssignment().PersonalActivities().Should().Be.Empty();
 			}
 		}
 	}

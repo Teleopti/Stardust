@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			target.Handle(command);
 
-			var addedLayer = personAssignmentRepository.Single().ShiftLayers.Last();
+			var addedLayer = personAssignmentRepository.Single().Activities.Last();
 			addedLayer.Payload.Should().Be(addedActivity);
 			addedLayer.Period.StartDateTime.Should().Be(command.StartTime);
 			addedLayer.Period.EndDateTime.Should().Be(command.EndTime);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			target.Handle(command);
 
-			var addedLayer = personAssignmentRepository.Single().ShiftLayers.Last();
+			var addedLayer = personAssignmentRepository.Single().Activities.Last();
 			addedLayer.Period.StartDateTime.Should().Be(TimeZoneHelper.ConvertToUtc(command.StartTime, TimeZoneInfoFactory.HawaiiTimeZoneInfo()));
 			addedLayer.Period.EndDateTime.Should().Be(TimeZoneHelper.ConvertToUtc(command.EndTime, TimeZoneInfoFactory.HawaiiTimeZoneInfo()));
 		}

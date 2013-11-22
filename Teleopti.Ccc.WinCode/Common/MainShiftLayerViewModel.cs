@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 				public override int VisualOrderIndex
 				{
-					get { return _assignment.MainLayers().ToList().IndexOf(_layer); }
+					get { return _assignment.MainActivities().ToList().IndexOf(_layer); }
 				}
 
 	    public override bool IsMovePermitted()
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveUp
 	    {
-				get { return _moveLayer!=null && _assignment.MainLayers().ToList().IndexOf(_layer) > 0; }
+				get { return _moveLayer!=null && _assignment.MainActivities().ToList().IndexOf(_layer) > 0; }
 	    }
 
 	    public override bool CanMoveDown
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		private bool isLayerLast()
 		{
-			var mainLayers = _assignment.MainLayers().ToList();
+			var mainLayers = _assignment.MainActivities().ToList();
 			return mainLayers.Any() && mainLayers.Last().Equals(_layer);
 		}
 

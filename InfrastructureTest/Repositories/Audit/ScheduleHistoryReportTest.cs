@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				PersonAssignment.AddActivity(PersonAssignment.MainLayers().First().Payload, new DateTimePeriod(Today, Today.AddDays(1)));
+				PersonAssignment.AddActivity(PersonAssignment.MainActivities().First().Payload, new DateTimePeriod(Today, Today.AddDays(1)));
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.ClearMainLayers();
+				PersonAssignment.ClearMainActivities();
 				uow.PersistAll();
 			}
 			//remove assignment
@@ -197,8 +197,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddPersonalActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
-				PersonAssignment.ClearMainLayers();
+				PersonAssignment.AddPersonalActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
+				PersonAssignment.ClearMainActivities();
 				uow.PersistAll();
 			}
 
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.ClearMainLayers();
+				PersonAssignment.ClearMainActivities();
 				uow.PersistAll();
 			}
 
@@ -361,8 +361,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddPersonalActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
-				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.AddPersonalActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period, MultiplicatorDefinitionSet);
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddPersonalActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
+				PersonAssignment.AddPersonalActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
 				PersonAssignment.SetDayOff(DayOffTemplate);
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period, MultiplicatorDefinitionSet);
 				PersonAssignment.SetDayOff(DayOffTemplate);
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
@@ -444,8 +444,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddPersonalActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
-				PersonAssignment.ClearMainLayers();
+				PersonAssignment.AddPersonalActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
+				PersonAssignment.ClearMainActivities();
 				uow.PersistAll();
 			}
 
@@ -464,8 +464,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
-				PersonAssignment.ClearMainLayers();
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.ClearMainActivities();
 				uow.PersistAll();
 			}
 
@@ -484,7 +484,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.ClearMainLayers();
+				PersonAssignment.ClearMainActivities();
 				uow.PersistAll();
 			}
 
@@ -503,9 +503,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddPersonalActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
-				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
-				PersonAssignment.ClearMainLayers();
+				PersonAssignment.AddPersonalActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.ClearMainActivities();
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}

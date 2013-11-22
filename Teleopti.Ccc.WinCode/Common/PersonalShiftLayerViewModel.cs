@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public override int VisualOrderIndex
 		{
-			get { return 200 + _parent.PersonalLayers().ToList().IndexOf(_layer); }
+			get { return 200 + _parent.PersonalActivities().ToList().IndexOf(_layer); }
 		}
 
 		public override bool IsMovePermitted()
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			get
 			{
-				return _parent != null && _parent.PersonalLayers().ToList().IndexOf(_layer) > 0;
+				return _parent != null && _parent.PersonalActivities().ToList().IndexOf(_layer) > 0;
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WinCode.Common
 			{
 				if (_parent != null)
 				{
-					return _parent.PersonalLayers().Contains(_layer) && !_parent.PersonalLayers().ToList().Last().Equals(_layer);
+					return _parent.PersonalActivities().Contains(_layer) && !_parent.PersonalActivities().ToList().Last().Equals(_layer);
 				}
 
 				return false;

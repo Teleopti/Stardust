@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						var assignment = s.PersonAssignment();
 						if (assignment != null)
 						{
-							return (from layer in assignment.PersonalLayers()
+							return (from layer in assignment.PersonalActivities()
 							        select new PersonalShiftViewModel
 								        {
 									        Subject =

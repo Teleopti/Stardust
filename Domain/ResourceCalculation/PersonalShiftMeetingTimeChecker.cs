@@ -64,14 +64,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if (mainShiftLayer.Payload.AllowOverwrite)
 					continue;
-				foreach (var personalLayer in personAssignment.PersonalLayers())
+				foreach (var personalLayer in personAssignment.PersonalActivities())
 				{
 					if (mainShiftLayer.Period.Intersect(personalLayer.Period))
 						return false;
 				}
 			}
 
-			foreach (var personalLayer in personAssignment.PersonalLayers())
+			foreach (var personalLayer in personAssignment.PersonalActivities())
 			{
 				var layer = new EditableShiftLayer(personalLayer.Payload, personalLayer.Period);
 				clone.LayerCollection.Add(layer);

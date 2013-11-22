@@ -22,15 +22,15 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Clears the personal shift.
         /// </summary>
-        void ClearPersonalLayers();
+        void ClearPersonalActivities();
 
 
         /// <summary>
         /// Clears the main shift.
         /// </summary>
-        void ClearMainLayers();
+        void ClearMainActivities();
 
-	    void ClearOvertimeLayers();
+	    void ClearOvertimeActivities();
 
 	    void Clear();
 
@@ -40,17 +40,17 @@ namespace Teleopti.Interfaces.Domain
 	    DateOnly Date { get; }
 
 	    IShiftCategory ShiftCategory { get; }
-	    IEnumerable<IMainShiftLayer> MainLayers();
-	    IEnumerable<IPersonalShiftLayer> PersonalLayers();
-	    IEnumerable<IOvertimeShiftLayer> OvertimeLayers();
-	    IEnumerable<IShiftLayer> ShiftLayers { get; }
+	    IEnumerable<IMainShiftLayer> MainActivities();
+	    IEnumerable<IPersonalShiftLayer> PersonalActivities();
+	    IEnumerable<IOvertimeShiftLayer> OvertimeActivities();
+	    IEnumerable<IShiftLayer> Activities { get; }
 
 	    /// <summary>
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
 		void ScheduleChanged();
 
-		bool RemoveLayer(IShiftLayer layer);
+		bool RemoveActivity(IShiftLayer layer);
 	    void AddPersonalActivity(IActivity activity, DateTimePeriod period);
 	    void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 	    IDayOff DayOff();
@@ -60,7 +60,7 @@ namespace Teleopti.Interfaces.Domain
 	    void FillWithDataFrom(IPersonAssignment newAss);
 	    void AddActivity(IActivity activity, DateTimePeriod period);
 	    void SetShiftCategory(IShiftCategory shiftCategory);
-	    void SetMainLayersAndShiftCategoryFrom(IPersonAssignment assignment);
-	    void InsertMainLayer(IActivity activity, DateTimePeriod period, int index);
+	    void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment);
+	    void InsertActivity(IActivity activity, DateTimePeriod period, int index);
     }
 }

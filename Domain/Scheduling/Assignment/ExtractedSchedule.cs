@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
 
 			var thisAss = PersonAssignment(true);
-			thisAss.ClearMainLayers();
+			thisAss.ClearMainActivities();
 			source.PersonAssignment().SetThisAssignmentsDayOffOn(thisAss);
         }
 
@@ -539,7 +539,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		    IPersonAssignment highAss = PersonAssignment();
 
 		    if (highAss != null)
-			    highAss.ClearOvertimeLayers();
+			    highAss.ClearOvertimeActivities();
 	    }
 
 	    public void DeleteMainShift(IScheduleDay source)
@@ -548,8 +548,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			if (highAss != null)
 			{
-				highAss.ClearMainLayers();
-				highAss.ClearOvertimeLayers();
+				highAss.ClearMainActivities();
+				highAss.ClearOvertimeActivities();
 			}
 				
 		}
@@ -574,7 +574,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
 					workingCopyOfAssignment.Clear();
 					workingCopyOfAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
-					foreach (var layer in sourceAssignment.MainLayers())
+					foreach (var layer in sourceAssignment.MainActivities())
 					{
 						workingCopyOfAssignment.AddActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
 					}
@@ -586,7 +586,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 
 	        var currentAssignment = PersonAssignment(true);
-					currentAssignment.SetMainLayersAndShiftCategoryFrom(workingCopyOfAssignment);
+					currentAssignment.SetActivitiesAndShiftCategoryFrom(workingCopyOfAssignment);
 					if(splitAbsence) SplitAbsences(period);
 					updateDateOnlyAsPeriod(workingCopyOfAssignment);
         }
@@ -600,7 +600,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// <param name="mainShift"></param>
 				private void updateDateOnlyAsPeriod(IPersonAssignment mainShift)
 				{
-					if (mainShift.MainLayers().Any())
+					if (mainShift.MainActivities().Any())
 					{
 						DateTimePeriod mainShiftPeriod = mainShift.Period;
 						DateTime dateTime = mainShiftPeriod.StartDateTime;
@@ -649,7 +649,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             IPersonAssignment ass = PersonAssignment();
             if (ass != null)
-                ass.ClearPersonalLayers();
+                ass.ClearPersonalActivities();
         }
 
         private void mergePersonalStuff(IScheduleDay source)
@@ -662,7 +662,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 				IPeriodOffsetCalculator periodOffsetCalculator = new PeriodOffsetCalculator();
 				
-		        foreach (var personalLayer in sourceAss.PersonalLayers())
+		        foreach (var personalLayer in sourceAss.PersonalActivities())
 		        {
 					TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source.Period, Period);
 			        destAss.AddPersonalActivity(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
@@ -726,7 +726,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			    var personAss = source.PersonAssignment();
 			    if (personAss != null)
 			    {
-				    foreach (var layer in personAss.OvertimeLayers())
+				    foreach (var layer in personAss.OvertimeActivities())
 				    {
 					    if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
 					    {
@@ -784,7 +784,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			public void AddMainShift(IPersonAssignment mainShiftSource)
 			{
 				var currentAss = PersonAssignment(true);
-				currentAss.SetMainLayersAndShiftCategoryFrom(mainShiftSource);
+				currentAss.SetActivitiesAndShiftCategoryFrom(mainShiftSource);
 			}
 
         #endregion Methods

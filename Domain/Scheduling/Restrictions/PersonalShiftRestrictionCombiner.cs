@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var person = scheduleDay.Person;
 			var timeZoneInfo = person.PermissionInformation.DefaultTimeZone();
 
-			var periods = from l in assignment.PersonalLayers()
+			var periods = from l in assignment.PersonalActivities()
 			              select l.Period;
 
 			var asEffectiveRestrictions = from p in periods

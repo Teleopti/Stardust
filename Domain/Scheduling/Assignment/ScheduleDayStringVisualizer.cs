@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 							if (ass != null)
 							{
 								sb.AppendFormat(" - {0}: ", UserTexts.Resources.PersonalShift);
-								foreach (var personalLayer in ass.PersonalLayers())
+								foreach (var personalLayer in ass.PersonalActivities())
 								{
 									sb.AppendLine();
 									sb.Append("    ");

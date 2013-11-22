@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var ass = part.PersonAssignment();
 			if (ass == null)
 				return;
-			ass.RemoveLayer(layer);
+			ass.RemoveActivity(layer);
 		}
 
 		public void Remove(IScheduleDay part, ILayer<IAbsence> layer)
