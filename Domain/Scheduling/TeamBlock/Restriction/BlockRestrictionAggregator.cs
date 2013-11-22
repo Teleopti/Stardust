@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		public IEffectiveRestriction Aggregate(IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
 		{
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-            var timeZone = TimeZoneInfo.Utc;
+            var timeZone = TimeZoneGuard.Instance.TimeZone;
 			var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 			var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
 			if (dateOnlyList == null) return null;

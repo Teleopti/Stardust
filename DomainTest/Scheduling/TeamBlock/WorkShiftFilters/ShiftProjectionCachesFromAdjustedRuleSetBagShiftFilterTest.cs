@@ -58,7 +58,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldGetShiftProjectionCachesFromAdjustedRuleSetBag()
 		{
-			var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var permissionInfo = new PermissionInformation(_person);
+            permissionInfo.SetDefaultTimeZone(_timeZoneInfo);
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			var ruleSets = new List<IWorkShiftRuleSet> {ruleSet1};
 			var shifts = getCashes();
 			using (_mocks.Record())
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
+                Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				Expect.Call(_ruleSetToShiftsGenerator.Generate(ruleSet1)).Return(shifts);
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
@@ -85,7 +88,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldNotGenerateAnyShiftsIfRuleSetIsInvalid()
 		{
-			var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var permissionInfo = new PermissionInformation(_person);
+            permissionInfo.SetDefaultTimeZone(_timeZoneInfo);
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
 			using (_mocks.Record())
 			{
@@ -93,6 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
 				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(false);
+                Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
@@ -107,7 +113,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldNotGenerateAnyShiftsIfRuleSetContainsDeletedActivity()
 		{
-			var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var permissionInfo = new PermissionInformation(_person);
+            permissionInfo.SetDefaultTimeZone(_timeZoneInfo);
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
 			using (_mocks.Record())
 			{
@@ -117,6 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(true);
+                Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
@@ -130,7 +139,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldNotGenerateAnyShiftsIfRuleSetShiftCategoryContainsDeletedActivity()
 		{
-			var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var permissionInfo = new PermissionInformation(_person);
+            permissionInfo.SetDefaultTimeZone(_timeZoneInfo);
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
 			using (_mocks.Record())
 			{
@@ -139,6 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(true);
+                Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
@@ -152,7 +164,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldNotGenerateAnyShiftsIfRuleSetContainsSkillActivityNotInPersonSkills()
 		{
-			var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var permissionInfo = new PermissionInformation(_person);
+            permissionInfo.SetDefaultTimeZone(_timeZoneInfo);
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
 			var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
 			using (_mocks.Record())
 			{
@@ -164,6 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
+                Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(null, null)).IgnoreArguments().Return(false);
 			}
 			using (_mocks.Playback())

@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	            Expect.Call(_matrix.UnlockedDays)
 	                  .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {_scheduleDayPro}));
 	            Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(
-                    () => _shiftProjectionCache.SetDate(DateOnly.MinValue, TimeZoneInfo.Utc));
+                Expect.Call( () => _shiftProjectionCache.SetDate(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone()));
 	            Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
 	            Expect.Call(() => _scheduleDay.AddMainShift(_mainShift));
 	            Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));

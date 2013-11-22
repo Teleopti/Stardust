@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (person == null)
 				return null;
 			var shiftProjectionCaches = new List<IShiftProjectionCache>();
-            var timeZone = TimeZoneInfo.Utc;
+            var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var personPeriod = person.Period(scheduleDateOnly);
 			var bag = personPeriod.RuleSetBag;
 

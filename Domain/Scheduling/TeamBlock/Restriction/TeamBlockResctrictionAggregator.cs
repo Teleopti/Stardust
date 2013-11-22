@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-            var timeZone = TimeZoneInfo.Utc;
+            var timeZone = TimeZoneGuard.Instance.TimeZone;
 			var matrixesOfFirstPerson = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
