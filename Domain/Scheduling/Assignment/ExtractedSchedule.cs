@@ -711,7 +711,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
         {
 					var foundPersonAssignment = PersonAssignment(true);
-					foundPersonAssignment.AddOvertimeLayer(activity, period, definitionSet);
+					foundPersonAssignment.AddOvertimeActivity(activity, period, definitionSet);
         }
 
 	    public void MergeOvertime(IScheduleDay source)

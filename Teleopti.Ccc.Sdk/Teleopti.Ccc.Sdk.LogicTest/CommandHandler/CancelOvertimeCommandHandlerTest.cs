@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
             var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-					scheduleDay.PersonAssignment().AddOvertimeLayer(_activity, _period,
+					scheduleDay.PersonAssignment().AddOvertimeActivity(_activity, _period,
                                                                          new MultiplicatorDefinitionSet("test",
                                                                                                         MultiplicatorType
                                                                                                             .Overtime));
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
  			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignment().AddOvertimeLayer(_activity, _period,
+			scheduleDay.PersonAssignment().AddOvertimeActivity(_activity, _period,
 																		 new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();

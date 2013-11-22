@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
            
             IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
             ass.SetId(Guid.NewGuid());
-					ass.AddOvertimeLayer(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet);
+					ass.AddOvertimeActivity(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet);
             ass.OvertimeLayers().First().SetId(Guid.NewGuid());
 						ass.AddActivity(act, new DateTimePeriod(1900, 1, 1, 1900, 1, 2));
 					ass.SetShiftCategory(sCat);

@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 				var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(_scenario, _personOne, dateTimePeriod1);
 				_scheduleDayOnePersonOne.Add(ass);
-				ass.AddOvertimeLayer(new Activity("activity"), dateTimePeriod2, definitionSet);
+				ass.AddOvertimeActivity(new Activity("activity"), dateTimePeriod2, definitionSet);
 			
 				_selectionOne = new List<IScheduleDay> { _scheduleDayOnePersonOne };
 				_selectionTwo = new List<IScheduleDay> { _scheduleDayTwoPersonOne };

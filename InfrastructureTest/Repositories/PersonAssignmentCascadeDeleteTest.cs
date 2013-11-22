@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 										new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
 										dummyCat,
 										dummyScenario);
-			target.AddOvertimeLayer(dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), definitionSet);
+			target.AddOvertimeActivity(dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), definitionSet);
 			Session.Save(target);
 			Session.Flush();
 			Session.SessionFactory.Statistics.Clear();

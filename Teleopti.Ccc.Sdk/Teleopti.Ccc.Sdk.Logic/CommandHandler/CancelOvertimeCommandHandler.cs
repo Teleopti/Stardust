@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					{
 						if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 						{
-							personAssignment.AddOvertimeLayer(layer.Payload, dateTimePeriod, layer.DefinitionSet);
+							personAssignment.AddOvertimeActivity(layer.Payload, dateTimePeriod, layer.DefinitionSet);
 						}
 					}
 				}

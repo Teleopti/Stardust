@@ -362,7 +362,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				uow.Reassociate(PersonAssignment);
 				PersonAssignment.AddPersonalActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
-				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
 			}
@@ -423,7 +423,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
 				PersonAssignment.SetDayOff(DayOffTemplate);
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();
@@ -464,7 +464,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
 				PersonAssignment.ClearMainLayers();
 				uow.PersistAll();
 			}
@@ -504,7 +504,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				uow.Reassociate(PersonAssignment);
 				PersonAssignment.AddPersonalActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
-				PersonAssignment.AddOvertimeLayer(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
+				PersonAssignment.AddOvertimeActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period, MultiplicatorDefinitionSet);
 				PersonAssignment.ClearMainLayers();
 				uow.Merge(PersonAssignment);
 				uow.PersistAll();

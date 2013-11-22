@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	        ass.AddActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 					ass.SetShiftCategory(_dummyCat);
 					ass.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
-	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
+	        ass.AddOvertimeActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
 	        return ass;
         }
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-            agAssValid.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
+            agAssValid.AddOvertimeActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
 
             IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
                 _dummyActivity,

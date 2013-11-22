@@ -141,8 +141,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new MoveLayerVertical();
 			var ass = new PersonAssignment(new Person(), new Scenario("sd"), new DateOnly(2000, 1, 1));
 			ass.AddActivity(new Activity("d"), new DateTimePeriod());
-			ass.AddOvertimeLayer(activityToLookFor, new DateTimePeriod(),null);
-			ass.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(), null);
+			ass.AddOvertimeActivity(activityToLookFor, new DateTimePeriod(),null);
+			ass.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(), null);
 
 			target.MoveDown(ass, ass.OvertimeLayers().First());
 

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				personAssignment.ClearOvertimeLayers();
 				foreach (IOvertimeShiftLayer newOvertimeShiftLayer in layers)
 				{
-					personAssignment.AddOvertimeLayer(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period,
+					personAssignment.AddOvertimeActivity(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period,
 					                                  newOvertimeShiftLayer.DefinitionSet);
 				}
 			}

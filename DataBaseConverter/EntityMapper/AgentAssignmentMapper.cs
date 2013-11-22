@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 {
 									foreach (IOvertimeShiftLayer overtimeLayer in overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift))
 	                {
-		                agAss.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+		                agAss.AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
 	                }
                 }
             }
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 {
 									foreach (IOvertimeShiftLayer overtimeLayer in overtimeShiftMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift))
 	                {
-										agAss.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+										agAss.AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
 	                }
                 }
             }
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                     {
 											foreach (IOvertimeShiftLayer overtimeLayer in overtimeShiftMapper.Map(fillup))
 											{
-												agAss.AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+												agAss.AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
 											}
                     }
                 }

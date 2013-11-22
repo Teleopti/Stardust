@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
-			target.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+			target.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
 			var layer = target.OvertimeLayers().Single();
 			Assert.AreSame(target, layer.Parent);
 			Assert.AreSame(target, layer.Root());
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
 			var dayOffTemplate = new DayOffTemplate(new Description());
 
-			target.AddOvertimeLayer(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
+			target.AddOvertimeActivity(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
 			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			target.PersonalLayers().Single().SetId(Guid.NewGuid());
 			target.OvertimeLayers().Single().SetId(Guid.NewGuid());
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
 			var act = new Activity("sdf");
-			target.AddOvertimeLayer(act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+			target.AddOvertimeActivity(act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
 			target.AddActivity(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
@@ -515,7 +515,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			target.AddOvertimeLayer(activity, period, null);
+			target.AddOvertimeActivity(activity, period, null);
 			target.AddPersonalActivity(activity, period);
 			target.AddActivity(activity, period);
 			target.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("cat"));
@@ -535,7 +535,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			target.AddOvertimeLayer(activity, period, null);
+			target.AddOvertimeActivity(activity, period, null);
 			target.AddPersonalActivity(activity, period);
 			target.AddActivity(activity, period);
 			target.FillWithDataFrom(new PersonAssignment(target.Person, target.Scenario, target.Date));
@@ -550,7 +550,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var newAss = new PersonAssignment(target.Person, target.Scenario, target.Date);
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			newAss.AddOvertimeLayer(activity, period, null);
+			newAss.AddOvertimeActivity(activity, period, null);
 			newAss.AddPersonalActivity(activity, period);
 			newAss.AddActivity(activity, period);
 			target.FillWithDataFrom(newAss);
@@ -566,7 +566,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			newAss.SetDayOff(new DayOffTemplate());
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			newAss.AddOvertimeLayer(activity, period, null);
+			newAss.AddOvertimeActivity(activity, period, null);
 			newAss.AddPersonalActivity(activity, period);
 			target.FillWithDataFrom(newAss);
 			target.OvertimeLayers().Should().Not.Be.Empty();

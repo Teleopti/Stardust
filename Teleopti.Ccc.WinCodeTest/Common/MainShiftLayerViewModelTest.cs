@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			public void VerifyCanMoveUp()
 			{
 				var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000,1,1));
-				ass.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(), null);
+				ass.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(), null);
 				ass.AddActivity(new Activity("d"), new DateTimePeriod());
 				ass.AddActivity(new Activity("d"), new DateTimePeriod());
 
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			public void VerifyCanMoveDown()
 			{
 				var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-				ass.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(), null);
+				ass.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(), null);
 				ass.AddActivity(new Activity("d"), new DateTimePeriod());
 				ass.AddActivity(new Activity("d"), new DateTimePeriod());
 

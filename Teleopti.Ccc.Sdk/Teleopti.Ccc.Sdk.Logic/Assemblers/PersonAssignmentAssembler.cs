@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 							var layersDomain = _overtimeShiftLayerAssembler.DtosToDomainEntities(overtimeShiftDto.LayerCollection.OfType<OvertimeLayerDto>());
 	            foreach (var layer in layersDomain)
 	            {
-		            assignment.AddOvertimeLayer(layer.Payload, layer.Period, layer.DefinitionSet);
+		            assignment.AddOvertimeActivity(layer.Payload, layer.Period, layer.DefinitionSet);
 	            }
             }
         }

@@ -52,7 +52,7 @@ namespace Teleopti.Interfaces.Domain
 
 		bool RemoveLayer(IShiftLayer layer);
 	    void AddPersonalActivity(IActivity activity, DateTimePeriod period);
-	    void AddOvertimeLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
+	    void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet);
 	    IDayOff DayOff();
 	    void SetDayOff(IDayOffTemplate template);
 	    void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination);

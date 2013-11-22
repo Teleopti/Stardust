@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("def", MultiplicatorType.Overtime);
                 PersonFactory.AddDefinitionSetToPerson(_person, defSet);
 								IPersonAssignment ass = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-                ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+                ass.AddOvertimeActivity(ActivityFactory.CreateActivity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
                 _target.Add(ass);
                 _person.RemoveAllPersonPeriods();
                 Assert.AreEqual(1,
