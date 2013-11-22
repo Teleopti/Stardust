@@ -73,11 +73,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _taskIndex; }
             set
             {
-                if (_taskOwner.OpenForWork.IsOpenForIncomingWork && value >= 0)
-                {
-                    _taskIndex = value;
-                    _taskOwner.Tasks = _taskIndex*_comparisonTasks;
-                }
+	            if (value < 0) return;
+	            if (!_taskOwner.OpenForWork.IsOpenForIncomingWork) return;
+	            _taskIndex = value;
+	            _taskOwner.Tasks = _taskIndex*_comparisonTasks;
             }
         }
 
@@ -123,13 +122,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _talkTimeIndex; }
             set
             {
-                //if (!_taskOwner.IsClosed || _wl.Workload.Skill.SkillType.ForecastSource == ForecastSource.Email)
-                if (_taskOwner.OpenForWork.IsOpenForIncomingWork && value >= 0)
-                {
-                    _talkTimeIndex = value;
-                    _taskOwner.AverageTaskTime =
-                        new TimeSpan((long) (_talkTimeIndex*_comparisonAverageTalkTime.Ticks));
-                }
+	            if (value < 0) return;
+	            if (!_taskOwner.OpenForWork.IsOpenForIncomingWork) return;
+	            _talkTimeIndex = value;
+	            _taskOwner.AverageTaskTime =
+		            new TimeSpan((long) (_talkTimeIndex*_comparisonAverageTalkTime.Ticks));
             }
         }
 
@@ -146,12 +143,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
             get { return _afterTalkTimeIndex; }
             set
             {
-                if (_taskOwner.OpenForWork.IsOpenForIncomingWork && value > 0)
-                {
-                    _afterTalkTimeIndex = value;
-                    _taskOwner.AverageAfterTaskTime =
-                        new TimeSpan((long) (_afterTalkTimeIndex*_comparisonAverageAfterWorkTime.Ticks));
-                }
+	            if (value < 0) return;
+	            if (!_taskOwner.OpenForWork.IsOpenForIncomingWork) return;
+	            _afterTalkTimeIndex = value;
+	            _taskOwner.AverageAfterTaskTime =
+		            new TimeSpan((long) (_afterTalkTimeIndex*_comparisonAverageAfterWorkTime.Ticks));
             }
         }
 
