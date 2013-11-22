@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Kpi
     /// Created by: Ola
     /// Created date: 2008-04-07
     /// </remarks>
-    public class KeyPerformanceIndicator : AggregateRoot, IKeyPerformanceIndicator
+    public class KeyPerformanceIndicator : VersionedAggregateRoot, IKeyPerformanceIndicator
     {
         private readonly IList<IKpiTarget> _kpiTargetCollection = new List<IKpiTarget>();
 

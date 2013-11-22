@@ -121,17 +121,6 @@ namespace Teleopti.Interfaces.Domain
         void AddPercentageToTasks(Percent percent);
 
         /// <summary>
-        /// Adds the absolute value to tasks.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        void AddAbsoluteValueToTasks(double value);
-
-        /// <summary>
         /// Adds the percentage to Validated ACW.
         /// </summary>
         /// <param name="percent">The percent.</param>
@@ -152,27 +141,5 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-06-27
         /// </remarks>
         void AddPercentageToValidatedTaskTime(Percent percent);
-
-        /// <summary>
-        /// Adds the absolute value to Validated Task Time.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        void AddAbsoluteValueToValidatedTaskTime(TimeSpan value);
-
-        /// <summary>
-        /// Adds the absolute value to Validated Task Time.
-        /// </summary>
-        /// <param name="value">The value.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: zoet
-        /// Created date: 2008-06-27
-        /// </remarks>
-        void AddAbsoluteValueToValidatedAcw(TimeSpan value);
     }
 }

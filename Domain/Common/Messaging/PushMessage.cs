@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.Messaging
 {
-    public class PushMessage : AggregateRootWithBusinessUnit, IPushMessage
+    public class PushMessage : VersionedAggregateRootWithBusinessUnit, IPushMessage
     {
         private string _message = string.Empty;
         private string _title = string.Empty;

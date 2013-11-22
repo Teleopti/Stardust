@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
     /// Created by: robink
     /// Created date: 2008-06-17
     /// </remarks>
-    public class ExternalLogOn : AggregateRoot, IExternalLogOn, IDeleteTag, IComparable
+    public class ExternalLogOn : VersionedAggregateRoot, IExternalLogOn, IDeleteTag, IComparable
     {
         private int _acdLogOnMartId;
         private int _acdLogOnAggId;

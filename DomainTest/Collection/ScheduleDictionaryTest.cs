@@ -274,10 +274,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(diffSvc.Difference(null, null))
 				    .IgnoreArguments()
 				    .Constraints(
-					    List.Equal(new List<IPersistableScheduleData> { pAss }),
-					    List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs })
+						List.Equal(new List<IPersistableScheduleData> { pAss }),
+						List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs })
 						)
-				    .Return(new DifferenceCollection<IPersistableScheduleData>());
+					.Return(new DifferenceCollection<IPersistableScheduleData>());
 			}
 			using (mocks.Playback())
 			{
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					Assert.IsFalse(target[dummyPerson].Contains(ass));
 					Assert.IsFalse(target[dummyPerson].Contains(abs));
 
-					IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+					var diff = target.DifferenceSinceSnapshot();
 					Assert.AreEqual(0, diff.Count());
 
 					Assert.IsTrue(eventFired);
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				target.DeleteMeetingFromBroker(meetingId);
 				var partNew = target[dummyPerson].ScheduledDay(date);
 				Assert.AreEqual(0, partNew.PersonMeetingCollection().Count);
-				IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+				var diff = target.DifferenceSinceSnapshot();
 				Assert.AreEqual(0, diff.Count());
 
 				Assert.IsTrue(eventFired);
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					((Schedule)part).Add(pAss);
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
-					IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+					var diff = target.DifferenceSinceSnapshot();
 					Assert.AreEqual(1, diff.Count());
 					Assert.AreEqual(DifferenceStatus.Added, diff.First().Status);
 				}

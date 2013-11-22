@@ -87,13 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.Add(_note);
 		}
 
-		[Test]
-		public void ShouldThrowIfTryingToAddMultipleAssignments()
-		{
-			Assert.Throws<ArgumentException>(() => 
-				_target.Add(new PersonAssignment(_target.Person, _target.Scenario, _target.DateOnlyAsPeriod.DateOnly))
-			);
-		}
+	
 
 		[Test]
 		public void CanAddTwoLayersWithHoleInBetween()
@@ -497,31 +491,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.PersonAssignment().Should().Not.Be.Null();
 		}
 
-		[Test]
-		public void TwoPersonAssignmentsOnOneDayShouldThrow()
-		{
-			_target.Clear<IPersistableScheduleData>();
-
-			DateTime start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-			DateTime end = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
-			DateTimePeriod period = new DateTimePeriod(start, end);
-
-			var mainShift = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test"), period,
-																	ShiftCategoryFactory.CreateShiftCategory("test"));
-			_target.AddMainShift(mainShift);
-
-			start = new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc);
-			end = new DateTime(2000, 1, 1, 14, 0, 0, DateTimeKind.Utc);
-			period = new DateTimePeriod(start, end);
-
-			var mainShift1 = EditableShiftFactory.CreateEditorShift(ActivityFactory.CreateActivity("test1"), period,
-																	ShiftCategoryFactory.CreateShiftCategory("test1"));
-			IPersonAssignment personAssignment = PersonAssignmentFactory.CreatePersonAssignment(_target.Person, _target.Scenario);
-			new EditableShiftMapper().SetMainShiftLayers(personAssignment, mainShift1);
-
-			Assert.Throws<ArgumentException>(() =>
-			                                         _target.Add(personAssignment));
-		}
+		
 
 		[Test]
 		public void ToStringShouldReturnEmptyString()

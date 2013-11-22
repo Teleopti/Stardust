@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Budgeting
 {
-    public class BudgetGroup : AggregateRootWithBusinessUnit, IBudgetGroup, IDeleteTag
+    public class BudgetGroup : VersionedAggregateRootWithBusinessUnit, IBudgetGroup, IDeleteTag
     {
 		private readonly Iesi.Collections.Generic.ISet<ISkill> _skillCollection;
         private string _timeZone;

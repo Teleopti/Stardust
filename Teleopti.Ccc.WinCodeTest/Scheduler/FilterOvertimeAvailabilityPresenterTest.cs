@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -42,8 +41,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             listOfPerson.Add(new Guid() ,person);
             var dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today,DateOnly.Today);
 
-            var persistableCollection = new List<IPersistableScheduleData>();
-            IPersistableScheduleData overtimeAvailability = new OvertimeAvailability(person, DateOnly.Today, TimeSpan.FromHours(17), TimeSpan.FromHours(18));
+			var persistableCollection = new List<IPersistableScheduleData>();
+            var overtimeAvailability = new OvertimeAvailability(person, DateOnly.Today, TimeSpan.FromHours(17), TimeSpan.FromHours(18));
             persistableCollection.Add(overtimeAvailability);
             using (_mocks.Record())
             {

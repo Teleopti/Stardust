@@ -90,16 +90,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Creates a system role - application role mapper repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        public ISystemRoleApplicationRoleMapperRepository CreateSystemRoleApplicationRoleMapperRepository(IUnitOfWork unitOfWork)
-        {
-            return new SystemRoleApplicationRoleMapperRepository(unitOfWork);
-        }
-
-        /// <summary>
         /// Creates the Skill repository.
         /// </summary>
         /// <param name="unitOfWork">The uow.</param>

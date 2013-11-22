@@ -26,6 +26,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using ConstraintViolationException = Teleopti.Ccc.Infrastructure.Foundation.ConstraintViolationException;
@@ -1672,7 +1673,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(businessUnit);
 			var site = SiteFactory.CreateSimpleSite("d");
-			ReflectionHelper.SetBusinessUnit(site,businessUnit);
+			site.SetBusinessUnit(businessUnit);
 			PersistAndRemoveFromUnitOfWork(site);
 			var team = TeamFactory.CreateSimpleTeam();
 			team.Site = site;
@@ -1727,12 +1728,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	  
 		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
 		{
-			IPersonContract pContract = PersonContractFactory.CreatePersonContract();
+			var pContract = PersonContractFactory.CreatePersonContract();
 			if (otherBusinessUnit != null)
 			{
-				ReflectionHelper.SetBusinessUnit(pContract.Contract,otherBusinessUnit);
-				ReflectionHelper.SetBusinessUnit(pContract.ContractSchedule,otherBusinessUnit);
-				ReflectionHelper.SetBusinessUnit(pContract.PartTimePercentage,otherBusinessUnit);
+				pContract.Contract.SetBusinessUnit(otherBusinessUnit);
+				pContract.ContractSchedule.SetBusinessUnit(otherBusinessUnit);
+				pContract.PartTimePercentage.SetBusinessUnit(otherBusinessUnit);
 			}
 			PersistAndRemoveFromUnitOfWork(pContract.Contract);
 			PersistAndRemoveFromUnitOfWork(pContract.ContractSchedule);

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
             var scheduleMessages = QueryMessagesByType<IScheduleChangedEvent>(messageQueue);
             _scheduleRefresher.Refresh(scheduleDictionary, scheduleMessages, refreshedEntitiesBuffer, conflictsBuffer);
 
-            var scheduleDataMessages = QueryMessagesByType<IPersistableScheduleData>(messageQueue);
+			var scheduleDataMessages = QueryMessagesByType<IPersistableScheduleData>(messageQueue);
             _scheduleDataRefresher.Refresh(scheduleDictionary, scheduleDataMessages, refreshedEntitiesBuffer, conflictsBuffer);
 
             var meetingMessages = QueryMessagesByType<IMeeting>(messageQueue);

@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
 {
-    public class ScheduleTag : AggregateRootWithBusinessUnit, IScheduleTag, IDeleteTag
+    public class ScheduleTag : VersionedAggregateRootWithBusinessUnit, IScheduleTag, IDeleteTag
     {
         private bool _isDeleted;
         private string _description;

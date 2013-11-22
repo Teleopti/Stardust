@@ -234,8 +234,8 @@
     <comment>After call work time</comment>
   </data>
   <data name="AgentInfo" xml:space="preserve">
-    <value>Agent Info</value>
-    <comment>Agent Info</comment>
+    <value>Info</value>
+    <comment>Info</comment>
   </data>
   <data name="AgentInformation" xml:space="preserve">
     <value>Agent information</value>
@@ -11769,7 +11769,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Caption dialog to filter hourly availability</comment>
   </data>
   <data name="InfoPanel" xml:space="preserve">
-    <value>Info Panel</value>
+    <value>Info</value>
     <comment>Text on button to toggle the info panel on and off in scheduler</comment>
   </data>
   <data name="SubjectTooLong" xml:space="preserve">

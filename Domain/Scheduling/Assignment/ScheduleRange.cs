@@ -156,10 +156,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		    var authorization = PrincipalAuthorization.Instance();
 
-		    ICollection<IPersistableScheduleData> permittedData = new List<IPersistableScheduleData>();
-            IEnumerable<IPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
+			ICollection<IPersistableScheduleData> permittedData = new List<IPersistableScheduleData>();
+			IEnumerable<IPersistableScheduleData> fullData = PersistableScheduleDataInternalCollection();
 
-		    foreach (IPersistableScheduleData persistableScheduleData in fullData)
+			foreach (IPersistableScheduleData persistableScheduleData in fullData)
 		    {
                 var forAuthorization = new PersistableScheduleDataForAuthorization(persistableScheduleData);
 		        if(persistableScheduleData.BelongsToPeriod(part.DateOnlyAsPeriod)
@@ -191,9 +191,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private class PersistableScheduleDataForAuthorization
         {
-            private readonly IPersistableScheduleData _persistableScheduleData;
+			private readonly IPersistableScheduleData _persistableScheduleData;
 
-            public PersistableScheduleDataForAuthorization(IPersistableScheduleData persistableScheduleData)
+			public PersistableScheduleDataForAuthorization(IPersistableScheduleData persistableScheduleData)
             {
                 _persistableScheduleData = persistableScheduleData;
             }

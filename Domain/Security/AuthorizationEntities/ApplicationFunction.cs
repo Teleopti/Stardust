@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
-    public class ApplicationFunction : AggregateRoot, IApplicationFunction, IDeleteTag
+    public class ApplicationFunction : VersionedAggregateRoot, IApplicationFunction, IDeleteTag
     {
         private string _functionDescription;
         private IParentChildEntity _parent;

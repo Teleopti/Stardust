@@ -4,6 +4,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Content/Crossroads/crossroads.js" />
 /// <reference path="~/Content/hasher/hasher.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {

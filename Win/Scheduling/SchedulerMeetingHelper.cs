@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Meetings;
@@ -61,6 +62,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var meeting = meetingRepository.Get(personMeeting.BelongsToMeeting.Id.GetValueOrDefault());
                     if (meeting == null) // recurrent already deleted
                         continue;
+
+					if (!LazyLoadingManager.IsInitialized(meeting.Scenario))
+						LazyLoadingManager.Initialize(meeting.Scenario);
+					if (!LazyLoadingManager.IsInitialized(meeting.Activity))
+						LazyLoadingManager.Initialize(meeting.Activity);
                     meeting.RemovePerson(personMeeting.Person);
                     if (!meeting.MeetingPersons.Any())
                         meetingRepository.Remove(meeting);
@@ -98,7 +104,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var persons = meetingToRemove.MeetingPersons.Select(m => m.Person).ToArray();
-                unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+                unitOfWork.Reassociate(persons);
+
                 if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, meetingToRemove.StartDate, scheduleViewBase, PrincipalAuthorization.Instance()))
                     return;
 				meetingToRemove.Snapshot();
@@ -154,7 +161,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+					var persons = meeting.MeetingPersons.Select(m => m.Person).ToArray();
+					unitOfWork.Reassociate(persons);
 
                     var period  = meeting.MeetingPeriod(meeting.StartDate);
                     var start = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);

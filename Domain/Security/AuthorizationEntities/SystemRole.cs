@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// Created by: tamasb
     /// Created date: 2008-01-15
     /// </remarks>
-    public class SystemRole : AggregateRoot, IAuthorizationEntity, IDeleteTag
+    public class SystemRole : VersionedAggregateRoot, IAuthorizationEntity, IDeleteTag
     {
         private string _name;
         private string _descriptionText;

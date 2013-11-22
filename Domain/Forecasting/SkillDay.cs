@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
     /// Created by: micke
     /// Created date: 18.12.2007
     /// </remarks>
-	public class SkillDay : AggregateRootWithBusinessUnit, ISkillDay, IMaxSeatSkillDay, IPeriodized
+	public class SkillDay : VersionedAggregateRootWithBusinessUnit, ISkillDay, IMaxSeatSkillDay, IPeriodized
     {
         private DateOnly _currentDate;
         private ISkill _skill;

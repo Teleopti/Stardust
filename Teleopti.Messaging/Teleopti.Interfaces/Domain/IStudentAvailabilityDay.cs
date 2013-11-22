@@ -12,7 +12,7 @@ namespace Teleopti.Interfaces.Domain
     /// <summary>
     /// 
     /// </summary>
-    public interface IStudentAvailabilityDay : IPersistableScheduleData
+    public interface IStudentAvailabilityDay : IPersistableScheduleData, IVersioned
     {
         /// <summary>
         /// Gets or sets a value indicating whether [not available].

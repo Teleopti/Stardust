@@ -152,5 +152,29 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Assert.AreEqual(1.79d, Math.Round(target.AfterTalkTimeIndex, 2));
             }
         }
+
+		[Test]
+		public void ShouldNotAllowNegativeValuesInAverageTasks()
+		{
+			using (mocks.Record())
+			{
+				Expect.Call(taskOwnerPeriod.TotalStatisticCalculatedTasks).Return(14d);
+				Expect.Call(taskOwnerPeriod.TotalStatisticAverageTaskTime).Return(TimeSpan.FromSeconds(14));
+				Expect.Call(taskOwnerPeriod.TotalStatisticAverageAfterTaskTime).Return(TimeSpan.FromSeconds(28));
+				Expect.Call(taskOwnerPeriod.TaskOwnerDayCollection).Return(new ReadOnlyCollection<ITaskOwner>(new List<ITaskOwner> { null })).Repeat.AtLeastOnce();
+				Expect.Call(volumeYear.AverageTasksPerDay).Return(2);
+				Expect.Call(volumeYear.TalkTime).Return(TimeSpan.FromSeconds(28));
+				Expect.Call(volumeYear.AfterTalkTime).Return(TimeSpan.FromSeconds(56));
+			}
+			using (mocks.Playback())
+			{
+				target = new WeekOfMonthItem(taskOwnerPeriod, volumeYear);
+				target.AverageTasks = 1;
+				Assert.AreEqual(1, target.AverageTasks);
+
+				target.AverageTasks = -2;
+				Assert.AreEqual(1, target.AverageTasks);
+			}
+		}
     }
 }

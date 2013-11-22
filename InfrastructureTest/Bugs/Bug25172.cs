@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Bugs
 	[TestFixture]
 	public class Bug25172 : DatabaseTest
 	{
-		[Test, Ignore("Not yet fixed. Remove Ignore attr when fixed")]
+		[Test]
 		public void AggregatesImplementingIVersionedShouldBeVersionedInMapping()
 		{
 			var illegalTypes = new List<Type>();

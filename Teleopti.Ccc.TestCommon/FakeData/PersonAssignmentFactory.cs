@@ -116,6 +116,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 												 period);
 		}
 
+		public static IPersonAssignment CreateEmptyAssignment(IScenario scenario,
+															 IPerson person,
+															 DateTimePeriod period)
+		{
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
+			return ass;
+		}
+
 		public static IPersonAssignment CreateAssignmentWithMainShift(IScenario scenario,
 																	 IPerson person,
 																	 DateTimePeriod period)

@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 {
-    public class AvailableData : AggregateRoot, IAvailableData, IDeleteTag
+    public class AvailableData : VersionedAggregateRoot, IAvailableData, IDeleteTag
     {
         #region Variables
 

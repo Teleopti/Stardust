@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.SetId(Guid.NewGuid());
 			var moveToTheseParameters = new PersonAssignment(newPer, newScen, new DateOnly(2000, 1, 1));
 
-			IPersistableScheduleData newAss = ((PersonAssignment)target).CloneAndChangeParameters(moveToTheseParameters);
+			var newAss = ((PersonAssignment)target).CloneAndChangeParameters(moveToTheseParameters);
 			
 			Assert.IsNull(newAss.Id);
 			Assert.AreSame(newPer, newAss.Person);

@@ -65,6 +65,26 @@ SET NOCOUNT ON
 ------------
 --Create all needed temp tables. Just for performance
 ------------
+CREATE TABLE #fact_schedule_deviation_raw (
+	shift_startdate_id INT,
+	shift_startinterval_id int,
+	date_id INT,
+	interval_id INT,
+	person_id INT,
+	deviation_schedule_ready_s INT,
+	deviation_schedule_s INT,
+	deviation_contract_s INT,
+	ready_time_s INT,
+	is_logged_in INT,
+	contract_time_s INT
+	)
+CREATE CLUSTERED INDEX #CIX_fact_schedule_deviation_raw ON #fact_schedule_deviation_raw
+(
+	[shift_startdate_id] ASC,
+	[shift_startinterval_id] ASC
+)
+
+
 CREATE TABLE #fact_schedule_deviation (
 	shift_startdate_id INT, --NEW 20130111
 	shift_startinterval_id int,--NEW 20130111
@@ -78,6 +98,11 @@ CREATE TABLE #fact_schedule_deviation (
 	is_logged_in INT,
 	contract_time_s INT
 	)
+CREATE CLUSTERED INDEX #CIX_fact_schedule_deviation ON #fact_schedule_deviation
+(
+	[shift_startdate_id] ASC,
+	[shift_startinterval_id] ASC
+)
 
 CREATE TABLE #minmax(
 	[minint] [int] NULL,
@@ -222,8 +247,12 @@ DECLARE @nowutcDateOnly smalldatetime
 DECLARE @nowutcInterval smalldatetime
 DECLARE @nowLocalDateId int
 DECLARE @nowLocalIntervalId smallint
+DECLARE @minUtcDateId int
+DECLARE @maxUtcDateId int
+
 SELECT @nowutcDateOnly = DATEADD(dd, 0, DATEDIFF(dd, 0, GETUTCDATE()))
 SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(hour, DATEPART(hour, GETUTCDATE()),'1900-01-01 00:00:00'))
+
 
 ------------
 --Init
@@ -257,13 +286,10 @@ INNER JOIN mart.dim_interval i
 WHERE b.time_zone_id = @time_zone_id
 
 --Get the min/max UTC date_id
-INSERT INTO @date (date_from_id,date_to_id)
-	SELECT MIN(b.date_id),MAX(b.date_id)
-	FROM mart.bridge_time_zone b
-	INNER JOIN mart.dim_date d 
-		ON b.local_date_id = d.date_id
-	WHERE	d.date_date	between @date_from AND @date_to
-	AND		b.time_zone_id	= @time_zone_id
+SELECT
+	@minUtcDateId = MIN(b.date_id),
+	@maxUtcDateId = MAX(b.date_id)
+FROM #bridge_time_zone b
 
 --Get Now() in local date/interval Id variables
 SELECT
@@ -325,7 +351,7 @@ INNER JOIN #rights_agents a
 	ON a.right_id = dp.person_id
 	
 --Create UTC table from: mart.fact_schedule_deviation
-INSERT INTO #fact_schedule_deviation(shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
+INSERT INTO #fact_schedule_deviation_raw(shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
 	fsd.shift_startdate_id,--new20130111
 	fsd.shift_startinterval_id,--new20130111
@@ -339,8 +365,23 @@ SELECT
 	is_logged_in,
 	contract_time_s
 FROM mart.fact_schedule_deviation fsd
-INNER JOIN #person_id a
-	ON fsd.person_id = a.person_id
+WHERE fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId
+AND fsd.person_id IN (SELECT person_id FROM #person_id)
+
+INSERT INTO #fact_schedule_deviation(shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
+SELECT 
+	fsd.shift_startdate_id,--new20130111
+	fsd.shift_startinterval_id,--new20130111
+	fsd.date_id,
+	fsd.interval_id,
+	fsd.person_id,
+	deviation_schedule_ready_s,
+	deviation_schedule_s,
+	deviation_contract_s,
+	ready_time_s,
+	is_logged_in,
+	contract_time_s
+FROM #fact_schedule_deviation_raw fsd
 INNER JOIN #bridge_time_zone b
 	ON	fsd.shift_startinterval_id= b.interval_id
 	AND fsd.shift_startdate_id=b.date_id --NEW 20130111

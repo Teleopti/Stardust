@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
 
 		public ScheduleRangePersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
-		                              IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
+									  IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService,
 		                              IScheduleRangeConflictCollector scheduleRangeConflictCollector,
 																	IScheduleDifferenceSaver scheduleDifferenceSaver,
 																	IMessageBrokerIdentifier messageBrokerIdentifier)

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// Class describing an PersonAbsence
     /// </summary>
-    public class PersonAbsence : AggregateRoot, 
+    public class PersonAbsence : VersionedAggregateRoot, 
                                     IPersonAbsence
     {
         private IPerson _person;

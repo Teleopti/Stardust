@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>{_overtimeAvailabilityDay}));
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _overtimeAvailabilityDay }));
 				Expect.Call(() => _scheduleDay.DeleteOvertimeAvailability());
 			}
 

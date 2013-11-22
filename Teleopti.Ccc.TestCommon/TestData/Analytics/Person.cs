@@ -21,12 +21,19 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	    private readonly int _businessUnitId;
 	    private readonly Guid _businessUnitCode;
 	    private readonly bool _toBeDeleted;
-
-	    public int PersonId { get; set; }
+		/*
+		private readonly int _validToDateIdMax;
+		private readonly int _validToIntervalIdMax;
+		private readonly DateTime _validFromLocal;
+		private readonly DateTime _validToLocal;
+		private readonly int _validFromIdLocal;
+		private readonly int _validToIdLocal;
+		*/
+		public int PersonId { get; set; }
 		public IEnumerable<DataRow> Rows { get; set; }
 
-        public Person(IPerson person, IDatasourceData datasource, int personId, DateTime validFrom, DateTime validTo, int validFromId, 
-                            int validToId, int businessUnitId, Guid businessUnitCode,bool toBeDeleted)
+        public Person(IPerson person, IDatasourceData datasource, int personId, DateTime validFrom, DateTime validTo, int validFromId,
+							int validToId, int businessUnitId, Guid businessUnitCode, bool toBeDeleted)
         {
             _person = person;
 			_datasource = datasource;
