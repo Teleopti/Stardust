@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerMyTimeScripts()
 		{
 			var cssBundle = new StyleBundle("~/MyTimeCss")
-				//using min file here due to this bug http://aspnetoptimization.codeplex.com/workitem/107
-				.Include("~/Content/bootstrap/bootstrap.min.css", new CssRewriteUrlTransform())
 				.Include(
 					"~/Content/moment-datepicker/datepicker.css",
 					"~/Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css",
@@ -63,6 +61,14 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			jsBundle.Orderer = new TeleoptiScriptsOrderedByNumberOfDots();
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
+			registerBootstrapCssIndividualDueToRelativePathsInsideCss();
+		}
+
+		private static void registerBootstrapCssIndividualDueToRelativePathsInsideCss()
+		{
+			var bootstrapCss = new StyleBundle("~/Content/bootstrap/bundle")
+				.Include("~/Content/bootstrap/bootstrap.css");
+			BundleTable.Bundles.Add(bootstrapCss);
 		}
 
 		private static void registerSigninScripts()
