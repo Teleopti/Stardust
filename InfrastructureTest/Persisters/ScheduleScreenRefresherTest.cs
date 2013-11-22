@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             _mocks.ReplayAll();
 
-            _target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>());
+            _target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>(), _ => true);
 
             _mocks.VerifyAll();
         }
@@ -59,10 +59,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
             _mocks.ReplayAll();
 
-            _target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>());
+            _target.Refresh(_scheduleDictionary, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflictMessageState>(),_ => true);
 
             _mocks.VerifyAll();
         }
-
     }
 }

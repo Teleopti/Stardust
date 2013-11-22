@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -22,13 +23,13 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
             _personRequestRefresher = personRequestRefresher;
         }
 
-        public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
+        public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer, Func<Guid,bool> isRelevantPerson)
         {
             _messageQueueUpdater.ReassociateDataWithAllPeople();
 
             var scheduleMessages = QueryMessagesByType<IScheduleChangedEvent>(messageQueue);
             _scheduleRefresher.Refresh(scheduleDictionary, messageQueue, scheduleMessages, refreshedEntitiesBuffer,
-                                       conflictsBuffer);
+                                       conflictsBuffer, isRelevantPerson);
 
             var scheduleDataMessages = QueryMessagesByType<IPersistableScheduleData>(messageQueue);
             _scheduleDataRefresher.Refresh(scheduleDictionary, messageQueue, scheduleDataMessages, refreshedEntitiesBuffer, conflictsBuffer);

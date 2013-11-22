@@ -23,12 +23,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		}
 
 		public void Refresh(IScheduleDictionary scheduleDictionary, IList<IEventMessage> messageQueue, IEnumerable<IEventMessage> scheduleMessages,
-							ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer)
+							ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflictMessageState> conflictsBuffer, Func<Guid,bool> isRelevantPerson)
 		{
 			var myChanges = scheduleDictionary.DifferenceSinceSnapshot();
 			
 			foreach (var eventMessage in scheduleMessages)
 			{
+				if (!isRelevantPerson(eventMessage.DomainObjectId)) continue;
+
 				var person = _personRepository.Load(eventMessage.DomainObjectId);
 				var period = new DateTimePeriod(DateTime.SpecifyKind(eventMessage.EventStartDate, DateTimeKind.Utc),
 												DateTime.SpecifyKind(eventMessage.EventEndDate, DateTimeKind.Utc));

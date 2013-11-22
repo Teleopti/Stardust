@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		    refreshedEntity.Stub(x => x.Person).Return(_person);
 		    _scheduleRefresher.Stub(
 		        x =>
-		        x.Refresh(_schedulerStateHolder.Schedules, new List<IEventMessage>(), new List<IEventMessage>(), new Collection<IPersistableScheduleData>(), new Collection<PersistConflictMessageState>()))
+		        x.Refresh(_schedulerStateHolder.Schedules, new List<IEventMessage>(), new List<IEventMessage>(), new Collection<IPersistableScheduleData>(), new Collection<PersistConflictMessageState>(), _ => true))
                               .IgnoreArguments().WhenCalled(x => ((ICollection<IPersistableScheduleData>)x.Arguments[3]).Add(refreshedEntity));
 
 			target.Execute(new EventMessage { InterfaceType = typeof(IScheduleChangedEvent), DomainObjectId = _person.Id.GetValueOrDefault(), DomainUpdateType = DomainUpdateType.NotApplicable, ReferenceObjectId = _scenario.Id.GetValueOrDefault()});
