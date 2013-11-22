@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var messages = new[] {new EventMessage
 				{
 					InterfaceType = typeof (IScheduleChangedEvent), 
-					DomainObjectId = person.Id.Value, 
+					DomainObjectId = person.Id.GetValueOrDefault(), 
 					EventStartDate = period.StartDateTime, 
 					EventEndDate = period.EndDateTime
 				}};
 
-			target.Refresh(scheduleDictionary, messages, null, null);
+			target.Refresh(scheduleDictionary, messages, null, null, _ => true);
 
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
 		}
@@ -58,13 +58,40 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var messages = new[] {new EventMessage
 				{
 					InterfaceType = typeof (IScheduleChangedEvent), 
-					DomainObjectId = person.Id.Value, 
+					DomainObjectId = person.Id.GetValueOrDefault(), 
 					EventStartDate = period.StartDateTime, 
 					EventEndDate = period.EndDateTime
 				}};
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
 
-			target.Refresh(scheduleDictionary, messages, null, null);
+			target.Refresh(scheduleDictionary, messages, null, null, _ => true);
+
+			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldIgnorePersonAssignmentUpdateWhenPersonNotRelevant()
+		{
+			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
+			var person = PersonFactory.CreatePersonWithId();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var target = new ScheduleRefresher(
+				new FakePersonRepository(person),
+				null,
+				new FakePersonAssignmentRepository(personAssignment),
+				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
+				MockRepository.GenerateMock<IMessageQueueRemoval>()
+				);
+			var scheduleDictionary = new ScheduleDictionaryForTest(personAssignment.Scenario, period);
+			var messages = new[] {new EventMessage
+				{
+					InterfaceType = typeof (IScheduleChangedEvent), 
+					DomainObjectId = person.Id.GetValueOrDefault(), 
+					EventStartDate = period.StartDateTime, 
+					EventEndDate = period.EndDateTime
+				}};
+
+			target.Refresh(scheduleDictionary, messages, null, null, _ => false);
 
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.Null();
 		}
@@ -87,12 +114,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var messages = new[] {new EventMessage
 				{
 					InterfaceType = typeof (IScheduleChangedEvent), 
-					DomainObjectId = person.Id.Value, 
+					DomainObjectId = person.Id.GetValueOrDefault(), 
 					EventStartDate = period.StartDateTime, 
 					EventEndDate = period.EndDateTime
 				}};
 
-			target.Refresh(scheduleDictionary, messages, null, null);
+			target.Refresh(scheduleDictionary, messages, null, null, _ => true);
 			remover.AssertWasCalled(x => x.Remove(messages.Single()));
 		}
 	}

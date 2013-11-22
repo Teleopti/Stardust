@@ -2472,10 +2472,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void validateAllPersons()
 		{
 			_personsToValidate.Clear();
-			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
-			{
-				_personsToValidate.Add(permittedPerson);
-			}
+			_schedulerState.AllPermittedPersons.ForEach(_personsToValidate.Add);
 			validatePersons();
 		}
 
