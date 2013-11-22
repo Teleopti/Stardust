@@ -371,6 +371,7 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ResctrictionFromRoleModelRestrictionTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameActivityRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameEndTimeRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftCategoryRestrictionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftRestrictionTest.cs" />

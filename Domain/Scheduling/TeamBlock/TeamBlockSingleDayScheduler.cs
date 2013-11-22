@@ -75,8 +75,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 
-					var shifts = _workShiftFilterService.Filter(day, person, teamBlockSingleDayInfo, restriction, roleModelShift, schedulingOptions,
-																new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupPerson, day));
+					var shifts = _workShiftFilterService.Filter(day, person, teamBlockSingleDayInfo, restriction, schedulingOptions,
+					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupPerson, day));
 					if (shifts.IsNullOrEmpty()) break;
 					var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockSingleDayInfo);
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,

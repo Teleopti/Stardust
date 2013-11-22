@@ -161,11 +161,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false).Repeat.Twice();
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
 				      .Return(restriction);
-				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person1, _teamBlockInfo, restriction, _shift,
+				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person1, _teamBlockInfo, restriction,
 				                                           _schedulingOptions, finderResult)).Return(shifts);
 				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
 				      .Return(restriction);
-				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person2, _teamBlockInfo, restriction, _shift,
+				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person2, _teamBlockInfo, restriction,
 				                                           _schedulingOptions, finderResult)).Return(shifts);
 				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo)).Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,

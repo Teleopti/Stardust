@@ -200,6 +200,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.IsTrue(result);
 		}
 
+		[Test]
+		public void ShouleBeTeamSchedulingWithBlockSameActivity()
+		{
+			_schedulingOptions.UseTeamBlockPerOption = false;
+			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseCommonActivity = true;
+
+			var result = _target.IsTeamSchedulingWithSameActivity(_schedulingOptions);
+
+			Assert.IsTrue(result);
+		}
+
+		[Test]
+		public void ShouleBeTeamBlockSchedulingWithBlockSameActivity()
+		{
+			_schedulingOptions.UseTeamBlockPerOption = true;
+			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseCommonActivity = true;
+
+			var result = _target.IsTeamSameActivityInTeamBlock(_schedulingOptions);
+
+			Assert.IsTrue(result);
+		}
+
         [Test]
         public void ShouldReturnFalseIfNotSingleAgentTeam()
         {

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -45,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 																	schedulingOptions,
 																	new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer),
 																	_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo));
-			if (shifts == null || shifts.Count <= 0)
+			if (shifts.IsNullOrEmpty())
 				return null;
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,

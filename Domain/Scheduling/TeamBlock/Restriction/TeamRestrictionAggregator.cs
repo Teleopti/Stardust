@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
@@ -55,6 +53,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			{
 				effectiveRestriction = combineRestriction(new SameShiftCategoryRestriction(), dateOnly, matrixList,
 													  effectiveRestriction);
+			}
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(schedulingOptions))
+			{
+				effectiveRestriction = combineRestriction(new SameActivityRestriction(schedulingOptions.CommonActivity), dateOnly, matrixList,
+				                                          effectiveRestriction);
 			}
 			if (roleModel != null)
 			{

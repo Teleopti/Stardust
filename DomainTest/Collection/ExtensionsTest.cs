@@ -211,6 +211,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 			Assert.That(newList, Is.Not.EqualTo(list));
 		}
+
+		[Test]
+		public void ShouldBeNonSequentiallyEqual()
+		{
+			var list1 = new List<int> {1, 2, 3, 4, 5, 3};
+			var list2 = new List<int> {5, 3, 4, 2, 1, 3};
+			Assert.That(list1.NonSequenceEquals(list2), Is.True);
+		}
     }
 }
  

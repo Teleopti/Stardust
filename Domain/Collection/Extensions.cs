@@ -185,5 +185,33 @@ namespace Teleopti.Ccc.Domain.Collection
 			Random rnd = new Random();
 			return source.OrderBy((item) => rnd.Next());
 		}
+
+		public static bool NonSequenceEquals<T>(this IEnumerable<T> source, IEnumerable<T> other)
+		{
+			var cnt = new Dictionary<T, int>();
+			foreach (T s in source)
+			{
+				if (cnt.ContainsKey(s))
+				{
+					cnt[s]++;
+				}
+				else
+				{
+					cnt.Add(s, 1);
+				}
+			}
+			foreach (T s in other)
+			{
+				if (cnt.ContainsKey(s))
+				{
+					cnt[s]--;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			return cnt.Values.All(c => c == 0);
+		}
     }
 }

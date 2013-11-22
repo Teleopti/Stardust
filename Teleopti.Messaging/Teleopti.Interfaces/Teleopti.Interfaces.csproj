@@ -117,6 +117,7 @@
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Domain\ICalculator.cs" />
+    <Compile Include="Domain\ICommonActivity.cs" />
     <Compile Include="Domain\IDayOff.cs" />
     <Compile Include="Domain\IDayOffOnPeriod.cs" />
     <Compile Include="Domain\IEditableShift.cs" />

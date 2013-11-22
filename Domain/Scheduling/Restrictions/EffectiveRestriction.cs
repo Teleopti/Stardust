@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IEffectiveRestriction Combine(IEffectiveRestriction effectiveRestriction)
         {
 
-			IEffectiveRestriction emptyEffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+			EffectiveRestriction emptyEffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																				  new EndTimeLimitation(),
 																				  new WorkTimeLimitation(), null, null, null,
 																				  new List<IActivityRestriction>());
@@ -236,25 +237,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				ret.IsStudentAvailabilityDay = true;
 			if (effectiveRestriction.NotAvailable)
 				ret.NotAvailable = true;
-			ret.CommonMainShift = CommonMainShift;
-			if (CommonMainShift == null)
-			{
-				ret.CommonMainShift = effectiveRestriction.CommonMainShift;
-				return ret;
-			}
+	        ret.CommonActivity = CommonActivity;
+	        ret.CommonMainShift = CommonMainShift;
 
 	        if (effectiveRestriction.CommonMainShift != null)
 	        {
-		        if (areMainShiftsEqual(CommonMainShift, effectiveRestriction.CommonMainShift))
+				if (CommonMainShift == null || areMainShiftsEqual(CommonMainShift, effectiveRestriction.CommonMainShift))
 				{
 					ret.CommonMainShift = effectiveRestriction.CommonMainShift; 
 		        }
 		        else
 		        {
-					return emptyEffectiveRestriction;
+					ret = emptyEffectiveRestriction;
 		        }
 	        }
-
+			
+			if (effectiveRestriction.CommonActivity != null)
+	        {
+				if (CommonActivity == null || CommonActivity.Equals(effectiveRestriction.CommonActivity))
+		        {
+			        ret.CommonActivity = effectiveRestriction.CommonActivity;
+		        }
+		        else
+		        {
+					ret = emptyEffectiveRestriction;
+		        }
+	        }
+			
 	        return ret;
 
         }
@@ -435,6 +444,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 					result = (result * 398) ^ ShiftCategory.GetHashCode();
 				if (CommonMainShift != null)
 					result = (result * 398) ^ CommonMainShift.GetHashCode();
+				if (CommonActivity != null)
+					result = (result * 398) ^ CommonActivity.GetHashCode();
 				if (DayOffTemplate != null)
 					result = (result * 398) ^ DayOffTemplate.GetHashCode();
 				if (Absence != null)
@@ -466,5 +477,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public bool NotAllowedForDayOffs { get; set; }
 	    public IEditableShift CommonMainShift { get; set; }
+	    public ICommonActivity CommonActivity { get; set; }
     }
 }

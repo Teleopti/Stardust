@@ -539,10 +539,12 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\BlockRestrictionAggregator.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\CommonActivity.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\OpenHourRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcition.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ResctrictionFromRoleModelRestriction.cs" />
+    <Compile Include="Scheduling\TeamBlock\Restriction\SameActivityRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockResctrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameEndTimeRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SameShiftCategoryRestriction.cs" />

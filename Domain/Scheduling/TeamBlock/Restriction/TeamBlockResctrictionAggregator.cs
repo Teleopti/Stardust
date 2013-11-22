@@ -95,7 +95,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			{
 				effectiveRestriction = combineRestriction(new SameEndTimeRestriction(timeZone), datePointer, matrixList, effectiveRestriction);
 			}
-
+			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(schedulingOptions) ||
+			    _teamBlockSchedulingOptions.IsTeamSameActivityInTeamBlock(schedulingOptions))
+			{
+				effectiveRestriction = combineRestriction(new SameActivityRestriction(schedulingOptions.CommonActivity), datePointer,
+				                                          matrixList,
+				                                          effectiveRestriction);
+			}
 			if (roleModel != null)
 			{
 				effectiveRestriction = combineRestriction(new ResctrictionFromRoleModelRestriction(roleModel, _teamBlockSchedulingOptions, schedulingOptions), dateOnlyList,

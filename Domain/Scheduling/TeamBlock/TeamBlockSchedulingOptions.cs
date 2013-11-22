@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool IsTeamSameEndTimeInTeamBlock(ISchedulingOptions schedulingOptions);
 		bool IsBlockSameShiftInTeamBlock(ISchedulingOptions schedulingOptions);
 		bool IsTeamSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions);
+		bool IsTeamSameActivityInTeamBlock(ISchedulingOptions schedulingOptions);
+		bool IsTeamSchedulingWithSameActivity(ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockSchedulingOptions : ITeamBlockSchedulingOptions
@@ -116,5 +118,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
                    schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
         }
+
+		public bool IsTeamSameActivityInTeamBlock(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamBlockScheduling(schedulingOptions) &&
+			       schedulingOptions.UseCommonActivity;
+		}
+
+		public bool IsTeamSchedulingWithSameActivity(ISchedulingOptions schedulingOptions)
+		{
+			return IsTeamScheduling(schedulingOptions) &&
+			       schedulingOptions.UseCommonActivity;
+		}
 	}
 }

@@ -447,7 +447,7 @@ namespace Teleopti.Interfaces.Domain
         /// </returns>
         public override int GetHashCode()
         {
-            return period.Minimum.GetHashCode() ^ period.Maximum.GetHashCode();
+			return (period.Minimum.GetHashCode() * 397) ^ period.Maximum.GetHashCode();
         }
 
         /// <summary>
