@@ -23,9 +23,17 @@
             }
             else
             {
-                <li><div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var option in Model.Options.PreferenceOptions)
+                <li>
+                    <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
                                                                                                         {
-                                                                                                            @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
+                                                                                                            if (optionGroup.Text != Resources.ShiftCategory)
+                                                                                                            {
+                                                                                                                @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
+                                                                                                            }
+                                                                                                            foreach (var option in optionGroup.Options)
+                                                                                                            {
+                                                                                                                @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
+                                                                                                            }
                                                                                                         }]">
                         <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
                      
@@ -40,7 +48,8 @@
                             <li class="divider"></li>
                             <!-- /ko -->
                         </ul>
-                    </div></li>
+                    </div>
+                </li>
             }
             <li><a href="#" data-bind="click: deletePreference"><i class="icon-remove"></i>&nbsp;@Resources.Remove</a></li>
             <li class="divider-vertical"></li>

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -146,18 +148,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 		}
 
-		private IEnumerable<IOption> ActivityOptions()
+		private PreferenceOptionGroup ActivityOptions()
 		{
-			return (from a in _preferenceOptionsProvider().RetrieveActivityOptions().MakeSureNotNull()
-				   select new Option
-				   {
-					   Value = a.Id.ToString(),
-					   Text = a.Description.Name,
-					   Color = a.DisplayColor.ToHtml()
-				   }).ToList();
+			return new PreferenceOptionGroup(Resources.Activity, 
+											(from a in _preferenceOptionsProvider().RetrieveActivityOptions().MakeSureNotNull()
+											select new PreferenceOption
+											{
+												Value = a.Id.ToString(),
+												Text = a.Description.Name,
+												Color = a.DisplayColor.ToHtml()
+											}).ToList());
 		}
 
-		private IEnumerable<IPreferenceOption> PreferenceOptions()
+		private IEnumerable<PreferenceOptionGroup> PreferenceOptions()
 		{
 			var shiftCategories =
 				_preferenceOptionsProvider()
@@ -196,16 +199,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				})
 				.ToArray();
 
-			var options = new List<IPreferenceOption>();
-			options.AddRange(shiftCategories);
-			if (options.Count > 0 && dayOffs.Any())
-				options.Add(new PreferenceOptionSplit());
-			options.AddRange(dayOffs);
-			if (options.Count > 0 && absences.Any())
-				options.Add(new PreferenceOptionSplit());
-			options.AddRange(absences);
+			var optionGroups = new List<PreferenceOptionGroup>
+				{
+					new PreferenceOptionGroup(Resources.ShiftCategory, shiftCategories)
+				};
+			if (dayOffs.Any())
+				optionGroups.Add(new PreferenceOptionGroup(Resources.DayOff, dayOffs));
+			if (absences.Any())
+				optionGroups.Add(new PreferenceOptionGroup(Resources.Absence, absences));
 
-			return options.ToList();
+			return optionGroups.ToList();
 		}
 	}
 }
