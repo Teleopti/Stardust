@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		private static void registerMyTimeScripts()
 		{
+			registerBootstrapCssIndividualDueToRelativePathsInsideCss();
 			var cssBundle = new StyleBundle(MyTimeCss)
 				.Include(
 					"~/Content/moment-datepicker/datepicker.css",
@@ -64,10 +65,9 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/scripts/pinify/scripts/jquery.pinify.min.js"
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Scripts", "*.js", true);
-			jsBundle.Orderer = new TeleoptiScriptsOrderedByNumberOfDots();
+			jsBundle.Orderer = new teleoptiScriptsOrderedByNumberOfDots();
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
-			registerBootstrapCssIndividualDueToRelativePathsInsideCss();
 		}
 
 		private static void registerBootstrapCssIndividualDueToRelativePathsInsideCss()
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			BundleTable.Bundles.Add(jsBundle);
 		}
 
-		private class TeleoptiScriptsOrderedByNumberOfDots : IBundleOrderer
+		private class teleoptiScriptsOrderedByNumberOfDots : IBundleOrderer
 		{
 			public IEnumerable<BundleFile> OrderFiles(BundleContext context, IEnumerable<BundleFile> files)
 			{
