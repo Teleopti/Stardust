@@ -39,11 +39,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                                                                                      schedulingOptions);
             HashSet<IList<ITeamBlockInfo>> listOfMultipleLengthBlocks =
                 _teamBlockSizeClassifier.SplitTeamBlockInfo(listOfAllTeamBlock);
-            Parallel.ForEach(listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true), teamBlockList => _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories));
-            //foreach (var teamBlockList in listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true))
-            //{
-            //    _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories);
-            //}
+            //Parallel.ForEach(listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true), teamBlockList => _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories));
+            foreach (var teamBlockList in listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true))
+            {
+                _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories);
+            }
         }
 
         

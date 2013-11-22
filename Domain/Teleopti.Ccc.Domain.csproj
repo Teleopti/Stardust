@@ -362,6 +362,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SelectedAgentPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SwapScheduleDays.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriorityDefinitionInfo.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockListSwapAnalyzer.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
@@ -373,7 +374,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\DetermineTeamBlockPriority.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriorityDefinition.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockFairnessOptimizationService.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSizeClassifier.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockWeight.cs" />

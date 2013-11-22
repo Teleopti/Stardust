@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface IDetermineTeamBlockPriority
     {
-        IDictionary<ITeamBlockInfo, PriorityDefinition> CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories);
+        ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos,
+                                                           IList<IShiftCategory> shiftCategories);
     }
 
     public class DetermineTeamBlockPriority : IDetermineTeamBlockPriority
@@ -15,49 +16,66 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         private readonly ISelectedAgentPoints _selectedAgentPoints;
         private readonly IShiftCategoryPoints _shiftCategoryPoints;
 
-        public DetermineTeamBlockPriority(ISelectedAgentPoints selectedAgentPoints, IShiftCategoryPoints shiftCategoryPoints)
+        public DetermineTeamBlockPriority(ISelectedAgentPoints selectedAgentPoints,
+                                          IShiftCategoryPoints shiftCategoryPoints)
         {
             _selectedAgentPoints = selectedAgentPoints;
             _shiftCategoryPoints = shiftCategoryPoints;
         }
 
-        public IDictionary<ITeamBlockInfo, PriorityDefinition> CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories)
+        //public IDictionary<ITeamBlockInfo, PriorityDefinition> CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories)
+        //{
+        //    var tbPriorityDictionary = new Dictionary<ITeamBlockInfo, PriorityDefinition>();
+        //    foreach (ITeamBlockInfo teamBlockInfo in teamBlockInfos)
+        //    {
+        //        IPrioritiseAgentForTeamBlock prioritiseAgentForTeamBlock = new PrioritiseAgentForTeamBlock(_selectedAgentPoints);
+        //        IPriortiseShiftCategoryForTeamBlock priortiseShiftCategoryForTeamBlock = new PriortiseShiftCategoryForTeamBlock(_shiftCategoryPoints);
+        //        extractAgentAndShiftCategoryPriority(teamBlockInfo, prioritiseAgentForTeamBlock, priortiseShiftCategoryForTeamBlock);
+
+        //        var priority = new PriorityDefinition
+        //            {
+        //                AgentPriority = prioritiseAgentForTeamBlock.AveragePriority,
+        //                ShiftCategoryPriority = priortiseShiftCategoryForTeamBlock.AveragePriority
+        //            };
+        //        tbPriorityDictionary.Add(teamBlockInfo, priority);
+        //    }
+        //    return tbPriorityDictionary;
+        //}
+
+        public ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos,
+                                                                  IList<IShiftCategory> shiftCategories)
         {
-            var tbPriorityDictionary = new Dictionary<ITeamBlockInfo, PriorityDefinition>();
+            var teamBlockPriorityDefinitionInfo = new TeamBlockPriorityDefinitionInfo();
             foreach (ITeamBlockInfo teamBlockInfo in teamBlockInfos)
             {
-                IPrioritiseAgentForTeamBlock prioritiseAgentForTeamBlock = new PrioritiseAgentForTeamBlock(_selectedAgentPoints);
-                IPriortiseShiftCategoryForTeamBlock priortiseShiftCategoryForTeamBlock = new PriortiseShiftCategoryForTeamBlock(_shiftCategoryPoints);
+                var prioritiseAgentForTeamBlock = new PrioritiseAgentForTeamBlock(_selectedAgentPoints);
+                var priortiseShiftCategoryForTeamBlock = new PriortiseShiftCategoryForTeamBlock(_shiftCategoryPoints);
                 extractAgentAndShiftCategoryPriority(teamBlockInfo, prioritiseAgentForTeamBlock, priortiseShiftCategoryForTeamBlock);
-                
-                var priority = new PriorityDefinition
-                    {
-                        AgentPriority = prioritiseAgentForTeamBlock.AveragePriority,
-                        ShiftCategoryPriority = priortiseShiftCategoryForTeamBlock.AveragePriority
-                    };
-                tbPriorityDictionary.Add(teamBlockInfo, priority);
+                var teamBlockInfoPriority = new TeamBlockInfoPriority(teamBlockInfo,  prioritiseAgentForTeamBlock.AveragePriority, priortiseShiftCategoryForTeamBlock.AveragePriority);
+                teamBlockPriorityDefinitionInfo.AddItem(teamBlockInfoPriority);
             }
-            return tbPriorityDictionary;
+            return teamBlockPriorityDefinitionInfo;
         }
 
-        private void extractAgentAndShiftCategoryPriority(ITeamBlockInfo teamBlockInfo, IPrioritiseAgentForTeamBlock prioritiseAgentForTeamBlock, IPriortiseShiftCategoryForTeamBlock priortiseShiftCategoryForTeamBlock)
+        private void extractAgentAndShiftCategoryPriority(ITeamBlockInfo teamBlockInfo,
+                                                          IPrioritiseAgentForTeamBlock prioritiseAgentForTeamBlock,
+                                                          IPriortiseShiftCategoryForTeamBlock
+                                                              priortiseShiftCategoryForTeamBlock)
         {
-            prioritiseAgentForTeamBlock.GetPriortiseAgentByStartDate(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList());
+            prioritiseAgentForTeamBlock.GetPriortiseAgentByStartDate( teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList());
             var shiftCategories = new List<IShiftCategory>();
-            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndPeriod(teamBlockInfo.BlockInfo.BlockPeriod)
-                )
+            foreach (IScheduleMatrixPro matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndPeriod(teamBlockInfo.BlockInfo.BlockPeriod))
             {
-                foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+                foreach (DateOnly day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
                 {
-                    var scheduleDay = matrix.GetScheduleDayByKey(day);
+                    IScheduleDayPro scheduleDay = matrix.GetScheduleDayByKey(day);
                     if (scheduleDay != null && scheduleDay.DaySchedulePart() != null &&
                         scheduleDay.DaySchedulePart().GetEditorShift() != null)
                     {
-                        var sc = scheduleDay.DaySchedulePart().GetEditorShift().ShiftCategory;
-                        if(!shiftCategories.Contains(sc ) )
+                        IShiftCategory sc = scheduleDay.DaySchedulePart().GetEditorShift().ShiftCategory;
+                        if (!shiftCategories.Contains(sc))
                             shiftCategories.Add(sc);
                     }
-                        
                 }
             }
             priortiseShiftCategoryForTeamBlock.GetPriortiseShiftCategories(shiftCategories);

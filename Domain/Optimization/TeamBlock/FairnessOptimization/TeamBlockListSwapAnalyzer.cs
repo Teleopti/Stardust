@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
     {
         private readonly IDetermineTeamBlockPriority _determineTeamBlockPriority;
         private readonly ISwapScheduleDays _swapScheduleDays;
-        private IValidateScheduleDays _validateScheduleDay;
+        private readonly IValidateScheduleDays _validateScheduleDay;
 
         public TeamBlockListSwapAnalyzer(IDetermineTeamBlockPriority determineTeamBlockPriority, ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDay)
         {
@@ -27,20 +27,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         public void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
         {
-            var teamBlockPriorityDefinition = new TeamBlockPriorityDefinitionInfo(_determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories));
-            foreach (int higherPriority in teamBlockPriorityDefinition.HighToLowAgentPriorityList)
+            var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories);
+            foreach (int higherPriority in teamBlockPriorityDefinitionInfo.HighToLowAgentPriorityList)
             {
-                foreach (int lowerPriority in teamBlockPriorityDefinition.LowToHighAgentPriorityList)
+                foreach (int lowerPriority in teamBlockPriorityDefinitionInfo.LowToHighAgentPriorityList)
                 {
-                    ITeamBlockInfo higherPriorityBlock = teamBlockPriorityDefinition.BlockOnAgentPriority(higherPriority);
-                    int lowestShiftCategoryPrioirty =
-                        teamBlockPriorityDefinition.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
-                    if (
-                        teamBlockPriorityDefinition.HighToLowShiftCategoryPriorityList.Any(
-                            higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPrioirty))
+                    ITeamBlockInfo higherPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(higherPriority);
+                    int lowestShiftCategoryPrioirty = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
+                    if (teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriorityList.Any(higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPrioirty))
                     {
-                        ITeamBlockInfo lowestPriorityBlock =
-                            teamBlockPriorityDefinition.BlockOnAgentPriority(lowerPriority);
+                        ITeamBlockInfo lowestPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(lowerPriority);
                         if (validateBlock(higherPriorityBlock, lowestPriorityBlock))
                             swapBlock(higherPriorityBlock, lowestPriorityBlock);
                     }
