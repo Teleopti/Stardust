@@ -36,7 +36,6 @@ Background:
 	| Name     | Common |
 	| Rule set | Common |
 
-
 Scenario: See indication of a pre-scheduled meeting
 	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled meeting with
@@ -88,10 +87,7 @@ Scenario: Tooltip of a pre-scheduled personal shift
 	| Activity  | Administration   |
 
 Scenario: Feedback from pre-scheduled meeting
-	Given I have a person period with 
-	| Field        | Value      |
-	| Start date   | 2012-10-01 |
-	| Rule set bag | Common     |
+	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled meeting with
 	| Field     | Value            |
 	| StartTime | 2012-10-19 17:00 |
@@ -105,10 +101,7 @@ Scenario: Feedback from pre-scheduled meeting
 	| EndTime boundry | 18:00-18:00 |
 
 Scenario: Feedback from a pre-scheduled meeting outside of possible shifts
-	Given I have a person period with 
-	| Field        | Value      |
-	| Start date   | 2012-10-01 |
-	| Rule set bag | Common     |
+	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled meeting with
 	| Field     | Value            |
 	| StartTime | 2012-10-19 18:00 |
@@ -122,10 +115,7 @@ Scenario: Feedback from a pre-scheduled meeting outside of possible shifts
 	| Feedback error | No available shift |
 
 Scenario: Feedback from pre-scheduled personal shift
-	Given I have a person period with 
-	| Field        | Value      |
-	| Start date   | 2012-10-01 |
-	| Rule set bag | Common     |
+	Given I have a person period that starts on '2012-10-01'
 	And I have a pre-scheduled personal shift with
 	| Field     | Value            |
 	| StartTime | 2012-10-19 17:00 |
