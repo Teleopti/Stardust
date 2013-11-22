@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IScheduleDay> retList = service.SwapAssignments(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, retList[0].PersonAssignment().MainActivities().Count());
         }
 
 

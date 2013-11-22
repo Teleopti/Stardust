@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
 			var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var lastLayer = ass.OvertimeLayers().Last();
+			var lastLayer = ass.OvertimeActivities().Last();
 			var target = new OvertimeLayerViewModel(observer, lastLayer, ass, stubbedEventAggregator(), moveupdown);
 			target.MoveUp();
 
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
 			var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
-			var firstLayer = ass.OvertimeLayers().First();
+			var firstLayer = ass.OvertimeActivities().First();
 			var target = new OvertimeLayerViewModel(observer, firstLayer, ass, stubbedEventAggregator(), moveupdown);
 			target.MoveDown();
 

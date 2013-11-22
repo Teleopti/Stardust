@@ -132,13 +132,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyCreateSystemRoleApplicationRoleMapperRepository()
-        {
-            mocks.ReplayAll();
-            Assert.IsNotNull(new RepositoryFactory().CreateSystemRoleApplicationRoleMapperRepository(uow));
-        }
-
-        [Test]
         public void VerifyCreateWorkloadRepository()
         {
             mocks.ReplayAll();

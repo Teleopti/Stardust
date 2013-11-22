@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<FullDayAbsenceAddedEvent>,
 		IHandleEvent<PersonAbsenceRemovedEvent>,
 		IHandleEvent<PersonAbsenceAddedEvent>,
-		IHandleEvent<ActivityAssignedEvent>
+		IHandleEvent<ActivityAddedEvent>
 
 	{
 		private readonly IPublishEventsFromEventHandlers _publisher;
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 				});
 		}
 
-		public void Handle(ActivityAssignedEvent @event)
+		public void Handle(ActivityAddedEvent @event)
 		{
 			_publisher.Publish(new ScheduleChangedEvent
 				{

@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsMain = layerToRemove as IMainShiftLayer;
 			if (layerAsMain != null)
 			{
-				var mainLayers = assignment.MainLayers().ToList();
+				var mainLayers = assignment.MainActivities().ToList();
 				var indexOfLayer = mainLayers.IndexOf(layerAsMain);
 				if (indexOfLayer > -1)
 				{
-					assignment.RemoveLayer(layerAsMain);
-					assignment.InsertMainLayer(newActivity,newPeriod,indexOfLayer);
+					assignment.RemoveActivity(layerAsMain);
+					assignment.InsertActivity(newActivity,newPeriod,indexOfLayer);
 					return true;
 				}
 			}
@@ -46,16 +46,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
 			if (layerAsPersonal != null)
 			{
-				var mainLayers = assignment.PersonalLayers().ToList();
+				var mainLayers = assignment.PersonalActivities().ToList();
 				var indexOfLayer = mainLayers.IndexOf(layerAsPersonal);
 				if (indexOfLayer > -1)
 				{
 					mainLayers.RemoveAt(indexOfLayer);
 					mainLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
-					assignment.ClearPersonalLayers();
+					assignment.ClearPersonalActivities();
 					foreach (var layer in mainLayers)
 					{
-						assignment.AddPersonalLayer(layer.Payload, layer.Period);
+						assignment.AddPersonalActivity(layer.Payload, layer.Period);
 					}
 					return true;
 				}
@@ -68,16 +68,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
 			if (layerAsOvertime != null)
 			{
-				var overtimeLayers = assignment.OvertimeLayers().ToList();
+				var overtimeLayers = assignment.OvertimeActivities().ToList();
 				var indexOfLayer = overtimeLayers.IndexOf(layerAsOvertime);
 				if (indexOfLayer > -1)
 				{
 					overtimeLayers.RemoveAt(indexOfLayer);
 					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));
-					assignment.ClearOvertimeLayers();
+					assignment.ClearOvertimeActivities();
 					foreach (var layer in overtimeLayers)
 					{
-						assignment.AddOvertimeLayer(layer.Payload, layer.Period, layer.DefinitionSet);
+						assignment.AddOvertimeActivity(layer.Payload, layer.Period, layer.DefinitionSet);
 					}
 					return true;
 				}

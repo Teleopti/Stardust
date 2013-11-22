@@ -167,6 +167,7 @@
     <Compile Include="Persisters\Requests\DontPersistIfNoPermissionTest.cs" />
     <Compile Include="Persisters\Requests\UpdateNoConflictTest.cs" />
     <Compile Include="Persisters\Requests\RequestPersisterBaseTest.cs" />
+    <Compile Include="Persisters\Schedules\Bug25715.cs" />
     <Compile Include="Persisters\Schedules\ConflictNoteEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictPersonAbsenceEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\InsertNoConflictTest.cs" />
@@ -346,7 +347,6 @@
     <Compile Include="Repositories\RuleSetBagRepositoryTest.cs" />
     <Compile Include="Repositories\ScorecardRepositoryTest.cs" />
     <Compile Include="Repositories\ValidatedVolumeDayRepositoryTest.cs" />
-    <Compile Include="Repositories\SystemRoleApplicationRoleMapperRepositoryTest.cs" />
     <Compile Include="Repositories\ScheduleRepositoryTest.cs" />
     <Compile Include="Repositories\SkillDayRepositoryTest.cs" />
     <Compile Include="Repositories\PersonAbsenceRepositoryTest.cs" />

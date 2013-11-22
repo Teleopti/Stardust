@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Forecasting.Import
 {
-    public class ForecastFile : AggregateRootWithBusinessUnit, IForecastFile
+    public class ForecastFile : NonversionedAggregateRootWithBusinessUnit, IForecastFile
     {
         private readonly byte[] _fileContent;
         private readonly string _fileName;

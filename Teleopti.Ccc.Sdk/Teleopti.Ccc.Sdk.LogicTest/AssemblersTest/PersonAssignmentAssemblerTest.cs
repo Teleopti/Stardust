@@ -127,16 +127,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
                 Assert.AreEqual(dto.Version, entity.Version);
                 Assert.AreEqual(dto.Id, entity.Id);
-                Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.MainLayers().Single().Period);
-                Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), entity.PersonalLayers().Single().Period);
-                Assert.AreEqual(new DateTimePeriod(2001, 1, 1, 2001, 1, 2), entity.OvertimeLayers().Single().Period);
+                Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.MainActivities().Single().Period);
+                Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), entity.PersonalActivities().Single().Period);
+                Assert.AreEqual(new DateTimePeriod(2001, 1, 1, 2001, 1, 2), entity.OvertimeActivities().Single().Period);
                 Assert.AreSame(person, entity.Person);
                 Assert.AreSame(scenario, entity.Scenario);             
                 Assert.AreSame(shiftCategory, entity.ShiftCategory);
-                Assert.AreSame(activityMain, entity.MainLayers().First().Payload);
-                Assert.AreSame(activityPers, entity.PersonalLayers().First().Payload);
-                Assert.AreSame(activityOvertime, entity.OvertimeLayers().First().Payload);
-                Assert.AreSame(definitionSet, entity.OvertimeLayers().First().DefinitionSet);
+                Assert.AreSame(activityMain, entity.MainActivities().First().Payload);
+                Assert.AreSame(activityPers, entity.PersonalActivities().First().Payload);
+                Assert.AreSame(activityOvertime, entity.OvertimeActivities().First().Payload);
+                Assert.AreSame(definitionSet, entity.OvertimeActivities().First().DefinitionSet);
             }
         }
 
@@ -169,13 +169,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
            
             IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
             ass.SetId(Guid.NewGuid());
-					ass.AddOvertimeLayer(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet);
-            ass.OvertimeLayers().First().SetId(Guid.NewGuid());
-						ass.AssignActivity(act, new DateTimePeriod(1900, 1, 1, 1900, 1, 2));
+					ass.AddOvertimeActivity(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet);
+            ass.OvertimeActivities().First().SetId(Guid.NewGuid());
+						ass.AddActivity(act, new DateTimePeriod(1900, 1, 1, 1900, 1, 2));
 					ass.SetShiftCategory(sCat);
-						ass.AddPersonalLayer(act, new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
-					ass.MainLayers().Single().SetId(Guid.NewGuid());
-					ass.PersonalLayers().Single().SetId(Guid.NewGuid());
+						ass.AddPersonalActivity(act, new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
+					ass.MainActivities().Single().SetId(Guid.NewGuid());
+					ass.PersonalActivities().Single().SetId(Guid.NewGuid());
 
             PersonAssignmentDto dto = target.DomainEntityToDto(ass);
             ActivityLayerDto firstMainShiftLayer = dto.MainShift.LayerCollection.First();
@@ -183,12 +183,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(0, dto.Version);
             Assert.AreEqual(ass.Id, dto.Id);
             Assert.AreEqual(ass.ShiftCategory.Id, dto.MainShift.ShiftCategoryId);
-            Assert.AreEqual(ass.MainLayers().Count(), dto.MainShift.LayerCollection.Count);
-            Assert.AreEqual(ass.MainLayers().First().Payload.Id, firstMainShiftLayer.Activity.Id);
-            Assert.AreEqual(ass.MainLayers().First().Period,	new DateTimePeriod(firstMainShiftLayer.Period.UtcStartTime, firstMainShiftLayer.Period.UtcEndTime));
-            Assert.AreEqual(ass.MainLayers().First().Id,	dto.MainShift.LayerCollection.First().Id);
-            Assert.AreEqual(ass.PersonalLayers().Single().Id, dto.PersonalShiftCollection.First().LayerCollection.First().Id);
-            Assert.AreEqual(ass.OvertimeLayers().Single().Id, dto.OvertimeShiftCollection.First().LayerCollection.First().Id);
+            Assert.AreEqual(ass.MainActivities().Count(), dto.MainShift.LayerCollection.Count);
+            Assert.AreEqual(ass.MainActivities().First().Payload.Id, firstMainShiftLayer.Activity.Id);
+            Assert.AreEqual(ass.MainActivities().First().Period,	new DateTimePeriod(firstMainShiftLayer.Period.UtcStartTime, firstMainShiftLayer.Period.UtcEndTime));
+            Assert.AreEqual(ass.MainActivities().First().Id,	dto.MainShift.LayerCollection.First().Id);
+            Assert.AreEqual(ass.PersonalActivities().Single().Id, dto.PersonalShiftCollection.First().LayerCollection.First().Id);
+            Assert.AreEqual(ass.OvertimeActivities().Single().Id, dto.OvertimeShiftCollection.First().LayerCollection.First().Id);
         }
     }
 }

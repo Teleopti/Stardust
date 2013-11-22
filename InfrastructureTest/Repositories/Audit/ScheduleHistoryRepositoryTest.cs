@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.AssignActivity(PersonAssignment.MainLayers().First().Payload, PersonAssignment.MainLayers().First().Period);
+				PersonAssignment.AddActivity(PersonAssignment.MainActivities().First().Payload, PersonAssignment.MainActivities().First().Period);
 				uow.PersistAll();
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 					new AbsenceLayer(PersonAbsence.Layer.Payload, new DateTimePeriod(Today.AddHours(27), Today.AddHours(28))));
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				PersonAssignment.AssignActivity(PersonAssignment.MainLayers().First().Payload, new DateTimePeriod(Today.AddHours(23), Today.AddHours(30)));
+				PersonAssignment.AddActivity(PersonAssignment.MainActivities().First().Payload, new DateTimePeriod(Today.AddHours(23), Today.AddHours(30)));
 				Repository.Add(PersonAssignment);
 
 				Repository.Add(newAbsence);

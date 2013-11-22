@@ -51,7 +51,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-05-29
         /// </remarks>
-        IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot();
+		IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot();
 
         /// <summary>
         /// Extracts all schedule data.
@@ -182,7 +182,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-06-17
         /// </remarks>
-        IPersistableScheduleData DeleteFromBroker(Guid id);
+	IPersistableScheduleData DeleteFromBroker(Guid id);
 
         /// <summary>
         /// Validates the business rules on persons.

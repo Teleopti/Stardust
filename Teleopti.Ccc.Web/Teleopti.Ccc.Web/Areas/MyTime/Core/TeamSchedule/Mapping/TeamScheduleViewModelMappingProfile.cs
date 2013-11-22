@@ -71,6 +71,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 						var timeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
 						timeFormat = timeFormat.Replace(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator, string.Empty);
 						timeFormat = timeFormat.Replace("m", string.Empty);
+						if (timeFormat == "h")
+							timeFormat = "hh";
+						else if (timeFormat == "H")
+							timeFormat = "HH";
 						return localTime.ToString(timeFormat);
 					}))
 				.ForMember(d => d.PositionPercent, o => o.ResolveUsing(s =>

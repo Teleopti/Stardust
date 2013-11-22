@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -37,44 +35,52 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var schedulePart0 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
 			var schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
-			var ass0 = schedulePart0.PersonAssignment();
-			var ass1 = schedulePart1.PersonAssignment();
-			if ((ass1!=null || ass0!=null) &&
-				(!schedulePart1.HasDayOff() && !schedulePart0.HasDayOff()))
-			{
-				if (ass1==null)
-				{
-					_selectedSchedules[1].Swap(schedulePart0, false);
-					_selectedSchedules[1].DeletePersonalStuff();
-					_selectedSchedules[0].DeleteMainShift(schedulePart0);
-				}
-				else
-				{
-					_selectedSchedules[0].Swap(schedulePart1, false);
-					_selectedSchedules[0].DeletePersonalStuff();
-					_selectedSchedules[1].DeleteMainShift(schedulePart1);
-				}
-			}
-			else
-			{
-				if (!schedulePart1.PersistableScheduleDataCollection().Any())
-					_selectedSchedules[0].Swap(_selectedSchedules[0], true);
-				else
-					_selectedSchedules[0].Swap(schedulePart1, false);
 
-				if(!schedulePart0.PersistableScheduleDataCollection().Any())
-					_selectedSchedules[1].Swap(_selectedSchedules[1], true);
-				else
-					_selectedSchedules[1].Swap(schedulePart0, false);
-			}
+			var assignment0 = schedulePart0.PersonAssignment(true);
+			var assignment1 = schedulePart1.PersonAssignment(true);
+			var workingAssignment = assignment0.NoneEntityClone();
 
-			((ExtractedSchedule)_selectedSchedules[1]).DeleteOvertime();
-			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart0);
-			((ExtractedSchedule)_selectedSchedules[0]).DeleteOvertime();
-			((ExtractedSchedule)_selectedSchedules[0]).MergeOvertime(schedulePart1);
+			movePersonAssignment(assignment0, workingAssignment);
+			movePersonAssignment(assignment1, assignment0);
+			movePersonAssignment(workingAssignment, assignment1);
 
-			retList.AddRange(_selectedSchedules);
+			retList.AddRange(new List<IScheduleDay> {schedulePart0, schedulePart1});
 			return retList;
+		}
+
+		private static void movePersonAssignment(IPersonAssignment sourceAssignment, IPersonAssignment targetAssignment)
+		{
+
+			var periodOffsetCalculator = new PeriodOffsetCalculator();
+			var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(sourceAssignment.Period, targetAssignment.Period);
+
+			targetAssignment.ClearMainActivities();
+			targetAssignment.ClearOvertimeActivities();
+
+			foreach (var layer in sourceAssignment.MainActivities())
+			{
+				targetAssignment.AddActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
+			}
+
+			var timeZoneInfo = sourceAssignment.Person.PermissionInformation.DefaultTimeZone();
+			var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(sourceAssignment.Period.StartDateTime, timeZoneInfo));
+			var personPeriod = sourceAssignment.Person.Period(dateOnlyPerson);
+
+			foreach (var layer in sourceAssignment.OvertimeActivities())
+			{
+				if (personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
+				{
+					targetAssignment.AddOvertimeActivity(layer.Payload, layer.Period, layer.DefinitionSet);
+				}
+			}
+
+			sourceAssignment.SetThisAssignmentsDayOffOn(targetAssignment);
+
+			targetAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
+
+			sourceAssignment.ClearMainActivities();
+			sourceAssignment.ClearOvertimeActivities();
+			sourceAssignment.SetDayOff(null);
 		}
 
 		public IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules)

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Auditing
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, new Person(), 
 			                                                               new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
 			target.ShouldBeAudited(pa).Should().Be.True();
-			target.ShouldBeAudited(pa.MainLayers().First()).Should().Be.True();
+			target.ShouldBeAudited(pa.MainActivities().First()).Should().Be.True();
 		}
 
 		[Test]
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Auditing
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, new Person(),
 																								new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
 			target.ShouldBeAudited(pa).Should().Be.False();
-			target.ShouldBeAudited(pa.MainLayers().First()).Should().Be.False();
+			target.ShouldBeAudited(pa.MainActivities().First()).Should().Be.False();
 		}
 
 		[Test]

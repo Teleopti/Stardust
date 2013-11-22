@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
 		private readonly ConcurrentDictionary<string, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<string, IEnumerable<ISkill>>();
-		private readonly HashSet<Guid> _activityRequiresSeat = new HashSet<Guid>();
+		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		
 		private int _minSkillResolution = 60;
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			if (resourceLayer.RequiresSeat)
 			{
-				_activityRequiresSeat.Add(resourceLayer.PayloadId);
+				_activityRequiresSeat.TryAdd(resourceLayer.PayloadId,true);
 			}
 			resources.AppendResource(key, skills, 1d, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double ActivityResourcesWhereSeatRequired(ISkill skill, DateTimePeriod period)
 		{
-			var activityKeys = _activityRequiresSeat.Select(a => a.ToString()).ToArray();
+			var activityKeys = _activityRequiresSeat.Keys.Select(a => a.ToString()).ToArray();
 			var skillKey = skill.Id.GetValueOrDefault();
 
 			double resource = 0;

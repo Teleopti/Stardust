@@ -86,10 +86,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 			if (personAssignment.ShiftCategory == null && personAssignment.DayOff() == null)
 			{
-				if (personAssignment.OvertimeLayers().IsEmpty() && !personAssignment.PersonalLayers().IsEmpty())
+				if (personAssignment.OvertimeActivities().IsEmpty() && !personAssignment.PersonalActivities().IsEmpty())
 					ret.Detail = Resources.PersonalShift;
 
-				if (personAssignment.PersonalLayers().IsEmpty() && !personAssignment.OvertimeLayers().IsEmpty())
+				if (personAssignment.PersonalActivities().IsEmpty() && !personAssignment.OvertimeActivities().IsEmpty())
 					ret.Detail = Resources.Overtime;
 
 			}

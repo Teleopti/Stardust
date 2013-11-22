@@ -404,8 +404,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     IScheduleDay day1 = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     IScheduleDay day2 = _target.ScheduledDay(new DateOnly(2000, 1, 3));
 
-										Assert.AreEqual(ass1.MainLayers().First().Period,
-																		day1.PersonAssignment().MainLayers().First().Period);
+										Assert.AreEqual(ass1.MainActivities().First().Period,
+																		day1.PersonAssignment().MainActivities().First().Period);
                     Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
                     Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
                     Assert.AreEqual(personMeeting.Period, day1.PersonMeetingCollection()[0].Period);
@@ -521,11 +521,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("def", MultiplicatorType.Overtime);
                 PersonFactory.AddDefinitionSetToPerson(_person, defSet);
 								IPersonAssignment ass = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-                ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+                ass.AddOvertimeActivity(ActivityFactory.CreateActivity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
                 _target.Add(ass);
                 _person.RemoveAllPersonPeriods();
                 Assert.AreEqual(1,
-                       _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment().OvertimeLayers().Count());
+                       _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignment().OvertimeActivities().Count());
             }
 			_mocks.VerifyAll();
 		}
@@ -960,7 +960,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IActivity activity = ActivityFactory.CreateActivity("sdf");
                 IPersonAssignment pAss = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
                                                                                         _parameters.Scenario);
-                pAss.AddPersonalLayer(activity,_parameters.Period);
+                pAss.AddPersonalActivity(activity,_parameters.Period);
 
                 _target.Add(new PersonAbsence(_parameters.Person, _parameters.Scenario,
                                               new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), _parameters.Period)));

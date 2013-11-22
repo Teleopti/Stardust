@@ -1385,7 +1385,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Agent Info.
+        ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string AgentInfo {
             get {
@@ -10302,7 +10302,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Info Panel.
+        ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string InfoPanel {
             get {

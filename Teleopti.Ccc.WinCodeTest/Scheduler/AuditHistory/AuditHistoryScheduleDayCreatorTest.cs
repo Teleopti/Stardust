@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 		{
 			scheduleDay.CreateAndAddActivity(new Activity("no"), new DateTimePeriod(2000,1,1,2000,1,2), new ShiftCategory("sdf"));
 			var newAss = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000, 1, 1));
-			newAss.AssignActivity(new Activity("yes"), new DateTimePeriod(2000,1,1,2000,1,2));
+			newAss.AddActivity(new Activity("yes"), new DateTimePeriod(2000,1,1,2000,1,2));
 			newAss.SetShiftCategory(new ShiftCategory("sdf"));
 			target.Apply(scheduleDay, new[]{newAss});
-			scheduleDay.PersonAssignment().MainLayers().Single().Payload.Name.Should().Be.EqualTo("yes");
+			scheduleDay.PersonAssignment().MainActivities().Single().Payload.Name.Should().Be.EqualTo("yes");
 		}
 
 		[Test]

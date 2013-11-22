@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				Repository.Add(Agent);
 				Repository.Add(Scenario);
 				Repository.Add(PersonAssignment.ShiftCategory);
-				Repository.Add(PersonAssignment.MainLayers().First().Payload);
-				Repository.Add(PersonAssignment.MainLayers().First().Payload.GroupingActivity);
+				Repository.Add(PersonAssignment.MainActivities().First().Payload);
+				Repository.Add(PersonAssignment.MainActivities().First().Payload.GroupingActivity);
 				Repository.Add(PersonAbsence.Layer.Payload);
 
 				Repository.Add(PersonAssignment);

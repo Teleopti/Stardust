@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
     /// <summary>
     /// Represents a shift category, a grouping of shifts
     /// </summary>
-    public class ShiftCategory : AggregateRootWithBusinessUnit, IShiftCategory, IDeleteTag, ICloneableEntity<ShiftCategory>
+    public class ShiftCategory : VersionedAggregateRootWithBusinessUnit, IShiftCategory, IDeleteTag, ICloneableEntity<ShiftCategory>
     {
         #region Fields
 

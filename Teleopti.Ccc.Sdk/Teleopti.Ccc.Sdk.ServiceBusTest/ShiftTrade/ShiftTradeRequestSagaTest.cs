@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 				private IScheduleDifferenceSaver scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
     	private ILoadSchedulesForRequestWithoutResourceCalculation loader;
-	    private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
+		private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
 
 			[SetUp]
 			public void Setup()

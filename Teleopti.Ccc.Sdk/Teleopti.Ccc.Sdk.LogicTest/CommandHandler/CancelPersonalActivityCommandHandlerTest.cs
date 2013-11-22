@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignment().AddPersonalLayer(_activity, _period);
+			scheduleDay.PersonAssignment().AddPersonalActivity(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (_mock.Playback())
 			{
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignment().PersonalLayers().Should().Be.Empty();
+				scheduleDay.PersonAssignment().PersonalActivities().Should().Be.Empty();
 			}
 		}
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scenarioId = Guid.NewGuid();
 			var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
 			var scheduleDay = _schedulePartFactoryForDomain.CreatePartWithMainShift();
-			scheduleDay.PersonAssignment().AddPersonalLayer(_activity, _period);
+			scheduleDay.PersonAssignment().AddPersonalActivity(_activity, _period);
 			var scheduleRangeMock = _mock.DynamicMock<IScheduleRange>();
 			var dictionary = _mock.DynamicMock<IScheduleDictionary>();
 			var rules = _mock.DynamicMock<INewBusinessRuleCollection>();
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				_cancelPersonalActivityCommandDto.ScenarioId = scenarioId;
 				_target.Handle(_cancelPersonalActivityCommandDto);
-				scheduleDay.PersonAssignment().PersonalLayers().Should().Be.Empty();
+				scheduleDay.PersonAssignment().PersonalActivities().Should().Be.Empty();
 			}
 		}
 	}

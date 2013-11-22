@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class Person : AggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
+    public class Person : VersionedAggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
     {
         private Name _name;
         private readonly IPermissionInformation _permissionInformation;

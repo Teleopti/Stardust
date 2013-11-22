@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
     {
 	    void Refresh(IScheduleDictionary scheduleDictionary,
 	                 IEnumerable<IEventMessage> scheduleMessages,
-	                 ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
+					 ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
 	                 ICollection<PersistConflict> conflictsBuffer);
     }
 }

@@ -50,14 +50,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             DateTimePeriod period1 =
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 12, 6, 0, 0, DateTimeKind.Utc));
-					_testPersonAssignment.AssignActivity(ActivityFactory.CreateActivity("Phone"), period1);
+					_testPersonAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), period1);
 					_testPersonAssignment.SetShiftCategory(new ShiftCategory("myCategory"));
 
             DateTimePeriod period2 =
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 11, 3, 0, 0, DateTimeKind.Utc));
 
-						_testPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("Möte"), period2);
+						_testPersonAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("Möte"), period2);
 
             return _testPersonAssignment;
         }
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             DateTimePeriod period1 =
                 new DateTimePeriod(new DateTime(2007, 8, 11, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 12, 1, 0, 0, DateTimeKind.Utc));
-					_testPersonAssignment.AssignActivity(ActivityFactory.CreateActivity("Phone"), period1);
+					_testPersonAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), period1);
 					_testPersonAssignment.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("myCategory"));
             return _testPersonAssignment;
         }

@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
         /// </summary>
         protected override void GroupConvert()
         {
-            AddApplicationRoleMappers();
             AddApplicationFunctions();
             AssignApplicationFunctionsToRoles();
         }
@@ -136,29 +135,5 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
                 } while (itemFound);
             }
         }
-
-        /// <summary>
-        /// Adds active directory role - application role mappers.
-        /// </summary>
-        /// <remarks>
-        /// // note: mappers for Active Directory Support
-        /// </remarks>
-        private void AddApplicationRoleMappers()
-        {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                SystemRoleApplicationRoleMapperRepository rep = new SystemRoleApplicationRoleMapperRepository(uow);
-
-                SystemRoleApplicationRoleMapper domainUsersMapper = new SystemRoleApplicationRoleMapper();
-                domainUsersMapper.SystemName = "ActiveDirectory";
-                domainUsersMapper.SystemRoleLongName = "CN=Domain Users,CN=Builtin,DC=toptinet,DC=teleopti,DC=com";
-                domainUsersMapper.ApplicationRole = _defaultAggregateRoot.AgentRole;
-
-                rep.Add(domainUsersMapper);
-
-                uow.PersistAll();
-            }
-        }
-
     }
 }

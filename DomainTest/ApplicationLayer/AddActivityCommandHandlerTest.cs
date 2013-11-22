@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
-	public class AssignActivityCommandHandlerTest
+	public class AddActivityCommandHandlerTest
 	{
 		[Test]
 		public void ShouldRaiseActivityAddedEvent()
@@ -27,11 +27,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 						mainActivity, personRepository.Single(),
 						new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
 				};
-			var target = new AssignActivityCommandHandler(personAssignmentRepository,
+			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
 								   activityRepository, personRepository, new UtcTimeZone());
 
-			var command = new AssignActivityCommand
+			var command = new AddActivityCommand
 			{
 				PersonId = personRepository.Single().Id.Value,
 				Date = new DateOnly(2013, 11, 14),
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			target.Handle(command);
 
-			var @event = personAssignmentRepository.Single().PopAllEvents().OfType<ActivityAssignedEvent>().Single(e => e.ActivityId == addedActivity.Id.Value);
+			var @event = personAssignmentRepository.Single().PopAllEvents().OfType<ActivityAddedEvent>().Single(e => e.ActivityId == addedActivity.Id.Value);
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.Date.Should().Be(new DateOnly(2013, 11, 14));
 			@event.StartDateTime.Should().Be(command.StartTime);
@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 						mainActivity, personRepository.Single(),
 						new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
 				};
-			var target = new AssignActivityCommandHandler(personAssignmentRepository,
+			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario), 
 								   activityRepository, personRepository, new UtcTimeZone());
 
-			var command = new AssignActivityCommand
+			var command = new AddActivityCommand
 			{
 				PersonId = personRepository.Single().Id.Value,
 				Date = new DateOnly(2013, 11, 14),
@@ -95,13 +95,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 						mainActivity, personRepository.Single(),
 						new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16))
 				};
-			var target = new AssignActivityCommandHandler(personAssignmentRepository,
+			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
 								   activityRepository, personRepository,
 								   new SpecificTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo())
 								   );
 
-			var command = new AssignActivityCommand
+			var command = new AddActivityCommand
 			{
 				PersonId = personRepository.Single().Id.Value,
 				Date = new DateOnly(2013, 11, 14),

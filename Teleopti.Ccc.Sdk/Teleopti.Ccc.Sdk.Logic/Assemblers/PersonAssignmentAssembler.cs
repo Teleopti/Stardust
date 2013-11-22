@@ -34,15 +34,15 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             };
 					if (entity.ShiftCategory != null)
 					{
-						retDto.MainShift = CreateMainShiftDto(entity.MainLayers(), entity.ShiftCategory, entity.Person);						
+						retDto.MainShift = CreateMainShiftDto(entity.MainActivities(), entity.ShiftCategory, entity.Person);						
 					}
-	        var personalLayers = entity.PersonalLayers();
+	        var personalLayers = entity.PersonalActivities();
 					if (personalLayers.Any())
 					{
 						var personalShift = CreatePersonalShiftDto(personalLayers, entity.Person);
 						retDto.PersonalShiftCollection.Add(personalShift);
 					}
-	        var overtimeLayers = entity.OvertimeLayers();
+	        var overtimeLayers = entity.OvertimeActivities();
 					if (overtimeLayers.Any())
 					{
 						var overtimeShift = CreateOvertimeShiftDto(overtimeLayers, entity.Person);
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             IPersonAssignment ass = new PersonAssignment(Person, DefaultScenario, PartDate);
             ass.SetId(dto.Id);
             //rk - hack
-            typeof(AggregateRoot).GetField("_version", BindingFlags.Instance | BindingFlags.NonPublic)
+            typeof(VersionedAggregateRoot).GetField("_version", BindingFlags.Instance | BindingFlags.NonPublic)
                 .SetValue(ass, dto.Version);
             addMainShift(ass, dto);
             addPersonalShift(ass, dto);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	            var layersDomain = _personalActivityLayerAssembler.DtosToDomainEntities(persShiftDto.LayerCollection);
 	            foreach (var layer in layersDomain)
 	            {
-		            assignment.AddPersonalLayer(layer.Payload, layer.Period);
+		            assignment.AddPersonalActivity(layer.Payload, layer.Period);
 	            }
             }
         }
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 							var layersDomain = _overtimeShiftLayerAssembler.DtosToDomainEntities(overtimeShiftDto.LayerCollection.OfType<OvertimeLayerDto>());
 	            foreach (var layer in layersDomain)
 	            {
-		            assignment.AddOvertimeLayer(layer.Payload, layer.Period, layer.DefinitionSet);
+		            assignment.AddOvertimeActivity(layer.Payload, layer.Period, layer.DefinitionSet);
 	            }
             }
         }
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 var shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
 	            foreach (var layer in _mainActivityLayerAssembler.DtosToDomainEntities(dto.MainShift.LayerCollection))
 	            {
-		            assignment.AssignActivity(layer.Payload, layer.Period);
+		            assignment.AddActivity(layer.Payload, layer.Period);
 	            }
 							assignment.SetShiftCategory(shiftCategory);
             }

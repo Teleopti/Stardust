@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var scenario = new ScenarioRepository(uow).LoadAll().Single(x => x.Description.Name == Scenario);
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(user, scenario, new DateOnly(StartTime));
 			personAssignment.SetShiftCategory(shiftCategory);
-			personAssignment.AssignActivity(activity, _assignmentPeriod);
+			personAssignment.AddActivity(activity, _assignmentPeriod);
 			addScheduleActivity(timeZone, personAssignment, uow);
 
 			// simply publish the schedule changed event so that the read model is updated
@@ -76,9 +76,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
 
 			if (ScheduledActivityIsPersonal)
-				personAssignment.AddPersonalLayer(scheduledActivity, period);
+				personAssignment.AddPersonalActivity(scheduledActivity, period);
 			else
-				personAssignment.AssignActivity(scheduledActivity, period);
+				personAssignment.AddActivity(scheduledActivity, period);
 		}
 	}
 }

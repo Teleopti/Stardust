@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -16,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Events;
+using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Teleopti.Ccc.WinCodeTest.Intraday
 {
@@ -58,14 +57,21 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		public void ShouldReloadScheduleDayInEditorOnRefresh()
 		{
 		    var refreshedEntity = MockRepository.GenerateMock<IPersistableScheduleData>();
+			var eventMessage = new EventMessage { InterfaceType = typeof(IScheduleChangedEvent), DomainObjectId = _person.Id.GetValueOrDefault(), DomainUpdateType = DomainUpdateType.NotApplicable, ReferenceObjectId = _scenario.Id.GetValueOrDefault() };
+			
+		    refreshedEntity.Stub(x => x.Person).Return(_person);
+			_scheduleRefresher.Stub(
+				x =>
+				x.Refresh(_schedulerStateHolder.Schedules, new List<IEventMessage>(), new List<IPersistableScheduleData>(),
+				          new List<PersistConflict>()))
+			                  .Constraints(Is.Equal(_schedulerStateHolder.Schedules),
+			                               Rhino.Mocks.Constraints.List.IsIn(eventMessage),
+			                               Is.Anything(),
+			                               Is.Anything())
+			                  .WhenCalled(x => ((ICollection<IPersistableScheduleData>) x.Arguments[2]).Add(refreshedEntity));
 
 		    refreshedEntity.Stub(x => x.Person).Return(_person);
-		    _scheduleRefresher.Stub(
-		        x =>
-		        x.Refresh(_schedulerStateHolder.Schedules, new List<IEventMessage>(), new List<IPersistableScheduleData>(), new List<PersistConflict>()))
-                              .IgnoreArguments().WhenCalled(x => ((ICollection<IPersistableScheduleData>)x.Arguments[2]).Add(refreshedEntity));
-
-			target.Execute(new EventMessage { InterfaceType = typeof(IScheduleChangedEvent), DomainObjectId = _person.Id.GetValueOrDefault(), DomainUpdateType = DomainUpdateType.NotApplicable, ReferenceObjectId = _scenario.Id.GetValueOrDefault()});
+		   target.Execute(eventMessage);
 
             _view.AssertWasCalled(x => x.ReloadScheduleDayInEditor(_person));
 		}

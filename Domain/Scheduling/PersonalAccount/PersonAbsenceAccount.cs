@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 {
-	public class PersonAbsenceAccount : AggregateRoot, IPersonAbsenceAccount
+	public class PersonAbsenceAccount : VersionedAggregateRoot, IPersonAbsenceAccount
 	{
 		private readonly IPerson _person;
 		private readonly IAbsence _absence;

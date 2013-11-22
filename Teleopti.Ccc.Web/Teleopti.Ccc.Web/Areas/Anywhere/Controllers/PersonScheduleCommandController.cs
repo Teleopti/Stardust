@@ -1,7 +1,6 @@
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
-		public JsonResult AssignActivity(AssignActivityCommand command)
+		public JsonResult AddActivity(AddActivityCommand command)
 		{
 			_commandDispatcher.Execute(command);
 			return Json(new object(), JsonRequestBehavior.DenyGet);

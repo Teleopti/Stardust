@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.WinCode.Common;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         public virtual void Execute(IEventMessage eventMessage)
         {
             var conflicts = new List<PersistConflict>();
-            var refreshedEntitiesBuffer = new Collection<IPersistableScheduleData>();
+			var refreshedEntitiesBuffer = new Collection<IPersistableScheduleData>();
 
             using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -49,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Activities);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.ShiftCategories);
 
-                _scheduleRefresher.Refresh(_schedulingResultLoader.SchedulerState.Schedules, new List<IEventMessage>(), refreshedEntitiesBuffer, conflicts);
+                _scheduleRefresher.Refresh(_schedulingResultLoader.SchedulerState.Schedules, new List<IEventMessage>{eventMessage}, refreshedEntitiesBuffer, conflicts);
 
                 if (refreshedEntitiesBuffer.Count > 0)
                 {

@@ -112,9 +112,9 @@ namespace Teleopti.Ccc.Win.Common
                     IPersonAssignment personAssignment = source.PersonAssignment();
                     if (personAssignment != null)
                     {
-	                    foreach (var personalLayer in personAssignment.PersonalLayers())
+	                    foreach (var personalLayer in personAssignment.PersonalActivities())
 	                    {
-		                    personAssignmentNoMainShift.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+		                    personAssignmentNoMainShift.AddPersonalActivity(personalLayer.Payload, personalLayer.Period);
 	                    }
                     }
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Win.Common
                     tempPart.Clear<IPersonAssignment>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
-                    if (personAssignmentNoMainShift.PersonalLayers().Any())
+                    if (personAssignmentNoMainShift.PersonalActivities().Any())
                     {
                         tempPart.Add(personAssignmentNoMainShift);
                         destination.Merge(tempPart, false);
@@ -134,9 +134,9 @@ namespace Teleopti.Ccc.Win.Common
                 {
                     tempPart = (IScheduleDay)part.Clone();
                     tempPart.Clear<IPersonAbsence>();
-                    tempPart.PersonAssignment(true).ClearMainLayers();
-					tempPart.PersonAssignment(true).ClearOvertimeLayers();
-					tempPart.PersonAssignment(true).ClearPersonalLayers();
+                    tempPart.PersonAssignment(true).ClearMainActivities();
+					tempPart.PersonAssignment(true).ClearOvertimeActivities();
+					tempPart.PersonAssignment(true).ClearPersonalActivities();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
                     if (tempPart.HasDayOff())

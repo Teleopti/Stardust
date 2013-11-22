@@ -282,17 +282,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.AddPercentageToTasks(percent);
             Assert.AreEqual(9, target.ValidatedTasks);
         }
-        [Test]
-        public void VerifyCanAddAbsoluteValueToTasks()
-        {
-            double value = 2400.32;
-            target.ValidatedTasks = value;
-            target.AddAbsoluteValueToTasks(1000);
-            Assert.AreEqual(3400.32, Math.Round(target.ValidatedTasks, 2));
-            target.ValidatedTasks = value;
-            target.AddAbsoluteValueToTasks(-1000);
-            Assert.AreEqual(1400.32, Math.Round(target.ValidatedTasks, 2));
-        }
+        
         [Test]
         public void VerifyCanAddPercentToTalkTime()
         {
@@ -328,35 +318,36 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target.AddPercentageToValidatedAfterTaskTime(percent);
             Assert.AreEqual(new TimeSpan(0, 0, 0, 55, 800), target.ValidatedAverageAfterTaskTime);
         }
-        [Test]
-        public void VerifyCanAddAbsoluteValueToValidatedTaskTime()
-        {
-            TimeSpan value = new TimeSpan(0, 0, 1, 17);
-            TimeSpan origValue = new TimeSpan(0, 0, 2, 3);
-            TimeSpan origValue2 = new TimeSpan(0, 0, 0, -3);
 
-            target.ValidatedAverageTaskTime = origValue;
-            target.AddAbsoluteValueToValidatedTaskTime(value);
-            Assert.AreEqual(new TimeSpan(0, 0, 3, 20), target.ValidatedAverageTaskTime);
-            target.ValidatedAverageTaskTime = origValue2;
-            target.AddAbsoluteValueToValidatedTaskTime(value);
-            Assert.AreEqual(new TimeSpan(0, 0, 1, 14), target.ValidatedAverageTaskTime);
-        }
+		[Test]
+		public void ShouldNotAcceptNegativeValuesInValidatedAverageAfterTaskTime()
+		{
+			target.ValidatedAverageAfterTaskTime = TimeSpan.FromHours(1);
+			Assert.AreEqual(TimeSpan.FromHours(1), target.ValidatedAverageAfterTaskTime);
 
-        [Test]
-        public void VerifyCanAddAbsoluteValueToValidatedAcw()
-        {
-            TimeSpan value = new TimeSpan(0, 0, 1, 17);
-            TimeSpan origValue = new TimeSpan(0, 0, 2, 3);
-            TimeSpan origValue2 = new TimeSpan(0, 0, 0, -3);
+			target.ValidatedAverageAfterTaskTime = TimeSpan.FromHours(-2);
+			Assert.AreEqual(TimeSpan.FromHours(1), target.ValidatedAverageAfterTaskTime);
+		}
 
-            target.ValidatedAverageAfterTaskTime = origValue;
-            target.AddAbsoluteValueToValidatedAcw(value);
-            Assert.AreEqual(new TimeSpan(0, 0, 3, 20), target.ValidatedAverageAfterTaskTime);
-            target.ValidatedAverageAfterTaskTime = origValue2;
-            target.AddAbsoluteValueToValidatedAcw(value);
-            Assert.AreEqual(new TimeSpan(0, 0, 1, 14), target.ValidatedAverageAfterTaskTime);
-        }
+		[Test]
+		public void ShouldNotAcceptNegativeValuesInValidatedAverageTaskTime()
+		{
+			target.ValidatedAverageTaskTime = TimeSpan.FromHours(1);
+			Assert.AreEqual(TimeSpan.FromHours(1), target.ValidatedAverageTaskTime);
+
+			target.ValidatedAverageTaskTime = TimeSpan.FromHours(-2);
+			Assert.AreEqual(TimeSpan.FromHours(1), target.ValidatedAverageTaskTime);
+		}
+
+		[Test]
+		public void ShouldNotAcceptNegativeValuesInValidatedTasks()
+		{
+			target.ValidatedTasks = 1;
+			Assert.AreEqual(1, target.ValidatedTasks);
+
+			target.ValidatedTasks = -2;
+			Assert.AreEqual(1, target.ValidatedTasks);
+		}
 
 
         #region ITaskOwner tests

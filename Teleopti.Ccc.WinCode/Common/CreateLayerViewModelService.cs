@@ -64,17 +64,17 @@ namespace Teleopti.Ccc.WinCode.Common
 	        var moveUpDown = new MoveLayerVertical();
             if (assignment != null)
             {
-	            foreach (var layer in assignment.MainLayers())
+	            foreach (var layer in assignment.MainActivities())
 	            {
 		            layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }
 
-	            foreach (var layer in assignment.OvertimeLayers())
+	            foreach (var layer in assignment.OvertimeActivities())
 	            {
 								layerViewModels.Add(new OvertimeLayerViewModel(observer, layer, assignment, eventAggregator, moveUpDown));
 	            }
 
-	            foreach (var personalLayer in assignment.PersonalLayers())
+	            foreach (var personalLayer in assignment.PersonalActivities())
 	            {
 		            layerViewModels.Add(new PersonalShiftLayerViewModel(observer, personalLayer, assignment, eventAggregator, moveUpDown));
 	            }

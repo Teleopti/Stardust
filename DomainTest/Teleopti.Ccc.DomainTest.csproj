@@ -134,7 +134,7 @@
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestWithinLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
-    <Compile Include="ApplicationLayer\AssignActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />
@@ -1042,7 +1042,6 @@
     <Compile Include="Security\AuthorizationEntities\SiteAuthorizationEntityConverterTest.cs" />
     <Compile Include="Security\AuthorizationEntities\MatrixReportInfoTest.cs" />
     <Compile Include="Security\Matrix\ExternalApplicationFunctionSpecificationTest.cs" />
-    <Compile Include="Security\AuthorizationEntities\SystemRoleApplicationRoleMapperTest.cs" />
     <Compile Include="Security\AuthorizationEntities\SystemRoleTest.cs" />
     <Compile Include="Security\AuthorizationEntities\PermissionInformationTest.cs" />
     <Compile Include="Scheduling\AbsenceLayerTest.cs" />

@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (ass!=null)
             {
-                foreach (var personalLayer in ass.PersonalLayers())
+                foreach (var personalLayer in ass.PersonalActivities())
                 {
                     if (!period.HasValue)
                         period = personalLayer.Period;
@@ -545,7 +545,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 					if (personAssignment != null)
 					{
-						if (personAssignment.PersonalLayers().Any(l => l.Period.Intersect(layer.Period)))
+						if (personAssignment.PersonalActivities().Any(l => l.Period.Intersect(layer.Period)))
 							return true;
 					}
 

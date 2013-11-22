@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapShiftCategoryInPersonAssignmentDayViewModel()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
-			personAssignment.AssignActivity(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			personAssignment.AddActivity(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			personAssignment.SetShiftCategory(new ShiftCategory("shiftCategory"));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 
@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			activityLayer.Stub(x => x.Period).Return(new DateTimePeriod(now.ToUniversalTime(), now.ToUniversalTime().AddHours(1)));
 
 			var scheduleDay = stubs.ScheduleDayStub(DateOnly.Today);
-			personAssignment.Stub(x => x.PersonalLayers()).Return(new List<IPersonalShiftLayer>{activityLayer});
+			personAssignment.Stub(x => x.PersonalActivities()).Return(new List<IPersonalShiftLayer>{activityLayer});
 			scheduleDay.Stub(x => x.PersonAssignment()).Return(personAssignment);
 
 			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);

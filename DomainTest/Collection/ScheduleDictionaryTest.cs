@@ -274,10 +274,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(diffSvc.Difference(null, null))
 				    .IgnoreArguments()
 				    .Constraints(
-					    List.Equal(new List<IPersistableScheduleData> { pAss }),
-					    List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs })
+						List.Equal(new List<IPersistableScheduleData> { pAss }),
+						List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs })
 						)
-				    .Return(new DifferenceCollection<IPersistableScheduleData>());
+					.Return(new DifferenceCollection<IPersistableScheduleData>());
 			}
 			using (mocks.Playback())
 			{
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					Assert.IsFalse(target[dummyPerson].Contains(ass));
 					Assert.IsFalse(target[dummyPerson].Contains(abs));
 
-					IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+					var diff = target.DifferenceSinceSnapshot();
 					Assert.AreEqual(0, diff.Count());
 
 					Assert.IsTrue(eventFired);
@@ -391,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				target.DeleteMeetingFromBroker(meetingId);
 				var partNew = target[dummyPerson].ScheduledDay(date);
 				Assert.AreEqual(0, partNew.PersonMeetingCollection().Count);
-				IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+				var diff = target.DifferenceSinceSnapshot();
 				Assert.AreEqual(0, diff.Count());
 
 				Assert.IsTrue(eventFired);
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					((Schedule)part).Add(pAss);
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
-					IDifferenceCollection<IPersistableScheduleData> diff = target.DifferenceSinceSnapshot();
+					var diff = target.DifferenceSinceSnapshot();
 					Assert.AreEqual(1, diff.Count());
 					Assert.AreEqual(DifferenceStatus.Added, diff.First().Status);
 				}
@@ -1326,7 +1326,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					Assert.IsFalse(container.CanRedo());
 
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 1));
-					part.PersonAssignment().ClearMainLayers();
+					part.PersonAssignment().ClearMainActivities();
 
 					container.CreateBatch("a");
 					target.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { part }, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
@@ -1374,9 +1374,9 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					((ScheduleRange)target[dummyPerson]).AddRange(new List<IPersonAssignment> { pAss });
 
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
-					part.PersonAssignment().ClearMainLayers();
+					part.PersonAssignment().ClearMainActivities();
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
+					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainActivities());
 
 					container.Undo();
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().ShiftCategory);
@@ -1386,11 +1386,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 					Assert.IsNotNull(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().ShiftCategory);
 
 					container.Redo();
-					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
+					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainActivities());
 
 					//should do nothing
 					container.Redo();
-					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainLayers());
+					CollectionAssert.IsEmpty(target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2)).PersonAssignment().MainActivities());
 				}
 			}
 		}
@@ -1418,7 +1418,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 
 					IScheduleDay part = target[dummyPerson].ScheduledDay(new DateOnly(2000, 11, 2));
 					var oldMainShift = part.GetEditorShift();
-					part.PersonAssignment().ClearMainLayers();
+					part.PersonAssignment().ClearMainActivities();
 					target.Modify(ScheduleModifier.Scheduler, part, _noNewRules, scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 
 					container.Undo();

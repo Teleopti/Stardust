@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             original.DeleteMainShift(original);
-						Assert.AreEqual(0, original.PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, original.PersonAssignment().MainActivities().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             current.DeleteMainShift(current);
-						Assert.AreEqual(0, current.PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, current.PersonAssignment().MainActivities().Count());
 
             Assert.IsFalse(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             IPersonAssignment personAssingment = current.PersonAssignment();
 	        var category = personAssingment.ShiftCategory;
-            Assert.AreEqual(2, personAssingment.MainLayers().Count());
+            Assert.AreEqual(2, personAssingment.MainActivities().Count());
 
             // change order
             var activity1 = current.GetEditorShift().LayerCollection[0];
@@ -222,13 +222,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsTrue(_target.MainShiftEquals(original, current2));
 
             original.DeleteMainShift(original);
-						Assert.AreEqual(0, original.PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, original.PersonAssignment().MainActivities().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             current.DeleteMainShift(current);
-						Assert.AreEqual(0, current.PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, current.PersonAssignment().MainActivities().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -254,8 +254,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             original.DeleteMainShift(original);
             current.DeleteMainShift(current);
-            Assert.AreEqual(0, original.PersonAssignment().MainLayers().Count());
-						Assert.AreEqual(0, current.PersonAssignment().MainLayers().Count());
+            Assert.AreEqual(0, original.PersonAssignment().MainActivities().Count());
+						Assert.AreEqual(0, current.PersonAssignment().MainActivities().Count());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -411,10 +411,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var id1 = Guid.NewGuid();
 			var id2 = Guid.NewGuid();
-			scheduleDay1.PersonAssignment().MainLayers().First().Payload.SetId(id1);
-			scheduleDay2.PersonAssignment().MainLayers().First().Payload.SetId(id1);
-			scheduleDay1.PersonAssignment().MainLayers().Last().Payload.SetId(id2);
-			scheduleDay2.PersonAssignment().MainLayers().Last().Payload.SetId(id2);
+			scheduleDay1.PersonAssignment().MainActivities().First().Payload.SetId(id1);
+			scheduleDay2.PersonAssignment().MainActivities().First().Payload.SetId(id1);
+			scheduleDay1.PersonAssignment().MainActivities().Last().Payload.SetId(id2);
+			scheduleDay2.PersonAssignment().MainActivities().Last().Payload.SetId(id2);
 		}
     }
 }

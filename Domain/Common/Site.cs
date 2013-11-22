@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Common
     /// <summary>
     /// Class for UnitCollection
     /// </summary>
-    public class Site : AggregateRootWithBusinessUnit, ISite, IDeleteTag
+    public class Site : VersionedAggregateRootWithBusinessUnit, ISite, IDeleteTag
     {
         private readonly IList<ITeam> _teamCollection;
         private Description _description;

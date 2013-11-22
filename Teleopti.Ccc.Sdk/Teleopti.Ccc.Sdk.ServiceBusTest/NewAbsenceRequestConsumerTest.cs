@@ -479,7 +479,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                                {
                                                    personAbsenceAccount
                                                };
-        	var changes = new DifferenceCollection<IPersistableScheduleData>();
+			var changes = new DifferenceCollection<IPersistableScheduleData>();
 
             using (_mockRepository.Record())
             {
@@ -583,7 +583,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void ExpectPersistOfDictionary()
         {
-        	var changes = new DifferenceCollection<IPersistableScheduleData>();
+			var changes = new DifferenceCollection<IPersistableScheduleData>();
         	Expect.Call(_scheduleDictionary.DifferenceSinceSnapshot()).Return(changes);
 			Expect.Call(() => _scheduleDictionarySaver.SaveChanges(changes,null)).IgnoreArguments();
         }

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Common
     /// <summary>
     /// Represents a Grouping Unit.
     /// </summary>
-    public class GroupPage : AggregateRootWithBusinessUnit, IDeleteTag, IGroupPage
+    public class GroupPage : VersionedAggregateRootWithBusinessUnit, IDeleteTag, IGroupPage
     {
         private Description _description;
         private readonly IList<IRootPersonGroup> _rootGroupCollection = new List<IRootPersonGroup>();

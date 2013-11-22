@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IPersonAssignment PersonAssignmentPersonalShiftStub()
 		{
 			var personAssignment = MockRepository.GenerateStub<IPersonAssignment>();
-			personAssignment.Stub(x => x.PersonalLayers()).Return(Enumerable.Empty<IPersonalShiftLayer>());
+			personAssignment.Stub(x => x.PersonalActivities()).Return(Enumerable.Empty<IPersonalShiftLayer>());
 			return personAssignment;
 		}
 

@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			    sb.Append("  ");
 			        sb.Append(ToLocalStartEndTimeString(pa.Period, TimeZoneGuard.Instance.TimeZone )); //time
 
-			    foreach (var layer in pa.PersonalLayers())
+			    foreach (var layer in pa.PersonalActivities())
 			    {
 				    sb.AppendLine();
 				    sb.AppendFormat(" - {0}: ", Resources.PersonalShift);
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	    private static bool dayHasOvertime(IScheduleDay cell)
 	    {
 	        var assignment = cell.PersonAssignment();
-		    return assignment != null && assignment.OvertimeLayers().Any();
+		    return assignment != null && assignment.OvertimeActivities().Any();
 	    }
 
 	    /// <summary>
