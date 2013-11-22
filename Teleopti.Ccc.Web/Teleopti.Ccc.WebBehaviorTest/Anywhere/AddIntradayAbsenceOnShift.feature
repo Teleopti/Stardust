@@ -31,6 +31,12 @@ Background:
 	
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-15 11:00 |
+	| End time       | 2013-11-15 17:00 |
 	When I view schedules for 'Team green' on '2013-11-15'
 	And I select any schedule activity for 'Pierre Baldi'
 	And I click 'add intraday absence'
