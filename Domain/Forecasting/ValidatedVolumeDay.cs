@@ -127,8 +127,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-				if(value >= 0)
-					_validatedTasks = value;
+	            if (value < 0) return;
+				_validatedTasks = value;
             }
         }
 
@@ -170,8 +170,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-				if (value >= TimeSpan.Zero)
-					validatedTaskTime = value;
+	            if (value < TimeSpan.Zero) return;
+				validatedTaskTime = value;
             }
         }
 
@@ -213,8 +213,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-				if(value >= TimeSpan.Zero)
-					validatedAfterTaskTime = value;
+	            if (value < TimeSpan.Zero) return;
+				validatedAfterTaskTime = value;
             }
         }
 
