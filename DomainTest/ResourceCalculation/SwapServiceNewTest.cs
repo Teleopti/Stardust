@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
-			Assert.AreEqual(0, _p1D1.PersonAssignment().MainLayers().Count());
+			Assert.AreEqual(0, _p1D1.PersonAssignment().MainActivities().Count());
 			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
 			// NOTE that the followith case is not right from the edition 388 as there is no null PersonAssignment() any longer
 			//Assert.IsNull(_p2D1.PersonAssignment());
@@ -268,8 +268,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(1, retList[0].PersonAbsenceCollection().Count());
 			Assert.AreEqual(0, retList[1].PersonAbsenceCollection().Count());
 
-			Assert.AreEqual(1, retList[0].PersonAssignment().MainLayers().Count());
-			Assert.AreEqual(0, retList[1].PersonAssignment().MainLayers().Count());
+			Assert.AreEqual(1, retList[0].PersonAssignment().MainActivities().Count());
+			Assert.AreEqual(0, retList[1].PersonAssignment().MainActivities().Count());
 		}
 
 		/// <summary>
