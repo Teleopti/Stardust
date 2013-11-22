@@ -25,8 +25,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
+	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="SchedulerMeetingHelper"/> class.
         /// </summary>
         /// <param name="messageBrokerIdentifier">The message broker module.</param>
@@ -102,15 +103,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var persons = meetingToRemove.MeetingPersons.Select(m => m.Person).ToArray();
-                unitOfWork.Reassociate(persons);
+				IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
+	            var reloadedMeeting = meetingRepository.Get(meetingToRemove.Id.GetValueOrDefault());
+				if (reloadedMeeting == null) return;
 
-                if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, meetingToRemove.StartDate, scheduleViewBase, PrincipalAuthorization.Instance()))
-                    return;
-				meetingToRemove.Snapshot();
+				if (!LazyLoadingManager.IsInitialized(reloadedMeeting.Scenario))
+					LazyLoadingManager.Initialize(reloadedMeeting.Scenario);
+				if (!LazyLoadingManager.IsInitialized(reloadedMeeting.Activity))
+					LazyLoadingManager.Initialize(reloadedMeeting.Activity);
 
-                IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
-                meetingRepository.Remove(meetingToRemove);
+				unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+				var persons = reloadedMeeting.MeetingPersons.Select(m => m.Person).ToArray();
+
+				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Instance())) return;
+				reloadedMeeting.Snapshot();
+
+				meetingRepository.Remove(reloadedMeeting);
                 unitOfWork.PersistAll(_messageBrokerIdentifier);
             }
             NotifyModificationOccured(meetingToRemove, true);
