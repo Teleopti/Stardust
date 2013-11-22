@@ -27,7 +27,7 @@ SET SQLLogin=sa
 SET SQLPwd=cadadi
 SET CreateAgg=
 SET CreateAnalytics=
-SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
+SET Tfiles=\\gigantes\Developchina\RestoreToLocal
 
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
