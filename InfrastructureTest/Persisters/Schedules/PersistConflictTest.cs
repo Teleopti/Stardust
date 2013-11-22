@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var expected = Guid.NewGuid();
 			var target = new PersistConflict(
-							new DifferenceCollectionItem<INonversionedPersistableScheduleData>(createScheduleDataWithId(Guid.NewGuid()), createScheduleDataWithId(Guid.NewGuid())), 
+							new DifferenceCollectionItem<IPersistableScheduleData>(createScheduleDataWithId(Guid.NewGuid()), createScheduleDataWithId(Guid.NewGuid())), 
 																				createScheduleDataWithId(expected));
 			target.InvolvedId().Should().Be.EqualTo(expected);
 		}
@@ -26,14 +26,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var expected = Guid.NewGuid();
 			var target = new PersistConflict(
-						new DifferenceCollectionItem<INonversionedPersistableScheduleData>(createScheduleDataWithId(expected), createScheduleDataWithId(Guid.NewGuid())), null);
+						new DifferenceCollectionItem<IPersistableScheduleData>(createScheduleDataWithId(expected), createScheduleDataWithId(Guid.NewGuid())), null);
 			target.InvolvedId().Should().Be.EqualTo(expected);
 		}
 
 		[Test]
 		public void AnyOtherCaseShouldThrow()
 		{
-			var target = new PersistConflict(new DifferenceCollectionItem<INonversionedPersistableScheduleData>(), null);
+			var target = new PersistConflict(new DifferenceCollectionItem<IPersistableScheduleData>(), null);
 			Assert.Throws<ArgumentException>(() => target.InvolvedId());
 		}
 

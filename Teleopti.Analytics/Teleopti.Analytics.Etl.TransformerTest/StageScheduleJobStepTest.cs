@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         public void Setup()
         {
 			_mock = new MockRepository();
-			var diffSvc = _mock.StrictMock<IDifferenceCollectionService<INonversionedPersistableScheduleData>>();
+			var diffSvc = _mock.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
             var period2 = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             var scenario = ScenarioFactory.CreateScenarioAggregate();
             _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc);

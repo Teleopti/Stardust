@@ -2,7 +2,7 @@
 
 namespace Teleopti.Interfaces.Domain
 {
-	public interface IOvertimeAvailability : INonversionedPersistableScheduleData
+	public interface IOvertimeAvailability : IPersistableScheduleData
 	{
 		bool NotAvailable { get; set; }
 		TimeSpan? StartTime { get; }

@@ -37,7 +37,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				var shiftCategoryList = _model.GetSortedShiftCategories();
 				if (colIndex > shiftCategoryList.Count)
 					return;
-				style.CellValue = shiftCategoryList[colIndex - 1].Description.ShortName;
+
+				var categoryDescription = shiftCategoryList[colIndex - 1].Description;
+				style.CellValue = categoryDescription.ShortName;
+				style.CellTipText = categoryDescription.Name;
 				style.Tag = shiftCategoryList[colIndex - 1];	
 			}
 

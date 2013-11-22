@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private IScheduleRange _dummyScheduleRange;
 		private TimeSpan _nightlyRest;
 		private IDictionary<IPerson, IScheduleRange> dictionary;
-		private IDifferenceCollectionService<INonversionedPersistableScheduleData> diffSvc;
+		private IDifferenceCollectionService<IPersistableScheduleData> diffSvc;
 		private string dummyFunction;
 		private IPerson dummyPerson;
 		private bool eventFired;
@@ -49,12 +49,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		{
 			mocks = new MockRepository();
 			dictionary = mocks.StrictMock<IDictionary<IPerson, IScheduleRange>>();
-			diffSvc = mocks.StrictMock<IDifferenceCollectionService<INonversionedPersistableScheduleData>>();
+			diffSvc = mocks.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
 			principalAuthorization = mocks.StrictMock<IPrincipalAuthorization>();
 			scheduleDayChangeCallback = mocks.DynamicMock<IScheduleDayChangeCallback>();
 			period = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			scenario = ScenarioFactory.CreateScenarioAggregate();
-			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<INonversionedPersistableScheduleData>());
+			target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
 			dummyPerson = PersonFactory.CreatePerson();
 			IScheduleRange justToCreateTheScheduleRangeForTests = target[dummyPerson];
 			dummyFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
@@ -274,10 +274,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(diffSvc.Difference(null, null))
 				    .IgnoreArguments()
 				    .Constraints(
-						List.Equal(new List<INonversionedPersistableScheduleData> { pAss }),
-						List.ContainsAll(new List<INonversionedPersistableScheduleData> { pAss, pAbs })
+						List.Equal(new List<IPersistableScheduleData> { pAss }),
+						List.ContainsAll(new List<IPersistableScheduleData> { pAss, pAbs })
 						)
-					.Return(new DifferenceCollection<INonversionedPersistableScheduleData>());
+					.Return(new DifferenceCollection<IPersistableScheduleData>());
 			}
 			using (mocks.Playback())
 			{

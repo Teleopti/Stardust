@@ -7,7 +7,7 @@
     /// Created by: rogerkr
     /// Created date: 2009-11-23
     /// </remarks>
-    public interface IExportToAnotherScenario : INonversionedPersistableScheduleData
+    public interface IExportToAnotherScenario : IPersistableScheduleData
     {
         /// <summary>
         /// Creates a clone and replacing IScheduleParameters.
@@ -19,6 +19,6 @@
         /// Created by: rogerkr
         /// Created date: 2009-10-12
         /// </remarks>
-        INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters);
+        IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters);
     }
 }

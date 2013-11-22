@@ -51,7 +51,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-05-29
         /// </remarks>
-		IDifferenceCollection<INonversionedPersistableScheduleData> DifferenceSinceSnapshot();
+		IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot();
 
         /// <summary>
         /// Extracts all schedule data.
@@ -145,7 +145,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-05-29
         /// </remarks>
-        IDifferenceCollectionService<INonversionedPersistableScheduleData> DifferenceCollectionService { get; }
+        IDifferenceCollectionService<IPersistableScheduleData> DifferenceCollectionService { get; }
 
         /// <summary>
         /// Holds a list of modifyed personal accounts
@@ -163,7 +163,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-06-12
         /// </remarks>
         //todo: Change this one to accept an IMessage and IScheduleRepository instead!
-	INonversionedPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateFromBroker<T> personAssignmentRepository, Guid id) where T : INonversionedPersistableScheduleData;
+	IPersistableScheduleData UpdateFromBroker<T>(ILoadAggregateFromBroker<T> personAssignmentRepository, Guid id) where T : IPersistableScheduleData;
 
         /// <summary>
         /// Updates this instance from data source (Meeting)
@@ -182,7 +182,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: rogerkr
         /// Created date: 2008-06-17
         /// </remarks>
-	INonversionedPersistableScheduleData DeleteFromBroker(Guid id);
+	IPersistableScheduleData DeleteFromBroker(Guid id);
 
         /// <summary>
         /// Validates the business rules on persons.

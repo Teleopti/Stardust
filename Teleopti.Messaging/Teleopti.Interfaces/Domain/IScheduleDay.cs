@@ -108,13 +108,6 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         void DeleteAbsence(bool all);
 
-	    /// <summary>
-	    /// Does the swapping and updates the SchedulePart represented by the source
-	    /// </summary>
-	    /// <param name="source"></param>
-		/// <param name="isDelete"></param>
-	    void Swap(IScheduleDay source, bool isDelete);
-
         /// <summary>
         /// Updates the SchedulePart from the source
         /// </summary>
@@ -226,7 +219,7 @@ namespace Teleopti.Interfaces.Domain
 				/// Created by: rogerkr
 				/// Created date: 2009-03-10
 				/// </remarks>
-				IEnumerable<INonversionedPersistableScheduleData> PersistableScheduleDataCollection();
+				IEnumerable<IPersistableScheduleData> PersistableScheduleDataCollection();
 
 
 				/// <summary>

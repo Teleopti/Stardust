@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private readonly IPersonRepository _personRepository;
 				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
     	private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
-		private readonly IDifferenceCollectionService<INonversionedPersistableScheduleData> _differenceService;
+		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 	    private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
         private IPersonRequest _personRequest;
         private ShiftTradeRequestValidationResult _validationResult;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
 
-		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<INonversionedPersistableScheduleData> differenceService)
+		public ShiftTradeRequestSaga(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDifferenceSaver scheduleDictionarySaver, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulingDataForRequestWithoutResourceCalculation, IDifferenceCollectionService<IPersistableScheduleData> differenceService)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_schedulingResultStateHolder = schedulingResultStateHolder;

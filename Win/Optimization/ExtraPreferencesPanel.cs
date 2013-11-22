@@ -170,6 +170,18 @@ namespace Teleopti.Ccc.Win.Optimization
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
         	setSubItemsOnTeamOptimizationStatus();
+            if (checkBoxTeams.Checked)
+            {
+                checkBoxCommonCategory.Checked = true;
+            }
+            else
+            {
+                checkBoxCommonCategory.Checked = false;
+                checkBoxCommonStart.Checked = false;
+                checkBoxCommonEnd.Checked = false;
+                checkBoxCommonActivity.Checked = false;
+                checkBoxKeepWeekEndsTogether.Checked = false;
+            }
         }
 
         private void setSubItemsOnTeamOptimizationStatus()
@@ -200,6 +212,16 @@ namespace Teleopti.Ccc.Win.Optimization
             checkBoxSameStartTime.Enabled = checkBoxBlock.Checked;
             comboBoxTeamBlockType.Enabled = checkBoxBlock.Checked;
 	        checkBoxTeamBlockSameShift.Enabled = checkBoxBlock.Checked;
+            if (checkBoxBlock.Checked)
+            {
+                checkBoxTeamBlockSameShiftCategory.Checked = true;
+            }
+            else
+            {
+                checkBoxTeamBlockSameShiftCategory.Checked = false;
+                checkBoxSameStartTime.Checked =false;
+                checkBoxTeamBlockSameShift.Checked = false;
+            }
         }
 
         private void setTeamBlockPerData()

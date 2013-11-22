@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Meetings;
@@ -25,8 +26,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
+	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
 
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="SchedulerMeetingHelper"/> class.
         /// </summary>
         /// <param name="messageBrokerIdentifier">The message broker module.</param>
@@ -61,6 +63,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                     var meeting = meetingRepository.Get(personMeeting.BelongsToMeeting.Id.GetValueOrDefault());
                     if (meeting == null) // recurrent already deleted
                         continue;
+
+					if (!LazyLoadingManager.IsInitialized(meeting.Scenario))
+						LazyLoadingManager.Initialize(meeting.Scenario);
+					if (!LazyLoadingManager.IsInitialized(meeting.Activity))
+						LazyLoadingManager.Initialize(meeting.Activity);
                     meeting.RemovePerson(personMeeting.Person);
                     if (!meeting.MeetingPersons.Any())
                         meetingRepository.Remove(meeting);
@@ -97,14 +104,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                var persons = meetingToRemove.MeetingPersons.Select(m => m.Person).ToArray();
-                unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
-                if (!new MeetingParticipantPermittedChecker().ValidatePermittedPersons(persons, meetingToRemove.StartDate, scheduleViewBase, PrincipalAuthorization.Instance()))
-                    return;
-				meetingToRemove.Snapshot();
+				IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
+	            var reloadedMeeting = meetingRepository.Get(meetingToRemove.Id.GetValueOrDefault());
+				if (reloadedMeeting == null) return;
 
-                IMeetingRepository meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
-                meetingRepository.Remove(meetingToRemove);
+				if (!LazyLoadingManager.IsInitialized(reloadedMeeting.Scenario))
+					LazyLoadingManager.Initialize(reloadedMeeting.Scenario);
+				if (!LazyLoadingManager.IsInitialized(reloadedMeeting.Activity))
+					LazyLoadingManager.Initialize(reloadedMeeting.Activity);
+
+				unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+				var persons = reloadedMeeting.MeetingPersons.Select(m => m.Person).ToArray();
+
+				if (!_meetingParticipantPermittedChecker.ValidatePermittedPersons(persons, reloadedMeeting.StartDate, scheduleViewBase, PrincipalAuthorization.Instance())) return;
+				reloadedMeeting.Snapshot();
+
+				meetingRepository.Remove(reloadedMeeting);
                 unitOfWork.PersistAll(_messageBrokerIdentifier);
             }
             NotifyModificationOccured(meetingToRemove, true);
@@ -154,7 +169,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
-                    unitOfWork.Reassociate(_schedulerStateHolder.SchedulingResultState.PersonsInOrganization);
+					var persons = meeting.MeetingPersons.Select(m => m.Person).ToArray();
+					unitOfWork.Reassociate(persons);
 
                     var period  = meeting.MeetingPeriod(meeting.StartDate);
                     var start = period.StartDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone);

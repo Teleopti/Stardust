@@ -10,7 +10,8 @@ namespace Teleopti.Interfaces.Domain
 										IExportToAnotherScenario,
 										IAggregateRootWithEvents,
                                         ICloneableEntity<IPersonAbsence>,
-										ILayerCollectionOwner<ISkillStaff>
+										ILayerCollectionOwner<ISkillStaff>,
+										IVersioned
     {
         /// <summary>
         /// Gets the layer.

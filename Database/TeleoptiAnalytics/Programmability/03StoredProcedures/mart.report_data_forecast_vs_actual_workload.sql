@@ -65,7 +65,7 @@ CREATE TABLE #pre_result(
 CREATE TABLE #result(
 	period nvarchar(30),
 	forecasted_calls decimal(28,4),
-	calculated_calls int,
+	calculated_calls decimal(28,4),
 	offered_calls int,
 	answered_calls int,
 	sum_talk_time_s int,

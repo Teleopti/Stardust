@@ -139,12 +139,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence; }
         }
 
-        public virtual INonversionedPersistableScheduleData CreateTransient()
+        public virtual IPersistableScheduleData CreateTransient()
         {
             return NoneEntityClone();
         }
 
-        public virtual INonversionedPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
+        public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
         {
             var retObj = (PersonAbsence)NoneEntityClone();
             retObj._scenario = parameters.Scenario;

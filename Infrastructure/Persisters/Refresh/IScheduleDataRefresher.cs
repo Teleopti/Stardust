@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 {
 	public interface IScheduleDataRefresher 
 	{
-		void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> scheduleDataMessages, ICollection<INonversionedPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer);
+		void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> scheduleDataMessages, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer);
 	}
 }

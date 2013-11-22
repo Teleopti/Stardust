@@ -132,7 +132,7 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="differenceService"></param>
 		/// <returns></returns>
-		IDifferenceCollection<INonversionedPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<INonversionedPersistableScheduleData> differenceService);
+		IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService);
 
 		/// <summary>
 		/// Tells the domain that current state corresponds with db state

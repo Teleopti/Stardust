@@ -52,6 +52,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("to_be_deleted", typeof(int));
 			table.Columns.Add("windows_domain", typeof(String));
 			table.Columns.Add("windows_username", typeof(String));
+			table.Columns.Add("valid_to_date_id_maxDate", typeof(int));
+			table.Columns.Add("valid_to_interval_id_maxDate", typeof(int));
+			table.Columns.Add("valid_from_date_id_local", typeof(int));
+			table.Columns.Add("valid_to_date_id_local", typeof(int));
+			table.Columns.Add("valid_from_date_local", typeof(DateTime));
+			table.Columns.Add("valid_to_date_local", typeof(DateTime));
 			return table;
 		}
 
@@ -99,6 +105,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["windows_domain"] = "";
 			row["windows_username"] = "";
 			row["to_be_deleted"] = toBeDeleted;
+			row["valid_to_date_id_maxDate"] = validToDateId;
+			row["valid_to_interval_id_maxDate"] = 0;
+			row["valid_from_date_id_local"]= validFromDateId;
+			row["valid_to_date_id_local"]= validToDateId;
+			row["valid_from_date_local"]= validFrom;
+			row["valid_to_date_local"]  = validTo;
+
 
 			dataTable.Rows.Add(row);
 		}

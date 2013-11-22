@@ -7,17 +7,17 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 {
     public sealed class DateFactory
     {
-        #region Constructors (1) 
+        #region Constructors (1) 
 
         private DateFactory()
         {
         }
 
-        #endregion Constructors 
+        #endregion Constructors 
 
-        #region Methods (2) 
+        #region Methods (2) 
 
-        // Public Methods (2) 
+        // Public Methods (2) 
 
         public static IList<DayDate> CreateDateCollection(CultureInfo culture)
         {
@@ -57,6 +57,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
         //    return retList;
         //}
 
-        #endregion Methods 
+        #endregion Methods 
     }
 }

@@ -154,12 +154,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
             set
             {
-                if (_comparisonTasks != 0 && _averageTasks!=0)
-                    _taskIndex = (value / (_averageTasks * 7)) * _taskIndex;
-                _averageTasks = value / 7;
-                _totalTasks = _averageTasks * _taskOwnerDays.TaskOwnerDayCollection.Count;
-                if (_comparisonTasks != 0)
-                    _taskIndex = _totalTasks / _comparisonTasks;
+	            if (value < 0) return;
+	            if (_comparisonTasks != 0 && _averageTasks != 0)
+		            _taskIndex = (value/(_averageTasks*7))*_taskIndex;
+	            _averageTasks = value/7;
+	            _totalTasks = _averageTasks*_taskOwnerDays.TaskOwnerDayCollection.Count;
+	            if (_comparisonTasks != 0)
+		            _taskIndex = _totalTasks/_comparisonTasks;
             }
         }
 

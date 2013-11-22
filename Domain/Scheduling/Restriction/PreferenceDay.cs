@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restriction
             get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction; }
         }
 
-        public virtual INonversionedPersistableScheduleData CreateTransient()
+        public virtual IPersistableScheduleData CreateTransient()
         {
             IPreferenceDay ret = (IPreferenceDay)Clone();
             ret.SetId(null);

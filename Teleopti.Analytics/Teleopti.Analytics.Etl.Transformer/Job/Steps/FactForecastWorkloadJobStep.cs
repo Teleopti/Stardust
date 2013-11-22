@@ -22,7 +22,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             //Load data from stage to datamart
             var rows =
                 _jobParameters.Helper.Repository.FillForecastWorkloadDataMart(
-                    new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
+					new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit, _isIntraday);
 
 			if (_isIntraday)
 				_jobParameters.StateHolder.UpdateThisTime("Forecast", RaptorTransformerHelper.CurrentBusinessUnit);

@@ -763,6 +763,9 @@ End personal drop down menu
   .select2-drop{
     z-index: 9999999999999 !important;
 }
+.ie8 .select2-container {
+	min-width: 250px;
+}
 
 .user-name-link {
 	white-space: nowrap;

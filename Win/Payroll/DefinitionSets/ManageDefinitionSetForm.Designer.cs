@@ -70,6 +70,7 @@
             this.tableLayoutPanel1.SetColumnSpan(this.txtName, 2);
             this.txtName.Location = new System.Drawing.Point(111, 11);
             this.txtName.Margin = new System.Windows.Forms.Padding(5);
+            this.txtName.MaxLength = 250;
             this.txtName.Name = "txtName";
             this.txtName.OverflowIndicatorToolTipText = null;
             this.txtName.Size = new System.Drawing.Size(192, 20);

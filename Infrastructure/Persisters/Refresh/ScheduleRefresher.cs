@@ -26,12 +26,14 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 		}
 
 		public void Refresh(IScheduleDictionary scheduleDictionary, IEnumerable<IEventMessage> scheduleMessages,
-							ICollection<INonversionedPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
+							ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer, Func<Guid,bool> isRelevantPerson)
 		{
 			var myChanges = scheduleDictionary.DifferenceSinceSnapshot();
 			
 			foreach (var eventMessage in scheduleMessages)
 			{
+				if (!isRelevantPerson(eventMessage.DomainObjectId)) continue;
+
 				var person = _personRepository.Load(eventMessage.DomainObjectId);
 				var period = new DateTimePeriod(DateTime.SpecifyKind(eventMessage.EventStartDate, DateTimeKind.Utc),
 												DateTime.SpecifyKind(eventMessage.EventEndDate, DateTimeKind.Utc));
@@ -45,57 +47,57 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 			}
 		}
 
-		private IEnumerable<INonversionedPersistableScheduleData> myPersonAbsenceCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
+		private IEnumerable<IPersistableScheduleData> myPersonAbsenceCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
 		{
 			var scheduleDays = scheduleDictionary[person].ScheduledDayCollection(period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
 			return scheduleDays.SelectMany(s => s.PersonAbsenceCollection(false)).Where(a => a.Id.HasValue).Distinct().ToArray();
 		}
 
-		private IEnumerable<INonversionedPersistableScheduleData> messagePersonAbsenceCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
+		private IEnumerable<IPersistableScheduleData> messagePersonAbsenceCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
 		{
 			var result =  _personAbsenceRepository.Find(new[] { person }, period, scheduleDictionary.Scenario);
 			if (result == null)
-				return new INonversionedPersistableScheduleData[] {};
+				return new IPersistableScheduleData[] {};
 			return result;
 		}
 
-		private IEnumerable<INonversionedPersistableScheduleData> myPersonAssignmentCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
+		private IEnumerable<IPersistableScheduleData> myPersonAssignmentCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
 		{
 			var scheduleDays = scheduleDictionary[person].ScheduledDayCollection(period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
 			return scheduleDays.Select(s => s.PersonAssignment()).Where(p => p != null && p.Id.HasValue).ToArray();
 		}
 
-		private IEnumerable<INonversionedPersistableScheduleData> messagePersonAssignmentCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
+		private IEnumerable<IPersistableScheduleData> messagePersonAssignmentCollection(IScheduleDictionary scheduleDictionary, IPerson person, DateTimePeriod period)
 		{
 			var result = _personAssignmentRepository.Find(new[] {person}, period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), scheduleDictionary.Scenario);
 			if (result == null)
-				return new INonversionedPersistableScheduleData[] { };
+				return new IPersistableScheduleData[] { };
 			return result;
 		}
 
 		private void refreshThingOfType<T, TKey>(
 			IScheduleDictionary scheduleDictionary, 
-			IDifferenceCollection<INonversionedPersistableScheduleData> myChanges, 
-			ICollection<PersistConflict> conflictsBuffer, ICollection<INonversionedPersistableScheduleData> refreshedEntitiesBuffer,
-			Func<INonversionedPersistableScheduleData, TKey> key,
-			Func<IEnumerable<INonversionedPersistableScheduleData>> myVersionCollection,
-			Func<IEnumerable<INonversionedPersistableScheduleData>> messageVersionCollection
+			IDifferenceCollection<IPersistableScheduleData> myChanges, 
+			ICollection<PersistConflict> conflictsBuffer, ICollection<IPersistableScheduleData> refreshedEntitiesBuffer,
+			Func<IPersistableScheduleData, TKey> key,
+			Func<IEnumerable<IPersistableScheduleData>> myVersionCollection,
+			Func<IEnumerable<IPersistableScheduleData>> messageVersionCollection
 			) where T : class
 		{
 			var messageVersionOfPersistableScheduleData = messageVersionCollection();
 			var myVersionOfPersistableScheduleData = myVersionCollection();
 
-			var versionDictionary = new Dictionary<TKey, Tuple<INonversionedPersistableScheduleData, INonversionedPersistableScheduleData>>();
+			var versionDictionary = new Dictionary<TKey, Tuple<IPersistableScheduleData, IPersistableScheduleData>>();
 			addItemsToVersionDictionary(versionDictionary, key,
 										myVersionOfPersistableScheduleData,
-										(t, i) => new Tuple<INonversionedPersistableScheduleData, INonversionedPersistableScheduleData>(i, t.Item2));
+										(t, i) => new Tuple<IPersistableScheduleData, IPersistableScheduleData>(i, t.Item2));
 			addItemsToVersionDictionary(versionDictionary, key,
 										messageVersionOfPersistableScheduleData,
-										(t, i) => new Tuple<INonversionedPersistableScheduleData, INonversionedPersistableScheduleData>(t.Item1, i));
+										(t, i) => new Tuple<IPersistableScheduleData, IPersistableScheduleData>(t.Item1, i));
 
 			foreach (var versionKeyValuePair in versionDictionary)
 			{
-				DifferenceCollectionItem<INonversionedPersistableScheduleData>? myVersionOfEntity;
+				DifferenceCollectionItem<IPersistableScheduleData>? myVersionOfEntity;
 				if (versionKeyValuePair.Value.IsInsertByMessage())
 				{
 					myVersionOfEntity = (from d in myChanges
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 										 where
 											 pa != null &&
 											 pa.Equals(versionKeyValuePair.Value.Item2)
-										 select (DifferenceCollectionItem<INonversionedPersistableScheduleData>?)d
+										 select (DifferenceCollectionItem<IPersistableScheduleData>?)d
 										).SingleOrDefault();
 				}
 				else
@@ -118,7 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 					continue;
 				}
 
-				INonversionedPersistableScheduleData messageVersionOfEntity = null;
+				IPersistableScheduleData messageVersionOfEntity = null;
 				if (versionKeyValuePair.Value.IsDeletedByMessage())
 				{
 					messageVersionOfEntity = scheduleDictionary.DeleteFromBroker(versionKeyValuePair.Value.Item1.Id.GetValueOrDefault());

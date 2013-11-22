@@ -16,27 +16,27 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_data = data;
 		}
 
-		public void Add(INonversionedPersistableScheduleData entity)
+		public void Add(IPersistableScheduleData entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public void Remove(INonversionedPersistableScheduleData entity)
+		public void Remove(IPersistableScheduleData entity)
 		{
 			throw new NotImplementedException();
 		}
 
-		public INonversionedPersistableScheduleData Get(Guid id)
+		public IPersistableScheduleData Get(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public IList<INonversionedPersistableScheduleData> LoadAll()
+		public IList<IPersistableScheduleData> LoadAll()
 		{
 			throw new NotImplementedException();
 		}
 
-		public INonversionedPersistableScheduleData Load(Guid id)
+		public IPersistableScheduleData Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public void AddRange(IEnumerable<INonversionedPersistableScheduleData> entityCollection)
+		public void AddRange(IEnumerable<IPersistableScheduleData> entityCollection)
 		{
 			throw new NotImplementedException();
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
-		public INonversionedPersistableScheduleData Get(Type concreteType, Guid id)
+		public IPersistableScheduleData Get(Type concreteType, Guid id)
 		{
 			throw new NotImplementedException();
 		}
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public INonversionedPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
+		public IPersistableScheduleData LoadScheduleDataAggregate(Type scheduleDataType, Guid id)
 		{
 			throw new NotImplementedException();
 		}

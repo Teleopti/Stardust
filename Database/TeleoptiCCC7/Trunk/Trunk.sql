@@ -661,29 +661,31 @@ BEGIN
 	ALTER TABLE [dbo].[PersonAbsence] CHECK CONSTRAINT [FK_PersonAbsence_Scenario]
 END
 
+
 ----------------  
 --Name: Robin Karlsson
 --Date: 2013-11-18
 --Desc: Dropping table not being used
 ---------------- 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_SystemRoleApplicationRoleMapper_ApplicationRole]') AND parent_object_id = OBJECT_ID(N'[dbo].[SystemRoleApplicationRoleMapper]'))
-ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_ApplicationRole]
+EXEC('ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_ApplicationRole]')
 GO
 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_SystemRoleApplicationRoleMapper_BusinessUnit]') AND parent_object_id = OBJECT_ID(N'[dbo].[SystemRoleApplicationRoleMapper]'))
-ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_BusinessUnit]
+EXEC('ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_BusinessUnit]')
 GO
 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_SystemRoleApplicationRoleMapper_Person_CreatedBy]') AND parent_object_id = OBJECT_ID(N'[dbo].[SystemRoleApplicationRoleMapper]'))
-ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_Person_CreatedBy]
+EXEC('ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_Person_CreatedBy]')
 GO
 
 IF  EXISTS (SELECT * FROM sys.foreign_keys WHERE object_id = OBJECT_ID(N'[dbo].[FK_SystemRoleApplicationRoleMapper_Person_UpdatedBy]') AND parent_object_id = OBJECT_ID(N'[dbo].[SystemRoleApplicationRoleMapper]'))
-ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_Person_UpdatedBy]
+EXEC('ALTER TABLE [dbo].[SystemRoleApplicationRoleMapper] DROP CONSTRAINT [FK_SystemRoleApplicationRoleMapper_Person_UpdatedBy]')
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[SystemRoleApplicationRoleMapper]') AND type in (N'U'))
-DROP TABLE [dbo].[SystemRoleApplicationRoleMapper]
+EXEC('DROP TABLE [dbo].[SystemRoleApplicationRoleMapper]')
 GO
+
 
 

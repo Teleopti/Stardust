@@ -13,6 +13,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         DateTimePeriod? PeriodToLoadBridgeTimeZone { get; }
         IScheduleDictionary GetSchedules(DateTimePeriod period, IScenario scenario);
         ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
+		ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck);
         IDictionary<ISkill, IList<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
         IList<IPerson> UserCollection { get; }
         IList<IActivity> ActivityCollection { get; }

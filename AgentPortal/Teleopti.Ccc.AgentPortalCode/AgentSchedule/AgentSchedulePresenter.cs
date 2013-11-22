@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Threading;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
@@ -15,17 +14,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
 {
     public class AgentSchedulePresenter : AgentSchedulePresenterBase
     {
-        private readonly ClipHandler<ICustomScheduleAppointment> _scheduleClipHandler;
-
-        public AgentSchedulePresenter(IAgentScheduleViewBase view, AgentScheduleStateHolder stateHolder, ClipHandler<ICustomScheduleAppointment> clipHandler)
+        public AgentSchedulePresenter(IAgentScheduleViewBase view, AgentScheduleStateHolder stateHolder)
             : base(view, stateHolder)
         {
-            _scheduleClipHandler = clipHandler;
-        }
-
-        public ClipHandler<ICustomScheduleAppointment> ScheduleClipHandler
-        {
-            get { return _scheduleClipHandler; }
         }
 
         /// <summary>

@@ -2,20 +2,11 @@ using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
-
-
-    ///<summary>
-    ///</summary>
-    public interface IVersionedAggregateRoot : IVersioned, IAggregateRoot
-    {
-
-    }
-
-    ///<summary>
+		///<summary>
     /// IPersonAbsenceAccount
     ///</summary>
     public interface IPersonAbsenceAccount 
-        : IVersionedAggregateRoot, IOriginator<IPersonAbsenceAccount>, ICloneableEntity<IPersonAbsenceAccount>
+        : IAggregateRoot, IVersioned, IOriginator<IPersonAbsenceAccount>, ICloneableEntity<IPersonAbsenceAccount>
     {
         ///<summary>
         ///</summary>
