@@ -372,11 +372,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridColumns.Add(new SFGridCheckBoxColumn<T>("InContractTime", Resources.IsContractTime));
             gridColumns.Add(new SFGridCheckBoxColumn<T>("InWorkTime", Resources.IsWorkTime));
             gridColumns.Add(new SFGridCheckBoxColumn<T>("InPaidTime", Resources.IsPaidTime));
-            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
-            {
-                var payrollColumn = new SFGridEditableTextColumn<T>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
-                gridColumns.Add(payrollColumn);
-            }
             gridColumns.Add(new SFGridByteCellColumn<T>("Priority", Resources.Priority, null));
             gridColumns.Add(new SFGridCheckBoxColumn<T>("Requestable", UserTexts.Resources.UseForRequests));
             var trackerColumn = new SFGridDropDownColumn<T, TrackerView>("Tracker", Resources.TrackerTypeHeader, _trackerAdopterCollection,
@@ -384,6 +379,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                                 	{UseDisablePropertyCheck = true};
         	gridColumns.Add(trackerColumn);
             gridColumns.Add(new SFGridCheckBoxColumn<T>("Confidential", Resources.Confidential));
+			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			{
+				var payrollColumn = new SFGridEditableTextColumn<T>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
+				gridColumns.Add(payrollColumn);
+			}
         }
 
         private static void createColumnsForGroupingAbsenceGrid<T>(ICollection<SFGridColumnBase<T>> gridColumns)
