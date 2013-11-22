@@ -16,6 +16,10 @@ define([
 			},
 			SetSelectedLayer: function (layer) {
 				selectedLayer = layer;
+			},
+			Clear: function() {
+				selectedPersonId = undefined;
+				selectedLayer = undefined;
 			}
 		};
 	});

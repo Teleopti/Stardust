@@ -166,12 +166,14 @@ define([
 				teamSchedule.SelectedGroup.subscribe(function () {
 					if (teamSchedule.Loading())
 						return;
+					currentState.Clear();
 					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
 				teamSchedule.SelectedDate.subscribe(function() {
 					if (teamSchedule.Loading())
 						return;
+					currentState.Clear();
 					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
