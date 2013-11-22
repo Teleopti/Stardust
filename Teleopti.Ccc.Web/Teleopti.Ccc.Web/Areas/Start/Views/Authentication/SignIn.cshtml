@@ -1,8 +1,9 @@
 ﻿@using System.Web.Optimization
 @using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 @section head {
-	@Styles.Render("~/SignInCss")
-	@Scripts.Render("~/SignInJs")
+	@Styles.Render(BundleScripts.SignInCss)
+	@Scripts.Render(BundleScripts.SignInJs)
 	
 	<script type="text/javascript">
 		var authentication;

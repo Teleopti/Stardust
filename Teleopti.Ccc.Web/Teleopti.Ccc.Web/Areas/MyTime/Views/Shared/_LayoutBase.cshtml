@@ -1,5 +1,6 @@
 ﻿@using System.Web.Optimization
 @using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -16,9 +17,9 @@
 	<meta name="author" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	@Styles.Render("~/MyTimeCss")
-	@Styles.Render("~/Content/bootstrap/bundle")
-	@Scripts.Render("~/MyTimeJs")
+	@Styles.Render(BundleScripts.MyTimeCss)
+	@Styles.Render(BundleScripts.BootstrapCss)
+	@Scripts.Render(BundleScripts.MyTimeJs)
 
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{

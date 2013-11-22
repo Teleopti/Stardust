@@ -9,6 +9,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	[TaskPriority(20)]
 	public class BundleScripts : IBootstrapperTask
 	{
+		public const string MyTimeJs = "~/MyTimeJs";
+		public const string MyTimeCss = "~/MyTimeCss";
+		public const string BootstrapCss = "~/Content/bootstrap/bundle";
+		public const string SignInCss = "~/SignInCss";
+		public const string SignInJs = "~/SignInJs";
+
 		public Task Execute()
 		{
 			BundleTable.Bundles.IgnoreList.Clear();
@@ -22,7 +28,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		private static void registerMyTimeScripts()
 		{
-			var cssBundle = new StyleBundle("~/MyTimeCss")
+			var cssBundle = new StyleBundle(MyTimeCss)
 				.Include(
 					"~/Content/moment-datepicker/datepicker.css",
 					"~/Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css",
@@ -32,7 +38,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"
 				)
 				.IncludeDirectory("~/Areas/MyTime/Content/Css", "*.css");
-			var jsBundle = new ScriptBundle("~/MyTimeJs")
+			var jsBundle = new ScriptBundle(MyTimeJs)
 				.Include(
 					"~/Content/jquery/jquery-1.10.2.js",
 					"~/Content/Scripts/knockout-2.2.1.js",
@@ -66,7 +72,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		private static void registerBootstrapCssIndividualDueToRelativePathsInsideCss()
 		{
-			var bootstrapCss = new StyleBundle("~/Content/bootstrap/bundle")
+			var bootstrapCss = new StyleBundle(BootstrapCss)
 				.Include("~/Content/bootstrap/bootstrap.css");
 			BundleTable.Bundles.Add(bootstrapCss);
 		}
@@ -74,14 +80,14 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerSigninScripts()
 		{
 			//use requiresJs here instead?
-			var cssBundle = new StyleBundle("~/SignInCss")
+			var cssBundle = new StyleBundle(SignInCss)
 				.Include(
 					"~/Content/bootstrap/bootstrap.css",
 					"~/Content/bootstrap/bootstrap-responsive.css",
 					"~/Areas/Start/Content/Css/Login.css",
 					"~/Areas/Start/Content/Css/Site.css"
 				);
-			var jsBundle = new ScriptBundle("~/SignInJs")
+			var jsBundle = new ScriptBundle(SignInJs)
 				.Include(
 					"~/Content/jquery/jquery-1.10.2.js",
 					"~/Content/Scripts/jquery.ba-hashchange.js",
