@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	public class BundleScripts : IBootstrapperTask
 	{
 		public const string MyTimeJs = "~/MyTimeJs";
-		public const string MyTimeCss = "~/MyTimeCss";
+		public const string MyTimeCss = "~/Areas/MyTime/Content/Css/bundle"; //to get correct paths to our pic links in css - might need to move 3rd libs out of here
 		public const string BootstrapCss = "~/Content/bootstrap/bundle";
-		public const string SignInCss = "~/SignInCss";
+		public const string SignInCss = "~/Areas/Start/Content/Css/bundle"; //to get correct paths to our pic links in css - might need to move 3rd libs out of here
 		public const string SignInJs = "~/SignInJs";
 
 		public Task Execute()
