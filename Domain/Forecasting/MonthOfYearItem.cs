@@ -142,8 +142,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     _averageTasks = _totalTasks / _taskOwnerDays.TaskOwnerDayCollection.Count;
                 return _averageTasks * _daysInMonth;
             }
-            set {
-	            if (!(value >= 0)) return;
+            set
+            {
+	            if (value < 0) return;
 	            if (_comparisonTasks != 0 && _averageTasks != 0)
 		            _taskIndex = ((value/(_averageTasks*_daysInMonth)*TaskIndex));
 	            _averageTasks = value/_daysInMonth;
