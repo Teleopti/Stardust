@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var publisher = new FakePublishEventsFromEventHandlers();
 			var target = new ScheduleChangedEventPublisher(publisher);
 
-			var @event = new ActivityAssignedEvent
+			var @event = new ActivityAddedEvent
 				{
 					Timestamp = new DateTime(2013, 11, 15, 10, 0, 0),
 					Datasource = "datasource",

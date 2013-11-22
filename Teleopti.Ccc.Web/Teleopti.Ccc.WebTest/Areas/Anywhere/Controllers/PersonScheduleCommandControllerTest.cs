@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
 			var target = new PersonScheduleCommandController(commandDispatcher);
 
-			var command = new AssignActivityCommand();
+			var command = new AddActivityCommand();
 
-			target.AssignActivity(command);
+			target.AddActivity(command);
 
 			commandDispatcher.AssertWasCalled(x => x.Execute(command));
 		}
