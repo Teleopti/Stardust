@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Win.Common
                     {
 	                    foreach (var personalLayer in personAssignment.PersonalLayers())
 	                    {
-		                    personAssignmentNoMainShift.AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+		                    personAssignmentNoMainShift.AddPersonalActivity(personalLayer.Payload, personalLayer.Period);
 	                    }
                     }
 

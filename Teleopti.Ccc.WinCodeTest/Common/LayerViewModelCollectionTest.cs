@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             var assignment = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 						var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
 						assignment.AddOvertimeLayer(ActivityFactory.CreateActivity("activity"), period, multi);
-						assignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period);
+						assignment.AddPersonalActivity(ActivityFactory.CreateActivity("activity"), period);
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 

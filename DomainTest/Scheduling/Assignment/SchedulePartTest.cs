@@ -1134,7 +1134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			//create personassignment with no mainshift
 			IPersonAssignment newPersonAssignment = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario);
 			//add personal layer to assignment
-			newPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period3);
+			newPersonAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("activity"), period3);
 			//add assignment to source
 			source.Add(newPersonAssignment);
 

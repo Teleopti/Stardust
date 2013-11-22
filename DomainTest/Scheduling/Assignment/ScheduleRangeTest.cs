@@ -960,7 +960,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IActivity activity = ActivityFactory.CreateActivity("sdf");
                 IPersonAssignment pAss = PersonAssignmentFactory.CreatePersonAssignment(_parameters.Person,
                                                                                         _parameters.Scenario);
-                pAss.AddPersonalLayer(activity,_parameters.Period);
+                pAss.AddPersonalActivity(activity,_parameters.Period);
 
                 _target.Add(new PersonAbsence(_parameters.Person, _parameters.Scenario,
                                               new AbsenceLayer(AbsenceFactory.CreateAbsence("abs"), _parameters.Period)));

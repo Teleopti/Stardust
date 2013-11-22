@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
-			personAss.AddPersonalLayer(act3, period3);
+			personAss.AddPersonalActivity(act3, period3);
 			personAss.AddActivity(act1, period1);
 			personAss.AddActivity(act2, period2);
 			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period4, absence);

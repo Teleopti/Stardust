@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return Person; }
 		}
 
-		public virtual void AddPersonalLayer(IActivity activity, DateTimePeriod period)
+		public virtual void AddPersonalActivity(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 			foreach (var personalLayer in personAssignmentSource.PersonalLayers())
 			{
-				AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+				AddPersonalActivity(personalLayer.Payload, personalLayer.Period);
 			}
 			foreach (var overtimeLayer in personAssignmentSource.OvertimeLayers())
 			{

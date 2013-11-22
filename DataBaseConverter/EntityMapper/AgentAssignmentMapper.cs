@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
 	                foreach (var layer in psMapper.Map(fillup))
 	                {
-		                agAss.AddPersonalLayer(layer.Payload, layer.Period);
+		                agAss.AddPersonalActivity(layer.Payload, layer.Period);
 	                }
                     if (_shiftContainsOvertime.IsSatisfiedBy(fillup))
                     {

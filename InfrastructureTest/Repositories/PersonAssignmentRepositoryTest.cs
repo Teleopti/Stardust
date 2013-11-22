@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	        var ass = new PersonAssignment(_dummyAgent, _dummyScenario, new DateOnly(2000, 1, 1));
 	        ass.AddActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 					ass.SetShiftCategory(_dummyCat);
-					ass.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
+					ass.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
 	        ass.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet);
 	        return ass;
         }
@@ -183,9 +183,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                    new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
                 _dummyCategory,
                 _dummyScenario);
-            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
             agAssValid.AddOvertimeLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2), _definitionSet);
 
             IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
@@ -246,9 +246,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                                    new DateTime(2007, 1, 2, 0, 0, 0, DateTimeKind.Utc)),
                 _dummyCategory,
                 _dummyScenario);
-            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
-            agAssValid.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
+            agAssValid.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2007, 1, 1, 2007, 1, 2));
 
             IPersonAssignment agAssInvalid = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(
                 _dummyActivity,
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
                 //Do change
                 loaded = _rep.Load(org.Id.Value);
-							loaded.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
+							loaded.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2));
                 UnitOfWork.PersistAll();
                 loaded = _rep.Load(org.Id.Value);
                 Assert.AreEqual(2, casted.Version);
@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
                 //Do change
                 loaded = _rep.LoadAggregate(org.Id.Value);
-	            loaded.AddPersonalLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+	            loaded.AddPersonalActivity(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
                 UnitOfWork.PersistAll();
                 UnitOfWork.Remove(loaded);
                 loaded = _rep.LoadAggregate(org.Id.Value);

@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new MoveLayerVertical();
 			var ass = new PersonAssignment(new Person(), new Scenario("sd"), new DateOnly(2000, 1, 1));
 			ass.AddActivity(new Activity("d"), new DateTimePeriod());
-			ass.AddPersonalLayer(activityToLookFor, new DateTimePeriod());
-			ass.AddPersonalLayer(new Activity("d"), new DateTimePeriod());
+			ass.AddPersonalActivity(activityToLookFor, new DateTimePeriod());
+			ass.AddPersonalActivity(new Activity("d"), new DateTimePeriod());
 
 			target.MoveUp(ass, ass.PersonalLayers().Last());
 

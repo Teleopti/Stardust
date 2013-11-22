@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 new DateTimePeriod(new DateTime(2007, 8, 10, 1, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2007, 8, 11, 3, 0, 0, DateTimeKind.Utc));
 
-						_testPersonAssignment.AddPersonalLayer(ActivityFactory.CreateActivity("Möte"), period2);
+						_testPersonAssignment.AddPersonalActivity(ActivityFactory.CreateActivity("Möte"), period2);
 
             return _testPersonAssignment;
         }

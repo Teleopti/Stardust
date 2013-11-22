@@ -665,7 +665,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		        foreach (var personalLayer in sourceAss.PersonalLayers())
 		        {
 					TimeSpan periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source.Period, Period);
-			        destAss.AddPersonalLayer(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
+			        destAss.AddPersonalActivity(personalLayer.Payload, personalLayer.Period.MovePeriod(periodOffset));
 		        }
 
 	        }
@@ -770,7 +770,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period)
 		{
 			var ass = PersonAssignment(true);
-			ass.AddPersonalLayer(activity, period);
+			ass.AddPersonalActivity(activity, period);
 		}
 
 			//will be removed

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(8, 16));
 			IActivity pActivity = ActivityFactory.CreateActivity("personal");
-			ass1.AddPersonalLayer(pActivity, createPeriod(10,13));
+			ass1.AddPersonalActivity(pActivity, createPeriod(10,13));
 			IPersonAbsence abs1 = createPersonAbsence(100, createPeriod(8, 13));
 			scheduleDay.Add(ass1);
 			scheduleDay.Add(abs1);

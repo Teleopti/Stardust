@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var period = new DateTimePeriod(startTimeUtc, endTimeUtc);
 
 			if (ScheduledActivityIsPersonal)
-				personAssignment.AddPersonalLayer(scheduledActivity, period);
+				personAssignment.AddPersonalActivity(scheduledActivity, period);
 			else
 				personAssignment.AddActivity(scheduledActivity, period);
 		}

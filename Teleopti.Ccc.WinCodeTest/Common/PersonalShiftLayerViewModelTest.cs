@@ -256,8 +256,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var activity = ActivityFactory.CreateActivity("activity");
 
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
-			personAssignment.AddPersonalLayer(activity, period);
-			personAssignment.AddPersonalLayer(activity, period2);
+			personAssignment.AddPersonalActivity(activity, period);
+			personAssignment.AddPersonalActivity(activity, period2);
 
 
 			_target = new PersonalShiftLayerViewModel(null, personAssignment.PersonalLayers().Last(), personAssignment, null, new MoveLayerVertical());

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				{
 					if (dateTimePeriod.ElapsedTime() > TimeSpan.Zero)
 					{
-						personAssignment.AddPersonalLayer(layer.Payload, dateTimePeriod);
+						personAssignment.AddPersonalActivity(layer.Payload, dateTimePeriod);
 					}
 				}
 			}

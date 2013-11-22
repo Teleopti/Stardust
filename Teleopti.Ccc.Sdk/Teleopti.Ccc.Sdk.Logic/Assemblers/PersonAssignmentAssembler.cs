@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 	            var layersDomain = _personalActivityLayerAssembler.DtosToDomainEntities(persShiftDto.LayerCollection);
 	            foreach (var layer in layersDomain)
 	            {
-		            assignment.AddPersonalLayer(layer.Payload, layer.Period);
+		            assignment.AddPersonalActivity(layer.Payload, layer.Period);
 	            }
             }
         }
