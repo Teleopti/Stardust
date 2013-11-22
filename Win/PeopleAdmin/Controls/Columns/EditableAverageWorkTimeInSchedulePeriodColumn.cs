@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
             if (IsContentRow(e.RowIndex,dataItems.Count))
             {
-                e.Style.CellType = GridCellModelConstants.CellTypeTimeSpanLongHourMinutesCell;
+				e.Style.CellType = GridCellModelConstants.CellTypeTimeSpanLongHourMinutesOrEmptyCell;
                 T dataItem = dataItems[e.RowIndex - 1];
                 
                 object obj = _propertyReflector.GetValue(dataItem, BindingProperty);
