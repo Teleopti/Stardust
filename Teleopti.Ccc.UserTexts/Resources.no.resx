@@ -364,7 +364,7 @@
     <value>&amp;Velg kommandoer fra:</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Slett</value>
+    <value>Tømme</value>
   </data>
   <data name="ClipAbsence" xml:space="preserve">
     <value>Klipp ut fravær</value>
@@ -4439,9 +4439,6 @@ Lisensskjemaet er "{3}". Disse valgene er aktivert: {4}</value>
   <data name="TimeTypeWeeksSingular" xml:space="preserve">
     <value>uke</value>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Student Tilgjengelighet</value>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Sett inn verdier for de ulike kombinasjonene</value>
   </data>
@@ -4681,9 +4678,6 @@ Lisensskjemaet er "{3}". Disse valgene er aktivert: {4}</value>
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>Er du sikker på at du vil slette '{0}' kontrakt?</value>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Ny student tilgjengelig</value>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Absolutt start</value>
@@ -7051,9 +7045,6 @@ langsiktig</value>
   <data name="StaffEmployed" xml:space="preserve">
     <value>Ansatt personal</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Studenttimer</value>
-  </data>
   <data name="DeleteEfficiencyShrinkageRow" xml:space="preserve">
     <value>Slett effektivitet/svinn</value>
   </data>
@@ -7407,15 +7398,6 @@ ukedag</value>
   <data name="NextDayColon" xml:space="preserve">
     <value>Neste dag:</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Ingen skift tilgjengelige for denne studentens tilgjengelighet.</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Student tilgjengelighets periode</value>
-  </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Åpne sudent tilgjengelighet</value>
-  </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
     <value>Valgt periode bør ikke være lenger enn {0}.</value>
   </data>
@@ -7457,9 +7439,6 @@ ukedag</value>
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Lås restriksjoner</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Lås Sudent tilgjengelighet</value>
   </data>
   <data name="LockRotations" xml:space="preserve">
     <value>Lås rotasjoner</value>
@@ -8160,9 +8139,6 @@ Disse alternativene er aktivert:
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
     <value>Skift for fleksibel arbeidstid</value>
   </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Student tilgjengelighet</value>
-  </data>
   <data name="Teams" xml:space="preserve">
     <value>Team</value>
   </data>
@@ -8249,9 +8225,6 @@ Disse alternativene er aktivert:
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>Fraværsforespørselen {0} ble avslått.</value>
-  </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Student tilgjengelighet oppfyllelse</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>Ny vaktbytte forespørsel {0}, godkjenn eller avslå i din forespørsels oversikt.</value>
