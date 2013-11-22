@@ -75,10 +75,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void OnEventMessage(object sender, EventMessageArgs e)
 		{
-			if (_owner.IsDisposed)
-				return;
-			if (e.Message.ModuleId == InstanceId)
-				return;
+			if (_owner.IsDisposed) return;
+			if (e.Message.ModuleId == InstanceId) return;
 			if (_owner.InvokeRequired)
 			{
 				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(OnEventMessage), sender, e);
