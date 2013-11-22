@@ -51,15 +51,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private static void movePersonAssignment(IPersonAssignment sourceAssignment, IPersonAssignment targetAssignment)
 		{
 
-			var periodOffsetCalculator = new PeriodOffsetCalculator();
-			var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(sourceAssignment.Period, targetAssignment.Period);
+			//var periodOffsetCalculator = new PeriodOffsetCalculator();
+			//var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(sourceAssignment.Period, targetAssignment.Period);
 
 			targetAssignment.ClearMainLayers();
 			targetAssignment.ClearOvertimeLayers();
 
 			foreach (var layer in sourceAssignment.MainLayers())
 			{
-				targetAssignment.AddMainLayer(layer.Payload, layer.Period.MovePeriod(periodOffset));
+				targetAssignment.AddMainLayer(layer.Payload, layer.Period);
 			}
 
 			var timeZoneInfo = sourceAssignment.Person.PermissionInformation.DefaultTimeZone();
