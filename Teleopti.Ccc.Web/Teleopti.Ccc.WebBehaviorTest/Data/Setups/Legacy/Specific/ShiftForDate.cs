@@ -51,13 +51,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			// create main shift
             _assignmentPeriod = new DateTimePeriod(shiftStartUtc, shiftEndUtc);
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(Date));
-			assignment.AssignActivity(TestData.ActivityPhone, _assignmentPeriod);
+			assignment.AddActivity(TestData.ActivityPhone, _assignmentPeriod);
 
 			// add lunch
 			if (_withLunch)
 			{
                 var lunchPeriod = new DateTimePeriod(shiftStartUtc.AddHours(3), shiftStartUtc.AddHours(4));
-				assignment.AssignActivity(TestData.ActivityLunch, lunchPeriod);
+				assignment.AddActivity(TestData.ActivityLunch, lunchPeriod);
 			}
 
 			assignment.SetShiftCategory(ShiftCategory);

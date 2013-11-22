@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldMapShiftCategoryInPersonAssignmentDayViewModel()
 		{
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
-			personAssignment.AssignActivity(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			personAssignment.AddActivity(new Activity("sdf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			personAssignment.SetShiftCategory(new ShiftCategory("shiftCategory"));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 

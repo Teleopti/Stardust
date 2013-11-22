@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 				var newAss = new PersonAssignment(person, destination.Scenario, date);
 				newAss.SetId(Guid.NewGuid());
-				newAss.AssignActivity(new Activity("dsf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+				newAss.AddActivity(new Activity("dsf"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 				var schedulePart = createPartWithData(newAss, date);
 
 				target.CopySchedulePartsToAnotherDictionary(destination, new[] {schedulePart});

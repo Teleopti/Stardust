@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var schedDay = ExtractedSchedule.CreateScheduleDay(schedDic, new Person(), new DateOnly(2000, 2, 1));
 			schedDay.Person.SetId(Guid.NewGuid());
 			var ass = new PersonAssignment(schedDay.Person, schedDay.Scenario, new DateOnly(2000,1,1));
-			ass.AssignActivity(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12)));
+			ass.AddActivity(act, schedDay.DateOnlyAsPeriod.Period().MovePeriod(TimeSpan.FromHours(12)));
 			ass.SetShiftCategory(new ShiftCategory("asd"));
 			schedDay.Add(ass);
 			using (mocks.Record())
@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             var scheduleDay = ExtractedSchedule.CreateScheduleDay(schedDictionary, new Person(), new DateOnly(2000, 2, 1));
             scheduleDay.Person.SetId(Guid.NewGuid());
             var assignment = new PersonAssignment(scheduleDay.Person, scheduleDay.Scenario, new DateOnly(2000,1,1));
-	        assignment.AssignActivity(activity, period);
+	        assignment.AddActivity(activity, period);
 					assignment.SetShiftCategory(new ShiftCategory("sdf"));
             scheduleDay.Add(assignment);
 

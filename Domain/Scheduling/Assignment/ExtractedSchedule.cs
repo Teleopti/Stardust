@@ -576,7 +576,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					workingCopyOfAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
 					foreach (var layer in sourceAssignment.MainLayers())
 					{
-						workingCopyOfAssignment.AssignActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
+						workingCopyOfAssignment.AddActivity(layer.Payload, layer.Period.MovePeriod(periodOffset));
 					}
 
 					var period = source.Period.MovePeriod(periodOffset);
@@ -750,7 +750,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					if (ass != null && 
 						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
 				{
-					ass.AssignActivity(activity, period);
+					ass.AddActivity(activity, period);
 					if (ass.ShiftCategory == null)
 					{
 						ass.SetShiftCategory(shiftCategory);
@@ -760,7 +760,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-					newPersonAssignment.AssignActivity(activity, period);
+					newPersonAssignment.AddActivity(activity, period);
 					newPersonAssignment.SetShiftCategory(shiftCategory);
 			Add(newPersonAssignment);
 

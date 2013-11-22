@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		{
 			var start = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			var day = othersScheduleRange.ScheduledDay(date);
-			day.PersonAssignment().AssignActivity(Activity, new DateTimePeriod(start, start.AddHours(3)));
+			day.PersonAssignment().AddActivity(Activity, new DateTimePeriod(start, start.AddHours(3)));
 			DoModify(day);
 		}
 

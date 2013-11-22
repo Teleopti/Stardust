@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				});
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
-			personAssignment.AssignActivity(activity, period);
+			personAssignment.AddActivity(activity, period);
 		}
 	}
 }

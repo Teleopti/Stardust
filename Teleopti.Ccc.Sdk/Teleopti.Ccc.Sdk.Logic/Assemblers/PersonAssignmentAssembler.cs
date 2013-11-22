@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 var shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
 	            foreach (var layer in _mainActivityLayerAssembler.DtosToDomainEntities(dto.MainShift.LayerCollection))
 	            {
-		            assignment.AssignActivity(layer.Payload, layer.Period);
+		            assignment.AddActivity(layer.Payload, layer.Period);
 	            }
 							assignment.SetShiftCategory(shiftCategory);
             }

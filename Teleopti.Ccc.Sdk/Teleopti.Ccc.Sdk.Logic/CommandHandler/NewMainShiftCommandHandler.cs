@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 							currentAss.SetShiftCategory(shiftCategory);
 	            foreach (var shiftLayer in mainShiftLayers)
 	            {
-		            currentAss.AssignActivity(shiftLayer.Payload, shiftLayer.Period);
+		            currentAss.AddActivity(shiftLayer.Payload, shiftLayer.Period);
 	            }
 
 				var scheduleTagEntity = _scheduleTagAssembler.DtoToDomainEntity(new ScheduleTagDto { Id = command.ScheduleTagId });
