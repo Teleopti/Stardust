@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			                  .Constraints(Is.Equal(_schedulerStateHolder.Schedules),
 			                               Rhino.Mocks.Constraints.List.IsIn(eventMessage),
 			                               Is.Anything(),
-			                               Is.Anything())
+			                               Is.Anything(),
+										   Is.Anything())
 			                  .WhenCalled(x => ((ICollection<IPersistableScheduleData>) x.Arguments[2]).Add(refreshedEntity));
 
 		    refreshedEntity.Stub(x => x.Person).Return(_person);
