@@ -10,10 +10,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	public class BundleScripts : IBootstrapperTask
 	{
 		public const string MyTimeJs = "~/MyTimeJs";
-		public const string MyTimeCss = "~/Areas/MyTime/Content/Css/bundle"; //to get correct paths to our pic links in css - might need to move 3rd libs out of here
 		public const string BootstrapCss = "~/Content/bootstrap/bundle";
-		public const string SignInCss = "~/Areas/Start/Content/Css/bundle"; //to get correct paths to our pic links in css - might need to move 3rd libs out of here
 		public const string SignInJs = "~/SignInJs";
+		//to get correct paths to our pic links in css - need same structure
+		public const string Select2Css = "~/Content/select2/bundle";
+		public const string MyTimeCss = "~/Areas/MyTime/Content/Css/bundle";
+		public const string SignInCss = "~/Areas/Start/Content/Css/bundle"; 
 
 		public Task Execute()
 		{
@@ -29,12 +31,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerMyTimeScripts()
 		{
 			registerBootstrapCssIndividualDueToRelativePathsInsideCss();
+			registerSelect2CssIndividualDueToRelativePathsInsideCss();
 			var cssBundle = new StyleBundle(MyTimeCss)
 				.Include(
 					"~/Content/moment-datepicker/datepicker.css",
 					"~/Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css",
 					"~/Content/Scripts/jquery.qtip.css",
-					"~/Content/select2/select2.css",
 					"~/Content/bootstrap-timepicker/css/bootstrap-timepicker.css",
 					"~/Content/Scripts/pinify/content/jquery.pinify.min.css"
 				)
@@ -68,6 +70,13 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			jsBundle.Orderer = new teleoptiScriptsOrderedByNumberOfDots();
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
+		}
+
+		private static void registerSelect2CssIndividualDueToRelativePathsInsideCss()
+		{
+			var select2Css = new StyleBundle(Select2Css)
+				.Include("~/Content/select2/select2.css");
+			BundleTable.Bundles.Add(select2Css);
 		}
 
 		private static void registerBootstrapCssIndividualDueToRelativePathsInsideCss()
