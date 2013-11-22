@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var ass = Parent as IPersonAssignment;
 				if (ass == null)
 					return -1;
-				return ass.Activities.ToList().IndexOf(this);
+				return ass.ShiftLayers.ToList().IndexOf(this);
 			}
 		}
 

@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				var modifiedPart = destination[person].ScheduledDay(date);
 				var assResult = modifiedPart.PersonAssignment();
 				assResult.Id.Should().Be.EqualTo(orgAss.Id.Value);
-				assResult.Activities.Count().Should().Be.EqualTo(1);
+				assResult.ShiftLayers.Count().Should().Be.EqualTo(1);
 			}
 
 

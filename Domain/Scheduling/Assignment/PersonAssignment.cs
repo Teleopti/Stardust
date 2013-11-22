@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
-		private IList<IShiftLayer> _activities;
+		private IList<IShiftLayer> _shiftLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private IShiftCategory _shiftCategory;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Date = date;
 			_person = agent;
 			_scenario = scenario;
-			_activities = new List<IShiftLayer>();
+			_shiftLayers = new List<IShiftLayer>();
 		}
 
 		protected PersonAssignment()
@@ -112,22 +112,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual IEnumerable<IMainShiftLayer> MainActivities()
 		{
-			return _activities.OfType<IMainShiftLayer>();
+			return _shiftLayers.OfType<IMainShiftLayer>();
 		}
 
 		public virtual IEnumerable<IPersonalShiftLayer> PersonalActivities()
 		{
-			return _activities.OfType<IPersonalShiftLayer>();
+			return _shiftLayers.OfType<IPersonalShiftLayer>();
 		}
 
 		public virtual IEnumerable<IOvertimeShiftLayer> OvertimeActivities()
 		{
-			return _activities.OfType<IOvertimeShiftLayer>();
+			return _shiftLayers.OfType<IOvertimeShiftLayer>();
 		}
 
-		public virtual IEnumerable<IShiftLayer> Activities
+		public virtual IEnumerable<IShiftLayer> ShiftLayers
 		{
-			get { return _activities; }
+			get { return _shiftLayers; }
 		}
 
 		public virtual IPerson Person
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual bool RemoveActivity(IShiftLayer layer)
 		{
-			return _activities.Remove(layer);
+			return _shiftLayers.Remove(layer);
 		}
 
 		public virtual void ClearPersonalActivities()
@@ -230,11 +230,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
-			retobj._activities = new List<IShiftLayer>();
-			foreach (var newLayer in _activities.Select(layer => layer.NoneEntityClone()))
+			retobj._shiftLayers = new List<IShiftLayer>();
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
 			{
 				newLayer.SetParent(retobj);
-				retobj._activities.Add(newLayer);
+				retobj._shiftLayers.Add(newLayer);
 			}
 
 			return retobj;
@@ -243,11 +243,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IPersonAssignment EntityClone()
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
-			retobj._activities = new List<IShiftLayer>();
-			foreach (var newLayer in _activities.Select(layer => layer.EntityClone()))
+			retobj._shiftLayers = new List<IShiftLayer>();
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
-				retobj._activities.Add(newLayer);
+				retobj._shiftLayers.Add(newLayer);
 			}
 
 			return retobj;
@@ -262,21 +262,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
-			_activities.Add(layer);
+			_shiftLayers.Add(layer);
 		}
 
 		public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 		{
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
-			_activities.Add(layer);
+			_shiftLayers.Add(layer);
 		}
 
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
-			_activities.Add(layer);
+			_shiftLayers.Add(layer);
 			SetDayOff(null);
 
 			AddEvent(() => new ActivityAddedEvent
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
-			_activities.Insert(index, layer);
+			_shiftLayers.Insert(index, layer);
 			SetDayOff(null);
 
 		}
