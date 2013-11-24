@@ -612,50 +612,86 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (PerformanceOutput.ForOperation("Optimizing " + matrixListForWorkShiftOptimization.Count + " matrixes"))
             {
+	            var continuedStep = false;
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
-                    runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
+                {
+	                runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
+	                continuedStep = true;
+
+                }
 
 				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container, selectedPeriod);
                 IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
                     createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
 
                 if (optimizerPreferences.General.OptimizationStepTimeBetweenDays)
-                    RunWorkShiftOptimization(
-                        optimizerPreferences, 
-                        matrixOriginalStateContainerListForWorkShiftOptimization, 
-                        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
-                        selectedPeriod, 
-                        _backgroundWorker);
+                {
+					recalculateIfContinuedStep(continuedStep, selectedPeriod);
+	                RunWorkShiftOptimization(
+		                optimizerPreferences, 
+		                matrixOriginalStateContainerListForWorkShiftOptimization, 
+		                workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
+		                selectedPeriod, 
+		                _backgroundWorker);
+	                continuedStep = true;
+                }
 
 				if (optimizerPreferences.General.OptimizationStepShiftsForFlexibleWorkTime)
+				{
+					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 					_extendReduceTimeHelper.RunExtendReduceTimeOptimization(optimizerPreferences, _backgroundWorker,
-																			selectedDays, SchedulingStateHolder,
-																			selectedPeriod,
-																			matrixOriginalStateContainerListForMoveMax);
+					                                                        selectedDays, SchedulingStateHolder,
+					                                                        selectedPeriod,
+					                                                        matrixOriginalStateContainerListForMoveMax);
+					continuedStep = true;
+				}
 
                 if (optimizerPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
-                    _extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
-                                                                                 selectedDays, _schedulerStateHolder,
-                                                                                 selectedPeriod,
-                                                                                 matrixOriginalStateContainerListForMoveMax);
+                {
+					recalculateIfContinuedStep(continuedStep, selectedPeriod);
+	                _extendReduceDaysOffHelper.RunExtendReduceDayOffOptimization(optimizerPreferences, _backgroundWorker,
+	                                                                             selectedDays, _schedulerStateHolder,
+	                                                                             selectedPeriod,
+	                                                                             matrixOriginalStateContainerListForMoveMax);
+					continuedStep = true;
+	                                                                             
+                }
 
                 if (optimizerPreferences.General.OptimizationStepShiftsWithinDay)
-                    RunIntradayOptimization(
-                        optimizerPreferences, 
-                        matrixOriginalStateContainerListForIntradayOptimization,
-                        workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization, 
-                        backgroundWorker,
-						selectedPeriod);
+                {
+					recalculateIfContinuedStep(continuedStep, selectedPeriod);
+	                RunIntradayOptimization(
+		                optimizerPreferences, 
+		                matrixOriginalStateContainerListForIntradayOptimization,
+		                workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization, 
+		                backgroundWorker,
+		                selectedPeriod);
+					continuedStep = true;
+                }
 
 				if (optimizerPreferences.General.OptimizationStepFairness)
+				{
+					recalculateIfContinuedStep(continuedStep, selectedPeriod);
 					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences, selectedPeriod);
+				}
             }
 
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
 
-		private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
+	    private void recalculateIfContinuedStep(bool continuedStep, DateOnlyPeriod selectedPeriod)
+	    {
+		    if (continuedStep)
+		    {
+			    foreach (var dateOnly in selectedPeriod.DayCollection())
+			    {
+				    _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
+			    }
+		    }
+	    }
+
+	    private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod)
 		{
 			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container, selectedPeriod);
