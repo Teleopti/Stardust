@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.UndoRedo;
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
 		public virtual IEnumerable<IAccount> Find(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var retList = new Iesi.Collections.Generic.SortedSet<IAccount>(new AccountDateDescendingComparer());
+			var retList = new SortedSet<IAccount>(new AccountDateDescendingComparer());
 			foreach (var account in accountCollection)
 			{
 				if (account.Period().Intersection(dateOnlyPeriod).HasValue)

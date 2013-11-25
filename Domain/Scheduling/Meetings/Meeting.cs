@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 	public class Meeting : VersionedAggregateRootWithBusinessUnit, IMeeting, IProvideCustomChangeInfo
 	{
 		private IPerson _organizer;
-		private Iesi.Collections.Generic.ISet<IMeetingPerson> _meetingPersons;
+		private ISet<IMeetingPerson> _meetingPersons;
 		private String _subject;
 		private String _location;
 		private String _description;
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		{
 			_meetingChangeTracker.TakeSnapshot(this);
 			_organizer = organizer;
-			_meetingPersons = new HashedSet<IMeetingPerson>();
+			_meetingPersons = new HashSet<IMeetingPerson>();
 			_subject = subject;
 			_location = location;
 			_description = description;
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 
 		protected Meeting()
 		{
-			_meetingPersons = new HashedSet<IMeetingPerson>();
+			_meetingPersons = new HashSet<IMeetingPerson>();
 		}
 
 		public virtual IPerson Organizer
@@ -383,7 +382,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 				recurrenceOption.SetParent(retobj);
 				retobj.meetingRecurrenceOptions.Add(recurrenceOption);
 			}
-			retobj._meetingPersons = new HashedSet<IMeetingPerson>();
+			retobj._meetingPersons = new HashSet<IMeetingPerson>();
 			if (_meetingPersons != null)
 			{
 				foreach (IMeetingPerson person in _meetingPersons)

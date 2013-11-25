@@ -7,10 +7,8 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Iesi.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
@@ -20,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private string _description = string.Empty;
         private Color _displayColor;
         private ISkillType _skillType;
-		private Iesi.Collections.Generic.ISet<IWorkload> _workloadCollection;
+	    private ISet<IWorkload> _workloadCollection;
         private IDictionary<int, ISkillDayTemplate> _templateWeekCollection;
         private IActivity _activity;
         private string _timeZone;
@@ -60,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _displayColor = displayColor;
             _defaultResolution = defaultResolution;
             _skillType = skillType;
-            _workloadCollection = new HashedSet<IWorkload>();
+	        _workloadCollection = new HashSet<IWorkload>();
             _staffingThresholds = StaffingThresholds.DefaultValues();
 
             _templateWeekCollection = new Dictionary<int, ISkillDayTemplate>();
@@ -653,7 +651,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 template.SetParent(retobj);
                 retobj._templateWeekCollection.Add(keyValuePair.Key, template);
             }
-            retobj._workloadCollection = new HashedSet<IWorkload>();
+	        retobj._workloadCollection = new HashSet<IWorkload>();
             foreach (IWorkload workload in _workloadCollection)
             {
                 retobj.AddWorkload(workload);
@@ -672,7 +670,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 template.SetParent(retobj);
                 retobj._templateWeekCollection.Add(keyValuePair.Key, template);
             }
-            retobj._workloadCollection = new HashedSet<IWorkload>();
+            retobj._workloadCollection = new HashSet<IWorkload>();
             foreach (IWorkload workload in _workloadCollection)
             {
                 retobj.AddWorkload(workload);

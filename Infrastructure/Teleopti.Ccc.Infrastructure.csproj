@@ -95,8 +95,9 @@
     <Reference Include="Autofac.Configuration">
       <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections, Version=4.0.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -106,13 +107,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="NHibernate, Version=4.0.0.1000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\packages\NHibernate.4.0.0-Alpha1\lib\net40\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Envers, Version=1.6.1.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
+    <Reference Include="NHibernate.Envers, Version=2.0.0.100, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.Envers.1.6.1\lib\Net35\NHibernate.Envers.dll</HintPath>
+      <HintPath>..\packages\NHibernate.Envers.2.0-Beta\lib\Net35\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />

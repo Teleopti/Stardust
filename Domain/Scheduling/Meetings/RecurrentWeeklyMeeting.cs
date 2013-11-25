@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Iesi.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 {
     public class RecurrentWeeklyMeeting : RecurrentMeetingOption, IRecurrentWeeklyMeeting
     {
-		private Iesi.Collections.Generic.ISet<DayOfWeek> _weekDays = new HashedSet<DayOfWeek>();
+	    private ISet<DayOfWeek> _weekDays = new HashSet<DayOfWeek>();
 
         public override IList<DateOnly> GetMeetingDays(DateOnly startDate, DateOnly endDate)
         {
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
             var weekly = retObj as RecurrentWeeklyMeeting;
             if (weekly != null)
             {
-				weekly._weekDays = new HashedSet<DayOfWeek>();
+	            weekly._weekDays = new HashSet<DayOfWeek>();
                 foreach (var dayOfWeek in WeekDays)
                 {
                     weekly._weekDays.Add(dayOfWeek);
