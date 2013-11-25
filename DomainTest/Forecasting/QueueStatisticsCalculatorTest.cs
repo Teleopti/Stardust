@@ -42,6 +42,22 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(752d,_statistic.StatCalculatedTasks);
         }
 
+		[Test]
+		public void ShouldSetZeroWhenCalculationEndsInNegativeResult()
+		{
+			_queueAdjustments.OfferedTasks = new Percent(0.01);
+			_queueAdjustments.OverflowIn = new Percent(0.75);
+			_queueAdjustments.OverflowOut = new Percent(0.40);
+			_queueAdjustments.Abandoned = new Percent(-1);
+			_queueAdjustments.AbandonedShort = new Percent(0.2);
+			_queueAdjustments.AbandonedWithinServiceLevel = new Percent(0.60);
+			_queueAdjustments.AbandonedAfterServiceLevel = new Percent(0.5);
+			_target = new QueueStatisticsCalculator(_queueAdjustments);
+
+			_target.Calculate(_statistic);
+			Assert.AreEqual(0d, _statistic.StatCalculatedTasks);
+		}
+
         [Test]
         public void VerifyCalculationWithStatisticNull()
         {

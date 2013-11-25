@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -19,13 +20,15 @@ namespace Teleopti.Ccc.Domain.Forecasting
             var abandonedAfterServiceLevel = statisticTask.StatAbandonedTasks - statisticTask.StatAbandonedShortTasks -
                                              statisticTask.StatAbandonedTasksWithinSL;
 
-            statisticTask.StatCalculatedTasks = statisticTask.StatOfferedTasks*_queueAdjustment.OfferedTasks.Value +
-                                                statisticTask.StatAbandonedTasks*_queueAdjustment.Abandoned.Value +
-                                                statisticTask.StatOverflowInTasks*_queueAdjustment.OverflowIn.Value +
-                                                statisticTask.StatAbandonedShortTasks* _queueAdjustment.AbandonedShort.Value +
-                                                statisticTask.StatAbandonedTasksWithinSL* _queueAdjustment.AbandonedWithinServiceLevel.Value +
-                                                abandonedAfterServiceLevel* _queueAdjustment.AbandonedAfterServiceLevel.Value +
-                                                statisticTask.StatOverflowOutTasks*_queueAdjustment.OverflowOut.Value;
+	        var calculatedTasks = statisticTask.StatOfferedTasks*_queueAdjustment.OfferedTasks.Value +
+	                              statisticTask.StatAbandonedTasks*_queueAdjustment.Abandoned.Value +
+	                              statisticTask.StatOverflowInTasks*_queueAdjustment.OverflowIn.Value +
+	                              statisticTask.StatAbandonedShortTasks*_queueAdjustment.AbandonedShort.Value +
+	                              statisticTask.StatAbandonedTasksWithinSL*_queueAdjustment.AbandonedWithinServiceLevel.Value +
+	                              abandonedAfterServiceLevel*_queueAdjustment.AbandonedAfterServiceLevel.Value +
+	                              statisticTask.StatOverflowOutTasks*_queueAdjustment.OverflowOut.Value;
+
+	        statisticTask.StatCalculatedTasks = Math.Max(calculatedTasks,0);
         }
     }
 }
