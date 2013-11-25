@@ -57,13 +57,13 @@
 		type="string"
 		length="300"/>
     
-    <bag name="requests"
+    <set name="requests"
             cascade="all-delete-orphan"
             inverse="true"
             access="field">
       <key column ="Parent" />
       <one-to-many class="Teleopti.Ccc.Domain.AgentInfo.Requests.Request" />
-    </bag>
+    </set>
 
     <property name="IsDeleted"
       type="boolean"
