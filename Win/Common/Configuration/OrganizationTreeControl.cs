@@ -376,7 +376,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void treeViewAdvHierarchyTreeAfterSelect(object sender, EventArgs e)
         {
-            switch (treeViewAdvHierarchyTree.SelectedNode.Tag.ToString())
+	        var selectedNode = treeViewAdvHierarchyTree.SelectedNode;
+	        if (selectedNode == null) return;
+
+			switch (selectedNode.Tag.ToString())
             {
                 case orgBusinessUnit:
                     buttonNew.Enabled = true;
