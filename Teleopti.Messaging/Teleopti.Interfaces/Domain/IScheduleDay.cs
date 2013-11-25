@@ -109,7 +109,7 @@ namespace Teleopti.Interfaces.Domain
 	    /// </summary>
 	    /// <param name="source"></param>
 		/// <param name="isDelete"></param>
-	    void Swap(IScheduleDay source, bool isDelete);
+		void MergeSwap(IScheduleDay source, bool isDelete);
 
         /// <summary>
         /// Updates the SchedulePart from the source

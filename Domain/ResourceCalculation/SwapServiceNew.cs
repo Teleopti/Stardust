@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -25,59 +26,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return true;
 		}
 
-		public IList<IScheduleDay> Swap(IScheduleDictionary schedules)
-		{
-			if(schedules == null)
-				throw new ArgumentNullException("schedules");
-
-			if (!CanSwapAssignments())
-				throw new ConstraintException("Can not swap assignments");
-
-			var retList = new List<IScheduleDay>();
-
-			var schedulePart0 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
-			var schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
-			if ((schedulePart1.PersonAssignmentCollection().Count == 0 || schedulePart0.PersonAssignmentCollection().Count == 0) &&
-				(schedulePart1.PersonDayOffCollection().Count == 0 && schedulePart0.PersonDayOffCollection().Count == 0))
-			{
-				if (schedulePart1.PersonAssignmentCollection().Count == 0)
-				{
-					_selectedSchedules[1].Swap(schedulePart0, false);
-					_selectedSchedules[1].DeletePersonalStuff();
-					_selectedSchedules[0].DeleteMainShift(schedulePart0);
-				}
-				else if (schedulePart0.PersonAssignmentCollection().Count == 0)
-				{
-					_selectedSchedules[0].Swap(schedulePart1, false);
-					_selectedSchedules[0].DeletePersonalStuff();
-					_selectedSchedules[1].DeleteMainShift(schedulePart1);
-				}
-			}
-			else
-			{
-				if (schedulePart1.PersistableScheduleDataCollection().Count() == 0)
-					_selectedSchedules[0].Swap(_selectedSchedules[0], true);
-				else
-					_selectedSchedules[0].Swap(schedulePart1, false);
-
-
-				if(schedulePart0.PersistableScheduleDataCollection().Count() == 0)
-					_selectedSchedules[1].Swap(_selectedSchedules[1], true);
-				else
-					_selectedSchedules[1].Swap(schedulePart0, false);
-			}
-
-			((ExtractedSchedule)_selectedSchedules[1]).DeleteOvertime();
-			((ExtractedSchedule)_selectedSchedules[1]).MergeOvertime(schedulePart0);
-			((ExtractedSchedule)_selectedSchedules[0]).DeleteOvertime();
-			((ExtractedSchedule)_selectedSchedules[0]).MergeOvertime(schedulePart1);
-			
-
-			retList.AddRange(_selectedSchedules);
-			return retList;
-		}
-
-		public IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules)
+	public IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules)
 		{
 			Init(selectedSchedules);
 			return Swap(schedules);
@@ -92,6 +41,61 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return false;
 
 			return true;
+		}
+
+
+		public IList<IScheduleDay> Swap(IScheduleDictionary schedules)
+		{
+			if (schedules == null)
+				throw new ArgumentNullException("schedules");
+
+			if (!CanSwapAssignments())
+				throw new ConstraintException("Can not swap assignments");
+
+			var retList = new List<IScheduleDay>();
+
+			var schedulePart0 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
+			var schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
+
+			swapScheduleDays(schedulePart0, schedulePart1);
+
+			retList.AddRange(new List<IScheduleDay> { schedulePart0, schedulePart1 });
+			return retList;
+		}
+
+		private void swapScheduleDays(IScheduleDay source, IScheduleDay destination)
+		{
+
+			IScheduleDay tempSlot = (IScheduleDay)source.Clone();
+			tempSlot.Clear<IPersistableScheduleData>();
+
+			copyAndClean(source, tempSlot);
+			copyAndClean(destination, source);
+			copyAndClean(tempSlot, destination);
+
+		}
+
+		private void copyAndClean(IScheduleDay source, IScheduleDay destination)
+		{
+			IScheduleDay tempPart = (IScheduleDay)source.Clone();
+			tempPart.Clear<IPersonDayOff>();
+			tempPart.Clear<IPersonAbsence>();
+			tempPart.Clear<IPreferenceDay>();
+			tempPart.Clear<IStudentAvailabilityDay>();
+			destination.MergeSwap(tempPart, false);
+
+			tempPart = (IScheduleDay)source.Clone();
+			tempPart.Clear<IPersonAbsence>();
+			tempPart.Clear<IPersonAssignment>();
+			tempPart.Clear<IPreferenceDay>();
+			tempPart.Clear<IStudentAvailabilityDay>();
+			destination.Merge(tempPart, false);
+
+			((ExtractedSchedule)destination).MergeOvertime(source);
+
+			source.DeleteDayOff();
+			source.DeleteOvertime();
+			source.DeleteMainShift(source);
 		}
 	}
 }
