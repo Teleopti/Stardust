@@ -180,5 +180,29 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             _target.OnMasterActivityPropertyChanged(null);
         }
+
+		[Test]
+		public void ShouldUseExistingNameIfNameIsEmptyInView()
+		{
+			var master = new MasterActivityModel(new MasterActivity { Description = new Description("master", ""), DisplayColor = Color.DodgerBlue }, _localizer);
+			var masters = new List<IMasterActivityModel>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_view.LongName).Return(string.Empty);
+				Expect.Call(_view.Color).Return(Color.BlueViolet);
+				Expect.Call(_view.Activities).Return(new List<IActivityModel>());
+				Expect.Call(() => _view.LoadComboWithMasterActivities(masters));
+				Expect.Call(_viewModel.AllNotDeletedMasterActivities).Return(masters);
+				Expect.Call(() => _view.SelectMaster(master));
+				
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.OnMasterActivityPropertyChanged(master);
+				Assert.AreEqual("master", master.Name);
+			}
+		}
     }
 }
