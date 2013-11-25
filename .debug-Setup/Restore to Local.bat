@@ -9,7 +9,7 @@ cls
 
 ::Default values
 SET /A ERRORLEV=0
-SET Demoreg=DemoSales
+SET DefaultDB=DemoSales
 SET Customer=%DefaultDB%
 SET AppRar=%DefaultDB%App.rar
 SET StatRar=%DefaultDB%Stat.rar
