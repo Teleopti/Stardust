@@ -190,14 +190,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(1, retList[1].PersonDayOffCollection().Count);		
 		}
 
-        [Test, ExpectedException(typeof(ConstraintException))]
-        public void VerifyInvalidList()
-        {
-            _list = new List<IScheduleDay>();
-            var service = new SwapServiceNew();
-            service.Init(_list);
-            service.Swap(_dictionary);
-        }
 
         private void SetupForAssignmentSwap()
         {
@@ -378,7 +370,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		/// WHEN swapping an absence day with a shift day, THEN short absence should not disappear, but stay
 		/// </summary>
 		[Test]
-		[Ignore("does not show the problem, but passes")]
 		public void ShouldStayShortAbsence()
 		{
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
@@ -529,7 +520,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		/// WHEN swapping long absence with a set of shift days, THEN full day absence should not disappear from the last day, but stay
 		/// </summary>
 		[Test]
-		[Ignore("does not show the problem, but passes")]
 		public void ShouldNotDisappearFullDayAbsenceFromTheLastDay()
 		{
 			IList<IScheduleDay> _list = new List<IScheduleDay>();
@@ -576,14 +566,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(0, retList[0].PersonAbsenceCollection().Count());
 			Assert.AreEqual(1, retList[1].PersonAbsenceCollection().Count());	
 		}
-
-		/// <summary>
-		/// WHEN swapping more a set of absence days with a set of shift days, THEN full day absences should not get doubled on the first day, but stay
-		/// </summary>
-		[Test]
-		public void ShouldNotHaveDoubleFullDayAbsenceOnTheFirstDay()
-		{
-		}
-
     }
 }
