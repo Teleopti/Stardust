@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if ( isDayOff(scheduleDay) || (isSingleAgentTeam &&  isAbsenceDay(scheduleDay )) )
 		        return null;
 
-			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod( TimeZoneGuard.Instance.TimeZone);
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
 			var personPeriod = person.Period(providedDateOnly);
 			if (personPeriod == null)

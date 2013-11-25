@@ -71,10 +71,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "optimizerPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-        public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, ILifetimeScope container, DateOnlyPeriod selectedPeriod)
+        public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList,IRestrictionExtractor restrictionExtractor,IOptimizationPreferences optimizationPreferences, DateOnlyPeriod selectedPeriod)
         {
-            var restrictionExtractor = container.Resolve<IRestrictionExtractor>();
-            var optimizationPreferences = container.Resolve<IOptimizationPreferences>();
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
             var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 

@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -37,8 +38,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
         private IActivity _activity;
     	private IPerson _person;
+		private EffectiveRestriction _emptyEffectiveRestriction;
+		private ICommonActivity _commonActivity;
 
-    	[SetUp]
+		[SetUp]
         public void Setup()
         {
             _startTimeLimitation = new StartTimeLimitation();
@@ -54,7 +57,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
 			_commonMainShift = EditableShiftFactory.CreateEditorShift(_activity, period, _shiftCategory);
-            //15h
+			_commonActivity = new CommonActivity {Activity = _activity, Periods = new List<DateTimePeriod> {period}};
+			//15h
             _workShift1 = WorkShiftFactory.CreateWorkShift(
                 TimeSpan.FromHours(6),
                 TimeSpan.FromHours(21),
@@ -90,6 +94,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			_info3 = WorkShiftProjection.FromWorkShift(_workShift3);
 			_info4 = WorkShiftProjection.FromWorkShift(_workShift4);
 			_info5 = WorkShiftProjection.FromWorkShift(_workShift5);
+
+			_emptyEffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+																				  new EndTimeLimitation(),
+																				  new WorkTimeLimitation(), null, null, null,
+																				  new List<IActivityRestriction>());
         }
 
         [Test]
@@ -266,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, otherAbsence, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
-            Assert.IsNull(result);
+	        Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
 
             other = new EffectiveRestriction(
                 _startTimeLimitation,
@@ -322,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 otherDayOff, null, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
-            Assert.IsNull(result);
+	        Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
 
             other = new EffectiveRestriction(
                 _startTimeLimitation,
@@ -375,7 +384,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
-            Assert.IsNull(result);
+	        Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
 
             IShiftCategory cat = ShiftCategoryFactory.CreateShiftCategory("same");
             _target = new EffectiveRestriction(
@@ -414,7 +423,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             var result = _target.Combine(other);
-            Assert.IsNull(result);
+			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
         }
 
         [Test]
@@ -435,7 +444,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             var result = _target.Combine(other);
-            Assert.IsNull(result);
+			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
         }
 
         [Test]
@@ -456,7 +465,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             var result = _target.Combine(other);
-            Assert.IsNull(result);
+			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
         }
 
 		[Test]
@@ -502,7 +511,53 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			null, null, new List<IActivityRestriction>()) { CommonMainShift = commonMainShift };
 
 			var result = _target.Combine(other);
-			Assert.That(result, Is.Null);
+			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+		}
+
+		[Test]
+		public void ShouldCombineCommonActivityWhenTargetHasNoCommonActivity()
+		{
+			_target = new EffectiveRestriction(
+			  _startTimeLimitation,
+			  _endTimeLimitation,
+			  _workTimeLimitation,
+			  _shiftCategory,
+			  null, null, new List<IActivityRestriction>());
+			
+			IEffectiveRestriction other = new EffectiveRestriction(
+			_startTimeLimitation,
+			_endTimeLimitation,
+			new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)),
+			null,
+			null, null, new List<IActivityRestriction>()) { CommonActivity = _commonActivity };
+			
+			var result = _target.Combine(other);
+			Assert.That(result.CommonActivity, Is.EqualTo(_commonActivity));
+		}
+	
+		[Test]
+		public void ShouldCombineCommonActivityWhenTargetHasDifferentCommonActivities()
+		{
+			_target = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				null,
+				null, null, new List<IActivityRestriction>()) {CommonActivity = _commonActivity};
+
+			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
+											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
+			var commonActivity = new CommonActivity { Activity = ActivityFactory.CreateActivity("new"), Periods = new List<DateTimePeriod> { period } };
+
+			var other = new EffectiveRestriction(
+			_startTimeLimitation,
+			_endTimeLimitation,
+			new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)),
+			null,
+			null, null, new List<IActivityRestriction>()) { CommonActivity = commonActivity };
+
+			var result = _target.Combine(other);
+			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
 		}
 
         [Test]
@@ -544,7 +599,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             IEffectiveRestriction result = _target.Combine(other);
-            Assert.IsNull(result);
+			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
 
             //  we must move the end start forward but the start end does not need a move because we do not have a limit on end.end
             other = new EffectiveRestriction(
@@ -641,7 +696,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				null,
 				null, null, new List<IActivityRestriction>());
 			var result = _target.Combine(null);
-			Assert.IsNull(result);
+			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
 		}
 
 		[Test]

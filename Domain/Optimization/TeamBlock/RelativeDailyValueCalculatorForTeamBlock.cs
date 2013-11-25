@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                 scheduleDay.Date, scheduleDay.Date.AddDays(1),
-                TeleoptiPrincipal.Current.Regional.TimeZone);
+                 TimeZoneGuard.Instance.TimeZone);
 
             IList<ISkillStaffPeriod> personsSkillStaffPeriods =
                 scheduleMatrix.SchedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(personsActiveSkills, dateTimePeriod);

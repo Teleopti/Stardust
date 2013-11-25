@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private ISchedulerGroupPagesProvider _groupPagesProvider;
         private IList<IGroupPageLight> _groupPages;
         private bool _dataLoaded;
-    	private IShiftCategoryFairnessAggregateManager _fairnessManager;
 
     	public AgentInfoControl()
         {
@@ -114,141 +113,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 return;
             }
             
-            if(tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
-            {
-                updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
-            }
+            
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void updateFairnessInfo(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder stateHolder)
-		{
-			agentGroupPageLabel.Text = Resources.GroupPage;
+		
 
-			if (_fairnessManager == null)
-				_fairnessManager = _container.Resolve<IShiftCategoryFairnessAggregateManager>();
-
-			ISchedulingOptions schedulingOptions = new SchedulingOptions
-			{
-				UseAvailability = true,
-				UsePreferences = true,
-				UseStudentAvailability = true,
-				UseRotations = true
-			};
-			var helper = new AgentInfoHelper(person, dateOnly, stateHolder, schedulingOptions, _workShiftWorkTime);
-			perPersonAndGroupListView.Items.Clear();
-
-			helper.SchedulePeriodData();
-			if (!helper.Period.HasValue)
-				return;
-
-
-			var period = person.Period(helper.SelectedDate);
-			if (period != null)
-			{
-				var employmentType = period.PersonContract.Contract.EmploymentType;
-				if (employmentType != EmploymentType.HourlyStaff)
-				{
-					createAndAddItem(perPersonAndGroupListView, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-					createAndAddItem(perPersonAndGroupListView, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-					createAndAddItem(perPersonAndGroupListView, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-					createAndAddItem(perPersonAndGroupListView, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-				}
-				else
-				{
-					createAndAddItem(perPersonAndGroupListView, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
-				}
-			}
-
-			var pointPerShiftCategoryOption = !(person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness);
-
-			if (pointPerShiftCategoryOption)
-			{
-				perPersonAndGroupListView.Items.Add("");
-				createAndAddItem(perPersonAndGroupListView, Resources.FairnessValue,
-								 ((int)
-								  stateHolder.Schedules[person].CachedShiftCategoryFairness().FairnessValueResult.
-									  FairnessPoints).ToString(CultureInfo.CurrentCulture), 2);
-			}
-
-			perPersonAndGroupListView.Items.Add("");
-			perPersonAndGroupListView.Items.Add("");
-			perPersonAndGroupListView.Items.Add("");
-
-			if (person.WorkflowControlSet != null && person.WorkflowControlSet.UseShiftCategoryFairness)
-			{
-				var groupPage = comboBoxAgentGrouping.SelectedItem as IGroupPageLight;
-				var perPersonAndGroup = _fairnessManager.GetPerPersonAndGroup(person, groupPage, dateOnly);
-				var perGroupAndOthers = _fairnessManager.GetPerGroupAndOtherGroup(person, groupPage, dateOnly);
-				var shiftCategoryFairness = _stateHolder.Schedules[person].CachedShiftCategoryFairness();
-				
-				var categories =
-					new List<IShiftCategory>(shiftCategoryFairness.ShiftCategoryFairnessDictionary.Keys);
-				categories.Sort(new ShiftCategorySorter());
-
-				var fairnessHelper = new ShiftCategoryFairnessValueHelper(perPersonAndGroup.ShiftCategoryFairnessCompareValues, perGroupAndOthers.ShiftCategoryFairnessCompareValues);
-
-				if (perPersonAndGroup.ShiftCategoryFairnessCompareValues != null || perGroupAndOthers.ShiftCategoryFairnessCompareValues != null)
-				{
-					var displayHeaders = shouldHeadersBeDisplayedOrNot(perPersonAndGroup.ShiftCategoryFairnessCompareValues) || shouldHeadersBeDisplayedOrNot(perGroupAndOthers.ShiftCategoryFairnessCompareValues); 
-
-					if (displayHeaders)
-						createAndAddItemInMultipleColumns(perPersonAndGroupListView, ""
-														  , Resources.Agent
-														  , Resources.Others
-														  , Resources.Team
-														  , Resources.Others
-														  , true);
-
-
-					foreach (var shiftCategory in fairnessHelper.ShiftCategories())
-					{
-						var agentShiftCategory = fairnessHelper.AgentValue(shiftCategory);
-						var teamShiftCategory = fairnessHelper.TeamValue(shiftCategory);
-
-						if (!(agentShiftCategory.Original == 0.0 && agentShiftCategory.ComparedTo == 0.0) || !(teamShiftCategory.Original == 0.0 && teamShiftCategory.ComparedTo == 0.0))
-						{
-							var originalFairnessAgent = Math.Round((agentShiftCategory.Original * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
-							var othersFairnessAgent = Math.Round((agentShiftCategory.ComparedTo * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
-
-							var originalFairnessTeam = Math.Round((teamShiftCategory.Original * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
-							var othersFairnessTeam = Math.Round((teamShiftCategory.ComparedTo * 100), 2).ToString(CultureInfo.CurrentCulture) + "%";
-
-							createAndAddItemInMultipleColumns(perPersonAndGroupListView,
-															  shiftCategory.Description.Name,
-															  originalFairnessAgent,
-															  othersFairnessAgent,
-															  originalFairnessTeam,
-															  othersFairnessTeam,
-															  false);
-						}
-					}
-
-
-					if (displayHeaders)
-						createAndAddItemInMultipleColumns(perPersonAndGroupListView, Resources.StandardDeviation
-														  , Math.Round(perPersonAndGroup.StandardDeviation, 4).ToString(CultureInfo.CurrentCulture)
-														  , ""
-														  , Math.Round(perGroupAndOthers.StandardDeviation, 4).ToString(CultureInfo.CurrentCulture)
-														  , ""
-														  , true);
-				}
-	
-			}
-		}
-
-        private static bool shouldHeadersBeDisplayedOrNot(IList<IShiftCategoryFairnessCompareValue> shiftCategoryFairnessCompareValues)
-        {
-			if (shiftCategoryFairnessCompareValues == null) return false;
-            foreach (var shiftCategory in shiftCategoryFairnessCompareValues)
-            {
-                if (!(shiftCategory.Original == 0.0 && shiftCategory.ComparedTo == 0.0))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
 
         private static void createAndAddItemInMultipleColumns(ListView listView, string column1Text, string column2Text, string column3Text, string column4Text, string column5Text, bool isBold )
         {
@@ -682,8 +551,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 TimeSpan time = pair.Value;
                 createAndAddItem(listViewSchedulePeriod, pair.Key, DateHelper.HourMinutesString(time.TotalMinutes), 2);
             }
-            //createAndAddItem(listViewSchedulePeriod, "xxOB", DateHelper.HourMinutesString(helper.CurrentShiftAllowanceTime.TotalMinutes), 2);
-            //createAndAddItem(listViewSchedulePeriod, Resources.Overtime, DateHelper.HourMinutesString(helper.CurrentOvertime.TotalMinutes), 2);
 
             listViewSchedulePeriod.Items.Add("");
             createAndAddItem(listViewSchedulePeriod, Resources.FreeSlots, freeSlots.ToString(CultureInfo.CurrentCulture),
@@ -760,12 +627,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             createAndAddItem(listViewPerson, Resources.Email, person.Email ?? "", 2);
             createAndAddItem(listViewPerson, Resources.EmployeeNo, person.EmploymentNumber ?? "", 2);
             createAndAddItem(listViewPerson, Resources.Note, person.Note ?? "", 2);
-            //createAndAddItem(listViewPerson, Resources.Roles, "", 1);
-            // lazy load, do we want to load these one by one?
-            //foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
-            //{
-            //    createAndAddItem(listViewPerson, applicationRole.Name, "", 2);
-            //}
 
             createAndAddItem(listViewPerson, Resources.WorkflowControlSet,
                              person.WorkflowControlSet != null ? person.WorkflowControlSet.Name : "", 2);
@@ -797,20 +658,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 }
             }
             
-        }
-
-        private void FormAgentInfoResizeEnd(object sender, EventArgs e)
-        {
-            if (Width - 270 > 0)
-                listViewPerson.Columns[1].Width = Width - 270;
-        }
-
-        private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_dataLoaded && _selectedPerson!= null)
-            {
-                updateFairnessInfo(_selectedPerson, _dateOnlyList.First(), _stateHolder);
-            }
         }
 
         private void AgentInfo_FromLoad(object sender, EventArgs e)

@@ -6,6 +6,8 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -46,51 +48,56 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		public void ShouldCheckParameters()
 		{
 			var shift = new ShiftProjectionCache(_workShift, _personalShiftMeetingTimeChecker);
+			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
+														new EndTimeLimitation(),
+														new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 
-			var result = _target.Filter(null, _schedulingOptions, shift);
+			var result = _target.Filter(null, _schedulingOptions, restriction);
 			Assert.IsNull(result);
 
-			result = _target.Filter(new List<IShiftProjectionCache>(), _schedulingOptions, shift);
+			result = _target.Filter(new List<IShiftProjectionCache>(), _schedulingOptions, restriction);
 			Assert.That(result.Count, Is.EqualTo(0));
 
 			result = _target.Filter(new List<IShiftProjectionCache>(), _schedulingOptions, null);
 			Assert.That(result.Count, Is.EqualTo(0));
 
 			_schedulingOptions.UseCommonActivity = true;
-			result = _target.Filter(new List<IShiftProjectionCache> { shift }, _schedulingOptions, shift);
+			result = _target.Filter(new List<IShiftProjectionCache> { shift }, _schedulingOptions, restriction);
 			Assert.That(result.Count, Is.EqualTo(1));
 		}
 
 		[Test]
-		public void ShouldFilterShiftsAccordingToSuggestedShift()
+		public void ShouldFilterShiftsAccordingToCommonActivity()
 		{
 			_schedulingOptions.UseCommonActivity = true;
 			_schedulingOptions.UseGroupScheduling = true;
 			_schedulingOptions.CommonActivity = _activity;
-			var shifts = getCashes();
-			var shift = _mocks.StrictMock<IShiftProjectionCache>();
+			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
+			                                           new EndTimeLimitation(),
+			                                           new WorkTimeLimitation(), null, null, null,
+			                                           new List<IActivityRestriction>()) {CommonActivity = getCommonActivity()};
 
+
+			var shifts = getCashes();
+			
 			using (_mocks.Record())
 			{
-				Expect.Call(shift.MainShiftProjection).Return(getSuggestedMainShiftProjection());
+				
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(shifts, _schedulingOptions, shift);
+				var result = _target.Filter(shifts, _schedulingOptions, restriction);
 				Assert.That(result.Count, Is.EqualTo(1));
 			}
 		}
 
-		private VisualLayerCollection getSuggestedMainShiftProjection()
+		private ICommonActivity getCommonActivity()
 		{
-			return new VisualLayerCollection(null,
-			                                 new List<IVisualLayer>
-				                                 {
-					                                 new VisualLayer(_activity,
-					                                                 new DateTimePeriod(new DateTime(2013, 3, 1, 7, 0, 0, DateTimeKind.Utc),
-					                                                                    new DateTime(2013, 3, 1, 15, 0, 0, DateTimeKind.Utc)), _activity,
-					                                                 null)
-				                                 }, new ProjectionPayloadMerger());
+			return new CommonActivity
+				{
+					Activity = _activity,
+					Periods = new List<DateTimePeriod> {new DateTimePeriod(2013, 3, 1, 7, 2013, 3, 1, 15)}
+				};
 		}
 
 		private IList<IShiftProjectionCache> getCashes()

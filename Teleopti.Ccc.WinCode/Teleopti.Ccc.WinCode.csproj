@@ -619,8 +619,6 @@
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerAgentPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerDatePresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftStatisticsPresenter.cs" />
-    <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
-    <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
     <Compile Include="Scheduling\SkillMonthGridControlPresenter.cs" />
     <Compile Include="Scheduling\DayPresenterNew.cs" />
@@ -950,8 +948,6 @@
     <Compile Include="Scheduling\SetTagCommand.cs" />
     <Compile Include="Scheduling\SkillWeekGridControlPresenter.cs" />
     <Compile Include="Scheduling\SplitLongDayAbsences.cs" />
-    <Compile Include="Scheduling\ShiftCategoryFairnessAggregateManager.cs" />
-    <Compile Include="Scheduling\ShiftCategoryFairnessGroupPersonHolder.cs" />
     <Compile Include="Scheduling\Editor\TriggerShiftEditorUpdate.cs" />
     <Compile Include="Scheduling\IAddLayerViewModel.cs" />
     <Compile Include="Scheduling\INotesAltered.cs" />

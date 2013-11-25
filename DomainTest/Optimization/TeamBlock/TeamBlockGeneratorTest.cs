@@ -17,14 +17,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private MockRepository _mocks;
 		private ITeamInfoFactory _teamInfoFactory;
 		private ITeamBlockInfoFactory _teamBlockInfoFactory;
+	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_teamInfoFactory = _mocks.StrictMock<ITeamInfoFactory>();
 			_teamBlockInfoFactory = _mocks.StrictMock<ITeamBlockInfoFactory>();
-			_target = new TeamBlockGenerator(_teamInfoFactory, _teamBlockInfoFactory);
+            _teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
+			_target = new TeamBlockGenerator(_teamInfoFactory, _teamBlockInfoFactory,_teamBlockSchedulingOptions);
 		}
 
 		[Test]

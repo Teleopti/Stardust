@@ -18,6 +18,9 @@ using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -121,7 +124,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private RequestView _requestView;
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
 		private ScheduleOptimizerHelper _scheduleOptimizerHelper;
-		private GroupDayOffOptimizerHelper _groupDayOffOptimizerHelper;
 		private readonly IVirtualSkillHelper _virtualSkillHelper;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
 		private readonly IGridlockManager _gridLockManager;
@@ -199,11 +201,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSet { get; private set; }
 		private SkillResultViewSetting _skillResultViewSetting;
-		private ISingleSkillDictionary _singleSkillDictionary;
+    	private ISingleSkillDictionary _singleSkillDictionary;
 		private const int maxCalculatMinMaxCacheEnries = 100000;
 		public IList<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 		private DateTimePeriod _selectedPeriod;
-		private bool isWindowLoaded = false;
+	    private bool isWindowLoaded = false;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
 
@@ -578,6 +580,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
+
 				uow.Reassociate(_schedulerState.SchedulingResultState.PersonsInOrganization);
 				_schedulerMessageBrokerHandler.HandleMeetingChange(e.ModifiedMeeting, e.Delete);
 				invalidateAfterMeetingChange(e);
@@ -3664,13 +3667,39 @@ namespace Teleopti.Ccc.Win.Scheduling
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
 				if (schedulingOptions.UseTeamBlockPerOption || schedulingOptions.UseGroupScheduling)
-				{
-					//when the advance scheduling is required
-					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
+                {
+                    //when the advance scheduling is required
+					var teamBlockSchedulingChecker = _container.Resolve<ITeamBlockSchedulingOptions>();
+					var roleModelSelector = _container.Resolve<ITeamBlockRoleModelSelector>();
+					var completionChecker = _container.Resolve<ITeamBlockSchedulingCompletionChecker>();
+					var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+	                ISchedulePartModifyAndRollbackService rollbackService =
+		                new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
+		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
+		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+					var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+					var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
+					var singleDayScheduler = new TeamBlockSingleDayScheduler(completionChecker,
+																			 _container.Resolve<IProposedRestrictionAggregator>(),
+																			 _container.Resolve<IWorkShiftFilterService>(),
+																			 _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+																			 _container.Resolve<IWorkShiftSelector>(),
+																			 teamScheduling, teamBlockSchedulingChecker
+						);
+	                var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(roleModelSelector,
+	                                                                                          singleDayScheduler,
+	                                                                                          completionChecker,
+	                                                                                          teamBlockCleaner,
+	                                                                                          rollbackService);
+					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
+																					teamBlockSchedulingChecker,
+																					singleDayScheduler, roleModelSelector);
+					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays, teamBlockScheduler, rollbackService);
 
-
-				}
-				else
+                    
+                }
+                else
 				{
 					var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
 
@@ -3692,7 +3721,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					else
 						_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, schedulingOptions);
 				}
-
+						
 			}
 			else
 			{
@@ -3726,8 +3755,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
 			bool turnOfCache = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(_schedulerState, schedulingOptions,
-																																					 _container.Resolve<IEffectiveRestrictionCreator>
-																																						 (), maxCalculatMinMaxCacheEnries);
+			                                                                     _container.Resolve<IEffectiveRestrictionCreator>
+				                                                                     (), maxCalculatMinMaxCacheEnries);
 			if (turnOfCache)
 			{
 				_container.Resolve<IMbCacheFactory>().DisableCache<IWorkShiftWorkTime>();
@@ -4038,26 +4067,40 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 				case OptimizationMethod.ReOptimize:
 
-
-					if (!optimizerPreferences.Extra.UseTeamBlockOption && optimizerPreferences.Extra.UseTeams)
+					if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
 					{
-						var originalBlockType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
-						schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+						var teamBlockSchedulingChecker = _container.Resolve<ITeamBlockSchedulingOptions>();
+						var roleModelSelector = _container.Resolve<ITeamBlockRoleModelSelector>();
+						var completionChecker = _container.Resolve<ITeamBlockSchedulingCompletionChecker>();
+						var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
+						                                                            true,
+						                                                            schedulingOptions.ConsiderShortBreaks);
 
-						IList<IPerson> selectedPersons =
-							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-						_groupDayOffOptimizerHelper.TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons,
-																		_container.Resolve<IOptimizationPreferences>());
-						schedulingOptions.BlockFinderTypeForAdvanceScheduling = originalBlockType;
-						break;
-					}
-
-					if (optimizerPreferences.Extra.UseTeamBlockOption)
-					{
-						IList<IPerson> selectedPersons =
-							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-						_groupDayOffOptimizerHelper.TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons,
-																														_container.Resolve<IOptimizationPreferences>());
+						var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
+							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
+							                                                           new ScheduleTagSetter(
+								                                                           schedulingOptions.TagToUseOnScheduling));
+						var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+						var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
+						var singleDayScheduler = new TeamBlockSingleDayScheduler(completionChecker,
+						                                                         _container.Resolve<IProposedRestrictionAggregator>(),
+						                                                         _container.Resolve<IWorkShiftFilterService>(),
+						                                                         _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+						                                                         _container.Resolve<IWorkShiftSelector>(),
+						                                                         teamScheduling, teamBlockSchedulingChecker
+							);
+						var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(roleModelSelector,
+						                                                                          singleDayScheduler,
+						                                                                          completionChecker,
+						                                                                          teamBlockCleaner,
+						                                                                          rollbackService);
+						var teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
+						                                                                teamBlockSchedulingChecker,
+						                                                                singleDayScheduler, roleModelSelector);
+						var selectedPersons = new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+						_container.Resolve<ITeamBlockOptimizationCommand>()
+						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
+						                   rollbackService, schedulingOptions, teamBlockScheduler);
 						break;
 					}
 
@@ -4197,9 +4240,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, new PersonSkillProvider());
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
-
-			_groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
-
+		
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
 			_optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
