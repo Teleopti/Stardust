@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -56,7 +57,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private bool scheduleSelectedDays(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
 								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
-			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedPersons.First(), schedulingOptions);
+			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Intersect(selectedPersons).ToList();
+			if (selectedTeamMembers.IsEmpty()) return false;
+			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
 			if (roleModelShift == null)
 				return false;
 

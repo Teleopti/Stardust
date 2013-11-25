@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private SchedulingOptions _schedulingOptions;
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
+		private IPerson _person2;
 
 
 		[SetUp]
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
+			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.Empty);
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
@@ -87,6 +89,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly,
 				                                                  _shift, _blockPeriod)).Return(true);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
+														  _selectedPersons);
+				Assert.That(result, Is.True);
+			}
+		}
+		
+		[Test]
+		public void RestrictionAggregatorShouldConsumeSelectedTeamMembersOnly()
+		{
+			_selectedPersons = new List<IPerson> {_person2 };
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+
 			}
 			using (_mocks.Playback())
 			{

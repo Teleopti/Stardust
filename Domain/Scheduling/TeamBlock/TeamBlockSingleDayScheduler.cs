@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -57,12 +58,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			
 			var bestShiftProjectionCache = roleModelShift;
 			var groupMembers = teamInfo.GroupPerson.GroupMembers;
-			var selectedTeamMembers = new List<IPerson>();
-			foreach (var groupMember in groupMembers)
-			{
-				if(selectedPersons.Contains(groupMember))
-					selectedTeamMembers.Add(groupMember);
-			}
+			var selectedTeamMembers = groupMembers.Intersect(selectedPersons).ToList();
+			if (selectedTeamMembers.IsEmpty()) return true;
 			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
 				return true;
 			foreach (var person in selectedTeamMembers)

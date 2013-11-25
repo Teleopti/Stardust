@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private SchedulingOptions _schedulingOptions;
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
+		private IPerson _person2;
 
 		[SetUp]
 		public void Setup()
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
+			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.Empty);
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
@@ -132,6 +134,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
+		[Test]
+		public void RestrictionAggregatorShouldConsumeSelectedTeamMembersOnly()
+		{
+			_selectedPersons = new List<IPerson> {_person2};
 
+			var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
+			                              _selectedPersons);
+			Assert.That(result, Is.True);
+		}
 	}
 }
