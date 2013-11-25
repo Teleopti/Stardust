@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private IScheduleMatrixPro _scheduleMatrixPro2;
 		private TeamBlockInfo _teamBlockInfo;
 		private SchedulingOptions _schedulingOptions;
-		private TimeZoneInfo _timeZoneInfo;
 		private IShiftProjectionCache _shift;
 		private DateOnlyPeriod _blockPeriod;
 		private GroupPerson _groupPerson;
@@ -60,10 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1));
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_blockPeriod));
 			_schedulingOptions = new SchedulingOptions();
-			_timeZoneInfo = TimeZoneInfo.Utc;
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
-
-			((Regional)TeleoptiPrincipal.Current.Regional).TimeZone = _timeZoneInfo;
 		}
 
 		[Test]
