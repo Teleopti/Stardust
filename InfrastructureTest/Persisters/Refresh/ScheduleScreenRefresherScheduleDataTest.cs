@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
             _mocks.ReplayAll();
 
             var conflictingEntitiesBuffer = new List<PersistConflict>();
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), conflictingEntitiesBuffer);
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), conflictingEntitiesBuffer, _ => true);
 
             _mocks.VerifyAll();
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			_mocks.ReplayAll();
 			var messageCountBefore = _messages.Count;
 			var conflictingEntitiesBuffer = new List<PersistConflict>();
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), conflictingEntitiesBuffer);
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), conflictingEntitiesBuffer, _ => true);
 
 			//conflictingEntitiesBuffer.Single().RemoveFromCollection();
 			_messages.Count
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
             _mocks.ReplayAll();
 
 			var refreshedEntitiesBuffer = new List<IPersistableScheduleData>();
-						_target.Refresh(_scheduleDictionary, _messages, refreshedEntitiesBuffer, new List<PersistConflict>());
+						_target.Refresh(_scheduleDictionary, _messages, refreshedEntitiesBuffer, new List<PersistConflict>(), _ => true);
 
             _mocks.VerifyAll();
 
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
         {
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
 
             _mocks.VerifyAll();
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
 
             _mocks.VerifyAll();
         }
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
 
             _mocks.VerifyAll();
         }
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
 
             _mocks.VerifyAll();
         }
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 
             _mocks.ReplayAll();
 
-			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>());
+			_target.Refresh(_scheduleDictionary, _messages, new List<IPersistableScheduleData>(), new List<PersistConflict>(), _ => true);
 
             _mocks.VerifyAll();
         }

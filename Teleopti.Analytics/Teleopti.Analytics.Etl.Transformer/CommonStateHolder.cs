@@ -380,31 +380,25 @@ namespace Teleopti.Analytics.Etl.Transformer
             return _jobParameters.Helper.Repository.LoadSchedulePartsPerPersonAndDate(period, GetSchedules(period,scenario));
         }
 
+		public ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck)
+		{
+			return _jobParameters.Helper.Repository.LoadSkillDays(scenario, lastCheck).ToArray();
+		}
+
         public ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
         {
-            //if (_skillDaysCollection == null)
-            //{
             // Load skill days in collection from dictionary
             _skillDaysCollection = new List<ISkillDay>();
             foreach (IList<ISkillDay> skillDay in GetSkillDaysDictionary(period, skills, scenario).Values)
             {
                 _skillDaysCollection.AddRange(skillDay);
             }
-            //}
-
+         
             return _skillDaysCollection;
         }
 
         public IDictionary<ISkill, IList<ISkillDay>> GetSkillDaysDictionary(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
         {
-            //if (_skillDaysDictionary == null)
-            //{
-            // Load skill days
-            //_skillDaysDictionary =
-            //    _jobParameters.Helper.Repository.LoadSkillDays(period, skills, scenario);
-            //}
-
-            //return _skillDaysDictionary;
             return _jobParameters.Helper.Repository.LoadSkillDays(period, skills, scenario);
         }
 

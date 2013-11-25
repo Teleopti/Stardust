@@ -63,11 +63,12 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_scheduleRefresher.Stub(
 				x =>
 				x.Refresh(_schedulerStateHolder.Schedules, new List<IEventMessage>(), new List<IPersistableScheduleData>(),
-				          new List<PersistConflict>()))
+				          new List<PersistConflict>(), _ => true))
 			                  .Constraints(Is.Equal(_schedulerStateHolder.Schedules),
 			                               Rhino.Mocks.Constraints.List.IsIn(eventMessage),
 			                               Is.Anything(),
-			                               Is.Anything())
+			                               Is.Anything(),
+										   Is.Anything())
 			                  .WhenCalled(x => ((ICollection<IPersistableScheduleData>) x.Arguments[2]).Add(refreshedEntity));
 
 		    refreshedEntity.Stub(x => x.Person).Return(_person);

@@ -21,13 +21,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
-			// Set start date one day earlier to be sure to get hold of all skill days
-			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor.AddDays(-1).AddHours(2),
-											JobCategoryDatePeriod.EndDateUtcCeiling);
-
 			var rep = _jobParameters.Helper.Repository;
 
-			var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, "Forecast", period);
+			var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, "Forecast");
 			_jobParameters.StateHolder.SetThisTime(lastTime, "Forecast");
 
 	        if (lastTime.ThisTime > lastTime.LastTime)
@@ -35,8 +31,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 				foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
 				{
 					//Get data from Raptor
-					var skills = _jobParameters.StateHolder.SkillCollection;
-					var rootList = _jobParameters.StateHolder.GetSkillDaysCollection(period, skills, scenario);
+					var rootList = _jobParameters.StateHolder.GetSkillDaysCollection(scenario,lastTime.LastTime);
 
 					var raptorTransformer = new ForecastWorkloadTransformer(_jobParameters.IntervalsPerDay, DateTime.Now);
 					raptorTransformer.Transform(rootList, BulkInsertDataTable1);

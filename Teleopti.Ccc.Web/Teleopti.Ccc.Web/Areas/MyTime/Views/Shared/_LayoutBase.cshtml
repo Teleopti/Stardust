@@ -2,9 +2,7 @@
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
+<!--[if (gt IE 7)|!(IE)]><!-->
 <html @Html.LayoutBase().FullLangAttribute()@Html.LayoutBase().FullDirAttribute() class="no-js ">
 <!--<![endif]-->
 <head>
@@ -16,7 +14,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     
 	@{
-	    var version = 1;// @ViewBag.LayoutBase.Version;
+	    var version = @ViewBag.LayoutBase.Version;
 	}
 
 	<link href="@Url.Content("~/Content/bootstrap/bootstrap.css")" rel="stylesheet" type="text/css" />

@@ -371,7 +371,6 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLocker.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
-    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreator.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\IRestrictionOverLimitDecider.cs" />
     <Compile Include="Optimization\ExtendReduceDaysoffOptimizer.cs" />
@@ -399,18 +398,6 @@
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregator.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractTimeCheck.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractToleranceChecker.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapCategorySorter.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparer.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSkillChecker.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSwappableChecker.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessRescheduler.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessRuleSetChecker.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwap.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapFinder.cs" />
-    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
@@ -495,7 +482,6 @@
     <Compile Include="ResourceCalculation\ActivitySkillsCombination.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateHolder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />

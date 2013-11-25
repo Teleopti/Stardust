@@ -12,11 +12,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <returns></returns>
 		IEnumerable<IPerson> GroupMembers { get; }
-
-		/// <summary>
-		/// Gets or sets the common PossibleStartEndCategory.
-		/// </summary>
-		/// <value>The common nPossibleStartEndCategory.</value>
-		IPossibleStartEndCategory CommonPossibleStartEndCategory  { get; set; }
     }
 }

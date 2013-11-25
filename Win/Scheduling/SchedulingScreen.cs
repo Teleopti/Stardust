@@ -709,10 +709,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.AddPersonalShift();
 						break;
 				}
+				_scheduleView.Presenter.ClipHandlerSchedule.Clear();
+				RecalculateResources();
+				updateShiftEditor();
 			}
-
-			RecalculateResources();
-			updateShiftEditor();
 		}
 
 		private void editControlNewClicked(object sender, EventArgs e)
@@ -1385,6 +1385,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						_scheduleView.Presenter.ClipHandlerSchedule.AddClip(1, 1, clone);
 						_externalExceptionHandler.AttemptToUseExternalResource(() => Clipboard.SetData("PersistableScheduleData", new int()));
 						pasteDayOff();
+						_scheduleView.Presenter.ClipHandlerSchedule.Clear();
 					}
 				}
 			}
@@ -2474,10 +2475,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void validateAllPersons()
 		{
 			_personsToValidate.Clear();
-			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
-			{
-				_personsToValidate.Add(permittedPerson);
-			}
+			_schedulerState.AllPermittedPersons.ForEach(_personsToValidate.Add);
 			validatePersons();
 		}
 
@@ -4897,7 +4895,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupInfoTabs()
 		{
-			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
 
 			//container can fix this to one row

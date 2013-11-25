@@ -59,6 +59,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
+		public void VerifyNullPersonMeetingCollection()
+		{
+			_scheduleDay.Stub(x => x.PersonMeetingCollection())
+				.Return(null);
+			IEffectiveRestriction result =
+				_target.Combine(_scheduleDay, _restriction);
+			Assert.IsNotNull(result);
+			Assert.AreSame(_restriction, _restriction);
+		}
+
+		[Test]
 		public void VerifyAddEffectiveRestriction()
 		{
 

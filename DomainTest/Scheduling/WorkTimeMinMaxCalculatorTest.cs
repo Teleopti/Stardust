@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -210,15 +211,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public static void ShouldReturnFlagIfRestrictionNeverHadThePossibilityToMatchAShift()
 		{
 			var workTimeMinMaxRestrictionCreator = MockRepository.GenerateMock<IWorkTimeMinMaxRestrictionCreator>();
-			var workTimeMinMaxRestriction = MockRepository.GenerateMock<IWorkTimeMinMaxRestriction>();
+			var effectiveRestriction = MockRepository.GenerateMock<IEffectiveRestriction>();
 			var scheduleDay = new StubFactory().ScheduleDayStub();
 			var personPeriod = new PersonPeriod(DateOnly.Today, new PersonContract(new Contract(" "), new PartTimePercentage(" "), new ContractSchedule(" ")), new Team()) { RuleSetBag = MockRepository.GenerateMock<IRuleSetBag>() };
 			var person = new Person();
 			person.AddPersonPeriod(personPeriod);
 			var target = new WorkTimeMinMaxCalculator(null, workTimeMinMaxRestrictionCreator);
 
-			workTimeMinMaxRestriction.Stub(x => x.MayMatchWithShifts()).Return(false);
-			workTimeMinMaxRestrictionCreator.Stub(x => x.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(new WorkTimeMinMaxRestrictionCreationResult {Restriction = workTimeMinMaxRestriction});
+			effectiveRestriction.Stub(x => x.MayMatchWithShifts()).Return(false);
+			workTimeMinMaxRestrictionCreator.Stub(x => x.MakeWorkTimeMinMaxRestriction(scheduleDay, EffectiveRestrictionOptions.UseAll())).Return(new WorkTimeMinMaxRestrictionCreationResult { Restriction = effectiveRestriction});
 
 			var result = target.WorkTimeMinMax(DateOnly.Today, person, scheduleDay);
 

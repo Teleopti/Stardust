@@ -311,12 +311,22 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             return new Dictionary<ISkill, IList<ISkillDay>>();
         }
 
-        public int PersistForecastWorkload(DataTable dataTable)
+		public IEnumerable<ISkillDay> LoadSkillDays(IScenario scenario, DateTime lastCheck)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int PersistForecastWorkload(DataTable dataTable)
         {
             return dataTable.Rows.Count;
         }
 
-        public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
+		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit, bool isIntraday)
+		{
+			throw new NotImplementedException();
+		}
+
+		public int FillForecastWorkloadDataMart(DateTimePeriod period, IBusinessUnit businessUnit)
         {
             return 0;
         }
