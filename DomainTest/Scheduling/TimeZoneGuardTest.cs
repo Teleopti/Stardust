@@ -17,18 +17,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		}
 
 		[Test]
-		public void ShouldSetTimeZone()
+		public void ShoudHaveDefaultTimeZone()
 		{
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
-			_target.TimeZone = timeZone;
-
-			Assert.That(_target.TimeZone, Is.EqualTo(timeZone));
+			var target = TimeZoneGuard.Instance;
+			Assert.AreEqual(TeleoptiPrincipal.Current.Regional.TimeZone, target.TimeZone);
 		}
 
 		[Test]
-		public void ShoudHaveDefaultTimeZone()
+		public void ShouldSetTimeZone()
 		{
-			Assert.AreEqual(TeleoptiPrincipal.Current.Regional.TimeZone, _target.TimeZone);
+			var timeZone = TimeZoneInfo.Utc;
+			_target.TimeZone = timeZone;
+
+			Assert.That(_target.TimeZone, Is.EqualTo(timeZone));
 		}
 	}
 }

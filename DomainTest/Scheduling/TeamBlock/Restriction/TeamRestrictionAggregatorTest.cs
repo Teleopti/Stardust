@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 			}
 
 			using (_mocks.Playback())
@@ -120,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
 				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
@@ -164,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
-				
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
 				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
@@ -205,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(true);
-				
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro1);
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
@@ -247,7 +248,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(_schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameEndTime(_schedulingOptions)).Return(true).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameShiftCategory(_schedulingOptions)).Return(true).Repeat.AtLeastOnce();
-
+				Expect.Call(_teamBlockSchedulingOptions.IsTeamSchedulingWithSameActivity(_schedulingOptions)).Return(false);
 				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnly)).Return(null).Repeat.AtLeastOnce();
 				
