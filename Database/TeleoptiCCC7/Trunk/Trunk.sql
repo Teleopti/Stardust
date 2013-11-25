@@ -687,5 +687,11 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Syste
 EXEC('DROP TABLE [dbo].[SystemRoleApplicationRoleMapper]')
 GO
 
-
-
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-11-25
+--Desc: Bug #25580 - Remove invalid negative values for tasks and campaign tasks (most likely from statistics calculation failure)
+---------------- 
+UPDATE dbo.TemplateTaskPeriod SET Tasks = 0 WHERE Tasks<0
+UPDATE dbo.TemplateTaskPeriod SET CampaignTasks = -1 WHERE CampaignTasks<-1
+GO
