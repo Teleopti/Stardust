@@ -50,10 +50,19 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void buildConnectionString()
 		{
+			if (String.IsNullOrEmpty(UserName) || String.IsNullOrEmpty(Password))
+			{
+							ConnectionString =
+				string.Format(CultureInfo.InvariantCulture,
+							  "Data Source={0};Initial Catalog={1};Integrated Security=SSPI",
+				              ServerName, Database);
+			}
+			else {
 			ConnectionString =
 				string.Format(CultureInfo.InvariantCulture,
 				              "Data Source={0};Initial Catalog={1};User Id={2};Password={3}",
 				              ServerName, Database, UserName, Password);
+			}
 		}
 	}
 }
