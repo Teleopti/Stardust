@@ -58,30 +58,22 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static void buildConnectionString()
 		{
-			if (String.IsNullOrEmpty(UserName) || String.IsNullOrEmpty(Password))
+			if (String.IsNullOrEmpty(SQL_LOGIN) || String.IsNullOrEmpty(SQL_PASSWORD))
 			{
-							ConnectionString =
-				string.Format(CultureInfo.InvariantCulture,
-							  "Data Source={0};Initial Catalog={1};Integrated Security=SSPI",
-				              ServerName, Database);
+				SQL_AUTH_STRING =
+					string.Format(CultureInfo.InvariantCulture,
+					"Data Source={0};Integrated Security=SSPI",
+					SQL_SERVER_NAME);
 			}
-			else {
-			ConnectionString =
-				string.Format(CultureInfo.InvariantCulture,
-				              "Data Source={0};Initial Catalog={1};User Id={2};Password={3}",
-							  SQL_SERVER_NAME, DB_CCC7, SQL_LOGIN, SQL_PASSWORD);
-
-			ConnectionStringMatrix =
-								string.Format(CultureInfo.InvariantCulture,
-							  "Data Source={0};Initial Catalog={1};User Id={2};Password={3}",
-							  SQL_SERVER_NAME, DB_ANALYTICS, SQL_LOGIN, SQL_PASSWORD);
-
-			SQL_AUTH_STRING =
-				string.Format(CultureInfo.InvariantCulture,
-							  "Data Source={0};User Id={1};Password={2}",
-							  SQL_SERVER_NAME, SQL_LOGIN, SQL_PASSWORD);
-
-
+			else
+			{
+				SQL_AUTH_STRING =
+					string.Format(CultureInfo.InvariantCulture,
+					"Data Source={0};User Id={1};Password={2}",
+					SQL_SERVER_NAME, SQL_LOGIN, SQL_PASSWORD);
+			}
+			ConnectionString = SQL_AUTH_STRING + string.Format(CultureInfo.InvariantCulture, ";Initial Catalog={0}",DB_CCC7);
+			ConnectionStringMatrix = SQL_AUTH_STRING + string.Format(CultureInfo.InvariantCulture, ";Initial Catalog={0}", DB_ANALYTICS);
 		}
 	}
 }

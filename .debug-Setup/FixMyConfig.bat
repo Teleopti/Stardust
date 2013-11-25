@@ -21,6 +21,10 @@ SET /P AnalyticsDB=AnalyticsDB?
 ::get a fresh Settings.txt
 COPY "%masterSettings%" "%MySettings%"
 
+cls
+CHOICE /C yn /M "Fix my Infratest.ini?"
+IF ERRORLEVEL 1 COPY Infratest.ini C:\Infratest.ini
+
 ::Replace some parameters according to current RestoreToLocal.bat
 cscript .\common\replace.vbs "TeleoptiAnalytics_Demo" "%AnalyticsDB%" "%MySettings%" > NUL
 cscript .\common\replace.vbs "TeleoptiCCC7_Demo" "%CCC7DB%" "%MySettings%" > NUL
