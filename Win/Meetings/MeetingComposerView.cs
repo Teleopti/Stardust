@@ -123,10 +123,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			TimeSpan endTime;
 			try
 			{
-				var shortTimePattern = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
-
-				startTime = DateTime.ParseExact(start, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-				endTime = DateTime.ParseExact(end, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+                TimeHelper.TryParse(start, out startTime);
+                TimeHelper.TryParse(end, out endTime);
 			}
 			catch (FormatException error)
 			{
