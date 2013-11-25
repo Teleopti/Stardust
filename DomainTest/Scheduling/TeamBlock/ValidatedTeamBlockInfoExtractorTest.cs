@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IPerson _person;
         private List<IScheduleMatrixPro> _matrixList;
         private DateOnlyPeriod _dateOnlyPeriod;
-        private ITeamSteadyStateHolder _teamSteadyStateHolder;
         private IGroupPerson _groupPerson;
         private BlockInfo _blockInfo;
         private TeamBlockInfo _teamBlockInfo;
@@ -47,10 +46,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _teamBlockSteadyStateValidator = _mocks.StrictMock<ITeamBlockSteadyStateValidator>();
             _teamBlockInfoFactory = _mocks.StrictMock<ITeamBlockInfoFactory>();
             _schedulingOptions = new SchedulingOptions();
-            _teamSteadyStateHolder = _mocks.StrictMock<ITeamSteadyStateHolder>();
             _teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
-            _target = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator,_teamBlockInfoFactory,_teamSteadyStateHolder,_teamBlockSchedulingOptions,_teamBlockSchedulingCompletionChecker);
+            _target = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator,_teamBlockInfoFactory,_teamBlockSchedulingOptions,_teamBlockSchedulingCompletionChecker);
 
             _date = new DateOnly(2013, 02, 22);
             _person = PersonFactory.CreatePerson();
@@ -80,31 +78,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), null));
         }
 
-        [Test]
-        public void ReturnNullIfGroupPersonNotInSteadyState()
-        {
-            using (_mocks.Record())
-            {
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
-            }
-            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo,new DateOnly(),new List<IScheduleMatrixPro>(),_schedulingOptions  ));
-        }
-
-        [Test]
-        public void ReturnNullIfNewTeamBlockInfoIsNullWithSingleAgentTeam()
-        {
-            IGroupPageLight groupPageLight = new GroupPageLight { Key = "SingleAgentTeam", Name =  "SingleAgentTeam"};
-            _schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPageLight ;
-            _schedulingOptions.UseTeamBlockPerOption = true;
-            using (_mocks.Record())
-            {
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(),
-                                                                      BlockFinderType.BetweenDayOff, true,
-                                                                      new List<IScheduleMatrixPro>())).IgnoreArguments().Return(null);
-            }
-            Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, new DateOnly(), new List<IScheduleMatrixPro>(), _schedulingOptions));
-        }
+        
+       
 
         [Test]
         public void ReturnNullIfNewTeamBlockInfoIsNullWith()
@@ -114,7 +89,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingOptions.UseTeamBlockPerOption = false;
             using (_mocks.Record())
             {
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson )).Return(true) ;
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, new DateOnly(),
                                                                       BlockFinderType.SingleDay, false,
                                                                       new List<IScheduleMatrixPro>())).IgnoreArguments().Return(null);
@@ -130,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingOptions.UseTeamBlockPerOption = false;
             using (_mocks.Record())
             {
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
                                                                       BlockFinderType.SingleDay, false,
                                                                       new List<IScheduleMatrixPro>())).IgnoreArguments().Return(_teamBlockInfo);
@@ -159,7 +132,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingOptions.UseTeamBlockPerOption = false;
             using (_mocks.Record())
             {
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
                                                                       BlockFinderType.SingleDay, false,
                                                                       new List<IScheduleMatrixPro>())).IgnoreArguments().Return(_teamBlockInfo);
@@ -189,7 +161,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _schedulingOptions.UseTeamBlockPerOption = false;
             using (_mocks.Record())
             {
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date,
                                                                       BlockFinderType.SingleDay, false,
                                                                       new List<IScheduleMatrixPro>())).IgnoreArguments().Return(_teamBlockInfo);

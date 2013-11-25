@@ -562,7 +562,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingCompletionChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptions.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSingleDayScheduler.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingService.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecification.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateService.cs" />
@@ -968,11 +967,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ValidDateTimePeriodShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilter.cs" />
-    <Compile Include="Scheduling\TeamSteadyState.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateHolder.cs" />
-    <Compile Include="Scheduling\TeamSteadyStatePersonPeriod.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateRunner.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateSchedulePeriod.cs" />
     <Compile Include="Scheduling\TimeLayer\DateTimeMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\DayOfWeekMultiplicatorDefinition.cs" />
     <Compile Include="Scheduling\TimeLayer\Multiplicator.cs" />

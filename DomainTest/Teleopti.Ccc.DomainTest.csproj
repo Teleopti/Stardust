@@ -390,7 +390,6 @@
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSingleDaySchedulerTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
@@ -774,11 +773,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilterTest.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateHolderTest.cs" />
-    <Compile Include="Scheduling\TeamSteadyStatePersonPeriodTest.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateRunnerTest.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateSchedulePeriodTest.cs" />
-    <Compile Include="Scheduling\TeamSteadyStateTest.cs" />
     <Compile Include="Scheduling\TimeLayer\DateTimeMultiplicatorDefinitionTest.cs" />
     <Compile Include="Scheduling\TimeLayer\DayOfWeekMultiplicatorDefinitionTest.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorDefinitionSetTest.cs" />
