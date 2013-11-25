@@ -23,11 +23,12 @@ SET RarFolder=
 SET Zip7Folder=
 SET DriveLetter=%ROOTDIR:~0,2%
 SET CustomPathConfig=%DriveLetter%\CustomPath.txt
+SET CustomTfiles=%DriveLetter%\CustomTfiles.txt
 SET SQLLogin=sa
 SET SQLPwd=cadadi
 SET CreateAgg=
 SET CreateAnalytics=
-SET Tfiles=\\gigantes\Developchina\RestoreToLocal
+SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
 
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
@@ -55,12 +56,21 @@ SET /A ERRORLEV=6
 GOTO :error
 )
 
+::checkAccess
+:checkAccess
+DIR "%Tfiles%" > NUL
+IF %ERRORLEVEL% NEQ 0 (
+ECHO Could not read files from "%Tfiles%"
+Call :LocalTFiles "%DriveLetter%" "%CustomTfiles%" Tfiles
+GOTO :checkAccess
+)
 ::Used for check: Did we copy a new file?
 SET FINDTHIS=0 File(s) copied
 
 ECHO.
 
 goto MakeCustomPath
+
 :MakeCustomPath
 if exist "%CustomPathConfig%" (
 set /p CustomPath= <%CustomPathConfig%
@@ -280,10 +290,11 @@ ECHO Fix Cross DB stuff
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
-::Add license (only if Demoreg)
-IF "%Customer%"=="%Demoreg%" (
+:Add lic
+::Add license
+CHOICE /C yn /M "Add license?"
+IF ERRORLEVEL 1 (
 SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\..\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :Error
 )
 
 ::FixMyConfig
@@ -324,6 +335,19 @@ GOTO :EOF
 SET BRANCH=%~n1
 SET BRANCH=%BRANCH%%~x1
 GOTO :EOF
+
+:LocalTfiles
+SETLOCAL
+if not exist "%~2" (
+ECHO %~1\Tfiles> %~2
+)
+set /p localTfiles= <%~2
+mkdir "%localTfiles%"
+(
+ENDLOCAL
+set "%~3=%localTfiles%"
+)
+goto:eof
 
 :GETDATAPATH
 SET /P CustomPath=Please provide a custom path for data storage:
