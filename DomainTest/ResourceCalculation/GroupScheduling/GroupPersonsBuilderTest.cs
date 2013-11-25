@@ -71,8 +71,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(rootGroup.Id).Return(_guid);
 
 			_mocks.ReplayAll();
-
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory,
+				_schedulingResults, _groupPagePerDateHolder);
+            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 			
 		    Assert.That(ret.Count,Is.EqualTo(1));
 			
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 				_schedulingResults, _groupPagePerDateHolder);
 			
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 
 			Assert.That(ret.Count, Is.EqualTo(2));
 			_mocks.VerifyAll();
@@ -198,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 _schedulingResults, _groupPagePerDateHolder);
 			
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 
 			Assert.That(ret.Count, Is.EqualTo(1));
 			_mocks.VerifyAll();
@@ -260,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_mocks.ReplayAll();
 			_groupPersonsBuilder = new GroupPersonsBuilder(  _stateHolder, _groupPersonFactory, _schedulingResults,_groupPagePerDateHolder);
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 
 			Assert.That(ret.Count, Is.EqualTo(4));
 			_mocks.VerifyAll();
@@ -297,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
                 _schedulingResults, _groupPagePerDateHolder);
 			
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 
             Assert.That(ret.Count, Is.EqualTo(1));
             
