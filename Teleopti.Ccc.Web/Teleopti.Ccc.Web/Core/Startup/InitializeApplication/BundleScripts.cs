@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/jquery-plugin/jquery.placeholder.min.js",
 					"~/Content/Scripts/jquery.qtip.js",
 					"~/Content/Scripts/indexOf.js",
-					"~/Content/signalr/jquery.signalR-1.1.2.js",
+					"~/Content/signalr/jquery.signalR-1.1.3.js",
 					"~/Content/signalr/broker-hubs.js",
 					"~/Content/select2/select2.js",
 					"~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js",
