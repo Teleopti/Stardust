@@ -357,8 +357,8 @@
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseAgentForTeamBlock.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriortiseShiftCategoryForTeamBlock.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PriortiseWeekDay.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseShiftCategoryForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseWeekDay.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SelectedAgentPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SwapScheduleDays.cs" />

@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
-    public interface IPriortiseWeekDay
+    public interface IPrioritiseWeekDay
     {
         int HigestPriority { get; }
         int LowestPriority { get; }
@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         void IdentifyPriority(IList<IScheduleDay> scheduleDays);
     }
 
-    public class PriortiseWeekDay : IPriortiseWeekDay
+    public class PrioritiseWeekDay : IPrioritiseWeekDay
     {
         private readonly IDictionary<int, HashSet<DateOnly>> _dateOnPriorityDays;
         private IDictionary<DayOfWeek, int> _weekDayProprity;
 
-        public PriortiseWeekDay()
+        public PrioritiseWeekDay()
         {
             _dateOnPriorityDays = new Dictionary<int, HashSet<DateOnly>>();
         }

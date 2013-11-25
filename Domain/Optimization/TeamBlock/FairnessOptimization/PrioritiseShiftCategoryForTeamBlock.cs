@@ -5,21 +5,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
-    public interface IPriortiseShiftCategoryForTeamBlock
+    public interface IPrioritiseShiftCategoryForTeamBlock
     {
         int AveragePriority { get; }
-        IDictionary<int, IShiftCategory> GetPriortiseShiftCategories(IList<IShiftCategory> shiftCategories);
+        IDictionary<int, IShiftCategory> GetPrioritiseShiftCategories(IList<IShiftCategory> shiftCategories);
         IShiftCategory ShiftCategoryOnPriority(int priority);
         int PriorityOfShiftCategory(IShiftCategory shiftCategory);
-        void Clear();
+        IDictionary<int, IShiftCategory> PrioritiseShiftCategoryList { get; }
     }
 
-    public class PriortiseShiftCategoryForTeamBlock : IPriortiseShiftCategoryForTeamBlock
+    public class PrioritiseShiftCategoryForTeamBlock : IPrioritiseShiftCategoryForTeamBlock
     {
         private readonly IShiftCategoryPoints _shiftCategoryPoints;
         private readonly IDictionary<int, IShiftCategory> _result = new Dictionary<int, IShiftCategory>();
 
-        public PriortiseShiftCategoryForTeamBlock(IShiftCategoryPoints shiftCategoryPoints)
+        public PrioritiseShiftCategoryForTeamBlock(IShiftCategoryPoints shiftCategoryPoints)
         {
             _shiftCategoryPoints = shiftCategoryPoints;
         }
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         /// </summary>
         /// <param name="shiftCategories"></param>
         /// <returns></returns>
-        public IDictionary<int, IShiftCategory> GetPriortiseShiftCategories(IList<IShiftCategory> shiftCategories)
+        public IDictionary<int, IShiftCategory> GetPrioritiseShiftCategories(IList<IShiftCategory> shiftCategories)
         {
             foreach (IShiftCategory shiftCategory in shiftCategories)
             {
@@ -56,9 +56,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             return -1;
         }
 
-        public void Clear()
-        {
-            _result.Clear();
-        }
+        public IDictionary<int, IShiftCategory> PrioritiseShiftCategoryList { get { return _result; } }
     }
 }

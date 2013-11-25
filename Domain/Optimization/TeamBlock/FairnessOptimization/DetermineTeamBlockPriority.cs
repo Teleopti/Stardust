@@ -30,8 +30,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             foreach (ITeamBlockInfo teamBlockInfo in teamBlockInfos)
             {
                 var prioritiseAgentForTeamBlock = new PrioritiseAgentForTeamBlock(_selectedAgentPoints);
-                var priortiseShiftCategoryForTeamBlock = new PriortiseShiftCategoryForTeamBlock(_shiftCategoryPoints);
+                var priortiseShiftCategoryForTeamBlock = new PrioritiseShiftCategoryForTeamBlock(_shiftCategoryPoints);
                 extractAgentAndShiftCategoryPriority(teamBlockInfo, prioritiseAgentForTeamBlock, priortiseShiftCategoryForTeamBlock);
+                if (!prioritiseAgentForTeamBlock.PrioritiseAgentList.Any() || !priortiseShiftCategoryForTeamBlock.PrioritiseShiftCategoryList.Any())
+                    continue;
                 var teamBlockInfoPriority = new TeamBlockInfoPriority(teamBlockInfo,  prioritiseAgentForTeamBlock.AveragePriority, priortiseShiftCategoryForTeamBlock.AveragePriority);
                 teamBlockPriorityDefinitionInfo.AddItem(teamBlockInfoPriority);
             }
@@ -40,8 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         private void extractAgentAndShiftCategoryPriority(ITeamBlockInfo teamBlockInfo,
                                                           IPrioritiseAgentForTeamBlock prioritiseAgentForTeamBlock,
-                                                          IPriortiseShiftCategoryForTeamBlock
-                                                              priortiseShiftCategoryForTeamBlock)
+                                                          IPrioritiseShiftCategoryForTeamBlock
+                                                              prioritiseShiftCategoryForTeamBlock)
         {
             prioritiseAgentForTeamBlock.GetPriortiseAgentByStartDate( teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList());
             var shiftCategories = new List<IShiftCategory>();
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                     }
                 }
             }
-            priortiseShiftCategoryForTeamBlock.GetPriortiseShiftCategories(shiftCategories);
+            prioritiseShiftCategoryForTeamBlock.GetPrioritiseShiftCategories(shiftCategories);
         }
 
     }

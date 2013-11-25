@@ -10,13 +10,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         IDictionary<int, IPerson> GetPriortiseAgentByName(IList<IPerson> personList);
         IDictionary<int, IPerson> GetPriortiseAgentByStartDate(IList<IPerson> personList);
         IPerson PersonOnPriority(int priority);
-        void Clear();
+        IDictionary<int, IPerson> PrioritiseAgentList { get; };
     }
 
     public class PrioritiseAgentForTeamBlock : IPrioritiseAgentForTeamBlock
     {
         private readonly ISelectedAgentPoints _selectedAgentPoints;
         private Dictionary<int, IPerson> _result = new Dictionary<int, IPerson>();
+
+        
 
         public PrioritiseAgentForTeamBlock(ISelectedAgentPoints selectedAgentPoints)
         {
@@ -63,9 +65,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             return _result[priority];
         }
 
-        public void Clear()
-        {
-            _result.Clear();
+        public IDictionary<int, IPerson> PrioritiseAgentList 
+        { 
+            get { return _result; } 
         }
     }
 }
