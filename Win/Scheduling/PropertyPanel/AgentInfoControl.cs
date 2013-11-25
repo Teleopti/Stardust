@@ -4,10 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Autofac;
-using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -30,7 +27,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     public partial class AgentInfoControl : BaseUserControl
     {
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
-    	private readonly ILifetimeScope _container;
     	private IPerson _selectedPerson;
         private ICollection<DateOnly> _dateOnlyList;
         private ISchedulingResultStateHolder _stateHolder;
@@ -41,7 +37,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
         private ISchedulerGroupPagesProvider _groupPagesProvider;
         private IList<IGroupPageLight> _groupPages;
-        private bool _dataLoaded;
 
     	public AgentInfoControl()
         {
@@ -53,11 +48,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ILifetimeScope container, ISchedulerGroupPagesProvider groupPagesProvider)
+		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
-			_container = container;
 		    _groupPagesProvider = groupPagesProvider;
 		}
 
@@ -110,29 +104,9 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             {
 				timerRefresh.Enabled = true;
                 updatePersonInfo(_selectedPerson);
-                return;
             }
             
             
-        }
-
-		
-
-
-        private static void createAndAddItemInMultipleColumns(ListView listView, string column1Text, string column2Text, string column3Text, string column4Text, string column5Text, bool isBold )
-        {
-            var listViewItems = new ListViewItem(column1Text);
-            listViewItems.SubItems.Add(column2Text);
-            listViewItems.SubItems.Add(column3Text);
-			listViewItems.SubItems.Add(column4Text);
-			listViewItems.SubItems.Add(column5Text);
-
-            if(isBold)
-            {
-                listViewItems.Font = listViewItems.Font.ChangeToBold();
-            }
-            
-            listView.Items.Add(listViewItems);
         }
 
         private void initializeFairnessTab()
@@ -141,7 +115,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             comboBoxAgentGrouping.DataSource = _groupPages;
             comboBoxAgentGrouping.DisplayMember = "Name";
             comboBoxAgentGrouping.ValueMember = "Key";
-            _dataLoaded = true;
         }
 
         private void updateRestrictionData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
