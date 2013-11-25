@@ -37,6 +37,10 @@ for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do call:Replace "%%g" "%Cu
 ::update web.config with machineKey config
 for /f "tokens=1,2 delims=," %%g in (ConfigFiles.txt) do SetMachineKeys "%%g"
 
+cls
+CHOICE /C yn /M "Fix my Infratest.ini?"
+IF ERRORLEVEL 1 COPY Infratest.ini C:\Infratest.ini
+
 ::cleanup
 XCOPY "%ROOTDIR%\%nhibFile%" "%nhibDir%" /Y
 DEL "%ROOTDIR%\%nhibFile%"
