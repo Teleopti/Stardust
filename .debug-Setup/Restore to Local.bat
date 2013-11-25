@@ -9,10 +9,10 @@ cls
 
 ::Default values
 SET /A ERRORLEV=0
-SET Demoreg=Demoreg
-SET Customer=%Demoreg%
-SET AppRar=%Demoreg%App.rar
-SET StatRar=%Demoreg%Stat.rar
+SET Demoreg=DemoSales
+SET Customer=%DefaultDB%
+SET AppRar=%DefaultDB%App.rar
+SET StatRar=%DefaultDB%Stat.rar
 SET LOADSTAT=1
 SET TRUNK=-T -R -Lsa:dummyPwd
 SET UNRAR=7
