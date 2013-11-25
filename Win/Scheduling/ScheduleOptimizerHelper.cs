@@ -594,26 +594,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                    backgroundWorker,
 		                    selectedPeriod);
 
-		            if (optimizerPreferences.General.OptimizationStepFairness)
-		                runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences, selectedPeriod);
+					//if (optimizerPreferences.General.OptimizationStepFairness)
+					//	runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences, selectedPeriod);
 		        }
 		    }
 		    //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
 
-		private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
-			IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod)
-		{
-			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
-			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
-			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
-			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
-			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
-			fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
-										optimizerPreferences, rollbackService, optimizerPreferences.Advanced.UseAverageShiftLengths);
-			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
-		}
+		//private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
+		//	IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod)
+		//{
+		//	//var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
+		//	//var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
+		//	//var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
+		//	//var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
+		//	//fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
+		//	//fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
+		//	//							optimizerPreferences, rollbackService, optimizerPreferences.Advanced.UseAverageShiftLengths);
+		//	//fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
+		//}
 
         private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {

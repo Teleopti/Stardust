@@ -15,16 +15,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		private readonly ISchedulingResultStateHolder _resultStateHolder;
         
 		private readonly IGroupPersonFactory _groupPersonFactory;
-		private readonly IGroupPersonConsistentChecker _groupPersonConsistentChecker;
 		private readonly IWorkShiftFinderResultHolder _finderResultHolder;
 	    private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
 
-		public GroupPersonsBuilder(ISchedulingResultStateHolder resultStateHolder, IGroupPersonFactory groupPersonFactory, IGroupPersonConsistentChecker groupPersonConsistentChecker, 
+		public GroupPersonsBuilder(ISchedulingResultStateHolder resultStateHolder, IGroupPersonFactory groupPersonFactory,
 				 IWorkShiftFinderResultHolder finderResultHolder, IGroupPagePerDateHolder groupPagePerDateHolder)
 		{
 			_resultStateHolder = resultStateHolder;
             _groupPersonFactory = groupPersonFactory;
-			_groupPersonConsistentChecker = groupPersonConsistentChecker;
 			_finderResultHolder = finderResultHolder;
 		    _groupPagePerDateHolder = groupPagePerDateHolder;
 		}
@@ -82,7 +80,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                 var personsInGroup = personsInDictionary.Where(person => _selectedPersons.Contains(person)).ToList();
                 if (!personsInGroup.IsEmpty())
                 {
-                    if (checkShiftCategoryConsistency && !_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(dic, personsInDictionary, dateOnly, schedulingOptions))
+                    if (checkShiftCategoryConsistency)
                     {
                         addResult(personGroup.Description.Name, dateOnly);
 
@@ -109,7 +107,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     var newGroupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
                     if (!newGroupPerson.GroupMembers.IsEmpty())
                     {
-                        newGroupPerson.CommonPossibleStartEndCategory = _groupPersonConsistentChecker.CommonPossibleStartEndCategory;
                         retLis.Add(newGroupPerson);
                     }
                 }
