@@ -39,7 +39,10 @@ BEGIN
 					@percentage_abandoned_short * @abandoned_short_calls +
 					@percentage_abandoned_within_service_level * @abandoned_calls_within_SL +
 					@percentage_abandoned_after_service_level * @abandoned_calls_after_SL
-						
+
+	IF @result<0
+		SET @result = 0
+
 	RETURN @result
 END
 
