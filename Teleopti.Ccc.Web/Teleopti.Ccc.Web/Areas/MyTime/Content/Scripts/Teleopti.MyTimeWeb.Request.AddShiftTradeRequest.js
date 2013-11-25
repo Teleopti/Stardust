@@ -212,21 +212,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _setWeekStart(vm) {
-		ajax.Ajax({
-			url: "UserInfo/ShiftTradeRequest",
-			dataType: "json",
-			type: 'GET',
-			url: 'UserInfo/Culture',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				vm.weekStart(data.WeekStart);
-			},
-			
-			error: function (jqXHR, textStatus, errorThrown) {
-				
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+			vm.weekStart(data.WeekStart);
 		});
 	}
 
