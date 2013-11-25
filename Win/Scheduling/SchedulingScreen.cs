@@ -4895,7 +4895,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupInfoTabs()
 		{
-			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _container, _groupPagesProvider);
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
 
 			//container can fix this to one row
