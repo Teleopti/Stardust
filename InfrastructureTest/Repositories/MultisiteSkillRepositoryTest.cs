@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _skillType = SkillTypeFactory.CreateSkillType();
             PersistAndRemoveFromUnitOfWork(_skillType);
-            _activity = ActivityFactory.CreateActivity("The test", Color.Honeydew);
+            _activity = new Activity("The test"){DisplayColor = Color.Honeydew};
             GroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
             PersistAndRemoveFromUnitOfWork(groupingActivity);
             _activity.GroupingActivity = groupingActivity;

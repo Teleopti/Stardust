@@ -3,6 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var dummyCat = ShiftCategoryFactory.CreateShiftCategory("dummyCat");
 			var groupAct = new GroupingActivity("f");
 			PersistAndRemoveFromUnitOfWork(groupAct);
-			var dummyActivity = ActivityFactory.CreateActivity("dummy", Color.DodgerBlue);
+			var dummyActivity = new Activity("dummy") { DisplayColor = Color.DodgerBlue };
 			dummyActivity.GroupingActivity = groupAct;
 			PersistAndRemoveFromUnitOfWork(dummyActivity);
 			var dummyAgent = PersonFactory.CreatePerson("m");

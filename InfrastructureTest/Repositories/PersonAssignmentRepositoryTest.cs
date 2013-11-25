@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _rep = RepositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
             _groupAct = new GroupingActivity("f");
             PersistAndRemoveFromUnitOfWork(_groupAct);
-            _dummyActivity = ActivityFactory.CreateActivity("dummy", Color.DodgerBlue);
+						_dummyActivity = new Activity("dummy") { DisplayColor = Color.DodgerBlue };
             _dummyActivity.GroupingActivity = _groupAct;
             PersistAndRemoveFromUnitOfWork(_dummyActivity);
             _dummyAgent = PersonFactory.CreatePerson("m");

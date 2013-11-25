@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PartTimePercentage percentage = new PartTimePercentage("sdf");
 			ContractSchedule ctrSched = new ContractSchedule("sdfsdf");
 			IPerson per = PersonFactory.CreatePerson("vjioo");
-			IContract ctr = ContractFactory.CreateContract("contract");
+			IContract ctr = new Contract("contract");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			ISite site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PartTimePercentage percentage = new PartTimePercentage("sdf");
 			ContractSchedule ctrSched = new ContractSchedule("sdfsdf");
 			IPerson per = PersonFactory.CreatePerson("vjioo");
-			IContract ctr = ContractFactory.CreateContract("contract");
+			IContract ctr = new Contract("contract");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			ISite site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
 			PersistAndRemoveFromUnitOfWork(groupActivity);
 
-			IActivity activity = ActivityFactory.CreateActivity("dummy activity");
+			IActivity activity = new Activity("dummy activity");
 			activity.GroupingActivity = groupActivity;
 			PersistAndRemoveFromUnitOfWork(activity);
 					
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var groupActivity = new GroupingActivity("dummy group activity");
 			PersistAndRemoveFromUnitOfWork(groupActivity);
-			var activity = ActivityFactory.CreateActivity("dummy activity");
+			var activity = new Activity("dummy activity");
 			activity.GroupingActivity = groupActivity;
 			PersistAndRemoveFromUnitOfWork(activity);
 
@@ -390,7 +390,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
 			PersistAndRemoveFromUnitOfWork(groupActivity);
 
-			IActivity activity = ActivityFactory.CreateActivity("dummy activity");
+			IActivity activity = new Activity("dummy activity");
 			activity.GroupingActivity = groupActivity;
 			PersistAndRemoveFromUnitOfWork(activity);
 					
@@ -564,9 +564,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(team);
 
-			IApplicationFunction func1 = ApplicationFunctionFactory.CreateApplicationFunction("APP1");
+			IApplicationFunction func1 = new ApplicationFunction("APP1");
 			PersistAndRemoveFromUnitOfWork(func1);
-			IApplicationFunction func2 = ApplicationFunctionFactory.CreateApplicationFunction("APP2");
+			IApplicationFunction func2 = new ApplicationFunction("APP2");
 			PersistAndRemoveFromUnitOfWork(func2);
 			IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1", "ROLEDESC1");
 			role1.AddApplicationFunction(func1);
@@ -605,7 +605,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(site);
             PersistAndRemoveFromUnitOfWork(team);
 
-            IApplicationFunction func1 = ApplicationFunctionFactory.CreateApplicationFunction("APP1");
+						IApplicationFunction func1 = new ApplicationFunction("APP1");
             PersistAndRemoveFromUnitOfWork(func1);
             IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1", "ROLEDESC1");
             role1.AddApplicationFunction(func1);
@@ -635,9 +635,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyLoadPermissionDataWithoutReassociate()
 		{
 			//setup
-			IApplicationFunction func1 = ApplicationFunctionFactory.CreateApplicationFunction("APP1");
+			IApplicationFunction func1 = new ApplicationFunction("APP1");
 			PersistAndRemoveFromUnitOfWork(func1);
-			IApplicationFunction func2 = ApplicationFunctionFactory.CreateApplicationFunction("APP2");
+			IApplicationFunction func2 = new ApplicationFunction("APP2");
 			PersistAndRemoveFromUnitOfWork(func2);
 			IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1", "ROLEDESC1");
 			role1.AddApplicationFunction(func1);
@@ -784,7 +784,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scen);
 			IGroupingActivity gAct = new GroupingActivity("sdf");
 			PersistAndRemoveFromUnitOfWork(gAct);
-			IActivity act = ActivityFactory.CreateActivity("sdf");
+			IActivity act = new Activity("sdf");
 			act.GroupingActivity = gAct;
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
@@ -864,7 +864,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scen);
 			IGroupingActivity gAct = new GroupingActivity("sdf");
 			PersistAndRemoveFromUnitOfWork(gAct);
-			IActivity act = ActivityFactory.CreateActivity("sdf");
+			IActivity act = new Activity("sdf");
 			act.GroupingActivity = gAct;
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
@@ -988,7 +988,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			site.AddTeam(team);
 			IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
 			PersistAndRemoveFromUnitOfWork(groupActivity);
-			IActivity act = ActivityFactory.CreateActivity("for test");
+			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
 			ISkill skill2 = new Skill("for test2", "sdf", Color.Blue, 3, skType);
@@ -1067,8 +1067,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ITeam team = TeamFactory.CreateSimpleTeam("sdf");
             ISite site = SiteFactory.CreateSimpleSite("sdf");
             team.Site = site;
-            IContract ctr = ContractFactory.CreateContract("sdf");
-            IPartTimePercentage pTime = PartTimePercentageFactory.CreatePartTimePercentage("sdf");
+						IContract ctr = new Contract("sdf");
+            IPartTimePercentage pTime = new PartTimePercentage("sdf");
             IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
         	DateOnly date = new DateOnly(2000, 1, 2);
 
@@ -1135,8 +1135,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team = TeamFactory.CreateSimpleTeam("sdf");
 			ISite site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;            
-			IContract ctr = ContractFactory.CreateContract("sdf");
-			IPartTimePercentage pTime = PartTimePercentageFactory.CreatePartTimePercentage("sdf");
+			IContract ctr = new Contract("sdf");
+			IPartTimePercentage pTime = new PartTimePercentage("sdf");
 			IContractSchedule cSc = ContractScheduleFactory.CreateContractSchedule("sdf");
 
 			PersistAndRemoveFromUnitOfWork(site);
@@ -1184,7 +1184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IGroupingActivity groupingActivity = new GroupingActivity("asdf");
 			PersistAndRemoveFromUnitOfWork(groupingActivity);
-			IActivity dummyActivity = ActivityFactory.CreateActivity("dummy");
+			IActivity dummyActivity = new Activity("dummy");
 			dummyActivity.GroupingActivity = groupingActivity;
 			PersistAndRemoveFromUnitOfWork(dummyActivity);
 			IShiftCategory shiftCat = ShiftCategoryFactory.CreateShiftCategory("dummy");
@@ -1235,9 +1235,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team2 = TeamFactory.CreateSimpleTeam("Team2");
 			site2.AddTeam(team2);
 
-			IPartTimePercentage partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("100%");
+			IPartTimePercentage partTimePercentage = new PartTimePercentage("100%");
 			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			IContract contract = ContractFactory.CreateContract("Full time");
+			IContract contract = new Contract("Full time");
 	
 			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
@@ -1298,9 +1298,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team1 = TeamFactory.CreateSimpleTeam("Team1");
 			site1.AddTeam(team1);
 
-			IPartTimePercentage partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("100%");
+			IPartTimePercentage partTimePercentage = new PartTimePercentage("100%");
 			IContractSchedule contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			IContract contract = ContractFactory.CreateContract("Full time");
+			IContract contract = new Contract("Full time");
 
 			IPerson per1 = PersonFactory.CreatePerson("sumeda", "Herath");
 			IPersonPeriod personPeriod1 =
@@ -1503,7 +1503,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			scenario.DefaultScenario = true;
 			IGroupingActivity groupingActivity = new GroupingActivity("asdf");
 			PersistAndRemoveFromUnitOfWork(groupingActivity);
-			IActivity act = ActivityFactory.CreateActivity("df");
+			IActivity act = new Activity("df");
 			act.GroupingActivity = groupingActivity;
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
@@ -1522,8 +1522,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 													 newStateMock);
 
 			//add pers ass in another BU
-			IContract ctr = ContractFactory.CreateContract("cf");
-			IPartTimePercentage part = PartTimePercentageFactory.CreatePartTimePercentage("d");
+			IContract ctr = new Contract("cf");
+			IPartTimePercentage part = new PartTimePercentage("d");
 			ISite site = SiteFactory.CreateSimpleSite("d");
 			IContractSchedule ctrSched = ContractScheduleFactory.CreateContractSchedule("dd");
 			PersistAndRemoveFromUnitOfWork(site);

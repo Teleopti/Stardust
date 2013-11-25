@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void ConcreteSetup()
         {
             shiftCat = ShiftCategoryFactory.CreateShiftCategory("used in test");
-            act = ActivityFactory.CreateActivity("used in test");
+            act = new Activity("used in test");
             IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("used in test");
 
             PersistAndRemoveFromUnitOfWork(groupingActivity);

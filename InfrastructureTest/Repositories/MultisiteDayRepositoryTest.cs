@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             _skillType = SkillTypeFactory.CreateSkillType();
             _skill = SkillFactory.CreateMultisiteSkill("dummy", _skillType, 15);
-            _activity = ActivityFactory.CreateActivity("dummyActivity");
+            _activity = new Activity("dummyActivity");
             _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("ga1");
             _skill.Activity = _activity;
 

@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -38,9 +39,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IPersonContract CreatePersonContract(string contractName, string contractScheduleName, string partTimePercentage)
         {
-            IContract ctr = ContractFactory.CreateContract(contractName);
+            IContract ctr = new Contract(contractName); //rk - changed this - no id set
             IContractSchedule contractSch = ContractScheduleFactory.CreateContractSchedule(contractScheduleName);
-            IPartTimePercentage newPartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage(partTimePercentage);
+            IPartTimePercentage newPartTimePercentage = new PartTimePercentage(partTimePercentage); // rk - changed this - no id set
 
             return CreatePersonContract(ctr,newPartTimePercentage,contractSch);
         }

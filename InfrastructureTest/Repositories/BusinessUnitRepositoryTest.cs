@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             GroupingActivity ga = GroupingActivityFactory.CreateSimpleGroupingActivity("test");
             PersistAndRemoveFromUnitOfWork(ga);
 
-            Activity activity = ActivityFactory.CreateActivity("test");
+            Activity activity = new Activity("test");
             activity.GroupingActivity = ga;
             PersistAndRemoveFromUnitOfWork(activity);
 

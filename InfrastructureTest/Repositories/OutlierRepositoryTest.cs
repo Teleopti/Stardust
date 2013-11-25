@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _skillType = SkillTypeFactory.CreateSkillType();
             PersistAndRemoveFromUnitOfWork(_skillType);
-            _activity = ActivityFactory.CreateActivity("The test", Color.Honeydew);
+						_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
             GroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
             PersistAndRemoveFromUnitOfWork(groupingActivity);
             _activity.GroupingActivity = groupingActivity;

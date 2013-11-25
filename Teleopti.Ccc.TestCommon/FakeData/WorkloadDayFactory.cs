@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
             IWorkload workload1 = new Workload(skill);
-            workload1.SetId(Guid.NewGuid());
+
 
             IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
             ITemplateTaskPeriod templateTaskPeriod =
@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             workloadDays.Add(workloadDay);
 
             IWorkload workload2 = new Workload(skill);
-            workload2.SetId(Guid.NewGuid());
 
             taskPeriods = new List<ITemplateTaskPeriod>();
             templateTaskPeriod = new TemplateTaskPeriod(new Task(300, TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(40)),
