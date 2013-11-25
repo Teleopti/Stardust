@@ -108,6 +108,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NHibernate.4.0.0-Alpha1\lib\net40\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate.Caches.SysCache">
+      <HintPath>..\packages\NHibernate.Caches.SysCache.4.0.0.4000\lib\net40\NHibernate.Caches.SysCache.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate.Envers, Version=2.0.0.100, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NHibernate.Envers.2.0-Beta\lib\Net35\NHibernate.Envers.dll</HintPath>
@@ -515,7 +518,8 @@
   -->
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.Config" copy "$(ProjectDir)..\.debug-Setup\config\CruiseControl.config" "$(ProjectDir)App.Config"</PreBuildEvent>
-    <PostBuildEvent>xcopy "$(ProjectDir)..\nhibernateAddons\Cache_Providers\*.dll" "$(TargetDir)" /y</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
 </Project>
