@@ -5,6 +5,17 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
 
+if (typeof(Teleopti) === 'undefined') {
+	Teleopti = {};
+}
+if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+		Teleopti.MyTimeWeb = {};
+}
+if (typeof (Teleopti.MyTimeWeb.Preference) === 'undefined') {
+	Teleopti.MyTimeWeb.Preference = {};
+}
+
+
 Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax, showMeridian, saveAsNewTemplateMethod, deletePreferenceTemplateMethod, savePreferenceMethod, isShiftCategorySelectedAsStandardPreferenceMethod) {
 	var self = this;
 
