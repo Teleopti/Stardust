@@ -8,10 +8,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface IConstructTeamBlock
     {
-        IList<ITeamBlockInfo> Constract(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+        IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
                                         IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions);
     }
 
+    /// <summary>
+    /// INFO: This class can be moved to TeamBlock code as it serves more general purpose
+    /// </summary>
     public class ConstructTeamBlock : IConstructTeamBlock
     {
         private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
@@ -23,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             _teamBlockInfoFactory = teamBlockInfoFactory;
         }
 
-        public IList<ITeamBlockInfo> Constract(IList<IScheduleMatrixPro> allPersonMatrixList,
+        public IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList,
                                                DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
                                                ISchedulingOptions schedulingOptions)
         {

@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             var teamBlockListDictionary = new Dictionary<TeamBlockWeight, IList<ITeamBlockInfo>>();
             foreach (ITeamBlockInfo teamBlockInfo in teamBlockInfoList)
             {
-                //get team block weight
-                TeamBlockWeight teamBlockWeight = _teamBlockWeightExtractor.DetermineWeight(teamBlockInfo);
+                var teamBlockWeight = _teamBlockWeightExtractor.DetermineWeight(teamBlockInfo);
                 if (!teamBlockListDictionary.ContainsKey(teamBlockWeight))
                     teamBlockListDictionary.Add(teamBlockWeight, new List<ITeamBlockInfo>());
                 teamBlockListDictionary[teamBlockWeight].Add(teamBlockInfo);

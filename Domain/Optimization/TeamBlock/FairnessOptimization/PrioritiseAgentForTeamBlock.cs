@@ -57,9 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             //return result;
             return GetPriortiseAgentByName(personList);
         }
-
         
-
         public IPerson PersonOnPriority(int priority)
         {
             return _result[priority];

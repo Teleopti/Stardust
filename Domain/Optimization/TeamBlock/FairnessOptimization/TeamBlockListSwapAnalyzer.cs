@@ -32,11 +32,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             {
                 foreach (int lowerPriority in teamBlockPriorityDefinitionInfo.LowToHighAgentPriorityList)
                 {
-                    ITeamBlockInfo higherPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(higherPriority);
-                    int lowestShiftCategoryPrioirty = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
-                    if (teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriorityList.Any(higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPrioirty))
+                    var higherPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(higherPriority);
+                    int lowestShiftCategoryPriority = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
+                    if (teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriorityList.Any(higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPriority))
                     {
-                        ITeamBlockInfo lowestPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(lowerPriority);
+                        var lowestPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(lowerPriority);
                         if (validateBlock(higherPriorityBlock, lowestPriorityBlock))
                             swapBlock(higherPriorityBlock, lowestPriorityBlock);
                     }
@@ -48,7 +48,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         {
             _swapScheduleDays.Swap(higherPriorityBlock, lowestPriorityBlock);
         }
-
+        /// <summary>
+        /// We can call the validate method block by block on two blocks at one time.
+        /// need to think on that. Depends on the validation as well
+        /// </summary>
+        /// <param name="higherPriorityBlock"></param>
+        /// <param name="lowestPriorityBlock"></param>
+        /// <returns></returns>
         private bool validateBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
         {
             return _validateScheduleDay.Validate(higherPriorityBlock, lowestPriorityBlock);

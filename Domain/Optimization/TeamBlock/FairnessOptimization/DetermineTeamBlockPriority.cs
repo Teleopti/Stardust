@@ -23,25 +23,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             _shiftCategoryPoints = shiftCategoryPoints;
         }
 
-        //public IDictionary<ITeamBlockInfo, PriorityDefinition> CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories)
-        //{
-        //    var tbPriorityDictionary = new Dictionary<ITeamBlockInfo, PriorityDefinition>();
-        //    foreach (ITeamBlockInfo teamBlockInfo in teamBlockInfos)
-        //    {
-        //        IPrioritiseAgentForTeamBlock prioritiseAgentForTeamBlock = new PrioritiseAgentForTeamBlock(_selectedAgentPoints);
-        //        IPriortiseShiftCategoryForTeamBlock priortiseShiftCategoryForTeamBlock = new PriortiseShiftCategoryForTeamBlock(_shiftCategoryPoints);
-        //        extractAgentAndShiftCategoryPriority(teamBlockInfo, prioritiseAgentForTeamBlock, priortiseShiftCategoryForTeamBlock);
-
-        //        var priority = new PriorityDefinition
-        //            {
-        //                AgentPriority = prioritiseAgentForTeamBlock.AveragePriority,
-        //                ShiftCategoryPriority = priortiseShiftCategoryForTeamBlock.AveragePriority
-        //            };
-        //        tbPriorityDictionary.Add(teamBlockInfo, priority);
-        //    }
-        //    return tbPriorityDictionary;
-        //}
-
         public ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos,
                                                                   IList<IShiftCategory> shiftCategories)
         {
@@ -81,44 +62,5 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             priortiseShiftCategoryForTeamBlock.GetPriortiseShiftCategories(shiftCategories);
         }
 
-        //public IEnumerable<int> HighToLowAgentPriorityList
-        //{
-        //    get { return (_tbPriorityDictionary.Values.Select(s => s.AgentPriority)).ToList().OrderByDescending(s => s); }
-        //}
-
-        //public IEnumerable<int> HighToLowShiftCategoryPriorityList
-        //{
-        //    get
-        //    {
-        //        return
-        //            (_tbPriorityDictionary.Values.Select(s => s.ShiftCategoryPriority)).ToList()
-        //                                                                               .OrderByDescending(s => s);
-        //    }
-        //}
-
-        //public IEnumerable<int> LowToHighShiftCategoryPriorityList
-        //{
-        //    get { return (_tbPriorityDictionary.Values.Select(s => s.ShiftCategoryPriority)).ToList().OrderBy(s => s); }
-        //}
-
-        //public IEnumerable<int> LowToHighAgentPriorityList
-        //{
-        //    get { return (_tbPriorityDictionary.Values.Select(s => s.AgentPriority)).ToList().OrderBy(s => s); }
-        //}
-
-        //public void Clear()
-        //{
-        //    _tbPriorityDictionary.Clear();
-        //}
-
-        //public ITeamBlockInfo BlockOnAgentPriority(int priority)
-        //{
-        //    return _tbPriorityDictionary.FirstOrDefault(s => s.Value.AgentPriority == priority).Key;
-        //}
-
-        //public int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
-        //{
-        //    return _tbPriorityDictionary[teamBlockInfo].ShiftCategoryPriority;
-        //}
     }
 }

@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.Win.Commands
         {
             var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
             var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
-            ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-            IConstructTeamBlock constructTeamBlock = new ConstructTeamBlock(teamInfoFactory,_teamBlockInfoFactory);
+            var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+            var constructTeamBlock = new ConstructTeamBlock(teamInfoFactory,_teamBlockInfoFactory);
             _selectedAgentPoints.AssignAgentPoints(selectedPerson );
             _shiftCategoryPoints.AssignShiftCategoryPoints(shiftCategories );
-            IDetermineTeamBlockPriority determineTeamBlockPriority = new DetermineTeamBlockPriority(_selectedAgentPoints,_shiftCategoryPoints );
-            ITeamBlockListSwapAnalyzer teamBlockListSwapAnalyzer = new TeamBlockListSwapAnalyzer(determineTeamBlockPriority ,_swapScheduleDays,_validateScheduleDays);
+            var determineTeamBlockPriority = new DetermineTeamBlockPriority(_selectedAgentPoints,_shiftCategoryPoints );
+            var teamBlockListSwapAnalyzer = new TeamBlockListSwapAnalyzer(determineTeamBlockPriority ,_swapScheduleDays,_validateScheduleDays);
             var teamBlockFairnessOptimizer = new TeamBlockFairnessOptimizationService(constructTeamBlock, _teamBlockSizeClassifier,
                                                                             teamBlockListSwapAnalyzer);
             teamBlockFairnessOptimizer.Exectue(allVisibleMatrixes, selectedPeriod, selectedPerson, schedulingOptions, shiftCategories);

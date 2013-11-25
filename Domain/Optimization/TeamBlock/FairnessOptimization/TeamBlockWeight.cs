@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             var teamBlockWeight = obj as TeamBlockWeight;
             return teamBlockWeight != null && Equals(teamBlockWeight);
         }
-
-
         
     }
 }

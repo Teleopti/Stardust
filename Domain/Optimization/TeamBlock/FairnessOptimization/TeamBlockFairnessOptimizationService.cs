@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                             IList<IPerson> selectedPersons, 
                             ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories)
         {
-            IList<ITeamBlockInfo> listOfAllTeamBlock = _constructTeamBlock.Constract(allPersonMatrixList, selectedPeriod,
+            IList<ITeamBlockInfo> listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod,
                                                                                      selectedPersons,
                                                                                      schedulingOptions);
             HashSet<IList<ITeamBlockInfo>> listOfMultipleLengthBlocks =
