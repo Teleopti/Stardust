@@ -51,7 +51,10 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration.MasterActivity
         {
             if (selectedMasterActivityModel == null)
                 return;
-            selectedMasterActivityModel.Name = _view.LongName;
+
+	        var longName = _view.LongName;
+			if(longName != string.Empty)
+				selectedMasterActivityModel.Name = longName;
             selectedMasterActivityModel.Color = _view.Color;
             selectedMasterActivityModel.UpdateActivities(_view.Activities);
             _view.LoadComboWithMasterActivities(_viewModel.AllNotDeletedMasterActivities);
