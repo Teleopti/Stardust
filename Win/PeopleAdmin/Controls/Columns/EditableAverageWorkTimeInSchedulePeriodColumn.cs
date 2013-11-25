@@ -60,6 +60,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
             {
                 T dataItem = dataItems[e.RowIndex - 1];
 
+	            if (e.Style.CellValue == null)
+		            e.Style.CellValue = TimeSpan.Zero;
+
                 if (e.Style.CellValue is TimeSpan)
                 {
                     _propertyReflector.SetValue(dataItem, BindingProperty, (TimeSpan) e.Style.CellValue);
