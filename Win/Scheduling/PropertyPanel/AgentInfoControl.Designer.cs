@@ -126,7 +126,7 @@
 			// 
 			// listViewSchedulePeriod
 			// 
-			this.listViewSchedulePeriod.BackColor = System.Drawing.SystemColors.Info;
+			this.listViewSchedulePeriod.BackColor = System.Drawing.Color.White;
 			this.listViewSchedulePeriod.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listViewSchedulePeriod.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
@@ -156,20 +156,21 @@
 			// 
 			// tabPageAdvRestrictions
 			// 
+			this.tabPageAdvRestrictions.BackColor = System.Drawing.SystemColors.Control;
 			this.tabPageAdvRestrictions.Controls.Add(this.listViewRestrictions);
 			this.tabPageAdvRestrictions.Image = null;
 			this.tabPageAdvRestrictions.ImageSize = new System.Drawing.Size(16, 16);
 			this.tabPageAdvRestrictions.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvRestrictions.Name = "tabPageAdvRestrictions";
 			this.tabPageAdvRestrictions.ShowCloseButton = true;
-			this.tabPageAdvRestrictions.Size = new System.Drawing.Size(555, 423);
+			this.tabPageAdvRestrictions.Size = new System.Drawing.Size(453, 441);
 			this.tabPageAdvRestrictions.TabIndex = 4;
 			this.tabPageAdvRestrictions.Text = "xxRestrictions";
 			this.tabPageAdvRestrictions.ThemesEnabled = false;
 			// 
 			// listViewRestrictions
 			// 
-			this.listViewRestrictions.BackColor = System.Drawing.SystemColors.Info;
+			this.listViewRestrictions.BackColor = System.Drawing.Color.White;
 			this.listViewRestrictions.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader5,
             this.columnHeader6});
@@ -181,7 +182,7 @@
             listViewItem2});
 			this.listViewRestrictions.Location = new System.Drawing.Point(0, 0);
 			this.listViewRestrictions.Name = "listViewRestrictions";
-			this.listViewRestrictions.Size = new System.Drawing.Size(555, 423);
+			this.listViewRestrictions.Size = new System.Drawing.Size(453, 441);
 			this.listViewRestrictions.SmallImageList = this.imageList1;
 			this.listViewRestrictions.TabIndex = 2;
 			this.listViewRestrictions.UseCompatibleStateImageBehavior = false;
@@ -204,14 +205,14 @@
 			this.tabPageAdvPersonPeriod.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvPersonPeriod.Name = "tabPageAdvPersonPeriod";
 			this.tabPageAdvPersonPeriod.ShowCloseButton = true;
-			this.tabPageAdvPersonPeriod.Size = new System.Drawing.Size(555, 423);
+			this.tabPageAdvPersonPeriod.Size = new System.Drawing.Size(453, 441);
 			this.tabPageAdvPersonPeriod.TabIndex = 3;
 			this.tabPageAdvPersonPeriod.Text = "xxPersonPeriod";
 			this.tabPageAdvPersonPeriod.ThemesEnabled = false;
 			// 
 			// listViewPersonPeriod
 			// 
-			this.listViewPersonPeriod.BackColor = System.Drawing.SystemColors.Info;
+			this.listViewPersonPeriod.BackColor = System.Drawing.Color.White;
 			this.listViewPersonPeriod.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader3,
             this.columnHeader4});
@@ -223,7 +224,7 @@
             listViewItem3});
 			this.listViewPersonPeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewPersonPeriod.Name = "listViewPersonPeriod";
-			this.listViewPersonPeriod.Size = new System.Drawing.Size(555, 423);
+			this.listViewPersonPeriod.Size = new System.Drawing.Size(453, 441);
 			this.listViewPersonPeriod.SmallImageList = this.imageList1;
 			this.listViewPersonPeriod.TabIndex = 2;
 			this.listViewPersonPeriod.UseCompatibleStateImageBehavior = false;
@@ -246,14 +247,14 @@
 			this.tabPageAdvPerson.Location = new System.Drawing.Point(0, 21);
 			this.tabPageAdvPerson.Name = "tabPageAdvPerson";
 			this.tabPageAdvPerson.ShowCloseButton = true;
-			this.tabPageAdvPerson.Size = new System.Drawing.Size(555, 423);
+			this.tabPageAdvPerson.Size = new System.Drawing.Size(453, 441);
 			this.tabPageAdvPerson.TabIndex = 5;
 			this.tabPageAdvPerson.Text = "xxPerson";
 			this.tabPageAdvPerson.ThemesEnabled = false;
 			// 
 			// listViewPerson
 			// 
-			this.listViewPerson.BackColor = System.Drawing.SystemColors.Info;
+			this.listViewPerson.BackColor = System.Drawing.Color.White;
 			this.listViewPerson.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader7,
             this.columnHeader8});
@@ -265,7 +266,7 @@
             listViewItem4});
 			this.listViewPerson.Location = new System.Drawing.Point(0, 0);
 			this.listViewPerson.Name = "listViewPerson";
-			this.listViewPerson.Size = new System.Drawing.Size(555, 423);
+			this.listViewPerson.Size = new System.Drawing.Size(453, 441);
 			this.listViewPerson.SmallImageList = this.imageList1;
 			this.listViewPerson.TabIndex = 3;
 			this.listViewPerson.UseCompatibleStateImageBehavior = false;
@@ -288,14 +289,14 @@
 			this.tabPageFairness.Location = new System.Drawing.Point(0, 21);
 			this.tabPageFairness.Name = "tabPageFairness";
 			this.tabPageFairness.ShowCloseButton = true;
-			this.tabPageFairness.Size = new System.Drawing.Size(555, 423);
+			this.tabPageFairness.Size = new System.Drawing.Size(453, 441);
 			this.tabPageFairness.TabIndex = 6;
 			this.tabPageFairness.Text = "xxFairness";
 			this.tabPageFairness.ThemesEnabled = false;
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.BackColor = System.Drawing.SystemColors.Info;
+			this.tableLayoutPanel1.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel1.ColumnCount = 1;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 0, 0);
@@ -307,11 +308,12 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(555, 423);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(453, 441);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
 			// 
+			this.tableLayoutPanel2.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel2.ColumnCount = 2;
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.30924F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.69077F));
@@ -323,13 +325,13 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 3F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 97F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(549, 31);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(447, 31);
 			this.tableLayoutPanel2.TabIndex = 5;
 			// 
 			// agentGroupPageLabel
 			// 
 			this.agentGroupPageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.agentGroupPageLabel.Location = new System.Drawing.Point(74, 9);
+			this.agentGroupPageLabel.Location = new System.Drawing.Point(61, 9);
 			this.agentGroupPageLabel.Name = "agentGroupPageLabel";
 			this.agentGroupPageLabel.Size = new System.Drawing.Size(0, 13);
 			this.agentGroupPageLabel.TabIndex = 0;
@@ -339,16 +341,16 @@
 			this.comboBoxAgentGrouping.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAgentGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxAgentGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(152, 5);
+			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(125, 5);
 			this.comboBoxAgentGrouping.Name = "comboBoxAgentGrouping";
-			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 19);
+			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAgentGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAgentGrouping.TabIndex = 1;
 			this.comboBoxAgentGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentGrouping_SelectedIndexChanged);
 			// 
 			// perPersonAndGroupListView
 			// 
-			this.perPersonAndGroupListView.BackColor = System.Drawing.SystemColors.Info;
+			this.perPersonAndGroupListView.BackColor = System.Drawing.Color.White;
 			this.perPersonAndGroupListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.perPersonAndGroupListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader11,
@@ -360,7 +362,7 @@
 			this.perPersonAndGroupListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.perPersonAndGroupListView.Location = new System.Drawing.Point(3, 40);
 			this.perPersonAndGroupListView.Name = "perPersonAndGroupListView";
-			this.perPersonAndGroupListView.Size = new System.Drawing.Size(549, 380);
+			this.perPersonAndGroupListView.Size = new System.Drawing.Size(447, 398);
 			this.perPersonAndGroupListView.StateImageList = this.imageList1;
 			this.perPersonAndGroupListView.TabIndex = 0;
 			this.perPersonAndGroupListView.UseCompatibleStateImageBehavior = false;

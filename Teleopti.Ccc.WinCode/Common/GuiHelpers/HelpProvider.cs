@@ -46,18 +46,18 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
         {
             var topic = GetHelpString(sender as UIElement);
 
-            string helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
-            string helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
-            string helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffix"];
-            string helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDivider"];
-            string helpLang = string.Empty; //empty for now
+			var helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrlOnline"];
+			var helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefixOnline"];
+			var helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffixOnline"];
+			var helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
+			var helpLang = string.Empty; //empty for now
 
             if (Keyboard.Modifiers != ModifierKeys.Shift)
             {
-                helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrlOnline"];
-                helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefixOnline"];
-                helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffixOnline"];
-                helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
+				helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
+				helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];
+				helpSuffix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpSuffix"];
+				helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDivider"];
             }
             Help.ShowHelp(null, string.Concat(helpUrl, helpLang, helpPrefix, topic.Replace("+",helpDivider), helpSuffix));
         }

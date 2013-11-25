@@ -6,13 +6,14 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
@@ -313,6 +314,52 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
 
 			result.MaxMustHave.Should().Be.EqualTo(8);
+		}
+
+		[Test]
+		public void ShouldMapPreferenceActivityOptions()
+		{
+			var activity =  new Activity("myActivity");
+			activity.SetId(Guid.NewGuid());
+			
+			preferenceOptionProvider.Stub(x => x.RetrieveActivityOptions()).Return(new[] { activity });
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			assertOption(result.Options.ActivityOptions, Resources.Activity, activity.Description.Name, activity.Id.Value);
+		}
+
+		[Test]
+		public void ShouldMapPreferenceOptions()
+		{
+			var shiftCategory = new ShiftCategory("SC");
+			shiftCategory.SetId(Guid.NewGuid());
+			var dayOff = new DayOffTemplate(new Description("DO"));
+			dayOff.SetId(Guid.NewGuid());
+			var absence = new Absence { Description = new Description("absence") };
+			absence.SetId(Guid.NewGuid());
+
+			preferenceOptionProvider.Stub(x => x.RetrieveShiftCategoryOptions()).Return(new[] { shiftCategory });
+			preferenceOptionProvider.Stub(x => x.RetrieveDayOffOptions()).Return(new[] { dayOff });
+			preferenceOptionProvider.Stub(x => x.RetrieveAbsenceOptions()).Return(new[] { absence });
+
+			var result = Mapper.Map<PreferenceDomainData, PreferenceViewModel>(data);
+
+			var shiftCategoriesGroup = result.Options.PreferenceOptions.First();
+			var dayOffsGroup = result.Options.PreferenceOptions.ElementAt(1);
+			var absencesGroup = result.Options.PreferenceOptions.Last();
+
+			assertOption(shiftCategoriesGroup, Resources.ShiftCategory, shiftCategory.Description.Name, shiftCategory.Id.Value);
+			assertOption(dayOffsGroup, Resources.DayOff, dayOff.Description.Name, dayOff.Id.Value);
+			assertOption(absencesGroup, Resources.Absence, absence.Description.Name, absence.Id.Value);
+		}
+
+		private void assertOption(PreferenceOptionGroup optionGroup, string groupText, string firstItemName, Guid firstItemNameId)
+		{
+			optionGroup.Text.Should().Be.EqualTo(groupText);
+			optionGroup.Options.Count().Should().Be.EqualTo(1);
+			optionGroup.Options.First().Text.Should().Be.EqualTo(firstItemName);
+			optionGroup.Options.First().Value.Should().Be.EqualTo(firstItemNameId.ToString());
 		}
 
 	}

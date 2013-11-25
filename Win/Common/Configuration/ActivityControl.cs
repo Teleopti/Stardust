@@ -79,24 +79,22 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             gridColumns.Add(new SFGridRowHeaderColumn<IActivity>(string.Empty));
             gridColumns.Add(new SFGridDescriptionNameColumn<IActivity>("Description", Resources.Name));
-
             gridColumns.Add(new SFGridColorPickerColumn<IActivity>("DisplayColor", Resources.Color));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InContractTime", Resources.IsContractTime));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InWorkTime", Resources.IsWorkTime));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InPaidTime", Resources.IsPaidTime));
-            if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
-            {
-                var payrollColumn = new SFGridEditableTextColumn<IActivity>("PayrollCode", 20, Resources.PayrollCode)
-                                        {AllowEmptyValue = true};
-                gridColumns.Add(payrollColumn);
-            }
+            
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("RequiresSkill", Resources.RequiresSkill));
 			gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("RequiresSeat", Resources.RequiresSeat));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("InReadyTime", Resources.InReadyTime));
             gridColumns.Add(new SFGridCheckBoxColumn<IActivity>("AllowOverwrite",Resources.AllowMeetings ));
 
             gridColumns.Add(new SFGridDropDownEnumColumn<IActivity, ReportLevelDetailAdapter, ReportLevelDetail>("ReportLevelDetail", Resources.ReportLevel, ReportLevelDetails(), "DisplayName", "ReportLevelDetail"));
-
+			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
+			{
+				var payrollColumn = new SFGridEditableTextColumn<IActivity>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
+				gridColumns.Add(payrollColumn);
+			}
             gridColumns.AppendAuditColumns();
             gridControlGroupingActivities.RowCount = GridRowCount(GridType.Activity);
             gridControlGroupingActivities.ColCount = gridColumns.Count - 1;  //col index starts on 0

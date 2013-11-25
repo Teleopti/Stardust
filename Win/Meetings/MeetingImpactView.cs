@@ -344,6 +344,11 @@ namespace Teleopti.Ccc.Win.Meetings
 			get { return _presenter; }
 		}
 
+		public void ResetSelection()
+		{
+			tabControlSkillResultGrid.Select();
+		}
+
 		public void NotifyMeetingTimeChanged()
 		{
 			_meetingComposerView.NotifyMeetingTimeChanged(this);

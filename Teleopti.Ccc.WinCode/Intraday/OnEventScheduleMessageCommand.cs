@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Infrastructure.Persisters;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.WinCode.Common;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.Activities);
                 uow.Reassociate(_schedulingResultLoader.SchedulerState.CommonStateHolder.ShiftCategories);
 
-                _scheduleRefresher.Refresh(_schedulingResultLoader.SchedulerState.Schedules, new List<IEventMessage>(), refreshedEntitiesBuffer, conflicts);
+                _scheduleRefresher.Refresh(_schedulingResultLoader.SchedulerState.Schedules, new List<IEventMessage>{eventMessage}, refreshedEntitiesBuffer, conflicts, isRelevantPerson);
 
                 if (refreshedEntitiesBuffer.Count > 0)
                 {
@@ -60,5 +61,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _schedulingResultLoader.InitializeScheduleData();
             _view.DrawSkillGrid();
         }
+
+		private bool isRelevantPerson(Guid personId)
+		{
+			return _schedulingResultLoader.SchedulerState.SchedulingResultState.PersonsInOrganization.Any(p => p.Id == personId);
+		}
     }
 }

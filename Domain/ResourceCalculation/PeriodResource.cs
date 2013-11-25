@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private readonly ConcurrentDictionary<string, PeriodResourceDetail> _resourceDictionary = new ConcurrentDictionary<string, PeriodResourceDetail>();
 		private readonly ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>> _skillEffiencies = new ConcurrentDictionary<string, ConcurrentDictionary<Guid, double>>();
-		private readonly ConcurrentDictionary<string, IList<DateTimePeriod>> _fractionResourcePeriods = new ConcurrentDictionary<string, IList<DateTimePeriod>>(); 
+		private readonly ConcurrentDictionary<string, ConcurrentDictionary<DateTimePeriod,int>> _fractionResourcePeriods = new ConcurrentDictionary<string, ConcurrentDictionary<DateTimePeriod,int>>(); 
 		
 		public void AppendResource(string key, SkillCombination skillCombination, double heads, double resource, DateTimePeriod? fractionPeriod)
 		{
@@ -18,9 +18,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (fractionPeriod.HasValue)
 			{
-				_fractionResourcePeriods.AddOrUpdate(key, new List<DateTimePeriod> { fractionPeriod.Value }, (s, d) =>
+				_fractionResourcePeriods.AddOrUpdate(key, (e) =>
+					{
+						var dictionary = new ConcurrentDictionary<DateTimePeriod, int>();
+						dictionary.AddOrUpdate(fractionPeriod.Value, 1, (period, i) => i + 1);
+						return dictionary;
+					}, (s, d) =>
 					{ 
-						d.Add(fractionPeriod.Value);
+						d.AddOrUpdate(fractionPeriod.Value, 1, (period, i) => i + 1);
 						return d;
 					});
 			}
@@ -44,9 +49,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			if (fractionPeriod.HasValue)
 			{
-				_fractionResourcePeriods.AddOrUpdate(key, new List<DateTimePeriod>(), (s, d) =>
+				_fractionResourcePeriods.AddOrUpdate(key, (e) =>
 				{
-					d.Remove(fractionPeriod.Value);
+					var dictionary = new ConcurrentDictionary<DateTimePeriod, int>();
+					dictionary.AddOrUpdate(fractionPeriod.Value, 0, (period, i) => i - 1);
+					return dictionary;
+				}, (s, d) =>
+				{
+					d.AddOrUpdate(fractionPeriod.Value, 0, (period, i) => i - 1);
 					return d;
 				});
 			}
@@ -97,10 +107,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				if ((string.IsNullOrEmpty(activityKey) || pair.Key.StartsWith(activityKey)) && (pair.Key.Contains(skillKeyString)))
 				{
-					IList<DateTimePeriod> fractionPeriods;
+					ConcurrentDictionary<DateTimePeriod,int> fractionPeriods;
 					if (_fractionResourcePeriods.TryGetValue(pair.Key, out fractionPeriods))
 					{
-						result.AddRange(fractionPeriods);
+						foreach (var fractionPeriod in fractionPeriods)
+						{
+							result.AddRange(Enumerable.Range(0,fractionPeriod.Value).Select(i => fractionPeriod.Key));
+						}
 					}
 				}
 			}
