@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             // Grid must have a Header column
             gridColumns.Add(new SFGridRowHeaderColumn<AgentQueueStatDetailsDto>(string.Empty));
 
-            gridColumns.Add(new SFGridDescriptionNameColumn<AgentQueueStatDetailsDto>("QueueName", UserTexts.Resources.Name, 150));
-            gridColumns.Add(new SFGridDescriptionNameColumn<AgentQueueStatDetailsDto>("AnsweredContacts", UserTexts.Resources.AnsweredContacts, 150));
+            gridColumns.Add(new SFGridStringColumn<AgentQueueStatDetailsDto>("QueueName", UserTexts.Resources.Name, 150));
+            gridColumns.Add(new SFGridStringColumn<AgentQueueStatDetailsDto>("AnsweredContacts", UserTexts.Resources.AnsweredContacts, 150));
             gridColumns.Add(new SFGridHourMinutesColumn<AgentQueueStatDetailsDto>("AverageTalkTime", UserTexts.Resources.AverageTalkTime, 150));
             gridColumns.Add(new SFGridHourMinutesColumn<AgentQueueStatDetailsDto>("AfterContactWorkTime", UserTexts.Resources.AverageAfterCallWork, 150));
             gridColumns.Add(new SFGridHourMinutesColumn<AgentQueueStatDetailsDto>("AverageHandlingTime", UserTexts.Resources.AverageHandlingTime, 150));

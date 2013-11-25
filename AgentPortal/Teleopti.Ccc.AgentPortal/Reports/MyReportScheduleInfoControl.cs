@@ -146,9 +146,9 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             gridColumns.Add(new SFGridRowHeaderColumn<MyScheduleGridAdapter>(string.Empty));
 
             gridColumns.Add(
-                new SFGridDescriptionNameColumn<MyScheduleGridAdapter>("ShortDateTime", UserTexts.Resources.Date, 110));
+                new SFGridStringColumn<MyScheduleGridAdapter>("ShortDateTime", UserTexts.Resources.Date, 110));
 
-            gridColumns.Add(new SFGridDescriptionNameColumn<MyScheduleGridAdapter>("Adherence", UserTexts.Resources.Adherence, 80));
+            gridColumns.Add(new SFGridStringColumn<MyScheduleGridAdapter>("Adherence", UserTexts.Resources.Adherence, 80));
 
             int width = gridControlMyWeekSchedules.Width - 200;
             SFGridScheduleAdherenceColumn<MyScheduleGridAdapter> adherenceColumn =

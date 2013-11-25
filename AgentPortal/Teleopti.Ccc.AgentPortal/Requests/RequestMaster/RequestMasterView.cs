@@ -65,11 +65,11 @@ namespace Teleopti.Ccc.AgentPortal.Requests.RequestMaster
             IList<SFGridColumnBase<RequestDetailRow>> gridColumns = new List<SFGridColumnBase<RequestDetailRow>>();
 
             gridColumns.Add(new SFGridRowHeaderColumn<RequestDetailRow>(""));
-            gridColumns.Add(new SFGridDescriptionNameColumn<RequestDetailRow>("RequestDate", RequestDateHeader, colWidth-16));
-            gridColumns.Add(new SFGridDescriptionNameColumn<RequestDetailRow>("RequestType", RequestTypeHeader, colWidth-17));
+            gridColumns.Add(new SFGridStringColumn<RequestDetailRow>("RequestDate", RequestDateHeader, colWidth-16));
+            gridColumns.Add(new SFGridStringColumn<RequestDetailRow>("RequestType", RequestTypeHeader, colWidth-17));
             gridColumns.Add(new SFGridRequestStatusColumn<RequestDetailRow>("RequestStatus", RequestStatusHeader, colWidth-17));
-            gridColumns.Add(new SFGridDescriptionNameColumn<RequestDetailRow>("Details", DetailsHeader, colWidth+50));
-            gridColumns.Add(new SFGridDescriptionNameColumn<RequestDetailRow>("Subject", SubjectHeader, colWidth));
+            gridColumns.Add(new SFGridStringColumn<RequestDetailRow>("Details", DetailsHeader, colWidth+50));
+            gridColumns.Add(new SFGridStringColumn<RequestDetailRow>("Subject", SubjectHeader, colWidth));
             gridColumns.Add(new SFGridStringCellColumn<RequestDetailRow>("Message", MessageHeader, colWidth));
             gridColumns.Add(new SFGridHourMinutesColumn<RequestDetailRow>("LastChanged", LastChangedHeader, colWidth));
             _sfGridColumnGridHelper = new SFGridColumnGridHelper<RequestDetailRow>(gridControlRequestMaster, new ReadOnlyCollection<SFGridColumnBase<RequestDetailRow>>(gridColumns), (List<RequestDetailRow>) DataSource);

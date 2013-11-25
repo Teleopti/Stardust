@@ -1,5 +1,4 @@
-﻿
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Drawing;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
@@ -17,48 +16,41 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
         public override void GetCellValue(GridQueryCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
             e.Style.CellType = "DescriptionNameCell";
-            e.Style.CellValue = GetDescription(currentItem);
-            e.Style.Interior = GetBrushInfo(currentItem);
+            
+			object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
+	        var status = value as StatusDisplay;
+
+			e.Style.CellValue = GetDescription(status, value);
+            e.Style.Interior = GetBrushInfo(status);
         }
 
         public override void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
-            Description description = new Description((string)e.Style.CellValue);
-            PropertyReflectorHelper.SetValue(currentItem, BindingProperty, new Description(description.Name, description.ShortName));
+			PropertyReflectorHelper.SetValue(currentItem, BindingProperty, e.Style.CellValue);
         }
 
-        private Description GetDescription(T currentItem)
+        private string GetDescription(StatusDisplay currentItem,object value)
         {
-            Description description;
-            object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
-            if (value == null) return new Description();
+	        if (value == null) return string.Empty;
 
-            if (value.GetType() == typeof(StatusDisplay))
-                description = new Description(((StatusDisplay)value).DisplayText);
-            else
-                description = new Description(value.ToString(), System.String.Empty);
-            return description;
+            return currentItem!=null ? currentItem.DisplayText : value.ToString();
         }
 
-        private BrushInfo GetBrushInfo(T currentItem)
-        {
-            BrushInfo brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(150,Color.Yellow));
-            object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
-            if (value == null) return brushInfo;
+	    private BrushInfo GetBrushInfo(StatusDisplay currentItem)
+	    {
+		    var brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(150, Color.Yellow));
+		    if (currentItem == null) return brushInfo;
 
-            if (value.GetType() == typeof(StatusDisplay))
-            {
-                RequestStatusDto requestStatus = ((StatusDisplay)value).RequestStatus;
-                if (requestStatus==RequestStatusDto.Approved)
-                {
-                    brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180,Color.LimeGreen));
-				}
-				else if (requestStatus == RequestStatusDto.Denied)
-                {
-                    brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180,Color.Crimson));
-                }
-            }
-            return brushInfo;
-        }
+		    var requestStatus = currentItem.RequestStatus;
+		    if (requestStatus == RequestStatusDto.Approved)
+		    {
+			    brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180, Color.LimeGreen));
+		    }
+		    else if (requestStatus == RequestStatusDto.Denied)
+		    {
+			    brushInfo = new BrushInfo(GradientStyle.Vertical, Color.White, Color.FromArgb(180, Color.Crimson));
+		    }
+		    return brushInfo;
+	    }
     }
 }
