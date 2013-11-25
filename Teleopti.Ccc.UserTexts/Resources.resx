@@ -11413,8 +11413,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Confirm removal</comment>
   </data>
   <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
-    <value>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</value>
-    <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
+    <value>It is not allowed to move a work shift to another day, create a new instead</value>
+    <comment>It is not allowed to move a work shift to another day, create a new instead</comment>
   </data>
   <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
     <value>Chance of getting absence request granted: </value>
