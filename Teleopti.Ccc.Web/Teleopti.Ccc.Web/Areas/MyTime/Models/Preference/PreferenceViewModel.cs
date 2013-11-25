@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 
 	public class PreferenceOptionsViewModel
 	{
-		public PreferenceOptionsViewModel(IEnumerable<IPreferenceOption> preferenceOptions, IEnumerable<IOption> activityOptions)
+		public PreferenceOptionsViewModel(IEnumerable<PreferenceOptionGroup> preferenceOptions, PreferenceOptionGroup activityOptions)
 		{
 			PreferenceOptions = preferenceOptions;
 			ActivityOptions = activityOptions;
 		}
 
-		public IEnumerable<IPreferenceOption> PreferenceOptions { get; set; }
-		public IEnumerable<IOption> ActivityOptions { get; set; }
+		public IEnumerable<PreferenceOptionGroup> PreferenceOptions { get; set; }
+		public PreferenceOptionGroup ActivityOptions { get; set; }
 	}
 
 	public class PreferencePeriodViewModel

@@ -248,7 +248,6 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	    var optionElement = $(option.element);
 	    var activityColor = optionElement.data('color');
 
-	    if (option.id === '-') return '<hr>';
 	    if (option.text.length === 0) return option.text;
 	    
 	    return '<span class="pull-left" style="padding-left: 16px;margin-right: 5px;border-radius: 4px;background-color: ' + activityColor + '">&nbsp;</span>' + option.text;

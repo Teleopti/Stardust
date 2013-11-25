@@ -34,9 +34,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool Extended { get; set; }
 	}
 
-	public class PreferenceOptionSplit : OptionSplit, IPreferenceOption
+	public class PreferenceOptionGroup
 	{
-		public bool Extended { get { return false; } }
+		public PreferenceOptionGroup(string text, IEnumerable<IPreferenceOption> preferenceOptions)
+		{
+			Text = text;
+			Options = preferenceOptions;
+		}
+
+		public string Text { get; private set; }
+		public IEnumerable<IPreferenceOption> Options { get; private set; }
 	}
 
 	public interface IPreferenceOption : IOption
@@ -45,22 +52,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	}
 
 
-
-
 	public class Option : IOption
 	{
 		public string Value { get; set; }
 		public string Text { get; set; }
 		public string Color { get; set; }
 	}
-
-	public class OptionSplit : IOption
-	{
-		public string Value { get { return "-"; } }
-		public string Text { get { return string.Empty; } }
-		public string Color { get { return null; } }
-	}
-
+	
 	public interface IOption
 	{
 		string Value { get; }
