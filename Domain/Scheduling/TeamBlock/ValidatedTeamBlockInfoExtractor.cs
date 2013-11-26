@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var teamBlockInfo = createTeamBlockInfo(allPersonMatrixList, datePointer, teamInfo, schedulingOptions);
             if (teamBlockInfo == null) return null;
             if (_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) return null;
-            if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions)) return null;
+            if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions)) return null;
 
             return teamBlockInfo;
         }

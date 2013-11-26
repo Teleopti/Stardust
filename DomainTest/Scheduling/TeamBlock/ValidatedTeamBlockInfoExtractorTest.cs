@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(_teamBlockInfo, _date))
 					 .Return(false);
-                Expect.Call(_teamBlockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).IgnoreArguments() 
+                Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).IgnoreArguments() 
                       .Return(false);
             }
             Assert.IsNull(_target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions));
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 	            Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlock(_teamBlockInfo, _date))
 	                  .Return(false);
-                Expect.Call(_teamBlockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).IgnoreArguments()
+                Expect.Call(_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).IgnoreArguments()
                       .Return(true);
             }
             Assert.AreEqual( _target.GetTeamBlockInfo(_teamInfo, _date, new List<IScheduleMatrixPro>(), _schedulingOptions),_teamBlockInfo );

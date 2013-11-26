@@ -33,16 +33,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
                 {
                     foreach (var skillDay in skillDays)
                     {
-                        if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
+						var skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
+						if (skillStaffPeriodCollection.Count == 0)
+							continue;
+	                    var mappedSkillIntervalData =
+		                    _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection);
                         var openHourForSkillDay =
-                            _skillIntervalDataOpenHour.GetOpenHours(
-                                _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
-                                    skillDay.SkillStaffPeriodCollection));
+							_skillIntervalDataOpenHour.GetOpenHours(mappedSkillIntervalData, skillDay.CurrentDate);
                         if (sampleHour != openHourForSkillDay)
                             return false;
                     }
                 }
-
             }
 
             return true;
@@ -52,11 +53,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
         {
             foreach (var skillDay in skillDays)
             {
-                if (skillDay.SkillStaffPeriodCollection.Count > 0)
+	            var skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
+				var mappedSkillIntervalData =
+							_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection);
+				if (skillStaffPeriodCollection.Count > 0)
                 {
-                    return _skillIntervalDataOpenHour.GetOpenHours(
-                        _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
-                            skillDay.SkillStaffPeriodCollection));
+					var openHourPeriod = _skillIntervalDataOpenHour.GetOpenHours(mappedSkillIntervalData, skillDay.CurrentDate);
+
+	                return openHourPeriod;
                 }
             }
             return null;

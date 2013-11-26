@@ -354,7 +354,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																  _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList))
 			      .Return(_teamBlockInfo);
 
-			Expect.Call(_teamTeamBlockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
+			Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
 			Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
 			                                                     new DateOnlyPeriod(DateOnly.MinValue,
