@@ -260,8 +260,8 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             Assert.AreEqual(1, _oldShiftClass.ExcludedDateCollection.Count);
             Assert.AreEqual(1,_oldShiftClass.ExcludedWeekDayCollection.Count);
 
-            Assert.AreEqual(1,_workShiftRuleSet.AccessibilityDates.Count);
-            Assert.AreEqual(1,_workShiftRuleSet.AccessibilityDaysOfWeek.Count);
+            Assert.AreEqual(1,_workShiftRuleSet.AccessibilityDates.Count());
+            Assert.AreEqual(1,_workShiftRuleSet.AccessibilityDaysOfWeek.Count());
         }
 
         [Test]

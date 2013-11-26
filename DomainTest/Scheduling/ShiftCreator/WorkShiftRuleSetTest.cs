@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Saturday);
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Sunday);
 
-            Assert.AreEqual(2, _target.AccessibilityDaysOfWeek.Count);
+            Assert.AreEqual(2, _target.AccessibilityDaysOfWeek.Count());
             Assert.IsTrue(_target.AccessibilityDaysOfWeek.Contains(DayOfWeek.Saturday));
             Assert.IsTrue(_target.AccessibilityDaysOfWeek.Contains(DayOfWeek.Sunday));
         }
@@ -235,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Sunday);
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Sunday);
 
-            Assert.AreEqual(1, _target.AccessibilityDaysOfWeek.Count);
+            Assert.AreEqual(1, _target.AccessibilityDaysOfWeek.Count());
         }
 
         [Test]
@@ -244,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Saturday);
             _target.AddAccessibilityDayOfWeek(DayOfWeek.Sunday);
 
-            Assert.AreEqual(2, _target.AccessibilityDaysOfWeek.Count);
+            Assert.AreEqual(2, _target.AccessibilityDaysOfWeek.Count());
 
             _target.RemoveAccessibilityDayOfWeek(DayOfWeek.Sunday);
 
@@ -256,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
         {
             _target.RemoveAccessibilityDayOfWeek(DayOfWeek.Sunday);
 
-            Assert.AreEqual(0, _target.AccessibilityDaysOfWeek.Count);
+            Assert.AreEqual(0, _target.AccessibilityDaysOfWeek.Count());
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
@@ -274,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
 
-            Assert.AreEqual(2, _target.AccessibilityDates.Count);
+            Assert.AreEqual(2, _target.AccessibilityDates.Count());
             Assert.IsTrue(_target.AccessibilityDates.Contains(date1));
             Assert.IsTrue(_target.AccessibilityDates.Contains(date2));
         }
@@ -286,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date1);
 
-            Assert.AreEqual(1, _target.AccessibilityDates.Count);
+            Assert.AreEqual(1, _target.AccessibilityDates.Count());
         }
 
         [Test]
@@ -298,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
 
-            Assert.AreEqual(2, _target.AccessibilityDates.Count);
+            Assert.AreEqual(2, _target.AccessibilityDates.Count());
             Assert.IsTrue(_target.AccessibilityDates.Contains(date1));
             Assert.IsTrue(_target.AccessibilityDates.Contains(date2));
 
@@ -313,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             var date1 = new DateTime(2008, 7, 1, 0, 0, 0, DateTimeKind.Utc);
             _target.RemoveAccessibilityDate(date1);
 
-            Assert.AreEqual(0, _target.AccessibilityDates.Count);
+            Assert.AreEqual(0, _target.AccessibilityDates.Count());
         }
 
         [Test]
@@ -325,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _target.AddAccessibilityDate(date1);
             _target.AddAccessibilityDate(date2);
 
-            Assert.AreEqual(2, _target.AccessibilityDates.Count);
+            Assert.AreEqual(2, _target.AccessibilityDates.Count());
             Assert.IsTrue(_target.AccessibilityDates.Contains(date1.Date));
             Assert.IsTrue(_target.AccessibilityDates.Contains(date2.Date));
         }

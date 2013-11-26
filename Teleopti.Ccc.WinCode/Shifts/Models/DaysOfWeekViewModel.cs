@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Interfaces.Domain;
 

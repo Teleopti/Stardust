@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
@@ -22,9 +23,9 @@ namespace Teleopti.Interfaces.Domain
 
         DefaultAccessibility DefaultAccessibility { get; set; }
 
-        ReadOnlyCollection<DayOfWeek> AccessibilityDaysOfWeek { get; }
+        IEnumerable<DayOfWeek> AccessibilityDaysOfWeek { get; }
 
-        ReadOnlyCollection<DateTime> AccessibilityDates { get; }
+        IEnumerable<DateTime> AccessibilityDates { get; }
 
 		void AddAccessibilityDayOfWeek(DayOfWeek dayOfWeek);
 
