@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
         public virtual void CalculateUsed(IScheduleRepository repository, IScenario scenario)
         {
-	        var projectionServiceForPersonAccount = new PersonAccountProjectionService(this, loadedSchedule);
+	        var projectionServiceForPersonAccount = new PersonAccountProjectionService(this, null);
 			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
 			_usedInScheduler = TimeSpan.Zero;
 			_usedOutsideScheduler = null;
