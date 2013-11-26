@@ -1493,7 +1493,6 @@
     </Compile>
     <Compile Include="Scheduling\SingleAgentRestriction\CommentMouseControler.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsenceOnContractDayOffPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsencePainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\ActivityPreferencePainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\DisabledPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\EffectiveRestrictionPainter.cs" />
