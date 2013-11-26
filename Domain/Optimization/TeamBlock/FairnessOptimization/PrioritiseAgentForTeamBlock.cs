@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         IDictionary<int, IPerson> GetPriortiseAgentByName(IList<IPerson> personList);
         IDictionary<int, IPerson> GetPriortiseAgentByStartDate(IList<IPerson> personList);
         IPerson PersonOnPriority(int priority);
-        IDictionary<int, IPerson> PrioritiseAgentList { get; };
+        IDictionary<int, IPerson> PrioritiseAgentList { get; }
     }
 
     public class PrioritiseAgentForTeamBlock : IPrioritiseAgentForTeamBlock
