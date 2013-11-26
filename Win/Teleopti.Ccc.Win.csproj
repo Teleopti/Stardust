@@ -1504,7 +1504,6 @@
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferenceCellPainterBase.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsencePainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredDayOffPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredExtendedPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredShiftCategoryPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\ScheduledDayOffPainter.cs" />
