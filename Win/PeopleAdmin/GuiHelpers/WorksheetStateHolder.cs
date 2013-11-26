@@ -995,7 +995,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             _personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
             CurrentChildName = commonNameDescription.BuildCommonNameDescription(personFiltered);
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 foreach (var account in personAcccountCollection.AllPersonAccounts())
                 {

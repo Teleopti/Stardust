@@ -7,13 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 {
-    /// <summary>
-    /// Account
-    /// </summary>
-    /// <remarks>
-    /// Created by: henrika
-    /// Created date: 2008-08-22
-    /// </remarks>
     public abstract class Account : AggregateEntity, IAccount
     {
         private DateOnly _startDate;
@@ -59,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
         {
             get
             {
-                //CalculateBalanceIn();
                 return BalanceIn.Add(Accrued).Add(Extra).Subtract(LatestCalculatedBalance).Subtract(BalanceOut);
             }
         }
@@ -75,11 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 
         public virtual void CalculateUsed(IScheduleRepository repository,ISchedule loadedSchedule, IScenario scenario)
         {
-            CalculateUsed(repository, loadedSchedule, scenario, new PersonAccountProjectionService(this, loadedSchedule));
-        }
-
-		public virtual void CalculateUsed(IScheduleRepository repository, ISchedule loadedSchedule, IScenario scenario, IPersonAccountProjectionService projectionServiceForPersonAccount)
-		{
+	        var projectionServiceForPersonAccount = new PersonAccountProjectionService(this, loadedSchedule);
 			IList<IScheduleDay> scheduleDays = projectionServiceForPersonAccount.CreateProjection(repository, scenario);
 			_usedInScheduler = TimeSpan.Zero;
 			_usedOutsideScheduler = null;
@@ -102,7 +90,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
                 if(_latestCalculatedBalance > _usedInScheduler)
                     _usedOutsideScheduler = _latestCalculatedBalance - _usedInScheduler;
             }
-
         }
 
         public virtual IAccount FindEarliestPersonAccount()
