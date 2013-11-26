@@ -15,5 +15,9 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
 		string Assembly { get; }
 		string Api { get; }
 		string Data { get; }
+		string FindSuccessOrError { get; }
+		string ErrorCode { get; }
+		string SuccessCode { get; }
+		bool SkipSearch { get; }
 	}
 }
