@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart)
 		{
-			return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] {});
+			return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, new Contract("ctr"), new PartTimePercentage("ptc"));
 		}
 
 		public static IPerson CreatePersonWithPersonPeriodTeamSite(DateOnly personPeriodStart)
@@ -120,52 +120,57 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			var site = SiteFactory.CreateSimpleSite(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team() {Site = site};
-			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team);
+			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
 			person.SetId(Guid.NewGuid());
 			return person;
 		}
 
 		public static IPerson CreatePersonWithPersonPeriodFromTeam(DateOnly personPeriodStart, Team team)
 		{
-			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team);
+			var person = CreatePersonWithPersonPeriod(new Person(), personPeriodStart, new ISkill[] { }, team, new Contract("ctr"), new PartTimePercentage("ptc"));
 			person.SetId(Guid.NewGuid());
 			return person;
 		}
 
 	    public static IPerson CreatePersonWithPersonPeriod(DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
-        {
-            return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, skillsInPersonPeriod);
-        }
+	    {
+				return CreatePersonWithPersonPeriod(new Person(), personPeriodStart, skillsInPersonPeriod, new Contract("ctr"), new PartTimePercentage("ptc"));
+	    }
 
         public static IPerson CreatePersonWithValidVirtualSchedulePeriod(IPerson person, DateOnly periodStart)
         {
-            IPerson retPerson = CreatePersonWithPersonPeriod(person, periodStart, new List<ISkill>());
-            ISchedulePeriod schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(periodStart);
-            retPerson.AddSchedulePeriod(schedulePeriod);
-            return retPerson;
+					return CreatePersonWithValidVirtualSchedulePeriod(person, periodStart, new Contract("ctr"), new PartTimePercentage("ptc"));
         }
+
+				public static IPerson CreatePersonWithValidVirtualSchedulePeriod(IPerson person, DateOnly periodStart, IContract contract, IPartTimePercentage partTimePercentage)
+				{
+					IPerson retPerson = CreatePersonWithPersonPeriod(person, periodStart, new List<ISkill>(), contract, partTimePercentage);
+					ISchedulePeriod schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(periodStart);
+					retPerson.AddSchedulePeriod(schedulePeriod);
+					return retPerson;
+				}
 
 		public static IPerson CreatePersonWithValidVirtualSchedulePeriodAndMustHave(IPerson person, DateOnly periodStart)
 		{
-			IPerson retPerson = CreatePersonWithPersonPeriod(person, periodStart, new List<ISkill>());
+			IPerson retPerson = CreatePersonWithPersonPeriod(person, periodStart, new List<ISkill>(), new Contract("ctr"), new PartTimePercentage("ptc"));
 			ISchedulePeriod schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(periodStart);
 			schedulePeriod.MustHavePreference = 2;
 			retPerson.AddSchedulePeriod(schedulePeriod);
 			return retPerson;
 		}
 
-        public static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod)
+        public static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod, IContract contract, IPartTimePercentage partTimePercentage)
         {
-	        return CreatePersonWithPersonPeriod(person, personPeriodStart, skillsInPersonPeriod, new Team());
+	        return CreatePersonWithPersonPeriod(person, personPeriodStart, skillsInPersonPeriod, new Team(), contract, partTimePercentage);
         }
 
-		private static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod, Team teamInPersonPeriod)
+		private static IPerson CreatePersonWithPersonPeriod(IPerson person, DateOnly personPeriodStart, IEnumerable<ISkill> skillsInPersonPeriod, Team teamInPersonPeriod, IContract contract, IPartTimePercentage partTimePercentage)
 		{
 			IPersonPeriod pPeriod = person.Period(personPeriodStart);
 			if (pPeriod == null)
 			{
 				pPeriod = new PersonPeriod(personPeriodStart,
-								 PersonContractFactory.CreatePersonContract(),
+								 PersonContractFactory.CreatePersonContract(contract, partTimePercentage, new ContractSchedule("contract schedule name")),
 								 teamInPersonPeriod);
 				person.AddPersonPeriod(pPeriod);
 			}

@@ -39,12 +39,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IPersonContract CreatePersonContract(string contractName, string contractScheduleName, string partTimePercentage)
         {
-            IContract ctr = new Contract(contractName); //rk - changed this - no id set
-            IContractSchedule contractSch = ContractScheduleFactory.CreateContractSchedule(contractScheduleName);
-            IPartTimePercentage newPartTimePercentage = new PartTimePercentage(partTimePercentage); // rk - changed this - no id set
-
-            return CreatePersonContract(ctr,newPartTimePercentage,contractSch);
+	        return CreatePersonContract(new Contract(contractName), contractScheduleName, partTimePercentage);
         }
+
+			public static IPersonContract CreatePersonContract(IContract contract, string contractScheduleName, string partTimePercentage)
+			{
+				IPartTimePercentage newPartTimePercentage = new PartTimePercentage(partTimePercentage);
+				return CreatePersonContract(contract, contractScheduleName, newPartTimePercentage);
+			}
+
+			public static IPersonContract CreatePersonContract(IContract contract, string contractScheduleName, IPartTimePercentage partTimePercentage)
+			{
+				IContractSchedule contractSch = ContractScheduleFactory.CreateContractSchedule(contractScheduleName);
+
+				return CreatePersonContract(contract, partTimePercentage, contractSch);
+			}
 
         public static IPersonContract CreateFulltimePersonContractWithWorkingWeekContractSchedule()
         {

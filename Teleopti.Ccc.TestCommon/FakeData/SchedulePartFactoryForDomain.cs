@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			CurrentScenario = scenario;
 			CurrentPeriod = period;
 			CurrentSkill = skill;
-			CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill });
+			CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill }, new Contract("ctr"), new PartTimePercentage("ptc"));
 			CurrentPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
 			_part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
 		}

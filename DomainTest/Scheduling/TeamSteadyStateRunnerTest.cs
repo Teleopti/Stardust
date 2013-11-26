@@ -40,8 +40,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			_guid = Guid.NewGuid();
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2012, 1, 1);
-			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod	(PersonFactory.CreatePerson("person1"), _dateOnly);
-			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person2"), _dateOnly);
+			var ctr = new Contract("ctr");
+			var ptc = new PartTimePercentage("ptc");
+			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod	(PersonFactory.CreatePerson("person1"), _dateOnly, ctr, ptc);
+			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("person2"), _dateOnly, ctr, ptc);
 
 			_shiftCategory = new ShiftCategory("shiftCategory");
 			_ruleSetBag = new RuleSetBag();
