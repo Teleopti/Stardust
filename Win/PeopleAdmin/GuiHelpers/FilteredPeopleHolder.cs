@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         private void loadFilteredPeopleGridData(IPerson person, IUserDetail userDetail)
         {
             //create new person grid data.
-			var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(this,_refreshService, UnitOfWorkFactory.Current));
+			var personGridData = new PersonGeneralModel(person, userDetail, new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current));
 
             //set optional columns if any.
             if (_optionalColumnCollection.Count > 0)
@@ -878,7 +878,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
                     account = null;
             }
 
-            IPersonAccountModel adapter = new PersonAccountModel(_refreshService,accounts, account, _commonNameDescription);
+            IPersonAccountModel adapter = new PersonAccountModel(RefreshService,accounts, account, _commonNameDescription);
 
             handleCanBold(canBold, grid, adapter);
             adapter.GridControl = grid;
@@ -1515,7 +1515,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         private void UpdatePersonAccounts(IAccount account)
         {
-			var updater = new FilteredPeopleAccountUpdater(this, _refreshService, UnitOfWorkFactory.Current);
+			var updater = new FilteredPeopleAccountUpdater(this, UnitOfWorkFactory.Current);
             updater.Update(account.Owner.Person);
         }
 
@@ -1554,13 +1554,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return _validatePasswordPolicy;}
         }
 
-		private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
+	  public ITraceableRefreshService RefreshService
+	  {
+		  get { return _refreshService; }
+	  }
+
+	  private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
         {
             //fel här. kan vara flera. fråga estländarna.
             IAccount account = AllAccounts[person].Find(selectedDate).FirstOrDefault();
 
             // Gets the person account adoptor using the person data and the selcted date
-            IPersonAccountModel personAccountModel = new PersonAccountModel(_refreshService, AllAccounts[person], account,_commonNameDescription);
+            IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account,_commonNameDescription);
             _personAccountGridViewAdaptorCollection.Add(personAccountModel);
         }
 
@@ -1573,7 +1578,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				//fel här. kan vara flera. fråga sydkoreanerna
         		IAccount account = AllAccounts[person].Find(SelectedDate).FirstOrDefault();
         		// Gets the person account adoptor using the person data and the selcted date
-        		IPersonAccountModel personAccountModel = new PersonAccountModel(_refreshService, AllAccounts[person], account, _commonNameDescription);
+        		IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, _commonNameDescription);
         		_personAccountGridViewAdaptorCollection.Add(personAccountModel);
         	}
         }
@@ -1662,7 +1667,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         		}
 
         		// Gets the person account adoptor using the person data and the selcted date
-        		IPersonAccountModel personAccountModel = new PersonAccountModel(_refreshService, AllAccounts[person], account, _commonNameDescription);
+        		IPersonAccountModel personAccountModel = new PersonAccountModel(RefreshService, AllAccounts[person], account, _commonNameDescription);
         		_personAccountGridViewAdaptorCollection.Add(personAccountModel);
         	}
         }
