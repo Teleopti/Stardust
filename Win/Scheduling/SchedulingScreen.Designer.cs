@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
                 if (_gridChartManager != null)
                     _gridChartManager.Dispose();
-                if(_singleAgentRestrictionPresenter != null)
-                    _singleAgentRestrictionPresenter.Dispose();
                 if (_skillDayGridControl!=null)
                     _skillDayGridControl.Dispose();
                 if (_skillIntradayGridControl!=null)

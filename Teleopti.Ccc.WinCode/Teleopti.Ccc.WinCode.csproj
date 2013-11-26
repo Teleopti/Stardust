@@ -961,8 +961,6 @@
     <Compile Include="Scheduling\NotesEditorViewModel.cs" />
     <Compile Include="Scheduling\Panels\LengthToDateCalculator.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IPreferenceCellData.cs" />
-    <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryGrid.cs" />
-    <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryView.cs" />
     <Compile Include="Scheduling\PersistConflictModel.cs" />
     <Compile Include="Scheduling\Editor\ExpandedLayersViewModel.cs" />
     <Compile Include="Scheduling\Editor\EditLayerViewModel.cs" />
@@ -982,7 +980,6 @@
     <Compile Include="Scheduling\IExportToScenarioResultView.cs" />
     <Compile Include="Scheduling\IPersistConflictView.cs" />
     <Compile Include="Scheduling\PersistConflictPresenter.cs" />
-    <Compile Include="Scheduling\RestrictionSummary\IRestrictionSummaryViewCellModel.cs" />
     <Compile Include="Scheduling\RestrictionSummary\IWeekHeaderCellData.cs" />
     <Compile Include="Scheduling\RestrictionSummary\PainterHelper.cs" />
     <Compile Include="Scheduling\RestrictionSummary\PreferenceCellData.cs" />
@@ -994,10 +991,6 @@
     <Compile Include="Scheduling\Requests\ShowOnlyPersonRequestViewModelSpecification.cs" />
     <Compile Include="Scheduling\Requests\HandlePersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RestrictionSchedulingOptions.cs" />
-    <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryModel.cs" />
-    <Compile Include="Scheduling\RestrictionSummary\RestrictionSummaryPresenter.cs" />
-    <Compile Include="Scheduling\RestrictionSummary\SingleAgentRestrictionModel.cs" />
-    <Compile Include="Scheduling\RestrictionSummary\SingleAgentRestrictionPresenter.cs" />
     <Compile Include="Scheduling\RestrictionSummary\WeekHeaderCellData.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfFontManager.cs" />
     <Compile Include="Scheduling\ScheduleReporting\ScheduleReportDetail.cs" />

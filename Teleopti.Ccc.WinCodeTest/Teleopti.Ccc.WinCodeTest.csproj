@@ -649,10 +649,6 @@
     <Compile Include="Scheduler\Editor\ShiftEditorViewModelTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\PainterHelperTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\PreferenceNightRestCheckerTest.cs" />
-    <Compile Include="Scheduler\RestrictionSummary\RestrictionSummaryModelTest.cs" />
-    <Compile Include="Scheduler\RestrictionSummary\RestrictionSummaryPresenterTest.cs" />
-    <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionModelTest.cs" />
-    <Compile Include="Scheduler\RestrictionSummary\SingleAgentRestrictionPresenterTest.cs" />
     <Compile Include="Scheduler\RestrictionSummary\WeekHeaderCellDataTest.cs" />
     <Compile Include="Scheduler\ScheduleNavigatorPresenterTest.cs" />
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
