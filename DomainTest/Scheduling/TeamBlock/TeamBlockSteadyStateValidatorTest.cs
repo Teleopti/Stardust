@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsFalse(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsFalse(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsFalse(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsFalse(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsFalse(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsFalse(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsFalse(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsTrue(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsTrue(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsTrue(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsTrue(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsTrue(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
 
@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
+                Assert.IsTrue(_target.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions));
             }
         }
     }

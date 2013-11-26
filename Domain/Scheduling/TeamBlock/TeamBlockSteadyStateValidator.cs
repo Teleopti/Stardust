@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockSteadyStateValidator
 	{
-		bool IsBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
+		bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockSteadyStateValidator : ITeamBlockSteadyStateValidator
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_sameShiftBlockSpecification = sameShiftBlockSpecification;
 		}
 
-		public bool IsBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
+		public bool IsTeamBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
 		{
 			bool isSteadyState = true;
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(schedulingOptions) ||

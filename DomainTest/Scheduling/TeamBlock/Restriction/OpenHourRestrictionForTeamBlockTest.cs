@@ -114,7 +114,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(
                     _scheduleResultStartHolder.SkillDaysOnDateOnly(
                         _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
-
+	            Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 17));
+				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly(2013, 10, 18));
                 expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
                 expectCallForDay(day2Interval, _skillDay2, _skill1, _baseLineData.Activity1);
 
@@ -153,7 +154,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(
                     _scheduleResultStartHolder.SkillDaysOnDateOnly(
                         _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
-
+				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 19));
+				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly(2013, 10, 20));
                 expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
                 expectCallForDay(day2Interval, _skillDay2, _skill1, _baseLineData.Activity1);
 
@@ -192,7 +194,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(
                     _scheduleResultStartHolder.SkillDaysOnDateOnly(
                         _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
-
+				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 18));
+				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly(2013, 10, 19));
+				Expect.Call(_skillDay3.CurrentDate).Return(new DateOnly(2013, 10, 20));
                 expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
                 expectCallForDay(day2Interval, _skillDay2, _skill1, _baseLineData.Activity1);
                 expectCallForDay(day3Interval, _skillDay3, _skill1, _baseLineData.Activity1);
@@ -226,10 +230,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(
                     _scheduleResultStartHolder.SkillDaysOnDateOnly(
                         _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
-                
-                expectCallForDay(day1Interval,_skillDay1,_skill1,_baseLineData.Activity1  );
-                expectCallForDay(day2Interval,_skillDay2,_skill1,_baseLineData.Activity1  );
-                expectCallForDay(day3Interval,_skillDay3,_skill1,_baseLineData.Activity1  );
+
+				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 17));
+				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly(2013, 10, 18));
+				Expect.Call(_skillDay3.CurrentDate).Return(new DateOnly(2013, 10, 19));
+                expectCallForDay(day1Interval,_skillDay1,_skill1,_baseLineData.Activity1);
+                expectCallForDay(day2Interval,_skillDay2,_skill1,_baseLineData.Activity1);
+                expectCallForDay(day3Interval,_skillDay3,_skill1,_baseLineData.Activity1);
                   
             }
             var result = _target.GetOpenHoursPerActivity( _teamBlockInfo);
@@ -237,80 +244,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             Assert.AreEqual(result[_baseLineData.Activity1].StartTime, TimeSpan.FromHours(9 ));
             Assert.AreEqual(result[_baseLineData.Activity1].EndTime,TimeSpan.FromHours(10 ));
             
-        }
-
-        [Test]
-        public void SameOpenHourForBlock()
-        {
-
-            var day1Interval = generateIntervalForDay(new DateOnly(2013, 10, 17), 8, 11);
-            var day2Interval = generateIntervalForDay(new DateOnly(2013, 10, 18), 8, 11);
-            var day3Interval = generateIntervalForDay(new DateOnly(2013, 10, 19), 8, 11);
-
-            var skillIntervalList = new List<ISkillIntervalData>();
-            skillIntervalList.AddRange(day1Interval);
-            skillIntervalList.AddRange(day2Interval);
-            skillIntervalList.AddRange(day3Interval);
-            IList<ISkillDay> skillDays = new List<ISkillDay> { _skillDay1, _skillDay2, _skillDay3 };
-            
-            using (_mock.Record())
-            {
-                Expect.Call(_teamBlockInfo.BlockInfo).Return(_baseLineData.BlockOfThreeDays);
-                Expect.Call(
-                    _scheduleResultStartHolder.SkillDaysOnDateOnly(
-                        _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
-
-                expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day2Interval, _skillDay2, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day3Interval, _skillDay3, _skill1, _baseLineData.Activity1);
-                
-            }
-            var result = _target.GetOpenHoursPerActivity(_teamBlockInfo);
-            Assert.AreEqual(result.Count(), 1);
-            Assert.AreEqual(result[_baseLineData.Activity1].StartTime, TimeSpan.FromHours(8));
-            Assert.AreEqual(result[_baseLineData.Activity1].EndTime, TimeSpan.FromHours(11));
-
-        }
-
-        [Test]
-        public void OpenHourForBlockTwoActivities()
-        {
-
-            var day1Interval = generateIntervalForDay(new DateOnly(2013, 10, 17), 8, 12);
-            var day2Interval = generateIntervalForDay(new DateOnly(2013, 10, 18), 9, 11);
-            var day3Interval = generateIntervalForDay(new DateOnly(2013, 10, 19), 9, 10);
-            var day4Interval = generateIntervalForDay(new DateOnly(2013, 10, 17), 9, 11);
-            var day5Interval = generateIntervalForDay(new DateOnly(2013, 10, 18), 8, 12);
-            var day6Interval = generateIntervalForDay(new DateOnly(2013, 10, 19), 8, 11);
-
-            var skillIntervalList = new List<ISkillIntervalData>();
-            skillIntervalList.AddRange(day1Interval);
-            skillIntervalList.AddRange(day2Interval);
-            skillIntervalList.AddRange(day3Interval);
-            IList<ISkillDay> skillDays = new List<ISkillDay> { _skillDay1, _skillDay2, _skillDay3, _skillDay4, _skillDay5, _skillDay6 };
-            
-            using (_mock.Record())
-            {
-                Expect.Call(_teamBlockInfo.BlockInfo).Return(_baseLineData.BlockOfThreeDays);
-                Expect.Call(
-                    _scheduleResultStartHolder.SkillDaysOnDateOnly(
-                        _baseLineData.BlockOfThreeDays.BlockPeriod.DayCollection())).Return(skillDays);
-                
-                expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day2Interval, _skillDay2, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day3Interval, _skillDay3, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day4Interval, _skillDay4, _skill2, _baseLineData.Activity2);
-                expectCallForDay(day5Interval, _skillDay5, _skill2, _baseLineData.Activity2);
-                expectCallForDay(day6Interval, _skillDay6, _skill2, _baseLineData.Activity2);
-
-            }
-            var result = _target.GetOpenHoursPerActivity(_teamBlockInfo);
-            Assert.AreEqual(result.Count(), 2);
-            Assert.AreEqual(result[_baseLineData.Activity1].StartTime, TimeSpan.FromHours(9));
-            Assert.AreEqual(result[_baseLineData.Activity1].EndTime, TimeSpan.FromHours(10));
-            Assert.AreEqual(result[_baseLineData.Activity2].StartTime, TimeSpan.FromHours(9));
-            Assert.AreEqual(result[_baseLineData.Activity2].EndTime, TimeSpan.FromHours(11));
-
         }
 
         [Test]
