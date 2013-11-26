@@ -303,6 +303,10 @@ CHOICE /C yn /M "Fix my config?"
 IF ERRORLEVEL 2 GOTO Finish
 IF ERRORLEVEL 1 CALL "%ROOTDIR%\FixMyConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
 
+::refresh Infratest.ini to match branch
+CHOICE /C yn /M "Fix my Infratest.ini to match branch?"
+IF ERRORLEVEL 1 COPY Infratest.ini C:\Infratest.ini
+
 GOTO Finish
 
 :Error
