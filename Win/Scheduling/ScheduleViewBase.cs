@@ -476,8 +476,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ViewGrid.CellModels.Add("TotalDayOffCell", new NumericReadOnlyCellModel(ViewGrid.Model){NumberOfDecimals = 0});
             if (!ViewGrid.CellModels.ContainsKey("TotalTimeCell"))
                 ViewGrid.CellModels.Add("TotalTimeCell", new TimeSpanDurationStaticCellModel(ViewGrid.Model));
-            if (!ViewGrid.CellModels.ContainsKey("RestrictionSummaryViewCellModel"))
-                ViewGrid.Model.CellModels.Add("RestrictionSummaryViewCellModel", new RestrictionSummaryViewCellModel(ViewGrid.Model));
             if (!ViewGrid.CellModels.ContainsKey("RestrictionWeekHeaderViewCellModel"))
                 ViewGrid.Model.CellModels.Add("RestrictionWeekHeaderViewCellModel", new RestrictionWeekHeaderViewCellModel(ViewGrid.Model));
         }
