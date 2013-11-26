@@ -58,18 +58,23 @@ namespace Teleopti.Ccc.Win.Grouping
 
                             foreach (var optionalColumnGroup in optionalColumnGroups)
                             {
+								
                                 //Creates a root Group object & add into GroupPage
                                 string groupName = optionalColumnGroup.Description.Length > 50
                                                        ? optionalColumnGroup.Description.Substring(0, 48) + ".."
                                                        : optionalColumnGroup.Description;
                                 IRootPersonGroup rootGroup = new RootPersonGroup(groupName);
-                                
+
+	                            var trimmedDescription = optionalColumnGroup.Description.Trim();
+
 								foreach (var person in groupPageOptions.Persons)
 								{
 									var val = person.GetColumnValue(column);
-									if (val != null && val.Description.Equals(optionalColumnGroup.Description))
+									if (val == null) continue;
+
+									if(val.Description.Trim().Equals(trimmedDescription))
 										rootGroup.AddPerson(person);
-                                }
+								}
                                 
                                 //Add into GroupPage
                                 if(rootGroup.PersonCollection.Count > 0)
