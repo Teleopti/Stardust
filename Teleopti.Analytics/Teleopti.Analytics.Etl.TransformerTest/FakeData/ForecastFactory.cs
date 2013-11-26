@@ -50,17 +50,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             IScenario scenario = new Scenario("Scenario 1");
             scenario.SetId(Guid.NewGuid());
 
-            //IList<SkillDataPeriod> skillDataPeriods = new List<SkillDataPeriod>();
-            
-            //skillDataPeriods.Add(
-            //    new SkillDataPeriod(
-            //        serviceAgreement,
-            //        new SkillPersonData(),
-            //        new DateTimePeriod(dt.Add(TimeSpan.FromHours(4)), dt.Add(TimeSpan.FromHours(19)))));
 
-            SkillDay skillDay = new SkillDay(dt, skill, scenario,
-                                             WorkloadDayFactory.GetWorkloadDaysForTest(dt, skill),
-                                             new List<ISkillDataPeriod>());
+	        var skillDay = new SkillDay(dt, skill, scenario,
+	                                    WorkloadDayFactory.GetWorkloadDaysForTest(dt, skill, true),
+	                                    new List<ISkillDataPeriod>());
 
             return skillDay;
         }

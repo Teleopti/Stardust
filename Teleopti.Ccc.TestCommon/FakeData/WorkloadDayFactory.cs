@@ -8,65 +8,72 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
     public static class WorkloadDayFactory
     {
+			public static IList<IWorkloadDay> GetWorkloadDaysForTest(DateTime dt, ISkill skill, bool setIdOnWorkLoad)
+			{
+				IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
+				IWorkload workload1 = new Workload(skill);
+				if(setIdOnWorkLoad)
+					workload1.SetId(Guid.NewGuid());
+
+				IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
+				ITemplateTaskPeriod templateTaskPeriod =
+						new TemplateTaskPeriod(new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20)),
+																	 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+																			 dt.Add(TimeSpan.FromHours(11)), dt.Add(TimeSpan.FromHours(14)),
+																			 skill.TimeZone));
+
+				taskPeriods.Add(templateTaskPeriod);
+
+				WorkloadDay workloadDay = new WorkloadDay();
+				workloadDay.Create(new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone)), workload1, new List<TimePeriod>());
+				workloadDay.Lock();
+				workloadDay.MakeOpen24Hours();
+
+				//Add some tasks between 11 - 14
+				foreach (ITemplateTaskPeriod taskPeriod in workloadDay.SortedTaskPeriodList)
+				{
+					if (taskPeriod.Period.StartDateTime >= dt.Add(new TimeSpan(11, 0, 0)) && taskPeriod.Period.EndDateTime <= dt.Add(new TimeSpan(14, 0, 0)))
+					{
+						taskPeriod.SetTasks(100d / 12d);
+						taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(120);
+						taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(20);
+					}
+				}
+
+				workloadDay.Release();
+				workloadDays.Add(workloadDay);
+
+				IWorkload workload2 = new Workload(skill);
+				if(setIdOnWorkLoad)
+					workload2.SetId(Guid.NewGuid());
+
+				taskPeriods = new List<ITemplateTaskPeriod>();
+				templateTaskPeriod = new TemplateTaskPeriod(new Task(300, TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(40)),
+								TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+																			 dt.Add(TimeSpan.FromHours(13)), dt.Add(TimeSpan.FromHours(17)),
+																			 skill.TimeZone));
+				taskPeriods.Add(templateTaskPeriod);
+				workloadDay = new WorkloadDay();
+				workloadDay.Create(new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone)), workload2, new List<TimePeriod>());
+				workloadDay.Lock();
+				workloadDay.MakeOpen24Hours();
+				foreach (ITemplateTaskPeriod taskPeriod in workloadDay.SortedTaskPeriodList)
+				{
+					if (taskPeriod.Period.StartDateTime >= dt.Add(new TimeSpan(13, 0, 0)) && taskPeriod.Period.EndDateTime <= dt.Add(new TimeSpan(17, 0, 0)))
+					{
+						taskPeriod.SetTasks(300d / 16d);
+						taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(240);
+						taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(40);
+					}
+				}
+				workloadDay.Release();
+				workloadDays.Add(workloadDay);
+				return workloadDays;
+			}
 
         public static IList<IWorkloadDay> GetWorkloadDaysForTest(DateTime dt, ISkill skill)
         {
-            IList<IWorkloadDay> workloadDays = new List<IWorkloadDay>();
-            IWorkload workload1 = new Workload(skill);
-
-
-            IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
-            ITemplateTaskPeriod templateTaskPeriod =
-                new TemplateTaskPeriod(new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(20)),
-                                       TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                                           dt.Add(TimeSpan.FromHours(11)), dt.Add(TimeSpan.FromHours(14)),
-                                           skill.TimeZone));
-
-            taskPeriods.Add(templateTaskPeriod);
-
-            WorkloadDay workloadDay = new WorkloadDay();
-            workloadDay.Create(new DateOnly(TimeZoneHelper.ConvertFromUtc(dt,skill.TimeZone)), workload1, new List<TimePeriod>());
-            workloadDay.Lock();
-            workloadDay.MakeOpen24Hours();
-            
-            //Add some tasks between 11 - 14
-            foreach (ITemplateTaskPeriod taskPeriod in workloadDay.SortedTaskPeriodList)
-            {
-                if (taskPeriod.Period.StartDateTime >= dt.Add(new TimeSpan(11, 0, 0)) && taskPeriod.Period.EndDateTime <= dt.Add(new TimeSpan(14, 0, 0)))
-                {
-                    taskPeriod.SetTasks(100d / 12d);
-                    taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(120);
-                    taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(20);
-                }
-            }
-
-            workloadDay.Release();
-            workloadDays.Add(workloadDay);
-
-            IWorkload workload2 = new Workload(skill);
-
-            taskPeriods = new List<ITemplateTaskPeriod>();
-            templateTaskPeriod = new TemplateTaskPeriod(new Task(300, TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(40)),
-                    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-                                           dt.Add(TimeSpan.FromHours(13)), dt.Add(TimeSpan.FromHours(17)),
-                                           skill.TimeZone));
-            taskPeriods.Add(templateTaskPeriod);
-            workloadDay = new WorkloadDay();
-            workloadDay.Create(new DateOnly(TimeZoneHelper.ConvertFromUtc(dt, skill.TimeZone)), workload2, new List<TimePeriod>());
-            workloadDay.Lock();
-            workloadDay.MakeOpen24Hours();
-            foreach (ITemplateTaskPeriod taskPeriod in workloadDay.SortedTaskPeriodList)
-            {
-                if (taskPeriod.Period.StartDateTime >= dt.Add(new TimeSpan(13, 0, 0)) && taskPeriod.Period.EndDateTime <= dt.Add(new TimeSpan(17, 0, 0)))
-                {
-                    taskPeriod.SetTasks(300d / 16d);
-                    taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(240);
-                    taskPeriod.AverageAfterTaskTime = TimeSpan.FromSeconds(40);
-                }
-            }
-            workloadDay.Release();
-            workloadDays.Add(workloadDay);
-            return workloadDays;
+	        return GetWorkloadDaysForTest(dt, skill, false);
         }
 
         //Creates a list of 2 Workload days 1 with sent in Workload and one with random guid
