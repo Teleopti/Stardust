@@ -27,6 +27,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 	<password>cadadi02</password>
 	<api_id>3388822</api_id>
 	<from>TeleoptiCCC</from>
+	<FindSuccessOrError>Error</FindSuccessOrError>
+	<ErrorCode>fault</ErrorCode>
+	<SuccessCode>success</SuccessCode>
+	<SkipSearch>false</SkipSearch>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
 		<api_id>3388822</api_id>
@@ -130,7 +134,76 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			_target.SetConfigReader(_notificationConfigReader);
 			_target.SendNotification(smsMessage, "46709218108");
 		}
+
+		[Test]
+		public void ShouldNotThrowIfSkipCheck()
+		{
+			const string xmlWithNoCheck = @"<?xml version='1.0' encoding='utf-8' ?>
+<Config>
+	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<url>http://api.clickatell.com/xml/xml?data=</url>
+	<user>ola.hakansson@teleopti.com</user>
+	<password>cadadi02</password>
+	<api_id>3388822</api_id>
+	<from>TeleoptiCCC</from>
+	<FindSuccessOrError>Error</FindSuccessOrError>
+	<ErrorCode>fault</ErrorCode>
+	<SuccessCode>success</SuccessCode>
+	<SkipSearch>true</SkipSearch>
+	<data>
+		<![CDATA[ <clickAPI><sendMsg>
+		<api_id>3388822</api_id>
+		<user>{0}</user>
+		<password>{1}</password>
+		<to>{2}</to>
+		<from>{3}</from>
+		<text>{4}</text>
+		</sendMsg></clickAPI>]]>
+	</data>
+</Config>";
+			var doc = new XmlDocument();
+			doc.LoadXml(xmlWithNoCheck);
+
+			_notificationConfigReader = new NotificationConfigReader(doc);
+			_target.SetConfigReader(_notificationConfigReader);
+			_target.SendNotification(smsMessage, "46709218108");
+		}
+	
+
+		[Test, ExpectedException(typeof(SendNotificationException))]
+		public void ShouldSearchForSuccess()
+		{
+			const string xmlWithSuccessCheck = @"<?xml version='1.0' encoding='utf-8' ?>
+<Config>
+	<class>Teleopti.Ccc.Sdk.Notification.ClickatellNotificationSender</class>
+	<url>http://api.clickatell.com/xml/xml?data=</url>
+	<user>ola.hakansson@teleopti.com</user>
+	<password>cadadi02</password>
+	<api_id>3388822</api_id>
+	<from>TeleoptiCCC</from>
+	<FindSuccessOrError>Success</FindSuccessOrError>
+	<ErrorCode>fault</ErrorCode>
+	<SuccessCode>detgickbra</SuccessCode>
+	<SkipSearch>false</SkipSearch>
+	<data>
+		<![CDATA[ <clickAPI><sendMsg>
+		<api_id>3388822</api_id>
+		<user>{0}</user>
+		<password>{1}</password>
+		<to>{2}</to>
+		<from>{3}</from>
+		<text>{4}</text>
+		</sendMsg></clickAPI>]]>
+	</data>
+</Config>";
+			smsMessage.Messages.Add("test1");
+			var doc = new XmlDocument();
+			doc.LoadXml(xmlWithSuccessCheck);
+
+			_notificationConfigReader = new NotificationConfigReader(doc);
+			_target.SetConfigReader(_notificationConfigReader);
+			_target.SendNotification(smsMessage, "46709218108");
+		}
 	}
-
-
 }
+

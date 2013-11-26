@@ -113,6 +113,30 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		{
 			Assert.That(_target.Data, Is.Not.Empty);
 		}
+
+		[Test]
+		public void ShouldHaveAFindSuccessOrErrorProperty()
+		{
+			Assert.That(_target.FindSuccessOrError, Is.Not.Empty);
+		}
+
+		[Test]
+		public void ShouldHaveAErrorCodeProperty()
+		{
+			Assert.That(_target.ErrorCode, Is.Not.Empty);
+		}
+
+		[Test]
+		public void ShouldHaveASuccessCodeProperty()
+		{
+			Assert.That(_target.SuccessCode, Is.Not.Empty);
+		}
+
+		[Test]
+		public void ShouldHaveASkipProperty()
+		{
+			Assert.That(_target.SkipSearch, Is.False);
+		}
 	}
 
 	

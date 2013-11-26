@@ -7,6 +7,12 @@
 	<password>pwd</password>
 	<api_id>3388822</api_id>
 	<from>from</from>
+	<!--use these to config what to look for in the answer from the web service used to send sms
+	if no check at all set SkipSearch to true-->
+	<FindSuccessOrError>Error</FindSuccessOrError>
+	<ErrorCode>fault</ErrorCode>
+	<SuccessCode>success</SuccessCode>
+	<SkipSearch>false</SkipSearch>
 	<data>
 		<![CDATA[ <clickAPI><sendMsg>
 		<api_id>3388822</api_id>
