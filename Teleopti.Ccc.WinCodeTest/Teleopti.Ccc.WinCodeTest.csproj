@@ -403,7 +403,6 @@
     <Compile Include="Main\LogonDataSourceHandlerTest.cs" />
     <Compile Include="Main\LogonLicenseCheckerTest.cs" />
     <Compile Include="Main\LogonMatrixTest.cs" />
-    <Compile Include="Main\LogonScreenModelTest.cs" />
     <Compile Include="Main\LogonPresenterTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />
     <Compile Include="Matrix\MatrixNavigationPresenterTest.cs" />
