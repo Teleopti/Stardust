@@ -16,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Clipboard;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
-using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using ViewType = Teleopti.Ccc.Win.PeopleAdmin.Views.ViewType;
@@ -25,17 +24,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 {
     public class WorksheetStateHolder : IDisposable
     {
-        private readonly ITraceableRefreshService _refreshService;
-
-        private readonly IDictionary<ViewType, IRotationStateHolder> _rotationStateHolderCache =
-            new Dictionary<ViewType, IRotationStateHolder>();
+        private readonly IDictionary<ViewType, IRotationStateHolder> _rotationStateHolderCache = new Dictionary<ViewType, IRotationStateHolder>();
 
         private IList<IShiftCategory> _shiftCategories = new List<IShiftCategory>();
-		private readonly TypedBindingCollection<IContractSchedule> _contractScheduleBindingCollection =
-			new TypedBindingCollection<IContractSchedule>();
+		private readonly TypedBindingCollection<IContractSchedule> _contractScheduleBindingCollection = new TypedBindingCollection<IContractSchedule>();
 
-		private readonly TypedBindingCollection<IPartTimePercentage> _partTimePercentageBindingCollection =
-		   new TypedBindingCollection<IPartTimePercentage>();
+		private readonly TypedBindingCollection<IPartTimePercentage> _partTimePercentageBindingCollection = new TypedBindingCollection<IPartTimePercentage>();
 
 		private readonly List<PersonGeneralModel> _tobeDeleteFromGridDataAfterRomove = new List<PersonGeneralModel>();
 
@@ -44,8 +38,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private readonly List<Culture> _uiCultureCollection = new List<Culture>();
 		
 		private List<PersonPeriodChildModel> _personPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
-		private IList<PersonPeriodChildModel> _fullPersonPeriodGridViewChildCollection = new List<PersonPeriodChildModel>();
-		private List<SchedulePeriodChildModel> _schedulePeriodGridViewChildCollection;
+	    private List<SchedulePeriodChildModel> _schedulePeriodGridViewChildCollection;
 		
 		private IList<PersonRotationModelChild> _personRotationChildAdapterCollection;
 		private IList<PersonAvailabilityModelChild> _personAvailablityChildAdapterCollection;
@@ -55,16 +48,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 		private TypedBindingCollection<IRotation> _rotationCollection = new TypedBindingCollection<IRotation>();
 		private readonly TypedBindingCollection<IAvailabilityRotation> _availabilityCollection = new TypedBindingCollection<IAvailabilityRotation>();
 		private List<IPersonAccountChildModel> _personaccountGridViewChildCollection;
-		
-		private readonly List<GridClassType> _trackerDescriptionClassTypes = new List<GridClassType>();
-		private readonly List<GridClassType> _trackerDescriptionClassTypesForRibbon = new List<GridClassType>();
-		private readonly List<IAbsence> _absenceCollection = new List<IAbsence>();
-		private readonly List<GridClassType> _trackerAccountClassTypes = new List<GridClassType>();
-		private readonly TypedBindingCollection<IWorkflowControlSet> _workflowControlSetCollection = new TypedBindingCollection<IWorkflowControlSet>();
+
+	    private readonly TypedBindingCollection<IWorkflowControlSet> _workflowControlSetCollection = new TypedBindingCollection<IWorkflowControlSet>();
 
 		public WorksheetStateHolder(ITraceableRefreshService cacheServiceForPersonAccount)
         {
-            _refreshService = cacheServiceForPersonAccount;
         }
 
         public TypedBindingCollection<IContract> ContractCollection
@@ -148,7 +136,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             filteredPeopleHolder.MarkForInsert(newPerson);
 
-			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(filteredPeopleHolder,_refreshService,  UnitOfWorkFactory.Current)) { CanBold = true };
+			var gridData = new PersonGeneralModel(newPerson, new UserDetail(newPerson), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(filteredPeopleHolder,  UnitOfWorkFactory.Current)) { CanBold = true };
 
         	gridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
@@ -200,7 +188,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 filteredPeopleHolder.MarkForInsert(person);
 
-				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(filteredPeopleHolder, _refreshService, UnitOfWorkFactory.Current)) { CanBold = true };
+				var personGridData = new PersonGeneralModel(person, new UserDetail(person), new PrincipalAuthorization(new CurrentTeleoptiPrincipal()), new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current)) { CanBold = true };
             	personGridData.SetAvailableRoles(filteredPeopleHolder.ApplicationRoleCollection);
 
                 //set optional columns if any.);
@@ -241,7 +229,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             filteredPeopleHolder.PersonRotationParentAdapterCollection.Add(parentRotationItem);
 
             // Add person account acdopter for the newly added item
-            filteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Add(new PersonAccountModel(_refreshService,filteredPeopleHolder.AllAccounts[newPerson], null,filteredPeopleHolder.CommonNameDescription));
+            filteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Add(new PersonAccountModel(filteredPeopleHolder.RefreshService,filteredPeopleHolder.AllAccounts[newPerson], null,filteredPeopleHolder.CommonNameDescription));
 
             if (AllAvailabilities.Count > 0)
             {
@@ -998,19 +986,24 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             _personaccountGridViewChildCollection = new List<IPersonAccountChildModel>();
 			CommonNameDescriptionSetting commonNameDescription = filteredPeopleHolder.CommonNameDescription;
             CurrentChildName = commonNameDescription.BuildCommonNameDescription(personFiltered);
-            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                foreach (var account in personAcccountCollection.AllPersonAccounts())
-                {
-                    var scenario = new ScenarioRepository(uow).LoadDefaultScenario();
-                    var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new FilteredPeopleAccountUpdater(filteredPeopleHolder, _refreshService, UnitOfWorkFactory.Current));
-                    if (adapter.ContainedEntity != null && ((account == currentAccount) && canBold) ||
-                        adapter.ContainedEntity.Id == null)
-                        adapter.CanBold = true;
-                    if (adapter.ContainedEntity != null) _refreshService.RefreshIfNeeded(adapter.ContainedEntity);
-                    _personaccountGridViewChildCollection.Add(adapter);  
-                }
-            }
+
+	        foreach (var account in personAcccountCollection.AllPersonAccounts())
+	        {
+		        var adapter = new PersonAccountChildModel(filteredPeopleHolder.RefreshService, allAccounts[personFiltered], account,
+		                                                  commonNameDescription,
+		                                                  new FilteredPeopleAccountUpdater(filteredPeopleHolder, UnitOfWorkFactory.Current));
+		        if (adapter.ContainedEntity != null && ((account == currentAccount) && canBold) ||
+		            adapter.ContainedEntity.Id == null)
+			        adapter.CanBold = true;
+		        if (adapter.ContainedEntity != null)
+		        {
+			        using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			        {
+				        filteredPeopleHolder.RefreshService.RefreshIfNeeded(adapter.ContainedEntity);
+			        }
+		        }
+		        _personaccountGridViewChildCollection.Add(adapter);
+	        }
         }
 
         public void GetChildPersonAccounts(int index, ReadOnlyCollection<IPersonAccountChildModel> cachedCollection, FilteredPeopleHolder filteredPeopleHolder)
@@ -1033,7 +1026,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             foreach (var account in accountCollection.AllPersonAccounts())
             {
-                var adapter = new PersonAccountChildModel(_refreshService, allAccounts[personFiltered], account, commonNameDescription, new FilteredPeopleAccountUpdater(filteredPeopleHolder,_refreshService, UnitOfWorkFactory.Current) );
+                var adapter = new PersonAccountChildModel(filteredPeopleHolder.RefreshService, allAccounts[personFiltered], account, commonNameDescription, new FilteredPeopleAccountUpdater(filteredPeopleHolder,UnitOfWorkFactory.Current) );
                 handleCanBold(cachedCollection, canBold, currentAccount, account, adapter);
                 _personaccountGridViewChildCollection.Add(adapter);   
             }

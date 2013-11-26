@@ -13,13 +13,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 	public class FilteredPeopleAccountUpdater : IPersonAccountUpdater
 	{
 		private readonly FilteredPeopleHolder _filteredPeopleHolder;
-		private readonly ITraceableRefreshService _traceableRefreshService;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-		public FilteredPeopleAccountUpdater(FilteredPeopleHolder filteredPeopleHolder, ITraceableRefreshService traceableRefreshService, IUnitOfWorkFactory unitOfWorkFactory)
+		public FilteredPeopleAccountUpdater(FilteredPeopleHolder filteredPeopleHolder, IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_filteredPeopleHolder = filteredPeopleHolder;
-			_traceableRefreshService = traceableRefreshService;
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
@@ -32,7 +30,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 				{
 					foreach (var account in personAbsenceAccount.AccountCollection())
 					{
-						_traceableRefreshService.Refresh(account);
+						_filteredPeopleHolder.RefreshService.Refresh(account);
 					}
 				}
 			}

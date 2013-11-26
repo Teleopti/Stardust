@@ -338,13 +338,13 @@ GO
 --Date: 2013-09-18 
 --Desc: add IsDeleted tag to OvertimeAvailability
 ---------------- 
-ALTER TABLE OvertimeAvailability
+ALTER TABLE dbo.OvertimeAvailability
 ADD IsDeleted bit NULL
 GO
-UPDATE OvertimeAvailability
+UPDATE dbo.OvertimeAvailability
 SET IsDeleted = 0
 GO
-ALTER TABLE OvertimeAvailability
+ALTER TABLE dbo.OvertimeAvailability
 ALTER COLUMN IsDeleted bit NOT NULL
 GO
 
