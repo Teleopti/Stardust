@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.Win.Common
             get { return _control; }
         }
 
-        #region IHelpContext Members
-
         public bool HasHelp
         {
             get { return true; }
@@ -27,7 +25,5 @@ namespace Teleopti.Ccc.Win.Common
         {
             get { return _control.Name; }
         }
-
-        #endregion
     }
 }
