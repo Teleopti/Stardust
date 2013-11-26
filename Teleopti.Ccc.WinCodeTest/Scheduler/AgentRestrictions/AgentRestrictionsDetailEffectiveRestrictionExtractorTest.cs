@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.IsTrue(_preferenceCellData.HasShift);
 			Assert.AreEqual(TimeSpan.FromHours(8), _preferenceCellData.EffectiveRestriction.StartTimeLimitation.StartTime);
 			Assert.AreEqual(TimeSpan.FromHours(26), _preferenceCellData.EffectiveRestriction.EndTimeLimitation.EndTime);
-			Assert.AreEqual(TimeSpan.FromHours(18), _preferenceCellData.EffectiveRestriction.WorkTimeLimitation.StartTime);
+			Assert.AreEqual(null, _preferenceCellData.EffectiveRestriction.WorkTimeLimitation.StartTime);
 
 			Assert.AreEqual(dateOnly, _preferenceCellData.TheDate);
 			Assert.AreEqual(part, _preferenceCellData.SchedulePart);
