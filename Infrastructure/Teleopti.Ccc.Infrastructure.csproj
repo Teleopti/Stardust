@@ -111,9 +111,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\NHibernate.4.0.0-Alpha1\lib\net40\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Envers, Version=2.0.0.100, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
+    <Reference Include="NHibernate.Envers, Version=2.0.0.200, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\NHibernate.Envers.2.0-Beta\lib\Net35\NHibernate.Envers.dll</HintPath>
+      <HintPath>..\packages\NHibernate.Envers.2.0.0-Beta2\lib\Net35\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
