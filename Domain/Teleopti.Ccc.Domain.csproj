@@ -269,7 +269,6 @@
     <Compile Include="Common\Time\ThisIsNow.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
-    <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
     <Compile Include="Common\EntityBaseTypes\SimpleAggregateRoot.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorization.cs" />
     <Compile Include="Common\LogWriter.cs" />

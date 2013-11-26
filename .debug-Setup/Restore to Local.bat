@@ -9,10 +9,10 @@ cls
 
 ::Default values
 SET /A ERRORLEV=0
-SET Demoreg=Demoreg
-SET Customer=%Demoreg%
-SET AppRar=%Demoreg%App.rar
-SET StatRar=%Demoreg%Stat.rar
+SET DefaultDB=DemoSales
+SET Customer=%DefaultDB%
+SET AppRar=%DefaultDB%App.rar
+SET StatRar=%DefaultDB%Stat.rar
 SET LOADSTAT=1
 SET TRUNK=-T -R -Lsa:dummyPwd
 SET UNRAR=7
@@ -23,6 +23,7 @@ SET RarFolder=
 SET Zip7Folder=
 SET DriveLetter=%ROOTDIR:~0,2%
 SET CustomPathConfig=%DriveLetter%\CustomPath.txt
+SET CustomTfiles=%DriveLetter%\CustomTfiles.txt
 SET SQLLogin=sa
 SET SQLPwd=cadadi
 SET CreateAgg=
@@ -53,6 +54,15 @@ SET DBMANAGERPATH="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bi
 ) else (
 SET /A ERRORLEV=6
 GOTO :error
+)
+
+::checkAccess
+:checkAccess
+DIR "%Tfiles%" > NUL
+IF %ERRORLEVEL% NEQ 0 (
+ECHO Could not read files from "%Tfiles%"
+Call :LocalTFiles "%DriveLetter%" "%CustomTfiles%" Tfiles
+GOTO :checkAccess
 )
 
 ::Used for check: Did we copy a new file?
@@ -324,6 +334,19 @@ GOTO :EOF
 SET BRANCH=%~n1
 SET BRANCH=%BRANCH%%~x1
 GOTO :EOF
+
+:LocalTfiles
+SETLOCAL
+if not exist "%~2" (
+ECHO %~1\Tfiles> %~2
+)
+set /p localTfiles= <%~2
+mkdir "%localTfiles%"
+(
+ENDLOCAL
+set "%~3=%localTfiles%"
+)
+goto:eof
 
 :GETDATAPATH
 SET /P CustomPath=Please provide a custom path for data storage:

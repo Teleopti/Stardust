@@ -155,9 +155,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var startTimeLimitation = new StartTimeLimitation(viewLocalTime.TimeOfDay, viewLocalTime.TimeOfDay);
 			var endTimeStart = viewLocalEndTime.Subtract(viewLocalTime.Date);
 			var endTimeLimitation = new EndTimeLimitation(endTimeStart, endTimeStart);
-
+			//bug 25880 crashed if the shift was 24h or longer
+			var workTimeLimitation = new WorkTimeLimitation(null, null);
 			var contractTime = projection.ContractTime();
-			var workTimeLimitation = new WorkTimeLimitation(contractTime, contractTime);
 
 			totalRestriction = totalRestriction.Combine(new EffectiveRestriction(startTimeLimitation, endTimeLimitation, workTimeLimitation, null, null, null, new List<IActivityRestriction>()));
 

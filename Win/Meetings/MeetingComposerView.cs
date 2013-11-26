@@ -120,16 +120,15 @@ namespace Teleopti.Ccc.Win.Meetings
 			}
 			TimeSpan startTime;
 			TimeSpan endTime;
-			try
-			{
-				var shortTimePattern = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
 
-				startTime = DateTime.ParseExact(start, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-				endTime = DateTime.ParseExact(end, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
-			}
-			catch (FormatException error)
+			if (!TimeHelper.TryParse(start, out startTime))
 			{
-				MessageBox.Show(this, error.Message);
+				MessageBox.Show(this, string.Format(UserTexts.Resources.InvalidTimeValue, UserTexts.Resources.StartTime));
+				return;
+			}
+			if (!TimeHelper.TryParse(end, out endTime))
+			{
+				MessageBox.Show(this, string.Format(UserTexts.Resources.InvalidTimeValue, UserTexts.Resources.EndTime));
 				return;
 			}
 			

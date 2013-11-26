@@ -70,13 +70,13 @@ namespace Teleopti.Ccc.AgentPortal.Requests
             IList<SFGridColumnBase<PersonAccountModel>> gridColumns = new List<SFGridColumnBase<PersonAccountModel>>();
 
             gridColumns.Add(new SFGridRowHeaderColumn<PersonAccountModel>(""));
-            gridColumns.Add(new SFGridDescriptionNameColumn<PersonAccountModel>("Description", DescriptionHeader, colWidth));
+            gridColumns.Add(new SFGridStringColumn<PersonAccountModel>("Description", DescriptionHeader, colWidth));
             gridColumns.Add(new SFGridDateOnlyColumn<PersonAccountModel>("PeriodFrom", PeriodFromHeader, colWidth));
             gridColumns.Add(new SFGridDateOnlyColumn<PersonAccountModel>("EndDate", PeriodToHeader, colWidth));
-            gridColumns.Add(new SFGridDescriptionNameColumn<PersonAccountModel>("TypeOfValue", TypeOfValueHeader, colWidth));
-            gridColumns.Add(new SFGridDescriptionNameColumn<PersonAccountModel>("Accrued", AccruedHeader, colWidth));
-            gridColumns.Add(new SFGridDescriptionNameColumn<PersonAccountModel>("Used", UsedHeader, colWidth));
-            gridColumns.Add(new SFGridDescriptionNameColumn<PersonAccountModel>("Remaining", RemainingHeader, colWidth));
+            gridColumns.Add(new SFGridStringColumn<PersonAccountModel>("TypeOfValue", TypeOfValueHeader, colWidth));
+            gridColumns.Add(new SFGridStringColumn<PersonAccountModel>("Accrued", AccruedHeader, colWidth));
+            gridColumns.Add(new SFGridStringColumn<PersonAccountModel>("Used", UsedHeader, colWidth));
+            gridColumns.Add(new SFGridStringColumn<PersonAccountModel>("Remaining", RemainingHeader, colWidth));
             _sfGridColumnGridHelper = new SFGridColumnGridHelper<PersonAccountModel>(gridControlPersonAccounts, new ReadOnlyCollection<SFGridColumnBase<PersonAccountModel>>(gridColumns), _presenter.Items);
             gridControlPersonAccounts.ResizeColsBehavior = ((GridResizeCellsBehavior.ResizeSingle | GridResizeCellsBehavior.InsideGrid) | GridResizeCellsBehavior.OutlineHeaders);
             gridControlPersonAccounts.SelectCellsMouseButtonsMask = MouseButtons.Left | MouseButtons.Right;

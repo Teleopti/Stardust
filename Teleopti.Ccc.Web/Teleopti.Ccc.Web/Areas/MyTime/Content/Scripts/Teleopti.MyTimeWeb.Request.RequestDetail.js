@@ -13,13 +13,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var parentViewModel = null;
     var defaultDateTimes = null;
 	var weekStart = 3;
-	ajax.Ajax({
-			url: 'UserInfo/Culture',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				weekStart = data.WeekStart;
-			}
+	Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+		weekStart = data.WeekStart;
 	});
 
     var RequestDetailParentViewModel = function() {
