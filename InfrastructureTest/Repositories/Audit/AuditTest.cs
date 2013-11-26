@@ -44,9 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				Repository.Add(Scenario);
 				Repository.Add(PersonAssignment.ShiftCategory);
 				Repository.Add(PersonAssignment.MainLayers().First().Payload);
-				Repository.Add(PersonAssignment.MainLayers().First().Payload.GroupingActivity);
 				Repository.Add(PersonAbsence.Layer.Payload);
-
 				Repository.Add(PersonAssignment);
 				Repository.Add(PersonAbsence);
 				Repository.Add(DayOffTemplate);
