@@ -104,12 +104,22 @@ namespace Teleopti.Ccc.Sdk.Notification
 						var s = reader.ReadToEnd();
 						data.Close();
 						reader.Close();
-						var doc = new XmlDocument();
-						doc.LoadXml(s);
-						if (doc.GetElementsByTagName("fault").Count > 0)
+						if(_notificationConfigReader.SkipSearch) return;
+						if (_notificationConfigReader.FindSuccessOrError.Equals("Error"))
 						{
-                            Logger.Error("Error occurred sending SMS: " + s);
-							throw new SendNotificationException("Error occurred sending SMS: " + s);
+							if (s.Contains(_notificationConfigReader.ErrorCode))
+							{
+								Logger.Error("Error occurred sending SMS: " + s);
+								throw new SendNotificationException("Error occurred sending SMS: " + s);
+							}
+						}
+						else
+						{
+							if (!s.Contains(_notificationConfigReader.SuccessCode))
+							{
+								Logger.Error("Error occurred sending SMS: " + s);
+								throw new SendNotificationException("Error occurred sending SMS: " + s);
+							}
 						}
 					}
 				}
