@@ -30,6 +30,8 @@ define([
 		this.SetData = function (data, groupId) {
 			personId = data.PersonId;
 			self.Date(data.Date);
+			self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
+			self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
 			self.AbsenceTypes([
 				{
 					Id: 1,

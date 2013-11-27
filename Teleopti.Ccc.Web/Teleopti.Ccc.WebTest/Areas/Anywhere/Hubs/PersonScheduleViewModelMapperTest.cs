@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -93,8 +94,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift }});
 
-			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(expectedStartTime);
-			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(expectedStartTime.AddHours(1));
+			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedStartTime.TimeOfDay, CultureInfo.CurrentCulture));
+			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedStartTime.AddHours(1).TimeOfDay, CultureInfo.CurrentCulture));
 		}
 
 		[Test]
@@ -112,8 +113,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift } });
 
-			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(expectedStartTime);
-			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(expectedEndTime);
+			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedStartTime.TimeOfDay, CultureInfo.CurrentCulture));
+			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedEndTime.TimeOfDay, CultureInfo.CurrentCulture));
 		}
 
 		[Test]
