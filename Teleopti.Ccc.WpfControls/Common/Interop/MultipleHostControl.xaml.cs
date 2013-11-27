@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
     /// <summary>
     /// Interaction logic for MultipleHostControl.xaml
     /// </summary>
-    public partial class MultipleHostControl : UserControl
+    public partial class MultipleHostControl : IMultipleHostControl
     {
-        private IMultipleHostViewModel Model { get; set; }
+        public IMultipleHostViewModel Model { get; set; }
 
         public MultipleHostControl()
         {

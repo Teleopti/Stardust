@@ -321,6 +321,7 @@
     <Compile Include="Common\ILayerViewModelSelector.cs" />
     <Compile Include="Common\IModifySelectionView.cs" />
     <Compile Include="Common\INavigationPanel.cs" />
+    <Compile Include="Common\Interop\IMultipleHostControl.cs" />
     <Compile Include="Common\IOpenPeriodMode.cs" />
     <Compile Include="Common\IPortalSettings.cs" />
     <Compile Include="Common\IScheduleContractTimeCalculator.cs" />
