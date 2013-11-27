@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Intersect(selectedPersons).ToList();
-			if (selectedTeamMembers.IsEmpty()) return false;
+			if (selectedTeamMembers.IsEmpty()) return true;
 			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
 			if (roleModelShift == null)
 				return false;
