@@ -181,7 +181,7 @@ define([
 		clearaction: function (options) {
 			personSchedule.AddingFullDayAbsence(false);
 			personSchedule.AddingActivity(false);
-			personSchedule.AddingAbsence(false);
+			personSchedule.AddingIntradayAbsence(false);
 		},
 
 		addfulldayabsence: function (options) {
@@ -192,8 +192,8 @@ define([
 			personSchedule.AddingActivity(true);
 		},
 		
-		addabsence: function (options) {
-			personSchedule.AddingAbsence(true);
+		addintradayabsence: function (options) {
+			personSchedule.AddingIntradayAbsence(true);
 		},
 
 		setDateFromTest: function (date) {

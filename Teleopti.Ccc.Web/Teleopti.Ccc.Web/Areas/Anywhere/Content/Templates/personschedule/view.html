@@ -92,8 +92,8 @@
 								<div class="row-fluid space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
 									<div class="span3">
 										<!--<blockquote>-->
-										<!-- ko if: $root.AddingAbsence -->
-										<!-- ko with: $root.AddAbsenceForm -->
+										<!-- ko if: $root.AddingIntradayAbsence -->
+										<!-- ko with: $root.AddIntradayAbsenceForm -->
 										<form action="#" class="form activity-form">
 											<select id="Select1" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
 											</select>
