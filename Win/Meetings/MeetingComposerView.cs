@@ -120,14 +120,15 @@ namespace Teleopti.Ccc.Win.Meetings
 			}
 			TimeSpan startTime;
 			TimeSpan endTime;
-			try
+
+			if (!TimeHelper.TryParse(start, out startTime))
 			{
-                TimeHelper.TryParse(start, out startTime);
-                TimeHelper.TryParse(end, out endTime);
+				MessageBox.Show(this, string.Format(UserTexts.Resources.InvalidTimeValue, UserTexts.Resources.StartTime));
+				return;
 			}
-			catch (FormatException error)
+			if (!TimeHelper.TryParse(end, out endTime))
 			{
-				MessageBox.Show(this, error.Message);
+				MessageBox.Show(this, string.Format(UserTexts.Resources.InvalidTimeValue, UserTexts.Resources.EndTime));
 				return;
 			}
 			
