@@ -4876,8 +4876,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                                                     cachedNumberOfEachCategoryPerDate,
 			                                                                     cachedNumberOfEachCategoryPerPerson,
 			                                                                     _schedulerState.RequestedPeriod.DateOnlyPeriod,
-			                                                                     _schedulerState,
-			                                                                     new PopulationStatisticsCalculator());
+			                                                                     _schedulerState);
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.InsertShiftCategoryDistributionModel(_shiftCategoryDistributionModel);
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
@@ -5411,8 +5410,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (skillStaffPeriods.Count >= 0)
 			{
 				_chartDescription = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", skill.Name, _currentIntraDayDate.ToShortDateString());
-				var statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods);
-				statistics.Analyze();
 				_skillIntradayGridControl.SetupDataSource(skillStaffPeriods, skill, _schedulerState);
 				_skillIntradayGridControl.SetRowsAndCols();
 				positionControl(_skillIntradayGridControl);

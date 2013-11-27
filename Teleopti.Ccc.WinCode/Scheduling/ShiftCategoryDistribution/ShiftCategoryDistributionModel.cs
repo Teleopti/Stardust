@@ -45,17 +45,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		private readonly ICachedNumberOfEachCategoryPerPerson _cachedNumberOfEachCategoryPerPerson;
 		private readonly DateOnlyPeriod _periodToMonitor;
 		private readonly ISchedulerStateHolder _schedulerStateHolder;
-		private readonly IPopulationStatisticsCalculator _populationStatisticsCalculator;
 		//private int _lastShiftCategoryCount;
 
-		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder, IPopulationStatisticsCalculator populationStatisticsCalculator)
+		public ShiftCategoryDistributionModel(ICachedShiftCategoryDistribution cachedShiftCategoryDistribution, ICachedNumberOfEachCategoryPerDate cachedNumberOfEachCategoryPerDate, ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson, DateOnlyPeriod periodToMonitor, ISchedulerStateHolder schedulerStateHolder)
 		{
 			_cachedShiftCategoryDistribution = cachedShiftCategoryDistribution;
 			_cachedNumberOfEachCategoryPerDate = cachedNumberOfEachCategoryPerDate;
 			_cachedNumberOfEachCategoryPerPerson = cachedNumberOfEachCategoryPerPerson;
 			_periodToMonitor = periodToMonitor;
 			_schedulerStateHolder = schedulerStateHolder;
-			_populationStatisticsCalculator = populationStatisticsCalculator;
 		}
 
 		public bool ShouldUpdateViews { get; set; }
@@ -75,21 +73,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		public double GetAverageForShiftCategory(IShiftCategory shiftCategory)
 		{
 			var minMax = GetMinMaxForShiftCategory(shiftCategory);
-			_populationStatisticsCalculator.Clear();
-			_populationStatisticsCalculator.AddItem(minMax.Minimum);
-			_populationStatisticsCalculator.AddItem(minMax.Maximum);
-			_populationStatisticsCalculator.Analyze();
-			return _populationStatisticsCalculator.Average;
+			return Domain.Calculation.Variances.Average(new double[]{minMax.Minimum,minMax.Maximum});
 		}
 
 		public double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory)
 		{
 			var minMax = GetMinMaxForShiftCategory(shiftCategory);
-			_populationStatisticsCalculator.Clear();
-			_populationStatisticsCalculator.AddItem(minMax.Minimum);
-			_populationStatisticsCalculator.AddItem(minMax.Maximum);
-			_populationStatisticsCalculator.Analyze();
-			return _populationStatisticsCalculator.StandardDeviation;
+			return Domain.Calculation.Variances.StandardDeviation(new double[] { minMax.Minimum, minMax.Maximum });
 		}
 
 		public double GetSumOfDeviations()

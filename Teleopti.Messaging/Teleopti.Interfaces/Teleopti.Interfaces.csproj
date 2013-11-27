@@ -405,7 +405,7 @@
     <Compile Include="Domain\IPersonAbsenceRepository.cs" />
     <Compile Include="Domain\IPersonAccountProjectionService.cs" />
     <Compile Include="Domain\IPersonRequest.cs" />
-    <Compile Include="Domain\IPopulationStatisticsCalculator.cs" />
+    <Compile Include="Domain\IPopulationStatisticsCalculatedValues.cs" />
     <Compile Include="Domain\IPopulationStatisticsData.cs" />
     <Compile Include="Domain\IRecurrentDailyMeeting.cs" />
     <Compile Include="Domain\IRecurrentMeetingOption.cs" />

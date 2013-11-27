@@ -428,9 +428,9 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Sets the distribution values.
         /// </summary>
-        /// <param name="calculator">The calculator.</param>
+        /// <param name="calculatedValues">The calculator.</param>
         /// <param name="periodDistribution">The period distribution.</param>
-        void SetDistributionValues(IPopulationStatisticsCalculator calculator, IPeriodDistribution periodDistribution);
+        void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution);
 
         /// <summary>
         /// Clears the intra interval distribution.

@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -15,21 +14,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public double PeriodValue(IterationOperationOption iterationOperationOption)
         {
-            IPopulationStatisticsCalculator populationStatisticsCalculator =
-                new PopulationStatisticsCalculator(true);
-            double sum = 0;
-            foreach (double? value in _scheduleResultDataExtractor.Values())
-            {
-                if (value.HasValue)
-                {
-                    sum += Math.Abs(value.Value);
-                    populationStatisticsCalculator.AddItem(value.Value);
-                }
-            }
-            populationStatisticsCalculator.Analyze();
-            var stdDev = populationStatisticsCalculator.StandardDeviation;
-
-            return sum + stdDev;
+	        var values = _scheduleResultDataExtractor.Values().Where(v => v.HasValue).Select(v => v.Value);
+	        return Calculation.Variances.Teleopti(values);
         }
     }
 }
