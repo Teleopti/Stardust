@@ -338,13 +338,13 @@ GO
 --Date: 2013-09-18 
 --Desc: add IsDeleted tag to OvertimeAvailability
 ---------------- 
-ALTER TABLE OvertimeAvailability
+ALTER TABLE dbo.OvertimeAvailability
 ADD IsDeleted bit NULL
 GO
-UPDATE OvertimeAvailability
+UPDATE dbo.OvertimeAvailability
 SET IsDeleted = 0
 GO
-ALTER TABLE OvertimeAvailability
+ALTER TABLE dbo.OvertimeAvailability
 ALTER COLUMN IsDeleted bit NOT NULL
 GO
 
@@ -687,5 +687,11 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Syste
 EXEC('DROP TABLE [dbo].[SystemRoleApplicationRoleMapper]')
 GO
 
-
-
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-11-25
+--Desc: Bug #25580 - Remove invalid negative values for tasks and campaign tasks (most likely from statistics calculation failure)
+---------------- 
+UPDATE dbo.TemplateTaskPeriod SET Tasks = 0 WHERE Tasks<0
+UPDATE dbo.TemplateTaskPeriod SET CampaignTasks = -1 WHERE CampaignTasks<-1
+GO

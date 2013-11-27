@@ -110,7 +110,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			UnitOfWork.PersistAll();
 			IPerson per = PersonFactory.CreatePerson("for test");
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-			IActivity activity = ActivityFactory.CreateActivity("Training");
+			IActivity activity = new Activity("Training");
+			activity.GroupingActivity = new GroupingActivity("group training");
 			new Repository(UnitOfWork).Add(per);
 			new Repository(UnitOfWork).Add(scenario);
 			new Repository(UnitOfWork).Add(activity.GroupingActivity);

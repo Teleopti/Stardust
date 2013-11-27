@@ -67,13 +67,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 
             validator.Validate(details);
 
-            Assert.IsTrue(_openShiftTradePeriodSpecification.HasBeenCalledWith.Equals(details));
-            Assert.IsTrue(_shiftTradeSkillSpecification.HasBeenCalledWith.Equals(details));
-            Assert.IsTrue(_shiftTradeTargetTimeSpecification.HasBeenCalledWith.Equals(details));
-            Assert.IsTrue(_isWorkflowControlSetNotNullSpecification.HasBeenCalledWith.Equals(details));
-			Assert.IsTrue(_shiftTradeAbsenceSpecification.HasBeenCalledWith.Equals(details));
-			Assert.IsTrue(_shiftTradePersonalActivitySpecification.HasBeenCalledWith.Equals(details));
-			Assert.IsTrue(_shiftTradeMeetingSpecification.HasBeenCalledWith.Equals(details));
+            Assert.That(_openShiftTradePeriodSpecification.HasBeenCalledWith(details));
+            Assert.That(_shiftTradeSkillSpecification.HasBeenCalledWith(details));
+            Assert.That(_shiftTradeTargetTimeSpecification.HasBeenCalledWith(details));
+            Assert.That(_isWorkflowControlSetNotNullSpecification.HasBeenCalledWith(details));
+			Assert.That(_shiftTradeAbsenceSpecification.HasBeenCalledWith(details));
+			Assert.That(_shiftTradePersonalActivitySpecification.HasBeenCalledWith(details));
+			Assert.That(_shiftTradeMeetingSpecification.HasBeenCalledWith(details));
         }
 
         [Test]
@@ -116,20 +116,21 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
         {
             private readonly bool _isSatisfiedBy;
             private readonly string _denyReason;
-
-
-				public IEnumerable<IShiftTradeSwapDetail> HasBeenCalledWith { get; private set; }
+	        private IEnumerable<IShiftTradeSwapDetail> _calledWith;
+			public bool HasBeenCalledWith(IEnumerable<IShiftTradeSwapDetail> details)
+			{
+				return details.Equals(_calledWith);
+			}
 
             public ValidatorSpecificationForTest(bool isSatisfiedBy,string denyReason)
             {
-                HasBeenCalledWith = null;
                 _isSatisfiedBy = isSatisfiedBy;
                 _denyReason = denyReason;
             }
 
 				public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
             {
-                HasBeenCalledWith = obj;
+				_calledWith = obj;
                 
                 return _isSatisfiedBy;
 

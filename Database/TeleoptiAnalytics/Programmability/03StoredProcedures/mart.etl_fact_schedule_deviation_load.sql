@@ -19,6 +19,7 @@ GO
 --				2010-09-20 Fix calculation: Ready Time vs. Scheduled Ready Time. Set 100% as soon a mixed interval is fullfilled. e.g Readytime >= ScheduleReadytime
 --				2010-11-01 #11055 Refact of mart.fact_schedule_deviation, measures in seconds instead of minutes. KJ
 --				2012-10-08 #20924 Fix Contract Deviation
+--				2013-11-26 #25906 - make sure we put stats on correct adherance interval
 --
 -- =============================================
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-07-02 00:00:00',@end_date='2013-07-02 00:00:00',@business_unit_code='70B18F45-1FF3-4BA7-AEB2-A13F00BDC738',@isIntraday=0
@@ -354,6 +355,8 @@ WHERE stat.shift_startdate_id IS NULL
 AND stat.interval_id < shifts.shift_startinterval_id 
 AND stat.interval_id >= shifts.shift_startinterval_id - @intervals_outside_shift-- ONLY 2 Hours back
 AND stat.date_id <= shifts.shift_startdate_id
+AND stat.date_id <= shifts.date_id --make sure the stat intervals are before shift
+AND stat.interval_id <= shifts.interval_id
 
 --ALL ROWS AFTER SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
@@ -365,6 +368,8 @@ WHERE stat.shift_startdate_id IS NULL
 AND stat.interval_id > shifts.shift_endinterval_id
 AND stat.interval_id <= shifts.shift_endinterval_id + @intervals_outside_shift -- ONLY 2 Hours ahead
 AND stat.date_id >= shifts.shift_startdate_id
+AND stat.date_id >= shifts.date_id --make sure the stat intervals are after shift
+AND stat.interval_id >= shifts.interval_id
 
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
 

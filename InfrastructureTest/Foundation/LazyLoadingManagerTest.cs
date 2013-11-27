@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             PersistAndRemoveFromUnitOfWork(groupingActivity);
 
             skill.Activity.GroupingActivity = groupingActivity;
+					skill.Activity.SetId(null);
             PersistAndRemoveFromUnitOfWork(skill.Activity);
 
             PersistAndRemoveFromUnitOfWork(skill.SkillType);

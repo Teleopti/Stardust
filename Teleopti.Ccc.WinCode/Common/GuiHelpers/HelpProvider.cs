@@ -1,7 +1,12 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.WinCode.Common.Interop;
 
 namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 {
@@ -30,12 +35,39 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
         static private void CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            UIElement senderElement = sender as UIElement;
-            if (GetHelpString(senderElement) != null)
-            {
-                e.CanExecute = true;
-            }
+	        var result = tryGetHelpString(sender as UIElement);
+			e.CanExecute = !string.IsNullOrEmpty(result);
         }
+
+		private static string tryGetHelpString(object element)
+		{
+			if (element == null) return null;
+			var result = GetHelpString(element as DependencyObject);
+			if (result != null)
+			{
+				return result;
+			}
+
+			var adorner = element as AdornerDecorator;
+			if (adorner != null)
+			{
+				return tryGetHelpString(adorner.Child);
+			}
+
+			var host = element as IMultipleHostControl;
+			if (host != null)
+			{
+				return tryGetHelpString(host.Model != null ? host.Model.CurrentItem : null);
+			}
+
+			var panel = element as System.Windows.Controls.Panel;
+			if (panel != null)
+			{
+				return tryGetHelpString(panel.Children.OfType<UIElement>().FirstOrDefault());
+			}
+
+			return null;
+		}
 
         public static string GetHelpString(DependencyObject obj)
         {
@@ -44,7 +76,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 
         static private void Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var topic = GetHelpString(sender as UIElement);
+            var topic = tryGetHelpString(sender as UIElement);
 
 			var helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrlOnline"];
 			var helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefixOnline"];

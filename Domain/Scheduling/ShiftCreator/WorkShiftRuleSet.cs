@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IWorkShiftTemplateGenerator _templateGenerator;
         private DefaultAccessibility _defaultAccessibility = DefaultAccessibility.Included;
-        private IList<DayOfWeek> _accessibilityDaysOfWeek = new List<DayOfWeek>(7);
-        private IList<DateTime> _accessibilityDates = new List<DateTime>();
+        private ISet<DayOfWeek> _accessibilityDaysOfWeek = new HashSet<DayOfWeek>();
+        private ISet<DateTime> _accessibilityDates = new HashSet<DateTime>();
 		private Description _description;
 		private bool _onlyForRestrictions;
 
@@ -98,14 +98,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             set { _defaultAccessibility = value; }
         }
 
-        public virtual ReadOnlyCollection<DayOfWeek> AccessibilityDaysOfWeek
+        public virtual IEnumerable<DayOfWeek> AccessibilityDaysOfWeek
         {
-            get { return new ReadOnlyCollection<DayOfWeek>(_accessibilityDaysOfWeek); }
+            get { return _accessibilityDaysOfWeek; }
         }
 
-        public virtual ReadOnlyCollection<DateTime> AccessibilityDates
+				public virtual IEnumerable<DateTime> AccessibilityDates
         {
-            get { return new ReadOnlyCollection<DateTime>(_accessibilityDates); }
+            get { return _accessibilityDates; }
         }
 		#endregion Properties 
 
@@ -159,8 +159,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         public virtual void AddAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
         {
-            if (!_accessibilityDaysOfWeek.Contains(dayOfWeek))
-                _accessibilityDaysOfWeek.Add(dayOfWeek);
+	        _accessibilityDaysOfWeek.Add(dayOfWeek);
         }
 
         public virtual void RemoveAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
@@ -172,8 +171,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         {
             InParameter.VerifyDateIsUtc("dateTime",dateTime);
             dateTime = dateTime.Date;
-            if (!_accessibilityDates.Contains(dateTime))
-                _accessibilityDates.Add(dateTime);
+	        _accessibilityDates.Add(dateTime);
         }
 
         public virtual void RemoveAccessibilityDate(DateTime dateTime)
@@ -207,8 +205,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         private void reinitializeFields()
         {
-            _accessibilityDaysOfWeek = new List<DayOfWeek>();
-            _accessibilityDates = new List<DateTime>();
+            _accessibilityDaysOfWeek = new HashSet<DayOfWeek>();
+            _accessibilityDates = new HashSet<DateTime>();
         }
         #endregion Methods 
 
@@ -254,12 +252,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                 retobj.AddAccessibilityDate(date);
 
             retobj._ruleSetBagCollection = new List<IRuleSetBag>();
-
-            //Do not copy rulesetbag on entity clone NH Bug8217
-            //foreach (IRuleSetBag ruleSetBag in RuleSetBagCollection)
-            //{
-            //    ruleSetBag.AddRuleSet(retobj);
-            //}
 
             return retobj;
         }

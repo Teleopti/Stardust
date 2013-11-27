@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Contract = ContractFactory.CreateContract(Name);
+			Contract = new Contract(Name);
 			Contract.EmploymentType = EmploymentType;
 			Contract.WorkTime = new WorkTime(TimeSpan.Parse(AverageWorkTimePerDay));
 			Contract.PositiveDayOffTolerance = PositiveDayOffTolerance;

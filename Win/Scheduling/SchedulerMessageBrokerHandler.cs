@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
@@ -79,24 +80,36 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void OnEventMessage(object sender, EventMessageArgs e)
 		{
-			if (_owner.IsDisposed)
-				return;
-			if (e.Message.ModuleId == InstanceId)
-				return;
+			if (_owner.IsDisposed) return;
+			if (e.Message.ModuleId == InstanceId) return;
 			if (_owner.InvokeRequired)
 			{
 				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(OnEventMessage), sender, e);
 			}
 			else
 			{
+				if (!messageIsRelevant(e.Message)) return;
+
 				_messageQueue.Add(e.Message);
 				_owner.SizeOfMessageBrokerQueue(_messageQueue.Count);
 			}
 		}
 
+		private bool messageIsRelevant(IEventMessage message)
+		{
+			return isRelevantPerson(message.DomainObjectId) || isRelevantPerson(message.ReferenceObjectId) ||
+			       message.InterfaceType.IsAssignableFrom(typeof (IMeeting)) ||
+			       message.InterfaceType.IsAssignableFrom(typeof (IPersonRequest));
+		}
+
 		public void Refresh(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
 		{
-			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer);
+			_scheduleScreenRefresher.Refresh(_owner.SchedulerState.Schedules, _messageQueue, refreshedEntitiesBuffer, conflictsBuffer, isRelevantPerson);
+		}
+
+		private bool isRelevantPerson(Guid personId)
+		{
+			return _owner.SchedulerState.SchedulingResultState.PersonsInOrganization.Any(p => p.Id == personId);
 		}
 
 		public void FillReloadedScheduleData(IPersistableScheduleData databaseVersionOfEntity)

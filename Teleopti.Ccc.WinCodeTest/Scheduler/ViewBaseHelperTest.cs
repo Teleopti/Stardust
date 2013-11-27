@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _layerFactory = new VisualLayerFactory();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             IPerson person = PersonFactory.CreatePerson();
-            _agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999,1,1), new List<ISkill>());
+						_agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999, 1, 1), new List<ISkill>(), new Contract("ctr"), new PartTimePercentage("ptc"));
             _mockRep = new MockRepository();
             _schedulePart1 = _mockRep.StrictMock<IScheduleDay>();
             _schedulePart2 = _mockRep.StrictMock<IScheduleDay>();

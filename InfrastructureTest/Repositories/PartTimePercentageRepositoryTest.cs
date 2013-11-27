@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IPartTimePercentage CreateAggregateWithCorrectBusinessUnit()
         {
-            IPartTimePercentage partTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage("dummyContract");
+            IPartTimePercentage partTimePercentage = new PartTimePercentage("dummyContract");
 
             return partTimePercentage;
         }

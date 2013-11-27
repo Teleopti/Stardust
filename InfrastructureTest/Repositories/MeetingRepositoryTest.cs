@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _attendee1 = PersonFactory.CreatePerson("attendeePerson1");
             _attendee2 = PersonFactory.CreatePerson("attendeePerson2");
             _scenario = ScenarioFactory.CreateScenarioAggregate();
-            _activity = ActivityFactory.CreateActivity("activity");
+            _activity = new Activity("activity");
 
             GroupingActivity groupAct = new GroupingActivity("f");
             PersistAndRemoveFromUnitOfWork(groupAct);

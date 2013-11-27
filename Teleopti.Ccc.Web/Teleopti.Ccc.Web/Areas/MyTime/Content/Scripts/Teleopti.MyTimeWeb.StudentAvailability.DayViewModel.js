@@ -4,6 +4,17 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
+if (typeof (Teleopti) === 'undefined') {
+	Teleopti = {};
+}
+if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	Teleopti.MyTimeWeb = {};
+}
+if (typeof (Teleopti.MyTimeWeb.StudentAvailability) === 'undefined') {
+	Teleopti.MyTimeWeb.StudentAvailability = {};
+}
+
+
 Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 	var self = this;
 

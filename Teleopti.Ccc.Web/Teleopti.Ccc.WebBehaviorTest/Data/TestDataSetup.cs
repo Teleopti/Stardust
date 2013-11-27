@@ -7,6 +7,7 @@ using System.Threading;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -281,10 +282,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void CreateActivities(IUnitOfWork unitOfWork)
 		{
-			TestData.ActivityPhone = ActivityFactory.CreateActivity("Legacy activity Phone", Color.FromKnownColor(KnownColor.Green));
-			TestData.ActivityShortBreak = ActivityFactory.CreateActivity("Legacy activity ShortBreak", Color.FromKnownColor(KnownColor.Red));
-			TestData.ActivityLunch = ActivityFactory.CreateActivity("Legacy activity Lunch", Color.FromKnownColor(KnownColor.Yellow));
-			TestData.ActivityTraining = ActivityFactory.CreateActivity("Legacy activity Training", Color.FromKnownColor(KnownColor.Purple));
+			TestData.ActivityPhone = new Activity("Legacy activity Phone"){DisplayColor = Color.FromKnownColor(KnownColor.Green)};
+			TestData.ActivityShortBreak = new Activity("Legacy activity ShortBreak"){DisplayColor = Color.FromKnownColor(KnownColor.Red)};
+			TestData.ActivityLunch = new Activity("Legacy activity Lunch"){DisplayColor = Color.FromKnownColor(KnownColor.Yellow)};
+			TestData.ActivityTraining = new Activity("Legacy activity Training"){DisplayColor =  Color.FromKnownColor(KnownColor.Purple)};
 
 			TestData.ActivityPhone.GroupingActivity = TestData.GroupingActivity;
 			TestData.ActivityShortBreak.GroupingActivity = TestData.GroupingActivity;

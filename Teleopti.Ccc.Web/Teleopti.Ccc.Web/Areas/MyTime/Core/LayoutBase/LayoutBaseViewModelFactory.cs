@@ -11,17 +11,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 		private readonly ICultureSpecificViewModelFactory _cultureSpecificViewModelFactory;
 		private readonly IDatePickerGlobalizationViewModelFactory _datePickerGlobalizationViewModelFactory;
 		private readonly INow _now;
-		private readonly IResourceVersion _version;
 
 		public LayoutBaseViewModelFactory(ICultureSpecificViewModelFactory cultureSpecificViewModelFactory,
 		                                  IDatePickerGlobalizationViewModelFactory datePickerGlobalizationViewModelFactory,
-		                                  INow now,
-		                                  IResourceVersion version)
+		                                  INow now)
 		{
 			_cultureSpecificViewModelFactory = cultureSpecificViewModelFactory;
 			_datePickerGlobalizationViewModelFactory = datePickerGlobalizationViewModelFactory;
 			_now = now;
-			_version = version;
 		}
 
 		// TODO: JonasN, Texts
@@ -40,8 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 					DatePickerGlobalization = datePickerGlobalizationViewModel,
 					Footer = string.Empty,
 					Title = title,
-					FixedDate = fixedDate,
-					Version = _version.Version()
+					FixedDate = fixedDate
 				};
 		}
 	}

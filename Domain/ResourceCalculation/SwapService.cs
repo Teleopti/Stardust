@@ -35,21 +35,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 if (ass1 == null)
                 {
-                    _selectedSchedules[1].Merge(schedulePart2, false);
+                    _selectedSchedules[1].Merge(schedulePart2, false,true);
                     _selectedSchedules[1].DeletePersonalStuff();
                     _selectedSchedules[0].DeleteMainShift(schedulePart2);
                 }
                 else
                 {
-                    _selectedSchedules[0].Merge(schedulePart1, false);
+                    _selectedSchedules[0].Merge(schedulePart1, false,true);
                     _selectedSchedules[0].DeletePersonalStuff();
                     _selectedSchedules[1].DeleteMainShift(schedulePart1);
                 }
             }
             else
             {
-                _selectedSchedules[0].Merge(schedulePart1, false);
-                _selectedSchedules[1].Merge(schedulePart2, false);
+                _selectedSchedules[0].Merge(schedulePart1, false,true);
+				_selectedSchedules[1].Merge(schedulePart2, false,true);
             }
             retList.AddRange(_selectedSchedules);
             return retList;

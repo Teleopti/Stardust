@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																													 DateTimePeriod period,
 																													IShiftCategory shiftCategory)
 		{
-			return CreateAssignmentWithMainShift(ActivityFactory.CreateActivity("sdf"),
+			return CreateAssignmentWithMainShift(new Activity("ass activity"), 
 																					 person,
 																					 period,
 																					 shiftCategory,

@@ -364,7 +364,7 @@
     <value>&amp;Velg kommandoer fra:</value>
   </data>
   <data name="Clear" xml:space="preserve">
-    <value>Slett</value>
+    <value>Tømme</value>
   </data>
   <data name="ClipAbsence" xml:space="preserve">
     <value>Klipp ut fravær</value>
@@ -6752,10 +6752,10 @@ Periode: {3}</value>
     <value>Tilbudt</value>
   </data>
   <data name="OverflowIn" xml:space="preserve">
-    <value>Overflod inn</value>
+    <value>Overflow inn</value>
   </data>
   <data name="OverflowOut" xml:space="preserve">
-    <value>Overflod ut</value>
+    <value>Overflow ut</value>
   </data>
   <data name="SelectScorecardForTeams" xml:space="preserve">
     <value>Velg scorecard til bruk for team</value>

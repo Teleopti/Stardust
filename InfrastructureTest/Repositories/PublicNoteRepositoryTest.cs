@@ -79,7 +79,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void VerifyDoNotFindByPeriodPersonsAndScenario()
         {
             IPerson personWithoutNotes = PersonFactory.CreatePerson("Sven");
-            personWithoutNotes.SetId(Guid.NewGuid());
             IPublicNote note = CreateAggregateWithCorrectBusinessUnit();
             PersistAndRemoveFromUnitOfWork(note);
             PersistAndRemoveFromUnitOfWork(personWithoutNotes);

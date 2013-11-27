@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -25,16 +26,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public ISkill CurrentSkill { get; set; }
         private readonly IScheduleDay _part;
 
-        public SchedulePartFactoryForDomain(IPerson person,IScenario scenario,DateTimePeriod period,ISkill skill)
+		public SchedulePartFactoryForDomain(IPerson person, IScenario scenario, DateTimePeriod period, ISkill skill)
+			: this(person, scenario, period, skill, TimeZoneInfo.Utc)
         {
-            CurrentScenario = scenario;
-            CurrentPeriod = period;
-            CurrentSkill = skill;
-            CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person,new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill });
-            CurrentPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-            _part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
-
         }
+
+		public SchedulePartFactoryForDomain(IPerson person, IScenario scenario, DateTimePeriod period, ISkill skill,TimeZoneInfo timeZone)
+		{
+			CurrentScenario = scenario;
+			CurrentPeriod = period;
+			CurrentSkill = skill;
+			CurrentPerson = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(CurrentPeriod.StartDateTime), new List<ISkill> { CurrentSkill }, new Contract("ctr"), new PartTimePercentage("ptc"));
+			CurrentPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
+			_part = createPart(new DateOnly(CurrentPeriod.StartDateTime));
+		}
+
+		public SchedulePartFactoryForDomain(IPerson person, DateTimePeriod period)
+			: this(person, ScenarioFactory.CreateScenarioAggregate("For test", true), period, SkillFactory.CreateSkill("Skill"))
+		{	
+		}
 
         public SchedulePartFactoryForDomain()
             : this(PersonFactory.CreatePerson(), ScenarioFactory.CreateScenarioAggregate("For test",true), new DateTimePeriod(2001, 1, 1, 2001, 1, 3), SkillFactory.CreateSkill("Skill")) {}
@@ -161,6 +171,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	        _part.CreateAndAddActivity(ActivityFactory.CreateActivity("Main"), CurrentPeriod, ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
             return this;
         }
+
+		public SchedulePartFactoryForDomain AddMainShiftLayerBetween(TimeSpan startTime, TimeSpan endTime)
+	    {
+		    var start = new DateTime(CurrentPeriod.StartDateTime.Year, CurrentPeriod.StartDateTime.Month,
+		                             CurrentPeriod.StartDateTime.Day, startTime.Hours, startTime.Minutes, startTime.Seconds,
+		                             DateTimeKind.Utc);
+			var end = new DateTime(CurrentPeriod.StartDateTime.Year, CurrentPeriod.StartDateTime.Month,
+									CurrentPeriod.StartDateTime.Day, endTime.Hours, endTime.Minutes, endTime.Seconds,
+									DateTimeKind.Utc);
+			_part.CreateAndAddActivity(ActivityFactory.CreateActivity("Main"), new DateTimePeriod(start,end), ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
+			return this;
+	    }
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void ConcreteSetup()
         {
             shiftCat = ShiftCategoryFactory.CreateShiftCategory("used in test");
-            act = ActivityFactory.CreateActivity("used in test");
+            act = new Activity("used in test");
             IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("used in test");
 
             PersistAndRemoveFromUnitOfWork(groupingActivity);
@@ -98,11 +99,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.AreEqual(DefaultAccessibility.Excluded, loadedAggregateFromDatabase.DefaultAccessibility);
 
-            Assert.AreEqual(2,loadedAggregateFromDatabase.AccessibilityDaysOfWeek.Count);
+            Assert.AreEqual(2,loadedAggregateFromDatabase.AccessibilityDaysOfWeek.Count());
             Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDaysOfWeek.Contains(DayOfWeek.Saturday));
             Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDaysOfWeek.Contains(DayOfWeek.Sunday));
 
-            Assert.AreEqual(3, loadedAggregateFromDatabase.AccessibilityDates.Count);
+            Assert.AreEqual(3, loadedAggregateFromDatabase.AccessibilityDates.Count());
             Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateTime(2007, 12, 24, 0, 0, 0, DateTimeKind.Utc)));
             Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateTime(2008, 12, 24, 0, 0, 0, DateTimeKind.Utc)));
             Assert.IsTrue(loadedAggregateFromDatabase.AccessibilityDates.Contains(new DateTime(2009, 12, 24, 0, 0, 0, DateTimeKind.Utc)));
@@ -134,8 +135,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.IsTrue(LazyLoadingManager.IsInitialized(res[0].AccessibilityDates));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(res[0].AccessibilityDaysOfWeek));
-            Assert.AreEqual(1,res[0].AccessibilityDates.Count);
-            Assert.AreEqual(1, res[0].AccessibilityDaysOfWeek.Count);
+            Assert.AreEqual(1,res[0].AccessibilityDates.Count());
+            Assert.AreEqual(1, res[0].AccessibilityDaysOfWeek.Count());
         }
 
         [Test]
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             WorkShiftRuleSet ruleSet2 = new WorkShiftRuleSet(generator);
             ruleSet2.Description = new Description("second", "sdg");
             ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(10, 11, 12, 13), new TimeSpan()));
-            Activity actForExtender = ActivityFactory.CreateActivity("sdf");
+            Activity actForExtender = new Activity("sdf");
             actForExtender.GroupingActivity = act.GroupingActivity;
             PersistAndRemoveFromUnitOfWork(actForExtender);
             ruleSet.AddExtender(

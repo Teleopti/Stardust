@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -26,13 +27,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Contract = ContractFactory.CreateContract("Contract from table");
-			Contract.EmploymentType = EmploymentType;
-			Contract.WorkTime = new WorkTime(TimeSpan.FromHours(AverageWorkTimePerDay));
-			Contract.PositiveDayOffTolerance = PositiveDayOffTolerance;
-			Contract.NegativeDayOffTolerance = NegativeDayOffTolerance;
-			Contract.PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(PositiveTargetToleranceHours);
-			Contract.NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(NegativeTargetToleranceHours);
+			Contract = new Contract("Contract from table")
+				{
+					EmploymentType = EmploymentType,
+					WorkTime = new WorkTime(TimeSpan.FromHours(AverageWorkTimePerDay)),
+					PositiveDayOffTolerance = PositiveDayOffTolerance,
+					NegativeDayOffTolerance = NegativeDayOffTolerance,
+					PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(PositiveTargetToleranceHours),
+					NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(NegativeTargetToleranceHours)
+				};
 			new ContractRepository(uow).Add(Contract);
 		}
 	}

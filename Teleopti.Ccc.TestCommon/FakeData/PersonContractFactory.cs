@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -38,12 +39,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IPersonContract CreatePersonContract(string contractName, string contractScheduleName, string partTimePercentage)
         {
-            IContract ctr = ContractFactory.CreateContract(contractName);
-            IContractSchedule contractSch = ContractScheduleFactory.CreateContractSchedule(contractScheduleName);
-            IPartTimePercentage newPartTimePercentage = PartTimePercentageFactory.CreatePartTimePercentage(partTimePercentage);
-
-            return CreatePersonContract(ctr,newPartTimePercentage,contractSch);
+	        return CreatePersonContract(new Contract(contractName), contractScheduleName, partTimePercentage);
         }
+
+			public static IPersonContract CreatePersonContract(IContract contract, string contractScheduleName, string partTimePercentage)
+			{
+				IPartTimePercentage newPartTimePercentage = new PartTimePercentage(partTimePercentage);
+				return CreatePersonContract(contract, contractScheduleName, newPartTimePercentage);
+			}
+
+			public static IPersonContract CreatePersonContract(IContract contract, string contractScheduleName, IPartTimePercentage partTimePercentage)
+			{
+				IContractSchedule contractSch = ContractScheduleFactory.CreateContractSchedule(contractScheduleName);
+
+				return CreatePersonContract(contract, partTimePercentage, contractSch);
+			}
 
         public static IPersonContract CreateFulltimePersonContractWithWorkingWeekContractSchedule()
         {

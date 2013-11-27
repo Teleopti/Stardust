@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _skillType = SkillTypeFactory.CreateSkillType();
             PersistAndRemoveFromUnitOfWork(_skillType);
-            _activity = ActivityFactory.CreateActivity("The test", Color.Honeydew);
+						_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
             _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
             PersistAndRemoveFromUnitOfWork(_groupingActivity);
             _activity.GroupingActivity = _groupingActivity;
@@ -447,9 +448,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyGettingSkillsThatHaveCertainActivities()
         {
-            IActivity blueActivity = ActivityFactory.CreateActivity("Blue Activity", Color.Blue);
-            IActivity redActivity = ActivityFactory.CreateActivity("Red Activity", Color.Red);
-            IActivity greenActivity = ActivityFactory.CreateActivity("Green Activity", Color.Green);
+					var blueActivity = new Activity("Blue Activity") { DisplayColor = Color.Blue };
+					var redActivity = new Activity("Red Activity") { DisplayColor = Color.Red };
+					var greenActivity = new Activity("Green Activity") { DisplayColor = Color.Green };
 
             blueActivity.GroupingActivity = _groupingActivity;
             redActivity.GroupingActivity = _groupingActivity;

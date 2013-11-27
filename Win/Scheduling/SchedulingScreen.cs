@@ -140,7 +140,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly TabControlAdv _tabInfoPanels;
 		private readonly ElementHost _elementHostRequests;
 		private readonly WpfControls.Controls.Requests.Views.HandlePersonRequestView _handlePersonRequestView1;
-		private SingleAgentRestrictionPresenter _singleAgentRestrictionPresenter;
 		private readonly IEventAggregator _eventAggregator = new EventAggregator();
 		private ClipboardControl _clipboardControl;
 		private ClipboardControl _clipboardControlRestrictions;
@@ -1882,7 +1881,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var authorization = PrincipalAuthorization.Instance();
 			var options = new PasteOptions();
 			var clipboardSpecialOptions = new ClipboardSpecialOptions();
-			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
+			clipboardSpecialOptions.ShowRestrictions = _scheduleView is AgentRestrictionsDetailView;
 			clipboardSpecialOptions.DeleteMode = false;
 			clipboardSpecialOptions.ShowOvertimeAvailability = false;
 			clipboardSpecialOptions.ShowShiftAsOvertime = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities); ;
@@ -2472,10 +2471,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void validateAllPersons()
 		{
 			_personsToValidate.Clear();
-			foreach (IPerson permittedPerson in SchedulerState.AllPermittedPersons)
-			{
-				_personsToValidate.Add(permittedPerson);
-			}
+			_schedulerState.AllPermittedPersons.ForEach(_personsToValidate.Add);
 			validatePersons();
 		}
 
@@ -3355,7 +3351,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var options = new PasteOptions();
 			var clipboardSpecialOptions = new ClipboardSpecialOptions();
-			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
+			clipboardSpecialOptions.ShowRestrictions = _scheduleView is AgentRestrictionsDetailView;
 			clipboardSpecialOptions.DeleteMode = true;
 			clipboardSpecialOptions.ShowOvertimeAvailability = false;
 			clipboardSpecialOptions.ShowShiftAsOvertime = false;
@@ -3396,7 +3392,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var authorization = PrincipalAuthorization.Instance();
 			var options = new PasteOptions();
 			var clipboardSpecialOptions = new ClipboardSpecialOptions();
-			clipboardSpecialOptions.ShowRestrictions = _scheduleView is RestrictionSummaryView;
+			clipboardSpecialOptions.ShowRestrictions = _scheduleView is AgentRestrictionsDetailView;
 			clipboardSpecialOptions.DeleteMode = true;
 			clipboardSpecialOptions.ShowOvertimeAvailability = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
 			clipboardSpecialOptions.ShowShiftAsOvertime = false;
@@ -6141,12 +6137,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_undoRedo != null) _undoRedo.Clear();
 
 			notesEditor = null;
-			if (_singleAgentRestrictionPresenter != null)
-			{
-				_singleAgentRestrictionPresenter.Dispose();
-				_singleAgentRestrictionPresenter = null;
-			}
-
+			
 			if (_elementHostRequests != null && _elementHostRequests.Child != null) _elementHostRequests.Child = null;
 			if (_grid != null) _grid.ContextMenu = null;
 			if (contextMenuViews != null) contextMenuViews.Dispose();

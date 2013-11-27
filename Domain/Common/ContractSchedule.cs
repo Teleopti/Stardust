@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Common
     public class ContractSchedule : VersionedAggregateRootWithBusinessUnit, IContractSchedule, IDeleteTag
     {
         private Description _description;
-		private readonly Iesi.Collections.Generic.ISet<IContractScheduleWeek> _contractScheduleWeeks; //byt till BCL's ISet<T> när vi går över till .net 4.0!
+	    private readonly ISet<IContractScheduleWeek> _contractScheduleWeeks;
         private bool _isDeleted;
 
         /// <summary>
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Common
         public ContractSchedule(string name)
         {
             _description = new Description(name);
-            _contractScheduleWeeks = new HashedSet<IContractScheduleWeek>();
+	        _contractScheduleWeeks = new HashSet<IContractScheduleWeek>();
         }
 
         /// <summary>

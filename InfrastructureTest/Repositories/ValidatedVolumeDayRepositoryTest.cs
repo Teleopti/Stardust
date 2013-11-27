@@ -5,6 +5,7 @@ using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Rhino.Mocks;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             ISkillType skillType = SkillTypeFactory.CreateSkillType();
             ISkill skill = SkillFactory.CreateSkill("dummy", skillType, 15);
-            IActivity activity = ActivityFactory.CreateActivity("dummyActivity");
+            IActivity activity = new Activity("dummyActivity");
             IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("ga1");
             skill.Activity = activity;
 

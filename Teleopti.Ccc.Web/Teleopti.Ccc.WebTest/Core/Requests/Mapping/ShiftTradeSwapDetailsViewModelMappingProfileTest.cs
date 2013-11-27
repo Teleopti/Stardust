@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -127,7 +126,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_timeLineFactory.AssertWasCalled(x => x.CreateTimeLineHours(
 				new DateTimePeriod(shiftTradeRequest.Period.StartDateTime.AddHours(-1), shiftTradeRequest.Period.EndDateTime.AddHours(1))));
 		}
-
 
 		[Test]
 		public void CreateTimelineBasedOnShiftTradePeriodIfNoSchedulesExists()

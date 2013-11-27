@@ -173,26 +173,6 @@ ko.bindingHandlers.select2 = {
 	}
 };
 
-//wraps the datepickerbinding and sets the datepickeroptions
-ko.bindingHandlers.mytimeDatePicker = {
-	init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
-		var isDisabled = $(element).attr('disabled') == 'disabled';
-		$(element).attr('disabled', 'disabled');
-
-		var ajax = new Teleopti.MyTimeWeb.Ajax();
-		ajax.Ajax({
-			url: 'UserInfo/Culture',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				allBindingsAccessor().datepickerOptions = { autoHide: true, weekStart: data.WeekStart };
-				ko.bindingHandlers.datepicker.init(element, valueAccessor, allBindingsAccessor, viewModel);
-				if (!isDisabled) $(element).removeAttr('disabled');
-			}
-		});
-	}
-};
-
 ko.bindingHandlers.clickable = {
 	update: function (element, valueAccessor) {
 		var value = ko.utils.unwrapObservable(valueAccessor());

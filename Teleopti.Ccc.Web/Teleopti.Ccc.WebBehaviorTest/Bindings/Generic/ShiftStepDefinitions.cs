@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	{
 		[Given(@"(I) have a shift with")]
 		[Given(@"'?(.*)'? has a shift with")]
-		[Given(@"'?(.*)'? have a shift with")] // wrong!
 		public void GivenIHaveAShiftWith(string person, Table table)
 		{
 			DataMaker.ApplyFromTable<ShiftConfigurable>(person, table);

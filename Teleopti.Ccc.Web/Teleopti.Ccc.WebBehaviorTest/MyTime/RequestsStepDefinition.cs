@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -223,7 +224,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldNotSeeResendShifttradeButtonForRequestAtPosition(int position)
 		{
 			Browser.Interactions.AssertNotExists(".request:nth-child(" + position + ")", ".request:nth-child(" + position + ") .btn[data-bind*='reSend']");
+		}
 
+		[Then(@"I should not see any shifts to trade with")]
+		public void ThenIShouldNotSeeAnyShiftsToTradeWith()
+		{
+			ScenarioContext.Current.Pending();
 		}
 
 	}

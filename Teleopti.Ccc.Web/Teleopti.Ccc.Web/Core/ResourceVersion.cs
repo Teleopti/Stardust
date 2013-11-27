@@ -12,6 +12,5 @@ namespace Teleopti.Ccc.Web.Core
 				       ? DateTime.UtcNow.ToString("yyyyMMddHHmmssffff")
 				       : version.ToString();
 		}
-		
 	}
 }
