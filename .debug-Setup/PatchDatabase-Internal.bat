@@ -18,7 +18,7 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 
 CD "%ROOTDIR%"
 
-SET /P MyServerInstance=Your SQL Server instance: 
+SET /P INSTANCE=Your SQL Server instance: 
 
 CHOICE /C yn /M "Do you want to use WinAuth?"
 IF ERRORLEVEL 1 SET /a WinAuth=1
@@ -67,8 +67,8 @@ GOTO :error
 ::Patch DB
 ::Upgrade DB to latest version, we now always include trunk
 CD "%DBMANAGERPATH%"
-ECHO "%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
-"%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
+ECHO "%DBMANAGER%" -S%INSTANCE% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
+"%DBMANAGER%" -S%INSTANCE% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error
@@ -78,7 +78,7 @@ CD "%ROOTDIR%"
 
 IF %ISCCC7% EQU 1 (
 ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD%DATABASE% %Conn2%
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD%DATABASE% %Conn2%
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=10
 GOTO :error
@@ -87,7 +87,7 @@ GOTO :error
 
 IF %CROSSDB% EQU 1 (
 ECHO Running: CrossDatabaseViewUpdate
-"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%MyServerInstance% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" %Conn2%
+"%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%DATABASE%" -CD"%TeleoptiCCCAgg%" %Conn2%
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=1
 GOTO :error
@@ -95,9 +95,11 @@ GOTO :error
 )
 
 ::Add license
+IF %ISCCC7% EQU 1 (
 CHOICE /C yn /M "Add license?"
 IF ERRORLEVEL 1 (
-SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+	SQLCMD -S%INSTANCE% -E -d"%DATABASE%" -i"%ROOTDIR%\database\tsql\AddLic.sql" -v LicFile="%ROOTDIR%\..\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\License.xml"
+	)
 )
 
 ECHO.
