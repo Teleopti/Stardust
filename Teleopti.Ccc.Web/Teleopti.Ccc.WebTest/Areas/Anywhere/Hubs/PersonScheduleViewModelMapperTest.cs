@@ -1,6 +1,5 @@
 using System;
 using System.Drawing;
-using System.Dynamic;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -20,11 +18,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	[TestFixture]
 	public class PersonScheduleViewModelMapperTest
 	{
+		private IUserTimeZone _userTimeZone;
+
 		[SetUp]
 		public void Setup()
 		{
+			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile()));
+			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_userTimeZone)));
 		}
 
 		[Test]
@@ -74,6 +75,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(new PersonScheduleData { Date = DateTime.Today, Person = person });
 
 			result.Site.Should().Be("Moon");
+		}
+
+		[Test]
+		public void ShouldMapIsTodayInUserTimeZone()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
+			var date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, hawaiiTimeZoneInfo).Date;
+			var result = target.Map(new PersonScheduleData { Date = date });
+
+			result.IsToday.Should().Be.True();
 		}
 
 		[Test]

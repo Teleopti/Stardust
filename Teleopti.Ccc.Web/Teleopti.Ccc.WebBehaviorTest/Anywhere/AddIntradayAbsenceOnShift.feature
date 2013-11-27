@@ -39,7 +39,7 @@ Scenario: View form
 	| End time       | 2013-11-15 17:00 |
 	When I view schedules for 'Team green' on '2013-11-15'
 	And I select any schedule activity for 'Pierre Baldi'
-	And I click 'add intraday absence'
+	And I click 'add intraday absence' in shift menu
 	Then I should see the add intraday absence form
 
 Scenario: Default times today

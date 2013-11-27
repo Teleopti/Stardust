@@ -10,6 +10,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	public class PersonScheduleViewModelMappingProfile : Profile
 	{
+		private readonly IUserTimeZone _userTimeZone;
+
+		public PersonScheduleViewModelMappingProfile(IUserTimeZone userTimeZone)
+		{
+			_userTimeZone = userTimeZone;
+		}
+
 		private class MapContext<TParent, TChild>
 		{
 			public MapContext(TParent parent, TChild child)
@@ -36,8 +43,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					                               ))
 				.ForMember(x => x.PersonAbsences, o => o.MapFrom(
 					s => from p in s.PersonAbsences ?? new IPersonAbsence[] {}
-					     select new MapContext<PersonScheduleData, IPersonAbsence>(s, p)
-					                                       ))
+					     select new MapContext<PersonScheduleData, IPersonAbsence>(s, p)))
+				.ForMember(x => x.IsToday,
+				           o =>
+				           o.MapFrom(s => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _userTimeZone.TimeZone()).Date == s.Date))
 				;
 
 			CreateMap<MapContext<PersonScheduleData, SimpleLayer>, PersonScheduleViewModelLayer>()
