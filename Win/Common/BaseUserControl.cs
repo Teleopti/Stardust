@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Win.Common
     /// Created by: robink
     /// Created date: 2007-12-27
     /// </remarks>
-    public class BaseUserControl : UserControl, ILocalized, IHelpContext
+    public class BaseUserControl : UserControl, ILocalized, IHelpContext, IHelpForm
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="BaseUserControl"/> class.
@@ -73,7 +73,12 @@ namespace Teleopti.Ccc.Win.Common
             get { return Name; }
         }
 
-        /// <summary>
+	    public IHelpContext FindMatchingManualHelpContext(Control control)
+	    {
+		    return null;
+	    }
+
+	    /// <summary>
         /// Gets the current UI culture information.
         /// </summary>
         public static CultureInfo CurrentCulture
