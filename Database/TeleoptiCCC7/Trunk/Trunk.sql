@@ -285,6 +285,8 @@ alter table auditing.PersonAssignment_AUD drop column BusinessUnit
 --Date: 2013-09-11
 --Desc: Dropping BusinessUnit from PersonAbsence
 ---------------- 
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAbsence]') AND name = N'IX_PersonAbsence_BusinessUnit')
+DROP INDEX [IX_PersonAbsence_BusinessUnit] ON [dbo].[PersonAbsence]
 ALTER TABLE dbo.PersonAbsence DROP CONSTRAINT [FK_PersonAbsence_BusinessUnit]
 alter table dbo.PersonAbsence drop column BusinessUnit
 alter table auditing.PersonAbsence_AUD drop column BusinessUnit
