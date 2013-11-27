@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 
 			var activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
-
 			var assignmentRepository = new PersonAssignmentRepository(uow);
 
 			var timeZone = user.PermissionInformation.DefaultTimeZone();

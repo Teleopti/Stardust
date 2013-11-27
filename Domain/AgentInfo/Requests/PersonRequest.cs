@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         private bool _deserialized;
         private string _subject;
         private bool _changed;
-        private IList<IRequest> requests = new List<IRequest>(1);
+        private ISet<IRequest> requests = new HashSet<IRequest>();
         private bool _isDeleted;
         private string _denyReason = string.Empty;
         private DateTime _updatedOnServerUtc;
@@ -221,7 +222,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (request != null)
             {
                 IRequest requestClone = request.NoneEntityClone();
-                clone.requests = new List<IRequest>(1);
+                clone.requests = new HashSet<IRequest>();
                 clone.setRequest(requestClone);
             }
             clone.SetId(null);
@@ -236,7 +237,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (request != null)
             {
                 IRequest requestClone = request.EntityClone();
-                clone.requests = new List<IRequest>(1);
+                clone.requests = new HashSet<IRequest>();
                 clone.setRequest(requestClone);
             }
             clone.SetId(Id);
@@ -316,7 +317,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (requests.Count == 0)
                 return null;
 
-            return requests[0];
+            return requests.Single();
         }
 
         public virtual void Restore(IPersonRequest previousState)

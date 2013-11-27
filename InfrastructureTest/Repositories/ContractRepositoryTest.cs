@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IContract CreateAggregateWithCorrectBusinessUnit()
         {
-            IContract contract = ContractFactory.CreateContract("dummyContract");
+            IContract contract = new Contract("dummyContract");
 
             return contract;
         }
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCanPersistProperties()
         {
-            _contract = ContractFactory.CreateContract("MyContract");
+            _contract = new Contract("MyContract");
             IMultiplicatorDefinitionSet definitionSet = new MultiplicatorDefinitionSet("Overtime",
                                                                                        MultiplicatorType.Overtime);
             PersistAndRemoveFromUnitOfWork(definitionSet);
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCanLoadContractsAndInitializeMultiplicatorDefinitionSets()
         {
-            _contract = ContractFactory.CreateContract("MyContract");
+            _contract = new Contract("MyContract");
             IMultiplicatorDefinitionSet definitionSet = new MultiplicatorDefinitionSet("Overtime",
                                                                                        MultiplicatorType.Overtime);
             PersistAndRemoveFromUnitOfWork(definitionSet);

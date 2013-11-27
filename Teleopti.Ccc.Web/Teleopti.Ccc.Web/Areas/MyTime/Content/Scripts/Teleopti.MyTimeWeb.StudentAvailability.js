@@ -58,6 +58,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	    vm.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
 	    vm.setCurrentDate(moment(periodData.Date));
 	    
+		// use Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {  instead, when SA bindings doesnt cause exceptions
 	    ajax.Ajax({
 	    	url: 'UserInfo/Culture',
 	    	dataType: "json",

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -12,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 {
     public class BudgetGroup : VersionedAggregateRootWithBusinessUnit, IBudgetGroup, IDeleteTag
     {
-		private readonly Iesi.Collections.Generic.ISet<ISkill> _skillCollection;
+	    private readonly ISet<ISkill> _skillCollection;
         private string _timeZone;
         private int _daysPerYear;
         private string _name;
@@ -22,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
         public BudgetGroup()
         {
-            _skillCollection = new HashedSet<ISkill>();
+	        _skillCollection = new HashSet<ISkill>();
         }
 
         public virtual IEnumerable<ISkill> SkillCollection

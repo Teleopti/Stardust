@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -10,11 +9,11 @@ namespace Teleopti.Ccc.Domain.Budgeting
         private string _shrinkageName;
         private int _orderIndex;
         private bool _includedInAllowance;
-		private readonly Iesi.Collections.Generic.ISet<IAbsence> _budgetAbsenceCollection;
+	    private readonly ISet<IAbsence> _budgetAbsenceCollection;
 
         protected CustomShrinkage()
         {
-            _budgetAbsenceCollection = new HashedSet<IAbsence>();
+            _budgetAbsenceCollection = new HashSet<IAbsence>();
         }
 
         public CustomShrinkage(string shrinkageName) : this()

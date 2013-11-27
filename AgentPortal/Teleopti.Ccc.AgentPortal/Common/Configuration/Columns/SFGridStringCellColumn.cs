@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 
         public override void SaveCellValue(GridSaveCellInfoEventArgs e, ReadOnlyCollection<T> dataItems, T currentItem)
         {
-            Description description = new Description((string)e.Style.CellValue);
-            PropertyReflectorHelper.SetValue(currentItem, BindingProperty, new Description(description.Name, description.ShortName));
+			PropertyReflectorHelper.SetValue(currentItem, BindingProperty, e.Style.CellValue);
         }
     }
 }

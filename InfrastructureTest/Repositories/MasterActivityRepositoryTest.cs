@@ -29,9 +29,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _groupAct = new GroupingActivity("f");
             PersistAndRemoveFromUnitOfWork(_groupAct);
 
-            _activity1 = ActivityFactory.CreateActivity("zz");
-            _activity2 = ActivityFactory.CreateActivity("ff");
-            _activity3 = ActivityFactory.CreateActivity("aa");
+						_activity1 = new Activity("zz");
+						_activity2 = new Activity("ff");
+						_activity3 = new Activity("aa");
 
             _activity1.GroupingActivity = _groupAct;
             _activity2.GroupingActivity = _groupAct;

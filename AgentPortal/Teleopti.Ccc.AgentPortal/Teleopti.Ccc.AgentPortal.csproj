@@ -463,7 +463,7 @@
     </Compile>
     <Compile Include="Common\Configuration\Columns\SFGridColumnBase.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridColumnGridHelper.cs" />
-    <Compile Include="Common\Configuration\Columns\SFGridDescriptionNameColumn.cs" />
+    <Compile Include="Common\Configuration\Columns\SFGridStringColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridHourMinutesColumn.cs" />
     <Compile Include="Common\Configuration\Columns\SFGridRowHeaderColumn.cs" />
     <Compile Include="Settings\AgentPortalOptions.cs">
@@ -477,9 +477,6 @@
     </Compile>
     <Compile Include="Common\Controls\NavigationMonthCalendar.cs">
       <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Common\Description.cs">
-      <SubType>Code</SubType>
     </Compile>
     <Compile Include="Common\IDialogControl.cs" />
     <Compile Include="Helper\Iso8601Helper.cs" />

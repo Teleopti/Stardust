@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 				                            _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
 				                            smsMessage, containUnicode ? 1 : 0);
 
-				if (Logger.IsInfoEnabled)
-					Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
+				Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
 				try
 				{
 					var data = client.OpenRead(_notificationConfigReader.Url + msgData);
@@ -104,12 +103,22 @@ namespace Teleopti.Ccc.Sdk.Notification
 						var s = reader.ReadToEnd();
 						data.Close();
 						reader.Close();
-						var doc = new XmlDocument();
-						doc.LoadXml(s);
-						if (doc.GetElementsByTagName("fault").Count > 0)
+						if(_notificationConfigReader.SkipSearch) return;
+						if (_notificationConfigReader.FindSuccessOrError.Equals("Error"))
 						{
-                            Logger.Error("Error occurred sending SMS: " + s);
-							throw new SendNotificationException("Error occurred sending SMS: " + s);
+							if (s.Contains(_notificationConfigReader.ErrorCode))
+							{
+								Logger.Error("Error occurred sending SMS: " + s);
+								throw new SendNotificationException("Error occurred sending SMS: " + s);
+							}
+						}
+						else
+						{
+							if (!s.Contains(_notificationConfigReader.SuccessCode))
+							{
+								Logger.Error("Error occurred sending SMS: " + s);
+								throw new SendNotificationException("Error occurred sending SMS: " + s);
+							}
 						}
 					}
 				}

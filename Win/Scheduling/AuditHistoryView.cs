@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -20,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-    public partial class AuditHistoryView : BaseRibbonForm, IAuditHistoryView
+    public partial class AuditHistoryView : BaseDialogForm, IAuditHistoryView
     {
         private readonly SchedulingScreen _owner;
         private readonly IAuditHistoryModel _model;
@@ -186,7 +185,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void UpdateHeaderText()
         {
-            this.Text = _model.HeaderText;
+            Text = _model.HeaderText;
         }
 
         private void backgroundWorkerDataLoader_DoWork(object sender, DoWorkEventArgs e)
@@ -209,11 +208,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                        {
                            new IAggregateRoot[] {_owner.SchedulerState.RequestedScenario},
                            personsToReassociate,
-                           _owner.MultiplicatorDefinitionSet.Cast<IAggregateRoot>(),
-                           _owner.SchedulerState.CommonStateHolder.Absences.Cast<IAggregateRoot>(),
-                           _owner.SchedulerState.CommonStateHolder.DayOffs.Cast<IAggregateRoot>(),
-                           _owner.SchedulerState.CommonStateHolder.Activities.Cast<IAggregateRoot>(),
-                           _owner.SchedulerState.CommonStateHolder.ShiftCategories.Cast<IAggregateRoot>()
+                           _owner.MultiplicatorDefinitionSet,
+                           _owner.SchedulerState.CommonStateHolder.Absences,
+                           _owner.SchedulerState.CommonStateHolder.DayOffs,
+                           _owner.SchedulerState.CommonStateHolder.Activities,
+                           _owner.SchedulerState.CommonStateHolder.ShiftCategories
                        };
         }
 
@@ -269,10 +268,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void ShowDataSourceException(DataSourceException dataSourceException)
         {
-            using (var view = new SimpleExceptionHandlerView(dataSourceException, UserTexts.Resources.ViewScheduleHistory, UserTexts.Resources.ServerUnavailable))
+            using (var view = new SimpleExceptionHandlerView(dataSourceException, Resources.ViewScheduleHistory, Resources.ServerUnavailable))
             {
                 view.ShowDialog(this);
             }
         }
+
+		  private void auditHistoryViewResizeEnd(object sender, EventArgs e)
+		  {
+			  RefreshGrid();
+		  }
     }
 }

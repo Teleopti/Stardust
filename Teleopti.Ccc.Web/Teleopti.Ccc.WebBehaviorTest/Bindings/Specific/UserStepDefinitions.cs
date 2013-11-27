@@ -471,6 +471,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Person(userName).Apply(new StockholmTimeZone());
 		}
 
+		[Given(@"(.*) is located in '(.*)'")]
+		public void GivenIsLocatedIn(string name,string location)
+		{
+			DataMaker.Person(name).Apply(new UserTimeZoneFor(location));
+		}
+
 
 		[Given(@"I have an existing text request")]
 		public void GivenIHaveAnExistingTextRequest()

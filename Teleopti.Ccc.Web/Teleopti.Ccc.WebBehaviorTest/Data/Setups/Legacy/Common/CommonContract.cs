@@ -1,5 +1,5 @@
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Contract = ContractFactory.CreateContract(DefaultName.Make("Common contract"));
+			Contract = new Contract(DefaultName.Make("Common contract"));
 			new ContractRepository(uow).Add(Contract);
 		}
 	}

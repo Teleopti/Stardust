@@ -1,4 +1,6 @@
-﻿@using Teleopti.Ccc.Web.Areas.MyTime.Core
+﻿@using System.Web.Optimization
+@using Teleopti.Ccc.Web.Areas.MyTime.Core
+@using Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 <!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
@@ -12,100 +14,12 @@
 	<meta name="description" content="" />
 	<meta name="author" content="" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-	@{
-	    var version = @ViewBag.LayoutBase.Version;
-	}
-
-	<link href="@Url.Content("~/Content/bootstrap/bootstrap.css")" rel="stylesheet" type="text/css" />
-	@*<link href="@Url.Content("~/Content/bootstrap/bootstrap-responsive.css")" rel="stylesheet" type="text/css" />*@
-	<link href="@Url.Content("~/Content/moment-datepicker/datepicker.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/jqueryui/smoothness/jquery-ui-1.10.2.custom.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/Scripts/jquery.qtip.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/select2/select2.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/TeamSchedule.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Asm.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Request.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Preference.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/StudentAvailability.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Settings.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/WeekView.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/CalendarView.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/ScheduleStyles.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/jquery.ui.custom.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/TooltipCustom.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Areas/MyTime/Content/Css/AsmMessage.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/select2/select2.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/bootstrap-timepicker/css/bootstrap-timepicker.min.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/content/favicon.ico")" rel="shortcut icon" type="image/x-icon"/>
-    <script src="@Url.Content("~/Content/jquery/jquery-1.10.2.js")"></script>
-    <script src="@Url.Content("~/Content/Scripts/knockout-2.2.1.js")"></script>
-	<script src="@Url.Content("~/Content/moment/moment.js")"></script>
-	<script src="@Url.Content("~/Content/moment/moment.all.min.js")"></script>
-    <script src="@Url.Content("~/Content/moment-datepicker/moment-datepicker.js")"></script>
-    <script src="@Url.Content("~/Content/moment-datepicker/moment-datepicker-ko.js")"></script>
-	<script src="@Url.Content("~/Content/signals/signals.min.js")"></script>
-	<script src="@Url.Content("~/Content/hasher/hasher.min.js")"></script>
-	<script src="@Url.Content("~/Content/crossroads/crossroads.min.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/modernizr-2.6.2.js")"></script>
-	<script src="@Url.Content("~/Content/bootstrap/bootstrap.js")"></script>
-	<script src="@Url.Content("~/Content/jqueryui/jquery-ui-1.10.2.custom.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/json2.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/jquery.hoverIntent.js")"></script>
-	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.min.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/jquery.qtip.js")"></script>
-	<script src="@Url.Content("~/Content/Scripts/indexOf.js")"></script>
-	<script src="@Url.Content("~/Content/signalr/jquery.signalR-1.1.2.min.js")"></script>
-	<script src="@Url.Content("~/Content/signalr/broker-hubs.js")"></script>
-	<script src="@Url.Content("~/Content/select2/select2.js")"></script>
-	<script src="@Url.Content("~/Content/bootstrap-timepicker/js/bootstrap-timepicker.js")"></script>
-
-	<script src="@Url.Content("~/Content/Scripts/pinify/scripts/jquery.pinify.min.js")"></script>
-	<link href="@Url.Content("~/Content/Scripts/pinify/content/jquery.pinify.min.css")" rel="stylesheet" type="text/css" />
-
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.extensions.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/jquery.ui.calendarselectable.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/knockout.bindings.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/noty/jquery.noty.js")"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/noty/layouts/bottom.js")"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/noty/themes/default.js")"></script>
 	
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.SelectionViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.List.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.RequestDetail.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.RequestViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.AsmMessage.List.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.AsmMessageDetail.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.TeamSchedule.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Settings.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Test.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Init.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Asm.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.AsmMessage.js?v=" + version)"></script>
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js?v=" + version)"></script>	
-	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js?v=" + version)"></script>
-    
-    @*<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/base/jquery-ui.css" />*@
-    @*<script src="http://code.jquery.com/jquery-1.9.1.js"></script>*@
- @*   <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-*@
+	@Styles.Render(BundleScripts.BootstrapCss)
+	@Styles.Render(BundleScripts.Select2Css)
+	@Styles.Render(BundleScripts.MyTimeCss)
+	@Scripts.Render(BundleScripts.MyTimeJs)
+
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{
 		DateTime date = ViewBag.LayoutBase.FixedDate;

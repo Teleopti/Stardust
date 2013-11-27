@@ -30,6 +30,7 @@ Background:
 	| Day   |
 	| Night |
 
+
 Scenario: No access to make shift trade reuquests
 	Given there is a role with
 	| Field								| Value						|
@@ -84,7 +85,7 @@ Scenario: Show possible shift trades
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -113,7 +114,7 @@ Scenario: Do not show person that agent has no permission to
 	Given I am an agent in a team with access only to my own data
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -143,7 +144,7 @@ Scenario: Time line should cover all scheduled shifts
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -165,12 +166,12 @@ Scenario: When clicking an agent i shift trade list, the other agent's should be
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent2 have a shift with
+	And 'OtherAgent2' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 07:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -201,7 +202,7 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -228,12 +229,12 @@ Scenario: Cancel a shift trade request before sending
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent2 have a shift with
+	And 'OtherAgent2' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 07:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And 'OtherAgent' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -345,7 +346,7 @@ Scenario: Show name of sender of a received shifttrade
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -372,7 +373,7 @@ Scenario: Show name of the person of a shifttrade that I have created
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -400,7 +401,7 @@ Given I have the role 'Full access to mytime'
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
 	| Lunch3HoursAfterStart | True             |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -466,7 +467,7 @@ Given I have the role 'Full access to mytime'
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -518,7 +519,7 @@ Scenario: Resend referred shifttrade
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -548,7 +549,7 @@ Scenario: Cancel referred shifttrade
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -577,7 +578,7 @@ Scenario: Do not show rerred shifttrade to reciever
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -604,7 +605,7 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category        | Day              |
-	And Ashley Andeen have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
@@ -619,7 +620,86 @@ Scenario: Do not show resend and cancelbuttons to sender when shifttrade is not 
 	And I am viewing requests
 	When I click on the request at position '1' in the list
 	Then I should not see resend shifttrade button for request at position '1'
-	
+
+Scenario: See shifts from users in other timezones
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And I am located in Stockholm
+	And 'OtherAgent' has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And 'OtherAgent' is located in 'Hawaii'
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see OtherAgent in the shift trade list
+
+Scenario: Show other shifts to trade with from users in other timezones translated to my timezone
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I am located in Stockholm
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And 'OtherAgent' is located in 'Moscow'
+	And 'OtherAgent' has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And the current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see a possible schedule trade with
+	| Field			| Value |
+	| Start time	| 03:00 |
+	| End time		| 13:00 |
+
+Scenario: Show shifts in ongoing trades from users in other timezone translated to my timezone
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I am located in Stockholm
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	| Lunch3HoursAfterStart | True             |
+	And 'Ashley Andeen' is located in 'Moscow'
+	And 'Ashley Andeen' has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And I have created a shift trade request
+	| Field    | Value         |
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
+	And I am viewing requests
+	When I click on the request at position '1' in the list
+	Then I should see details with a schedule from
+	| Field			| Value |
+	| Start time	| 06:00 |
+	| End time		| 16:00 |
+	And I should see details with a schedule to
+	| Field			| Value |
+	| Start time	| 03:00 |
+	| End time		| 13:00 |
 
 Scenario: Navigate to shifttrade with url
 	Given I have the role 'Full access to mytime'

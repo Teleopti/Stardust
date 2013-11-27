@@ -7,6 +7,16 @@
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Content/moment/moment.js" />
 
+if (typeof (Teleopti) === 'undefined') {
+	Teleopti = {};
+}
+if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
+	Teleopti.MyTimeWeb = {};
+}
+if (typeof (Teleopti.MyTimeWeb.Request) === 'undefined') {
+	Teleopti.MyTimeWeb.Request = {};
+}
+
 Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
@@ -219,21 +229,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _setWeekStart(vm) {
-		ajax.Ajax({
-			url: "UserInfo/ShiftTradeRequest",
-			dataType: "json",
-			type: 'GET',
-			url: 'UserInfo/Culture',
-			dataType: "json",
-			type: 'GET',
-			success: function (data) {
-				vm.weekStart(data.WeekStart);
-			},
-			
-			error: function (jqXHR, textStatus, errorThrown) {
-				
-				Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
-			}
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function(data) {
+			vm.weekStart(data.WeekStart);
 		});
 	}
 

@@ -43,5 +43,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             return TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
         }
+
+		public static TimeZoneInfo TimeZone(string timeZone)
+		{
+			var timeZones = TimeZoneInfo.GetSystemTimeZones();
+			var ret = timeZones.FirstOrDefault(t => t.DisplayName == timeZone) ?? timeZones.FirstOrDefault(t => t.DisplayName.Contains(timeZone));
+			return ret;
+		}
     }
 }

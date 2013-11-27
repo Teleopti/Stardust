@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override void ConcreteSetup()
         {
             _skillType = SkillTypeFactory.CreateSkillType();
-            _activity = ActivityFactory.CreateActivity("The test", Color.Honeydew);
+						_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
             _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
             _skill = SkillFactory.CreateSkill("Skill - Name", _skillType, 15);
             _skill.MidnightBreakOffset = TimeSpan.FromHours(2);

@@ -338,13 +338,13 @@ GO
 --Date: 2013-09-18 
 --Desc: add IsDeleted tag to OvertimeAvailability
 ---------------- 
-ALTER TABLE OvertimeAvailability
+ALTER TABLE dbo.OvertimeAvailability
 ADD IsDeleted bit NULL
 GO
-UPDATE OvertimeAvailability
+UPDATE dbo.OvertimeAvailability
 SET IsDeleted = 0
 GO
-ALTER TABLE OvertimeAvailability
+ALTER TABLE dbo.OvertimeAvailability
 ALTER COLUMN IsDeleted bit NOT NULL
 GO
 
@@ -687,5 +687,67 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Syste
 EXEC('DROP TABLE [dbo].[SystemRoleApplicationRoleMapper]')
 GO
 
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-11-25
+--Desc: Bug #25580 - Remove invalid negative values for tasks and campaign tasks (most likely from statistics calculation failure)
+---------------- 
+UPDATE dbo.TemplateTaskPeriod SET Tasks = 0 WHERE Tasks<0
+UPDATE dbo.TemplateTaskPeriod SET CampaignTasks = -1 WHERE CampaignTasks<-1
+GO
 
+----------------  
+--Name: David and Roger
+--Date: 2013-11-27
+--Desc: #26021 - make sure data is unique
+---------------- 
+--AccessibilityDates
+create table #AccessibilityDates(RuleSet uniqueidentifier, [Date] datetime)
+insert into #AccessibilityDates
+select
+	a.ruleset,
+	a.date
+from
+(
+select
+	ruleset,
+	date,
+	ROW_NUMBER()OVER(PARTITION BY ruleset,date ORDER BY date) as 'rn'
+from dbo.AccessibilityDates
+) a
+where a.rn = 1
 
+DELETE FROM dbo.AccessibilityDates
+ALTER TABLE dbo.AccessibilityDates ADD CONSTRAINT UQ_AccessibilityDates UNIQUE(RuleSet,[Date])
+INSERT INTO dbo.AccessibilityDates
+SELECT
+	ruleset,
+	date
+FROM #AccessibilityDates
+drop table #AccessibilityDates
+
+--AccessibilityDaysOfWeek
+create table #AccessibilityDaysOfWeek(RuleSet uniqueidentifier, [DayOfWeek] int)
+insert into #AccessibilityDaysOfWeek
+select
+	a.ruleset,
+	a.DayOfWeek
+from
+(
+select
+	ruleset,
+	DayOfWeek,
+	ROW_NUMBER()OVER(PARTITION BY ruleset,DayOfWeek ORDER BY DayOfWeek) as 'rn'
+from dbo.AccessibilityDaysOfWeek
+) a
+where a.rn = 1
+
+DELETE FROM dbo.AccessibilityDaysOfWeek
+ALTER TABLE dbo.AccessibilityDaysOfWeek ADD CONSTRAINT UQ_AccessibilityDaysOfWeek UNIQUE(RuleSet,[DayOfWeek])
+INSERT INTO dbo.AccessibilityDaysOfWeek
+SELECT
+	ruleset,
+	DayOfWeek
+FROM #AccessibilityDaysOfWeek
+drop table #AccessibilityDaysOfWeek
+GO

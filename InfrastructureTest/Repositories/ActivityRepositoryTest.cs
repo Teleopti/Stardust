@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -31,9 +32,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyLoadSortedByDescription()
         {
-            _activity1 = ActivityFactory.CreateActivity("zz");
-            _activity2 = ActivityFactory.CreateActivity("ff");
-            _activity3 = ActivityFactory.CreateActivity("aa");
+            _activity1 = new Activity("zz");
+						_activity2 = new Activity("ff");
+						_activity3 = new Activity("aa");
 
             _activity1.GroupingActivity = _groupAct;
             _activity2.GroupingActivity = _groupAct;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IActivity CreateAggregateWithCorrectBusinessUnit()
         {
-            IActivity act = ActivityFactory.CreateActivity("roger", Color.White);
+            IActivity act = new Activity("roger"){DisplayColor = Color.White};
             act.GroupingActivity = _groupAct;
             act.RequiresSkill = false;
             return act;

@@ -32,10 +32,6 @@
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle2 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle3 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle4 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle5 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle6 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle7 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
-			Syncfusion.Windows.Forms.Grid.GridBaseStyle gridBaseStyle8 = new Syncfusion.Windows.Forms.Grid.GridBaseStyle();
 			this.backgroundWorkerDataLoader = new System.ComponentModel.BackgroundWorker();
 			this.buttonRestore = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonClose = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -45,13 +41,9 @@
 			this.grid = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.linkLabelPrevious = new System.Windows.Forms.LinkLabel();
 			this.linkLabelNext = new System.Windows.Forms.LinkLabel();
-			this.ribbonControlHeader = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
-			this.restrictionSummaryGrid1 = new Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction.RestrictionSummaryGrid();
 			this.statusStrip.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlHeader)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.restrictionSummaryGrid1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// backgroundWorkerDataLoader
@@ -65,7 +57,7 @@
 			this.buttonRestore.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonRestore.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.buttonRestore.Dock = System.Windows.Forms.DockStyle.Top;
-			this.buttonRestore.Location = new System.Drawing.Point(593, 393);
+			this.buttonRestore.Location = new System.Drawing.Point(603, 464);
 			this.buttonRestore.Name = "buttonRestore";
 			this.buttonRestore.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonRestore.Size = new System.Drawing.Size(86, 23);
@@ -79,7 +71,7 @@
 			this.buttonClose.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.buttonClose.Dock = System.Windows.Forms.DockStyle.Top;
-			this.buttonClose.Location = new System.Drawing.Point(685, 393);
+			this.buttonClose.Location = new System.Drawing.Point(695, 464);
 			this.buttonClose.Name = "buttonClose";
 			this.buttonClose.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonClose.Size = new System.Drawing.Size(82, 23);
@@ -93,9 +85,9 @@
 			this.statusStrip.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.pageOfPagesStatusLabel});
-			this.statusStrip.Location = new System.Drawing.Point(6, 486);
+			this.statusStrip.Location = new System.Drawing.Point(0, 492);
 			this.statusStrip.Name = "statusStrip";
-			this.statusStrip.Size = new System.Drawing.Size(788, 22);
+			this.statusStrip.Size = new System.Drawing.Size(800, 22);
 			this.statusStrip.TabIndex = 7;
 			this.statusStrip.Text = "statusStrip1";
 			// 
@@ -103,15 +95,11 @@
 			// 
 			this.pageOfPagesStatusLabel.BackColor = System.Drawing.SystemColors.Control;
 			this.pageOfPagesStatusLabel.Name = "pageOfPagesStatusLabel";
-			this.SetShortcut(this.pageOfPagesStatusLabel, System.Windows.Forms.Keys.None);
 			this.pageOfPagesStatusLabel.Size = new System.Drawing.Size(77, 17);
 			this.pageOfPagesStatusLabel.Text = "pageOfPages";
 			// 
 			// tableLayoutPanel1
 			// 
-			this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tableLayoutPanel1.ColumnCount = 4;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 92F));
@@ -126,16 +114,17 @@
 			this.tableLayoutPanel1.Controls.Add(this.buttonRestore, 1, 2);
 			this.tableLayoutPanel1.Controls.Add(this.linkLabelPrevious, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.linkLabelNext, 2, 1);
-			this.tableLayoutPanel1.Location = new System.Drawing.Point(6, 30);
+			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 22F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 65F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 21F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 35F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(790, 455);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 514);
 			this.tableLayoutPanel1.TabIndex = 5;
 			// 
 			// grid
@@ -188,7 +177,7 @@
 			this.grid.SelectCellsMouseButtonsMask = System.Windows.Forms.MouseButtons.Left;
 			this.grid.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
 			this.grid.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.AlwaysVisible;
-			this.grid.Size = new System.Drawing.Size(784, 362);
+			this.grid.Size = new System.Drawing.Size(794, 434);
 			this.grid.SmartSizeBox = false;
 			this.grid.TabIndex = 12;
 			this.grid.ThemesEnabled = true;
@@ -197,9 +186,9 @@
 			// linkLabelPrevious
 			// 
 			this.linkLabelPrevious.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.linkLabelPrevious.Location = new System.Drawing.Point(593, 368);
+			this.linkLabelPrevious.Location = new System.Drawing.Point(603, 440);
 			this.linkLabelPrevious.Name = "linkLabelPrevious";
-			this.linkLabelPrevious.Size = new System.Drawing.Size(86, 22);
+			this.linkLabelPrevious.Size = new System.Drawing.Size(86, 21);
 			this.linkLabelPrevious.TabIndex = 2;
 			this.linkLabelPrevious.TabStop = true;
 			this.linkLabelPrevious.Text = "xxPrevious";
@@ -209,91 +198,14 @@
 			// linkLabelNext
 			// 
 			this.linkLabelNext.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.linkLabelNext.Location = new System.Drawing.Point(685, 368);
+			this.linkLabelNext.Location = new System.Drawing.Point(695, 440);
 			this.linkLabelNext.Name = "linkLabelNext";
-			this.linkLabelNext.Size = new System.Drawing.Size(82, 22);
+			this.linkLabelNext.Size = new System.Drawing.Size(82, 21);
 			this.linkLabelNext.TabIndex = 3;
 			this.linkLabelNext.TabStop = true;
 			this.linkLabelNext.Text = "xxNext";
 			this.linkLabelNext.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			this.linkLabelNext.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabelLater_LinkClicked);
-			// 
-			// ribbonControlHeader
-			// 
-			this.ribbonControlHeader.CaptionFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.ribbonControlHeader.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlHeader.MaximizeToolTip = "Maximize Ribbon";
-			this.ribbonControlHeader.MenuButtonText = "";
-			this.ribbonControlHeader.MenuButtonVisible = false;
-			this.ribbonControlHeader.MinimizeToolTip = "Minimize Ribbon";
-			this.ribbonControlHeader.Name = "ribbonControlHeader";
-			// 
-			// ribbonControlHeader.OfficeMenu
-			// 
-			this.ribbonControlHeader.OfficeMenu.Name = "OfficeMenu";
-			this.ribbonControlHeader.OfficeMenu.Size = new System.Drawing.Size(12, 65);
-			this.ribbonControlHeader.QuickPanelVisible = false;
-			this.ribbonControlHeader.SelectedTab = null;
-			this.ribbonControlHeader.Size = new System.Drawing.Size(798, 33);
-			this.ribbonControlHeader.SystemText.QuickAccessDialogDropDownName = "Start menu";
-			this.ribbonControlHeader.TabIndex = 4;
-			this.ribbonControlHeader.Text = "ribbonControlAdv1";
-			this.ribbonControlHeader.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
-			// 
-			// restrictionSummaryGrid1
-			// 
-			gridBaseStyle5.Name = "Header";
-			gridBaseStyle5.StyleInfo.Borders.Bottom = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Left = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Right = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.Borders.Top = new Syncfusion.Windows.Forms.Grid.GridBorder(Syncfusion.Windows.Forms.Grid.GridBorderStyle.None);
-			gridBaseStyle5.StyleInfo.CellType = "Header";
-			gridBaseStyle5.StyleInfo.Font.Bold = true;
-			gridBaseStyle5.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			gridBaseStyle5.StyleInfo.VerticalAlignment = Syncfusion.Windows.Forms.Grid.GridVerticalAlignment.Middle;
-			gridBaseStyle6.Name = "Standard";
-			gridBaseStyle6.StyleInfo.Font.Facename = "Tahoma";
-			gridBaseStyle6.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-			gridBaseStyle7.Name = "Column Header";
-			gridBaseStyle7.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			gridBaseStyle8.Name = "Row Header";
-			gridBaseStyle8.StyleInfo.BaseStyle = "Header";
-			gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-			gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-			this.restrictionSummaryGrid1.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle5,
-            gridBaseStyle6,
-            gridBaseStyle7,
-            gridBaseStyle8});
-			this.restrictionSummaryGrid1.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
-			this.restrictionSummaryGrid1.CoveredRanges.AddRange(new Syncfusion.Windows.Forms.Grid.GridRangeInfo[] {
-            Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(0, 2, 0, 6),
-            Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(0, 7, 0, 8),
-            Syncfusion.Windows.Forms.Grid.GridRangeInfo.Cells(0, 9, 0, 12)});
-			this.restrictionSummaryGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.restrictionSummaryGrid1.ExcelLikeCurrentCell = true;
-			this.restrictionSummaryGrid1.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2007;
-			this.restrictionSummaryGrid1.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
-			this.restrictionSummaryGrid1.HeaderCount = 0;
-			this.restrictionSummaryGrid1.HScrollBehavior = Syncfusion.Windows.Forms.Grid.GridScrollbarMode.Automatic;
-			this.restrictionSummaryGrid1.HScrollPixel = true;
-			this.restrictionSummaryGrid1.Location = new System.Drawing.Point(0, 0);
-			this.restrictionSummaryGrid1.Name = "restrictionSummaryGrid1";
-			this.restrictionSummaryGrid1.NumberedColHeaders = false;
-			this.restrictionSummaryGrid1.NumberedRowHeaders = false;
-			this.restrictionSummaryGrid1.Office2007ScrollBars = true;
-			this.restrictionSummaryGrid1.Properties.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(231)))), ((int)(((byte)(242)))), ((int)(((byte)(255)))));
-			this.restrictionSummaryGrid1.Properties.FixedLinesColor = System.Drawing.Color.Red;
-			this.restrictionSummaryGrid1.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
-			this.restrictionSummaryGrid1.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.restrictionSummaryGrid1.Size = new System.Drawing.Size(489, 344);
-			this.restrictionSummaryGrid1.SmartSizeBox = false;
-			this.restrictionSummaryGrid1.Text = "gridControl1";
-			this.restrictionSummaryGrid1.ThemesEnabled = true;
-			this.restrictionSummaryGrid1.UseRightToLeftCompatibleTextBox = true;
 			// 
 			// AuditHistoryView
 			// 
@@ -305,22 +217,22 @@
 			this.ClientSize = new System.Drawing.Size(800, 514);
 			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.tableLayoutPanel1);
-			this.Controls.Add(this.ribbonControlHeader);
+			this.HelpButton = false;
 			this.MaximizeBox = false;
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(200, 46);
 			this.Name = "AuditHistoryView";
+			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxAuditHistoryView";
 			this.Load += new System.EventHandler(this.AuditHistoryView_Load);
+			this.ResizeEnd += new System.EventHandler(this.auditHistoryViewResizeEnd);
 			this.statusStrip.ResumeLayout(false);
 			this.statusStrip.PerformLayout();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.grid)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlHeader)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.restrictionSummaryGrid1)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -328,9 +240,7 @@
 
         #endregion
 
-        private System.ComponentModel.BackgroundWorker backgroundWorkerDataLoader;
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdv ribbonControlHeader;
-        private SingleAgentRestriction.RestrictionSummaryGrid restrictionSummaryGrid1;
+		  private System.ComponentModel.BackgroundWorker backgroundWorkerDataLoader;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel pageOfPagesStatusLabel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;

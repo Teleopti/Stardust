@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -35,50 +36,56 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				return;
 			}
 
-			if (Logger.IsInfoEnabled)
-				Logger.Info("Checking SMSLink license.");
 			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
 			if (
 				DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
 					DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
 			{
+				Logger.Info("Found SMSLink license.");
 				var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
 				if (!string.IsNullOrEmpty(smsMessages.Subject))
 				{
+					Logger.Info("Found significant change on " + date.ToShortDateString(CultureInfo.InvariantCulture) + " on " + person.Name);
 					var number = _smsLinkChecker.SmsMobileNumber(person);
 					if (!string.IsNullOrEmpty(number))
 					{
-                        try
-                        {
-                            var smsSender = _notificationSenderFactory.GetSender();
-                            if (smsSender != null)
-                            {
-                                smsSender.SendNotification(smsMessages, number);
-                            }
-                            else
-                            {
-                                Logger.Warn("No SMS sender was found. Review the configuration and try to restart the service bus.");
-                            }
-                        }
-                        catch (TypeLoadException exception)
-                        {
-                            Logger.Error("Could not load type for notification.", exception);
-                        }
-                        catch (FileNotFoundException exception)
-                        {
-                            Logger.Error("Could not load type for notification.", exception);
-                        }
-                        catch (FileLoadException exception)
-                        {
-                            Logger.Error("Could not load type for notification.", exception);
-                        }
-                        catch (BadImageFormatException exception)
-                        {
-                            Logger.Error("Could not load type for notification.", exception);
-                        }
+						try
+						{
+							var smsSender = _notificationSenderFactory.GetSender();
+							if (smsSender != null)
+							{
+								smsSender.SendNotification(smsMessages, number);
+							}
+							else
+							{
+								Logger.Warn("No SMS sender was found. Review the configuration and try to restart the service bus.");
+							}
+						}
+						catch (TypeLoadException exception)
+						{
+							Logger.Error("Could not load type for notification.", exception);
+						}
+						catch (FileNotFoundException exception)
+						{
+							Logger.Error("Could not load type for notification.", exception);
+						}
+						catch (FileLoadException exception)
+						{
+							Logger.Error("Could not load type for notification.", exception);
+						}
+						catch (BadImageFormatException exception)
+						{
+							Logger.Error("Could not load type for notification.", exception);
+						}
+					}
+					else
+					{
+						Logger.Info("Did not find a Mobile Number on " + person.Name);
 					}
 				}
 			}
+			else
+				Logger.Info("No SMSLink license found.");
 		}
 	}
 }

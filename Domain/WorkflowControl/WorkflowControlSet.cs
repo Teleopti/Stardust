@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,10 +12,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private string _name = string.Empty;
         private bool _isDeleted;
         private IList<IAbsenceRequestOpenPeriod> _absenceRequestOpenPeriods;
-        private Iesi.Collections.Generic.ISet<ISkill> _mustMatchSkills;
-        private Iesi.Collections.Generic.ISet<IShiftCategory> _allowedPreferenceShiftCategories;
-        private Iesi.Collections.Generic.ISet<IDayOffTemplate> _allowedPreferenceDayOffs;
-        private Iesi.Collections.Generic.ISet<IAbsence> _allowedPreferenceAbsences;
+        private ISet<ISkill> _mustMatchSkills;
+        private ISet<IShiftCategory> _allowedPreferenceShiftCategories;
+        private ISet<IDayOffTemplate> _allowedPreferenceDayOffs;
+        private ISet<IAbsence> _allowedPreferenceAbsences;
         private DateOnly preferencePeriodFromDate;
         private DateOnly preferencePeriodToDate;
         private DateOnly preferenceInputFromDate;
@@ -36,10 +35,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public WorkflowControlSet()
         {
             _absenceRequestOpenPeriods = new List<IAbsenceRequestOpenPeriod>();
-            _allowedPreferenceShiftCategories = new HashedSet<IShiftCategory>();
-            _allowedPreferenceDayOffs = new HashedSet<IDayOffTemplate>();
-            _allowedPreferenceAbsences = new HashedSet<IAbsence>();
-            _mustMatchSkills = new HashedSet<ISkill>();
+            _allowedPreferenceShiftCategories = new HashSet<IShiftCategory>();
+			_allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>();
+			_allowedPreferenceAbsences = new HashSet<IAbsence>();
+			_mustMatchSkills = new HashSet<ISkill>();
             preferencePeriodFromDate = new DateOnly(DateHelper.MinSmallDateTime);
             preferencePeriodToDate = new DateOnly(DateHelper.MaxSmallDateTime);
             preferenceInputFromDate = new DateOnly(DateHelper.MinSmallDateTime);
@@ -143,10 +142,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 periodClone.SetParent(clone);
                 clone._absenceRequestOpenPeriods.Add(periodClone);
             }
-            clone._allowedPreferenceDayOffs = new HashedSet<IDayOffTemplate>(_allowedPreferenceDayOffs);
-            clone._allowedPreferenceShiftCategories = new HashedSet<IShiftCategory>(_allowedPreferenceShiftCategories);
-            clone._allowedPreferenceAbsences = new HashedSet<IAbsence>(_allowedPreferenceAbsences);
-            clone._mustMatchSkills = new HashedSet<ISkill>(_mustMatchSkills);
+	        clone._allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>(_allowedPreferenceDayOffs);
+	        clone._allowedPreferenceShiftCategories = new HashSet<IShiftCategory>(_allowedPreferenceShiftCategories);
+	        clone._allowedPreferenceAbsences = new HashSet<IAbsence>(_allowedPreferenceAbsences);
+	        clone._mustMatchSkills = new HashSet<ISkill>(_mustMatchSkills);
             return clone;
         }
 
@@ -247,7 +246,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public virtual IEnumerable<IShiftCategory> AllowedPreferenceShiftCategories
         {
             get { return _allowedPreferenceShiftCategories; }
-			set { _allowedPreferenceShiftCategories = new HashedSet<IShiftCategory>(new List<IShiftCategory>(value)); }
+			set { _allowedPreferenceShiftCategories = new HashSet<IShiftCategory>(new List<IShiftCategory>(value)); }
 		}
 
         public virtual void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff)
@@ -264,7 +263,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public virtual IEnumerable<IDayOffTemplate> AllowedPreferenceDayOffs
         {
             get { return _allowedPreferenceDayOffs; }
-			set { _allowedPreferenceDayOffs = new HashedSet<IDayOffTemplate>(new List<IDayOffTemplate>(value)); }
+			set { _allowedPreferenceDayOffs = new HashSet<IDayOffTemplate>(new List<IDayOffTemplate>(value)); }
 		}
 
         public virtual bool AutoGrantShiftTradeRequest
@@ -282,7 +281,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public virtual IEnumerable<IAbsence> AllowedPreferenceAbsences
         {
             get { return _allowedPreferenceAbsences; }
-			set { _allowedPreferenceAbsences = new HashedSet<IAbsence>(new List<IAbsence>(value)); }
+			set { _allowedPreferenceAbsences = new HashSet<IAbsence>(new List<IAbsence>(value)); }
         }
 
         public virtual void AddAllowedPreferenceAbsence(IAbsence absence)

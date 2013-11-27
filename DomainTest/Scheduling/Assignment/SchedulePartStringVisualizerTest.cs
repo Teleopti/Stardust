@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             IPerson person = PersonFactory.CreatePerson();
             person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
-            _agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999, 1, 1), new List<ISkill>());
+            _agent = PersonFactory.CreatePersonWithPersonPeriod(person, new DateOnly(1999, 1, 1), new List<ISkill>(), new Contract("ctr"), new PartTimePercentage("ptc"));
             underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
             dic = new ScheduleDictionaryForTest(_scenario,
                                                 new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2010, 1, 1)),

@@ -1461,7 +1461,6 @@
     <Compile Include="Scheduling\RequestDetailsView.Designer.cs">
       <DependentUpon>RequestDetailsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\RestrictionSummaryView.cs" />
     <Compile Include="Scheduling\RibbonControlAdvFixed.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1494,7 +1493,6 @@
     </Compile>
     <Compile Include="Scheduling\SingleAgentRestriction\CommentMouseControler.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsenceOnContractDayOffPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\AbsencePainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\ActivityPreferencePainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\DisabledPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\EffectiveRestrictionPainter.cs" />
@@ -1506,15 +1504,6 @@
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferenceCellPainterBase.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsenceOnContractDayOffPainter.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredAbsencePainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredDayOffPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredExtendedPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\PreferredShiftCategoryPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\ScheduledDayOffPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\ScheduledPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\PreferenceCellPainters\ScheduledShiftPainter.cs" />
-    <Compile Include="Scheduling\SingleAgentRestriction\RestrictionSummaryGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Scheduling\ScheduleReporting\IPdfScheduleTemplate.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfDayOfWeekHeader.cs" />
     <Compile Include="Scheduling\ScheduleReporting\PdfScheduleAssignment.cs" />
@@ -1552,7 +1541,6 @@
     <Compile Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesDialog.Designer.cs">
       <DependentUpon>SchedulingSessionPreferencesDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SingleAgentRestriction\RestrictionSummaryViewCellModel.cs" />
     <Compile Include="Scheduling\SingleAgentRestriction\RestrictionWeekHeaderViewCellModel.cs" />
     <Compile Include="Scheduling\SkillSummary.cs">
       <SubType>Form</SubType>
@@ -3174,9 +3162,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\SchedulingSessionPreferencesTabPanel.resx">
       <DependentUpon>SchedulingSessionPreferencesTabPanel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Scheduling\SingleAgentRestriction\RestrictionSummaryGrid.resx">
-      <DependentUpon>RestrictionSummaryGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SkillSummary.resx">
       <DependentUpon>SkillSummary.cs</DependentUpon>

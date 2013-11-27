@@ -600,7 +600,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
-            ShowHelp(false);
+            ViewBase.ShowHelp(this,true);
         }
 
         private void toolStripButtonResetLayout_Click(object sender, EventArgs e)

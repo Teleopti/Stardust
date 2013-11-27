@@ -9,6 +9,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             _skillType = SkillTypeFactory.CreateSkillType();
             _skill = SkillFactory.CreateSkill("dummy", _skillType, 15);
-            _activity = ActivityFactory.CreateActivity("dummyActivity");
+            _activity = new Activity("dummyActivity");
             _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("ga1");
             _skill.Activity = _activity;
 

@@ -157,5 +157,53 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 				return "";
 			}
 		}
+
+		public string FindSuccessOrError
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				if (_configXml.GetElementsByTagName("FindSuccessOrError").Count > 0)
+					return _configXml.GetElementsByTagName("FindSuccessOrError")[0].InnerText;
+				return "";
+			}
+		}
+
+		public string ErrorCode
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				if (_configXml.GetElementsByTagName("ErrorCode").Count > 0)
+					return _configXml.GetElementsByTagName("ErrorCode")[0].InnerText;
+				return "";
+			}
+		}
+
+		public string SuccessCode
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return "";
+				if (_configXml.GetElementsByTagName("SuccessCode").Count > 0)
+					return _configXml.GetElementsByTagName("SuccessCode")[0].InnerText;
+				return "";
+			}
+		}
+
+		public bool SkipSearch
+		{
+			get
+			{
+				if (!HasLoadedConfig)
+					return true;
+				if (_configXml.GetElementsByTagName("SkipSearch").Count > 0)
+					return Convert.ToBoolean(_configXml.GetElementsByTagName("SkipSearch")[0].InnerText);
+				return false;
+			}
+		}
 	}
 }

@@ -281,6 +281,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             
             ((IRequest)request1).SetParent(_target);
             LastCall.Repeat.Once();
+	        Expect.Call(request1.GetHashCode()).Return(37);
 
             typeof(Request).GetMethod("Approve", BindingFlags.NonPublic | BindingFlags.Instance)
                 .Invoke(request1, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.InvokeMethod, null, new object[] { null }, CultureInfo.InvariantCulture);

@@ -3,6 +3,7 @@ using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IStateGroupActivityAlarm CreateAggregateWithCorrectBusinessUnit()
         {
-			activity = ActivityFactory.CreateActivity("roger", Color.White);
+					activity = new Activity("roger") { DisplayColor = Color.White };
 			activity.GroupingActivity = groupAct;
 			PersistAndRemoveFromUnitOfWork(activity);
 

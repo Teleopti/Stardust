@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
@@ -12,9 +11,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 	{
 		private IPersonContract _personContract;
 		private ITeam _team;
-		private Iesi.Collections.Generic.ISet<IPersonSkill> _personSkillCollection;
+		private ISet<IPersonSkill> _personSkillCollection;
 		private readonly IList<IPersonSkill> _personMaxSeatSkillCollection  = new List<IPersonSkill>();
-		private Iesi.Collections.Generic.ISet<IExternalLogOn> _externalLogOnCollection;
+		private ISet<IExternalLogOn> _externalLogOnCollection;
 		private DateOnly _startDate;
 		private IRuleSetBag _ruleSetBag;
 		private string _note;
@@ -34,8 +33,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			_personContract = personContract;
 			_team = team;
-			_personSkillCollection = new HashedSet<IPersonSkill>();
-			_externalLogOnCollection = new HashedSet<IExternalLogOn>();
+			_personSkillCollection = new HashSet<IPersonSkill>();
+			_externalLogOnCollection = new HashSet<IExternalLogOn>();
 			_startDate = startDate;
 		}
 
@@ -208,8 +207,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var retobj = (PersonPeriod)MemberwiseClone();
 			retobj.SetId(null);
-			retobj._personSkillCollection = new HashedSet<IPersonSkill>();
-			retobj._externalLogOnCollection = new HashedSet<IExternalLogOn>(_externalLogOnCollection);
+			retobj._personSkillCollection = new HashSet<IPersonSkill>();
+			retobj._externalLogOnCollection = new HashSet<IExternalLogOn>(_externalLogOnCollection);
 
 			foreach (IPersonSkill personSkill in _personSkillCollection)
 			{
@@ -226,8 +225,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public virtual IPersonPeriod EntityClone()
 		{
 			var retobj = (PersonPeriod)MemberwiseClone();
-			retobj._personSkillCollection = new HashedSet<IPersonSkill>();
-			retobj._externalLogOnCollection = new HashedSet<IExternalLogOn>(_externalLogOnCollection);
+			retobj._personSkillCollection = new HashSet<IPersonSkill>();
+			retobj._externalLogOnCollection = new HashSet<IExternalLogOn>(_externalLogOnCollection);
 
 			foreach (IPersonSkill personSkill in _personSkillCollection)
 			{
