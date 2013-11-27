@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Rta.Server.Resolvers
 
 		public bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<PersonWithBusinessUnit> personId)
 		{
-			var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn);
+			var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn).ToUpper(CultureInfo.InvariantCulture);
 			if (string.IsNullOrEmpty(logOn))
 				lookupKey = string.Empty;
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Rta.Server.Resolvers
 					Guid personId = reader.GetGuid(reader.GetOrdinal("person_code"));
 					Guid businessUnitId = reader.GetGuid(reader.GetOrdinal("business_unit_code"));
 
-					var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", loadedDataSourceId, originalLogOn);
+					var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", loadedDataSourceId, originalLogOn).ToUpper(CultureInfo.InvariantCulture);
 					var personWithBusinessUnit = new PersonWithBusinessUnit
 													{
 														PersonId = personId,
