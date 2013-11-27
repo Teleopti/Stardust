@@ -136,6 +136,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestWithinLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\FakePersonAssignmentWriteSideRepository.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\FakePersonScheduleDayReadModelPersister.cs" />

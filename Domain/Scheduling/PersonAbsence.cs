@@ -61,6 +61,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				});
 		}
 
+		public void IntradayAbsence(IPerson person, IAbsence absence, DateTime startDateTimeInUtc, DateTime endDateTimeInUtc)
+		{
+			_person = person;
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
+			_layer = absenceLayer;
+
+			AddEvent(new IntradayAbsenceAddedEvent
+			{
+				AbsenceId = absence.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault(),
+				StartDateTime = startDateTimeInUtc,
+				EndDateTime = endDateTimeInUtc,
+				ScenarioId = _scenario.Id.GetValueOrDefault()
+			});
+		}
+
 		public virtual void RemovePersonAbsence()
 		{
 			AddEvent(new PersonAbsenceRemovedEvent
@@ -309,5 +325,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			throw new NotImplementedException();
 		}
+
+	    
     }
 }
