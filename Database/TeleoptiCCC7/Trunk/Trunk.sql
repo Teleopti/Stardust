@@ -695,3 +695,59 @@ GO
 UPDATE dbo.TemplateTaskPeriod SET Tasks = 0 WHERE Tasks<0
 UPDATE dbo.TemplateTaskPeriod SET CampaignTasks = -1 WHERE CampaignTasks<-1
 GO
+
+----------------  
+--Name: David and Roger
+--Date: 2013-11-27
+--Desc: #26021 - make sure data is unique
+---------------- 
+--AccessibilityDates
+create table #AccessibilityDates(RuleSet uniqueidentifier, [Date] datetime)
+insert into #AccessibilityDates
+select
+	a.ruleset,
+	a.date
+from
+(
+select
+	ruleset,
+	date,
+	ROW_NUMBER()OVER(PARTITION BY ruleset,date ORDER BY date) as 'rn'
+from dbo.AccessibilityDates
+) a
+where a.rn = 1
+
+DELETE FROM dbo.AccessibilityDates
+ALTER TABLE dbo.AccessibilityDates ADD CONSTRAINT UQ_AccessibilityDates UNIQUE(RuleSet,[Date])
+INSERT INTO dbo.AccessibilityDates
+SELECT
+	ruleset,
+	date
+FROM #AccessibilityDates
+drop table #AccessibilityDates
+
+--AccessibilityDaysOfWeek
+create table #AccessibilityDaysOfWeek(RuleSet uniqueidentifier, [DayOfWeek] int)
+insert into #AccessibilityDaysOfWeek
+select
+	a.ruleset,
+	a.DayOfWeek
+from
+(
+select
+	ruleset,
+	DayOfWeek,
+	ROW_NUMBER()OVER(PARTITION BY ruleset,DayOfWeek ORDER BY DayOfWeek) as 'rn'
+from dbo.AccessibilityDaysOfWeek
+) a
+where a.rn = 1
+
+DELETE FROM dbo.AccessibilityDaysOfWeek
+ALTER TABLE dbo.AccessibilityDaysOfWeek ADD CONSTRAINT UQ_AccessibilityDaysOfWeek UNIQUE(RuleSet,[DayOfWeek])
+INSERT INTO dbo.AccessibilityDaysOfWeek
+SELECT
+	ruleset,
+	DayOfWeek
+FROM #AccessibilityDaysOfWeek
+drop table #AccessibilityDaysOfWeek
+GO
