@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -13,7 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public IEnumerable<PersonScheduleViewModelLayer> Layers { get; set; }
 		public IEnumerable<PersonScheduleViewModelAbsence> Absences { get; private set; }
 		public IEnumerable<PersonScheduleViewModelPersonAbsence> PersonAbsences  { get; private set; }
-		public bool IsToday { get; set; }
+		public DefaultIntradayAbsenceViewModel DefaultIntradayAbsenceData { get; set; }
+	}
+
+	public class DefaultIntradayAbsenceViewModel
+	{
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
 	}
 
 	public class PersonScheduleViewModelPersonAbsence

@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -19,13 +20,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	public class PersonScheduleViewModelMapperTest
 	{
 		private IUserTimeZone _userTimeZone;
+		private INow _now;
 
 		[SetUp]
 		public void Setup()
 		{
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_now = MockRepository.GenerateMock<INow>();
+			_now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_userTimeZone)));
+			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile(_userTimeZone, _now)));
 		}
 
 		[Test]
@@ -78,15 +82,38 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapIsTodayInUserTimeZone()
+		public void ShouldMapDefaultIntradayAbsenceTimesInUserTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
 			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			_userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
-			var date = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, hawaiiTimeZoneInfo).Date;
-			var result = target.Map(new PersonScheduleData { Date = date });
+			var startTime = new DateTime(2013, 3, 4, 13, 20, 0, DateTimeKind.Utc);
+			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2013, 3, 4, 13, 20, 0, DateTimeKind.Utc), hawaiiTimeZoneInfo);
+			var shift = new Shift { Projection = new[] { new SimpleLayer { Start = startTime } } };
 
-			result.IsToday.Should().Be.True();
+			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift }});
+
+			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(expectedStartTime);
+			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(expectedStartTime.AddHours(1));
+		}
+
+		[Test]
+		public void ShouldMapDefaultIntradayAbsenceTimesInUserTimeZoneForToday()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
+			var now = _now.UtcDateTime();
+			var startTime = now.AddHours(-3);
+			var endTime = startTime.AddHours(8);
+			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(now, hawaiiTimeZoneInfo);
+			var expectedEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, hawaiiTimeZoneInfo);
+			var shift = new Shift { Projection = new[] { new SimpleLayer { Start = startTime, End = endTime} } };
+
+			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift } });
+
+			result.DefaultIntradayAbsenceData.StartTime.Should().Be.EqualTo(expectedStartTime);
+			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(expectedEndTime);
 		}
 
 		[Test]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
@@ -11,10 +12,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PersonScheduleViewModelMappingProfile : Profile
 	{
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly INow _now;
 
-		public PersonScheduleViewModelMappingProfile(IUserTimeZone userTimeZone)
+		public PersonScheduleViewModelMappingProfile(IUserTimeZone userTimeZone, INow now)
 		{
 			_userTimeZone = userTimeZone;
+			_now = now;
 		}
 
 		private class MapContext<TParent, TChild>
@@ -44,9 +47,33 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.PersonAbsences, o => o.MapFrom(
 					s => from p in s.PersonAbsences ?? new IPersonAbsence[] {}
 					     select new MapContext<PersonScheduleData, IPersonAbsence>(s, p)))
-				.ForMember(x => x.IsToday,
-				           o =>
-				           o.MapFrom(s => TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, _userTimeZone.TimeZone()).Date == s.Date))
+				.ForMember(x => x.DefaultIntradayAbsenceData,
+						   o => o.MapFrom(s => s.Model.Shift.Projection))
+				;
+
+			CreateMap<IList<SimpleLayer>, DefaultIntradayAbsenceViewModel>()
+				.ForMember(x => x.StartTime, o => o.ResolveUsing(s =>
+					{
+						if (s.FirstOrDefault() == null || s.LastOrDefault() == null)
+							return DateTime.MinValue;
+						var now = _now.UtcDateTime();
+						if (now >= s.FirstOrDefault().Start && now <= s.LastOrDefault().End)
+							return TimeZoneInfo.ConvertTimeFromUtc(now, _userTimeZone.TimeZone());
+						return s.FirstOrDefault() != null
+							       ? TimeZoneInfo.ConvertTimeFromUtc(s.FirstOrDefault().Start, _userTimeZone.TimeZone())
+							       : DateTime.MinValue;
+					}))
+				.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
+					{
+						var now = _now.UtcDateTime();
+						if (s.FirstOrDefault() == null || s.LastOrDefault() == null)
+							return DateTime.MinValue;
+						if (now >= s.FirstOrDefault().Start && now <= s.LastOrDefault().End)
+							return TimeZoneInfo.ConvertTimeFromUtc(s.LastOrDefault().End, _userTimeZone.TimeZone());
+						return s.FirstOrDefault() != null
+							       ? TimeZoneInfo.ConvertTimeFromUtc(s.FirstOrDefault().Start, _userTimeZone.TimeZone()).AddHours(1)
+							       : DateTime.MinValue;
+					}))
 				;
 
 			CreateMap<MapContext<PersonScheduleData, SimpleLayer>, PersonScheduleViewModelLayer>()

@@ -21,8 +21,8 @@ define([
 		this.Absence = ko.observable("");
 
 		this.Date = ko.observable();
-		this.StartTime = ko.observable("17:00");
-		this.EndTime = ko.observable("18:00");
+		this.StartTime = ko.observable();
+		this.EndTime = ko.observable();
 
 		var groupid;
 		var personId;
