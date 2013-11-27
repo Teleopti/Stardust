@@ -352,10 +352,28 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseAgentForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseShiftCategoryForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\PrioritiseWeekDay.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SelectedAgentPoints.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SwapScheduleDays.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriority.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriorityDefinitionInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockListSwapAnalyzer.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ValidateScheduleDays.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\DetermineTeamBlockPriority.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockFairnessOptimizationService.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSizeClassifier.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockWeight.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockWeightExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockTargetValueCalculator.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
