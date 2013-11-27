@@ -2,6 +2,7 @@
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -72,23 +73,25 @@ namespace Teleopti.Ccc.Win.Common
 			MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Error,
                                                         MessageBoxDefaultButton.Button1,
-                                                        (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
-                                                            ? MessageBoxOptions.RtlReading |
-                                                              MessageBoxOptions.RightAlign
-                                                            : 0);
+                                                        rightToLeftOptions());
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
+	    private static MessageBoxOptions rightToLeftOptions()
+	    {
+		    return (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
+			           ? MessageBoxOptions.RtlReading |
+			             MessageBoxOptions.RightAlign
+			           : 0;
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
 		public static void ShowErrorMessage(IWin32Window owner, string text, string caption)
 		{
 			LocalizationProvider.Provider = new Localizer();
 			MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
 														MessageBoxButtons.OK, MessageBoxIcon.Error,
 														MessageBoxDefaultButton.Button1,
-														(((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
-															? MessageBoxOptions.RtlReading |
-															  MessageBoxOptions.RightAlign
-															: 0);
+														rightToLeftOptions());
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -98,10 +101,7 @@ namespace Teleopti.Ccc.Win.Common
             MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information,
                                                         MessageBoxDefaultButton.Button1,
-                                                        (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
-                                                            ? MessageBoxOptions.RtlReading |
-                                                              MessageBoxOptions.RightAlign
-                                                            : 0);
+														rightToLeftOptions());
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters")]
@@ -111,10 +111,7 @@ namespace Teleopti.Ccc.Win.Common
             MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information,
                                                         MessageBoxDefaultButton.Button1,
-                                                        (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
-                                                            ? MessageBoxOptions.RtlReading |
-                                                              MessageBoxOptions.RightAlign
-                                                            : 0);
+														rightToLeftOptions());
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -123,11 +120,7 @@ namespace Teleopti.Ccc.Win.Common
 			LocalizationProvider.Provider = new Localizer();
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
 															   MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2,
-                                                               (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-																   RightToLeftDisplay)
-																   ? MessageBoxOptions.RtlReading |
-																	 MessageBoxOptions.RightAlign
-																   : 0);
+															   rightToLeftOptions());
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -142,11 +135,7 @@ namespace Teleopti.Ccc.Win.Common
 			LocalizationProvider.Provider = new Localizer();
 			return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
 															   MessageBoxButtons.YesNo, MessageBoxIcon.Question, defaultButton,
-															   (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-																   RightToLeftDisplay)
-																   ? MessageBoxOptions.RtlReading |
-																	 MessageBoxOptions.RightAlign
-																   : 0);
+															   rightToLeftOptions());
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -156,11 +145,7 @@ namespace Teleopti.Ccc.Win.Common
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
                                                                MessageBoxDefaultButton.Button1,
-                                                               (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-                                                                   RightToLeftDisplay)
-                                                                   ? MessageBoxOptions.RtlReading |
-                                                                     MessageBoxOptions.RightAlign
-                                                                   : 0);
+															   rightToLeftOptions());
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters")]
@@ -170,11 +155,7 @@ namespace Teleopti.Ccc.Win.Common
             return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
 															   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
 															   MessageBoxDefaultButton.Button1,
-                                                               (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-																   RightToLeftDisplay)
-																   ? MessageBoxOptions.RtlReading |
-																	 MessageBoxOptions.RightAlign
-																   : 0);
+															   rightToLeftOptions());
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -184,11 +165,7 @@ namespace Teleopti.Ccc.Win.Common
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                                MessageBoxButtons.OKCancel, MessageBoxIcon.Question,
                                                                MessageBoxDefaultButton.Button1,
-                                                               (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-                                                                   RightToLeftDisplay)
-                                                                   ? MessageBoxOptions.RtlReading |
-                                                                     MessageBoxOptions.RightAlign
-                                                                   : 0);
+															   rightToLeftOptions());
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
@@ -198,10 +175,43 @@ namespace Teleopti.Ccc.Win.Common
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                 MessageBoxButtons.OK, MessageBoxIcon.Warning,
                 MessageBoxDefaultButton.Button1,
-                (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
-                    RightToLeftDisplay)
-                    ? MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign
-                    : 0);
+				rightToLeftOptions());
         }
+
+		public static void ShowHelp(IHelpForm owner, bool local)
+		{
+			ColorHelper guiHelper = new ColorHelper();
+			var activeControl = guiHelper.GetActiveControl(owner as Control);
+			IHelpContext userControl = null;
+			while (activeControl != null)
+			{
+				if (tryGetHelpFromContext(activeControl, ref userControl)) break;
+				if (tryGetHelpFromManualContext(owner, activeControl, ref userControl)) break;
+
+				var panel = activeControl as Panel;
+				if (panel != null && panel.Controls.Count > 0)
+				{
+					if (tryGetHelpFromContext(panel.Controls[0], ref userControl)) break;
+				}
+
+				activeControl = activeControl.Parent;
+			}
+
+			HelpHelper.Current.GetHelp(owner, userControl, local);
+		}
+
+		private static bool tryGetHelpFromContext(Control activeControl, ref IHelpContext userControl)
+		{
+			userControl = activeControl as IHelpContext;
+			if (userControl != null && userControl.HasHelp) return true;
+			return false;
+		}
+
+		private static bool tryGetHelpFromManualContext(IHelpForm form, Control activeControl, ref IHelpContext userControl)
+		{
+			userControl = form.FindMatchingManualHelpContext(activeControl);
+			if (userControl != null && userControl.HasHelp) return true;
+			return false;
+		}
     }
 }

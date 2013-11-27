@@ -405,7 +405,7 @@ namespace Teleopti.Ccc.Win.Budgeting
 
 		private void toolStripButtonHelp_Click(object sender, EventArgs e)
 		{
-			ShowHelp(true);
+			ViewBase.ShowHelp(this,true);
 		}
 
 		private void toolStripButtonClose_Click(object sender, EventArgs e)

@@ -670,7 +670,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void toolStripButtonMainHelp_Click(object sender, EventArgs e)
         {
-            ShowHelp(true);
+            ViewBase.ShowHelp(this,true);
         }
         private void toolStripButtonContract_Click(object sender, EventArgs e)
         {
