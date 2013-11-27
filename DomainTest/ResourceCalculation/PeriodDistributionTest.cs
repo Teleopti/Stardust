@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(0, _target.GetSplitPeriodValues()[2]);
             Assert.AreEqual(7, _target.PeriodDetailsSum);
 
-            double expected = new PopulationStatisticsCalculator(new[] {1d, -0.19d, -1d}).StandardDeviation;
+            double expected = Domain.Calculation.Variances.StandardDeviation(new[] {1d, -0.19d, -1d});
             Assert.AreEqual(expected, _target.CalculateStandardDeviation(), 0.01);
 
             Assert.AreEqual(2.33, _target.PeriodDetailAverage, 0.01);
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(2, _target.GetSplitPeriodValues()[1]);
             Assert.AreEqual(7, _target.PeriodDetailsSum);
 
-            double expected = new PopulationStatisticsCalculator(new[]{1d, -0.19d, -1d}).StandardDeviation;
+            double expected = Domain.Calculation.Variances.StandardDeviation(new[]{1d, -0.19d, -1d});
             Assert.AreEqual(expected, _target.CalculateStandardDeviation(), 0.01);
             Assert.AreEqual(2.33, _target.PeriodDetailAverage, 0.01);
 

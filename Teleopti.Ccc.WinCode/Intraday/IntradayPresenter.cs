@@ -361,10 +361,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             _loadStatisticsAndActualHeadsCommand.Execute(_intradayDate, skill, skillStaffPeriods);
 
-            // fill in statistic data
-            var statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods);
-            statistics.Analyze();
-
             return skillStaffPeriods;
         }
 

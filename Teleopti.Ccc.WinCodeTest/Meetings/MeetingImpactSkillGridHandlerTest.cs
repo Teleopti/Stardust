@@ -111,9 +111,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(skillStaffPeriodHolder).Repeat.Once();
             Expect.Call(skillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { _skill }, periodToFind)).IgnoreArguments().Return(skillStaffPeriods).Repeat.Once();
-            Expect.Call(skillStaffPeriod.FStaff).Return(1.0).Repeat.Once();
-            Expect.Call(skillStaffPeriod.CalculatedResource).Return(1.0).Repeat.Once();
-
+            
             Expect.Call(() => _meetingImpactView.ClearTabPages());
             Expect.Call(() => _meetingImpactView.DrawIntraday(_skill, _schedulerStateHolder, skillStaffPeriods));
             Expect.Call(() => _meetingImpactView.PositionControl()).Repeat.Once();
