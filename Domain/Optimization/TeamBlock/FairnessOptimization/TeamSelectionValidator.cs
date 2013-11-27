@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
 	public interface ITeamSelectionValidator
 	{
-		bool ValidSelection(IList<IPerson> selectedPersonList, DateOnlyPeriod selectedPeriod);
+		bool ValidateSelection(IList<IPerson> selectedPersonList, DateOnlyPeriod selectedPeriod);
 	}
 
 	public class TeamSelectionValidator : ITeamSelectionValidator
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 			_scheduleMatrixList = scheduleMatrixList;
 		}
 
-		public bool ValidSelection(IList<IPerson> selectedPersonList, DateOnlyPeriod selectedPeriod)
+		public bool ValidateSelection(IList<IPerson> selectedPersonList, DateOnlyPeriod selectedPeriod)
 		{
 			if (selectedPersonList == null) return false;
 			if (selectedPersonList.Count == 0) return false;

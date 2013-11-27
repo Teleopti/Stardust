@@ -358,9 +358,12 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SelectedAgentPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SwapScheduleDays.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriorityDefinitionInfo.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockListSwapAnalyzer.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSwapValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ValidateScheduleDays.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">

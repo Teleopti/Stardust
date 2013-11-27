@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			{
 				_selectedPersonList.Add(_person1);
 				_selectedPersonList.Add(_person2);
-				var result = _target.ValidSelection(_selectedPersonList, _dateOnlyPeriod);
+				var result = _target.ValidateSelection(_selectedPersonList, _dateOnlyPeriod);
 
 				Assert.IsTrue(result);	
 			}	
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			using (_mock.Playback())
 			{
 				_selectedPersonList.Add(_person1);
-				var result = _target.ValidSelection(_selectedPersonList, _dateOnlyPeriod);
+				var result = _target.ValidateSelection(_selectedPersonList, _dateOnlyPeriod);
 
 				Assert.IsFalse(result);
 			}		
@@ -92,14 +92,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		[Test]
 		public void ShouldReturnFalseIfSelectedPersonListIsNull()
 		{
-			var result = _target.ValidSelection(null, _dateOnlyPeriod);
+			var result = _target.ValidateSelection(null, _dateOnlyPeriod);
 			Assert.IsFalse(result);
 		}
 
 		[Test]
 		public void ShouldReturnFalseIfSelectedPersonListIsEmpty()
 		{
-			var result = _target.ValidSelection(new List<IPerson>(), _dateOnlyPeriod);
+			var result = _target.ValidateSelection(new List<IPerson>(), _dateOnlyPeriod);
 			Assert.IsFalse(result);
 		}
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			using (_mock.Playback())
 			{
 				_selectedPersonList.Add(_person1);
-				var result = _target.ValidSelection(_selectedPersonList, _dateOnlyPeriod);
+				var result = _target.ValidateSelection(_selectedPersonList, _dateOnlyPeriod);
 
 				Assert.IsFalse(result);
 			}	
