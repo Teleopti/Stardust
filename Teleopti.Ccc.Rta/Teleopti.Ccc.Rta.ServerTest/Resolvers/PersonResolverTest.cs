@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Resolvers
 			dataReader.Expect(d => d.GetOrdinal("datasource_id")).Return(0).Repeat.Twice();
 			dataReader.Expect(d => d.GetInt16(0)).Return(2).Repeat.Twice();
 			dataReader.Expect(d => d.GetOrdinal("acd_login_original_id")).Return(1).Repeat.Twice();
-			dataReader.Expect(d => d.GetString(1)).Return("0001").Repeat.Twice();
+			dataReader.Expect(d => d.GetString(1)).Return("A0001").Repeat.Twice();
 			dataReader.Expect(d => d.GetOrdinal("person_code")).Return(2).Repeat.Twice();
 			dataReader.Expect(d => d.GetGuid(2)).Return(_personId).Repeat.Twice();
 			dataReader.Expect(d => d.GetOrdinal("business_unit_code")).Return(3).Repeat.Twice();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Resolvers
 			_mock.ReplayAll();
 
 			IEnumerable<PersonWithBusinessUnit> resolvedList;
-			Assert.That(_target.TryResolveId(2, "0001", out resolvedList), Is.True);
+			Assert.That(_target.TryResolveId(2, "a0001", out resolvedList), Is.True);
 			resolvedList = resolvedList.ToList();
 			Assert.That(resolvedList.Count(p => p.BusinessUnitId == _businessUnitId && p.PersonId == _personId), Is.EqualTo(1));
 			Assert.That(resolvedList.Count(p => p.BusinessUnitId == _secondBusinessUnit && p.PersonId == _personId), Is.EqualTo(1));
