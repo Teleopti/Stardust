@@ -7,12 +7,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
 	public class TeamBlockSwap
 	{
+		private readonly ITeamBlockSwapDayValidator _teamBlockSwapDayValidator;
 		private readonly ISwapServiceNew _swapServiceNew;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
 
-		public TeamBlockSwap(ISwapServiceNew swapServiceNew, IScheduleDictionary scheduleDictionary, ITeamBlockSwapValidator teamBlockSwapValidator)
+		public TeamBlockSwap(ISwapServiceNew swapServiceNew, IScheduleDictionary scheduleDictionary, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockSwapDayValidator teamBlockSwapDayValidator)
 		{
+			_teamBlockSwapDayValidator = teamBlockSwapDayValidator;
 			_swapServiceNew = swapServiceNew;
 			_scheduleDictionary = scheduleDictionary;
 			_teamBlockSwapValidator = teamBlockSwapValidator;
@@ -33,6 +35,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 				
 				var day1 = scheduleDayPros1[i].DaySchedulePart();
 				var day2 = scheduleDayPros2[i].DaySchedulePart();
+
+				if (!_teamBlockSwapDayValidator.ValidateSwapDays(day1, day2)) return false;
 
 				daysToSwap.Add(day1);
 				daysToSwap.Add(day2);

@@ -363,7 +363,9 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockInfoPriorityDefinitionInfo.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockListSwapAnalyzer.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillChecker.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSwap.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSwapDayValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSwapValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ValidateScheduleDays.cs" />
