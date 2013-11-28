@@ -18,7 +18,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		private ITeamBlockInfo _teamBlockInfo1;
 		private ITeamBlockInfo _teamBlockInfo2;
 		private TeamBlockSwapValidator _target;
-
+		private IList<IPerson> _selectedPersons;
+		private DateOnlyPeriod _dateOnlyPeriod;
+			
 		[SetUp]
 		public void SetUp()
 		{
@@ -29,18 +31,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_teamBlockContractTimeValidator = _mock.StrictMock<ITeamBlockContractTimeValidator>();
 			_teamBlockInfo1 = _mock.StrictMock<ITeamBlockInfo>();
 			_teamBlockInfo2 = _mock.StrictMock<ITeamBlockInfo>();
-			_target = new TeamBlockSwapValidator(_teamSelectionValidator, _teamMemberCountValidator, _teamBlockPeriodValidator, _teamBlockContractTimeValidator);
+			_selectedPersons = new List<IPerson>();
+			_dateOnlyPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
+			_target = new TeamBlockSwapValidator(_selectedPersons, _dateOnlyPeriod, _teamSelectionValidator, _teamMemberCountValidator, _teamBlockPeriodValidator, _teamBlockContractTimeValidator);
 		}
 
 		[Test]
 		public void ShouldReturnTrueWhenPossibleToSwap()
 		{
-			var selectedPersonList = new List<IPerson>();
-			var selectedPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
-
 			using (_mock.Record())
 			{
-				Expect.Call(_teamSelectionValidator.ValidateSelection(selectedPersonList, selectedPeriod)).Return(true);
+				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockContractTimeValidator.ValidateContractTime(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateCanSwap(selectedPersonList, selectedPeriod, _teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2);
 				Assert.IsTrue(result);
 			}
 		}
@@ -56,17 +57,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		[Test]
 		public void ShouldReturnFalseWhenValidateSelectionFails()
 		{
-			var selectedPersonList = new List<IPerson>();
-			var selectedPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
-
 			using (_mock.Record())
 			{
-				Expect.Call(_teamSelectionValidator.ValidateSelection(selectedPersonList, selectedPeriod)).Return(false);
+				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(false);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateCanSwap(selectedPersonList, selectedPeriod, _teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2);
 				Assert.IsFalse(result);
 			}	
 		}
@@ -74,18 +72,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		[Test]
 		public void ShouldReturnFalseWhenValidateMemberCountFails()
 		{
-			var selectedPersonList = new List<IPerson>();
-			var selectedPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
-
 			using (_mock.Record())
 			{
-				Expect.Call(_teamSelectionValidator.ValidateSelection(selectedPersonList, selectedPeriod)).Return(true);
+				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(false);	
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateCanSwap(selectedPersonList, selectedPeriod, _teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2);
 				Assert.IsFalse(result);
 			}	
 		}
@@ -93,19 +88,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		[Test]
 		public void ShouldReturnFalseWhenValidatePeriodFails()
 		{
-			var selectedPersonList = new List<IPerson>();
-			var selectedPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
-
 			using (_mock.Record())
 			{
-				Expect.Call(_teamSelectionValidator.ValidateSelection(selectedPersonList, selectedPeriod)).Return(true);
+				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(false);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateCanSwap(selectedPersonList, selectedPeriod, _teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2);
 				Assert.IsFalse(result);
 			}	
 		}
@@ -113,12 +105,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		[Test]
 		public void ShouldReturnFalsWhenValidateContractTimeFails()
 		{
-			var selectedPersonList = new List<IPerson>();
-			var selectedPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
-
 			using (_mock.Record())
 			{
-				Expect.Call(_teamSelectionValidator.ValidateSelection(selectedPersonList, selectedPeriod)).Return(true);
+				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockContractTimeValidator.ValidateContractTime(_teamBlockInfo1, _teamBlockInfo2)).Return(false);
@@ -126,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.ValidateCanSwap(selectedPersonList, selectedPeriod, _teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2);
 				Assert.IsFalse(result);
 			}	
 		}
