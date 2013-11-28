@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				PersonId = scheduleReadModel.PersonId,
 				StartTimeUtc = scheduleReadModel.Start.Value,
 				Name = string.Format(CultureInfo.InvariantCulture, "{0} {1}", shiftReadModel.FirstName, shiftReadModel.LastName),
-				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection)
+				ScheduleLayers = _layerMapper.Map(shiftReadModel.Shift.Projection),
+				MinStart = scheduleReadModel.MinStart
 			};
 		}
 

@@ -50,7 +50,8 @@ AS
 		AND DATEDIFF(MINUTE,Start, [End] ) < 1440
 		ORDER BY sd.Start
 	) 
-	SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS [Date], Start, [End], Model 
+
+	SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS [Date], Start, [End], Model, (SELECT MIN(Start) FROM Ass)  As 'MinStart',(SELECT COUNT(*) FROM Ass)  As 'Total'
 	FROM Ass 
 	WHERE RowNumber > @skip
 GO

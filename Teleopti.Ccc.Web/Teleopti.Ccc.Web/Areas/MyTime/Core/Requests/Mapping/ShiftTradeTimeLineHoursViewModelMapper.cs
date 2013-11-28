@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			
 			var timeZone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
-			var startTime = schedules.Min(l => l.ScheduleLayers.First().Start);
+			var startTime = schedules.First().MinStart.GetValueOrDefault();
 			var endTime = schedules.Max(l => l.ScheduleLayers.Last().End);
 
 			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startTime, endTime, timeZone);

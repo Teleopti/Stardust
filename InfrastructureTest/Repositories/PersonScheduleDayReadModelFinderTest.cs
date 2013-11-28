@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Assert.That(scheduleReadModels.ElementAt(0).PersonId, Is.EqualTo(personSortedFirst));
 				Assert.That(scheduleReadModels.ElementAt(1).PersonId, Is.EqualTo(personSortedSecond));
 				Assert.That(scheduleReadModels.ElementAt(2).PersonId, Is.EqualTo(personSortedThird));
+				Assert.That(scheduleReadModels.ElementAt(0).MinStart,Is.EqualTo(new DateTime(2012, 8, 28,7,0,0)));
 			}
 		}
 

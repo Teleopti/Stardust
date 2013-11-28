@@ -105,6 +105,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							  .AddScalar("Start", NHibernateUtil.DateTime)
 							  .AddScalar("End", NHibernateUtil.DateTime)
 							  .AddScalar("Model", NHibernateUtil.Custom(typeof(CompressedString)))
+							  .AddScalar("MinStart", NHibernateUtil.DateTime)
 							  .SetDateTime("shiftTradeDate", shiftTradeDate)
 							  .SetParameter("personIdList", idlist,NHibernateUtil.StringClob)
 							  .SetParameter("skip", paging.Skip)

@@ -44,5 +44,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Use your english skills and resharper to understand what I am
 		/// </summary>
 		string Model { get; set; }
+
+		DateTime? MinStart { get; set; }
 	}
 }
