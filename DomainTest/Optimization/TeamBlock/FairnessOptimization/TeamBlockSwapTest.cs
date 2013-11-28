@@ -97,7 +97,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			var scheduleMatrixPros2 = new List<IScheduleMatrixPro> { _scheduleMatrixPro2 };
 			var scheduleDayPros1 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1 });
 			var scheduleDayPros2 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro2 });
-			var swappedList = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
 
 			using (_mock.Record())
 			{
