@@ -300,10 +300,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void SetDistributionValues(IPopulationStatisticsCalculator calculator, IPeriodDistribution periodDistribution)
+        public void SetDistributionValues(IPopulationStatisticsCalculatedValues calculatedValues, IPeriodDistribution periodDistribution)
         {
-            IntraIntervalDeviation = calculator.StandardDeviation;
-            IntraIntervalRootMeanSquare = calculator.RootMeanSquare;
+            IntraIntervalDeviation = calculatedValues.StandardDeviation;
+            IntraIntervalRootMeanSquare = calculatedValues.RootMeanSquare;
             _periodDistribution = periodDistribution;
         }
 
@@ -781,4 +781,16 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
         }
     }
+
+	public class PopulationStatisticsCalculatedValues : IPopulationStatisticsCalculatedValues
+	{
+		public PopulationStatisticsCalculatedValues(double standardDeviation, double rootMeanSquare)
+		{
+			RootMeanSquare = rootMeanSquare;
+			StandardDeviation = standardDeviation;
+		}
+
+		public double StandardDeviation { get; private set; }
+		public double RootMeanSquare { get; private set; }
+	}
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -52,31 +49,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
         private double getTargetValue(IList<ISkillIntervalData> finalSkillIntervalData,TargetValueOptions targetValueCalculation)
         {
-            var calculator = new TeamBlockTargetValueCalculator();
             if (targetValueCalculation == TargetValueOptions.RootMeanSquare)
             {
                 var aggregatedValues = finalSkillIntervalData.Select(interval => interval.AbsoluteDifference).ToList();
-                runCalculator(calculator,aggregatedValues);
-                return calculator.RootMeanSquare;
+                return Calculation.Variances.RMS(aggregatedValues);
             }
             else
             {
                 var aggregatedValues = finalSkillIntervalData.Select(interval => interval.RelativeDifference).ToList();
-                runCalculator(calculator, aggregatedValues);
                 if (targetValueCalculation == TargetValueOptions.StandardDeviation)
-                    return calculator.StandardDeviation;
-                return calculator.Teleopti ;
+                    return Calculation.Variances.StandardDeviation(aggregatedValues);
+                return Calculation.Variances.Teleopti(aggregatedValues);
             }
             
-        }
-
-        private void runCalculator(TeamBlockTargetValueCalculator calculator, List<double> aggregatedValues)
-        {
-            foreach (double personnelDeficit in aggregatedValues)
-            {
-                calculator.AddItem(personnelDeficit);
-            }
-            calculator.Analyze();
         }
 
         private IList<ISkillIntervalData> calculateMedianValue(IDictionary<DateOnly, IList<ISkillIntervalData>> skillIntervalPerDayList, int minimumResolution)

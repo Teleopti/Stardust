@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -10,70 +12,35 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     public class SkillStaffPeriodStatisticsForSkillIntraday
     {
         private readonly IEnumerable<ISkillStaffPeriod> _periods;
-        private IDeviationStatisticsCalculator _deviationStatisticsCalculator;
 
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="SkillStaffPeriodStatisticsForSkillIntraday"/> class.
         /// </summary>
         /// <param name="periods">The periods.</param>
         public SkillStaffPeriodStatisticsForSkillIntraday(IEnumerable<ISkillStaffPeriod> periods)
         {
             _periods = periods;
-            _deviationStatisticsCalculator = new DeviationStatisticsCalculator();
+            StatisticsCalculator = new DeviationStatisticsCalculator();
             InitializeStatisticCalculator();
         }
 
-        /// <summary>
-        /// Gets the deviation statistics calculator.
-        /// </summary>
-        /// <value>The deviation statistics calculator.</value>
-        public IDeviationStatisticsCalculator StatisticsCalculator
-        {
-            get { return _deviationStatisticsCalculator; }
-            set { _deviationStatisticsCalculator = value; }
-        }
-
-        /// <summary>
-        /// Analyzes the skill staff period and fills in the statistical properties.
-        /// </summary>
-        public void Analyze()
-        {
-            StatisticsCalculator.AnalyzeData();
-        }
+	    /// <summary>
+	    /// Gets the deviation statistics calculator.
+	    /// </summary>
+	    /// <value>The deviation statistics calculator.</value>
+	    public IDeviationStatisticsCalculator StatisticsCalculator { get; set; }
 
         /// <summary>
         /// Initializes the statistic calculator.
         /// </summary>
         protected void InitializeStatisticCalculator()
         {
-            foreach (ISkillStaffPeriod skillStaffPeriod in _periods)
+	        var items = _periods.Select(p => new Tuple<double, double>(p.FStaff, p.CalculatedResource));
+            foreach (var item in items)
             {
-                var expectedValue = CreateExpectedValue(skillStaffPeriod );
-                if (expectedValue <= 0) continue;
-                var realValue = CreateRealValue(skillStaffPeriod);
-                StatisticsCalculator.AddItem(expectedValue, realValue);
+                if (item.Item1 <= 0) continue;
+                StatisticsCalculator.AddItem(item.Item1, item.Item2);
             }
         }
-
-        /// <summary>
-        /// Creates the value for calculator.
-        /// </summary>
-        /// <param name="skillStaffPeriod">The skill staff period.</param>
-        /// <returns></returns>
-        protected static double CreateExpectedValue(ISkillStaffPeriod skillStaffPeriod)
-        {
-            return skillStaffPeriod.FStaff;
-        }
-
-        /// <summary>
-        /// Creates the real value.
-        /// </summary>
-        /// <param name="skillStaffPeriod">The skill staff period.</param>
-        /// <returns></returns>
-        protected static double CreateRealValue(ISkillStaffPeriod skillStaffPeriod)
-        {
-            return skillStaffPeriod.CalculatedResource;
-        }
-
     }
 }

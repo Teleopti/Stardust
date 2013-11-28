@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -75,8 +76,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				}
 			}
 			
-			IPopulationStatisticsCalculator calculator = new PopulationStatisticsCalculator(CalculateSplitPeriodRelativeValues());
-			_skillStaffPeriod.SetDistributionValues(calculator, this);
+			var values = CalculateSplitPeriodRelativeValues();
+			_skillStaffPeriod.SetDistributionValues(
+				new PopulationStatisticsCalculatedValues(Calculation.Variances.StandardDeviation(values),
+				                                         Calculation.Variances.RMS(values)), this);
 		}
 
         public double[] CalculateSplitPeriodRelativeValues()
@@ -94,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public double DeviationAfterNewLayers(IVisualLayerCollection layerCollection)
         {
             var tmp = fillInValuesFromLayers(layerCollection.FilterLayers(_period), _splittedValues);
-            return new PopulationStatisticsCalculator(tmp).StandardDeviation;
+            return Calculation.Variances.StandardDeviation(tmp);
         }
 
         private IEnumerable<double> fillInValuesFromLayers(IVisualLayerCollection layerCollectionFilteredByPeriod, double[] splittedValues)
@@ -131,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// </remarks>
         public double CalculateStandardDeviation()
         {
-            return new PopulationStatisticsCalculator(CalculateSplitPeriodRelativeValues()).StandardDeviation;
+            return Calculation.Variances.StandardDeviation(CalculateSplitPeriodRelativeValues());
         }
 
         /// <summary>

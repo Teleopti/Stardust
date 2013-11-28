@@ -1012,11 +1012,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 													resourceCalculateDelayer);
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
 			var dailySkillForecastAndScheduledValueCalculator = new DailySkillForecastAndScheduledValueCalculator(_stateHolder);
-			var populationStatisticsCalculator = new PopulationStatisticsCalculator();
 			var deviationStatisticData = new DeviationStatisticData();
         	var dayOffOptimizerPreMoveResultPredictor =
-        		new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator,
-        		                                          populationStatisticsCalculator, deviationStatisticData);
+        		new DayOffOptimizerPreMoveResultPredictor(dailySkillForecastAndScheduledValueCalculator, deviationStatisticData);
 
             IDayOffDecisionMakerExecuter dayOffDecisionMakerExecuter
                 = new DayOffDecisionMakerExecuter(rollbackService,

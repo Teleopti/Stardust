@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private IDayOffOptimizerPreMoveResultPredictor _target;
 		private IScheduleMatrixPro _matrix;
 		private IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
-		private IPopulationStatisticsCalculator _populationStatisticsCalculator;
 		private IDeviationStatisticData _deviationStatisticData;
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private IScheduleDayPro _scheduleDayPro1;
@@ -30,10 +29,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_populationStatisticsCalculator = new PopulationStatisticsCalculator();
 			_deviationStatisticData = new DeviationStatisticData();
 			_dailySkillForecastAndScheduledValueCalculator = _mocks.StrictMock<IDailySkillForecastAndScheduledValueCalculator>();
-			_target = new DayOffOptimizerPreMoveResultPredictor(_dailySkillForecastAndScheduledValueCalculator, _populationStatisticsCalculator, _deviationStatisticData);
+			_target = new DayOffOptimizerPreMoveResultPredictor(_dailySkillForecastAndScheduledValueCalculator, _deviationStatisticData);
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();

@@ -100,13 +100,10 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 }
                 if (_skillStaffPeriods.Count >= 0)
                 {
-                    var statistics = new SkillStaffPeriodStatisticsForSkillIntraday(_skillStaffPeriods);
-                    statistics.Analyze();
                     _meetingImpactView.DrawIntraday(skill, _schedulerStateHolder, _skillStaffPeriods);
                     _meetingImpactView.ClearTabPages();
                     _meetingImpactView.PositionControl();
                 }
-
             }
         }
     }

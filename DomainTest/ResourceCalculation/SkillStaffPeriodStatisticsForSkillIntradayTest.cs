@@ -48,12 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _mocks.Record();
 
-            
-            _calculator.AnalyzeData();
-            LastCall.Repeat.Once();
-
-
-            //Expect.Call(_period.Period).Return(new DateTimePeriod(2009, 1, 1, 2009, 1, 2));
             Expect.Call(_period.FStaff).Return(1d);
             Expect.Call(_period.CalculatedResource).Return(11d);
             Expect.Call(_calculator.AbsoluteDeviationSumma).Return(10);
@@ -63,7 +57,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks.ReplayAll();
             _target = new SkillStaffPeriodStatisticsForSkillIntraday(new List<ISkillStaffPeriod> { _period });
             _target.StatisticsCalculator = _calculator;
-            _target.Analyze();
             Assert.AreEqual(10d, _calculator.AbsoluteDeviationSumma);
             Assert.AreEqual(1d, _calculator.RelativeDeviationSumma);
             _mocks.VerifyAll();

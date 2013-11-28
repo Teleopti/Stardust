@@ -1288,6 +1288,10 @@
       <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
       <Name>Teleopti.Ccc.DayOffPlanning</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
+      <Project>{e6d92eb3-39cc-4f0c-9c59-61f3403594c1}</Project>
+      <Name>Teleopti.Ccc.Domain.Calculation</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
       <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
       <Name>Teleopti.Ccc.Obfuscated</Name>
