@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using Teleopti.Analytics.Portal.Utils;
 
 namespace Teleopti.Analytics.Portal.Reports.Ccc
 {
@@ -21,9 +22,14 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			get { return (string)DataRow["person_name"]; }
 		}
 
-		public string Date
+		public string DateText
 		{
-			get { return ((DateTime)DataRow["date"]).ToShortDateString(); }
+			get { return ShiftStartDate.ToShortDateString(); }
+		}
+
+		private DateTime IntervalDate
+		{
+			get { return (DateTime)DataRow["date"]; }
 		}
 
 		public DateTime ShiftStartDate
@@ -114,5 +120,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		}
 
 		public bool EndsOnNextDate { get; set; }
+
+		public bool LoggedInOnTheDayBefore
+		{
+			get { return IntervalDate.IsEarlierThan(ShiftStartDate); }
+		}
 	}
 }
