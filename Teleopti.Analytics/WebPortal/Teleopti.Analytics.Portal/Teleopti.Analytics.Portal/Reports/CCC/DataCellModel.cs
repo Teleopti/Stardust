@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Drawing;
+using Teleopti.Analytics.Portal.Utils;
 
 namespace Teleopti.Analytics.Portal.Reports.Ccc
 {
@@ -63,11 +64,16 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public bool ShiftOverMidnight
 		{
-			get{return !Date.Equals(ShiftStartDate);}
+			get { return Date.IsLaterThan(ShiftStartDate); }
 		}
 
-		public IntervalToolTip CellToolTip 
-		{ 
+		public bool LoggedInOnTheDayBefore
+		{
+			get { return Date.IsEarlierThan(ShiftStartDate); }
+		}
+
+		public IntervalToolTip CellToolTip
+		{
 			get
 			{
 				if (_perDate)
@@ -75,7 +81,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					return _tooltipContainer.GetToolTip(ShiftStartDate, IntervalCounter);
 				}
 				return _tooltipContainer.GetToolTip(PersonId, IntervalCounter);
-			} 
+			}
 		}
 
 		public bool IsLoggedIn { get { return (bool)(DataRow["is_logged_in"]); } }
