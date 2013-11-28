@@ -151,13 +151,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public IEffectiveRestriction Combine(IEffectiveRestriction effectiveRestriction)
         {
-
-			EffectiveRestriction emptyEffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-																				  new EndTimeLimitation(),
-																				  new WorkTimeLimitation(), null, null, null,
-																				  new List<IActivityRestriction>());
-	        if (effectiveRestriction == null)
-				return emptyEffectiveRestriction;
+			if (effectiveRestriction == null)
+				return null;
             IDayOffTemplate dayOff = resolveDayOff(effectiveRestriction.DayOffTemplate);
             IShiftCategory cat = resolveShiftCategory(effectiveRestriction.ShiftCategory);
             var absence = resolveAbsence(effectiveRestriction.Absence);
@@ -170,19 +165,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if(dayOff != null)
             {
                 if (dayOff.Equals(_invalidDayOff))
-					return emptyEffectiveRestriction;
+					return null;
             }
 
             if (cat != null)
             {
                 if (cat.Equals(_invalidCategory))
-					return emptyEffectiveRestriction;
+					return null;
             }
 
             if(absence != null)
             {
                 if (absence.Equals(_invalidAbsence))
-					return emptyEffectiveRestriction;
+					return null;
             }
 
             TimeSpan? start = resolveTime(_startTimeLimitation.StartTime, effectiveRestriction.StartTimeLimitation.StartTime, false);
@@ -190,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (start.HasValue && end.HasValue)
             {
                 if (start.Value > end.Value)
-					return emptyEffectiveRestriction;
+					return null;
             }
             var startTimeLimitation = new StartTimeLimitation(start, end);
 
@@ -199,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (start.HasValue && end.HasValue)
             {
                 if (start.Value > end.Value)
-					return emptyEffectiveRestriction;
+					return null;
             }
             var endTimeLimitation = new EndTimeLimitation(start, end);
 
@@ -207,7 +202,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (startTimeLimitation.HasValue() && endTimeLimitation.HasValue() ) //&& endTimeLimitation.StartTime < startTimeLimitation.EndTime)
             {
                 if (endTimeLimitation.EndTime < startTimeLimitation.StartTime)
-					return emptyEffectiveRestriction;
+					return null;
 
                 if (startTimeLimitation.EndTime > endTimeLimitation.EndTime)
 						 startTimeLimitation = new StartTimeLimitation(startTimeLimitation.StartTime, endTimeLimitation.EndTime);
@@ -220,7 +215,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (start.HasValue && end.HasValue)
             {
                 if (start.Value > end.Value)
-					return emptyEffectiveRestriction;
+					return null;
             }
             var workTimeLimitation = new WorkTimeLimitation(start, end);
 
@@ -248,7 +243,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		        }
 		        else
 		        {
-					ret = emptyEffectiveRestriction;
+					ret = null;
 		        }
 	        }
 			
@@ -260,7 +255,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		        }
 		        else
 		        {
-					ret = emptyEffectiveRestriction;
+					ret = null;
 		        }
 	        }
 			

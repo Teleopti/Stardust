@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
         private IActivity _activity;
     	private IPerson _person;
-		private EffectiveRestriction _emptyEffectiveRestriction;
 		private ICommonActivity _commonActivity;
 
 		[SetUp]
@@ -95,10 +94,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			_info4 = WorkShiftProjection.FromWorkShift(_workShift4);
 			_info5 = WorkShiftProjection.FromWorkShift(_workShift5);
 
-			_emptyEffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-																				  new EndTimeLimitation(),
-																				  new WorkTimeLimitation(), null, null, null,
-																				  new List<IActivityRestriction>());
         }
 
         [Test]
@@ -275,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, otherAbsence, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
-	        Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
 
             other = new EffectiveRestriction(
                 _startTimeLimitation,
@@ -331,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 otherDayOff, null, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
-	        Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
 
             other = new EffectiveRestriction(
                 _startTimeLimitation,
@@ -384,7 +379,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             result = _target.Combine(other);
-	        Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
 
             IShiftCategory cat = ShiftCategoryFactory.CreateShiftCategory("same");
             _target = new EffectiveRestriction(
@@ -423,7 +418,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             var result = _target.Combine(other);
-			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
         }
 
         [Test]
@@ -444,7 +439,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             var result = _target.Combine(other);
-			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
         }
 
         [Test]
@@ -465,7 +460,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             var result = _target.Combine(other);
-			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
         }
 
 		[Test]
@@ -511,7 +506,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			null, null, new List<IActivityRestriction>()) { CommonMainShift = commonMainShift };
 
 			var result = _target.Combine(other);
-			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
 		}
 
 		[Test]
@@ -557,7 +552,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			null, null, new List<IActivityRestriction>()) { CommonActivity = commonActivity };
 
 			var result = _target.Combine(other);
-			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
 		}
 
         [Test]
@@ -599,7 +594,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 null, null, new List<IActivityRestriction>());
 
             IEffectiveRestriction result = _target.Combine(other);
-			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
 
             //  we must move the end start forward but the start end does not need a move because we do not have a limit on end.end
             other = new EffectiveRestriction(
@@ -696,7 +691,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				null,
 				null, null, new List<IActivityRestriction>());
 			var result = _target.Combine(null);
-			Assert.That(result, Is.EqualTo(_emptyEffectiveRestriction));
+			Assert.IsNull(result);
 		}
 
 		[Test]
