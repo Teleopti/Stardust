@@ -62,11 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             var period2 = new DateTimePeriod(new DateTime(2012, 12, 8, 7, 0, 0, DateTimeKind.Utc),
                                             new DateTime(2012, 12, 8, 8, 30, 0, DateTimeKind.Utc));
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
-												   new EndTimeLimitation(),
-												   new WorkTimeLimitation(), null, null, null,
-												   new List<IActivityRestriction>());
-            using (_mocks.Record())
+			using (_mocks.Record())
             {
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro1);
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(1))).Return(_scheduleDayPro2);
@@ -82,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             using (_mocks.Playback())
             {
                 var result = _target.ExtractRestriction(dateList, matrixList);
-				Assert.That(result, Is.EqualTo(restriction));
+				Assert.That(result, Is.Null);
             }
         }
 

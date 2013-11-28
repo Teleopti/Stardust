@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (!_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions) && !_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(schedulingOptions))
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
-
+					if (restriction == null) return false;
 					var shifts = _workShiftFilterService.Filter(day, person, teamBlockSingleDayInfo, restriction, schedulingOptions,
 					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupPerson, day));
 					if (shifts.IsNullOrEmpty()) break;

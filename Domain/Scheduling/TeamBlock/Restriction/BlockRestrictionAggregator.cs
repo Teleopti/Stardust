@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 
 			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, new List<IPerson>{person}, schedulingOptions,
 																	 scheduleDictionary), dateOnlyList, matrixes, effectiveRestriction);
-
+			
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameStartTime(schedulingOptions))
 			{
 				effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), dateOnlyList,
@@ -67,6 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		
 			effectiveRestriction = combineRestriction(new NightlyRestRestrcition(_nightlyRestRule), dateOnlyList, matrixes,
 													  effectiveRestriction);
+
 			if (roleModel != null)
 			{
 				effectiveRestriction = combineRestriction(new ResctrictionFromRoleModelRestriction(roleModel, _teamBlockSchedulingOptions, schedulingOptions), dateOnlyList,
@@ -80,6 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 																IList<IScheduleMatrixPro> matrixList,
 																IEffectiveRestriction effectiveRestriction)
 		{
+			if (effectiveRestriction == null) return null;
 			var restriction = strategy.ExtractRestriction(dateOnlyList, matrixList);
 			return effectiveRestriction.Combine(restriction);
 		}

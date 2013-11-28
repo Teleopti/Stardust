@@ -50,10 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 						else
 						{
 							if (!restriction.CommonActivity.Periods.NonSequenceEquals(commonActivityPeriods))
-								return new EffectiveRestriction(new StartTimeLimitation(),
-													   new EndTimeLimitation(),
-													   new WorkTimeLimitation(), null, null, null,
-													   new List<IActivityRestriction>());
+								return null;
 						}
 					}
 				}

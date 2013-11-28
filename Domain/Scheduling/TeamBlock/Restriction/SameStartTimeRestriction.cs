@@ -39,10 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                         TimePeriod timePeriod = period.Value.TimePeriod(_timeZone);
                         if (startTimeLimitation.StartTime != timePeriod.StartTime ||
                             startTimeLimitation.EndTime != timePeriod.StartTime)
-							return new EffectiveRestriction(new StartTimeLimitation(),
-													  new EndTimeLimitation(),
-													  new WorkTimeLimitation(), null, null, null,
-													  new List<IActivityRestriction>());
+							return null;
                     }
                 }
             }

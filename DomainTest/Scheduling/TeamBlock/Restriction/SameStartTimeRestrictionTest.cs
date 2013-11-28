@@ -91,10 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             var visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
             var projectionService2 = _mocks.StrictMock<IProjectionService>();
             var visualLayerCollection2 = _mocks.StrictMock<IVisualLayerCollection>();
-			var expected = new EffectiveRestriction(new StartTimeLimitation(),
-														new EndTimeLimitation(),
-														new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-            using (_mocks.Record())
+			using (_mocks.Record())
             {
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly)).Return(_scheduleDayPro1);
                 Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_dateOnly.AddDays(1))).Return(_scheduleDayPro2);
@@ -111,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
             using (_mocks.Playback())
             {
                 var result = _target.ExtractRestriction(dateList, matrixList);
-                Assert.That(result, Is.EqualTo(expected));
+                Assert.That(result, Is.Null);
             }
         }
 

@@ -152,9 +152,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			IEffectiveRestriction restriction2 = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
 																	  new WorkTimeLimitation(), cat2, null, null,
 																	  new List<IActivityRestriction>());
-			IEffectiveRestriction emptyRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-																	  new WorkTimeLimitation(), null, null, null,
-																	  new List<IActivityRestriction>());
 			using (_mocks.Record())
 			{
 				Expect.Call(scheduleDictionary[person1]).Return(range1);
@@ -178,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				ret = _target.GetEffectiveRestriction(new List<IPerson> { person1, person2 }, dateOnly, options, scheduleDictionary);
 			}
 
-			Assert.That(ret, Is.EqualTo(emptyRestriction));
+			Assert.IsNull(ret);
 		}
 
 		[Test]
