@@ -9,7 +9,6 @@ exec mart.report_data_agent_schedule_adherence @date_from='2009-02-01 00:00:00',
 exec mart.report_data_agent_schedule_adherence @date_from='2009-01-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'2',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@date_to='2009-02-11 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-
 */
 -- =============================================
 -- Author:		KJ
@@ -412,7 +411,6 @@ INNER JOIN #bridge_time_zone b
 	AND fs.shift_startdate_id = b.date_id
 WHERE fs.scenario_id=@scenario_id
 
-
 INSERT #fact_schedule(shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
 SELECT
 	fs.shift_startdate_id,
@@ -477,7 +475,6 @@ INSERT #person_intervals
 	--WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date
 	WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date OR @date_to BETWEEN p.valid_from_date AND p.valid_to_date --20120905 KJ ADDED @DATE_TO
 
-
 --Start creating the result set
 --a) insert agent statistics matching scheduled time
 INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
@@ -505,7 +502,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 				WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
 			END AS 'deviation_s',
 			isnull(fsd.ready_time_s,0) 'ready_time_s',
-			fsd.is_logged_in,
+			isnull(fsd.is_logged_in,0) as 'is_logged_in',
 			isnull(fs.activity_id,-1), --isnull = not defined
 			isnull(fs.absence_id,-1), --isnull = not defined
 			CASE @adherence_id 
@@ -517,25 +514,24 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			@hide_time_zone,
 			isnull(count_activity_per_interval,2) --fake a mixed shift = white color	
 	FROM mart.dim_person p
-	INNER JOIN #fact_schedule_deviation fsd
-		ON fsd.person_id=p.person_id
-	LEFT JOIN #fact_schedule fs
+	INNER JOIN #fact_schedule fs
+		ON fs.person_id=p.person_id
+	LEFT JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=fs.person_id
 		AND fsd.date_id=fs.schedule_date_id
 		AND fsd.interval_id=fs.interval_id
 	INNER JOIN #bridge_time_zone b1
-		ON	fsd.shift_startinterval_id= b1.interval_id
-		AND fsd.shift_startdate_id=b1.date_id
+		ON	fs.shift_startinterval_id= b1.interval_id
+		AND fs.shift_startdate_id=b1.date_id
 	INNER JOIN bridge_time_zone b2
-		ON	fsd.interval_id= b2.interval_id
-		AND fsd.date_id= b2.date_id
+		ON	fs.interval_id= b2.interval_id
+		AND fs.schedule_date_id= b2.date_id
 	INNER JOIN mart.dim_interval i
 		ON b2.local_interval_id = i.interval_id			
 	INNER JOIN mart.dim_date d 
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
 ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
-
 
 ----------
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
