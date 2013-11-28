@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 					
 					if (_shiftCategoryChecker.DayHasShiftCategory(day2, catTwo))
 					{
-						var modifiedParts = _swapService.Swap(new List<IScheduleDay> { day1, day2 }, _dic);
+						var modifiedParts = _swapService.Swap(day1, day2, _dic);
 						var responses = rollbackService.ModifyParts(modifiedParts);
 						if (responses.Any())
 							return false;
