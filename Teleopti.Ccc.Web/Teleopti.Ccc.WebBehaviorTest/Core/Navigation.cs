@@ -255,10 +255,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForUrlAssert(
 				string.Format("Anywhere#personschedule/{0}/{1}{2}{3}",
-				personId,
-				date.Year.ToString("0000"),
-				date.Month.ToString("00"),
-				date.Day.ToString("00")),
+				              personId,
+				              date.Year.ToString("0000"),
+				              date.Month.ToString("00"),
+				              date.Day.ToString("00")
+					),
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
 		}
@@ -268,6 +269,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForUrlAssert(
 				string.Format("Anywhere#personschedule/{0}/{1}{2}{3}/addfulldayabsence",
 				personId, 
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
+				date.Day.ToString("00")),
+				"Anywhere#personschedule",
+				new ApplicationStartupTimeout());
+		}
+
+		public static void GotoAnywherePersonScheduleIntradayAbsenceForm(Guid personId, Guid groupId, DateTime date)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/addintradayabsence",
+				groupId,
+				personId,
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
+				date.Day.ToString("00")),
+				"Anywhere#personschedule",
+				new ApplicationStartupTimeout());
+		}
+
+		public static void GotoAnywherePersonScheduleAddActivityForm(Guid personId, Guid groupId, DateTime date)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/addactivity",
+				groupId,
+				personId,
 				date.Year.ToString("0000"),
 				date.Month.ToString("00"),
 				date.Day.ToString("00")),

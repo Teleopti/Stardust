@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			PersonFactory.AddDefinitionSetToPerson(person, defSet);
 			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			IActivity act = ActivityFactory.CreateActivity("the one");
-			ass.AssignActivity(act, createPeriod(10,19));
-			ass.AddOvertimeLayer(act, createPeriod(16, 17), defSet);
+			ass.AddActivity(act, createPeriod(10,19));
+			ass.AddOvertimeActivity(act, createPeriod(16, 17), defSet);
 			
 			IVisualLayerCollection res = ass.ProjectionService().CreateProjection();
 			Assert.AreEqual(3, res.Count());
@@ -396,9 +396,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPersonAssignment personAss = PersonAssignmentFactory.CreatePersonAssignment(person,scenario);
-			personAss.AddPersonalLayer(act3, period3);
-			personAss.AssignActivity(act1, period1);
-			personAss.AssignActivity(act2, period2);
+			personAss.AddPersonalActivity(act3, period3);
+			personAss.AddActivity(act1, period1);
+			personAss.AddActivity(act2, period2);
 			IPersonAbsence personAbsence = PersonAbsenceFactory.CreatePersonAbsence(person, scenario, period4, absence);
 
 			var day =
@@ -442,7 +442,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																							createPeriod(12, 16));
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
 			IActivity overTimeActivity = ActivityFactory.CreateActivity("d");
-			ass.AddOvertimeLayer(overTimeActivity, createPeriod(14, 15), defSet);
+			ass.AddOvertimeActivity(overTimeActivity, createPeriod(14, 15), defSet);
 
 			IVisualLayerCollection org = ass.ProjectionService().CreateProjection();
 			IList<IVisualLayer> proj = new List<IVisualLayer>(org);
@@ -463,7 +463,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMultiplicatorDefinitionSet defSet = dummyDefinitionSet();
 			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, ScenarioFactory.CreateScenarioAggregate());
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
-			ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet);
+			ass.AddOvertimeActivity(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet);
 
 			IVisualLayerCollection org = ass.ProjectionService().CreateProjection();
 			IList<IVisualLayer> proj = new List<IVisualLayer>(org);
@@ -482,7 +482,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																				createPeriod(12,16),
 																				ScenarioFactory.CreateScenarioAggregate());
 			PersonFactory.AddDefinitionSetToPerson(ass.Person, defSet);
-			ass.AddOvertimeLayer(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet);
+			ass.AddOvertimeActivity(ActivityFactory.CreateActivity("d"), createPeriod(14, 15), defSet);
 
 
 			IList<IVisualLayer> proj = new List<IVisualLayer>(ass.ProjectionService().CreateProjection());

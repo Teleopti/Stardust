@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			_target.SetMainShiftLayers(_personAssignment, mainShift);
 			var editorShift = _target.CreateEditorShift(_personAssignment);
 			Assert.AreEqual(3, editorShift.LayerCollection.Count);
-			var assignedLayers = _personAssignment.MainLayers().ToList();
+			var assignedLayers = _personAssignment.MainActivities().ToList();
 			Assert.AreSame(assignedLayers[0].Payload, editorShift.LayerCollection[0].Payload);
 			Assert.AreSame(assignedLayers[1].Payload, editorShift.LayerCollection[1].Payload);
 			Assert.AreSame(assignedLayers[2].Payload, editorShift.LayerCollection[2].Payload);
@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var editorActivityLayer = new EditableShiftLayer(activity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			editorShift.LayerCollection.Add(editorActivityLayer);
 			_target.SetMainShiftLayers(_personAssignment, editorShift);
-			Assert.AreEqual(1, _personAssignment.MainLayers().Count());
-			var firstMainShiftLayer = _personAssignment.MainLayers().First();
+			Assert.AreEqual(1, _personAssignment.MainActivities().Count());
+			var firstMainShiftLayer = _personAssignment.MainActivities().First();
 			Assert.AreSame(activity, firstMainShiftLayer.Payload);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), firstMainShiftLayer.Period);
 			Assert.AreSame(shiftCategory, _personAssignment.ShiftCategory);

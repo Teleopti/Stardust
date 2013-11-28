@@ -34,9 +34,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void Clear()
 		{
-			ClearMainLayers();
-			ClearOvertimeLayers();
-			ClearPersonalLayers();
+			ClearMainActivities();
+			ClearOvertimeActivities();
+			ClearPersonalActivities();
 			SetDayOff(null);
 		}
 
@@ -50,15 +50,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
 			DateTimePeriod? mergedPeriod = null;
-			foreach (var mainShiftActivityLayer in MainLayers())
+			foreach (var mainShiftActivityLayer in MainActivities())
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(mainShiftActivityLayer.Period, mergedPeriod);
 			}
-			foreach (var personalLayer in PersonalLayers())
+			foreach (var personalLayer in PersonalActivities())
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(personalLayer.Period, mergedPeriod);
 			}
-			foreach (var overtimeLayer in OvertimeLayers())
+			foreach (var overtimeLayer in OvertimeActivities())
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(overtimeLayer.Period, mergedPeriod);
 			}
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				if (!MainLayers().Any())
+				if (!MainActivities().Any())
 					return null;
 
 				return _shiftCategory;
@@ -110,17 +110,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			protected set { _shiftCategory = value; }
 		}
 
-		public virtual IEnumerable<IMainShiftLayer> MainLayers()
+		public virtual IEnumerable<IMainShiftLayer> MainActivities()
 		{
 			return _shiftLayers.OfType<IMainShiftLayer>();
 		}
 
-		public virtual IEnumerable<IPersonalShiftLayer> PersonalLayers()
+		public virtual IEnumerable<IPersonalShiftLayer> PersonalActivities()
 		{
 			return _shiftLayers.OfType<IPersonalShiftLayer>();
 		}
 
-		public virtual IEnumerable<IOvertimeShiftLayer> OvertimeLayers()
+		public virtual IEnumerable<IOvertimeShiftLayer> OvertimeActivities()
 		{
 			return _shiftLayers.OfType<IOvertimeShiftLayer>();
 		}
@@ -151,27 +151,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				});
 		}
 
-		public virtual bool RemoveLayer(IShiftLayer layer)
+		public virtual bool RemoveActivity(IShiftLayer layer)
 		{
 			return _shiftLayers.Remove(layer);
 		}
 
-		public virtual void ClearPersonalLayers()
+		public virtual void ClearPersonalActivities()
 		{
-			PersonalLayers().ToArray()
-									.ForEach(l => RemoveLayer(l));
+			PersonalActivities().ToArray().ForEach(l => RemoveActivity(l));
 		}
 
-		public virtual void ClearMainLayers()
+		public virtual void ClearMainActivities()
 		{
-			MainLayers().ToArray()
-									.ForEach(l => RemoveLayer(l));
+			MainActivities().ToArray().ForEach(l => RemoveActivity(l));
 		}
 
-		public virtual void ClearOvertimeLayers()
+		public virtual void ClearOvertimeActivities()
 		{
-			OvertimeLayers().ToArray()
-									.ForEach(l => RemoveLayer(l));
+			OvertimeActivities().ToArray().ForEach(l => RemoveActivity(l));
 		}
 
 		public virtual void CheckRestrictions()
@@ -189,15 +186,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var proj = new VisualLayerProjectionService(Person);
 			if (hasProjection())
 			{
-				proj.Add(MainLayers(), new VisualLayerFactory());
-				var validPeriods = new HashSet<DateTimePeriod>(MainLayers().PeriodBlocks());
-				foreach (var overtimeLayer in OvertimeLayers())
+				proj.Add(MainActivities(), new VisualLayerFactory());
+				var validPeriods = new HashSet<DateTimePeriod>(MainActivities().PeriodBlocks());
+				foreach (var overtimeLayer in OvertimeActivities())
 				{
 					var overTimePeriod = overtimeLayer.Period;
 					proj.Add(overtimeLayer, new VisualLayerOvertimeFactory());
 					validPeriods.Add(overTimePeriod);
 				}
-				foreach (var personalLayer in PersonalLayers())
+				foreach (var personalLayer in PersonalActivities())
 				{
 					if (validPeriods.Any(validPeriod => validPeriod.Intersect(personalLayer.Period) || validPeriod.AdjacentTo(personalLayer.Period)))
 					{
@@ -211,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private bool hasProjection()
 		{
-				return MainLayers().Any() || OvertimeLayers().Any();
+			return MainActivities().Any() || OvertimeActivities().Any();
 		}
 
 		public virtual object Clone()
@@ -261,28 +258,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return Person; }
 		}
 
-		public virtual void AddPersonalLayer(IActivity activity, DateTimePeriod period)
+		public virtual void AddPersonalActivity(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 		}
 
-		public virtual void AddOvertimeLayer(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
+		public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 		{
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 		}
 
-		public virtual void AssignActivity(IActivity activity, DateTimePeriod period)
+		public virtual void AddActivity(IActivity activity, DateTimePeriod period)
 		{
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 			SetDayOff(null);
 
-			AddEvent(() => new ActivityAssignedEvent
+			AddEvent(() => new ActivityAddedEvent
 				{
 					Date = Date,
 					PersonId = Person.Id.Value,
@@ -292,27 +289,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					ScenarioId = Scenario.Id.Value
 				});
 		}
-		
+
 		public virtual void SetShiftCategory(IShiftCategory shiftCategory)
 		{
 			_shiftCategory = shiftCategory;
 		}
 
-		public virtual void SetMainLayersAndShiftCategoryFrom(IPersonAssignment assignment)
+		public virtual void SetActivitiesAndShiftCategoryFrom(IPersonAssignment assignment)
 		{
-			ClearMainLayers();
+			ClearMainActivities();
 			SetShiftCategory(assignment.ShiftCategory);
-			foreach (var mainLayer in assignment.MainLayers())
+			foreach (var mainLayer in assignment.MainActivities())
 			{
-				AssignActivity(mainLayer.Payload, mainLayer.Period);
+				AddActivity(mainLayer.Payload, mainLayer.Period);
 			}
 		}
 
-		public virtual void InsertMainLayer(IActivity activity, DateTimePeriod period, int index)
+		public virtual void InsertActivity(IActivity activity, DateTimePeriod period, int index)
 		{
 			var layer = new MainShiftLayer(activity, period);
 			layer.SetParent(this);
-			_shiftLayers.Insert(index,layer);
+			_shiftLayers.Insert(index, layer);
 			SetDayOff(null);
 
 		}
@@ -322,7 +319,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (_dayOffTemplate == null)
 				return null;
 			//don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
-      var anchorDateTime = TimeZoneHelper.ConvertToUtc(Date.Date.Add(_dayOffTemplate.Anchor), Person.PermissionInformation.DefaultTimeZone());
+			var anchorDateTime = TimeZoneHelper.ConvertToUtc(Date.Date.Add(_dayOffTemplate.Anchor), Person.PermissionInformation.DefaultTimeZone());
 			return new DayOff(anchorDateTime, _dayOffTemplate.TargetLength, _dayOffTemplate.Flexibility, _dayOffTemplate.Description, _dayOffTemplate.DisplayColor, _dayOffTemplate.PayrollCode);
 		}
 
@@ -330,7 +327,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			if (template != null)
 			{
-				ClearMainLayers();
+				ClearMainActivities();
 			}
 			_dayOffTemplate = template;
 		}
@@ -352,17 +349,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Clear();
 			personAssignmentSource.SetThisAssignmentsDayOffOn(this);
 			SetShiftCategory(personAssignmentSource.ShiftCategory);
-			foreach (var mainLayer in personAssignmentSource.MainLayers())
+			foreach (var mainLayer in personAssignmentSource.MainActivities())
 			{
-				AssignActivity(mainLayer.Payload, mainLayer.Period);
+				AddActivity(mainLayer.Payload, mainLayer.Period);
 			}
-			foreach (var personalLayer in personAssignmentSource.PersonalLayers())
+			foreach (var personalLayer in personAssignmentSource.PersonalActivities())
 			{
-				AddPersonalLayer(personalLayer.Payload, personalLayer.Period);
+				AddPersonalActivity(personalLayer.Payload, personalLayer.Period);
 			}
-			foreach (var overtimeLayer in personAssignmentSource.OvertimeLayers())
+			foreach (var overtimeLayer in personAssignmentSource.OvertimeActivities())
 			{
-				AddOvertimeLayer(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
+				AddOvertimeActivity(overtimeLayer.Payload, overtimeLayer.Period, overtimeLayer.DefinitionSet);
 			}
 		}
 
@@ -373,7 +370,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (ReferenceEquals(null, obj)) return false;
 			if (ReferenceEquals(this, obj)) return true;
 			if (obj.GetType() != this.GetType()) return false;
-			return Equals((IEntity) obj);
+			return Equals((IEntity)obj);
 		}
 
 		public override bool Equals(IEntity other)
@@ -382,8 +379,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (ReferenceEquals(this, other)) return true;
 			var otherAsAss = other as IPersonAssignment;
 			return otherAsAss != null && (Equals(_person, otherAsAss.Person) &&
-			                              Equals(_scenario, otherAsAss.Scenario) &&
-			                              Date.Equals(otherAsAss.Date));
+						      Equals(_scenario, otherAsAss.Scenario) &&
+						      Date.Equals(otherAsAss.Date));
 		}
 
 		public override int GetHashCode()

@@ -55,14 +55,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void CanCreateAssignmentAndPropertiesAreSet()
 		{
-			Assert.AreEqual(0, target.PersonalLayers().Count());
+			Assert.AreEqual(0, target.PersonalActivities().Count());
 			Assert.AreEqual(null, target.Id);
 			Assert.AreSame(testPerson, target.Person);
 			Assert.AreSame(testScenario, target.Scenario);
 			Assert.AreEqual(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment, target.FunctionPath);
-			target.MainLayers().Should().Be.Empty();
-			target.OvertimeLayers().Should().Be.Empty();
-			target.PersonalLayers().Should().Be.Empty();
+			target.MainActivities().Should().Be.Empty();
+			target.OvertimeActivities().Should().Be.Empty();
+			target.PersonalActivities().Should().Be.Empty();
 			target.ShiftCategory.Should().Be.Null();
 			target.DayOff().Should().Be.Null();
 			Assert.IsNull(target.UpdatedBy);
@@ -78,11 +78,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyClearPersonalShiftWorks()
 		{
-			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
-			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
-			Assert.AreEqual(2, target.PersonalLayers().Count());
-			target.ClearPersonalLayers();
-			Assert.AreEqual(0, target.PersonalLayers().Count());
+			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
+			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000,1,1,2000,1,2));
+			Assert.AreEqual(2, target.PersonalActivities().Count());
+			target.ClearPersonalActivities();
+			Assert.AreEqual(0, target.PersonalActivities().Count());
 		}
 
 
@@ -109,8 +109,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IMultiplicatorDefinitionSet defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
-			target.AddOvertimeLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
-			var layer = target.OvertimeLayers().Single();
+			target.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+			var layer = target.OvertimeActivities().Single();
 			Assert.AreSame(target, layer.Parent);
 			Assert.AreSame(target, layer.Root());
 		}
@@ -122,8 +122,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void VerifyReferenceBackToAssignmentWorksFromAPersonalLayer()
 		{
-			target.AddPersonalLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-			target.PersonalLayers().Single().Parent.Should().Be.SameInstanceAs(target);
+			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.PersonalActivities().Single().Parent.Should().Be.SameInstanceAs(target);
 		}
 
 		[Test]
@@ -173,9 +173,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod personalShiftPeriod3 = personalShiftPeriod1.MovePeriod(TimeSpan.FromHours(4));
 			DateTimePeriod expected = new DateTimePeriod(personalShiftPeriod1.StartDateTime, personalShiftPeriod3.EndDateTime);
 
-			target.AddPersonalLayer(activity, personalShiftPeriod1);
-			target.AddPersonalLayer(activity, personalShiftPeriod2);
-			target.AddPersonalLayer(activity, personalShiftPeriod3);
+			target.AddPersonalActivity(activity, personalShiftPeriod1);
+			target.AddPersonalActivity(activity, personalShiftPeriod2);
+			target.AddPersonalActivity(activity, personalShiftPeriod3);
 
 			Assert.AreEqual(expected, target.Period);
 		}
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod expected = new DateTimePeriod(start, end);
 			DateTimePeriod mainShiftPeriod = new DateTimePeriod(start, end);
 
-			target.AssignActivity(activity, mainShiftPeriod);
+			target.AddActivity(activity, mainShiftPeriod);
 		
 			Assert.AreEqual(expected, target.Period);
 		}
@@ -207,8 +207,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			DateTimePeriod mainShiftPeriod = new DateTimePeriod(start, end);
 			DateTimePeriod personalShiftPeriod = mainShiftPeriod.ChangeStartTime(TimeSpan.FromHours(-1)).ChangeEndTime(TimeSpan.FromHours(1));
 
-			target.AddPersonalLayer(activity, personalShiftPeriod);
-			target.AssignActivity(activity, mainShiftPeriod);
+			target.AddPersonalActivity(activity, personalShiftPeriod);
+			target.AddActivity(activity, mainShiftPeriod);
 
 			Assert.AreEqual(personalShiftPeriod, target.Period);
 		}
@@ -231,9 +231,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var mainShift = EditableShiftFactory.CreateEditorShift(activity, mainShiftPeriod, shiftCategory);
 			new EditableShiftMapper().SetMainShiftLayers(target, mainShift);
 
-			target.AddPersonalLayer(activity, personalPeriod1);
-			target.AddPersonalLayer(activity, personalPeriod2);
-			target.AddPersonalLayer(activity, personalPeriod3);
+			target.AddPersonalActivity(activity, personalPeriod1);
+			target.AddPersonalActivity(activity, personalPeriod2);
+			target.AddPersonalActivity(activity, personalPeriod3);
 
 			Assert.AreEqual(expectedPeriod, target.Period);
 		}
@@ -284,14 +284,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IPersonAssignment targetClone = (IPersonAssignment) target.Clone();
 			Assert.AreSame(target.Person, targetClone.Person);
 			Assert.AreSame(target.Scenario, targetClone.Scenario);
-			target.MainLayers().Should().Be.Empty();
-			Assert.AreEqual(0, targetClone.PersonalLayers().Count());
+			target.MainActivities().Should().Be.Empty();
+			Assert.AreEqual(0, targetClone.PersonalActivities().Count());
 		}
 
 		[Test]
 		public void VerifyProjectionIsEmptyIfNoMainShift()
 		{
-			target.AddPersonalLayer(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000,1,1,2001,1,1));
+			target.AddPersonalActivity(ActivityFactory.CreateActivity("sdf"), new DateTimePeriod(2000,1,1,2001,1,1));
 			IProjectionService svc = target.ProjectionService();
 			Assert.IsNull(svc.CreateProjection().Period());
 		}
@@ -307,8 +307,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var mainShiftActivity = ActivityFactory.CreateActivity("mainshift");
 			var persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			target.AssignActivity(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
-			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.AddActivity(mainShiftActivity, new DateTimePeriod(2000, 1, 1, 2010, 1, 1));
+			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 			IProjectionService svc = target.ProjectionService();
 			svc.CreateProjection();
 			IList<IVisualLayer> retList = new List<IVisualLayer>(svc.CreateProjection());
@@ -336,9 +336,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var personalShiftEnd = new DateTime(2000, 1, 1, 18, 0, 0, DateTimeKind.Utc);
 			var personalShiftPeriod = new DateTimePeriod(personalShiftStart, personalShiftEnd);
 
-			target.AssignActivity(mainShiftActivity, mainShiftPeriod);
+			target.AddActivity(mainShiftActivity, mainShiftPeriod);
 
-			target.AddPersonalLayer(personalShiftActivity, personalShiftPeriod);
+			target.AddPersonalActivity(personalShiftActivity, personalShiftPeriod);
 
 			var svc = target.ProjectionService();
 			svc.CreateProjection();
@@ -356,13 +356,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyRemovePersonalShift()
 		{
 			var persShiftActivity = ActivityFactory.CreateActivity("persShfit");
-			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
 
-			Assert.AreEqual(2, target.PersonalLayers().Count());
-			target.RemoveLayer(target.PersonalLayers().First());
+			Assert.AreEqual(2, target.PersonalActivities().Count());
+			target.RemoveActivity(target.PersonalActivities().First());
 
-			Assert.AreEqual(1, target.PersonalLayers().Count());
+			Assert.AreEqual(1, target.PersonalActivities().Count());
 		}
 
 		[Test]
@@ -373,31 +373,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
 			var dayOffTemplate = new DayOffTemplate(new Description());
 
-			target.AddOvertimeLayer(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
-			target.AddPersonalLayer(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
-			target.PersonalLayers().Single().SetId(Guid.NewGuid());
-			target.OvertimeLayers().Single().SetId(Guid.NewGuid());
+			target.AddOvertimeActivity(persShiftActivity, new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
+			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.PersonalActivities().Single().SetId(Guid.NewGuid());
+			target.OvertimeActivities().Single().SetId(Guid.NewGuid());
 			target.SetDayOff(dayOffTemplate);
 
 			IPersonAssignment pAss = target.EntityClone();
 			Assert.AreEqual(target.Id, pAss.Id);
-			Assert.AreEqual(target.PersonalLayers().Single().Id, pAss.PersonalLayers().Single().Id);
-			Assert.AreEqual(target.OvertimeLayers().Single().Id, pAss.OvertimeLayers().Single().Id);
+			Assert.AreEqual(target.PersonalActivities().Single().Id, pAss.PersonalActivities().Single().Id);
+			Assert.AreEqual(target.OvertimeActivities().Single().Id, pAss.OvertimeActivities().Single().Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			pAss.DayOff().Should().Not.Be.Null();
 
 			pAss = target.NoneEntityClone();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.PersonalLayers().Single().Id);
-			Assert.IsNull(pAss.OvertimeLayers().Single().Id);
+			Assert.IsNull(pAss.PersonalActivities().Single().Id);
+			Assert.IsNull(pAss.OvertimeActivities().Single().Id);
 			pAss.DayOff().Should().Not.Be.Null();
 
 			pAss = (IPersonAssignment)target.CreateTransient();
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
 			Assert.IsNull(pAss.Id);
-			Assert.IsNull(pAss.PersonalLayers().Single().Id);
-			Assert.IsNull(pAss.OvertimeLayers().Single().Id);
+			Assert.IsNull(pAss.PersonalActivities().Single().Id);
+			Assert.IsNull(pAss.OvertimeActivities().Single().Id);
 			pAss.DayOff().Should().Not.Be.Null();
 		}
 
@@ -407,12 +407,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
 			PersonFactory.AddDefinitionSetToPerson(testPerson, defSet);
 			var act = new Activity("sdf");
-			target.AddOvertimeLayer(act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
-			target.AssignActivity(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			target.AddOvertimeActivity(act, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), defSet);
+			target.AddActivity(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 
-			target.AddPersonalLayer(act, new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
+			target.AddPersonalActivity(act, new DateTimePeriod(2000, 1, 3, 2000, 1, 4));
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 		}
 
@@ -421,10 +421,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var start = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			var act = new Activity("d");
-			target.AssignActivity(act, new DateTimePeriod(start.AddHours(1), start.AddHours(2)));
-			target.AssignActivity(act, new DateTimePeriod(start.AddHours(6), start.AddHours(7)));
+			target.AddActivity(act, new DateTimePeriod(start.AddHours(1), start.AddHours(2)));
+			target.AddActivity(act, new DateTimePeriod(start.AddHours(6), start.AddHours(7)));
 
-			target.AddPersonalLayer(act, new DateTimePeriod(start.AddHours(3), start.AddHours(4)));
+			target.AddPersonalActivity(act, new DateTimePeriod(start.AddHours(3), start.AddHours(4)));
 			target.ProjectionService().CreateProjection()
 				.Count().Should().Be.EqualTo(2);
 		}
@@ -515,14 +515,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			target.AddOvertimeLayer(activity, period, null);
-			target.AddPersonalLayer(activity, period);
-			target.AssignActivity(activity, period);
+			target.AddOvertimeActivity(activity, period, null);
+			target.AddPersonalActivity(activity, period);
+			target.AddActivity(activity, period);
 			target.SetShiftCategory(ShiftCategoryFactory.CreateShiftCategory("cat"));
 			target.Clear();
-			target.OvertimeLayers().Should().Be.Empty();
-			target.PersonalLayers().Should().Be.Empty();
-			target.MainLayers().Should().Be.Empty();
+			target.OvertimeActivities().Should().Be.Empty();
+			target.PersonalActivities().Should().Be.Empty();
+			target.MainActivities().Should().Be.Empty();
 			target.ShiftCategory.Should().Be.Null();
 
 			target.SetDayOff(DayOffFactory.CreateDayOff());
@@ -535,13 +535,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			target.AddOvertimeLayer(activity, period, null);
-			target.AddPersonalLayer(activity, period);
-			target.AssignActivity(activity, period);
+			target.AddOvertimeActivity(activity, period, null);
+			target.AddPersonalActivity(activity, period);
+			target.AddActivity(activity, period);
 			target.FillWithDataFrom(new PersonAssignment(target.Person, target.Scenario, target.Date));
-			target.OvertimeLayers().Should().Be.Empty();
-			target.PersonalLayers().Should().Be.Empty();
-			target.MainLayers().Should().Be.Empty();
+			target.OvertimeActivities().Should().Be.Empty();
+			target.PersonalActivities().Should().Be.Empty();
+			target.MainActivities().Should().Be.Empty();
 		}
 
 		[Test]
@@ -550,13 +550,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var newAss = new PersonAssignment(target.Person, target.Scenario, target.Date);
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			newAss.AddOvertimeLayer(activity, period, null);
-			newAss.AddPersonalLayer(activity, period);
-			newAss.AssignActivity(activity, period);
+			newAss.AddOvertimeActivity(activity, period, null);
+			newAss.AddPersonalActivity(activity, period);
+			newAss.AddActivity(activity, period);
 			target.FillWithDataFrom(newAss);
-			target.OvertimeLayers().Should().Not.Be.Empty();
-			target.PersonalLayers().Should().Not.Be.Empty();
-			target.MainLayers().Should().Not.Be.Empty();
+			target.OvertimeActivities().Should().Not.Be.Empty();
+			target.PersonalActivities().Should().Not.Be.Empty();
+			target.MainActivities().Should().Not.Be.Empty();
 		}
 
 		[Test]
@@ -566,11 +566,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			newAss.SetDayOff(new DayOffTemplate());
 			var activity = ActivityFactory.CreateActivity("hej");
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
-			newAss.AddOvertimeLayer(activity, period, null);
-			newAss.AddPersonalLayer(activity, period);
+			newAss.AddOvertimeActivity(activity, period, null);
+			newAss.AddPersonalActivity(activity, period);
 			target.FillWithDataFrom(newAss);
-			target.OvertimeLayers().Should().Not.Be.Empty();
-			target.PersonalLayers().Should().Not.Be.Empty();
+			target.OvertimeActivities().Should().Not.Be.Empty();
+			target.PersonalActivities().Should().Not.Be.Empty();
 			target.DayOff().Should().Not.Be.Null();
 		}
 
@@ -589,16 +589,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldClearMainLayersWhenSettingDayoff()
 		{
-			target.AssignActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.AddActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			target.SetDayOff(new DayOffTemplate());
-			target.MainLayers().Should().Be.Empty();
+			target.MainActivities().Should().Be.Empty();
 		}
 
 		[Test]
 		public void ShouldRemoveDayoffWhenAddingMainLayer()
 		{
 			target.SetDayOff(new DayOffTemplate());
-			target.AssignActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.AddActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
 			target.DayOff().Should().Be.Null();
 		}
 
@@ -606,7 +606,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void ShouldRemoveDayoffWhenInsertinggMainLayer()
 		{
 			target.SetDayOff(new DayOffTemplate());
-			target.InsertMainLayer(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2),0);
+			target.InsertActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2),0);
 			target.DayOff().Should().Be.Null();
 		}
 
@@ -619,24 +619,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var period = new DateTimePeriod(2000, 1, 1, 2000, 1, 2);
 
-			target.AssignActivity(activity1, period);
-			target.AssignActivity(activity3, period);
+			target.AddActivity(activity1, period);
+			target.AddActivity(activity3, period);
 
-			target.InsertMainLayer(activity2,period,1);
+			target.InsertActivity(activity2,period,1);
 
-			target.MainLayers().First().Payload.Should().Be.EqualTo(activity1);
-			target.MainLayers().Skip(1).First().Payload.Should().Be.EqualTo(activity2);
-			target.MainLayers().Skip(2).First().Payload.Should().Be.EqualTo(activity3);
+			target.MainActivities().First().Payload.Should().Be.EqualTo(activity1);
+			target.MainActivities().Skip(1).First().Payload.Should().Be.EqualTo(activity2);
+			target.MainActivities().Skip(2).First().Payload.Should().Be.EqualTo(activity3);
 		}
 
 		[Test]
 		public void ShouldKeepOtherMainShiftLayersWhenInsertingAwMainShiftLayer()
 		{
-			target.AssignActivity(new Activity("any activity"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
-			var firstLayer = target.MainLayers().First();
+			target.AddActivity(new Activity("any activity"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			var firstLayer = target.MainActivities().First();
 
-			target.InsertMainLayer(new Activity("any activity"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), 0);
-			target.MainLayers().Skip(1).First().Should().Be.SameInstanceAs(firstLayer);
+			target.InsertActivity(new Activity("any activity"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), 0);
+			target.MainActivities().Skip(1).First().Should().Be.SameInstanceAs(firstLayer);
 		}
 	}
 }

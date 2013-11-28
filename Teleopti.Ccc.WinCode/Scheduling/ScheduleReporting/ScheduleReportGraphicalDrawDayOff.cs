@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
 				return null;
 
 	        var personAssignment = _scheduleDay.PersonAssignment();
-			var overtime = personAssignment.OvertimeLayers().Any();
+			var overtime = personAssignment.OvertimeActivities().Any();
 			return overtime ? null : personAssignment.DayOff();
         }
 

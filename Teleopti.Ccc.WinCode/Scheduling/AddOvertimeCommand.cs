@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
 
 			//if (personAssignment != null && personAssignment.HasProjection)
-            if (personAssignment != null && (personAssignment.MainLayers().Any() || personAssignment.OvertimeLayers().Any()))
+            if (personAssignment != null && (personAssignment.MainActivities().Any() || personAssignment.OvertimeActivities().Any()))
             {
                 DateTimePeriod assPeriod = personAssignment.Period;
                 if (!DefaultIsSet)

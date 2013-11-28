@@ -11850,4 +11850,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Shifttrade denied because target shift is for another date.</value>
     <comment>denymessage when trading shifts on different dates</comment>
   </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Add intraday absence</value>
+    <comment>Add intraday absence</comment>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Intraday absence</value>
+    <comment>Intraday absence</comment>
+  </data>
 </root>

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Expect.Call(c1.MainShiftProjection).Return(new VisualLayerCollection(null, getLunchLayer(currentDate, lunch), new ProjectionPayloadMerger())).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(readOnlymeetings).Repeat.AtLeastOnce();
-			Expect.Call(_personAssignment.PersonalLayers()).Return(getPersonalLayers(currentDate)).Repeat.AtLeastOnce();
+			Expect.Call(_personAssignment.PersonalActivities()).Return(getPersonalLayers(currentDate)).Repeat.AtLeastOnce();
 			Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
 			Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
 			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
 			Expect.Call(_part.PersonAssignment()).Return(_personAssignment).Repeat.AtLeastOnce();
 			Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
-			Expect.Call(_personAssignment.PersonalLayers())
+			Expect.Call(_personAssignment.PersonalActivities())
 			      .Return(Enumerable.Empty<IPersonalShiftLayer>());
 			_mocks.ReplayAll();
 			var retShifts = _target.Filter(_dateOnly, _person, shifts, _finderResult);

@@ -2,30 +2,37 @@ define([
 		'knockout',
 		'moment',
 		'navigation',
-	'lazy',
-		'views/teamschedule/layer',
-		'resources!r'
+		'lazy',
+		'shared/layer',
+		'views/teamschedule/shiftmenu'
 ], function (
 	ko,
 	moment,
 	navigation,
-    lazy,
+	lazy,
 	layer,
-	resources
+	shiftMenu
 	) {
 
-	return function(timeline) {
+	return function(timeline, groupid, personid, date) {
 
 		var self = this;
 
 		this.Layers = ko.observableArray();
-		var date, personId;
 
-		this.AddLayers = function(data) {
-			personId = data.PersonId;
-			var layers = data.Projection;
-			var newItems = ko.utils.arrayMap(layers, function(l) {
-				date = date || moment(l.Start).startOf('day');
+		this.PersonId = personid;
+
+		this.IsAnyLayerSelected = function () {
+			return $(self.Layers()).is(function (index) {
+				return this.Selected();
+			});
+		};
+
+		this.ShiftMenu = new shiftMenu(groupid, personid, date);
+
+		this.AddLayers = function (data) {
+			var layers = data.Projection != undefined ? data.Projection : data.Layers;
+			var newItems = ko.utils.arrayMap(layers, function (l) {
 				l.Date = data.Date;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
 				return new layer(timeline, l, self);
@@ -33,34 +40,17 @@ define([
 			self.Layers.push.apply(self.Layers, newItems);
 		};
 
-		this.AnyLayerSelected = ko.computed(function() {
-			return lazy(self.Layers()).some(function(x) { return x.Selected(); });
+		this.StartsOnSelectedDay = ko.computed(function () {
+			return self.Layers().length > 0 && self.Layers()[0].StartMinutes() < 25 * 60;
 		});
 
-		this.MakeSpaceForDrop = ko.computed(function() {
-			if (!self.AnyLayerSelected())
-				return false;
-			var aDropWillBeDisplayed = lazy(self.Layers()).some(function(x) { return x.DisplayDrop(); });
-			return aDropWillBeDisplayed;
+		this.ShiftStartPixels = ko.computed(function () {
+			if (self.Layers().length > 0)
+				return self.Layers()[0].StartPixels();
+			return 0;
 		});
 
-		this.ShowDetails = function() {
-			navigation.GotoPersonSchedule(personId, date);
-		};
-
-		this.AddFullDayAbsence = function() {
-			navigation.GotoPersonScheduleAddFullDayAbsenceForm(personId, date);
-		};
-
-		this.AddActivity = function() {
-			navigation.GotoPersonScheduleAddActivityForm(personId, date);
-		};
-
-	    this.StartsOnSelectedDay = ko.computed(function () {
-	    	return self.Layers().length > 0 && self.Layers()[0].StartMinutes() < 25 * 60;
-	    });
-
-		this.DistinctLayers = ko.computed(function() {
+		this.DistinctLayers = ko.computed(function () {
 			var array = self.Layers();
 			var result = [];
 			var names = [];
@@ -72,6 +62,5 @@ define([
 			}
 			return result;
 		});
-
 	};
 });

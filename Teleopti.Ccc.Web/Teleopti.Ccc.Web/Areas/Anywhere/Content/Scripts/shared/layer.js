@@ -15,7 +15,6 @@ define([
 	) {
 
 	return function (timeline, data, shift) {
-
 		var self = this;
 
 		var unit = new unitViewModel(timeline, data);
@@ -43,12 +42,6 @@ define([
 			return 0;
 		});
 			
-		this.DisplayDrop = ko.computed(function () {
-			if (self.LengthPixels() > 30)
-				return false;
-			return shift.AnyLayerSelected();
-		});
-
 		this.Selected = ko.observable(false);
 
 	};

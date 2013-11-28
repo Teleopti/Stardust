@@ -3,7 +3,7 @@ define([
 		'moment',
 		'lazy',
 		'views/teamschedule/shift',
-		'views/teamschedule/dayoff'
+		'shared/dayoff'
 ], function (
 		ko,
 		moment,
@@ -28,6 +28,12 @@ define([
 			return self.Shifts().length > 0;
 		});
 
+		this.IsPersonSelected = ko.computed(function() {
+			return $(self.Shifts()).is(function(index) {
+				return this.IsAnyLayerSelected();
+			});
+		});
+
 		this.ContractTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 			return time.format("H:mm");
@@ -45,9 +51,9 @@ define([
 			self.ContractTimeMinutes(0);
 		};
 
-		this.AddData = function (data, timeline) {
+		this.AddData = function (data, timeline, selectedGroup) {
 			if (data.Projection.length > 0) {
-				var newShift = new shift(timeline);
+				var newShift = new shift(timeline, selectedGroup, self.Id, data.Date);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
 			}
@@ -89,6 +95,7 @@ define([
 		this.OrderBy = function () {
 
 			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
+			
 			if (visibleShiftLayers.some())
 				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
 			

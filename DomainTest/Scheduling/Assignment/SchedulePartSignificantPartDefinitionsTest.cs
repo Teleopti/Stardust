@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //Definition: Assignment with "HighestZOrder" has PersonalShift
 					IPersonAssignment personAssignmentWithPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 					IPersonAssignment personAssignmentWithoutPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            personAssignmentWithPersonalShift.AddPersonalLayer(new Activity("hej"), new DateTimePeriod(2000,1,1,2000,1,1));
+            personAssignmentWithPersonalShift.AddPersonalActivity(new Activity("hej"), new DateTimePeriod(2000,1,1,2000,1,1));
 
             using (_mocker.Record())
             {
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //Definition: Assignment with HighesZorder has OvertimeShift
 					IPersonAssignment personAssignmentWithOvertimeShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 					IPersonAssignment personAssignmentWithoutOvertimeShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            personAssignmentWithOvertimeShift.AddOvertimeLayer(new Activity("sdf"), new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
+            personAssignmentWithOvertimeShift.AddOvertimeActivity(new Activity("sdf"), new DateTimePeriod(2000,1,1,2000,1,2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
 
             using (_mocker.Record())
             {

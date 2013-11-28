@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var pa1 = mocks.StrictMock<IPersonAssignment>();
             var schedulePart = CreateScheduleDayAndSetBasicExpectation(SchedulePartView.PersonalShift);
             Expect.Call(schedulePart.PersonAssignment()).Return(pa1).Repeat.AtLeastOnce();
-	        Expect.Call(pa1.PersonalLayers())
+	        Expect.Call(pa1.PersonalActivities())
 	              .Return(new List<IPersonalShiftLayer>
 		              {
 			              new PersonalShiftLayer(new Activity("d"), new DateTimePeriod(_date.AddHours(10), _date.AddHours(15)))

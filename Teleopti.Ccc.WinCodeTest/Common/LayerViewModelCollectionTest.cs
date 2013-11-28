@@ -338,15 +338,15 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             #region setup
             var assignment = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
 						var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
-						assignment.AddOvertimeLayer(ActivityFactory.CreateActivity("activity"), period, multi);
-						assignment.AddPersonalLayer(ActivityFactory.CreateActivity("activity"), period);
+						assignment.AddOvertimeActivity(ActivityFactory.CreateActivity("activity"), period, multi);
+						assignment.AddPersonalActivity(ActivityFactory.CreateActivity("activity"), period);
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
-            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainLayers().First(), assignment, null, null);
-            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainLayers().Last(), assignment, null, null);
-			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, assignment.OvertimeLayers().Single(), assignment, null, null);
-			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,assignment.PersonalLayers().Single(), assignment, null,null);
+            MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(null, assignment.MainActivities().First(), assignment, null, null);
+            MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(null, assignment.MainActivities().Last(), assignment, null, null);
+			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(null, assignment.OvertimeActivities().Single(), assignment, null, null);
+			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(null,assignment.PersonalActivities().Single(), assignment, null,null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(null, absenceLayer,null);
 	        var meetingPerson = new MeetingPerson(new Person(), false);
 						Meeting meeting = new Meeting(new Person(), new[]{meetingPerson }, "subject", "location", "description", ActivityFactory.CreateActivity("activity"), ScenarioFactory.CreateScenarioAggregate());
@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.PersonAssignment().MainLayers().Single();
+			var theLayer = part.PersonAssignment().MainActivities().Single();
 			var theLayerViewModel = target.Single();
 
 	        removeService.Expect(r => r.Remove(part, theLayer));
@@ -556,7 +556,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			  .CreatePart();
 			target.AddFromSchedulePart(part);
 
-			var theLayer = part.PersonAssignment().MainLayers().Single();
+			var theLayer = part.PersonAssignment().MainActivities().Single();
 			var theLayerViewModel = target.Single();
 
 			var newPayload = ActivityFactory.CreateActivity("new");
@@ -616,8 +616,8 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			var firstViewModel = target.First();
 			var secondViewModel = target.Skip(1).First();
 
-			var firstModel = part.PersonAssignment().MainLayers().First(l => l.Period == firstViewModel.Period);
-			var secondModel = part.PersonAssignment().MainLayers().First(l => l.Period == secondViewModel.Period);
+			var firstModel = part.PersonAssignment().MainActivities().First(l => l.Period == firstViewModel.Period);
+			var secondModel = part.PersonAssignment().MainActivities().First(l => l.Period == secondViewModel.Period);
 			var firstPeriod = firstModel.Period;
 			var secondPeriod = secondModel.Period;
 

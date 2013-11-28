@@ -54,23 +54,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			//var periodOffsetCalculator = new PeriodOffsetCalculator();
 			//var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(sourceAssignment.Period, targetAssignment.Period);
 
-			targetAssignment.ClearMainLayers();
-			targetAssignment.ClearOvertimeLayers();
+			targetAssignment.ClearMainActivities();
+			targetAssignment.ClearOvertimeActivities();
 
-			foreach (var layer in sourceAssignment.MainLayers())
+			foreach (var layer in sourceAssignment.MainActivities())
 			{
-				targetAssignment.AssignActivity(layer.Payload, layer.Period);
+				targetAssignment.AddActivity(layer.Payload, layer.Period);
 			}
 
 			var timeZoneInfo = sourceAssignment.Person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(sourceAssignment.Period.StartDateTime, timeZoneInfo));
 			var personPeriod = sourceAssignment.Person.Period(dateOnlyPerson);
 
-			foreach (var layer in sourceAssignment.OvertimeLayers())
+			foreach (var layer in sourceAssignment.OvertimeActivities())
 			{
 				if (personPeriod.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(layer.DefinitionSet))
 				{
-					targetAssignment.AddOvertimeLayer(layer.Payload, layer.Period, layer.DefinitionSet);
+					targetAssignment.AddOvertimeActivity(layer.Payload, layer.Period, layer.DefinitionSet);
 				}
 			}
 
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			targetAssignment.SetShiftCategory(sourceAssignment.ShiftCategory);
 
-			sourceAssignment.ClearMainLayers();
-			sourceAssignment.ClearOvertimeLayers();
+			sourceAssignment.ClearMainActivities();
+			sourceAssignment.ClearOvertimeActivities();
 			sourceAssignment.SetDayOff(null);
 		}
 

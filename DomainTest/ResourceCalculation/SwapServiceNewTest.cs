@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var retList = service.Swap(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-			Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, retList[0].PersonAssignment().MainActivities().Count());
         }
 
 		[Test]
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
-			Assert.AreEqual(0, _p1D1.PersonAssignment().MainLayers().Count());
+			Assert.AreEqual(0, _p1D1.PersonAssignment().MainActivities().Count());
 			Assert.AreEqual(1, _p1D1.PersonAbsenceCollection().Count);
 			// NOTE that the followith case is not right from the edition 388 as there is no null PersonAssignment() any longer
 			//Assert.IsNull(_p2D1.PersonAssignment());
@@ -268,8 +268,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.AreEqual(1, retList[0].PersonAbsenceCollection().Count());
 			Assert.AreEqual(0, retList[1].PersonAbsenceCollection().Count());
 
-			Assert.AreEqual(1, retList[0].PersonAssignment().MainLayers().Count());
-			Assert.AreEqual(0, retList[1].PersonAssignment().MainLayers().Count());
+			Assert.AreEqual(1, retList[0].PersonAssignment().MainActivities().Count());
+			Assert.AreEqual(0, retList[1].PersonAssignment().MainActivities().Count());
 		}
 
 		/// <summary>
@@ -397,8 +397,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
-			Assert.AreEqual(1, p1assignments[0].PersonalLayers().Count());
-			Assert.AreEqual(0, p2assignments[0].PersonalLayers().Count());
+			Assert.AreEqual(1, p1assignments[0].PersonalActivities().Count());
+			Assert.AreEqual(0, p2assignments[0].PersonalActivities().Count());
 
 			var service = new SwapServiceNew();
 			service.Init(_list);
@@ -417,8 +417,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var p1assignmentsAfterSwap = retList[0].PersonAssignment();
 			var p2assignmentsAfterSwap = retList[1].PersonAssignment();
 
-			Assert.AreEqual(1, p1assignmentsAfterSwap.PersonalLayers().Count());
-			Assert.AreEqual(0, p2assignmentsAfterSwap.PersonalLayers().Count());
+			Assert.AreEqual(1, p1assignmentsAfterSwap.PersonalActivities().Count());
+			Assert.AreEqual(0, p2assignmentsAfterSwap.PersonalActivities().Count());
 		}
 
 		/// <summary>
@@ -442,15 +442,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IPersonAssignment> p2assignments = new List<IPersonAssignment> { _p2D1.PersonAssignment() };
 			((ScheduleRange)_dictionary[_person2]).AddRange(p2assignments);
 
-			Assert.AreEqual(1, p1assignments[0].OvertimeLayers().Count());
-			Assert.AreEqual(0, p2assignments[0].OvertimeLayers().Count());
+			Assert.AreEqual(1, p1assignments[0].OvertimeActivities().Count());
+			Assert.AreEqual(0, p2assignments[0].OvertimeActivities().Count());
 
 			var p1Period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_d1.StartDateTime.AddDays(-1)));
 			_person1.AddPersonPeriod(p1Period);
 			var p2Period = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(_d1.StartDateTime.AddDays(-1)));
 			_person2.AddPersonPeriod(p2Period);
 
-			var definitionSet = ((IOvertimeShiftLayer)p1assignments[0].OvertimeLayers().ToList()[0]).DefinitionSet;
+			var definitionSet = ((IOvertimeShiftLayer)p1assignments[0].OvertimeActivities().ToList()[0]).DefinitionSet;
 			_person1.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			_person2.PersonPeriodCollection[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 
@@ -471,8 +471,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var p1assignmentsAfterSwap = retList[0].PersonAssignment();
 			var p2assignmentsAfterSwap = retList[1].PersonAssignment();
 
-			Assert.AreEqual(0, p1assignmentsAfterSwap.OvertimeLayers().Count());
-			Assert.AreEqual(1, p2assignmentsAfterSwap.OvertimeLayers().Count());
+			Assert.AreEqual(0, p1assignmentsAfterSwap.OvertimeActivities().Count());
+			Assert.AreEqual(1, p2assignmentsAfterSwap.OvertimeActivities().Count());
 		}
     }
 }

@@ -99,8 +99,13 @@ define([
                 });
             crossroads.addRoute(
                 new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
-                function(view, id, date, action) {
-                    _displayView({ view: view, id: id, date: date, action: action });
+                function (view, personid, date, action) {
+                	_displayView({ view: view, personid: personid, date: date, action: action });
+                });
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
+                function(view, groupid, personid, date, action) {
+                	_displayView({ view: view, groupid: groupid, personid:personid, date: date, action: action });
                 });
             crossroads.addRoute(
                 new RegExp('^(' + viewRegex + ')/(' + dateRegex + ')$', "i"),
@@ -112,15 +117,20 @@ define([
                 function(view, id, action) {
                     _displayView({ view: view, id: id, action: action });
                 });
+	        crossroads.addRoute(
+		        new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
+		        function(view, id, date) {
+			        _displayView({ view: view, id: id, date: date });
+		        });
             crossroads.addRoute(
                 new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + guidRegex + ')$', "i"),
                 function(view, id, date, secondaryId) {
                     _displayView({ view: view, id: id, date: date, secondaryId: secondaryId });
                 });
             crossroads.addRoute(
-                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
-                function(view, id, date) {
-                    _displayView({ view: view, id: id, date: date });
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
+                function(view, groupid, personid, date) {
+                    _displayView({ view: view, groupid: groupid, personid: personid, date: date });
                 });
             crossroads.addRoute(
                 new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),

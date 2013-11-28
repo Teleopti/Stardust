@@ -10,7 +10,9 @@ define([
 		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
 		'resizeevent',
-		'ajax'
+		'shared/current-state',
+		'ajax',
+		'lazy'
 	], function (
 		ko,
 		$,
@@ -22,10 +24,27 @@ define([
 		personViewModel,
 		view,
 		resize,
-		ajax
+		currentState,
+		ajax,
+		lazy
 	) {
 
 		var teamSchedule;
+
+		var setSelectedLayer = function(shifts) {
+			var layers = lazy(shifts)
+				.map(function(x) { return x.Layers(); })
+				.flatten();
+			var layer = lazy(layers)
+				.select(function(x) {
+					if (x.StartTime() == currentState.SelectedLayer().StartTime()) {
+						return x;
+					}
+				});
+			var selectedLayer = layer.first();
+			if (selectedLayer)
+				selectedLayer.Selected(true);
+		};
 
 		var loadSchedules = function(options) {
 			subscriptions.subscribeTeamSchedule(
@@ -42,7 +61,15 @@ define([
 						for (var j = 0; j < schedules.length; j++) {
 							if (currentPersons[i].Id == schedules[j].PersonId) {
 				    	        schedules[j].Date = dateClone;
-				    			currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine);
+				    	        currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, teamSchedule.SelectedGroup());
+				    	        if (currentState.SelectedPersonId() == currentPersons[i].Id) {
+					    	        if (currentState.SelectedLayer()) {
+						    	        setSelectedLayer(currentPersons[i].Shifts());
+					    	        } else {
+						    	        
+					    	        }
+					    	        
+				    	        }
 							}
 						}
 					}
@@ -139,12 +166,14 @@ define([
 				teamSchedule.SelectedGroup.subscribe(function () {
 					if (teamSchedule.Loading())
 						return;
+					currentState.Clear();
 					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
 				teamSchedule.SelectedDate.subscribe(function() {
 					if (teamSchedule.Loading())
 						return;
+					currentState.Clear();
 					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
@@ -216,6 +245,11 @@ define([
 							loadSchedules({
 								success: function () {
 									teamSchedule.Loading(false);
+									if (currentState.SelectedPersonId()) {
+										$('html, body').animate({
+											scrollTop: $("[data-person-id='" + currentState.SelectedPersonId() + "']").offset().top
+										}, 20);
+									}
 									deferred.resolve();
 								}
 							});

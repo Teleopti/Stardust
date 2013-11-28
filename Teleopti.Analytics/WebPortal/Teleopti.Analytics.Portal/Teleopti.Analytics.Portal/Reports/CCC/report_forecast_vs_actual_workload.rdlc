@@ -1807,7 +1807,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(sum(Fields!calculated_calls.Value), 1)</Value>
+                              <Value>=code.RoundToLarger(sum(Fields!calculated_calls.Value), 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1847,7 +1847,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(sum(Fields!forecasted_calls.Value), 1)</Value>
+                              <Value>=code.RoundToLarger(sum(Fields!forecasted_calls.Value), 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -1887,7 +1887,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(sum(Fields!offered_calls.Value), 1)</Value>
+                              <Value>=code.RoundToLarger(sum(Fields!offered_calls.Value), 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2163,7 +2163,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!calculated_calls.Value, 1)</Value>
+                              <Value>=code.RoundToLarger(Fields!calculated_calls.Value, 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -2195,7 +2195,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!forecasted_calls.Value, 1)</Value>
+                              <Value>=code.RoundToLarger(Fields!forecasted_calls.Value, 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -2228,7 +2228,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!offered_calls.Value, 1)</Value>
+                              <Value>=code.RoundToLarger(Fields!offered_calls.Value, 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -2469,7 +2469,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(sum(Fields!calculated_calls.Value), 1)</Value>
+                              <Value>=code.RoundToLarger(sum(Fields!calculated_calls.Value), 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2509,7 +2509,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(sum(Fields!forecasted_calls.Value), 1)</Value>
+                              <Value>=code.RoundToLarger(sum(Fields!forecasted_calls.Value), 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2550,7 +2550,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(sum(Fields!offered_calls.Value), 1)</Value>
+                              <Value>=code.RoundToLarger(sum(Fields!offered_calls.Value), 1)</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -3457,7 +3457,11 @@ Public Function Divide(a as integer, b as integer) as integer
 	else
 		return a/b
 	end if
-End Function</Code>
+End Function
+Public Function RoundToLarger(ByVal Number, ByVal NumDigitsAfterDecimal)
+  RoundToLarger = FormatNumber(CDbl(FormatNumber(Number, NumDigitsAfterDecimal)),NumDigitsAfterDecimal)
+End Function
+</Code>
   <Width>19cm</Width>
   <Page>
     <PageHeader>

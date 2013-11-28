@@ -3,11 +3,11 @@ define([
         'navigation',
         'lazy',
 		'shared/timeline',
-		'views/teamschedule/group-page',
+		'shared/group-page',
         'resources!r',
         'moment',
 		'select2',
-		'knockoutBindings'
+		'shared/current-state'
     ], function(
         ko,
         navigation,
@@ -17,12 +17,12 @@ define([
         resources,
         moment,
 	    select2,
-	    knockoutBindings
+	    currentState
     ) {
 
-        return function() {
+    	return function () {
 
-            var self = this;
+    		var self = this;
             
             this.Loading = ko.observable(false);
             
@@ -57,26 +57,6 @@ define([
             	});
             	self.GroupPages.push.apply(self.GroupPages, newItems);
             };
-            
-            this.SetTeams = function (teams) {
-            	
-            	self.GroupPages([]);
-
-            	var groups = [];
-	            for(var i = 0; i < teams.length; i++)
-	            	groups.push({ Name: teams[i].SiteAndTeam, Id: teams[i].Id });
-
-	            var groupings = [
-		            {
-		            	Name: "",
-		            	Groups : groups
-		            }];
-
-            	var newItems = ko.utils.arrayMap(groupings, function (d) {
-            		return new groupPageViewModel(d);
-            	});
-            	self.GroupPages.push.apply(self.GroupPages, newItems);
-            };
 	        
             this.NextDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', 1));
@@ -86,12 +66,13 @@ define([
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
 
-            this.SelectPerson = function(person) {
-                navigation.GotoPersonSchedule(person.Id, self.SelectedDate());
+            this.SelectPerson = function (person) {
+            	currentState.SetSelectedPersonId(person.Id);
+            	navigation.GotoPersonSchedule(self.SelectedGroup(), person.Id, self.SelectedDate());
             };
             
-            this.SelectLayer = function (layer) {
-                var selectedLayers = lazy(self.Persons())
+            this.SelectLayer = function (layer, personId) {
+	            var selectedLayers = lazy(self.Persons())
                     .map(function(x) { return x.Shifts(); })
                     .flatten()
                     .map(function(x) { return x.Layers(); })
@@ -105,6 +86,10 @@ define([
                     x.Selected(false);
                 });
                 layer.Selected(!layer.Selected());
+                currentState.SetSelectedPersonId(personId);
+                if (layer.Selected()) {
+	                currentState.SetSelectedLayer(layer);
+                }
             };
 
 

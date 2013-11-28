@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 						var personAssignment = new PersonAssignment(_agent, _scheduleRange.Scenario, new DateOnly(2008, 1, 1));
             IActivity activity = ActivityFactory.CreateActivity("Overtime activity");
-						personAssignment.AddOvertimeLayer(activity, period, multiplicatorDefinitionSet);
+						personAssignment.AddOvertimeActivity(activity, period, multiplicatorDefinitionSet);
 
             var part = _scheduleRange.ScheduledDay(new DateOnly(2008, 1, 1));
             part.Add(personAssignment);

@@ -2,93 +2,182 @@
 .person-schedule {
 }
 
-	.person-schedule .time-line {
-		left: 0; /* first column with paddings */
-		width: 100%;
-	}
+	.person-schedule .time-line 
+{
+	left: 121px; /* 105 + 8 + 8    first column with paddings */
+	width: 100%;
+}
 
-		.person-schedule .time-line,
-		.person-schedule .time-line div {
-			height: 100%;
-			z-index: -10;
-		}
+.person-schedule .time-line,
+.person-schedule .time-line div
+{
+	height: 100%;
+	z-index: -10;
+}
 
-			.person-schedule .time-line .ruler {
-				height: 100%;
-				width: 1px;
-				background-color: rgba(0,0,0,0.2);
-				z-index: 100;
-			}
+.person-schedule .time-line .ruler {
+	height: 100%;
+	width: 1px;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 100;
+}
+.person-schedule .time-line .label {
+	font-size: xx-small;
+	height: 12px;
+	z-index: 111;
+ }
 
-			.person-schedule .time-line .label {
-				font-size: xx-small;
-				height: 12px;
-				z-index: 111;
-			}
+.person-schedule .person td
+{
+	height: 14px;
+	line-height: 14px;	
+}
+ 
+.person-schedule .person.selected-person
+{
+	height: 57px;
+}
 
-	.person-schedule .schedule-row {
-		height: 57px;
-	}
+.person-schedule .person.selected-person .layer
+{
+	height: 40px;
+}
 
-	.person-schedule .schedule {
-		padding-left: 0;
-		padding-right: 0;
-	}
+.person-schedule .person-name-column {
+	max-width: 105px !important;
+	min-width: 105px !important;
+	width: 105px !important;
+	overflow: hidden;
+	vertical-align: middle;
+}
+.person-schedule .contract-time-column {
+	max-width: 100px !important;
+	min-width: 100px !important;
+	width: 100px !important;
+	vertical-align: middle;
+}
+.person-schedule .schedule-column {
+	padding-left: 0;
+	padding-right: 0;
+	width: auto;
+}
 
-	.person-schedule .layer {
-		height: 40px;
-		text-align: center;
-		z-index: 10;
-	}
+.person-schedule .person-name 
+{
+}
+.person-schedule tbody tr
+{
+	
+}
+.person-schedule .schedule
+{
+}
 
-		.person-schedule .layer:first-of-type {
-			-webkit-border-radius: 4px 0px 0px 4px;
-			-moz-border-radius: 4px 0px 0px 4px;
-			border-radius: 4px 0px 0px 4px;
-		}
+.person-schedule .dayoff {
+	text-align: center;
+	width: 100%;
+	top: -4px;
+	height: 30px;
+	background-size: 11px 11px;
+	background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
+}
 
-		.person-schedule .layer:last-of-type {
-			-webkit-border-radius: 0px 4px 4px 0px;
-			-moz-border-radius: 0px 4px 4px 0px;
-			border-radius: 0px 4px 4px 0px;
-		}
+.person-schedule .person.selected-person .dayoff {
+	top: -8px;
+	height: 57px;
+}
 
-		.person-schedule .layer:only-child {
-			-webkit-border-radius: 4px 4px 4px 4px;
-			-moz-border-radius: 4px 4px 4px 4px;
-			border-radius: 4px 4px 4px 4px;
-		}
-
-		.person-schedule .layer .layer-description {
-			margin-top: 11px;
-			background-color: white;
-			color: #606060;
-			text-shadow: none;
-		}
-
-	.person-schedule .dayoff {
-		text-align: center;
-		width: 100%;
-		top: -8px;
-		height: 57px;
-		background-size: 11px 11px;
-		background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0,0,0,0.2) 8px, transparent 8px, transparent );
-	}
-
-		.person-schedule .dayoff .layer-description {
-			margin-top: 18px;
-			text-shadow: none;
-		}
+.person-schedule .dayoff .layer-description {
+	margin-top: 18px;
+	text-shadow: none;
+}
 
 .no-cssgradients .person-schedule .dayoff {
 	background-color: beige;
+}
+
+
+
+.person-schedule .shift-menu-background {
+	background: #eeeeee;
+}
+
+.person-schedule .shift-menu
+{
+}
+
+
+.person-schedule .shift-details .label {
+	text-shadow: none;
+}
+.person-schedule .activity-details {
+	text-shadow: none;
+}
+
+.person-schedule .shift .layer
+{
+	z-index: 10;	
+	height: 22px;
+	text-align: center;
+}
+
+.person-schedule .shift .layer:first-of-type
+{
+	-webkit-border-radius: 4px 0px 0px 4px;
+	   -moz-border-radius: 4px 0px 0px 4px;
+			border-radius: 4px 0px 0px 4px;
+}
+.person-schedule .shift .layer:last-of-type
+{
+	-webkit-border-radius: 0px 4px 4px 0px;
+	   -moz-border-radius: 0px 4px 4px 0px;
+			border-radius: 0px 4px 4px 0px;
+}
+.person-schedule .shift .layer:only-child
+{
+	-webkit-border-radius: 4px 4px 4px 4px;
+	   -moz-border-radius: 4px 4px 4px 4px;
+			border-radius: 4px 4px 4px 4px;
+}
+.person-schedule .shift .layer .layer-description {
+	background-color: white;
+	color: #606060;
+	text-shadow: none;
+}
+.person-schedule .shift .layer .drop {
+	top: 21px;
+}
+
+.person-schedule .resources td {
+	padding-top: 3px;
+}
+.person-schedule .contract-time 
+{
+	text-align: right;
+	overflow: hidden;
+}
+
+.person-schedule .date-input {
+	cursor: pointer;
+	background-color: #FFFFFF;
+}
+
+@media (max-width: 1199px) {
+
+	.person-schedule .contract-time {
+		display: none;
+	}
+	.person-schedule .work-time {
+		display: none;
+	}
 }
 
 .person-schedule .full-day-absence-form {
 	width: 223px;
 }
 
-	.person-schedule .full-day-absence-form .start-date {
+	.person-schedule .full-day-absence-form .start-date
+	{
 		width: 180px;
 		margin-bottom: 10px;
 	}
@@ -105,15 +194,22 @@
 	vertical-align: middle;
 }
 
-
-.person-schedule .activity-form {
-	width: 223px;
+.person-schedule .space {
+	margin-top: 15px;
 }
 
-	.person-schedule .activity-form .start-time {
-		width: 180px;
-	}
+.person-schedule .activity-form {
+	/*width: 223px;*/
+}
 
-	.person-schedule .activity-form .end-time {
-		width: 180px;
-	}
+.person-schedule .activity-form .start-time{
+	
+}
+
+.person-schedule .activity-form .end-time {
+	/*'width: 180px;*/
+}
+
+.person-schedule .activity-form-row {
+	/*'width: 180px;*/
+}

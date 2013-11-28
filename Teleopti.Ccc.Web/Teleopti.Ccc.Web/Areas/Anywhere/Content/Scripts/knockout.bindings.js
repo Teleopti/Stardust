@@ -25,4 +25,29 @@ define(
     			$(element).select2("val", observable());
     		}
     	};
+	    
+    	ko.bindingHandlers.timepicker = {
+    		init: function (element, valueAccessor, allBindingsAccessor) {
+    			var options = allBindingsAccessor().timepickerOptions || {};
+    			var $element = $(element);
+    			$element.timepicker(options);
+
+    			$element.on('change', function () {
+    				var observable = valueAccessor();
+    				var value = $element.val();
+    				value = value == '' ? undefined : value;
+    				observable(value);
+    			});
+    		},
+    		update: function (element, valueAccessor) {
+    			var $element = $(element);
+
+    			var value = ko.utils.unwrapObservable(valueAccessor());
+    			if (value) {
+    				$element.timepicker("setTime", value);
+    			} else {
+    				$element.val(value);
+    			}
+    		}
+    	};
     });

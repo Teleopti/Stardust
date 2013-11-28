@@ -1,5 +1,7 @@
 using System;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
@@ -20,6 +22,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenThereIsAnAbsenceNamed(string name)
 		{
 			DataMaker.Data().Apply(new AbsenceConfigurable{Name = name});
+		}
+
+		[Given(@"there are absences")]
+		public void GivenThereAreAbsences(Table table)
+		{
+			var absences = table.CreateSet<AbsenceConfigurable>();
+			absences.ForEach(x => DataMaker.Data().Apply(x));
 		}
 
 		[Given(@"'?(I)'? have a full day absence named '(.*)' on '(.*)'")]

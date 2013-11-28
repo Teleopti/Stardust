@@ -1,13 +1,6 @@
-using System.Globalization;
-using System.Linq;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
@@ -31,35 +24,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 	}
-
-	public class GroupPageConfigurable : IDataSetup
-	{
-		public string Name { get; set; }
-		public string Group { get; set; }
-
-		public void Apply(IUnitOfWork uow)
-		{
-			var page = new GroupPage(Name);
-
-			var groups = Group.Split(',').Select(g => g.Trim());
-			groups.ForEach(g => page.AddRootPersonGroup(new RootPersonGroup(g)));
-
-			new GroupPageRepository(uow).Add(page);
-		}
-
-	}
-
-	public class PersonGroupConfigurable : IUserDataSetup
-	{
-		public string Page { get; set; }
-		public string Group { get; set; }
-
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
-		{
-			var page = new GroupPageRepository(uow).LoadAll().Single(p => p.Description.Name == Page);
-			var group = page.RootGroupCollection.Single(g => g.Description.Name == Group);
-			group.AddPerson(user);
-		}
-	}
-
 }

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private void pasteMainShiftLayers(IPersonAssignment personAssignment, TimeSpan periodOffset)
 		{
-			foreach (var mainShiftLayer in personAssignment.MainLayers())
+			foreach (var mainShiftLayer in personAssignment.MainActivities())
 			{
 				_destination.CreateAndAddOvertime(mainShiftLayer.Payload, mainShiftLayer.Period.MovePeriod(periodOffset), _multiplicatorDefinitionSet);
 			}	
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private void pasteOvertimelayers(IPersonAssignment personAssignment, TimeSpan periodOffset)
 		{
-			foreach (var overtimeShiftLayer in personAssignment.OvertimeLayers())
+			foreach (var overtimeShiftLayer in personAssignment.OvertimeActivities())
 			{
 				_destination.CreateAndAddOvertime(overtimeShiftLayer.Payload, overtimeShiftLayer.Period.MovePeriod(periodOffset), _multiplicatorDefinitionSet);
 			}	

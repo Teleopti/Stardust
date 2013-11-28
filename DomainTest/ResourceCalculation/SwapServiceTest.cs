@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IScheduleDay> retList = service.SwapAssignments(_dictionary);
 
             Assert.AreEqual("kalle", retList[0].Person.Name.LastName);
-						Assert.AreEqual(0, retList[0].PersonAssignment().MainLayers().Count());
+						Assert.AreEqual(0, retList[0].PersonAssignment().MainActivities().Count());
         }
 
 		[Test]
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private static void verifyAllSchedulesStartAtTheSameUtcTime(IEnumerable<IScheduleDay> schedules)
 		{
 			var mainShifts = from s in schedules
-			                 select s.PersonAssignment().MainLayers().First().Period.StartDateTime;
+							 select s.PersonAssignment().MainActivities().First().Period.StartDateTime;
 			
 			Assert.That(mainShifts.Distinct().Count(),Is.EqualTo(1),"All mainshiftlayers expected to start at the same time");
 		}

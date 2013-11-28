@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	public class AssignActivityCommandHandler : IHandleCommand<AssignActivityCommand>
+	public class AddActivityCommandHandler : IHandleCommand<AddActivityCommand>
 	{
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> _personAssignmentRepository;
@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IPerson> _personForId;
 		private readonly IUserTimeZone _timeZone;
 
-		public AssignActivityCommandHandler(
+		public AddActivityCommandHandler(
 			IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository,
 			ICurrentScenario currentScenario, IProxyForId<IActivity> activityForId, IProxyForId<IPerson> personForId,
 			IUserTimeZone timeZone)
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_timeZone = timeZone;
 		}
 
-		public void Handle(AssignActivityCommand command)
+		public void Handle(AddActivityCommand command)
 		{
 			var activity = _activityForId.Load(command.ActivityId);
 			var personAssignment = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				});
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
 
-			personAssignment.AssignActivity(activity, period);
+			personAssignment.AddActivity(activity, period);
 		}
 	}
 }

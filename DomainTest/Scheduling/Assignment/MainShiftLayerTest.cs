@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-			ass.AssignActivity(new Activity("d"), new DateTimePeriod(start, start.AddHours(1)));
-			var layer2check = ass.MainLayers().Single();
+			ass.AddActivity(new Activity("d"), new DateTimePeriod(start, start.AddHours(1)));
+			var layer2check = ass.MainActivities().Single();
 			layer2check.Parent.Should().Not.Be.Null();
 			var clone = (IMainShiftLayer)layer2check.NoneEntityClone();
 			clone.Parent.Should().Be.Null();
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void ShouldKnowItsIndex()
 		{
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeMainshiftLayers();
-			((MainShiftLayer)ass.MainLayers().Last()).OrderIndex.Should().Be.EqualTo(2);
+			((MainShiftLayer)ass.MainActivities().Last()).OrderIndex.Should().Be.EqualTo(2);
 		}
 	}
 }

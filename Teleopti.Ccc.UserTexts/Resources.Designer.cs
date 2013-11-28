@@ -799,6 +799,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add intraday absence.
+        /// </summary>
+        public static string AddIntradayAbsence {
+            get {
+                return ResourceManager.GetString("AddIntradayAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Main Layer.
         /// </summary>
         public static string AddMainLayer {
@@ -10541,6 +10550,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Intraday {
             get {
                 return ResourceManager.GetString("Intraday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Intraday absence.
+        /// </summary>
+        public static string IntradayAbsence {
+            get {
+                return ResourceManager.GetString("IntradayAbsence", resourceCulture);
             }
         }
         

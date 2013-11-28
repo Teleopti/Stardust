@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.StartTime);
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.EndTime);
 			if(!string.IsNullOrEmpty(scheduleActivity.TextColor))
-				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') ~ tr .activity-details[style*='color: {1}']", name, colorNameToCss(scheduleActivity.TextColor));
+				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') ~ tr .activity-details span[style*='color: {1}']", name, colorNameToCss(scheduleActivity.TextColor));
 		}
 
 		[Then(@"I should see schedule shift details for '(.*)' with")]
@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists(".person", personName);
 		}
 
-
 		[Then(@"I should see '(.*)' with schedule")]
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
@@ -134,7 +133,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeWithTheScheduledActivity(string personName, Table table)
 		{
 			var scheduledActivity = table.CreateInstance<ScheduledActivityInfo>();
-
 			assertScheduledActivity(personName, scheduledActivity);
 		}
 
