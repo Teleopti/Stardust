@@ -27,6 +27,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
+		self.possibleTradeSchedulesRaw = [];
 		self.agentChoosed = ko.observable(null);
 		self.isSendEnabled = ko.observable(true);
 		self.IsLoading = ko.observable(false);
@@ -66,8 +67,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self._createPossibleTradeSchedules = function (possibleTradeSchedules) {
+			self.possibleTradeSchedules.removeAll();
 			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradeSchedules, function (personSchedule) {
-
+				
 			    var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
 			    	var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
 			    	return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());;
@@ -132,7 +134,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             },
             write: function (value) {
             	if (self.requestedDateInternal().diff(value) == 0) return;
-            	self.possibleTradeSchedules.removeAll();
+            	self.possibleTradeSchedulesRaw = [];
                 self.chooseAgent(null);
                 self.requestedDateInternal(value);
                 self.loadSchedule();
@@ -202,8 +204,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				},
 				success: function (data, textStatus, jqXHR) {
 				    self._createTimeLine(data.TimeLineHours);
-					self._createMySchedule(data.MySchedule);
-					self._createPossibleTradeSchedules(data.PossibleTradeSchedules);
+				    self._createMySchedule(data.MySchedule);
+					
+				    $.each(data.PossibleTradeSchedules, function (i, item) {
+				    	self.possibleTradeSchedulesRaw.push(item);
+				    });
+					
+				    self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
 					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},
