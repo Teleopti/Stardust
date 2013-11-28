@@ -19,7 +19,7 @@ define([
 		};
 		
 		this.AddIntradayAbsence = function () {
-			navigation.GotoPersonScheduleAddIntradayAbsenceForm(personid, date);
+			navigation.GotoPersonScheduleAddIntradayAbsenceForm(groupid, personid, date);
 		};
 		
 		this.RemoveAbsence = function () {

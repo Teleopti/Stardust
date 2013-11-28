@@ -164,17 +164,18 @@ define([
 				});
 
 				teamSchedule.SelectedGroup.subscribe(function () {
+					currentState.Clear();
+
 					if (teamSchedule.Loading())
 						return;
-					currentState.Clear();
-					currentState.SetSelectedGroupId(teamSchedule.SelectedGroup());
 					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
-				teamSchedule.SelectedDate.subscribe(function() {
+				teamSchedule.SelectedDate.subscribe(function () {
+					currentState.Clear();
+
 					if (teamSchedule.Loading())
 						return;
-					currentState.Clear();
 					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 

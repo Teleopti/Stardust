@@ -67,7 +67,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.AddIntradayAbsence,
 					UserTexts.Resources.IntradayAbsence,
 					UserTexts.Resources.Absence,
-					
+					UserTexts.Resources.InvalidIntradayAbsenceTimes,
+					UserTexts.Resources.InvalidEndTime,
+
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,
 					DateAndTimeFormatExtensions.FixedTimeFormat,
@@ -84,7 +86,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					TimeFormatForMoment = DateAndTimeFormatExtensions.TimeFormatForMoment(),
 
 					LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
-					FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek
+					FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
+					ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t")
 				}, Formatting.Indented);
 
 			template = string.Format(template, userTexts);

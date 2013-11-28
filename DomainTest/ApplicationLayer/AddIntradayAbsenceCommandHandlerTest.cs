@@ -30,17 +30,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					StartDateTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
-					EndDateTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc)
+					Date = new DateOnly(2013, 11, 27),
+					StartTime = new TimeOfDay(new TimeSpan(14, 00, 00)),
+					EndTime = new TimeOfDay(new TimeSpan(15, 00, 00))
 				};
 			target.Handle(command);
 
-			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as IntradayAbsenceAddedEvent;
+			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as PersonAbsenceAddedEvent;
 			@event.AbsenceId.Should().Be(absenceRepository.Single().Id.Value);
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
-			@event.StartDateTime.Should().Be(command.StartDateTime);
-			@event.EndDateTime.Should().Be(command.EndDateTime);
+			@event.StartDateTime.Should().Be(command.Date.Date.Add(command.StartTime.Time));
+			@event.EndDateTime.Should().Be(command.Date.Date.Add(command.EndTime.Time));
 		}
 
 		[Test]
@@ -56,8 +57,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					StartDateTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
-					EndDateTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc)
+					Date = new DateOnly(2013, 11, 27),
+					StartTime = new TimeOfDay(new TimeSpan(14, 00, 00)),
+					EndTime = new TimeOfDay(new TimeSpan(15, 00, 00))
 				};
 			target.Handle(command);
 
@@ -65,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			personAbsence.Person.Should().Be(personRepository.Single());
 			absenceLayer.Payload.Should().Be(absenceRepository.Single());
-			absenceLayer.Period.StartDateTime.Should().Be(command.StartDateTime);
-			absenceLayer.Period.EndDateTime.Should().Be(command.EndDateTime);
+			absenceLayer.Period.StartDateTime.Should().Be(command.Date.Date.Add(command.StartTime.Time));
+			absenceLayer.Period.EndDateTime.Should().Be(command.Date.Date.Add(command.EndTime.Time));
 		}
 
 		[Test]
@@ -84,18 +86,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					StartDateTime = new DateTime(2013, 11, 27, 14, 00, 00),
-					EndDateTime = new DateTime(2013, 11, 27, 15, 00, 00)
+					Date = new DateOnly(2013, 11, 27),
+					StartTime = new TimeOfDay(new TimeSpan(14, 00, 00)),
+					EndTime = new TimeOfDay(new TimeSpan(15, 00, 00))
 				};
 			target.Handle(command);
 
 			var personAbsence = personAbsenceRepository.Single();
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDateTime, userTimeZone));
-			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDateTime, userTimeZone));
-			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as IntradayAbsenceAddedEvent;
-			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDateTime, userTimeZone));
-			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDateTime, userTimeZone));
+			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.StartTime.Time), userTimeZone));
+			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.EndTime.Time), userTimeZone));
+			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as PersonAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.StartTime.Time), userTimeZone));
+			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.EndTime.Time), userTimeZone));
 		}
 	}
 }

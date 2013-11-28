@@ -11858,4 +11858,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Intraday absence</value>
     <comment>Intraday absence</comment>
   </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Invalid end time.</value>
+    <comment>Invalid end time</comment>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Please add intraday absence on existing shift.</value>
+    <comment>Please add intraday absence on existing shift</comment>
+  </data>
 </root>

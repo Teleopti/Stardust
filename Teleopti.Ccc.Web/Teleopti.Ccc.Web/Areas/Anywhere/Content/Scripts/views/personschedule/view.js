@@ -158,7 +158,6 @@ define([
 						var person = new personViewModel(data);
 						person.AddData(data, personSchedule.TimeLine);
 						personSchedule.AddPersonsToGroup([person]);
-					    
 						personSchedule.SetData(data, options.groupid);
 					    
 						if (personSchedule.AddingActivity()) {

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTimeInUtc, endDateTimeInUtc));
 			_layer = absenceLayer;
 
-			AddEvent(new IntradayAbsenceAddedEvent
+			AddEvent(new PersonAbsenceAddedEvent
 			{
 				AbsenceId = absence.Id.GetValueOrDefault(),
 				PersonId = person.Id.GetValueOrDefault(),

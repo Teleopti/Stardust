@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -29,8 +30,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var person = _personRepository.Load(command.PersonId);
 			var absence = _absenceRepository.Load(command.AbsenceId);
-			var absenceTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartDateTime, _timeZone.TimeZone()),
-			                                           TimeZoneHelper.ConvertToUtc(command.EndDateTime, _timeZone.TimeZone()));
+			var absenceTimePeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.Date.Date.Add(command.StartTime.Time), _timeZone.TimeZone()),
+													   TimeZoneHelper.ConvertToUtc(command.Date.Date.Add(command.EndTime.Time), _timeZone.TimeZone()));
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
 			personAbsence.IntradayAbsence(person, absence,

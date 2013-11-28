@@ -276,10 +276,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
-		public static void GotoAnywherePersonScheduleIntradayAbsenceForm(Guid personId, DateTime date)
+		public static void GotoAnywherePersonScheduleIntradayAbsenceForm(Guid groupId, Guid personId, DateTime date)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#personschedule/{0}/{1}{2}{3}/addintradayabsence",
+				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/addintradayabsence",
+				groupId,
 				personId,
 				date.Year.ToString("0000"),
 				date.Month.ToString("00"),

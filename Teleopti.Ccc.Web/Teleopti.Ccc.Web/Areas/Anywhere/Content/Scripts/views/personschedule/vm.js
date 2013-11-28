@@ -10,7 +10,8 @@ define([
 	'helpers',
 	'resources!r',
 	'select2',
-	'lazy'
+	'lazy',
+	'shared/current-state'
 ], function (
 	ko,
 	navigation,
@@ -23,7 +24,8 @@ define([
 	helpers,
 	resources,
 	select2,
-	lazy
+	lazy,
+	currentState
 	) {
 
 	return function () {
@@ -133,7 +135,7 @@ define([
 			self.PersonsInGroup.push.apply(self.PersonsInGroup, persons);
 		};
 
-		this.SetData = function (data, groupid) {
+		this.SetData = function (data, groupId) {
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.Id();
@@ -146,7 +148,7 @@ define([
 
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
-			self.AddIntradayAbsenceForm.SetData(data, groupid);
+			self.AddIntradayAbsenceForm.SetData(data, groupId);
 		};
 
 		this.AddFullDayAbsence = function () {

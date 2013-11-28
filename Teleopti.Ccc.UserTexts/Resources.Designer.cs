@@ -10617,6 +10617,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid end time..
+        /// </summary>
+        public static string InvalidEndTime {
+            get {
+                return ResourceManager.GetString("InvalidEndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please add intraday absence on existing shift..
+        /// </summary>
+        public static string InvalidIntradayAbsenceTimes {
+            get {
+                return ResourceManager.GetString("InvalidIntradayAbsenceTimes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid multisite distribution.
         /// </summary>
         public static string InvalidMultisiteDistribution {
