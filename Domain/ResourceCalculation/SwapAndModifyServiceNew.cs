@@ -51,15 +51,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				var part1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
 				var part2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
 
-				//if(part1.PersonAbsenceCollection().Any() || part2.PersonAbsenceCollection().Any())
-				//    continue;
-
 				if(lockedDates.Contains(dateOnly))
 					continue;
 
-				IList<IScheduleDay> selectedSchedules = new List<IScheduleDay> { part1, part2 };
+				var returnedSwappedParts = swapParts(scheduleDictionary, part1, part2);
 
-				modifiedParts.AddRange(SwapParts(scheduleDictionary, selectedSchedules));
+				modifiedParts.AddRange(returnedSwappedParts);
 
 				foreach (var assignment in part1.PersonAssignmentCollection())
 				{
@@ -77,10 +74,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return responses.Where(r => !r.Overridden).ToList();
 		}
 
-		private IEnumerable<IScheduleDay> SwapParts(IScheduleDictionary scheduleDictionary, IList<IScheduleDay> selectedSchedules)
+		private IEnumerable<IScheduleDay> swapParts(IScheduleDictionary scheduleDictionary, IScheduleDay part1, IScheduleDay part2)
 		{
-			_swapService.Init(selectedSchedules);
-			return _swapService.Swap(scheduleDictionary);
+			return _swapService.Swap(part1, part2,scheduleDictionary);
 		}
 	}
 }

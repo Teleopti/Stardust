@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -12,90 +8,103 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public class SwapServiceNew : ISwapServiceNew
 	{
-		private IList<IScheduleDay> _selectedSchedules;
-
-		public void Init(IList<IScheduleDay> selectedSchedules)
+		public IList<IScheduleDay> Swap(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2, IScheduleDictionary schedules)
 		{
-			_selectedSchedules = selectedSchedules;
-		}
+			InParameter.NotNull("schedules", schedules);
 
-		public bool CanSwapAssignments()
-		{
-			if (!CheckBasicRules())
-				return false;
-			return true;
-		}
-
-	public IList<IScheduleDay> Swap(IList<IScheduleDay> selectedSchedules, IScheduleDictionary schedules)
-		{
-			Init(selectedSchedules);
-			return Swap(schedules);
-		}
-
-		private bool CheckBasicRules()
-		{
-			if (_selectedSchedules.Count != 2)
-				return false;
-
-			if (_selectedSchedules[0].Person == _selectedSchedules[1].Person)
-				return false;
-
-			return true;
-		}
-
-
-		public IList<IScheduleDay> Swap(IScheduleDictionary schedules)
-		{
-			if (schedules == null)
-				throw new ArgumentNullException("schedules");
-
-			if (!CanSwapAssignments())
+			if (!canSwapAssignments(scheduleDay1, scheduleDay2))
 				throw new ConstraintException("Can not swap assignments");
 
 			var retList = new List<IScheduleDay>();
 
-			var schedulePart0 = schedules[_selectedSchedules[0].Person].ReFetch(_selectedSchedules[0]);
-			var schedulePart1 = schedules[_selectedSchedules[1].Person].ReFetch(_selectedSchedules[1]);
+			var schedulePart1 = schedules[scheduleDay1.Person].ReFetch(scheduleDay1);
+			var schedulePart2 = schedules[scheduleDay2.Person].ReFetch(scheduleDay2);
 
-			swapScheduleDays(schedulePart0, schedulePart1);
+			swapMainShiftAndOvertime(schedulePart1, schedulePart2);
+			swapDayOff(schedulePart1, schedulePart2);
 
-			retList.AddRange(new List<IScheduleDay> { schedulePart0, schedulePart1 });
+			retList.AddRange(new List<IScheduleDay> { schedulePart1, schedulePart2 });
 			return retList;
 		}
 
-		private void swapScheduleDays(IScheduleDay source, IScheduleDay destination)
+		private void swapMainShiftAndOvertime(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2)
 		{
+			var tempSlot = (IScheduleDay)scheduleDay1.Clone();
+			tempSlot.Clear<IScheduleData>();
 
-			IScheduleDay tempSlot = (IScheduleDay)source.Clone();
-			tempSlot.Clear<IPersistableScheduleData>();
-
-			copyAndClean(source, tempSlot);
-			copyAndClean(destination, source);
-			copyAndClean(tempSlot, destination);
+			copyAndClearMainShiftAndOvertime(scheduleDay1, tempSlot);
+			copyAndClearMainShiftAndOvertime(scheduleDay2, scheduleDay1);
+			copyAndClearMainShiftAndOvertime(tempSlot, scheduleDay2);
 
 		}
 
-		private void copyAndClean(IScheduleDay source, IScheduleDay destination)
+		private void swapDayOff(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2)
 		{
-			IScheduleDay tempPart = (IScheduleDay)source.Clone();
-			tempPart.Clear<IPersonDayOff>();
-			tempPart.Clear<IPersonAbsence>();
-			tempPart.Clear<IPreferenceDay>();
-			tempPart.Clear<IStudentAvailabilityDay>();
-			destination.MergeSwap(tempPart, false);
+			var tempSlot = (IScheduleDay)scheduleDay1.Clone();
+			tempSlot.Clear<IScheduleData>();
 
-			tempPart = (IScheduleDay)source.Clone();
-			tempPart.Clear<IPersonAbsence>();
-			tempPart.Clear<IPersonAssignment>();
-			tempPart.Clear<IPreferenceDay>();
-			tempPart.Clear<IStudentAvailabilityDay>();
-			destination.Merge(tempPart, false);
+			copyAndClearDayOff(scheduleDay1, tempSlot);
+			copyAndClearDayOff(scheduleDay2, scheduleDay1);
+			copyAndClearDayOff(tempSlot, scheduleDay2);
+		}
 
-			((ExtractedSchedule)destination).MergeOvertime(source);
+		private static void copyAndClearMainShiftAndOvertime(IScheduleDay slot1, IScheduleDay slot2)
+		{
+			foreach (var personAssignment in slot1.PersonAssignmentCollection())
+			{
+				var mainShift = personAssignment.MainShift;
+				if (mainShift != null)
+				{
+					slot2.AddMainShift((IMainShift) mainShift.NoneEntityClone());
+				}
 
-			source.DeleteDayOff();
-			source.DeleteOvertime();
-			source.DeleteMainShift(source);
+				var overtimeShiftToRemove = new List<IOvertimeShift>();
+				foreach (var overtimeShift in personAssignment.OvertimeShiftCollection)
+				{
+					overtimeShiftToRemove.Add(overtimeShift);
+					foreach (var layer in overtimeShift.LayerCollectionWithDefinitionSet())
+					{
+						slot2.CreateAndAddOvertime(layer);
+					}
+				}
+				foreach (var overtimeShift in overtimeShiftToRemove)
+				{
+					personAssignment.RemoveOvertimeShift(overtimeShift);
+				}
+			}
+			slot1.DeleteMainShift(slot1);
+		}
+
+		private static void copyAndClearDayOff(IScheduleDay scheduleDay1, IScheduleDay tempSlot)
+		{
+			foreach (var personDayOff in scheduleDay1.PersonDayOffCollection())
+			{
+				var oldDayOff = personDayOff.DayOff;
+				var dayOff = new DayOff(oldDayOff.Anchor, oldDayOff.TargetLength, oldDayOff.Flexibility, oldDayOff.Description,
+				                        oldDayOff.DisplayColor, oldDayOff.PayrollCode);
+				var personDayOffToAdd = new PersonDayOff(tempSlot.Person, tempSlot.Scenario, dayOff,
+				                                         tempSlot.DateOnlyAsPeriod.DateOnly, scheduleDay1.TimeZone);
+				tempSlot.Add(personDayOffToAdd);
+			}
+			scheduleDay1.DeleteDayOff();
+		}
+
+		private bool canSwapAssignments(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2)
+		{
+			if (!checkBasicRules(scheduleDay1, scheduleDay2))
+				return false;
+			return true;
+		}
+
+		private bool checkBasicRules(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2)
+		{
+			if (scheduleDay1 == null || scheduleDay2 == null)
+				return false;
+
+			if (scheduleDay1.Person == scheduleDay2.Person)
+				return false;
+
+			return true;
 		}
 	}
 }
