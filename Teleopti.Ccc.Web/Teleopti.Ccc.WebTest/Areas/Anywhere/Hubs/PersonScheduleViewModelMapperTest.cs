@@ -9,7 +9,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -98,6 +97,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.DefaultIntradayAbsenceData.EndTime.Should().Be.EqualTo(TimeHelper.TimeOfDayFromTimeSpan(expectedStartTime.AddHours(1).TimeOfDay, CultureInfo.CurrentCulture));
 		}
 
+		private static DateTime roundUp(DateTime dt, TimeSpan d)
+		{
+			return new DateTime(((dt.Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
+		}
+
 		[Test]
 		public void ShouldMapDefaultIntradayAbsenceTimesInUserTimeZoneForToday()
 		{
@@ -107,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var now = _now.UtcDateTime();
 			var startTime = now.AddHours(-3);
 			var endTime = startTime.AddHours(8);
-			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(now, hawaiiTimeZoneInfo);
+			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(roundUp(now, TimeSpan.FromMinutes(15)), hawaiiTimeZoneInfo);
 			var expectedEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, hawaiiTimeZoneInfo);
 			var shift = new Shift { Projection = new[] { new SimpleLayer { Start = startTime, End = endTime} } };
 

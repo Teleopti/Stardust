@@ -33,6 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			public readonly TChild Child;
 		}
 
+		private static DateTime roundUp(DateTime dt, TimeSpan d)
+		{
+			return new DateTime(((dt.Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
+		}
+
 		protected override void Configure()
 		{
 			CreateMap<PersonScheduleData, PersonScheduleViewModel>()
@@ -59,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 							return TimeHelper.TimeOfDayFromTimeSpan(TimeSpan.Zero, CultureInfo.CurrentCulture);
 						var now = _now.UtcDateTime();
 						if (now >= s.FirstOrDefault().Start && now <= s.LastOrDefault().End)
-							return TimeHelper.TimeOfDayFromTimeSpan(TimeZoneInfo.ConvertTimeFromUtc(now, _userTimeZone.TimeZone()).TimeOfDay, CultureInfo.CurrentCulture);
+							return TimeHelper.TimeOfDayFromTimeSpan(TimeZoneInfo.ConvertTimeFromUtc(roundUp(now, TimeSpan.FromMinutes(15)), _userTimeZone.TimeZone()).TimeOfDay, CultureInfo.CurrentCulture);
 						return TimeHelper.TimeOfDayFromTimeSpan(s.FirstOrDefault() != null
 							       ? TimeZoneInfo.ConvertTimeFromUtc(s.FirstOrDefault().Start, _userTimeZone.TimeZone()).TimeOfDay
 								   : TimeSpan.Zero, CultureInfo.CurrentCulture);
