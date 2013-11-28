@@ -365,7 +365,7 @@ SELECT
 	is_logged_in,
 	contract_time_s
 FROM mart.fact_schedule_deviation fsd
-WHERE fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId
+WHERE fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId+1
 AND fsd.person_id IN (SELECT person_id FROM #person_id)
 
 INSERT INTO #fact_schedule_deviation(shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
