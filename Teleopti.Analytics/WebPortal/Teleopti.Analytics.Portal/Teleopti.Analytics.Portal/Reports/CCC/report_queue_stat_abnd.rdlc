@@ -2070,7 +2070,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!average_speed_answer.Value,2)</Value>
+                              <Value>=code.RoundToLarger(Fields!average_speed_answer.Value,2)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2819,7 +2819,11 @@
 	else
 		return var
 	end if
-End Function</Code>
+End Function
+Public Function RoundToLarger(ByVal Number, ByVal NumDigitsAfterDecimal)
+  RoundToLarger = FormatNumber(CDbl(FormatNumber(Number, NumDigitsAfterDecimal)),NumDigitsAfterDecimal)
+End Function
+</Code>
   <Width>19cm</Width>
   <Page>
     <PageHeader>

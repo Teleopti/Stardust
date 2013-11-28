@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             mocks.ReplayAll();
 
             _periodDistributionService.CalculateDay(_container, dictionary);
-            double expedtedResult = new PopulationStatisticsCalculator(new[] { 0d, double.NaN, double.NaN }).StandardDeviation;
+            double expedtedResult = Domain.Calculation.Variances.StandardDeviation(new[] { 0d, double.NaN, double.NaN });
             Assert.AreEqual(expedtedResult, skillStaffPeriod.IntraIntervalDeviation, 0.01);
         }
     }

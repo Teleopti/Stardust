@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -9,8 +10,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </summary>
     public class DeviationStatisticsCalculator : IDeviationStatisticsCalculator
     {
-        private readonly PopulationStatisticsCalculator _absoluteDeviationStatisticsCalculator = new PopulationStatisticsCalculator();
-        private readonly PopulationStatisticsCalculator _relativeDeviationStatisticsCalculator = new PopulationStatisticsCalculator();
+		private readonly IList<double> _absoluteStatisticsValues = new List<double>();
+		private readonly IList<double> _relativeStatisticsValues = new List<double>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DeviationStatisticsCalculator"/> class.
@@ -40,7 +41,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 AddItem(expectedList[i], realList[i]);
             }
-            AnalyzeData();
         }
 
         /// <summary>
@@ -51,19 +51,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public void AddItem(double expectedValue, double realValue)
         {
             var item = new DeviationStatisticData(expectedValue, realValue);
-            //_items.Add(item);
-            AbsoluteStatisticsCalculator.AddItem(item.AbsoluteDeviation);
-            if (!item.RelativeDeviation.Equals(double.NaN))
-                RelativeStatisticsCalculator.AddItem(item.RelativeDeviation);
-        }
 
-        /// <summary>
-        /// Analizes the input data and calculates statistic data.
-        /// </summary>
-        public void AnalyzeData()
-        {
-            AbsoluteStatisticsCalculator.Analyze();
-            RelativeStatisticsCalculator.Analyze();
+            _absoluteStatisticsValues.Add(item.AbsoluteDeviation);
+            if (!item.RelativeDeviation.Equals(double.NaN))
+                _relativeStatisticsValues.Add(item.RelativeDeviation);
         }
 
         /// <summary>
@@ -72,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The absolute deviation average.</value>
         public double AbsoluteDeviationAverage
         {
-            get { return AbsoluteStatisticsCalculator.Average; }
+			get { return Calculation.Variances.Average(_absoluteStatisticsValues); }
         }
 
         /// <summary>
@@ -81,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The absolute deviation summa.</value>
         public double AbsoluteDeviationSumma
         {
-            get { return AbsoluteStatisticsCalculator.Summa; }
+            get { return _absoluteStatisticsValues.Sum(); }
         }
 
         /// <summary>
@@ -90,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The absolute standard deviation.</value>
         public double AbsoluteStandardDeviation
         {
-            get { return AbsoluteStatisticsCalculator.StandardDeviation; }
+            get { return Calculation.Variances.StandardDeviation(_absoluteStatisticsValues); }
         }
 
         /// <summary>
@@ -99,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The absolute root mean square.</value>
         public double AbsoluteRootMeanSquare
         {
-            get { return AbsoluteStatisticsCalculator.RootMeanSquare; }
+            get { return Calculation.Variances.RMS(_absoluteStatisticsValues); }
         }
 
         /// <summary>
@@ -108,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The relative deviation average.</value>
         public double RelativeDeviationAverage
         {
-            get { return RelativeStatisticsCalculator.Average; }
+            get { return Calculation.Variances.Average(_relativeStatisticsValues); }
         }
 
         /// <summary>
@@ -117,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The relative deviation summa.</value>
         public double RelativeDeviationSumma
         {
-            get { return RelativeStatisticsCalculator.Summa; }
+            get { return _relativeStatisticsValues.Sum(); }
         }
 
         /// <summary>
@@ -126,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The relative root mean square.</value>
         public double RelativeRootMeanSquare
         {
-            get { return RelativeStatisticsCalculator.RootMeanSquare; }
+            get { return Calculation.Variances.RMS(_relativeStatisticsValues); }
         }
 
         /// <summary>
@@ -135,26 +126,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// <value>The standard deviation.</value>
         public double RelativeStandardDeviation
         {
-            get { return RelativeStatisticsCalculator.StandardDeviation; }
+            get { return Calculation.Variances.StandardDeviation(_relativeStatisticsValues); }
         }
-
-        /// <summary>
-        /// Gets the inner absolute deviation statistics calculator.
-        /// </summary>
-        /// <value>The absolute deviation statistics calculator.</value>
-        public PopulationStatisticsCalculator AbsoluteStatisticsCalculator
-        {
-            get { return _absoluteDeviationStatisticsCalculator; }
-        }
-
-        /// <summary>
-        /// Gets the inner relative deviation statistics calculator.
-        /// </summary>
-        /// <value>The relative deviation statistics calculator.</value>
-        public PopulationStatisticsCalculator RelativeStatisticsCalculator
-        {
-            get { return _relativeDeviationStatisticsCalculator; }
-        }
-
     }
 }

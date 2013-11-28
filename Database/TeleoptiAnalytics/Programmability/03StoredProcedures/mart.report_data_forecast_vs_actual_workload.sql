@@ -227,14 +227,14 @@ SELECT CASE @interval_type
 		WHEN 6 THEN convert(varchar(10),left(year_month,4) + '-' + right(year_month,2))
 		WHEN 7 THEN weekday_resource_key
 		END AS 'period',
-		sum(forecasted_calls) 'forecasted_calls',
+		sum(isnull(forecasted_calls,0)) 'forecasted_calls',
 		sum(isnull(calculated_calls,0)) 'calculated_calls',
-		sum(offered_calls) 'offered_calls',
-		sum(answered_calls) 'answered_calls',
-		sum(talk_time_s) 'sum_talk_time_s',
-		sum(acw_s) 'sum_acw_s',
-		sum(forecast_talk_time_s) 'sum_forecast_talk_time_s',
-		sum(forecast_acw_s) 'sum_forecast_acw_s',
+		sum(isnull(offered_calls,0)) 'offered_calls',
+		sum(isnull(answered_calls,0)) 'answered_calls',
+		sum(isnull(talk_time_s,0)) 'sum_talk_time_s',
+		sum(isnull(acw_s,0)) 'sum_acw_s',
+		sum(isnull(forecast_talk_time_s,0)) 'sum_forecast_talk_time_s',
+		sum(isnull(forecast_acw_s,0)) 'sum_forecast_acw_s',
 		CASE WHEN sum(forecasted_calls) <=0 THEN 0
 		ELSE
 		convert(decimal(19,2),sum(forecast_talk_time_s)/sum(forecasted_calls) )

@@ -6,7 +6,6 @@ using System.Windows.Input;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Win.Common.Controls.OutlookControls.Workspaces;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace Teleopti.Ccc.Win.Common
@@ -72,10 +71,9 @@ namespace Teleopti.Ccc.Win.Common
         {
             if (e.KeyCode == Keys.F1)
             {
-                if (e.KeyCode == Keys.F1 && e.Modifiers == Keys.Shift)
-                    ShowHelp(true);//Offline
-                else
-                    ShowHelp(false); //Online
+	            var offlineMode = e.Modifiers == Keys.Shift;
+                
+				ViewBase.ShowHelp(this,offlineMode);
             }
             base.OnKeyDown(e);
         }
@@ -90,7 +88,7 @@ namespace Teleopti.Ccc.Win.Common
         {
             if (_manualHelpContextList.Any(c => c.Control.Name.Equals(control.Name)))
             {
-                ControlHelpContext helpContext = _manualHelpContextList.FirstOrDefault(c => c.Control.Name.Equals(control.Name));
+                var helpContext = _manualHelpContextList.FirstOrDefault(c => c.Control.Name.Equals(control.Name));
                 _manualHelpContextList.Remove(helpContext);
             }
         }
@@ -133,31 +131,13 @@ namespace Teleopti.Ccc.Win.Common
         protected override void OnHelpButtonClicked(System.ComponentModel.CancelEventArgs e)
         {
 	        var showLocalHelp = Keyboard.Modifiers == System.Windows.Input.ModifierKeys.Shift;
-			ShowHelp(showLocalHelp);
+			ViewBase.ShowHelp(this,showLocalHelp);
             base.OnHelpButtonClicked(e);
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (!KillMode)
                 base.OnFormClosing(e);
-        }
-
-        public void ShowHelp(bool local)
-        {
-            var guiHelper = new ColorHelper();
-            var activeControl = guiHelper.GetActiveControl(this);
-            IHelpContext userControl = null;
-            while (activeControl != null)
-            {
-                userControl = activeControl as IHelpContext;
-                if (userControl != null && userControl.HasHelp) break;
-                Control control = activeControl;
-                userControl = _manualHelpContextList.FirstOrDefault(c => c.Control.Equals(control));
-                if (userControl != null && userControl.HasHelp) break;
-                activeControl = activeControl.Parent;
-            }
-
-            HelpHelper.Current.GetHelp(this, userControl, local);
         }
 
         private void initializeComponent()
@@ -179,7 +159,12 @@ namespace Teleopti.Ccc.Win.Common
             get { return Name; }
         }
 
-        public bool KillMode
+	    public IHelpContext FindMatchingManualHelpContext(Control control)
+	    {
+		    return _manualHelpContextList.FirstOrDefault(c => c.Control.Equals(control));
+	    }
+
+	    public bool KillMode
         {
             get { return _killMode; }
         }

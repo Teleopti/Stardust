@@ -12,12 +12,6 @@
         /// <param name="realValue">The real value.</param>
         void AddItem(double expectedValue, double realValue);
 
-
-        /// <summary>
-        /// Analizes the input data and calculates statistic data.
-        /// </summary>
-        void AnalyzeData();
-
         /// <summary>
         /// Gets the absolute deviation average.
         /// </summary>

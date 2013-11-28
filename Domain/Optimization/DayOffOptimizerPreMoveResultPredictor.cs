@@ -16,15 +16,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffOptimizerPreMoveResultPredictor : IDayOffOptimizerPreMoveResultPredictor
 	{
 		private readonly IDailySkillForecastAndScheduledValueCalculator _dailySkillForecastAndScheduledValueCalculator;
-		private readonly IPopulationStatisticsCalculator _populationStatisticsCalculator;
 		private readonly IDeviationStatisticData _deviationStatisticData;
 
-		public DayOffOptimizerPreMoveResultPredictor(IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator,
-			IPopulationStatisticsCalculator populationStatisticsCalculator, IDeviationStatisticData deviationStatisticData)
+		public DayOffOptimizerPreMoveResultPredictor(IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator, IDeviationStatisticData deviationStatisticData)
 
 		{
 			_dailySkillForecastAndScheduledValueCalculator = dailySkillForecastAndScheduledValueCalculator;
-			_populationStatisticsCalculator = populationStatisticsCalculator;
 			_deviationStatisticData = deviationStatisticData;
 		}
 
@@ -55,17 +52,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private double calculateValue(IDictionary<DateOnly, IForecastScheduleValuePair> rawDataDic)
 		{
-			foreach (var forecastScheduleValuePair in rawDataDic.Values)
-			{
-				if(forecastScheduleValuePair.ForecastValue > 0)
-				{
-					double diff = _deviationStatisticData.CalculateRelativeDeviation(forecastScheduleValuePair.ForecastValue,
-					                                                                 forecastScheduleValuePair.ScheduleValue);
-					_populationStatisticsCalculator.AddItem(diff);
-				}
-			}
-			_populationStatisticsCalculator.Analyze();
-			return _populationStatisticsCalculator.StandardDeviation;
+			var values =
+				rawDataDic.Values.Where(x => x.ForecastValue > 0)
+				          .Select(x => _deviationStatisticData.CalculateRelativeDeviation(x.ForecastValue, x.ScheduleValue));
+			return Calculation.Variances.StandardDeviation(values);
 		}
 
 		private static void modifyRawData(ILockableBitArray workingBitArray, IScheduleMatrixPro matrix,

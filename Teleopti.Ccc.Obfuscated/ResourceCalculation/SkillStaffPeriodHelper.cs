@@ -275,12 +275,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             double? result = null;
 
-            IPopulationStatisticsCalculator calculator = new PopulationStatisticsCalculator(intradayDifferences);
-
-            if (calculator.Count > 0)
+			if (intradayDifferences.Any())
             {
-                calculator.Analyze();
-                result = calculator.RootMeanSquare;
+                result = Domain.Calculation.Variances.RMS(intradayDifferences);
                 result += highestIntraIntervalDeviation;
             }
             return result;
@@ -296,7 +293,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if (!skillStaffPeriods.Any())
                 return null;
             SkillStaffPeriodStatisticsForSkillIntraday statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriods.ToList());
-            statistics.Analyze();
             return statistics.StatisticsCalculator.RelativeStandardDeviation.Equals(double.NaN)
                        ? 0d
                        : statistics.StatisticsCalculator.RelativeStandardDeviation;
@@ -313,10 +309,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			}
 			if (relativeDifferences.Count == 0)
 				return null;
-			var calculator = new PopulationStatisticsCalculator(relativeDifferences);
-			calculator.Analyze();
-			var	result = calculator.StandardDeviation;
-			return result;
+
+			return Domain.Calculation.Variances.StandardDeviation(relativeDifferences);
 		}
 
         public static TimeSpan? AbsoluteDifferenceIncoming(IEnumerable<ISkillStaffPeriod> skillStaffPeriods)

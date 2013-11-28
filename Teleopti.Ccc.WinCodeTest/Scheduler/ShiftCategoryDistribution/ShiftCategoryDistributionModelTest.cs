@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		private ICachedNumberOfEachCategoryPerDate _cachedNumberOfEachCategoryPerDate;
 		private ICachedShiftCategoryDistribution _cachedShiftCategoryDistribution;
 		private ISchedulerStateHolder _schedulerStateHolder;
-	    private IPopulationStatisticsCalculator _populationStatisticsCalculator;
 		private bool _chartUpdateNeeded;
 
 	    [SetUp]
@@ -32,9 +30,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			_cachedNumberOfEachCategoryPerDate = _mocks.StrictMock<ICachedNumberOfEachCategoryPerDate>();
 			_cachedShiftCategoryDistribution = _mocks.StrictMock<ICachedShiftCategoryDistribution>();
 			_schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
-            _populationStatisticsCalculator = new PopulationStatisticsCalculator(true );
 			_target = new ShiftCategoryDistributionModel(_cachedShiftCategoryDistribution, _cachedNumberOfEachCategoryPerDate, _cachedNumberOfEachCategoryPerPerson,
-														 new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder, _populationStatisticsCalculator);
+														 new DateOnlyPeriod(2013, 09, 16, 2013, 09, 17), _schedulerStateHolder);
 			_target.ChartUpdateNeeded += targetChartUpdateNeeded;
 		}
 

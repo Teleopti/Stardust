@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -39,29 +38,22 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<double> intradayRelativePersonnelDeficits =
                 GetIntradayRelativePersonnelDeficits(scheduleDay);
 
-            IPopulationStatisticsCalculator calculator = new PopulationStatisticsCalculator();
-
             double? result = null;
 
-            foreach (double personnelDeficit in intradayRelativePersonnelDeficits)
+            if (intradayRelativePersonnelDeficits.Any())
             {
-                calculator.AddItem(personnelDeficit);
-            }
-            if (calculator.Count > 0)
-            {
-                calculator.Analyze();
 				switch (_advancedPreferences.TargetValueCalculation)
 				{
 					case TargetValueOptions.StandardDeviation:
-						result = calculator.StandardDeviation;
+						result = Calculation.Variances.StandardDeviation(intradayRelativePersonnelDeficits);
 						break;
 
 					case TargetValueOptions.RootMeanSquare:
-						result = calculator.RootMeanSquare;
+						result = Calculation.Variances.RMS(intradayRelativePersonnelDeficits);
 						break;
 
 					case TargetValueOptions.Teleopti:
-						result = calculator.Teleopti;
+						result = Calculation.Variances.Teleopti(intradayRelativePersonnelDeficits);
 						break;
 
 				}

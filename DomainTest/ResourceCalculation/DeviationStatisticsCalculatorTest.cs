@@ -28,30 +28,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void VerifyInnerCalculators()
-        {
-            _target.AnalyzeData();
-
-            Assert.AreEqual(2, _target.AbsoluteStatisticsCalculator[0].Value, 0.001);
-            Assert.AreEqual(1, _target.AbsoluteStatisticsCalculator[1].Value, 0.001);
-            Assert.AreEqual(-0.8d, _target.AbsoluteStatisticsCalculator[2].Value, 0.001);
-            Assert.AreEqual(-0.9d, _target.AbsoluteStatisticsCalculator[3].Value, 0.001);
-            Assert.AreEqual(-8d, _target.AbsoluteStatisticsCalculator[4].Value, 0.001);
-
-
-            Assert.AreEqual(0.175d, _target.RelativeStatisticsCalculator[0].Value, 0.001);
-            Assert.AreEqual(0.057d, _target.RelativeStatisticsCalculator[1].Value, 0.001);
-            Assert.AreEqual(-0.037, _target.RelativeStatisticsCalculator[2].Value, 0.001);
-            Assert.AreEqual(-0.034d, _target.RelativeStatisticsCalculator[3].Value, 0.001);
-            Assert.AreEqual(-0.199d, _target.RelativeStatisticsCalculator[4].Value, 0.001);
-        }
-
-        [Test]
         public void VerifyCommonStatisticData()
         {
-            _target.AnalyzeData();
-
-            //Assert.AreEqual(5, _target.Count);
             Assert.AreEqual(-6.7d, _target.AbsoluteDeviationSumma, 0.01d);
             Assert.AreEqual(-1.34d, _target.AbsoluteDeviationAverage, 0.01d);
             Assert.AreEqual(3.50d, _target.AbsoluteStandardDeviation, 0.01d);
@@ -117,7 +95,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             double[] real = { 1.5, 1d };
 
             _target = new DeviationStatisticsCalculator(expected, real);
-            Assert.AreEqual(1, _target.RelativeStatisticsCalculator.Count);
             Assert.IsFalse(double.IsNaN(new DeviationStatisticsCalculator(expected, real).RelativeStandardDeviation));
         }
     }

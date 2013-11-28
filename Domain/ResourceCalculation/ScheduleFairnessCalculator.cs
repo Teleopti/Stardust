@@ -1,3 +1,4 @@
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -20,16 +21,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public double ScheduleFairness()
         {
             var scheduleDictionary = _resultStateHolder.Schedules;
-            IPopulationStatisticsCalculator stddevCalculator = new PopulationStatisticsCalculator();
             double totalValue = scheduleDictionary.FairnessPoints().FairnessPointsPerShift;
-            foreach (IPerson person in scheduleDictionary.Keys)
-            {
-                double value = calcPersonFainess(person, totalValue);
-                stddevCalculator.AddItem(value);
-            }
-            
-            stddevCalculator.Analyze();
-            return stddevCalculator.StandardDeviation;
+
+	        var values = scheduleDictionary.Keys.Select(p => calcPersonFainess(p, totalValue)).ToArray();
+            return Calculation.Variances.StandardDeviation(values);
         }
 
         private double calcPersonFainess(IPerson person, double totalValue)

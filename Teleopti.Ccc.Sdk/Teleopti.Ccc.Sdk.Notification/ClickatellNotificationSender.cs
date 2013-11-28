@@ -93,8 +93,7 @@ namespace Teleopti.Ccc.Sdk.Notification
 				                            _notificationConfigReader.Password, mobileNumber, _notificationConfigReader.From,
 				                            smsMessage, containUnicode ? 1 : 0);
 
-				if (Logger.IsInfoEnabled)
-					Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
+				Logger.Info("Sending SMS on: " + _notificationConfigReader.Url + msgData);
 				try
 				{
 					var data = client.OpenRead(_notificationConfigReader.Url + msgData);

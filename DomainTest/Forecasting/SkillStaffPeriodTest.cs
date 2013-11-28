@@ -6,7 +6,6 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private ISkillStaffPeriod stPeriod5;
         private ISkillStaffPeriod stPeriod6;
         private ISkillStaffPeriod stPeriod7;
-        private IPopulationStatisticsCalculator _populationStatisticsCalculator;
+        private IPopulationStatisticsCalculatedValues _populationStatisticsCalculatedValues;
 	    private ISkill _skill;
 	    private ISkillDay _skillDay;
 
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.Payload.CalculatedLoggedOn = 321;
             mocks = new MockRepository();
             _aggregateSkillStaffPeriod = _target;
-            _populationStatisticsCalculator = new PopulationStatisticsCalculator();
+            _populationStatisticsCalculatedValues = new PopulationStatisticsCalculatedValues(0,0);
 		    
 			_skill = SkillFactory.CreateSkill("name", SkillTypeFactory.CreateSkillType(), 15);
 		    _skillDay = SkillDayFactory.CreateSkillDay(_skill, DateTime.Now);
@@ -88,27 +87,17 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             MockRepository mock = new MockRepository();
             IPeriodDistribution periodDistribution = mock.StrictMock<IPeriodDistribution>();
-            //double[] expectedRelativeValues = {1, 2, 3};
-            
             
             using (mock.Record())
             {
-                //Expect.Call(periodDistribution.CalculateSplitPeriodRelativeValues())
-                //    .Return(expectedRelativeValues)
-                //    .Repeat.Once();
-                //Expect.Call(_populationStatisticsCalculator.StandardDeviation).Return(2d);
-                //Expect.Call(_populationStatisticsCalculator.RootMeanSquare).Return(2d);
             }
             using (mock.Playback())
             {
                 Assert.AreEqual(0, _target.IntraIntervalDeviation);
                 Assert.AreEqual(0, _target.IntraIntervalRootMeanSquare);
 
-                _populationStatisticsCalculator.AddItem(1);
-                _populationStatisticsCalculator.AddItem(2);
-                _populationStatisticsCalculator.AddItem(3);
-                _populationStatisticsCalculator.Analyze();
-                _target.SetDistributionValues(_populationStatisticsCalculator, periodDistribution);
+				_populationStatisticsCalculatedValues = new PopulationStatisticsCalculatedValues(1,2);
+                _target.SetDistributionValues(_populationStatisticsCalculatedValues, periodDistribution);
                 
                 Assert.AreNotEqual(0, _target.IntraIntervalDeviation);
                 Assert.AreNotEqual(0, _target.IntraIntervalRootMeanSquare);

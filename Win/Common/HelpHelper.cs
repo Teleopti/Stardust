@@ -9,12 +9,7 @@ namespace Teleopti.Ccc.Win.Common
 	{
 		private static HelpHelper _current;
 
-		public static HelpHelper Current {get
-		{
-			if (_current == null)
-				_current = new HelpHelper();
-			return _current;
-		} }
+		public static HelpHelper Current {get { return _current ?? (_current = new HelpHelper()); } }
 
         private readonly string _http;
 		private readonly string _httpOnline;
@@ -107,19 +102,6 @@ namespace Teleopti.Ccc.Win.Common
 						HelpHttp(form.HelpId, helpContext);
 					else
 						HelpOnlineHttp(form.HelpId, helpContext);
-					break;
-			}
-		}
-
-		public void GetHelp(BaseUserControl userControl, IHelpContext helpContext, bool local)
-		{
-			switch (_helpType)
-			{
-				case HelpType.Http:
-					if (local)
-						HelpHttp(userControl.HelpId, helpContext);
-					else
-						HelpOnlineHttp(userControl.HelpId, helpContext);
 					break;
 			}
 		}

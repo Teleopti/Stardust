@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -93,22 +93,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         public double CalculateInitialValue(IterationOperationOption iterationOperationOption)
         {
-            IPopulationStatisticsCalculator statisticsCalculator = new PopulationStatisticsCalculator();
-            foreach (DateOnly scheduleDay in _scheduleDays)
-            {
-                double? intradayStaffingDeviation = DayValue(scheduleDay, iterationOperationOption);
-                if (intradayStaffingDeviation.HasValue)
-                {
-                    statisticsCalculator.AddItem(intradayStaffingDeviation.Value);
-                }
-            }
-            if (statisticsCalculator.Count > 0)
-                statisticsCalculator.Analyze();
+	        var values = _scheduleDays.Select(s => DayValue(s, iterationOperationOption)).Where(s => s.HasValue).Select(s => s.Value).ToArray();
+	        if (!values.Any()) return 0;
 
-            if (iterationOperationOption == IterationOperationOption.DayOffOptimization)
-                return statisticsCalculator.StandardDeviation;
-
-            return statisticsCalculator.RootMeanSquare;
+	        return iterationOperationOption == IterationOperationOption.DayOffOptimization
+		               ? Domain.Calculation.Variances.StandardDeviation(values)
+		               : Domain.Calculation.Variances.RMS(values);
         }
 
         public static double CalculatePeriodValue(double fairnessSetting, double fairnessValue, double initialValue)
@@ -120,7 +110,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             return _optimizerPreferences.Advanced.UseIntraIntervalDeviation;
         }
-
 
         public double? DayValue(DateOnly scheduleDay, IterationOperationOption iterationOperationOption)
         {
