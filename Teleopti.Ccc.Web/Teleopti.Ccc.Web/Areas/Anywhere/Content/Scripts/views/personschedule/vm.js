@@ -5,7 +5,7 @@ define([
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',
 	'views/personschedule/absencelistitem',
-	'views/personschedule/addabsenceform',
+	'views/personschedule/addintradayabsenceform',
 	'shared/group-page',
 	'helpers',
 	'resources!r',
@@ -18,7 +18,7 @@ define([
 	addActivityFormViewModel,
 	addFullDayAbsenceFormViewModel,
 	absenceListItemViewModel,
-	addAbsenceFormViewModel,
+	addIntradayAbsenceFormViewModel,
 	groupPageViewModel,
 	helpers,
 	resources,
@@ -117,11 +117,11 @@ define([
 		this.AddActivityForm = new addActivityFormViewModel();
 		this.AddingActivity = ko.observable(false);
 		
-		this.AddAbsenceForm = new addAbsenceFormViewModel();
-		this.AddingAbsence = ko.observable(false);
+		this.AddIntradayAbsenceForm = new addIntradayAbsenceFormViewModel();
+		this.AddingIntradayAbsence = ko.observable(false);
 
 		this.DisplayShiftMenu = ko.computed(function() {
-			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingAbsence();
+			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence();
 		});
 
 		this.DisplayDescriptions = ko.observable(false);
@@ -146,7 +146,7 @@ define([
 
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
-			self.AddAbsenceForm.SetData(data, groupid);
+			self.AddIntradayAbsenceForm.SetData(data, groupid);
 		};
 
 		this.AddFullDayAbsence = function () {

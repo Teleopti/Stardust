@@ -24,6 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPost]
 		[UnitOfWorkAction]
+		public JsonResult AddIntradayAbsence(AddIntradayAbsenceCommand command)
+		{
+			_commandDispatcher.Execute(command);
+			return Json(new object(), JsonRequestBehavior.DenyGet);
+		}
+
+		[HttpPost]
+		[UnitOfWorkAction]
 		public JsonResult RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);

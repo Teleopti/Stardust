@@ -167,6 +167,7 @@ define([
 					if (teamSchedule.Loading())
 						return;
 					currentState.Clear();
+					currentState.SetSelectedGroupId(teamSchedule.SelectedGroup());
 					navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 

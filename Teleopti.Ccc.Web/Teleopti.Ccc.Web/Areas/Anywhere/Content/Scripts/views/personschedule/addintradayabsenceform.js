@@ -21,8 +21,9 @@ define([
 		this.Absence = ko.observable("");
 
 		this.Date = ko.observable();
-		this.StartTime = ko.observable("17:00");
-		this.EndTime = ko.observable("18:00");
+		this.StartTime = ko.observable();
+		this.EndTime = ko.observable();
+		this.AbsenceTypes = ko.observableArray();
 
 		var groupid;
 		var personId;
@@ -30,22 +31,12 @@ define([
 		this.SetData = function (data, groupId) {
 			personId = data.PersonId;
 			self.Date(data.Date);
-			self.AbsenceTypes([
-				{
-					Id: 1,
-					Name: "Vacation"
-				}, {
-					Id: 2,
-					Name: "AWOL"
-				}, {
-					Id: 3,
-					Name: "Illness"
-				}
-			]);
+			self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
+			self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
+			self.AbsenceTypes(data.Absences);
 			groupid = groupId;
 		};
 
-		this.AbsenceTypes = ko.observableArray();
 
 		this.Apply = function () {
 			navigation.GoToTeamSchedule(groupid, self.Date());

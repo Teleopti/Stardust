@@ -39,7 +39,7 @@ Scenario: View form
 	| End time       | 2013-11-15 17:00 |
 	When I view schedules for 'Team green' on '2013-11-15'
 	And I select any schedule activity for 'Pierre Baldi'
-	And I click 'add intraday absence'
+	And I click 'add intraday absence' in shift menu
 	Then I should see the add intraday absence form
 
 Scenario: Default times today
@@ -51,7 +51,7 @@ Scenario: Default times today
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' on '2013-11-15'
 	Then I should see the add intraday absence form with
 	| Field        | Value   |
 	| Start time   | 13:30   | 
@@ -66,7 +66,7 @@ Scenario: Default times tomorrow
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' on '2013-11-15'
 	Then I should see the add intraday absence form with
 	| Field        | Value   |
 	| Start time   | 11:00   |
@@ -80,7 +80,7 @@ Scenario: Add on shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' on '2013-11-15'
 	And I input these intraday absence values
 	| Field      | Value   |
 	| Absence    | Illness |
@@ -102,7 +102,7 @@ Scenario: Add after midnight on night shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 22:00 |
 	| End time       | 2013-11-16 04:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' on '2013-11-15'
 	And I input these intraday absence values
 	| Field      | Value   |
 	| Activity   | Illness |
@@ -124,7 +124,7 @@ Scenario: Add cross midnight on night shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 22:00 |
 	| End time       | 2013-11-16 04:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' on '2013-11-15'
 	And I input these intraday absence values
 	| Field      | Value   |
 	| Activity   | Illness |
@@ -145,7 +145,7 @@ Scenario: Adding overlapping of shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' on '2013-11-15'
 	And I input these intraday absence values
 	| Field      | Value   |
 	| Absence    | Illness |
@@ -166,7 +166,7 @@ Scenario: Prevent adding outside of shift
 	| Activity       | Phone            |
 	| Start time     | 2013-11-15 11:00 |
 	| End time       | 2013-11-15 17:00 |
-	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	When I view person schedules add intraday absence form for 'Pierre Baldi' on '2013-11-15'
 	And I input these intraday absence values
 	| Field      | Value   |
 	| Absence    | Illness |

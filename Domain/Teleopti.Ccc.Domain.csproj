@@ -123,8 +123,11 @@
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\Events\IntradayAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonAbsenceAddedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonDeletedEvent.cs" />
     <Compile Include="ApplicationLayer\Events\PersonPeriodAddedEvent.cs" />

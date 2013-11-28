@@ -3,6 +3,7 @@ define([
 	) {
 		var selectedPersonId;
 		var selectedLayer;
+		var selectedGroupId;
 
 		return {
 			SelectedPersonId: function() {
@@ -10,6 +11,12 @@ define([
 			},
 			SetSelectedPersonId: function (personId) {
 				selectedPersonId = personId;
+			},
+			SelectedGroupId: function () {
+				return selectedGroupId;
+			},
+			SetSelectedGroupId: function (groupId) {
+				selectedGroupId = groupId;
 			},
 			SelectedLayer:function() {
 				return selectedLayer;

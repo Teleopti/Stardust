@@ -14,6 +14,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	[Binding]
 	public class TeamSchedulePageStepDefinitions
 	{
+		[StepArgumentTransformation]
+		public CssClass ToClassName(string textToBeClassName)
+		{
+			var className = textToBeClassName.ToLower().Replace(" ", "-");
+			return new CssClass { Name = className };
+		}
+
 		[When(@"I search for group '(.*)'")]
 		public void WhenISearchForGroup(string searchText)
 		{
@@ -25,6 +32,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIClickDescriptionToggleButton()
 		{
 			DescriptionToggle.EnsureIsOn();
+		}
+
+		[When(@"I click '(.*)' in shift menu")]
+		public void WhenIClickInShiftMenu(CssClass cssClass)
+		{
+			Browser.Interactions.Click(string.Format(".shift-menu a.{0}", cssClass.Name));
 		}
 
 		[When(@"I select the schedule activity for '(.*)' with start time '(.*)'")]

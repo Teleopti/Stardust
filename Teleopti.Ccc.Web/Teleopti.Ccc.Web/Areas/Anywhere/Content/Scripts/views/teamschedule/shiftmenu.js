@@ -18,8 +18,8 @@ define([
 			navigation.GotoPersonScheduleAddActivityForm(groupid, personid, date);
 		};
 		
-		this.AddAbsence = function () {
-			navigation.GotoPersonScheduleAddAbsenceForm(groupid, personid, date);
+		this.AddIntradayAbsence = function () {
+			navigation.GotoPersonScheduleAddIntradayAbsenceForm(personid, date);
 		};
 		
 		this.RemoveAbsence = function () {
