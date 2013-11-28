@@ -78,5 +78,38 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			result.Count.Should().Be.EqualTo(2);
 		}
+
+		[Test]
+		public void ShouldMapMinStartAndLastPageFromReadModel()
+		{
+			var shift = new Shift
+			{
+				Projection = new List<SimpleLayer>()
+			};
+			var model = new Model
+			{
+				FirstName = "Arne",
+				LastName = "Anka",
+				Shift = shift
+			};
+			var readModel = new PersonScheduleDayReadModel
+			{
+				PersonId = Guid.NewGuid(),
+				Start = DateTime.Now,
+				Model = JsonConvert.SerializeObject(model),
+				IsLastPage = false,
+				MinStart = new DateTime(2013,11,28,7,0,0)
+			};
+			var layerViewModels = new List<ShiftTradeScheduleLayerViewModel>();
+			var layerMapper = MockRepository.GenerateMock<IShiftTradeScheduleLayerViewModelMapper>();
+
+			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
+
+			var target = new ShiftTradePersonScheduleViewModelMapper(layerMapper);
+			var result = target.Map(readModel);
+
+			result.IsLastPage.Should().Be.False();
+			result.MinStart.Should().Be.EqualTo(new DateTime(2013, 11, 28, 7, 0, 0));
+		}
 	}
 }

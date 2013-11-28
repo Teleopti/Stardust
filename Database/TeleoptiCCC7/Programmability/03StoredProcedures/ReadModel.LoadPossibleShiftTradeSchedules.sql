@@ -50,10 +50,23 @@ AS
 		AND DATEDIFF(MINUTE,Start, [End] ) < 1440
 		ORDER BY sd.Start
 	) 
-
-	SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS [Date], Start, [End], Model, (SELECT MIN(Start) FROM Ass)  As 'MinStart',(SELECT COUNT(*) FROM Ass)  As 'Total'
+	
+	SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS [Date], Start, [End], Model, (SELECT MIN(Start) FROM Ass)  As 'MinStart',(SELECT COUNT(*) FROM Ass)  As 'Total', RowNumber
+	INTO #tmpOut
 	FROM Ass 
 	WHERE RowNumber > @skip
+
+	DECLARE @lastPage bit = 0
+	IF ((SELECT COUNT(*) FROM #tmpOut) < @take)
+		SET @lastPage = 1
+
+	DECLARE @thisLastRow int
+	SET @thisLastRow = (SELECT MAX(Rownumber) FROM #tmpOut)
+	
+	IF (SELECT MAX(Total) FROM #tmpOut) = @thisLastRow
+		SET @lastPage = 1
+
+	SELECT *, @lastPage AS IsLastPage FROM #tmpOut
 GO
 
 

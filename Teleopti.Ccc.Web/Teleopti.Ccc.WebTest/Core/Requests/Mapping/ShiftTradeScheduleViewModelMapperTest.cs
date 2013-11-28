@@ -99,5 +99,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			result.PossibleTradeSchedules.Should().Be.Empty();
 		}
+
+		[Test]
+		public void ShouldMapIsLastPageFromReadModel()
+		{
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true, Paging = new Paging() };
+			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
+			var possibleTradeScheduleViewModels = new List<ShiftTradePersonScheduleViewModel>{new ShiftTradePersonScheduleViewModel{IsLastPage = false}};
+			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
+
+			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradeSchedules(persons.Date, persons.Persons, data.Paging))
+									  .Return(scheduleReadModels);
+			_shiftTradePersonScheduleViewModelMapper.Stub(x => x.Map(scheduleReadModels)).Return(possibleTradeScheduleViewModels);
+
+			var result = _target.Map(data);
+
+			result.IsLastPage.Should().Be.False();
+		}
 	}
 }

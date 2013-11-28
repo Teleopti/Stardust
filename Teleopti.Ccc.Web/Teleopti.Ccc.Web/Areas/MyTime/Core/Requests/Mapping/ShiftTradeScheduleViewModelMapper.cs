@@ -30,16 +30,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
 
 			ShiftTradePersonScheduleViewModel mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel);
-			IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging);
+			var possibleTradeSchedule = getPossibleTradeSchedules(possibleTradePersons, data.Paging).ToList();
 
 			IEnumerable<ShiftTradeTimeLineHoursViewModel> timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(
 				mySchedule, possibleTradeSchedule, data.ShiftTradeDate);
+
+			var last = true;
+			if (possibleTradeSchedule.Any())
+				last = possibleTradeSchedule.First().IsLastPage;
 
 			return new ShiftTradeScheduleViewModel
 			{
 				MySchedule = mySchedule,
 				PossibleTradeSchedules = possibleTradeSchedule,
-				TimeLineHours = timeLineHours
+				TimeLineHours = timeLineHours,
+				IsLastPage = last
 			};
 		}
 

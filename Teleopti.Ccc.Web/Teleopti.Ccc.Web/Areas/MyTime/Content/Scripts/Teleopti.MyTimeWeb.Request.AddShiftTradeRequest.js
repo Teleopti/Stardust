@@ -6,6 +6,7 @@
 /// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="~/Content/moment/moment.js" />
+/// <reference path="jquery.visible.js" />
 
 Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -37,7 +38,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.myTeamFilter = ko.observable(true);
 		self.timeLineStartTime = ko.observable();
 	    self.timeLineLengthInMinutes = ko.observable();
-
+		self.IsLastPage = false;
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -135,8 +136,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             write: function (value) {
             	if (self.requestedDateInternal().diff(value) == 0) return;
             	self.possibleTradeSchedulesRaw = [];
+	            self.IsLastPage = false;
                 self.chooseAgent(null);
                 self.requestedDateInternal(value);
+                self.IsLoading(false);
                 self.loadSchedule();
             }
         });
@@ -185,9 +188,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.loadSchedule = function () {
-			var skip = self.possibleTradeSchedules().length;
+			if (self.IsLoading()) return;
+			var skip = self.possibleTradeSchedulesRaw.length;
 			var take = 20;
-		
+			if (self.IsLastPage) return;
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestSchedule",
 				dataType: "json",
@@ -205,7 +209,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				success: function (data, textStatus, jqXHR) {
 				    self._createTimeLine(data.TimeLineHours);
 				    self._createMySchedule(data.MySchedule);
-					
+					self.IsLastPage = data.IsLastPage;
 				    $.each(data.PossibleTradeSchedules, function (i, item) {
 				    	self.possibleTradeSchedulesRaw.push(item);
 				    });
@@ -354,6 +358,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
     
 	return {
 		Init: function () {
+			initScrollPaging();
 		},
 		SetShiftTradeRequestDate: function (date) {
 			return setShiftTradeRequestDate(date);
@@ -370,4 +375,20 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		}
 	};
 
+	function initScrollPaging() {
+		$(window).scroll(loadAPageIfRequired);
+	}
+	
+	function loadAPageIfRequired() {
+		
+		$('#tooltipContainer').each(function(i, el) {
+			// Is this element visible onscreen?
+			// LoadMore
+			var elem = $(el);
+			if (elem.visible(true)) {
+				vm.loadSchedule();
+			}	
+		});
+	}
+	
 })(jQuery);
