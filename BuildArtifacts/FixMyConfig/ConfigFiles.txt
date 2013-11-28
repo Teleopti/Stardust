@@ -6,7 +6,7 @@
 ..\..\Teleopti.Ccc.Web.Broker\web.config,..\BrokerWeb.config
 ..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\App.config,..\AppETLTool.config
 ..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\App.config,..\AppETLService.config
-..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,..\Web.Root.Web.config
+..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Web.config,Web.Root.Web.config
 ..\..\Teleopti.Ccc.Startpage\web.config,..\RTAWeb.config
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\GeneralQueue.config,..\ServiceBusHostGeneralQueue.config
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\RequestQueue.config,..\ServiceBusHostRequestQueue.config
