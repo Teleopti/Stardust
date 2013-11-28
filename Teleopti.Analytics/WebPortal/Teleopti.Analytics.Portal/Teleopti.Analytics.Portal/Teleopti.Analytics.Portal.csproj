@@ -267,6 +267,7 @@
     </Compile>
     <Compile Include="Utils\AppKeyReader.cs" />
     <Compile Include="Utils\CccReports.cs" />
+    <Compile Include="Utils\DateTimeExtensions.cs" />
     <Compile Include="Utils\HelpLinkBuilder.cs" />
     <Compile Include="Utils\ImpersonatedUser.cs" />
     <Compile Include="Utils\Login.cs" />
