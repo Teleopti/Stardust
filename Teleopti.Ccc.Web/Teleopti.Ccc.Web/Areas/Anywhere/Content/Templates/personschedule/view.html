@@ -109,15 +109,9 @@
 												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
 											
-											<!-- ko if: InvalidIntradayAbsenceTimes -->
+											<!-- ko if: ErrorMessage() !== '' -->
 											<div class="alert">
-												<span data-bind="text: $root.Resources.InvalidIntradayAbsenceTimes"></span>
-											</div>
-											<!-- /ko -->
-											
-											<!-- ko if: InvalidEndTime -->
-											<div class="alert">
-												<span data-bind="text: $root.Resources.InvalidEndTime"></span>
+												<span data-bind="html: ErrorMessage()"></span>
 											</div>
 											<!-- /ko -->
 											

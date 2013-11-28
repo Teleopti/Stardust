@@ -37,25 +37,11 @@ define([
 			groupid = groupId;
 		};
 		
-		this.InvalidIntradayAbsenceTimes = ko.computed(function () {
-			
-			//if (!self.EndDate())
-			//	return true;
-			//if (self.StartDate() && self.StartDate().diff)
-			//	return self.StartDate().diff(self.EndDate()) > 0;
-			return false;
-		});
-		
-		this.InvalidEndTime = ko.computed(function () {
-			if (!self.EndTime())
-				return true;
-			if (self.StartTime() && self.StartTime().diff)
-				return self.StartTime().diff(self.EndTime()) > 0;
-			return false;
-		});
+		this.ErrorMessage = ko.observable('');
+
 
 		this.Apply = function() {
-			var data = JSON.stringify({
+			var requestData = JSON.stringify({
 				Date: self.Date().format('YYYY-MM-DD'),
 				StartTime: self.StartTime(),
 				EndTime: self.EndTime(),
@@ -65,14 +51,14 @@ define([
 			ajax.ajax({
 					url: 'PersonScheduleCommand/AddIntradayAbsence',
 					type: 'POST',
-					data: data,
+					data: requestData,
 					success: function(data, textStatus, jqXHR) {
 						navigation.GoToTeamSchedule(groupid, self.Date());
 					},
 					error: function(jqXHR, textStatus, errorThrown) {
 						if (jqXHR.status == 400) {
-							//var data = $.parseJSON(jqXHR.responseText);
-							//self.ErrorMessage(data.Errors.join('</br>'));
+							var errorData = $.parseJSON(jqXHR.responseText);
+							self.ErrorMessage(errorData.Errors.join('</br>'));
 							return;
 						}
 					}

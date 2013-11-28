@@ -12,7 +12,7 @@ define(
                 options.cache = false;
                 options.dataType = options.dataType || "json";
                 options.contentType = options.contentType || "application/json";
-                options.error = function (jqXHR, textStatus, errorThrown) {
+                options.error = options.error || function (jqXHR, textStatus, errorThrown) {
                     var message = {
                         title: "Ajax error!",
                         message: {

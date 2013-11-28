@@ -158,6 +158,23 @@ Scenario: Adding overlapping of shift
 	| End time   | 2013-11-15 17:00 |
 	| Color      | Red              |
 
+Scenario: Prevent invalid times
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-15 11:00 |
+	| End time       | 2013-11-15 17:00 |
+	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	And I input these intraday absence values
+	| Field      | Value   |
+	| Absence    | Illness |
+	| Start time | 15:00   |
+	| End time   | 14:00   |
+	And I initiate 'apply'
+	Then I should see the alert 'Invalid end time'
+
 Scenario: Prevent adding outside of shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
