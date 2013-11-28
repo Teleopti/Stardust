@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I click '(.*)' in shift menu")]
 		public void WhenIClickInShiftMenu(CssClass cssClass)
 		{
-			Browser.Interactions.Click(string.Format("a.{0}", cssClass.Name));
+			Browser.Interactions.Click(string.Format(".shift-menu a.{0}", cssClass.Name));
 		}
 
 		[When(@"I select the schedule activity for '(.*)' with start time '(.*)'")]
