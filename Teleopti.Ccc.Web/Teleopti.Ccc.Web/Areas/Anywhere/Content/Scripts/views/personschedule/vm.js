@@ -34,13 +34,13 @@ define([
 		
 		this.Persons = ko.observableArray();
 
-		this.Id = ko.observable();
+		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
 		this.Date = ko.observable();
 
 		this.SelectedPerson = ko.computed(function () {
 			return lazy(self.Persons())
-				.select(function (x) { return x.Id == self.Id(); })
+				.select(function (x) { return x.Id == self.PersonId(); })
 				.first();
 		});
 
@@ -124,13 +124,13 @@ define([
 		this.SetData = function (data, groupId) {
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
-				a.PersonId = self.Id();
+				a.PersonId = self.PersonId();
 				a.Date = self.Date();
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);
 
-			data.PersonId = self.Id();
+			data.PersonId = self.PersonId();
 
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);

@@ -54,7 +54,7 @@
 					</thead>
 					
 					<tbody>
-						<tr class="person selected-person" data-bind="attr: { 'data-person-id': Id }">
+						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }">
 							<td class="person-name person-name-column" data-bind="text: Name">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap"></div>
@@ -195,7 +195,7 @@
 						</tr>
 
 						<!-- ko foreach: Persons -->
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>

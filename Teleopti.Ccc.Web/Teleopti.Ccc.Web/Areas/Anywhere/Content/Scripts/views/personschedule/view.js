@@ -114,7 +114,7 @@ define([
 
 			viewModel.Loading(true);
 
-			viewModel.Id(options.personid != undefined ? options.personid : options.id);
+			viewModel.PersonId(options.personid != undefined ? options.personid : options.id);
 			viewModel.GroupId(options.groupid);
 			viewModel.Date(date);
 
@@ -147,14 +147,14 @@ define([
 			};
 
 			subscriptions.subscribePersonSchedule(
-				    viewModel.Id(),
+				    viewModel.PersonId(),
 				    helpers.Date.ToServer(viewModel.Date()),
 				    function (data) {
 				    	resize.notify();
 
 				    	viewModel.Persons([]);
 
-				    	data.Id = viewModel.Id();
+				    	data.Id = viewModel.PersonId();
 				    	data.Date = viewModel.Date();
 
 				    	var person = new personViewModel(data);
