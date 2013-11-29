@@ -19,7 +19,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private int _intervalLength;
 		private int _timeLineStartInterval;
 		private int _timeLineEndInterval;
-		private int _timeLineDayTwoEndInterval;
+		private int _timeLineStartIntervalDayBefore;
+		private int _timeLineEndIntervalDayAfter;
 		private Decimal? _teamAdherenceTotal = -2;
 		private Decimal? _teamDeviationTotal = -2;
 		private IList<SqlParameter> _sqlParameterList;
@@ -294,10 +295,22 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private TableRow[] GetIntervalTotalsRows()
 		{
 			//fill it if there are holes in it
+			for (var i = _timeLineStartIntervalDayBefore; i < _intervalsPerDay; i++)
+			{
+				if (!_colSummary.ContainsKey(i))
+					_colSummary.Add(i, new summaryData { Interval = i });
+			}
 			for (var i = _timeLineStartInterval; i < _timeLineEndInterval; i++)
 			{
-				if(!_colSummary.ContainsKey(i))
-					_colSummary.Add(i, new summaryData{Interval = i});
+				var interval = i + 1000;
+				if(!_colSummary.ContainsKey(interval))
+					_colSummary.Add(interval, new summaryData { Interval = interval });
+			}
+			for (var i = 0; i < _timeLineEndIntervalDayAfter; i++)
+			{
+				var interval = i + 2000;
+				if (!_colSummary.ContainsKey(interval))
+					_colSummary.Add(interval, new summaryData { Interval = interval });
 			}
 			IList<TableRow> tableRowList = new List<TableRow>();
 
@@ -349,7 +362,6 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			{
 				string text;
 				var cssClass = "ReportIntervalTotalDeviationCell";
-				var interval = summaryData.Value.Interval;
 				if (isAdherence)
 				{
 					text = (summaryData.Value.Adherence * 100).ToString("0", CultureInfo.CurrentCulture);
@@ -360,12 +372,11 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					text = summaryData.Value.Deviation.ToString("0", CultureInfo.CurrentCulture);
 				}
 				
-				var tableCell = MakeTableCell(text,
-												   HorizontalAlign.Center, VerticalAlign.Middle, cssClass);
-				if (((interval + 1) % _intervalsPerHour == 0) && (interval > 0) ) 
-				{
+				var tableCell = MakeTableCell(text, HorizontalAlign.Center, VerticalAlign.Middle, cssClass);
+				var interval = summaryData.Value.Interval;
+				//if (((interval + 1) % _intervalsPerHour == 0) && (interval > 0))
+				if (((interval + 1) % _intervalsPerHour == 0))
 					tableCell.Style.Add("border-right", "solid 2px silver");
-				}
 
 				tableCells.Add(tableCell);
 			}
@@ -393,7 +404,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			else
 			{
 				var tableCellColumnSpan = MakeTableCell("&nbsp;", HorizontalAlign.Center, VerticalAlign.Middle, cssClass);
-				tableCellColumnSpan.ColumnSpan = _timeLineEndInterval - _timeLineStartInterval + _timeLineDayTwoEndInterval;
+				tableCellColumnSpan.ColumnSpan = (_intervalsPerDay - _timeLineStartIntervalDayBefore) + (_timeLineEndInterval - _timeLineStartInterval) + _timeLineEndIntervalDayAfter;
 				tableRow.Cells.Add(tableCellColumnSpan);
 			}
 
@@ -414,8 +425,19 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		{
 			var tableRow = MakeTableRow(personModel);
 
-			var tableCellList = fillWithBlankCells(_timeLineStartInterval, personModel.FirstIntervalId);
-			var previousIntervalId = personModel.FirstIntervalId - 1;
+			
+			var tableCellList = new List<TableCell>();
+			if (personModel.LoggedInOnTheDayBefore)
+			{
+				tableCellList.AddRange(fillWithBlankCells(_timeLineStartIntervalDayBefore, personModel.FirstIntervalId));
+			}
+			else
+			{
+				tableCellList.AddRange(fillWithBlankCells(_timeLineStartIntervalDayBefore, _intervalsPerDay));
+				tableCellList.AddRange(fillWithBlankCells(_timeLineStartInterval, personModel.FirstIntervalId));
+			}
+			
+			var previousIntervalId = personModel.FirstIntervalId;
 
 			SetTeamTotals(personModel);
 
@@ -450,7 +472,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			var tableRowSpace = new TableRow();
 			var tableCellSpace = MakeTableCell("", HorizontalAlign.Center, VerticalAlign.Middle, "ReportRowSpace");
 			tableCellSpace.Style.Add("border-top", "solid 2pt lightgrey");
-			tableCellSpace.ColumnSpan = 3 + (_timeLineEndInterval - _timeLineStartInterval) + _timeLineDayTwoEndInterval;
+			tableCellSpace.ColumnSpan = 3 + (_intervalsPerDay - _timeLineStartIntervalDayBefore) + (_timeLineEndInterval - _timeLineStartInterval) + _timeLineEndIntervalDayAfter;
 			tableRowSpace.Cells.Add(tableCellSpace);
 			tableRowList.Add(tableRowSpace);
 			return tableRowList;
@@ -459,7 +481,14 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private void addColSummary(DataCellModel dataCellModel)
 		{
 			var key = dataCellModel.IntervalId;
+			// Since the colSummary is a sorted dictionary with key interval we need a workaround here.
+			// We could have data for three days here: 
+			// "Day before" - no adding to the intervals
+			// "Report date" - adding 1000 to the interval
+			// "Day after" - adding 2000 to the interval
 			if (dataCellModel.ShiftOverMidnight)
+				key += 2000;
+			else if (!dataCellModel.LoggedInOnTheDayBefore)
 				key += 1000;
 
 			if(!_colSummary.ContainsKey(key))
@@ -523,14 +552,12 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 				tableRow.Cells.AddRange(tableCellList.ToArray());
 				List<TableCell> fillCells;
 				// If previous shift ends earlier than _timeLineEndInterval then we need to fill with some blanc cells
-				if(!personModel.EndsOnNextDate)
-				{
-					fillCells = fillWithBlankCells(previousIntervalId + 1, _timeLineEndInterval);
-					fillCells.AddRange(fillWithBlankCells(0, _timeLineDayTwoEndInterval));
-				}
+				if (personModel.EndsOnNextDate)
+					fillCells = fillWithBlankCells(previousIntervalId + 1, _timeLineEndIntervalDayAfter);
 				else
 				{
-					fillCells = fillWithBlankCells(previousIntervalId + 1, _timeLineDayTwoEndInterval);
+					fillCells = fillWithBlankCells(previousIntervalId + 1, _timeLineEndInterval);
+					fillCells.AddRange(fillWithBlankCells(0, _timeLineEndIntervalDayAfter));
 				}
 				tableRow.Cells.AddRange(fillCells.ToArray());
 				tableRowList.Add(tableRow);
@@ -576,7 +603,7 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 			var header = row.PersonName;
 			if(ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
-				header = row.Date;
+				header = row.DateText;
 
 			tableCellArray[0] = MakeTableCell(header, HorizontalAlign.Left,
 											 VerticalAlign.Middle, "");
@@ -616,21 +643,17 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private TableRow GetReportDetailHeaderRowWithTimeLineHour()
 		{
 			var tableRow = new TableRow { CssClass = "ReportColumnHeaders" };
-			if(ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))) //one agent per day
-				tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResDate,
-											HorizontalAlign.Left, VerticalAlign.Top, ""));
-			else
-				tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResAgentName,
-											HorizontalAlign.Left, VerticalAlign.Top, ""));	
+			tableRow.Cells.Add(ReportId.Equals(new Guid("6a3eb69b-690e-4605-b80e-46d5710b28af"))
+								   ? MakeTableCell(ReportTexts.Resources.ResDate, HorizontalAlign.Left, VerticalAlign.Top, "") //one agent per days
+				                   : MakeTableCell(ReportTexts.Resources.ResAgentName, HorizontalAlign.Left, VerticalAlign.Top, "")); // one day per agents
 
-			tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResAdherencePercent,
-											HorizontalAlign.Center, VerticalAlign.Top, ""));
+			tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResAdherencePercent, HorizontalAlign.Center, VerticalAlign.Top, ""));
 
-			tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResDeviationMinute,
-											HorizontalAlign.Center, VerticalAlign.Top, ""));
+			tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResDeviationMinute, HorizontalAlign.Center, VerticalAlign.Top, ""));
 
+			tableRow.Cells.AddRange(GetTimeLineHourCellArray(_timeLineStartIntervalDayBefore, _intervalsPerDay));
 			tableRow.Cells.AddRange(GetTimeLineHourCellArray(_timeLineStartInterval, _timeLineEndInterval));
-			tableRow.Cells.AddRange(GetTimeLineHourCellArray(0, _timeLineDayTwoEndInterval));
+			tableRow.Cells.AddRange(GetTimeLineHourCellArray(0, _timeLineEndIntervalDayAfter));
 			return tableRow;
 		}
 
@@ -653,26 +676,34 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private TableCell[] GetTimeLineIntervalCellArray()
 		{
 			var cells = new List<TableCell>();
+			for (var interval = 0; interval < (_intervalsPerDay - _timeLineStartIntervalDayBefore); interval++)
+			{
+				var cssClass = interval % 2 == 0 ? "ReportTimeLineIntervalCellOdd" : "ReportTimeLineIntervalCellEven";
+				var tableCell = GetTimeLineIntervalCell((interval % _intervalsPerHour) * _intervalLength, cssClass);
+
+				if (((interval + 1) % _intervalsPerHour == 0) && (interval > 0))
+					tableCell.Style.Add("border-right", "solid 2px silver");
+
+				cells.Add(tableCell);
+			}
 			for (var interval = 0; interval < (_timeLineEndInterval - _timeLineStartInterval); interval++)
 			{
 				var cssClass = interval % 2 == 0 ? "ReportTimeLineIntervalCellOdd" : "ReportTimeLineIntervalCellEven";
 				var tableCell = GetTimeLineIntervalCell((interval % _intervalsPerHour) * _intervalLength, cssClass);
 
-				if (((interval + 1) % _intervalsPerHour == 0) && (interval > 0) && (interval < (_timeLineEndInterval - _timeLineStartInterval) - 1))
-				{
+				if (((interval + 1) % _intervalsPerHour == 0) && (interval > 0) && (interval < (_timeLineEndInterval - _timeLineStartInterval)))
 					tableCell.Style.Add("border-right", "solid 2px silver");
-				}
+
 				cells.Add(tableCell);
 			}
-			for (var interval = 0; interval < (_timeLineDayTwoEndInterval - 0); interval++)
+			for (var interval = 0; interval < (_timeLineEndIntervalDayAfter); interval++)
 			{
 				var cssClass = interval % 2 == 0 ? "ReportTimeLineIntervalCellOdd" : "ReportTimeLineIntervalCellEven";
 				var tableCell = GetTimeLineIntervalCell((interval % _intervalsPerHour) * _intervalLength, cssClass);
 
 				if (((interval + 1) % _intervalsPerHour == 0) && (interval > 0) && (interval < (_timeLineEndInterval - _timeLineStartInterval) - 1))
-				{
 					tableCell.Style.Add("border-right", "solid 2px silver");
-				}
+
 				cells.Add(tableCell);
 			}
 			return cells.ToArray();
@@ -713,27 +744,39 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			var previousAbsenceId = -2;
 			var previousIntervalId = -2;
 			var previousIntervalCounter = -2;
+			var dataDayAfterExists = false;
+			var isNewDate = false;
 			IntervalToolTip intervalToolTip = null;
 			IList<IntervalToolTip> intervalToolTipList = null;//new List<IntervalToolTip>();
 			_timeLineStartInterval = _intervalsPerDay;
+			_timeLineStartIntervalDayBefore = _intervalsPerDay;
 
 			foreach (DataRow row in _dataTable.Rows)
 			{
-				if ((int)row["interval_id"] < _timeLineStartInterval && ((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
+				var dateIntervalBelongsTo = (DateTime)row["date"];
+				var shiftStartDate = (DateTime)row["shift_startdate"];
+				var intervalId = (int)row["interval_id"];
+				var activityId = (int)row["activity_id"];
+				var absenceId = (int)row["absence_id"];
+
+				if (intervalId < _timeLineStartIntervalDayBefore && dateIntervalBelongsTo.IsEarlierThan(shiftStartDate))
+					_timeLineStartIntervalDayBefore = intervalId;
+
+				if (intervalId < _timeLineStartInterval && dateIntervalBelongsTo.Equals(shiftStartDate))
+					_timeLineStartInterval = intervalId;
+
+				if (intervalId > _timeLineEndInterval && dateIntervalBelongsTo.Equals(shiftStartDate))
+					_timeLineEndInterval = intervalId;
+
+				if (intervalId >= _timeLineEndIntervalDayAfter && dateIntervalBelongsTo.IsLaterThan(shiftStartDate))
 				{
-					_timeLineStartInterval = (int)row["interval_id"];
-				}
-				if ((int)row["interval_id"] > _timeLineEndInterval)
-				{
-					_timeLineEndInterval = (int)row["interval_id"];
-				}
-				if ((int)row["interval_id"] > _timeLineDayTwoEndInterval && !((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
-				{
-					_timeLineDayTwoEndInterval = (int)row["interval_id"];
+					dataDayAfterExists = true;
+					_timeLineEndIntervalDayAfter = intervalId;
 				}
 
-				if (previousDate != (DateTime)row["shift_startdate"])
+				if (previousDate != shiftStartDate)
 				{
+					isNewDate = true;
 					// Gather tooltip for each activity/absence layer
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
@@ -747,39 +790,45 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					intervalToolTipList = new List<IntervalToolTip>();
 					intervalToolTip = new IntervalToolTip
 					{
-						StartInterval = ((int)row["interval_id"]),
+						StartInterval = intervalId,
 						StartIntervalCounter = ((int)row["date_interval_counter"]),
 						AbsenceOrActivityName = ((String)row["activity_absence_name"])
 					};
-
-					previousActivityId = (int)row["activity_id"];
-					previousAbsenceId = (int)row["absence_id"];
 				}
 
-				if ((previousActivityId != (int)row["activity_id"]) || (previousAbsenceId != (int)row["absence_id"]))
+				if (
+					(!isNewDate)
+					&&
+					(
+						((activityId == -1 && previousActivityId == activityId) && (absenceId == -1 && previousAbsenceId == absenceId))
+						|| 
+						((previousActivityId != activityId) || (previousAbsenceId != absenceId))
+					)
+					)
 				{
 					// We´re in the start of a new layer. Save the end interval of the previous layer 
 					// and the start of the current layer into different tooltip objects.
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
 						intervalToolTip.EndInterval = previousIntervalId;
+						intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 						intervalToolTipList.Add(intervalToolTip);
 					}
 
 					intervalToolTip = new IntervalToolTip
-					{
-						StartInterval = ((int)row["interval_id"]),
-						StartIntervalCounter = ((int)row["date_interval_counter"]),
-
-						AbsenceOrActivityName = ((String)row["activity_absence_name"])
-					};
+											{
+												StartInterval = intervalId,
+												StartIntervalCounter = ((int)row["date_interval_counter"]),
+												AbsenceOrActivityName = ((String)row["activity_absence_name"])
+											};
 				}
 
-				previousDate = (DateTime)row["shift_startdate"];
-				previousActivityId = (int)row["activity_id"];
-				previousAbsenceId = (int)row["absence_id"];
-				previousIntervalId = (int)row["interval_id"];
+				previousDate = shiftStartDate;
+				previousActivityId = activityId;
+				previousAbsenceId = absenceId;
+				previousIntervalId = intervalId;
 				previousIntervalCounter = (int)row["date_interval_counter"];
+				isNewDate = false;
 			}
 
 			// Catch the end of the last layer. Save the end interval of the last layer into tooltip object.
@@ -793,21 +842,20 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			}
 
 			_timeLineEndInterval += 1;
-			// See to that the start and end variables begins and ends at whole hours
 			if (_timeLineStartInterval % _intervalsPerHour != 0)
-			{
 				_timeLineStartInterval -= _timeLineStartInterval % _intervalsPerHour;
-			}
+
 			if (_timeLineEndInterval % _intervalsPerHour != 0)
-			{
 				_timeLineEndInterval += _intervalsPerHour - (_timeLineEndInterval % _intervalsPerHour);
-			}
-			if (_timeLineDayTwoEndInterval > 0)
-				_timeLineDayTwoEndInterval += 1;
-			if (_timeLineDayTwoEndInterval % _intervalsPerHour != 0)
-			{
-				_timeLineDayTwoEndInterval += _intervalsPerHour - (_timeLineDayTwoEndInterval % _intervalsPerHour);
-			}
+
+			if (_timeLineStartIntervalDayBefore % _intervalsPerHour != 0)
+				_timeLineStartIntervalDayBefore -= _timeLineStartIntervalDayBefore % _intervalsPerHour;
+
+			if (dataDayAfterExists)
+				_timeLineEndIntervalDayAfter += 1;
+
+			if (_timeLineEndIntervalDayAfter % _intervalsPerHour != 0)
+				_timeLineEndIntervalDayAfter += _intervalsPerHour - (_timeLineEndIntervalDayAfter % _intervalsPerHour);
 		}
 
 		private void SetEarliestShiftStartAndLatestShiftEnd()
@@ -819,28 +867,39 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			var previousAbsenceId = -2;
 			var previousIntervalId = -2;
 			var previousIntervalCounter = -2;
+			var dataDayAfterExists = false;
+			var isNewPerson = false;
 			IntervalToolTip intervalToolTip = null;
-			IList<IntervalToolTip> intervalToolTipList = null;//new List<IntervalToolTip>();
+			IList<IntervalToolTip> intervalToolTipList = null;
 			_timeLineStartInterval = _intervalsPerDay;
+			_timeLineStartIntervalDayBefore = _intervalsPerDay;
 
 			foreach (DataRow row in _dataTable.Rows)
 			{
-				if ((int)row["interval_id"] < _timeLineStartInterval && ((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
+				var dateIntervalBelongsTo = (DateTime) row["date"];
+				var shiftStartDate = (DateTime) row["shift_startdate"];
+				var intervalId = (int) row["interval_id"];
+				var activityId = (int)row["activity_id"];
+				var absenceId = (int)row["absence_id"];
+
+				if (intervalId < _timeLineStartIntervalDayBefore && dateIntervalBelongsTo.IsEarlierThan(shiftStartDate))
+					_timeLineStartIntervalDayBefore = intervalId;
+
+				if (intervalId < _timeLineStartInterval && dateIntervalBelongsTo.Equals(shiftStartDate))
+					_timeLineStartInterval = intervalId;
+
+				if (intervalId > _timeLineEndInterval && dateIntervalBelongsTo.Equals(shiftStartDate))
+					_timeLineEndInterval = intervalId;
+
+				if (intervalId >= _timeLineEndIntervalDayAfter && dateIntervalBelongsTo.IsLaterThan(shiftStartDate))
 				{
-					_timeLineStartInterval = (int)row["interval_id"];
+					dataDayAfterExists = true;
+					_timeLineEndIntervalDayAfter = intervalId;
 				}
-				if ((int)row["interval_id"] > _timeLineEndInterval)
-				{
-					_timeLineEndInterval = (int)row["interval_id"];
-				}
-				if ((int)row["interval_id"] > _timeLineDayTwoEndInterval && !((DateTime)row["date"]).Equals((DateTime)row["shift_startdate"]))
-				{
-					_timeLineDayTwoEndInterval = (int)row["interval_id"];
-				}
-				
 
 				if (previousPersonId != (int)row["person_id"])
 				{
+					isNewPerson = true;
 					// Gather tooltip for each activity/absence layer
 					if (intervalToolTip != null && intervalToolTipList != null)
 					{
@@ -858,16 +917,21 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					intervalToolTipList = new List<IntervalToolTip>();
 					intervalToolTip = new IntervalToolTip
 					{
-						StartInterval = ((int)row["interval_id"]),
+						StartInterval = intervalId,
 						StartIntervalCounter = ((int)row["date_interval_counter"]),
 						AbsenceOrActivityName = ((String)row["activity_absence_name"])
 					};
-
-					previousActivityId = (int)row["activity_id"];
-					previousAbsenceId = (int)row["absence_id"];
 				}
 
-				if ((previousActivityId != (int)row["activity_id"]) || (previousAbsenceId != (int)row["absence_id"]))
+				if (
+					(!isNewPerson)
+					&&
+					(
+						((activityId == -1 && previousActivityId == activityId) && (absenceId == -1 && previousAbsenceId == absenceId))
+						||
+						((previousActivityId != activityId) || (previousAbsenceId != absenceId))
+					)
+					)
 				{
 					// We´re in the start of a new layer. Save the end interval of the previous layer 
 					// and the start of the current layer into different tooltip objects.
@@ -879,18 +943,19 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					}
 
 					intervalToolTip = new IntervalToolTip
-										  {
-											  StartInterval = ((int)row["interval_id"]),
-											  StartIntervalCounter = ((int)row["date_interval_counter"]),
-											  AbsenceOrActivityName = ((String)row["activity_absence_name"])
-										  };
+											{
+												StartInterval = intervalId,
+												StartIntervalCounter = ((int)row["date_interval_counter"]),
+												AbsenceOrActivityName = ((String)row["activity_absence_name"])
+											};
 				}
 
 				previousPersonId = (int)row["person_id"];
-				previousActivityId = (int)row["activity_id"];
-				previousAbsenceId = (int)row["absence_id"];
-				previousIntervalId = (int)row["interval_id"];
+				previousActivityId = activityId;
+				previousAbsenceId = absenceId;
+				previousIntervalId = intervalId;
 				previousIntervalCounter = (int)row["date_interval_counter"];
+				isNewPerson = false;
 			}
 
 			// Catch the end of the last layer. Save the end interval of the last layer into tooltip object.
@@ -907,24 +972,22 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 					_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
 			}
 
-			_timeLineEndInterval += 1;
-			
-
 			// See to that the start and end variables begins and ends at whole hours
+			_timeLineEndInterval += 1;
 			if (_timeLineStartInterval % _intervalsPerHour != 0)
-			{
-				_timeLineStartInterval -= _timeLineStartInterval % _intervalsPerHour;
-			}
+				_timeLineStartInterval -= _timeLineStartInterval%_intervalsPerHour;
+
 			if (_timeLineEndInterval % _intervalsPerHour != 0)
-			{
 				_timeLineEndInterval += _intervalsPerHour - (_timeLineEndInterval % _intervalsPerHour);
-			}
-			if(_timeLineDayTwoEndInterval > 0)
-				_timeLineDayTwoEndInterval += 1;
-			if (_timeLineDayTwoEndInterval % _intervalsPerHour != 0)
-			{
-				_timeLineDayTwoEndInterval += _intervalsPerHour - (_timeLineDayTwoEndInterval % _intervalsPerHour);
-			}
+
+			if (_timeLineStartIntervalDayBefore % _intervalsPerHour != 0)
+				_timeLineStartIntervalDayBefore -= _timeLineStartIntervalDayBefore % _intervalsPerHour;
+
+			if (dataDayAfterExists)
+				_timeLineEndIntervalDayAfter += 1;
+
+			if (_timeLineEndIntervalDayAfter % _intervalsPerHour != 0)
+				_timeLineEndIntervalDayAfter += _intervalsPerHour - (_timeLineEndIntervalDayAfter % _intervalsPerHour);
 		}
 
 		private void SetIntervalInformation()

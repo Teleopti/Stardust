@@ -50,7 +50,7 @@ Scenario: View default time line
 	
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
 	| Activity         | Phone            |
@@ -69,7 +69,7 @@ Scenario: View shift
 Scenario: Cannot view schedule when not published
 	Given I have the role 'Cannot View Unpublished'
 	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
 	| Activity         | Phone            |
@@ -84,7 +84,7 @@ Scenario: Cannot view schedule when not published
 Scenario: View unpublished schedule when permitted
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field            | Value            |
 	| Shift category   | Day              |
 	| Activity         | Phone            |
@@ -102,7 +102,7 @@ Scenario: View unpublished schedule when permitted
 
 Scenario: View night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Night            |
 	| Activity       | Phone            |
@@ -113,7 +113,7 @@ Scenario: View night shift from yesterday
 
 Scenario: View night shift from today
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Night            |
 	| Activity       | Phone            |
@@ -130,7 +130,7 @@ Scenario: View schedule in persons time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'Pierre Baldi' is located in Hawaii
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |

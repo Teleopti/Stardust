@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -33,9 +35,35 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			sortedTeamBlocks.AddRange(
 				originalTeamBlocks.OrderByDescending(
 					x => RecalculateTeamBlock(x, optimizationPreferences, schedulingOptions).BlockInfo.AverageOfStandardDeviations));
+			sortedTeamBlocks = shuffle(sortedTeamBlocks);
 			return sortedTeamBlocks;
 		}
 
+		private static List<ITeamBlockInfo> shuffle(IEnumerable<ITeamBlockInfo> teamBlocks)
+		{
+			var shuffledList = new List<ITeamBlockInfo>();
+			var teamBockDict = new Dictionary<double, IList<ITeamBlockInfo>>();
+			foreach (var teamBlockInfo in teamBlocks)
+			{
+				var teamBlockValue = teamBlockInfo.BlockInfo.AverageOfStandardDeviations;
+				if (teamBockDict.ContainsKey(teamBlockValue))
+				{
+					var teamBlockWithSameValue = teamBockDict[teamBlockValue];
+					teamBlockWithSameValue.Add(teamBlockInfo);
+				}
+				else
+				{
+					teamBockDict.Add(teamBlockValue, new List<ITeamBlockInfo> {teamBlockInfo});
+				}
+			}
+			foreach (var teamBlock in teamBockDict.OrderByDescending(x => x.Key))
+			{
+				shuffledList.AddRange(teamBlock.Value.Randomize());
+			}
+
+			return shuffledList;
+		}
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
 		                                           IOptimizationPreferences optimizationPreferences,

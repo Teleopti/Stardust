@@ -46,7 +46,7 @@ Background:
 
 Scenario: Order like shift start, full day absence, day off, no shift 
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -71,7 +71,7 @@ Scenario: Order by shift start when shift and day off in view
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Hawaii
 	And 'Pierre Baldi' is located in Stockholm
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -82,7 +82,7 @@ Scenario: Order by shift start when shift and day off in view
 	| Name  | Day off    |
 	| Date  | 2013-09-28 |
 	And 'Ashley Andeen' is located in Hawaii
-	And 'Ashley Andeen' have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -93,13 +93,13 @@ Scenario: Order by shift start when shift and day off in view
 
 Scenario: Order as full day absence when on day off
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Andeen' have a shift with
+	And 'Pierre Andeen' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2013-10-28 15:00 |
 	| End time       | 2013-10-28 23:00 |
-	And 'Ashley Andeen' have a shift with
+	And 'Ashley Andeen' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |

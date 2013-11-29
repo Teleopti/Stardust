@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockDayOffOptimizerService _target;
 		private ITeamInfoFactory _teamInfoFactory;
 		private ILockableBitArrayFactory _lockableBitArrayFactory;
-		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 		private ITeamBlockScheduler _teamBlockScheduler;
 		private ITeamBlockInfoFactory _teamBlockInfoFactory;
@@ -33,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private IOptimizationPreferences _optimizationPreferences;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
-		private IDayOffTemplate _dayOffTemplate;
 		private IScheduleMatrixPro _matrix;
 		private IPerson _person;
 		private IList<IScheduleMatrixPro> _matrixList;
@@ -48,15 +46,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
+	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+            _teamBlockSchedulingOptions = new TeamBlockSchedulingOptions();
 			_teamBlockDaysOffMoveFinder = _mocks.StrictMock<ITeamBlockDaysOffMoveFinder>();
 			_teamInfoFactory = _mocks.StrictMock<ITeamInfoFactory>();
 			_lockableBitArrayFactory = _mocks.StrictMock<ILockableBitArrayFactory>();
-			_schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
 			_lockableBitArrayChangesTracker = _mocks.StrictMock<ILockableBitArrayChangesTracker>();
 			_teamBlockScheduler = _mocks.StrictMock<ITeamBlockScheduler>();
 			_teamBlockInfoFactory = _mocks.StrictMock<ITeamBlockInfoFactory>();
@@ -70,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_optimizationPreferences.Extra.KeepSameDaysOffInTeam = true;
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
-			_dayOffTemplate = new DayOffTemplate(new Description("hej"));
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
 			_matrixList = new List<IScheduleMatrixPro> {_matrix};
@@ -88,14 +86,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_selectedPersons = new List<IPerson> {_person};
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
-			_target = new TeamBlockDayOffOptimizerService(_teamInfoFactory, _lockableBitArrayFactory,
-			                                              _schedulingOptionsCreator, _lockableBitArrayChangesTracker,
+			_target = new TeamBlockDayOffOptimizerService(_teamInfoFactory, _lockableBitArrayFactory, _lockableBitArrayChangesTracker,
 			                                              _teamBlockScheduler, _teamBlockInfoFactory,
 			                                              _periodValueCalculatorForAllSkills,
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
 			                                              _teamTeamBlockSteadyStateValidator, _teamBlockClearer,
 														  _restrictionOverLimitValidator, _teamBlockMaxSeatChecker,
-														  _teamBlockDaysOffMoveFinder);
+                                                          _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions);
 		}
 
 		[Test]
@@ -104,7 +101,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
 				      .Return(_teamInfo);
 				
@@ -130,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList, 
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), 
 					_selectedPersons, _optimizationPreferences, _rollbackService, 
-					_dayOffTemplate);
+					_schedulingOptions);
 			}
 		}
 
@@ -140,7 +136,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target.ReportProgress += _target_ReportProgress;
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
 					  .Return(_teamInfo);
 
@@ -158,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList, 
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), 
 					_selectedPersons, _optimizationPreferences, _rollbackService, 
-					_dayOffTemplate);
+					_schedulingOptions);
 				_target.ReportProgress -= _target_ReportProgress;
 			}
 		}
@@ -174,7 +169,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
 					  .Return(_teamInfo);
 
@@ -200,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_dayOffTemplate);
+					_schedulingOptions);
 			}
 		}
 
@@ -209,7 +203,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
 					  .Return(_teamInfo);
 
@@ -234,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_dayOffTemplate);
+					_schedulingOptions);
 			}
 		}
 
@@ -243,7 +236,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
 					  .Return(_teamInfo);
 
@@ -262,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_dayOffTemplate);
+					_schedulingOptions);
 			}
 		}
 
@@ -271,7 +263,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
 					  .Return(_teamInfo);
 
@@ -290,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_dayOffTemplate);
+					_schedulingOptions);
 			}
 		}
 
@@ -299,7 +290,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
 					  .Return(_teamInfo);
 
@@ -318,7 +308,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_dayOffTemplate);
+					_schedulingOptions);
 			}
 		}
 
@@ -364,7 +354,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																  _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList))
 			      .Return(_teamBlockInfo);
 
-			Expect.Call(_teamTeamBlockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
+			Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
 			Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
 			                                                     new DateOnlyPeriod(DateOnly.MinValue,

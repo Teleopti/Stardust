@@ -37,7 +37,7 @@ Background:
 @ignore
 Scenario: View staffing metrics
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Start time     | 2013-04-09 09:00 |
 	| End time       | 2013-04-09 16:00 |
@@ -65,7 +65,7 @@ Scenario: View staffing metrics
 Scenario: Push staffing metrics changes
 
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Start time     | 2013-09-09 09:00 |
 	| End time       | 2013-09-09 16:00 |

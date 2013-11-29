@@ -346,7 +346,6 @@
 			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAgentGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAgentGrouping.TabIndex = 1;
-			this.comboBoxAgentGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentGrouping_SelectedIndexChanged);
 			// 
 			// perPersonAndGroupListView
 			// 

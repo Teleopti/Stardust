@@ -38,13 +38,6 @@ namespace Teleopti.Ccc.Domain.Collection
             return source;
         }
 
-			public static bool IsNullOrEmpty<T>(this IEnumerable<T> coll)
-			{
-				if (coll == null)
-					return true;
-				return !coll.Any();
-			}
-
         /// <summary>
         /// Batches the specified IEnumerable into a collection of IEnumerable base on the set batchSize.
         /// </summary>
@@ -176,7 +169,11 @@ namespace Teleopti.Ccc.Domain.Collection
             return !source.Any();
         }
 
-
+		public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+		{
+			return source == null || !source.Any();
+		}
+		
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter")]
         public static IEnumerable<T> CopyEnumerable<T>(this IEnumerable source)
         {
@@ -187,6 +184,34 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			Random rnd = new Random();
 			return source.OrderBy((item) => rnd.Next());
+		}
+
+		public static bool NonSequenceEquals<T>(this IEnumerable<T> source, IEnumerable<T> other)
+		{
+			var cnt = new Dictionary<T, int>();
+			foreach (T s in source)
+			{
+				if (cnt.ContainsKey(s))
+				{
+					cnt[s]++;
+				}
+				else
+				{
+					cnt.Add(s, 1);
+				}
+			}
+			foreach (T s in other)
+			{
+				if (cnt.ContainsKey(s))
+				{
+					cnt[s]--;
+				}
+				else
+				{
+					return false;
+				}
+			}
+			return cnt.Values.All(c => c == 0);
 		}
     }
 }

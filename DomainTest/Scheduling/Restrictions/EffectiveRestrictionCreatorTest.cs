@@ -141,7 +141,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			var dateOnly = new DateOnly(2010, 1, 1);
 			var person1 = _mocks.StrictMock<IPerson>();
 			var person2 = _mocks.StrictMock<IPerson>();
-			var person3 = _mocks.StrictMock<IPerson>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			var range1 = _mocks.StrictMock<IScheduleRange>();
 			var range2 = _mocks.StrictMock<IScheduleRange>();
@@ -164,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Expect.Call(range2.ScheduledDay(dateOnly)).Return(scheduleDay2);
 				Expect.Call(() => _extractor.Extract(scheduleDay2));
 				Expect.Call(_extractor.CombinedRestriction(options)).Return(restriction2);
-
+				
 				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.None);
 				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
 
@@ -173,10 +172,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			IEffectiveRestriction ret;
 			using (_mocks.Playback())
 			{
-				ret = _target.GetEffectiveRestriction(new List<IPerson> { person1, person2, person3 }, dateOnly, options, scheduleDictionary);
+				ret = _target.GetEffectiveRestriction(new List<IPerson> { person1, person2 }, dateOnly, options, scheduleDictionary);
 			}
 
-			Assert.That(ret, Is.Null);
+			Assert.IsNull(ret);
 		}
 
 		[Test]

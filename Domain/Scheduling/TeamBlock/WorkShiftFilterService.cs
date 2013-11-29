@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool options);
 
-		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, IShiftProjectionCache suggestedShift, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
 	}
 
 	public class WorkShiftFilterService : IWorkShiftFilterService
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return shiftList.Count == 0 ? null : shiftList;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, IShiftProjectionCache suggestedShift, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
+		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
 		{
 			if (effectiveRestriction == null)
 				return null;
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
 			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, person, false,schedulingOptions.BlockFinderTypeForAdvanceScheduling );
-            shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList, suggestedShift, true);
+            shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList, true);
 			if (shiftList == null)
 				return null;
 			return shiftList.Count == 0 ? null : shiftList;
@@ -152,10 +152,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		private IList<IShiftProjectionCache> runFilters(DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
 								 ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, IList<IShiftProjectionCache> shiftList,
-								 IPerson person, IList<IScheduleMatrixPro> matrixList, IShiftProjectionCache suggestedShift, bool sameContractTime)
+								 IPerson person, IList<IScheduleMatrixPro> matrixList, bool sameContractTime)
 		{
 			shiftList = _businessRulesShiftFilter.Filter(person, shiftList, dateOnly, finderResult);
-			shiftList = _commonActivityFilter.Filter(shiftList, schedulingOptions, suggestedShift);
+			shiftList = _commonActivityFilter.Filter(shiftList, schedulingOptions, effectiveRestriction);
 			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList,sameContractTime );
 			return shiftList;
 		}

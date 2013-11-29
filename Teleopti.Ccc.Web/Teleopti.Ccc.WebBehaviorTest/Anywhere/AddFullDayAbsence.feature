@@ -58,7 +58,7 @@ Scenario: Add on empty day
 
 Scenario: Add on shift
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -83,7 +83,7 @@ Scenario: Add on shift
 
 Scenario: Add on empty day first day
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -103,7 +103,7 @@ Scenario: Add on empty day first day
 	
 Scenario: Add on empty day last day
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -123,13 +123,13 @@ Scenario: Add on empty day last day
 
 Scenario: Add on shifts in sequence
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2013-04-08 08:00 |
 	| End time       | 2013-04-08 17:00 |
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -149,7 +149,7 @@ Scenario: Add on shifts in sequence
 
 Scenario: Add on shift ending tomorrow
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -174,7 +174,7 @@ Scenario: Add on shift ending tomorrow
 
 Scenario: Add absence on a day with a night shift starting yesterday
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |

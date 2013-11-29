@@ -575,7 +575,6 @@
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftPerAgentPresenterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftPerDatePresenterTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryDistribution\ShiftStatisticsPresenterTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DayPresenterNewTest.cs" />
     <Compile Include="Scheduler\DayPresenterScaleCalculatorTest.cs" />
@@ -656,9 +655,6 @@
     <Compile Include="Scheduler\SetTagCommandTest.cs" />
     <Compile Include="Scheduler\SkillMonthGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\SkillWeekGridControlPresenterTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryFairnessAggregateManagerTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryFairnessGroupPersonHolderTest.cs" />
-    <Compile Include="Scheduler\ShiftCategoryFairnessOptimizerTest.cs" />
     <Compile Include="Scheduler\SmartDayOffBackToLegalStateSolverContainerTest.cs" />
     <Compile Include="Scheduler\SplitLongDayAbsencesTest.cs" />
     <Compile Include="Scheduler\WorkShiftMasterActivityCheckerTest.cs" />

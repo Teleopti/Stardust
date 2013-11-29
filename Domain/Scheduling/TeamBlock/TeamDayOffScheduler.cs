@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -61,23 +62,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						var scheduleDate = scheduleDayPro.Day;
 						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
 					    if (groupPerson == null) continue;
-                        var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-						                                                                       scheduleDate, schedulingOptions,
-						                                                                       scheduleDictionary);
-						var matrixesOfOneTeam = matrixListAll.Where(x => groupPerson.GroupMembers.Contains(x.Person)).ToList();
-						addDaysOffForTeam(matrixesOfOneTeam, schedulingOptions,rollbackService, scheduleDate, restriction);
+					    List<IScheduleMatrixPro> matrixesOfOneTeam;
+					    var restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, groupPerson, scheduleDate, out matrixesOfOneTeam);
+					    addDaysOffForTeam(matrixesOfOneTeam, schedulingOptions,rollbackService, scheduleDate, restriction);
 					}
 					foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 					{
 						var scheduleDate = scheduleDayPro.Day;
 						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
                         if (groupPerson == null) continue;
-						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-						                                                                       scheduleDate, schedulingOptions,
-						                                                                       scheduleDictionary);
-						var matrixesOfOneTeam = matrixListAll.Where(x => groupPerson.GroupMembers.Contains(x.Person)).ToList();
+                        List<IScheduleMatrixPro> matrixesOfOneTeam;
+                        var restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, groupPerson, scheduleDate, out matrixesOfOneTeam);
 						addContractDaysOffForTeam(matrixesOfOneTeam, schedulingOptions, rollbackService, scheduleDate, restriction);
 					}
 				}
@@ -89,7 +84,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-		private void addDaysOffForTeam(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+	    private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions,
+	                                                     IGroupPerson groupPerson, DateOnly scheduleDate,
+	                                                     out List<IScheduleMatrixPro> matrixesOfOneTeam)
+	    {
+	        var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+	        var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+	                                                                               scheduleDate, schedulingOptions,
+	                                                                               scheduleDictionary);
+	        matrixesOfOneTeam = matrixListAll.Where(x => groupPerson.GroupMembers.Contains(x.Person)).ToList();
+	        return restriction;
+	    }
+
+	    private void addDaysOffForTeam(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
 									ISchedulePartModifyAndRollbackService rollbackService,
 		                               DateOnly scheduleDate,
 		                               IEffectiveRestriction restriction)

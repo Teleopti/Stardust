@@ -72,8 +72,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
             get { return _groupMembers.Keys; }
         }
 
-		public IPossibleStartEndCategory CommonPossibleStartEndCategory { get ; set ; }
-
 		private void setPersonSkillsOnDate()
 		{
 			var personPeriod = PersonPeriodCollection[0];

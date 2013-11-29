@@ -4,12 +4,9 @@ using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
@@ -19,7 +16,7 @@ namespace Teleopti.Ccc.Win.Commands
 {
 	public interface ITeamBlockScheduleCommand
 	{
-		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules);
+		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
@@ -30,24 +27,17 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
 		private readonly IAdvanceDaysOffSchedulingService _advanceDaysOffSchedulingService;
 		private readonly IMatrixListFactory _matrixListFactory;
-		private readonly IGroupPersonsBuilder _groupPersonsBuilder;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-		private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
-		private readonly IRestrictionAggregator _restrictionAggregator;
-		private readonly IWorkShiftFilterService _workShiftFilterService;
-		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IWorkShiftFinderResultHolder _workShiftFinderResultHolder;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-		private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToEffectiveRestrictionConverter;
-		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private BackgroundWorker _backgroundWorker;
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
-	    private IOpenHourRestrictionForTeamBlock _openHourRestrictionForTeamBlock;
+	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 
 	    public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			ISchedulerStateHolder schedulerStateHolder,
@@ -55,20 +45,14 @@ namespace Teleopti.Ccc.Win.Commands
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
 			IAdvanceDaysOffSchedulingService advanceDaysOffSchedulingService,
 			IMatrixListFactory matrixListFactory,
-			IGroupPersonsBuilder groupPersonsBuilder,
-			IResourceOptimizationHelper resourceOptimizationHelper,
-			ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
-			IRestrictionAggregator restrictionAggregator,
-			IWorkShiftFilterService workShiftFilterService,
-			IWorkShiftSelector workShiftSelector,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			IWorkShiftFinderResultHolder workShiftFinderResultHolder,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
-			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter,
-			ITeamBlockClearer teamBlockClearer, IOpenHourRestrictionForTeamBlock openHourRestrictionForTeamBlock)
+ 			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
+			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -76,24 +60,18 @@ namespace Teleopti.Ccc.Win.Commands
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
 			_advanceDaysOffSchedulingService = advanceDaysOffSchedulingService;
 			_matrixListFactory = matrixListFactory;
-			_groupPersonsBuilder = groupPersonsBuilder;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
-			_restrictionAggregator = restrictionAggregator;
-			_workShiftFilterService = workShiftFilterService;
-			_workShiftSelector = workShiftSelector;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_workShiftFinderResultHolder = workShiftFinderResultHolder;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
-			_teamBlockClearer = teamBlockClearer;
-	        _openHourRestrictionForTeamBlock = openHourRestrictionForTeamBlock;
+	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
+
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules)
+		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
@@ -128,24 +106,17 @@ namespace Teleopti.Ccc.Win.Commands
 				                                         schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions,
 				                                         groupPersonBuilderForOptimization);
 				_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			
-				var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allMatrixesOfSelectedPersons, schedulingOptions, selectedPeriod);
-				ISchedulePartModifyAndRollbackService rollbackService =
-				   new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback,
-															new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+						
 			    var advanceSchedulingResults = new List<IWorkShiftFinderResult>();
-                var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization, rollbackService, advanceSchedulingResults);
+                var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization, teamBlockScheduler, advanceSchedulingResults);
 				IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 				var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
 				advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 				advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
-												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
-												  teamSteadyStateHolder, rollbackService);
+												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(), rollbackService);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
                 _workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
-				//if (schedulingOptions.RotationDaysOnly)
-				//    schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
                 _workShiftFinderResultHolder.AddResults(advanceSchedulingResults, DateTime.Now);
 			}
@@ -166,45 +137,16 @@ namespace Teleopti.Ccc.Win.Commands
 			}
 		}
 
-		private TeamSteadyStateHolder initiateTeamSteadyStateHolder(IList<IScheduleMatrixPro> selectedPersonAllMatrixList,
-																	ISchedulingOptions schedulingOptions,
-																	DateOnlyPeriod selectedPeriod)
+		private TeamBlockSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, ITeamBlockScheduler teamBlockScheduler, List<IWorkShiftFinderResult> advanceSchedulingResults)
 		{
-			var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
-
-			var teamSteadyStateRunner = new TeamSteadyStateRunner(selectedPersonAllMatrixList, targetTimeCalculator);
-			var teamSteadyStateCreator = new TeamBlockSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList,
-																			  _groupPersonsBuilder, schedulingOptions);
-			var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
-			var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
-			return teamSteadyStateHolder;
-		}
-
-		private TeamBlockSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, ISchedulePartModifyAndRollbackService rollbackService, List<IWorkShiftFinderResult> advanceSchedulingResults)
-		{
-
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-																		schedulingOptions.ConsiderShortBreaks);
-            var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
-
-
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-			ITeamBlockScheduler teamBlockScheduler =
-				new TeamBlockScheduler(_skillDayPeriodIntervalDataGenerator,
-									   _restrictionAggregator,
-									   _workShiftFilterService, 
-									   teamScheduling,
-									   _workShiftSelector,
-									   _openHoursToEffectiveRestrictionConverter, _teamBlockClearer, rollbackService,_openHourRestrictionForTeamBlock);
-
+			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory, _teamBlockSchedulingOptions, _teamBlockSchedulingCompletionChecker);    
 			var advanceSchedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,
 											 teamInfoFactory,
-											 _teamBlockInfoFactory,
 											 teamBlockScheduler, 
-											 _teamBlockSteadyStateValidator, 
 											 _safeRollbackAndResourceCalculation,
-											 _workShiftMinMaxCalculator, advanceSchedulingResults, _teamBlockMaxSeatChecker);
+											 _workShiftMinMaxCalculator, advanceSchedulingResults, _teamBlockMaxSeatChecker,validatedTeamBlockExtractor);
 
 			return advanceSchedulingService;
 		}

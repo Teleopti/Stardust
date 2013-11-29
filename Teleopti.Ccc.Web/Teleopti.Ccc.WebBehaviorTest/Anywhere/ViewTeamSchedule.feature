@@ -79,7 +79,7 @@ Scenario: View my own data
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -91,7 +91,7 @@ Scenario: View my own data
 
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field                | Value            |
 	| Shift category       | Day              |
 	| Activity             | Phone            |
@@ -104,7 +104,7 @@ Scenario: View team schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Hawaii
 	And 'Pierre Baldi' is located in Stockholm
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -119,7 +119,7 @@ Scenario: View team schedule in my time zone
 
 Scenario: View team schedule with night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field                     | Value            |
 	| Shift category            | Night            |
 	| Start time                | 2012-12-02 20:00 |
@@ -132,7 +132,7 @@ Scenario: View team schedule with night shift from yesterday
 
 Scenario: View team schedule with night shift ending tomorrow
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field            | Value            |
 	| Shift category   | Night            |
 	| Start time       | 2013-11-04 22:00 |
@@ -213,13 +213,13 @@ Scenario: Only view published schedule
 	| Start date | 2012-12-01 |
 	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0810'
 	And 'John Smith' has the workflow control set 'Schedule published to 0809'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
 	| Start time     | 2013-08-10 08:00 |
 	| End time       | 2013-08-10 17:00 |
-	And 'John Smith' have a shift with
+	And 'John Smith' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -232,7 +232,7 @@ Scenario: Only view published schedule
 Scenario: View unpublished schedule when permitted
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has the workflow control set 'Schedule published to 0809'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -243,7 +243,7 @@ Scenario: View unpublished schedule when permitted
 	
 Scenario: Push team schedule changes
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
     | Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
