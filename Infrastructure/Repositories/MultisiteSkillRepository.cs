@@ -16,5 +16,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             : base(unitOfWork)
         {
         }
+
+		public MultisiteSkillRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+		}
     }
 }
