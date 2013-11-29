@@ -115,6 +115,7 @@ define([
 			viewModel.Loading(true);
 
 			viewModel.Id(options.personid != undefined ? options.personid : options.id);
+			viewModel.GroupId(options.groupid);
 			viewModel.Date(date);
 
 			var deferred = $.Deferred();
@@ -151,10 +152,10 @@ define([
 				    function (data) {
 				    	resize.notify();
 
+				    	viewModel.Persons([]);
+
 				    	data.Id = viewModel.Id();
 				    	data.Date = viewModel.Date();
-
-				    	viewModel.Persons([]);
 
 				    	var person = new personViewModel(data);
 				    	person.AddData(data, viewModel.TimeLine);

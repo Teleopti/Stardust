@@ -10,8 +10,7 @@ define([
 	'helpers',
 	'resources!r',
 	'select2',
-	'lazy',
-	'shared/current-state'
+	'lazy'
 ], function (
 	ko,
 	navigation,
@@ -24,8 +23,7 @@ define([
 	helpers,
 	resources,
 	select2,
-	lazy,
-	currentState
+	lazy
 	) {
 
 	return function () {
@@ -36,7 +34,8 @@ define([
 		
 		this.Persons = ko.observableArray();
 
-		this.Id = ko.observable("");
+		this.Id = ko.observable();
+		this.GroupId = ko.observable();
 		this.Date = ko.observable();
 
 		this.SelectedPerson = ko.computed(function () {

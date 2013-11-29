@@ -15,7 +15,6 @@ define([
 	return function (data) {
 		var self = this;
 
-		
 		this.Id = data.Id;
 		this.Name = data.Name ? data.Name : data.FirstName + ' ' + data.LastName;
 
