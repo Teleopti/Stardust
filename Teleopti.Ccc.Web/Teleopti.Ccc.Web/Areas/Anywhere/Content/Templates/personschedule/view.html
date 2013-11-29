@@ -91,7 +91,6 @@
 							<td class="shift-menu-background schedule-column">
 								<div class="row-fluid space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
 									<div class="span3">
-										<!--<blockquote>-->
 										<!-- ko if: $root.AddingIntradayAbsence -->
 										<!-- ko with: $root.AddIntradayAbsenceForm -->
 										<form action="#" class="intraday-absence-form">
@@ -175,7 +174,6 @@
 										</form>
 										<!-- /ko -->
 										<!-- /ko -->
-										<!--</blockquote>-->
 									</div>
 									
 									
@@ -244,7 +242,7 @@
 		</div>
 	</div>
 	
-	<div class="row" data-bind="ifnot: AddingActivity">
+	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span8">
 			<table class="table absence-list">
 				<tbody data-bind="foreach: Absences">
