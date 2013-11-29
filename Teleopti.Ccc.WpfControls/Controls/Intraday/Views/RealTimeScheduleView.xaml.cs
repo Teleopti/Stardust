@@ -9,7 +9,6 @@ using System.Windows.Media.Animation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
-using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.WpfControls.Controls.Layers;
 using Teleopti.Ccc.WpfControls.Controls.Time.Timeline;
@@ -213,20 +212,18 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 
 	    private void NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)
 	    {
-		    var dayLayerModel = e.Item as DayLayerModel;
-		    if (dayLayerModel == null) return;
-
 		    DateTime utcTime;
 		    if (!DateTime.TryParse(e.Content.ToString(), out utcTime)) return;
 
-		    if (utcTime.Equals(new DateTime(1900, 1, 1, 00, 00, 00))
-		        || utcTime.Equals(DateTime.MinValue))
+		    if (utcTime < DateHelper.MinSmallDateTime)
 			    e.Content = "";
 		    else
 			    e.Content =
-				    TimeZoneInfo.ConvertTime(utcTime, TimeZoneInfo.Utc, TeleoptiPrincipal.Current.Regional.TimeZone)
+				    TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipal.Current.Regional.TimeZone)
 								//ErikS: This is hardcoded because Intraday hardcodes it, WYSIWYG
 				                .ToString("yyyy-MM-dd HH:mm:ss");
-	    }
+			/*
+			 */
+		}
     }
 }
