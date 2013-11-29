@@ -81,7 +81,7 @@ Scenario: View group picker options
 		| Another group page/Some other group       |
 
 Scenario: View group schedule
-	Given 'John Smith' have a shift with
+	Given 'John Smith' has a shift with
 		| Field          | Value            |
 		| Shift category | Day              |
 		| Activity       | Phone            |
@@ -92,7 +92,7 @@ Scenario: View group schedule
 		| Team       | Team green       |
 		| Start date | 2013-10-10       |
 		| Contract   | Another contract |
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 		| Field          | Value            |
 		| Shift category | Day              |
 		| Activity       | Phone            |

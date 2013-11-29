@@ -74,12 +74,12 @@ Scenario: View group schedule
 	| StartTime      | 2013-03-25 09:00 |
 	| EndTime        | 2013-03-25 18:00 |
 	| Shift category | Day              |
-	And John Smith have a shift with
+	And John Smith has a shift with
 	| Field          | Value            |
 	| StartTime      | 2013-03-25 10:00 |
 	| EndTime        | 2013-03-25 19:00 |
 	| Shift category | Day              |
-	And Pierre Baldi have a shift with
+	And Pierre Baldi has a shift with
 	| Field          | Value            |
 	| StartTime      | 2013-03-25 11:00 |
 	| EndTime        | 2013-03-25 20:00 |
@@ -103,7 +103,7 @@ Scenario: Sort late shifts after early shifts
 	| StartTime      | 2013-03-25 09:00 |
 	| EndTime        | 2013-03-25 18:00 |
 	| Shift category | Day              |
-	And John Smith have a shift with
+	And John Smith has a shift with
 	| Field          | Value            |
 	| StartTime      | 2013-03-25 08:00 |
 	| EndTime        | 2013-03-25 17:00 |
