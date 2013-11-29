@@ -282,7 +282,8 @@
 		$(CCNetWorkingDirectory)\BuildArtifacts\ccc_Menu.ico"
 		    Exclude=
    "$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.lastcodeanalysissucceeded;
-   $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.CodeAnalysisLog.xml"
+   $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.CodeAnalysisLog.xml;
+   $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\pub.config"
 		/>
 
 			<!-- Cube -->
