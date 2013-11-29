@@ -25,20 +25,79 @@ define([
 		this.EndTime = ko.observable();
 		this.AbsenceTypes = ko.observableArray();
 
-		var groupid;
+		var groupId;
 		var personId;
 
-		this.SetData = function (data, groupId) {
+		var shiftStart;
+		var shiftEnd;
+		
+		var momentStartInput;
+		var momentEndInput;
+		var isNextDay;
+
+		this.SetData = function (data, groupid) {
 			personId = data.PersonId;
 			self.Date(data.Date);
 			self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
 			self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
 			self.AbsenceTypes(data.Absences);
-			groupid = groupId;
+			groupId = groupid;
+			shiftStart = data.Layers.length > 0 ? moment(data.Layers[0].Start) : undefined;
+			shiftEnd = data.Layers.length > 0 ? moment(data.Layers[data.Layers.length - 1].Start).add('m', data.Layers[data.Layers.length - 1].Minutes) : undefined;
 		};
 		
-		this.ErrorMessage = ko.observable('');
+		this.IsStartTimeWithinShift = ko.computed(function () {
+			isNextDay = false;
+			if (self.StartTime() && self.EndTime() && shiftStart && shiftEnd) {
+				momentStartInput = getMomentFromInput(self.StartTime());
+				momentEndInput = getMomentFromInput(self.EndTime());
+				
+				if (momentStartInput.diff(shiftStart) >= 0 && momentStartInput.diff(shiftEnd) < 0) {
+					return true;
+				}
+				if (shiftStart.date() != shiftEnd.date()) {
+					momentStartInput = momentStartInput.add('d', 1);
+					momentEndInput = momentEndInput.add('d', 1);
+					isNextDay = true;
+					if (momentStartInput.diff(shiftStart) >= 0 && momentStartInput.diff(shiftEnd) < 0) {
+						return true;
+					}
+				}
+				return false;
+			}
+			return true;
+		});
 
+		var getMomentFromInput = function(input) {
+			var momentInput = moment(input, resources.TimeFormatForMoment);
+			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
+		};
+
+		this.ValidEndTime = ko.computed(function () {
+			if (!self.IsStartTimeWithinShift())
+				return true;
+			
+			if (momentStartInput && momentStartInput.diff(momentEndInput) == 0)
+				return false;
+			
+			if (momentStartInput && momentStartInput.diff(momentEndInput) > 0) {
+				if (!isNextDay && shiftStart && shiftEnd && shiftStart.date() != shiftEnd.date()) {
+					return true;
+				}
+				return false;
+			}
+			return true;
+		});
+		
+		this.ErrorMessage = ko.computed(function () {
+			if (!self.IsStartTimeWithinShift()) {
+				return resources.InvalidIntradayAbsenceTimes;
+			}
+			if (!self.ValidEndTime()) {
+				return resources.InvalidEndTime;
+			}
+			return undefined;
+		});
 
 		this.Apply = function() {
 			var requestData = JSON.stringify({
@@ -53,14 +112,7 @@ define([
 					type: 'POST',
 					data: requestData,
 					success: function(data, textStatus, jqXHR) {
-						navigation.GoToTeamSchedule(groupid, self.Date());
-					},
-					error: function(jqXHR, textStatus, errorThrown) {
-						if (jqXHR.status == 400) {
-							var errorData = $.parseJSON(jqXHR.responseText);
-							self.ErrorMessage(errorData.Errors.join('</br>'));
-							return;
-						}
+						navigation.GoToTeamSchedule(groupId, self.Date());
 					}
 				}
 			);

@@ -172,7 +172,6 @@ Scenario: Prevent invalid times
 	| Absence    | Illness |
 	| Start time | 15:00   |
 	| End time   | 14:00   |
-	And I initiate 'apply'
 	Then I should see the alert 'Invalid end time'
 
 Scenario: Prevent adding outside of shift
@@ -189,5 +188,4 @@ Scenario: Prevent adding outside of shift
 	| Absence    | Illness |
 	| Start time | 17:00   |
 	| End time   | 18:00   |
-	And I initiate 'apply'
-	Then I should see the validation error 'Please add intraday absence on existing shift'
+	Then I should see the alert 'Please add intraday absence on existing shift'
