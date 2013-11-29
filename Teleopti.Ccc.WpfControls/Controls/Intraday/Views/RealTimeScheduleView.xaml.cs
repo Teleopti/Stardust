@@ -6,12 +6,17 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
+using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.WpfControls.Controls.Layers;
 using Teleopti.Ccc.WpfControls.Controls.Time.Timeline;
 using Teleopti.Interfaces.Domain;
+using DataGridCellClipboardEventArgs = Microsoft.Windows.Controls.DataGridCellClipboardEventArgs;
+using DataGridClipboardCopyMode = Microsoft.Windows.Controls.DataGridClipboardCopyMode;
+using DataGridSelectionMode = Microsoft.Windows.Controls.DataGridSelectionMode;
 using DataGridSortingEventArgs = Microsoft.Windows.Controls.DataGridSortingEventArgs;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
@@ -194,6 +199,34 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 		    column.SortDirection = sortDirection;
 		    Model.SetSortDescription(sortDescription);
 		    e.Handled = true;
+	    }
+
+	    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+		{
+			RealTimeDataGrid.SelectionMode = DataGridSelectionMode.Extended;
+		    RealTimeDataGrid.SelectAllCells();
+			RealTimeDataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
+			ApplicationCommands.Copy.Execute(null, RealTimeDataGrid);
+			RealTimeDataGrid.UnselectAllCells();
+			RealTimeDataGrid.SelectionMode = DataGridSelectionMode.Single;
+	    }
+
+	    private void NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)
+	    {
+		    var dayLayerModel = e.Item as DayLayerModel;
+		    if (dayLayerModel == null) return;
+
+		    DateTime utcTime;
+		    if (!DateTime.TryParse(e.Content.ToString(), out utcTime)) return;
+
+		    if (utcTime.Equals(new DateTime(1900, 1, 1, 00, 00, 00))
+		        || utcTime.Equals(DateTime.MinValue))
+			    e.Content = "";
+		    else
+			    e.Content =
+				    TimeZoneInfo.ConvertTime(utcTime, TimeZoneInfo.Utc, TeleoptiPrincipal.Current.Regional.TimeZone)
+								//ErikS: This is hardcoded because Intraday hardcodes it, WYSIWYG
+				                .ToString("yyyy-MM-dd HH:mm:ss");
 	    }
     }
 }

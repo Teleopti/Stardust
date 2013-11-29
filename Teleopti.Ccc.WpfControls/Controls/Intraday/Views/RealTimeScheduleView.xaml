@@ -51,6 +51,12 @@
         </ResourceDictionary>
 
     </UserControl.Resources>
+	<StackPanel>
+		<Button
+			Margin="10, 0, 0, 0"
+		Width="80"
+		HorizontalAlignment="Left"
+		Click="ButtonBase_OnClick">Copy Grid</Button>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -132,7 +138,10 @@
                                             Width="Auto" 
                                             CanUserSort="True"
                                             SortMemberPath="NextActivityStartDateTime"
-                                            CanUserReorder="False">
+                                            CanUserReorder="False"
+											ClipboardContentBinding="{Binding NextActivityStartDateTime}"
+											CopyingCellClipboardContent="NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent">
+					
                     <controls:DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock VerticalAlignment="Top" x:Name="NextStartTextBlock">
@@ -165,7 +174,12 @@
                                              Width="Auto"
 											 CanUserSort="True"
                                              SortMemberPath="EnteredCurrentState"
-                                             Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter}, Mode=OneWay}"/>
+                                             Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter}, Mode=OneWay}">
+						<controls:DataGridTextColumn.ClipboardContentBinding>
+							<Binding Path="EnteredCurrentState" Converter="{StaticResource ElapsedTimeConverter}"/>
+						</controls:DataGridTextColumn.ClipboardContentBinding>
+					</controls:DataGridTextColumn>
+
 
                 <!--Pinned Column-->
                 <controls:DataGridTemplateColumn 
@@ -257,5 +271,5 @@
                  BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorAlarmGradientSeeThroughBrush}"></TextBox>
 
     </Grid>
-
+	</StackPanel>
 </UserControl>
