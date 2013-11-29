@@ -16,7 +16,7 @@ define([
 		var self = this;
 
 		this.Id = data.Id;
-		this.Name = data.Name ? data.Name : data.FirstName + ' ' + data.LastName;
+		this.Name = ko.observable(data.FirstName ? data.FirstName + ' ' + data.LastName : "");
 
 		this.Site = data.Site ? data.Site : "";
 		this.Team = data.Team ? data.Team : "";
@@ -40,6 +40,10 @@ define([
 			var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
 			return time.format("H:mm");
 		});
+
+		this.SetData = function (data) {
+			self.Name(data.FirstName + ' ' + data.LastName);
+		};
 
 		this.ClearData = function () {
 			self.Shifts([]);

@@ -45,7 +45,7 @@
 				</div>
 				<!-- /ko -->
 				
-				<table class="table table-hover" data-bind="if: true">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th></th>
@@ -55,9 +55,8 @@
 					
 					<tbody>
 						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }">
-							<td class="person-name person-name-column" data-bind="text: Name">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
-								<div class="person-name nowrap"></div>
+							<td class="person-name person-name-column">
+								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
@@ -197,7 +196,6 @@
 						<!-- ko foreach: Persons -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
 							<td class="schedule schedule-column" style="padding-top: 4px">

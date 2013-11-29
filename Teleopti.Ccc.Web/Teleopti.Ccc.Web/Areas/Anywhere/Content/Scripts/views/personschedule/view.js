@@ -7,20 +7,16 @@ define([
 		'text!templates/personschedule/view.html',
 		'resizeevent',
 		'views/personschedule/person',
-		'ajax',
-		'navigation',
-		'lazy'
+		'ajax'
 ], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
 		helpers,
 		view,
-	    resize,
+		resize,
 		personViewModel,
-		ajax,
-		navigation,
-		lazy
+		ajax
 	) {
 
 	var viewModel;
@@ -34,14 +30,12 @@ define([
 				var currentPersons = viewModel.Persons();
 
 				for (var i = 0; i < currentPersons.length; i++) {
-					if (currentPersons[i].Id != options.personid) {
-						currentPersons[i].ClearData();
+					currentPersons[i].ClearData();
 
-						for (var j = 0; j < schedules.length; j++) {
-							if (currentPersons[i].Id == schedules[j].PersonId) {
-								schedules[j].Date = date;
-								currentPersons[i].AddData(schedules[j], viewModel.TimeLine);
-							}
+					for (var j = 0; j < schedules.length; j++) {
+						if (currentPersons[i].Id == schedules[j].PersonId) {
+							schedules[j].Date = date;
+							currentPersons[i].AddData(schedules[j], viewModel.TimeLine);
 						}
 					}
 				}
@@ -77,18 +71,8 @@ define([
 				date: helpers.Date.ToServer(moment(options.date, "YYYYMMDD")),
 				groupId: options.groupid
 			},
-			success: function (people, textStatus, jqXHR) {
-
-				var newPeople = lazy(people)
-						.filter(function (x) {
-							return options.personid != x.Id;
-						});
-
-				var newItems = ko.utils.arrayMap(newPeople.toArray(), function (s) {
-					return new personViewModel(s);
-				});
-
-				viewModel.AddPersons(newItems);
+			success: function (data, textStatus, jqXHR) {
+				viewModel.AddPersons(data);
 				options.success();
 			}
 		});
@@ -147,29 +131,20 @@ define([
 			};
 
 			subscriptions.subscribePersonSchedule(
-				    viewModel.PersonId(),
-				    helpers.Date.ToServer(viewModel.Date()),
-				    function (data) {
-				    	resize.notify();
+				viewModel.PersonId(),
+				helpers.Date.ToServer(viewModel.Date()),
+				function (data) {
+					viewModel.SetData(data, viewModel.TimeLine);
+					loadPersonsAndSchedules();
+				}
+			);
 
-				    	viewModel.Persons([]);
-
-				    	data.Id = viewModel.PersonId();
-				    	data.Date = viewModel.Date();
-
-				    	var person = new personViewModel(data);
-				    	person.AddData(data, viewModel.TimeLine);
-				    	viewModel.AddPersons([person]);
-				    	viewModel.SetData(data, options.groupid);
-
-				    	if (viewModel.AddingActivity()) {
-				    		loadPersonsAndSchedules();
-				    	} else {
-				    		viewModel.Loading(false);
-				    		deferred.resolve();
-				    	}
-				    }
-			    );
+			//subscriptions.subscribeGroupSchedules(
+			//	viewModel.GroupId(),
+			//	helpers.Date.ToServer(viewModel.Date()),
+			//	function (data) {
+			//		viewModel.SetSchedules(data);
+			//	});
 
 			return deferred.promise();
 		},

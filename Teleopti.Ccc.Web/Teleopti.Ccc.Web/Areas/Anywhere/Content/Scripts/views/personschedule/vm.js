@@ -2,6 +2,7 @@ define([
 	'knockout',
 	'navigation',
 	'shared/timeline',
+	'views/personschedule/person',
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',
 	'views/personschedule/absencelistitem',
@@ -15,6 +16,7 @@ define([
 	ko,
 	navigation,
 	timeLineViewModel,
+	personViewModel,
 	addActivityFormViewModel,
 	addFullDayAbsenceFormViewModel,
 	absenceListItemViewModel,
@@ -46,7 +48,7 @@ define([
 
 		this.Name = ko.computed(function () {
 			if(self.SelectedPerson())
-				return self.SelectedPerson().Name;
+				return self.SelectedPerson().Name();
 			return "";
 		});
 
@@ -116,12 +118,16 @@ define([
 		this.ToggleDisplayDescriptions = function () {
 			self.DisplayDescriptions(!self.DisplayDescriptions());
 		};
+		
+		this.SetData = function (data, timeLine) {
 
-		this.AddPersons = function (persons) {
-			self.Persons.push.apply(self.Persons, persons);
-		};
+			var person = self.SelectedPerson();
+			if (!person) {
+				person = new personViewModel({ Id: self.PersonId() });
+				self.Persons.push(person);
+			}
+			//person.AddData(data, timeLine);
 
-		this.SetData = function (data, groupId) {
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				a.PersonId = self.PersonId();
@@ -131,10 +137,24 @@ define([
 			self.Absences.push.apply(self.Absences, absences);
 
 			data.PersonId = self.PersonId();
-
+			data.Date = self.Date();
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
-			self.AddIntradayAbsenceForm.SetData(data, groupId);
+			self.AddIntradayAbsenceForm.SetData(data);
+		};
+
+		this.AddPersons = function (data) {
+			for (var i = 0; i < data.length; i++) {
+				var personData = data[i];
+				var person = lazy(self.Persons())
+					.select(function (x) { return x.Id == personData.Id; })
+					.first();
+				if (person) {
+					person.SetData(personData);
+				} else {
+					self.Persons.push(new personViewModel(personData));
+				}
+			}
 		};
 
 		this.AddFullDayAbsence = function () {
