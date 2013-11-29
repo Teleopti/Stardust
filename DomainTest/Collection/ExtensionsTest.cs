@@ -180,6 +180,16 @@ namespace Teleopti.Ccc.DomainTest.Collection
             Assert.IsFalse(_source.IsEmpty());
         }
 
+        [Test]
+        public void VerifyIsAny()
+        {
+            Assert.IsTrue(_target.IsNullOrEmpty());
+			Assert.IsFalse(_source.IsNullOrEmpty());
+
+	        _source = null;
+	        Assert.IsTrue(_source.IsNullOrEmpty());
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldCopyEnumerable()
         {
@@ -200,6 +210,14 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var newList = list.Randomize();
 
 			Assert.That(newList, Is.Not.EqualTo(list));
+		}
+
+		[Test]
+		public void ShouldBeNonSequentiallyEqual()
+		{
+			var list1 = new List<int> {1, 2, 3, 4, 5, 3};
+			var list2 = new List<int> {5, 3, 4, 2, 1, 3};
+			Assert.That(list1.NonSequenceEquals(list2), Is.True);
 		}
     }
 }

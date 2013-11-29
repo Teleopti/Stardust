@@ -146,7 +146,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public override int GetHashCode()
         {
-            return _minimum.GetHashCode() ^ _maximum.GetHashCode();
+            return (_minimum.GetHashCode() * 397) ^ _maximum.GetHashCode();
         }
 
         #endregion

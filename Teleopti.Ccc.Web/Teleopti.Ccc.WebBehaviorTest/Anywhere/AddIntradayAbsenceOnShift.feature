@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Add intraday absence on shift
+﻿Feature: Add intraday absence on shift
 	In order to keep track of persons absences
 	As a team leader
 	I want to add that an agent is absent for a part of his/her shift
@@ -93,6 +92,7 @@ Scenario: Add on shift
 	| End time   | 17:00 |
 	| Color      | Red   |
 
+@ignore
 Scenario: Add after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And there is a shift category named 'Night'
@@ -115,6 +115,7 @@ Scenario: Add after midnight on night shift
 	| End time   | 2013-11-16 04:00 |
 	| Color      | Red              |
 
+@ignore
 Scenario: Add cross midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And there is a shift category named 'Night'
@@ -137,6 +138,7 @@ Scenario: Add cross midnight on night shift
 	| End time   | 2013-11-16 01:00 |
 	| Color      | Red              |
 
+@ignore
 Scenario: Adding overlapping of shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -158,6 +160,7 @@ Scenario: Adding overlapping of shift
 	| End time   | 2013-11-15 17:00 |
 	| Color      | Red              |
 
+@ignore
 Scenario: Prevent invalid times
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -174,6 +177,7 @@ Scenario: Prevent invalid times
 	| End time   | 14:00   |
 	Then I should see the alert 'Invalid end time'
 
+@ignore
 Scenario: Prevent adding outside of shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with

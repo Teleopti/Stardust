@@ -77,7 +77,7 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }">
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonSelected }">
 							<td class="person-name person-name-column" data-bind="click: $root.SelectPerson">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
@@ -117,7 +117,7 @@
 						<!-- ko foreach: Shifts -->
 						<!-- ko foreach: Layers -->
 						<!-- ko if: Selected -->
-						<tr>
+						<tr class="shift-menu-row">
 							<td class="shift-menu-background person-name-column"></td>
 							<td class="shift-menu-background schedule-column" colspan="2">
 								<div class="activity-details" data-bind="style: {'margin-left': StartPixels() + 'px'}">

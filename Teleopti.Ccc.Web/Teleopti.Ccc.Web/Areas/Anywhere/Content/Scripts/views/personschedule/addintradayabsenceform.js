@@ -12,7 +12,7 @@ define([
 	ajax,
 	resources,
 	timepicker
-    ) {
+	) {
 
 	return function () {
 
@@ -38,8 +38,10 @@ define([
 		this.SetData = function (data, groupid) {
 			personId = data.PersonId;
 			self.Date(data.Date);
-			self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
-			self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
+			if (data.DefaultIntradayAbsenceData) {
+				self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
+				self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
+			}
 			self.AbsenceTypes(data.Absences);
 			groupId = groupid;
 			shiftStart = data.Layers.length > 0 ? moment(data.Layers[0].Start) : undefined;

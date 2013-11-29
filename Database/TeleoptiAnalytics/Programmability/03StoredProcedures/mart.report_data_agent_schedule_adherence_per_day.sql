@@ -406,7 +406,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 				WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
 			END AS 'deviation_s',
 			isnull(fsd.ready_time_s,0) 'ready_time_s',
-			fsd.is_logged_in,
+			isnull(fsd.is_logged_in,0) as 'is_logged_in',
 			isnull(fs.activity_id,-1), --isnull = not defined
 			isnull(fs.absence_id,-1), --isnull = not defined
 			CASE @adherence_id 
@@ -419,15 +419,15 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			isnull(count_activity_per_interval,2) --fake a mixed shift = white color
 			
 	FROM mart.dim_person p
-	INNER JOIN #fact_schedule_deviation fsd
-		ON fsd.person_id=p.person_id
-	LEFT JOIN #fact_schedule fs
+	INNER JOIN #fact_schedule fs
+		ON fs.person_id=p.person_id
+	LEFT JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=fs.person_id
 		AND fsd.date_id=fs.schedule_date_id
 		AND fsd.interval_id=fs.interval_id
 	INNER JOIN mart.bridge_time_zone b
-		ON	fsd.interval_id= b.interval_id
-		AND fsd.date_id= b.date_id
+		ON	fs.interval_id= b.interval_id
+		AND fs.schedule_date_id= b.date_id
 	INNER JOIN mart.dim_date d 
 		ON b.local_date_id = d.date_id
 	INNER JOIN mart.dim_interval i

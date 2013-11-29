@@ -89,7 +89,7 @@ Scenario: Remove absence with confirmation
 
 Scenario: Remove one of two absences
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Start time     | 2013-05-06 08:00 |

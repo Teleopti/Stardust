@@ -46,7 +46,7 @@ Scenario: View team mates schedules
 
 Scenario: Add after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -67,7 +67,7 @@ Scenario: Add after midnight on night shift
 
 Scenario: Add over midnight on night shift
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -88,7 +88,7 @@ Scenario: Add over midnight on night shift
 
 Scenario: Prevent creation of second shift
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -131,7 +131,7 @@ Scenario: Add to day with no shift
 Scenario: Default times (2)
 	Given I have the role 'Anywhere Team Green'
 	And the current time is '2013-11-17 13:20'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
@@ -145,7 +145,7 @@ Scenario: Default times (2)
 
 Scenario: Add on shift	
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a shift with
+	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
 	| Activity       | Phone            |
