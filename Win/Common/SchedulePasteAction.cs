@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Common
                     IPersonAssignment sourcePersonAssignment = source.PersonAssignment();
                     if (sourcePersonAssignment != null)
                     {
-	                    foreach (var personalLayer in personAssignment.PersonalActivities())
+						foreach (var personalLayer in sourcePersonAssignment.PersonalActivities())
 	                    {
 		                    personAssignmentNoMainShift.AddPersonalActivity(personalLayer.Payload, personalLayer.Period);
 	                    }
