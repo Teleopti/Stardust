@@ -11,11 +11,6 @@ namespace Teleopti.Ccc.DayOffPlanning
             return makeDecision(matrixConverter.Convert(false, false), matrixConverter.SourceMatrix, dataExtractor);
         }
 
-        public IList<DateOnly> Execute(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor)
-        {
-            return makeDecision(lockableBitArray, matrix, dataExtractor);
-        }
-
         private static IList<DateOnly> makeDecision(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix,
                                           IScheduleResultDataExtractor dataExtractor)
         {
