@@ -45,7 +45,7 @@
 				</div>
 				<!-- /ko -->
 				
-				<table class="table table-hover" data-bind="if: true">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th></th>
@@ -54,10 +54,9 @@
 					</thead>
 					
 					<tbody>
-						<tr class="person selected-person" data-bind="attr: { 'data-person-id': Id }">
-							<td class="person-name person-name-column" data-bind="text: Name">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
-								<div class="person-name nowrap"></div>
+						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }">
+							<td class="person-name person-name-column">
+								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
@@ -91,7 +90,6 @@
 							<td class="shift-menu-background schedule-column">
 								<div class="row-fluid space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
 									<div class="span3">
-										<!--<blockquote>-->
 										<!-- ko if: $root.AddingIntradayAbsence -->
 										<!-- ko with: $root.AddIntradayAbsenceForm -->
 										<form action="#" class="intraday-absence-form">
@@ -175,7 +173,6 @@
 										</form>
 										<!-- /ko -->
 										<!-- /ko -->
-										<!--</blockquote>-->
 									</div>
 									
 									
@@ -196,10 +193,9 @@
 							</td>
 						</tr>
 
-						<!-- ko foreach: PersonsInGroup -->
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">
+						<!-- ko foreach: Persons -->
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
 							<td class="schedule schedule-column" style="padding-top: 4px">
@@ -244,7 +240,7 @@
 		</div>
 	</div>
 	
-	<div class="row" data-bind="ifnot: AddingActivity">
+	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span8">
 			<table class="table absence-list">
 				<tbody data-bind="foreach: Absences">
