@@ -113,8 +113,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                              DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
 			var allSelectedDaysAreScheduled = false;
-			while (!allSelectedDaysAreScheduled)
+			var maxIterations = 50;
+			var iterations = 0;
+			while (!allSelectedDaysAreScheduled && iterations < maxIterations)
 			{
+				iterations++;
 				var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
 				                                                                               schedulingOptions);
 				if (suggestedShiftProjectionCache == null && !(schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling))
