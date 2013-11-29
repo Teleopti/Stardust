@@ -108,9 +108,9 @@ namespace Teleopti.Ccc.Win.Common
 
                 if (options.PersonalShifts)
                 {
-									IPersonAssignment personAssignmentNoMainShift = new PersonAssignment(source.Person, source.Scenario, new DateOnly(2000, 1, 1));
-                    IPersonAssignment personAssignment = source.PersonAssignment();
-                    if (personAssignment != null)
+		    IPersonAssignment personAssignmentNoMainShift = new PersonAssignment(source.Person, source.Scenario, new DateOnly(2000, 1, 1));
+                    IPersonAssignment sourcePersonAssignment = source.PersonAssignment();
+                    if (sourcePersonAssignment != null)
                     {
 	                    foreach (var personalLayer in personAssignment.PersonalActivities())
 	                    {
@@ -129,6 +129,11 @@ namespace Teleopti.Ccc.Win.Common
                         destination.Merge(tempPart, false);
                     }
                 }
+
+				if (options.Overtime)
+				{
+					((ExtractedSchedule)destination).MergeOvertime(source);
+				}
 
                 if (options.DayOff)
                 {
@@ -152,11 +157,6 @@ namespace Teleopti.Ccc.Win.Common
 
                     if (tempPart.PersonAbsenceCollection().Count > 0)
                         destination.MergeAbsences(tempPart, true);
-                }
-
-                if (options.Overtime)
-                {
-                    ((ExtractedSchedule)destination).MergeOvertime(source);
                 }
 
                 if (options.Preference)
