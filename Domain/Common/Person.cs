@@ -953,22 +953,4 @@ namespace Teleopti.Ccc.Domain.Common
 			return base.GetHashCode() ^ 431;
 		}
     }
-
-    class PersonEqualityComparer : IEqualityComparer<IPerson>
-    {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public bool Equals(IPerson x, IPerson y)
-        {
-            InParameter.NotNull("x", x);
-            InParameter.NotNull("y", y);
-            return x.Id == y.Id;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public int GetHashCode(IPerson obj)
-        {
-            InParameter.NotNull("obj", obj);
-            return obj.Id.GetHashCode();
-        }
-    }
 }
