@@ -43,6 +43,8 @@ namespace Teleopti.Analytics.Etl.Transformer
                     dataRow["is_deleted"] = deleteCheck.IsDeleted;
                 }
 
+                dataRow["is_log_out_state"] = stateGroup.IsLogOutState;
+
 				stateGroupTable.Rows.Add(dataRow);
             }
         }

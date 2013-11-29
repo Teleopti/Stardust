@@ -465,7 +465,8 @@ CREATE TABLE [stage].[stg_state_group](
 	[insert_date] smalldatetime NOT NULL,
 	[update_date] smalldatetime NOT NULL,
 	[datasource_update_date] smalldatetime NOT NULL,
-	[is_deleted] [bit] NOT NULL
+	[is_deleted] [bit] NOT NULL,
+	[is_log_out_state] bit NOT NULL
 )
 ALTER TABLE [stage].[stg_state_group] ADD  CONSTRAINT [PK_stg_state_group] PRIMARY KEY CLUSTERED
 (
@@ -482,7 +483,8 @@ CREATE TABLE [mart].[dim_state_group](
 	[insert_date] smalldatetime NOT NULL,
 	[update_date] smalldatetime NOT NULL,
 	[datasource_update_date] smalldatetime NOT NULL,
-	[is_deleted] [bit] NOT NULL
+	[is_deleted] [bit] NOT NULL,
+	[is_log_out_state] bit NOT NULL
 )
 
 ALTER TABLE [mart].[dim_state_group] ADD  CONSTRAINT [PK_dim_state_group] PRIMARY KEY CLUSTERED 

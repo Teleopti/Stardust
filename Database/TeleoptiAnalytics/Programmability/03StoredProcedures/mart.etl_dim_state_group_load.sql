@@ -30,18 +30,20 @@ INSERT INTO mart.dim_state_group
 	insert_date,
 	update_date,
 	datasource_update_date,
-	is_deleted
+	is_deleted,
+	is_log_out_state
 	)
 SELECT 
 	state_group_id				= -1, 
 	state_group_code			= NULL, 
 	state_group_name			= 'Not Defined', 
-	business_unit_id			= NULL,
+	business_unit_id			= -1,
 	datasource_id				= -1,
 	insert_date					= @mindate,
 	update_date					= @mindate,
 	datasource_update_date		= @mindate,
-	is_deleted					= 0
+	is_deleted					= 0,
+	is_log_out_state			= 0
 WHERE NOT EXISTS (SELECT * FROM mart.dim_state_group where state_group_id = -1)
 
 SET IDENTITY_INSERT mart.dim_state_group OFF
@@ -56,7 +58,8 @@ SET
 	business_unit_id			= ISNULL(bu.business_unit_id,-1),
 	datasource_id				= s.datasource_id,
 	is_deleted					= s.is_deleted,
-	update_date					= getdate()
+	update_date					= getdate(),
+	is_log_out_state			= s.is_log_out_state
 FROM stage.stg_state_group s
 LEFT JOIN mart.dim_business_unit bu
 	ON bu.business_unit_code = s.business_unit_code
@@ -80,7 +83,8 @@ INSERT INTO mart.dim_state_group
 	insert_date,
 	update_date,
 	datasource_update_date,
-	is_deleted
+	is_deleted,
+	is_log_out_state
 	)
 SELECT 
 	state_group_code			= s.state_group_code, 
@@ -90,7 +94,8 @@ SELECT
 	insert_date					= getdate(),
 	update_date					= getdate(),
 	datasource_update_date		= getdate(),
-	is_deleted					= s.is_deleted
+	is_deleted					= s.is_deleted,
+	is_log_out_state			= s.is_log_out_state
 FROM stage.stg_state_group s
 LEFT JOIN mart.dim_business_unit bu
 	ON bu.business_unit_code = s.business_unit_code
