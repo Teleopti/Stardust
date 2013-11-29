@@ -110,10 +110,10 @@ Scenario: Add after midnight on night shift
 	| End time   | 04:00   |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-16 01:00 |
-	| End time   | 2013-11-16 04:00 |
-	| Color      | Red              |
+	| Field      | Value |
+	| Start time | 01:00 |
+	| End time   | 04:00 |
+	| Color      | Red   |
 
 Scenario: Add cross midnight on night shift
 	Given I have the role 'Anywhere Team Green'
