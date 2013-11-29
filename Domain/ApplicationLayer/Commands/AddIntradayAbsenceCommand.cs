@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
@@ -9,9 +8,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	{
 		public Guid PersonId { get; set; }
 		public Guid AbsenceId { get; set; }
-		public DateOnly Date { get; set; }
-		public TimeOfDay StartTime { get; set; }
-		public TimeOfDay EndTime { get; set; }
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
 
 		public IList<string> ValidationResult { get; set; }
 
@@ -19,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var isValid = true;
 			ValidationResult = new List<string>();
-			if (StartTime.Time > EndTime.Time)
+			if (StartTime > EndTime)
 			{
 				isValid = false;
 				ValidationResult.Add(Resources.InvalidEndTime);

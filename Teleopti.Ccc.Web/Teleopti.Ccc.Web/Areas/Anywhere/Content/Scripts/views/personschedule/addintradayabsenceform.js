@@ -33,7 +33,6 @@ define([
 		
 		var momentStartInput;
 		var momentEndInput;
-		var isNextDay;
 
 		this.SetData = function (data, groupid) {
 			personId = data.PersonId;
@@ -46,24 +45,27 @@ define([
 			groupId = groupid;
 			shiftStart = data.Layers.length > 0 ? moment(data.Layers[0].Start) : undefined;
 			shiftEnd = data.Layers.length > 0 ? moment(data.Layers[data.Layers.length - 1].Start).add('m', data.Layers[data.Layers.length - 1].Minutes) : undefined;
+
+			momentStartInput = getMomentFromInput(self.StartTime());
+			momentEndInput = getMomentFromInput(self.EndTime());
 		};
 		
 		this.IsStartTimeWithinShift = ko.computed(function () {
-			isNextDay = false;
 			if (self.StartTime() && self.EndTime() && shiftStart && shiftEnd) {
 				momentStartInput = getMomentFromInput(self.StartTime());
 				momentEndInput = getMomentFromInput(self.EndTime());
 				
 				if (momentStartInput.diff(shiftStart) >= 0 && momentStartInput.diff(shiftEnd) < 0) {
+					if (shiftStart.date() != shiftEnd.date() && momentStartInput.diff(momentEndInput) > 0) {
+						momentEndInput = momentEndInput.add('d', 1);
+					}
 					return true;
 				}
 				if (shiftStart.date() != shiftEnd.date()) {
 					momentStartInput = momentStartInput.add('d', 1);
 					momentEndInput = momentEndInput.add('d', 1);
-					isNextDay = true;
-					if (momentStartInput.diff(shiftStart) >= 0 && momentStartInput.diff(shiftEnd) < 0) {
+					if (momentStartInput.diff(shiftStart) >= 0 && momentStartInput.diff(shiftEnd) < 0)
 						return true;
-					}
 				}
 				return false;
 			}
@@ -79,13 +81,7 @@ define([
 			if (!self.IsStartTimeWithinShift())
 				return true;
 			
-			if (momentStartInput && momentStartInput.diff(momentEndInput) == 0)
-				return false;
-			
-			if (momentStartInput && momentStartInput.diff(momentEndInput) > 0) {
-				if (!isNextDay && shiftStart && shiftEnd && shiftStart.date() != shiftEnd.date()) {
-					return true;
-				}
+			if (momentStartInput && momentStartInput.diff(momentEndInput) >= 0) {
 				return false;
 			}
 			return true;
@@ -103,9 +99,8 @@ define([
 
 		this.Apply = function() {
 			var requestData = JSON.stringify({
-				Date: self.Date().format('YYYY-MM-DD'),
-				StartTime: self.StartTime(),
-				EndTime: self.EndTime(),
+				StartTime: momentStartInput.format(),
+				EndTime: momentEndInput.format(),
 				AbsenceId: self.Absence(),
 				PersonId: personId
 			});

@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		{
 			var command = new AddIntradayAbsenceCommand
 			{
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(9))
+				StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
+				EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc)
 			};
 
 			var result = command.IsValid();
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 		{
 			var command = new AddIntradayAbsenceCommand
 			{
-				StartTime = new TimeOfDay(TimeSpan.FromHours(8)),
-				EndTime = new TimeOfDay(TimeSpan.FromHours(7))
+				StartTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc),
+				EndTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc)
 			};
 
 			var result = command.IsValid();

@@ -115,7 +115,6 @@ Scenario: Add after midnight on night shift
 	| End time   | 2013-11-16 04:00 |
 	| Color      | Red              |
 
-@ignore
 Scenario: Add cross midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And there is a shift category named 'Night'
@@ -133,10 +132,10 @@ Scenario: Add cross midnight on night shift
 	| End time   | 01:00   |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-15 23:00 |
-	| End time   | 2013-11-16 01:00 |
-	| Color      | Red              |
+	| Field      | Value |
+	| Start time | 23:00 |
+	| End time   | 01:00 |
+	| Color      | Red   |
 
 Scenario: Adding overlapping of shift
 	Given I have the role 'Anywhere Team Green'

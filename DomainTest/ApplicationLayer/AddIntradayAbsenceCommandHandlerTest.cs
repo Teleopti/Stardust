@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -23,16 +22,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
-			var target = new AddIntradayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository,
+			var target = new AddIntradayAbsenceCommandHandler(personRepository,
 			                                                  absenceRepository, personAbsenceRepository, currentScenario, new UtcTimeZone());
 
 			var command = new AddIntradayAbsenceCommand
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					Date = new DateOnly(2013, 11, 27),
-					StartTime = new TimeOfDay(new TimeSpan(14, 00, 00)),
-					EndTime = new TimeOfDay(new TimeSpan(15, 00, 00))
+					StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
+					EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc)
 				};
 			target.Handle(command);
 
@@ -40,8 +38,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.AbsenceId.Should().Be(absenceRepository.Single().Id.Value);
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
-			@event.StartDateTime.Should().Be(command.Date.Date.Add(command.StartTime.Time));
-			@event.EndDateTime.Should().Be(command.Date.Date.Add(command.EndTime.Time));
+			@event.StartDateTime.Should().Be(command.StartTime);
+			@event.EndDateTime.Should().Be(command.EndTime);
 		}
 
 		[Test]
@@ -51,15 +49,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceRepository = new FakeWriteSideRepository<IAbsence> { AbsenceFactory.CreateAbsenceWithId() };
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
-			var target = new AddIntradayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario, new UtcTimeZone());
+			var target = new AddIntradayAbsenceCommandHandler(personRepository, absenceRepository, personAbsenceRepository, currentScenario, new UtcTimeZone());
 
 			var command = new AddIntradayAbsenceCommand
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					Date = new DateOnly(2013, 11, 27),
-					StartTime = new TimeOfDay(new TimeSpan(14, 00, 00)),
-					EndTime = new TimeOfDay(new TimeSpan(15, 00, 00))
+					StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
+					EndTime = new DateTime(2013, 11, 27, 15, 00, 00, DateTimeKind.Utc)
 				};
 			target.Handle(command);
 
@@ -67,8 +64,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			personAbsence.Person.Should().Be(personRepository.Single());
 			absenceLayer.Payload.Should().Be(absenceRepository.Single());
-			absenceLayer.Period.StartDateTime.Should().Be(command.Date.Date.Add(command.StartTime.Time));
-			absenceLayer.Period.EndDateTime.Should().Be(command.Date.Date.Add(command.EndTime.Time));
+			absenceLayer.Period.StartDateTime.Should().Be(command.StartTime);
+			absenceLayer.Period.EndDateTime.Should().Be(command.EndTime);
 		}
 
 		[Test]
@@ -80,25 +77,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAbsenceRepository = new FakeWriteSideRepository<IPersonAbsence>();
 			var currentScenario = new FakeCurrentScenario();
 			var userTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			var target = new AddIntradayAbsenceCommandHandler(new FakePersonAssignmentReadScheduleRepository(), personRepository, absenceRepository, personAbsenceRepository, currentScenario, new SpecificTimeZone(userTimeZone));
+			var target = new AddIntradayAbsenceCommandHandler(personRepository, absenceRepository, personAbsenceRepository, currentScenario, new SpecificTimeZone(userTimeZone));
 
 			var command = new AddIntradayAbsenceCommand
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					Date = new DateOnly(2013, 11, 27),
-					StartTime = new TimeOfDay(new TimeSpan(14, 00, 00)),
-					EndTime = new TimeOfDay(new TimeSpan(15, 00, 00))
+					StartTime = new DateTime(2013, 11, 27, 14, 00, 00),
+					EndTime = new DateTime(2013, 11, 27, 15, 00, 00)
 				};
 			target.Handle(command);
 
 			var personAbsence = personAbsenceRepository.Single();
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
-			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.StartTime.Time), userTimeZone));
-			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.EndTime.Time), userTimeZone));
+			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartTime, userTimeZone));
+			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndTime, userTimeZone));
 			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as PersonAbsenceAddedEvent;
-			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.StartTime.Time), userTimeZone));
-			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.Date.Date.Add(command.EndTime.Time), userTimeZone));
+			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartTime, userTimeZone));
+			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndTime, userTimeZone));
 		}
 	}
 }
