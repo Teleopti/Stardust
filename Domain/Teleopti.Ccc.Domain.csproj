@@ -767,7 +767,6 @@
     <Compile Include="Optimization\SchedulePartExtractor.cs" />
     <Compile Include="Optimization\ScheduleDayPro.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillService.cs" />
-    <Compile Include="ResourceCalculation\BlockFinderResult.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsData.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\FairnessValueResult.cs" />
