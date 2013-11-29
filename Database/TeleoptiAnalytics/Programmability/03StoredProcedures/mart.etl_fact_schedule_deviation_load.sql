@@ -14,12 +14,13 @@ GO
 --				2009-10-01 Include rows for agents with Schedule but without agent statistics
 --				2009-10-01 Removed isnull in calculation
 --				2009-10-01 Special CASE WHEN scheduled_ready_time_m = 0 THEN SET deviation_schedule_m = ready_time_m
---				2010-06-04 Need to consider scenario when doing calculation
+--				2010-06-04 Need to consider scenario when doing calculationr
 --				2010-06-10 Added detection of is_logged_in, used when ready_time_m = 0 to show zero, else empty string in report
 --				2010-09-20 Fix calculation: Ready Time vs. Scheduled Ready Time. Set 100% as soon a mixed interval is fullfilled. e.g Readytime >= ScheduleReadytime
 --				2010-11-01 #11055 Refact of mart.fact_schedule_deviation, measures in seconds instead of minutes. KJ
 --				2012-10-08 #20924 Fix Contract Deviation
 --				2013-11-26 #25906 - make sure we put stats on correct adherance interval
+--				2013-11-29 #25900 Fix for nights shift with person period change
 --
 -- =============================================
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-07-02 00:00:00',@end_date='2013-07-02 00:00:00',@business_unit_code='70B18F45-1FF3-4BA7-AEB2-A13F00BDC738',@isIntraday=0
@@ -30,6 +31,7 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @isIntraday bit = 0,
 @is_delayed_job bit = 0
 AS
+
 -- temporary part of #24257 we can't just use the updated schedules to know if we should do anything
 -- there could be updated statistcs too, maybe we can do both, update today and yesterday AND other days with changed schedules
 set @isIntraday = 0
@@ -59,6 +61,7 @@ CREATE TABLE #fact_schedule_deviation(
 	interval_id smallint,
 	shift_startinterval_id smallint, 
 	shift_endinterval_id smallint,
+	acd_login_id int, --new 20131128
 	person_id int,
 	scheduled_ready_time_s int default 0,
 	ready_time_s int default 0,
@@ -160,6 +163,7 @@ BEGIN
 		(
 		date_id, 
 		interval_id,
+		acd_login_id, --new 20131128
 		person_id, 
 		ready_time_s,
 		is_logged_in,
@@ -168,6 +172,7 @@ BEGIN
 	SELECT
 		date_id					= fa.date_id, 
 		interval_id				= fa.interval_id,
+		acd_login_id			= fa.acd_login_id,--new 20131128
 		person_id				= b.person_id, 
 		ready_time_s			= fa.ready_time_s,
 		is_logged_in			= 1, --marks that we do have logged in time
@@ -192,7 +197,6 @@ BEGIN
 		fa.date_id BETWEEN @start_date_id AND @end_date_id
 		AND b.business_unit_id = @business_unit_id
 END
-
 
 if (@isIntraday=1)
 BEGIN
@@ -255,6 +259,7 @@ BEGIN
 		date_id, 
 		interval_id,
 		person_id, 
+		acd_login_id,--new 20131128
 		ready_time_s,
 		is_logged_in,
 		business_unit_id
@@ -262,6 +267,7 @@ BEGIN
 	SELECT
 		date_id					= fa.date_id, 
 		interval_id				= fa.interval_id,
+		acd_login_id			= fa.acd_login_id, --new 20131128
 		person_id				= b.person_id, 
 		ready_time_s			= fa.ready_time_s,
 		is_logged_in			= 1, --marks that we do have logged in time
@@ -299,6 +305,7 @@ INSERT INTO #fact_schedule_deviation
 	shift_startinterval_id,
 	shift_endinterval_id,
 	interval_id,
+	acd_login_id,--new 20131128
 	person_id,
 	is_logged_in, 
 	scheduled_ready_time_s,
@@ -311,6 +318,7 @@ SELECT
 	shift_startinterval_id	= fs.shift_startinterval_id,
 	shift_endinterval_id	= di.interval_id,
 	interval_id				= fs.interval_id,
+	acd_login_id			= b.acd_login_id,--new 20131128
 	person_id				= fs.person_id,
 	is_logged_in			= 0, --Mark schedule rows as Not loggged in 
 	scheduled_ready_time_s	= fs.scheduled_ready_time_m*60,
@@ -324,19 +332,34 @@ ON
 	p.person_id = fs.person_id
 	AND
 		(
-			(fs.schedule_date_id > p.valid_from_date_id AND fs.schedule_date_id < p.valid_to_date_id)
-				OR (fs.schedule_date_id = p.valid_from_date_id AND fs.interval_id >= p.valid_from_interval_id)
-				OR (fs.schedule_date_id = p.valid_to_date_id AND fs.interval_id <= p.valid_to_interval_id)
+				(fs.shift_startdate_id > p.valid_from_date_id AND fs.shift_startdate_id < p.valid_to_date_id)
+				OR (fs.shift_startdate_id = p.valid_from_date_id AND fs.shift_startinterval_id >= p.valid_from_interval_id)
+				OR (fs.shift_startdate_id = p.valid_to_date_id AND fs.shift_startinterval_id <= p.valid_to_interval_id)
 		)
 INNER JOIN 
 	#intervals di
 ON 
 	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) > di.interval_start
 	and dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) <= di.interval_end
+LEFT JOIN mart.bridge_acd_login_person b --new 20131128
+ON
+	p.person_id=b.person_id
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.business_unit_id = @business_unit_id
-	
+
+
+/*#25900:20131128 Handle night shifts and person_period change, must update person_id in stat from correct shift*/
+UPDATE stat
+SET person_id=shifts.person_id--update agent stat data
+FROM #fact_schedule_deviation shifts
+INNER JOIN #fact_schedule_deviation stat
+ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND shifts.acd_login_id=stat.acd_login_id
+WHERE stat.person_id<>shifts.person_id AND shifts.acd_login_id IS NOT NULL --where diff on person but same acd_login
+AND shifts.shift_startdate_id IS NOT NULL  --get from schedule data
+AND stat.shift_startdate_id IS NULL
+
+
 --UPDATE ALL ROWS WITH KNOWN SHIFT_STARTDATE_ID
 UPDATE stat
 SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
@@ -370,6 +393,7 @@ AND stat.interval_id <= shifts.shift_endinterval_id + @intervals_outside_shift -
 AND stat.date_id >= shifts.shift_startdate_id
 AND stat.date_id >= shifts.date_id --make sure the stat intervals are after shift
 AND stat.interval_id >= shifts.interval_id
+
 
 DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
 
