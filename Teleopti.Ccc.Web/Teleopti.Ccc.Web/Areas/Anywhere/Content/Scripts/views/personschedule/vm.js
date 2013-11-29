@@ -131,7 +131,7 @@ define([
 			self.DisplayDescriptions(!self.DisplayDescriptions());
 		};
 
-		this.AddPersonsToGroup = function (persons) {
+		this.AddPersons = function (persons) {
 			self.Persons.push.apply(self.Persons, persons);
 		};
 

@@ -88,7 +88,7 @@ define([
 					return new personViewModel(s);
 				});
 
-				viewModel.AddPersonsToGroup(newItems);
+				viewModel.AddPersons(newItems);
 				options.success();
 			}
 		});
@@ -158,7 +158,7 @@ define([
 
 				    	var person = new personViewModel(data);
 				    	person.AddData(data, viewModel.TimeLine);
-				    	viewModel.AddPersonsToGroup([person]);
+				    	viewModel.AddPersons([person]);
 				    	viewModel.SetData(data, options.groupid);
 
 				    	if (viewModel.AddingActivity()) {
