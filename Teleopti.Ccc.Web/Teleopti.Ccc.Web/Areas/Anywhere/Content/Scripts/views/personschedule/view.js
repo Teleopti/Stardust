@@ -31,7 +31,7 @@ define([
 			options.groupid,
 			helpers.Date.ToServer(date),
 			function (schedules) {
-				var currentPersons = viewModel.PersonsInGroup();
+				var currentPersons = viewModel.Persons();
 
 				for (var i = 0; i < currentPersons.length; i++) {
 					if (currentPersons[i].Id != options.personid) {
@@ -52,15 +52,16 @@ define([
 					return first == second ? 0 : (first < second ? -1 : 1);
 				});
 
-				viewModel.PersonsInGroup.valueHasMutated();
+				viewModel.Persons.valueHasMutated();
 
 				options.success();
 
 				resize.notify();
 			},
 			function (notification) {
-				for (var i = 0; i < viewModel.PersonsInGroup().length; i++) {
-					if (notification.DomainReferenceId == viewModel.PersonsInGroup()[i].Id) {
+				var persons = viewModel.Persons();
+				for (var i = 0; i < persons.length; i++) {
+					if (notification.DomainReferenceId == persons[i].Id) {
 						return true;
 					}
 				}
@@ -153,7 +154,7 @@ define([
 				    	data.Id = viewModel.Id();
 				    	data.Date = viewModel.Date();
 
-				    	viewModel.PersonsInGroup([]);
+				    	viewModel.Persons([]);
 
 				    	var person = new personViewModel(data);
 				    	person.AddData(data, viewModel.TimeLine);

@@ -34,14 +34,14 @@ define([
 		
 		this.Loading = ko.observable(false);
 		
-		this.PersonsInGroup = ko.observableArray();
+		this.Persons = ko.observableArray();
 
 		this.Id = ko.observable("");
 		this.Date = ko.observable();
 
 		this.SelectedPerson = ko.computed(function () {
-			if (self.PersonsInGroup().length > 0) {
-				var selectedPerson = lazy(self.PersonsInGroup())
+			if (self.Persons().length > 0) {
+				var selectedPerson = lazy(self.Persons())
 					.select(function(x) {
 						if (x.Id == self.Id()) {
 							return x.Name;
@@ -78,7 +78,7 @@ define([
 
 		this.Absences = ko.observableArray();
 		
-		this.TimeLine = new timeLineViewModel(this.PersonsInGroup); 
+		this.TimeLine = new timeLineViewModel(this.Persons);
 		
 		this.Shift = ko.computed(function () {
 			if (self.SelectedPerson()) {
@@ -132,7 +132,7 @@ define([
 		};
 
 		this.AddPersonsToGroup = function (persons) {
-			self.PersonsInGroup.push.apply(self.PersonsInGroup, persons);
+			self.Persons.push.apply(self.Persons, persons);
 		};
 
 		this.SetData = function (data, groupId) {
