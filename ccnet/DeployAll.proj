@@ -269,7 +269,8 @@
 				Include=
 		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\**\*.*"
 				Exclude=
-		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.nhib.xml"
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.nhib.xml;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\pub.config"
 		/>
 
 			<!--ToDo: what is this? Move thism to post-Build events or reference with CopyToLocal-->
@@ -282,8 +283,7 @@
 		$(CCNetWorkingDirectory)\BuildArtifacts\ccc_Menu.ico"
 		    Exclude=
    "$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.lastcodeanalysissucceeded;
-   $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.CodeAnalysisLog.xml;
-   $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\pub.config"
+   $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartParts\bin\$(Configuration)\Teleopti.Ccc.SmartClientPortal.Shell.exe.CodeAnalysisLog.xml"
 		/>
 
 			<!-- Cube -->
