@@ -138,7 +138,6 @@ Scenario: Add cross midnight on night shift
 	| End time   | 2013-11-16 01:00 |
 	| Color      | Red              |
 
-@ignore
 Scenario: Adding overlapping of shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -155,12 +154,11 @@ Scenario: Adding overlapping of shift
 	| End time   | 18:00   |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-15 16:00 |
-	| End time   | 2013-11-15 17:00 |
-	| Color      | Red              |
+	| Field      | Value |
+	| Start time | 16:00 |
+	| End time   | 17:00 |
+	| Color      | Red   |
 
-@ignore
 Scenario: Prevent invalid times
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -177,7 +175,6 @@ Scenario: Prevent invalid times
 	| End time   | 14:00   |
 	Then I should see the alert 'Invalid end time'
 
-@ignore
 Scenario: Prevent adding outside of shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
