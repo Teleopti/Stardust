@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
-using Teleopti.Ccc.Web.Areas.Anywhere.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers

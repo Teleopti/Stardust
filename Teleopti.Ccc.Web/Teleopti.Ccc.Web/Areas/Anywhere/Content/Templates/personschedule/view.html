@@ -107,13 +107,13 @@
 												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
 											
-											<!-- ko if: ErrorMessage() !== '' -->
+											<!-- ko if: ErrorMessage() -->
 											<div class="alert">
-												<span data-bind="html: ErrorMessage()"></span>
+												<span data-bind="text: ErrorMessage()"></span>
 											</div>
 											<!-- /ko -->
 											
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 					
 										</form>
 										
