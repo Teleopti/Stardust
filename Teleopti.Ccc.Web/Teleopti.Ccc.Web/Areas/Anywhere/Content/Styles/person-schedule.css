@@ -38,6 +38,11 @@
 	height: 57px;
 }
 
+.person-schedule .person.selected-person:hover > td 
+{
+	background-color: transparent;
+}
+
 .person-schedule .person.selected-person .layer
 {
 	height: 40px;
@@ -86,7 +91,7 @@
 	top: -8px;
 	height: 57px;
 }
-
+sh
 .person-schedule .dayoff .layer-description {
 	margin-top: 18px;
 	text-shadow: none;
@@ -106,6 +111,9 @@
 {
 }
 
+.person-schedule .shift-menu-row:hover > td{
+	background-color: #eeeeee;
+}
 
 .person-schedule .shift-details .label {
 	text-shadow: none;

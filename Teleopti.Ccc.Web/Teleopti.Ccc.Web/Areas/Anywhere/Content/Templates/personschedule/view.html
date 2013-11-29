@@ -1,7 +1,7 @@
 <div class="person-schedule container">
 	
-	<!-- ko if: true -->
-	<div class="row">
+	
+	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span12 page-header">
 			<h1>
 				<span data-bind="text: Name"></span>
@@ -19,7 +19,7 @@
 		</div>
 	</div>
 	
-	<div class="row">
+	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span12">
 			<form action="#">
 				<div class="btn-group">
@@ -28,7 +28,7 @@
 			</form>
 		</div>
 	</div>
-	<!-- /ko -->
+	
 
 	<div class="row">
 		<div class="span12">
@@ -55,7 +55,7 @@
 					
 					<tbody>
 						<tr class="person selected-person" data-bind="attr: { 'data-person-id': Id }">
-							<td class="person-name person-name-column">
+							<td class="person-name person-name-column" data-bind="text: Name">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap"></div>
 							</td>
@@ -86,7 +86,7 @@
 							</td>
 						</tr>
 						
-						<tr data-bind="if: DisplayShiftMenu">
+						<tr class="shift-menu-row" data-bind="if: DisplayShiftMenu">
 							<td class="shift-menu-background person-name-column"></td>
 							<td class="shift-menu-background schedule-column">
 								<div class="row-fluid space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
@@ -186,6 +186,16 @@
 
 						<!-- ko if: AddingActivity -->
 						
+						<tr>
+							<td colspan="2" style="background-color: white; border: none" >
+								<h4>
+									<span >Part-Time Percentage</span>
+									\ 
+									<span >100%</span>
+								</h4>
+							</td>
+						</tr>
+
 						<!-- ko foreach: PersonsInGroup -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">
 							<td class="person-name person-name-column">

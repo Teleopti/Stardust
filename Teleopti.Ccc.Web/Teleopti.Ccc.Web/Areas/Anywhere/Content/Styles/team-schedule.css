@@ -32,6 +32,11 @@
 {
 }
 
+.team-schedule .person.selected-person
+{
+	background-color: rgb(245, 245, 245);
+}
+
 .team-schedule .person-name-column {
 	max-width: 105px !important;
 	min-width: 105px !important;
@@ -85,10 +90,15 @@
 
 .team-schedule .shift-menu-background {
 	background: #eeeeee;
+	
+}
+
+.team-schedule .shift-menu-row:hover > td{
+	background-color: #eeeeee;
 }
 
 .team-schedule .shift-menu-background.person-name-column {
-	border-top: none;
+	
 }
 
 .team-schedule .shift-menu
