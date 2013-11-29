@@ -39,16 +39,9 @@ define([
 		this.Date = ko.observable();
 
 		this.SelectedPerson = ko.computed(function () {
-			if (self.Persons().length > 0) {
-				var selectedPerson = lazy(self.Persons())
-					.select(function(x) {
-						if (x.Id == self.Id()) {
-							return x.Name;
-						}
-					});
-				return selectedPerson.first();
-			}
-			return "";
+			return lazy(self.Persons())
+				.select(function (x) { return x.Id == self.Id(); })
+				.first();
 		});
 
 		this.Name = ko.computed(function () {
@@ -69,12 +62,6 @@ define([
 			return "";
 		});
 		
-		this.ContractTime = ko.computed(function () {
-			if (self.SelectedPerson())
-				return self.SelectedPerson().ContractTime();
-			return 0;
-		});
-
 		this.Absences = ko.observableArray();
 		
 		this.TimeLine = new timeLineViewModel(this.Persons);
