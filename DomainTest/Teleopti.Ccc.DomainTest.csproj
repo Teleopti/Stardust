@@ -580,7 +580,6 @@
     <Compile Include="Optimization\SchedulePartExtractorTest.cs" />
     <Compile Include="Optimization\ScheduleDayProTest.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillServiceTest.cs" />
-    <Compile Include="ResourceCalculation\BlockFinderResultTest.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsDataTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManagerTest.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusCheckerTest.cs" />
