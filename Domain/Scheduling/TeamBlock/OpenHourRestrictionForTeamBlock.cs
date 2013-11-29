@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -38,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 var activity = skillDay.Skill.Activity;
                 if (activity == null) continue;
                 if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
-                var openHourForSkillDay = _skillIntervalDataOpenHour.GetOpenHours(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection));
+                var openHourForSkillDay = _skillIntervalDataOpenHour.GetOpenHours(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection), skillDay.CurrentDate);
                 if (!openHoursPerActivity.ContainsKey(activity))
                 {
                     openHoursPerActivity.Add(activity,openHourForSkillDay );
@@ -67,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                         var openHourForSkillDay =
                             _skillIntervalDataOpenHour.GetOpenHours(
                                 _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
-                                    skillDay.SkillStaffPeriodCollection));
+                                    skillDay.SkillStaffPeriodCollection), skillDay.CurrentDate);
                         if (sampleHour != openHourForSkillDay)
                             return false;
                     }
@@ -86,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 {
                     return _skillIntervalDataOpenHour.GetOpenHours(
                         _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(
-                            skillDay.SkillStaffPeriodCollection));
+                            skillDay.SkillStaffPeriodCollection), skillDay.CurrentDate);
                 }
             }
             return null;
