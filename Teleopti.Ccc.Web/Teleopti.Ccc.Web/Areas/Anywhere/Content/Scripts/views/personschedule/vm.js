@@ -70,7 +70,7 @@ define([
 		
 		this.Shift = ko.computed(function () {
 			if (self.SelectedPerson()) {
-				return self.SelectedPerson().Shifts()[0];
+				return self.SelectedPerson().Shifts()[0]; // need to fix
 			}
 			return undefined;
 		});
@@ -158,7 +158,7 @@ define([
 		};
 
 		this.AddFullDayAbsence = function () {
-			navigation.GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory(self.Id(), self.Date());
+			navigation.GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory(self.PersonId(), self.Date());
 		};
 	};
 });
