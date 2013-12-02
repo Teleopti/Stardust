@@ -165,6 +165,7 @@ namespace Teleopti.Ccc.TestCommon
 					{
 						using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
 						{
+							SqlConnection.ClearPool(conn);
 							conn.Open();
 							using (var cmd = new SqlCommand("delete from auditing.Auditsetting", conn))
 								cmd.ExecuteNonQuery();
