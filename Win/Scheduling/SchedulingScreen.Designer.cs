@@ -187,6 +187,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemReOptimize = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemBackToLegalState = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripDropDownButtonSwap = new System.Windows.Forms.ToolStripSplitButton();
+			this.toolStripMenuItemSwap = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemSwapAndReschedule = new System.Windows.Forms.ToolStripMenuItem();
+			this.ToolStripMenuItemSwapRaw = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
 			this.toolStripExLocks = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripPanelItemLocks = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
@@ -315,10 +319,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.xxShowLastNumberOfDays = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripComboBoxExFilterDays = new Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx();
-			this.toolStripDropDownButtonSwap = new System.Windows.Forms.ToolStripSplitButton();
-			this.toolStripMenuItemSwap = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemSwapAndReschedule = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemSwapRaw = new System.Windows.Forms.ToolStripMenuItem();
 			this.statusStrip1.SuspendLayout();
 			this.contextMenuViews.SuspendLayout();
 			this.contextMenuStripResultView.SuspendLayout();
@@ -370,7 +370,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 11;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 4;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -1642,6 +1642,48 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemBackToLegalState.Size = new System.Drawing.Size(210, 22);
 			this.toolStripMenuItemBackToLegalState.Text = "xxBackToLegalState";
 			this.toolStripMenuItemBackToLegalState.Click += new System.EventHandler(this.toolStripMenuItemBackToLegalStateClick);
+			// 
+			// toolStripDropDownButtonSwap
+			// 
+			this.ribbonControlAdv1.SetDescription(this.toolStripDropDownButtonSwap, "");
+			this.toolStripDropDownButtonSwap.DropDownButtonWidth = 20;
+			this.toolStripDropDownButtonSwap.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItemSwap,
+            this.toolStripMenuItemSwapAndReschedule,
+            this.ToolStripMenuItemSwapRaw});
+			this.toolStripDropDownButtonSwap.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SwapShifts_32x32;
+			this.toolStripDropDownButtonSwap.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripDropDownButtonSwap.Name = "toolStripDropDownButtonSwap";
+			this.SetShortcut(this.toolStripDropDownButtonSwap, System.Windows.Forms.Keys.None);
+			this.toolStripDropDownButtonSwap.Size = new System.Drawing.Size(85, 20);
+			this.toolStripDropDownButtonSwap.Text = "xxSwap";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripDropDownButtonSwap, true);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripDropDownButtonSwap, false);
+			this.toolStripDropDownButtonSwap.ButtonClick += new System.EventHandler(this.toolStripMenuItemSwapClick);
+			// 
+			// toolStripMenuItemSwap
+			// 
+			this.toolStripMenuItemSwap.Name = "toolStripMenuItemSwap";
+			this.SetShortcut(this.toolStripMenuItemSwap, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemSwap.Size = new System.Drawing.Size(187, 22);
+			this.toolStripMenuItemSwap.Text = "xxSwap";
+			this.toolStripMenuItemSwap.Click += new System.EventHandler(this.toolStripMenuItemSwapClick);
+			// 
+			// toolStripMenuItemSwapAndReschedule
+			// 
+			this.toolStripMenuItemSwapAndReschedule.Name = "toolStripMenuItemSwapAndReschedule";
+			this.SetShortcut(this.toolStripMenuItemSwapAndReschedule, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemSwapAndReschedule.Size = new System.Drawing.Size(187, 22);
+			this.toolStripMenuItemSwapAndReschedule.Text = "xxSwapAndReschedule";
+			this.toolStripMenuItemSwapAndReschedule.Click += new System.EventHandler(this.toolStripMenuItemSwapAndRescheduleClick);
+			// 
+			// ToolStripMenuItemSwapRaw
+			// 
+			this.ToolStripMenuItemSwapRaw.Name = "ToolStripMenuItemSwapRaw";
+			this.SetShortcut(this.ToolStripMenuItemSwapRaw, System.Windows.Forms.Keys.None);
+			this.ToolStripMenuItemSwapRaw.Size = new System.Drawing.Size(187, 22);
+			this.ToolStripMenuItemSwapRaw.Text = "xxSwapRaw";
+			this.ToolStripMenuItemSwapRaw.Click += new System.EventHandler(this.toolStripMenuItemSwapRawClick);
 			// 
 			// toolStripButtonRefresh
 			// 
@@ -3205,47 +3247,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripComboBoxExFilterDays.Size = new System.Drawing.Size(45, 23);
 			this.toolStripComboBoxExFilterDays.ToolTipText = "xxFilterNumberOfDaysBackInTime";
 			this.toolStripComboBoxExFilterDays.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBoxExFilterDays_SelectedIndexChanged);
-			// 
-			// toolStripDropDownButtonSwap
-			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripDropDownButtonSwap, "");
-			this.toolStripDropDownButtonSwap.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemSwap,
-            this.toolStripMenuItemSwapAndReschedule,
-            this.ToolStripMenuItemSwapRaw});
-			this.toolStripDropDownButtonSwap.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SwapShifts_32x32;
-			this.toolStripDropDownButtonSwap.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripDropDownButtonSwap.Name = "toolStripDropDownButtonSwap";
-			this.SetShortcut(this.toolStripDropDownButtonSwap, System.Windows.Forms.Keys.None);
-			this.toolStripDropDownButtonSwap.Size = new System.Drawing.Size(76, 20);
-			this.toolStripDropDownButtonSwap.Text = "xxSwap";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripDropDownButtonSwap, true);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripDropDownButtonSwap, false);
-			this.toolStripDropDownButtonSwap.ButtonClick += new System.EventHandler(this.toolStripMenuItemSwapClick);
-			// 
-			// toolStripMenuItemSwap
-			// 
-			this.toolStripMenuItemSwap.Name = "toolStripMenuItemSwap";
-			this.SetShortcut(this.toolStripMenuItemSwap, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemSwap.Size = new System.Drawing.Size(187, 22);
-			this.toolStripMenuItemSwap.Text = "xxSwap";
-			this.toolStripMenuItemSwap.Click += new System.EventHandler(this.toolStripMenuItemSwapClick);
-			// 
-			// toolStripMenuItemSwapAndReschedule
-			// 
-			this.toolStripMenuItemSwapAndReschedule.Name = "toolStripMenuItemSwapAndReschedule";
-			this.SetShortcut(this.toolStripMenuItemSwapAndReschedule, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemSwapAndReschedule.Size = new System.Drawing.Size(187, 22);
-			this.toolStripMenuItemSwapAndReschedule.Text = "xxSwapAndReschedule";
-			this.toolStripMenuItemSwapAndReschedule.Click += new System.EventHandler(this.toolStripMenuItemSwapAndRescheduleClick);
-			// 
-			// ToolStripMenuItemSwapRaw
-			// 
-			this.ToolStripMenuItemSwapRaw.Name = "ToolStripMenuItemSwapRaw";
-			this.SetShortcut(this.ToolStripMenuItemSwapRaw, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemSwapRaw.Size = new System.Drawing.Size(187, 22);
-			this.ToolStripMenuItemSwapRaw.Text = "xxSwapRaw";
-			this.ToolStripMenuItemSwapRaw.Click += new System.EventHandler(this.toolStripMenuItemSwapRawClick);
 			// 
 			// SchedulingScreen
 			// 
