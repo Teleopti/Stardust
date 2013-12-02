@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -197,6 +198,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockSchedulingService(builder);
             registerTeamBlockOptimizationService(builder);
             registerFairnessOptimizationService(builder);
+			registerEqualNumberOfCategoryFairnessService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
             builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
@@ -208,7 +210,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
         }
 
-        
+        private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
+        {
+			builder.RegisterType<EqualNumberOfCategoryFairnessService>().As<IEqualNumberOfCategoryFairnessService>();
+			builder.RegisterType<DistributionForPersons>().As<IDistributionForPersons>();
+			builder.RegisterType<FilterForEqualNumberOfCategoryFairness>().As<IFilterForEqualNumberOfCategoryFairness>();
+        }
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)
         {
