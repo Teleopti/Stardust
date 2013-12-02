@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalUpdate(conflicts.First().DatabaseVersion, true);
                 forgetAboutDebugAssertsOnMock(0);
-                view.CloseForm(PersistConflictDialogResult.OK);
+                view.CloseForm();
             }
             using(mocks.Playback())
             {
@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[pDayOff.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalDeletion(conflicts.First().ClientVersion.OriginalItem.Id.Value, true);
                 forgetAboutDebugAssertsOnMock(0);
-				view.CloseForm(PersistConflictDialogResult.OK);
+				view.CloseForm();
             }
             using (mocks.Playback())
             {
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
-				view.CloseForm(PersistConflictDialogResult.Overwrite);
+				view.CloseForm();
             }
             using (mocks.Playback())
             {
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalUpdate(dataDb, false);
                 forgetAboutDebugAssertsOnMock(1);
-				view.CloseForm(PersistConflictDialogResult.Overwrite);
+				view.CloseForm();
             }
             using (mocks.Playback())
             {
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Expect.Call(schedDic[dataOrg.Person]).Return(range);
                 range.SolveConflictBecauseOfExternalDeletion(dataOrg.Id.Value, false);
                 forgetAboutDebugAssertsOnMock(1);
-				view.CloseForm(PersistConflictDialogResult.Overwrite);
+				view.CloseForm();
             }
             using (mocks.Playback())
             {
@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             using (mocks.Record())
             {
-				view.CloseForm(PersistConflictDialogResult.Cancel);
+				view.CloseForm();
             }
             using (mocks.Playback())
             {

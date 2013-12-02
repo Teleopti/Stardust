@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public interface IPersistConflictView
     {
         void SetupGridControl(IEnumerable<PersistConflictData> conflictCollection);
-        void CloseForm(PersistConflictDialogResult dialogResult);
+        void CloseForm();
     }
 }
