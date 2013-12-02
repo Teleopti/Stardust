@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> ()));
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(selectedPersons, date, "ROOT", _guid)).Return(groupPerson);
-			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons));
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons)).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.Id).Return(_guid);
 
 			_mocks.ReplayAll();
@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT",_guid)).Return(groupPerson);
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2, _person3 }, date, "ROOT2", _guid)).Return(groupPerson2);
 
-			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1));
-			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2));
-
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1)).Repeat.AtLeastOnce();
+			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2)).Repeat.AtLeastOnce();
+			
 			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> ()));
 			Expect.Call(rootGroup2.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> ()));
 			Expect.Call(rootGroup.Id).Return(_guid);
@@ -166,10 +166,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var personColl1 = new List<IPerson> { _person1, _person4, _person5 };
 			var personColl2 = new List<IPerson> { _person2, _person3 };
 			var members1 = new List<IPerson> { _person1 };
-			
-			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
+
+			var selectedPersons = new List<IPerson> { _person1 };
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var groupPerson2 = _mocks.StrictMock<IGroupPerson>();
 
             Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
@@ -180,19 +179,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
 			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
-			Expect.Call(rootGroup2.Description).Return(new Description("ROOT2"));
 
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT", _guid)).Return(groupPerson);
-			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2, _person3 }, date, "ROOT2", _guid)).Return(groupPerson2);
 
-			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1));
-			// empty for some internal reason in GroupPerson
-			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>()));
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1)).Repeat.AtLeastOnce();
 
 			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 			Expect.Call(rootGroup2.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 			Expect.Call(rootGroup.Id).Return(_guid);
-			Expect.Call(rootGroup2.Id).Return(_guid);
 
 			_mocks.ReplayAll();
             _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
@@ -214,8 +208,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var childPersonGroup = _mocks.StrictMock<IChildPersonGroup>();
 			var personColl1 = new List<IPerson> { _person1, _person4, _person5 };
 			var personColl2 = new List<IPerson> { _person2, _person3 };
-			var personColl3 = new List<IPerson> { _person2 };
-			var personColl4 = new List<IPerson> { _person3 };
 			var members1 = new List<IPerson> { _person1 };
 			var members2 = new List<IPerson> { _person2, _person3 };
 
@@ -239,18 +231,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT", _guid)).Return(groupPerson);
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2, _person3 }, date, "CHILD", _guid)).Return(groupPerson2);
-			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2 }, date, "a-a", _guid)).Return(groupPerson3);
-			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person3 }, date, "b-b", _guid)).Return(groupPerson4);
-
-			Expect.Call(_person2.Name).Return(new Name("a","a")).Repeat.AtLeastOnce();
-			Expect.Call(_person3.Name).Return(new Name("b","b")).Repeat.AtLeastOnce();
-			Expect.Call(_person2.Id).Return(_guid);
-			Expect.Call(_person3.Id).Return(_guid);
-
+			
 			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1)).Repeat.AtLeastOnce();
 			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2)).Repeat.AtLeastOnce();
-			Expect.Call(groupPerson3.GroupMembers).Return(new ReadOnlyCollection<IPerson>(personColl3)).Repeat.AtLeastOnce();
-			Expect.Call(groupPerson4.GroupMembers).Return(new ReadOnlyCollection<IPerson>(personColl4)).Repeat.AtLeastOnce();
 
 			Expect.Call(childPersonGroup.ChildGroupCollection).Return(
 				new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
@@ -263,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 
             var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 
-			Assert.That(ret.Count, Is.EqualTo(4));
+			Assert.That(ret.Count, Is.EqualTo(2));
 			_mocks.VerifyAll();
 		}
 
@@ -288,10 +271,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
             Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(selectedAndInDictionary, date, "ROOT", _guid)).Return(groupPerson);
-            Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons));
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons)).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.Id).Return(_guid);
-			Expect.Call(_person1.Name).Return(new Name("a", "a")).Repeat.AtLeastOnce();
-			Expect.Call(_person1.Id).Return(_guid);
 
             _mocks.ReplayAll();
             _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
@@ -326,10 +307,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
             Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(selectedAndInDictionary, date, "ROOT", _guid)).Return(groupPerson);
-            Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons));
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons)).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.Id).Return(_guid);
-			Expect.Call(_person1.Name).Return(new Name("a", "a")).Repeat.AtLeastOnce();
-			Expect.Call(_person1.Id).Return(_guid);
 
             _mocks.ReplayAll();
             _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
