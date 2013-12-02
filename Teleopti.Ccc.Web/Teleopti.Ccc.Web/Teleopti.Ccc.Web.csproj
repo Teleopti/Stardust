@@ -721,7 +721,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addabsenceform.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addintradayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\person.js" />
@@ -1165,7 +1165,6 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Anywhere\Models\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
   </ItemGroup>
   <ItemGroup>

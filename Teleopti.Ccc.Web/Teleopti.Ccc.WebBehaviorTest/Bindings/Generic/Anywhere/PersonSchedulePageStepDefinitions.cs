@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var values = table.CreateInstance<AddIntradayAbsenceFormInfo>();
 
-			Browser.Interactions.SelectOptionByTextUsingJQuery(".intraday-absence-form .activity-type", values.Absence);
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".intraday-absence-form .absence-type", values.Absence);
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".intraday-absence-form .start-time", values.StartTime.ToShortTimeString(DataMaker.Me().Culture));
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".intraday-absence-form .end-time", values.EndTime.ToShortTimeString(DataMaker.Me().Culture));
 		}

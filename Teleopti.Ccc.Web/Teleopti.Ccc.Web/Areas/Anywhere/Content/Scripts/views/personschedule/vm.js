@@ -2,10 +2,11 @@ define([
 	'knockout',
 	'navigation',
 	'shared/timeline',
+	'views/personschedule/person',
 	'views/personschedule/addactivityform',
 	'views/personschedule/addfulldayabsenceform',
 	'views/personschedule/absencelistitem',
-	'views/personschedule/addabsenceform',
+	'views/personschedule/addintradayabsenceform',
 	'shared/group-page',
 	'helpers',
 	'resources!r',
@@ -15,10 +16,11 @@ define([
 	ko,
 	navigation,
 	timeLineViewModel,
+	personViewModel,
 	addActivityFormViewModel,
 	addFullDayAbsenceFormViewModel,
 	absenceListItemViewModel,
-	addAbsenceFormViewModel,
+	addIntradayAbsenceFormViewModel,
 	groupPageViewModel,
 	helpers,
 	resources,
@@ -32,27 +34,21 @@ define([
 		
 		this.Loading = ko.observable(false);
 		
-		this.PersonsInGroup = ko.observableArray();
+		this.Persons = ko.observableArray();
 
-		this.Id = ko.observable("");
+		this.PersonId = ko.observable();
+		this.GroupId = ko.observable();
 		this.Date = ko.observable();
 
 		this.SelectedPerson = ko.computed(function () {
-			if (self.PersonsInGroup().length > 0) {
-				var selectedPerson = lazy(self.PersonsInGroup())
-					.select(function(x) {
-						if (x.Id == self.Id()) {
-							return x.Name;
-						}
-					});
-				return selectedPerson.first();
-			}
-			return "";
+			return lazy(self.Persons())
+				.select(function (x) { return x.Id == self.PersonId(); })
+				.first();
 		});
 
 		this.Name = ko.computed(function () {
 			if(self.SelectedPerson())
-				return self.SelectedPerson().Name;
+				return self.SelectedPerson().Name();
 			return "";
 		});
 
@@ -68,15 +64,9 @@ define([
 			return "";
 		});
 		
-		this.ContractTime = ko.computed(function () {
-			if (self.SelectedPerson())
-				return self.SelectedPerson().ContractTime();
-			return 0;
-		});
-
 		this.Absences = ko.observableArray();
 		
-		this.TimeLine = new timeLineViewModel(this.PersonsInGroup); 
+		this.TimeLine = new timeLineViewModel(this.Persons);
 		
 		this.Shift = ko.computed(function () {
 			if (self.SelectedPerson()) {
@@ -117,36 +107,54 @@ define([
 		this.AddActivityForm = new addActivityFormViewModel();
 		this.AddingActivity = ko.observable(false);
 		
-		this.AddAbsenceForm = new addAbsenceFormViewModel();
-		this.AddingAbsence = ko.observable(false);
+		this.AddIntradayAbsenceForm = new addIntradayAbsenceFormViewModel();
+		this.AddingIntradayAbsence = ko.observable(false);
 
 		this.DisplayShiftMenu = ko.computed(function() {
-			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingAbsence();
+			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence();
 		});
 
 		this.DisplayDescriptions = ko.observable(false);
 		this.ToggleDisplayDescriptions = function () {
 			self.DisplayDescriptions(!self.DisplayDescriptions());
 		};
+		
+		this.SetData = function (data, timeLine) {
 
-		this.AddPersonsToGroup = function (persons) {
-			self.PersonsInGroup.push.apply(self.PersonsInGroup, persons);
-		};
+			var person = self.SelectedPerson();
+			if (!person) {
+				person = new personViewModel({ Id: self.PersonId() });
+				self.Persons.push(person);
+			}
+			//person.AddData(data, timeLine);
 
-		this.SetData = function (data, groupid) {
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
-				a.PersonId = self.Id();
+				a.PersonId = self.PersonId();
 				a.Date = self.Date();
 				return new absenceListItemViewModel(a);
 			});
 			self.Absences.push.apply(self.Absences, absences);
 
-			data.PersonId = self.Id();
-
+			data.PersonId = self.PersonId();
+			data.Date = self.Date();
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
-			self.AddAbsenceForm.SetData(data, groupid);
+			self.AddIntradayAbsenceForm.SetData(data, self.GroupId());
+		};
+
+		this.AddPersons = function (data) {
+			for (var i = 0; i < data.length; i++) {
+				var personData = data[i];
+				var person = lazy(self.Persons())
+					.select(function (x) { return x.Id == personData.Id; })
+					.first();
+				if (person) {
+					person.SetData(personData);
+				} else {
+					self.Persons.push(new personViewModel(personData));
+				}
+			}
 		};
 
 		this.AddFullDayAbsence = function () {

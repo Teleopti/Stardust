@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Add intraday absence on shift
+﻿Feature: Add intraday absence on shift
 	In order to keep track of persons absences
 	As a team leader
 	I want to add that an agent is absent for a part of his/her shift
@@ -39,7 +38,7 @@ Scenario: View form
 	| End time       | 2013-11-15 17:00 |
 	When I view schedules for 'Team green' on '2013-11-15'
 	And I select any schedule activity for 'Pierre Baldi'
-	And I click 'add intraday absence'
+	And I click 'add intraday absence' in shift menu
 	Then I should see the add intraday absence form
 
 Scenario: Default times today
@@ -93,6 +92,7 @@ Scenario: Add on shift
 	| End time   | 17:00 |
 	| Color      | Red   |
 
+@ignore
 Scenario: Add after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And there is a shift category named 'Night'
@@ -110,10 +110,10 @@ Scenario: Add after midnight on night shift
 	| End time   | 04:00   |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-16 01:00 |
-	| End time   | 2013-11-16 04:00 |
-	| Color      | Red              |
+	| Field      | Value |
+	| Start time | 01:00 |
+	| End time   | 04:00 |
+	| Color      | Red   |
 
 Scenario: Add cross midnight on night shift
 	Given I have the role 'Anywhere Team Green'
@@ -132,10 +132,10 @@ Scenario: Add cross midnight on night shift
 	| End time   | 01:00   |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-15 23:00 |
-	| End time   | 2013-11-16 01:00 |
-	| Color      | Red              |
+	| Field      | Value |
+	| Start time | 23:00 |
+	| End time   | 01:00 |
+	| Color      | Red   |
 
 Scenario: Adding overlapping of shift
 	Given I have the role 'Anywhere Team Green'
@@ -153,10 +153,26 @@ Scenario: Adding overlapping of shift
 	| End time   | 18:00   |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-15 16:00 |
-	| End time   | 2013-11-15 17:00 |
-	| Color      | Red              |
+	| Field      | Value |
+	| Start time | 16:00 |
+	| End time   | 17:00 |
+	| Color      | Red   |
+
+Scenario: Prevent invalid times
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-15 11:00 |
+	| End time       | 2013-11-15 17:00 |
+	When I view person schedules add intraday absence form for 'Pierre Baldi' in 'Team green' on '2013-11-15'
+	And I input these intraday absence values
+	| Field      | Value   |
+	| Absence    | Illness |
+	| Start time | 15:00   |
+	| End time   | 14:00   |
+	Then I should see the alert 'Invalid end time'
 
 Scenario: Prevent adding outside of shift
 	Given I have the role 'Anywhere Team Green'
@@ -172,4 +188,4 @@ Scenario: Prevent adding outside of shift
 	| Absence    | Illness |
 	| Start time | 17:00   |
 	| End time   | 18:00   |
-	Then I should see the validation error 'Please add intraday absence on existing shift'
+	Then I should see the alert 'Please add intraday absence on existing shift'

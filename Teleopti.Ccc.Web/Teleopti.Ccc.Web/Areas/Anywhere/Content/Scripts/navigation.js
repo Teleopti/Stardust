@@ -31,8 +31,8 @@ define([
             	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addactivity';
             },
             
-            GotoPersonScheduleAddAbsenceForm: function (groupid, personid, date) {
-            	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addabsence';
+            GotoPersonScheduleAddIntradayAbsenceForm: function (groupid, personid, date) {
+            	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addintradayabsence';
             },
         	
             GotoPersonScheduleWithAction: function (groupid, personid, date, action) {

@@ -1,7 +1,7 @@
 <div class="person-schedule container">
 	
-	<!-- ko if: true -->
-	<div class="row">
+	
+	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span12 page-header">
 			<h1>
 				<span data-bind="text: Name"></span>
@@ -19,7 +19,7 @@
 		</div>
 	</div>
 	
-	<div class="row">
+	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span12">
 			<form action="#">
 				<div class="btn-group">
@@ -28,7 +28,7 @@
 			</form>
 		</div>
 	</div>
-	<!-- /ko -->
+	
 
 	<div class="row">
 		<div class="span12">
@@ -45,7 +45,7 @@
 				</div>
 				<!-- /ko -->
 				
-				<table class="table table-hover" data-bind="if: true">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th></th>
@@ -54,10 +54,9 @@
 					</thead>
 					
 					<tbody>
-						<tr class="person selected-person" data-bind="attr: { 'data-person-id': Id }">
+						<tr class="person selected-person" data-bind="attr: { 'data-person-id': PersonId }">
 							<td class="person-name person-name-column">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
-								<div class="person-name nowrap"></div>
+								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
@@ -86,30 +85,35 @@
 							</td>
 						</tr>
 						
-						<tr data-bind="if: DisplayShiftMenu">
+						<tr class="shift-menu-row" data-bind="if: DisplayShiftMenu">
 							<td class="shift-menu-background person-name-column"></td>
 							<td class="shift-menu-background schedule-column">
 								<div class="row-fluid space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
 									<div class="span3">
-										<!--<blockquote>-->
-										<!-- ko if: $root.AddingAbsence -->
-										<!-- ko with: $root.AddAbsenceForm -->
-										<form action="#" class="form activity-form">
-											<select id="Select1" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
+										<!-- ko if: $root.AddingIntradayAbsence -->
+										<!-- ko with: $root.AddIntradayAbsenceForm -->
+										<form action="#" class="intraday-absence-form">
+											<select class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
 											</select>
 											<div class="input-append input-prepend bootstrap-timepicker">
 												<span class="add-on"><i class="icon-step-backward"></i></span>
-												<input type="text" class="start-time input-mini" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+												<input type="text" class="start-time input-mini" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
 												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
 											
 											<div class="input-append input-prepend bootstrap-timepicker">
 												<span class="add-on"><i class="icon-step-forward"></i></span>
-												<input type="text" class="start-time input-mini" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: false, allowEmpty: true }" />
+												<input type="text" class="end-time input-mini" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
 												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
 											
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+											<!-- ko if: ErrorMessage() -->
+											<div class="alert">
+												<span data-bind="text: ErrorMessage()"></span>
+											</div>
+											<!-- /ko -->
+											
+											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
 					
 										</form>
 										
@@ -169,7 +173,6 @@
 										</form>
 										<!-- /ko -->
 										<!-- /ko -->
-										<!--</blockquote>-->
 									</div>
 									
 									
@@ -180,10 +183,19 @@
 
 						<!-- ko if: AddingActivity -->
 						
-						<!-- ko foreach: PersonsInGroup -->
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.Id() != Id">
+						<tr>
+							<td colspan="2" style="background-color: white; border: none" >
+								<h4>
+									<span >Part-Time Percentage</span>
+									\ 
+									<span >100%</span>
+								</h4>
+							</td>
+						</tr>
+
+						<!-- ko foreach: Persons -->
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
 							</td>
 							<td class="schedule schedule-column" style="padding-top: 4px">
@@ -228,7 +240,7 @@
 		</div>
 	</div>
 	
-	<div class="row" data-bind="ifnot: AddingActivity">
+	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span8">
 			<table class="table absence-list">
 				<tbody data-bind="foreach: Absences">

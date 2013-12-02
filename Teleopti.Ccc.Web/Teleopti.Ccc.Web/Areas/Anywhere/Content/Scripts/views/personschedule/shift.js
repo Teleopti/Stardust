@@ -46,7 +46,7 @@ define([
 				return self.Layers()[0].StartPixels();
 			return 0;
 		});
-
+		
 		this.DistinctLayers = ko.computed(function () {
 			var array = self.Layers();
 			var result = [];

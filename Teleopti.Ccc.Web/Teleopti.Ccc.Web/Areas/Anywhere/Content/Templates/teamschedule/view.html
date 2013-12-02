@@ -77,7 +77,7 @@
 						</tr>
 					</thead>
 					<tbody data-bind="foreach: Persons">
-						<tr class="person" data-bind="attr: { 'data-person-id': Id }">
+						<tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonSelected }">
 							<td class="person-name person-name-column" data-bind="click: $root.SelectPerson">
 								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name"></div>
@@ -117,7 +117,7 @@
 						<!-- ko foreach: Shifts -->
 						<!-- ko foreach: Layers -->
 						<!-- ko if: Selected -->
-						<tr>
+						<tr class="shift-menu-row">
 							<td class="shift-menu-background person-name-column"></td>
 							<td class="shift-menu-background schedule-column" colspan="2">
 								<div class="activity-details" data-bind="style: {'margin-left': StartPixels() + 'px'}">
@@ -136,8 +136,8 @@
 									<!-- ko with: $parent.ShiftMenu -->
 									<div class="btn-group">
 										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
+										<a href="#" class="btn btn-small add-intraday-absence" data-bind="click: $data.AddIntradayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
 										<!-- ko if: false -->
-											<a href="#" class="btn btn-small add-intraday-absence" data-bind="click: $data.AddAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
 											<a href="#" class="btn btn-small add-activity" data-bind="click: $data.AddActivity"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
 										<!-- /ko -->
 										<a href="#" class="btn btn-small remove-absence" data-bind="click: $data.RemoveAbsence"><i class="icon-minus"></i><span data-bind="	text: $root.Resources.Absence"></span></a>

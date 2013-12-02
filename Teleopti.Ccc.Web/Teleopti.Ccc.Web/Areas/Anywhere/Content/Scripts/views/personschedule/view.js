@@ -7,23 +7,19 @@ define([
 		'text!templates/personschedule/view.html',
 		'resizeevent',
 		'views/personschedule/person',
-		'ajax',
-		'navigation',
-		'lazy'
+		'ajax'
 ], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
 		helpers,
 		view,
-	    resize,
+		resize,
 		personViewModel,
-		ajax,
-		navigation,
-		lazy
+		ajax
 	) {
 
-	var personSchedule;
+	var viewModel;
 
 	var loadSchedules = function (options) {
 		var date = moment(options.date, "YYYYMMDD");
@@ -31,17 +27,15 @@ define([
 			options.groupid,
 			helpers.Date.ToServer(date),
 			function (schedules) {
-				var currentPersons = personSchedule.PersonsInGroup();
+				var currentPersons = viewModel.Persons();
 
 				for (var i = 0; i < currentPersons.length; i++) {
-					if (currentPersons[i].Id != options.personid) {
-						currentPersons[i].ClearData();
+					currentPersons[i].ClearData();
 
-						for (var j = 0; j < schedules.length; j++) {
-							if (currentPersons[i].Id == schedules[j].PersonId) {
-								schedules[j].Date = date;
-								currentPersons[i].AddData(schedules[j], personSchedule.TimeLine);
-							}
+					for (var j = 0; j < schedules.length; j++) {
+						if (currentPersons[i].Id == schedules[j].PersonId) {
+							schedules[j].Date = date;
+							currentPersons[i].AddData(schedules[j], viewModel.TimeLine);
 						}
 					}
 				}
@@ -52,15 +46,16 @@ define([
 					return first == second ? 0 : (first < second ? -1 : 1);
 				});
 
-				personSchedule.PersonsInGroup.valueHasMutated();
+				viewModel.Persons.valueHasMutated();
 
 				options.success();
 
 				resize.notify();
 			},
 			function (notification) {
-				for (var i = 0; i < personSchedule.PersonsInGroup().length; i++) {
-					if (notification.DomainReferenceId == personSchedule.PersonsInGroup()[i].Id) {
+				var persons = viewModel.Persons();
+				for (var i = 0; i < persons.length; i++) {
+					if (notification.DomainReferenceId == persons[i].Id) {
 						return true;
 					}
 				}
@@ -76,18 +71,8 @@ define([
 				date: helpers.Date.ToServer(moment(options.date, "YYYYMMDD")),
 				groupId: options.groupid
 			},
-			success: function (people, textStatus, jqXHR) {
-
-				var newPeople = lazy(people)
-						.filter(function (x) {
-							return options.personid != x.Id;
-						});
-
-				var newItems = ko.utils.arrayMap(newPeople.toArray(), function (s) {
-					return new personViewModel(s);
-				});
-				
-				personSchedule.AddPersonsToGroup(newItems);
+			success: function (data, textStatus, jqXHR) {
+				viewModel.AddPersons(data);
 				options.success();
 			}
 		});
@@ -98,30 +83,31 @@ define([
 
 			options.renderHtml(view);
 
-			personSchedule = new personScheduleViewModel();
+			viewModel = new personScheduleViewModel();
 
 			resize.onresize(function () {
-				personSchedule.TimeLine.WidthPixels($('.time-line-for').width());
+				viewModel.TimeLine.WidthPixels($('.time-line-for').width());
 
 			});
-			
-			ko.applyBindings(personSchedule, options.bindingElement);
+
+			ko.applyBindings(viewModel, options.bindingElement);
 		},
 
 		display: function (options) {
 			var date = moment(options.date, 'YYYYMMDD');
 
-			personSchedule.Loading(true);
-			
-			personSchedule.Id(options.personid != undefined ? options.personid : options.id);
-			personSchedule.Date(date);
+			viewModel.Loading(true);
+
+			viewModel.PersonId(options.personid != undefined ? options.personid : options.id);
+			viewModel.GroupId(options.groupid);
+			viewModel.Date(date);
 
 			var deferred = $.Deferred();
-			
+
 			var loadPersonsAndSchedules = function () {
 				var currentGroup = options.groupid;
 				if (!currentGroup) {
-					personSchedule.Loading(false);
+					viewModel.Loading(false);
 					deferred.resolve();
 					return;
 				}
@@ -136,7 +122,7 @@ define([
 							date: options.date,
 							personid: options.personid,
 							success: function () {
-								personSchedule.Loading(false);
+								viewModel.Loading(false);
 								deferred.resolve();
 							}
 						});
@@ -145,30 +131,20 @@ define([
 			};
 
 			subscriptions.subscribePersonSchedule(
-				    options.personid ? options.personid : options.id,
-				    helpers.Date.ToServer(personSchedule.Date()),
-				    function (data) {
-				    	resize.notify();
+				viewModel.PersonId(),
+				helpers.Date.ToServer(viewModel.Date()),
+				function (data) {
+					viewModel.SetData(data, viewModel.TimeLine);
+					loadPersonsAndSchedules();
+				}
+			);
 
-				    	data.Id = options.personid ? options.personid : options.id;
-				    	data.Date = personSchedule.Date();
-
-				    	personSchedule.PersonsInGroup([]);
-					    
-						var person = new personViewModel(data);
-						person.AddData(data, personSchedule.TimeLine);
-						personSchedule.AddPersonsToGroup([person]);
-					    
-						personSchedule.SetData(data, options.groupid);
-					    
-						if (personSchedule.AddingActivity()) {
-							loadPersonsAndSchedules();
-						} else {
-							personSchedule.Loading(false);
-							deferred.resolve();
-						}
-				    }
-			    );
+			//subscriptions.subscribeGroupSchedules(
+			//	viewModel.GroupId(),
+			//	helpers.Date.ToServer(viewModel.Date()),
+			//	function (data) {
+			//		viewModel.SetSchedules(data);
+			//	});
 
 			return deferred.promise();
 		},
@@ -179,25 +155,25 @@ define([
 		},
 
 		clearaction: function (options) {
-			personSchedule.AddingFullDayAbsence(false);
-			personSchedule.AddingActivity(false);
-			personSchedule.AddingAbsence(false);
+			viewModel.AddingFullDayAbsence(false);
+			viewModel.AddingActivity(false);
+			viewModel.AddingIntradayAbsence(false);
 		},
 
 		addfulldayabsence: function (options) {
-			personSchedule.AddingFullDayAbsence(true);
+			viewModel.AddingFullDayAbsence(true);
 		},
 
 		addactivity: function (options) {
-			personSchedule.AddingActivity(true);
+			viewModel.AddingActivity(true);
 		},
-		
-		addabsence: function (options) {
-			personSchedule.AddingAbsence(true);
+
+		addintradayabsence: function (options) {
+			viewModel.AddingIntradayAbsence(true);
 		},
 
 		setDateFromTest: function (date) {
-			personSchedule.AddFullDayAbsenceForm.EndDate(moment(date));
+			viewModel.AddFullDayAbsenceForm.EndDate(moment(date));
 		}
 	};
 });
