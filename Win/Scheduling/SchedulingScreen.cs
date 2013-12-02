@@ -6366,15 +6366,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private PersistConflictDialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<PersistConflict> conflicts)
+		private void showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<PersistConflict> conflicts)
 		{
-			PersistConflictDialogResult dialogResult;
 			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData, _schedulerMessageBrokerHandler))
 			{
 				conflictForm.ShowDialog();
-				dialogResult = conflictForm.DialogResult;
 			}
-			return dialogResult;
 		}
 
 		private void refreshEntitiesUsingMessageBroker(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)
