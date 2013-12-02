@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.TestCommon
 				{
 					using (var conn = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTests))
 					{
+						SqlConnection.ClearPool(conn);
 						conn.Open();
 						using (var cmd = new SqlCommand("exec [dbo].[MergePersonAssignments]", conn))
 							cmd.ExecuteNonQuery();
