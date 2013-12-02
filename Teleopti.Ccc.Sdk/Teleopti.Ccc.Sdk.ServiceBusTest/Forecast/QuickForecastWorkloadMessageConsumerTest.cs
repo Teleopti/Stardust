@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -20,7 +21,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class QuickForecastWorkloadMessageConsumerTest
 	{
-		private MockRepository _mocks;
 		private ISkillDayRepository _skillDayRep;
 		private QuickForecastWorkloadMessageConsumer _target;
 		private IOutlierRepository _outlierRep;
@@ -39,28 +39,31 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		private IStatisticHelper _statisticHelper;
 		private DateOnlyPeriod _statPeriod;
 		private IForecastClassesCreator _forecastClassesCreator;
+		private IMultisiteDayRepository _multisiteDayRep;
+		private IRepository<IMultisiteSkill> _skillRep;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_skillDayRep = _mocks.DynamicMock<ISkillDayRepository>();
-			_outlierRep = _mocks.DynamicMock<IOutlierRepository>();
-			_workloadRep = _mocks.DynamicMock<IWorkloadRepository>();
-			_scenarioRep = _mocks.DynamicMock<IScenarioRepository>();
-			_repFactory = _mocks.DynamicMock<IRepositoryFactory>();
-			_currentunitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-			_unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
-			_jobResultRep = _mocks.DynamicMock<IJobResultRepository>();
-			_jobResultFeedback = _mocks.DynamicMock<IJobResultFeedback>();
-			_messBroker = _mocks.DynamicMock<IMessageBroker>();
-			_workloadDayHelper = _mocks.DynamicMock<IWorkloadDayHelper>();
-			_statisticHelper = _mocks.DynamicMock<IStatisticHelper>();
-			_forecastClassesCreator = _mocks.DynamicMock<IForecastClassesCreator>();
-			_target = new QuickForecastWorkloadMessageConsumer(_skillDayRep, _outlierRep, _workloadRep, _scenarioRep, _repFactory,
+			_skillDayRep = MockRepository.GenerateMock<ISkillDayRepository>();
+			_multisiteDayRep = MockRepository.GenerateMock<IMultisiteDayRepository>();
+			_outlierRep = MockRepository.GenerateMock<IOutlierRepository>();
+			_workloadRep = MockRepository.GenerateMock<IWorkloadRepository>();
+			_skillRep = MockRepository.GenerateMock<IRepository<IMultisiteSkill>>();
+			_scenarioRep = MockRepository.GenerateMock<IScenarioRepository>();
+			_repFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+			_currentunitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			_jobResultRep = MockRepository.GenerateMock<IJobResultRepository>();
+			_jobResultFeedback = MockRepository.GenerateMock<IJobResultFeedback>();
+			_messBroker = MockRepository.GenerateMock<IMessageBroker>();
+			_workloadDayHelper = MockRepository.GenerateMock<IWorkloadDayHelper>();
+			_statisticHelper = MockRepository.GenerateMock<IStatisticHelper>();
+			_forecastClassesCreator = MockRepository.GenerateMock<IForecastClassesCreator>();
+			_target = new QuickForecastWorkloadMessageConsumer(_skillDayRep, _multisiteDayRep, _outlierRep, _workloadRep, _skillRep, _scenarioRep, _repFactory,
 															   _currentunitOfWorkFactory, _jobResultRep, _jobResultFeedback, _messBroker,
 															   _workloadDayHelper, _forecastClassesCreator);
-			_unitOfWork =  _mocks.DynamicMock<IUnitOfWork>();
+			_unitOfWork =  MockRepository.GenerateMock<IUnitOfWork>();
 
 			_jobId = Guid.NewGuid();
 			_statPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 31);
@@ -70,150 +73,182 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		[Test]
 		public void ShouldExitIfWrongJobId()
 		{
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
-			Expect.Call(_jobResultRep.Get(_jobId)).Return(null);
-			_mocks.ReplayAll();
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_jobResultRep.Stub(x => x.Get(_jobId)).Return(null);
+			
 			_target.Consume(_mess);
-			_mocks.VerifyAll();
+			
+			_workloadRep.AssertWasNotCalled(x => x.Get(Guid.Empty),o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldExitIfWrongWorkloadId()
 		{
-			var jobResult = _mocks.DynamicMock<IJobResult>();
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
-			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
-			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(null);
-			_mocks.ReplayAll();
+			var jobResult = MockRepository.GenerateMock<IJobResult>();
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
+			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(null);
+			
 			_target.Consume(_mess);
-			_mocks.VerifyAll();
+
+			_scenarioRep.AssertWasNotCalled(x => x.Get(Guid.Empty), o => o.IgnoreArguments());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void ShouldForecast()
 		{
-			var jobResult = _mocks.DynamicMock<IJobResult>();
-			var workload = _mocks.DynamicMock<IWorkload>();
-			var scenario = _mocks.DynamicMock<IScenario>();
-			var skillDayCalc = _mocks.DynamicMock<ISkillDayCalculator>();
-			var totalVolume = _mocks.DynamicMock<ITotalVolume>();
-			var validatedRep = _mocks.DynamicMock<IValidatedVolumeDayRepository>();
-			var workloadDayTemplateCalculator = _mocks.DynamicMock<IWorkloadDayTemplateCalculator>();
-			var taskOwner = _mocks.DynamicMock<ITaskOwner>();
+			var jobResult = MockRepository.GenerateMock<IJobResult>();
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("Sales"));
+			var scenario = MockRepository.GenerateMock<IScenario>();
+			var skillDayCalc = MockRepository.GenerateMock<ISkillDayCalculator>();
+			var totalVolume = MockRepository.GenerateMock<ITotalVolume>();
+			var validatedRep = MockRepository.GenerateMock<IValidatedVolumeDayRepository>();
+			var workloadDayTemplateCalculator = MockRepository.GenerateMock<IWorkloadDayTemplateCalculator>();
+			var taskOwner = MockRepository.GenerateMock<ITaskOwner>();
 			var teskOwners = new List<ITaskOwner> {taskOwner};
-			//var taskOwnerPeriod = _mocks.DynamicMock<ITaskOwnerPeriod>();
 			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013,1,1),new List<ITaskOwner>(),TaskOwnerPeriodType.Other  );
-			var template = _mocks.DynamicMock<IWorkloadDayTemplate>();
-
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
-			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
-			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
-			Expect.Call(() =>_jobResultFeedback.SetJobResult(jobResult, _messBroker));
-			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
-			Expect.Call(_statisticHelper.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
-			Expect.Call(_repFactory.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
-
-			Expect.Call(validatedRep.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
-			Expect.Call(validatedRep.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>(),
-												false)).Return(new List<ITaskOwner>()).IgnoreArguments();
-
-			Expect.Call(_statisticHelper.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario,
-			                                                                    new List<IValidatedVolumeDay>()))
-				  .Return(teskOwners);
-			Expect.Call(_forecastClassesCreator.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
-			Expect.Call(_outlierRep.FindByWorkload(workload)).Return(new List<IOutlier>());
-			Expect.Call(_skillDayRep.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments()
-			      .Return(new Collection<ISkillDay>());
-			Expect.Call(_forecastClassesCreator.CreateSkillDayCalculator(null, new List<ISkillDay>(), _statPeriod))
-			      .IgnoreArguments()
-			      .Return(skillDayCalc);
-			Expect.Call(_workloadDayHelper.GetWorkloadDaysFromSkillDays(new List<ISkillDay>(), workload)).IgnoreArguments()
-			      .Return(new List<IWorkloadDayBase>());
-
 			
-			Expect.Call(_forecastClassesCreator.CreateTotalVolume()).Return(totalVolume);
-			totalVolume.Create(null,new List<ITaskOwner>() , new List<IVolumeYear>(),
-			                               new List<IOutlier>(), 0, 0, false,workload);
-			LastCall.IgnoreArguments();
+			_currentunitOfWorkFactory.Stub(x=> x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x=> x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
+			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
+			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
+			_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
+			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
+			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
-			Expect.Call(_forecastClassesCreator.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep))
-			      .Return(workloadDayTemplateCalculator);
-			Expect.Call(() => workloadDayTemplateCalculator.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload))
-			      .IgnoreArguments();
-			Expect.Call(workload.GetTemplateAt(TemplateTarget.Workload, 1)).IgnoreArguments().Return(template);
-			_mocks.ReplayAll();
+			validatedRep.Stub(x=> x.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
+			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>(), false)).Return(new List<ITaskOwner>()).IgnoreArguments();
+
+			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>())).Return(teskOwners);
+			_forecastClassesCreator.Stub(x => x.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
+			_outlierRep.Stub(x => x.FindByWorkload(workload)).Return(new List<IOutlier>());
+			_skillDayRep.Stub(x => x.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments().Return(new Collection<ISkillDay>());
+			_forecastClassesCreator.Stub(x => x.CreateSkillDayCalculator(null, new List<ISkillDay>(), _statPeriod)).IgnoreArguments().Return(skillDayCalc);
+			_workloadDayHelper.Stub(x => x.GetWorkloadDaysFromSkillDays(new List<ISkillDay>(), workload)).IgnoreArguments().Return(new List<IWorkloadDayBase>());
+
+			_forecastClassesCreator.Stub(x => x.CreateTotalVolume()).Return(totalVolume);
+			totalVolume.Create(null,new List<ITaskOwner>() , new List<IVolumeYear>(), new List<IOutlier>(), 0, 0, false,workload);
+
+			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
+			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(null);
+			
 			_target.Consume(_mess);
-			_mocks.VerifyAll();
+
+			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
+			                                              o => o.IgnoreArguments());
+		}
+
+		[Test]
+		public void ShouldForecastMultisiteSkill()
+		{
+			var jobResult = MockRepository.GenerateMock<IJobResult>();
+			var workload = WorkloadFactory.CreateWorkload(SkillFactory.CreateSkill("Sales"));
+			var scenario = MockRepository.GenerateMock<IScenario>();
+			var skillDayCalc = MockRepository.GenerateMock<ISkillDayCalculator>();
+			var totalVolume = MockRepository.GenerateMock<ITotalVolume>();
+			var validatedRep = MockRepository.GenerateMock<IValidatedVolumeDayRepository>();
+			var workloadDayTemplateCalculator = MockRepository.GenerateMock<IWorkloadDayTemplateCalculator>();
+			var taskOwner = MockRepository.GenerateMock<ITaskOwner>();
+			var teskOwners = new List<ITaskOwner> { taskOwner };
+			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013, 1, 1), new List<ITaskOwner>(), TaskOwnerPeriodType.Other);
+			
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
+			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
+			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
+			_forecastClassesCreator.Stub(x => x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
+			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
+			_repFactory.Stub(x => x.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
+
+			validatedRep.Stub(x => x.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
+			validatedRep.Stub(x => x.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>(), false)).Return(new List<ITaskOwner>()).IgnoreArguments();
+
+			_statisticHelper.Stub(x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>())).Return(teskOwners);
+			_forecastClassesCreator.Stub(x => x.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
+			_outlierRep.Stub(x => x.FindByWorkload(workload)).Return(new List<IOutlier>());
+			_skillDayRep.Stub(x => x.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario, _ => { })).IgnoreArguments().Return(new Collection<ISkillDay>());
+			_multisiteDayRep.Stub(x => x.GetAllMultisiteDays(_statPeriod, new List<IMultisiteDay>(), null, scenario, true)).IgnoreArguments().Return(new Collection<IMultisiteDay>());
+			_forecastClassesCreator.Stub(x => x.CreateSkillDayCalculator(null, new List<ISkillDay>(), new List<IMultisiteDay>(), new Dictionary<IChildSkill, ICollection<ISkillDay>>(), _statPeriod)).IgnoreArguments().Return(skillDayCalc);
+			_workloadDayHelper.Stub(x => x.GetWorkloadDaysFromSkillDays(new List<ISkillDay>(), workload)).IgnoreArguments().Return(new List<IWorkloadDayBase>());
+
+			_forecastClassesCreator.Stub(x => x.CreateTotalVolume()).Return(totalVolume);
+			totalVolume.Create(null, new List<ITaskOwner>(), new List<IVolumeYear>(), new List<IOutlier>(), 0, 0, false, workload);
+
+			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
+			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(SkillFactory.CreateMultisiteSkill("Multi sales"));
+
+			_target.Consume(_mess);
+
+			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
+														  o => o.IgnoreArguments());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldNotForecastWhenNoStatistic()
 		{
-			var jobResult = _mocks.DynamicMock<IJobResult>();
-			var workload = _mocks.DynamicMock<IWorkload>();
-			var scenario = _mocks.DynamicMock<IScenario>();
+			var jobResult = MockRepository.GenerateMock<IJobResult>();
+			var workload = MockRepository.GenerateMock<IWorkload>();
+			var scenario = MockRepository.GenerateMock<IScenario>();
 
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
-			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
-			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
-			Expect.Call(() => _jobResultFeedback.SetJobResult(jobResult, _messBroker));
-			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
-			Expect.Call(_statisticHelper.LoadStatisticData(_statPeriod,workload)).Return(new List<IWorkloadDayBase>());
+			_currentunitOfWorkFactory.Stub(x=> x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x=> x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_jobResultRep.Stub(x=> x.Get(_jobId)).Return(jobResult);
+			_workloadRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
+			_scenarioRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
+			_forecastClassesCreator.Stub(x=> x.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
+			_statisticHelper.Stub(x=> x.LoadStatisticData(_statPeriod,workload)).Return(new List<IWorkloadDayBase>());
 
-			_mocks.ReplayAll();
 			_target.Consume(_mess);
-			_mocks.VerifyAll();
+
+			_statisticHelper.AssertWasNotCalled(
+				x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario, new List<IValidatedVolumeDay>()),
+				o => o.IgnoreArguments());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly"), Test]
 		public void ShouldReportError()
 		{
-			var jobResult = _mocks.DynamicMock<IJobResult>();
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
-			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
-			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Throw(new ArgumentOutOfRangeException());
-			Expect.Call(() => _jobResultFeedback.ReportProgress(0, "Error")).IgnoreArguments();
-			_mocks.ReplayAll();
+			var jobResult = MockRepository.GenerateMock<IJobResult>();
+
+			_currentunitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			_unitOfWorkFactory.Stub(x=> x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			_jobResultRep.Stub(x=> x.Get(_jobId)).Return(jobResult);
+			_workloadRep.Stub(x=> x.Get(Guid.NewGuid())).IgnoreArguments().Throw(new ArgumentOutOfRangeException());
+			
 			_target.Consume(_mess);
-			_mocks.VerifyAll();
+
+			_jobResultFeedback.AssertWasCalled(x=>x.ReportProgress(0, "Error"),o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldUseCreator()
 		{
 			var creator = new ForecastClassesCreator(_repFactory);
-			var statRep = _mocks.DynamicMock<IStatisticRepository>();
+			var statRep = MockRepository.GenerateMock<IStatisticRepository>();
 			Assert.That(creator.CreateTotalVolume(), Is.Not.Null);
 			Assert.That(creator.CreateSkillDayCalculator(null, new List<ISkillDay>(),new DateOnlyPeriod() ), Is.Not.Null);
+			Assert.That(creator.CreateSkillDayCalculator(SkillFactory.CreateMultisiteSkill("Phone"), new List<ISkillDay>(),new List<IMultisiteDay>(), new Dictionary<IChildSkill, ICollection<ISkillDay>>(), new DateOnlyPeriod() ), Is.Not.Null);
 			Assert.That(creator.CreateWorkloadDayTemplateCalculator(_statisticHelper,_outlierRep),Is.Not.Null);
 			Assert.That(creator.GetNewTaskOwnerPeriod(new List<ITaskOwner>()),Is.Not.Null);
-			Expect.Call(_repFactory.CreateStatisticRepository()).Return(statRep);
-			_mocks.ReplayAll();
+
+			_repFactory.Stub(x => x.CreateStatisticRepository()).Return(statRep);		
 			Assert.That(creator.CreateStatisticHelper(_unitOfWork),Is.Not.Null);
-			_mocks.VerifyAll();
 		}
 
 		[Test]
 		public void ShouldSendMessageForEachWorkload()
 		{
-			var bus = _mocks.DynamicMock<IServiceBus>();
+			var bus = MockRepository.GenerateMock<IServiceBus>();
 			var consumer = new QuickForecastWorkloadsMessageConsumer(bus);
 			var mess = new QuickForecastWorkloadsMessage {WorkloadIds = new Collection<Guid> {Guid.NewGuid(), Guid.NewGuid()}};
-			Expect.Call(() => bus.Send(new QuickForecastWorkloadMessage())).IgnoreArguments().Repeat.Twice();
-			_mocks.ReplayAll();
+			
 			consumer.Consume(mess);
-			_mocks.VerifyAll();
+
+			bus.AssertWasCalled(x => x.Send(new QuickForecastWorkloadMessage()), o => o.IgnoreArguments().Repeat.Twice());
 		}
 	}
-
-	
-
-	
 }

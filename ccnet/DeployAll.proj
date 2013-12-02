@@ -269,7 +269,8 @@
 				Include=
 		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\**\*.*"
 				Exclude=
-		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.nhib.xml"
+		"$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.nhib.xml;
+		$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\pub.config"
 		/>
 
 			<!--ToDo: what is this? Move thism to post-Build events or reference with CopyToLocal-->

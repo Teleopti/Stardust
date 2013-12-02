@@ -19,8 +19,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 	public class QuickForecastWorkloadMessageConsumer : ConsumerOf<QuickForecastWorkloadMessage>
 	{
 		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly IMultisiteDayRepository _multisiteDayRepository;
 		private readonly IOutlierRepository _outlierRepository;
 		private readonly IWorkloadRepository _workloadRepository;
+		private readonly IRepository<IMultisiteSkill> _skillRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
@@ -31,20 +33,24 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		private readonly IForecastClassesCreator _forecastClassesCreator;
 
 		public QuickForecastWorkloadMessageConsumer(ISkillDayRepository skillDayRepository,
-													IOutlierRepository outlierRepository,
-													IWorkloadRepository workloadRepository,
-													IScenarioRepository scenarioRepository,
-													IRepositoryFactory repositoryFactory,
-													ICurrentUnitOfWorkFactory unitOfWorkFactory,
-													IJobResultRepository jobResultRepository,
-													IJobResultFeedback feedback,
-													IMessageBroker messageBroker,
-													IWorkloadDayHelper workloadDayHelper,
-													IForecastClassesCreator forecastClassesCreator)
+		                                            IMultisiteDayRepository multisiteDayRepository,
+		                                            IOutlierRepository outlierRepository,
+		                                            IWorkloadRepository workloadRepository,
+		                                            IRepository<IMultisiteSkill> skillRepository,
+		                                            IScenarioRepository scenarioRepository,
+		                                            IRepositoryFactory repositoryFactory,
+		                                            ICurrentUnitOfWorkFactory unitOfWorkFactory,
+		                                            IJobResultRepository jobResultRepository,
+		                                            IJobResultFeedback feedback,
+		                                            IMessageBroker messageBroker,
+		                                            IWorkloadDayHelper workloadDayHelper,
+		                                            IForecastClassesCreator forecastClassesCreator)
 		{
 			_skillDayRepository = skillDayRepository;
+			_multisiteDayRepository = multisiteDayRepository;
 			_outlierRepository = outlierRepository;
 			_workloadRepository = workloadRepository;
+			_skillRepository = skillRepository;
 			_scenarioRepository = scenarioRepository;
 			_repositoryFactory = repositoryFactory;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -83,6 +89,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					remainingProgress -= message.IncreaseWith;
 
 					var skill = workload.Skill;
+
 					var scenario = _scenarioRepository.Get(message.ScenarioId);
 					//Load statistic data
 					var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(unitOfWork);
@@ -135,11 +142,38 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 					//Load (or create) workload days
 					// Here we could split it in smaller chunks so we don't lock the tables too long
-					var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-					skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario,
-					                                                _skillDayRepository.AddRange);
-					var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
+					ISkillDayCalculator calculator;
+					var multisiteSkill = _skillRepository.Get(skill.Id.GetValueOrDefault());
+					if (multisiteSkill!=null)
+					{
+						var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
+						skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario,
+																		_skillDayRepository.AddRange);
 
+						var allChildSkillDays = new Dictionary<IChildSkill, ICollection<ISkillDay>>();
+						foreach (var childSkill in multisiteSkill.ChildSkills)
+						{
+							var childSkillDays = _skillDayRepository.FindRange(message.TargetPeriod, childSkill, scenario);
+							childSkillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, childSkillDays, childSkill, scenario,
+																			_skillDayRepository.AddRange);
+							allChildSkillDays.Add(childSkill,childSkillDays);
+						}
+
+						var multisiteDays = _multisiteDayRepository.FindRange(message.TargetPeriod, multisiteSkill, scenario);
+						multisiteDays = _multisiteDayRepository.GetAllMultisiteDays(message.TargetPeriod, multisiteDays, multisiteSkill,
+						                                                            scenario, true);
+
+						calculator = _forecastClassesCreator.CreateSkillDayCalculator(multisiteSkill, skillDays.ToList(), multisiteDays.ToList(), allChildSkillDays, message.TargetPeriod);
+					}
+					else
+					{
+						var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
+						skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario,
+																		_skillDayRepository.AddRange);
+
+						calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
+					}
+					
 					var workloadDays =
 						_workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days on " + message.TargetPeriod,
@@ -224,6 +258,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		ISkillDayCalculator CreateSkillDayCalculator(ISkill skill, IList<ISkillDay> skillDays,
 		                                                            DateOnlyPeriod visiblePeriod);
 
+		ISkillDayCalculator CreateSkillDayCalculator(IMultisiteSkill skill, IList<ISkillDay> skillDays, IList<IMultisiteDay> multisiteDays , IDictionary<IChildSkill,ICollection<ISkillDay>> childSkillDays,
+																	DateOnlyPeriod visiblePeriod);
+
+
 		IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork);
 
 
@@ -254,6 +292,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		                                                   DateOnlyPeriod visiblePeriod)
 		{
 			return new SkillDayCalculator(skill,skillDays,visiblePeriod);
+		}
+
+		public ISkillDayCalculator CreateSkillDayCalculator(IMultisiteSkill skill, IList<ISkillDay> skillDays, IList<IMultisiteDay> multisiteDays, IDictionary<IChildSkill, ICollection<ISkillDay>> childSkillDays,
+		                                                    DateOnlyPeriod visiblePeriod)
+		{
+			var multisiteSkillDayCalculator = new MultisiteSkillDayCalculator(skill, skillDays, multisiteDays, visiblePeriod);
+			foreach (var pair in childSkillDays)
+			{
+				multisiteSkillDayCalculator.SetChildSkillDays(pair.Key,pair.Value.ToList());
+			}
+			multisiteSkillDayCalculator.InitializeChildSkills();
+			return multisiteSkillDayCalculator;
 		}
 
 		public IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork)

@@ -290,7 +290,6 @@
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecificationTest.cs" />
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlockTest.cs" />
@@ -582,7 +581,6 @@
     <Compile Include="Optimization\SchedulePartExtractorTest.cs" />
     <Compile Include="Optimization\ScheduleDayProTest.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillServiceTest.cs" />
-    <Compile Include="ResourceCalculation\BlockFinderResultTest.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsDataTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillPeriodsDataHolderManagerTest.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusCheckerTest.cs" />
@@ -1119,7 +1117,7 @@
       <Name>Teleopti.Ccc.DayOffPlanning</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
-      <Project>{e6d92eb3-39cc-4f0c-9c59-61f3403594c1}</Project>
+      <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
       <Name>Teleopti.Ccc.Domain.Calculation</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">

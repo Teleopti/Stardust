@@ -14,14 +14,5 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="dataExtractor">The data extractor.</param>
         /// <returns></returns>
         IList<DateOnly> Execute(IScheduleMatrixLockableBitArrayConverter matrixConverter, IScheduleResultDataExtractor dataExtractor);
-
-        /// <summary>
-        /// Excecutes the specified lockable bit array.
-        /// </summary>
-        /// <param name="lockableBitArray">The lockable bitarray.</param>
-        /// <param name="matrix">The matrix.</param>
-        /// <param name="dataExtractor">The data extractor.</param>
-        /// <returns></returns>
-        IList<DateOnly> Execute(ILockableBitArray lockableBitArray, IScheduleMatrixPro matrix, IScheduleResultDataExtractor dataExtractor);
     }
 }

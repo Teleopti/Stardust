@@ -276,30 +276,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyGetYearlyDateTimePeriodList()
-        {
-            DateTime startDateTime = new DateTime(2001, 04, 23);
-            DateTime endDateTime = new DateTime(2005, 08, 15);
-            DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
-            IEnumerable<DateTimePeriod> dateTimePeriods = DateHelper.SplitDateTimePeriodYearly(dateTimePeriod);
-            Assert.AreEqual(5, dateTimePeriods.Count());
-            Assert.AreEqual(startDateTime, dateTimePeriods.First().LocalStartDateTime);
-            Assert.AreEqual(endDateTime, dateTimePeriods.Last().LocalEndDateTime);
-
-            startDateTime = new DateTime(2001, 04, 23);
-            endDateTime = new DateTime(2001, 08, 15);
-            dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
-            dateTimePeriods = DateHelper.SplitDateTimePeriodYearly(dateTimePeriod);
-            Assert.AreEqual(1, dateTimePeriods.Count());
-
-            startDateTime = new DateTime(2008, 01, 01);
-            endDateTime = new DateTime(2009, 12, 31);
-            dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(startDateTime, endDateTime);
-            dateTimePeriods = DateHelper.SplitDateTimePeriodYearly(dateTimePeriod);
-            Assert.AreEqual(2, dateTimePeriods.Count());
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifySplitDateTimePeriod()
         {
             TimeSpan daysToSplitOn = TimeSpan.FromDays(90);

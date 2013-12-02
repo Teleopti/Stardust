@@ -364,7 +364,6 @@
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimization.cs" />
-    <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecification.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLocker.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
@@ -769,7 +768,6 @@
     <Compile Include="Optimization\SchedulePartExtractor.cs" />
     <Compile Include="Optimization\ScheduleDayPro.cs" />
     <Compile Include="ResourceCalculation\AffectedPersonSkillService.cs" />
-    <Compile Include="ResourceCalculation\BlockFinderResult.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\DeviationStatisticsData.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\FairnessValueResult.cs" />
@@ -1543,7 +1541,7 @@
       <Name>Teleopti.Ccc.DayOffPlanning</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
-      <Project>{e6d92eb3-39cc-4f0c-9c59-61f3403594c1}</Project>
+      <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
       <Name>Teleopti.Ccc.Domain.Calculation</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.UserTexts\Teleopti.Ccc.UserTexts.csproj">
