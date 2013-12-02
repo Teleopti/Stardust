@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
 			                                                     new DateOnlyPeriod(DateOnly.MinValue,
 			                                                                        DateOnly.MinValue.AddDays(1)),
-			                                                     _selectedPersons)).Return(!failOnRescheduling);
+																 _selectedPersons, _rollbackService)).Return(!failOnRescheduling);
 			if (failOnRescheduling)
 				return;
 

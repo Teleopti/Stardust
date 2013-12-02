@@ -7,12 +7,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IDistributionForPersons
 	{
-		Dictionary<IShiftCategory, int> CreateSummary(IEnumerable<IPerson> personList, IScheduleDictionary scheduleDictionary);
+		IDistributionSummary CreateSummary(IEnumerable<IPerson> personList, IScheduleDictionary scheduleDictionary);
 	}
 
 	public class DistributionForPersons : IDistributionForPersons
 	{
-		public Dictionary<IShiftCategory, int> CreateSummary(IEnumerable<IPerson> personList, IScheduleDictionary scheduleDictionary)
+		public IDistributionSummary CreateSummary(IEnumerable<IPerson> personList, IScheduleDictionary scheduleDictionary)
 		{
 			var totalsDictionary = new Dictionary<IShiftCategory, int>();
 			foreach (var person in personList)
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				}
 			}
 
-			return totalsDictionary;
+			return new DistributionSummary(totalsDictionary);
 		}
 	}
 }

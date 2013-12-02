@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -69,10 +70,9 @@ namespace Teleopti.Ccc.Win.Commands
         private BackgroundWorker _backgroundWorker;
         private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 	    private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
+	    private readonly EqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 
-	    public TeamBlockOptimizationCommand(IScheduleDayChangeCallback scheduleDayChangeCallback,
-                                            IResourceOptimizationHelper resourceOptimizationHelper,
-                                            ISchedulerStateHolder schedulerState, IScheduleDayEquator scheduleDayEquator,
+	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerState, IScheduleDayEquator scheduleDayEquator,
                                             IRestrictionOverLimitDecider restrictionOverLimitDecider,
                                             IGroupScheduleGroupPageDataProvider groupPageDataProvider,
                                             IGroupPagePerDateHolder groupPagePerDateHolder,
@@ -97,10 +97,11 @@ namespace Teleopti.Ccc.Win.Commands
                                             ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
                                             ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
                                             IRestrictionExtractor restrictionExtractor,
-                                            IMatrixListFactory matrixListFactory, ITeamBlockSchedulingOptions teamBlockScheudlingOptions, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
+                                            IMatrixListFactory matrixListFactory, 
+			ITeamBlockSchedulingOptions teamBlockScheudlingOptions, 
+			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
+			EqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness)
         {
-            _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
             _schedulerState = schedulerState;
             _scheduleDayEquator = scheduleDayEquator;
             _restrictionOverLimitDecider = restrictionOverLimitDecider;
@@ -131,8 +132,9 @@ namespace Teleopti.Ccc.Win.Commands
             _matrixListFactory = matrixListFactory;
             _teamBlockScheudlingOptions = teamBlockScheudlingOptions;
 	        _dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
+		    _equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
 
-	        _stateHolder = _schedulerState.SchedulingResultState;
+		    _stateHolder = _schedulerState.SchedulingResultState;
         }
 
         [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
@@ -163,6 +165,11 @@ namespace Teleopti.Ccc.Win.Commands
             if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
                 optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences,
 										  teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService, schedulingOptions, teamBlockScheduler);
+			if (optimizationPreferences.General.OptimizationStepFairness)
+			{
+				_equalNumberOfCategoryFairness.Execute(allMatrixes,selectedPeriod, selectedPersons, schedulingOptions,_stateHolder.Schedules, rollbackService);
+			}
+				
         }
 
         private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)

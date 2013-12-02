@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				var result = _target.CreateSummary(_personList, _dic);
-				Assert.That(result[category1] == 4);
-				Assert.That(result[category2] == 3);
+				Assert.That(result.PercentDicionary[category1] == 4/7);
+				Assert.That(result.PercentDicionary[category2] == 3/7);
 			}
 		}
 	}

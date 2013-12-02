@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
 		private IPerson _person2;
+		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 
 
 		[SetUp]
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingOptions = new SchedulingOptions();
 			_selectedPersons = new List<IPerson> { _person1 };
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 		}
 
 		[Test]
@@ -66,13 +68,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
 				Expect.Call(() => _sameShiftCategoryBlockScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_sameShiftCategoryBlockScheduler.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-				                                                      _selectedPersons)).Return(true);
+																	  _selectedPersons, _schedulePartModifyAndRollbackService)).Return(true);
 				Expect.Call(() => _sameShiftCategoryBlockScheduler.DayScheduled -= _target.OnDayScheduled);
 			}
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-				                                          _selectedPersons);
+														  _selectedPersons, _schedulePartModifyAndRollbackService);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons);
+														  _selectedPersons, _schedulePartModifyAndRollbackService);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons);
+														  _selectedPersons, _schedulePartModifyAndRollbackService);
 				Assert.That(result, Is.True);
 			}
 		}
