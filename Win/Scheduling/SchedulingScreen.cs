@@ -6360,11 +6360,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)
 		{
-			List<IPersistableScheduleData> modifiedDataFromConflictResolution;
-			if (refreshedEntities == null)
-				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>();
-			else
-				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
+			var modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
 
 			var result = new ConflictHandlingResult { ConflictsFound = false, DialogResult = PersistConflictDialogResult.None };
 			result.ConflictsFound = conflicts.Any();
