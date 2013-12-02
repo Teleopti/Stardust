@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
     /// </remarks>
     public partial class RealTimeScheduleView
     {
-        public RealTimeScheduleView()
+	    public RealTimeScheduleView()
         {
             InitializeComponent();
             DataContextChanged += (RealTimeScheduleView_DataContextChanged);
@@ -200,8 +200,9 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 		    e.Handled = true;
 	    }
 
-	    private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-		{
+	    private void ButtonCopyGrid_OnClick(object sender, RoutedEventArgs e)
+	    {
+		    
 			RealTimeDataGrid.SelectionMode = DataGridSelectionMode.Extended;
 		    RealTimeDataGrid.SelectAllCells();
 			RealTimeDataGrid.ClipboardCopyMode = DataGridClipboardCopyMode.IncludeHeader;
