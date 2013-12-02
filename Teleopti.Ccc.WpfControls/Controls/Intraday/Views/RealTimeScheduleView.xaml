@@ -146,7 +146,7 @@
                         <DataTemplate>
                             <TextBlock VerticalAlignment="Top" x:Name="NextStartTextBlock">
                                 <TextBlock.Text>
-                                    <MultiBinding Converter="{StaticResource DateTimeToLocalAndNotMinValueConverter}" StringFormat="g">
+                                    <MultiBinding Converter="{StaticResource DateTimeToLocalAndNotMinValueConverter}">
                                         <MultiBinding.Bindings>
                                             <Binding Path="NextActivityStartDateTime"/>
                                             <Binding RelativeSource="{RelativeSource Self}" Path="(guiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WpfControls.Converters
@@ -18,10 +19,10 @@ namespace Teleopti.Ccc.WpfControls.Converters
             InParameter.MustBeTrue("values", values[0] is DateTime);
             InParameter.MustBeTrue("values", values[1] is TimeZoneInfo);
 
-            if (((DateTime)values[0]).Equals(new DateTime(1900, 1, 1, 00, 00, 00))
-                || ((DateTime)values[0]).Equals(DateTime.MinValue))
-                return null;
-            return TimeZoneInfo.ConvertTimeFromUtc((DateTime)values[0], (TimeZoneInfo)values[1]);
+			return (DateTime) values[0] <= DateHelper.MinSmallDateTime
+				       ? null
+				       : TimeZoneHelper.ConvertFromUtc((DateTime) values[0], (TimeZoneInfo) values[1])
+				                       .ToString(TeleoptiPrincipal.Current.Regional.Culture);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
