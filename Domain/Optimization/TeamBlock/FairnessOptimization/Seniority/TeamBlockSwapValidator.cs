@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
 	public interface ITeamBlockSwapValidator
 	{

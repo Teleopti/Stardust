@@ -295,9 +295,9 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillCheckerTest.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSwapDayValidatorTest.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSwapTest.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSwapValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
@@ -1198,7 +1198,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
-    <Folder Include="Optimization\TeamBlock\FairnessOptimization\Seniority\" />
     <Folder Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints\" />
   </ItemGroup>
   <ItemGroup>

@@ -1,12 +1,13 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 
-namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
+namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
 	[TestFixture]
 	public class TeamBlockSwapDayValidatorTest
