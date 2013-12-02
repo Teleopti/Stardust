@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 		private IPerson _person4;
 		private IPerson _person5;
 		private MockRepository _mocks;
-        private IGroupPagePerDateHolder _groupPagePerDateHolder;
+		private IGroupPagePerDateHolder _groupPagePerDateHolder;
 		private IGroupPagePerDate _groupPagePerDate;
 		private IList<IPerson> _allPerson;
 		private IScheduleDictionary _scheduleDictionary;
 		private IGroupPersonFactory _groupPersonFactory;
 		private IGroupPersonConsistentChecker _groupPersonConsistentChecker;
 		private WorkShiftFinderResultHolder _schedulingResults;
-	    private ISchedulingResultStateHolder _stateHolder;
+		private ISchedulingResultStateHolder _stateHolder;
 		private ISchedulingOptions _schedulingOptions;
 		private Guid _guid;
 
@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_person4 = _mocks.StrictMock<IPerson>();
 			_person5 = _mocks.StrictMock<IPerson>();
 			_groupPagePerDate = _mocks.StrictMock<IGroupPagePerDate>();
-            _groupPagePerDateHolder = _mocks.StrictMock<IGroupPagePerDateHolder>();
-			_allPerson = new List<IPerson> {_person1, _person2, _person3, _person4, _person5};
-	    	_schedulingOptions = new SchedulingOptions {UseGroupSchedulingCommonCategory = true};
-		    _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_groupPagePerDateHolder = _mocks.StrictMock<IGroupPagePerDateHolder>();
+			_allPerson = new List<IPerson> { _person1, _person2, _person3, _person4, _person5 };
+			_schedulingOptions = new SchedulingOptions { UseGroupSchedulingCommonCategory = true };
+			_stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_groupPersonFactory = _mocks.StrictMock<IGroupPersonFactory>();
 			_groupPersonConsistentChecker = _mocks.StrictMock<IGroupPersonConsistentChecker>();
@@ -51,37 +51,37 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			_guid = Guid.NewGuid();
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldGetListOfGroupPersonsOnDate()
 		{
 			var date = new DateOnly(2010, 10, 4);
 			var groupPage = _mocks.StrictMock<IGroupPage>();
 			var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
-			var selectedPersons = new List<IPerson> {_person1, _person2, _person3};
+			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-		    Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-		    Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
+			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
 				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
-		    Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
-			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> ()));
-			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, selectedPersons,date, _schedulingOptions)).Return(true).IgnoreArguments();
+			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
+			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, selectedPersons, date, _schedulingOptions)).Return(true).IgnoreArguments();
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(selectedPersons, date, "ROOT", _guid)).Return(groupPerson);
-			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons));
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons)).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
 			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
 			Expect.Call(rootGroup.Id).Return(_guid);
 
 			_mocks.ReplayAll();
-			_groupPersonsBuilder = new GroupPersonsBuilder(  _stateHolder, _groupPersonFactory, _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
-			
-		    Assert.That(ret.Count,Is.EqualTo(1));
-			
+			var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+
+			Assert.That(ret.Count, Is.EqualTo(1));
+
 			_mocks.VerifyAll();
 		}
 
@@ -92,54 +92,54 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var groupPage = _mocks.StrictMock<IGroupPage>();
 			var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
 			var rootGroup2 = _mocks.StrictMock<IRootPersonGroup>();
-			var personColl1 = new List<IPerson> {_person1, _person4, _person5};
-			var personColl2 = new List<IPerson> {_person2, _person3};
-			var members1 = new List<IPerson> {_person1};
-			var members2 = new List<IPerson> {_person2,_person3};
+			var personColl1 = new List<IPerson> { _person1, _person4, _person5 };
+			var personColl2 = new List<IPerson> { _person2, _person3 };
+			var members1 = new List<IPerson> { _person1 };
+			var members2 = new List<IPerson> { _person2, _person3 };
 
 			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
 			var groupPerson2 = _mocks.StrictMock<IGroupPerson>();
 
-            Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
+			Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
 				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup, rootGroup2 })).Repeat.AtLeastOnce();
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
 			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl1)).Repeat.AtLeastOnce();
 			Expect.Call(rootGroup2.PersonCollection).Return(new ReadOnlyCollection<IPerson>(personColl2)).Repeat.AtLeastOnce();
-			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl1, date,_schedulingOptions)).Return(true);
+			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl1, date, _schedulingOptions)).Return(true);
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl2, date, _schedulingOptions)).Return(true);
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(rootGroup2.Description).Return(new Description("ROOT2"));
-			
-			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT",_guid)).Return(groupPerson);
+
+			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT", _guid)).Return(groupPerson);
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2, _person3 }, date, "ROOT2", _guid)).Return(groupPerson2);
 
-			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1));
-			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2));
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1)).Repeat.AtLeastOnce();
+			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2)).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null).Repeat.Twice();
 			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
 			Expect.Call(() => groupPerson2.CommonPossibleStartEndCategory = null);
 
-			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> ()));
-			Expect.Call(rootGroup2.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup> ()));
+			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
+			Expect.Call(rootGroup2.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 			Expect.Call(rootGroup.Id).Return(_guid);
 			Expect.Call(rootGroup2.Id).Return(_guid);
 
 			_mocks.ReplayAll();
-            _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory,
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory,
 				_groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
-			
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+
+			var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
 
 			Assert.That(ret.Count, Is.EqualTo(2));
 			_mocks.VerifyAll();
 		}
 
-		[Test] 
+		[Test]
 		public void ShouldNotGetGroupPersonIfShiftCategoriesAreDifferent()
 		{
 			var date = new DateOnly(2010, 10, 4);
@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
 			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
 
-            Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
+			Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
 				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
@@ -157,17 +157,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _allPerson, date, _schedulingOptions)).Return(false);
 			Expect.Call(rootGroup.Description).Return(new Description("RootGroup"));
 			_mocks.ReplayAll();
-            _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
-                _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory,
+				_groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+			var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
 
 			Assert.That(ret.Count, Is.EqualTo(0));
-			Assert.That(_schedulingResults.GetResults().Count,Is.GreaterThan(0));
+			Assert.That(_schedulingResults.GetResults().Count, Is.GreaterThan(0));
 			_mocks.VerifyAll();
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldNotReturnGroupPersonWithEmptyMemberList()
 		{
 			var date = new DateOnly(2010, 10, 4);
@@ -177,12 +177,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var personColl1 = new List<IPerson> { _person1, _person4, _person5 };
 			var personColl2 = new List<IPerson> { _person2, _person3 };
 			var members1 = new List<IPerson> { _person1 };
-			
-			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var groupPerson2 = _mocks.StrictMock<IGroupPerson>();
 
-            Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
+			var selectedPersons = new List<IPerson> { _person1 };
+			var groupPerson = _mocks.StrictMock<IGroupPerson>();
+
+			Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
 				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup, rootGroup2 })).Repeat.AtLeastOnce();
@@ -191,30 +190,24 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
 			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl1, date, _schedulingOptions)).Return(true);
-			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl2, date, _schedulingOptions)).Return(true);
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
-			Expect.Call(rootGroup2.Description).Return(new Description("ROOT2"));
 
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT", _guid)).Return(groupPerson);
-			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2, _person3 }, date, "ROOT2", _guid)).Return(groupPerson2);
 
-			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1));
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1)).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
 			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
-			// empty for some internal reason in GroupPerson
-			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>()));
 
 			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 			Expect.Call(rootGroup2.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 			Expect.Call(rootGroup.Id).Return(_guid);
-			Expect.Call(rootGroup2.Id).Return(_guid);
 
 			_mocks.ReplayAll();
-            _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
-                _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
-			
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory,
+				_groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+
+			var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
 
 			Assert.That(ret.Count, Is.EqualTo(1));
 			_mocks.VerifyAll();
@@ -229,18 +222,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			var childPersonGroup = _mocks.StrictMock<IChildPersonGroup>();
 			var personColl1 = new List<IPerson> { _person1, _person4, _person5 };
 			var personColl2 = new List<IPerson> { _person2, _person3 };
-			var personColl3 = new List<IPerson> { _person2 };
-			var personColl4 = new List<IPerson> { _person3 };
 			var members1 = new List<IPerson> { _person1 };
 			var members2 = new List<IPerson> { _person2, _person3 };
 
 			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
 			var groupPerson2 = _mocks.StrictMock<IGroupPerson>();
-			var groupPerson3 = _mocks.StrictMock<IGroupPerson>();
-			var groupPerson4 = _mocks.StrictMock<IGroupPerson>();
 
-            Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
+			Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
 			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
 			Expect.Call(groupPage.RootGroupCollection).Return(
 				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
@@ -251,127 +240,110 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl1, date, _schedulingOptions)).Return(true);
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl2, date, _schedulingOptions)).Return(true);
-			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl3, date, _schedulingOptions)).Return(true);
-			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, personColl4, date, _schedulingOptions)).Return(true);
 			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(childPersonGroup.Description).Return(new Description("CHILD"));
 
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person1 }, date, "ROOT", _guid)).Return(groupPerson);
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2, _person3 }, date, "CHILD", _guid)).Return(groupPerson2);
-			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person2 }, date, "a-a", _guid)).Return(groupPerson3);
-			Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person3 }, date, "b-b", _guid)).Return(groupPerson4);
-
-			Expect.Call(_person2.Name).Return(new Name("a","a")).Repeat.AtLeastOnce();
-			Expect.Call(_person3.Name).Return(new Name("b","b")).Repeat.AtLeastOnce();
-			Expect.Call(_person2.Id).Return(_guid);
-			Expect.Call(_person3.Id).Return(_guid);
 
 			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members1)).Repeat.AtLeastOnce();
 			Expect.Call(groupPerson2.GroupMembers).Return(new ReadOnlyCollection<IPerson>(members2)).Repeat.AtLeastOnce();
-			Expect.Call(groupPerson3.GroupMembers).Return(new ReadOnlyCollection<IPerson>(personColl3)).Repeat.AtLeastOnce();
-			Expect.Call(groupPerson4.GroupMembers).Return(new ReadOnlyCollection<IPerson>(personColl4)).Repeat.AtLeastOnce();
 			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null).Repeat.AtLeastOnce();
-			
+
 			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
 			Expect.Call(() => groupPerson2.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
-			Expect.Call(() => groupPerson3.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
-			Expect.Call(() => groupPerson4.CommonPossibleStartEndCategory = null).Repeat.AtLeastOnce();
 
 			Expect.Call(childPersonGroup.ChildGroupCollection).Return(
 				new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 
 			Expect.Call(rootGroup.Id).Return(_guid);
 			Expect.Call(childPersonGroup.Id).Return(_guid);
-			
+
 			_mocks.ReplayAll();
-			_groupPersonsBuilder = new GroupPersonsBuilder(  _stateHolder, _groupPersonFactory, _groupPersonConsistentChecker, _schedulingResults,_groupPagePerDateHolder);
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
+			var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
 
-			Assert.That(ret.Count, Is.EqualTo(4));
+			Assert.That(ret.Count, Is.EqualTo(2));
 			_mocks.VerifyAll();
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldNotTryToCheckPersonNotLoadedInDictionary()
-        {
-            _allPerson.Remove(_person1);
-            var date = new DateOnly(2010, 10, 4);
-            var groupPage = _mocks.StrictMock<IGroupPage>();
-            var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
-            var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var selectedAndInDictionary = new List<IPerson> {_person2, _person3};
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldNotTryToCheckPersonNotLoadedInDictionary()
+		{
+			_allPerson.Remove(_person1);
+			var date = new DateOnly(2010, 10, 4);
+			var groupPage = _mocks.StrictMock<IGroupPage>();
+			var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
+			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
+			var groupPerson = _mocks.StrictMock<IGroupPerson>();
+			var selectedAndInDictionary = new List<IPerson> { _person2, _person3 };
 
-            Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
-            Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
-            Expect.Call(groupPage.RootGroupCollection).Return(
-                new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
-            Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
-            Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
+			Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
+			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
+			Expect.Call(groupPage.RootGroupCollection).Return(
+				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
+			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
 			Expect.Call(_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _allPerson, date, _schedulingOptions)).Return(true);
-            Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
+			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(selectedAndInDictionary, date, "ROOT", _guid)).Return(groupPerson);
-            Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons));
-            Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
-            Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons)).Repeat.AtLeastOnce();
+			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
+			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
 			Expect.Call(rootGroup.Id).Return(_guid);
-			Expect.Call(_person1.Name).Return(new Name("a", "a")).Repeat.AtLeastOnce();
-			Expect.Call(_person1.Id).Return(_guid);
 
-            _mocks.ReplayAll();
-            _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
-                _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
-			
+			_mocks.ReplayAll();
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory,
+				_groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
 
-            Assert.That(ret.Count, Is.EqualTo(1));
-            
-            _mocks.VerifyAll();
-        }
+			var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, true, _schedulingOptions);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldNotTryToCheckShiftCategoryConsistencyWhenFalse()
-        {
-            _allPerson.Remove(_person1);
-            var date = new DateOnly(2010, 10, 4);
-            var groupPage = _mocks.StrictMock<IGroupPage>();
-            var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
-            var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var selectedAndInDictionary = new List<IPerson> { _person2, _person3 };
+			Assert.That(ret.Count, Is.EqualTo(1));
 
-            Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
-            Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
-            Expect.Call(groupPage.RootGroupCollection).Return(
-                new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
-            Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
-            Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
-            Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
-            Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
-            Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
+			_mocks.VerifyAll();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldNotTryToCheckShiftCategoryConsistencyWhenFalse()
+		{
+			_allPerson.Remove(_person1);
+			var date = new DateOnly(2010, 10, 4);
+			var groupPage = _mocks.StrictMock<IGroupPage>();
+			var rootGroup = _mocks.StrictMock<IRootPersonGroup>();
+			var selectedPersons = new List<IPerson> { _person1, _person2, _person3 };
+			var groupPerson = _mocks.StrictMock<IGroupPerson>();
+			var selectedAndInDictionary = new List<IPerson> { _person2, _person3 };
+
+			Expect.Call(_groupPagePerDateHolder.GroupPersonGroupPagePerDate).Return(_groupPagePerDate);
+			Expect.Call(_groupPagePerDate.GetGroupPageByDate(date)).Return(groupPage);
+			Expect.Call(groupPage.RootGroupCollection).Return(
+				new ReadOnlyCollection<IRootPersonGroup>(new List<IRootPersonGroup> { rootGroup })).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.PersonCollection).Return(new ReadOnlyCollection<IPerson>(_allPerson)).Repeat.AtLeastOnce();
+			Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDictionary.Keys).Return(_allPerson).Repeat.AtLeastOnce();
+			Expect.Call(rootGroup.ChildGroupCollection).Return(new ReadOnlyCollection<IChildPersonGroup>(new List<IChildPersonGroup>()));
+			Expect.Call(rootGroup.Description).Return(new Description("ROOT"));
 			Expect.Call(_groupPersonFactory.CreateGroupPerson(selectedAndInDictionary, date, "ROOT", _guid)).Return(groupPerson);
-            Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons));
-            Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
-            Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
+			Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(selectedPersons)).Repeat.AtLeastOnce();
+			Expect.Call(_groupPersonConsistentChecker.CommonPossibleStartEndCategory).Return(null);
+			Expect.Call(() => groupPerson.CommonPossibleStartEndCategory = null);
 			Expect.Call(rootGroup.Id).Return(_guid);
-			Expect.Call(_person1.Name).Return(new Name("a", "a")).Repeat.AtLeastOnce();
-			Expect.Call(_person1.Id).Return(_guid);
 
-            _mocks.ReplayAll();
-            _groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory, 
-                _groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
-			
+			_mocks.ReplayAll();
+			_groupPersonsBuilder = new GroupPersonsBuilder(_stateHolder, _groupPersonFactory,
+				_groupPersonConsistentChecker, _schedulingResults, _groupPagePerDateHolder);
 
-            var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 
-            Assert.That(ret.Count, Is.EqualTo(1));
+			var ret = _groupPersonsBuilder.BuildListOfGroupPersons(date, selectedPersons, false, _schedulingOptions);
 
-            _mocks.VerifyAll();
-        }
+			Assert.That(ret.Count, Is.EqualTo(1));
+
+			_mocks.VerifyAll();
+		}
 	}
 
 }
