@@ -35,7 +35,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.errorMessage = ko.observable();
 		self.isReadyLoaded = ko.observable(false);
 		self.requestedDateInternal = ko.observable(moment().startOf('day'));
-		self.myTeamFilter = ko.observable(true);
+		self.myTeamFilter = ko.observable(false);
 		self.timeLineStartTime = ko.observable();
 	    self.timeLineLengthInMinutes = ko.observable();
 		self.IsLastPage = false;
@@ -190,7 +190,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.loadSchedule = function () {
 			if (self.IsLoading()) return;
 			var skip = self.possibleTradeSchedulesRaw.length;
-			var take = 20;
+			var take = 50;
 			if (self.IsLastPage) return;
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestSchedule",
@@ -199,7 +199,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				contentType: 'application/json; charset=utf-8',
 				data: {
 				    selectedDate: self.requestedDateInternal().toDate().toJSON(),
-				    loadOnlyMyTeam: self.myTeamFilter(),
+				    loadOnlyMyTeam: false,
 				    Take: take,
 				    Skip: skip
 				},
