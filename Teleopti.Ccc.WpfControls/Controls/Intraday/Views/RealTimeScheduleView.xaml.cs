@@ -220,10 +220,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 		    else
 			    e.Content =
 				    TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipal.Current.Regional.TimeZone)
-								//ErikS: This is hardcoded because Intraday hardcodes it, WYSIWYG
-				                .ToString("yyyy-MM-dd HH:mm:ss");
-			/*
-			 */
+								.ToString(TeleoptiPrincipal.Current.Regional.Culture);
 		}
     }
 }
