@@ -108,6 +108,9 @@ This is were the action starts
 	PRINT	'   - Set recovery model. Working...'
 	ALTER DATABASE [$(DBNAME)] SET RECOVERY $(RECOVERYMODEL)
 	PRINT	'   - Set recovery model. Finished!'
+
+	-- Set auto close = false
+	ALTER DATABASE [$(DBNAME)] SET AUTO_CLOSE OFF WITH NO_WAIT
 	
 	--All other database settings are based on the "model" database in local instance
 	--see: sp_configure
