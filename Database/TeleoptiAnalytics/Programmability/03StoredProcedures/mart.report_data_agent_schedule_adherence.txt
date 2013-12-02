@@ -1,8 +1,5 @@
 set nocount on
 declare @BuId uniqueidentifier
-declare @PaIdYesterday uniqueidentifier
-declare @PaIdToday uniqueidentifier
-declare @PaIdTomorrow uniqueidentifier
 declare @personId uniqueidentifier
 declare @Phone uniqueidentifier
 declare @Lunch uniqueidentifier
@@ -15,162 +12,233 @@ declare @shiftCat uniqueidentifier
 declare @defSet uniqueidentifier
 declare @overtime uniqueidentifier
 
-truncate table TeleoptiAnalytics_demo.mart.fact_schedule_deviation
+truncate table main_DemoSales_TeleoptiAnalytics.mart.fact_schedule_deviation
 
-declare @yesterday smalldatetime
+declare @todayMinus2 smalldatetime
+declare @todayMinus1 smalldatetime
 declare @today smalldatetime
-declare @tomorrow smalldatetime
+declare @todayPlus1 smalldatetime
+
+declare @PaIdTodayMinus2 uniqueidentifier
+declare @PaIdTodayMinus1 uniqueidentifier
+declare @PaIdToday uniqueidentifier
+declare @PaIdTodayPlus1 uniqueidentifier
+
+declare @teamLondonPreferences uniqueidentifier
+declare @teamParisNights uniqueidentifier
+declare @currentPersonPeriodId uniqueidentifier
+declare @NewPersonPeriodId uniqueidentifier
+
+set @teamLondonPreferences='34590A63-6331-4921-BC9F-9B5E015AB495'
+set @teamParisNights='EFBD4A33-473B-4E2A-BF7F-9B5E015AB495'
+set @currentPersonPeriodId='2E5F6DCF-0828-4DF0-BA5A-9B5E015B2564'
+set @NewPersonPeriodId='8857A7F4-1CD6-4B1E-A3BF-53BE685FE79D'
 
 set @defSet='29F7ECE8-D340-408F-BE40-9BB900B8A4CB'
 set @shiftCat='44540C66-E351-423C-BB35-9B5E015AB4C3' --Late shift
 set @TBBreak='A7C5A78A-2F28-4A1A-8A06-A0E301694BFB' --mongo shift. ContractTime=0, readyTime=1
-SELECT @yesterday = DATEADD(dd, -1, DATEDIFF(dd, 0, GETDATE())) --yesterday
-set @today = dateAdd(dd,1,@yesterday) --today (early this morning)
-set @tomorrow = dateAdd(dd,1,@today) --omorrow
+
+SELECT @todayMinus2 = DATEADD(dd, -2, DATEDIFF(dd, 0, GETDATE())) --day before yesterday
+SELECT @todayMinus1 = DATEADD(dd, -1, DATEDIFF(dd, 0, GETDATE())) --yesterday
+set @today = dateAdd(dd,1,@todayMinus1) --today (early this morning)
+set @todayPlus1 = dateAdd(dd,1,@today) --tomorrow
 
 
 set @BuId = '928DD0BC-BF40-412E-B970-9B5E015AADEA'
-select @defaultScenario = Id from TeleoptiCCC7_Demo.dbo.Scenario where BusinessUnit=@BuId and DefaultScenario=1
+select @defaultScenario = Id from main_DemoSales_TeleoptiCCC7.dbo.Scenario where BusinessUnit=@BuId and DefaultScenario=1
 
 --get 'Ashley'
 select @personId = p.Id
-from TeleoptiCCC7_Demo.dbo.Person p
+from main_DemoSales_TeleoptiCCC7.dbo.Person p
 where p.FirstName= 'Ashley'
 and p.LastName= 'Andeen'
 
+--add persion new Person period, starting yesterday, with new team
+delete from main_DemoSales_TeleoptiCCC7.dbo.ExternalLogOnCollection WHERE PersonPeriod=@NewPersonPeriodId
+delete from main_DemoSales_TeleoptiCCC7.dbo.PersonPeriod where Id=@NewPersonPeriodId
+
+insert into main_DemoSales_TeleoptiCCC7.dbo.PersonPeriod
+select
+Id=@NewPersonPeriodId,
+StartDate	= @todayMinus1,
+Team		= @teamParisNights,
+Note		= '',
+Parent		= @personId,
+RuleSetBag	= RuleSetBag,
+PartTimePercentage	= PartTimePercentage,
+Contract	= Contract,
+ContractSchedule = ContractSchedule,
+BudgetGroup		= BudgetGroup
+from main_DemoSales_TeleoptiCCC7.dbo.PersonPeriod
+where Id = @currentPersonPeriodId
+
+--add acd logon to new personPeriod
+INSERT INTO main_DemoSales_TeleoptiCCC7.dbo.ExternalLogOnCollection (PersonPeriod, ExternalLogOn)
+VALUES (@NewPersonPeriodId, 'DA593701-9300-4623-9DA8-9F0800DA825B')
+
+INSERT INTO main_DemoSales_TeleoptiCCC7.dbo.ExternalLogOnCollection (PersonPeriod, ExternalLogOn)
+VALUES (@NewPersonPeriodId, '1813B318-1141-47F7-99DA-A142011AF9A0')
+
 --remove everything for Ashley
-delete from TeleoptiCCC7_Demo.dbo.PersonAssignment
+delete from main_DemoSales_TeleoptiCCC7.dbo.PersonAssignment
 where Person=@personId
 
-delete from TeleoptiCCC7_Demo.dbo.PersonAbsence
+delete from main_DemoSales_TeleoptiCCC7.dbo.PersonAbsence
 where Person=@personId
 
 --New personAssignment
-select @PaIdYesterday = NEWID()
+select @PaIdTodayMinus2 = NEWID()
+select @PaIdTodayMinus1 = NEWID()
 select @PaIdToday  = NEWID()
-select @PaIdTomorrow  = NEWID()
+select @PaIdTodayPlus1  = NEWID()
 
 --Add strange activity
-if not exists (select 1 from TeleoptiCCC7_Demo.dbo.Activity where id = @TBBreak)
-exec sp_executesql N'INSERT INTO TeleoptiCCC7_Demo.dbo.Activity (Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Name, ShortName, DisplayColor, InContractTime, InWorkTime, InPaidTime, PayrollCode, BusinessUnit, IsDeleted, InReadyTime, RequiresSkill, RequiresSeat, AllowOverwrite, ReportLevelDetail, GroupingActivity, IsMaster, Id) VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, ''0'', @p20)',N'@p0 int,@p1 uniqueidentifier,@p2 uniqueidentifier,@p3 datetime,@p4 datetime,@p5 nvarchar(4000),@p6 nvarchar(4000),@p7 int,@p8 bit,@p9 bit,@p10 bit,@p11 nvarchar(4000),@p12 uniqueidentifier,@p13 bit,@p14 bit,@p15 bit,@p16 bit,@p17 bit,@p18 int,@p19 uniqueidentifier,@p20 uniqueidentifier',@p0=1,@p1='10957AD5-5489-48E0-959A-9B5E015B2B5C',@p2='10957AD5-5489-48E0-959A-9B5E015B2B5C',@p3='2012-10-07 19:55:26',@p4='2012-10-07 19:55:26',@p5=N'<New Activity 1>',@p6=NULL,@p7=-14774017,@p8=1,@p9=0,@p10=0,@p11=N'',@p12='928DD0BC-BF40-412E-B970-9B5E015AADEA',@p13=0,@p14=0,@p15=0,@p16=0,@p17=0,@p18=0,@p19=NULL,@p20=@TBBreak
-exec sp_executesql N'UPDATE TeleoptiCCC7_Demo.dbo.Activity SET Version = @p0, UpdatedBy = @p1, UpdatedOn = @p2, Name = @p3, ShortName = @p4, DisplayColor = @p5, InContractTime = @p6, InWorkTime = @p7, InPaidTime = @p8, PayrollCode = @p9, BusinessUnit = @p10, IsDeleted = @p11, InReadyTime = @p12, RequiresSkill = @p13, RequiresSeat = @p14, AllowOverwrite = @p15, ReportLevelDetail = @p16, GroupingActivity = @p17 WHERE Id = @p18 AND Version = @p19',N'@p0 int,@p1 uniqueidentifier,@p2 datetime,@p3 nvarchar(4000),@p4 nvarchar(4000),@p5 int,@p6 bit,@p7 bit,@p8 bit,@p9 nvarchar(4000),@p10 uniqueidentifier,@p11 bit,@p12 bit,@p13 bit,@p14 bit,@p15 bit,@p16 int,@p17 uniqueidentifier,@p18 uniqueidentifier,@p19 int',@p0=2,@p1='10957AD5-5489-48E0-959A-9B5E015B2B5C',@p2='2012-10-07 19:56:38',@p3=N'TP break',@p4=N'',@p5=-14774017,@p6=1,@p7=1,@p8=0,@p9=N'',@p10='928DD0BC-BF40-412E-B970-9B5E015AADEA',@p11=0,@p12=1,@p13=0,@p14=0,@p15=0,@p16=0,@p17=NULL,@p18='A7C5A78A-2F28-4A1A-8A06-A0E301694BFB',@p19=1
+if not exists (select 1 from main_DemoSales_TeleoptiCCC7.dbo.Activity where id = @TBBreak)
+exec sp_executesql N'INSERT INTO main_DemoSales_TeleoptiCCC7.dbo.Activity (Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Name, ShortName, DisplayColor, InContractTime, InWorkTime, InPaidTime, PayrollCode, BusinessUnit, IsDeleted, InReadyTime, RequiresSkill, RequiresSeat, AllowOverwrite, ReportLevelDetail, GroupingActivity, IsMaster, Id) VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14, @p15, @p16, @p17, @p18, @p19, ''0'', @p20)',N'@p0 int,@p1 uniqueidentifier,@p2 uniqueidentifier,@p3 datetime,@p4 datetime,@p5 nvarchar(4000),@p6 nvarchar(4000),@p7 int,@p8 bit,@p9 bit,@p10 bit,@p11 nvarchar(4000),@p12 uniqueidentifier,@p13 bit,@p14 bit,@p15 bit,@p16 bit,@p17 bit,@p18 int,@p19 uniqueidentifier,@p20 uniqueidentifier',@p0=1,@p1='10957AD5-5489-48E0-959A-9B5E015B2B5C',@p2='10957AD5-5489-48E0-959A-9B5E015B2B5C',@p3='2012-10-07 19:55:26',@p4='2012-10-07 19:55:26',@p5=N'<New Activity 1>',@p6=NULL,@p7=-14774017,@p8=1,@p9=0,@p10=0,@p11=N'',@p12='928DD0BC-BF40-412E-B970-9B5E015AADEA',@p13=0,@p14=0,@p15=0,@p16=0,@p17=0,@p18=0,@p19=NULL,@p20=@TBBreak
+exec sp_executesql N'UPDATE main_DemoSales_TeleoptiCCC7.dbo.Activity SET Version = @p0, UpdatedBy = @p1, UpdatedOn = @p2, Name = @p3, ShortName = @p4, DisplayColor = @p5, InContractTime = @p6, InWorkTime = @p7, InPaidTime = @p8, PayrollCode = @p9, BusinessUnit = @p10, IsDeleted = @p11, InReadyTime = @p12, RequiresSkill = @p13, RequiresSeat = @p14, AllowOverwrite = @p15, ReportLevelDetail = @p16, GroupingActivity = @p17 WHERE Id = @p18 AND Version = @p19',N'@p0 int,@p1 uniqueidentifier,@p2 datetime,@p3 nvarchar(4000),@p4 nvarchar(4000),@p5 int,@p6 bit,@p7 bit,@p8 bit,@p9 nvarchar(4000),@p10 uniqueidentifier,@p11 bit,@p12 bit,@p13 bit,@p14 bit,@p15 bit,@p16 int,@p17 uniqueidentifier,@p18 uniqueidentifier,@p19 int',@p0=2,@p1='10957AD5-5489-48E0-959A-9B5E015B2B5C',@p2='2012-10-07 19:56:38',@p3=N'TP break',@p4=N'',@p5=-14774017,@p6=1,@p7=1,@p8=0,@p9=N'',@p10='928DD0BC-BF40-412E-B970-9B5E015AADEA',@p11=0,@p12=1,@p13=0,@p14=0,@p15=0,@p16=0,@p17=NULL,@p18='A7C5A78A-2F28-4A1A-8A06-A0E301694BFB',@p19=1
 
 --get activities
-select @Phone=id from TeleoptiCCC7_Demo.dbo.Activity where Name='Phone'
-select @Lunch=id from TeleoptiCCC7_Demo.dbo.Activity where Name='Lunch'
-select @ShortBreak=id from TeleoptiCCC7_Demo.dbo.Activity where Name='Short break'
-select @Admin=id from TeleoptiCCC7_Demo.dbo.Activity where Name='Administration'
-select @TBBreak=id from TeleoptiCCC7_Demo.dbo.Activity where Name='TP break'
-select @Meeting=id from TeleoptiCCC7_Demo.dbo.Activity where Name='Meeting'
+select @Phone=id from main_DemoSales_TeleoptiCCC7.dbo.Activity where Name='Phone'
+select @Lunch=id from main_DemoSales_TeleoptiCCC7.dbo.Activity where Name='Lunch'
+select @ShortBreak=id from main_DemoSales_TeleoptiCCC7.dbo.Activity where Name='Short break'
+select @Admin=id from main_DemoSales_TeleoptiCCC7.dbo.Activity where Name='Administration'
+select @TBBreak=id from main_DemoSales_TeleoptiCCC7.dbo.Activity where Name='TP break'
+select @Meeting=id from main_DemoSales_TeleoptiCCC7.dbo.Activity where Name='Meeting'
 
---add PA x 3
-INSERT INTO [TeleoptiCCC7_Demo].[dbo].[PersonAssignment]([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[Scenario],[BusinessUnit],[Minimum],[Maximum])
-VALUES(@PaIdYesterday,1,@personId,@personId,GETDATE(),GETDATE(),@personId,@defaultScenario,@buId,@yesterday+'13:00:00',@yesterday+'17:00:00')
+--add PA
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[PersonAssignment]([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[Scenario],[BusinessUnit],[Minimum],[Maximum])
+VALUES(@PaIdTodayMinus2,1,@personId,@personId,GETDATE(),GETDATE(),@personId,@defaultScenario,@buId,@todayMinus2+'13:00:00',@todayMinus1+'17:00:00')
 
-INSERT INTO [TeleoptiCCC7_Demo].[dbo].[PersonAssignment]([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[Scenario],[BusinessUnit],[Minimum],[Maximum])
-VALUES(@PaIdToday,1,@personId,@personId,GETDATE(),GETDATE(),@personId,@defaultScenario,@buId,@yesterday+'22:00:00',@today+'02:00:00')
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[PersonAssignment]([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[Scenario],[BusinessUnit],[Minimum],[Maximum])
+VALUES(@PaIdTodayMinus1,1,@personId,@personId,GETDATE(),GETDATE(),@personId,@defaultScenario,@buId,@todayMinus1+'13:00:00',@todayMinus1+'17:00:00')
 
-INSERT INTO [TeleoptiCCC7_Demo].[dbo].[PersonAssignment]([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[Scenario],[BusinessUnit],[Minimum],[Maximum])
-VALUES(@PaIdTomorrow,1,@personId,@personId,GETDATE(),GETDATE(),@personId,@defaultScenario,@buId,@tomorrow+'13:00:00',@tomorrow+'17:00:00')
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[PersonAssignment]([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[Scenario],[BusinessUnit],[Minimum],[Maximum])
+VALUES(@PaIdToday,1,@personId,@personId,GETDATE(),GETDATE(),@personId,@defaultScenario,@buId,@todayMinus1+'22:00:00',@today+'02:00:00')
+
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[PersonAssignment]([Id],[Version],[CreatedBy],[UpdatedBy],[CreatedOn],[UpdatedOn],[Person],[Scenario],[BusinessUnit],[Minimum],[Maximum])
+VALUES(@PaIdTodayPlus1,1,@personId,@personId,GETDATE(),GETDATE(),@personId,@defaultScenario,@buId,@todayPlus1+'13:00:00',@todayPlus1+'17:00:00')
 
 --add mainshift
-INSERT INTO [TeleoptiCCC7_Demo].[dbo].[MainShift]([Id],[ShiftCategory])
-VALUES(@PaIdYesterday,@shiftCat)
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[MainShift]([Id],[ShiftCategory])
+VALUES(@PaIdTodayMinus2,@shiftCat)
 
-INSERT INTO [TeleoptiCCC7_Demo].[dbo].[MainShift]([Id],[ShiftCategory])
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[MainShift]([Id],[ShiftCategory])
+VALUES(@PaIdTodayMinus1,@shiftCat)
+
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[MainShift]([Id],[ShiftCategory])
 VALUES(@PaIdToday,@shiftCat)
 
-INSERT INTO [TeleoptiCCC7_Demo].[dbo].[MainShift]([Id],[ShiftCategory])
-VALUES(@PaIdTomorrow,@shiftCat)
+INSERT INTO [main_DemoSales_TeleoptiCCC7].[dbo].[MainShift]([Id],[ShiftCategory])
+VALUES(@PaIdTodayPlus1,@shiftCat)
+
+--Minus2
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Phone,		(@todayMinus2 + '19:55:00'),(@todayMinus1 + '06:15:00'),@PaIdTodayMinus2,0)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@todayMinus2 + '20:15:00'),(@todayMinus2 + '20:30:00'),@PaIdTodayMinus2,1)
 
 --add layers. note: utc date and time
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Phone,		(@yesterday + '13:00:00'),(@yesterday + '15:24:00'),@PaIdYesterday,0)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@yesterday + '13:24:00'),(@yesterday + '13:30:00'),@PaIdYesterday,1)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@yesterday + '13:33:00'),(@yesterday + '13:39:00'),@PaIdYesterday,2)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@yesterday + '13:54:00'),(@yesterday + '14:00:00'),@PaIdYesterday,3)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Admin,		(@yesterday + '14:06:00'),(@yesterday + '14:15:00'),@PaIdYesterday,4)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Admin,		(@yesterday + '14:15:00'),(@yesterday + '14:18:00'),@PaIdYesterday,5)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Lunch,		(@yesterday + '14:18:00'),(@yesterday + '14:54:00'),@PaIdYesterday,6)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Meeting,		(@yesterday + '14:54:00'),(@yesterday + '14:57:00'),@PaIdYesterday,7)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Admin,		(@yesterday + '15:03:00'),(@yesterday + '15:06:00'),@PaIdYesterday,8)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Meeting,		(@yesterday + '15:15:00'),(@yesterday + '15:18:00'),@PaIdYesterday,9)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Phone,		(@todayMinus1 + '13:00:00'),(@todayMinus1 + '15:24:00'),@PaIdTodayMinus1,0)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@todayMinus1 + '13:24:00'),(@todayMinus1 + '13:30:00'),@PaIdTodayMinus1,1)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@todayMinus1 + '13:33:00'),(@todayMinus1 + '13:39:00'),@PaIdTodayMinus1,2)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@todayMinus1 + '13:54:00'),(@todayMinus1 + '14:00:00'),@PaIdTodayMinus1,3)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Admin,		(@todayMinus1 + '14:06:00'),(@todayMinus1 + '14:15:00'),@PaIdTodayMinus1,4)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Admin,		(@todayMinus1 + '14:15:00'),(@todayMinus1 + '14:18:00'),@PaIdTodayMinus1,5)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Lunch,		(@todayMinus1 + '14:18:00'),(@todayMinus1 + '14:54:00'),@PaIdTodayMinus1,6)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Meeting,	(@todayMinus1 + '14:54:00'),(@todayMinus1 + '14:57:00'),@PaIdTodayMinus1,7)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Admin,		(@todayMinus1 + '15:03:00'),(@todayMinus1 + '15:06:00'),@PaIdTodayMinus1,8)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Meeting,	(@todayMinus1 + '15:15:00'),(@todayMinus1 + '15:18:00'),@PaIdTodayMinus1,9)
 
 --add overtime
 select @overtime = NEWID()
-insert into [TeleoptiCCC7_Demo].[dbo].[OvertimeShift] values(@overtime,@PaIdYesterday,0)
-insert into TeleoptiCCC7_Demo.dbo.OvertimeShiftActivityLayer values (newid(),@Phone,	(@yesterday + '15:18:00'),(@yesterday + '15:54:00'),@defSet,@overtime,0)
+insert into [main_DemoSales_TeleoptiCCC7].[dbo].[OvertimeShift] values(@overtime,@PaIdTodayMinus1,0)
+insert into main_DemoSales_TeleoptiCCC7.dbo.OvertimeShiftActivityLayer values (newid(),@Phone,	(@todayMinus1 + '15:18:00'),(@todayMinus1 + '15:54:00'),@defSet,@overtime,0)
 
 --MidNightBreak shift but belongs to same Schedule date
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Phone,		(@yesterday + '22:30:00'),(@today + '02:00:00'),@PaIdToday,0)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@today + '00:15:00'),(@today + '00:30:00'),@PaIdToday,1)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Phone,		(@todayMinus1 + '22:30:00'),(@today + '02:00:00'),@PaIdToday,0)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@today + '00:15:00'),(@today + '00:30:00'),@PaIdToday,1)
 
 --tomorrow
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Phone,		(@tomorrow + '13:00:00'),(@tomorrow + '21:00:00'),@PaIdTomorrow,0)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@tomorrow + '13:45:00'),(@tomorrow + '14:05:00'),@PaIdTomorrow,1)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@Lunch,		(@tomorrow + '17:15:00'),(@tomorrow + '18:00:00'),@PaIdTomorrow,2)
-insert into TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@tomorrow + '19:55:00'),(@tomorrow + '20:15:00'),@PaIdTomorrow,3)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Phone,		(@todayPlus1 + '13:00:00'),(@todayPlus1 + '21:00:00'),@PaIdTodayPlus1,0)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@todayPlus1 + '13:45:00'),(@todayPlus1 + '14:05:00'),@PaIdTodayPlus1,1)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@Lunch,		(@todayPlus1 + '17:15:00'),(@todayPlus1 + '18:00:00'),@PaIdTodayPlus1,2)
+insert into main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer values (newid(),@ShortBreak,	(@todayPlus1 + '19:55:00'),(@todayPlus1 + '20:15:00'),@PaIdTodayPlus1,3)
 
 --add cti data
-/*
---Get Ashley
-SELECT * from mart.dim_person p
-where p.First_Name= 'Ashley'
-and p.Last_Name= 'Andeen'
-
-select * from mart.bridge_acd_login_person
-where person_id in (275,276)
-
---Asley = 177 as acd_login_id
-
-select * from mart.dim_acd_login where acd_login_id = 177
-
---Asley = 375 as agg_agent_id
-
-
-select * from TeleoptiCCC7Agg_Demo.dbo.agent_info agg
-inner join TeleoptiAnalytics_Demo.mart.dim_acd_login mart
-	on agg.Agent_id = mart.acd_login_agg_id
-inner join TeleoptiAnalytics_Demo.mart.bridge_acd_login_person bridge
-	on mart.acd_login_id = bridge.acd_login_id
-inner join mart.dim_person p
-	on p.person_id = bridge.person_id
-
-*/
-
 declare @agent_id int
 set @agent_id =52
 
 declare @ExcelFrame int
-set @ExcelFrame = 900/5
+set @ExcelFrame = 180 --seconds
 
-delete from TeleoptiCCC7Agg_Demo.dbo.agent_logg where agent_id = @agent_id
+delete from main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg where agent_id = @agent_id
 
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,55,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,56,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,57,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,58,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,59,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,60,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,61,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,62,@agent_id,'Ashley Andeen',@ExcelFrame*1,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,63,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,64,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,65,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,66,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,67,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,85,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,86,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,87,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,88,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,89,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,90,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,91,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,92,@agent_id,'Ashley Andeen',@ExcelFrame*1,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,93,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,94,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,95,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus2,96,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,0,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,1,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,2,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,3,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,4,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,5,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,6,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,7,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,8,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,9,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,10,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,11,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,12,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,13,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,14,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,15,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,16,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,17,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,18,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,19,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,20,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,21,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,22,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,23,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,24,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,25,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,26,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,27,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,28,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
 
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,93,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,94,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,95,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@yesterday,96,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@today,0,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@today,1,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@today,2,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert TeleoptiCCC7Agg_Demo.dbo.agent_logg values (11,@today,3,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,55,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,56,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,57,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,58,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,59,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,60,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,61,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,62,@agent_id,'Ashley Andeen',@ExcelFrame*1,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,63,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,64,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,65,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,66,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,67,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
 
-PRINT 'Now Run ETL for ' +cast(@yesterday as nvarchar(20))
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,93,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,94,@agent_id,'Ashley Andeen',@ExcelFrame*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,95,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@todayMinus1,96,@agent_id,'Ashley Andeen',@ExcelFrame*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@today,0,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@today,1,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@today,2,@agent_id,'Ashley Andeen',@ExcelFrame*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert main_DemoSales_TeleoptiCCCAgg.dbo.agent_logg values (11,@today,3,@agent_id,'Ashley Andeen',@ExcelFrame*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
 
-SELECT * from TeleoptiCCC7_Demo.dbo.PersonAssignment PA
-INNER JOIN  TeleoptiCCC7_Demo.dbo.MainShiftActivityLayer ms
+PRINT 'Now Run ETL for ' +cast(@todayMinus1 as nvarchar(20))
+
+SELECT * from main_DemoSales_TeleoptiCCC7.dbo.PersonAssignment PA
+INNER JOIN  main_DemoSales_TeleoptiCCC7.dbo.MainShiftActivityLayer ms
 on ms.parent = pa.id
 where pa.person = @personId
