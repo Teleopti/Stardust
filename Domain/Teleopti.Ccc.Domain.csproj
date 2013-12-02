@@ -353,6 +353,8 @@
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionForPersons.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualNumberOfCategoryFairnessService.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForEqualNumberOfCategoryFairness.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseAgentForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseShiftCategoryForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseWeekDay.cs" />
@@ -368,14 +370,14 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwap.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidator.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamMemberCountValidator.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ValidateScheduleDays.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ValidateScheduleDays.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ConstructTeamBlock.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamSelectionValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\DetermineTeamBlockPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockFairnessOptimizationService.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSizeClassifier.cs" />
