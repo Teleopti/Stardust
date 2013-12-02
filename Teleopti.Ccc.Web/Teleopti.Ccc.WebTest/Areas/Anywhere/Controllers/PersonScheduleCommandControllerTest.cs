@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -52,8 +51,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var command = new AddIntradayAbsenceCommand
 				{
-					StartTime = new TimeOfDay(new TimeSpan(8, 0, 0)),
-					EndTime = new TimeOfDay(new TimeSpan(7, 0, 0))
+					StartTime = new DateTime(2013, 11, 27, 14, 00, 00, DateTimeKind.Utc),
+					EndTime = new DateTime(2013, 11, 27, 13, 00, 00, DateTimeKind.Utc)
 				};
 
 			target.AddIntradayAbsence(command);
