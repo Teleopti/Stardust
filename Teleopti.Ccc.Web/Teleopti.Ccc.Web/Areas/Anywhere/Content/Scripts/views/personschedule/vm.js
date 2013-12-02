@@ -140,7 +140,7 @@ define([
 			data.Date = self.Date();
 			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
-			self.AddIntradayAbsenceForm.SetData(data);
+			self.AddIntradayAbsenceForm.SetData(data, self.GroupId());
 		};
 
 		this.AddPersons = function (data) {
