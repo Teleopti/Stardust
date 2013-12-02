@@ -41,39 +41,38 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			var pageOnDate = _groupPagePerDateHolder.GroupPersonGroupPagePerDate.GetGroupPageByDate(dateOnly);
 			var rootGroups = new List<IRootPersonGroup>();
 			rootGroups.AddRange(pageOnDate.RootGroupCollection);
-			var personsInSelectedGroupPage = new List<IPerson>();
-			var dic = _resultStateHolder.Schedules;
-			var keys = dic.Keys;
-			foreach (var personGroup in pageOnDate.RootGroupCollection)
+
+			var retLis = new List<IGroupPerson>();
+			var excludePersons = new List<IPerson>();
+			var personGroups = rootGroups.Cast<IPersonGroup>().ToList();
+			checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency, schedulingOptions, excludePersons);
+
+			var groupedPersons = new HashSet<IPerson>();
+			foreach (var groupPerson in retLis)
 			{
-				var personsInDictionary = personGroup.PersonCollection.Where(keys.Contains).ToList();
-				personsInSelectedGroupPage.AddRange(personsInDictionary);
+				groupPerson.GroupMembers.ForEach(x => groupedPersons.Add(x));
 			}
-			var ungroupedPersons = _selectedPersons.Where(x => !personsInSelectedGroupPage.Contains(x)).ToList();
+
+			var ungroupedPersons = _selectedPersons.Where(x => !groupedPersons.Contains(x) && !excludePersons.Contains(x)).ToList();
 			if (ungroupedPersons.Count > 0)
 			{
 				var converter = new PersonToSingleAgentTeamRootPersonGroupConverter(new SingleAgentTeamGroupPage());
+				var singleAgentGroups = new List<IRootPersonGroup>();
+				var singleAgentGroupPersons = new List<IGroupPerson>();
 				foreach (var ungroupedPerson in ungroupedPersons)
 				{
 					var personGroup = converter.Convert(ungroupedPerson, dateOnly);
-					rootGroups.Add(personGroup);
+					singleAgentGroups.Add(personGroup);
 				}
+				checkGroupCollection(dateOnly, singleAgentGroups, singleAgentGroupPersons, checkShiftCategoryConsistency, schedulingOptions, excludePersons);
+				retLis.AddRange(singleAgentGroupPersons);
 			}
-
-			var retLis = new List<IGroupPerson>();
-			var personGroups = new List<IPersonGroup>();
-			foreach (var rootPersonGroup in rootGroups)
-			{
-				personGroups.Add(rootPersonGroup);
-			}
-
-			checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency, schedulingOptions);
-
+			
 			return retLis;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void checkGroupCollection(DateOnly dateOnly, IEnumerable<IPersonGroup> groups, List<IGroupPerson> retLis, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions)
+		private void checkGroupCollection(DateOnly dateOnly, IEnumerable<IPersonGroup> groups, List<IGroupPerson> retLis, bool checkShiftCategoryConsistency, ISchedulingOptions schedulingOptions, List<IPerson> excludePersons)
 		{
             if (groups.IsEmpty())
 		    return;
@@ -91,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
                     if (checkShiftCategoryConsistency && !_groupPersonConsistentChecker.AllPersonsHasSameOrNoneScheduled(dic, personsInDictionary, dateOnly, schedulingOptions))
                     {
                         addResult(personGroup.Description.Name, dateOnly);
-
+	                    excludePersons.AddRange(personsInDictionary);
                         continue;
                     }
 
@@ -125,7 +124,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				{
 					personGroups.Add(rootPersonGroup);
 				}
-				checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency, schedulingOptions);
+				checkGroupCollection(dateOnly, personGroups, retLis, checkShiftCategoryConsistency, schedulingOptions, excludePersons);
 			}
 		}
 
