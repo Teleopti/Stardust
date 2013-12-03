@@ -30,6 +30,14 @@ SET CreateAgg=
 SET CreateAnalytics=
 SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
 
+::Read/set config file
+SET DbBaseline=C:\DbBaseline.txt
+if not exist "%DbBaseline%" (
+echo %Tfiles%> "%DbBaseline%"
+)
+set /p Tfiles= <"%DbBaseline%"
+echo.
+
 ::Get current Branch
 CD "%ROOTDIR%\..\..\.."
 SET HgFolder=%CD%
@@ -111,6 +119,9 @@ CALL :SETDATAPATH %CustomPath%
 IF NOT EXIST "%DataFolder%" MKDIR "%DataFolder%"
 IF NOT EXIST "%RarFolder%" MKDIR "%RarFolder%"
 IF NOT EXIST "%Zip7Folder%" MKDIR "%Zip7Folder%"
+
+ECHO Note: Database will be restored from "%Tfiles%". Feel free to change this path in "%DbBaseline%" if you want restore from other location!
+ECHO.
 
 ::Un-zip exe
 SET UNRAR="%Zip7Folder%\7z.exe" x -y -o"%RarFolder%"
