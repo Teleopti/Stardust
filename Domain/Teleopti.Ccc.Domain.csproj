@@ -357,6 +357,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualNumberOfCategoryFairnessService.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForEqualNumberOfCategoryFairness.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForTeamBlockInSelection.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocks.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseAgentForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseShiftCategoryForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseWeekDay.cs" />

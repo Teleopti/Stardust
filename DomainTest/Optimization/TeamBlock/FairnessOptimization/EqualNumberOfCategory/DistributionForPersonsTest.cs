@@ -43,10 +43,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			var category1 = ShiftCategoryFactory.CreateShiftCategory("hej");
 			var category2 = ShiftCategoryFactory.CreateShiftCategory("hopp");
 			var dic1 = new Dictionary<IShiftCategory, int>();
-			dic1.Add(category1, 2);
-			dic1.Add(category2, 3);
+			dic1.Add(category1, 50);
+			dic1.Add(category2, 25);
 			var dic2 = new Dictionary<IShiftCategory, int>();
-			dic2.Add(category1, 2);
+			dic2.Add(category1, 25);
 
 			using (_mocks.Record())
 			{
@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				var result = _target.CreateSummary(_personList, _dic);
-				Assert.That(result.PercentDicionary[category1] == 4/7);
-				Assert.That(result.PercentDicionary[category2] == 3/7);
+				Assert.That(result.PercentDicionary[category1] == 0.75);
+				Assert.That(result.PercentDicionary[category2] == 0.25);
 			}
 		}
 	}

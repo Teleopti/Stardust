@@ -21,13 +21,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IDistributionForPersons _distributionForPersons;
 		private readonly IFilterForEqualNumberOfCategoryFairness _filterForEqualNumberOfCategoryFairness;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
+		private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
 
-		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection)
+		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
 			_filterForEqualNumberOfCategoryFairness = filterForEqualNumberOfCategoryFairness;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
+			_filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
@@ -69,39 +71,70 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 						teamBlockInfoToWorkWith = teamBlockInfo;
 					}
 				}
+				if (teamBlockInfoToWorkWith == null)
+					continue;
 
-				//to standalone class
-				var possibleTeamBlocksToSwapWith = new List<ITeamBlockInfo>();
-				foreach (var teamBlockInfo in teamBlockInfoList)
+				teamBlockInfoList.Remove(teamBlockInfoToWorkWith);
+				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(teamBlockInfoList, teamBlockInfoToWorkWith);
+				if(possibleTeamBlocksToSwapWith.Count == 0)
+					continue;
+
+				//what category do i have to much of
+				var distributionToWorkWith = _distributionForPersons.CreateSummary(teamBlockInfoToWorkWith.TeamInfo.GroupPerson.GroupMembers,
+																			 scheduleDictionary);
+				var maxDiff = 0d;
+				IShiftCategory category = null;
+				foreach (var d in distributionToWorkWith.PercentDicionary)
 				{
-					if (!new TeamBlockPeriodValidator().ValidatePeriod(teamBlockInfo, teamBlockInfoToWorkWith))
-						continue;
-
-					if (!new TeamMemberCountValidator().ValidateMemberCount(teamBlockInfo, teamBlockInfoToWorkWith))
-						continue;
-
-					if (!new TeamBlockContractTimeValidator().ValidateContractTime(teamBlockInfo, teamBlockInfoToWorkWith))
-						continue;
-
-					//Kolla att skillen stämmer
-					//inga lås i blocken
-
-					if (teamBlockInfo.Equals(teamBlockInfoToWorkWith))
-						continue;
-
-					possibleTeamBlocksToSwapWith.Add(teamBlockInfo);
+					var diff = d.Value - totalDistribution.PercentDicionary[d.Key];
+					if (diff > maxDiff)
+					{
+						maxDiff = diff;
+						category = d.Key;
+					}
 				}
 
 
+				ITeamBlockInfo selectedTeamBlock = null;
+				foreach (var teamBlockInfo in possibleTeamBlocksToSwapWith)
+				{
+					var foundCategory = false;
+					for (int i = 0; i < teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Count(); i++)
+					{
+						foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+						{
+							var person = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList()[i];
+							var day = scheduleDictionary[person].ScheduledDay(dateOnly);
+							if (day.SignificantPartForDisplay() == SchedulePartView.MainShift &&
+							    day.PersonAssignment().ShiftCategory == category)
+							{
+								foundCategory = true;
+								break;
+							}
+						}
+
+						if(foundCategory)
+							break;
+					}
+					if (!foundCategory)
+					{
+						selectedTeamBlock = teamBlockInfo;
+						break;
+					}
+				}
+
+				if(selectedTeamBlock == null)
+					continue;
+
 				//to standalone class
-				ISwapServiceNew swapService = new SwapServiceNew(); //problem med frånvaro
+				ISwapServiceNew swapService = new SwapServiceNew(); //problem med frånvaro?
 				List<IScheduleDay> totalModifyList = new List<IScheduleDay>();
 				for (int i = 0; i < teamBlockInfoToWorkWith.TeamInfo.GroupPerson.GroupMembers.Count(); i++)
 				{
 					foreach (var dateOnly in teamBlockInfoToWorkWith.BlockInfo.BlockPeriod.DayCollection())
 					{
 						var person1 = teamBlockInfoToWorkWith.TeamInfo.GroupPerson.GroupMembers.ToList()[i];
-						var person2 = possibleTeamBlocksToSwapWith[0].TeamInfo.GroupPerson.GroupMembers.ToList()[i];
+						var person2 = selectedTeamBlock.TeamInfo.GroupPerson.GroupMembers.ToList()[i];
 						var day1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
 						var day2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
 						totalModifyList.AddRange(swapService.Swap(new List<IScheduleDay> {day1, day2}, scheduleDictionary));
@@ -118,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				//find swappable pair
 				//swap
 
-				teamBlockInfoList.Remove(teamBlockInfoToWorkWith);
+				
 			}
 		}
 
