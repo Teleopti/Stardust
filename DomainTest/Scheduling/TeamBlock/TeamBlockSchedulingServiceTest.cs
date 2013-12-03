@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _validatedTeamBlockExtractor = _mock.StrictMock<IValidatedTeamBlockInfoExtractor>();
 		    _target = new TeamBlockSchedulingService(_schedulingOptions, _teamInfoFactory,
 		                                             _teamBlockScheduler, _safeRollback,
-		                                             _workShiftMinMaxCalculator, new List<IWorkShiftFinderResult>(),
+		                                             _workShiftMinMaxCalculator,
 		                                             _teamBlockMaxSeatChecker,_validatedTeamBlockExtractor);
             _date = new DateOnly(2013, 02, 22);
             _person = PersonFactory.CreatePerson();
