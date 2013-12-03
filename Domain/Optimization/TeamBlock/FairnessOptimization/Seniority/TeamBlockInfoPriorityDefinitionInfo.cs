@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface ITeamBlockPriorityDefinitionInfo
     {
-        IEnumerable<int> HighToLowAgentPriorityList { get; }
+        IEnumerable<double> HighToLowAgentPriorityList { get; }
         IEnumerable<int> HighToLowShiftCategoryPriorityList { get; }
         IEnumerable<int> LowToHighShiftCategoryPriorityList { get; }
-        IEnumerable<int> LowToHighAgentPriorityList { get; }
+        IEnumerable<double> LowToHighAgentPriorityList { get; }
         void Clear();
-        ITeamBlockInfo BlockOnAgentPriority(int priority);
+        ITeamBlockInfo BlockOnAgentPriority(double priority);
         int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
     }
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             _teamBlockInfoPriorityList.Add(teamBlockInfoPriority);
         }
 
-        public IEnumerable<int> HighToLowAgentPriorityList
+        public IEnumerable<double> HighToLowAgentPriorityList
         {
             get { return (_teamBlockInfoPriorityList.Select(s => s.Seniority)).ToList().OrderByDescending(s => s); }
         }
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             get { return (_teamBlockInfoPriorityList.Select(s => s.ShiftCategoryPriority)).ToList().OrderBy(s => s); }
         }
 
-        public IEnumerable<int> LowToHighAgentPriorityList
+        public IEnumerable<double> LowToHighAgentPriorityList
         {
             get { return (_teamBlockInfoPriorityList.Select(s => s.Seniority)).ToList().OrderBy(s => s); }
         }
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             _teamBlockInfoPriorityList.Clear();
         }
 
-        public ITeamBlockInfo BlockOnAgentPriority(int priority)
+        public ITeamBlockInfo BlockOnAgentPriority(double priority)
         {
             return _teamBlockInfoPriorityList.FirstOrDefault(s => s.Seniority == priority).TeamBlockInfo;
         }

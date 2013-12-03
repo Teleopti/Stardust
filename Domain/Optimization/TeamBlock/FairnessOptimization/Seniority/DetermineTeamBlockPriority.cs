@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
     {
         //private readonly ISelectedAgentPoints _selectedAgentPoints;
         private readonly IShiftCategoryPoints _shiftCategoryPoints;
-	    private ISeniorityExtractor _seniorityExtractor;
+	    private readonly ISeniorityExtractor _seniorityExtractor;
 
 		//public DetermineTeamBlockPriority(ISelectedAgentPoints selectedAgentPoints, IShiftCategoryPoints shiftCategoryPoints)
 		//{
