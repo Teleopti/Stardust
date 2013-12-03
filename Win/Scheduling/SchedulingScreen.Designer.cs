@@ -308,8 +308,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemRestrictionCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRestrictionPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRestrictionDelete = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-			this.xxAgentInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.schedulerSplitters1 = new Teleopti.Ccc.Win.Scheduling.SchedulerSplitters();
 			this.contextMenuStripRequests = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.ToolStripMenuItemViewDetails = new System.Windows.Forms.ToolStripMenuItem();
@@ -364,13 +362,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.Silver;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 4;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 3;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -3089,11 +3087,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripSeparator5,
             this.toolStripMenuItemRestrictionCopy,
             this.toolStripMenuItemRestrictionPaste,
-            this.toolStripMenuItemRestrictionDelete,
-            this.toolStripSeparator6,
-            this.xxAgentInfoToolStripMenuItem});
+            this.toolStripMenuItemRestrictionDelete});
 			this.contextMenuStripRestrictionView.Name = "contextMenuStripRestrictionView";
-			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(260, 148);
+			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(260, 142);
 			// 
 			// toolStripMenuItemAddPreferenceRestriction
 			// 
@@ -3143,18 +3139,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemRestrictionDelete.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemRestrictionDelete.Text = "xxDelete";
 			this.toolStripMenuItemRestrictionDelete.Click += new System.EventHandler(this.toolStripMenuItemRestrictionDelete_Click);
-			// 
-			// toolStripSeparator6
-			// 
-			this.toolStripSeparator6.Name = "toolStripSeparator6";
-			this.SetShortcut(this.toolStripSeparator6, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator6.Size = new System.Drawing.Size(256, 6);
-			// 
-			// xxAgentInfoToolStripMenuItem
-			// 
-			this.xxAgentInfoToolStripMenuItem.Name = "xxAgentInfoToolStripMenuItem";
-			this.SetShortcut(this.xxAgentInfoToolStripMenuItem, System.Windows.Forms.Keys.None);
-			this.xxAgentInfoToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
 			// 
 			// schedulerSplitters1
 			// 
@@ -3548,8 +3532,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripMenuItem toolStripMenuItemRestrictionCopy;
 		private ToolStripMenuItem toolStripMenuItemRestrictionPaste;
 		private ToolStripMenuItem toolStripMenuItemRestrictionDelete;
-		private ToolStripSeparator toolStripSeparator6;
-		private ToolStripMenuItem xxAgentInfoToolStripMenuItem;
 		private ToolStripTextBox toolStripTextBoxFilter;
 		private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExFilterDays;
 		private ToolStripLabel xxShowLastNumberOfDays;
