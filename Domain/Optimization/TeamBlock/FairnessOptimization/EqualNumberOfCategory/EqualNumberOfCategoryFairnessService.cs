@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
 		private readonly ITeamBlockSwapper _teamBlockSwapper;
+		private readonly IEqualCategoryDistributionBestTeamBlockDecider _equalCategoryDistributionBestTeamBlockDecider;
 
-		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockSwapper teamBlockSwapper)
+		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockSwapper teamBlockSwapper, IEqualCategoryDistributionBestTeamBlockDecider equalCategoryDistributionBestTeamBlockDecider)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
 			_filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
 			_teamBlockSwapper = teamBlockSwapper;
+			_equalCategoryDistributionBestTeamBlockDecider = equalCategoryDistributionBestTeamBlockDecider;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
@@ -81,50 +83,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				if(possibleTeamBlocksToSwapWith.Count == 0)
 					continue;
 
-				//what category do i have to much of
-				var distributionToWorkWith = _distributionForPersons.CreateSummary(teamBlockInfoToWorkWith.TeamInfo.GroupPerson.GroupMembers,
-																			 scheduleDictionary);
-				var maxDiff = 0d;
-				IShiftCategory category = null;
-				foreach (var d in distributionToWorkWith.PercentDicionary)
-				{
-					var diff = d.Value - totalDistribution.PercentDicionary[d.Key];
-					if (diff > maxDiff)
-					{
-						maxDiff = diff;
-						category = d.Key;
-					}
-				}
-
-
-				ITeamBlockInfo selectedTeamBlock = null;
-				foreach (var teamBlockInfo in possibleTeamBlocksToSwapWith)
-				{
-					var foundCategory = false;
-					for (int i = 0; i < teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Count(); i++)
-					{
-						foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-						{
-							var person = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList()[i];
-							var day = scheduleDictionary[person].ScheduledDay(dateOnly);
-							if (day.SignificantPartForDisplay() == SchedulePartView.MainShift &&
-							    day.PersonAssignment().ShiftCategory == category)
-							{
-								foundCategory = true;
-								break;
-							}
-						}
-
-						if(foundCategory)
-							break;
-					}
-					if (!foundCategory)
-					{
-						selectedTeamBlock = teamBlockInfo;
-						break;
-					}
-				}
-
+				ITeamBlockInfo selectedTeamBlock =
+					_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(teamBlockInfoToWorkWith, possibleTeamBlocksToSwapWith,
+					                                                            totalDistribution, scheduleDictionary);
 				if(selectedTeamBlock == null)
 					continue;
 
