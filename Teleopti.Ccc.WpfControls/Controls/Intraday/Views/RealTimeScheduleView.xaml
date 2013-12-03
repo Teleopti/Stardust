@@ -47,20 +47,12 @@
 					</Setter.Value>
 				</Setter>
 			</Style>
-
+			<ContextMenu x:Key="ContextMenuCopy">
+				<MenuItem Header="{x:Static userTexts:Resources.Copy}" Click="ContextMenu_OnClick"/>
+			</ContextMenu>
 		</ResourceDictionary>
 
 	</UserControl.Resources>
-	<StackPanel
-		Background="{StaticResource RaptorStandardGradientBrush}">
-		<Button
-			Margin="7, 0, 0, 0"
-			Width="80"
-			HorizontalAlignment="Left"
-			Content="Copy Grid"
-			Click="ButtonCopyGrid_OnClick"
-			x:Name="ButtonCopyGrid" />
-
 		<Grid>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto" />
@@ -87,7 +79,8 @@
                        HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
 					   x:Name="RealTimeDataGrid"
 					   x:FieldModifier="private"
-						   Sorting="RealTimeDataGrid_OnSorting">
+					   ContextMenu="{StaticResource ContextMenuCopy}"
+					   Sorting="RealTimeDataGrid_OnSorting">
 
 				<!--AgentName Column-->
 				<controls:DataGrid.Columns>
@@ -220,7 +213,7 @@
 						</controls:DataGridTemplateColumn.Header>
 						<controls:DataGridTemplateColumn.CellTemplate>
 							<DataTemplate>
-								<layers:LayerListBox DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded"
+							<layers:LayerListBox DataContext="{Binding Path=Layers}" Loaded="LayerListBox_Loaded" PreviewMouseLeftButtonDown="layer_Clicked"
 											    Background="{StaticResource RaptorStandardLightGradientBrush}" Style="{StaticResource LayerListBoxStyle}" />
 							</DataTemplate>
 						</controls:DataGridTemplateColumn.CellTemplate>
@@ -243,7 +236,7 @@
                  Text="{x:Static userTexts:Resources.Agent}" 
                  BorderThickness="0.3"
                  IsHitTestVisible="False"
-                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorAgentGradientSeeThroughBrush}"></TextBox>
+                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorAgentGradientSeeThroughBrush}"/>
 			<TextBox x:Name="Bb"
                  FontWeight ="Bold"
                  FontFamily ="SegoeUI, Segoe UI, Tahoma"
@@ -257,7 +250,7 @@
                  Text="{x:Static userTexts:Resources.Activity}" 
                  BorderThickness="0,0.3,0.3,0.3" 
                  IsHitTestVisible="False"
-                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorActivityGradientSeeThroughBrush}" ></TextBox>
+                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorActivityGradientSeeThroughBrush}"/>
 			<TextBox x:Name="Cc"
                  FontWeight ="Bold"
                  FontFamily ="SegoeUI, Segoe UI, Tahoma"
@@ -271,8 +264,6 @@
                  Text="{x:Static userTexts:Resources.Alarm}" 
                  BorderThickness="0,0.3,0.3,0.3" 
                  IsHitTestVisible="False"
-                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorAlarmGradientSeeThroughBrush}"></TextBox>
-
+                 BorderBrush="{StaticResource RaptorStandardCellBorderBrush}" Background="{StaticResource RaptorAlarmGradientSeeThroughBrush}"/>
 		</Grid>
-	</StackPanel>
 </UserControl>
