@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -7,14 +8,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ISeniorityExtractor
 	{
-		IList<ISeniorityInfo> ExtractSeniority(IList<ITeamInfo> teamInfos);
+		IDictionary<ITeamInfo, ISeniorityInfo> ExtractSeniority(IList<ITeamInfo> teamInfos);
 	}
 
 	public class SeniorityExtractor : ISeniorityExtractor
 	{
-		public IList<ISeniorityInfo> ExtractSeniority(IList<ITeamInfo> teamInfos)
+		public IDictionary<ITeamInfo, ISeniorityInfo> ExtractSeniority(IList<ITeamInfo> teamInfos)
 		{
-			IList<ISeniorityInfo> seniorityInfos = new List<ISeniorityInfo>();
+			IDictionary<ITeamInfo, ISeniorityInfo> seniorityInfos = new Dictionary<ITeamInfo, ISeniorityInfo>();
 		
 			var selectedPersons = new List<IPerson>();
 			foreach (var teamInfo in teamInfos)
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 				var averageValue = totalSeniorityPoints / (double)groupPerson.GroupMembers.Count();
 				var seniorityInfo = new SeniorityInfo(teamInfo, averageValue);
-				seniorityInfos.Add(seniorityInfo);
+				seniorityInfos.Add(teamInfo, seniorityInfo);
 			}
 			//
 

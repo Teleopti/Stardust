@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mock.Playback())
 			{
 				var result = _target.ExtractSeniority(_teamInfos);
-				Assert.AreEqual(expectedSeniority, result[0].Seniority);	
+				Assert.AreEqual(expectedSeniority, result[_teamInfo].Seniority);	
 			}
 		}
 	}

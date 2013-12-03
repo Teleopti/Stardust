@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         public IEnumerable<int> HighToLowAgentPriorityList
         {
-            get { return (_teamBlockInfoPriorityList.Select(s => s.AgentPriority)).ToList().OrderByDescending(s => s); }
+            get { return (_teamBlockInfoPriorityList.Select(s => s.Seniority)).ToList().OrderByDescending(s => s); }
         }
 
         public IEnumerable<int> HighToLowShiftCategoryPriorityList
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         public IEnumerable<int> LowToHighAgentPriorityList
         {
-            get { return (_teamBlockInfoPriorityList.Select(s => s.AgentPriority)).ToList().OrderBy(s => s); }
+            get { return (_teamBlockInfoPriorityList.Select(s => s.Seniority)).ToList().OrderBy(s => s); }
         }
 
         public void Clear()
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         public ITeamBlockInfo BlockOnAgentPriority(int priority)
         {
-            return _teamBlockInfoPriorityList.FirstOrDefault(s => s.AgentPriority == priority).TeamBlockInfo;
+            return _teamBlockInfoPriorityList.FirstOrDefault(s => s.Seniority == priority).TeamBlockInfo;
         }
 
         public int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)

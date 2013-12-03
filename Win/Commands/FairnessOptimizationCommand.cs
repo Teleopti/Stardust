@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -44,7 +45,8 @@ namespace Teleopti.Ccc.Win.Commands
             var constructTeamBlock = new ConstructTeamBlock(teamInfoFactory,_teamBlockInfoFactory);
             _selectedAgentPoints.AssignAgentPoints(selectedPerson );
             _shiftCategoryPoints.AssignShiftCategoryPoints(shiftCategories );
-            var determineTeamBlockPriority = new DetermineTeamBlockPriority(_selectedAgentPoints,_shiftCategoryPoints );
+	        var seniorityExtractor = new SeniorityExtractor();
+            var determineTeamBlockPriority = new DetermineTeamBlockPriority(seniorityExtractor,_shiftCategoryPoints );
             var teamBlockListSwapAnalyzer = new TeamBlockListSwapAnalyzer(determineTeamBlockPriority ,_swapScheduleDays,_validateScheduleDays);
             var teamBlockFairnessOptimizer = new TeamBlockFairnessOptimizationService(constructTeamBlock, _teamBlockSizeClassifier,
                                                                             teamBlockListSwapAnalyzer);
