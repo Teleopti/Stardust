@@ -10,6 +10,7 @@ GO
 --				2012-01-09: MattiasE:	Passed bu to ReportAgents
 --				2012-01-26:	Jonas N:	Change parameters @group_page_group_set and @team_set to sets and nvarchar(max)
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- 2013-12-03 Removed join with brdige_queue_workload KJ
 -- Description:	Used by report Agent Queue Metrics 
 -- =============================================
 -- exec mart.report_data_agent_queue_metrics @date_from='2009-02-02 00:00:00',@date_to='2009-02-08 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_code=N'00000000-0000-0000-0000-000000000002',@time_zone_id=N'0',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id=15,@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
@@ -139,14 +140,6 @@ INNER JOIN
 	mart.dim_queue dq 
 ON 
 	dq.queue_id = fq.queue_id
-INNER JOIN 
-	(SELECT DISTINCT a.queue_id 
-			FROM mart.bridge_queue_workload a
-			INNER JOIN mart.dim_workload b
-				ON a.workload_id = b.workload_id
-				AND b.is_deleted = 0) bqw
-ON 
-	bqw.queue_id = dq.queue_id
 INNER JOIN 
 	mart.bridge_time_zone b
 ON
