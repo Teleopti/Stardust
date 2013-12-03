@@ -22,14 +22,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IFilterForEqualNumberOfCategoryFairness _filterForEqualNumberOfCategoryFairness;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
+		private readonly ITeamBlockSwapper _teamBlockSwapper;
 
-		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks)
+		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockSwapper teamBlockSwapper)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
 			_filterForEqualNumberOfCategoryFairness = filterForEqualNumberOfCategoryFairness;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
 			_filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
+			_teamBlockSwapper = teamBlockSwapper;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
@@ -126,32 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				if(selectedTeamBlock == null)
 					continue;
 
-				//to standalone class
-				ISwapServiceNew swapService = new SwapServiceNew(); //problem med frånvaro?
-				List<IScheduleDay> totalModifyList = new List<IScheduleDay>();
-				for (int i = 0; i < teamBlockInfoToWorkWith.TeamInfo.GroupPerson.GroupMembers.Count(); i++)
-				{
-					foreach (var dateOnly in teamBlockInfoToWorkWith.BlockInfo.BlockPeriod.DayCollection())
-					{
-						var person1 = teamBlockInfoToWorkWith.TeamInfo.GroupPerson.GroupMembers.ToList()[i];
-						var person2 = selectedTeamBlock.TeamInfo.GroupPerson.GroupMembers.ToList()[i];
-						var day1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
-						var day2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
-						totalModifyList.AddRange(swapService.Swap(new List<IScheduleDay> {day1, day2}, scheduleDictionary));
-					}
-				}
-
-				rollbackService.ClearModificationCollection();
-				rollbackService.ModifyParts(totalModifyList);
-				rollbackService.ClearModificationCollection();
-
-				//loop
-				//get swap candidate
-				//get swap teamblock from candidate
-				//find swappable pair
-				//swap
-
-				
+				_teamBlockSwapper.Swap(teamBlockInfoToWorkWith, selectedTeamBlock, rollbackService, scheduleDictionary);
 			}
 		}
 

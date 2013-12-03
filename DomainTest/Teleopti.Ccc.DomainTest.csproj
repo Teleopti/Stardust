@@ -294,6 +294,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionForPersonsTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForEqualNumberOfCategoryFairnessTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForTeamBlockInSelectionTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\TeamBlockSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocksTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityInfoTest.cs" />
