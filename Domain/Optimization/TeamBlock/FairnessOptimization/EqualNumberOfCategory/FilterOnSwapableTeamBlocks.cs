@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					continue;
 
 				//Kolla att skillen stämmer
+				//ShiftBag
 				//inga lås i blocken
 
 				possibleTeamBlocksToSwapWith.Add(teamBlockInfo);
