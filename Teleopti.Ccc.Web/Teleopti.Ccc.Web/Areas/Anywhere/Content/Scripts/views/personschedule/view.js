@@ -113,12 +113,12 @@ define([
 				}
 
 				loadPersons({
-					groupid: options.groupid,
+					groupid: currentGroup,
 					date: options.date,
 					personid: options.personid,
 					success: function () {
 						loadSchedules({
-							groupid: options.groupid,
+							groupid: currentGroup,
 							date: options.date,
 							personid: options.personid,
 							success: function () {

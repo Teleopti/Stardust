@@ -92,7 +92,6 @@ Scenario: Add on shift
 	| End time   | 17:00 |
 	| Color      | Red   |
 
-@ignore
 Scenario: Add after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And there is a shift category named 'Night'
@@ -107,12 +106,12 @@ Scenario: Add after midnight on night shift
 	| Field      | Value   |
 	| Activity   | Illness |
 	| Start time | 01:00   |
-	| End time   | 04:00   |
+	| End time   | 03:00   |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
 	| Field      | Value |
 	| Start time | 01:00 |
-	| End time   | 04:00 |
+	| End time   | 03:00 |
 	| Color      | Red   |
 
 Scenario: Add cross midnight on night shift

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					Datasource = @event.Datasource,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
-					StartDateTime = @event.StartDateTime,
+					StartDateTime = @event.StartDateTime.AddHours(-24),
 					EndDateTime = @event.EndDateTime,
 				});
 		}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					Datasource = @event.Datasource,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
-					StartDateTime = @event.StartDateTime,
+					StartDateTime = @event.StartDateTime.AddHours(-24),
 					EndDateTime = @event.EndDateTime,
 				});
 		}
