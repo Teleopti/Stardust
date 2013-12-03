@@ -22,7 +22,7 @@
             Opacity="1"
             Background="{Binding Path=DisplayColor, Converter={StaticResource ColorConverter}, FallbackValue=White}"
             Cursor="Hand"
-            MouseDown="Border_MouseDown"/>
+            MouseLeftButtonDown="Border_MouseDown"/>
 
     <UserControl.ToolTip>
         <ToolTip Opacity="0.8">
