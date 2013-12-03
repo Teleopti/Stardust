@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 			foreach (var keyValurPair in distribution)
 			{
-				var percentOfTotal = keyValurPair.Value/sumOfCategories;
+				var percentOfTotal = (double)keyValurPair.Value/sumOfCategories;
 				PercentDicionary.Add(keyValurPair.Key, percentOfTotal);
 			}
 		}

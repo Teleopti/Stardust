@@ -70,6 +70,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					}
 				}
 
+				if (teamBlockInfoToWorkWith == null)
+					continue;
+
+				teamBlockInfoList.Remove(teamBlockInfoToWorkWith);
+
 				//to standalone class
 				var possibleTeamBlocksToSwapWith = new List<ITeamBlockInfo>();
 				foreach (var teamBlockInfo in teamBlockInfoList)
@@ -92,6 +97,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					possibleTeamBlocksToSwapWith.Add(teamBlockInfo);
 				}
 
+				if(possibleTeamBlocksToSwapWith.Count == 0)
+					continue;
 
 				//to standalone class
 				ISwapServiceNew swapService = new SwapServiceNew(); //problem med frånvaro
@@ -118,7 +125,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				//find swappable pair
 				//swap
 
-				teamBlockInfoList.Remove(teamBlockInfoToWorkWith);
+				
 			}
 		}
 
