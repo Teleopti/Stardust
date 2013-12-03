@@ -2710,9 +2710,9 @@ namespace Teleopti.Analytics.ReportTexts {
         /// <summary>
         ///   Looks up a localized string similar to State Groups:.
         /// </summary>
-        public static string ResStateGroupsColon {
+        public static string ResStateGroupColon {
             get {
-                return ResourceManager.GetString("ResStateGroupsColon", resourceCulture);
+                return ResourceManager.GetString("ResStateGroupColon", resourceCulture);
             }
         }
         

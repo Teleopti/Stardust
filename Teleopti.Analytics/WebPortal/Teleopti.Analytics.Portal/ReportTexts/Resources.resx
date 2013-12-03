@@ -1365,7 +1365,7 @@ Schedule</value>
     <value>Time in State per Agent</value>
     <comment>Time in State per Agent</comment>
   </data>
-  <data name="ResStateGroupsColon" xml:space="preserve">
+  <data name="ResStateGroupColon" xml:space="preserve">
     <value>State Groups:</value>
     <comment>State Groups:</comment>
   </data>

@@ -579,7 +579,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResStateGroupsColon.Value</Value>
+                              <Value>=Parameters!ResStateGroupColon.Value</Value>
                               <Style>
                                 <FontSize>9pt</FontSize>
                                 <Color>DimGray</Color>
@@ -779,7 +779,6 @@
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
@@ -1707,7 +1706,7 @@
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ResStateGroupsColon">
+    <ReportParameter Name="ResStateGroupColon">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
       <Prompt>ReportParameter1</Prompt>
