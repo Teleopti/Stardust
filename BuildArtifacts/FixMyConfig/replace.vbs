@@ -32,20 +32,26 @@ End If
 'Read text file
 function GetFile(FileName)
   If FileName<>"" Then
-    Dim FS, FileStream
-    Set FS = CreateObject("Scripting.FileSystemObject")
-      on error resume Next
-      Set FileStream = FS.OpenTextFile(FileName)
-      GetFile = FileStream.ReadAll
+    Dim FileStream
+    Set FileStream = CreateObject("ADODB.Stream")
+    With FileStream
+        .Open
+        .CharSet = "utf-8"
+        .LoadFromFile(FileName)
+    End With
+    GetFile = FileStream.ReadText()
   End If
 End Function
 
 'Write string As a text file.
 function WriteFile(FileName, Contents)
-  Dim OutStream, FS
-
-  on error resume Next
-  Set FS = CreateObject("Scripting.FileSystemObject")
-    Set OutStream = FS.OpenTextFile(FileName, 2, True)
-    OutStream.Write Contents
+  Dim OutStream
+  Set OutStream = CreateObject("ADODB.Stream")
+  With OutStream
+      .Open
+      .CharSet = "utf-8"
+      .WriteText Contents
+      .SaveToFile FileName, 2
+  End With
+  Set OutStream = Nothing
 End Function
