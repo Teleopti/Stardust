@@ -21,13 +21,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IDistributionForPersons _distributionForPersons;
 		private readonly IFilterForEqualNumberOfCategoryFairness _filterForEqualNumberOfCategoryFairness;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
+		private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
 
-		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection)
+		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
 			_filterForEqualNumberOfCategoryFairness = filterForEqualNumberOfCategoryFairness;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
+			_filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
@@ -69,34 +71,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 						teamBlockInfoToWorkWith = teamBlockInfo;
 					}
 				}
-
 				if (teamBlockInfoToWorkWith == null)
 					continue;
 
 				teamBlockInfoList.Remove(teamBlockInfoToWorkWith);
-
-				//to standalone class
-				var possibleTeamBlocksToSwapWith = new List<ITeamBlockInfo>();
-				foreach (var teamBlockInfo in teamBlockInfoList)
-				{
-					if (!new TeamBlockPeriodValidator().ValidatePeriod(teamBlockInfo, teamBlockInfoToWorkWith))
-						continue;
-
-					if (!new TeamMemberCountValidator().ValidateMemberCount(teamBlockInfo, teamBlockInfoToWorkWith))
-						continue;
-
-					if (!new TeamBlockContractTimeValidator().ValidateContractTime(teamBlockInfo, teamBlockInfoToWorkWith))
-						continue;
-
-					//Kolla att skillen stämmer
-					//inga lås i blocken
-
-					if (teamBlockInfo.Equals(teamBlockInfoToWorkWith))
-						continue;
-
-					possibleTeamBlocksToSwapWith.Add(teamBlockInfo);
-				}
-
+				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(teamBlockInfoList, teamBlockInfoToWorkWith);
 				if(possibleTeamBlocksToSwapWith.Count == 0)
 					continue;
 

@@ -216,6 +216,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<DistributionForPersons>().As<IDistributionForPersons>();
 			builder.RegisterType<FilterForEqualNumberOfCategoryFairness>().As<IFilterForEqualNumberOfCategoryFairness>();
 			builder.RegisterType<FilterForTeamBlockInSelection>().As<IFilterForTeamBlockInSelection>();
+			builder.RegisterType<FilterOnSwapableTeamBlocks>().As<IFilterOnSwapableTeamBlocks>();
         }
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)
@@ -234,6 +235,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<TeamBlockListSwapAnalyzer>().As<ITeamBlockListSwapAnalyzer>();
             builder.RegisterType<SwapScheduleDays>().As<ISwapScheduleDays>();
             builder.RegisterType<ValidateScheduleDays>().As<IValidateScheduleDays>();
+			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
+			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>();
+			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>();
         }
 
         private static void registerTeamBlockCommon(ContainerBuilder builder)
