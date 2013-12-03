@@ -3693,12 +3693,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			 teamScheduling, 
 																			 _container.Resolve<ITeamBlockSchedulingOptions>());
 
-					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(_container.Resolve<ISameShiftCategoryBlockScheduler>(),
+	                var sameShiftCategoryBlockScheduler =
+		                new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
+		                                                    singleDayScheduler,
+		                                                    _container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
+															_container.Resolve<ITeamBlockClearer>());
+
+					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
 																					_container.Resolve<ITeamBlockSchedulingOptions>(),
 																					singleDayScheduler, 
 																					_container.Resolve<ITeamBlockRoleModelSelector>());
 
-					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays, teamBlockScheduler, rollbackService);
+					var teamBlockScheduleCommand = _container.Resolve<ITeamBlockScheduleCommand>();
+					teamBlockScheduleCommand.Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays, teamBlockScheduler, rollbackService);
 
                     
                 }
@@ -4080,6 +4087,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
 					{
+						var selectedPersons = new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
 						                                                            true,
 						                                                            schedulingOptions.ConsiderShortBreaks);
@@ -4109,7 +4118,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 																						singleDayScheduler, 
 																						_container.Resolve<ITeamBlockRoleModelSelector>());
 
-						var selectedPersons = new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+						
+						
+						//ITeamBlockOptimizationCommand teamBlockOptimizationCommand = new TeamBlockOptimizationCommand();
+
 						_container.Resolve<ITeamBlockOptimizationCommand>()
 						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
 						                   rollbackService, schedulingOptions, teamBlockScheduler);

@@ -10,6 +10,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IEqualNumberOfCategoryFairnessService
 	{
+		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+		                             IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
+		                             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class EqualNumberOfCategoryFairnessService : IEqualNumberOfCategoryFairnessService
