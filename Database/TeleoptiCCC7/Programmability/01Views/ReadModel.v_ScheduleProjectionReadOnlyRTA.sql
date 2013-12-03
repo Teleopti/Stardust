@@ -15,6 +15,15 @@ SELECT [Id]
       ,[ShortName]
       ,[DisplayColor]
 FROM [ReadModel].[ScheduleProjectionReadOnly]
-WHERE BelongsToDate BETWEEN DATEADD(DAY,-2,GETUTCDATE()) AND DATEADD(DAY,1,GETUTCDATE())
--- 2013-12-03 ErikS: Use between -2 since BelongsToDate is always on 00:00 but DATEADD(...) retuns the full datetime
+WHERE BelongsToDate
+	BETWEEN
+		DATEADD(
+			DAY,-1, --yesterday
+			DATEDIFF(DAY, 0, GETUTCDATE()) --Now().DateOnly
+			)
+		AND
+		DATEADD(
+			DAY,1, --tomorrow
+			DATEDIFF(DAY, 0, GETUTCDATE()) --Now().DateOnly
+			)
 GO
