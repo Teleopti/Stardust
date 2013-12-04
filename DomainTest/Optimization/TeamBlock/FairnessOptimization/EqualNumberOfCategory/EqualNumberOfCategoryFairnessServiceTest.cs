@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		}
 
 		[Test]
-		public void ShouldWORK()
+		public void ShouldWork()
 		{
 			var allMatrixes = new List<IScheduleMatrixPro> {_matrix1};
 			var person = PersonFactory.CreatePerson();
@@ -75,12 +75,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_constructTeamBlock.Construct(allMatrixes, new DateOnlyPeriod(), selectedPersons, schedulingOptions))
 				      .Return(teamBlockInfos);
 				Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(teamBlockInfos)).Return(teamBlockInfos);
+
 				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
 				Expect.Call(_groupPerson.GroupMembers).Return(selectedPersons);
 				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
 				Expect.Call(_groupPerson.GroupMembers).Return(selectedPersons);
+
 				Expect.Call(_distributionForPersons.CreateSummary(selectedPersons, _sceduleDictionary)).IgnoreArguments()
 				      .Return(totalDistributionSummary);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockInfos, selectedPersons, new DateOnlyPeriod())).Return(teamBlockInfos);
