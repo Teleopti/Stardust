@@ -74,7 +74,7 @@ define([
 				groupId: options.groupid
 			},
 			success: function (data, textStatus, jqXHR) {
-				if (viewModel.AddingFullDayAbsence() || viewModel.AddingIntradayAbsence()) {
+				if (!viewModel.DisplayGroupMates()) {
 					data = [lazy(data)
 						.select(function(x) { return x.Id == viewModel.PersonId(); }).first()];
 				}

@@ -114,6 +114,10 @@ define([
 			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence();
 		});
 
+		this.DisplayGroupMates = ko.computed(function () {
+			return self.AddingActivity();
+		});
+
 		this.DisplayDescriptions = ko.observable(false);
 		this.ToggleDisplayDescriptions = function () {
 			self.DisplayDescriptions(!self.DisplayDescriptions());
