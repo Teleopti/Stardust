@@ -51,29 +51,18 @@ define([
 				return self.SelectedPerson().Name();
 			return "";
 		});
-
-		this.Site = ko.computed(function () {
-			if (self.SelectedPerson())
-				return self.SelectedPerson().Site;
-			return "";
-		});
-		
-		this.Team = ko.computed(function () {
-			if (self.SelectedPerson())
-				return self.SelectedPerson().Team;
-			return "";
-		});
 		
 		this.Absences = ko.observableArray();
 		
 		this.TimeLine = new timeLineViewModel(this.Persons);
-		
-		this.Shift = ko.computed(function () {
+
+		this.Shift = ko.computed(function() {
 			if (self.SelectedPerson()) {
 				return self.SelectedPerson().Shifts()[0]; // need to fix
 			}
 			return undefined;
 		});
+		
 		this.IsShift = ko.computed(function () {
 			if(self.Shift())
 				return self.Shift().Layers().length > 0;
