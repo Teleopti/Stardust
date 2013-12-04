@@ -25,8 +25,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly ITeamBlockSwapper _teamBlockSwapper;
 		private readonly IEqualCategoryDistributionBestTeamBlockDecider _equalCategoryDistributionBestTeamBlockDecider;
 		private readonly IEqualCategoryDistributionWorstTeamBlockDecider _equalCategoryDistributionWorstTeamBlockDecider;
+		private readonly IFilterPersonsForTotalDistribution _filterPersonsForTotalDistribution;
 
-		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockSwapper teamBlockSwapper, IEqualCategoryDistributionBestTeamBlockDecider equalCategoryDistributionBestTeamBlockDecider, IEqualCategoryDistributionWorstTeamBlockDecider equalCategoryDistributionWorstTeamBlockDecider)
+		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
+		                                            IDistributionForPersons distributionForPersons,
+		                                            IFilterForEqualNumberOfCategoryFairness
+			                                            filterForEqualNumberOfCategoryFairness,
+		                                            IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
+		                                            IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks,
+		                                            ITeamBlockSwapper teamBlockSwapper,
+		                                            IEqualCategoryDistributionBestTeamBlockDecider
+			                                            equalCategoryDistributionBestTeamBlockDecider,
+		                                            IEqualCategoryDistributionWorstTeamBlockDecider
+			                                            equalCategoryDistributionWorstTeamBlockDecider,
+		                                            IFilterPersonsForTotalDistribution filterPersonsForTotalDistribution)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
@@ -36,38 +48,32 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_teamBlockSwapper = teamBlockSwapper;
 			_equalCategoryDistributionBestTeamBlockDecider = equalCategoryDistributionBestTeamBlockDecider;
 			_equalCategoryDistributionWorstTeamBlockDecider = equalCategoryDistributionWorstTeamBlockDecider;
+			_filterPersonsForTotalDistribution = filterPersonsForTotalDistribution;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		                    IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService)
 		{
+			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList);
+			
 			var teamBlockListRaw = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
 			                                                  schedulingOptions);
 
 			var teamBlockListWithCorrectWorkFlowControlSet = _filterForEqualNumberOfCategoryFairness.Filter(teamBlockListRaw);
 			
-			var personListForTotalDistribution = new HashSet<IPerson>();
-			foreach (var teamBlockInfo in teamBlockListWithCorrectWorkFlowControlSet)
-			{
-				foreach (var groupMember in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
-				{
-					personListForTotalDistribution.Add(groupMember);
-				}
-			}
-			
 			var totalDistribution = _distributionForPersons.CreateSummary(personListForTotalDistribution, scheduleDictionary);
-			var teamBlockInfoList = _filterForTeamBlockInSelection.Filter(teamBlockListWithCorrectWorkFlowControlSet,
+			var teamBlocksInSelection = _filterForTeamBlockInSelection.Filter(teamBlockListWithCorrectWorkFlowControlSet,
 			                                                              selectedPersons, selectedPeriod);
 
-			while (teamBlockInfoList.Count > 0)
+			while (teamBlocksInSelection.Count > 0)
 			{
 				ITeamBlockInfo teamBlockInfoToWorkWith =
-					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, teamBlockInfoList,
+					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, teamBlocksInSelection,
 					                                                                    scheduleDictionary);
-				teamBlockInfoList.Remove(teamBlockInfoToWorkWith);
+				teamBlocksInSelection.Remove(teamBlockInfoToWorkWith);
 
-				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(teamBlockInfoList, teamBlockInfoToWorkWith);
+				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(teamBlocksInSelection, teamBlockInfoToWorkWith);
 				if(possibleTeamBlocksToSwapWith.Count == 0)
 					continue;
 

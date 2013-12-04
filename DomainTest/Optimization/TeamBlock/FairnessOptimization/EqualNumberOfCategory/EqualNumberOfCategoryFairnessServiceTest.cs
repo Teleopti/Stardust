@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private ITeamInfo _teamInfo;
 		private IGroupPerson _groupPerson	;
 		private ITeamBlockInfo _teamBlockInfo2;
+		private IFilterPersonsForTotalDistribution _filterPersonsForTotalDistribution;
 
 		[SetUp]
 		public void Setup()
@@ -45,11 +46,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_equalCategoryDistributionBestTeamBlockDecider = _mocks.StrictMock<IEqualCategoryDistributionBestTeamBlockDecider>();
 			_equalCategoryDistributionWorstTeamBlockDecider =
 				_mocks.StrictMock<IEqualCategoryDistributionWorstTeamBlockDecider>();
+			_filterPersonsForTotalDistribution = _mocks.StrictMock<IFilterPersonsForTotalDistribution>();
 			_target = new EqualNumberOfCategoryFairnessService(_constructTeamBlock, _distributionForPersons,
 			                                                   _filterForEqualNumberOfCategoryFairness,
 			                                                   _filterForTeamBlockInSelection, _filterOnSwapableTeamBlocks,
 			                                                   _teamBlockSwapper, _equalCategoryDistributionBestTeamBlockDecider,
-			                                                   _equalCategoryDistributionWorstTeamBlockDecider);
+			                                                   _equalCategoryDistributionWorstTeamBlockDecider,
+															   _filterPersonsForTotalDistribution);
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_sceduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -72,6 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			
 			using (_mocks.Record())
 			{
+				Expect.Call(_filterPersonsForTotalDistribution.Filter(allMatrixes)).Return(selectedPersons);
 				Expect.Call(_constructTeamBlock.Construct(allMatrixes, new DateOnlyPeriod(), selectedPersons, schedulingOptions))
 				      .Return(teamBlockInfos);
 				Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(teamBlockInfos)).Return(teamBlockInfos);
