@@ -27,13 +27,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IScheduleDictionary _scheduleDictionary;
 		private ITeamBlockSwapValidator _teamBlockSwapValidator;
 		private ITeamBlockSwapDayValidator _teamBlockSwapDayValidator;
+		private ISchedulePartModifyAndRollbackService _modifyAndRollbackService;
+		private ITeamInfo _teamInfo1;
+		private ITeamInfo _teamInfo2;
+		private IGroupPerson _groupPerson1;
+		private IGroupPerson _groupPerson2;
+		private IPerson _person1;
+		private IPerson _person2;
+		private IList<IPerson> _persons1;
+		private IList<IPerson> _persons2;
+		private IBlockInfo _blockInfo1;
+		private IBlockInfo _blockInfo2;
+		private DateOnlyPeriod _dateOnlyPeriod;
+		private IScheduleRange _scheduleRange1;
+		private IScheduleRange _scheduleRange2;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_mock = new MockRepository();
-			_scheduleDay1 = ScheduleDayFactory.Create(new DateOnly(2013, 1, 1));
-			_scheduleDay2 = ScheduleDayFactory.Create(new DateOnly(2013, 1, 1));
+			_dateOnlyPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
+			_scheduleDay1 = ScheduleDayFactory.Create(_dateOnlyPeriod.StartDate);
+			_scheduleDay2 = ScheduleDayFactory.Create(_dateOnlyPeriod.StartDate);
 			_teamBlockInfo1 = _mock.StrictMock<ITeamBlockInfo>();
 			_teamBlockInfo2 = _mock.StrictMock<ITeamBlockInfo>();
 			_swapServiceNew = _mock.StrictMock<ISwapServiceNew>();
@@ -44,34 +59,53 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
 			_teamBlockSwapValidator = _mock.StrictMock<ITeamBlockSwapValidator>();
 			_teamBlockSwapDayValidator = _mock.StrictMock<ITeamBlockSwapDayValidator>();
-			_target = new TeamBlockSwap(_swapServiceNew, _scheduleDictionary, _teamBlockSwapValidator, _teamBlockSwapDayValidator);
+			_modifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_teamInfo1 = _mock.StrictMock<ITeamInfo>();
+			_teamInfo2 = _mock.StrictMock<ITeamInfo>();
+			_groupPerson1 = _mock.StrictMock<IGroupPerson>();
+			_groupPerson2 = _mock.StrictMock<IGroupPerson>();
+			_person1 = PersonFactory.CreatePerson("Person1");
+			_person2 = PersonFactory.CreatePerson("Person2");
+			_persons1 = new List<IPerson>{_person1};
+			_persons2 = new List<IPerson>{_person2};
+			_blockInfo1 = _mock.StrictMock<IBlockInfo>();
+			_blockInfo2 = _mock.StrictMock<IBlockInfo>();
+			_scheduleRange1 = _mock.StrictMock<IScheduleRange>();
+			_scheduleRange2 = _mock.StrictMock<IScheduleRange>();
+			_target = new TeamBlockSwap(_swapServiceNew, _teamBlockSwapValidator, _teamBlockSwapDayValidator);
 		}
 
 		[Test]
 		public void ShouldSwap()
 		{
-			var scheduleMatrixPros1 = new List<IScheduleMatrixPro> {_scheduleMatrixPro1};
-			var scheduleMatrixPros2 = new List<IScheduleMatrixPro> {_scheduleMatrixPro2};
-			var scheduleDayPros1 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro1});
- 			var scheduleDayPros2 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro2});
 			var swappedList = new List<IScheduleDay> {_scheduleDay1, _scheduleDay2};
 
 			using (_mock.Record())
 			{
 				Expect.Call(_teamBlockSwapValidator.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
-				Expect.Call(_teamBlockInfo1.MatrixesForGroupAndBlock()).Return(scheduleMatrixPros1);
-				Expect.Call(_teamBlockInfo2.MatrixesForGroupAndBlock()).Return(scheduleMatrixPros2);
-				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(scheduleDayPros1);
-				Expect.Call(_scheduleMatrixPro2.EffectivePeriodDays).Return(scheduleDayPros2);
-				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
-				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
+				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
+				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
+				Expect.Call(_teamInfo1.GroupPerson).Return(_groupPerson1);
+				Expect.Call(_teamInfo2.GroupPerson).Return(_groupPerson2);
+				Expect.Call(_groupPerson1.GroupMembers).Return(_persons1);
+				Expect.Call(_groupPerson2.GroupMembers).Return(_persons2);
+				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
+				Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
+				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay1);
+				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay2);
 				Expect.Call(_teamBlockSwapDayValidator.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).Return(true);
 				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {_scheduleDay1, _scheduleDay2}, _scheduleDictionary)).Return(swappedList);
+				Expect.Call(()=>_modifyAndRollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
+				Expect.Call(_modifyAndRollbackService.ModifyParts(swappedList));
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary);
 				Assert.IsTrue(result);
 			}
 		}
@@ -86,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary);
 				Assert.IsFalse(result);	
 			}
 		}
@@ -94,26 +128,29 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		[Test]
 		public void ShouldNotSwapIfValidatorDayFails()
 		{
-			var scheduleMatrixPros1 = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
-			var scheduleMatrixPros2 = new List<IScheduleMatrixPro> { _scheduleMatrixPro2 };
-			var scheduleDayPros1 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1 });
-			var scheduleDayPros2 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro2 });
-
 			using (_mock.Record())
 			{
 				Expect.Call(_teamBlockSwapValidator.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
-				Expect.Call(_teamBlockInfo1.MatrixesForGroupAndBlock()).Return(scheduleMatrixPros1);
-				Expect.Call(_teamBlockInfo2.MatrixesForGroupAndBlock()).Return(scheduleMatrixPros2);
-				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(scheduleDayPros1);
-				Expect.Call(_scheduleMatrixPro2.EffectivePeriodDays).Return(scheduleDayPros2);
-				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
-				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
+				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
+				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
+				Expect.Call(_teamInfo1.GroupPerson).Return(_groupPerson1);
+				Expect.Call(_teamInfo2.GroupPerson).Return(_groupPerson2);
+				Expect.Call(_groupPerson1.GroupMembers).Return(_persons1);
+				Expect.Call(_groupPerson2.GroupMembers).Return(_persons2);
+				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
+				Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
+				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay1);
+				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay2);
 				Expect.Call(_teamBlockSwapDayValidator.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).Return(false);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary);
 				Assert.IsFalse(result);
 			}	
 		}

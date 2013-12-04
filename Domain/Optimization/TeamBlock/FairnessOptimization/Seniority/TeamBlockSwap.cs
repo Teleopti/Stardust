@@ -9,56 +9,65 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		private readonly ITeamBlockSwapDayValidator _teamBlockSwapDayValidator;
 		private readonly ISwapServiceNew _swapServiceNew;
-		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
 
-		public TeamBlockSwap(ISwapServiceNew swapServiceNew, IScheduleDictionary scheduleDictionary, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockSwapDayValidator teamBlockSwapDayValidator)
+		public TeamBlockSwap(ISwapServiceNew swapServiceNew, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockSwapDayValidator teamBlockSwapDayValidator)
 		{
 			_teamBlockSwapDayValidator = teamBlockSwapDayValidator;
 			_swapServiceNew = swapServiceNew;
-			_scheduleDictionary = scheduleDictionary;
 			_teamBlockSwapValidator = teamBlockSwapValidator;
 		}
 
-		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2)
+		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary)
 		{
 			if (!_teamBlockSwapValidator.ValidateCanSwap(teamBlockInfo1, teamBlockInfo2)) return false;
-			var scheduleDayPros1 = extractScheduleDayPros(teamBlockInfo1.MatrixesForGroupAndBlock()).ToList();
-			var scheduleDayPros2 = extractScheduleDayPros(teamBlockInfo2.MatrixesForGroupAndBlock()).ToList();
-			var index = scheduleDayPros1.Count;
+			var scheduleDays1 = extractScheduleDays(teamBlockInfo1, scheduleDictionary).ToList();
+			var scheduleDays2 = extractScheduleDays(teamBlockInfo2, scheduleDictionary).ToList();
+			var index = scheduleDays1.Count;
 			var daysToSwap = new List<IScheduleDay>();
 			var swappedDays = new List<IScheduleDay>();
 
 			for (var i = 0; i < index; i++)
 			{	
 				daysToSwap.Clear();
-				
-				var day1 = scheduleDayPros1[i].DaySchedulePart();
-				var day2 = scheduleDayPros2[i].DaySchedulePart();
+
+				var day1 = scheduleDays1[i];
+				var day2 = scheduleDays2[i];
 
 				if (!_teamBlockSwapDayValidator.ValidateSwapDays(day1, day2)) return false;
 
 				daysToSwap.Add(day1);
 				daysToSwap.Add(day2);
 
-				var result = _swapServiceNew.Swap(daysToSwap, _scheduleDictionary);
+				var result = _swapServiceNew.Swap(daysToSwap, scheduleDictionary);
 				swappedDays.AddRange(result);
 			}
+
+			rollbackService.ClearModificationCollection();
+			rollbackService.ModifyParts(swappedDays);
+			rollbackService.ClearModificationCollection();
 
 			return true;
 		}
 
 
-		private IEnumerable<IScheduleDayPro> extractScheduleDayPros(IEnumerable<IScheduleMatrixPro> scheduleMatrixPros)
+		private IEnumerable<IScheduleDay> extractScheduleDays(ITeamBlockInfo teamBlockInfo, IScheduleDictionary scheduleDictionary)
 		{
-			var scheduleDayPros = new List<IScheduleDayPro>();
+			var scheduleDays = new List<IScheduleDay>();
+			var period = teamBlockInfo.BlockInfo.BlockPeriod;
+			var teamBlock1GroupMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList();
 
-			foreach (var scheduleMatrixPro in scheduleMatrixPros)
+			for (var i = 0; i < teamBlock1GroupMembers.Count(); i++)
 			{
-				scheduleDayPros.AddRange(scheduleMatrixPro.EffectivePeriodDays);
+				foreach (var dateOnly in period.DayCollection())
+				{
+					var person = teamBlock1GroupMembers[i];
+					var scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
+					scheduleDays.Add(scheduleDay);
+				}
 			}
 
-			return scheduleDayPros;
+			return scheduleDays;
 		}
 	}
 }
