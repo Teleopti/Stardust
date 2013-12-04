@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -20,19 +17,15 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
         private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
         private readonly ITeamBlockSizeClassifier _teamBlockSizeClassifier;
-        private readonly ISelectedAgentPoints  _selectedAgentPoints;
-        private readonly IShiftCategoryPoints  _shiftCategoryPoints;
         private readonly ISwapScheduleDays _swapScheduleDays;
         private readonly IValidateScheduleDays _validateScheduleDays;
 
-        public FairnessOptimizationCommand(IMatrixListFactory matrixListFactory, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSizeClassifier teamBlockSizeClassifier, ISelectedAgentPoints selectedAgentPoints, IShiftCategoryPoints shiftCategoryPoints, ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDays)
+        public FairnessOptimizationCommand(IMatrixListFactory matrixListFactory, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSizeClassifier teamBlockSizeClassifier, ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDays)
         {
             _matrixListFactory = matrixListFactory;
             _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
             _teamBlockInfoFactory = teamBlockInfoFactory;
             _teamBlockSizeClassifier = teamBlockSizeClassifier;
-            _selectedAgentPoints = selectedAgentPoints;
-            _shiftCategoryPoints = shiftCategoryPoints;
             _swapScheduleDays = swapScheduleDays;
             _validateScheduleDays = validateScheduleDays;
         }
@@ -43,15 +36,12 @@ namespace Teleopti.Ccc.Win.Commands
             var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
             var constructTeamBlock = new ConstructTeamBlock(teamInfoFactory,_teamBlockInfoFactory);
-            //_selectedAgentPoints.AssignAgentPoints(selectedPerson );
-            _shiftCategoryPoints.AssignShiftCategoryPoints(shiftCategories );
 	        var seniorityExtractor = new SeniorityExtractor();
 	        var shiftCategoryPointExtractor = new ShiftCategoryPointExtractor(shiftCategories);
 	        var shiftCategoryPointInfoExtractor = new ShiftCategoryPointInfoExtractor(shiftCategoryPointExtractor);
 			var determineTeamBlockPriority = new DetermineTeamBlockPriority(seniorityExtractor, shiftCategoryPointInfoExtractor);
             var teamBlockListSwapAnalyzer = new TeamBlockListSwapAnalyzer(determineTeamBlockPriority ,_swapScheduleDays,_validateScheduleDays);
-            var teamBlockFairnessOptimizer = new TeamBlockFairnessOptimizationService(constructTeamBlock, _teamBlockSizeClassifier,
-                                                                            teamBlockListSwapAnalyzer);
+            var teamBlockFairnessOptimizer = new TeamBlockFairnessOptimizationService(constructTeamBlock, _teamBlockSizeClassifier, teamBlockListSwapAnalyzer);
             teamBlockFairnessOptimizer.Exectue(allVisibleMatrixes, selectedPeriod, selectedPerson, schedulingOptions, shiftCategories);
         }
     }

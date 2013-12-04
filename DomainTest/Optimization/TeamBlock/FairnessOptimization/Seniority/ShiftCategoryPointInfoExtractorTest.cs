@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IScheduleDayPro _scheduleDayPro2;
 		private IList<IScheduleMatrixPro> _scheduleMatrixPros1;
 		private IList<IScheduleDayPro> _scheduleDayPros1;
-		private IList<IScheduleDayPro> _scheduleDayPros2;
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;
 		private IPersonAssignment _personAssignment1;
