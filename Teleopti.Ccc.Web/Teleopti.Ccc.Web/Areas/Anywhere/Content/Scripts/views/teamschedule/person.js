@@ -51,21 +51,24 @@ define([
 			self.ContractTimeMinutes(0);
 		};
 
-		this.AddData = function (data, timeline, selectedGroup) {
-			if (data.Projection.length > 0) {
-				var newShift = new shift(timeline, selectedGroup, self.Id, data.Date);
-				newShift.AddLayers(data);
+		this.AddData = function (shiftData, timeline, selectedGroup) {
+			if (shiftData.Projection.length > 0) {
+				var newShift = new shift(timeline, selectedGroup, self.Id, shiftData.Date);
+				newShift.AddLayers(shiftData);
+				if (newShift.Layers()[0].StartMinutes() < 0) {
+					newShift.ShiftMenu.Date(shiftData.Date.clone().subtract('days', 1));
+				}
 				self.Shifts.push(newShift);
 			}
 
-			if (data.DayOff) {
-				data.DayOff.Date = data.Date;
-				var newDayOff = new dayOff(timeline, data.DayOff);
+			if (shiftData.DayOff) {
+				shiftData.DayOff.Date = shiftData.Date;
+				var newDayOff = new dayOff(timeline, shiftData.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
 
-			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
-			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
+			self.ContractTimeMinutes(self.ContractTimeMinutes() + shiftData.ContractTimeMinutes);
+			self.WorkTimeMinutes(self.WorkTimeMinutes() + shiftData.WorkTimeMinutes);
 		};
 
 		var layers = function () {

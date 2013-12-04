@@ -55,11 +55,11 @@ define([
 		this.Absences = ko.observableArray();
 		
 		this.TimeLine = new timeLineViewModel(this.Persons);
-
-		this.Shift = ko.computed(function() {
-			if (self.SelectedPerson()) {
-				return self.SelectedPerson().Shifts()[0]; // need to fix
-			}
+		
+		this.Shift = ko.computed(function () {
+			var person = self.SelectedPerson();
+			if (person)
+				return person.Shifts()[0];
 			return undefined;
 		});
 		

@@ -56,7 +56,8 @@ define([
 			if (data.Projection ? data.Projection.length > 0 : (data.Layers ? data.Layers.length > 0 : false)) {
 				var newShift = new shift(timeline);
 				newShift.AddLayers(data);
-				self.Shifts.push(newShift);
+				if (newShift.Layers()[0].StartMinutes() > 0)
+					self.Shifts.push(newShift);
 			}
 
 			var newDayOff;
