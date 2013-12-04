@@ -26,6 +26,9 @@ namespace Teleopti.Ccc.Rta.TestApplication
 		private readonly Guid _businessUnitId;
 		private readonly bool _removeOneByOne;
 		private readonly bool _randomPersonsInSnapshot;
+		private readonly bool _useMultiThread;
+		private readonly int _numberOfThreads;
+		private readonly Random random;
 
 		public SendSettings()
 		{
@@ -37,149 +40,80 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			foreach (var personId in ConfigurationManager.AppSettings["PersonIdsForScheduleUpdate"].Split(','))
 			{
 				Guid personGuid;
-				if (IsValidGuid(personId, out personGuid))
+				if (isValidGuid(personId, out personGuid))
 					_personIdForScheduleUpdate.Add(personId);
+				else
+					_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+					                       "Property PersonIdsForScheduleUpdate was not read from configuration");
 			}
 
 			var strPlatformTypeId = (ConfigurationManager.AppSettings["PlatformTypeId"]);
-			if (!IsValidGuid(strPlatformTypeId, out _platformId))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property PlatformTypeId was not read from configuration");
+			if (!isValidGuid(strPlatformTypeId, out _platformId))
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property PlatformTypeId was not read from configuration");
 
 			var setting = ConfigurationManager.AppSettings["SendCount"];
 			if (!int.TryParse(setting, out _sendCount))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property SendCount was not read from configuration");
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property SendCount was not read from configuration");
 
 			setting = ConfigurationManager.AppSettings["SourceId"];
 			if (!int.TryParse(setting, out _sourceId))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property SourceId was not read from configuration (the value must be numeric)");
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property SourceId was not read from configuration (the value must be numeric)");
 
 			setting = ConfigurationManager.AppSettings["MinDistributionMilliseconds"];
 			if (!int.TryParse(setting, out _minDistributionMilliseconds))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property MinDistributionMilliseconds was not read from configuration");
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property MinDistributionMilliseconds was not read from configuration");
 
 			setting = ConfigurationManager.AppSettings["MaxDistributionMilliseconds"];
 			if (!int.TryParse(setting, out _maxDistributionMilliseconds))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property MaxDistributionMilliseconds was not read from configuration");
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property MaxDistributionMilliseconds was not read from configuration");
 
 			setting = ConfigurationManager.AppSettings["SnapshotMode"];
 			if (!bool.TryParse(setting, out _snapshotMode))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property Snapshot was not read from configuration, the default value of false will be used.");
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property Snapshot was not read from configuration, the default value of false will be used.");
 
 			setting = ConfigurationManager.AppSettings["IntervalForScheduleUpdate"];
 			if (!int.TryParse(setting, out _intervalForScheduleUpdate))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property IntervalForScheduleUpdate was not read from configuration.");
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property IntervalForScheduleUpdate was not read from configuration.");
 
 			setting = ConfigurationManager.AppSettings["BusinessUnitId"];
-			if (!IsValidGuid(setting, out _businessUnitId))
-				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property BusinessUnitId was not read from configuration");
+			if (!isValidGuid(setting, out _businessUnitId))
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property BusinessUnitId was not read from configuration");
 
-			try
-			{
-				_removeOneByOne = bool.Parse(ConfigurationManager.AppSettings["RemoveOneByOne"]);
-				_randomPersonsInSnapshot = bool.Parse(ConfigurationManager.AppSettings["RandomPersonsInSnapshot"]);
-			}
-			catch (ConfigurationErrorsException)
-			{
-				//remove random instead..
-			}
+			setting = ConfigurationManager.AppSettings["UseMultiThread"];
+			if (!bool.TryParse(setting, out _useMultiThread))
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property UseMultiThread was not read from configuration");
+
+			setting = ConfigurationManager.AppSettings["NumberOfThreads"];
+			if (!int.TryParse(setting, out _numberOfThreads))
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property NumberOfThreads was not read from configuration");
+
+			setting = ConfigurationManager.AppSettings["RemoveOneByOne"];
+			if (!bool.TryParse(setting, out _removeOneByOne))
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property RemoveOneByOne was not read from configuration");
+
+			setting = ConfigurationManager.AppSettings["RandomPersonsInSnapshot"];
+			if (!bool.TryParse(setting, out _randomPersonsInSnapshot))
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
+				                       "Property RandomPersonsInSnapshot was not read from configuration");
 
 			_loggingSvc.InfoFormat(
 				"Loaded test sequence with {0} calls using {1} different log on and {2} different state codes. The SourceId is {3}. Snapshot mode is {4}.",
 				_sendCount, _logOnCollection.Count, _stateCodeCollection.Count, _sourceId, _snapshotMode);
+			random = new Random();
 		}
 
-		public int RemainingCount
-		{
-			get { return _sendCount; }
-		}
-
-		public Guid PlatformId
-		{
-			get { return _platformId; }
-		}
-
-		public int IntervalForScheduleUpdate
-		{
-			get { return _intervalForScheduleUpdate; }
-		}
-
-		public IEnumerable<AgentStateForTest> Read()
-		{
-			if (_sendCount <= 0) throw new InvalidOperationException("The sequence is now finished. Start a new sequence to run test again.");
-			var random = new Random();
-			if (_snapshotMode)
-			{
-				if (_removeOneByOne)
-				{
-					if (_logOnCollection.Count > 1) _logOnCollection.RemoveAt(0);
-
-					var batchIdentifier = DateTime.UtcNow;
-					foreach (var selectedLogOn in _logOnCollection)
-					{
-						var currentLogOn = selectedLogOn;
-						if (_randomPersonsInSnapshot)
-							currentLogOn = _personIdForScheduleUpdate[random.Next(0, _personIdForScheduleUpdate.Count)];
-						var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
-						
-						_sendCount--;
-
-						yield return
-							new AgentStateForTest(selectedLogOn, _stateCodeCollection[stateCodeIndex],
-												  TimeSpan.Zero, _sourceId, true, batchIdentifier, currentLogOn, _businessUnitId);
-					}
-
-					var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
-					yield return
-						new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier,
-						                      _personIdForScheduleUpdate[0], _businessUnitId);
-						//Snapshot end signal - with delay to add delay between snapshots
-				}
-				else
-				{
-					var selectedLogOns = new List<int>();
-					var batchIdentifier = DateTime.UtcNow;
-
-					if (_randomPersonsInSnapshot)
-					{
-						var numberOfAgentsToInclude = Math.Max(1, _logOnCollection.Count - 2);
-						while (selectedLogOns.Count < numberOfAgentsToInclude)
-							selectedLogOns.Add(random.Next(0, _logOnCollection.Count));
-					}
-					else
-						for (var i = 0; i < _logOnCollection.Count; i++)
-							selectedLogOns.Add(i);
-
-					foreach (var selectedLogOn in selectedLogOns)
-					{
-						var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
-						var personIdIndex = random.Next(0, _personIdForScheduleUpdate.Count);
-						_sendCount--;
-
-						yield return
-							new AgentStateForTest(_logOnCollection[selectedLogOn], _stateCodeCollection[stateCodeIndex],
-												  TimeSpan.Zero, _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[personIdIndex], _businessUnitId);
-					}
-
-					var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
-					yield return new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[0], _businessUnitId); //Snapshot end signal - with delay to add delay between snapshots
-				}
-
-			}
-			else
-			{
-				var logOnIndex = random.Next(0, _logOnCollection.Count);
-				var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
-				var personIdIndex = random.Next(0, _personIdForScheduleUpdate.Count);
-				var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
-				_sendCount--;
-
-				yield return
-					new AgentStateForTest(_logOnCollection[logOnIndex], _stateCodeCollection[stateCodeIndex],
-										  TimeSpan.FromMilliseconds(waitTime), _sourceId, false, DateTime.UtcNow, _personIdForScheduleUpdate[personIdIndex], _businessUnitId);
-			}
-		}
-
-		private static bool IsValidGuid(string guid, out Guid platformId)
+		private static bool isValidGuid(string guid, out Guid platformId)
 		{
 			var reg =
 				new Regex(
@@ -206,15 +140,104 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			}
 		}
 
+		public int RemainingCount
+		{
+			get { return _sendCount; }
+		}
+
+		public Guid PlatformId
+		{
+			get { return _platformId; }
+		}
+
+		public int IntervalForScheduleUpdate
+		{
+			get { return _intervalForScheduleUpdate; }
+		}
+
+		public int NumberOfThreads
+		{
+			get { return _numberOfThreads; }
+		}
+
+		public bool UseMultiThread
+		{
+			get { return _useMultiThread; }
+		}
+
+		public IEnumerable<AgentStateForTest> Read()
+		{
+			if (_sendCount <= 0)
+				throw new InvalidOperationException("The sequence is now finished. Start a new sequence to run test again.");
+
+			return _snapshotMode
+				       ? getSnapshot()
+				       : new[] {getSingleState()};
+		}
+
+		private IEnumerable<AgentStateForTest> getSnapshot()
+		{
+			var batchIdentifier = DateTime.UtcNow;
+			var selectedLogOns = new List<int>();
+
+			for (var i = 0; i < _logOnCollection.Count; i++)
+				selectedLogOns.Add(i);
+
+			if (_removeOneByOne && selectedLogOns.Count > 1)
+				selectedLogOns.RemoveAt(0);
+
+			else if (_randomPersonsInSnapshot)
+			{
+				selectedLogOns.Clear();
+				while (selectedLogOns.Count < Math.Max(1, _logOnCollection.Count - 2))
+					selectedLogOns.Add(random.Next(0, _logOnCollection.Count));
+			}
+
+			return buildSnapshot(selectedLogOns, batchIdentifier);
+		}
+
+		private IEnumerable<AgentStateForTest> buildSnapshot(IEnumerable<int> selectedLogOns, DateTime batchIdentifier)
+		{
+			foreach (var selectedLogOn in selectedLogOns)
+			{
+				var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
+				var personIdIndex = random.Next(0, _personIdForScheduleUpdate.Count);
+
+				_sendCount--;
+				yield return
+					new AgentStateForTest(_logOnCollection[selectedLogOn], _stateCodeCollection[stateCodeIndex],
+					                      TimeSpan.Zero, _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[personIdIndex],
+					                      _businessUnitId);
+			}
+
+			var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
+			yield return new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier,
+			                                   _personIdForScheduleUpdate[0], _businessUnitId);
+		}
+
+		private AgentStateForTest getSingleState()
+		{
+			var logOnIndex = random.Next(0, _logOnCollection.Count);
+			var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
+			var personIdIndex = random.Next(0, _personIdForScheduleUpdate.Count);
+			var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
+
+			_sendCount--;
+			return new AgentStateForTest(_logOnCollection[logOnIndex], _stateCodeCollection[stateCodeIndex],
+			                             TimeSpan.FromMilliseconds(waitTime), _sourceId, false, DateTime.UtcNow,
+			                             _personIdForScheduleUpdate[personIdIndex], _businessUnitId);
+		}
+
 		public IList<AgentStateForTest> EndSequence()
 		{
-			IList<AgentStateForTest> result = new List<AgentStateForTest>();
+			var result = new List<AgentStateForTest>();
 			if (string.IsNullOrEmpty(_endSequenceCode)) return result;
-			foreach (var logOn in _logOnCollection)
-			{
-				result.Add(new AgentStateForTest(logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false,
-												 DateTime.UtcNow, string.Empty, Guid.Empty));
-			}
+
+			result.AddRange(
+				_logOnCollection.Select(
+					logOn =>
+					new AgentStateForTest(logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false, DateTime.UtcNow, string.Empty,
+					                      Guid.Empty)));
 			return result;
 		}
 	}

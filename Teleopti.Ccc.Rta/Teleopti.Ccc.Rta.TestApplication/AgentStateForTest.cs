@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Rta.TestApplication
 	    private readonly string _personId;
 	    private readonly Guid _businessUnitId;
 
-		public AgentStateForTest(string logOn, string stateCode, TimeSpan waitTime, int dataSourceId, bool isSnapshot, DateTime batchIdentifier, string personId, Guid businessUnitId)
+	    public AgentStateForTest(string logOn, string stateCode, TimeSpan waitTime, int dataSourceId, bool isSnapshot,
+	                             DateTime batchIdentifier, string personId, Guid businessUnitId)
         {
             _logOn = logOn;
             _isSnapshot = isSnapshot;
