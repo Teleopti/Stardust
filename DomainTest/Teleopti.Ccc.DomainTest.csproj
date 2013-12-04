@@ -297,6 +297,9 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocksTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityInfoTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoExtractorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillCheckerTest.cs" />
