@@ -18,9 +18,10 @@
 		</span>
 	    <span class="add-on" data-bind="clickable: nextDateValid, enable: nextDateValid">
 	        <i class="icon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
-			
 	    </span>
-		
+		<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+			<option data-bind="text: text, value: id"></option>
+		</select>
 	</div>
 	<div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
         <div class="shift-trade-add-schedule">

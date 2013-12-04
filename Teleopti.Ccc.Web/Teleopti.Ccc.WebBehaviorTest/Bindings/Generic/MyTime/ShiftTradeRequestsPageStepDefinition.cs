@@ -3,12 +3,14 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -248,6 +250,50 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
         {
             Browser.Interactions.AssertUrlContains("ShiftTrade/"+date.ToString("yyyyMMdd"));
         }
+
+		[Given(@"I have possible shift trades with")]
+		public void GivenIHavePossibleShiftTradesWith(Table table)
+		{
+			var date = DateTime.Parse(table.Rows[0][1]);
+			var possibleTradeCount = int.Parse(table.Rows[1][1]);
+			var wcs = table.Rows[2][1];
+			var personPeriodDate = DateTime.Parse(table.Rows[3][1]);
+			var shiftCategory = table.Rows[4][1];
+
+			for (int i = 0; i < possibleTradeCount; i++)
+			{
+				string agentName = i.ToString(CultureInfo.InvariantCulture);
+				
+				var personPeriod = new PersonPeriodConfigurable {StartDate = personPeriodDate};
+				DataMaker.Person(agentName).Apply(personPeriod);
+
+				var userWorkflowControlSet = new WorkflowControlSetForUser { Name = wcs };
+				DataMaker.Person(agentName).Apply(userWorkflowControlSet);
+
+				DataMaker.Person(agentName).Apply(new ShiftConfigurable
+				{
+					ShiftCategory = shiftCategory,
+					StartTime = date.AddHours(8),
+					EndTime = date.AddHours(16),
+					LunchStartTime = date.AddHours(12),
+					LunchEndTime = date.AddHours(13),
+				});
+			}
+		}
+
+		[Given(@"I can see '(.*)' possible shift trades")]
+		[Then(@"I can see '(.*)' possible shift trades")]
+		public void GivenICanSeePossibleShiftTrades(int possibleShiftTradeCount)
+		{
+			var script = string.Format("return $('.shift-trade-person-schedule-row').length == {0}", possibleShiftTradeCount);
+			Browser.Interactions.AssertJavascriptResultContains(script, "true");
+		}
+
+		[When(@"I scroll down to the bottom of the shift trade section")]
+		public void WhenIScrollDownToTheBottomOfTheShiftTradeSection()
+		{
+			Browser.Interactions.Javascript("$('body, html').animate({ scrollTop: $('.shift-trade-person-schedule-row').filter(':last').offset().top }, 1);");
+		}
 
 	}
 }
