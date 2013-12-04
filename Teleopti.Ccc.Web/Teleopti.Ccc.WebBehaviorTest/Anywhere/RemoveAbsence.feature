@@ -124,3 +124,29 @@ Scenario: Remove one of two absences
 	| End time   | 16:00 |
 	| Color      | Gray  |
 
+Scenario: Remove absence starting from day 2 on night shift
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Start time     | 2013-12-06 22:00 |
+	| End time       | 2013-12-07 06:00 |
+	And 'Pierre Baldi' has an absence with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-12-07 02:00 |
+	| End time   | 2013-12-07 03:00 |
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-12-06'
+	Then I should see a scheduled activity with
+	| Field      | Value |
+	| Start time | 02:00 |
+	| End time   | 03:00 |
+	| Color      | Red   |
+	When I click 'remove' on absence named 'Vacation'
+	And I click 'confirm removal' on absence named 'Vacation'
+	Then I should see 0 absences in the absence list
+	And I should not see a scheduled activity with
+	| Field      | Value |
+	| Start time | 02:00 |
+	| End time   | 03:00 |
+	| Color      | Red   |
