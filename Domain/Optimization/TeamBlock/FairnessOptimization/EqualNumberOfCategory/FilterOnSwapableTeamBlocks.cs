@@ -15,12 +15,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly ITeamBlockPeriodValidator _teamBlockPeriodValidator;
 		private readonly ITeamMemberCountValidator _teamMemberCountValidator;
 		private readonly ITeamBlockContractTimeValidator _teamBlockContractTimeValidator;
+		private readonly ITeamBlockSameSkillValidator _teamBlockSameSkillValidator;
 
-		public FilterOnSwapableTeamBlocks(ITeamBlockPeriodValidator teamBlockPeriodValidator, ITeamMemberCountValidator teamMemberCountValidator, ITeamBlockContractTimeValidator teamBlockContractTimeValidator)
+		public FilterOnSwapableTeamBlocks(ITeamBlockPeriodValidator teamBlockPeriodValidator, ITeamMemberCountValidator teamMemberCountValidator, ITeamBlockContractTimeValidator teamBlockContractTimeValidator, ITeamBlockSameSkillValidator teamBlockSameSkillValidator)
 		{
 			_teamBlockPeriodValidator = teamBlockPeriodValidator;
 			_teamMemberCountValidator = teamMemberCountValidator;
 			_teamBlockContractTimeValidator = teamBlockContractTimeValidator;
+			_teamBlockSameSkillValidator = teamBlockSameSkillValidator;
 		}
 
 		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockInfoList, ITeamBlockInfo teamBlockInfoToWorkWith)
@@ -37,7 +39,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				if (!_teamBlockContractTimeValidator.ValidateContractTime(teamBlockInfo, teamBlockInfoToWorkWith))
 					continue;
 
-				//Kolla att skillen stämmer
+				if (!_teamBlockSameSkillValidator.ValidateSameSkill(teamBlockInfo, teamBlockInfoToWorkWith))
+					continue;
+
 				//ShiftBag
 				//inga lås i blocken
 

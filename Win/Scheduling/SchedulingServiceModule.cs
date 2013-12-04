@@ -240,6 +240,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
 			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>();
 			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>();
+			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>();
+			builder.RegisterType<TeamBlockPersonsSkillChecker>().As<ITeamBlockPersonsSkillChecker>();
         }
 
         private static void registerTeamBlockCommon(ContainerBuilder builder)
