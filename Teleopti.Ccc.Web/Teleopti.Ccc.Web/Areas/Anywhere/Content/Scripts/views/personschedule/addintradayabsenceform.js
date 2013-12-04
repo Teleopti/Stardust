@@ -29,28 +29,22 @@ define([
 
 		var groupId;
 		var personId;
+		var startTimeAsMoment;
+		var endTimeAsMoment;
 
-		this.StartTimeAsMoment = ko.computed(function () {
-			var momentStartTime = moment(self.StartTime(), resources.TimeFormatForMoment);
-			return moment(self.Date()).add('h', momentStartTime.hours()).add('m', momentStartTime.minutes());
-		});
-		
-		this.EndTimeAsMoment = ko.computed(function () {
-			var momentEndTime = moment(self.EndTime(), resources.TimeFormatForMoment);
-			return moment(self.Date()).add('h', momentEndTime.hours()).add('m', momentEndTime.minutes());
-		});
-		
 		this.StartTimeWithinShift = ko.computed(function () {
 			if (self.ShiftStart() && self.ShiftEnd()) {
+				startTimeAsMoment = getMomentFromInput(self.StartTime());
+				endTimeAsMoment = getMomentFromInput(self.EndTime());
 				if (startTimeWithinShift()) {
 					if (nightShiftWithEndTimeOnNextDay()) {
-						self.EndTimeAsMoment().add('d', 1);
+						endTimeAsMoment.add('d', 1);
 					}
 					return true;
 				}
 				if (self.ShiftStart().date() != self.ShiftEnd().date()) {
-					self.StartTimeAsMoment().add('d', 1);
-					self.EndTimeAsMoment().add('d', 1);
+					startTimeAsMoment.add('d', 1);
+					endTimeAsMoment.add('d', 1);
 					if (startTimeWithinShift())
 						return true;
 				}
@@ -63,7 +57,7 @@ define([
 			if (!self.StartTimeWithinShift())
 				return true;
 			
-			if (self.StartTimeAsMoment() && self.StartTimeAsMoment().diff(self.EndTimeAsMoment()) >= 0) {
+			if (startTimeAsMoment && startTimeAsMoment.diff(endTimeAsMoment) >= 0) {
 				return false;
 			}
 			return true;
@@ -92,12 +86,15 @@ define([
 
 			self.ShiftStart(data.Layers.length > 0 ? moment(data.Layers[0].Start) : undefined);
 			self.ShiftEnd(data.Layers.length > 0 ? moment(data.Layers[data.Layers.length - 1].Start).add('m', data.Layers[data.Layers.length - 1].Minutes) : undefined);
+			
+			startTimeAsMoment = getMomentFromInput(self.StartTime());
+			endTimeAsMoment = getMomentFromInput(self.EndTime());
 		};
 
 		this.Apply = function() {
 			var requestData = JSON.stringify({
-				StartTime: self.StartTimeAsMoment().format(),
-				EndTime: self.EndTimeAsMoment().format(),
+				StartTime: startTimeAsMoment.format(),
+				EndTime: endTimeAsMoment.format(),
 				AbsenceId: self.Absence(),
 				PersonId: personId
 			});
@@ -112,12 +109,17 @@ define([
 			);
 		};
 		
+		var getMomentFromInput = function(input) {
+			var momentInput = moment(input, resources.TimeFormatForMoment);
+			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
+		};
+
 		var startTimeWithinShift = function () {
-			return self.StartTimeAsMoment().diff(self.ShiftStart()) >= 0 && self.StartTimeAsMoment().diff(self.ShiftEnd()) < 0;
+			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) < 0;
 		};
 
 		var nightShiftWithEndTimeOnNextDay = function () {
-			return self.ShiftStart().date() != self.ShiftEnd().date() && self.StartTimeAsMoment().diff(self.EndTimeAsMoment()) > 0;
+			return self.ShiftStart().date() != self.ShiftEnd().date() && startTimeAsMoment.diff(endTimeAsMoment) > 0;
 		};
 	};
 });
