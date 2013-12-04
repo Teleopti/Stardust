@@ -72,7 +72,6 @@ Scenario: Cannot view confidential absence in person view when no permission
 	| Start time  | 08:00 |
 	| End time    | 16:00 |
 	| Color       | gray  |
-	| Description | Other |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Other            |
@@ -93,7 +92,6 @@ Scenario: View confidential absence in person view when permitted
 	| Start time  | 08:00           |
 	| End time    | 16:00           |
 	| Color       | Red             |
-	| Description | Mental disorder |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Mental disorder  |

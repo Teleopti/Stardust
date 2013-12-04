@@ -1,24 +1,5 @@
 <div class="person-schedule container">
-	
-	
-	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
-		<div class="span12 page-header">
-			<h1>
-				<span data-bind="text: Name"></span>
-				<small>
-					<span data-bind="text: Site"></span>
-					\ 
-					<span data-bind="text: Team"></span>
-				</small>
-				<div class="pull-right">
-					<div class="input-append">
-						<button class="btn toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions"><i class="icon-question-sign"></i></button>
-					</div>
-				</div>
-			</h1>
-		</div>
-	</div>
-	
+
 	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
 		<div class="span12">
 			<form action="#">

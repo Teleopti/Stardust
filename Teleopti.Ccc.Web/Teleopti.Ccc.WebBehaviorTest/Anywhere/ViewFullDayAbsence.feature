@@ -50,7 +50,6 @@ Scenario: View full day absence for person
 	| Start time  | 08:00    |
 	| End time    | 16:00    |
 	| Color       | Red      |
-	| Description | Vacation |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
