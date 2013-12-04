@@ -5,9 +5,9 @@ Feature: Shift Trade Request Add
 	I want to be able to trade shifts with other agents
 
 Background:
-	Given there is a team with
-	| Field | Value			|
-	| Name  | Other team    |
+	Given there is a site named 'The site'
+	And there is a team named 'My team' on 'The site'
+	And there is a team named 'Other team' on 'The site'
 	And there is a role with
 	| Field        | Value                 |
 	| Name         | Full access to mytime |
@@ -25,7 +25,8 @@ Background:
 	| Length     | 1          |
 	And I have a person period with 
 	| Field      | Value      |
-	| Start date | 2012-06-18 |	
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
 	And OtherAgent has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -298,8 +299,14 @@ Scenario: Show my scheduled day off
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
 	And I should see the time line hours span from '8' to '17'
+
+Scenario: Default to my team
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	When I view Add Shift Trade Request for date '2030-01-04'
+	Then The team picker should have 'The site/My team' selected
 	
-Scenario: Show possible shift trades only from my team
+Scenario: Show possible shift trades from my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -324,7 +331,7 @@ Scenario: Show possible shift trades only from my team
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
-Scenario: Show possible shift trades from any team
+Scenario: Show possible shift trades from another team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'

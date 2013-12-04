@@ -140,7 +140,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 self.chooseAgent(null);
                 self.requestedDateInternal(value);
                 self.IsLoading(false);
-                self.loadSchedule();
+                // Ladda team för combo med datum
+                //self.loadTeams();
+                self.loadSchedule(); //flytta till team ajax success
             }
         });
 
@@ -160,7 +162,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	        }
 	        return true;
         };
-
+        
 		self.loadPeriod = function (date) {
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestPeriod",
