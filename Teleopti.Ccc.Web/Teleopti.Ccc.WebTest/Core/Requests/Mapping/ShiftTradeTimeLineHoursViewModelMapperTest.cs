@@ -77,6 +77,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 										End = date.Date.AddHours(13)
 									}
 							}
+							,
+					MinStart = date.Date.AddHours(6)
 				};
 
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");

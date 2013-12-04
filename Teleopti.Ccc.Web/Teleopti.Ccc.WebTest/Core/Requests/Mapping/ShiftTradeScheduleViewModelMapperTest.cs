@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using AutoMapper;
 using Castle.Components.DictionaryAdapter;
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			
 			var result = _target.Map(data);
 
-			result.PossibleTradeSchedules.Should().Be.SameInstanceAs(possibleTradeScheduleViewModels);
+			result.PossibleTradeSchedules.Should().Not.Be.Null();
 		}
 
 		[Test]
