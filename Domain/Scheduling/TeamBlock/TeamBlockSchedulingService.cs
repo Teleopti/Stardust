@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -21,18 +20,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
-        private readonly List<IWorkShiftFinderResult> _advanceSchedulingResults;
         private readonly ITeamBlockMaxSeatChecker  _teamBlockMaxSeat;
         private readonly IValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
 
         public TeamBlockSchedulingService
-		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,  ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults, ITeamBlockMaxSeatChecker teamBlockMaxSeat, IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor)
+		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockScheduler teamBlockScheduler,  ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, ITeamBlockMaxSeatChecker teamBlockMaxSeat, IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
-            _advanceSchedulingResults = advanceSchedulingResults;
             _teamBlockMaxSeat = teamBlockMaxSeat;
             _validatedTeamBlockExtractor = validatedTeamBlockExtractor;
             _schedulingOptions = schedulingOptions;
@@ -71,8 +68,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
-                if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,selectedPeriod, selectedPersons))
-                    verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer, dateOnlySkipList, teamBlockInfo, teamInfo);
+				if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService))
+                    verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer, dateOnlySkipList, teamBlockInfo);
 
                 if (_cancelMe)
                     break;
@@ -81,8 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private void verfiyScheduledTeamBlock(IList<IPerson> selectedPersons,
                                               ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo,
-                                              ITeamInfo teamInfo)
+                                              DateOnly datePointer, List<DateOnly> dateOnlySkipList, ITeamBlockInfo teamBlockInfo)
         {
             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
             {
@@ -93,11 +89,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 _workShiftMinMaxCalculator.ResetCache();
                 if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
                 {
-                    var workShiftFinderResult = new WorkShiftFinderResult(teamInfo.GroupPerson, datePointer);
-                    workShiftFinderResult.AddFilterResults(
-                        new WorkShiftFilterResult(UserTexts.Resources.TeamBlockNotInLegalState, 0, 0));
-                    _advanceSchedulingResults.Add(workShiftFinderResult);
-
                     executeRollback(schedulePartModifyAndRollbackService);
                     dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
                     break;
