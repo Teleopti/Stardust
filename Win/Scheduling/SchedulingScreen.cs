@@ -4052,7 +4052,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			else
 			{
-				selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnCompareWith;
+				selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
 			}
 
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), selectedGroupPage);
@@ -4130,7 +4130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					// we need it here for fairness opt. for example
 					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-					_scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
+					_scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
 
 					break;
 			}
