@@ -219,6 +219,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<FilterOnSwapableTeamBlocks>().As<IFilterOnSwapableTeamBlocks>();
 			builder.RegisterType<TeamBlockSwapper>().As<ITeamBlockSwapper>();
 			builder.RegisterType<EqualCategoryDistributionBestTeamBlockDecider>().As<IEqualCategoryDistributionBestTeamBlockDecider>();
+			builder.RegisterType<EqualCategoryDistributionWorstTeamBlockDecider>().As<IEqualCategoryDistributionWorstTeamBlockDecider>();
         }
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)

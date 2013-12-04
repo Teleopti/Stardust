@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
 		private readonly ITeamBlockSwapper _teamBlockSwapper;
 		private readonly IEqualCategoryDistributionBestTeamBlockDecider _equalCategoryDistributionBestTeamBlockDecider;
+		private readonly IEqualCategoryDistributionWorstTeamBlockDecider _equalCategoryDistributionWorstTeamBlockDecider;
 
-		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockSwapper teamBlockSwapper, IEqualCategoryDistributionBestTeamBlockDecider equalCategoryDistributionBestTeamBlockDecider)
+		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock, IDistributionForPersons distributionForPersons, IFilterForEqualNumberOfCategoryFairness filterForEqualNumberOfCategoryFairness, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockSwapper teamBlockSwapper, IEqualCategoryDistributionBestTeamBlockDecider equalCategoryDistributionBestTeamBlockDecider, IEqualCategoryDistributionWorstTeamBlockDecider equalCategoryDistributionWorstTeamBlockDecider)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
 			_teamBlockSwapper = teamBlockSwapper;
 			_equalCategoryDistributionBestTeamBlockDecider = equalCategoryDistributionBestTeamBlockDecider;
+			_equalCategoryDistributionWorstTeamBlockDecider = equalCategoryDistributionWorstTeamBlockDecider;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
@@ -60,25 +62,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 			while (teamBlockInfoList.Count > 0)
 			{
-
-				//to standalone class
-				ITeamBlockInfo teamBlockInfoToWorkWith = null;
-				var teamBlockInfoDistributionValue = 0d;
-				foreach (var teamBlockInfo in teamBlockInfoList)
-				{
-					var distribution = _distributionForPersons.CreateSummary(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers,
-					                                                         scheduleDictionary);
-					var absDiff = distributionDiff(totalDistribution, distribution);
-					if (absDiff > teamBlockInfoDistributionValue)
-					{
-						teamBlockInfoDistributionValue = absDiff;
-						teamBlockInfoToWorkWith = teamBlockInfo;
-					}
-				}
-				if (teamBlockInfoToWorkWith == null)
-					continue;
-
+				ITeamBlockInfo teamBlockInfoToWorkWith =
+					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, teamBlockInfoList,
+					                                                                    scheduleDictionary);
 				teamBlockInfoList.Remove(teamBlockInfoToWorkWith);
+
 				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(teamBlockInfoList, teamBlockInfoToWorkWith);
 				if(possibleTeamBlocksToSwapWith.Count == 0)
 					continue;
@@ -92,18 +80,5 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				_teamBlockSwapper.Swap(teamBlockInfoToWorkWith, selectedTeamBlock, rollbackService, scheduleDictionary);
 			}
 		}
-
-		private double distributionDiff(IDistributionSummary totalDistribution,
-									 IDistributionSummary distributionToCalculate)
-		{
-			var absDiff = 0d;
-			foreach (var i in distributionToCalculate.PercentDicionary)
-			{
-				absDiff += Math.Abs(i.Value - totalDistribution.PercentDicionary[i.Key]);
-			}
-
-			return absDiff;
-		}
-
 	}
 }
