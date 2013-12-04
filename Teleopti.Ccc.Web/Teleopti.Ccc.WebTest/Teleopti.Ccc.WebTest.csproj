@@ -248,9 +248,9 @@
     <Compile Include="FakeCurrentTeleoptiPrincipal.cs" />
     <Compile Include="Areas\MobileReports\UserSettingServiceTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackControllerTest.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\TeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\TeamScheduleProjectionProviderTest.cs" />
-    <Compile Include="Areas\MyTime\Core\TeamSchedule\DataProvider\DefaultTeamProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\DefaultTeamProviderTest.cs" />
     <Compile Include="Areas\MyTime\Models\LayoutBase\OptionSplitTest.cs" />
     <Compile Include="Areas\MyTime\Models\Portal\CultureSpecificViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Controllers\MenuControllerTest.cs" />
