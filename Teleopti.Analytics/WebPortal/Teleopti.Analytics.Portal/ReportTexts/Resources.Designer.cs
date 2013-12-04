@@ -2429,6 +2429,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Saturday.
+        /// </summary>
+        public static string ResSaturday {
+            get {
+                return ResourceManager.GetString("ResSaturday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scenario:.
         /// </summary>
         public static string ResScenarioColon {
