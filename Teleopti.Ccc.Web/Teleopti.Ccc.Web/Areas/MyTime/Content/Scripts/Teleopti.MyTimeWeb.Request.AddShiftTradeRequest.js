@@ -24,7 +24,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.missingWorkflowControlSet = ko.observable(true);
 		
 		self.noPossibleShiftTrades = ko.observable(false);
-		//self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
@@ -81,7 +80,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 
 			self.noPossibleShiftTrades(mappedPersonsSchedule.length == 0 ? true : false);
-			//self.possibleTradeSchedules.push(mappedPersonsSchedule);
 		};
 
 		self.chooseAgent = function (agent) {
@@ -126,7 +124,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    
 			self.hours([]);
 			self.hours.push.apply(self.hours, arrayMap);
-			//_positionTimeLineHourTexts();
 		};
 
         self.requestedDate = ko.computed({
@@ -141,8 +138,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 self.requestedDateInternal(value);
                 self.IsLoading(false);
                 // Ladda team för combo med datum
-                //self.loadTeams();
-                self.loadSchedule(); //flytta till team ajax success
+                self.loadTeams();
             }
         });
 
@@ -163,6 +159,30 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	        return true;
         };
         
+        self.loadTeams = function () {
+            ajax.Ajax({
+                url: "xxx/teams",
+                dataType: "json",
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {
+                    selectedDate: self.requestedDateInternal().toDate().toJSON()
+                },
+                beforeSend: function () {
+                    //self.IsLoading(true);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    self.loadSchedule();
+                },
+                error: function (e) {
+                    //console.log(e);
+                },
+                complete: function () {
+                    //self.IsLoading(false);
+                }
+            });
+        };
+
 		self.loadPeriod = function (date) {
 			ajax.Ajax({
 				url: "Requests/ShiftTradeRequestPeriod",
