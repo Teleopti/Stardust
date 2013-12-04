@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleLayerViewModelMapperTest.cs" />

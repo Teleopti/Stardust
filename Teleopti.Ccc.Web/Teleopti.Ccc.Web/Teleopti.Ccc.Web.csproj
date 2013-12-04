@@ -243,6 +243,8 @@
     <Compile Include="Areas\Anywhere\Core\TeamScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\ITeamViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />

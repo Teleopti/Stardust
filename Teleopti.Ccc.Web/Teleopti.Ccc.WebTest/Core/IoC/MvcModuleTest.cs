@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -27,6 +26,7 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
@@ -34,7 +34,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -340,6 +339,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolveTeamScheduleViewModelFactory()
 		{
 			requestContainer.Resolve<ITeamScheduleViewModelFactory>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveTeamViewModelFactory()
+		{
+			requestContainer.Resolve<ITeamViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
 

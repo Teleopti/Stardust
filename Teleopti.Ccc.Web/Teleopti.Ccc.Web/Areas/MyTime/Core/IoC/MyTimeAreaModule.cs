@@ -13,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
@@ -202,6 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
 			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
 			builder.RegisterType<AbsenceRequestProbabilityProvider>().As<IAbsenceRequestProbabilityProvider>();
+			builder.RegisterType<TeamViewModelFactory>().As<ITeamViewModelFactory>();
 		}
 	}
 }
