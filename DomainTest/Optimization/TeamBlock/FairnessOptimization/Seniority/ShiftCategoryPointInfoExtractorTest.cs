@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IScheduleDayPro _scheduleDayPro1;
 		private IScheduleDayPro _scheduleDayPro2;
 		private IList<IScheduleMatrixPro> _scheduleMatrixPros1;
-		private IList<IScheduleDayPro> _scheduleDayPros1;
 		private IScheduleDay _scheduleDay1;
 		private IScheduleDay _scheduleDay2;
 		private IPersonAssignment _personAssignment1;
@@ -46,12 +44,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_shiftCategoryPoints = new Dictionary<IShiftCategory, int>();
 			_shiftCategoryPoints.Add(_shiftCategory2, 1);
 			_shiftCategoryPoints.Add(_shiftCategory1, 2);
-			_dateOnlyPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
+			_dateOnlyPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 2);
 			_scheduleMatrixPro1 = _mock.StrictMock<IScheduleMatrixPro>();
 			_scheduleDayPro1 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDayPro2 = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleMatrixPros1 = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
-			_scheduleDayPros1 = new List<IScheduleDayPro>{_scheduleDayPro1, _scheduleDayPro2};
 			_scheduleDay1 = _mock.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mock.StrictMock<IScheduleDay>();
 			_personAssignment1 = _mock.StrictMock<IPersonAssignment>();
@@ -70,7 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
 				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_teamInfo1.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(_scheduleMatrixPros1);
-				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(_scheduleDayPros1));
+				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnlyPeriod.StartDate)).Return(_scheduleDayPro1);
+				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnlyPeriod.EndDate)).Return(_scheduleDayPro2);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
@@ -27,25 +28,27 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			{
 				var points = 0;
 				var period = teamBlockInfo.BlockInfo.BlockPeriod;
-				var scheduleMatrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndPeriod(period);
+				var scheduleMatrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndPeriod(period).ToList();
 
-				foreach (var scheduleMatrixPro in scheduleMatrixes)
+				
+				foreach (var dateOnly in period.DayCollection())
 				{
-					var effectiveDays = scheduleMatrixPro.EffectivePeriodDays;
-					foreach (var scheduleDayPro in effectiveDays)
+					foreach (var scheduleMatrixPro in scheduleMatrixes)
 					{
+						var scheduleDayPro = scheduleMatrixPro.GetScheduleDayByKey(dateOnly);
+						if (scheduleDayPro == null) continue;
+						
 						var scheduleDay = scheduleDayPro.DaySchedulePart();
+						if (scheduleDay == null) continue;
+						
 						var personAssignment = scheduleDay.PersonAssignment();
-						if (personAssignment != null)
-						{
-							var shiftCategory = personAssignment.ShiftCategory;
-							if (shiftCategory != null)
-							{
-								points += shiftCategoryPoints[shiftCategory];
-							}
-						}
-					}
+						if (personAssignment == null) continue;
 
+						var shiftCategory = personAssignment.ShiftCategory;
+						if (shiftCategory == null) continue;
+						
+						points += shiftCategoryPoints[shiftCategory];			
+					}	
 				}
 
 				var shiftCategoryPointInfo = new ShiftCategoryPointInfo(teamBlockInfo, points);

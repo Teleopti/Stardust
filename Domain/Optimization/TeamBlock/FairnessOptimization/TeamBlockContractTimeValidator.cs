@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -14,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 	{
 		public bool ValidateContractTime(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2)
 		{
-			var scheduleDayPros1 = extractScheduleDayPros(teamBlockInfo1.MatrixesForGroupAndBlock());
-			var scheduleDayPros2 = extractScheduleDayPros(teamBlockInfo2.MatrixesForGroupAndBlock());
+			var scheduleDayPros1 = extractScheduleDayPros(teamBlockInfo1);
+			var scheduleDayPros2 = extractScheduleDayPros(teamBlockInfo2);
 
 			var contractTime1 = calculateContractTime(scheduleDayPros1);
 			var contractTime2 = calculateContractTime(scheduleDayPros2);
@@ -23,13 +24,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 			return contractTime1.Equals(contractTime2);
 		}
 
-		private IEnumerable<IScheduleDayPro> extractScheduleDayPros(IEnumerable<IScheduleMatrixPro> scheduleMatrixPros)
+		private IEnumerable<IScheduleDayPro> extractScheduleDayPros(ITeamBlockInfo teamBlockInfo)
 		{
 			var scheduleDayPros = new List<IScheduleDayPro>();
+			var period = teamBlockInfo.BlockInfo.BlockPeriod;
+			var scheduleMatrixes = teamBlockInfo.TeamInfo.MatrixesForGroupAndPeriod(period).ToList();
 
-			foreach (var scheduleMatrixPro in scheduleMatrixPros)
+			foreach (var dateOnly in period.DayCollection())
 			{
-				scheduleDayPros.AddRange(scheduleMatrixPro.EffectivePeriodDays);
+				foreach (var scheduleMatrixPro in scheduleMatrixes)
+				{
+					var scheduleDayPro = scheduleMatrixPro.GetScheduleDayByKey(dateOnly);
+					if (scheduleDayPro == null) continue;
+
+					scheduleDayPros.Add(scheduleDayPro);
+				}
 			}
 
 			return scheduleDayPros;
