@@ -354,6 +354,7 @@
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionBestTeamBlockDecider.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionWorstTeamBlockDecider.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterPersonsForTotalDistribution.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\TeamBlockSwapper.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionForPersons.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionSummary.cs" />
@@ -377,6 +378,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwap.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameSkillValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ValidateScheduleDays.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
