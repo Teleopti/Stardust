@@ -26,6 +26,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		private IVisualLayerCollection _visualLayerCollection1;
 		private IVisualLayerCollection _visualLayerCollection2;
 		private TeamBlockContractTimeValidator _target;
+		private IBlockInfo _blockInfo1;
+		private IBlockInfo _blockInfo2;
+		private ITeamInfo _teamInfo1;
+		private ITeamInfo _teamInfo2;
+		private DateOnlyPeriod _dateOnlyPeriod;
 		
 		[SetUp]
 		public void Setup()
@@ -43,6 +48,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_projectionService2 = _mock.StrictMock<IProjectionService>();
 			_visualLayerCollection1 = _mock.StrictMock<IVisualLayerCollection>();
 			_visualLayerCollection2 = _mock.StrictMock<IVisualLayerCollection>();
+			_blockInfo1 = _mock.StrictMock<IBlockInfo>();
+			_blockInfo2 = _mock.StrictMock<IBlockInfo>();
+			_dateOnlyPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
+			_teamInfo1 = _mock.StrictMock<ITeamInfo>();
+			_teamInfo2 = _mock.StrictMock<ITeamInfo>();
 			_target = new TeamBlockContractTimeValidator();
 		}
 
@@ -51,16 +61,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		{
 			IList<IScheduleMatrixPro> matrixPros1 = new List<IScheduleMatrixPro>{_scheduleMatrixPro1};
 			IList<IScheduleMatrixPro> matrixPros2 = new List<IScheduleMatrixPro>{_scheduleMatrixPro2};
-			var scheduleDayPros1 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro1});
- 			var scheduleDayPros2 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro2});
 			var contractTime = TimeSpan.FromHours(1);
 			
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockInfo1.MatrixesForGroupAndBlock()).Return(matrixPros1);
-				Expect.Call(_teamBlockInfo2.MatrixesForGroupAndBlock()).Return(matrixPros2);
-				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(scheduleDayPros1);
-				Expect.Call(_scheduleMatrixPro2.EffectivePeriodDays).Return(scheduleDayPros2);
+				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
+				Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
+				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
+				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
+				Expect.Call(_teamInfo1.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(matrixPros1);
+				Expect.Call(_teamInfo2.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(matrixPros2);
+				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnlyPeriod.StartDate)).Return(_scheduleDayPro1);
+				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnlyPeriod.StartDate)).Return(_scheduleDayPro2);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.HasProjection()).Return(true);
@@ -85,17 +99,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		{
 			IList<IScheduleMatrixPro> matrixPros1 = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
 			IList<IScheduleMatrixPro> matrixPros2 = new List<IScheduleMatrixPro> { _scheduleMatrixPro2 };
-			var scheduleDayPros1 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1 });
-			var scheduleDayPros2 = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro2 });
 			var contractTime = TimeSpan.FromHours(1);
 			var contractTimeDifferent = contractTime.Add(TimeSpan.FromHours(1));
 
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockInfo1.MatrixesForGroupAndBlock()).Return(matrixPros1);
-				Expect.Call(_teamBlockInfo2.MatrixesForGroupAndBlock()).Return(matrixPros2);
-				Expect.Call(_scheduleMatrixPro1.EffectivePeriodDays).Return(scheduleDayPros1);
-				Expect.Call(_scheduleMatrixPro2.EffectivePeriodDays).Return(scheduleDayPros2);
+				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
+				Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
+				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
+				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
+				Expect.Call(_teamInfo1.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(matrixPros1);
+				Expect.Call(_teamInfo2.MatrixesForGroupAndPeriod(_dateOnlyPeriod)).Return(matrixPros2);
+				Expect.Call(_scheduleMatrixPro1.GetScheduleDayByKey(_dateOnlyPeriod.StartDate)).Return(_scheduleDayPro1);
+				Expect.Call(_scheduleMatrixPro2.GetScheduleDayByKey(_dateOnlyPeriod.StartDate)).Return(_scheduleDayPro2);
 				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
 				Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.HasProjection()).Return(true);
