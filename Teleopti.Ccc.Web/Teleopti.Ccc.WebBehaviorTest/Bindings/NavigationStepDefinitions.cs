@@ -144,22 +144,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TeamSchedulePageStepDefinitions.SelectSkill(skill);
 		}
 
-		[When(@"I view person schedule for '(.*)' on '(.*)'")]
-		public void WhenIViewPersonScheduleForOn(string person, DateTime date)
+		[When(@"I view person schedule for '(.*)' in '(.*)' on '(.*)'")]
+		public void WhenIViewPersonScheduleForInOn(string person, string group, DateTime date)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(person).Person.Id.Value;
-			Navigation.GotoAnywherePersonSchedule(personId, date);
+			var groupId = IdForTeam(group);
+			Navigation.GotoAnywherePersonSchedule(groupId, personId, date);
 		}
 
-		[When(@"I view person schedules add full day absence form for '(.*)' on '(.*)'")]
-		public void WhenIViewPersonSchedulesAddFullDayAbsenceFormForPersonOnDate(string name, DateTime date)
+		[When(@"I view person schedules add full day absence form for '(.*)' in '(.*)' on '(.*)'")]
+		public void WhenIViewPersonSchedulesAddFullDayAbsenceFormForInOn(string name, string group, DateTime date)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(personId, date);
+			var groupId = IdForTeam(group);
+			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(groupId, personId, date);
 		}
-
 
 		[When(@"I view person schedules add intraday absence form for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAddIntradayAbsenceFormForInOn(string name, string @group, DateTime date)

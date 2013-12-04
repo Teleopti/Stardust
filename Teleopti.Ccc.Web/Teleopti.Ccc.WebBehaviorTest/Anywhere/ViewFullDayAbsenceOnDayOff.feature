@@ -49,7 +49,7 @@ Scenario: View full day absence on day off for person
 	| Name       | Vacation         |
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-10-25'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-10-25'
 	And I click description toggle button
 	Then I should see a day off named 'Day off'
 	And I should see a scheduled activity with

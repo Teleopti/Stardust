@@ -66,7 +66,7 @@ Scenario: Cannot view confidential absence in person view when no permission
 	| Name       | Mental disorder  |
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-10-25'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-10-25'
 	Then I should see a scheduled activity with
 	| Field       | Value |
 	| Start time  | 08:00 |
@@ -87,7 +87,7 @@ Scenario: View confidential absence in person view when permitted
 	| Name       | Mental disorder  |
 	| Start time | 2013-10-25 00:00 |
 	| End time   | 2013-10-25 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-10-25'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-10-25'
 	Then I should see a scheduled activity with
 	| Field       | Value           |
 	| Start time  | 08:00           |

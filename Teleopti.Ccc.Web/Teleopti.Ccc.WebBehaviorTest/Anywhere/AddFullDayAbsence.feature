@@ -39,7 +39,7 @@ Scenario: View form
 
 Scenario: Add on empty day
 	Given I have the role 'Anywhere Team Green'
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -64,7 +64,7 @@ Scenario: Add on shift
 	| Activity       | Phone            |
 	| Start time     | 2013-04-08 08:00 |
 	| End time       | 2013-04-08 17:00 |
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -89,7 +89,7 @@ Scenario: Add on empty day first day
 	| Activity       | Phone            |
 	| Start time     | 2013-04-09 08:00 |
 	| End time       | 2013-04-09 17:00 |
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -109,7 +109,7 @@ Scenario: Add on empty day last day
 	| Activity       | Phone            |
 	| Start time     | 2013-04-08 08:00 |
 	| End time       | 2013-04-08 17:00 |
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -135,7 +135,7 @@ Scenario: Add on shifts in sequence
 	| Activity       | Phone            |
 	| Start time     | 2013-04-09 09:00 |
 	| End time       | 2013-04-09 18:00 |
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -155,7 +155,7 @@ Scenario: Add on shift ending tomorrow
 	| Activity       | Phone            |
 	| Start time     | 2013-05-23 22:00 |
 	| End time       | 2013-05-24 07:00 |	
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-05-23'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-05-23'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -180,7 +180,7 @@ Scenario: Add absence on a day with a night shift starting yesterday
 	| Activity       | Phone            |
 	| Start time     | 2013-05-22 22:00 |
 	| End time       | 2013-05-23 07:00 |
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-05-23'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2013-05-23'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -194,7 +194,7 @@ Scenario: Add absence on a day with a night shift starting yesterday
 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2012-12-02'
 	Then I should see the add full day absence form with
 	| Field      | Value      |
 	| Start date | 2012-12-02 |
@@ -202,7 +202,7 @@ Scenario: Default values
 	
 Scenario: Invalid dates
 	Given I have the role 'Anywhere Team Green'
-	When I view person schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedules add full day absence form for 'Pierre Baldi' in 'Team green' on '2012-12-02'
 	And I input these full day absence values
 	| Field    | Value      |
 	| End date | 2012-12-01 |

@@ -44,7 +44,7 @@ Scenario: View full day absence for person
 	| Name       | Vacation         |
 	| Start time | 2013-10-22 00:00 |
 	| End time   | 2013-10-22 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-10-22'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-10-22'
 	Then I should see a scheduled activity with
 	| Field       | Value    |
 	| Start time  | 08:00    |

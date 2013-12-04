@@ -37,7 +37,7 @@ Scenario: View absence on this day in list
 	| Name       | Vacation         |
 	| Start time | 2013-05-06 00:00 |
 	| End time   | 2013-05-06 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -51,7 +51,7 @@ Scenario: View absence starting yesterday in list
 	| Name       | Vacation         |
 	| Start time | 2013-05-02 00:00 |
 	| End time   | 2013-05-06 15:00 |
-	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -65,7 +65,7 @@ Scenario: View absence ending tomorrow in list
 	| Name       | Vacation         |
 	| Start time | 2013-05-06 00:00 |
 	| End time   | 2013-05-07 15:00 |
-	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -79,7 +79,7 @@ Scenario: Remove absence with confirmation
 	| Name       | Vacation         |
 	| Start time | 2013-05-06 00:00 |
 	| End time   | 2013-05-06 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	And I click 'remove' on absence named 'Vacation'
 	Then I should see 1 absences in the absence list
 	And I should see a shift
@@ -104,7 +104,7 @@ Scenario: Remove one of two absences
 	| Name       | Illness			|
 	| Start time | 2013-05-06 15:00 |
 	| End time   | 2013-05-06 16:00 |
-	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
+	When I view person schedule for 'Pierre Baldi' in 'Team green' on '2013-05-06'
 	Then I should see a scheduled activity with
 	| Field      | Value |
 	| Start time | 15:00 |
@@ -123,3 +123,4 @@ Scenario: Remove one of two absences
 	| Start time | 15:00 |
 	| End time   | 16:00 |
 	| Color      | Gray  |
+
