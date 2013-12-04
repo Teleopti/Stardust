@@ -7,7 +7,8 @@ define([
 		'text!templates/personschedule/view.html',
 		'resizeevent',
 		'views/personschedule/person',
-		'ajax'
+		'ajax',
+		'lazy'
 ], function (
 		ko,
 		personScheduleViewModel,
@@ -16,7 +17,8 @@ define([
 		view,
 		resize,
 		personViewModel,
-		ajax
+		ajax,
+		lazy
 	) {
 
 	var viewModel;
@@ -72,6 +74,11 @@ define([
 				groupId: options.groupid
 			},
 			success: function (data, textStatus, jqXHR) {
+				if (viewModel.AddingFullDayAbsence() || viewModel.AddingIntradayAbsence()) {
+					data = lazy(data)
+						.select(function(x) { return x.Id == viewModel.PersonId(); })
+						.first();
+				}
 				viewModel.AddPersons(data);
 				options.success();
 			}
