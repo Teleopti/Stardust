@@ -117,19 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-	<data name="ResFulfilled" xml:space="preserve">
+  <data name="ResFulfilled" xml:space="preserve">
     <value>Fulfilled</value>
     <comment>Fulfilled</comment>
   </data>
-	<data name="ResFulfillmentPercent" xml:space="preserve">
+  <data name="ResFulfillmentPercent" xml:space="preserve">
     <value>Fulfillment (%)</value>
     <comment>Fulfillment (%)</comment>
   </data>
-	<data name="ResMustHaves" xml:space="preserve">
+  <data name="ResMustHaves" xml:space="preserve">
     <value>Must Haves</value>
     <comment>Must Haves</comment>
   </data>
-	<data name="ResUnfulfilled" xml:space="preserve">
+  <data name="ResUnfulfilled" xml:space="preserve">
     <value>Unfulfilled</value>
     <comment>Unfulfilled</comment>
   </data>
@@ -1324,5 +1324,13 @@ Schedule</value>
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Zoom</value>
     <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Connection to database timed out, try to limit your search conditions.</value>
+    <comment>Connection to database timed out, try to limit your search conditions.</comment>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>Saturday</value>
+    <comment>Saturday</comment>
   </data>
 </root>
