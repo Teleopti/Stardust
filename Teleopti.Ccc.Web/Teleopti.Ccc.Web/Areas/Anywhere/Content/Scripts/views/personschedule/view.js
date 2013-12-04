@@ -75,9 +75,8 @@ define([
 			},
 			success: function (data, textStatus, jqXHR) {
 				if (viewModel.AddingFullDayAbsence() || viewModel.AddingIntradayAbsence()) {
-					data = lazy(data)
-						.select(function(x) { return x.Id == viewModel.PersonId(); })
-						.first();
+					data = [lazy(data)
+						.select(function(x) { return x.Id == viewModel.PersonId(); }).first()];
 				}
 				viewModel.AddPersons(data);
 				options.success();

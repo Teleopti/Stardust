@@ -121,11 +121,11 @@ define([
 		
 		this.SetData = function (data, timeLine) {
 
-			var person = self.SelectedPerson();
-			if (!person) {
-				person = new personViewModel({ Id: self.PersonId() });
-				self.Persons.push(person);
-			}
+			//var person = self.SelectedPerson();
+			//if (!person) {
+			//	person = new personViewModel({ Id: self.PersonId() });
+			//	self.Persons.push(person);
+			//}
 			//person.AddData(data, timeLine);
 
 			self.Absences([]);
