@@ -363,6 +363,9 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SelectedAgentPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SwapScheduleDays.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidator.cs" />

@@ -43,10 +43,12 @@ namespace Teleopti.Ccc.Win.Commands
             var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
             var constructTeamBlock = new ConstructTeamBlock(teamInfoFactory,_teamBlockInfoFactory);
-            _selectedAgentPoints.AssignAgentPoints(selectedPerson );
+            //_selectedAgentPoints.AssignAgentPoints(selectedPerson );
             _shiftCategoryPoints.AssignShiftCategoryPoints(shiftCategories );
 	        var seniorityExtractor = new SeniorityExtractor();
-            var determineTeamBlockPriority = new DetermineTeamBlockPriority(seniorityExtractor,_shiftCategoryPoints );
+	        var shiftCategoryPointExtractor = new ShiftCategoryPointExtractor(shiftCategories);
+	        var shiftCategoryPointInfoExtractor = new ShiftCategoryPointInfoExtractor(shiftCategoryPointExtractor);
+			var determineTeamBlockPriority = new DetermineTeamBlockPriority(seniorityExtractor, shiftCategoryPointInfoExtractor);
             var teamBlockListSwapAnalyzer = new TeamBlockListSwapAnalyzer(determineTeamBlockPriority ,_swapScheduleDays,_validateScheduleDays);
             var teamBlockFairnessOptimizer = new TeamBlockFairnessOptimizationService(constructTeamBlock, _teamBlockSizeClassifier,
                                                                             teamBlockListSwapAnalyzer);
