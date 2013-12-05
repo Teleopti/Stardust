@@ -10,21 +10,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         IEnumerable<int> HighToLowShiftCategoryPriorityList { get; }
         IEnumerable<int> LowToHighShiftCategoryPriorityList { get; }
         IEnumerable<double> LowToHighSeniorityList { get; }
-        void Clear();
         ITeamBlockInfo BlockOnSeniority(double seniority);
         int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
+	    void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority);
     }
 
     public class TeamBlockPriorityDefinitionInfo : ITeamBlockPriorityDefinitionInfo
     {
-        private readonly IList<TeamBlockInfoPriority> _teamBlockInfoPriorityList;
+        private readonly IList<ITeamBlockInfoPriority> _teamBlockInfoPriorityList;
 
         public TeamBlockPriorityDefinitionInfo()
         {
-            _teamBlockInfoPriorityList = new List<TeamBlockInfoPriority>( );
+            _teamBlockInfoPriorityList = new List<ITeamBlockInfoPriority>( );
         }
 
-        public void AddItem(TeamBlockInfoPriority teamBlockInfoPriority)
+        public void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority)
         {
             _teamBlockInfoPriorityList.Add(teamBlockInfoPriority);
         }
@@ -49,10 +49,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             get { return (_teamBlockInfoPriorityList.Select(s => s.Seniority)).ToList().OrderBy(s => s); }
         }
 
-        public void Clear()
-        {
-            _teamBlockInfoPriorityList.Clear();
-        }
 
         public ITeamBlockInfo BlockOnSeniority(double seniority)
         {
