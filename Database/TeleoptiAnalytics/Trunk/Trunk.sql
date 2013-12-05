@@ -408,7 +408,7 @@ INSERT INTO mart.report (
 		'Time in State per Agent',
 		'ResReportTimeInStatePerAgent',
 		1,
-		'~/Reports/CCC/report_time_in_state_per_agent.rdlc',
+		'~/Reports/CCC/CCCV8_report_time_in_state_per_agent.rdlc',
 		'mart.report_data_time_in_state_per_agent',
 		'f01:Report+TimeInStatePerAgent',
 		'','','','',
