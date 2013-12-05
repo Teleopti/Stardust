@@ -6,6 +6,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Win.Scheduling;
@@ -53,8 +54,9 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
+	    private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 
-		public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
+	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											IScheduleDayEquator scheduleDayEquator,
                                             IRestrictionOverLimitDecider restrictionOverLimitDecider, 
 											ITeamBlockClearer teamBlockCleaner,
@@ -77,7 +79,8 @@ namespace Teleopti.Ccc.Win.Commands
                                             IMatrixListFactory matrixListFactory, 
 											ITeamBlockSchedulingOptions teamBlockScheudlingOptions, 
 											IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
-											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness)
+											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
+											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService)
         {
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayEquator = scheduleDayEquator;
@@ -102,6 +105,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockScheudlingOptions = teamBlockScheudlingOptions;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
+			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
         }
 
         public void Execute(BackgroundWorker backgroundWorker, 
@@ -146,6 +150,7 @@ namespace Teleopti.Ccc.Win.Commands
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
+				_teamBlockSeniorityFairnessOptimizationService.Exectue(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList());
 			}
 				
         }

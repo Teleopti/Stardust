@@ -15,6 +15,7 @@ using Autofac;
 using Autofac.Core;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -3759,18 +3760,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 			_undoRedo.CommitBatch();
-
-            //TODO this line should be removed or should be under some IF
-		    runFairnessOptimization(selectedPeriod, _selectedPersons, scheduleDays,schedulingOptions);
-
 		}
-
-	    private void runFairnessOptimization(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleDay> scheduleDays,  ISchedulingOptions schedulingOptions)
-	    {
-            var fairnessOptimizationCommand = _container.Resolve<IFairnessOptimizationCommand>();
-            fairnessOptimizationCommand.Execute(selectedPeriod, selectedPersons, scheduleDays, _schedulerState.CommonStateHolder.ShiftCategories.ToList(),schedulingOptions );
-	    }
-
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
 		{
@@ -4118,13 +4108,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 																						singleDayScheduler, 
 																						_container.Resolve<ITeamBlockRoleModelSelector>());
 
-						
-						
-						//ITeamBlockOptimizationCommand teamBlockOptimizationCommand = new TeamBlockOptimizationCommand();
-
 						_container.Resolve<ITeamBlockOptimizationCommand>()
 						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
 						                   rollbackService, schedulingOptions, teamBlockScheduler);
+
 						break;
 					}
 

@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)
         {
-            builder.RegisterType<TeamBlockFairnessOptimizationService>().As<ITeamBlockFairnessOptimizationService>();
+            builder.RegisterType<TeamBlockSeniorityFairnessOptimizationService>().As<ITeamBlockSeniorityFairnessOptimizationService>();
             builder.RegisterType<PrioritiseWeekDay>().As<IPrioritiseWeekDay>();
             builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>();
             builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
@@ -239,6 +239,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<TeamBlockListSwapAnalyzer>().As<ITeamBlockListSwapAnalyzer>();
             builder.RegisterType<SwapScheduleDays>().As<ISwapScheduleDays>();
             builder.RegisterType<ValidateScheduleDays>().As<IValidateScheduleDays>();
+			builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>();
+			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>();
+			builder.RegisterType<ShiftCategoryPointInfoExtractor>().As<IShiftCategoryPointInfoExtractor>();
+			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
+			builder.RegisterType<TeamBlockListSwapAnalyzer>().As<ITeamBlockListSwapAnalyzer>();
+
+			//common
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
 			builder.RegisterType<TeamMemberCountValidator>().As<ITeamMemberCountValidator>();
 			builder.RegisterType<TeamBlockContractTimeValidator>().As<ITeamBlockContractTimeValidator>();

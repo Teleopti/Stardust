@@ -1,11 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Interfaces.Domain;
+
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
     public interface IDetermineTeamBlockPriority
     {
-        ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos);
+		ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories);
     }
 
     public class DetermineTeamBlockPriority : IDetermineTeamBlockPriority
@@ -19,11 +22,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_shiftCategoryPointInfoExtractor = shiftCategoryPointInfoExtractor;
 		}
 
-        public ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos)
+        public ITeamBlockPriorityDefinitionInfo CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories)
         {
 	        var teamInfos = teamBlockInfos.Select(teamBlockInfo => teamBlockInfo.TeamInfo).ToList();
 	        var seniorityInfos = _seniorityExtractor.ExtractSeniority(teamInfos);
-	        var shiftCategoryPointInfos = _shiftCategoryPointInfoExtractor.ExtractShiftCategoryInfos(teamBlockInfos);
+	        var shiftCategoryPointInfos = _shiftCategoryPointInfoExtractor.ExtractShiftCategoryInfos(teamBlockInfos, shiftCategories);
 
             var teamBlockPriorityDefinitionInfo = new TeamBlockPriorityDefinitionInfo();
             foreach (var teamBlockInfo in teamBlockInfos)

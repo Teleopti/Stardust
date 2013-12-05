@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         public void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
         {
-            var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(teamBlockList);
+            var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories);
             foreach (var higherPriority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityList)
             {
                 foreach (var lowerPriority in teamBlockPriorityDefinitionInfo.LowToHighSeniorityList)

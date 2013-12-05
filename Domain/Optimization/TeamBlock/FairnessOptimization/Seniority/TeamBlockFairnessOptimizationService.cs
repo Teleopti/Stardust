@@ -1,28 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-    public interface ITeamBlockFairnessOptimizationService
+    public interface ITeamBlockSeniorityFairnessOptimizationService
     {
         void Exectue(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
                                      IList<IPerson> selectedPersons, 
                                      ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories);
     }
 
-    public class TeamBlockFairnessOptimizationService : ITeamBlockFairnessOptimizationService
+    public class TeamBlockSeniorityFairnessOptimizationService : ITeamBlockSeniorityFairnessOptimizationService
     {
         private readonly IConstructTeamBlock _constructTeamBlock;
         private readonly ITeamBlockSizeClassifier _teamBlockSizeClassifier;
         private readonly ITeamBlockListSwapAnalyzer _teamBlockListSwapAnalyzer;
 
-        public TeamBlockFairnessOptimizationService(IConstructTeamBlock constructTeamBlock,
+        public TeamBlockSeniorityFairnessOptimizationService(IConstructTeamBlock constructTeamBlock,
                                           ITeamBlockSizeClassifier teamBlockSizeClassifier, ITeamBlockListSwapAnalyzer teamBlockListSwapAnalyzer)
         {
             _constructTeamBlock = constructTeamBlock;

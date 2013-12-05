@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_shiftCategoryPointExtractor.ExtractShiftCategoryPoints()).Return(_shiftCategoryPoints);
+				Expect.Call(_shiftCategoryPointExtractor.ExtractShiftCategoryPoints(new List<IShiftCategory>())).Return(_shiftCategoryPoints);
 				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
 				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
 				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.ExtractShiftCategoryInfos(_teamBlockInfos);
+				var result = _target.ExtractShiftCategoryInfos(_teamBlockInfos, new List<IShiftCategory>());
 				Assert.AreEqual(3, result[_teamBlockInfo1].Point);
 			}
 		}
