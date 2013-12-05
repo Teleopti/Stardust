@@ -3,12 +3,14 @@ define([
 		'moment',
 		'lazy',
 		'views/teamschedule/shift',
+		'views/teamschedule/schedule-menu',
 		'shared/dayoff'
 ], function (
 		ko,
 		moment,
 		lazy,
 		shift,
+		scheduleMenu,
 		dayOff
 	) {
 
@@ -28,12 +30,18 @@ define([
 			return self.Shifts().length > 0;
 		});
 
-		this.IsPersonSelected = ko.computed(function() {
+		this.ScheduleMenu = new scheduleMenu(data.Id, data.GroupId, data.Date);
+		
+		this.Selected = ko.observable(false);
+
+		this.IsPersonOrShiftSelected = ko.computed(function() {
+			if (self.Selected())
+				return true;
 			return $(self.Shifts()).is(function(index) {
 				return this.IsAnyLayerSelected();
 			});
 		});
-
+		
 		this.ContractTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 			return time.format("H:mm");

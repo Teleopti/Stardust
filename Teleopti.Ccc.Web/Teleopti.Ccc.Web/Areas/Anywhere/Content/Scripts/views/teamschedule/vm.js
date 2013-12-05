@@ -67,32 +67,53 @@ define([
             };
 
             this.SelectPerson = function (person) {
+	            deselectAllPersons(person.Id);
+	            deselectAllLayers();
+	            
+            	person.Selected(!person.Selected());
             	currentState.SetSelectedPersonId(person.Id);
-            	navigation.GotoPersonSchedule(self.SelectedGroup(), person.Id, self.SelectedDate());
             };
             
             this.SelectLayer = function (layer, personId) {
-	            var selectedLayers = lazy(self.Persons())
-                    .map(function(x) { return x.Shifts(); })
-                    .flatten()
-                    .map(function(x) { return x.Layers(); })
-                    .flatten()
-                    .filter(function (x) {
-                        if (x === layer)
-                            return false;
-                        return x.Selected();
-                    });
-                selectedLayers.each(function (x) {
-                    x.Selected(false);
-                });
-                layer.Selected(!layer.Selected());
+            	deselectAllPersons();
+            	deselectAllLayers(layer);
+	            
+            	layer.Selected(!layer.Selected());
                 currentState.SetSelectedPersonId(personId);
                 if (layer.Selected()) {
 	                currentState.SetSelectedLayer(layer);
                 }
             };
 
+    		var deselectAllPersons = function(person) {
+    			var selectedPersons = lazy(self.Persons())
+	            .filter(function (x) {
+	            	if (person && x === person)
+	            		return false;
+	            	return x.Selected();
+	            });
+    			selectedPersons.each(function (x) {
+    				x.Selected(false);
+    			});
+    		};
 
+    		var deselectAllLayers = function(layer) {
+    			var selectedLayers = lazy(self.Persons())
+				   .map(function (x) { return x.Shifts(); })
+				   .flatten()
+				   .map(function (x) { return x.Layers(); })
+				   .flatten()
+				   .filter(function (x) {
+					   if (layer && x === layer) {
+						   return false;
+					   }
+					   return x.Selected();
+				   });
+    			selectedLayers.each(function (x) {
+    				x.Selected(false);
+    			});
+    		};
+			
 
 
 

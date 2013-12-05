@@ -1,4 +1,4 @@
-
+sh
 .team-schedule 
 {
 }
@@ -86,6 +86,14 @@
 }
 
 
+
+.team-schedule .schedule-menu-row:hover > td{
+	background-color: #eeeeee;
+}
+
+.team-schedule .schedule-menu-background {
+	background: #eeeeee;
+}
 
 
 .team-schedule .shift-menu-background {

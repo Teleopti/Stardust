@@ -98,14 +98,18 @@ define([
 	};
 
 	var loadPersons = function (options) {
+		var groupid = teamSchedule.SelectedGroup();
+		
 		ajax.ajax({
 			url: 'Person/PeopleInGroup',
 			data: {
 				date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
-				groupId: teamSchedule.SelectedGroup()
+				groupId: groupid
 			},
 			success: function (people, textStatus, jqXHR) {
 				var newItems = ko.utils.arrayMap(people, function (s) {
+					s["GroupId"] = groupid;
+					s["Date"] = teamSchedule.SelectedDate().format("YYYYMMDD");
 					return new personViewModel(s);
 				});
 				teamSchedule.SetPersons(newItems);

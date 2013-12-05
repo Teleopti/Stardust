@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			DescriptionToggle.EnsureIsOn();
 		}
 
+		[When(@"I click '(.*)' in schedule menu")]
+		public void WhenIClickInScheduleMenu(CssClass cssClass)
+		{
+			Browser.Interactions.Click(string.Format(".schedule-menu a.{0}", cssClass.Name));
+		}
+
 		[When(@"I click '(.*)' in shift menu")]
 		public void WhenIClickInShiftMenu(CssClass cssClass)
 		{

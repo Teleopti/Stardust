@@ -33,8 +33,9 @@ Background:
 	
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
-	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click 'add full day absence'
+	When I view schedules for 'Team green' on '2012-12-02'	
+	And I click person name 'Pierre Baldi'
+	And I click 'add full day absence' in schedule menu
 	Then I should see the add full day absence form
 
 Scenario: Add on empty day
@@ -212,7 +213,7 @@ Scenario: Back to viewing schedule after adding a full day absence
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-04-08'
 	And I click person name 'Pierre Baldi'
-	And I click 'add full day absence'
+	And I click 'add full day absence' in schedule menu
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -224,5 +225,5 @@ Scenario: Back to viewing schedule after adding a full day absence
 	| Start time | 2013-04-08 00:00 |
 	| End time   | 2013-04-08 23:59 |
 	When I press back in the web browser
-	Then I should be viewing schedules for '2013-04-08'
+	Then I should be viewing schedules for '2013-04-08'	
 
