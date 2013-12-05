@@ -1,7 +1,6 @@
 using System;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
     public class TeamBlockWeight : IEquatable<TeamBlockWeight>
     {

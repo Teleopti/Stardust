@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
@@ -30,6 +32,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                             IList<IPerson> selectedPersons, 
                             ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories)
         {
+			var instance = PrincipalAuthorization.Instance();
+	        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+		        return;
+
             IList<ITeamBlockInfo> listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod,
                                                                                      selectedPersons,
                                                                                      schedulingOptions);
