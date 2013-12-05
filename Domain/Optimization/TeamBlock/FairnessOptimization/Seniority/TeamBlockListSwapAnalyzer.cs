@@ -29,15 +29,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
         public void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
         {
             var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(teamBlockList);
-            foreach (var higherPriority in teamBlockPriorityDefinitionInfo.HighToLowAgentPriorityList)
+            foreach (var higherPriority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityList)
             {
-                foreach (var lowerPriority in teamBlockPriorityDefinitionInfo.LowToHighAgentPriorityList)
+                foreach (var lowerPriority in teamBlockPriorityDefinitionInfo.LowToHighSeniorityList)
                 {
-                    var higherPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(higherPriority);
+                    var higherPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnSeniority(higherPriority);
                     int lowestShiftCategoryPriority = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
                     if (teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriorityList.Any(higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPriority))
                     {
-                        var lowestPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnAgentPriority(lowerPriority);
+                        var lowestPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnSeniority(lowerPriority);
                         if (validateBlock(higherPriorityBlock, lowestPriorityBlock))
                             swapBlock(higherPriorityBlock, lowestPriorityBlock);
                     }
