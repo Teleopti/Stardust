@@ -9,6 +9,7 @@ using System.Windows.Media.Animation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Converters;
+using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.WpfControls.Controls.Layers;
 using Teleopti.Ccc.WpfControls.Controls.Time.Timeline;
@@ -200,18 +201,6 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 			e.Handled = true;
 		}
 
-		private void NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)
-		{
-			DateTime utcTime;
-			if (!DateTime.TryParse(e.Content.ToString(), out utcTime)) return;
-
-			if (utcTime < DateHelper.MinSmallDateTime)
-				e.Content = "";
-			else
-				e.Content =
-					TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipal.Current.Regional.TimeZone)
-								.ToString(TeleoptiPrincipal.Current.Regional.Culture);
-		}
 
 		private void ContextMenu_OnClick(object sender, RoutedEventArgs e)
 		{
@@ -233,6 +222,26 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 			var clickedRow = VisualTreeFinder.FindVisualParent<Microsoft.Windows.Controls.DataGridRow>(uiElement);
 			if (clickedRow != null)
 				RealTimeDataGrid.SelectedIndex = clickedRow.GetIndex();
+		}
+
+		private void NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)
+		{
+			var utcTime = ((DayLayerModel) e.Item).NextActivityStartDateTime;
+
+			if (utcTime < DateHelper.MinSmallDateTime)
+				e.Content = "";
+			else
+				e.Content =
+					TimeZoneHelper.ConvertFromUtc(utcTime, TeleoptiPrincipal.Current.Regional.TimeZone)
+								.ToString(TeleoptiPrincipal.Current.Regional.Culture);
+		}
+
+		private void PinnedColumn_OnCopyingCellClipboardContent(object sender, DataGridCellClipboardEventArgs e)
+		{
+			if (((DayLayerModel) e.Item).IsPinned)
+				e.Content = 1;
+			else
+				e.Content = "";
 		}
 	}
 }
