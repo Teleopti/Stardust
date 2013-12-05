@@ -11847,8 +11847,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>This message is shown when scheduling is finished and the scheduler tries to resolve the white spots.</comment>
   </data>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
-    <value>Shifttrade denied because target shift is for another date.</value>
-    <comment>denymessage when trading shifts on different dates</comment>
+    <value>Shift trade denied because shifts are on different dates.</value>
+    <comment>Deny message when trading shifts on different dates</comment>
   </data>
   <data name="AddIntradayAbsence" xml:space="preserve">
     <value>Add intraday absence</value>
