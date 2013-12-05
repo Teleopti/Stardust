@@ -130,7 +130,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				Exception exception = null;
 				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
-				var startTask = _hubConnection.Start(new LongPollingTransport());
+				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				                       	{
 				                       		if (t.IsFaulted && t.Exception != null)
