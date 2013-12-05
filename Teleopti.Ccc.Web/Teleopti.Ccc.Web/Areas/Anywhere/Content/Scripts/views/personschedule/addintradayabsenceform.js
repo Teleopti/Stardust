@@ -80,15 +80,14 @@ define([
 			if (data.DefaultIntradayAbsenceData) {
 				self.StartTime(data.DefaultIntradayAbsenceData.StartTime);
 				self.EndTime(data.DefaultIntradayAbsenceData.EndTime);
+				startTimeAsMoment = getMomentFromInput(self.StartTime());
+				endTimeAsMoment = getMomentFromInput(self.EndTime());
 			}
 			self.AbsenceTypes(data.Absences);
 			groupId = groupid;
 
 			self.ShiftStart(data.Layers.length > 0 ? moment(data.Layers[0].Start) : undefined);
 			self.ShiftEnd(data.Layers.length > 0 ? moment(data.Layers[data.Layers.length - 1].Start).add('m', data.Layers[data.Layers.length - 1].Minutes) : undefined);
-			
-			startTimeAsMoment = getMomentFromInput(self.StartTime());
-			endTimeAsMoment = getMomentFromInput(self.EndTime());
 		};
 
 		this.Apply = function() {
