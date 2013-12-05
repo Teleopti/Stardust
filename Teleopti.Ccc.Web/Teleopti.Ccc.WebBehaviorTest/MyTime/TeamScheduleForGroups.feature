@@ -56,7 +56,7 @@ Background:
 
 Scenario: View available custom group options
 	Given I have the role 'Access to view all group pages'
-	When I view team schedule for '2013-03-25'
+	When I view group schedule for '2013-03-25'
 	And I open the team-picker
 	Then I should see available group options
 	| Value                                 |
@@ -84,7 +84,7 @@ Scenario: View group schedule
 	| StartTime      | 2013-03-25 11:00 |
 	| EndTime        | 2013-03-25 20:00 |
 	| Shift category | Day              |
-	When I view team schedule for '2013-03-25'
+	When I view group schedule for '2013-03-25'
 	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see my schedule in team schedule with
 	| Field     | Value |
@@ -108,18 +108,18 @@ Scenario: Sort late shifts after early shifts
 	| StartTime      | 2013-03-25 08:00 |
 	| EndTime        | 2013-03-25 17:00 |
 	| Shift category | Day              |
-	When I view team schedule for '2013-03-25'
+	When I view group schedule for '2013-03-25'
 	And I select 'Kontrakt/A contract' in the team picker
 	Then I should see 'John Smith' before myself
 
 Scenario: Default to my team
 	Given I have the role 'Access to view all group pages'
-	When I view team schedule for '2013-03-25'
+	When I view group schedule for '2013-03-25'
 	Then The team picker should have 'The site/Team green' selected
 
 Scenario: Keep selected group when changing date
 	Given I have the role 'Access to view all group pages'
-	When I view team schedule for '2013-03-25'
+	When I view group schedule for '2013-03-25'
 	And I select 'Kontrakt/Another contract' in the team picker
 	And I click the next day button
 	Then I should see colleague 'Pierre Baldi'
@@ -127,13 +127,13 @@ Scenario: Keep selected group when changing date
 
 Scenario: Keep selected date when changing group
 	Given I have the role 'Access to view all group pages'
-	And I am viewing team schedule for tomorrow
+	And I am viewing group schedule for tomorrow
 	When I select something in the team picker
 	Then I should see tomorrow
 
 Scenario: View available team options if not have view all group pages permission
 	Given I have the role 'Without view group pages permission'
-	When I view team schedule for '2013-03-25'
+	When I view group schedule for '2013-03-25'
 	And I open the team-picker
 	Then I should see available team options
 	| Value               |
