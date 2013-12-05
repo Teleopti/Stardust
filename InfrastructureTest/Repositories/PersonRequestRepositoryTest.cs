@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
@@ -860,7 +861,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			public void ShouldNotIncludeShiftTradeOfTerminatedPersonTo()
 			{
 				var personTo = PersonFactory.CreatePerson("person to");
-				personTo.TerminalDate = new DateOnly(1900,1,1);
+				personTo.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
 				var personFrom = PersonFactory.CreatePerson("person from");
 				PersistAndRemoveFromUnitOfWork(personTo);
 				PersistAndRemoveFromUnitOfWork(personFrom);
@@ -909,7 +910,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var personTo = PersonFactory.CreatePerson("person to");
 				var personFrom = PersonFactory.CreatePerson("person from");
-				personFrom.TerminalDate = new DateOnly(1900, 1, 1);
+				personFrom.TerminatePerson(new DateOnly(1900,1,1), MockRepository.GenerateMock<IPersonAccountUpdater>());
 				PersistAndRemoveFromUnitOfWork(personTo);
 				PersistAndRemoveFromUnitOfWork(personFrom);
 
