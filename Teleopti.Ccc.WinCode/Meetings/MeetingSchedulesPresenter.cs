@@ -288,9 +288,9 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 				if (start < end)
 				{
-					 if (start.Minute != 0) start = start.AddMinutes(start.Minute * -1);
-					 if (end.Minute != 0) end = end.AddMinutes(60 - end.Minute);
-				if (!start.Date.Equals(end.Date)) return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(Model.StartDate, end.AddHours(1), _schedulerStateHolder.TimeZoneInfo);
+					if (start.Minute != 0) start = start.AddMinutes(start.Minute * -1);
+					if (end.Minute != 0) end = end.AddMinutes(60 - end.Minute);
+					if(start != DateTime.MaxValue) return new DateTimePeriod(start,end);
 				}
 
 				return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(Model.StartDate, Model.StartDate.AddDays(1), _schedulerStateHolder.TimeZoneInfo);
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 				
 				}
 
-				_currentPeriod = new DateOnlyPeriod(_currentDate, _currentDate.AddDays(1)); //OBS var 1.5
+				_currentPeriod = new DateOnlyPeriod(_currentDate.AddDays(-1), _currentDate.AddDays(1)); //OBS var 1.5
 		  }
 
 		  public void SetStartTime(TimeSpan startTime)
