@@ -2,6 +2,7 @@ using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -164,6 +165,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<GroupScheduleGroupPageDataProvider>().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupCreator>().As<GroupCreator>().InstancePerLifetimeScope();
 	        builder.RegisterType<SwapServiceNew>().As<ISwapServiceNew>();
 			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
         	builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
@@ -222,6 +224,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<EqualCategoryDistributionBestTeamBlockDecider>().As<IEqualCategoryDistributionBestTeamBlockDecider>();
 			builder.RegisterType<EqualCategoryDistributionWorstTeamBlockDecider>().As<IEqualCategoryDistributionWorstTeamBlockDecider>();
 			builder.RegisterType<FilterPersonsForTotalDistribution>().As<IFilterPersonsForTotalDistribution>();
+			builder.RegisterType<DistributionReportService>().As<IDistributionReportService>();
         }
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)

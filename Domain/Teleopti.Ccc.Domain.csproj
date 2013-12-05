@@ -331,6 +331,8 @@
     <Compile Include="Forecasting\QueueStatisticsCalculator.cs" />
     <Compile Include="GroupPageCreator\ContractGroupPage.cs" />
     <Compile Include="GroupPageCreator\ContractScheduleGroupPage.cs" />
+    <Compile Include="GroupPageCreator\Group.cs" />
+    <Compile Include="GroupPageCreator\GroupCreator.cs" />
     <Compile Include="GroupPageCreator\GroupPageLight.cs" />
     <Compile Include="GroupPageCreator\GroupPageOptions.cs" />
     <Compile Include="GroupPageCreator\IGroupingsCreator.cs" />
@@ -352,6 +354,8 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportData.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportService.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionBestTeamBlockDecider.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionWorstTeamBlockDecider.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterPersonsForTotalDistribution.cs" />
