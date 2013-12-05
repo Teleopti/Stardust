@@ -11349,4 +11349,10 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
     <value>Försöker lösa oschemalagda dagar...</value>
   </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Lägg till frånvaro inom dag</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Frånvaro inom dag</value>
+  </data>
 </root>
