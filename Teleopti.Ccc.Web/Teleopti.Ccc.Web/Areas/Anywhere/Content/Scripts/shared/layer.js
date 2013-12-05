@@ -43,6 +43,5 @@ define([
 		});
 			
 		this.Selected = ko.observable(false);
-
 	};
 });
