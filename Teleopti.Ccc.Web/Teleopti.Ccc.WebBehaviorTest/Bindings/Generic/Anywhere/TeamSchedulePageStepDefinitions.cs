@@ -162,6 +162,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			scheduledActivity.ForEach(sa => assertScheduledActivity(personName, sa));
 		}
 
+		[Then(@"I should see '(.*)'s shift menu")]
+		public void ThenIShouldSeeSShiftMenu(string person)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') + tr.shift-menu-row", person);
+		}
+
+
 		private static void assertScheduledActivity(string personName, ScheduledActivityInfo layer)
 		{
 			if (layer.StartTime.Equals("00:00"))

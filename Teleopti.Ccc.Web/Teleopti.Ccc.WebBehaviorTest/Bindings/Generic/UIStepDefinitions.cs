@@ -75,6 +75,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
 		}
-
 	}
 }

@@ -226,4 +226,3 @@ Scenario: Back to viewing schedule after adding a full day absence
 	| End time   | 2013-04-08 23:59 |
 	When I press back in the web browser
 	Then I should be viewing schedules for '2013-04-08'	
-
