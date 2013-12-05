@@ -126,7 +126,7 @@ Scenario: View night shift from today
 	| End time   | 1.04:00 |
 	| Color      | Green   |
 
-Scenario: View schedule in leader's time zone
+Scenario: View schedule in my time zone
 	Given I have the role 'Anywhere Team Green'
 	And I am located in Stockholm
 	And 'Pierre Baldi' is located in Hawaii
