@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
+using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Interfaces.Domain;
@@ -338,7 +339,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(ICollection<IPerson> persons, DateTimePeriod period)
 		{
 			//Alla request där UpdatedOn innanför period
-			IEnumerable<IPersonRequest> allRequestsBy = FindModifiedWithinPeriodOrPending(persons, period);
+			IEnumerable<IPersonRequest> allRequestsBy = FindModifiedWithinPeriodOrPendingExceptShiftTrades(persons, period);
 
 			//Alla shiftTrades där UpdatedOn innanför Period
 			IEnumerable<IPersonRequest> allShiftTradesTo = FindShiftTradesModifiedWithinPeriod(persons, period);
@@ -368,9 +369,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					 Restrictions.Eq("requestStatus", 0))
 				 )
 				.Add(Subqueries.PropertyIn("requests", DetachedCriteria.For(typeof(ShiftTradeRequest))
-					 .SetProjection(Projections.Property("Parent"))
-					 .Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", DetachedCriteria.For<ShiftTradeSwapDetail>().SetProjection(Projections.Property("Parent"))
-						 .Add(Restrictions.Or(Restrictions.InG("PersonFrom", personChunkList), Restrictions.InG("PersonTo", personChunkList)))))))
+						.SetProjection(Projections.Property("Parent"))
+						.Add(Subqueries.PropertyIn("ShiftTradeSwapDetails", DetachedCriteria.For<ShiftTradeSwapDetail>().SetProjection(Projections.Property("Parent"))
+							.CreateAlias("PersonTo", "personTo", JoinType.InnerJoin)
+							.CreateAlias("PersonFrom", "personFrom", JoinType.InnerJoin)
+							.Add(Restrictions.Eq("personTo.IsDeleted", false))
+							.Add(Restrictions.Eq("personFrom.IsDeleted", false))
+							.Add(Restrictions.Or(Restrictions.IsNull("personTo.TerminalDate"), Restrictions.Gt("personTo.TerminalDate", DateOnly.Today)))
+							.Add(Restrictions.Or(Restrictions.IsNull("personFrom.TerminalDate"), Restrictions.Gt("personFrom.TerminalDate", DateOnly.Today)))
+							.Add(Restrictions.Or(Restrictions.InG("PersonFrom", personChunkList), Restrictions.InG("PersonTo", personChunkList)))))))
 				.List<IPersonRequest>();
 
 			var personRequests =
@@ -391,7 +398,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequestList;
 		}
 
-		private IEnumerable<IPersonRequest> FindModifiedWithinPeriodOrPending(IEnumerable<IPerson> persons, DateTimePeriod period)
+		private IEnumerable<IPersonRequest> FindModifiedWithinPeriodOrPendingExceptShiftTrades(IEnumerable<IPerson> persons, DateTimePeriod period)
 		{
 			var retList = new List<IPersonRequest>();
 
@@ -405,6 +412,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 																	Restrictions.Eq("requestStatus", 0)))
 										.List<IPersonRequest>());
 			}
+
+			//sjukt korkat - men finns inget lämpligt att filtrera på i frågan ovan (varför en lista av requests!?)
+			retList = retList.Where(pr => !(pr.Request is IShiftTradeRequest)).ToList();
 
 			foreach (var personRequest in retList)
 			{
