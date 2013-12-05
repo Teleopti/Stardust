@@ -472,9 +472,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var startFirst = new DateTime(2009, 10, 27, 11, 0, 0, DateTimeKind.Utc);
-            var endFirst = new DateTime(2009, 10, 27, 15, 30, 0, DateTimeKind.Utc);
-            var periodFirst = new DateTimePeriod(startFirst, endFirst);
             var expectedStart = new DateTime(2009, 10, 27, 0, 0, 0, DateTimeKind.Utc);
             var expectedEnd = expectedStart.AddDays(1);
             var expectedPeriod  = new DateTimePeriod(expectedStart, expectedEnd);
@@ -483,7 +480,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             {
                 Expect.Call(scheduleDay.ProjectionService()).Return(projectionService);
                 Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
-                Expect.Call(visualLayerCollection.Period()).Return(periodFirst);
+                Expect.Call(visualLayerCollection.Period()).Return(null);
 				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_model.TimeZone).Repeat.AtLeastOnce();
                 Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);
@@ -511,24 +508,20 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var projectionService = _mocks.StrictMock<IProjectionService>();
             var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var startFirst = TimeZoneHelper.ConvertToUtc(new DateTime(2009, 10, 27, 11, 0, 0),_model.TimeZone);
-            var endFirst = TimeZoneHelper.ConvertToUtc(new DateTime(2009, 10, 28, 2, 0, 0), _model.TimeZone);
+            var startFirst = new DateTime(2009, 10, 27, 11, 0, 0,DateTimeKind.Utc);
+            var endFirst = new DateTime(2009, 10, 28, 2, 0, 0, DateTimeKind.Utc);
             var periodFirst = new DateTimePeriod(startFirst, endFirst);
-            var expectedStart = new DateTime(2009, 10, 27, 0, 0, 0, DateTimeKind.Utc);
-            var expectedEnd = expectedStart.AddHours(27);
+            var expectedPeriod = new DateTimePeriod(startFirst, endFirst);
 
-			var expectedPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(expectedStart, expectedEnd, _model.TimeZone);
-
-            using (_mocks.Record())
-            {
-                Expect.Call(scheduleDay.ProjectionService()).Return(projectionService);
-                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
-                Expect.Call(visualLayerCollection.Period()).Return(periodFirst);
-				Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary);
-				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(TimeZoneInfo.FindSystemTimeZoneById("utc")).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDictionary[person]).Return(range);
-                Expect.Call(range.ScheduledDay(_startDate)).Return(scheduleDay).IgnoreArguments();
-            }
+				using (_mocks.Record())
+				{
+					Expect.Call(scheduleDay.ProjectionService()).Return(projectionService);
+					Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
+					Expect.Call(visualLayerCollection.Period()).Return(periodFirst);
+					Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary);
+					Expect.Call(scheduleDictionary[person]).Return(range);
+					Expect.Call(range.ScheduledDay(_startDate)).Return(scheduleDay).IgnoreArguments();
+				}
 
             using (_mocks.Playback())
             {
