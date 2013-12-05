@@ -7,6 +7,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -676,9 +677,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-			var fairnessOpt = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
-			fairnessOpt.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
+
+			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
+			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
+			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
+
+			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
+			teamBlockSeniorityFairnessOptimizationService.Exectue(matrixListForFairness, selectedPeriod, selectedPersons,
+			                                                      schedulingOptions, _stateHolder.ShiftCategories.ToList());
 		}
 
         private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
