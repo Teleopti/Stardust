@@ -12,10 +12,9 @@ namespace Teleopti.Ccc.Rta.WebService
     {
         private IRtaDataHandler _rtaDataHandler;
         private readonly string _authenticationKey;
-        private readonly object _lockObject = new object();
         private const string logOutStateCode = "LOGGED-OFF";
         private static readonly ILog Log = LogManager.GetLogger(typeof (TeleoptiRtaService));
-		
+
 	    public TeleoptiRtaService(IRtaDataHandler rtaDataHandler)
         {
 		    _rtaDataHandler = rtaDataHandler;
@@ -90,18 +89,14 @@ namespace Teleopti.Ccc.Rta.WebService
 			                   stateCode, newStateCode, messageId);
 			    stateCode = newStateCode;
 		    }
-		    
-			Log.InfoFormat(
+
+		    Log.InfoFormat(
 			    "Message verified and validated from sender for UserCode: {0}, StateCode: {1}. (MessageId = {2})", userCode,
 			    stateCode, messageId);
-		    
-			lock (_lockObject)
-		    {
-			    _rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
-			                                   parsedPlatformTypeId, sourceId, batchId, isSnapshot);
-		    }
-		    
-			Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId = {2})", userCode,
+		    _rtaDataHandler.ProcessRtaData(userCode.Trim(), stateCode, TimeSpan.FromSeconds(secondsInState), timestamp,
+		                                   parsedPlatformTypeId, sourceId, batchId, isSnapshot);
+
+		    Log.InfoFormat("Message handling complete for UserCode: {0}, StateCode: {1}. (MessageId = {2})", userCode,
 		                   stateCode, messageId);
 
 		    return 1;
@@ -147,11 +142,9 @@ namespace Teleopti.Ccc.Rta.WebService
 			Log.InfoFormat(
 				"Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Timestamp: {2}", personId,
 				businessUnitId, timestamp);
-			lock (_lockObject)
-			{
+
 				_rtaDataHandler.ProcessScheduleUpdate(personId, businessUnitId, timestamp);
 			}
-		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "log4net.ILog.ErrorFormat(System.String,System.Object[])")]
 		private static void verifyBatchNotTooLarge(ICollection<ExternalUserState> externalUserStateBatch)
