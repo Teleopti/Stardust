@@ -160,7 +160,7 @@
     <value>Datum till:</value>
   </data>
   <data name="ResGrandTotal" xml:space="preserve">
-    <value>Grand Total</value>
+    <value>Totalsumma</value>
   </data>
   <data name="ResInterval" xml:space="preserve">
     <value>Intervall</value>
@@ -209,15 +209,15 @@
     <comment>Besvarade samtal per schemalagd telefontid</comment>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Snitt Efterbearbetningstid (s)</value>
+    <value>Snitt efterbearbetningstid (s)</value>
     <comment>Snitt Efterbearbetningstid (s)</comment>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>Snitt Hanteringstid (s)</value>
+    <value>Snitt hanteringstid (s)</value>
     <comment>Snitt Hanterings tid (s)</comment>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Snitt Samtalstid (s)</value>
+    <value>Snitt samtalstid (s)</value>
     <comment>Snitt Samtalstid (s)</comment>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
