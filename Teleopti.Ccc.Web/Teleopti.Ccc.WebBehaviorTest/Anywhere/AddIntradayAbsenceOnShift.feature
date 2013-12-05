@@ -189,7 +189,6 @@ Scenario: Prevent adding outside of shift
 	| End time   | 18:00   |
 	Then I should see the alert 'Please add intraday absence on existing shift'
 
-@ignore
 Scenario: Back to viewing selected person shift menu after adding
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with

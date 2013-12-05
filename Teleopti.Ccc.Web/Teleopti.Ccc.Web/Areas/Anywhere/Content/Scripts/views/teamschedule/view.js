@@ -66,7 +66,6 @@ define([
 								if (currentState.SelectedLayer()) {
 									setSelectedLayer(currentPersons[i].Shifts());
 								} else {
-
 								}
 
 							}
@@ -168,18 +167,16 @@ define([
 			});
 
 			teamSchedule.SelectedGroup.subscribe(function () {
-				currentState.Clear();
-
 				if (teamSchedule.Loading())
 					return;
+				currentState.Clear();
 				navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 			});
 
 			teamSchedule.SelectedDate.subscribe(function () {
-				currentState.Clear();
-
 				if (teamSchedule.Loading())
 					return;
+				currentState.Clear();
 				navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 			});
 
