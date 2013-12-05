@@ -235,7 +235,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
             builder.RegisterType<TeamBlockSizeClassifier>().As<ITeamBlockSizeClassifier>();
             builder.RegisterType<TeamBlockWeightExtractor>().As<ITeamBlockWeightExtractor>();
-            builder.RegisterType<FairnessOptimizationCommand>().As<IFairnessOptimizationCommand>();
             builder.RegisterType<TeamBlockListSwapAnalyzer>().As<ITeamBlockListSwapAnalyzer>();
             builder.RegisterType<SwapScheduleDays>().As<ISwapScheduleDays>();
             builder.RegisterType<ValidateScheduleDays>().As<IValidateScheduleDays>();
