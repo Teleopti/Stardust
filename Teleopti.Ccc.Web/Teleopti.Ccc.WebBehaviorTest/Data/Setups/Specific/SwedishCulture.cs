@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Threading;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -8,11 +9,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 	{
 		public CultureInfo CultureInfo;
 
-		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		public SwedishCulture()
 		{
 			CultureInfo = CultureInfo.GetCultureInfo("sv-SE");
+		}
+
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		{
 			user.PermissionInformation.SetCulture(CultureInfo);
 			user.PermissionInformation.SetUICulture(CultureInfo);
+			//strange - needs to be set if language pack installed
+			Thread.CurrentThread.CurrentUICulture = CultureInfo; 
+			Thread.CurrentThread.CurrentCulture = CultureInfo;
 		}
 	}
 }
