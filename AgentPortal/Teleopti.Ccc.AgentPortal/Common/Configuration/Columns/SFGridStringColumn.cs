@@ -22,8 +22,10 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 
         private string GetDescription(T currentItem)
         {
-            object value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
-            return (string)value ?? string.Empty;
+            var value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty);
+	        return value == null
+		               ? string.Empty
+		               : value.ToString();
         }
     }
 }

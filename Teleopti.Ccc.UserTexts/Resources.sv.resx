@@ -11335,7 +11335,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Stop current background operation in scheduler</comment>
   </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
-    <value>Agent Kompetenser</value>
+    <value>Agentkompetenser</value>
     <comment>Agent Kompetenser</comment>
   </data>
   <data name="KeepTag" xml:space="preserve">
@@ -11352,5 +11352,14 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
     <value>Försöker lösa oschemalagda dagar...</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Lägg till frånvaro inom dag</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Frånvaro inom dag</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Skiftbyte nekat då skiften är på olika datum.</value>
   </data>
 </root>

@@ -356,7 +356,7 @@
     <comment>Add personal activity menu item</comment>
   </data>
   <data name="AddPersonalActivityThreeDots" xml:space="preserve">
-    <value>提供个人活动…</value>
+    <value>增加个人活动…</value>
     <comment>Add Personal Activity...</comment>
   </data>
   <data name="AddPersonalLayer" xml:space="preserve">
@@ -1606,7 +1606,7 @@
     <comment>Early</comment>
   </data>
   <data name="EarlyEndTime" xml:space="preserve">
-    <value>早班结束时间</value>
+    <value>最早结束时间</value>
     <comment>Rotation Setting Grid Column header</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -1614,7 +1614,7 @@
     <comment>Early start shift creator activity grid</comment>
   </data>
   <data name="EarlyStartTime" xml:space="preserve">
-    <value>早班开始时间</value>
+    <value>最早开始时间</value>
     <comment>Rotation Setting Grid Column header</comment>
   </data>
   <data name="EarlyWarning" xml:space="preserve">
@@ -2426,7 +2426,7 @@
     <comment>Late</comment>
   </data>
   <data name="LateEndTime" xml:space="preserve">
-    <value>晚班结束时间</value>
+    <value>最晚结束时间</value>
     <comment>Rotation Setting Grid Column header</comment>
   </data>
   <data name="LateStart" xml:space="preserve">
@@ -2434,7 +2434,7 @@
     <comment>Late start shift creator activity grid</comment>
   </data>
   <data name="LateStartTime" xml:space="preserve">
-    <value>晚班开始时间</value>
+    <value>最晚开始时间</value>
     <comment>Rotation Setting Grid Column header</comment>
   </data>
   <data name="Layer" xml:space="preserve">

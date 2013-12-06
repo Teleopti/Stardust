@@ -440,25 +440,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 																   _parentAdapterCollection));
 		}
 
-		internal override void CellClick(object sender, GridCellClickEventArgs e)
-		{
-			if ((e.RowIndex == 0) && (e.ColIndex > 0))
-			{
-				Grid.Selections.Remove(GridRangeInfo.Col(e.ColIndex));
-
-				var test = sender as GridControl;
-				if (test == null) return;
-
-				for (var i = 0; i < test.RowCount; i++)
-				{
-					if (_parentAdapterCollection[i].ExpandState == false)
-					{
-						Grid.Selections.Ranges.Add(GridRangeInfo.Cells(i + 1, e.ColIndex, i + 1, e.ColIndex));
-					}
-				}
-			}
-		}
-
 		internal void PasteSpecial<T>(object sender, T eventArgs)
 		{
 			var gridRangeInfoList = Grid.Model.Selections.Ranges;
@@ -1035,7 +1016,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			{
 				var gridRangeInfo = gridRangeInfoList[index];
 
-				if (gridRangeInfo.IsTable)
+				if (gridRangeInfo.IsTable || gridRangeInfo.IsCols)
 				{
 					// This scenario is used for when user is selecting entire grid using button give top in 
 					// that grid.

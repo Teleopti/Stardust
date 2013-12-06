@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
         private RectangleF GetLayerRectangle(LengthToTimeCalculator pixelConverter, DateTimePeriod period, RectangleF clientRect)
         {
             var x1 = pixelConverter.PositionFromDateTime(period.StartDateTime, Grid.IsRightToLeft());
-			var x2 = pixelConverter.PositionFromDateTime(period.EndDateTime.TimeOfDay <= period.StartDateTime.TimeOfDay ? period.StartDateTime : period.EndDateTime, Grid.IsRightToLeft());
+				var x2 = pixelConverter.PositionFromDateTime(period.EndDateTime, Grid.IsRightToLeft());
 
             if (Grid.IsRightToLeft())
             {
