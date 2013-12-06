@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 
 					if (sendSettings.IntervalForScheduleUpdate != 0 &&
 					    sendSettings.RemainingCount%sendSettings.IntervalForScheduleUpdate == 0)
-						clientHandler.UpdateScheduleChange(stateForTest.PersonId,
+						clientHandler.UpdateScheduleChange(stateForTest.PersonId.ToString(),
 						                                   stateForTest.BusinessUnitId.ToString(), DateTime.UtcNow);
                         }
                         catch (Exception exception)
