@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 		private readonly ILog _loggingSvc = LogManager.GetLogger(ClientHandler.LogName);
 		private readonly IList<string> _logOnCollection = new List<string>();
 		private readonly IList<string> _stateCodeCollection = new List<string>();
-		private readonly IList<string> _personIdForScheduleUpdate = new List<string>();
+		private readonly IList<Guid> _personIdForScheduleUpdate = new List<Guid>();
 		private int _sendCount = 1;
 		private readonly Guid _platformId;
 		private readonly int _sourceId;
@@ -34,14 +34,13 @@ namespace Teleopti.Ccc.Rta.TestApplication
 		{
 			_logOnCollection = new List<string>(ConfigurationManager.AppSettings["LogOn"].Split(','));
 			_stateCodeCollection = new List<string>(ConfigurationManager.AppSettings["StateCode"].Split(','));
-			_personIdForScheduleUpdate = new List<string>();
 			_endSequenceCode = ConfigurationManager.AppSettings["LogOffCode"];
 
 			foreach (var personId in ConfigurationManager.AppSettings["PersonIdsForScheduleUpdate"].Split(','))
 			{
 				Guid personGuid;
 				if (isValidGuid(personId, out personGuid))
-					_personIdForScheduleUpdate.Add(personId);
+					_personIdForScheduleUpdate.Add(personGuid);
 				else
 					_loggingSvc.WarnFormat(CultureInfo.CurrentCulture,
 					                       "Property PersonIdsForScheduleUpdate was not read from configuration");
@@ -236,7 +235,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			result.AddRange(
 				_logOnCollection.Select(
 					logOn =>
-					new AgentStateForTest(logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false, DateTime.UtcNow, string.Empty,
+					new AgentStateForTest(logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false, DateTime.UtcNow, Guid.Empty,
 					                      Guid.Empty)));
 			return result;
 		}
