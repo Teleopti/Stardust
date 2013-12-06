@@ -7,17 +7,6 @@
 	Layout = null;
 }
 <script>
-    function checkContentMaxLength(element) {
-        var maxLength = element.attr("data-val-length-max");
-        if ((maxLength != undefined) && (maxLength > 0)) {
-            setTimeout(function() {
-                element.val(element.val().substring(0, maxLength));
-            }, 100);
-        }
-
-        return true;
-    }
-    
     $(function () {
         Teleopti.MyTimeWeb.Request.RequestDetail.PrepareForViewModel(
             {
@@ -30,11 +19,6 @@
                 todayDay: '@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)'
             }
         );
-
-        // Check content length limit on inputting and pasting for all element with length max setting.
-        $(document).on("paste keypress", "*[data-val-length-max]", function () {
-            return checkContentMaxLength($(this));
-        });
     });
 </script>
 <script type="text/html" id="request-detail-not-set">
