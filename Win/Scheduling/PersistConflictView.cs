@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_presenter = new PersistConflictPresenter(this, model, messageQueueRemoval);
 		}
 
-		public new PersistConflictDialogResult DialogResult { get; set; }
-
 		private void PersistConflict_Load(object sender, EventArgs e)
 		{
 			_presenter.Initialize();
@@ -55,9 +53,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			gridControlConflict.Cols.Size[4] = width;
 		}
 
-		public void CloseForm(PersistConflictDialogResult dialogResult)
+		public void CloseForm()
 		{
-			DialogResult = dialogResult;
 			Close();
 		}
 

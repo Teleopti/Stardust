@@ -46,14 +46,22 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
             return foundElement;
         }
 
-       
+		public static T FindVisualParent<T>(UIElement child) where T : UIElement
+		{
+			if (child == null) return null;
 
-		//public DependencyObject GetAncestorByType(DependencyObject element, Type type) 
-		//{ 
-		//    if (element == null) return null; 
-		//    if (element.GetType() == type) return element; 
-		//    return GetAncestorByType(VisualTreeHelper.GetParent(element), type); 
-		//}   
+			var parent = VisualTreeHelper.GetParent(child) as UIElement;
+
+			while (parent != null)
+			{
+				var found = parent as T;
+				if (found != null)
+					return found;
+				
+				parent = VisualTreeHelper.GetParent(parent) as UIElement;
+			}
+			return null;
+		}
    
         #endregion
 

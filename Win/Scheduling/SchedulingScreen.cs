@@ -6343,33 +6343,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulerSplitters1.RefreshTabInfoPanels();
 		}
 
-		private class ConflictHandlingResult
-		{
-			public bool ConflictsFound { get; set; }
-			public PersistConflictDialogResult DialogResult { get; set; }
-		}
-
-		private ConflictHandlingResult refreshEntitiesUsingMessageBroker()
+		private void refreshEntitiesUsingMessageBroker()
 		{
 			var conflictsBuffer = new List<PersistConflict>();
 			var refreshedEntitiesBuffer = new List<IPersistableScheduleData>();
 			refreshEntitiesUsingMessageBroker(refreshedEntitiesBuffer, conflictsBuffer);
-			var result = handleConflicts(refreshedEntitiesBuffer, conflictsBuffer);
-			return result;
+			handleConflicts(refreshedEntitiesBuffer, conflictsBuffer);
 		}
 
-		private ConflictHandlingResult handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)
+		private void handleConflicts(IEnumerable<IPersistableScheduleData> refreshedEntities, IEnumerable<PersistConflict> conflicts)
 		{
-			List<IPersistableScheduleData> modifiedDataFromConflictResolution;
-			if (refreshedEntities == null)
-				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>();
-			else
-				modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
+			var modifiedDataFromConflictResolution = new List<IPersistableScheduleData>(refreshedEntities);
 
-			var result = new ConflictHandlingResult { ConflictsFound = false, DialogResult = PersistConflictDialogResult.None };
-			result.ConflictsFound = conflicts.Any();
-			if (result.ConflictsFound)
-				result.DialogResult = showPersistConflictView(modifiedDataFromConflictResolution, conflicts);
+			if (conflicts.Any())
+				showPersistConflictView(modifiedDataFromConflictResolution, conflicts);
 
 			_undoRedo.Clear(); //see if this can be removed later... Should undo/redo work after refresh?
 			foreach (var data in modifiedDataFromConflictResolution)
@@ -6377,18 +6364,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerState.MarkDateToBeRecalculated(new DateOnly(data.Period.StartDateTimeLocal(_schedulerState.TimeZoneInfo)));
 				_personsToValidate.Add(data.Person);
 			}
-			return result;
 		}
 
-		private PersistConflictDialogResult showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<PersistConflict> conflicts)
+		private void showPersistConflictView(List<IPersistableScheduleData> modifiedData, IEnumerable<PersistConflict> conflicts)
 		{
-			PersistConflictDialogResult dialogResult;
 			using (var conflictForm = new PersistConflictView(_schedulerState.Schedules, conflicts, modifiedData, _schedulerMessageBrokerHandler))
 			{
 				conflictForm.ShowDialog();
-				dialogResult = conflictForm.DialogResult;
 			}
-			return dialogResult;
 		}
 
 		private void refreshEntitiesUsingMessageBroker(ICollection<IPersistableScheduleData> refreshedEntitiesBuffer, ICollection<PersistConflict> conflictsBuffer)

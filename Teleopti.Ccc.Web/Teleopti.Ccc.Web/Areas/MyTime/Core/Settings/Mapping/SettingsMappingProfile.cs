@@ -15,12 +15,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 
 		protected override void Configure()
 		{
-
-			CreateMap<CultureInfo, CultureViewModel>()
-				.ForMember(d => d.id, o => o.MapFrom(s => s.LCID))
-			.ForMember(d => d.text, o => o.MapFrom(s => s.DisplayName));
-
-
 			CreateMap<CultureInfo, CultureViewModel>()
 				.ForMember(d => d.id, o => o.MapFrom(s => s.LCID))
 				.ForMember(d => d.text, o => o.MapFrom(s => s.DisplayName));

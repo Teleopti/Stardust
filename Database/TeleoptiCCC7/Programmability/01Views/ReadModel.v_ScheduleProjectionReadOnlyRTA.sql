@@ -15,6 +15,15 @@ SELECT [Id]
       ,[ShortName]
       ,[DisplayColor]
 FROM [ReadModel].[ScheduleProjectionReadOnly]
-WHERE BelongsToDate between dateadd(day,-1,GETUTCDATE()) and dateadd(day,1,GETUTCDATE())
-
+WHERE BelongsToDate
+	BETWEEN
+		DATEADD(
+			DAY,-1, --yesterday
+			DATEDIFF(DAY, 0, GETUTCDATE()) --Now().DateOnly
+			)
+		AND
+		DATEADD(
+			DAY,1, --tomorrow
+			DATEDIFF(DAY, 0, GETUTCDATE()) --Now().DateOnly
+			)
 GO

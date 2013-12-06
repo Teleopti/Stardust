@@ -10,10 +10,11 @@ namespace Teleopti.Ccc.Rta.TestApplication
         private readonly int _dataSourceId;
         private readonly bool _isSnapshot;
         private readonly DateTime _batchIdentifier;
-	    private readonly string _personId;
+	    private readonly Guid _personId;
 	    private readonly Guid _businessUnitId;
 
-		public AgentStateForTest(string logOn, string stateCode, TimeSpan waitTime, int dataSourceId, bool isSnapshot, DateTime batchIdentifier, string personId, Guid businessUnitId)
+	    public AgentStateForTest(string logOn, string stateCode, TimeSpan waitTime, int dataSourceId, bool isSnapshot,
+	                             DateTime batchIdentifier, Guid personId, Guid businessUnitId)
         {
             _logOn = logOn;
             _isSnapshot = isSnapshot;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
             get { return _isSnapshot; }
         }
 		
-	    public string PersonId
+	    public Guid PersonId
 	    {
 			get { return _personId; }
 	    }

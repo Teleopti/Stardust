@@ -201,10 +201,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoPreference();
 		}
 
+		[Given(@"I view team schedule")]
 		[Given(@"I view group schedule")]
+		[Given(@"I am viewing team schedule")]
 		[Given(@"I am viewing group schedule")]
+		[Given(@"I am viewing team schedule for today")]
 		[Given(@"I am viewing group schedule for today")]
 		[When(@"I view group schedule")]
+		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
@@ -212,6 +216,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule();
 		}
 
+		[Given(@"I am viewing team schedule for tomorrow")]
 		[Given(@"I am viewing group schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
@@ -221,7 +226,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
         [When(@"I view group schedule for '(.*)'")]
-        [Given(@"I am viewing group schedule for '(.*)'")]
+		[Given(@"I am viewing group schedule for '(.*)'")]
+		[Given(@"I am viewing team schedule for '(.*)'")]
         public void WhenIViewTeamScheduleFor(DateTime date)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
@@ -241,6 +247,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I navigate to the group schedule")]
+		[When(@"I navigate to the team schedule")]
 		public void WhenINavigateToTheTeamSchedule()
 		{
 			Navigation.GotoTeamSchedule();

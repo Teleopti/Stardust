@@ -127,7 +127,7 @@ Scenario: Cannot view unpublished calendar
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2023-06-24         |
-	And Current time is '2023-06-20'
+	And the current time is '2023-06-20'
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2023-04-10 |

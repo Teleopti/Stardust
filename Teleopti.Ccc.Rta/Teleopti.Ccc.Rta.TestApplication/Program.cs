@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
-using System.Data.SqlTypes;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -16,16 +16,10 @@ namespace Teleopti.Ccc.Rta.TestApplication
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof (Program));
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-            "CA1303:Do not pass literals as localized parameters",
-            MessageId = "System.Console.WriteLine(System.String,System.Object)"),
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
-             "CA1303:Do not pass literals as localized parameters",
-             MessageId = "System.Console.WriteLine(System.String)")]
         private static void Main(string[] args)
         {
             XmlConfigurator.Configure();
-            ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
+			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
             var serviceUrl = ConfigurationManager.AppSettings["serviceUrl"];
 
             var connectionProperties = new Hashtable();
@@ -35,61 +29,90 @@ namespace Teleopti.Ccc.Rta.TestApplication
             while (keepRunning)
             {
                 var sendSettings = new SendSettings();
-                var sendCount = sendSettings.RemainingCount;
-                var platformTypeId = sendSettings.PlatformId;
+				var originalSendCount = sendSettings.RemainingCount;
                 var clientHandler = new ClientHandler(connectionProperties);
                 clientHandler.StartLogClient();
 	            var stopwatch = new System.Diagnostics.Stopwatch();
 				stopwatch.Start();
-                while (sendSettings.RemainingCount > 0)
+
+				if (sendSettings.UseMultiThread)
+					useMultiThread(sendSettings, clientHandler);
+				else
+					useSingleThread(sendSettings, clientHandler);
+
+				clientHandler.StopLogClient();
+				stopwatch.Stop();
+				Console.WriteLine("Done with sending {0} rows of RTA data. Elapsed time equals: {1}", originalSendCount, stopwatch.Elapsed);
+				Console.WriteLine("Press Y to send again or any other key to exit.");
+				var info = Console.ReadKey();
+				keepRunning = (info.Key == ConsoleKey.Y);
+			}
+		}
+
+		private static void useMultiThread(SendSettings sendSettings, ClientHandler clientHandler)
+		{
+			const int numberOfThreads = 10;
+			var fullStateList = getThreadStateLists(numberOfThreads, sendSettings);
+			var threadStateList = new List<Thread>();
+
+			for (var i = 0; i < numberOfThreads; i++)
+			{
+				var threadSendList = fullStateList[i];
+				var t = new Thread(() => sendStates(sendSettings, clientHandler, threadSendList));
+				t.Start();
+				threadStateList.Add(t);
+			}
+
+			threadStateList.ForEach(t => t.Join());
+		}
+
+		private static List<List<AgentStateForTest>> getThreadStateLists(int numberOfThreads, SendSettings settings)
+		{
+			var superList = new List<List<AgentStateForTest>>();
+			for (var i = 0; i < numberOfThreads; i++)
+			{
+				var tempThreadList = new List<AgentStateForTest>();
+				for (var j = 0; j < settings.RemainingCount / numberOfThreads; j++)
+					tempThreadList.AddRange(settings.Read());
+				superList.Add(tempThreadList);
+			}
+			return superList;
+		}
+
+	    private static void useSingleThread(SendSettings sendSettings, ClientHandler clientHandler)
+	    {
+		    while (sendSettings.RemainingCount > 0)
+			    sendStates(sendSettings, clientHandler, sendSettings.Read());
+
+		    sendStates(sendSettings, clientHandler, sendSettings.EndSequence());
+	    }
+
+	    private static void sendStates(SendSettings sendSettings, ClientHandler clientHandler, IEnumerable<AgentStateForTest> statesForTest)
                 {
-                    var statesForTest = sendSettings.Read();
                     foreach (var stateForTest in statesForTest)
                     {
                         try
                         {
                             clientHandler.SendRtaDataToServer(stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
-                                                              DateTime.UtcNow, platformTypeId, stateForTest.DataSourceId,
+					                                  DateTime.UtcNow, sendSettings.PlatformId, stateForTest.DataSourceId,
                                                               stateForTest.BatchIdentifier,
                                                               stateForTest.IsSnapshot);
 
-							if (sendSettings.IntervalForScheduleUpdate != 0 && sendSettings.RemainingCount % sendSettings.IntervalForScheduleUpdate == 0)
-								clientHandler.UpdateScheduleChange(stateForTest.PersonId, stateForTest.BusinessUnitId.ToString(), DateTime.UtcNow);
+					if (sendSettings.IntervalForScheduleUpdate != 0 &&
+					    sendSettings.RemainingCount%sendSettings.IntervalForScheduleUpdate == 0)
+						clientHandler.UpdateScheduleChange(stateForTest.PersonId.ToString(),
+						                                   stateForTest.BusinessUnitId.ToString(), DateTime.UtcNow);
                         }
                         catch (Exception exception)
                         {
                             Logger.Error("An error occured while sending RTA data to server", exception);
                             break;
                         }
-                        Thread.Sleep(stateForTest.WaitTime);
+	                    Thread.Sleep(stateForTest.WaitTime);
                     }
                 }
-                //Run the end of sequence (making sure LogOff signal is sent)
-                foreach (var stateForTest in sendSettings.EndSequence())
-                {
-                    try
-                    {
-                        clientHandler.SendRtaDataToServer(stateForTest.LogOn, stateForTest.StateCode, TimeSpan.Zero,
-                                                          DateTime.UtcNow, platformTypeId, stateForTest.DataSourceId,
-                                                          SqlDateTime.MinValue.Value,
-                                                          false);
-                    }
-                    catch (Exception exception)
-                    {
-                        Logger.Error("An error occured while sending RTA data to server", exception);
-                        break;
-                    }
-                }
-                clientHandler.StopLogClient();
-				stopwatch.Stop();
-                Console.WriteLine("Done with sending {0} rows of RTA data. Elapsed time equals: {1}", sendCount, stopwatch.Elapsed);
-                Console.WriteLine("Press Y to send again or any other key to exit.");
-                var info = Console.ReadKey();
-                keepRunning = (info.Key == ConsoleKey.Y);
-            }
-        }
 
-        private static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain,
+		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain,
                                                      SslPolicyErrors sslpolicyerrors)
         {
             return true;

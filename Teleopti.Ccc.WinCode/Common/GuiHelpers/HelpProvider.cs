@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WinCode.Common.GuiHelpers
 			var helpDivider = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpDividerOnline"];
 			var helpLang = string.Empty; //empty for now
 
-            if (Keyboard.Modifiers != ModifierKeys.Shift)
+            if (Keyboard.Modifiers == ModifierKeys.Shift)
             {
 				helpUrl = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpUrl"];
 				helpPrefix = StateHolder.Instance.StateReader.ApplicationScopeData.AppSettings["HelpPrefix"];

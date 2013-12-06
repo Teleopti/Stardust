@@ -27,9 +27,7 @@ Scenario: Adding too long text request
 	And I am viewing requests
 	When I click to add a new text request
 	And I input too long text request values
-	And I click send request button
-	Then I should see texts describing too long text error
-	And I should not see any requests in the list
+	Then I should see message adjusted to maximum length
 
 Scenario: Adding too long subject request
 	Given I am an agent

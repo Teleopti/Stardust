@@ -1325,6 +1325,14 @@ Schedule</value>
     <value>Zoom</value>
     <comment>Report Viewer Toolbar</comment>
   </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Connection to database timed out, try to limit your search conditions.</value>
+    <comment>Connection to database timed out, try to limit your search conditions.</comment>
+  </data>
+  <data name="ResSaturday" xml:space="preserve">
+    <value>Saturday</value>
+    <comment>Saturday</comment>
+  </data>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
     <value>Availability Per Agent</value>
     <comment> the report Availability Per Agent</comment>

@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommonCollapse" xml:space="preserve">
     <value>Dra ihop</value>
@@ -160,7 +160,7 @@
     <value>Datum till:</value>
   </data>
   <data name="ResGrandTotal" xml:space="preserve">
-    <value>Grand Total</value>
+    <value>Totalsumma</value>
   </data>
   <data name="ResInterval" xml:space="preserve">
     <value>Intervall</value>
@@ -209,15 +209,15 @@
     <comment>Besvarade samtal per schemalagd telefontid</comment>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Snitt Efterbearbetningstid (s)</value>
+    <value>Snitt efterbearbetningstid (s)</value>
     <comment>Snitt Efterbearbetningstid (s)</comment>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
-    <value>Snitt Hanteringstid (s)</value>
+    <value>Snitt hanteringstid (s)</value>
     <comment>Snitt Hanterings tid (s)</comment>
   </data>
   <data name="KpiAverageTalkTime" xml:space="preserve">
-    <value>Snitt Samtalstid (s)</value>
+    <value>Snitt samtalstid (s)</value>
     <comment>Snitt Samtalstid (s)</comment>
   </data>
   <data name="KpiReadiness" xml:space="preserve">
@@ -1324,6 +1324,18 @@
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Zooma</value>
     <comment>Report Viewer Toolbar</comment>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Endast aktiva kompetenser</value>
+    <comment>Endast aktiva kompetenser</comment>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Inkludera endast aktiva kompetenser:</value>
+    <comment>Inkludera endast aktiva kompetenser:</comment>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agentkompetenser</value>
+    <comment>Agent Kompetenser</comment>
   </data>
   <data name="ResOnlyActiveSkill" xml:space="preserve">
     <value>Endast aktiva kompetenser</value>

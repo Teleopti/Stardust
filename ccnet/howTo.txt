@@ -24,36 +24,35 @@ use "Toptinet\TFSIntegration"
 Use this account for all installations! It's important in order for some licenses to be applied correct
 
 --------------
-disable UAC
+Windows settings
 --------------
-Because we hate it
-Type UAC in search window. Get the slider to the bottom.
+::disable UAC
+C:\Windows\System32\cmd.exe /k %windir%\System32\reg.exe ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
 
---------------
-disable Hibernate 
---------------
-so that our new build server don't fall a sleep
-Run CMD as Administrator and execute:
+::diable windows search
+sc config Wsearch start= disabled
+net stop Wsearch
+
+::disable Hibernate 
 powercfg.exe -h off
+
+::reboot to get UAC settings to apply
+shutdown /r
 
 --------------
 File Explorer
 --------------
 Disable grandma-mode (she usally hides file extensions, system files, etc)
-
---------------
-minimize page file
---------------
-well... this is not recommended. But with current got only 80 Gb SSD-drives, so we need all the disk space we can get!
-Computer=>properties=>Advance system settings=>Performance=>blabla.=>Virtual Memory
-min  500 Mb
-max 1000 Mb
+Explorer->Organize->Folder and Search options-> "Hide extension for known file types" (untick!)
 
 ------------------
 Get needed software
 ------------------
 Open a command promt and Execute:
-\\a380\hangaren\#PROGRAM\Develop\_Teleopti-MyPrograms\CopyFilesAfterWindowsInstall.bat 1
+\\a380\hangaren\#PROGRAM\Develop\_Teleopti-MyPrograms\CopyFilesAfterWindowsInstall.bat
+BuildServer = Y
+CCC = C
+BIStudio = N
 
 -----------------
 Install software
@@ -63,15 +62,13 @@ Please keep the order given by the folder layout
 Make sure to start and/or run any scripts and programs with "Run as Adminsitrator"
 Some programs will require a Re-boot, go along when you are promted to avoid "a previous program required a re-boot"
 
-Note: SQL Server 2008 R2 Express, Use D:\SQLData as DataDir (or what ever Drive letter you have available for larger storage)
-
-VS2010, See screen shot of needed features
-VS2010, Use default installation path, C:\Program Files (x86)\Microsoft Visual Studio 10.0
-Azure, Use default installation path: C:\Program Files\Windows Azure SDK\
+Some program have some additional notes below:
 
 -----------------
 SQL Server configure remote access
 -----------------
+Run the automated .bat file
+
 ::enable tcpip
 "C:\Program Files\Microsoft SQL Server (x86)\100\Tools\Binn\SQLPS.exe" "$MachineObject = new-object ('Microsoft.SqlServer.Management.Smo.WMI.ManagedComputer') .;$ProtocolUri = 'ManagedComputer[@Name=''' + (get-item env:\computername).Value + ''']/ServerInstance[@Name=''mssqlserver'']/ServerProtocol';$tcp = $MachineObject.getsmoobject($ProtocolUri + '[@Name=''Tcp'']');$tcp.IsEnabled = $true;$tcp.alter();"
 
@@ -87,31 +84,9 @@ NET STOP MSSQLSERVER
 NET START MSSQLSERVER
 
 ------------------
-Windows Update
+VS2012 prep
 ------------------
-type "update" in the search window and start Windows Update
-Pick the Chefs recommendation of to day
-Use this setting: "Download updates but let me choose whether to install them"
-We need to be carefull with this => We don't to risk Microsotf to mess up our Build server!
-
-------------------
-IIS 7 prep
-------------------
-=> Register .NET 4 in IIS
-=> Make sure the DefaultAppPool (= CCnet) still runs v2.0
-=> Share inetpub for reading (handy for debugging/Log4Net review)
-=> reset IIS, just in case
-
-::Fast Track
-%systemRoot%\Microsoft.NET\Framework64\v4.0.30319\aspnet_regiis -i
-"%systemroot%\system32\inetsrv\APPCMD.exe" set apppool /apppool.name:DefaultAppPool /managedRuntimeVersion:v2.0
-net share inetpub="c:\inetpub" /GRANT:everyone,READ
-iisreset
-
-------------------
-VS2010 prep
-------------------
-Open up VS 2010 as TFSIntegration
+Open up VS 2012 as TFSIntegration
 "Visual C# Development Settings"
 Connect TeamExplorer to TFS-server (challenger)
 Map $/RaptorScrum = D:\TFSData (Do NOT get latest at this point!)
@@ -132,57 +107,36 @@ download and install x86/64-bit depending on your environment
 ---------------------
 Enable hg fetch extension
 ---------------------
-On the ccnet machine setting "tags" on repositories, hg extension "fetch" needs to be enabled.
-The easiest way to do this is to add...
+Make sure you are logged in as TfsIntegration.
+Open up HG Workbench and edit your settings file: c:\Users\tfsintegration\mercurial.ini
+[ui] 
+username =tfsintegration <tfsintegration@teleopti.com> 
+
 [extensions]
-fetch =  
-...to the file %USERPROFILE%\mercurial.ini.
-(If the ini file does not exist, you can add it)
-Currently the ccnet service is running as TfsIntegration.
-To verify it has been enabled correctly, run "hg help extensions"
+fetch = 
+purge =
+mq = 
+largefiles = 
 
-------------------
-NCover
-------------------
-Well it is checked into TF, but ...
-Will cause an exeption until registered.
-We have already tried to register as part of MSBuild. Works, but it will fail when/if folder structures are changed.
-
-::Fast Track
-D:
-CD "D:\TFSData\Root\ccnet\NCover64"
-NCover.Registration.exe //License NC3CMPLIC.lic
+[auth]
+atom.prefix = http://atom:5000
+atom.username = ccnet
+atom.password = m8kemew0rk
 
 ------------------
 CruiseControl
 ------------------
-Version: 1.6.7981.1
-http://sourceforge.net/projects/ccnet/files/CruiseControl.NET%20Releases/CruiseControl.NET%201.6/CruiseControl.NET-1.6.7981.1-Setup.exe/download
 Note, make the install on the fastest I/O sub system!
 Since "WorkingDirectory" are relative the CruiseControl installation dir
 Install Path: C:\Program Files (x86)\CruiseControl.NET
 
-Expected error on 64-bit:
-"The installer attempted to set the ASP.NET version for the CruisControl.NET web Dashboard but was not successful ...."
-reason: CCNet installation will not detect the 64-bit OS (and framework) so you will get an error during install.
-Run this to make the same thing happen manually:
-"C:\Windows\Microsoft.NET\Framework64\v2.0.50727\aspnet_regiis.exe" -s "W3SVC/1/ROOT/ccnet"
+------------------
+CruiseControl config - important
+------------------
+To get correct CCnet settings Run:
+C:\temp\download\50_CCNet\CCnetSettings.bat
 
-verify the URL
-http://localhost/ccnet
-Expected: A web page with: "No connection could be made because the target machine actively refused it 127.0.0.1:21234"
-
--ccService.exe.config
-Open up this file: C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config
-Replace all content with this template: http://challenger:8080/tfs/web/UI/Pages/Scc/Explorer.aspx?path=%24%2FRaptorScrum%2FCcNetServer%2F\Deployment
-NOTE: Make sure you edit the string: [COMPUTERNAME] => current machine
-Save and close
-
--ccnet.config - Working folder
-Create Dir for the "whatProjectsToBuildFile"
-MKDIR "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory"
-
--ccnet.config - Create new file
+-ccnet.config - (only If this is a new build server)
 Create and add a new file in TFS; $/RaptorScrum/CcNetServer/[COMPUTERNAME]_ccnet.config
 Check out and Edit, make sure all Workspaces match your new [COMPUTERNAME]
 Start off with a few projects, but <project name="ccnetserver"> is mandatory!
@@ -193,33 +147,35 @@ $/RaptorScrum/CcNetServer/[COMPUTERNAME]_ccnet.config
 This time (The very first time) you need to copy the file manually to your new Buildserver => "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory"
 Make sure it is set as "ReadOnly"
 
-- open Firewall
-netsh advfirewall firewall add rule name = IIS_80 dir = in protocol = tcp action = allow localport = 80 remoteip = any profile = DOMAIN
-netsh advfirewall firewall add rule name = CCTray dir = in protocol = tcp action = allow localport = 21234 remoteip = any profile = DOMAIN
+verify the URL
+http://localhost/ccnet
 
-- share the folder
-net share CruiseControl.NET="C:\Program Files (x86)\CruiseControl.NET" /GRANT:everyone,CHANGE
-
--WebDashBoard
-unzip this file: http://challenger:8080/tfs/web/UI/Pages/Scc/Explorer.aspx?path=%24%2FRaptorScrum%2FCcNetServer%2FDeployment%2Fwebdashboard.zip
-Into c:\Program Files (x86)\CruiseControl.NET\webdashboard
-merge and "Copy and Replace" for all Items
-
-- CCService Service Config
-Start: "services.msc"
-Find the service: "CruiseControl.NET Server"
-The service needs to "Logon as" = "toptinet\TFSIntegration"
-NET START "CruiseControl.NET Server"
-
-The service should now be running, if not check the Windows Event log: "Eventvwr.exe"
-
+---------------
+Initiate builds
+---------------
 - Force a build of project "ccnetserver"
 
 - Force a build of project "AnyGivenProject"
+#Fail!
+NCover cause an exception until registered.
+We have already tried to register as part of MSBuild. Works, but it will fail when/if folder structures are changed.
+CD "C:\Program Files (x86)\CruiseControl.NET\server\<Release-7.4.388>\WorkingDirectory\ccnet\NCover64"
+NCover.Registration.exe //License NC3CMPLIC.lic
+
+------------------
+Windows Update
+------------------
+Once you are done and have green build, run Windows Update manually once.
+
+type "update" in the search window and start Windows Update
+Pick the Chefs recommendation of to day
+Use this setting: "Download updates but let me choose whether to install them"
+make sure IE10 and IE11 are remove!!
+We need to be careful with this => We don't to risk Microsoft to mess up our Build server!
 
 ------------------------------------------------------------------------------------------------------------------
 
-Additionally we obfuscate, build SDk documentaionand create MSI files.
+For MSI build ww also: tag builds, create code quality reports, obfuscate, build SDk documentation, create MSI files
 
 ------------------------------------------------------
 ------------------------------------------------------
