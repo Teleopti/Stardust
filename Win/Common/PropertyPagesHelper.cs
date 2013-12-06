@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.Win.Common
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        public static IList<IPropertyPageNoRoot<ReforecastModelCollection>> GetReforecastFilePages(IList<ISkill> skills)
+        public static IList<IPropertyPageNoRoot<ReforecastModelCollection>> GetReforecastFilePages(AvailableSkillWithPreselectedSkill skills)
         {
             return new List<IPropertyPageNoRoot<ReforecastModelCollection>>
                        {

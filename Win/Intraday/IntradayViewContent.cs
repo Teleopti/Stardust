@@ -348,17 +348,6 @@ namespace Teleopti.Ccc.Win.Intraday
             tabSkillData.SelectedIndexChanged += tabSkillData_SelectedIndexChanged;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"),
-		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
-		public List<ISkill> GetSkills()
-		{
-			var selectedTab = (ISkill)tabSkillData.SelectedTab.Tag;
-			var list = (from TabPageAdv page in tabSkillData.TabPages select (ISkill)page.Tag).ToList();
-			list.Remove(selectedTab);
-			list.Insert(0, selectedTab);
-			return list;
-		}
-
         private void tabSkillData_SelectedIndexChanged(object sender, EventArgs e)
         {
             DrawSkillGrid(true);
