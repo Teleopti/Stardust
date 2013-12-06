@@ -4,7 +4,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -36,7 +39,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private IList<IOptionalColumn> _optionalColumns;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
         private ISchedulerGroupPagesProvider _groupPagesProvider;
-        private IList<IGroupPageLight> _groupPages;
+	    private readonly ILifetimeScope _container;
+	    private readonly DateOnlyPeriod _requestedPeriod;
+	    private IList<IGroupPageLight> _groupPages;
+	    private IGroupPagePerDate _groupPagePerDate;
 
     	public AgentInfoControl()
         {
@@ -48,11 +54,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider)
+		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider, ILifetimeScope container, DateOnlyPeriod requestedPeriod)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 		    _groupPagesProvider = groupPagesProvider;
+			_container = container;
+			_requestedPeriod = requestedPeriod;
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -67,7 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 listViewPersonPeriod.Items.Clear();
                 listViewRestrictions.Items.Clear();
                 listViewPerson.Items.Clear();
-                //listViewFairness.Items.Clear();
+				perPersonAndGroupListView.Items.Clear();
                 return;
             }
             _dateIsSelected = true;
@@ -105,8 +113,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				timerRefresh.Enabled = true;
                 updatePersonInfo(_selectedPerson);
             }
-            
-            
+	        if (tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
+		        updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+
+
         }
 
         private void initializeFairnessTab()
@@ -116,6 +126,28 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             comboBoxAgentGrouping.DisplayMember = "Name";
             comboBoxAgentGrouping.ValueMember = "Key";
         }
+
+		private void resetGroupPageData()
+		{
+			_groupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(_requestedPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), (IGroupPageLight)comboBoxAgentGrouping.SelectedItem);
+		}
+
+		private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+		{
+			perPersonAndGroupListView.Items.Clear();
+			var service = _container.Resolve<IDistributionReportService>();
+			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly), state.PersonsInOrganization.ToList(), state.Schedules);
+			foreach (var shiftCategory in report.DistributionDictionary.Keys)
+			{
+				var item = new ListViewItem(shiftCategory.Description.Name);
+				item.Font.ChangeToBold();
+				item.SubItems.Add(new Percent(report.DistributionDictionary[shiftCategory].Agent).ToString());
+				item.SubItems.Add(new Percent(report.DistributionDictionary[shiftCategory].Team).ToString());
+				item.SubItems.Add(new Percent(report.DistributionDictionary[shiftCategory].All).ToString());
+
+				perPersonAndGroupListView.Items.Add(item);
+			}
+		}
 
         private void updateRestrictionData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
         {
@@ -637,6 +669,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             initializeFairnessTab();
 	        timerRefresh.Interval = 2000;
+			resetGroupPageData();
         }
 
 		private void timerRefreshTick(object sender, EventArgs e)
@@ -651,5 +684,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             tabControlAgentInfo.SelectedIndex  = 0;
         }
+
+		private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			resetGroupPageData();
+			update();
+		}
     }
 }

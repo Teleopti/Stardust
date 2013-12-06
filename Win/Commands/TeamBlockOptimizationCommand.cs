@@ -5,17 +5,12 @@ using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -35,53 +30,36 @@ namespace Teleopti.Ccc.Win.Commands
 
     public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
     {
-        private readonly IDayOffBackToLegalStateFunctions _dayOffBackToLegalStateFunctions;
-        private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
-        private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
-        private readonly IGroupPageCreator _groupPageCreator;
-        private readonly IGroupScheduleGroupPageDataProvider _groupPageDataProvider;
-        private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
-        private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
-        private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
-        private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
-        private readonly IMatrixListFactory _matrixListFactory;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-        private readonly IRestrictionAggregator _restrictionAggregator;
-        private readonly IRestrictionExtractor _restrictionExtractor;
-        private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider;
-        private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-        private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
-        private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-        private readonly IScheduleDayEquator _scheduleDayEquator;
-        private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
-        private readonly ISchedulerStateHolder _schedulerState;
-        private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-        private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
-        private readonly ISchedulingResultStateHolder _stateHolder;
-        private readonly ITeamBlockClearer _teamBlockCleaner;
-        private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
-        private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
-        private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
-        private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-        private readonly ITeamDayOffModifier _teamDayOffModifier;
-        private readonly IWorkShiftFilterService _workShiftFilterService;
-        private readonly IWorkShiftSelector _workShiftSelector;
-        private BackgroundWorker _backgroundWorker;
-        private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
-	    private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
+		private readonly IDayOffBackToLegalStateFunctions _dayOffBackToLegalStateFunctions;
+		private readonly IDayOffDecisionMaker _dayOffDecisionMaker;
+		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
+		private readonly IGroupPersonBuilderForOptimizationFactory _groupPersonBuilderForOptimizationFactory;
+		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
+		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
+		private readonly IMatrixListFactory _matrixListFactory;
+		private readonly IRestrictionExtractor _restrictionExtractor;
+		private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider;
+		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
+		private readonly ISchedulerStateHolder _schedulerStateHolder;
+		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+		private readonly ITeamBlockClearer _teamBlockCleaner;
+		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
+		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
+		private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
+		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private readonly ITeamDayOffModifier _teamDayOffModifier;
+		private BackgroundWorker _backgroundWorker;
+		private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
+		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
+		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
+	    private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 
-	    public TeamBlockOptimizationCommand(IScheduleDayChangeCallback scheduleDayChangeCallback,
-                                            IResourceOptimizationHelper resourceOptimizationHelper,
-                                            ISchedulerStateHolder schedulerState, IScheduleDayEquator scheduleDayEquator,
-                                            IRestrictionOverLimitDecider restrictionOverLimitDecider,
-                                            IGroupScheduleGroupPageDataProvider groupPageDataProvider,
-                                            IGroupPagePerDateHolder groupPagePerDateHolder,
-                                            IGroupPageCreator groupPageCreator, ITeamBlockClearer teamBlockCleaner,
-                                            ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
-                                            IRestrictionAggregator restrictionAggregator,
-                                            IWorkShiftFilterService workShiftFilterService,
-                                            IWorkShiftSelector workShiftSelector,
-                                            ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification,
+	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
+											IScheduleDayEquator scheduleDayEquator,
+                                            IRestrictionOverLimitDecider restrictionOverLimitDecider, 
+											ITeamBlockClearer teamBlockCleaner,
                                             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
                                             IDayOffDecisionMaker dayOffDecisionMaker,
                                             IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -90,6 +68,7 @@ namespace Teleopti.Ccc.Win.Commands
                                             ILockableBitArrayFactory lockableBitArrayFactory,
                                             ISchedulingOptionsCreator schedulingOptionsCreator,
                                             ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
+
                                             ITeamBlockInfoFactory teamBlockInfoFactory,
                                             ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
                                             ITeamDayOffModifier teamDayOffModifier,
@@ -97,103 +76,96 @@ namespace Teleopti.Ccc.Win.Commands
                                             ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
                                             ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
                                             IRestrictionExtractor restrictionExtractor,
-                                            IMatrixListFactory matrixListFactory, ITeamBlockSchedulingOptions teamBlockScheudlingOptions, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
+                                            IMatrixListFactory matrixListFactory, 
+											ITeamBlockSchedulingOptions teamBlockScheudlingOptions, 
+											IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
+											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
+											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService)
         {
-            _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
-            _schedulerState = schedulerState;
-            _scheduleDayEquator = scheduleDayEquator;
-            _restrictionOverLimitDecider = restrictionOverLimitDecider;
-            _groupPageDataProvider = groupPageDataProvider;
-            _groupPagePerDateHolder = groupPagePerDateHolder;
-            _groupPageCreator = groupPageCreator;
-            _teamBlockCleaner = teamBlockCleaner;
-            _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
-            _restrictionAggregator = restrictionAggregator;
-            _workShiftFilterService = workShiftFilterService;
-            _workShiftSelector = workShiftSelector;
-            _sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
-            _dayOffBackToLegalStateFunctions = dayOffBackToLegalStateFunctions;
-            _dayOffDecisionMaker = dayOffDecisionMaker;
-            _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
-            _dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
-            _scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
-            _lockableBitArrayFactory = lockableBitArrayFactory;
-            _schedulingOptionsCreator = schedulingOptionsCreator;
-            _lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
-            _teamBlockInfoFactory = teamBlockInfoFactory;
-            _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
-            _teamDayOffModifier = teamDayOffModifier;
-            _teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
-            _teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
-            _teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
-            _restrictionExtractor = restrictionExtractor;
-            _matrixListFactory = matrixListFactory;
-            _teamBlockScheudlingOptions = teamBlockScheudlingOptions;
-	        _dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
-
-	        _stateHolder = _schedulerState.SchedulingResultState;
+			_schedulerStateHolder = schedulerStateHolder;
+			_scheduleDayEquator = scheduleDayEquator;
+			_restrictionOverLimitDecider = restrictionOverLimitDecider;
+			_teamBlockCleaner = teamBlockCleaner;
+			_dayOffBackToLegalStateFunctions = dayOffBackToLegalStateFunctions;
+			_dayOffDecisionMaker = dayOffDecisionMaker;
+			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
+			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
+			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
+			_lockableBitArrayFactory = lockableBitArrayFactory;
+			_schedulingOptionsCreator = schedulingOptionsCreator;
+			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
+			_teamBlockInfoFactory = teamBlockInfoFactory;
+			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
+			_teamDayOffModifier = teamDayOffModifier;
+			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
+			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
+			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
+			_restrictionExtractor = restrictionExtractor;
+			_matrixListFactory = matrixListFactory;
+			_teamBlockScheudlingOptions = teamBlockScheudlingOptions;
+			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
+			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
+			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
         }
 
-        [SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-        public void Execute(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod,
+        public void Execute(BackgroundWorker backgroundWorker, 
+							DateOnlyPeriod selectedPeriod,
 							IList<IPerson> selectedPersons,
 							IOptimizationPreferences optimizationPreferences, 
 							ISchedulePartModifyAndRollbackService rollbackService,
 							ISchedulingOptions schedulingOptions,
 							ITeamBlockScheduler teamBlockScheduler)
         {
-            _backgroundWorker = backgroundWorker;
 
+			_backgroundWorker = backgroundWorker;
             IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones =
                 new Dictionary<IPerson, IScheduleRange>();
+
             foreach (IPerson selectedPerson in selectedPersons)
             {
-                allSelectedScheduleRangeClones.Add(selectedPerson, _schedulerState.Schedules[selectedPerson]);
+				allSelectedScheduleRangeClones.Add(selectedPerson, _schedulerStateHolder.Schedules[selectedPerson]);
             }
+
             IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
                 new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, _scheduleDayEquator);
             ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator
                 (_restrictionOverLimitDecider, maxMovedDaysOverLimitValidator);
+
             IList<IScheduleMatrixPro> allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
-            //this one handles userlocks as well
-            if (optimizationPreferences.General.OptimizationStepDaysOff)
-                optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-										 teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService, schedulingOptions, teamBlockScheduler);
+
+	        IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+		        _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
+
+			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+
+	        if (optimizationPreferences.General.OptimizationStepDaysOff)
+		        optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
+		                                 teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService,
+		                                 schedulingOptions, teamBlockScheduler, teamInfoFactory);
+
             if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
                 optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences,
 										  teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService, schedulingOptions, teamBlockScheduler);
+
+			if (optimizationPreferences.General.OptimizationStepFairness)
+			{
+				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
+				_teamBlockSeniorityFairnessOptimizationService.Exectue(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList());
+			}
+				
         }
 
-        private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)
-        {
-            if (_schedulerState.LoadedPeriod != null)
-            {
-                IList<DateOnly> dates =
-                    _schedulerState.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
-                                    DayCollection();
-                _groupPagePerDateHolder.GroupPersonGroupPagePerDate =
-                    _groupPageCreator.CreateGroupPagePerDate(dates, _groupPageDataProvider,
-                                                             schedulingOptions.GroupOnGroupPageForTeamBlockPer,
-                                                             true);
-            }
-            IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-                new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory,
-                                                      _groupPagePerDateHolder);
-            return groupPersonBuilderForOptimization;
-        }
-
-        [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+        private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, 
+											  IList<IPerson> selectedPersons,
                                               IOptimizationPreferences optimizationPreferences,
-                                              ITeamBlockRestrictionOverLimitValidator
-                                                  teamBlockRestrictionOverLimitValidator,
+                                              ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
                                               IList<IScheduleMatrixPro> allMatrixes,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			ISchedulingOptions schedulingOptions,
-			ITeamBlockScheduler teamBlockScheduler)
+											  ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+											  ISchedulingOptions schedulingOptions,
+											  ITeamBlockScheduler teamBlockScheduler, 
+												ITeamInfoFactory teamInfoFactory)
         {
+
             OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
                                                                 optimizationPreferences, selectedPeriod);
 
@@ -203,13 +175,10 @@ namespace Teleopti.Ccc.Win.Commands
                     optimizationPreferences.DaysOff,
                     100,
                     _dayOffDecisionMaker);
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-                _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
-            ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
             IScheduleResultDataExtractor allSkillsDataExtractor =
                 OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod,
-                                                                   _stateHolder);
+																   _schedulerStateHolder.SchedulingResultState);
             IPeriodValueCalculator periodValueCalculatorForAllSkills =
                 OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced,
                                                                   allSkillsDataExtractor);
@@ -232,10 +201,11 @@ namespace Teleopti.Ccc.Win.Commands
                     _teamBlockCleaner,
                     teamBlockRestrictionOverLimitValidator,
                     _teamBlockMaxSeatChecker,
-                    teamBlockDaysOffMoveFinder,_teamBlockScheudlingOptions
+                    teamBlockDaysOffMoveFinder, 
+					_teamBlockScheudlingOptions
                     );
 
-            IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
+			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder.CommonStateHolder.DayOffs
                                                       where ((IDeleteTag) item).IsDeleted == false
                                                       select item).ToList();
 
@@ -254,17 +224,17 @@ namespace Teleopti.Ccc.Win.Commands
 
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-                                               IOptimizationPreferences optimizationPreferences,
-                                               ITeamBlockRestrictionOverLimitValidator
-                                                   teamBlockRestrictionOverLimitValidator,
-											   IList<IScheduleMatrixPro> allMatrixes, 
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			ISchedulingOptions schedulingOptions,
-			ITeamBlockScheduler teamBlockScheduler)
+												IOptimizationPreferences optimizationPreferences,
+												ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+												IList<IScheduleMatrixPro> allMatrixes, 
+												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+												ISchedulingOptions schedulingOptions,
+												ITeamBlockScheduler teamBlockScheduler)
         {
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
+	        var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-            var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,_teamBlockScheudlingOptions);
+	        var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
+	                                                        _teamBlockScheudlingOptions);
 
 	        ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
 		        new TeamBlockIntradayOptimizationService(
@@ -274,7 +244,9 @@ namespace Teleopti.Ccc.Win.Commands
 			        _safeRollbackAndResourceCalculation,
 			        _teamBlockIntradayDecisionMaker,
 			        teamBlockRestrictionOverLimitValidator,
-			        _teamBlockCleaner, _teamBlockMaxSeatChecker, _dailyTargetValueCalculatorForTeamBlock
+			        _teamBlockCleaner, 
+					_teamBlockMaxSeatChecker, 
+					_dailyTargetValueCalculatorForTeamBlock
 			        );
 
             teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
