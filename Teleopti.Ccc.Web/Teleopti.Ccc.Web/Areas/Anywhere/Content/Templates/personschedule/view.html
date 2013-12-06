@@ -40,11 +40,13 @@
 									<!-- /ko -->
 									<!-- /ko -->
 
-									<!-- ko if: IsDayOff -->
+									<!-- ko if: IsDayOff() -->
 									<!-- ko with: DayOff -->
+									<!-- ko if: OverlapsTimeLine() -->
 									<div
 										class="dayoff absolute">
 									</div>
+									<!-- /ko -->
 									<!-- /ko -->
 									<!-- /ko -->
 								</div>
