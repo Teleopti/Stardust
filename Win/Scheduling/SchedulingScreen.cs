@@ -1437,7 +1437,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						var first = sortedList.FirstOrDefault();
 						var last = sortedList.LastOrDefault();
 						var period = new DateTimePeriod(DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(first, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc),
-						                                DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last, TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc));
+						                                DateTime.SpecifyKind(TimeZoneHelper.ConvertFromUtc(last.AddDays(1), TimeZoneGuard.Instance.TimeZone), DateTimeKind.Utc));
 						var addDayOffDialog = _scheduleView.CreateAddDayOffViewModel(displayList, TimeZoneGuard.Instance.TimeZone, period);
 
 						if (!addDayOffDialog.Result)
