@@ -1,32 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
     public interface ITeamBlockListSwapAnalyzer
     {
-        void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories);
+		void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, ITeamBlockSwap teamBlockSwap);
     }
 
     public class TeamBlockListSwapAnalyzer : ITeamBlockListSwapAnalyzer
     {
         private readonly IDetermineTeamBlockPriority _determineTeamBlockPriority;
-        private readonly ISwapScheduleDays _swapScheduleDays;
-        private readonly IValidateScheduleDays _validateScheduleDay;
-
-        public TeamBlockListSwapAnalyzer(IDetermineTeamBlockPriority determineTeamBlockPriority, ISwapScheduleDays swapScheduleDays, IValidateScheduleDays validateScheduleDay)
+       
+        public TeamBlockListSwapAnalyzer(IDetermineTeamBlockPriority determineTeamBlockPriority)
         {
             _determineTeamBlockPriority = determineTeamBlockPriority;
-            _swapScheduleDays = swapScheduleDays;
-            _validateScheduleDay = validateScheduleDay;
         }
 
-        public void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories)
+        public void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, ITeamBlockSwap teamBlockSwap)
         {
             var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories);
             foreach (var higherPriority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityList)
@@ -38,27 +31,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                     if (teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriorityList.Any(higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPriority))
                     {
                         var lowestPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnSeniority(lowerPriority);
-                        if (validateBlock(higherPriorityBlock, lowestPriorityBlock))
-                            swapBlock(higherPriorityBlock, lowestPriorityBlock);
+		                teamBlockSwap.Swap(higherPriorityBlock, lowestPriorityBlock, rollbackService, scheduleDictionary);
                     }
                 }
             }
-        }
-
-        private void swapBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
-        {
-            _swapScheduleDays.Swap(higherPriorityBlock, lowestPriorityBlock);
-        }
-        /// <summary>
-        /// We can call the validate method block by block on two blocks at one time.
-        /// need to think on that. Depends on the validation as well
-        /// </summary>
-        /// <param name="higherPriorityBlock"></param>
-        /// <param name="lowestPriorityBlock"></param>
-        /// <returns></returns>
-        private bool validateBlock(ITeamBlockInfo higherPriorityBlock, ITeamBlockInfo lowestPriorityBlock)
-        {
-            return _validateScheduleDay.Validate(higherPriorityBlock, lowestPriorityBlock);
         }
     }
 }

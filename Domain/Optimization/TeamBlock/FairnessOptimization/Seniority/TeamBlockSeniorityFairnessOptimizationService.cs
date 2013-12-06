@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockSeniorityFairnessOptimizationService
     {
-        void Exectue(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-                                     IList<IPerson> selectedPersons, 
-                                     ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories);
+        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+                                     ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
+									 IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, ITeamBlockSwap teamBlockSwap);
     }
 
     public class TeamBlockSeniorityFairnessOptimizationService : ITeamBlockSeniorityFairnessOptimizationService
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _teamBlockListSwapAnalyzer = teamBlockListSwapAnalyzer;
         }
 
-        public void Exectue(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-                            IList<IPerson> selectedPersons, 
-                            ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories)
+        public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+                            ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
+							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, ITeamBlockSwap teamBlockSwap)
         {
 			var instance = PrincipalAuthorization.Instance();
 	        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             //Parallel.ForEach(listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true), teamBlockList => _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories));
             foreach (var teamBlockList in listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true))
             {
-                _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories);
+                _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories, scheduleDictionary, rollbackService, teamBlockSwap);
             }
         }
 

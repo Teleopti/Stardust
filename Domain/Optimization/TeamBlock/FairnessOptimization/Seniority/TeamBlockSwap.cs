@@ -5,7 +5,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-	public class TeamBlockSwap
+	public interface ITeamBlockSwap
+	{
+		bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary);
+	}
+
+	public class TeamBlockSwap : ITeamBlockSwap
 	{
 		private readonly ITeamBlockSwapDayValidator _teamBlockSwapDayValidator;
 		private readonly ISwapServiceNew _swapServiceNew;
