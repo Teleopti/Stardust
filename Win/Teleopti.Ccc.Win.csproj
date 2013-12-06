@@ -339,6 +339,7 @@
     </Compile>
     <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Commands\MatrixListFactory.cs" />
+    <Compile Include="Common\AvailableSkillWithPreselectedSkill.cs" />
     <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\SmsSettingsControl.cs">
       <SubType>UserControl</SubType>

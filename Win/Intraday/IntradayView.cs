@@ -646,11 +646,13 @@ namespace Teleopti.Ccc.Win.Intraday
 
 		private void toolStripButtonChangeForecastClick(object sender, EventArgs e)
 		{
-		    var skillList = _intradayViewContent.GetSkills();
+			var skills = new AvailableSkillWithPreselectedSkill(_intradayViewContent.SelectedSkill,
+			                                                    Presenter.SchedulerStateHolder.SchedulingResultState
+			                                                             .VisibleSkills);
 		    var models = new ReforecastModelCollection();
             using (var pages = new ReforecastWizardPages(models))
             {
-                var reforecastPages = PropertyPagesHelper.GetReforecastFilePages(skillList);
+                var reforecastPages = PropertyPagesHelper.GetReforecastFilePages(skills);
                 pages.Initialize(reforecastPages);
                 using (var wizard = new WizardNoRoot<ReforecastModelCollection>(pages))
                 {

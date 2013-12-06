@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
     {
         private IList<ListViewItem> _filteredItems;
         private IList<ListViewItem> _allItems;
-        private readonly IList<ISkill> _skills;
+        private readonly AvailableSkillWithPreselectedSkill _skill;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private readonly ListViewColumnSorter _listViewColumnSorter = new ListViewColumnSorter { Order = SortOrder.Ascending };
 
-        public SelectSkills(IList<ISkill> skills)
+        public SelectSkills(AvailableSkillWithPreselectedSkill skill)
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
             setColors();
-            _skills = skills;
+            _skill = skill;
         }
 
         private void setColors()
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
 
         public void Populate(ReforecastModelCollection stateObj)
         {
-            ReloadSkillsListView(stateObj, _skills.Any() ? _skills[0] : null);
+            ReloadSkillsListView(stateObj, _skill.PreselectedSkill);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -45,11 +45,12 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
         {
             if (!validated()) return false;
             stateObj.ReforecastModels.Clear();
-            foreach (
-                var item in
-                    listViewSkills.CheckedItems.Cast<ListViewItem>().Where(
-                        item => stateObj.ReforecastModels.All(m => m.Skill != (ISkill) item.Tag)))
-                stateObj.ReforecastModels.Add(new ReforecastModel {Skill = (ISkill) item.Tag});
+
+	        var uniqueSkills = listViewSkills.CheckedItems.Cast<ListViewItem>().Select(i => (ISkill) i.Tag).Distinct();
+	        foreach (var uniqueSkill in uniqueSkills)
+	        {
+		        stateObj.ReforecastModels.Add(new ReforecastModel{Skill = uniqueSkill});
+	        }
 
             return true;
         }
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
             listViewSkills.Columns.Add(header);
         }
 
-        private static void FindChecked(ListViewItem lvi)
+        private static void SetChecked(ListViewItem lvi)
         {
             lvi.Selected = true;
             lvi.Checked = true;
@@ -94,13 +95,18 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
 
             BuildColumns();
 
-            foreach (var skill in _skills)
+	        var isFirstTime = !stateObj.ReforecastModels.Any(m => _skill.AvailableSkills.Contains(m.Skill));
+            foreach (var skill in _skill.AvailableSkills)
             {
                 var lvi = new ListViewItem { Tag = skill,  Text = skill.Name };
-                if (stateObj.ReforecastModels.Any(m => m.Skill == skill)) FindChecked(lvi);
-                else if (!stateObj.ReforecastModels.Select(m => m.Skill).Intersect(_skills).Any() 
-                    && selectedSkill != null
-                    && selectedSkill == skill) FindChecked(lvi);
+				if (stateObj.ReforecastModels.Any(m => skill.Equals(m.Skill)))
+                {
+	                SetChecked(lvi);
+                }
+                else if (isFirstTime && skill.Equals(selectedSkill))
+                {
+	                SetChecked(lvi);
+                }
                 _allItems.Add(lvi);
             }
 
@@ -134,8 +140,8 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
             if (listViewSkills.CheckedItems.Count != 0)
                 return true;
 
-            MessageBoxAdv.Show(Resources.YouHaveToSelectAtLeastOneSkill, Resources.Message,
-                               MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			ViewBase.ShowErrorMessage(Resources.YouHaveToSelectAtLeastOneSkill, Resources.Message);
+
             return false;
         }
 
