@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private const string HubClassName = "MessageBrokerHub";
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
-		private SignalWrapper _wrapper;
+		private ISignalWrapper _wrapper;
 		private readonly object WrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 

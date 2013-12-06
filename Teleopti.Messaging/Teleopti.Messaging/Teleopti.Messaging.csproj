@@ -141,8 +141,10 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalR\DoNotSend.cs" />
+    <Compile Include="SignalR\ISignalWrapper.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
+    <Compile Include="SignalR\SignalSendOnlyWrapper.cs" />
     <Compile Include="SignalR\SignalWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

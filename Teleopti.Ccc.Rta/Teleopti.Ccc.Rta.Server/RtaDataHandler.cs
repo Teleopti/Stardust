@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			MessageId = "1")]
 		protected RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 								 IDatabaseConnectionFactory databaseConnectionFactory,
 								 IDataSourceResolver dataSourceResolver,
@@ -45,7 +43,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_messageSender.InstantiateBrokerService();
+				_messageSender.InstantiateSendOnlyBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -75,7 +73,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_messageSender.InstantiateBrokerService();
+				_messageSender.InstantiateSendOnlyBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -101,7 +99,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_messageSender.InstantiateBrokerService();
+				_messageSender.InstantiateSendOnlyBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -111,9 +109,6 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
-			 )]
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			try
@@ -153,9 +148,6 @@ namespace Teleopti.Ccc.Rta.Server
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"),
-		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
-			 )]
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
 								   Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{

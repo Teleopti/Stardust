@@ -5,10 +5,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
-using Microsoft.AspNet.SignalR.Client.Transports;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
@@ -16,18 +13,16 @@ using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
-	internal class SignalWrapper
+	internal class SignalWrapper : ISignalWrapper
 	{
 		private readonly IHubProxy _hubProxy;
 		private readonly HubConnection _hubConnection;
-		private const string EventName = "OnEventMessage";
+		private const string eventName = "OnEventMessage";
 		private int _retryCount;
 		private static readonly object LockObject = new object();
 		private bool _isRunning;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalWrapper));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1710:IdentifiersShouldHaveCorrectSuffix")]
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1009:DeclareEventHandlersCorrectly")]
 		public event Action<Notification> OnNotification;
 
 		public SignalWrapper(IHubProxy hubProxy, HubConnection hubConnection)
@@ -85,7 +80,6 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private bool verifyStillConnected()
 		{
 			if (_retryCount > 3)
@@ -117,13 +111,12 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartListening()
 		{
-			_hubProxy.Subscribe(EventName).Received += subscription_Data;
+			_hubProxy.Subscribe(eventName).Received += subscription_Data;
 
 			startHubConnection();
-			_hubProxy.Subscribe(EventName);
+			_hubProxy.Subscribe(eventName);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "SignalR")]
 		private void startHubConnection()
 		{
 			try
@@ -234,14 +227,13 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Portability", "CA1903:UseOnlyApiFromTargetedFramework", MessageId = "System.Threading.WaitHandle.#WaitOne(System.Int32)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void StopListening()
 		{
 			if (_hubConnection != null && _hubConnection.State==ConnectionState.Connected)
 			{
 				try
 				{
-					_hubProxy.Subscribe(EventName).Received -= subscription_Data;
+					_hubProxy.Subscribe(eventName).Received -= subscription_Data;
 
 					_hubConnection.Stop();
 					_isRunning = false;

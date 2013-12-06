@@ -61,5 +61,6 @@ namespace Teleopti.Interfaces.MessageBroker.Client
         /// </remarks>
         void InstantiateBrokerService();
 
+	    void InstantiateSendOnlyBrokerService();
     }
 }

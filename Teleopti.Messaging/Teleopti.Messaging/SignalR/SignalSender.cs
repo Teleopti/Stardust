@@ -18,7 +18,7 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalSender : IMessageSender
 	{
 		private readonly string _serverUrl;
-		private SignalWrapper _wrapper;
+		private ISignalWrapper _wrapper;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "0#")]
 		public SignalSender(string serverUrl)
@@ -86,9 +86,17 @@ namespace Teleopti.Messaging.SignalR
 				}
 				catch (Exception)
 				{
-					InstantiateBrokerService();
+					InstantiateSendOnlyBrokerService();
 				}
 			}
+		}
+
+		public void InstantiateSendOnlyBrokerService()
+		{
+			var connection = new HubConnection(_serverUrl);
+			var proxy = connection.CreateHubProxy("MessageBrokerHub");
+			_wrapper = new SignalSendOnlyWrapper(proxy, connection);
+			_wrapper.StartListening();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
