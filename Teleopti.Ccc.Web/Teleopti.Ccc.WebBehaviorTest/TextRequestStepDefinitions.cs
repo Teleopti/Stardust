@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", string.Empty);
 		}
 
-		[When(@"I input too long message request values")]
+		[When(@"I try to input too long message request values")]
 		[When(@"I input too long text request values")]
         public void WhenIInputTooLongTextRequestValues()
         {
@@ -185,10 +185,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.MissingSubject);
 		}
 
-        [Then(@"I should see texts describing too long text error")]
+		[Then(@"I should see message adjusted to maximum length")]
         public void ThenIShouldSeeTextsDescribingTooLongTextError()
         {
-			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.MessageTooLong);
+			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-message", new string('t', 2000));
         }
 
 		[Then(@"I should see texts describing too long subject error")]
