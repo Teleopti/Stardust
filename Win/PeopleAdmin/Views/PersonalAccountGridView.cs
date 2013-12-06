@@ -1185,7 +1185,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 {
                     var gridRangeInfo = gridRangeInfoList[index - 1];
 
-                    if (gridRangeInfo.IsTable)
+					if (gridRangeInfo.IsTable || gridRangeInfo.IsCols)
                     {
                         DeleteWhenAllSelected();
                     }
