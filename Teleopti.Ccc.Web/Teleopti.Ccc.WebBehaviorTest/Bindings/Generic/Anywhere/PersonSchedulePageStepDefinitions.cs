@@ -117,6 +117,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists(".intraday-absence-form");
 		}
 
+		[Then(@"I should see the add intraday absence form for '(.*)'")]
+		public void ThenIShouldSeeTheAddIntradayAbsenceFormFor(string date)
+		{
+			Browser.Interactions.AssertUrlContains(date.Replace("-", ""));
+		}
+
+
 		[Then(@"I should see the add activity form")]
 		public void ThenIShouldSeeTheAddctivityForm()
 		{

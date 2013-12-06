@@ -17,11 +17,14 @@ Background:
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-11-15 |
-	And there is a shift category named 'Day'
-	And there is an activity with
-	| Field | Value |
-	| Name  | Phone |
-	| Color | Green |
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Night |
+	And there are activities
+	| Name        | Color  |
+	| Phone       | Green  |
+	| Lunch       | Yellow |
 	And there are absences
 	| Name            | Color | Confidential |
 	| Illness         | Red   | false        |
@@ -94,7 +97,6 @@ Scenario: Add on shift
 
 Scenario: Add after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
-	And there is a shift category named 'Night'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Night            |
@@ -116,7 +118,6 @@ Scenario: Add after midnight on night shift
 
 Scenario: Add cross midnight on night shift
 	Given I have the role 'Anywhere Team Green'
-	And there is a shift category named 'Night'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Night            |
@@ -207,3 +208,25 @@ Scenario: Back to viewing selected person shift menu after adding
 	| End time   | 16:00   |
 	And I initiate 'apply'	
 	Then I should see 'Pierre Baldi's shift menu
+
+Scenario: Go to yesterday when select the night shift starting from yesterday
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has a shift with
+	| Field                         | Value            |
+	| Shift category                | Night            |
+	| Activity                      | Phone            |
+	| Start time                    | 2013-11-15 22:00 |
+	| End time                      | 2013-11-16 04:00 |
+	| Scheduled activity            | Lunch            |
+	| Scheduled activity start time | 2013-11-16 00:15 |
+	| Scheduled activity end time   | 2013-11-16 00:45 |
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Night            |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-16 22:15 |
+	| End time       | 2013-11-17 04:15 |
+	When I view schedules for 'Team green' on '2013-11-16'
+	And I select the schedule activity for 'Pierre Baldi' with start time '00:45'
+	And I click 'add intraday absence' in shift menu
+	Then I should see the add intraday absence form for '2013-11-15'
