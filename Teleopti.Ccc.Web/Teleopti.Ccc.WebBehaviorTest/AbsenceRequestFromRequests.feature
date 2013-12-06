@@ -66,11 +66,9 @@ Scenario: Adding too long message on absence request
 	Given I am an agent
 	And I am viewing requests
 	When I click to add a new absence request
-	And I input too long message request values
-	And I click the send button
-	Then I should see texts describing too long text error
-	And I should not see any requests in the list
-
+	And I try to input too long message request values
+	Then I should see message adjusted to maximum length
+	
 Scenario: Adding too long subject on absence request
 	Given I am an agent
 	And I am viewing requests
