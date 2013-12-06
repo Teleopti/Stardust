@@ -179,13 +179,14 @@ namespace Teleopti.Ccc.Rta.TestApplication
 			var batchIdentifier = DateTime.UtcNow;
 			var selectedLogOns = new List<int>();
 
+			
+			if (_removeOneByOne && _logOnCollection.Count > 1)
+				_logOnCollection.RemoveAt(0);
+
 			for (var i = 0; i < _logOnCollection.Count; i++)
 				selectedLogOns.Add(i);
 
-			if (_removeOneByOne && selectedLogOns.Count > 1)
-				selectedLogOns.RemoveAt(0);
-
-			else if (_randomPersonsInSnapshot)
+			if (_randomPersonsInSnapshot && !_removeOneByOne)
 			{
 				selectedLogOns.Clear();
 				while (selectedLogOns.Count < Math.Max(1, _logOnCollection.Count - 2))
