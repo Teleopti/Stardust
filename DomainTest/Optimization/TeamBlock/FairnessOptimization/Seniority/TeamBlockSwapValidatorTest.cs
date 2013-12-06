@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private TeamBlockSwapValidator _target;
 		private IList<IPerson> _selectedPersons;
 		private DateOnlyPeriod _dateOnlyPeriod;
+		private ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 			
 		[SetUp]
 		public void SetUp()
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamBlockInfo2 = _mock.StrictMock<ITeamBlockInfo>();
 			_selectedPersons = new List<IPerson>();
 			_dateOnlyPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 1);
-			_target = new TeamBlockSwapValidator(_selectedPersons, _dateOnlyPeriod, _teamSelectionValidator, _teamMemberCountValidator, _teamBlockPeriodValidator, _teamBlockContractTimeValidator);
+			_teamBlockSeniorityValidator = _mock.StrictMock<ITeamBlockSeniorityValidator>();
+			_target = new TeamBlockSwapValidator(_selectedPersons, _dateOnlyPeriod, _teamSelectionValidator, _teamMemberCountValidator, _teamBlockPeriodValidator, _teamBlockContractTimeValidator, _teamBlockSeniorityValidator);
 		}
 
 		[Test]
@@ -42,6 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
@@ -56,10 +60,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		}
 
 		[Test]
+		public void ShouldReturnFalseWhenvalidateSeniorityFails()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2);
+				Assert.IsFalse(result);
+			}		
+		}
+
+		[Test]
 		public void ShouldReturnFalseWhenValidateSelectionFails()
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(false);
 			}
 
@@ -75,6 +97,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(false);	
 			}
@@ -91,6 +115,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(false);
@@ -108,6 +134,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_teamSelectionValidator.ValidateSelection(_selectedPersons, _dateOnlyPeriod)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);

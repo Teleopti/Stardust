@@ -696,7 +696,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ITeamMemberCountValidator teamMemberCountValidator = new TeamMemberCountValidator();
 			ITeamBlockContractTimeValidator teamBlockContractTimeValidator = new TeamBlockContractTimeValidator();
 			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
-			ITeamBlockSwapValidator teamBlockSwapValidator = new TeamBlockSwapValidator(selectedPersons, selectedPeriod, teamSelectionValidator, teamMemberCountValidator, teamBlockPeriodValidator, teamBlockContractTimeValidator);
+			ITeamBlockSeniorityValidator teamBlockSeniorityValidator = new TeamBlockSeniorityValidator();
+			ITeamBlockSwapValidator teamBlockSwapValidator = new TeamBlockSwapValidator(selectedPersons, selectedPeriod, teamSelectionValidator, teamMemberCountValidator, teamBlockPeriodValidator, teamBlockContractTimeValidator, teamBlockSeniorityValidator);
 			ITeamBlockPersonsSkillChecker teamBlockPersonsSkillChecker = new TeamBlockPersonsSkillChecker();
 			ITeamBlockSwapDayValidator teamBlockSwapDayValidator = new TeamBlockSwapDayValidator(teamBlockPersonsSkillChecker);
 			ITeamBlockSwap teamBlockSwap = new TeamBlockSwap(swapService, teamBlockSwapValidator, teamBlockSwapDayValidator);

@@ -372,6 +372,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfo.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityDefinitionInfo.cs" />
