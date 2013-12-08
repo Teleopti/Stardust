@@ -3640,6 +3640,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var scheduleDays = argument.ScheduleDays;
 
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
+			var selectedPersons = scheduleDays.Select(x => x.Person).Distinct().ToList();
 
 			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
@@ -3667,36 +3668,40 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (schedulingOptions.UseTeamBlockPerOption || schedulingOptions.UseGroupScheduling)
                 {
-                    //when the advance scheduling is required
-					var teamBlockSchedulingChecker = _container.Resolve<ITeamBlockSchedulingOptions>();
-					var roleModelSelector = _container.Resolve<ITeamBlockRoleModelSelector>();
-					var completionChecker = _container.Resolve<ITeamBlockSchedulingCompletionChecker>();
 					var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
+
 	                ISchedulePartModifyAndRollbackService rollbackService =
 		                new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
 		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
 		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+
 					var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
-					var teamBlockCleaner = _container.Resolve<ITeamBlockClearer>();
-					var singleDayScheduler = new TeamBlockSingleDayScheduler(completionChecker,
+
+					var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 																			 _container.Resolve<IProposedRestrictionAggregator>(),
 																			 _container.Resolve<IWorkShiftFilterService>(),
 																			 _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 																			 _container.Resolve<IWorkShiftSelector>(),
-																			 teamScheduling, teamBlockSchedulingChecker
+																			 teamScheduling, 
+																			 _container.Resolve<ITeamBlockSchedulingOptions>()
 						);
-	                var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(roleModelSelector,
+					var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
 	                                                                                          singleDayScheduler,
-	                                                                                          completionChecker,
-	                                                                                          teamBlockCleaner,
+																							  _container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
+																							  _container.Resolve<ITeamBlockClearer>(),
 	                                                                                          rollbackService);
-					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
-																					teamBlockSchedulingChecker,
-																					singleDayScheduler, roleModelSelector);
-					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays, teamBlockScheduler, rollbackService);
 
-                    
+					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
+																					_container.Resolve<ITeamBlockSchedulingOptions>(),
+																					singleDayScheduler, 
+																					_container.Resolve<ITeamBlockRoleModelSelector>());
+
+	                _container.Resolve<ITeamBlockScheduleCommand>()
+	                          .Execute(schedulingOptions, _backgroundWorkerScheduling, selectedPersons, scheduleDays,
+	                                   teamBlockScheduler, rollbackService);
+
+
                 }
                 else
 				{

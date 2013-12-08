@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
         private bool _cancelTarget;
         private ITeamDayOffScheduler _teamDayOffScheduler;
 	    private IGroupPersonBuilderForOptimization _groupPersonBuilder;
+	    private List<IPerson> _selectedPersons;
 
 	    [SetUp]
         public void Setup()
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 	        _groupPersonBuilder = _mock.StrictMock<IGroupPersonBuilderForOptimization>();
             _matrixList = new List<IScheduleMatrixPro>();
             _schedulingOptions = new SchedulingOptions();
+		    _selectedPersons = new List<IPerson>();
         }
 
         [Test]
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
                 Expect.Call(() => _absencePreferenceScheduler.DayScheduled -= null).IgnoreArguments();
                 
                 Expect.Call(() => _teamDayOffScheduler.DayScheduled += null).IgnoreArguments();
-				Expect.Call(() => _teamDayOffScheduler.DayOffScheduling(_matrixList, _rollbackService, _schedulingOptions, _groupPersonBuilder));
+				Expect.Call(() => _teamDayOffScheduler.DayOffScheduling(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilder));
                 Expect.Call(() => _teamDayOffScheduler.DayScheduled -= null).IgnoreArguments();
 
                 Expect.Call(() => _missingDaysOffScheduler.DayScheduled += null).IgnoreArguments();
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             using (_mock.Playback())
             {
                 _target.DayScheduled += targetDayScheduled;
-				_target.Execute(_matrixList, _rollbackService, _schedulingOptions, _groupPersonBuilder);
+				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilder);
                 _target.DayScheduled -= targetDayScheduled;
             }
         }
@@ -81,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
             }
             using (_mock.Playback())
             {
-				_target.Execute(_matrixList, _rollbackService, _schedulingOptions, _groupPersonBuilder);
+				_target.Execute(_matrixList, _selectedPersons, _rollbackService, _schedulingOptions, _groupPersonBuilder);
             }
         }
 

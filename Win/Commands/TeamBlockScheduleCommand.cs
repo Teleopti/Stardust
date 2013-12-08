@@ -16,7 +16,9 @@ namespace Teleopti.Ccc.Win.Commands
 {
 	public interface ITeamBlockScheduleCommand
 	{
-		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService);
+		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons,
+		             IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler,
+		             ISchedulePartModifyAndRollbackService rollbackService);
 	}
 
 	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
@@ -71,7 +73,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService)
+		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
@@ -98,11 +100,10 @@ namespace Teleopti.Ccc.Win.Commands
 							scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
 				}
 
-				var allMatrixesOfSelectedPersons = _matrixListFactory.CreateMatrixList(allScheduleDays, selectedPeriod);
-				
+				var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
 				_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-				_advanceDaysOffSchedulingService.Execute(allMatrixesOfSelectedPersons,
+				_advanceDaysOffSchedulingService.Execute(allVisibleMatrixes, selectedPersons,
 				                                         schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions,
 				                                         groupPersonBuilderForOptimization);
 				_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
@@ -110,7 +111,6 @@ namespace Teleopti.Ccc.Win.Commands
 			    var advanceSchedulingResults = new List<IWorkShiftFinderResult>();
                 var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization, teamBlockScheduler, advanceSchedulingResults);
 				IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
-				var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
 				advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 				advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
