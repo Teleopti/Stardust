@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixListAll, selectedPersons, schedulingOptions,
 					                                                        groupPersonBuilderForOptimization, person, scheduleDate,
 					                                                        out restriction);
-					var canceled = addContractDaysOffForTeam(selectedMatrixesForTeam, schedulingOptions, rollbackService, scheduleDate, restriction);
+					var canceled = addContractDaysOffForTeam(selectedMatrixesForTeam, schedulingOptions, rollbackService, scheduleDate);
 					if (canceled)
 					{
 						cancelPressed = true;
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-		private List<IScheduleMatrixPro> getMatrixesAndRestriction(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions,
+		private IEnumerable<IScheduleMatrixPro> getMatrixesAndRestriction(IEnumerable<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions,
 		                      IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
 		                      IPerson person, DateOnly scheduleDate,
 		                      out IEffectiveRestriction restriction)
@@ -155,9 +155,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return false;
 		}
 
-		private bool addContractDaysOffForTeam(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
-		                                       ISchedulePartModifyAndRollbackService rollbackService, DateOnly scheduleDate,
-		                                       IEffectiveRestriction restriction)
+		private bool addContractDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+		                                       ISchedulePartModifyAndRollbackService rollbackService, DateOnly scheduleDate)
 		{
 			foreach (var matrix in matrixList)
 			{
