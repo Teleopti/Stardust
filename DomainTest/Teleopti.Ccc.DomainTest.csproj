@@ -367,7 +367,6 @@
     <Compile Include="Scheduling\TeamBlock\SameShiftCategoryBlockSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecificationTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\Specification\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditorActivityLayerTest.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftMapperTest.cs" />
