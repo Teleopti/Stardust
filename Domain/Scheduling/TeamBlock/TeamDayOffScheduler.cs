@@ -159,9 +159,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                                       ISchedulePartModifyAndRollbackService rollbackService, DateOnly scheduleDate,
 		                                       IEffectiveRestriction restriction)
 		{
-			if (restriction != null && restriction.NotAllowedForDayOffs)
-				return false;
-
 			foreach (var matrix in matrixList)
 			{
 				var schedulePeriod = matrix.SchedulePeriod;
