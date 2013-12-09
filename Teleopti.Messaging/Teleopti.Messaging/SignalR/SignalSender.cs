@@ -1,7 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
+using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
@@ -10,6 +15,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
+using Teleopti.Messaging.Exceptions;
 using log4net;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
@@ -18,7 +24,11 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalSender : IMessageSender
 	{
 		private readonly string _serverUrl;
-		private SignalWrapper _wrapper;
+		private ISignalWrapper _wrapper;
+		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
+		private readonly Thread workerThread;
+		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
+		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalSender));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "0#")]
 		public SignalSender(string serverUrl)
@@ -29,15 +39,15 @@ namespace Teleopti.Messaging.SignalR
 			ServicePointManager.DefaultConnectionLimit = 50;
 
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+			workerThread = new Thread(processQueue);
+			workerThread.Start();
 		}
 
 	    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 	    {
 	        if (!e.Observed)
             {
-                var logger = LogManager.GetLogger(typeof(SignalSender));
-            
-                logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+                Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
                 e.SetObserved();
             }
 	    }
@@ -49,7 +59,9 @@ namespace Teleopti.Messaging.SignalR
 
 		public void Dispose()
 		{
-			_wrapper.StopListening();
+			cancelToken.Cancel();
+			workerThread.Join();
+			_wrapper.StopHub();
 			_wrapper = null;
 		}
 
@@ -58,37 +70,65 @@ namespace Teleopti.Messaging.SignalR
 			get { return _wrapper != null && _wrapper.IsInitialized(); }
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void SendRtaData(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
+		public void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
 		{
-			int sendAttempt = 0;
-			while (sendAttempt < 3)
+			var domainObject = JsonConvert.SerializeObject(actualAgentState);
+			var type = typeof (IActualAgentState);
+
+			var notification = new Notification
+				{
+					StartDate =
+						Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
+					EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
+					DomainId = Subscription.IdToString(personId),
+					DomainType = type.Name,
+					DomainQualifiedType = type.AssemblyQualifiedName,
+					ModuleId = Subscription.IdToString(Guid.Empty),
+					DomainUpdateType = (int) DomainUpdateType.Insert,
+					BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject)),
+					BusinessUnitId = Subscription.IdToString(businessUnitId)
+				};
+			_notificationQueue.Add(new Tuple<DateTime, Notification>(DateTime.UtcNow, notification));
+		}
+
+		private void processQueue(object state)
+		{
+			while (!cancelToken.IsCancellationRequested)
 			{
-				try
+				var notifications =
+					_notificationQueue.GetConsumingEnumerable(cancelToken.Token)
+					                  .Take(Math.Max(1,Math.Min(_notificationQueue.Count,20)))
+					                  .ToArray()
+					                  .Where(t => t.Item1 > DateTime.UtcNow.AddMinutes(-2))
+									  .Select(t => t.Item2)
+									  .ToArray();
+				
+				if (!notifications.Any()) continue;
+				
+				var retryCount = 1;
+				while (retryCount<=3)
 				{
-					sendAttempt++;
-					var domainObject = JsonConvert.SerializeObject(actualAgentState);
-                    var type = typeof(IActualAgentState);
-					_wrapper.NotifyClients(new Notification
-								{
-									StartDate =
-										Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
-									EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
-									DomainId = Subscription.IdToString(personId),
-									DomainType = type.Name,
-									DomainQualifiedType = type.AssemblyQualifiedName,
-									ModuleId = Subscription.IdToString(Guid.Empty),
-									DomainUpdateType = (int)DomainUpdateType.Insert,
-					          		BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject)),
-									BusinessUnitId = Subscription.IdToString(businessUnitId)
-								});
-					break;
+					if (trySend(retryCount, notifications)) break;
+					retryCount++;
 				}
-				catch (Exception)
-				{
-					InstantiateBrokerService();
-				}
+				if (retryCount > 3)
+					Logger.Error("Could not send batch messages.");
 			}
+		}
+
+		private bool trySend(int attemptNumber, IEnumerable<Notification> notification)
+		{
+			try
+			{
+				_wrapper.NotifyClients(notification);
+				return true;
+			}
+			catch (Exception)
+			{
+				Thread.Sleep(250*attemptNumber);
+				InstantiateBrokerService();
+			}
+			return false;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
@@ -126,11 +166,24 @@ namespace Teleopti.Messaging.SignalR
 
 		public void InstantiateBrokerService()
 		{
-			var connection = new HubConnection(_serverUrl);
-			var proxy = connection.CreateHubProxy("MessageBrokerHub");
+			try
+			{
+				if (_wrapper != null) _wrapper.StopHub();
 
-			_wrapper = new SignalWrapper(proxy, connection);
-			_wrapper.StartListening();
+				var connection = new HubConnection(_serverUrl);
+				var proxy = connection.CreateHubProxy("MessageBrokerHub");
+
+				_wrapper = new SignalWrapper(proxy, connection);
+				_wrapper.StartHub();
+			}
+			catch (SocketException exception)
+			{
+				Logger.Error("The message broker seems to be down.", exception);
+			}
+			catch (BrokerNotInstantiatedException exception)
+			{
+				Logger.Error("The message broker seems to be down.", exception);
+			}
 		}
 	}
 }
