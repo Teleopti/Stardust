@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
 			    AddMinMaxToDto(dto, minMaxLength);
 
-				if ((personMeetingCollection.Count > 0 || (assignment!=null && assignment.PersonalLayers().Any())) 
+				if ((personMeetingCollection.Count > 0 || (assignment!=null && assignment.PersonalActivities().Any())) 
 					&& !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
 				{
 					dto.HasPersonalAssignmentOnly = true;
