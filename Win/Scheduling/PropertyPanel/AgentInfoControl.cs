@@ -158,6 +158,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
             item.Font = item.Font.ChangeToBold();
             listViewRestrictions.Items.Add(item);
+			createAndAddItem(listViewRestrictions, "", "", 0);
 
 			ISchedulingOptions schedulingOptions = new SchedulingOptions
                                                        {
@@ -167,6 +168,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                                                            UseRotations = true
                                                        };
             var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
+			helper.SetRestrictionFullfillment();
 			var period = person.Period(helper.SelectedDate);
 			if (period != null)
 			{
@@ -183,6 +185,9 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 					createAndAddItem(listViewRestrictions, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
 				}
 			}
+
+			createAndAddItem(listViewRestrictions, "", "", 0);
+			createAndAddItem(listViewRestrictions, "", "", 0);
 
             createAndAddItem(listViewRestrictions, Resources.Availability, "", 1);
             handleAvailabilities(extractor.AvailabilityList);

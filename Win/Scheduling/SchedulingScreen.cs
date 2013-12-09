@@ -3708,8 +3708,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 																					_container.Resolve<ITeamBlockRoleModelSelector>());
 
 					var teamBlockScheduleCommand = _container.Resolve<ITeamBlockScheduleCommand>();
-					teamBlockScheduleCommand.Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays, teamBlockScheduler, rollbackService);
-	                                   teamBlockScheduler, rollbackService);
+					teamBlockScheduleCommand.Execute(schedulingOptions, _backgroundWorkerScheduling, selectedPersons, scheduleDays,
+	                                                 teamBlockScheduler, rollbackService);
 
 
                 }
