@@ -150,15 +150,16 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
 			    AddMinMaxToDto(dto, minMaxLength);
 
-                if ((personMeetingCollection.Count > 0 || assignment!=null) && !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
-			    {
-				    dto.HasPersonalAssignmentOnly = true;
-				    dto.TipText = ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleDay,
-				                                                                            person.PermissionInformation
-				                                                                                  .DefaultTimeZone(),
-				                                                                            person.PermissionInformation.Culture());
-			    }
-			    result.Add(dto);
+				if ((personMeetingCollection.Count > 0 || (assignment!=null && assignment.PersonalLayers().Any())) 
+					&& !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
+				{
+					dto.HasPersonalAssignmentOnly = true;
+					dto.TipText = ScheduleDayStringVisualizer.GetToolTipPersonalAssignments(scheduleDay,
+					                                                                        person.PermissionInformation
+					                                                                              .DefaultTimeZone(),
+					                                                                        person.PermissionInformation.Culture());
+				}
+				result.Add(dto);
 		    }
 		    TrimValidatedPartListToFirstDayOfWeek(result);
 		    foreach (var partDto in result)
