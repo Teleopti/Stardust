@@ -12,6 +12,7 @@ GO
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_intraday_load] 
 --exec [mart].[etl_fact_schedule_day_count_intraday_load]  @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@scenario_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+--exec mart.etl_fact_schedule_day_count_intraday_load @business_unit_code='8F46F16D-AA66-4AFE-B6D5-A1F200A8CF0F',@scenario_code='C9432975-6303-44DA-8F2F-A1F200A8D1F3'
 @business_unit_code uniqueidentifier,
 @scenario_code uniqueidentifier
 AS
@@ -90,7 +91,7 @@ ON
 		(
 				(stg.starttime	>= dp.valid_from_date)
 			AND
-				(stg.starttime < dp.valid_to_date)
+				(stg.starttime <= dp.valid_to_date)
 		)
 INNER JOIN mart.dim_date AS dsd 
 	ON stg.date = dsd.date_date
@@ -154,6 +155,7 @@ INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC stg
 WHERE shift_category_id<>-1
 GROUP BY f.shift_startdate_id,f.shift_startinterval_id,f.person_id,f.scenario_id,f.business_unit_id,f.datasource_id
 
+
 --WHOLE DAY ABSENCES
 INSERT INTO mart.fact_schedule_day_count
 	(
@@ -192,7 +194,7 @@ ON
 				(stg.starttime	>= dp.valid_from_date)
 
 			AND
-				(stg.starttime < dp.valid_to_date)
+				(stg.starttime <= dp.valid_to_date)
 		)
 
 JOIN
@@ -212,6 +214,7 @@ ON
 	stg.scenario_code = ds.scenario_code
 	AND ds.scenario_id = @scenario_id 
 GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
+
 
 --DAY OFF 
 --(START: Special handling to increase start_interval_id for day off if already shift category or absence on same PK.)
@@ -248,6 +251,7 @@ ON
 	stg.scenario_code = ds.scenario_code
 	AND ds.scenario_id = @scenario_id
 GROUP BY dsd.date_id,stg.date,di.interval_id,dp.person_id,stg.person_code,ds.scenario_id,stg.scenario_code,dd.day_off_id,dp.business_unit_id,stg.datasource_id
+
 
 UPDATE stage.stg_schedule_day_off_count
 SET start_interval_id = stg.start_interval_id + 1
@@ -310,4 +314,5 @@ LEFT JOIN mart.dim_scenario	ds
 	ON stg.scenario_code = ds.scenario_code
 	AND ds.scenario_id = @scenario_id 
 GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dd.day_off_id,dp.business_unit_id,stg.datasource_id
+
 GO
