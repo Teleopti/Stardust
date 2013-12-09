@@ -22,12 +22,14 @@ define([
             this.EndDate = ko.observable(moment());
 
             var personId;
-
-            this.SetData = function(data) {
+            var groupId;
+	        
+            this.SetData = function (data, groupid) {
                 personId = data.PersonId;
                 self.StartDate(data.Date);
                 self.EndDate(data.Date);
                 self.AbsenceTypes(data.Absences);
+                groupId = groupid;
             };
 
             this.StartDateFormatted = ko.computed(function() {
@@ -56,7 +58,7 @@ define([
                         type: 'POST',
                         data: data,
                         success: function(data, textStatus, jqXHR) {
-                        	navigation.GotoPersonScheduleWithoutHistory(personId, self.StartDate());
+                        	navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.StartDate());
                         }
                     }
                 );

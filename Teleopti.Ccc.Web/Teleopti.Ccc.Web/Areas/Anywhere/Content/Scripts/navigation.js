@@ -15,16 +15,12 @@ define([
         	GotoPersonSchedule: function (groupid, personid, date) {
         		window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date);
             },
-            GotoPersonScheduleWithoutHistory: function (personid, date) {
-            	window.location.replace('#personschedule/' + personid + '/' + toDateString(date));
+        	GotoPersonScheduleWithoutHistory: function (groupid, personid, date) {
+            	window.location.replace('#personschedule/' + groupid + '/' + personid + '/' + toDateString(date));
             },
             
             GotoPersonScheduleAddFullDayAbsenceForm: function (groupid, personid, date) {
             	window.location.hash = 'personschedule/' + groupid + '/' + personid + '/' + toDateString(date) + '/addfulldayabsence';
-            },
-        	
-            GotoPersonScheduleAddFullDayAbsenceFormWithoutHistory: function (personid, date) {
-            	window.location.replace('#personschedule/' + personid + '/' + toDateString(date) + '/addfulldayabsence');
             },
 
             GotoPersonScheduleAddActivityForm: function (groupid, personid, date) {

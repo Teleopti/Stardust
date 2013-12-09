@@ -126,7 +126,7 @@ define([
 
 			data.PersonId = self.PersonId();
 			data.Date = self.Date();
-			self.AddFullDayAbsenceForm.SetData(data);
+			self.AddFullDayAbsenceForm.SetData(data, self.GroupId());
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data, self.GroupId());
 		};
