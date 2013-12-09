@@ -49,7 +49,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void Dispose()
 		{
-			_wrapper.StopListening();
+			_wrapper.StopHub();
 			_wrapper = null;
 		}
 
@@ -86,7 +86,7 @@ namespace Teleopti.Messaging.SignalR
 				}
 				catch (Exception)
 				{
-					InstantiateSendOnlyBrokerService();
+					InstantiateBrokerService();
 				}
 			}
 		}
@@ -95,8 +95,8 @@ namespace Teleopti.Messaging.SignalR
 		{
 			var connection = new HubConnection(_serverUrl);
 			var proxy = connection.CreateHubProxy("MessageBrokerHub");
-			_wrapper = new SignalSendOnlyWrapper(proxy, connection);
-			_wrapper.StartListening();
+			_wrapper = new SignalWrapper(proxy, connection);
+			_wrapper.StartHub();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
@@ -138,7 +138,7 @@ namespace Teleopti.Messaging.SignalR
 			var proxy = connection.CreateHubProxy("MessageBrokerHub");
 
 			_wrapper = new SignalWrapper(proxy, connection);
-			_wrapper.StartListening();
+			_wrapper.StartHub();
 		}
 	}
 }

@@ -5,15 +5,19 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Messaging.SignalR
 {
+	public class SignalWrappera
+	{
+
+	}
+
 	internal interface ISignalWrapper
 	{
-		Task NotifyClients(Notification notification);
-		void StopListening();
+		void StartHub();
+		void StopHub();
 		bool IsInitialized();
-		void StartListening();
+		Task NotifyClients(Notification notification);
 		Task NotifyClients(IEnumerable<Notification> notification);
 		Task AddSubscription(Subscription subscription);
 		Task RemoveSubscription(string route);
-		event Action<Notification> OnNotification;
 	}
 }

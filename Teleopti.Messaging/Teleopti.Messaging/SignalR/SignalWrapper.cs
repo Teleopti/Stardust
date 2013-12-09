@@ -13,18 +13,63 @@ using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
+	internal class SignalSubscriber
+	{
+		private readonly IHubProxy _hubProxy;
+		private const string eventName = "OnEventMessage";
+
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignalSubscriber));
+
+		public event Action<Notification> OnNotification;
+
+		public SignalSubscriber(IHubProxy hubProxy)
+		{
+			_hubProxy = hubProxy;
+		}
+
+		public void Start()
+		{
+			_hubProxy.Subscribe(eventName).Received += subscription_Data;
+		}
+
+		public void Stop()
+		{
+			try
+			{
+				_hubProxy.Subscribe(eventName).Received -= subscription_Data;
+			}
+			catch (Exception ex)
+			{
+				Logger.Error("An error happened when stopping connection.", ex);
+			}
+		}
+
+		private void subscription_Data(IList<JToken> obj)
+		{
+			var handler = OnNotification;
+			if (handler != null)
+			{
+				var d = obj[0].ToObject<Notification>();
+				handler.BeginInvoke(d, onNotificationCallback, handler);
+			}
+		}
+
+		private void onNotificationCallback(IAsyncResult ar)
+		{
+			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
+		}
+	}
+
 	internal class SignalWrapper : ISignalWrapper
 	{
 		private readonly IHubProxy _hubProxy;
 		private readonly HubConnection _hubConnection;
-		private const string eventName = "OnEventMessage";
 		private int _retryCount;
-		private static readonly object LockObject = new object();
 		private bool _isRunning;
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalWrapper));
 
-		public event Action<Notification> OnNotification;
-
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignalWrapper));
+		private static readonly object LockObject = new object();
+		
 		public SignalWrapper(IHubProxy hubProxy, HubConnection hubConnection)
 		{
 			_isRunning = false;
@@ -109,12 +154,9 @@ namespace Teleopti.Messaging.SignalR
 			return true;
 		}
 
-		public void StartListening()
+		public void StartHub()
 		{
-			_hubProxy.Subscribe(eventName).Received += subscription_Data;
-
 			startHubConnection();
-			_hubProxy.Subscribe(eventName);
 		}
 
 		private void startHubConnection()
@@ -162,21 +204,6 @@ namespace Teleopti.Messaging.SignalR
 				Logger.Error("An error happened when starting hub connection.", exception);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
-		}
-
-		private void subscription_Data(IList<JToken> obj)
-		{
-			var handler = OnNotification;
-			if (handler!=null)
-			{
-				var d = obj[0].ToObject<Notification>();
-				handler.BeginInvoke(d, onNotificationCallback,handler);
-			}
-		}
-
-		private void onNotificationCallback(IAsyncResult ar)
-		{
-			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
 		}
 
 		public Task AddSubscription(Subscription subscription)
@@ -227,14 +254,12 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		public void StopListening()
+		public void StopHub()
 		{
 			if (_hubConnection != null && _hubConnection.State==ConnectionState.Connected)
 			{
 				try
 				{
-					_hubProxy.Subscribe(eventName).Received -= subscription_Data;
-
 					_hubConnection.Stop();
 					_isRunning = false;
 				}

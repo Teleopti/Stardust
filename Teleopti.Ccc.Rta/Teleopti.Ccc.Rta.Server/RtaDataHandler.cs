@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_messageSender.InstantiateSendOnlyBrokerService();
+				_messageSender.InstantiateBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_messageSender.InstantiateSendOnlyBrokerService();
+				_messageSender.InstantiateBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_messageSender.InstantiateSendOnlyBrokerService();
+				_messageSender.InstantiateBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
