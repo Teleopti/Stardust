@@ -77,6 +77,12 @@ namespace Teleopti.Ccc.WinCode.Matrix
             }
         }
 
+		 //all version 8 so they  not come under custom reports
+		private static IEnumerable<string> version8Reports()
+		{
+			return    new []{
+				"BB8C21BA-0756-4DDC-8B26-C9D5715A3443"};
+		}
         private static IEnumerable<string> detailedAdherenceReports()
         {
 			  var ret =new List<string>();
@@ -235,10 +241,11 @@ namespace Teleopti.Ccc.WinCode.Matrix
         {
             get
             {
-                var groupedMatrixFunctionForeignIds =
-                    from g in GroupedPermittedMatrixFunctions
-                    from f in g.ApplicationFunctions
-                    select f.ForeignId;
+					var groupedMatrixFunctionForeignIds =
+						(from g in GroupedPermittedMatrixFunctions
+						from f in g.ApplicationFunctions
+						select f.ForeignId).ToList();
+					groupedMatrixFunctionForeignIds.AddRange(version8Reports());
                 return from f in PermittedMatrixFunctions
                        where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
                        select f;
