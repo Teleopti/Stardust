@@ -10,9 +10,6 @@
         <!-- ko if: IsEditable -->
             <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
         <!-- /ko -->
-        <!-- ko if: !IsEditable() -->
-            <label class="input-block-level request-non-edit-message" data-bind="text: Message" />
-        <!-- /ko -->
     <div>
         <label>
             @Resources.AbsenceType
