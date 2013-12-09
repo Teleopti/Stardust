@@ -682,9 +682,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
 
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
+			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
-
+			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			var groupPersonBuilderForOptimizationFactory = _container.Resolve<IGroupPersonBuilderForOptimizationFactory>();
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
