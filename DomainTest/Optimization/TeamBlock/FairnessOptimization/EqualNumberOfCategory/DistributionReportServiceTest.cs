@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			var distributionSummary = new DistributionSummary(distributionDic);
 			var group = new Group();
 			group.AddMember(_person1);
+			var scheduleDicKeys = new List<IPerson> {_person1};
 
 			using (_mocks.Record())
 			{
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				      .Return(distributionSummary);
 				Expect.Call(_distributionForPersons.CreateSummary(new List<IPerson> { _person1 }, _scheduleDictionary))
 					  .Return(distributionSummary);
-				Expect.Call(_groupCreator.CreateGroupForPerson(_person1, _groupPageForDate, _scheduleDictionary)).Return(group);
+				Expect.Call(_scheduleDictionary.Keys).Return(scheduleDicKeys);
+				Expect.Call(_groupCreator.CreateGroupForPerson(_person1, _groupPageForDate, scheduleDicKeys)).Return(group);
 				Expect.Call(_distributionForPersons.CreateSummary(group.GroupMembers, _scheduleDictionary))
 				      .Return(distributionSummary);
 			}

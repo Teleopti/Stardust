@@ -236,6 +236,7 @@
     <Compile Include="Forecasting\QueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\QueueStatisticsCalculatorTest.cs" />
     <Compile Include="Forecasting\WorkloadDayTemplateCalculatorTest.cs" />
+    <Compile Include="GroupPageCreator\GroupCreatorTest.cs" />
     <Compile Include="GroupPageCreator\PersonFinderServiceTest.cs" />
     <Compile Include="GroupPageCreator\PersonGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\SingleAgentTeamGroupPageTest.cs" />

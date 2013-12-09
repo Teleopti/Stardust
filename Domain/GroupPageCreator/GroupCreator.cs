@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
 	public interface IGroupCreator
 	{
-		Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IScheduleDictionary scheduleDictionary);
+		Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IList<IPerson> allPermittedPersons);
 	}
 
 	public class GroupCreator : IGroupCreator
 	{
-		public Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IScheduleDictionary scheduleDictionary)
+		public Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IList<IPerson> allPermittedPersons)
 		{
 			var groupToReturn = new Group();
 
@@ -23,13 +23,21 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			}
 
 			IPersonGroup personGroup = currentGroupForPerson(rootPersonGroups, person);
-			if (personGroup == null)
+			if (personGroup != null)
 			{
+				groupToReturn.SetName(personGroup.Description.Name);
+			}
+			else
+			{
+				if (!allPermittedPersons.Contains(person))
+					return null;
+
 				groupToReturn.AddMember(person);
+				groupToReturn.SetName(person.Name.ToString());
 				return groupToReturn;
 			}
 
-			var personsInGroup = currentPersonsInGroup(personGroup, scheduleDictionary);
+			var personsInGroup = currentPersonsInGroup(personGroup, allPermittedPersons);
 			foreach (var personInGroup in personsInGroup)
 			{
 				groupToReturn.AddMember(personInGroup);
@@ -61,13 +69,16 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			return null;
 		}
 
-		private IList<IPerson> currentPersonsInGroup(IPersonGroup personGroup, IScheduleDictionary scheduleDictionary)
+		private IList<IPerson> currentPersonsInGroup(IPersonGroup personGroup, IList<IPerson> allPermittedPersons)
 		{
-			var keys = scheduleDictionary.Keys;
-
 			//in group and also in ScheduleDictionary
-			var personsInDictionary = personGroup.PersonCollection.Where(keys.Contains).ToList();
-			return personsInDictionary;
+			IList<IPerson> personsToReturn = new List<IPerson>();
+			foreach (var person in personGroup.PersonCollection)
+			{
+				if(allPermittedPersons.Contains(person))
+					personsToReturn.Add(person);
+			}
+			return personsToReturn;
 		}
 	}
 }
