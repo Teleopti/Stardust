@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory
@@ -13,6 +14,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		                             IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
 		                             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService);
+
+		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
 	public class EqualNumberOfCategoryFairnessService : IEqualNumberOfCategoryFairnessService
@@ -26,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IEqualCategoryDistributionBestTeamBlockDecider _equalCategoryDistributionBestTeamBlockDecider;
 		private readonly IEqualCategoryDistributionWorstTeamBlockDecider _equalCategoryDistributionWorstTeamBlockDecider;
 		private readonly IFilterPersonsForTotalDistribution _filterPersonsForTotalDistribution;
+		private bool _cancelMe;
 
 		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
 		                                            IDistributionForPersons distributionForPersons,
@@ -51,10 +55,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_filterPersonsForTotalDistribution = filterPersonsForTotalDistribution;
 		}
 
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
+
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		                    IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService)
 		{
+			_cancelMe = false;
 			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList);
 			
 			var teamBlockListRaw = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
@@ -65,8 +72,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			var totalDistribution = _distributionForPersons.CreateSummary(personListForTotalDistribution, scheduleDictionary);
 			var teamBlocksInSelection = _filterForTeamBlockInSelection.Filter(teamBlockListWithCorrectWorkFlowControlSet,
 			                                                              selectedPersons, selectedPeriod);
-
-			while (teamBlocksInSelection.Count > 0)
+			double totalBlockCount = teamBlocksInSelection.Count;
+			while (teamBlocksInSelection.Count > 0 && !_cancelMe)
 			{
 				ITeamBlockInfo teamBlockInfoToWorkWith =
 					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, teamBlocksInSelection,
@@ -84,6 +91,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					continue;
 
 				_teamBlockSwapper.Swap(teamBlockInfoToWorkWith, selectedTeamBlock, rollbackService, scheduleDictionary);
+
+				var message = Resources.FairnessOptimizationOn + " " + Resources.EqualOfEachShiftCategory + ": " +
+							  new Percent((totalBlockCount - teamBlocksInSelection.Count) / totalBlockCount);
+
+				OnReportProgress(message);
+			}
+		}
+
+		public virtual void OnReportProgress(string message)
+		{
+			EventHandler<ResourceOptimizerProgressEventArgs> handler = ReportProgress;
+			if (handler != null)
+			{
+				var args = new ResourceOptimizerProgressEventArgs(0, 0, message);
+				handler(this, args);
+				if (args.Cancel)
+					_cancelMe = true;
 			}
 		}
 	}

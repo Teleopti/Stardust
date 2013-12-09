@@ -151,8 +151,9 @@ namespace Teleopti.Ccc.Win.Commands
 
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
+				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
-
+				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				//move into IOC
 				ISwapServiceNew swapService = new SwapServiceNew();
