@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId, _isSnapshot);
 
 			_stateCache.AssertWasCalled(a => a.AddAgentStateToCache(agentState));
-			_messageSender.AssertWasNotCalled(a => a.SendRtaData(agentState.PersonId, agentState.BusinessUnit, agentState));
+			_messageSender.AssertWasNotCalled(a => a.QueueRtaNotification(agentState.PersonId, agentState.BusinessUnit, agentState));
 			_mocks.VerifyAll();
 
 		}
@@ -281,12 +281,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
-			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_agentAssembler.Expect(
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState));
+			_messageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState));
 			
 			_mocks.ReplayAll();
 
@@ -317,12 +316,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
-			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_agentAssembler.Expect(
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new SocketException());
+			_messageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState)).Throw(new SocketException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
 
 			_mocks.ReplayAll();
@@ -349,12 +347,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
-			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_agentAssembler.Expect(
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new BrokerNotInstantiatedException());
+			_messageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState)).Throw(new BrokerNotInstantiatedException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
 
 			_mocks.ReplayAll();
@@ -378,8 +375,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				agentState);
 			var copyState = agentState;
 			_stateCache.Expect(s => s.AddAgentStateToCache(copyState));
-			_messageSender.Expect(m => m.IsAlive).Return(true);
-			_messageSender.Expect(m => m.SendRtaData(_personId, _businessUnitId, agentState));
+			_messageSender.Expect(m => m.QueueRtaNotification(_personId, _businessUnitId, agentState));
 			_mocks.ReplayAll();
 
 			_target = new rtaDataHandlerForTest(_loggingSvc, _messageSender, connectionString, _databaseConnectionFactory,
@@ -447,8 +443,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentAssembler.Expect(a => a.GetAgentStatesForMissingAgents(_batchId, _sourceId))
 			               .Return(new List<IActualAgentState> {agentState, null});
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_messageSender.Expect(m => m.IsAlive).Return(true);
-			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState));
+			_messageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState));
 			_mocks.ReplayAll();
 			
 			assignTargetAndRun();
