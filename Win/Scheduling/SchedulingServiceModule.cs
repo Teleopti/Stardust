@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<GroupScheduleGroupPageDataProvider>().As<IGroupScheduleGroupPageDataProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageCreator>().As<IGroupPageCreator>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPageFactory>().As<IGroupPageFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<GroupCreator>().As<GroupCreator>().InstancePerLifetimeScope();
+			builder.RegisterType<GroupCreator>().As<IGroupCreator>().InstancePerLifetimeScope();
 	        builder.RegisterType<SwapServiceNew>().As<ISwapServiceNew>();
 			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
         	builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();

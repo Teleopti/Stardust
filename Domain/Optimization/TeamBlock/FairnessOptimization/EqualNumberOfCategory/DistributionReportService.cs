@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 	public class DistributionReportService : IDistributionReportService
 	{
 		private readonly IDistributionForPersons _distributionForPersons;
-		private readonly GroupCreator _groupCreator;
+		private readonly IGroupCreator _groupCreator;
 
-		public DistributionReportService(IDistributionForPersons distributionForPersons, GroupCreator groupCreator)
+		public DistributionReportService(IDistributionForPersons distributionForPersons, IGroupCreator groupCreator)
 		{
 			_distributionForPersons = distributionForPersons;
 			_groupCreator = groupCreator;

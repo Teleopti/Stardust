@@ -4,7 +4,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
-	public class GroupCreator
+	public interface IGroupCreator
+	{
+		Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IScheduleDictionary scheduleDictionary);
+	}
+
+	public class GroupCreator : IGroupCreator
 	{
 		public Group CreateGroupForPerson(IPerson person, IGroupPage pageOnDate, IScheduleDictionary scheduleDictionary)
 		{
