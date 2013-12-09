@@ -159,6 +159,31 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             item.Font = item.Font.ChangeToBold();
             listViewRestrictions.Items.Add(item);
 
+			ISchedulingOptions schedulingOptions = new SchedulingOptions
+                                                       {
+                                                           UseAvailability = true,
+                                                           UsePreferences = true,
+                                                           UseStudentAvailability = false,
+                                                           UseRotations = true
+                                                       };
+            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
+			var period = person.Period(helper.SelectedDate);
+			if (period != null)
+			{
+				var employmentType = period.PersonContract.Contract.EmploymentType;
+				if (employmentType != EmploymentType.HourlyStaff)
+				{
+					createAndAddItem(listViewRestrictions, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewRestrictions, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewRestrictions, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewRestrictions, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+				}
+				else
+				{
+					createAndAddItem(listViewRestrictions, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+				}
+			}
+
             createAndAddItem(listViewRestrictions, Resources.Availability, "", 1);
             handleAvailabilities(extractor.AvailabilityList);
 
