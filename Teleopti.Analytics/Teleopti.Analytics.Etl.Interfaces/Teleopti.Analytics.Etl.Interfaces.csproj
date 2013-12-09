@@ -131,7 +131,6 @@
     <Compile Include="Transformer\IScheduleForecastSkillResourceCalculation.cs" />
     <Compile Include="Transformer\ISchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\JobCategoryType.cs" />
-    <Compile Include="Transformer\CustomEventArgs.cs" />
     <Compile Include="Transformer\IJob.cs" />
     <Compile Include="Transformer\IJobResult.cs" />
     <Compile Include="Transformer\IJobStep.cs" />
