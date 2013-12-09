@@ -16,13 +16,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly ITeamMemberCountValidator _teamMemberCountValidator;
 		private readonly ITeamBlockContractTimeValidator _teamBlockContractTimeValidator;
 		private readonly ITeamBlockSameSkillValidator _teamBlockSameSkillValidator;
+		private readonly ITeamBlockSameRuleSetBagValidator _teamBlockSameRuleSetBagValidator;
 
-		public FilterOnSwapableTeamBlocks(ITeamBlockPeriodValidator teamBlockPeriodValidator, ITeamMemberCountValidator teamMemberCountValidator, ITeamBlockContractTimeValidator teamBlockContractTimeValidator, ITeamBlockSameSkillValidator teamBlockSameSkillValidator)
+		public FilterOnSwapableTeamBlocks(ITeamBlockPeriodValidator teamBlockPeriodValidator, ITeamMemberCountValidator teamMemberCountValidator, ITeamBlockContractTimeValidator teamBlockContractTimeValidator, ITeamBlockSameSkillValidator teamBlockSameSkillValidator, ITeamBlockSameRuleSetBagValidator teamBlockSameRuleSetBagValidator)
 		{
 			_teamBlockPeriodValidator = teamBlockPeriodValidator;
 			_teamMemberCountValidator = teamMemberCountValidator;
 			_teamBlockContractTimeValidator = teamBlockContractTimeValidator;
 			_teamBlockSameSkillValidator = teamBlockSameSkillValidator;
+			_teamBlockSameRuleSetBagValidator = teamBlockSameRuleSetBagValidator;
 		}
 
 		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockInfoList, ITeamBlockInfo teamBlockInfoToWorkWith)
@@ -42,7 +44,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				if (!_teamBlockSameSkillValidator.ValidateSameSkill(teamBlockInfo, teamBlockInfoToWorkWith))
 					continue;
 
-				//ShiftBag
+				if(!_teamBlockSameRuleSetBagValidator.ValidateSameRuleSetBag(teamBlockInfo, teamBlockInfoToWorkWith))
+					continue;
+
 				//inga lås i blocken
 
 				possibleTeamBlocksToSwapWith.Add(teamBlockInfo);
