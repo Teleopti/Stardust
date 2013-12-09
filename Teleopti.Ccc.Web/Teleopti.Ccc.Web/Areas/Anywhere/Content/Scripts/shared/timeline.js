@@ -55,9 +55,15 @@ define([
 				var times = [];
 				var time = self.StartMinutes();
 				var end = self.EndMinutes();
+				var hideEven = false;
+				if (end - time > 1320) {
+					hideEven = true;
+				}
+				var isHidden = false;
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time));
+					times.push(new timeViewModel(self, time, hideEven && isHidden));
 					time = minutes.AddHours(time, 1);
+					isHidden = !isHidden;
 				}
 				return times;
 			}).extend({ throttle: 10 });

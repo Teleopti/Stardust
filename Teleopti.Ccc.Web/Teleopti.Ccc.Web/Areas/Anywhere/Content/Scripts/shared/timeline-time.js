@@ -8,16 +8,16 @@ define([
         resources
     ) {
 
-        return function(timeline, minutes) {
+        return function(timeline, minutes, hideLabel) {
 
-	        var time = moment().startOf('day').add('minutes', minutes);
+        	var time = moment().startOf('day').add('minutes', minutes);
 	        var formattedTime = time.format(resources.TimeFormatForMoment);
 
             this.Minutes = function() {
 	            return minutes;
             };
 
-            this.Time = formattedTime;
+            this.Time = hideLabel ? "" : formattedTime;
 
             this.Pixel = ko.computed(function() {
                 var startMinutes = minutes - timeline.StartMinutes();
