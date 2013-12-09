@@ -269,7 +269,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 
 		self.classForDaySummary = ko.computed(function () {
-		    var showRequestClass = self.textRequestPermission() ? 'weekview-day-summary weekview-day-show-request ' : 'weekview-day-summary';
+		    var showRequestClass = self.textRequestPermission() ? 'weekview-day-summary weekview-day-show-request ' : 'weekview-day-summary ';
 		    if (self.summaryStyleClassName() != null && self.summaryStyleClassName() != 'undefined') {
 		        return showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
 		    }
