@@ -146,7 +146,6 @@
     <Compile Include="FakeData\JobStepResultFactory.cs" />
     <Compile Include="FakeData\SchedulePartFactory.cs" />
     <Compile Include="FakeData\WorkloadQueueFactory.cs" />
-    <Compile Include="Job\CustomEventArgsTest.cs" />
     <Compile Include="Job\JobResultTest.cs" />
     <Compile Include="Job\JobStepResultTest.cs" />
     <Compile Include="Job\Jobs\AgentStatisticsJobTest.cs" />
