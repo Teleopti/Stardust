@@ -107,11 +107,6 @@ define([
 			return self.AddingActivity();
 		});
 
-		this.DisplayDescriptions = ko.observable(false);
-		this.ToggleDisplayDescriptions = function () {
-			self.DisplayDescriptions(!self.DisplayDescriptions());
-		};
-		
 		this.SetData = function (data, timeLine) {
 
 			//var person = self.SelectedPerson();
