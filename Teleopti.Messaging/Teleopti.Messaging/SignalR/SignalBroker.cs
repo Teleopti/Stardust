@@ -21,7 +21,8 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private const string HubClassName = "MessageBrokerHub";
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
-		private SignalWrapper _wrapper;
+		private ISignalWrapper _wrapper;
+		private SignalSubscriber _subscriberWrapper;
 		private readonly object WrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
@@ -60,7 +61,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_wrapper == null) return;
 
-				_wrapper.StopListening();
+				_wrapper.StopHub();
 				_wrapper = null;
 			}
 		}
@@ -335,9 +336,12 @@ namespace Teleopti.Messaging.SignalR
 
 			lock (WrapperLock)
 			{
+				_subscriberWrapper = new SignalSubscriber(hubProxy);
+				_subscriberWrapper.OnNotification += onNotification;
+				_subscriberWrapper.Start(); 
+				
 				_wrapper = new SignalWrapper(hubProxy, connection);
-				_wrapper.OnNotification += onNotification;
-				_wrapper.StartListening();
+				_wrapper.StartHub();
 			}
 		}
 
@@ -367,10 +371,15 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (WrapperLock)
 			{
-				if (_wrapper == null) return;
-
-				_wrapper.OnNotification -= onNotification;
-				_wrapper.StopListening();
+				if (_wrapper != null)
+				{
+					_wrapper.StopHub();
+				}
+				if (_subscriberWrapper != null)
+				{
+					_subscriberWrapper.Stop();
+					_subscriberWrapper.OnNotification -= onNotification;
+				}
 			}
 		}
 
