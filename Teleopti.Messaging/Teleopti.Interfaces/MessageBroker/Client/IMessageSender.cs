@@ -33,7 +33,7 @@ namespace Teleopti.Interfaces.MessageBroker.Client
     	/// Created by: ankarlp
     	/// Created date: 10/06/2010
     	/// </remarks>
-    	void SendRtaData(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState);
+    	void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState);
 
     	/// <summary>
     	/// Sends schedule data.
@@ -60,7 +60,5 @@ namespace Teleopti.Interfaces.MessageBroker.Client
         /// Created date: 09/06/2010
         /// </remarks>
         void InstantiateBrokerService();
-
-	    void InstantiateSendOnlyBrokerService();
     }
 }

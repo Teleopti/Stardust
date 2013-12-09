@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalWrappera
-	{
-
-	}
-
 	internal interface ISignalWrapper
 	{
 		void StartHub();

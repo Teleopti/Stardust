@@ -235,21 +235,8 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			try
 			{
-				if (_messageSender.IsAlive)
-				{
-					_loggingSvc.InfoFormat("Sending message through message broker AgentState: {0} ", agentState);
-					_messageSender.SendRtaData(agentState.PersonId, agentState.BusinessUnit, agentState);
-				}
-				else
-					_loggingSvc.Warn("Message broker is not alive");
-			}
-			catch (SocketException exception)
-			{
-				_loggingSvc.Error("The message broker seems to be down.", exception);
-			}
-			catch (BrokerNotInstantiatedException exception)
-			{
-				_loggingSvc.Error("The message broker seems to be down.", exception);
+				_loggingSvc.InfoFormat("Adding message to message broker queue AgentState: {0} ", agentState);
+				_messageSender.QueueRtaNotification(agentState.PersonId, agentState.BusinessUnit, agentState);
 			}
 			catch (Exception exception)
 			{
