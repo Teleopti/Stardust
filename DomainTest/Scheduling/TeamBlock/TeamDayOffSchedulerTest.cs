@@ -95,7 +95,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 				//addContractDaysOff
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.IsValid).Return(false);
+				int target;
+				IList<IScheduleDay> currentScheduleDayList;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target,
+																			 out currentScheduleDayList)).Return(true)
+				  .OutRef(1, new List<IScheduleDay>());
 				
 			}
 
@@ -208,11 +212,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		private void addContractDaysOffMocks()
 		{
-			Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod);
-			Expect.Call(_schedulePeriod.IsValid).Return(true);
-
 			int target;
 			IList<IScheduleDay> currentScheduleDayList;
+			Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod);
 			Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target,
 																			 out currentScheduleDayList)).Return(false)
 				  .OutRef(1, new List<IScheduleDay>());
@@ -255,6 +257,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			      .Return(_effectiveRestriction);
 			Expect.Call(_scheduleMatrixPro.Person).Return(_person1);
 			Expect.Call(_scheduleMatrixPro.Person).Return(_person1);
+
+			Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod);
+			Expect.Call(_schedulePeriod.IsValid).Return(true);
+			Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(2013, 2, 1, 2013, 2, 1));
 		}
 
 		void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)

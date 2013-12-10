@@ -122,7 +122,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupMembers,
 	                                                                               scheduleDate, schedulingOptions,
 	                                                                               scheduleDictionary);
-			matrixesOfOneTeam = matrixListAll.Where(x => groupMembers.Contains(x.Person)).ToList();
+			var matrixesOfOne = matrixListAll.Where(x => groupMembers.Contains(x.Person)).ToList();
+			matrixesOfOneTeam = new List<IScheduleMatrixPro>();
+			
+			foreach (var scheduleMatrixPro in matrixesOfOne)
+			{
+				var schedulePeriod = scheduleMatrixPro.SchedulePeriod;
+				if (schedulePeriod.IsValid && schedulePeriod.DateOnlyPeriod.Contains(scheduleDate))
+					matrixesOfOneTeam.Add(scheduleMatrixPro);
+			}
+			
 	        return restriction;
 	    }
 
@@ -160,15 +169,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			foreach (var matrix in matrixList)
 			{
-				var schedulePeriod = matrix.SchedulePeriod;
-
-				if (!schedulePeriod.IsValid)
-					continue;
-
 				int targetDaysOff;
 
 				IList<IScheduleDay> currentOffDaysList;
-				bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod,
+				bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrix.SchedulePeriod,
 				                                                                                      out targetDaysOff,
 				                                                                                      out currentOffDaysList);
 				int currentDaysOff = currentOffDaysList.Count;
