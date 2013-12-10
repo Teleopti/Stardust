@@ -294,3 +294,18 @@ GO
 UPDATE dbo.TemplateTaskPeriod SET Tasks = 0 WHERE Tasks<0
 UPDATE dbo.TemplateTaskPeriod SET CampaignTasks = -1 WHERE CampaignTasks<-1
 GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-12-10
+--Desc: Bug #26202 - ETL fails due to duplicated rows in readmodel
+---------------- 
+--remove potential duplicates
+delete from a
+from
+(select PersonId,BelongsToDate
+       ,ROW_NUMBER() over (partition by  PersonId,BelongsToDate
+                           order by InsertedOn desc) RowNumber --keep last updated
+from readmodel.ScheduleDay) as a
+where a.RowNumber > 1
+go
