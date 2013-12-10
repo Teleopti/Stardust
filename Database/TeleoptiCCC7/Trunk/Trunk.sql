@@ -830,8 +830,8 @@ BEGIN
 	)
 
 	--save current data into new table structure
-	INSERT INTO [ReadModel].[PersonScheduleDay_new](PersonId, TeamId, BelongsToDate, Start, End, SiteId, BusinessUnitId, InsertedOn, Model)
-	SELECT PersonId, TeamId, BelongsToDate, Start, End, SiteId, BusinessUnitId, InsertedOn, Model
+	INSERT INTO [ReadModel].[PersonScheduleDay_new](PersonId, TeamId, BelongsToDate, [Start], [End], SiteId, BusinessUnitId, InsertedOn, Model)
+	SELECT PersonId, TeamId, BelongsToDate, [Start], [End], SiteId, BusinessUnitId, InsertedOn, Model
 	FROM [ReadModel].[PersonScheduleDay]
 
 	DROP TABLE [ReadModel].[PersonScheduleDay]
