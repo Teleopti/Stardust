@@ -191,7 +191,7 @@
 	},
 	clickBubble: false
 	">
-		<!-- ko if: IsFullDayAbsence -->
+		<!-- ko if: IsFullDayAbsence && $parent.Layers().length == 1 -->
 		<!-- ko if: $root.DisplayDescriptions -->
 		<span class="label layer-description" data-bind="text: Description"></span>
 		<!-- /ko -->
