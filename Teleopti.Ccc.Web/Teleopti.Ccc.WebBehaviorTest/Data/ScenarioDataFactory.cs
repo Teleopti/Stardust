@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _delayedSetups.ForEach(s => s.Apply(Me().Person, uow)));
 
-			Resources.Culture = Me().Culture;
 			return Me().LogOnName;
 		}
 
