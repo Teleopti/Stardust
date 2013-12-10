@@ -132,5 +132,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     	bool DoesWindowsUserExists(string domainName, string userName);
     	IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser);
 	    int SaveLoginAttempt(LoginAttemptModel model);
+	    bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId);
     }
 }
