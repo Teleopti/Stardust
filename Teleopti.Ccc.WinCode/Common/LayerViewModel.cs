@@ -276,8 +276,13 @@ namespace Teleopti.Ccc.WinCode.Common
 			if (IsMovePermitted())
 			{
 				var current = Period.StartDateTime;
-				StartTimeChanged(panel, change * 0.6);
-				EndTimeChanged(panel, change * 0.6);
+				var currentElapsedtime = Period.ElapsedTime();
+				TimeSpan t = DateTimePeriodPanel.GetTimeSpanFromHorizontalChange(panel, change * 0.6, _interval.TotalMinutes);
+				var newStart = Period.StartDateTime.Add(t).ToInterval(Interval);
+				var newEnd = newStart.Add(currentElapsedtime);
+				Period = new DateTimePeriod(newStart, newEnd);
+				IsChanged = true;
+
 				TimeSpan delta = Period.StartDateTime.Subtract(current);
 				MoveLayer(delta);
 			}

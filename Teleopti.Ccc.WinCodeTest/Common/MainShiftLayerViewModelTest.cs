@@ -379,6 +379,27 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 		}
 
+		[Test]
+		public void MovePeriod_WhenIntervalDoesNotmatch_ShouldOnlySnapStartTime()
+		{
+			_testRunner.RunInSTA(
+				delegate
+				{
+
+					DateTimePeriodPanel panel = getPanel();
+
+					_target.Interval = TimeSpan.FromMinutes(1);
+					_target.EndTimeChanged(panel, -0.03);
+
+					var endTimeMinutes = _target.Period.EndDateTime.Minute;
+
+					_target.Interval = TimeSpan.FromMinutes(60);
+					_target.TimeChanged(panel, 10);
+					Assert.AreEqual(_target.Period.EndDateTime.Minute, endTimeMinutes, "Since we moved the layer one hour, the minutes should be intact, ie not snapped to 30");
+
+				});
+		}
+
 		[TearDown]
 		public void Teardown()
 		{
