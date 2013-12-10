@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 					ActivityId = Guid.NewGuid(),
 					ScenarioId = Guid.NewGuid(),
 					StartDateTime = new DateTime(2013, 11, 15, 8, 0, 0),
-					EndDateTime = new DateTime(2013, 11, 15, 9, 0, 0),
-					InitiatorId = Guid.NewGuid()
+					EndDateTime = new DateTime(2013, 11, 15, 9, 0, 0)
 				};
 			target.Handle(@event);
 
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			published.ScenarioId.Should().Be(@event.ScenarioId);
 			published.StartDateTime.Should().Be(@event.StartDateTime);
 			published.EndDateTime.Should().Be(@event.EndDateTime);
-			published.InitiatorId.Should().Be(@event.InitiatorId);
 		}
 	}
 }

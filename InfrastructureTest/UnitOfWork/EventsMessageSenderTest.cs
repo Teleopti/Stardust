@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -49,26 +48,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			target.Execute(null, roots);
 
 			eventsPublisher.PublishedEvents.Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
-		}
-
-		[Test]
-		public void ShouldGetInstanceId()
-		{
-			var identifier = MockRepository.GenerateMock<IMessageBrokerIdentifier>();
-			identifier.Stub(x => x.InstanceId).Return(Guid.NewGuid());
-
-			var eventsPublisher = new FakeEventsPublisher();
-			var target = new EventsMessageSender(eventsPublisher);
-
-			var root = new PersonAbsence(new FakeCurrentScenario().Current());
-			var dateTimeperiod =
-				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), dateTimeperiod.StartDateTime, dateTimeperiod.EndDateTime);
-			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
-
-			target.Execute(identifier, roots);
-
-			eventsPublisher.PublishedEvents.First().InitiatorId.Should().Be.EqualTo(identifier.InstanceId);
 		}
 	}
 

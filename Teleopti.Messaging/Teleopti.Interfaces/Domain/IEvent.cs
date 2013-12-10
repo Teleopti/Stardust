@@ -8,6 +8,5 @@ namespace Teleopti.Interfaces.Domain
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface IEvent
 	{
-		Guid InitiatorId { get; set; }
 	}
 }
