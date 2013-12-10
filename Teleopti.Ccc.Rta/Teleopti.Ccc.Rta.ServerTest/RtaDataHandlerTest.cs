@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Net.Sockets;
@@ -105,7 +104,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void VerifyCreateInstanceUsingEmptyConstructorFailsBecauseNoConfigurationAvailable()
 		{
-			new RtaDataHandler(_agentAssembler, _stateCache);
+			new RtaDataHandler(_agentAssembler, _stateCache, _messageSender);
 		}
 
 		[Test]

@@ -107,15 +107,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				try
 				{
-					var startTask = _hubProxy.Invoke("NotifyClientsMultiple", notifications);
-					startTask.ContinueWith(t =>
-					{
-						if (t.IsFaulted && t.Exception != null)
-						{
-							Logger.Error("An error happened when notifying multiple.", t.Exception.GetBaseException());
-						}
-					}, TaskContinuationOptions.OnlyOnFaulted);
-					return startTask;
+					return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
 				}
 				catch (InvalidOperationException exception)
 				{
