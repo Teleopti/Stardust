@@ -767,7 +767,7 @@ BEGIN
 		[DisplayColor] [int] NOT NULL,
 		[InsertedOn] [datetime] NOT NULL,
 		[NotScheduled] [bit] NOT NULL,
-	 CONSTRAINT [PK_ScheduleDay_new] PRIMARY KEY NONCLUSTERED 
+	 CONSTRAINT [PK_ScheduleDay_new] PRIMARY KEY CLUSTERED 
 	(
 		[PersonId] ASC,
 		[BelongsToDate] ASC
@@ -822,7 +822,7 @@ BEGIN
 		[BusinessUnitId] [uniqueidentifier] NOT NULL,
 		[InsertedOn] [datetime] NOT NULL,
 		[Model] [nvarchar](max) NOT NULL,
-	 CONSTRAINT [PK_PersonScheduleDay_new] PRIMARY KEY NONCLUSTERED 
+	 CONSTRAINT [PK_PersonScheduleDay_new] PRIMARY KEY CLUSTERED 
 	(
 		[PersonId] ASC,
 		[BelongsToDate] ASC
