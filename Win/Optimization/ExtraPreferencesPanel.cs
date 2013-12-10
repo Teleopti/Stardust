@@ -142,6 +142,20 @@ namespace Teleopti.Ccc.Win.Optimization
             setTeamBlockPerData();
         }
 
+		public bool ValidateTeamBlockCombination()
+		{
+			if (!checkBoxTeams.Checked || !checkBoxBlock.Checked)
+				return true;
+
+			if ((string)comboBoxTeamBlockType.SelectedValue != BlockFinderType.BetweenDayOff.ToString())
+				return true;
+
+			if (checkBoxKeepWeekEndsTogether.Checked)
+				return true;
+
+			return false;
+		}
+
         public bool  ValidateDefaultValuesForTeam()
         {
             if (checkBoxTeams.Checked)

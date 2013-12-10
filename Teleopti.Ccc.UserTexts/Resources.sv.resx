@@ -11358,4 +11358,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
     <value>Skiftbyte nekat då skiften är på olika datum.</value>
   </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Optimering med block mellan fridagar och att inte hålla ihop teamens fridagar supportas inte</value>
+    <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
+  </data>
 </root>
