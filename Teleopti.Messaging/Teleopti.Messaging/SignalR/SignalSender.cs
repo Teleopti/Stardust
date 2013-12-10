@@ -39,7 +39,7 @@ namespace Teleopti.Messaging.SignalR
 			ServicePointManager.DefaultConnectionLimit = 50;
 
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-			workerThread = new Thread(processQueue);
+			workerThread = new Thread(processQueue) {IsBackground = true};
 			workerThread.Start();
 		}
 
