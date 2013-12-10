@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -125,6 +126,23 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_target.FlushCacheToDatabase();
 
 			_target.batchedAgents.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void AddAgentStateToCache_SameTimeStamp_AddLast()
+		{
+			var personId = Guid.NewGuid();
+			var recievedTime = DateTime.UtcNow;
+			var firstState = new ActualAgentState {PersonId = personId, AlarmId = Guid.NewGuid(), ReceivedTime = recievedTime};
+			var secondState = new ActualAgentState {PersonId = personId, AlarmId = Guid.NewGuid(), ReceivedTime = recievedTime};
+
+			_target.AddAgentStateToCache(firstState);
+			_target.AddAgentStateToCache(secondState);
+
+			IActualAgentState result;
+			_target.batchedAgents.TryGetValue(personId, out result);
+
+			result.AlarmId.Should().Be.EqualTo(secondState.AlarmId);
 		}
 
 		private class actualAgentStateCacheForTest :ActualAgentStateCache
