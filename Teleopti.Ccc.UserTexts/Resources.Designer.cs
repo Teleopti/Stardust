@@ -21629,7 +21629,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shifttrade denied because target shift is for another date..
+        ///   Looks up a localized string similar to Shift trade denied because shifts are on different dates..
         /// </summary>
         public static string ShiftTradeDifferentDateDenyReason {
             get {
@@ -23498,6 +23498,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TeamSettings {
             get {
                 return ResourceManager.GetString("TeamSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team to compare with.
+        /// </summary>
+        public static string TeamToCompareWith {
+            get {
+                return ResourceManager.GetString("TeamToCompareWith", resourceCulture);
             }
         }
         
