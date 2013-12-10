@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 			}
 
-			var period = ViewBaseHelper.GetPeriod(selection);
+			var period = OptimizerHelperHelper.GetSelectedPeriod(selection);
 
 			if (model.Team)
 				ScheduleToPdfManager.ExportShiftPerDayTeamViewGraphical(_culture, personDic, period,

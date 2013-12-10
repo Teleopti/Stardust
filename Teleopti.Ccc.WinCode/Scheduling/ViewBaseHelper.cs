@@ -814,26 +814,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return returnList;
         }
 
-		public static DateOnlyPeriod GetPeriod(IList<IScheduleDay> days)
-		{
-			if(days == null)
-				throw new ArgumentNullException("days");
-
-			var firstDate = new DateOnly(3000, 1, 1);
-			var lastDate = new DateOnly(1000, 1, 1);
-
-			foreach (var part in days)
-			{
-				if (part.Period.LocalStartDateTime.Date < firstDate.Date)
-					firstDate = new DateOnly(part.Period.LocalStartDateTime.Date);
-
-				if (part.Period.LocalStartDateTime.Date > lastDate.Date)
-					lastDate = new DateOnly(part.Period.LocalStartDateTime.Date);
-			}
-
-			return new DateOnlyPeriod(firstDate, lastDate);
-		}
-
 		public static DateOnlyPeriod? PeriodFromSchedulePeriods(IEnumerable<IPerson> persons, DateOnlyPeriod period)
 		{
 			var min = DateOnly.MaxValue;

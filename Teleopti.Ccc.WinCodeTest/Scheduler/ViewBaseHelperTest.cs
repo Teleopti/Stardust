@@ -1095,34 +1095,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldReturnPeriodFromScheduleDays()
-		{
-			IList<IScheduleDay> days = new List<IScheduleDay> {_schedulePart1, _schedulePart2};
-			var period1 = new DateTimePeriod(2011, 1,1, 2011, 1, 1);
-			var period2 = new DateTimePeriod(2011, 1, 9, 2011, 1, 9);
-			var expected = new DateOnlyPeriod(new DateOnly(2011, 1, 1), new DateOnly(2011, 1, 9));
-
-			using(_mockRep.Record())
-			{
-				Expect.Call(_schedulePart1.Period).Return(period1).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePart2.Period).Return((period2)).Repeat.AtLeastOnce();
-			}
-
-			using(_mockRep.Playback())
-			{
-				var period = ViewBaseHelper.GetPeriod(days);
-				Assert.AreEqual(expected, period);
-			}
-		}
-
-		[Test, ExpectedException(typeof(ArgumentNullException))]
-		public void ShouldThrowExceptionWhenDaysIsNull()
-		{
-			_scheduleDays = null;
-			ViewBaseHelper.GetPeriod(_scheduleDays);
-		}
-
-		[Test]
 		public void ShouldReturnPeriodFromSchedulePeriods()
 		{
 			var startDate1 = new DateOnly(2011, 1, 1);
