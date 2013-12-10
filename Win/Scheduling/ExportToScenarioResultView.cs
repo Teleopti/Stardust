@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// All this bloody blue I hate it
 			//groupBoxWarnings.BackColor = ColorHelper.OfficeBlue;
 			//groupBoxInfo.BackColor = ColorHelper.OfficeBlue;
-			
+
 			Text = Resources.ExportToOtherScenario;
 			gridControl1.RightToLeft = RightToLeft;
 		}
@@ -102,14 +102,30 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_presenter = null;
 		}
 
-        public void ShowDataSourceException(DataSourceException exception)
-        {
-            using (var view = new SimpleExceptionHandlerView(exception,
-                                                                    Resources.ExportToOtherScenario,
-                                                                    Resources.ServerUnavailable))
-            {
-                view.ShowDialog();
-            }
-        }
+		public void ShowDataSourceException(DataSourceException exception)
+		{
+			using (var view = new SimpleExceptionHandlerView(exception,
+																	Resources.ExportToOtherScenario,
+																	Resources.ServerUnavailable))
+			{
+				view.ShowDialog();
+			}
+		}
+
+		public void DisableInteractions()
+		{
+			btnOk.Enabled = false;
+			btnCancel.Enabled = false;
+			spinningProgressControl1.Visible = true;
+			ControlBox = false;
+		}
+
+		public void EnableInteractions()
+		{
+			btnOk.Enabled = true;
+			btnCancel.Enabled = true;
+			spinningProgressControl1.Visible = false;
+			ControlBox = true;
+		}
 	}
 }

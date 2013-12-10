@@ -52,6 +52,7 @@
 			this.panel3 = new System.Windows.Forms.Panel();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.panel1 = new System.Windows.Forms.Panel();
+			this.spinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.SpinningProgressControl();
 			this.groupBoxInfo.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			this.groupBoxWarnings.SuspendLayout();
@@ -274,6 +275,7 @@
 			this.tableLayoutPanel3.Controls.Add(this.btnOk, 2, 4);
 			this.tableLayoutPanel3.Controls.Add(this.groupBoxInfo, 1, 1);
 			this.tableLayoutPanel3.Controls.Add(this.btnCancel, 3, 4);
+			this.tableLayoutPanel3.Controls.Add(this.spinningProgressControl1, 1, 4);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -330,6 +332,16 @@
 			this.panel1.Size = new System.Drawing.Size(819, 10);
 			this.panel1.TabIndex = 21;
 			// 
+			// spinningProgressControl1
+			// 
+			this.spinningProgressControl1.AutoIncrementFrequency = 100D;
+			this.spinningProgressControl1.Location = new System.Drawing.Point(8, 532);
+			this.spinningProgressControl1.MinimumSize = new System.Drawing.Size(20, 20);
+			this.spinningProgressControl1.Name = "spinningProgressControl1";
+			this.spinningProgressControl1.Size = new System.Drawing.Size(20, 20);
+			this.spinningProgressControl1.TabIndex = 25;
+			this.spinningProgressControl1.TransitionSegment = 5;
+			// 
 			// ExportToScenarioResultView
 			// 
 			this.AcceptButton = this.btnOk;
@@ -376,5 +388,6 @@
 		  private System.Windows.Forms.Panel panel4;
 		  private System.Windows.Forms.Panel panel3;
 		  private System.Windows.Forms.Panel panel2;
+		  private Common.Controls.SpinningProgress.SpinningProgressControl spinningProgressControl1;
     }
 }
