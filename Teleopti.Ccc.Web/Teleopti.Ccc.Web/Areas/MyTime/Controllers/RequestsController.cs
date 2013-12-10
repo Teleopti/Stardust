@@ -163,5 +163,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			model.Status = Resources.ProcessingDotDotDot;
 			return Json(model);
 		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult ShiftTradeRequestMyTeam(DateTime selectedDate)
+		{
+			return Json(_requestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(new DateOnly(selectedDate)), JsonRequestBehavior.AllowGet);
+		}
 	}
 }

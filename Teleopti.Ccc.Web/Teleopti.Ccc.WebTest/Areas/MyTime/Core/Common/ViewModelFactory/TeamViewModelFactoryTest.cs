@@ -20,6 +20,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 	public class TeamViewModelFactoryTest
 	{
 		[Test]
+		public void ShouldCreateTeamOptionsViewModel()
+		{
+			var teams = new[] { new Team() };
+			teams[0].SetId(Guid.NewGuid());
+			teams[0].Description = new Description("team");
+			teams[0].Site = new Site("site");
+			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
+			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(teams);
+			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null);
+
+			var result = target.CreateTeamOptionsViewModel(DateOnly.Today);
+
+			result.Select(t => t.text).Should().Have.SameSequenceAs("site/team");
+		}
+
+		[Test]
 		public void ShouldCreateTeamOptionsViewModelIfNotHaveViewAllGroupPagesPermission()
 		{
 			var teams = new[] { new Team() };
@@ -36,7 +52,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 
 			result.Select(t => t.text).Should().Have.SameSequenceAs("site/team");
 		}
-
 
 		[Test]
 		public void ShouldCreateGroupPageOptionsViewModelForBusinessHierarchyIfHaveViewAllGroupPagesPermission()

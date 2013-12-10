@@ -13,11 +13,37 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	public class TeamControllerTest
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldReturnTeamsAsJson()
+		public void ShouldReturnTeamsAndOrGroupingssAsJson()
 		{
 			var teams = new[] { new SelectGroup() };
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
 			viewModelFactory.Stub(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today)).Return(teams);
+
+			var target = new TeamController(viewModelFactory);
+
+			var result = target.TeamsAndOrGroupings(DateOnly.Today);
+
+			var data = result.Data as IEnumerable<SelectGroup>;
+			data.Should().Have.SameValuesAs(teams);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldUseTodayWhenDateNotSpecifiedForTeamsAndOrGroupings()
+		{
+			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
+			var target = new TeamController(viewModelFactory);
+
+			target.TeamsAndOrGroupings(null);
+
+			viewModelFactory.AssertWasCalled(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today));
+		}
+
+		[Test]
+		public void ShouldReturnTeamOptionsAsJson()
+		{
+			var teams = new[] { new SelectGroup() };
+			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
+			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today)).Return(teams);
 
 			var target = new TeamController(viewModelFactory);
 
@@ -27,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.Should().Have.SameValuesAs(teams);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		[Test]
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
@@ -35,7 +61,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			target.Teams(null);
 
-			viewModelFactory.AssertWasCalled(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today));
+			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(DateOnly.Today));
 		}
 	}
 }

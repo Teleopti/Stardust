@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)
 		{
 			return _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages) ?
-					   createGroupPagesOptions(date) : CreateTeamOptions(date);
+					   createGroupPagesOptions(date) : CreateTeamOptionsViewModel(date);
 		}
 
-		public IEnumerable<ISelectOption> CreateTeamOptions(DateOnly date)
+		public IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date)
 		{
 			var teams = _teamProvider.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule).ToList();
 			var sites = teams

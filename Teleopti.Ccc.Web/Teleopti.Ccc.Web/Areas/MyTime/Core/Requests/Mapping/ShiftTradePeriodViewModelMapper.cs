@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -10,10 +9,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		public ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet, INow now)
 		{
-			var vm = new ShiftTradeRequestsPeriodViewModel { HasWorkflowControlSet = workflowControlSet != null };
+			var vm = new ShiftTradeRequestsPeriodViewModel();
 
 			if (workflowControlSet != null)
 			{
+				vm.HasWorkflowControlSet = true;
 				vm.OpenPeriodRelativeStart = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum;
 				vm.OpenPeriodRelativeEnd = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum;
 			}

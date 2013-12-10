@@ -178,6 +178,37 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldRetrieveMyTeamId()
+		{
+			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
+			var shiftTradeDate = DateOnly.Today;
+			Guid? myTeamId = Guid.NewGuid();
+
+			provider.Stub(x => x.RetrieveMyTeamId(shiftTradeDate)).Return(myTeamId);
+
+			var target = new RequestsViewModelFactory(null, null, null, null, provider,
+			                                          MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
+			                                          MockRepository.GenerateMock<INow>(), null, null);
+
+			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(myTeamId.ToString());
+		}
+
+		[Test]
+		public void ShouldRetrieveNullWhenNotBelongingToATeam()
+		{
+			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
+			var shiftTradeDate = DateOnly.Today;
+
+			provider.Stub(x => x.RetrieveMyTeamId(shiftTradeDate)).Return(null);
+
+			var target = new RequestsViewModelFactory(null, null, null, null, provider,
+													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
+													  MockRepository.GenerateMock<INow>(), null, null);
+
+			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(null);
+		}
+
+		[Test]
 		public void ShouldRetrieveShiftTradeScheduleViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IShiftTradeScheduleViewModelMapper>();
