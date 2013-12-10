@@ -49,8 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void saveReadModel(PersonScheduleDayReadModel model)
 		{
 			_currentUnitOfWork.Session().CreateSQLQuery(
-				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,Model) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:Start,:End,:BelongsToDate,:Model)")
-			                  .SetGuid("Id", Guid.NewGuid())
+				"INSERT INTO ReadModel.PersonScheduleDay (PersonId,TeamId,SiteId,BusinessUnitId,Start,[End],BelongsToDate,Model) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:Start,:End,:BelongsToDate,:Model)")
 			                  .SetGuid("PersonId", model.PersonId)
 			                  .SetGuid("TeamId", model.TeamId)
 			                  .SetGuid("SiteId", model.SiteId)

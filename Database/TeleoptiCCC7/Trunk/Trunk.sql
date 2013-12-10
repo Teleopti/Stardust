@@ -459,52 +459,6 @@ GO
 ----------------  
 --Name: David Jonsson
 --Date: 2013-10-29
---Desc: Bug #25358 - re-design clustered key on ReadModel.PersonScheduleDay
-----------------
-IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[ReadModel].[PersonScheduleDay]') AND name = N'CIX_PersonScheduleDay')
-BEGIN
-	CREATE TABLE [ReadModel].[New_PersonScheduleDay](
-		[Id] [uniqueidentifier] NOT NULL,
-		[PersonId] [uniqueidentifier] NOT NULL,
-		[TeamId] [uniqueidentifier] NOT NULL,
-		[BelongsToDate] [smalldatetime] NOT NULL,
-		[Start] [datetime] NULL,
-		[End] [datetime] NULL,
-		[SiteId] [uniqueidentifier] NOT NULL,
-		[BusinessUnitId] [uniqueidentifier] NOT NULL,
-		[InsertedOn] [datetime] NOT NULL,
-		[Model] [nvarchar](max) NOT NULL
-	)
-
-	ALTER TABLE [ReadModel].[New_PersonScheduleDay] ADD  CONSTRAINT [new_PK_PersonScheduleDay] PRIMARY KEY NONCLUSTERED 
-	(
-		[Id] ASC
-	)
-
-	CREATE CLUSTERED INDEX [CIX_PersonScheduleDay] ON [ReadModel].[New_PersonScheduleDay]
-	(
-		[PersonId] ASC,
-		[BelongsToDate] ASC
-	)
-
-	ALTER TABLE [ReadModel].[PersonScheduleDay] DROP CONSTRAINT [DF_PersonScheduleDay_InsertedOn]
-	ALTER TABLE [ReadModel].[New_PersonScheduleDay] ADD  CONSTRAINT [DF_PersonScheduleDay_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
-
-	--Re-create data
-	INSERT INTO [ReadModel].[New_PersonScheduleDay]
-	SELECT * FROM [ReadModel].[PersonScheduleDay]
-
-	--drop old table
-	DROP TABLE [ReadModel].[PersonScheduleDay]
-
-	EXEC dbo.sp_rename @objname = N'[ReadModel].[New_PersonScheduleDay]', @newname = N'PersonScheduleDay', @objtype = N'OBJECT'
-	EXEC dbo.sp_rename @objname = N'[ReadModel].[PersonScheduleDay].[new_PK_PersonScheduleDay]', @newname = N'PK_PersonScheduleDay', @objtype =N'INDEX'
-END
-GO
-
-----------------  
---Name: David Jonsson
---Date: 2013-10-29
 --Desc: Bug #25370 - re-design clustered key on dbo.OvertimeShiftActivityLayer
 ----------------
 --No, not on this version. Tables is removed as part of "0000000386.sql"
@@ -757,4 +711,134 @@ SELECT
 	DayOfWeek
 FROM #AccessibilityDaysOfWeek
 drop table #AccessibilityDaysOfWeek
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-12-10
+--Desc: Bug #26202 - ETL fails due to duplicated rows in readmodel
+---------------- 
+--remove potential duplicates
+delete from a
+from
+(select PersonId,BelongsToDate
+       ,ROW_NUMBER() over (partition by  PersonId,BelongsToDate
+                           order by InsertedOn desc) RowNumber --keep last updated
+from readmodel.ScheduleDay) as a
+where a.RowNumber > 1
+go
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-12-10
+--Desc: Bug #26244 - Remove obsolete/never used PK => Id (guid) from readmodel
+---------------- 
+--Re-design tables and clustered index
+if exists(select * from sys.columns 
+            where Name = N'Id' and Object_ID = Object_ID(N'[ReadModel].[ScheduleDay]'))
+BEGIN
+	--remove potential duplicates
+	delete from a
+	from
+		(
+		select
+			PersonId,
+			BelongsToDate,
+			ROW_NUMBER() over
+				(partition by
+					PersonId,
+					BelongsToDate
+				order by
+					InsertedOn desc
+				) RowNumber --keep last updated
+		from readmodel.ScheduleDay
+		) as a
+	where a.RowNumber > 1
+
+	CREATE TABLE [ReadModel].[ScheduleDay_new](
+		[PersonId] [uniqueidentifier] NOT NULL,
+		[BelongsToDate] [smalldatetime] NOT NULL,
+		[StartDateTime] [datetime] NOT NULL,
+		[EndDateTime] [datetime] NOT NULL,
+		[Workday] [bit] NOT NULL,
+		[WorkTime] [bigint] NOT NULL,
+		[ContractTime] [bigint] NOT NULL,
+		[Label] [nvarchar](50) NOT NULL,
+		[DisplayColor] [int] NOT NULL,
+		[InsertedOn] [datetime] NOT NULL,
+		[NotScheduled] [bit] NOT NULL,
+	 CONSTRAINT [PK_ScheduleDay_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[PersonId] ASC,
+		[BelongsToDate] ASC
+	)
+	)
+	
+	--save current data into new table structure
+	INSERT INTO [ReadModel].[ScheduleDay_new](PersonId, BelongsToDate, StartDateTime, EndDateTime, Workday, WorkTime, ContractTime, Label, DisplayColor, InsertedOn, NotScheduled)
+	SELECT PersonId, BelongsToDate, StartDateTime, EndDateTime, Workday, WorkTime, ContractTime, Label, DisplayColor, InsertedOn, NotScheduled
+	FROM [ReadModel].[ScheduleDay]
+
+	DROP TABLE [ReadModel].[ScheduleDay]
+	
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[ScheduleDay_new]', @newname = N'ScheduleDay', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[ScheduleDay].[PK_ScheduleDay_new]', @newname = N'PK_ScheduleDay', @objtype =N'INDEX'
+	
+	ALTER TABLE [ReadModel].[ScheduleDay] ADD  CONSTRAINT [DF_ScheduleDay_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
+
+	ALTER TABLE [ReadModel].[ScheduleDay] ADD  CONSTRAINT [DF_ScheduleDay_NotScheduled]  DEFAULT ((0)) FOR [NotScheduled]
+END
+GO
+
+if exists(select * from sys.columns 
+            where Name = N'Id' and Object_ID = Object_ID(N'[ReadModel].[PersonScheduleDay]'))
+BEGIN
+
+	--remove potential duplicates
+	delete from a
+	from
+		(
+		select
+			PersonId,
+			BelongsToDate,
+			ROW_NUMBER() over
+				(partition by
+					PersonId,
+					BelongsToDate
+				order by
+					InsertedOn desc
+				) RowNumber --keep last updated
+		from readmodel.PersonScheduleDay
+		) as a
+	where a.RowNumber > 1
+
+	CREATE TABLE [ReadModel].[PersonScheduleDay_new](
+		[PersonId] [uniqueidentifier] NOT NULL,
+		[TeamId] [uniqueidentifier] NOT NULL,
+		[BelongsToDate] [smalldatetime] NOT NULL,
+		[Start] [datetime] NULL,
+		[End] [datetime] NULL,
+		[SiteId] [uniqueidentifier] NOT NULL,
+		[BusinessUnitId] [uniqueidentifier] NOT NULL,
+		[InsertedOn] [datetime] NOT NULL,
+		[Model] [nvarchar](max) NOT NULL,
+	 CONSTRAINT [PK_PersonScheduleDay_new] PRIMARY KEY NONCLUSTERED 
+	(
+		[PersonId] ASC,
+		[BelongsToDate] ASC
+	)
+	)
+
+	--save current data into new table structure
+	INSERT INTO [ReadModel].[PersonScheduleDay_new](PersonId, TeamId, BelongsToDate, Start, End, SiteId, BusinessUnitId, InsertedOn, Model)
+	SELECT PersonId, TeamId, BelongsToDate, Start, End, SiteId, BusinessUnitId, InsertedOn, Model
+	FROM [ReadModel].[PersonScheduleDay]
+
+	DROP TABLE [ReadModel].[PersonScheduleDay]
+	
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[PersonScheduleDay_new]', @newname = N'PersonScheduleDay', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[ReadModel].[PersonScheduleDay].[PK_PersonScheduleDay_new]', @newname = N'PK_PersonScheduleDay', @objtype =N'INDEX'
+
+	ALTER TABLE [ReadModel].[PersonScheduleDay] ADD  CONSTRAINT [DF_PersonScheduleDay_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
+END
 GO
