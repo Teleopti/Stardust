@@ -120,8 +120,21 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				_wrapper.NotifyClients(notification);
-				return true;
+				Exception exception = null;
+				var task = _wrapper.NotifyClients(notification);
+				task.ContinueWith(t =>
+					{
+						if (t.IsFaulted && t.Exception != null)
+						{
+							exception = t.Exception.GetBaseException();
+							Logger.Error("An error happened when notifying multiple.", exception);
+						}
+					}, TaskContinuationOptions.OnlyOnFaulted);
+				var waitResult = task.Wait(1000,cancelToken.Token);
+				if (exception != null)
+					throw exception;
+
+				return waitResult;
 			}
 			catch (Exception)
 			{
