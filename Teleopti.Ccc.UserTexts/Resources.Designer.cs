@@ -9950,6 +9950,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optimizing with block between days off and not keeping team days off together is not supported.
+        /// </summary>
+        public static string IllegalTeamBlockCombination {
+            get {
+                return ResourceManager.GetString("IllegalTeamBlockCombination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The input is not a valid time value.
         /// </summary>
         public static string IllegalTimeInput {
@@ -21629,7 +21638,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shifttrade denied because target shift is for another date..
+        ///   Looks up a localized string similar to Shift trade denied because shifts are on different dates..
         /// </summary>
         public static string ShiftTradeDifferentDateDenyReason {
             get {

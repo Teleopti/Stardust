@@ -5,13 +5,9 @@ using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
@@ -45,18 +41,13 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
         private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
         private readonly IMatrixListFactory _matrixListFactory;
-        private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
-        private readonly IRestrictionAggregator _restrictionAggregator;
         private readonly IRestrictionExtractor _restrictionExtractor;
         private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider;
         private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-        private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
-        private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
         private readonly IScheduleDayEquator _scheduleDayEquator;
         private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
         private readonly ISchedulerStateHolder _schedulerState;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-        private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
         private readonly ISchedulingResultStateHolder _stateHolder;
         private readonly ITeamBlockClearer _teamBlockCleaner;
         private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
@@ -64,24 +55,16 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
         private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
         private readonly ITeamDayOffModifier _teamDayOffModifier;
-        private readonly IWorkShiftFilterService _workShiftFilterService;
-        private readonly IWorkShiftSelector _workShiftSelector;
         private BackgroundWorker _backgroundWorker;
         private readonly ITeamBlockSchedulingOptions _teamBlockScheudlingOptions;
 	    private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 
-	    public TeamBlockOptimizationCommand(IScheduleDayChangeCallback scheduleDayChangeCallback,
-                                            IResourceOptimizationHelper resourceOptimizationHelper,
-                                            ISchedulerStateHolder schedulerState, IScheduleDayEquator scheduleDayEquator,
+	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerState, 
+											IScheduleDayEquator scheduleDayEquator,
                                             IRestrictionOverLimitDecider restrictionOverLimitDecider,
                                             IGroupScheduleGroupPageDataProvider groupPageDataProvider,
                                             IGroupPagePerDateHolder groupPagePerDateHolder,
                                             IGroupPageCreator groupPageCreator, ITeamBlockClearer teamBlockCleaner,
-                                            ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
-                                            IRestrictionAggregator restrictionAggregator,
-                                            IWorkShiftFilterService workShiftFilterService,
-                                            IWorkShiftSelector workShiftSelector,
-                                            ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification,
                                             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
                                             IDayOffDecisionMaker dayOffDecisionMaker,
                                             IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -97,10 +80,10 @@ namespace Teleopti.Ccc.Win.Commands
                                             ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
                                             ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
                                             IRestrictionExtractor restrictionExtractor,
-                                            IMatrixListFactory matrixListFactory, ITeamBlockSchedulingOptions teamBlockScheudlingOptions, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
+                                            IMatrixListFactory matrixListFactory, 
+											ITeamBlockSchedulingOptions teamBlockScheudlingOptions, 
+											IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock)
         {
-            _scheduleDayChangeCallback = scheduleDayChangeCallback;
-            _resourceOptimizationHelper = resourceOptimizationHelper;
             _schedulerState = schedulerState;
             _scheduleDayEquator = scheduleDayEquator;
             _restrictionOverLimitDecider = restrictionOverLimitDecider;
@@ -108,11 +91,6 @@ namespace Teleopti.Ccc.Win.Commands
             _groupPagePerDateHolder = groupPagePerDateHolder;
             _groupPageCreator = groupPageCreator;
             _teamBlockCleaner = teamBlockCleaner;
-            _skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
-            _restrictionAggregator = restrictionAggregator;
-            _workShiftFilterService = workShiftFilterService;
-            _workShiftSelector = workShiftSelector;
-            _sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
             _dayOffBackToLegalStateFunctions = dayOffBackToLegalStateFunctions;
             _dayOffDecisionMaker = dayOffDecisionMaker;
             _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;

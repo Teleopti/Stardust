@@ -11858,4 +11858,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Intraday absence</value>
     <comment>Intraday absence</comment>
   </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Optimizing with block between days off and not keeping team days off together is not supported</value>
+    <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
+  </data>
 </root>
