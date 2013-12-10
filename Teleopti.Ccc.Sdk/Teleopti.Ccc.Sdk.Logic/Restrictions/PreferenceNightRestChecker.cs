@@ -45,12 +45,19 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			
 			var date1 = part1.DateOnly.DateTime.AddMinutes(part1.MinEndTimeMinute);
 			var date2 = part2.DateOnly.DateTime.AddMinutes(part2.MaxStartTimeMinute);
-
+			if (isUnavailableDay(part2)) return;
+			
 			if (date2 - date1 < nightlyRest)
 			{
 				part1.ViolatesNightlyRest = true;
 				part2.ViolatesNightlyRest = true;
 			}
+		}
+
+		private static bool isUnavailableDay(ValidatedSchedulePartDto partDto)
+		{
+			return partDto.MinStartTimeMinute == 0 && partDto.MaxStartTimeMinute == 0 && partDto.MinEndTimeMinute == 0 &&
+			       partDto.MaxEndTimeMinute == 0 && partDto.MinWorkTimeInMinutes == 0 && partDto.MaxWorkTimeInMinutes == 0;
 		}
 	}
 }

@@ -13,7 +13,7 @@
 		<script type="text/javascript" src="jquery.ui.calendarselectable.js"></script>
 		
         <%
-            var version = new Random().Next(0, int.MaxValue);
+            var version = DateTime.UtcNow.Ticks;
         %>
 
         <script type="text/javascript" src="Teleopti.MyTimeWeb.Ajax.js?bust=<%=version%>"></script>

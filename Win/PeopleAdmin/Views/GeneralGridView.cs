@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private int getColumnIndex()
 		{
-			return Grid.CurrentCell.ColIndex;
+			return Math.Max(Grid.CurrentCell.ColIndex, 0); // this is to avoid -1, that would cause chrash
 		}
 
 		private void sortPeopleData(bool isAscending)

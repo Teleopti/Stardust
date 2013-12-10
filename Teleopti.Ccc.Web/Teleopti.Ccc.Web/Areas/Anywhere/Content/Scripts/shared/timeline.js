@@ -1,8 +1,9 @@
 define([
 		'knockout',
 		'helpers',
-		'shared/timeline-time'
-	], function (ko, helpers, timeViewModel) {
+		'shared/timeline-time',
+		'resources!r'
+	], function (ko, helpers, timeViewModel, resources) {
 
 		var minutes = helpers.Minutes;
 
@@ -55,9 +56,15 @@ define([
 				var times = [];
 				var time = self.StartMinutes();
 				var end = self.EndMinutes();
+				var hideEven = false;
+				if (self.PixelsPerMinute() < 0.5555 && resources.TimeFormatForMoment.indexOf("A") !== -1) {
+					hideEven = true;
+				}
+				var isHidden = false;
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time));
+					times.push(new timeViewModel(self, time, hideEven && isHidden));
 					time = minutes.AddHours(time, 1);
+					isHidden = !isHidden;
 				}
 				return times;
 			}).extend({ throttle: 10 });

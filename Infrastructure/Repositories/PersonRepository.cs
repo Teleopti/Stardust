@@ -797,5 +797,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetGuid("PersonId", model.PersonId.GetValueOrDefault())
 					.ExecuteUpdate();
 		}
+
+		public bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId)
+		{
+			var result = Session.CreateSQLQuery(
+				"exec dbo.DoesPersonHaveExternalLogOn @now=:now, @person=:person")
+			                    .SetDateTime("now", dateTime)
+								.SetGuid("person", personId)
+			                    .List();
+			return result.Count > 0;
+		}
     }
 }
