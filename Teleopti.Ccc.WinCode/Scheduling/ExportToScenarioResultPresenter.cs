@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -20,10 +21,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IUnitOfWorkFactory _uowFactory;
 		private readonly IMoveDataBetweenSchedules _moveSchedules;
-		private readonly IOwnMessageQueue _callback;
+		private readonly IReassociateDataForSchedules _callback;
 		private readonly IEnumerable<IPerson> _fullyLoadedPersonsToMove;
 		private readonly IEnumerable<IScheduleDay> _schedulePartsToExport;
-		private readonly IScheduleDictionaryBatchPersister _scheduleDictionaryBatchPersister;
+		private readonly IScheduleDictionaryPersister _scheduleDictionaryBatchPersister;
 		private readonly BackgroundWorker _exportBackrgroundWorker = new BackgroundWorker();
 		private bool _exportSuccesful;
 		private IEnumerable<IBusinessRuleResponse> _warnings;
@@ -37,11 +38,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 												IExportToScenarioResultView view,
 												IScheduleRepository scheduleRepository,
 												IMoveDataBetweenSchedules moveSchedules,
-												IOwnMessageQueue callback,
+												IReassociateDataForSchedules callback,
 												IEnumerable<IPerson> fullyLoadedPersonsToMove,
 												IEnumerable<IScheduleDay> schedulePartsToExport,
 												IScenario exportScenario,
-												IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister)
+												IScheduleDictionaryPersister scheduleDictionaryBatchPersister)
 		{
 			_uowFactory = uowFactory;
 			_moveSchedules = moveSchedules;
@@ -130,7 +131,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
 				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-				_callback.ReassociateDataWithAllPeople();
+				_callback.ReassociateDataForAllPeople();
 				ScheduleDictionaryToPersist =
 					_scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
 				return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);
