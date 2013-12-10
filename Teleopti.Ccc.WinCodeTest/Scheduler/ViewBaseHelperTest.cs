@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private VisualLayerFactory _layerFactory;
         private DateOnly _baseDateTime;
         private IDictionary<IPerson, IScheduleRange> _underlyingDictionary;
-	    private IList<IScheduleDay> _scheduleDays;
 			
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
