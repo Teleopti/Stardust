@@ -8,7 +8,6 @@ using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Exceptions;
 
 namespace Teleopti.Ccc.Rta.Server
@@ -83,10 +82,10 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		public RtaDataHandler(IActualAgentAssembler agentAssembler, IActualAgentStateCache stateCache)
+		public RtaDataHandler(IActualAgentAssembler agentAssembler, IActualAgentStateCache stateCache, IMessageSender messageSender)
 			: this(
 				LogManager.GetLogger(typeof(RtaDataHandler)),
-				MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
+				messageSender,
 				ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null)
 		{
 			_agentAssembler = agentAssembler;
