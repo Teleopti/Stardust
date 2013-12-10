@@ -11862,4 +11862,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Optimizing with block between days off and not keeping team days off together is not supported</value>
     <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
   </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Team to compare with</value>
+    <comment>Team to compare with</comment>
+  </data>
 </root>

@@ -31,6 +31,9 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentInfoControl));
+			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Hej : hej",
+            ""}, -1);
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
@@ -38,9 +41,6 @@
             "Hej : hej",
             ""}, -1);
 			System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Hej : hej",
-            ""}, -1);
-			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -64,15 +64,14 @@
 			this.tabPageFairness = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
-			this.agentGroupPageLabel = new Syncfusion.Windows.Forms.Tools.AutoLabel();
 			this.comboBoxAgentGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
 			this.perPersonAndGroupListView = new System.Windows.Forms.ListView();
 			this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.columnHeader13 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.timerRefresh = new System.Windows.Forms.Timer(this.components);
+			this.label1 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).BeginInit();
 			this.tabControlAgentInfo.SuspendLayout();
 			this.tabPageAdvSchedulePeriod.SuspendLayout();
@@ -134,9 +133,9 @@
 			this.listViewSchedulePeriod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewSchedulePeriod.FullRowSelect = true;
 			this.listViewSchedulePeriod.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem1.IndentCount = 25;
+			listViewItem5.IndentCount = 25;
 			this.listViewSchedulePeriod.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem5});
 			this.listViewSchedulePeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewSchedulePeriod.Name = "listViewSchedulePeriod";
 			this.listViewSchedulePeriod.Size = new System.Drawing.Size(453, 441);
@@ -177,9 +176,9 @@
 			this.listViewRestrictions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewRestrictions.FullRowSelect = true;
 			this.listViewRestrictions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem2.IndentCount = 25;
+			listViewItem1.IndentCount = 25;
 			this.listViewRestrictions.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
+            listViewItem1});
 			this.listViewRestrictions.Location = new System.Drawing.Point(0, 0);
 			this.listViewRestrictions.Name = "listViewRestrictions";
 			this.listViewRestrictions.Size = new System.Drawing.Size(453, 441);
@@ -219,9 +218,9 @@
 			this.listViewPersonPeriod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPersonPeriod.FullRowSelect = true;
 			this.listViewPersonPeriod.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem3.IndentCount = 25;
+			listViewItem2.IndentCount = 25;
 			this.listViewPersonPeriod.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3});
+            listViewItem2});
 			this.listViewPersonPeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewPersonPeriod.Name = "listViewPersonPeriod";
 			this.listViewPersonPeriod.Size = new System.Drawing.Size(453, 441);
@@ -261,9 +260,9 @@
 			this.listViewPerson.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPerson.FullRowSelect = true;
 			this.listViewPerson.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem4.IndentCount = 25;
+			listViewItem3.IndentCount = 25;
 			this.listViewPerson.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem4});
+            listViewItem3});
 			this.listViewPerson.Location = new System.Drawing.Point(0, 0);
 			this.listViewPerson.Name = "listViewPerson";
 			this.listViewPerson.Size = new System.Drawing.Size(453, 441);
@@ -315,10 +314,10 @@
 			// 
 			this.tableLayoutPanel2.BackColor = System.Drawing.Color.White;
 			this.tableLayoutPanel2.ColumnCount = 2;
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.30924F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 72.69077F));
-			this.tableLayoutPanel2.Controls.Add(this.agentGroupPageLabel, 0, 1);
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.Controls.Add(this.comboBoxAgentGrouping, 1, 1);
+			this.tableLayoutPanel2.Controls.Add(this.label1, 0, 1);
 			this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -328,24 +327,17 @@
 			this.tableLayoutPanel2.Size = new System.Drawing.Size(447, 31);
 			this.tableLayoutPanel2.TabIndex = 5;
 			// 
-			// agentGroupPageLabel
-			// 
-			this.agentGroupPageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.agentGroupPageLabel.Location = new System.Drawing.Point(61, 9);
-			this.agentGroupPageLabel.Name = "agentGroupPageLabel";
-			this.agentGroupPageLabel.Size = new System.Drawing.Size(0, 13);
-			this.agentGroupPageLabel.TabIndex = 0;
-			// 
 			// comboBoxAgentGrouping
 			// 
-			this.comboBoxAgentGrouping.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAgentGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+			this.comboBoxAgentGrouping.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.comboBoxAgentGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(125, 5);
+			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(203, 3);
 			this.comboBoxAgentGrouping.Name = "comboBoxAgentGrouping";
-			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 21);
+			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(241, 21);
 			this.comboBoxAgentGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAgentGrouping.TabIndex = 1;
+			this.comboBoxAgentGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentGrouping_SelectedIndexChanged);
 			// 
 			// perPersonAndGroupListView
 			// 
@@ -354,11 +346,10 @@
 			this.perPersonAndGroupListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader11,
             this.columnHeader12,
-            this.columnHeader13,
             this.columnHeader9,
             this.columnHeader10});
 			this.perPersonAndGroupListView.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.perPersonAndGroupListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+			this.perPersonAndGroupListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
 			this.perPersonAndGroupListView.Location = new System.Drawing.Point(3, 40);
 			this.perPersonAndGroupListView.Name = "perPersonAndGroupListView";
 			this.perPersonAndGroupListView.Size = new System.Drawing.Size(447, 398);
@@ -370,17 +361,12 @@
 			// columnHeader11
 			// 
 			this.columnHeader11.Text = "xxShiftCategory";
-			this.columnHeader11.Width = 200;
+			this.columnHeader11.Width = 167;
 			// 
 			// columnHeader12
 			// 
 			this.columnHeader12.Text = "xxAgent";
 			this.columnHeader12.Width = 100;
-			// 
-			// columnHeader13
-			// 
-			this.columnHeader13.Text = "xxOthers";
-			this.columnHeader13.Width = 100;
 			// 
 			// columnHeader9
 			// 
@@ -389,13 +375,24 @@
 			// 
 			// columnHeader10
 			// 
-			this.columnHeader10.Text = "xxOthers";
+			this.columnHeader10.Text = "xxAll";
 			this.columnHeader10.Width = 100;
 			// 
 			// timerRefresh
 			// 
 			this.timerRefresh.Interval = 20000;
 			this.timerRefresh.Tick += new System.EventHandler(this.timerRefreshTick);
+			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label1.Location = new System.Drawing.Point(3, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(194, 31);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "xxTeamToCompareWith";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// AgentInfoControl
 			// 
@@ -445,16 +442,15 @@
         private System.Windows.Forms.ColumnHeader columnHeader8;
         private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageFairness;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private Syncfusion.Windows.Forms.Tools.AutoLabel agentGroupPageLabel;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxAgentGrouping;
         private System.Windows.Forms.ListView perPersonAndGroupListView;
         private System.Windows.Forms.ColumnHeader columnHeader11;
-        private System.Windows.Forms.ColumnHeader columnHeader12;
-		private System.Windows.Forms.ColumnHeader columnHeader13;
+		private System.Windows.Forms.ColumnHeader columnHeader12;
 		private System.Windows.Forms.ColumnHeader columnHeader9;
 		private System.Windows.Forms.ColumnHeader columnHeader10;
 		private System.Windows.Forms.Timer timerRefresh;
+		private System.Windows.Forms.Label label1;
         
 	}
 }
