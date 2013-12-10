@@ -153,5 +153,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			throw new NotImplementedException();
 		}
+
+		public bool DoesPersonHaveExternalLogOn(DateOnly dateTime, Guid personId)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

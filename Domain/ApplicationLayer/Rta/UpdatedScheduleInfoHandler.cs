@@ -1,6 +1,8 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
@@ -11,17 +13,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 	{
 		private readonly ISendDelayedMessages _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IPersonRepository _personRepository;
         private readonly IGetUpdatedScheduleChangeFromTeleoptiRtaService _teleoptiRtaService;
         private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoHandler));
 
 		public UpdatedScheduleInfoHandler(
 			ISendDelayedMessages serviceBus, 
 			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
-			IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService)
+			IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService, 
+			IPersonRepository personRepository)
 		{
 			_serviceBus = serviceBus;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 	        _teleoptiRtaService = teleoptiRtaService;
+			_personRepository = personRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
@@ -30,6 +35,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Handle(PersonActivityStarting message)
 		{
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
+			
+			if (!doesPersonHaveExternalLogOn(message.PersonId)) return;
 			
 			try
 			{
@@ -65,6 +72,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public void Handle(ScheduleProjectionReadOnlyChanged message)
 		{
             Logger.Info("Start consuming ScheduleProjectionReadOnlyChanged message.");
+
+			if (!doesPersonHaveExternalLogOn(message.PersonId)) return;
 			
 			try
 			{
@@ -97,6 +106,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 						Timestamp = DateTime.UtcNow
 					});
 			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
+		}
+
+		private bool doesPersonHaveExternalLogOn(Guid personId)
+		{
+			if (!_personRepository.DoesPersonHaveExternalLogOn(DateOnly.Today, personId))
+			{
+				Logger.InfoFormat("Person: {0} is not connected to an External Log On, discarding mesage", personId);
+				return false;
+			}
+			return true;
 		}
 	}
 }

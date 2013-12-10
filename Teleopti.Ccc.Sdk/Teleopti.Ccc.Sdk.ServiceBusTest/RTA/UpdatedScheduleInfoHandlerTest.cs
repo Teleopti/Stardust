@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void IsPersonWithExternalLogOnConsumeSuccessfully()
+		public void IsPersonActivityStartingConsumeSuccessfully()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void IsUpdatedScheduleDayConsumeSuccessfully()
+		public void IsScheduleProjectionReadOnlyChangedConsumeSuccessfully()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void UpdatedScheduleDay_NoNextActivity_ShouldNotEnqueue()
+		public void ScheduleProjectionReadOnlyChanged_NoNextActivity_ShouldNotEnqueue()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void UpdatedScheduleDay_NextActivityBeforeScheduleChange_ShouldNotEnqueue()
+		public void ScheduleProjectionReadOnlyChanged_NextActivityBeforeScheduleChange_ShouldNotEnqueue()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void UpdatedScheduleDay_NextActivityAfterScheduleChange_ShouldEnqueue()
+		public void ScheduleProjectionReadOnlyChanged_NextActivityAfterScheduleChange_ShouldEnqueue()
 		{
 			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
@@ -283,14 +283,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void UpdatedScheduleDay_PersonDoesNotHaveExternalLogOn_ShouldDiscard()
+		public void ScheduleProjectionReadOnlyChanged_PersonDoesNotHaveExternalLogOn_ShouldDiscard()
 		{
 			teleoptiRtaService = MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
 			target = new UpdatedScheduleInfoHandler(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService, personRepository);
 			var personId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 
-			var updatedScheuldeDay = new UpdatedScheduleDay
+			var updatedScheuldeDay = new ScheduleProjectionReadOnlyChanged
 				{
 					ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 					ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -305,11 +305,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void UpdatedScheduleDay_PersonHaveExternalLogOn_ShouldSend()
+		public void ScheduleProjectionReadOnlyChanged_PersonHaveExternalLogOn_ShouldSend()
 		{
 			teleoptiRtaService = MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
 			target = new UpdatedScheduleInfoHandler(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService, personRepository);
-			var updatedScheuldeDay = new UpdatedScheduleDay
+			var updatedScheuldeDay = new ScheduleProjectionReadOnlyChanged
 			{
 				ActivityStartDateTime = DateTime.UtcNow.AddHours(1),
 				ActivityEndDateTime = DateTime.UtcNow.AddHours(8),
@@ -324,22 +324,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
-		public void PersonWithExternalLogOn_PersonDoesNotHaveExternalLogOn_ShouldDiscard()
+		public void PersonActivityStarting_PersonDoesNotHaveExternalLogOn_ShouldDiscard()
 		{
 			teleoptiRtaService = MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
 			target = new UpdatedScheduleInfoHandler(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService, personRepository);
 
-			var personWithExternalLogOn = new PersonWithExternalLogOn
+			var personActivityStarting = new PersonActivityStarting
 				{
 					PersonId = Guid.NewGuid(),
 					BusinessUnitId = Guid.Empty,
 					Timestamp = DateTime.UtcNow
 				};
 
-			personRepository.Stub(x => x.DoesPersonHaveExternalLogOn(DateOnly.Today, personWithExternalLogOn.PersonId))
+			personRepository.Stub(x => x.DoesPersonHaveExternalLogOn(DateOnly.Today, personActivityStarting.PersonId))
 							.Return(false);
 
-			target.Handle(personWithExternalLogOn);
+			target.Handle(personActivityStarting);
 			
 			teleoptiRtaService.AssertWasNotCalled(r => r.GetUpdatedScheduleChange(Guid.Empty, Guid.Empty, DateTime.UtcNow), a => a.IgnoreArguments());
 		}
