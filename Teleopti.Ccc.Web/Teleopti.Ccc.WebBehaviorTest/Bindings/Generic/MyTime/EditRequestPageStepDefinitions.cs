@@ -67,7 +67,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotBeAbleToInputValuesForTextRequestAtPositionInTheList(int position)
 		{
 			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".request:nth-child({0}) .request-edit-subject", position));
-			Browser.Interactions.AssertNotExists(string.Format(".request:nth-child({0}) .request-non-edit-message", position), string.Format(".request:nth-child({0}) .request-edit-message", position));
  
 			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-datefrom:not(:enabled)", position));
 			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-timefrom:not(:enabled)", position));
