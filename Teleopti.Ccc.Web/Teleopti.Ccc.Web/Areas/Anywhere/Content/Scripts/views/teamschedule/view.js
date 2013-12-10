@@ -32,16 +32,13 @@ define([
 	var teamSchedule;
 
 	var setSelectedLayer = function (shifts) {
-		var layers = lazy(shifts)
-			.map(function (x) { return x.Layers(); })
-			.flatten();
-		var layer = lazy(layers)
-			.select(function (x) {
-				if (x.StartTime() == currentState.SelectedLayer().StartTime()) {
-					return x;
-				}
-			});
-		var selectedLayer = layer.first();
+		var layers = lazy(shifts).map(function(x) { return x.Layers(); }).flatten();
+		var selectedStart = currentState.SelectedLayer().StartMinutes();
+		var selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
+		if (!selectedLayer) {
+			selectedStart += 1440;
+			selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
+		}
 		if (selectedLayer)
 			selectedLayer.Selected(true);
 	};
