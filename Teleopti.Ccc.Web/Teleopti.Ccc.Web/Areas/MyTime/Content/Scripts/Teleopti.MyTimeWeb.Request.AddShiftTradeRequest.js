@@ -37,7 +37,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.myTeamFilter = ko.observable(false);
 		self.timeLineStartTime = ko.observable();
 	    self.timeLineLengthInMinutes = ko.observable();
-		self.IsLastPage = false;
+	    self.IsLastPage = false;
+	    self.availableTeams = ko.observableArray();
+	    self.selectedTeam = ko.observable();
+	    self.noTeam = ko.observable();
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -137,8 +140,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 self.chooseAgent(null);
                 self.requestedDateInternal(value);
                 self.IsLoading(false);
-                // Ladda team för combo med datum
-                self.loadTeams();
+                
+                self.loadMyTeamId();
             }
         });
 
@@ -159,9 +162,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	        return true;
         };
         
-        self.loadTeams = function () {
+        self.loadMyTeamId = function () {
             ajax.Ajax({
-                url: "xxx/teams",
+                url: "Requests/ShiftTradeRequestMyTeam",
                 dataType: "json",
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
@@ -172,6 +175,34 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                     //self.IsLoading(true);
                 },
                 success: function (data, textStatus, jqXHR) {
+                    if (!data) {
+                        self.noTeam(true);
+                    }
+                    self.loadTeams();
+                },
+                error: function (e) {
+                    //console.log(e);
+                },
+                complete: function () {
+                    //self.IsLoading(false);
+                }
+            });
+        };
+	    
+        self.loadTeams = function () {
+            ajax.Ajax({
+                url: "Team/Teams",
+                dataType: "json",
+                type: 'GET',
+                contentType: 'application/json; charset=utf-8',
+                data: {
+                    date: self.requestedDateInternal().toDate().toJSON()
+                },
+                beforeSend: function () {
+                    //self.IsLoading(true);
+                },
+                success: function (data, textStatus, jqXHR) {
+                    self.availableTeams(data);
                     self.loadSchedule();
                 },
                 error: function (e) {

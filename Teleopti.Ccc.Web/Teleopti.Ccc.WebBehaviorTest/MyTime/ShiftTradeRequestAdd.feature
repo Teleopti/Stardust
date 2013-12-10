@@ -303,9 +303,18 @@ Scenario: Show my scheduled day off
 Scenario: Default to my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	When I view Add Shift Trade Request for date '2030-01-04'
+	And the current time is '2030-01-01'
+	When I view Add Shift Trade Request
 	Then The team picker should have 'The site/My team' selected
-	
+
+Scenario: Cannot trade shifts when teamless
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I...
+	And the current time is '2030-01-01'
+	When I view Add Shift Trade Request
+	Then I should see a message that I do not belong to a team
+
 Scenario: Show possible shift trades from my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

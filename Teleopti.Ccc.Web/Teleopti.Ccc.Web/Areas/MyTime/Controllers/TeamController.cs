@@ -15,11 +15,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		public JsonResult Teams(DateOnly? date)
+		public JsonResult TeamsAndOrGroupings(DateOnly? date)
 		{
 			if (!date.HasValue)
 				date = DateOnly.Today;
 			return Json(_teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		public JsonResult Teams(DateOnly? date)	
+		{
+			if (!date.HasValue)
+				date = DateOnly.Today;
+			return Json(_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
