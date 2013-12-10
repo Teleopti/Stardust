@@ -758,27 +758,3 @@ SELECT
 FROM #AccessibilityDaysOfWeek
 drop table #AccessibilityDaysOfWeek
 GO
-
-----------------  
---Name: David Jonsson
---Date: 2013-12-10
---Desc: Bug #26202 - ETL fails due to duplicated rows in readmodel
----------------- 
---remove potential duplicates
-delete from a
-from
-(select PersonId,BelongsToDate
-       ,ROW_NUMBER() over (partition by  PersonId,BelongsToDate
-                           order by InsertedOn desc) RowNumber --keep last updated
-from readmodel.ScheduleDay) as a
-where a.RowNumber > 1
-go
-
---make CIX_ScheduleDayReadOnly UNIQUE
-CREATE UNIQUE CLUSTERED INDEX [CIX_ScheduleDayReadOnly] ON [ReadModel].[ScheduleDay]
-(
-	[PersonId] ASC,
-	[BelongsToDate] ASC
-)
-WITH DROP_EXISTING
-GO
