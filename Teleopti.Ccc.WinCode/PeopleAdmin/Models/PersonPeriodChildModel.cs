@@ -252,11 +252,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             {
                 if (ContainedEntity != null)
                 {
-                    ContainedEntity.ResetExternalLogOn();
+						 Parent.ResetExternalLogOn(ContainedEntity);
                     var selectedExternalLogOns = _externalLogOnParser.ParsePersonExternalLogOn(value);
                     foreach (var selectedExternalLogOn in selectedExternalLogOns)
                     {
-                        ContainedEntity.AddExternalLogOn(selectedExternalLogOn);
+                        Parent.AddExternalLogOn(selectedExternalLogOn,ContainedEntity);
                     }
                 }
             }

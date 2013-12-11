@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-	public class PersonPeriod : AggregateEntity, IPersonPeriod, IPersonPeriodModifySkills
+	public class PersonPeriod : AggregateEntity, IPersonPeriod, IPersonPeriodModifySkills, IPersonPeriodModifyExternalLogon
 	{
 		private IPersonContract _personContract;
 		private ITeam _team;
