@@ -102,13 +102,12 @@ define([
 
 		this.StartTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.StartMinutes());
-			return time.format(resources.FixedTimeFormat);
+			return time.format(resources.TimeFormatForMoment);
 		});
 
 		this.EndTime = ko.computed(function () {
-		    var time = moment().startOf('day').add('minutes', self.EndMinutes());
-		    return time.format(resources.FixedTimeFormat);
+			var time = moment().startOf('day').add('minutes', self.EndMinutes());
+			return time.format(resources.TimeFormatForMoment);
 		});
-
 	};
 });

@@ -52,7 +52,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			if (startTime.StartsWith("00:00"))
 				Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer:first-child", name));
 			else
-				Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer[data-start-time~='{1}']", name, startTime));
+			{
+				var formatedTime = DateTime.Parse(startTime).ToString(DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern);
+				Browser.Interactions.ClickUsingJQuery(string.Format(".person:contains('{0}') .shift .layer[data-start-time~='{1}']", name, formatedTime));
+			}
 		}
 
 		[When(@"I select any schedule activity for '(.*)'")]
@@ -68,8 +71,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var scheduleActivity = table.CreateInstance<ScheduleActivityInfo>();
 			const string selector = ".person:contains('{0}') ~ tr .activity-details:contains('{1}')";
 			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.Name);
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.StartTime);
-			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.EndTime);
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.StartTimeFormatted());
+			Browser.Interactions.AssertExistsUsingJQuery(selector, name, scheduleActivity.EndTimeFormatted());
 			if(!string.IsNullOrEmpty(scheduleActivity.TextColor))
 				Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') ~ tr .activity-details span[style*='color: {1}']", name, colorNameToCss(scheduleActivity.TextColor));
 		}
@@ -385,6 +388,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
 		public string TextColor { get; set; }
+
+		public string StartTimeFormatted()
+		{
+			var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+			return DateTime.Parse(StartTime).ToString(format);
+		}
+
+		public string EndTimeFormatted()
+		{
+			var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+			return DateTime.Parse(EndTime).ToString(format);
+		}
 	}
 
 	public class ScheduleShiftInfo

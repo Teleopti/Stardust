@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		private static void assertScheduledActivity(ScheduledActivityInfo scheduledActivity)
 		{
 			var selector = string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-			                             scheduledActivity.StartTime,
+			                             scheduledActivity.StartTimeFormatted(),
 			                             scheduledActivity.LengthMinutes(),
 			                             ColorNameToCss(scheduledActivity.Color));
 
@@ -258,6 +258,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				var result = (int) TimeSpan.Parse(EndTime).Subtract(TimeSpan.Parse(StartTime)).TotalMinutes;
 				if (result < 0) result += 60*24;
 				return result;
+			}
+
+			public string StartTimeFormatted()
+			{
+				var format =  DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+				return DateTime.Parse(StartTime).ToString(format);
+			}
+
+			public string EndTimeFormatted()
+			{
+				var format = DataMaker.Me().Culture.DateTimeFormat.ShortTimePattern;
+				return DateTime.Parse(EndTime).ToString(format);
 			}
 		}
 
