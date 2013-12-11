@@ -21,11 +21,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	{
 		private IUserTimeZone _userTimeZone;
 		private INow _now;
+		private TimeZoneInfo _hawaiiTimeZoneInfo;
 
 		[SetUp]
 		public void Setup()
 		{
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
+			_hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			_userTimeZone.Stub(x => x.TimeZone()).Return(_hawaiiTimeZoneInfo);
 			_now = MockRepository.GenerateMock<INow>();
 			_now.Stub(x => x.UtcDateTime()).Return(DateTime.UtcNow);
 			Mapper.Reset();
@@ -85,10 +88,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapDefaultIntradayAbsenceTimesInUserTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
-			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			_userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
 			var startTime = new DateTime(2013, 3, 4, 13, 20, 0, DateTimeKind.Utc);
-			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2013, 3, 4, 13, 20, 0, DateTimeKind.Utc), hawaiiTimeZoneInfo);
+			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(new DateTime(2013, 3, 4, 13, 20, 0, DateTimeKind.Utc), _hawaiiTimeZoneInfo);
 			var shift = new Shift { Projection = new[] { new SimpleLayer { Start = startTime } } };
 
 			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift }});
@@ -106,13 +107,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapDefaultIntradayAbsenceTimesInUserTimeZoneForToday()
 		{
 			var target = new PersonScheduleViewModelMapper();
-			var hawaiiTimeZoneInfo = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			_userTimeZone.Stub(x => x.TimeZone()).Return(hawaiiTimeZoneInfo);
 			var now = _now.UtcDateTime();
 			var startTime = now.AddHours(-3);
 			var endTime = startTime.AddHours(8);
-			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(roundUp(now, TimeSpan.FromMinutes(15)), hawaiiTimeZoneInfo);
-			var expectedEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, hawaiiTimeZoneInfo);
+			var expectedStartTime = TimeZoneInfo.ConvertTimeFromUtc(roundUp(now, TimeSpan.FromMinutes(15)), _hawaiiTimeZoneInfo);
+			var expectedEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, _hawaiiTimeZoneInfo);
 			var shift = new Shift { Projection = new[] { new SimpleLayer { Start = startTime, End = endTime} } };
 
 			var result = target.Map(new PersonScheduleData { Model = new Model { Shift = shift } });
@@ -330,19 +329,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 
 		[Test]
-		public void ShouldMapLayerStartTimeInPersonsTimeZone()
+		public void ShouldMapLayerStartTimeInUsersTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
 			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
 
 			var person = new Person();
-			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
 			var shift = new Shift {Projection = new[] {new SimpleLayer {Start = startTime}}};
 
 			var result = target.Map(new PersonScheduleData {Model = new Model{Shift = shift}, Person = person});
 
-			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, _hawaiiTimeZoneInfo).ToFixedDateTimeFormat();
 			result.Layers.Single().Start.Should().Be(personStartTime);
 		}
 
@@ -476,7 +473,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapPersonAbsenceStartTimeInPersonsTimeZone()
+		public void ShouldMapPersonAbsenceStartTimeInUsersTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
 
@@ -485,20 +482,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(startTime, endTime));
 
 			var person = new Person();
-			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
-
 			var personAbsences = new[] {new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer)};
 
 			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
 
-			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, _hawaiiTimeZoneInfo).ToFixedDateTimeFormat();
 
 			result.PersonAbsences.Single().StartTime.Should().Be(personStartTime);
 		}
 
 		[Test]
-		public void ShouldMapPersonAbsenceEndTimeInPersonsTimeZone()
+		public void ShouldMapPersonAbsenceEndTimeInUsersTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
 
@@ -507,14 +501,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(startTime, endTime));
 
 			var person = new Person();
-			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
-			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
 
 			var personAbsences = new[] { new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer) };
 			
 			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
 
-			var personEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
+			var personEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, _hawaiiTimeZoneInfo).ToFixedDateTimeFormat();
 
 			result.PersonAbsences.Single().EndTime.Should().Be(personEndTime);
 		}
