@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.PageSize));
-			_page.LastRequest.ScrollIntoView();
+			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
 		}
 
 		[Then(@"I should see a requests list")]
