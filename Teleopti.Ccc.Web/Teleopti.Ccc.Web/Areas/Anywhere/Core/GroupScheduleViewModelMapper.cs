@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var published = new PublishedScheduleSpecification(data.CanSeePersons, data.Date);
 			return (from s in data.Schedules
-			        where
-				        data.CanSeeUnpublishedSchedules ||
-				        published.IsSatisfiedBy(s)
-			        let model = JsonConvert.DeserializeObject<Model>(s.Model ?? "{}")
-					let shift = model.Shift ?? new Shift()
-					let canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
-					let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
-					select makeViewModel(s, model, shift, layers, data.UserTimeZone))
+				where
+					data.CanSeeUnpublishedSchedules ||
+					published.IsSatisfiedBy(s)
+				let model = JsonConvert.DeserializeObject<Model>(s.Model ?? "{}")
+				let shift = model.Shift ?? new Shift()
+				let canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
+				let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
+				select makeViewModel(s, model, shift, layers, data.UserTimeZone))
 				.ToArray();
 		}
 
@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				{
 					ContractTimeMinutes = shift.ContractTimeMinutes,
 					PersonId = readModel.PersonId.ToString(),
+					Name = model.FirstName + " " + model.LastName,
 					Projection = layers,
 					IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
 					DayOff = dayOff
@@ -46,20 +47,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		private static IEnumerable<GroupScheduleLayerViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
 		{
-			var layers = shift.Projection ?? new SimpleLayer[] {};
+			var layers = shift.Projection ?? new SimpleLayer[] { };
 			return (
 					   from l in layers
 					   let canSeeLayerInfo = CanSeeLayerInfo(canSeeConfidentialAbsence, l)
 					   let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColorHex
 					   let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
 					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
-				       select new GroupScheduleLayerViewModel
-					       {
-						       Color = color,
+					   select new GroupScheduleLayerViewModel
+						   {
+							   Color = color,
 							   Description = description,
 							   Start = start.ToFixedDateTimeFormat(),
-						       Minutes = l.Minutes
-					       })
+							   Minutes = l.Minutes
+						   })
 				.ToArray();
 		}
 

@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
@@ -121,6 +122,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(data);
 
 			result.Single().IsFullDayAbsence.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapPersonName()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			person.Name = new Name("f", "l");
+			var target = new GroupScheduleViewModelMapper();
+
+			var data = new GroupScheduleData
+				{
+					CanSeePersons = new[] {person},
+					CanSeeConfidentialAbsencesFor = new[] {person},
+					Schedules = new[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									Model = JsonConvert.SerializeObject(new Model
+										{
+											FirstName = person.Name.FirstName,
+											LastName = person.Name.LastName
+										})
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().Name.Should().Be(person.Name.ToString());
 		}
 	}
 }
