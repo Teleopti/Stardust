@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	[TestFixture]
 	public class GroupScheduleViewModelMapperTest
 	{
-
 		[Test]
 		public void ShouldMapLayerStartTimeToMyTimeZone()
 		{
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				{
 					UserTimeZone = timeZone,
 					CanSeePersons = new[] { person },
-					CanSeeConfidentialAbsencesFor = new[] { person },
 					Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
@@ -33,16 +31,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 									PersonId = person.Id.Value,
 									Model = JsonConvert.SerializeObject(new Model
 										{
-											Shift =	new Shift
-											{
-											Projection = new[]
+											Shift = new Shift
 												{
-													new SimpleLayer
+													Projection = new[]
 														{
-															Start = startTime
+															new SimpleLayer
+																{
+																	Start = startTime
+																}
 														}
 												}
-											}
 										})
 								}
 						}
@@ -67,11 +65,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			{
 				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
-				CanSeeConfidentialAbsencesFor = new[] { person },
 				Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
+									PersonId = person.Id.Value,
 									Model = JsonConvert.SerializeObject(new Model
 										{
 											DayOff = new DayOff
@@ -103,11 +101,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var data = new GroupScheduleData
 				{
 					CanSeePersons = new[] { person },
-					CanSeeConfidentialAbsencesFor = new[] { person },
 					Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
+									PersonId = person.Id.Value,
 									Model = JsonConvert.SerializeObject(new Model
 										{
 											Shift = new Shift
@@ -133,12 +131,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var data = new GroupScheduleData
 				{
-					CanSeePersons = new[] {person},
-					CanSeeConfidentialAbsencesFor = new[] {person},
+					CanSeePersons = new[] { person },
 					Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
+									PersonId = person.Id.Value,
 									Model = JsonConvert.SerializeObject(new Model
 										{
 											FirstName = person.Name.FirstName,
@@ -151,6 +149,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(data);
 
 			result.Single().Name.Should().Be(person.Name.ToString());
+		}
+
+		[Test]
+		public void ShouldOnlyMapPermittedPersons()
+		{
+			var personPermitted = PersonFactory.CreatePersonWithId();
+			var personNotPermitted = PersonFactory.CreatePersonWithId();
+			var target = new GroupScheduleViewModelMapper();
+
+			var data = new GroupScheduleData
+				{
+					CanSeePersons = new[] { personPermitted },
+					Schedules = new[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									PersonId = personPermitted.Id.Value
+								},
+							new PersonScheduleDayReadModel
+								{
+									PersonId = personNotPermitted.Id.Value
+								}
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().PersonId.Should().Be(personPermitted.Id.Value.ToString());
 		}
 	}
 }

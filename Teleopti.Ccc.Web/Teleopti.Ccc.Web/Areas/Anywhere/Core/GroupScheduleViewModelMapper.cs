@@ -4,6 +4,7 @@ using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -11,16 +12,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public IEnumerable<GroupScheduleShiftViewModel> Map(GroupScheduleData data)
 		{
-			var published = new PublishedScheduleSpecification(data.CanSeePersons, data.Date);
+			var canSeePersons = data.CanSeePersons.ToArray();
+			var canSeeConfidentialAbsencesFor = data.CanSeeConfidentialAbsencesFor ?? new IPerson[] { };
+			var published = new PublishedScheduleSpecification(canSeePersons, data.Date);
 			return (from s in data.Schedules
-				where
-					data.CanSeeUnpublishedSchedules ||
-					published.IsSatisfiedBy(s)
-				let model = JsonConvert.DeserializeObject<Model>(s.Model ?? "{}")
-				let shift = model.Shift ?? new Shift()
-				let canSeeConfidentialAbsence = data.CanSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
-				let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
-				select makeViewModel(s, model, shift, layers, data.UserTimeZone))
+			        where canSeePersons.Any(p => p.Id.Equals(s.PersonId))
+			        where data.CanSeeUnpublishedSchedules || published.IsSatisfiedBy(s)
+			        let model = JsonConvert.DeserializeObject<Model>(s.Model ?? "{}")
+			        let shift = model.Shift ?? new Shift()
+			        let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
+			        let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
+			        select makeViewModel(s, model, shift, layers, data.UserTimeZone))
 				.ToArray();
 		}
 
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					{
 						DayOffName = model.DayOff.Title,
 						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
-						Minutes = (int) model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
+						Minutes = (int)model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
 					};
 			return new GroupScheduleShiftViewModel
 				{
