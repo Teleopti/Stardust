@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
 			var data = new[] { new TeamScheduleShiftViewModel { PersonId = Guid.NewGuid().ToString() } };
 			teamScheduleProvider.Stub(x => x.CreateViewModel(teamId, dateTime)).Return(data);
-			var target = new TeamScheduleHub(teamScheduleProvider);
+			var target = new GroupScheduleHub(teamScheduleProvider);
 			var hubBuilder = new TestHubBuilder();
 			IEnumerable<dynamic> actual = null;
-			hubBuilder.SetupHub(target, hubBuilder.FakeClient<IEnumerable<dynamic>>("incomingTeamSchedule", a => { actual = a; }));
+			hubBuilder.SetupHub(target, hubBuilder.FakeClient<IEnumerable<dynamic>>("incomingGroupSchedule", a => { actual = a; }));
 
-			target.SubscribeTeamSchedule(teamId, dateTime);
+			target.SubscribeGroupSchedule(teamId, dateTime);
 
 			Assert.That(actual.Single().PersonId, Is.EqualTo(data.First().PersonId));
 		}

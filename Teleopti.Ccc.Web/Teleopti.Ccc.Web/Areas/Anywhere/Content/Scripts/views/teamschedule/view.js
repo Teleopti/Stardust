@@ -44,7 +44,7 @@ define([
 	};
 
 	var loadSchedules = function (options) {
-		subscriptions.subscribeTeamSchedule(
+		subscriptions.subscribeGroupSchedule(
 			teamSchedule.SelectedGroup(),
 			helpers.Date.ToServer(teamSchedule.SelectedDate()),
 			function (schedules) {
@@ -269,7 +269,7 @@ define([
 		},
 
 		dispose: function (options) {
-			subscriptions.unsubscribeTeamSchedule();
+			subscriptions.unsubscribeGroupSchedule();
 			subscriptions.unsubscribeDailyStaffingMetrics();
 			$(".datepicker.dropdown-menu").remove();
 		},

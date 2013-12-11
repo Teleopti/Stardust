@@ -25,7 +25,7 @@ define([
 
 	var loadSchedules = function (options) {
 		var date = moment(options.date, "YYYYMMDD");
-		subscriptions.subscribeTeamSchedule(
+		subscriptions.subscribeGroupSchedule(
 			options.groupid,
 			helpers.Date.ToServer(date),
 			function (schedules) {

@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveAnywhereTeamScheduleHub()
 		{
-			requestContainer.Resolve<TeamScheduleHub>()
+			requestContainer.Resolve<GroupScheduleHub>()
 				.Should().Not.Be.Null();
 		}
 

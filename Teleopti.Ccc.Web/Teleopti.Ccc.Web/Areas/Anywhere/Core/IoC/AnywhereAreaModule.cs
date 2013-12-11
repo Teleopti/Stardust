@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			// TODO: Replace with RegisterHubs when upgrading Autofac
-			builder.RegisterType<TeamScheduleHub>().EnableClassInterceptors();
+			builder.RegisterType<GroupScheduleHub>().EnableClassInterceptors();
 			builder.RegisterType<PersonScheduleHub>().EnableClassInterceptors();
 
 			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
