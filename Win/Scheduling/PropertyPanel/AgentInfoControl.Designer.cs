@@ -31,9 +31,6 @@
 		{
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AgentInfoControl));
-			System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
-            "Hej : hej",
-            ""}, -1);
 			System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
@@ -41,6 +38,9 @@
             "Hej : hej",
             ""}, -1);
 			System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            "Hej : hej",
+            ""}, -1);
+			System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
             "Hej : hej",
             ""}, -1);
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
@@ -65,13 +65,13 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.comboBoxAgentGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+			this.label1 = new System.Windows.Forms.Label();
 			this.perPersonAndGroupListView = new System.Windows.Forms.ListView();
 			this.columnHeader11 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader12 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader10 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.timerRefresh = new System.Windows.Forms.Timer(this.components);
-			this.label1 = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).BeginInit();
 			this.tabControlAgentInfo.SuspendLayout();
 			this.tabPageAdvSchedulePeriod.SuspendLayout();
@@ -133,9 +133,9 @@
 			this.listViewSchedulePeriod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewSchedulePeriod.FullRowSelect = true;
 			this.listViewSchedulePeriod.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem5.IndentCount = 25;
+			listViewItem1.IndentCount = 25;
 			this.listViewSchedulePeriod.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem5});
+            listViewItem1});
 			this.listViewSchedulePeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewSchedulePeriod.Name = "listViewSchedulePeriod";
 			this.listViewSchedulePeriod.Size = new System.Drawing.Size(453, 441);
@@ -176,9 +176,9 @@
 			this.listViewRestrictions.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewRestrictions.FullRowSelect = true;
 			this.listViewRestrictions.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem1.IndentCount = 25;
+			listViewItem2.IndentCount = 25;
 			this.listViewRestrictions.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem2});
 			this.listViewRestrictions.Location = new System.Drawing.Point(0, 0);
 			this.listViewRestrictions.Name = "listViewRestrictions";
 			this.listViewRestrictions.Size = new System.Drawing.Size(453, 441);
@@ -218,9 +218,9 @@
 			this.listViewPersonPeriod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPersonPeriod.FullRowSelect = true;
 			this.listViewPersonPeriod.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem2.IndentCount = 25;
+			listViewItem3.IndentCount = 25;
 			this.listViewPersonPeriod.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
+            listViewItem3});
 			this.listViewPersonPeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewPersonPeriod.Name = "listViewPersonPeriod";
 			this.listViewPersonPeriod.Size = new System.Drawing.Size(453, 441);
@@ -260,9 +260,9 @@
 			this.listViewPerson.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewPerson.FullRowSelect = true;
 			this.listViewPerson.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-			listViewItem3.IndentCount = 25;
+			listViewItem4.IndentCount = 25;
 			this.listViewPerson.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3});
+            listViewItem4});
 			this.listViewPerson.Location = new System.Drawing.Point(0, 0);
 			this.listViewPerson.Name = "listViewPerson";
 			this.listViewPerson.Size = new System.Drawing.Size(453, 441);
@@ -339,6 +339,17 @@
 			this.comboBoxAgentGrouping.TabIndex = 1;
 			this.comboBoxAgentGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentGrouping_SelectedIndexChanged);
 			// 
+			// label1
+			// 
+			this.label1.AutoSize = true;
+			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.label1.Location = new System.Drawing.Point(3, 0);
+			this.label1.Name = "label1";
+			this.label1.Size = new System.Drawing.Size(194, 31);
+			this.label1.TabIndex = 2;
+			this.label1.Text = "xxTeamToCompareWith";
+			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
 			// perPersonAndGroupListView
 			// 
 			this.perPersonAndGroupListView.BackColor = System.Drawing.Color.White;
@@ -366,33 +377,22 @@
 			// columnHeader12
 			// 
 			this.columnHeader12.Text = "xxAgent";
-			this.columnHeader12.Width = 100;
+			this.columnHeader12.Width = 90;
 			// 
 			// columnHeader9
 			// 
 			this.columnHeader9.Text = "xxTeam";
-			this.columnHeader9.Width = 100;
+			this.columnHeader9.Width = 90;
 			// 
 			// columnHeader10
 			// 
 			this.columnHeader10.Text = "xxAll";
-			this.columnHeader10.Width = 100;
+			this.columnHeader10.Width = 90;
 			// 
 			// timerRefresh
 			// 
 			this.timerRefresh.Interval = 20000;
 			this.timerRefresh.Tick += new System.EventHandler(this.timerRefreshTick);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.Location = new System.Drawing.Point(3, 0);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(194, 31);
-			this.label1.TabIndex = 2;
-			this.label1.Text = "xxTeamToCompareWith";
-			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// AgentInfoControl
 			// 
