@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         }));
 
                 var personSkillPeriodDtos = _personSkillPeriodAssembler.DomainEntityToDto(lastPersonPeriod);
-                resetExternalLogOns(command.ExternalLogOn ?? externalLogOnDtos, newPersonPeriod);
+                resetExternalLogOns(command.ExternalLogOn ?? externalLogOnDtos, newPersonPeriod, person);
                 resetPersonSkills(command.PersonSkillPeriodCollection ??
                                   new List<PersonSkillPeriodDto> {personSkillPeriodDtos}, person, newPersonPeriod);
 
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     throw new FaultException(
                         "There is no person period existed before, you have to specify both person contract and team.");
                 newPersonPeriod = createPersonPeriod(command);
-                if (command.ExternalLogOn != null) resetExternalLogOns(command.ExternalLogOn, newPersonPeriod);
+                if (command.ExternalLogOn != null) resetExternalLogOns(command.ExternalLogOn, newPersonPeriod, person);
                 if (command.PersonSkillPeriodCollection != null)
                     resetPersonSkills(command.PersonSkillPeriodCollection, person, newPersonPeriod);
                 if (!string.IsNullOrEmpty(command.Note)) newPersonPeriod.Note = command.Note;
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
             if (command.ExternalLogOn != null)
             {
-                resetExternalLogOns(command.ExternalLogOn, existPersonPeriod);
+                resetExternalLogOns(command.ExternalLogOn, existPersonPeriod, person);
             }
             if (command.PersonSkillPeriodCollection != null)
             {
@@ -190,9 +190,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
         }
 
-        private void resetExternalLogOns(IEnumerable<ExternalLogOnDto> externalLogOnDtos, IPersonPeriod personPeriod)
+        private void resetExternalLogOns(IEnumerable<ExternalLogOnDto> externalLogOnDtos, IPersonPeriod personPeriod, IPerson person)
         {
-            personPeriod.ResetExternalLogOn();
+			  person.ResetExternalLogOn(personPeriod);
             var externalLogOns = _externalLogOnRepository.LoadAllExternalLogOns();
             var filteredExternalLogOns = new List<IExternalLogOn>();
             externalLogOns.ForEach(e =>
@@ -203,8 +203,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                                                edto.AcdLogOnOriginalId.Equals(e.AcdLogOnOriginalId)))
                                                filteredExternalLogOns.Add(e);
                                        });
-
-            filteredExternalLogOns.ForEach(personPeriod.AddExternalLogOn);
+	        foreach (var filteredExternalLogOn in filteredExternalLogOns)
+	        {
+		        person.AddExternalLogOn(filteredExternalLogOn,personPeriod);
+	        }
         }
 
 		private static void checkIfAuthorized(IPerson person)
