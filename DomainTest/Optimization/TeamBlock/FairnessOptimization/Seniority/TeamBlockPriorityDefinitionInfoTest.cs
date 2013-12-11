@@ -85,5 +85,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Assert.AreEqual(3, result);
 			}
 		}
+
+		[Test]
+		public void ShouldSetShiftCategoryPriority()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockInfoPriority1.TeamBlockInfo).Return(_teamBlockInfo1);
+				Expect.Call(() => _teamBlockInfoPriority1.ShiftCategoryPriority = 2);
+			}
+
+			using (_mock.Playback())
+			{
+				_target.SetShiftCategoryPoint(_teamBlockInfo1, 2);
+			}
+		}
 	}
 }
