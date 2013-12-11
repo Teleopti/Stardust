@@ -65,6 +65,13 @@ Some programs will require a Re-boot, go along when you are promted to avoid "a 
 Some program have some additional notes below:
 
 -----------------
+Install and Configure Chrome
+-----------------
+Install it
+Configure it to be fast in integration tests by:
+Start->"Internet Options"->Connections->LAN Settings->Automatically detect settings->*uncheck*
+
+-----------------
 SQL Server configure remote access
 -----------------
 Run the automated .bat file
