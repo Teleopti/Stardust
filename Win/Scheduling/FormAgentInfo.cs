@@ -309,6 +309,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 createAndAddItem(listViewRestrictions, personAbsenceAccount.Absence.Description.Name, personAbsenceAccount.Absence.Tracker.Description.Name, 1);
                 foreach (var account in personAbsenceAccount.AccountCollection())
                 {
+						 if (account.StartDate > person.TerminalDate) continue;
                     if (account.GetType() == typeof(AccountDay))
                         updateDayAccount(account);
                     else
