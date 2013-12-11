@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIScrollDownToTheBottomOfThePage()
 		{
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
-			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.PageSize));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.PageSize-1));
 			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
 		}
 
 		[Then(@"I should see a requests list")]
 		public void ThenIShouldSeeARequestsList()
 		{
-			EventualAssert.That(() => _page.RequestListItems.Count(r=>r.IsDisplayed()) > 0, Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(".request");
 		}
 
 		[Then(@"I should see my existing text request")]
@@ -59,32 +59,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see a shift trade request in the list with subject '(.*)'")]
 		public void ThenIShouldSeeAShiftTradeRequestInTheListWithSubject(string subject)
 		{
-			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
+			Browser.Interactions.AssertExists(".request");
+			Browser.Interactions.AssertFirstContains(".request-data-subject",subject);
 		}
 
 
 		[Then(@"I should see my existing absence request")]
 		public void ThenIShouldSeeMyExistingAbsenceRequest()
 		{
-			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(DataMaker.Data().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			Browser.Interactions.AssertExists(".request");
+			Browser.Interactions.AssertFirstContains(".request-data-subject", DataMaker.Data().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting()));
 		}
 
 
 		[Then(@"I should see my existing shift trade request with subject '(.*)'")]
 		public void ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(string subject)
 		{
-			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
+			Browser.Interactions.AssertExists(".request");
+			Browser.Interactions.AssertFirstContains(".request-details", subject);
 		}
-
-		[Then(@"I should not see any request")]
-		public void ThenIShouldNotSeeAnyRequest()
-		{
-			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(0));
-		}
-
 
 		[Then(@"I should see my existing shift trade request with status waiting for other part")]
 		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForOtherPart()
@@ -101,68 +94,65 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should be able to see requests link")]
 		public void ThenIShouldBeAbleToSeeRequestsLink()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.RequestsLink.Exists, Is.True);
+			Browser.Interactions.AssertExistsUsingJQuery("a[href='#RequestsTab']");
 		}
 
 		[Then(@"I should not be able to see requests link")]
 		public void ThenIShouldNotBeAbleToSeeRequestsLink()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			EventualAssert.That(() => page.Menu.Exists, Is.True);
-			EventualAssert.That(() => page.RequestsLink.Exists, Is.False);
+			Browser.Interactions.AssertNotExistsUsingJQuery(".bdd-mytime-top-menu", "a[href='#RequestsTab']");
 		}
 
 		[Then(@"I should only see one page of requests")]
 		public void ThenIShouldOnlySeeOnePageOfRequests()
 		{
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
-			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.PageSize));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.PageSize - 1));
 		}
 
 		[Then(@"I should see the page fill with the next page of requests")]
 		public void ThenIShouldSeeThePageFillWithTheNextPageOfRequests()
 		{
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
-			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.RequestCount));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.RequestCount - 1));
 		}
 
 		[Then(@"I should see that the list is sorted on changed date and time")]
 		public void ThenIShouldSeeThatTheListIsSortedOnChangedDateAndTime()
 		{
 			var data = DataMaker.Data().UserData<TwoExistingTextRequestChangedOnDifferentTimes>();
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(data.PersonRequest2.GetSubject(new NoFormatting())));
-			EventualAssert.That(() => _page.LastRequest.InnerHtml, Is.StringContaining(data.PersonRequest1.GetSubject(new NoFormatting())));
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".request-subject:first", data.PersonRequest2.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".request-subject:last", data.PersonRequest1.GetSubject(new NoFormatting()));
 		}
 
 		[Then(@"I should see a user-friendly message explaining that no requests exists")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingThatNoRequestsExists()
 		{
-			EventualAssert.That(()=>_page.NoRequestsFound.IsDisplayed(),Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery("#Requests-no-requests-found");
 		}
 
 		[Then(@"I should see an indication that there are more requests")]
 		public void ThenIShouldSeeAnIndicationThatThereAreMoreRequests()
 		{
-			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(".arrow-down");
 		}
 
 		[Then(@"I should not see an indication that there are more requests")]
 		public void ThenIShouldNotSeeAnIndicationThatThereAreMoreRequests()
 		{
-			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.False);
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".arrow-down");
 		}
 
 		[When(@"I click the Approve button on the shift request")]
 		public void WhenIClickTheApproveButtonOnTheShiftRequest()
 		{
-			_page.ApproveShiftTradeButton.EventualClick();
+			Browser.Interactions.Click("#Approve-shift-trade");
 		}
 
 		[Then(@"I should not see the approve button")]
-		public void WhenIShouldNotSeeTheApproveButton()
+		public void ThenIShouldNotSeeTheApproveButton()
 		{
-			EventualAssert.That(()=>_page.ApproveShiftTradeButton.IsDisplayed(),Is.False);
+			Browser.Interactions.AssertVisibleUsingJQuery("#Approve-shift-trade");
 		}
 
 		[Then(@"I should not see the deny button")]
@@ -209,9 +199,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"I should not see any requests")]
+		[Then(@"I should not see any request")]
 		public void ThenIShouldNotSeeAnyRequests()
 		{
-			EventualAssert.That(()=>_page.Requests,Is.Empty);
+			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".request");
 		}
 
 		[Then(@"I should see that request at position '(.*)' is processing")]
