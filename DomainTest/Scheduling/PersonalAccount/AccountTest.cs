@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -81,6 +82,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.PersonalAccount
             var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 1).AddDays(3600));
             Assert.AreEqual(period, acc.Period());
         }
+
+		  [Test]
+		  public void ShouldHaveTerminalDateAsEndDateIfInPeriod()
+		  {
+			  var person = MockRepository.GenerateMock<IPerson>();
+			  var owner = new PersonAbsenceAccount(person, new Absence());
+			  var acc = new AccountTime(new DateOnly(2013, 12, 1));
+			  owner.Add(acc);
+
+			  person.Stub(p => p.TerminalDate).Return(new DateOnly(2013, 12, 18));
+
+			  Assert.That(acc.Period().EndDate, Is.EqualTo(new DateOnly(2013, 12, 18)));
+		  }
     }
 
 }
