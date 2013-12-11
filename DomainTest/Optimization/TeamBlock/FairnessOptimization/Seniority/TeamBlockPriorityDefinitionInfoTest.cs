@@ -34,16 +34,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockInfoPriority1.TeamBlockInfo).Return(_teamBlockInfo1);
+				Expect.Call(_teamBlockInfoPriority2.TeamBlockInfo).Return(_teamBlockInfo2);
 				Expect.Call(_teamBlockInfoPriority1.Seniority).Return(1.3d).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockInfoPriority2.Seniority).Return(1.7d).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.HighToLowSeniorityList.ToList();
+				var result = _target.HighToLowSeniorityListBlockInfo;
 				Assert.AreEqual(2, result.Count());
-				Assert.AreEqual(_teamBlockInfoPriority1.Seniority, result[1]);
-				Assert.AreEqual(_teamBlockInfoPriority2.Seniority, result[0]);
+				Assert.AreEqual(_teamBlockInfo1, result[1]);
+				Assert.AreEqual(_teamBlockInfo2, result[0]);
 			}
 		}
 
@@ -52,70 +54,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockInfoPriority1.TeamBlockInfo).Return(_teamBlockInfo1);
+				Expect.Call(_teamBlockInfoPriority2.TeamBlockInfo).Return(_teamBlockInfo2);
 				Expect.Call(_teamBlockInfoPriority1.Seniority).Return(1.3d).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockInfoPriority2.Seniority).Return(1.7d).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.LowToHighSeniorityList.ToList();
+				var result = _target.LowToHighSeniorityListBlockInfo;
 				Assert.AreEqual(2, result.Count());
-				Assert.AreEqual(_teamBlockInfoPriority1.Seniority, result[0]);
-				Assert.AreEqual(_teamBlockInfoPriority2.Seniority, result[1]);
+				Assert.AreEqual(_teamBlockInfo1, result[0]);
+				Assert.AreEqual(_teamBlockInfo2, result[1]);
 			}	
-		}
-
-		[Test]
-		public void ShouldGetListSortedFromHighToLowShiftCategoryPriority()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(_teamBlockInfoPriority1.ShiftCategoryPriority).Return(2).Repeat.AtLeastOnce();
-				Expect.Call(_teamBlockInfoPriority2.ShiftCategoryPriority).Return(3).Repeat.AtLeastOnce();
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.HighToLowShiftCategoryPriorityList.ToList();
-				Assert.AreEqual(2, result.Count());
-				Assert.AreEqual(_teamBlockInfoPriority1.ShiftCategoryPriority, result[1]);
-				Assert.AreEqual(_teamBlockInfoPriority2.ShiftCategoryPriority, result[0]);
-			}
-		}
-
-		[Test]
-		public void ShouldGetListSortedFromLowToHighShiftCategoryPriority()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(_teamBlockInfoPriority1.ShiftCategoryPriority).Return(2).Repeat.AtLeastOnce();
-				Expect.Call(_teamBlockInfoPriority2.ShiftCategoryPriority).Return(3).Repeat.AtLeastOnce();
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.LowToHighShiftCategoryPriorityList.ToList();
-				Assert.AreEqual(2, result.Count());
-				Assert.AreEqual(_teamBlockInfoPriority1.ShiftCategoryPriority, result[0]);
-				Assert.AreEqual(_teamBlockInfoPriority2.ShiftCategoryPriority, result[1]);
-			}
-		}
-
-		[Test]
-		public void ShouldGetBlockWithSeniority()
-		{
-			using (_mock.Record())
-			{
-				Expect.Call(_teamBlockInfoPriority1.Seniority).Return(2d);
-				Expect.Call(_teamBlockInfoPriority2.Seniority).Return(3.14d);
-				Expect.Call(_teamBlockInfoPriority2.TeamBlockInfo).Return(_teamBlockInfo1);
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.BlockOnSeniority(3.14d);
-				Assert.AreEqual(_teamBlockInfo1, result);
-			}
 		}
 
 		[Test]
