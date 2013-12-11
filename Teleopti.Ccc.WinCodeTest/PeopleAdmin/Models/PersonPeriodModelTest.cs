@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 			_personPeriod2 = PersonPeriodFactory.CreatePersonPeriodWithSkills(DateOnly2, Skill2);
 			_personPeriod3 = PersonPeriodFactory.CreatePersonPeriodWithSkills(DateOnly3, Skill3);
 
-			_personPeriod1.AddExternalLogOn(ExternalLogOn1);
-			_personPeriod2.AddExternalLogOn(ExternalLogOn2);
-			_personPeriod3.AddExternalLogOn(ExternalLogOn3);
+			person.AddExternalLogOn(ExternalLogOn1, _personPeriod1);
+			person.AddExternalLogOn(ExternalLogOn2, _personPeriod2);
+			person.AddExternalLogOn(ExternalLogOn3,_personPeriod3);
 
 			_personPeriod1.RuleSetBag = new RuleSetBag();
 			_personPeriod2.RuleSetBag = new RuleSetBag();

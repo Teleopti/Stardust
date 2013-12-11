@@ -89,23 +89,6 @@ namespace Teleopti.Interfaces.Domain
     	///</summary>
     	IBudgetGroup BudgetGroup { get; set; }
 
-    	/// <summary>
-        /// Adds the external log on.
-        /// </summary>
-        /// <param name="externalLogOn">The external log on.</param>
-        void AddExternalLogOn(IExternalLogOn externalLogOn);
-
-        /// <summary>
-        /// Resets the external log on.
-        /// </summary>
-        void ResetExternalLogOn();
-
-        /// <summary>
-        /// Removes the external log on.
-        /// </summary>
-        /// <param name="externalLogOn">The external log on.</param>
-        void RemoveExternalLogOn(IExternalLogOn externalLogOn);
-
 		/// <summary>
 		/// Gets the person max seat skill collection.
 		/// </summary>
@@ -130,4 +113,11 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="personSkill">The person skill.</param>
         void AddPersonNonBlendSkill(IPersonSkill personSkill);
     }
+
+	public interface IPersonPeriodModifyExternalLogon
+	{
+		void AddExternalLogOn(IExternalLogOn externalLogOn);
+		void ResetExternalLogOn();
+		void RemoveExternalLogOn(IExternalLogOn externalLogOn);
+	}
 }

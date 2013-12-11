@@ -306,5 +306,8 @@ namespace Teleopti.Interfaces.Domain
 	    void RemoveSkill(ISkill skill, IPersonPeriod personPeriod);
 	    void ChangeSkillProficiency(ISkill skill, Percent proficiency, IPersonPeriod personPeriod);
 	    void ResetPersonSkills(IPersonPeriod personPeriod);
+		 void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
+		 void ResetExternalLogOn(IPersonPeriod personPeriod);
+		 void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod);
     }
 }

@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
         	_personPeriod.BudgetGroup = new BudgetGroup();
 
-            _personPeriod.AddExternalLogOn(ExternalLogOn1);
-            _personPeriod.AddExternalLogOn(ExternalLogOn2);
-            _personPeriod.AddExternalLogOn(ExternalLogOn3);
+			_person.AddExternalLogOn(ExternalLogOn1, _personPeriod);
+			_person.AddExternalLogOn(ExternalLogOn2, _personPeriod);
+			_person.AddExternalLogOn(ExternalLogOn3, _personPeriod);
 
             _person.AddPersonPeriod(_personPeriod);
 	        _person.AddSkill(PersonSkill1, _personPeriod);

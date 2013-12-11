@@ -508,8 +508,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson per2 = PersonFactory.CreatePerson("tamas", "balog");
 
 			IExternalLogOn login1 = ExternalLogOnFactory.CreateExternalLogOn();
-			personPeriod1.AddExternalLogOn(login1);
-			personPeriod2.AddExternalLogOn(login1);
+			per1.AddExternalLogOn(login1, personPeriod1);
+			per1.AddExternalLogOn(login1, personPeriod2);
 
 			//Persist
 			PersistAndRemoveFromUnitOfWork(site);
@@ -1593,8 +1593,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson person = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
 			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
 			person.AddPersonPeriod(personPeriod1);
-			personPeriod1.AddExternalLogOn(logOn1);
-			personPeriod1.AddExternalLogOn(logOn2);
+			person.AddExternalLogOn(logOn1, personPeriod1);
+			person.AddExternalLogOn(logOn2, personPeriod1);
 			//IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc), team);
 			//person.AddPersonPeriod(personPeriod2);
 

@@ -326,11 +326,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             {
                 if (_currentPeriod != null)
                 {
-                    _currentPeriod.ResetExternalLogOn();
+						 Parent.ResetExternalLogOn(_currentPeriod);
                     var selectedExternalLogOns = _externalLogOnParser.ParsePersonExternalLogOn(value);
                     foreach (var selectedExternalLogOn in selectedExternalLogOns)
                     {
-                        _currentPeriod.AddExternalLogOn(selectedExternalLogOn);
+							  Parent.AddExternalLogOn(selectedExternalLogOn, _currentPeriod);
                     }
                 }
             }

@@ -48,7 +48,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
             person.AddSkill(skill,personPeriod);
 
             IExternalLogOn login = ExternalLogOnFactory.CreateExternalLogOn();
-            personPeriod.AddExternalLogOn(login);
+				person.AddExternalLogOn(login, personPeriod);
 
             DateOnly date2 = new DateOnly(2007, 2, 1);
             personPeriod = PersonPeriodFactory.CreatePersonPeriod(date2, personContract, businessUnitGraph.SiteCollection[1].TeamCollection[0]);
