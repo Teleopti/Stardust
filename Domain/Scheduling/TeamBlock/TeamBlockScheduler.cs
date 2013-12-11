@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
-								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
+								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService);
 
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer,
 										 ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
-										 IList<IPerson> selectedPersons)
+										 IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(schedulingOptions) ||
 				_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(schedulingOptions))
 			{
 				_sameShiftCategoryBlockScheduler.DayScheduled += OnDayScheduled;
-				bool successful = _sameShiftCategoryBlockScheduler.Schedule(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+				bool successful = _sameShiftCategoryBlockScheduler.Schedule(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons, rollbackService);
 				_sameShiftCategoryBlockScheduler.DayScheduled -= OnDayScheduled;
 				return successful;
 			}

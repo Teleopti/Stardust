@@ -236,6 +236,7 @@
     <Compile Include="Forecasting\QueueAdjustmentTest.cs" />
     <Compile Include="Forecasting\QueueStatisticsCalculatorTest.cs" />
     <Compile Include="Forecasting\WorkloadDayTemplateCalculatorTest.cs" />
+    <Compile Include="GroupPageCreator\GroupCreatorTest.cs" />
     <Compile Include="GroupPageCreator\PersonFinderServiceTest.cs" />
     <Compile Include="GroupPageCreator\PersonGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\SingleAgentTeamGroupPageTest.cs" />
@@ -291,6 +292,35 @@
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlockTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlockTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionForPersonsTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportServiceTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionBestTeamBlockDeciderTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionWorstTeamBlockDeciderTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualNumberOfCategoryFairnessServiceTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForEqualNumberOfCategoryFairnessTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForTeamBlockInSelectionTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterPersonsForTotalDistributionTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\TeamBlockSwapperTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocksTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityInfoTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoExtractorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockPriorityDefinitionInfoTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillCheckerTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameRuleSetBagValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameSkillValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlockTest.cs" />
@@ -1188,6 +1218,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
+    <Folder Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt">

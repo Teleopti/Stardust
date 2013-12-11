@@ -23511,6 +23511,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team to compare with.
+        /// </summary>
+        public static string TeamToCompareWith {
+            get {
+                return ResourceManager.GetString("TeamToCompareWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team View.
         /// </summary>
         public static string TeamView {

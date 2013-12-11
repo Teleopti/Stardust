@@ -6,12 +6,16 @@ using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
@@ -541,7 +545,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")
 		]
-		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
+		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, ISchedulingOptions schedulingOptions)
 		{
 			_backgroundWorker = backgroundWorker;
 			_scheduledCount = 0;
@@ -644,12 +648,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 							workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization,
 							backgroundWorker,
 							selectedPeriod);
-						//continuedStep = true;
+						continuedStep = true;
 					}
 
-					//if (optimizerPreferences.General.OptimizationStepFairness)
-					//	runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences, selectedPeriod);
-					//recalculateIfContinuedStep(continuedStep, selectedPeriod);
+					if (optimizerPreferences.General.OptimizationStepFairness)
+					{
+						recalculateIfContinuedStep(continuedStep, selectedPeriod);
+						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod);
+					}
+					
 				}
 			}
 			//set back
@@ -668,18 +675,39 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		//private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
-		//	IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod)
-		//{
-		//	//var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
-		//	//var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
-		//	//var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
-		//	//var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
-		//	//fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
-		//	//fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
-		//	//							optimizerPreferences, rollbackService, optimizerPreferences.Advanced.UseAverageShiftLengths);
-		//	//fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
-		//}
+		private void runFairness(IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
+			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+		{
+			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
+			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
+
+			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
+			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
+			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
+			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
+			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
+
+			var groupPersonBuilderForOptimizationFactory = _container.Resolve<IGroupPersonBuilderForOptimizationFactory>();
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
+			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+
+			//move into IOC
+			ISwapServiceNew swapService = new SwapServiceNew();
+			ITeamBlockPeriodValidator teamBlockPeriodValidator = new TeamBlockPeriodValidator();
+			ITeamMemberCountValidator teamMemberCountValidator = new TeamMemberCountValidator();
+			ITeamBlockContractTimeValidator teamBlockContractTimeValidator = new TeamBlockContractTimeValidator();
+			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
+			ITeamBlockSeniorityValidator teamBlockSeniorityValidator = new TeamBlockSeniorityValidator();
+			ITeamBlockSwapValidator teamBlockSwapValidator = new TeamBlockSwapValidator(selectedPersons, selectedPeriod, teamSelectionValidator, teamMemberCountValidator, teamBlockPeriodValidator, teamBlockContractTimeValidator, teamBlockSeniorityValidator);
+			ITeamBlockPersonsSkillChecker teamBlockPersonsSkillChecker = new TeamBlockPersonsSkillChecker();
+			ITeamBlockSwapDayValidator teamBlockSwapDayValidator = new TeamBlockSwapDayValidator(teamBlockPersonsSkillChecker);
+			ITeamBlockSwap teamBlockSwap = new TeamBlockSwap(swapService, teamBlockSwapValidator, teamBlockSwapDayValidator);
+
+			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
+			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
+			                                                      schedulingOptions, _stateHolder.ShiftCategories.ToList(),
+																  _schedulerStateHolder.Schedules, rollbackService, teamBlockSwap);
+		}
 
         private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)
         {
