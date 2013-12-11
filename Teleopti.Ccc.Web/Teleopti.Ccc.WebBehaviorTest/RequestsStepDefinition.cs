@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var data = UserFactory.User().UserData<MoreThanOnePageOfRequests>();
 			EventualAssert.That(() => _page.Requests.Count(), Is.EqualTo(data.PageSize));
-			_page.LastRequest.ScrollIntoView();
+			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
 		}
 
 		[Then(@"I should see a requests list")]
