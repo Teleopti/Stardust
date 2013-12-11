@@ -9,15 +9,15 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public class TeamScheduleViewModelFactory : ITeamScheduleViewModelFactory
+	public class GroupScheduleViewModelFactory : IGroupScheduleViewModelFactory
 	{
-		private readonly ITeamScheduleViewModelMapper _mapper;
+		private readonly IGroupScheduleViewModelMapper _mapper;
 		private readonly ILoggedOnUser _user;
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ISchedulePersonProvider _schedulePersonProvider;
 
-		public TeamScheduleViewModelFactory(ITeamScheduleViewModelMapper mapper, ILoggedOnUser user, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider)
+		public GroupScheduleViewModelFactory(IGroupScheduleViewModelMapper mapper, ILoggedOnUser user, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IPermissionProvider permissionProvider, ISchedulePersonProvider schedulePersonProvider)
 		{
 			_mapper = mapper;
 			_user = user;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_schedulePersonProvider = schedulePersonProvider;
 		}
 
-		public IEnumerable<TeamScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime date)
+		public IEnumerable<GroupScheduleShiftViewModel> CreateViewModel(Guid groupId, DateTime date)
 		{
 			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
 			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			                                                                 DefinedRaptorApplicationFunctionPaths.
 																				 SchedulesAnywhere).ToArray();
 			var emptyReadModel = new PersonScheduleDayReadModel[] {};
-			var data = new TeamScheduleData
+			var data = new GroupScheduleData
 				{
 					Date = date,
 					UserTimeZone = _user.CurrentUser().PermissionInformation.DefaultTimeZone(),

@@ -253,15 +253,15 @@
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
-    <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\ITeamScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleData.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleDayOffViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleLayerViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleShiftViewModel.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
-    <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\Anywhere\Core\GroupScheduleData.cs" />
+    <Compile Include="Areas\Anywhere\Core\GroupScheduleDayOffViewModel.cs" />
+    <Compile Include="Areas\Anywhere\Core\GroupScheduleLayerViewModel.cs" />
+    <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
+    <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
+    <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />

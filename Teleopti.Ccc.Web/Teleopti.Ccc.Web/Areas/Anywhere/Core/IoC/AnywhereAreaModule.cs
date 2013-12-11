@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 
 			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
 
-			builder.RegisterType<TeamScheduleViewModelFactory>().As<ITeamScheduleViewModelFactory>().SingleInstance();
-			builder.RegisterType<TeamScheduleViewModelMapper>().As<ITeamScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<GroupScheduleViewModelFactory>().As<IGroupScheduleViewModelFactory>().SingleInstance();
+			builder.RegisterType<GroupScheduleViewModelMapper>().As<IGroupScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<PersonScheduleViewModelFactory>().As<IPersonScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<PersonScheduleViewModelMapper>().As<IPersonScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<DailyStaffingMetricsViewModelFactory>().As<IDailyStaffingMetricsViewModelFactory>().InstancePerLifetimeScope();

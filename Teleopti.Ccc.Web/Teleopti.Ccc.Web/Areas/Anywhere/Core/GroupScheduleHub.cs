@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	[Intercept(typeof(AspectInterceptor))]
 	public class GroupScheduleHub : TestableHub
 	{
-		private readonly ITeamScheduleViewModelFactory _teamScheduleViewModelFactory;
+		private readonly IGroupScheduleViewModelFactory _groupScheduleViewModelFactory;
 
-		public GroupScheduleHub(ITeamScheduleViewModelFactory teamScheduleViewModelFactory)
+		public GroupScheduleHub(IGroupScheduleViewModelFactory groupScheduleViewModelFactory)
 		{
-			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
+			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
 		}
 
 		[UnitOfWork]
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		private void pushSchedule(dynamic target, Guid groupId, DateTime date)
 		{
-			target.incomingGroupSchedule(_teamScheduleViewModelFactory.CreateViewModel(groupId, date));
+			target.incomingGroupSchedule(_groupScheduleViewModelFactory.CreateViewModel(groupId, date));
 		}
 	}
 }

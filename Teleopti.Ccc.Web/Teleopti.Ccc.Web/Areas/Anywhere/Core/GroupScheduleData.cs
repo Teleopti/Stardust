@@ -5,9 +5,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public class TeamScheduleData
+	public class GroupScheduleData
 	{
-		public TeamScheduleData()
+		public GroupScheduleData()
 		{
 			CanSeeUnpublishedSchedules = true;
 		}

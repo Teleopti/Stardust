@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	[TestFixture]
-	public class TeamScheduleViewModelFactoryTest
+	public class GroupScheduleViewModelFactoryTest
 	{
 		private DateTime _scheduleDate;
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var readModels = new[] { new PersonScheduleDayReadModel { PersonId = person.Id.Value } };
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(period, new []{person.Id.Value})).Return(readModels);
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }));
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }));
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new []{personWithPublishedSchedule.Id.Value, personWithUnpublishedSchedule.Id.Value})).IgnoreArguments().Return(readModels);
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)).Return(false);
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, permissionProvider, new FakeSchedulePersonProvider(new[] { personWithPublishedSchedule, personWithUnpublishedSchedule }));
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, permissionProvider, new FakeSchedulePersonProvider(new[] { personWithPublishedSchedule, personWithUnpublishedSchedule }));
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				.Return(new[] { person });
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				.Return(new IPerson[] { });
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 			result.Single().Projection.Single().Description.Should().Be.EqualTo(ConfidentialPayloadValues.Description.Name);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				.Return(new[] { person });
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new List<IPerson>());
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 				.Return(new[] { person });
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewConfidential))
 				 .Return(new[] { person });
-			var target = new TeamScheduleViewModelFactory(new TeamScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
+			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IPermissionProvider>(), schedulePersonProvider);
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 

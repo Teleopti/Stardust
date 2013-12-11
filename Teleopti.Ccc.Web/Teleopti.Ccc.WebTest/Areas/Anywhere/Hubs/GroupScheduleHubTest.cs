@@ -8,15 +8,15 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	[TestFixture]
-	public class TeamScheduleHubTest
+	public class GroupScheduleHubTest
 	{
 		[Test]
 		public void ShouldPushDataToCallerOnSubscribe()
 		{
-			var teamScheduleProvider = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
+			var teamScheduleProvider = MockRepository.GenerateMock<IGroupScheduleViewModelFactory>();
 			var teamId = Guid.NewGuid();
 			var dateTime = new DateTime(2013, 3, 4, 0, 0, 0);
-			var data = new[] { new TeamScheduleShiftViewModel { PersonId = Guid.NewGuid().ToString() } };
+			var data = new[] { new GroupScheduleShiftViewModel { PersonId = Guid.NewGuid().ToString() } };
 			teamScheduleProvider.Stub(x => x.CreateViewModel(teamId, dateTime)).Return(data);
 			var target = new GroupScheduleHub(teamScheduleProvider);
 			var hubBuilder = new TestHubBuilder();

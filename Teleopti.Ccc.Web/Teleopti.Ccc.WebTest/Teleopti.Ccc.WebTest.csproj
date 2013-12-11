@@ -159,8 +159,8 @@
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />
-    <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelFactoryTest.cs" />
-    <Compile Include="Areas\Anywhere\Hubs\TeamScheduleViewModelMapperTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\GroupScheduleViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\GroupScheduleViewModelMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersisterTest.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGeneratorTest.cs" />
@@ -196,7 +196,7 @@
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Hubs\TeamScheduleHubTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\GroupScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistrationTest.cs" />

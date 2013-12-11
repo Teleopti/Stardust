@@ -7,9 +7,9 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public class TeamScheduleViewModelMapper : ITeamScheduleViewModelMapper
+	public class GroupScheduleViewModelMapper : IGroupScheduleViewModelMapper
 	{
-		public IEnumerable<TeamScheduleShiftViewModel> Map(TeamScheduleData data)
+		public IEnumerable<GroupScheduleShiftViewModel> Map(GroupScheduleData data)
 		{
 			var published = new PublishedScheduleSpecification(data.CanSeePersons, data.Date);
 			return (from s in data.Schedules
@@ -24,17 +24,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ToArray();
 		}
 
-		private static TeamScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<TeamScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
+		private static GroupScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
 		{
-			TeamScheduleDayOffViewModel dayOff = null;
+			GroupScheduleDayOffViewModel dayOff = null;
 			if (model.DayOff != null)
-				dayOff = new TeamScheduleDayOffViewModel
+				dayOff = new GroupScheduleDayOffViewModel
 					{
 						DayOffName = model.DayOff.Title,
 						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
 						Minutes = (int) model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
 					};
-			return new TeamScheduleShiftViewModel
+			return new GroupScheduleShiftViewModel
 				{
 					ContractTimeMinutes = shift.ContractTimeMinutes,
 					PersonId = readModel.PersonId.ToString(),
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				};
 		}
 
-		private static IEnumerable<TeamScheduleLayerViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
+		private static IEnumerable<GroupScheduleLayerViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
 		{
 			var layers = shift.Projection ?? new SimpleLayer[] {};
 			return (
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					   let color = canSeeLayerInfo ? l.Color : ConfidentialPayloadValues.DisplayColorHex
 					   let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
 					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
-				       select new TeamScheduleLayerViewModel
+				       select new GroupScheduleLayerViewModel
 					       {
 						       Color = color,
 							   Description = description,

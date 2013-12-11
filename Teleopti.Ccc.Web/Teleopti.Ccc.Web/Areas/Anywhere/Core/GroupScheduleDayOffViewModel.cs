@@ -1,6 +1,6 @@
 ﻿namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	public class TeamScheduleDayOffViewModel
+	public class GroupScheduleDayOffViewModel
 	{
 		public string DayOffName { get; set; }
 		public string Start { get; set; }

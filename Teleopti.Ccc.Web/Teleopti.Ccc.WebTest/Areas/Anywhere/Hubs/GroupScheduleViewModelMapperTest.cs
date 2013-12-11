@@ -4,27 +4,27 @@ using NUnit.Framework;
 using Newtonsoft.Json;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	[TestFixture]
-	public class TeamScheduleViewModelMapperTest
+	public class GroupScheduleViewModelMapperTest
 	{
 
-		[Test] public void ShouldMapLayerStartTimeToMyTimeZone()
+		[Test]
+		public void ShouldMapLayerStartTimeToMyTimeZone()
 		{
-			var target = new TeamScheduleViewModelMapper();
+			var target = new GroupScheduleViewModelMapper();
 			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePersonWithId();
 			var timeZone = TimeZoneInfoFactory.HelsinkiTimeZoneInfo();
-			var data = new TeamScheduleData
+			var data = new GroupScheduleData
 				{
 					UserTimeZone = timeZone,
-					CanSeePersons = new[] {person},
-					CanSeeConfidentialAbsencesFor = new[] {person},
+					CanSeePersons = new[] { person },
+					CanSeeConfidentialAbsencesFor = new[] { person },
 					Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var endTime = new DateTime(2013, 10, 08, 22, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePersonWithId();
 			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
-			var target = new TeamScheduleViewModelMapper();
+			var target = new GroupScheduleViewModelMapper();
 
-			var data = new TeamScheduleData
+			var data = new GroupScheduleData
 			{
 				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
@@ -97,12 +97,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapFullDayAbsence()
 		{
 			var person = PersonFactory.CreatePersonWithId();
-			var target = new TeamScheduleViewModelMapper();
+			var target = new GroupScheduleViewModelMapper();
 
-			var data = new TeamScheduleData
+			var data = new GroupScheduleData
 				{
-					CanSeePersons = new[] {person},
-					CanSeeConfidentialAbsencesFor = new[] {person},
+					CanSeePersons = new[] { person },
+					CanSeeConfidentialAbsencesFor = new[] { person },
 					Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
