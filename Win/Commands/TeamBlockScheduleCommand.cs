@@ -120,6 +120,7 @@ namespace Teleopti.Ccc.Win.Commands
 			{
 				e.Cancel = true;
 			}
+			if(e.IsSuccessful)
 			_scheduledCount++;
 			if (_scheduledCount >= _schedulingOptions.RefreshRate)
 			{

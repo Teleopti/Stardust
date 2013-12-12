@@ -45,7 +45,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (schedulePartModifyAndRollbackService == null) return false;
             var dateOnlySkipList = new List<DateOnly>();
             foreach (var datePointer in selectedPeriod.DayCollection())
-            {
+			{
+				if (_cancelMe)
+					break;
                 if (dateOnlySkipList.Contains(datePointer)) continue;
 
                 var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
@@ -71,6 +73,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService))
                     verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer, dateOnlySkipList, teamBlockInfo);
 
+else
+                {
+	                OnDayScheduledFailed();
+	                break;
+                }
                 if (_cancelMe)
                     break;
             }
@@ -144,5 +151,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             dayScheduled(sender, e);
         }
+
+		public void OnDayScheduledFailed()
+		{
+			var temp = DayScheduled;
+			if (temp != null)
+			{
+				temp(this, new SchedulingServiceFailedEventArgs());
+			}
+		}
     }
 }

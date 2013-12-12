@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				part.CreateAndAddDayOff(restriction.DayOffTemplate);
 				rollbackService.Modify(part);
 
-				var eventArgs = new SchedulingServiceBaseEventArgs(part);
+				var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
 				OnDayScheduled(eventArgs);
 				if (eventArgs.Cancel)
 					return true;
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 				rollbackService.Modify(part);
 
-				var eventArgs = new SchedulingServiceBaseEventArgs(part);
+				var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
 				OnDayScheduled(eventArgs);
 				if (eventArgs.Cancel)
 					return true;
