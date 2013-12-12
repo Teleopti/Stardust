@@ -170,13 +170,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var matrix in matrixList)
 			{
 				int targetDaysOff;
-
 				IList<IScheduleDay> currentOffDaysList;
-				bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrix.SchedulePeriod,
-				                                                                                      out targetDaysOff,
-				                                                                                      out currentOffDaysList);
+				_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrix.SchedulePeriod, out targetDaysOff, out currentOffDaysList);
+
 				int currentDaysOff = currentOffDaysList.Count;
-				if (hasCorrectNumberOfDaysOff || currentDaysOff >= targetDaysOff)
+				if(currentDaysOff >= targetDaysOff)
 					continue;
 
 				IScheduleDay part = matrix.GetScheduleDayByKey(scheduleDate).DaySchedulePart();

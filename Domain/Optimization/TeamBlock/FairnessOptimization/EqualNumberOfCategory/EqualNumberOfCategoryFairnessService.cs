@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -90,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				if(selectedTeamBlock == null)
 					continue;
 
-				_teamBlockSwapper.Swap(teamBlockInfoToWorkWith, selectedTeamBlock, rollbackService, scheduleDictionary);
+				_teamBlockSwapper.TrySwap(teamBlockInfoToWorkWith, selectedTeamBlock, rollbackService, scheduleDictionary);
 
 				var message = Resources.FairnessOptimizationOn + " " + Resources.EqualOfEachShiftCategory + ": " +
 							  new Percent((totalBlockCount - teamBlocksInSelection.Count) / totalBlockCount);

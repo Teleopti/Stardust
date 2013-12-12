@@ -4086,10 +4086,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 						                                                            true,
 						                                                            schedulingOptions.ConsiderShortBreaks);
 
+						var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
+
 						var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
 							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
-							                                                           new ScheduleTagSetter(
-								                                                           schedulingOptions.TagToUseOnScheduling));
+																					   tagSetter);
 
 						var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
 
@@ -4111,9 +4112,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 																						singleDayScheduler, 
 																						_container.Resolve<ITeamBlockRoleModelSelector>());
 
+
 						_container.Resolve<ITeamBlockOptimizationCommand>()
 						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
-						                   rollbackService, schedulingOptions, teamBlockScheduler);
+						                   rollbackService, tagSetter, schedulingOptions, teamBlockScheduler);
 
 						break;
 					}
