@@ -258,6 +258,7 @@
     <Compile Include="TestData\Setups\Configurable\PersonPeriodConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\PersonThatCreatesTestData.cs" />
     <Compile Include="TestData\Setups\Specific\StockholmTimeZone.cs" />
+    <Compile Include="TestData\Setups\Specific\SwedeSpeakingEnglishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\USCulture.cs" />
     <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />

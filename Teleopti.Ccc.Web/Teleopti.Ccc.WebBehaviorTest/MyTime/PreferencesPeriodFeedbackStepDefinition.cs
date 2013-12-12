@@ -1,13 +1,10 @@
 using System;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Table = TechTalk.SpecFlow.Table;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -15,8 +12,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class PreferencesPeriodFeedbackStepDefinition
 	{
-		private PreferencePage _page { get { return Pages.Pages.PreferencePage; } }
-
 		[Given(@"I have a scheduling period of 1 week")]
 		public void GivenIHaveASchedulingPeriodOf1Week()
 		{
@@ -91,67 +86,67 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see a message that I should have (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHave2DaysOff(int numOfDaysoff)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff)));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", string.Format(UserTexts.Resources.YouShouldHaveXDaysOff, numOfDaysoff));
 		}
 
 		[Then(@"I should see a message that I should have between (\d) and (\d) days off")]
 		public void ThenIShouldSeeAMessageThatIShouldHaveBetweenXAndYDaysOff(int lower, int upper)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper)));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", string.Format(UserTexts.Resources.YouShouldHaveBetweenXAndYDaysOff, lower, upper));
 		}
 
 		[Then(@"I should see a message that my preferences can result (\d) days off")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResult2DaysOff(int daysoff)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff)));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", string.Format(UserTexts.Resources.YourPreferencesCanResultXDaysOff, daysoff));
 		}
 
 		[Then(@"I should see a message that I should work (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatIShouldWorkXHours(int hours)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkXHours, FormatHours(hours))));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", string.Format(UserTexts.Resources.YouShouldWorkXHours, FormatHours(hours)));
 		}
 
 		[Then(@"I should see a message that I should work (\d+) to (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatIShouldWorkXToYHours(int lower, int upper)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YouShouldWorkBetweenXAndYHours, FormatHours(lower), FormatHours(upper))));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", string.Format(UserTexts.Resources.YouShouldWorkBetweenXAndYHours, FormatHours(lower), FormatHours(upper)));
 		}
 
 		[Then(@"I should see a message that my preferences can result in (\d+) to (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResultInXToYHours(int lower, int upper)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXToYHours, FormatHours(lower), FormatHours(upper))));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", string.Format(UserTexts.Resources.YourPreferencesCanResultXToYHours, FormatHours(lower), FormatHours(upper)));
 		}
 
 		[Then(@"I should see a message that my preferences can result in (\d+) hours")]
 		public void ThenIShouldSeeAMessageThatMyPreferencesCanResultInXHours(int hours)
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Text, Is.StringContaining(string.Format(UserTexts.Resources.YourPreferencesCanResultXHours, FormatHours(hours))));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", string.Format(UserTexts.Resources.YourPreferencesCanResultXHours, FormatHours(hours)));
 		}
 
 		[Then(@"I should see a warning for my dayoff preferences outside the target")]
 		public void ThenIShouldSeeAWarningForMyDayoffPreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[1].Span(QuicklyFind.ByClass("icon-exclamation-sign")).Exists, Is.True);
+			Browser.Interactions.AssertExists("#Preference-period-feedback-view div:nth-of-type(2) span.icon-exclamation-sign");
 		}
 
 		[Then(@"I should not see a warning for my dayoff preferences outside the target")]
 		public void ThenIShouldNotSeeAWarningForMyDayoffPreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[1].Span(QuicklyFind.ByClass("icon-exclamation-sign")).Exists, Is.False);
+			Browser.Interactions.AssertNotExists("#Preference-period-feedback-view div:nth-of-type(2)", "#Preference-period-feedback-view div:nth-of-type(2) span.icon-exclamation-sign");
 		}
 
 		[Then(@"I should see a warning for my time preferences outside the target")]
 		public void ThenIShouldSeeAWarningForMyTimePreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[0].Span(QuicklyFind.ByClass("icon-exclamation-sign")).Exists, Is.True);
+			Browser.Interactions.AssertExists("#Preference-period-feedback-view div:nth-of-type(1) span.icon-exclamation-sign");
 		}
 
 		[Then(@"I should not see a warning for my time preferences outside the target")]
 		public void ThenIShouldNotSeeAWarningForMyTimePreferencesOutsideTheTarget()
 		{
-			EventualAssert.That(() => _page.PreferencePeriodFeedbackView.Divs[0].Span(QuicklyFind.ByClass("icon-exclamation-sign")).Exists, Is.False);
+			Browser.Interactions.AssertNotExists("#Preference-period-feedback-view div:nth-of-type(1)", "#Preference-period-feedback-view div:nth-of-type(1) span.icon-exclamation-sign");
 		}
 
 

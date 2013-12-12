@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Preferences period feedback
+﻿Feature: Preferences period feedback
 	In order to know if my preferences are viable
 	As an agent
 	I want feedback of my preferences compared to my contract for the period

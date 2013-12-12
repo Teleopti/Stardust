@@ -1,8 +1,9 @@
 using System;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -13,11 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheDayCellWith(Table table)
 		{
 			var fields = table.CreateInstance<DayCellFields>();
-			var shift = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "scheduled");
-			if (fields.ShiftCategory != null) EventualAssert.That(() => shift.InnerHtml, Is.StringContaining(fields.ShiftCategory));
+			var shift = CalendarCellsPage.DateSelector(fields.Date);
+			if (fields.ShiftCategory != null)
+				Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}", shift, "scheduled"), fields.ShiftCategory);
 
-			var preference = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference");
-			if (fields.Preference != null) EventualAssert.That(() => preference.InnerHtml, Is.StringContaining(fields.Preference));
+			if (fields.Preference != null)
+				Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}", shift, "preference-text"), fields.Preference);
 		}
 
 		private class DayCellFields
@@ -27,6 +29,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			public string Preference { get; set; }
 		}
 	}
-
-	
 }

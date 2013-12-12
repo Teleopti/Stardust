@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Globalization;
-using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -31,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the previous day button")]
 		public void WhenIClickPreviousVirtualSchedulePeriodButton()
 		{
-			Pages.Pages.CurrentDateRangeSelector.ClickPrevious();
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(1)");
 		}
 
 		[Then(@"I should see an error message")]
@@ -107,21 +103,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			calendarShouldRangeBetween(previousPeriodFirstDateDisplayed, previousPeriodLastDateDisplayed);
 		}
 
-		private static void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
-		{
-			var page = Browser.Current.Page<CalendarCellsPage>();
-			EventualAssert.That(() => page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")));
-			EventualAssert.That(() => page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")));
-		}
-
 		[Then(@"I should see a message saying I am missing a workflow control set")]
 		public void ThenIShouldSeeAMessageSayingIAmMissingAWorkflowControlSet()
 		{
-			var page = Browser.Current.Page<CalendarCellsPage>();
-			if (page is StudentAvailabilityPage)
-				((StudentAvailabilityPage) page).StudentAvailabilityPeriod.InnerHtml.Should().Contain(Resources.MissingWorkflowControlSet);
-			if (page is PreferencePage)
-				((PreferencePage)page).PreferencePeriod.InnerHtml.Should().Contain(Resources.MissingWorkflowControlSet);
+			Browser.Interactions.AssertAnyContains(".alert", Resources.MissingWorkflowControlSet);
+		}
+
+		private static void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCellsPage.DateSelector(firstDateDisplayed), CalendarCellsPage.DateSelector(firstDateDisplayed.AddDays(-1)));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCellsPage.DateSelector(lastDateDisplayed), CalendarCellsPage.DateSelector(lastDateDisplayed.AddDays(1)));
 		}
 	}
 }
