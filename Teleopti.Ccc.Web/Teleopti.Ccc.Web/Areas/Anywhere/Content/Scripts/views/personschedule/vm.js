@@ -141,6 +141,12 @@ define([
 		};
 
 		this.UpdateSchedules = function (data, timeLine) {
+			// if we dont display group mates, then filter out their data
+			if (!self.DisplayGroupMates()) {
+				data = lazy(data)
+					.select(function (x) { return x.PersonId == self.PersonId(); })
+					.toArray();
+			}
 			// data might include the same person more than once, with data for more than one day
 			// clear all existing persons schedules
 			var persons = self.Persons();
@@ -153,9 +159,6 @@ define([
 				personForId(schedule.PersonId);
 			}
 
-			if (!self.DisplayGroupMates()) {
-				data = [lazy(data).select(function (x) { return x.PersonId == self.PersonId(); }).first()];
-			}
 			// add schedule data. a person might get more than 1 schedule added
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
