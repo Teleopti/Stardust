@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
 			assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly);
-			OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
+			OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 			_resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 			                                            shiftProjectionCache.WorkShiftProjectionPeriod);
 		}

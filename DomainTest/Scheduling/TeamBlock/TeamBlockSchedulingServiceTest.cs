@@ -261,21 +261,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Record())
             {
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
-                Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).IgnoreArguments().Return(_teamInfoMock);
-                Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock, _date, _matrixList,
-                                                                          _schedulingOptions))
-                      .IgnoreArguments()
-                      .Return(_teamBlockInfoMock);
-                Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
-                                                                     _dateOnlyPeriod, _personList)).Return(true);
-                Expect.Call(() => _rollbackService.ClearModificationCollection());
-                Expect.Call(_teamBlockInfoMock.TeamInfo).Return(_teamInfoMock);
-                Expect.Call(_teamInfoMock.MatrixesForGroupAndDate(_date)).Return(_matrixList);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
-                Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).IgnoreArguments().Return(true);
 
             }
-            var args = new SchedulingServiceBaseEventArgs(null);
+			var args = new SchedulingServiceSuccessfulEventArgs(null);
             args.Cancel = true;
             _target.DayScheduled += targetOnDayScheduled;
             _target.RaiseEventForTest(this, args);
@@ -284,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Assert.IsTrue(_cancelTarget);
                 Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService));
             }
-            
+			_target.DayScheduled -= targetOnDayScheduled;
 
         }
 

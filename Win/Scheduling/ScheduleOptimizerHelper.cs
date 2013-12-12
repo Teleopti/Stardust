@@ -358,6 +358,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				e.Cancel = true;
 			}
+			if(e.IsSuccessful)
 			_scheduledCount++;
 			if (_scheduledCount >= _sendEventEvery)
 			{
