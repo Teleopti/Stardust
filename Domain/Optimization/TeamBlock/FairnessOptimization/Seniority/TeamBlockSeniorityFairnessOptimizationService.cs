@@ -32,20 +32,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                             ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, ITeamBlockSwap teamBlockSwap)
         {
-			var instance = PrincipalAuthorization.Instance();
-	        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
-		        return;
+			//do not run on 7.5, takes 26 hours on 60 persons
 
-            IList<ITeamBlockInfo> listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod,
-                                                                                     selectedPersons,
-                                                                                     schedulingOptions);
-            HashSet<IList<ITeamBlockInfo>> listOfMultipleLengthBlocks =
-                _teamBlockSizeClassifier.SplitTeamBlockInfo(listOfAllTeamBlock);
-            //Parallel.ForEach(listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true), teamBlockList => _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories));
-            foreach (var teamBlockList in listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true))
-            {
-                _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories, scheduleDictionary, rollbackService, teamBlockSwap);
-            }
+
+			//var instance = PrincipalAuthorization.Instance();
+			//if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+			//	return;
+
+			//IList<ITeamBlockInfo> listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod,
+			//																		 selectedPersons,
+			//																		 schedulingOptions);
+			//HashSet<IList<ITeamBlockInfo>> listOfMultipleLengthBlocks =
+			//	_teamBlockSizeClassifier.SplitTeamBlockInfo(listOfAllTeamBlock);
+			////Parallel.ForEach(listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true), teamBlockList => _teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories));
+			//foreach (var teamBlockList in listOfMultipleLengthBlocks.GetRandom(listOfAllTeamBlock.Count, true))
+			//{
+			//	_teamBlockListSwapAnalyzer.AnalyzeTeamBlock(teamBlockList, shiftCategories, scheduleDictionary, rollbackService, teamBlockSwap);
+			//}
         }
 
         
