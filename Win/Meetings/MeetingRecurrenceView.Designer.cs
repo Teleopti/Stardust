@@ -72,7 +72,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.groupBoxRangeOfRecurrence.SuspendLayout();
 			this.tableLayoutPanel4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart.Calendar)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd.Calendar)).BeginInit();
 			this.tableLayoutPanel5.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -93,7 +95,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 125F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(538, 364);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(534, 361);
 			this.tableLayoutPanel1.TabIndex = 8;
 			// 
 			// groupBoxAppointmentTime
@@ -104,7 +106,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.groupBoxAppointmentTime.Location = new System.Drawing.Point(10, 3);
 			this.groupBoxAppointmentTime.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
 			this.groupBoxAppointmentTime.Name = "groupBoxAppointmentTime";
-			this.groupBoxAppointmentTime.Size = new System.Drawing.Size(518, 84);
+			this.groupBoxAppointmentTime.Size = new System.Drawing.Size(514, 84);
 			this.groupBoxAppointmentTime.TabIndex = 0;
 			this.groupBoxAppointmentTime.TabStop = false;
 			this.groupBoxAppointmentTime.Text = "xxApointmentTime";
@@ -124,7 +126,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(512, 64);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(508, 64);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// outlookTimePickerEnd
@@ -185,7 +187,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.groupBoxRecurrencePattern.Location = new System.Drawing.Point(10, 93);
 			this.groupBoxRecurrencePattern.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
 			this.groupBoxRecurrencePattern.Name = "groupBoxRecurrencePattern";
-			this.groupBoxRecurrencePattern.Size = new System.Drawing.Size(518, 119);
+			this.groupBoxRecurrencePattern.Size = new System.Drawing.Size(514, 119);
 			this.groupBoxRecurrencePattern.TabIndex = 0;
 			this.groupBoxRecurrencePattern.TabStop = false;
 			this.groupBoxRecurrencePattern.Text = "xxRecurrencePattern";
@@ -207,8 +209,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			// splitContainerAdv1.Panel2
 			// 
 			this.splitContainerAdv1.Panel2.BackColor = System.Drawing.Color.Transparent;
-			this.splitContainerAdv1.Size = new System.Drawing.Size(512, 99);
-			this.splitContainerAdv1.SplitterDistance = 129;
+			this.splitContainerAdv1.Size = new System.Drawing.Size(508, 99);
+			this.splitContainerAdv1.SplitterDistance = 127;
 			this.splitContainerAdv1.SplitterWidth = 1;
 			this.splitContainerAdv1.TabIndex = 0;
 			this.splitContainerAdv1.Text = "yysplitContainerAdv1";
@@ -229,7 +231,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33F));
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 34F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(129, 99);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(127, 99);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// radioButtonAdvMonthlyRecurring
@@ -274,7 +276,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.groupBoxRangeOfRecurrence.Location = new System.Drawing.Point(10, 218);
 			this.groupBoxRangeOfRecurrence.Margin = new System.Windows.Forms.Padding(10, 3, 10, 3);
 			this.groupBoxRangeOfRecurrence.Name = "groupBoxRangeOfRecurrence";
-			this.groupBoxRangeOfRecurrence.Size = new System.Drawing.Size(518, 94);
+			this.groupBoxRangeOfRecurrence.Size = new System.Drawing.Size(514, 94);
 			this.groupBoxRangeOfRecurrence.TabIndex = 0;
 			this.groupBoxRangeOfRecurrence.TabStop = false;
 			this.groupBoxRangeOfRecurrence.Text = "xxRangeOfRecurrence";
@@ -296,7 +298,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel4.Name = "tableLayoutPanel4";
 			this.tableLayoutPanel4.RowCount = 1;
 			this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel4.Size = new System.Drawing.Size(512, 74);
+			this.tableLayoutPanel4.Size = new System.Drawing.Size(508, 74);
 			this.tableLayoutPanel4.TabIndex = 0;
 			// 
 			// labelRangeStart
@@ -333,11 +335,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStart.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvStart.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvStart.Calendar.HeadGradient = true;
+			this.dateTimePickerAdvStart.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvStart.Calendar.Location = new System.Drawing.Point(0, 0);
 			this.dateTimePickerAdvStart.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStart.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStart.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvStart.Calendar.Size = new System.Drawing.Size(206, 174);
+			this.dateTimePickerAdvStart.Calendar.Size = new System.Drawing.Size(200, 174);
 			this.dateTimePickerAdvStart.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStart.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvStart.Calendar.TabIndex = 0;
@@ -347,7 +350,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			// 
 			this.dateTimePickerAdvStart.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.dateTimePickerAdvStart.Calendar.NoneButton.Location = new System.Drawing.Point(134, 0);
+			this.dateTimePickerAdvStart.Calendar.NoneButton.Location = new System.Drawing.Point(130, 0);
 			this.dateTimePickerAdvStart.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvStart.Calendar.NoneButton.Text = "xxNone";
 			this.dateTimePickerAdvStart.Calendar.NoneButton.UseVisualStyle = true;
@@ -357,13 +360,14 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			this.dateTimePickerAdvStart.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.dateTimePickerAdvStart.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvStart.Calendar.TodayButton.Size = new System.Drawing.Size(206, 20);
+			this.dateTimePickerAdvStart.Calendar.TodayButton.Size = new System.Drawing.Size(200, 20);
 			this.dateTimePickerAdvStart.Calendar.TodayButton.Text = "xxToday";
 			this.dateTimePickerAdvStart.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvStart.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvStart.CalendarForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvStart.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvStart.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
+			this.dateTimePickerAdvStart.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvStart.DropDownImage = null;
 			this.dateTimePickerAdvStart.EnableNullDate = false;
 			this.dateTimePickerAdvStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
@@ -376,7 +380,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStart.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvStart.TabIndex = 10;
 			this.dateTimePickerAdvStart.ThemesEnabled = true;
-			this.dateTimePickerAdvStart.UseCurrentCulture = true;
 			this.dateTimePickerAdvStart.Value = new System.DateTime(2008, 12, 5, 6, 42, 38, 484);
 			this.dateTimePickerAdvStart.ValueChanged += new System.EventHandler(this.DateTimePickerAdvStartValueChanged);
 			// 
@@ -385,7 +388,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.labelEndBy.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
 			this.labelEndBy.AutoSize = true;
-			this.labelEndBy.Location = new System.Drawing.Point(258, 0);
+			this.labelEndBy.Location = new System.Drawing.Point(256, 0);
 			this.labelEndBy.Name = "labelEndBy";
 			this.labelEndBy.Size = new System.Drawing.Size(70, 74);
 			this.labelEndBy.TabIndex = 3;
@@ -414,11 +417,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEnd.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvEnd.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvEnd.Calendar.HeadGradient = true;
+			this.dateTimePickerAdvEnd.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvEnd.Calendar.Location = new System.Drawing.Point(0, 0);
 			this.dateTimePickerAdvEnd.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEnd.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEnd.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvEnd.Calendar.Size = new System.Drawing.Size(206, 174);
+			this.dateTimePickerAdvEnd.Calendar.Size = new System.Drawing.Size(200, 174);
 			this.dateTimePickerAdvEnd.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEnd.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvEnd.Calendar.TabIndex = 0;
@@ -428,7 +432,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			// 
 			this.dateTimePickerAdvEnd.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.dateTimePickerAdvEnd.Calendar.NoneButton.Location = new System.Drawing.Point(134, 0);
+			this.dateTimePickerAdvEnd.Calendar.NoneButton.Location = new System.Drawing.Point(130, 0);
 			this.dateTimePickerAdvEnd.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvEnd.Calendar.NoneButton.Text = "xxNone";
 			this.dateTimePickerAdvEnd.Calendar.NoneButton.UseVisualStyle = true;
@@ -438,17 +442,18 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			this.dateTimePickerAdvEnd.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.dateTimePickerAdvEnd.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvEnd.Calendar.TodayButton.Size = new System.Drawing.Size(206, 20);
+			this.dateTimePickerAdvEnd.Calendar.TodayButton.Size = new System.Drawing.Size(200, 20);
 			this.dateTimePickerAdvEnd.Calendar.TodayButton.Text = "xxToday";
 			this.dateTimePickerAdvEnd.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvEnd.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvEnd.CalendarForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvEnd.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvEnd.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
+			this.dateTimePickerAdvEnd.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvEnd.DropDownImage = null;
 			this.dateTimePickerAdvEnd.EnableNullDate = false;
 			this.dateTimePickerAdvEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-			this.dateTimePickerAdvEnd.Location = new System.Drawing.Point(334, 27);
+			this.dateTimePickerAdvEnd.Location = new System.Drawing.Point(332, 27);
 			this.dateTimePickerAdvEnd.MinValue = new System.DateTime(((long)(0)));
 			this.dateTimePickerAdvEnd.Name = "dateTimePickerAdvEnd";
 			this.dateTimePickerAdvEnd.NoneButtonVisible = false;
@@ -457,7 +462,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEnd.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvEnd.TabIndex = 11;
 			this.dateTimePickerAdvEnd.ThemesEnabled = true;
-			this.dateTimePickerAdvEnd.UseCurrentCulture = true;
 			this.dateTimePickerAdvEnd.Value = new System.DateTime(2008, 12, 5, 6, 42, 0, 0);
 			this.dateTimePickerAdvEnd.ValueChanged += new System.EventHandler(this.DateTimePickerAdvEndValueChanged);
 			// 
@@ -476,7 +480,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.tableLayoutPanel5.Name = "tableLayoutPanel5";
 			this.tableLayoutPanel5.RowCount = 1;
 			this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel5.Size = new System.Drawing.Size(532, 44);
+			this.tableLayoutPanel5.Size = new System.Drawing.Size(528, 44);
 			this.tableLayoutPanel5.TabIndex = 3;
 			// 
 			// buttonAdvRemove
@@ -488,7 +492,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.buttonAdvRemove.Location = new System.Drawing.Point(10, 10);
 			this.buttonAdvRemove.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.buttonAdvRemove.Name = "buttonAdvRemove";
-			this.buttonAdvRemove.Size = new System.Drawing.Size(203, 23);
+			this.buttonAdvRemove.Size = new System.Drawing.Size(201, 23);
 			this.buttonAdvRemove.TabIndex = 14;
 			this.buttonAdvRemove.Text = "xxRemoveRecurrence";
 			this.buttonAdvRemove.UseVisualStyle = true;
@@ -499,7 +503,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.buttonAdvCancel.Anchor = System.Windows.Forms.AnchorStyles.None;
 			this.buttonAdvCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonAdvCancel.Location = new System.Drawing.Point(441, 10);
+			this.buttonAdvCancel.Location = new System.Drawing.Point(437, 10);
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Size = new System.Drawing.Size(82, 23);
 			this.buttonAdvCancel.TabIndex = 13;
@@ -510,7 +514,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			this.buttonAdvOK.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonAdvOK.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvOK.Location = new System.Drawing.Point(347, 10);
+			this.buttonAdvOK.Location = new System.Drawing.Point(343, 10);
 			this.buttonAdvOK.Name = "buttonAdvOK";
 			this.buttonAdvOK.Size = new System.Drawing.Size(82, 23);
 			this.buttonAdvOK.TabIndex = 12;
@@ -526,7 +530,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.BackColor = System.Drawing.SystemColors.Control;
 			this.CancelButton = this.buttonAdvCancel;
 			this.CaptionForeColor = System.Drawing.Color.Black;
-			this.ClientSize = new System.Drawing.Size(538, 364);
+			this.ClientSize = new System.Drawing.Size(534, 361);
 			this.Controls.Add(this.tableLayoutPanel1);
 			this.Font = new System.Drawing.Font("Tahoma", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.HelpButton = false;
@@ -559,7 +563,9 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.groupBoxRangeOfRecurrence.ResumeLayout(false);
 			this.tableLayoutPanel4.ResumeLayout(false);
 			this.tableLayoutPanel4.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart.Calendar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvStart)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd.Calendar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvEnd)).EndInit();
 			this.tableLayoutPanel5.ResumeLayout(false);
 			this.ResumeLayout(false);
