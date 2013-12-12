@@ -571,6 +571,8 @@
     <Compile Include="Domain\ScheduleVisibleReasons.cs" />
     <Compile Include="Domain\SchedulingServiceBaseEventArgs.cs" />
     <Compile Include="Domain\ReportLevelDetail.cs" />
+    <Compile Include="Domain\SchedulingServiceFailedEventArgs.cs" />
+    <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
     <Compile Include="Domain\ShiftTradeRequestStatusException.cs" />
     <Compile Include="Domain\ShiftTradeStatus.cs" />
     <Compile Include="Domain\StaffingThreshold.cs" />

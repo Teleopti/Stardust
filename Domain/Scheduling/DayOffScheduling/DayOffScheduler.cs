@@ -72,8 +72,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                         _schedulePartModifyAndRollbackService.Rollback();
                     }
 
-                    var eventArgs = new SchedulingServiceBaseEventArgs(part);
-                    OnDayScheduled(eventArgs);
+	                var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
+					OnDayScheduled(eventArgs);
                     if (eventArgs.Cancel) return;
                 }       
             }          
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 						{
 							rollbackService.Rollback();
 						}
-						var eventArgs = new SchedulingServiceBaseEventArgs(bestScheduleDay);
+						var eventArgs = new SchedulingServiceSuccessfulEventArgs(bestScheduleDay);
 						OnDayScheduled(eventArgs);
 						if (eventArgs.Cancel)
 							return;

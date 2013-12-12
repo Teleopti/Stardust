@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 		void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
-			var eventArgs = new SchedulingServiceBaseEventArgs(e.SchedulePart);
-			eventArgs.Cancel = e.Cancel;
+			var eventArgs = new SchedulingServiceSuccessfulEventArgs(e.SchedulePart);
+ 			eventArgs.Cancel = e.Cancel;
 			OnDayScheduled(eventArgs);
 			e.Cancel = eventArgs.Cancel;
 			if (eventArgs.Cancel)

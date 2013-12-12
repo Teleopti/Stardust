@@ -120,7 +120,8 @@ namespace Teleopti.Ccc.Win.Commands
 			{
 				e.Cancel = true;
 			}
-			_scheduledCount++;
+			if (e.IsSuccessful)
+ 			_scheduledCount++;
 			if (_scheduledCount >= _schedulingOptions.RefreshRate)
 			{
 				_backgroundWorker.ReportProgress(1, e.SchedulePart);

@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (roleModelShift == null)
 				{
 					clearBlockedShiftCategories(schedulingOptions);
-					return false;
+					OnDayScheduledFailed();
+ 					return false;
 				}
 				var shiftCategoryToBeBlocked = roleModelShift.TheWorkShift.ShiftCategory;
 				var selectedBlockDays = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
@@ -56,8 +57,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					if (_cancelMe)
 					{
-						clearBlockedShiftCategories(schedulingOptions);
-						return false;
+						clearBlockedShiftCategories(schedulingOptions); 
+						OnDayScheduledFailed();
+ 						return false;
 					}
 					_singleDayScheduler.DayScheduled += OnDayScheduled;
 					_singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod);
@@ -94,6 +96,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				temp(this, e);
 			}
 			_cancelMe = e.Cancel;
+		}
+
+		public void OnDayScheduledFailed()
+		{
+			var temp = DayScheduled;
+			if (temp != null)
+			{
+				temp(this, new SchedulingServiceFailedEventArgs());
+			}
 		}
 	}
 

@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     part.CreateAndAddAbsence(layer);
                     _schedulePartModifyAndRollbackService.Modify(part);
 
-                    var eventArgs = new SchedulingServiceBaseEventArgs(part);
-                    OnDayScheduled(eventArgs);
+					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
+					OnDayScheduled(eventArgs);
                     if (eventArgs.Cancel) return;
                 }
             }

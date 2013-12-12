@@ -126,8 +126,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		                        if (!result && breakIfPersonCannotSchedule)
 		                            return false;
 
-		                        var eventArgs = new SchedulingServiceBaseEventArgs(schedulePart);
-		                        OnDayScheduled(eventArgs);
+								var eventArgs = new SchedulingServiceSuccessfulEventArgs(schedulePart); 
+								OnDayScheduled(eventArgs);
 		                        if (eventArgs.Cancel) return result;
 		                    }
 		                }
