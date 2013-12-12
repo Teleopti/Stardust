@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             DateTime time2 = CurrentCalendar.AddMonths(_dateValue, months);
             if(!IsDateOnSameMonth(months,time,time2))
             {
-                int weekOfYear = CurrentCalendar.GetWeekOfYear(time, CurrentCulture.DateTimeFormat.CalendarWeekRule, CurrentCulture.DateTimeFormat.FirstDayOfWeek);
+                int weekOfYear = DateHelper.WeekNumber(time, CurrentCulture);
                 e.Style.Font.Size = 6;
                 e.Style.VerticalAlignment = GridVerticalAlignment.Middle;
                 e.Style.HorizontalAlignment = GridHorizontalAlignment.Left;
