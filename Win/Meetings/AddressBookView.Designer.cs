@@ -64,6 +64,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.textBoxExtRequiredParticipant)).BeginInit();
 			this.tableLayoutPanelFilter.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate.Calendar)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxExtFilterCriteria)).BeginInit();
 			this.tableLayoutPanelConfirmButtons.SuspendLayout();
 			this.statusStripExAddressBook.SuspendLayout();
@@ -320,11 +321,12 @@
 			this.dateTimePickerAdvtDate.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvtDate.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvtDate.Calendar.HeadGradient = true;
+			this.dateTimePickerAdvtDate.Calendar.Iso8601CalenderFormat = false;
 			this.dateTimePickerAdvtDate.Calendar.Location = new System.Drawing.Point(0, 0);
 			this.dateTimePickerAdvtDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvtDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvtDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(206, 174);
+			this.dateTimePickerAdvtDate.Calendar.Size = new System.Drawing.Size(200, 174);
 			this.dateTimePickerAdvtDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvtDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvtDate.Calendar.TabIndex = 0;
@@ -335,7 +337,7 @@
 			// 
 			// 
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(134, 0);
+			this.dateTimePickerAdvtDate.Calendar.NoneButton.Location = new System.Drawing.Point(130, 0);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvtDate.Calendar.NoneButton.UseVisualStyle = true;
@@ -345,13 +347,14 @@
 			// 
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(206, 20);
+			this.dateTimePickerAdvtDate.Calendar.TodayButton.Size = new System.Drawing.Size(200, 20);
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvtDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvtDate.CalendarFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvtDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvtDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
 			this.dateTimePickerAdvtDate.ClipboardFormat = System.Windows.Forms.DateTimePickerFormat.Short;
+			this.dateTimePickerAdvtDate.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvtDate.DropDownImage = null;
 			this.dateTimePickerAdvtDate.EnableNullDate = false;
 			this.dateTimePickerAdvtDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
@@ -364,7 +367,6 @@
 			this.dateTimePickerAdvtDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvtDate.TabIndex = 5;
 			this.dateTimePickerAdvtDate.ThemesEnabled = true;
-			this.dateTimePickerAdvtDate.UseCurrentCulture = true;
 			this.dateTimePickerAdvtDate.Value = new System.DateTime(2008, 8, 5, 8, 1, 24, 984);
 			this.dateTimePickerAdvtDate.ValueChanged += new System.EventHandler(this.dateTimePickerAdvtDate_ValueChanged);
 			// 
@@ -491,6 +493,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.textBoxExtRequiredParticipant)).EndInit();
 			this.tableLayoutPanelFilter.ResumeLayout(false);
 			this.tableLayoutPanelFilter.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate.Calendar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvtDate)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.textBoxExtFilterCriteria)).EndInit();
 			this.tableLayoutPanelConfirmButtons.ResumeLayout(false);
