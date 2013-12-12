@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			_scheduleDay.Stub(x => x.PersonAssignment()).Return( personAssignment );
 			_scheduleDay.Stub(x => x.Person).Return(person);
-			personAssignment.Stub(x => x.PersonalLayers()).Return(new[] {new PersonalShiftLayer(activity, period)});
+			personAssignment.Stub(x => x.PersonalActivities()).Return(new[] { new PersonalShiftLayer(activity, period) });
 
 			using (_mocks.Record())
 			{
