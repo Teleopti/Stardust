@@ -142,11 +142,15 @@ define([
 
 		this.UpdateSchedules = function (data, timeLine) {
 			// data might include the same person more than once, with data for more than one day
-			// create any missing persons, and clear their schedule existing data
+			// clear all existing persons schedules
+			var persons = self.Persons();
+			for (var i = 0; i < persons.length; i++) {
+				persons[i].ClearData();
+			}
+			// create any missing persons
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
-				var person = personForId(schedule.PersonId);
-				person.ClearData();
+				personForId(schedule.PersonId);
 			}
 
 			if (!self.DisplayGroupMates()) {
