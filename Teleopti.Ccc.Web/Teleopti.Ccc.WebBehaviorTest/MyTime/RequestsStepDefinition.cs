@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(string subject)
 		{
 			Browser.Interactions.AssertExists(".request");
-			Browser.Interactions.AssertFirstContains(".request-details", subject);
+			Browser.Interactions.AssertFirstContains(".request-body", subject);
 		}
 
 		[Then(@"I should see my existing shift trade request with status waiting for other part")]
