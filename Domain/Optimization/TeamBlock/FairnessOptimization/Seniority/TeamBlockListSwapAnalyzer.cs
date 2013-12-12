@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -22,19 +21,26 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         public void AnalyzeTeamBlock(IList<ITeamBlockInfo> teamBlockList, IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, ITeamBlockSwap teamBlockSwap)
         {
             var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(teamBlockList, shiftCategories);
-            foreach (var higherPriority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityList)
-            {
-                foreach (var lowerPriority in teamBlockPriorityDefinitionInfo.LowToHighSeniorityList)
-                {
-                    var higherPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnSeniority(higherPriority);
-                    int lowestShiftCategoryPriority = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(higherPriorityBlock);
-                    if (teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriorityList.Any(higherShiftCategoryPriority => higherShiftCategoryPriority > lowestShiftCategoryPriority))
-                    {
-                        var lowestPriorityBlock = teamBlockPriorityDefinitionInfo.BlockOnSeniority(lowerPriority);
-		                teamBlockSwap.Swap(higherPriorityBlock, lowestPriorityBlock, rollbackService, scheduleDictionary);
-                    }
-                }
-            }
+	        var analyzedTeamBlocks = new List<ITeamBlockInfo>();
+
+			foreach (var teamBlockInfoHighSeniority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo)
+			{
+				foreach (var teamBlockInfoLowSeniority in teamBlockPriorityDefinitionInfo.LowToHighSeniorityListBlockInfo)
+				{
+					var highSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoHighSeniority);
+					var lowSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoLowSeniority);
+
+					if (analyzedTeamBlocks.Contains(teamBlockInfoLowSeniority)) continue;
+					if (teamBlockInfoHighSeniority.Equals(teamBlockInfoLowSeniority)) continue;
+					if (highSeniorityPoints > lowSeniorityPoints) continue;
+					if (!teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary)) continue;
+
+					teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoHighSeniority, lowSeniorityPoints);
+					teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoLowSeniority, highSeniorityPoints);	
+				}
+
+				analyzedTeamBlocks.Add(teamBlockInfoHighSeniority);
+	        }
         }
     }
 }
