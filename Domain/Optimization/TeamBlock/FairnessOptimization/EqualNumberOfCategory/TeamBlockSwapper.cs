@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface ITeamBlockSwapper
 	{
-		void Swap(ITeamBlockInfo teamBlock1, ITeamBlockInfo teamBlock2,
+		bool TrySwap(ITeamBlockInfo teamBlock1, ITeamBlockInfo teamBlock2,
 		                          ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary);
 	}
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_swapServiceNew = swapServiceNew;
 		}
 
-		public void Swap(ITeamBlockInfo teamBlock1, ITeamBlockInfo teamBlock2,
+		public bool TrySwap(ITeamBlockInfo teamBlock1, ITeamBlockInfo teamBlock2,
 		                 ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary)
 		{
 			List<IScheduleDay> totalModifyList = new List<IScheduleDay>();
@@ -40,8 +40,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			}
 
 			rollbackService.ClearModificationCollection();
-			rollbackService.ModifyParts(totalModifyList);
+			var modifyResults = rollbackService.ModifyParts(totalModifyList);
+			if (modifyResults.Any())
+			{
+				rollbackService.Rollback();
+				return false;
+			}
 			rollbackService.ClearModificationCollection();
+
+			return true;
 		}
 	}
 }

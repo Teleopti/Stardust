@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(_teamBlockInfo1, teamBlockInfos,
 				                                                                        totalDistributionSummary, _sceduleDictionary))
 				      .Return(_teamBlockInfo2);
-				Expect.Call(() => _teamBlockSwapper.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary));
+				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary)).Return(true);
 
 				//second loop
 				Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistributionSummary,
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(_teamBlockInfo1, teamBlockInfos,
 																						totalDistributionSummary, _sceduleDictionary))
 					  .Return(_teamBlockInfo2);
-				Expect.Call(() => _teamBlockSwapper.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary));
+				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary)).Return(true);
 			}
 
 			using (_mocks.Playback())

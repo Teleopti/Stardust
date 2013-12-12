@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Win.Commands
 							IList<IPerson> selectedPersons,
 							IOptimizationPreferences optimizationPreferences,
 							ISchedulePartModifyAndRollbackService rollbackService,
+							IScheduleTagSetter tagSetter,
 							ISchedulingOptions schedulingOptions,
 							ITeamBlockScheduler teamBlockScheduler);
     }
@@ -113,8 +114,9 @@ namespace Teleopti.Ccc.Win.Commands
         public void Execute(BackgroundWorker backgroundWorker, 
 							DateOnlyPeriod selectedPeriod,
 							IList<IPerson> selectedPersons,
-							IOptimizationPreferences optimizationPreferences, 
-							ISchedulePartModifyAndRollbackService rollbackService,
+							IOptimizationPreferences optimizationPreferences,
+							ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation,
+							IScheduleTagSetter tagSetter,
 							ISchedulingOptions schedulingOptions,
 							ITeamBlockScheduler teamBlockScheduler)
         {
@@ -142,17 +144,19 @@ namespace Teleopti.Ccc.Win.Commands
 
 	        if (optimizationPreferences.General.OptimizationStepDaysOff)
 		        optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-		                                 teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService,
+										 teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackServiceWithResourceCalculation,
 		                                 schedulingOptions, teamBlockScheduler, teamInfoFactory);
 
             if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
                 optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences,
-										  teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackService, schedulingOptions, teamBlockScheduler);
+										  teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackServiceWithResourceCalculation, schedulingOptions, teamBlockScheduler);
 
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
+				var rollbackServiceWithoutResourceCalculation = new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), tagSetter);
+
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
-				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
+				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				//move into IOC
@@ -168,7 +172,7 @@ namespace Teleopti.Ccc.Win.Commands
 				ITeamBlockSwap teamBlockSwap = new TeamBlockSwap(swapService, teamBlockSwapValidator, teamBlockSwapDayValidator);
 
 
-				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService, teamBlockSwap);
+				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation, teamBlockSwap);
 			}
 				
         }
