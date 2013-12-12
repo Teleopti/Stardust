@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IEqualCategoryDistributionBestTeamBlockDecider _equalCategoryDistributionBestTeamBlockDecider;
 		private readonly IEqualCategoryDistributionWorstTeamBlockDecider _equalCategoryDistributionWorstTeamBlockDecider;
 		private readonly IFilterPersonsForTotalDistribution _filterPersonsForTotalDistribution;
+		private readonly IFilterForFullyScheduledBlocks _filterForFullyScheduledBlocks;
 		private bool _cancelMe;
 
 		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			                                            equalCategoryDistributionBestTeamBlockDecider,
 		                                            IEqualCategoryDistributionWorstTeamBlockDecider
 			                                            equalCategoryDistributionWorstTeamBlockDecider,
-		                                            IFilterPersonsForTotalDistribution filterPersonsForTotalDistribution)
+		                                            IFilterPersonsForTotalDistribution filterPersonsForTotalDistribution,
+													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_equalCategoryDistributionBestTeamBlockDecider = equalCategoryDistributionBestTeamBlockDecider;
 			_equalCategoryDistributionWorstTeamBlockDecider = equalCategoryDistributionWorstTeamBlockDecider;
 			_filterPersonsForTotalDistribution = filterPersonsForTotalDistribution;
+			_filterForFullyScheduledBlocks = filterForFullyScheduledBlocks;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -69,15 +72,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			var totalDistribution = _distributionForPersons.CreateSummary(personListForTotalDistribution, scheduleDictionary);
 			var teamBlocksInSelection = _filterForTeamBlockInSelection.Filter(teamBlockListWithCorrectWorkFlowControlSet,
 			                                                              selectedPersons, selectedPeriod);
-			double totalBlockCount = teamBlocksInSelection.Count;
-			while (teamBlocksInSelection.Count > 0 && !_cancelMe)
+
+			var blocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksInSelection, scheduleDictionary);
+			
+			double totalBlockCount = blocksToWorkWith.Count;
+			while (blocksToWorkWith.Count > 0 && !_cancelMe)
 			{
 				ITeamBlockInfo teamBlockInfoToWorkWith =
-					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, teamBlocksInSelection,
+					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, blocksToWorkWith,
 					                                                                    scheduleDictionary);
-				teamBlocksInSelection.Remove(teamBlockInfoToWorkWith);
+				blocksToWorkWith.Remove(teamBlockInfoToWorkWith);
 
-				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(teamBlocksInSelection, teamBlockInfoToWorkWith);
+				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(blocksToWorkWith, teamBlockInfoToWorkWith);
 				if(possibleTeamBlocksToSwapWith.Count == 0)
 					continue;
 
@@ -90,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				_teamBlockSwapper.TrySwap(teamBlockInfoToWorkWith, selectedTeamBlock, rollbackService, scheduleDictionary);
 
 				var message = Resources.FairnessOptimizationOn + " " + Resources.EqualOfEachShiftCategory + ": " +
-							  new Percent((totalBlockCount - teamBlocksInSelection.Count) / totalBlockCount);
+							  new Percent((totalBlockCount - blocksToWorkWith.Count) / totalBlockCount);
 
 				OnReportProgress(message);
 			}
