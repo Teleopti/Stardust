@@ -59,13 +59,6 @@ define([
 						if (currentPersons[i].Id == schedules[j].PersonId) {
 							schedules[j].Date = dateClone;
 							currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, teamSchedule.SelectedGroup());
-							if (currentState.SelectedPersonId() == currentPersons[i].Id) {
-								if (currentState.SelectedLayer()) {
-									setSelectedLayer(currentPersons[i].Shifts());
-								} else {
-								}
-
-							}
 						}
 					}
 				}
@@ -79,8 +72,16 @@ define([
 				teamSchedule.Persons.valueHasMutated();
 
 				options.success();
-
+				
 				resize.notify();
+
+				for (var k = 0; k < currentPersons.length; k++) {
+					if (currentState.SelectedPersonId() == currentPersons[k].Id) {
+						if (currentState.SelectedLayer()) {
+							setSelectedLayer(currentPersons[k].Shifts());
+						}
+					}
+				}
 			},
 			function (notification) {
 				for (var i = 0; i < teamSchedule.Persons().length; i++) {
