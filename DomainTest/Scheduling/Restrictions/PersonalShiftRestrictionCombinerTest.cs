@@ -93,5 +93,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				Assert.AreSame(_restriction, _restriction);
 			}
 		}
+
+		[Test]
+		public void ShouldNotCrashOnWorktimeIfPersonalIs24HOrLonger()
+		{
+			var newDateTime1 = new DateTime(2013, 12, 12, 0, 0, 0, DateTimeKind.Utc);
+			var newDateTime2 = newDateTime1.AddHours(36);
+			var period = new DateTimePeriod(newDateTime1, newDateTime2);
+			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			var person = PersonFactory.CreatePerson();
+			var activity = _mocks.StrictMock<IActivity>();
+			ILayerCollection<IActivity> layerCollection = new LayerCollection<IActivity>();
+			layerCollection.Add(new ActivityLayer(activity, period));
+
+			_scheduleDay.Stub(x => x.PersonAssignment()).Return( personAssignment );
+			_scheduleDay.Stub(x => x.Person).Return(person);
+			personAssignment.Stub(x => x.PersonalLayers()).Return(new[] {new PersonalShiftLayer(activity, period)});
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_restriction.Combine(null))
+					.IgnoreArguments()
+					.Return(_restriction);
+			}
+			using (_mocks.Playback())
+			{
+				IEffectiveRestriction result =
+					_target.Combine(_scheduleDay, _restriction);
+				Assert.IsNotNull(result);
+				Assert.AreSame(_restriction, _restriction);
+			}
+		}
 	}
 }
