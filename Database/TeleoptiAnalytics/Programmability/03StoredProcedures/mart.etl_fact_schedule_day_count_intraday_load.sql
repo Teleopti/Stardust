@@ -153,6 +153,7 @@ INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC stg
 	AND f.person_id = stg.person_id
 	AND f.scenario_id = @scenario_id 
 WHERE shift_category_id<>-1
+AND NOT EXISTS (select 1 from mart.fact_schedule_day_count sdc where sdc.date_id = f.shift_startdate_id and sdc.person_id = f.person_id and sdc.scenario_id = f.scenario_id and sdc.start_interval_id = f.shift_startinterval_id)
 GROUP BY f.shift_startdate_id,f.shift_startinterval_id,f.person_id,f.scenario_id,f.business_unit_id,f.datasource_id
 
 
@@ -213,6 +214,7 @@ LEFT JOIN
 ON
 	stg.scenario_code = ds.scenario_code
 	AND ds.scenario_id = @scenario_id 
+	WHERE NOT EXISTS (select 1 from mart.fact_schedule_day_count sdc where sdc.date_id = dsd.date_id and sdc.person_id = dp.person_id and sdc.scenario_id = ds.scenario_id and sdc.start_interval_id = di.interval_id)  
 GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
 
 

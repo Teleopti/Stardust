@@ -53,8 +53,6 @@ INNER JOIN	#DimPersonLocalized dp_loc
 INNER JOIN mart.bridge_time_zone btz
 	ON	btz.local_date_id = dd.date_id
 	AND btz.time_zone_id = dp.time_zone_id
-	AND btz.local_interval_id = 0
-
 END
 
 GO
