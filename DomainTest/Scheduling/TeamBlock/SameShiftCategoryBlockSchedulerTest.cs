@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Assert.That(_isScheduleFailed, Is.False);
 				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-										  _selectedPersons);
+										  _selectedPersons, _rollbackService);
 
 				Assert.That(result, Is.False);
 				Assert.That(_isScheduleFailed, Is.True);

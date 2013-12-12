@@ -99,11 +99,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(result, Is.True);
 			}
 		}
-		
+
 		[Test]
 		public void RestrictionAggregatorShouldConsumeSelectedTeamMembersOnly()
 		{
-			_selectedPersons = new List<IPerson> {_person2 };
+			_selectedPersons = new List<IPerson> {_person2};
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
@@ -113,9 +113,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons, _schedulePartModifyAndRollbackService);
+				                                          _selectedPersons, _schedulePartModifyAndRollbackService);
 				Assert.That(result, Is.True);
 			}
+		}
+
 		[Test]
 		public void ShouldNotifySubscribersWhenScheduleFailed()
 		{
@@ -130,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Assert.That(_isScheduleFailed, Is.False);
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons);
+														  _selectedPersons, _schedulePartModifyAndRollbackService);
 
 				Assert.That(result, Is.False);
 				Assert.That(_isScheduleFailed, Is.True);
@@ -145,5 +147,4 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 		}
 
-	}
 }
