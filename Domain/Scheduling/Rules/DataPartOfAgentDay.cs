@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 

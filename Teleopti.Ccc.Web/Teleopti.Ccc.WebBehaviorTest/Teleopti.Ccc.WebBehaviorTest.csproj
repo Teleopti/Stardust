@@ -577,7 +577,7 @@
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
-    <Compile Include="Pages\Common\CalendarCellsPage.cs" />
+    <Compile Include="Pages\Common\CalendarCells.cs" />
     <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduleIsPublished.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />

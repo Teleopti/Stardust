@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenTheCalendarShouldBeEditable()
 		{
 			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = CalendarCellsPage.DateSelector(editableDate);
+			var cell = CalendarCells.DateSelector(editableDate);
 			Browser.Interactions.ClickUsingJQuery(cell);
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0}.{1}",cell,"ui-selected"));
 		}
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var startTime = TimeHelper.TimeOfDayFromTimeSpan(data.StartTime, DataMaker.Data().MyCulture);
 			var endTime = TimeHelper.TimeOfDayFromTimeSpan(data.EndTime, DataMaker.Data().MyCulture);
 
-			var cell = CalendarCellsPage.DateSelector(data.Date);
+			var cell = CalendarCells.DateSelector(data.Date);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,startTime);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,endTime);
 		}
@@ -93,8 +93,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCellsPage.DateSelector(firstDateDisplayed), CalendarCellsPage.DateSelector(firstDateDisplayed.AddDays(-1)));
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCellsPage.DateSelector(lastDateDisplayed), CalendarCellsPage.DateSelector(lastDateDisplayed.AddDays(1)));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(firstDateDisplayed), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1)));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(lastDateDisplayed), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1)));
 		}
 	}
 }

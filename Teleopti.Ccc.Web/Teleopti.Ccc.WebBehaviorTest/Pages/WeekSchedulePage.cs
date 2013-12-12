@@ -13,7 +13,7 @@ using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditRequestPage, IDateRangeSelector
+	public class WeekSchedulePage : PortalPage, IOkButton, ICancelButton, IEditRequestPage
 	{
 		private readonly Constraint DayConstraint = Find.By("data-mytime-date", v => v != null);
 		private ListCollection DayLists { get { return Document.Lists.Filter(DayConstraint); } }
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public string FirstDate { get { return FirstDay.GetAttributeValue("data-mytime-date"); } }
 
-		private string DateSelector(DateTime date) { return CalendarCellsPage.DateSelector(date); }
+		private string DateSelector(DateTime date) { return CalendarCells.DateSelector(date); }
 
 		public List DayElementForDate(DateTime date)
 		{
@@ -153,17 +153,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "ScheduleDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
-
-
-		public void ClickNext()
-		{
-			Browser.Interactions.Click("#ScheduleDateRangeSelector button:last-of-type");
-		}
-
-		public void ClickPrevious()
-		{
-			Browser.Interactions.Click("#ScheduleDateRangeSelector button:first-of-type");
-		}
 
 		public Link TodayButton 
 		{

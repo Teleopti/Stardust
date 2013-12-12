@@ -21,12 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class StudentAvailabilityPageStepDefinitions
 	{
-		public static void SelectCalendarCellByClass(DateTime date)
-		{
-			Browser.Interactions.AssertExistsUsingJQuery(CalendarCellsPage.DateSelector(date) + ".ui-selectee");
-			Browser.Interactions.AddClassUsingJQuery("ui-selected", CalendarCellsPage.DateSelector(date) + ".ui-selectee");
-		}
-
 		[Given(@"I have a student availability with")]
 		public void GivenIHaveAStudentAvailabilityWith(Table table)
 		{
@@ -43,14 +37,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I select day '(.*)' in student availability")]
 		public void WhenISelectDayInStudentAvailability(DateTime date)
 		{
-			SelectCalendarCellByClass(date);
+			Browser.Interactions.ClickUsingJQuery(CalendarCells.DateSelector(date));
 		}
 
 		[When(@"I select following days in student availability")]
 		public void WhenISelectFollowingDaysInStudentAvailability(Table table)
 		{
 			var dates = table.CreateSet<SingleValue>();
-			dates.ForEach(date => SelectCalendarCellByClass(date.Value));
+			dates.ForEach(date =>
+				{
+					var selector = CalendarCells.DateSelector(date.Value) + ".ui-selectee";
+					Browser.Interactions.AssertExistsUsingJQuery(selector);
+					Browser.Interactions.AddClassUsingJQuery("ui-selected", selector);
+				});
 		}
 		
 		[When(@"I click the edit button in student availability")]
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the student availability on '(.*)'")]
 		public void ThenIShouldNotSeeTheStudentAvailabilityOn(DateTime date)
 		{
-			var cell = CalendarCellsPage.DateSelector(date);
+			var cell = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0} .{1}:empty", cell, "day-content-text"));
 		}
 
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var fields = table.CreateInstance<StudentAvailabilityFields>();
 
-			var studentAvailabilityForDate = CalendarCellsPage.DateSelector(fields.Date);
+			var studentAvailabilityForDate = CalendarCells.DateSelector(fields.Date);
 
 			if (fields.StartTime != null)
 				Browser.Interactions.AssertFirstContainsUsingJQuery(studentAvailabilityForDate, fields.StartTime);

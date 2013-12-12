@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var data = DataMaker.Data().UserData<ShiftCategoryPreference>();
 			var shiftCategory = data.ShiftCategory.Description.Name;
 
-			var cell = CalendarCellsPage.DateSelector(data.Date);
+			var cell = CalendarCells.DateSelector(data.Date);
 			Browser.Interactions.AssertFirstContains(cell, shiftCategory);
 		}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var data = DataMaker.Data().UserData<DayOffPreference>();
 			var dayOff = data.DayOffTemplate.Description.Name;
 
-			var cell = CalendarCellsPage.DateSelector(data.Date);
+			var cell = CalendarCells.DateSelector(data.Date);
 			Browser.Interactions.AssertFirstContains(cell, dayOff);
 		}
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var data = DataMaker.Data().UserData<AbsencePreference>();
 			var absence = data.Absence.Description.Name;
 
-			var cell = CalendarCellsPage.DateSelector(data.Date);
+			var cell = CalendarCells.DateSelector(data.Date);
 			Browser.Interactions.AssertFirstContains(cell,absence);
 		}
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(date), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the 2 standard preferences in the calendar")]
@@ -122,17 +122,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			var data = DataMaker.Data().UserData<StandardPreference>();
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should not see the former standard preference in the calendar")]
 		public void ThenIShouldNotSeeTheFormerStandardPreferenceInTheCalendar()
 		{
 			var data = DataMaker.Data().UserData<StandardPreference>();
-			Browser.Interactions.AssertFirstNotContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
+			Browser.Interactions.AssertFirstNotContains(CalendarCells.DateSelector(data.Date), data.Preference);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period")]
@@ -158,8 +158,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var data1 = DataMaker.Data().UserData<StandardPreference>();
 			var data2 = DataMaker.Data().UserData<AnotherStandardPreference>();
-			var cell1 = CalendarCellsPage.DateSelector(data1.Date);
-			var cell2 = CalendarCellsPage.DateSelector(data2.Date);
+			var cell1 = CalendarCells.DateSelector(data1.Date);
+			var cell2 = CalendarCells.DateSelector(data2.Date);
 			Browser.Interactions.AssertFirstNotContains(cell1,data1.Preference);
 			Browser.Interactions.AssertFirstNotContains(cell2,data2.Preference);
 		}
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenThePreferenceCalendarShouldBeEditable()
 		{
 			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			var cell = CalendarCellsPage.DateSelector(editableDate);
+			var cell = CalendarCells.DateSelector(editableDate);
 			Browser.Interactions.Click(cell);
 			Browser.Interactions.AssertExists(string.Format("{0}.{1}", cell, "ui-selected"));
 		}
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
-			var cell = CalendarCellsPage.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}", cell, "possible-start-times"), expected);
 		}
 
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheEndTimeBoundryTo(string earliest, string latest)
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
-			var cell = CalendarCellsPage.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}",cell,"possible-end-times"),expected);
 		}
 
@@ -226,14 +226,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var culture = DataMaker.Data().MePerson.PermissionInformation.Culture();
 			var expected = GetExpectedContractTimesString(earliest, latest, culture);
 
-			var cell = CalendarCellsPage.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}", cell, "possible-contract-times"), expected);
 		}
 
 		[Then(@"I should see that there are no available shifts")]
 		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
 		{
-			var cell = CalendarCellsPage.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,Resources.NoAvailableShifts);
 		}
 
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 
-			var cell = CalendarCellsPage.DateSelector(date);
+			var cell = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertNotExistsUsingJQuery("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-start-times"));
 			Browser.Interactions.AssertNotExistsUsingJQuery("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-end-times"));
 			Browser.Interactions.AssertNotExistsUsingJQuery("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-contract-times"));
@@ -285,8 +285,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			Browser.Interactions.AssertNotExists(CalendarCellsPage.DateSelector(firstDateDisplayed), CalendarCellsPage.DateSelector(firstDateDisplayed.AddDays(-1)));
-			Browser.Interactions.AssertNotExists(CalendarCellsPage.DateSelector(lastDateDisplayed), CalendarCellsPage.DateSelector(lastDateDisplayed.AddDays(1)));
+			Browser.Interactions.AssertNotExists(CalendarCells.DateSelector(firstDateDisplayed), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1)));
+			Browser.Interactions.AssertNotExists(CalendarCells.DateSelector(lastDateDisplayed), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1)));
 		}
 	}
 }

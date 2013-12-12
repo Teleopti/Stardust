@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private static void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCellsPage.DateSelector(firstDateDisplayed), CalendarCellsPage.DateSelector(firstDateDisplayed.AddDays(-1)));
-			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCellsPage.DateSelector(lastDateDisplayed), CalendarCellsPage.DateSelector(lastDateDisplayed.AddDays(1)));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(firstDateDisplayed), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1)));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(lastDateDisplayed), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1)));
 		}
 	}
 }
