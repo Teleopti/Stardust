@@ -457,6 +457,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new USCulture());
 		}
 
+		[Given(@"I am englishspeaking swede")]
+		public void GivenIAmEnglishSpeakingSwede()
+		{
+			DataMaker.Data().Apply(new SwedeSpeakingEnglishCulture());
+		}
+
 		[Given(@"'?(I)'? am located in [hH]awaii")]
 		[Given(@"'?(.*)'? is located in [hH]awaii")]
 		public void GivenIAmLocatedInHawaii(string userName)
