@@ -842,3 +842,18 @@ BEGIN
 	ALTER TABLE [ReadModel].[PersonScheduleDay] ADD  CONSTRAINT [DF_PersonScheduleDay_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
 END
 GO
+
+----------------  
+--Name: Jonas Nordh
+--Date: 2013-12-12
+--Desc: Bug #26054 - Add unique constraint to prevent duplicates in ReadModel.GroupingReadOnly
+---------------- 
+TRUNCATE TABLE [ReadModel].[GroupingReadOnly] 
+IF NOT EXISTS (
+	SELECT * FROM sys.indexes
+	WHERE object_id = OBJECT_ID(N'[ReadModel].[GroupingReadOnly]')
+	AND name = N'UC_GroupingReadOnly'
+	)
+ALTER TABLE [ReadModel].[GroupingReadOnly] ADD CONSTRAINT UC_GroupingReadOnly UNIQUE (PersonId, StartDate, GroupId)
+GO
+
