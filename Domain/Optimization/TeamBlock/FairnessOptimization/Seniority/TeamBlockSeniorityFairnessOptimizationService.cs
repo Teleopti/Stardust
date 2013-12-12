@@ -28,6 +28,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _teamBlockListSwapAnalyzer = teamBlockListSwapAnalyzer;
         }
 
+		//To make optimization work, try something like this
+		//Filter the list of selected persons on seniorityfairness setting in wfcs
+		//In the list of selected persons, find person with highest prio
+		//Foreach fully selected block on that person
+		//If block already has highest possible value go to next block
+		//Filter all other personblocks to match criterias for swap (FilterOnSwapableTeamBlocks)
+		//Order the blocks after value and then after least senior
+		//Select first block if value are better than the workingperson block
+		//Try swap, if not success try second from list, if success go to next block on workingperson (TeamBlockSwapper)
+		//When all blocks have been tried on workingperson, remove him from list
+		//Start over again and continue until list is empty
+
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                             ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, ITeamBlockSwap teamBlockSwap)
