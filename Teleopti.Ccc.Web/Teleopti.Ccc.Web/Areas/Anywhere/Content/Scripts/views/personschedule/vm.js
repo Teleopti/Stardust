@@ -148,6 +148,10 @@ define([
 				var person = personForId(schedule.PersonId);
 				person.ClearData();
 			}
+
+			if (!self.DisplayGroupMates()) {
+				data = [lazy(data).select(function (x) { return x.PersonId == self.PersonId(); }).first()];
+			}
 			// add schedule data. a person might get more than 1 schedule added
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
