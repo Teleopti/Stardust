@@ -40,10 +40,21 @@ define([
 		this.GroupId = ko.observable();
 		this.Date = ko.observable();
 
-		this.SelectedPerson = ko.computed(function () {
-			return lazy(self.Persons())
-				.select(function (x) { return x.Id == self.PersonId(); })
+		var personForId = function (id) {
+			if (!id)
+				return undefined;
+			var person = lazy(self.Persons())
+				.select(function (x) { return x.Id == id; })
 				.first();
+			if (!person) {
+				person = new personViewModel({ Id: id });
+				self.Persons.push(person);
+			}
+			return person;
+		};
+
+		this.SelectedPerson = ko.computed(function () {
+			return personForId(self.PersonId());
 		});
 
 		this.Name = ko.computed(function () {
@@ -107,14 +118,11 @@ define([
 			return self.AddingActivity();
 		});
 
-		this.SetData = function (data, timeLine) {
-
-			//var person = self.SelectedPerson();
-			//if (!person) {
-			//	person = new personViewModel({ Id: self.PersonId() });
-			//	self.Persons.push(person);
-			//}
-			//person.AddData(data, timeLine);
+		this.UpdateData = function (data, timeLine) {
+			data.Date = self.Date();
+			
+			var person = self.SelectedPerson();
+			person.AddData(data, timeLine);
 
 			self.Absences([]);
 			var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
@@ -126,24 +134,38 @@ define([
 
 			data.PersonId = self.PersonId();
 			data.Date = self.Date();
+			
 			self.AddFullDayAbsenceForm.SetData(data, self.GroupId());
 			self.AddActivityForm.SetData(data);
 			self.AddIntradayAbsenceForm.SetData(data, self.GroupId());
 		};
 
-		this.AddPersons = function (data) {
+		this.UpdateSchedules = function (data, timeLine) {
+			// data might include the same person more than once, with data for more than one day
+			// create any missing persons, and clear their schedule existing data
 			for (var i = 0; i < data.length; i++) {
-				var personData = data[i];
-				var person = lazy(self.Persons())
-					.select(function (x) { return x.Id == personData.Id; })
-					.first();
-				if (person) {
-					person.SetData(personData);
-				} else {
-					self.Persons.push(new personViewModel(personData));
-				}
+				var schedule = data[i];
+				var person = personForId(schedule.PersonId);
+				person.ClearData();
 			}
+			// add schedule data. a person might get more than 1 schedule added
+			for (var i = 0; i < data.length; i++) {
+				var schedule = data[i];
+				schedule.Date = self.Date();
+				var person = personForId(schedule.PersonId);
+				person.AddData(schedule, timeLine);
+				
+				// make shiftstart and end computeds please!
+				if (person == self.SelectedPerson())
+					self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
+			}
+			
+			self.Persons().sort(function (first, second) {
+				first = first.OrderBy();
+				second = second.OrderBy();
+				return first == second ? 0 : (first < second ? -1 : 1);
+			});
 		};
-
+		
 	};
 });

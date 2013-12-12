@@ -122,7 +122,7 @@ define([
 			});
 		},
 
-		subscribeGroupSchedule: function (groupId, date, callback, isApplicableNotification) {
+		subscribeGroupSchedule: function (groupId, date, callback) {
 			unsubscribeGroupSchedule();
 			incomingGroupSchedule = callback;
 			startPromise.done(function () {
@@ -132,9 +132,6 @@ define([
 					domainReferenceType: 'Person',
 					domainType: 'IPersonScheduleDayReadModel',
 					callback: function (notification) {
-						if (!isApplicableNotification(notification)) {
-							return;
-						}
 						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
 							groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
 						}

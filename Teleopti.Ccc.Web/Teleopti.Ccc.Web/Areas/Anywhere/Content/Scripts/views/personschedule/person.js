@@ -16,10 +16,10 @@ define([
 		var self = this;
 
 		this.Id = data.Id;
-		this.Name = ko.observable(data.FirstName ? data.FirstName + ' ' + data.LastName : "");
+		this.Name = ko.observable();
 
-		this.Site = data.Site ? data.Site : "";
-		this.Team = data.Team ? data.Team : "";
+		this.Site = ko.observable();
+		this.Team = ko.observable();
 
 		this.WorkTimeMinutes = ko.observable(0);
 		this.ContractTimeMinutes = ko.observable(0);
@@ -41,40 +41,36 @@ define([
 			return time.format("H:mm");
 		});
 
-		this.SetData = function (data) {
-			self.Name(data.FirstName + ' ' + data.LastName);
-		};
-
-		this.ClearData = function () {
+		this.ClearData = function() {
 			self.Shifts([]);
 			self.DayOffs([]);
-			self.WorkTimeMinutes(0);
 			self.ContractTimeMinutes(0);
+			self.WorkTimeMinutes(0);
 		};
-
+		
 		this.AddData = function (data, timeline) {
-			if (data.Projection ? data.Projection.length > 0 : (data.Layers ? data.Layers.length > 0 : false)) {
-				var newShift = new shift(timeline);
-				newShift.AddLayers(data);
-				if (newShift.Layers()[0].StartMinutes() > 0)
-					self.Shifts.push(newShift);
-			}
+			self.Name(data.Name);
 
-			var newDayOff;
+			if (data.Site)
+				self.Site(data.Site);
+			if (data.Team)
+				self.Team(data.Team);
 
-			if (data.DayOff) {
-				data.DayOff.Date = data.Date;
-				newDayOff = new dayOff(timeline, data.DayOff);
-				self.DayOffs.push(newDayOff);
+			if (data.Projection) {
+				if (data.Projection.length > 0) {
+					var newShift = new shift(timeline);
+					newShift.AddLayers(data);
+					// this might be a wrong assumption
+					if (newShift.Layers()[0].StartMinutes() > 0)
+						self.Shifts.push(newShift);
+				}
+				if (data.DayOff) {
+					data.DayOff.Date = data.Date;
+					var newDayOff = new dayOff(timeline, data.DayOff);
+					self.DayOffs.push(newDayOff);
+				}
 			}
-			if (data.IsDayOff) {
-				data.DayOff = [];
-				data.DayOff.Date = data.Date;
-				data.DayOff.DayOffName = data.DayOffName;
-				newDayOff = new dayOff(timeline, data.DayOff);
-				self.DayOffs.push(newDayOff);
-			}
-
+			
 			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
 			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
 		};

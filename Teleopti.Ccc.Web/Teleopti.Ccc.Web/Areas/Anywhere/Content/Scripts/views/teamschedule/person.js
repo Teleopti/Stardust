@@ -63,7 +63,8 @@ define([
 			if (shiftData.Projection.length > 0) {
 				var newShift = new shift(timeline, selectedGroup, self.Id, shiftData.Date);
 				newShift.AddLayers(shiftData);
-				if (newShift.Layers()[0].StartMinutes() < 0) {
+				// this might be a wrong assumption
+				if (newShift.Layers()[0].StartMinutes() < 0) { 
 					newShift.ShiftMenu.Date(shiftData.Date.clone().subtract('days', 1));
 				}
 				self.Shifts.push(newShift);

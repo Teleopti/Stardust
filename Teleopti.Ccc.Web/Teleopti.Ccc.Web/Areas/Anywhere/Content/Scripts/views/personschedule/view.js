@@ -5,84 +5,17 @@ define([
 		'subscriptions',
 		'helpers',
 		'text!templates/personschedule/view.html',
-		'resizeevent',
-		'views/personschedule/person',
-		'ajax',
-		'lazy'
+		'resizeevent'
 ], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
 		helpers,
 		view,
-		resize,
-		personViewModel,
-		ajax,
-		lazy
+		resize
 	) {
 
 	var viewModel;
-
-	var loadSchedules = function (options) {
-		var date = moment(options.date, "YYYYMMDD");
-		subscriptions.subscribeGroupSchedule(
-			options.groupid,
-			helpers.Date.ToServer(date),
-			function (schedules) {
-				var currentPersons = viewModel.Persons();
-
-				for (var i = 0; i < currentPersons.length; i++) {
-					currentPersons[i].ClearData();
-
-					for (var j = 0; j < schedules.length; j++) {
-						if (currentPersons[i].Id == schedules[j].PersonId) {
-							schedules[j].Date = date;
-							currentPersons[i].AddData(schedules[j], viewModel.TimeLine);
-						}
-					}
-				}
-
-				currentPersons.sort(function (first, second) {
-					first = first.OrderBy();
-					second = second.OrderBy();
-					return first == second ? 0 : (first < second ? -1 : 1);
-				});
-
-				viewModel.Persons.valueHasMutated();
-
-				options.success();
-
-				resize.notify();
-			},
-			function (notification) {
-				var persons = viewModel.Persons();
-				for (var i = 0; i < persons.length; i++) {
-					if (notification.DomainReferenceId == persons[i].Id) {
-						return true;
-					}
-				}
-				return false;
-			}
-		);
-	};
-
-	var loadPersons = function (options) {
-		ajax.ajax({
-			url: 'Person/PeopleInGroup',
-			data: {
-				date: helpers.Date.ToServer(moment(options.date, "YYYYMMDD")),
-				groupId: options.groupid
-			},
-			success: function (data, textStatus, jqXHR) {
-				if (!viewModel.DisplayGroupMates()) {
-					data = [lazy(data)
-						.select(function(x) { return x.Id == viewModel.PersonId(); }).first()];
-				}
-				viewModel.AddPersons(data);
-				options.success();
-			}
-		});
-	};
 
 	return {
 		initialize: function (options) {
@@ -108,51 +41,32 @@ define([
 			viewModel.GroupId(options.groupid);
 			viewModel.Date(date);
 
-			var deferred = $.Deferred();
-
-			var loadPersonsAndSchedules = function () {
-				var currentGroup = options.groupid;
-				if (!currentGroup) {
-					viewModel.Loading(false);
-					deferred.resolve();
-					return;
-				}
-
-				loadPersons({
-					groupid: currentGroup,
-					date: options.date,
-					personid: options.personid,
-					success: function () {
-						loadSchedules({
-							groupid: currentGroup,
-							date: options.date,
-							personid: options.personid,
-							success: function () {
-								viewModel.Loading(false);
-								deferred.resolve();
-							}
-						});
-					}
-				});
-			};
-
+			var personScheduleDeferred = $.Deferred();
 			subscriptions.subscribePersonSchedule(
 				viewModel.PersonId(),
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
-					viewModel.SetData(data, viewModel.TimeLine);
-					loadPersonsAndSchedules();
+					viewModel.UpdateData(data, viewModel.TimeLine);
+					resize.notify();
+					personScheduleDeferred.resolve();
 				}
 			);
 
-			//subscriptions.subscribeGroupSchedules(
-			//	viewModel.GroupId(),
-			//	helpers.Date.ToServer(viewModel.Date()),
-			//	function (data) {
-			//		viewModel.SetSchedules(data);
-			//	});
+			var groupScheduleDeferred = $.Deferred();
+			subscriptions.subscribeGroupSchedule(
+				viewModel.GroupId(),
+				helpers.Date.ToServer(viewModel.Date()),
+				function (data) {
+					viewModel.UpdateSchedules(data, viewModel.TimeLine);
+					resize.notify();
+					groupScheduleDeferred.resolve();
+				}
+			);
 
-			return deferred.promise();
+			return $.when(personScheduleDeferred, groupScheduleDeferred)
+				.done(function () {
+					viewModel.Loading(false);
+				});
 		},
 
 		dispose: function (options) {

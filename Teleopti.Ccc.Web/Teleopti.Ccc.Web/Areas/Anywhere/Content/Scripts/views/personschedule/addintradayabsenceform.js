@@ -85,11 +85,14 @@ define([
 			}
 			self.AbsenceTypes(data.Absences);
 			groupId = groupid;
-
-			self.ShiftStart(data.Layers.length > 0 ? moment(data.Layers[0].Start) : undefined);
-			self.ShiftEnd(data.Layers.length > 0 ? moment(data.Layers[data.Layers.length - 1].Start).add('m', data.Layers[data.Layers.length - 1].Minutes) : undefined);
 		};
 
+		this.SetShiftStartAndEnd = function(data) {
+			var layers = data.Projection;
+			self.ShiftStart(layers.length > 0 ? moment(layers[0].Start) : undefined);
+			self.ShiftEnd(layers.length > 0 ? moment(layers[layers.length - 1].Start).add('m', layers[layers.length - 1].Minutes) : undefined);
+		};
+		
 		this.Apply = function() {
 			var requestData = JSON.stringify({
 				StartTime: startTimeAsMoment.format(),
