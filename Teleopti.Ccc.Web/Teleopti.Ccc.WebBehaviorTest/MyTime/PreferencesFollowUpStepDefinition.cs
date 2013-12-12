@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheDayCellWith(Table table)
 		{
 			var fields = table.CreateInstance<DayCellFields>();
-			var shift = CalendarCellsPage.DateSelector(fields.Date);
+			var shift = CalendarCells.DateSelector(fields.Date);
 			if (fields.ShiftCategory != null)
 				Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}", shift, "scheduled"), fields.ShiftCategory);
 

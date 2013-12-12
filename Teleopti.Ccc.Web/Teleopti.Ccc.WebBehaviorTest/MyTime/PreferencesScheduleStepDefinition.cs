@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var to = TimeHelper.GetLongHourMinuteTimeString(data.StartTime, DataMaker.Data().MyCulture);
 			var contractTime = TimeHelper.GetLongHourMinuteTimeString(data.GetContractTime(), DataMaker.Data().MyCulture);
 
-			var selector = CalendarCellsPage.DateSelector(data.Date);
+			var selector = CalendarCells.DateSelector(data.Date);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, data.ShiftCategory.Description.Name);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, from);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, to);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var data = DataMaker.Data().UserData<DayOffToday>();
 			
-			var selector = CalendarCellsPage.DateSelector(data.Date);
+			var selector = CalendarCells.DateSelector(data.Date);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, data.DayOff.Description.Name);
 		}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheAbsence()
 		{
 			var data = DataMaker.Data().UserData<AbsenceToday>();
-			var selector = CalendarCellsPage.DateSelector(data.Date);
+			var selector = CalendarCells.DateSelector(data.Date);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, data.Absence.Description.Name);
 		}
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldNotBeAbleToAddPreferenceToday()
 		{
 			var data = DataMaker.Data().UserData<ShiftToday>();
-			var selector = CalendarCellsPage.DateSelector(data.Date);
+			var selector = CalendarCells.DateSelector(data.Date);
 			
 			Browser.Interactions.AssertNotExistsUsingJQuery(selector, string.Format("{0} .ui-selectee",selector));
 			Browser.Interactions.ClickUsingJQuery(selector);

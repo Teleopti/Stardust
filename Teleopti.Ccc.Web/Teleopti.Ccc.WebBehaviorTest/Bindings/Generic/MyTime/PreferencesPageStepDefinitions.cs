@@ -22,17 +22,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	{
 		public static string ExtendedTooltip(DateTime date)
 		{
-			return CalendarCellsPage.DateSelector(date) + " .extended-tooltip";
+			return CalendarCells.DateSelector(date) + " .extended-tooltip";
 		}
 
 		public static string ExtendedIndication(DateTime date)
 		{
-			return CalendarCellsPage.DateSelector(date) + " .extended-indication";
+			return CalendarCells.DateSelector(date) + " .extended-indication";
 		}
 
 		public static void SelectCalendarCellByClass(DateTime date)
 		{
-			var selector = CalendarCellsPage.DateSelector(date) + ".ui-selectee";
+			var selector = CalendarCells.DateSelector(date) + ".ui-selectee";
 			Browser.Interactions.AssertExistsUsingJQuery(selector);
 			Browser.Interactions.AddClassUsingJQuery("ui-selected", selector);
 		}
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldHaveATooltipForMeetingDetailsWith(Table table)
 		{
 			var fields = table.CreateInstance<MeetingConfigurable>();
-			var cell = CalendarCellsPage.DateSelector(fields.StartTime);
+			var cell = CalendarCells.DateSelector(fields.StartTime);
 
 			var selector = string.Format("{0} .{1}", cell, "meeting-tooltip");
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.StartTime.ToShortTimeString().Split(' ').First());
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldHaveATooltipForPersonalShiftDetailsWith(Table table)
 		{
 			var fields = table.CreateInstance<PersonalShiftConfigurable>();
-			var cell = CalendarCellsPage.DateSelector(fields.StartTime);
+			var cell = CalendarCells.DateSelector(fields.StartTime);
 
 			var selector = string.Format("{0} .{1}", cell, "meeting-tooltip");
 			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.StartTime.ToShortTimeString().Split(' ').First());
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see an extended preference indication on '(.*)'")]
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)
 		{
-			var cell = CalendarCellsPage.DateSelector(date);
+			var cell = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0} .{1}", cell, "extended-indication"));
 		}
 
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the preference (.*) on '(.*)'")]
 		public void ThenIShouldSeeThePreferenceLateOn(string preference, DateTime date)
 		{
-			var cell = CalendarCellsPage.DateSelector(date);
+			var cell = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,preference);
 		}
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeePreference(Table table)
 		{
 			var fields = table.CreateInstance<PreferenceConfigurable>();
-			var cell = CalendarCellsPage.DateSelector(fields.Date);
+			var cell = CalendarCells.DateSelector(fields.Date);
 			
 			Browser.Interactions.AssertFirstContainsUsingJQuery(cell, fields.Date.Day.ToString(CultureInfo.CurrentCulture));
 
@@ -474,7 +474,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see preference feedback with")]
 		public void ThenIShouldSeePreferenceFeedbackWith(PreferenceFeedbackFields fields)
 		{
-			var cell = CalendarCellsPage.DateSelector(fields.Date);
+			var cell = CalendarCells.DateSelector(fields.Date);
 			if (fields.StartTimeBoundry != null)
 				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "possible-start-times"),fields.StartTimeBoundry);
 			if (fields.EndTimeBoundry != null)
@@ -488,7 +488,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see no preference feedback on '(.*)'")]
 		public void ThenIShouldSeeNoFeedback(DateTime date)
 		{
-			var cell = CalendarCellsPage.DateSelector(date);
+			var cell = CalendarCells.DateSelector(date);
 			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0}.{1}", cell, "feedback-error"));
 			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0}.{1}", cell, "possible-start-times"));
 			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0}.{1}", cell, "possible-end-times"));
