@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
             var handler = MockRepository.GenerateMock<IHandleEvent<TestDomainEvent>>();
             var resolver = MockRepository.GenerateMock<IResolve>();
             resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestDomainEvent>>))).Return(new[] { handler });
-            var target = new EventPublisher(resolver, new EventContextPopulator(new CurrentIdentity(), null));
+            var target = new EventPublisher(resolver, new EventContextPopulator(new CurrentIdentity(), new FakeCurrentInitiatorIdentifier()));
             var @event = new TestDomainEvent();
 
             target.Publish(@event);

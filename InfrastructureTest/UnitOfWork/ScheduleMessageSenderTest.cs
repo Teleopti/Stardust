@@ -140,24 +140,4 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 	}
-
-	public class FakeCurrentInitiatorIdentifier : ICurrentInitiatorIdentifier
-	{
-		private readonly IInitiatorIdentifier _initiatorIdentifier;
-
-		public FakeCurrentInitiatorIdentifier(IInitiatorIdentifier initiatorIdentifier)
-		{
-			_initiatorIdentifier = initiatorIdentifier;
-		}
-
-		public IInitiatorIdentifier Current()
-		{
-			return _initiatorIdentifier;
-		}
-	}
-
-	public class FakeInitiatorIdentifier : IInitiatorIdentifier
-	{
-		public Guid InstanceId { get; set; }
-	}
 }
