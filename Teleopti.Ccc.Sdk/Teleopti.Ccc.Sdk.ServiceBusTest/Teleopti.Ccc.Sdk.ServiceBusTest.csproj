@@ -153,6 +153,7 @@
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumerTest.cs" />
     <Compile Include="Forecast\SendImportForecastBusMessageTest.cs" />
     <Compile Include="Forecast\StatisticLoaderTest.cs" />
+    <Compile Include="LocalServiceBusPublisherTest.cs" />
     <Compile Include="NewAbsenceRequestConsumerTest.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparerTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
