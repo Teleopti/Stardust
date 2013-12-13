@@ -111,6 +111,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 		public Endpoint Endpoint { get; private set; }
 		public CurrentMessageInformation CurrentMessageInformation { get; private set; }
-		public event Action<Reroute> ReroutedEndpoint;
+
+		public event Action<Reroute> ReroutedEndpoint
+		{
+			add { throw new NotImplementedException(); }
+			remove { }
+		}
 	}
 }
