@@ -1,14 +1,12 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -20,12 +18,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class PreferencesPageStepDefinitions
 	{
-		public static string ExtendedTooltip(DateTime date)
+		private static string ExtendedTooltip(DateTime date)
 		{
 			return CalendarCells.DateSelector(date) + " .extended-tooltip";
 		}
 
-		public static string ExtendedIndication(DateTime date)
+		private static string ExtendedIndication(DateTime date)
 		{
 			return CalendarCells.DateSelector(date) + " .extended-indication";
 		}
@@ -33,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public static void SelectCalendarCellByClass(DateTime date)
 		{
 			var selector = CalendarCells.DateSelector(date) + ".ui-selectee";
-			Browser.Interactions.AssertExistsUsingJQuery(selector);
+			Browser.Interactions.AssertExists(selector);
 			Browser.Interactions.AddClassUsingJQuery("ui-selected", selector);
 		}
 
@@ -108,20 +106,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)
 		{
 			var cell = CalendarCells.DateSelector(date);
-			Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0} .{1}", cell, "extended-indication"));
+			Browser.Interactions.AssertNotExists(cell, string.Format("{0} .{1}", cell, "extended-indication"));
 		}
 
 		[Then(@"I should see the extended preference on '(.*)'")]
 		public void ThenIShouldSeeTheExtendedPreferenceOn(DateTime date)
 		{
-			Browser.Interactions.AssertExists(ExtendedTooltip(date));
+			Browser.Interactions.AssertExistsUsingJQuery(ExtendedTooltip(date));
 		}
 
 		[Then(@"I should see the preference (.*) on '(.*)'")]
 		public void ThenIShouldSeeThePreferenceLateOn(string preference, DateTime date)
 		{
 			var cell = CalendarCells.DateSelector(date);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,preference);
+			Browser.Interactions.AssertFirstContains(cell,preference);
 		}
 
 		[Then(@"I should see preference")]
@@ -129,14 +127,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var fields = table.CreateInstance<PreferenceConfigurable>();
 			var cell = CalendarCells.DateSelector(fields.Date);
-			
-			Browser.Interactions.AssertFirstContainsUsingJQuery(cell, fields.Date.Day.ToString(CultureInfo.CurrentCulture));
+
+			Browser.Interactions.AssertFirstContains(cell, fields.Date.Day.ToString(CultureInfo.CurrentCulture));
 
 			var mustHaveIcon = string.Format("{0} .{1}.{2}", cell, "preference-must-have", "icon-heart");
 			if (fields.MustHave)
-				Browser.Interactions.AssertExistsUsingJQuery(mustHaveIcon);
+				Browser.Interactions.AssertExists(mustHaveIcon);
 			else
-				Browser.Interactions.AssertNotExistsUsingJQuery(cell, mustHaveIcon);
+				Browser.Interactions.AssertNotExists(cell, mustHaveIcon);
 		}
 
 		[Then(@"I should see I have (\d) available must haves")]
@@ -294,7 +292,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			OpenExtendedTooltip(fields.Date);
 
 			var tooltip = ExtendedTooltip(fields.Date);
-			Browser.Interactions.AssertExists(tooltip);
+			Browser.Interactions.AssertExistsUsingJQuery(tooltip);
 
 			if (fields.Preference != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.Preference);
 			if (fields.StartTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.StartTimeMinimum);
