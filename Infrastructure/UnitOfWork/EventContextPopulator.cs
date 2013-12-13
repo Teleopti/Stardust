@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_initiatorIdentifier = initiatorIdentifier;
 		}
 
-		public void SetMessageDetail(IEvent @event)
+		public void PopulateEventContext(IEvent @event)
 		{
 			var domainEvents = @event as IRaptorDomainMessageInfo;
 			if (domainEvents != null)
-				SetMessageDetail(domainEvents);
+				PopulateEventContext(domainEvents);
 		}
 
-		public void SetMessageDetail(IRaptorDomainMessageInfo @event)
+		public void PopulateEventContext(IRaptorDomainMessageInfo @event)
 		{
 			setValuesFromIdentity(@event);
 		}

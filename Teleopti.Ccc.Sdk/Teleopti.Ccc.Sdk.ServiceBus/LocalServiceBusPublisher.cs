@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Publish(IEvent @event)
 		{
-			_eventContextPopulator.SetMessageDetail(@event);
+			_eventContextPopulator.PopulateEventContext(@event);
 			_bus.Send(@event);
 		}
 
