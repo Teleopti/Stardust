@@ -74,13 +74,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             state.SetParent(this);
         }
 
-        public virtual void MoveStateTo(IRtaStateGroup target, IRtaState state)
+        public virtual IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state)
         {
             _stateCollection.Remove(state);
             RtaStateGroup internalAdd = target as RtaStateGroup;
-            if (internalAdd==null) return;
-            if (state==null) return;
-            internalAdd.AddStateInternal(new RtaState(state.Name,state.StateCode,state.PlatformTypeId));
+            if (internalAdd==null) return null;
+            if (state==null) return null;
+	        var rtaState = new RtaState(state.Name, state.StateCode, state.PlatformTypeId);
+	        internalAdd.AddStateInternal(rtaState);
+	        return rtaState;
         }
 
 		public virtual void DeleteState(IRtaState state)
