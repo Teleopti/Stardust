@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -32,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
 		private IPerson _person2;
+		private bool _isScheduleFailed;
 
 		[SetUp]
 		public void Setup()
@@ -145,6 +144,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 										  _selectedPersons,
 														  _rollbackService);
 			Assert.That(result, Is.True);
+		}
+
+		[Test]
+		public void ShouldNotifySubscribersWhenScheduleFailed()
+		{
+			_target.DayScheduled += targetDayScheduled;
+			using (_mocks.Record())
+			{
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				Assert.That(_isScheduleFailed, Is.False);
+				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
+										  _selectedPersons, _rollbackService);
+
+				Assert.That(result, Is.False);
+				Assert.That(_isScheduleFailed, Is.True);
+			}
+			_target.DayScheduled -= targetDayScheduled;
+		}
+
+		private void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			if (e is SchedulingServiceFailedEventArgs)
+				_isScheduleFailed = true;
 		}
 	}
 }

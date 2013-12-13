@@ -17,7 +17,9 @@ namespace Teleopti.Interfaces.Messages
         ///</summary>
         public abstract Guid Identity { get; }
 
-        /// <summary>
+		public Guid InitiatorId { get; set; }
+
+		/// <summary>
         /// Gets or sets the datasource.
         /// </summary>
         /// <value>The datasource.</value>

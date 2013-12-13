@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -11,7 +8,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -20,8 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class PreferenceStepDefinition
 	{
-		private PreferencePage _page { get { return Pages.Pages.PreferencePage; } }
-
 		[When(@"I click the standard preference split-button")]
 		public void WhenIClickTheStandardPreferenceSplit_Button()
 		{
@@ -73,8 +67,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var data = DataMaker.Data().UserData<ShiftCategoryPreference>();
 			var shiftCategory = data.ShiftCategory.Description.Name;
-			var cell = _page.CalendarCellForDate(data.Date);
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(shiftCategory));
+
+			var cell = CalendarCells.DateSelector(data.Date);
+			Browser.Interactions.AssertFirstContains(cell, shiftCategory);
 		}
 
 		[Then(@"I should see my existing day off preference")]
@@ -82,8 +77,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var data = DataMaker.Data().UserData<DayOffPreference>();
 			var dayOff = data.DayOffTemplate.Description.Name;
-			var cell = _page.CalendarCellForDate(data.Date);
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(dayOff));
+
+			var cell = CalendarCells.DateSelector(data.Date);
+			Browser.Interactions.AssertFirstContains(cell, dayOff);
 		}
 
 		[Then(@"I should see my existing absence preference")]
@@ -92,14 +88,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var data = DataMaker.Data().UserData<AbsencePreference>();
 			var absence = data.Absence.Description.Name;
 
-			var cell = _page.CalendarCellForDate(data.Date);
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(absence));
+			var cell = CalendarCells.DateSelector(data.Date);
+			Browser.Interactions.AssertFirstContains(cell,absence);
 		}
 
 		[Then(@"I should see the workflow control set's standard preferences list")]
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList()
 		{
 			var data = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
+			Browser.Interactions.Click("#preference-split-button .dropdown-toggle");
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.ShiftCategory.Description.Name);
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.DayOffTemplate.Description.Name);
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.Absence.Description.Name);
@@ -117,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(date), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the 2 standard preferences in the calendar")]
@@ -125,17 +122,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			var data = DataMaker.Data().UserData<StandardPreference>();
-			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should not see the former standard preference in the calendar")]
 		public void ThenIShouldNotSeeTheFormerStandardPreferenceInTheCalendar()
 		{
 			var data = DataMaker.Data().UserData<StandardPreference>();
-			Browser.Interactions.AssertFirstNotContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
+			Browser.Interactions.AssertFirstNotContains(CalendarCells.DateSelector(data.Date), data.Preference);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period")]
@@ -150,11 +147,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeThePreferencePeriodInformation()
 		{
 			var data = DataMaker.Data().UserData<ExistingWorkflowControlSet>();
-			var innerHtml = _page.PreferencePeriodFeedbackView.InnerHtml;
-			innerHtml.Should().Contain(data.PreferenceInputPeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
-			innerHtml.Should().Contain(data.PreferenceInputPeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
-			innerHtml.Should().Contain(data.PreferencePeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
-			innerHtml.Should().Contain(data.PreferencePeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", data.PreferenceInputPeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", data.PreferenceInputPeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", data.PreferencePeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertAnyContains("#Preference-period-feedback-view", data.PreferencePeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should no longer see the 2 standard preferences in the calendar")]
@@ -162,29 +158,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var data1 = DataMaker.Data().UserData<StandardPreference>();
 			var data2 = DataMaker.Data().UserData<AnotherStandardPreference>();
-			var cell1 = _page.CalendarCellForDate(data1.Date);
-			var cell2 = _page.CalendarCellForDate(data2.Date);
-			EventualAssert.That(() => cell1.Text, Is.Not.StringContaining(data1.Preference));
-			EventualAssert.That(() => cell2.Text, Is.Not.StringContaining(data2.Preference));
+			var cell1 = CalendarCells.DateSelector(data1.Date);
+			var cell2 = CalendarCells.DateSelector(data2.Date);
+			Browser.Interactions.AssertFirstNotContains(cell1,data1.Preference);
+			Browser.Interactions.AssertFirstNotContains(cell2,data2.Preference);
 		}
 
 		[Then(@"the preference calendar should not be editable")]
 		public void ThenThePreferenceCalendarShouldNotBeEditable()
 		{
-			_page.CalendarCells.ForEach(cell =>
+			var amount = Convert.ToInt32(Browser.Interactions.Javascript("return $('li[data-mytime-date]').length;"));
+			for (int i = 0; i < amount; i++)
 			{
-				cell.ClassName.Should().Not.Contain("ui-selectee");
-				_page.SelectCalendarCellByClick(cell);
-				cell.ClassName.Should().Not.Contain("ui-selected");
-			});
+				var cell = string.Format("li[data-mytime-date]:nth({0})", i);
+				Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0}.{1}", cell, "ui-selectee"));
+				Browser.Interactions.ClickUsingJQuery(cell);
+				Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0}.{1}", cell, "ui-selected"));
+			}
 		}
 
 		[Then(@"the preference calendar should be editable")]
 		public void ThenThePreferenceCalendarShouldBeEditable()
 		{
 			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			_page.SelectCalendarCellForDateByClick(editableDate);
-			_page.CalendarCellForDate(editableDate).ClassName.Should().Contain("ui-selected");
+			var cell = CalendarCells.DateSelector(editableDate);
+			Browser.Interactions.Click(cell);
+			Browser.Interactions.AssertExists(string.Format("{0}.{1}", cell, "ui-selected"));
 		}
 
 		[Then(@"I should not be able to see preferences link")]
@@ -209,15 +208,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheStartTimeBoundryTo(string earliest, string latest)
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnlyForBehaviorTests.TestToday, "possible-start-times").InnerHtml, Is.StringMatching(expected));
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-start-times"), expected);
 		}
 
 		[Then(@"I should see the end time boundry (.*) to (.*)")]
 		public void ThenIShouldSeeTheEndTimeBoundryTo(string earliest, string latest)
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
-
-			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnlyForBehaviorTests.TestToday, "possible-end-times").InnerHtml, Is.StringMatching(expected));
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-end-times"), expected);
 		}
 
 		[Then(@"I should see the contract time boundry (\d+) to (\d+)")]
@@ -226,24 +226,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var culture = DataMaker.Data().MePerson.PermissionInformation.Culture();
 			var expected = GetExpectedContractTimesString(earliest, latest, culture);
 
-			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnlyForBehaviorTests.TestToday, "possible-contract-times").InnerHtml, Is.StringMatching(expected));
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-contract-times"), expected);
 		}
 
 		[Then(@"I should see that there are no available shifts")]
 		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
 		{
-			var cell = _page.CalendarCellForDate(DateOnlyForBehaviorTests.TestToday);
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(Resources.NoAvailableShifts));
+			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
+			Browser.Interactions.AssertFirstContains(cell, Resources.NoAvailableShifts);
 		}
 
 		[Then(@"I should see the preference feedback")]
 		public void ThenIShouldSeeThePreferenceFeedback()
 		{
 			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-start-times").InnerHtml, Is.Not.Null.Or.Empty);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-end-times").InnerHtml, Is.Not.Null.Or.Empty);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-contract-times").InnerHtml, Is.Not.Null.Or.Empty);
+
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-start-times"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-end-times"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-contract-times"));
 		}
 
 		[When(@"I click the delete preference button")]
@@ -283,8 +285,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			EventualAssert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")));
-			EventualAssert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertNotExists(CalendarCells.DateSelector(firstDateDisplayed), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1)));
+			Browser.Interactions.AssertNotExists(CalendarCells.DateSelector(lastDateDisplayed), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1)));
 		}
 	}
 }

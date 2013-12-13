@@ -91,11 +91,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void WaitUntilReadyForInteraction()
 		{
+			Browser.Interactions.AssertJavascriptResultContains("return (Teleopti != undefined) ? 'go' : 'no go';", "go");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Ready for interaction");
 		}
 
 		public static void WaitUntilCompletelyLoaded()
 		{
+			Browser.Interactions.AssertJavascriptResultContains("return (Teleopti != undefined) ? 'go' : 'no go';", "go");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Completely loaded");
 		}
 

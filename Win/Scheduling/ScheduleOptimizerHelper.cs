@@ -362,6 +362,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				e.Cancel = true;
 			}
+			if(e.IsSuccessful)
 			_scheduledCount++;
 			if (_scheduledCount >= _sendEventEvery)
 			{
@@ -679,7 +680,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new ResourceCalculationOnlyScheduleDayChangeCallback(), tagSetter);
+			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
@@ -912,69 +913,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			    backToLegalStateServicePro.Execute(matrixList, schedulingOptions, optimizationPreferences);
 		    }
 	    }
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public void BlockSchedule(IList<IScheduleDay> allScheduleDays, IList<IScheduleMatrixPro> matrixList, IList<IScheduleMatrixPro> matrixListAll, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
-        {
-            if (allScheduleDays == null) throw new ArgumentNullException("allScheduleDays");
-
-            var unlockedSchedules = (from scheduleMatrixPro in matrixList
-                                     from scheduleDayPro in scheduleMatrixPro.UnlockedDays
-                                     select scheduleDayPro.DaySchedulePart()).ToList();
-
-            if (!unlockedSchedules.Any()) return;
-
-            _backgroundWorker = backgroundWorker;
-
-            var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
-            fixedStaffSchedulingService.ClearFinderResults();
-
-            var schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-			_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
-
-            var tagSetter = _container.Resolve<IScheduleTagSetter>();
-            tagSetter.ChangeTagToSet(schedulingOptions.TagToUseOnScheduling);
-
-            IList<IScheduleMatrixPro> matrixes = matrixList;
-
-            IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
-
-
-            var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
-            _allResults = new WorkShiftFinderResultHolder();
-
-            int refreshRate = schedulingOptions.RefreshRate;
-
-            schedulingOptions.RefreshRate = 1;
-            blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
-
-			schedulingOptions.UseGroupSchedulingCommonCategory = true;
-			schedulingOptions.UseGroupSchedulingCommonEnd = false;
-			schedulingOptions.UseGroupSchedulingCommonStart = false;
-
-		    using (PerformanceOutput.ForOperation("Scheduling x blocks"))
-		            blockSchedulingService.Execute(matrixes, schedulingOptions, schedulingResults);
-
-
-		    if (schedulingOptions.RotationDaysOnly)
-                schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
-
-            blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
-            schedulingOptions.RefreshRate = refreshRate;
-            _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
-            _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
-        }
-        
-        void blockSchedulingServiceBlockScheduled(object sender, BlockSchedulingServiceEventArgs e)
-        {
-            if (_backgroundWorker.CancellationPending)
-            {
-                e.Cancel = true;
-            }
-
-            if (_backgroundWorker.IsBusy)
-                _backgroundWorker.ReportProgress(-e.PercentageCompleted);
-        }
 
         public IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod)
         {

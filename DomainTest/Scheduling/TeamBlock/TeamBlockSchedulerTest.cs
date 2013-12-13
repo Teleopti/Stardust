@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IShiftProjectionCache _shift;
 		private IPerson _person2;
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-
+		private bool _isScheduleFailed;
 
 		[SetUp]
 		public void Setup()
@@ -99,11 +99,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(result, Is.True);
 			}
 		}
-		
+
 		[Test]
 		public void RestrictionAggregatorShouldConsumeSelectedTeamMembersOnly()
 		{
-			_selectedPersons = new List<IPerson> {_person2 };
+			_selectedPersons = new List<IPerson> {_person2};
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
@@ -113,10 +113,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons, _schedulePartModifyAndRollbackService);
+				                                          _selectedPersons, _schedulePartModifyAndRollbackService);
 				Assert.That(result, Is.True);
 			}
 		}
 
-	}
+		[Test]
+		public void ShouldNotifySubscribersWhenScheduleFailed()
+		{
+			_target.DayScheduled += targetDayScheduled;
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(_schedulingOptions)).Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				Assert.That(_isScheduleFailed, Is.False);
+				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
+														  _selectedPersons, _schedulePartModifyAndRollbackService);
+
+				Assert.That(result, Is.False);
+				Assert.That(_isScheduleFailed, Is.True);
+			}
+			_target.DayScheduled -= targetDayScheduled;
+		}
+
+		private void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			if (e is SchedulingServiceFailedEventArgs)
+				_isScheduleFailed = true;
+		}
+		}
+
 }

@@ -12,33 +12,37 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class EventsPublisherModuleTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldResolveServiceBusLocalEventPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule<UnitOfWorkModule>();
+			containerBuilder.RegisterModule<AuthenticationModule>();
 			containerBuilder.RegisterModule<LocalServiceBusEventsPublisherModule>();
-            containerBuilder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldResolveLocalInMemoryEventPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule<UnitOfWorkModule>();
+			containerBuilder.RegisterModule<AuthenticationModule>();
 			containerBuilder.RegisterModule<LocalInMemoryEventsPublisherModule>();
-		    containerBuilder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldResolveServiceBusEventPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
+			containerBuilder.RegisterModule<AuthenticationModule>();
+			containerBuilder.RegisterModule<UnitOfWorkModule>();
 			containerBuilder.RegisterModule<ServiceBusEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();

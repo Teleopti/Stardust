@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				IList<IScheduleDay> currentScheduleDayList;
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target,
 																			 out currentScheduleDayList)).Return(true)
-				  .OutRef(1, new List<IScheduleDay>());
+				  .OutRef(1, new List<IScheduleDay>{_scheduleDay});
 				
 			}
 
@@ -110,7 +110,41 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldAddContractDayOffForTeamMember()
+		public void ShouldNotAddMoreContractDaysOffIfMemberHasTarget()
+		{
+			_effectiveRestriction.DayOffTemplate = new DayOffTemplate(new Description("DayOff"));
+
+			using (_mocks.Record())
+			{
+				commonMocks();
+
+				//first foreach
+				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
+				getMatrixesAndRestrictionMocks();
+				addDaysOffForTeamMocks();
+
+				//second foreach
+				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
+				getMatrixesAndRestrictionMocks();
+
+				//addContractDaysOff
+				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod);
+				int target;
+				IList<IScheduleDay> currentScheduleDayList;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target,
+																			 out currentScheduleDayList)).Return(true)
+				  .OutRef(1, new List<IScheduleDay> { _scheduleDay });
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.DayOffScheduling(_matrixList, _selectedPersons, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
+			}
+		}
+
+		[Test]
+		public void ShouldAddContractDayOffForTeamMemberIfActualIsBelowTarget()
 		{
 			using (_mocks.Record())
 			{
@@ -125,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				getMatrixesAndRestrictionMocks();
 
 				//addContractDaysOff
-				addContractDaysOffMocks();
+				addContractDaysOffMocksBelowTarget();
 			}
 
 			using (_mocks.Playback())
@@ -174,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				getMatrixesAndRestrictionMocks();
 
 				//addContractDaysOff
-				addContractDaysOffMocks();
+				addContractDaysOffMocksBelowTarget();
 			}
 
 			using (_mocks.Playback())
@@ -199,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				getMatrixesAndRestrictionMocks();
 				Expect.Call(_scheduleDayPro.Day).Return(new DateOnly(2013, 2, 1));
 				getMatrixesAndRestrictionMocks();
-				addContractDaysOffMocks();
+				addContractDaysOffMocksBelowTarget();
 				
 
 			}
@@ -210,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		private void addContractDaysOffMocks()
+		private void addContractDaysOffMocksBelowTarget()
 		{
 			int target;
 			IList<IScheduleDay> currentScheduleDayList;
@@ -221,6 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly(2013, 2, 1))).Return(_scheduleDayPro);
 			Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+			Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 			Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay)).Return(true);
 			Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
 			Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));

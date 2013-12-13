@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		{
 			var uowf = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory;
 			var groupingReadOnlyRepository = new GroupingReadOnlyRepository(uowf);
-			groupingReadOnlyRepository.UpdateGroupingReadModel(new Collection<Guid> { user.Id.Value });
+			groupingReadOnlyRepository.UpdateGroupingReadModel(new Collection<Guid> { Guid.Empty });
 		}
 	}
 }

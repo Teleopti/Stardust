@@ -83,9 +83,12 @@
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="DummyContextPopulator.cs" />
+    <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />
+    <Compile Include="FakeInitiatorIdentifier.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDataReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentRepository.cs" />
@@ -258,6 +261,7 @@
     <Compile Include="TestData\Setups\Configurable\PersonPeriodConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\PersonThatCreatesTestData.cs" />
     <Compile Include="TestData\Setups\Specific\StockholmTimeZone.cs" />
+    <Compile Include="TestData\Setups\Specific\SwedeSpeakingEnglishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\USCulture.cs" />
     <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />

@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Requests
+﻿Feature: Requests
 	In order to review my requests made
 	As an agent
 	I want to be able to view my requests

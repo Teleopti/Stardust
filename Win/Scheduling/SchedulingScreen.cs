@@ -527,12 +527,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		//flytta ut till modul
 		private static void updateContainer(IComponentRegistry componentRegistry, 
-															IMessageBrokerIdentifier messageBrokerIdentifier, 
+															IInitiatorIdentifier initiatorIdentifier, 
 															IReassociateDataForSchedules reassociateDataForSchedules,
 															IClearReferredShiftTradeRequests clearReferredShiftTradeRequests)
 		{
 			var updater = new ContainerBuilder();
-			updater.RegisterModule(SchedulePersistModule.ForScheduler(messageBrokerIdentifier, reassociateDataForSchedules));
+			updater.RegisterModule(SchedulePersistModule.ForScheduler(initiatorIdentifier, reassociateDataForSchedules));
 			updater.RegisterType<SchedulingScreenPersister>().As<ISchedulingScreenPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<PersonAccountPersister>().As<IPersonAccountPersister>().InstancePerLifetimeScope();
 			updater.RegisterType<PersonAccountConflictCollector>().As<IPersonAccountConflictCollector>().InstancePerLifetimeScope();
@@ -2872,7 +2872,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _schedulerMessageBrokerHandler_SchedulesUpdatedFromBroker(object sender, EventArgs e)
+		private void schedulerMessageBrokerHandlerSchedulesUpdatedFromBroker(object sender, EventArgs e)
 		{
 			if (toolStripTabItem1.Visible)
 			{
@@ -4086,10 +4086,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 						                                                            true,
 						                                                            schedulingOptions.ConsiderShortBreaks);
 
+						var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
+
 						var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
 							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
-							                                                           new ScheduleTagSetter(
-								                                                           schedulingOptions.TagToUseOnScheduling));
+																					   tagSetter);
 
 						var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
 
@@ -4111,9 +4112,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 																						singleDayScheduler, 
 																						_container.Resolve<ITeamBlockRoleModelSelector>());
 
+
 						_container.Resolve<ITeamBlockOptimizationCommand>()
 						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
-						                   rollbackService, schedulingOptions, teamBlockScheduler);
+						                   rollbackService, tagSetter, schedulingOptions, teamBlockScheduler);
 
 						break;
 					}
@@ -4439,12 +4441,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void initMessageBroker(DateTimePeriod period)
 		{
 			_schedulerMessageBrokerHandler.Listen(period);
-			_schedulerMessageBrokerHandler.RequestDeletedFromBroker += _schedulerMessageBrokerHandler_RequestDeletedFromBroker;
-			_schedulerMessageBrokerHandler.RequestInsertedFromBroker += _schedulerMessageBrokerHandler_RequestInsertedFromBroker;
-			_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker += _schedulerMessageBrokerHandler_SchedulesUpdatedFromBroker;
+			_schedulerMessageBrokerHandler.RequestDeletedFromBroker += schedulerMessageBrokerHandlerRequestDeletedFromBroker;
+			_schedulerMessageBrokerHandler.RequestInsertedFromBroker += schedulerMessageBrokerHandlerRequestInsertedFromBroker;
+			_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker += schedulerMessageBrokerHandlerSchedulesUpdatedFromBroker;
 		}
 
-		private void _schedulerMessageBrokerHandler_RequestInsertedFromBroker(object sender, CustomEventArgs<IPersonRequest> e)
+		private void schedulerMessageBrokerHandlerRequestInsertedFromBroker(object sender, CustomEventArgs<IPersonRequest> e)
 		{
 			IPersonRequest personRequestInserted = e.Value;
 			if (_requestView != null && personRequestInserted != null)
@@ -4453,7 +4455,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void _schedulerMessageBrokerHandler_RequestDeletedFromBroker(object sender, CustomEventArgs<IPersonRequest> e)
+		private void schedulerMessageBrokerHandlerRequestDeletedFromBroker(object sender, CustomEventArgs<IPersonRequest> e)
 		{
 			IPersonRequest personRequestDeleted = e.Value;
 			if (_requestView != null && personRequestDeleted != null)
@@ -5717,8 +5719,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_dateNavigateControl.SelectedDateChanged -= dateNavigateControlSelectedDateChanged;
 			if (_schedulerMessageBrokerHandler != null)
 			{
-				_schedulerMessageBrokerHandler.RequestDeletedFromBroker -= _schedulerMessageBrokerHandler_RequestDeletedFromBroker;
-				_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -= _schedulerMessageBrokerHandler_SchedulesUpdatedFromBroker;
+				_schedulerMessageBrokerHandler.RequestDeletedFromBroker -= schedulerMessageBrokerHandlerRequestDeletedFromBroker;
+				_schedulerMessageBrokerHandler.SchedulesUpdatedFromBroker -= schedulerMessageBrokerHandlerSchedulesUpdatedFromBroker;
 
 				_schedulerMessageBrokerHandler.Dispose();
 				_schedulerMessageBrokerHandler = null; // referens till SchedulingScreen

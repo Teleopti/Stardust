@@ -88,15 +88,6 @@ namespace Teleopti.Ccc.Win.Commands
 				if (matrixesOfSelectedScheduleDays.Count == 0)
 					return;
 
-				var allScheduleDays = new List<IScheduleDay>();
-
-				foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
-				{
-					allScheduleDays.AddRange(
-						_schedulerStateHolder.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(
-							scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
-				}
-
 				var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
 				_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
@@ -120,6 +111,7 @@ namespace Teleopti.Ccc.Win.Commands
 			{
 				e.Cancel = true;
 			}
+			if(e.IsSuccessful)
 			_scheduledCount++;
 			if (_scheduledCount >= _schedulingOptions.RefreshRate)
 			{

@@ -26,7 +26,7 @@ using System.Windows.Forms;
 
 namespace Teleopti.Ccc.WinCode.Intraday
 {
-    public class IntradayPresenter : IMessageBrokerIdentifier, IDisposable
+    public class IntradayPresenter : IInitiatorIdentifier, IDisposable
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(IntradayPresenter));
 
@@ -435,7 +435,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             return false;
         }
 
-        public Guid InstanceId
+        public Guid InitiatorId
         {
             get { return _instanceId; }
         }

@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Preferences follow up
+﻿Feature: Preferences follow up
 	In order to see my schedule and my preferences side by side
 	As an agent
 	I can easily see my preferences on a scheduled day
@@ -34,6 +33,7 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-10-01 |
+	And I am englishspeaking swede
 
 
 Scenario: See preference on scheduled day

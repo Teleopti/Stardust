@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private ITeamBlockInfo _teamBlockInfo1;
 		private ITeamBlockInfo _teamBlockInfo2;
 		private IFilterPersonsForTotalDistribution _filterPersonsForTotalDistribution;
+		private IFilterForFullyScheduledBlocks _filterForFullyScheduledBlocks;
 
 		[SetUp]
 		public void Setup()
@@ -45,12 +46,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_equalCategoryDistributionWorstTeamBlockDecider =
 				_mocks.StrictMock<IEqualCategoryDistributionWorstTeamBlockDecider>();
 			_filterPersonsForTotalDistribution = _mocks.StrictMock<IFilterPersonsForTotalDistribution>();
+			_filterForFullyScheduledBlocks = _mocks.StrictMock<IFilterForFullyScheduledBlocks>();
 			_target = new EqualNumberOfCategoryFairnessService(_constructTeamBlock, _distributionForPersons,
 			                                                   _filterForEqualNumberOfCategoryFairness,
 			                                                   _filterForTeamBlockInSelection, _filterOnSwapableTeamBlocks,
 			                                                   _teamBlockSwapper, _equalCategoryDistributionBestTeamBlockDecider,
 			                                                   _equalCategoryDistributionWorstTeamBlockDecider,
-															   _filterPersonsForTotalDistribution);
+															   _filterPersonsForTotalDistribution,
+															   _filterForFullyScheduledBlocks);
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_sceduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -78,6 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_distributionForPersons.CreateSummary(selectedPersons, _sceduleDictionary)).IgnoreArguments()
 				      .Return(totalDistributionSummary);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockInfos, selectedPersons, new DateOnlyPeriod())).Return(teamBlockInfos);
+				Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(teamBlockInfos, _sceduleDictionary)).Return(teamBlockInfos);
 
 				//first loop
 				Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistributionSummary,
@@ -87,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(_teamBlockInfo1, teamBlockInfos,
 				                                                                        totalDistributionSummary, _sceduleDictionary))
 				      .Return(_teamBlockInfo2);
-				Expect.Call(() => _teamBlockSwapper.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary));
+				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary)).Return(true);
 
 				//second loop
 				Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistributionSummary,
@@ -123,6 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_distributionForPersons.CreateSummary(selectedPersons, _sceduleDictionary)).IgnoreArguments()
 					  .Return(totalDistributionSummary);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockInfos, selectedPersons, new DateOnlyPeriod())).Return(teamBlockInfos);
+				Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(teamBlockInfos, _sceduleDictionary)).Return(teamBlockInfos);
 
 				//first loop
 				Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistributionSummary,
@@ -132,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(_teamBlockInfo1, teamBlockInfos,
 																						totalDistributionSummary, _sceduleDictionary))
 					  .Return(_teamBlockInfo2);
-				Expect.Call(() => _teamBlockSwapper.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary));
+				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary)).Return(true);
 			}
 
 			using (_mocks.Playback())

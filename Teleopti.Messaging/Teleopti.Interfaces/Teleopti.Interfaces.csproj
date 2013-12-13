@@ -111,6 +111,8 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
+    <Compile Include="Domain\SchedulingServiceFailedEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
     <Compile Include="Domain\IAggregateRootBrokerConditions.cs" />
@@ -736,7 +738,7 @@
     <Compile Include="Domain\TimeZoneHelper.cs" />
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
-    <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
+    <Compile Include="Infrastructure\IInitiatorIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\TransactionIsolationLevel.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />

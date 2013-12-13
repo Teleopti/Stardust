@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				part.CreateAndAddDayOff(restriction.DayOffTemplate);
 				rollbackService.Modify(part);
 
-				var eventArgs = new SchedulingServiceBaseEventArgs(part);
+				var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
 				OnDayScheduled(eventArgs);
 				if (eventArgs.Cancel)
 					return true;
@@ -170,16 +170,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var matrix in matrixList)
 			{
 				int targetDaysOff;
-
 				IList<IScheduleDay> currentOffDaysList;
-				bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrix.SchedulePeriod,
-				                                                                                      out targetDaysOff,
-				                                                                                      out currentOffDaysList);
+				_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrix.SchedulePeriod, out targetDaysOff, out currentOffDaysList);
+
 				int currentDaysOff = currentOffDaysList.Count;
-				if (hasCorrectNumberOfDaysOff || currentDaysOff >= targetDaysOff)
+				if(currentDaysOff >= targetDaysOff)
 					continue;
 
 				IScheduleDay part = matrix.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
+				if(part.IsScheduled())
+					continue;
 
 				if (!_hasContractDayOffDefinition.IsDayOff(part))
 					continue;
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 				rollbackService.Modify(part);
 
-				var eventArgs = new SchedulingServiceBaseEventArgs(part);
+				var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
 				OnDayScheduled(eventArgs);
 				if (eventArgs.Cancel)
 					return true;

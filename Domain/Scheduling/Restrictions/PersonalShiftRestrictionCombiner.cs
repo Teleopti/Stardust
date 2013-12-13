@@ -33,17 +33,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			var periods = from l in assignment.PersonalActivities()
 			              select l.Period;
 
-			var asEffectiveRestrictions = from p in periods
-										  select new EffectiveRestriction(
-													 new StartTimeLimitation(null, p.TimePeriod(timeZoneInfo).StartTime),
-													 new EndTimeLimitation(p.TimePeriod(timeZoneInfo).EndTime, null),
-													 new WorkTimeLimitation(p.TimePeriod(timeZoneInfo).SpanningTime(), null),
-													 null,
-													 null,
-													 null,
-													 new List<IActivityRestriction>())
-												 as IEffectiveRestriction
-				;
+			IList<IEffectiveRestriction> asEffectiveRestrictions = new List<IEffectiveRestriction>();
+			foreach (var p in periods)
+			{
+				var workTime = p.TimePeriod(timeZoneInfo).SpanningTime();
+				if (workTime >= TimeSpan.FromHours(24)) workTime = new TimeSpan(23, 59, 59);
+				asEffectiveRestrictions.Add(new EffectiveRestriction(
+														 new StartTimeLimitation(null, p.TimePeriod(timeZoneInfo).StartTime),
+														 new EndTimeLimitation(p.TimePeriod(timeZoneInfo).EndTime, null),
+														 new WorkTimeLimitation(workTime, null),
+														 null,
+														 null,
+														 null,
+														 new List<IActivityRestriction>()));
+			}
 
 			return _combiner.CombineEffectiveRestrictions(asEffectiveRestrictions, effectiveRestriction);
 		}

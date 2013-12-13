@@ -1,14 +1,12 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -20,25 +18,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class PreferencesPageStepDefinitions
 	{
-		public static string Cell(DateTime date)
+		private static string ExtendedTooltip(DateTime date)
 		{
-			return string.Format("li[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd"));
+			return CalendarCells.DateSelector(date) + " .extended-tooltip";
 		}
 
-		public static string ExtendedTooltip(DateTime date)
+		private static string ExtendedIndication(DateTime date)
 		{
-			return Cell(date) + " .extended-tooltip";
-		}
-
-		public static string ExtendedIndication(DateTime date)
-		{
-			return Cell(date) + " .extended-indication";
+			return CalendarCells.DateSelector(date) + " .extended-indication";
 		}
 
 		public static void SelectCalendarCellByClass(DateTime date)
 		{
-			Browser.Interactions.AssertExists(Cell(date) + ".ui-selectee");
-			Browser.Interactions.AddClassUsingJQuery("ui-selected", Cell(date) + ".ui-selectee");
+			var selector = CalendarCells.DateSelector(date) + ".ui-selectee";
+			Browser.Interactions.AssertExists(selector);
+			Browser.Interactions.AddClassUsingJQuery("ui-selected", selector);
 		}
 
 		[When(@"I select day '(.*)'")]
@@ -74,9 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see that I have an extended preference on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAnExtendedPreferenceOn(DateTime date)
 		{
-			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
-			EventualAssert.That(() => indication.Exists, Is.True);
-			EventualAssert.That(() => indication.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(ExtendedIndication(date));
 		}
 
 		[Then(@"I should see that I have a pre-scheduled personal shift on '(.*)'")]
@@ -90,57 +82,59 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldHaveATooltipForMeetingDetailsWith(Table table)
 		{
 			var fields = table.CreateInstance<MeetingConfigurable>();
-			var meetings = Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(fields.StartTime);
+			var cell = CalendarCells.DateSelector(fields.StartTime);
 
-			EventualAssert.That(() => meetings.InnerHtml, Is.StringContaining(fields.StartTime.ToShortTimeString().Split(' ').First()));
-			EventualAssert.That(() => meetings.InnerHtml, Is.StringContaining(fields.EndTime.ToShortTimeString().Split(' ').First()));
-			EventualAssert.That(() => meetings.InnerHtml, Is.StringContaining(fields.Subject));
+			var selector = string.Format("{0} .{1}", cell, "meeting-tooltip");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.StartTime.ToShortTimeString().Split(' ').First());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.EndTime.ToShortTimeString().Split(' ').First());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.Subject);
 		}
 
 		[Then(@"I should have a tooltip for personal shift details with")]
 		public void ThenIShouldHaveATooltipForPersonalShiftDetailsWith(Table table)
 		{
 			var fields = table.CreateInstance<PersonalShiftConfigurable>();
-			var personalshifts = Pages.Pages.PreferencePage.MeetingAndPersonalShiftTooltipForDate(fields.StartTime);
+			var cell = CalendarCells.DateSelector(fields.StartTime);
 
-			EventualAssert.That(() => personalshifts.InnerHtml, Is.StringContaining(fields.StartTime.ToShortTimeString().Split(' ').First()));
-			EventualAssert.That(() => personalshifts.InnerHtml, Is.StringContaining(fields.EndTime.ToShortTimeString().Split(' ').First()));
-			EventualAssert.That(() => personalshifts.InnerHtml, Is.StringContaining(fields.Activity));
+			var selector = string.Format("{0} .{1}", cell, "meeting-tooltip");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.StartTime.ToShortTimeString().Split(' ').First());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.EndTime.ToShortTimeString().Split(' ').First());
+			Browser.Interactions.AssertFirstContainsUsingJQuery(selector, fields.Activity);
 		}
 
 		[Then(@"I should not see an extended preference indication on '(.*)'")]
 		public void ThenIShouldNotSeeAnExtendedPreferenceIndicationOn(DateTime date)
 		{
-			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);
-			EventualAssert.That(() => indication.Exists, Is.False);
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertNotExists(cell, string.Format("{0} .{1}", cell, "extended-indication"));
 		}
 
 		[Then(@"I should see the extended preference on '(.*)'")]
 		public void ThenIShouldSeeTheExtendedPreferenceOn(DateTime date)
 		{
-			Browser.Interactions.AssertExists(ExtendedTooltip(date));
+			Browser.Interactions.AssertExistsUsingJQuery(ExtendedTooltip(date));
 		}
 
 		[Then(@"I should see the preference (.*) on '(.*)'")]
 		public void ThenIShouldSeeThePreferenceLateOn(string preference, DateTime date)
 		{
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(preference));
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertFirstContains(cell,preference);
 		}
 
 		[Then(@"I should see preference")]
 		public void ThenIShouldSeePreference(Table table)
 		{
 			var fields = table.CreateInstance<PreferenceConfigurable>();
-			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(fields.Date);
-			var mustHave = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference-must-have");
+			var cell = CalendarCells.DateSelector(fields.Date);
 
-			EventualAssert.That(() => cell.InnerHtml, Is.StringContaining(">" + fields.Date.Day.ToString(CultureInfo.CurrentCulture) + "<"));
+			Browser.Interactions.AssertFirstContains(cell, fields.Date.Day.ToString(CultureInfo.CurrentCulture));
 
+			var mustHaveIcon = string.Format("{0} .{1}.{2}", cell, "preference-must-have", "icon-heart");
 			if (fields.MustHave)
-				EventualAssert.That(() => mustHave.ClassName, Is.StringContaining("icon"));
+				Browser.Interactions.AssertExists(mustHaveIcon);
 			else
-				EventualAssert.That(() => mustHave.ClassName, Is.Not.StringContaining("icon"));
+				Browser.Interactions.AssertNotExists(cell, mustHaveIcon);
 		}
 
 		[Then(@"I should see I have (\d) available must haves")]
@@ -267,11 +261,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"all the time fields should be reset")]
 		public void ThenAllTheTimeFieldsShouldBeReset()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-start-time-min').val() === '';", "true");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-start-time-max').val() === '';", "true");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-end-time-min').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-start-time-min').val() === '';", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-start-time-max').val() === '';", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-end-time-min').val() === '';", "True");
 			Browser.Interactions.AssertExists(".preference-end-time-min-next-day:not(:enabled):not(.active)");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-end-time-max').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-end-time-max').val() === '';", "True");
 			Browser.Interactions.AssertExists(".preference-end-time-max-next-day:not(:enabled):not(.active)");
 			Browser.Interactions.AssertExists(".preference-extended-work-time-min option:checked[value='']");
 			Browser.Interactions.AssertExists(".preference-extended-work-time-max option:checked[value='']");
@@ -298,39 +292,39 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			OpenExtendedTooltip(fields.Date);
 
 			var tooltip = ExtendedTooltip(fields.Date);
-			Browser.Interactions.AssertExists(tooltip);
+			Browser.Interactions.AssertExistsUsingJQuery(tooltip);
 
-			if (fields.Preference != null) Browser.Interactions.AssertAnyContains(tooltip, fields.Preference);
-			if (fields.StartTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.StartTimeMinimum);
-			if (fields.StartTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.StartTimeMaximum);
-			if (fields.EndTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.EndTimeMinimum);
-			if (fields.EndTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.EndTimeMaximum);
-			if (fields.WorkTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.WorkTimeMinimum);
-			if (fields.WorkTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.WorkTimeMaximum);
+			if (fields.Preference != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.Preference);
+			if (fields.StartTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.StartTimeMinimum);
+			if (fields.StartTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.StartTimeMaximum);
+			if (fields.EndTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.EndTimeMinimum);
+			if (fields.EndTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.EndTimeMaximum);
+			if (fields.WorkTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.WorkTimeMinimum);
+			if (fields.WorkTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.WorkTimeMaximum);
 
-			if (fields.Activity != null) Browser.Interactions.AssertAnyContains(tooltip, fields.Activity);
-			if (fields.ActivityStartTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityStartTimeMinimum);
-			if (fields.ActivityStartTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.StartTimeMaximum);
-			if (fields.ActivityEndTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityEndTimeMinimum);
-			if (fields.ActivityEndTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityEndTimeMaximum);
-			if (fields.ActivityTimeMinimum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityTimeMinimum);
-			if (fields.ActivityTimeMaximum != null) Browser.Interactions.AssertAnyContains(tooltip, fields.ActivityTimeMaximum);
+			if (fields.Activity != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.Activity);
+			if (fields.ActivityStartTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityStartTimeMinimum);
+			if (fields.ActivityStartTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.StartTimeMaximum);
+			if (fields.ActivityEndTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityEndTimeMinimum);
+			if (fields.ActivityEndTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityEndTimeMaximum);
+			if (fields.ActivityTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityTimeMinimum);
+			if (fields.ActivityTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityTimeMaximum);
 		}
 
 		private static void OpenExtendedTooltip(DateTime date)
 		{
 			var extendedIndication = ExtendedIndication(date);
-			Browser.Interactions.AssertExists(extendedIndication);
+			Browser.Interactions.AssertExistsUsingJQuery(extendedIndication);
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseleave')", extendedIndication.JSEncode());
 			Browser.Interactions.Javascript("$('{0}').trigger('mouseenter')", extendedIndication.JSEncode());
 		}
 
 		private void AssertExtendedActivityTimeFieldsAreReset()
 		{
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-start-time-min').val() === '';", "true");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-start-time-max').val() === '';", "true");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-min').val() === '';", "true");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-max').val() === '';", "true");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-start-time-min').val() === '';", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-start-time-max').val() === '';", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-min').val() === '';", "True");
+			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-max').val() === '';", "True");
 			Browser.Interactions.AssertExists(".preference-activity-extended-work-time-min option:checked[value='']");
 			Browser.Interactions.AssertExists(".preference-activity-extended-work-time-max option:checked[value='']");
 		}
@@ -420,14 +414,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			templates.ForEach(
 				preference =>
 				Browser.Interactions.AssertJavascriptResultContains(
-					string.Format("return $('.preference-template-list option:contains(\"{0}\")').length > 0;", preference.Value), "true"));
+					string.Format("return $('.preference-template-list option:contains(\"{0}\")').length > 0;", preference.Value), "True"));
 		}
 
 		[Then(@"I should not see '(.*)' in templates list")]
 		public void ThenIShouldNotSeeInTemplatesList(string name)
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
-				string.Format("return $('.preference-template-list option:contains(\"{0}\")').length === 0;", name), "true");
+				string.Format("return $('.preference-template-list option:contains(\"{0}\")').length === 0;", name), "True");
 		}
 
 		
@@ -478,24 +472,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see preference feedback with")]
 		public void ThenIShouldSeePreferenceFeedbackWith(PreferenceFeedbackFields fields)
 		{
+			var cell = CalendarCells.DateSelector(fields.Date);
 			if (fields.StartTimeBoundry != null)
-				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-start-times").InnerHtml, Is.StringMatching(fields.StartTimeBoundry));
+				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "possible-start-times"),fields.StartTimeBoundry);
 			if (fields.EndTimeBoundry != null)
-				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-end-times").InnerHtml, Is.StringMatching(fields.EndTimeBoundry));
+				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "possible-end-times"), fields.EndTimeBoundry);
 			if (fields.ContractTimeBoundry != null)
-				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "possible-contract-times").InnerHtml, Is.StringMatching(fields.ContractTimeBoundry));
+				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "possible-contract-times"), fields.ContractTimeBoundry);
 			if (fields.FeedbackError != null)
-				EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "feedback-error").InnerHtml, Is.StringMatching(Resources.NoAvailableShifts));
+				Browser.Interactions.AssertAnyContains(string.Format("{0} .{1}", cell, "feedback-error"), Resources.NoAvailableShifts);
 		}
 
 		[Then(@"I should see no preference feedback on '(.*)'")]
 		public void ThenIShouldSeeNoFeedback(DateTime date)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "feedback-error").Exists, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-start-times").Exists, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-end-times").Exists, Is.False);
-			EventualAssert.That(() => Pages.Pages.PreferencePage.CalendarCellDataForDate(date, "possible-contract-times").Exists, Is.False);
+			var cell = CalendarCells.DateSelector(date);
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0}.{1}", cell, "feedback-error"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0}.{1}", cell, "possible-start-times"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0}.{1}", cell, "possible-end-times"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0}.{1}", cell, "possible-contract-times"));
 		}
-
 	}
 }

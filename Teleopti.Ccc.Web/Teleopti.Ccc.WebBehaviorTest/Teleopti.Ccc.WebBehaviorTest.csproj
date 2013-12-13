@@ -208,6 +208,7 @@
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
     <Compile Include="Data\Setups\Configurable\CalendarLinkConfigurable.cs" />
     <Compile Include="Data\ScenarioDataFactory.cs" />
+    <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -505,7 +506,6 @@
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
-    <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
@@ -583,7 +583,7 @@
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
-    <Compile Include="Pages\Common\CalendarCellsPage.cs" />
+    <Compile Include="Pages\Common\CalendarCells.cs" />
     <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduleIsPublished.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />
@@ -593,7 +593,6 @@
     <Compile Include="Pages\jQuery\jQuery.cs" />
     <Compile Include="Pages\jQuery\JQueryExpression.cs" />
     <Compile Include="Pages\PortalPage.cs" />
-    <Compile Include="Pages\PreferencePage.cs" />
     <Compile Include="Pages\Common\SplitButton.cs" />
     <Compile Include="Core\ScenarioContextLazy.cs" />
     <Compile Include="MyTime\Preferences.feature.cs">
@@ -635,7 +634,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SignOut.feature</DependentUpon>
     </Compile>
-    <Compile Include="Pages\StudentAvailabilityPage.cs" />
     <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
     <Compile Include="Core\SystemLevelLock.cs" />

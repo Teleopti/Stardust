@@ -125,8 +125,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.RequestsLink.Text, Is.EqualTo("Requests"));
+			Browser.Interactions.AssertFirstContains("a[href='#RequestsTab']","Requests");
 		}
 
 		[Then(@"I should see a message saying the password is not confirmed correctly")]
