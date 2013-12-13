@@ -1,4 +1,5 @@
 ﻿using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -8,13 +9,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"MyReport tab should not be visible")]
 		public void ThenReportTabShouldNotBeVisible()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.AssertNotExists(".navbar-inner","a[href$='#MyReportTab']");
 		}
 
 		[Then(@"MyReport tab should be visible")]
 		public void ThenMyReportTabShouldBeVisible()
 		{
-			ScenarioContext.Current.Pending();
+			Browser.Interactions.AssertExists("a[href$='#MyReportTab']");
 		}
 
 		[Then(@"I should see MyReport for '(.*)'")]

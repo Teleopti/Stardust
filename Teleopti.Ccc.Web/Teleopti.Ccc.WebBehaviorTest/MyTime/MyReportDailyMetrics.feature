@@ -17,6 +17,7 @@ Scenario: No permission to MyReport module
 	When I am viewing preferences
 	Then MyReport tab should not be visible 
 
+@ignore
 Scenario: Open MyReport shows yesterdays figures
 	Given I am an agent
 	And I view my week schedule for date '2013-10-03'

@@ -56,6 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportWeb))
+			{
+				navigationItems.Add(createMyeReportNavigationItem());
+			}
 
 			return new PortalViewModel
 						{
@@ -103,6 +107,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				TitleCount = string.Format(Resources.MessagesParenthesis, unreadMessageCount),
 				PayAttention = unreadMessageCount != 0,
 				UnreadMessageCount = unreadMessageCount
+			};
+		}
+
+		private static NavigationItem createMyeReportNavigationItem()
+		{
+			return new NavigationItem
+			{
+				Action = "Index",
+				Controller = "MyReport",
+				Title = Resources.MyReport,
 			};
 		}
 
