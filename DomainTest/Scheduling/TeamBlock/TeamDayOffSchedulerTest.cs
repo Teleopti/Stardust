@@ -255,6 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly(2013, 2, 1))).Return(_scheduleDayPro);
 			Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+			Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 			Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay)).Return(true);
 			Expect.Call(() => _scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate));
 			Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay));
