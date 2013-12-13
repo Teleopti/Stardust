@@ -197,7 +197,7 @@
 		</div>
 	</div>
 	
-	<div class="row" data-bind="if: !AddingIntradayAbsence() && !AddingActivity() && !AddingFullDayAbsence()">
+	<div class="row" data-bind="ifnot: DisplayShiftMenu()">
 		<div class="span8">
 			<table class="table absence-list">
 				<tbody data-bind="foreach: Absences">
