@@ -4,6 +4,7 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Core.Aop.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -12,21 +13,23 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class GroupScheduleHub : TestableHub
 	{
 		private readonly IGroupScheduleViewModelFactory _groupScheduleViewModelFactory;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public GroupScheduleHub(IGroupScheduleViewModelFactory groupScheduleViewModelFactory)
+		public GroupScheduleHub(IGroupScheduleViewModelFactory groupScheduleViewModelFactory, IUserTimeZone userTimeZone)
 		{
 			_groupScheduleViewModelFactory = groupScheduleViewModelFactory;
+			_userTimeZone = userTimeZone;
 		}
 
 		[UnitOfWork]
-		public virtual void SubscribeGroupSchedule(Guid groupId, DateTime date)
+		public virtual void SubscribeGroupSchedule(Guid groupId, DateTime dateInUserTimeZone)
 		{
-			pushSchedule(Clients.Caller, groupId, date);
+			pushSchedule(Clients.Caller, groupId, TimeZoneInfo.ConvertTime(dateInUserTimeZone, _userTimeZone.TimeZone(), TimeZoneInfo.Utc));
 		}
 
-		private void pushSchedule(dynamic target, Guid groupId, DateTime date)
+		private void pushSchedule(dynamic target, Guid groupId, DateTime dateTimeInUtc)
 		{
-			target.incomingGroupSchedule(_groupScheduleViewModelFactory.CreateViewModel(groupId, date));
+			target.incomingGroupSchedule(_groupScheduleViewModelFactory.CreateViewModel(groupId, dateTimeInUtc));
 		}
 	}
 }
