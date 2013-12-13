@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 	[TestFixture]
 	public class EventsConsumerTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldPublishEvents()
 		{
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			publisher.AssertWasCalled(x => x.Publish(@event));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldCreateAndPersistUnitOfWork()
 		{
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
@@ -43,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			unitOfWork.AssertWasCalled(x => x.PersistAll());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldSendEventsFromPackageMessage()
 		{
 			var bus = MockRepository.GenerateMock<IServiceBus>();
@@ -55,5 +57,41 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			bus.AssertWasCalled(x => x.Send(message.Events.ToArray()));
 		}
 
+		[Test]
+		public void ShouldPassOnEventsInitiatorId()
+		{
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			var target = new EventsConsumer(MockRepository.GenerateMock<IEventPublisher>(), null, new FakeCurrentUnitOfWorkFactory(unitOfWorkFactory));
+			var @event = new AnEventWithInitiatorId
+				{
+					InitiatorId = Guid.NewGuid()
+				};
+
+			target.Consume(@event);
+
+			unitOfWork.AssertWasCalled(x => x.PersistAll(Arg<IInitiatorIdentifier>.Matches(i => i.InstanceId == @event.InitiatorId)));
+		}
+
+	}
+
+	public class AnEventWithInitiatorId : RaptorDomainEvent
+	{
+	}
+
+	public class FakeCurrentUnitOfWorkFactory : ICurrentUnitOfWorkFactory
+	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+		public FakeCurrentUnitOfWorkFactory(IUnitOfWorkFactory unitOfWorkFactory)
+		{
+			_unitOfWorkFactory = unitOfWorkFactory;
+		}
+
+		public IUnitOfWorkFactory LoggedOnUnitOfWorkFactory()
+		{
+			return _unitOfWorkFactory;
+		}
 	}
 }
