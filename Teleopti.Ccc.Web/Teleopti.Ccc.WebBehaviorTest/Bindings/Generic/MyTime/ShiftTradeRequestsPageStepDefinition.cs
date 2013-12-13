@@ -11,6 +11,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -49,9 +50,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
 		public void ThenIShouldSeeAMessageTextSayingIAmMissingAWorkflowControlSet()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeMissingWorkflowControlsSetMessage.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(".shift-trade-missing-wcs-message");
 		}
 
+		[Given(@"I should see a message text saying that no possible shift trades could be found")]
 		[Then(@"I should see a message text saying that no possible shift trades could be found")]
 		public void ThenIShouldSeeAMessageTextSayingThatNoPossibleShiftTradesCouldBeFound()
 		{
@@ -293,6 +295,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIScrollDownToTheBottomOfTheShiftTradeSection()
 		{
 			Browser.Interactions.Javascript("$('body, html').animate({ scrollTop: $('.shift-trade-person-schedule-row').filter(':last').offset().top }, 1);");
+		}
+
+		[Then(@"the option '(.*)' should be selected")]
+		public void ThenTheOptionShouldBeSelected(string optionSelected)
+		{
+			Select2Box.AssertSelectedOptionText("Team-Picker", optionSelected);
+		}
+
+		[When(@"I select the '(.*)'")]
+		public void WhenISelectThe(string optionToSelect)
+		{
+			Select2Box.OpenWhenOptionsAreLoaded("Team-Picker");
+			Select2Box.SelectItemByText("Team-Picker", optionToSelect);
 		}
 
 	}

@@ -303,14 +303,54 @@ Scenario: Show my scheduled day off
 Scenario: Default to my team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 06:00 |
+	| EndTime               | 2030-01-02 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 10:00 |
+	| EndTime               | 2030-01-02 20:00 |
+	| Shift category		| Late	           |
+	And OtherAgentNotInMyTeam have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 08:00 |
+	| EndTime               | 2030-01-02 18:00 |
+	| Shift category		| Day	           |
 	And the current time is '2030-01-01'
 	When I view Add Shift Trade Request
-	Then The team picker should have 'The site/My team' selected
+	Then the option 'The site/My team' should be selected
+	And I should see a possible schedule trade with 'OtherAgent'
+	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
+
+Scenario: Change team
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgentNotInMyTeam have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And the current time is '2029-12-27'
+	And I view Add Shift Trade Request for date '2030-01-01'
+	And I should see a message text saying that no possible shift trades could be found
+	When I select the 'Other team'
+	Then the option 'The site/Other team' should be selected
+	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
 Scenario: Cannot trade shifts when teamless
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I...
+	And I left the organisation '2029-12-24'
 	And the current time is '2030-01-01'
 	When I view Add Shift Trade Request
 	Then I should see a message that I do not belong to a team

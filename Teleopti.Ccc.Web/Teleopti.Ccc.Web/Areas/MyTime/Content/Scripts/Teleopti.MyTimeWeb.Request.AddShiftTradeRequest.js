@@ -40,7 +40,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	    self.IsLastPage = false;
 	    self.availableTeams = ko.observableArray();
 	    self.selectedTeam = ko.observable();
-	    self.noTeam = ko.observable();
+	    self.missingMyTeam = ko.observable();
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -176,9 +176,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 },
                 success: function (data, textStatus, jqXHR) {
                     if (!data) {
-                        self.noTeam(true);
+                        self.missingMyTeam(true);
+                        return;
                     }
-                    self.loadTeams();
+                    self.loadTeams(data);
+                    
                 },
                 error: function (e) {
                     //console.log(e);
@@ -189,7 +191,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             });
         };
 	    
-        self.loadTeams = function () {
+        self.loadTeams = function (teamToSelect) {
             ajax.Ajax({
                 url: "Team/Teams",
                 dataType: "json",
@@ -203,6 +205,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 },
                 success: function (data, textStatus, jqXHR) {
                     self.availableTeams(data);
+                    self.selectedTeam(teamToSelect);
                     self.loadSchedule();
                 },
                 error: function (e) {

@@ -5,24 +5,39 @@
         <span id="Request-add-loaded-ready"></span>
     </div>
     <span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
-	<div id="Request-add-shift-trade-missing-wcs-message" class="alert alert-block" data-bind="visible : missingWorkflowControlSet">
-		@Resources.MissingWorkflowControlSet
+    <div class="shift-trade-missing-wcs-message alert alert-block" data-bind="visible: missingMyTeam">
+        @Resources.MissingWorkflowControlSet
+    </div>
+    <div class="shift-trade-missing-team-message alert alert-block" data-bind="visible: missingWorkflowControlSet">
+		xxYou do not belong to a team for the selected date.
 	</div>
-	<div data-bind="if : !missingWorkflowControlSet()" class="input-append input-prepend">
-		<span class="add-on" data-bind="clickable: previousDateValid">
-			<i class="icon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
-		</span>
-		<input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
-		<span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
-			<i class="icon-calendar" ></i>
-		</span>
-	    <span class="add-on" data-bind="clickable: nextDateValid, enable: nextDateValid">
-	        <i class="icon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
-	    </span>
-		<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-			<option data-bind="text: text, value: id"></option>
-		</select>
-	</div>
+    <div data-bind="if : !missingWorkflowControlSet()">
+        <table class="table-condensed">
+            <tr>
+                <td>
+                    <div class="input-append input-prepend">
+                        <span class="add-on" data-bind="clickable: previousDateValid">
+                            <i class="icon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
+                        </span>
+                        <input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+                        <span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+                            <i class="icon-calendar" ></i>
+                        </span>
+                        <span class="add-on" data-bind="clickable: nextDateValid, enable: nextDateValid">
+                            <i class="icon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <div style="margin-bottom: 10px">
+                        <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+                            <option data-bind="text: text, value: id"></option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 	<div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
         <div class="shift-trade-add-schedule">
             <div class="shift-trade-timeline">
