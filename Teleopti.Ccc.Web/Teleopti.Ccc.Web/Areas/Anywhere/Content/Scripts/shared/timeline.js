@@ -25,7 +25,7 @@ define([
 					return minutes.ForHourOfDay(8);
 				
 				return minutes.StartOfHour(start);
-			}).extend({ throttle: 10 });
+			});
 
 			this.EndMinutes = ko.computed(function () {
 				var end = undefined;
