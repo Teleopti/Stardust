@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_serviceBusSender = serviceBusSender;
 		}
 
-		public void Execute(IMessageBrokerIdentifier messageBrokerIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			if (!_serviceBusSender.EnsureBus()) return;
 

@@ -83,6 +83,7 @@
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="DummyContextPopulator.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />

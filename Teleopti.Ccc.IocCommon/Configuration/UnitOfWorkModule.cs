@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.Register(c => c.Resolve<ICurrentDataSource>().Current())
 				.As<IDataSource>()
 				.ExternallyOwned();
+
+			// placed here because at the moment uow is the "owner" of the *current* initiator identifier
+			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();
 		}
 	}
 }

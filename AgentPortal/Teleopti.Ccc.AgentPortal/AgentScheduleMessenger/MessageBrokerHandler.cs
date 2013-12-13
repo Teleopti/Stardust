@@ -9,7 +9,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 {
-    public class MessageBrokerHandler : IMessageBrokerIdentifier
+    public class MessageBrokerHandler : IInitiatorIdentifier
     {
         private readonly ScheduleMessengerScreen _scheduleMessengerScreen;
         private readonly PushMessageController _pushMessageController;

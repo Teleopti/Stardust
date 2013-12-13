@@ -3,17 +3,18 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
 	public class ServiceBusEventPublisherTest
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldSendToBus()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
-			var target = new ServiceBusEventPublisher(serviceBusSender);
+			var target = new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator());
 			var @event = new Event();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
@@ -22,11 +23,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			serviceBusSender.AssertWasCalled(x => x.Send(@event));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		[Test]
 		public void ShouldThrowIfBusCannotBeEnsured()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
-			var target = new ServiceBusEventPublisher(serviceBusSender);
+			var target = new ServiceBusEventPublisher(serviceBusSender, null);
 			var @event = new Event();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(false);
 

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
 			target = new PersonAccountPersister(uowFactory, 
 																	rep, 
-																	MockRepository.GenerateMock<IMessageBrokerIdentifier>(),
+																	MockRepository.GenerateMock<IInitiatorIdentifier>(),
 																	new PersonAccountConflictCollector(uowFactory),
 																	new PersonAccountConflictResolver(
 																		uowFactory,

@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
             using (_mocks.Playback())
             {
-				_target.Execute(null, roots);
+				_target.Execute(roots);
             }
         }
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(null, roots);
+				_target.Execute(roots);
 			}
 		}
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
             using (_mocks.Playback())
             {
-				_target.Execute(null, new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
+				_target.Execute(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
             }
         }
 	}
