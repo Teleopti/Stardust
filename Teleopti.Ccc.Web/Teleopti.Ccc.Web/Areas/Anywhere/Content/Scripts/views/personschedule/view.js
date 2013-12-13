@@ -26,7 +26,6 @@ define([
 
 			resize.onresize(function () {
 				viewModel.TimeLine.WidthPixels($('.time-line-for').width());
-
 			});
 
 			ko.applyBindings(viewModel, options.bindingElement);
@@ -37,7 +36,7 @@ define([
 
 			viewModel.Loading(true);
 
-			viewModel.PersonId(options.personid != undefined ? options.personid : options.id);
+			viewModel.PersonId(options.personid || options.id);
 			viewModel.GroupId(options.groupid);
 			viewModel.Date(date);
 

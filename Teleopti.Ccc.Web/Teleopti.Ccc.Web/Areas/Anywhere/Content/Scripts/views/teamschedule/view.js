@@ -29,7 +29,7 @@ define([
 		lazy
 	) {
 
-	var teamSchedule;
+	var viewModel;
 
 	var setSelectedLayer = function (shifts) {
 		var layers = lazy(shifts).map(function(x) { return x.Layers(); }).flatten();
@@ -45,12 +45,12 @@ define([
 
 	var loadSchedules = function (options) {
 		subscriptions.subscribeGroupSchedule(
-			teamSchedule.SelectedGroup(),
-			helpers.Date.ToServer(teamSchedule.SelectedDate()),
+			viewModel.SelectedGroup(),
+			helpers.Date.ToServer(viewModel.SelectedDate()),
 			function (schedules) {
-				var currentPersons = teamSchedule.Persons();
+				var currentPersons = viewModel.Persons();
 
-				var dateClone = teamSchedule.SelectedDate().clone();
+				var dateClone = viewModel.SelectedDate().clone();
 
 				for (var i = 0; i < currentPersons.length; i++) {
 					currentPersons[i].ClearData();
@@ -58,7 +58,7 @@ define([
 					for (var j = 0; j < schedules.length; j++) {
 						if (currentPersons[i].Id == schedules[j].PersonId) {
 							schedules[j].Date = dateClone;
-							currentPersons[i].AddData(schedules[j], teamSchedule.TimeLine, teamSchedule.SelectedGroup());
+							currentPersons[i].AddData(schedules[j], viewModel.TimeLine, viewModel.SelectedGroup());
 						}
 					}
 				}
@@ -69,7 +69,7 @@ define([
 					return first == second ? 0 : (first < second ? -1 : 1);
 				});
 
-				teamSchedule.Persons.valueHasMutated();
+				viewModel.Persons.valueHasMutated();
 
 				options.success();
 				
@@ -84,8 +84,8 @@ define([
 				}
 			},
 			function (notification) {
-				for (var i = 0; i < teamSchedule.Persons().length; i++) {
-					if (notification.DomainReferenceId == teamSchedule.Persons()[i].Id) {
+				for (var i = 0; i < viewModel.Persons().length; i++) {
+					if (notification.DomainReferenceId == viewModel.Persons()[i].Id) {
 						return true;
 					}
 				}
@@ -95,21 +95,21 @@ define([
 	};
 
 	var loadPersons = function (options) {
-		var groupid = teamSchedule.SelectedGroup();
+		var groupid = viewModel.SelectedGroup();
 		
 		ajax.ajax({
 			url: 'Person/PeopleInGroup',
 			data: {
-				date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
+				date: helpers.Date.ToServer(viewModel.SelectedDate()),
 				groupId: groupid
 			},
 			success: function (people, textStatus, jqXHR) {
 				var newItems = ko.utils.arrayMap(people, function (s) {
 					s["GroupId"] = groupid;
-					s["Date"] = teamSchedule.SelectedDate().format("YYYYMMDD");
+					s["Date"] = viewModel.SelectedDate().format("YYYYMMDD");
 					return new personViewModel(s);
 				});
-				teamSchedule.SetPersons(newItems);
+				viewModel.SetPersons(newItems);
 				options.success();
 			}
 		});
@@ -121,22 +121,22 @@ define([
 			cache: false,
 			dataType: 'json',
 			data: {
-				date: teamSchedule.SelectedDate().toDate().toJSON()
+				date: viewModel.SelectedDate().toDate().toJSON()
 			},
 			success: function (data, textStatus, jqXHR) {
-				teamSchedule.SetSkills(data.Skills);
+				viewModel.SetSkills(data.Skills);
 				options.success();
 			}
 		});
 	};
 
 	var loadDailyStaffingMetrics = function (options) {
-		if (teamSchedule.SelectedSkill() == null) return;
+		if (viewModel.SelectedSkill() == null) return;
 		subscriptions.subscribeDailyStaffingMetrics(
-			helpers.Date.ToServer(teamSchedule.SelectedDate()),
-			teamSchedule.SelectedSkill().Id,
+			helpers.Date.ToServer(viewModel.SelectedDate()),
+			viewModel.SelectedSkill().Id,
 			function (data) {
-				teamSchedule.SetDailyMetrics(data);
+				viewModel.SetDailyMetrics(data);
 				options.success();
 			});
 	};
@@ -144,10 +144,10 @@ define([
 		ajax.ajax({
 			url: 'GroupPage/AvailableGroupPages',
 			data: {
-				date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
+				date: helpers.Date.ToServer(viewModel.SelectedDate()),
 			},
 			success: function (data, textStatus, jqXHR) {
-				teamSchedule.SetGroupPages(data);
+				viewModel.SetGroupPages(data);
 				options.success();
 			}
 		});
@@ -158,33 +158,33 @@ define([
 
 			options.renderHtml(view);
 
-			teamSchedule = new teamScheduleViewModel();
+			viewModel = new teamScheduleViewModel();
 
 			resize.onresize(function () {
-				teamSchedule.TimeLine.WidthPixels($('.time-line-for').width());
+				viewModel.TimeLine.WidthPixels($('.time-line-for').width());
 			});
 
-			teamSchedule.SelectedGroup.subscribe(function () {
-				if (teamSchedule.Loading())
+			viewModel.SelectedGroup.subscribe(function () {
+				if (viewModel.Loading())
 					return;
 				currentState.Clear();
-				navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.SelectedDate(), viewModel.SelectedSkill());
 			});
 
-			teamSchedule.SelectedDate.subscribe(function () {
-				if (teamSchedule.Loading())
+			viewModel.SelectedDate.subscribe(function () {
+				if (viewModel.Loading())
 					return;
 				currentState.Clear();
-				navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.SelectedDate(), viewModel.SelectedSkill());
 			});
 
-			teamSchedule.SelectedSkill.subscribe(function () {
-				if (teamSchedule.Loading())
+			viewModel.SelectedSkill.subscribe(function () {
+				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(teamSchedule.SelectedGroup(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.SelectedDate(), viewModel.SelectedSkill());
 			});
 
-			ko.applyBindings(teamSchedule, options.bindingElement);
+			ko.applyBindings(viewModel, options.bindingElement);
 		},
 
 		display: function (options) {
@@ -192,17 +192,17 @@ define([
 			var currentGroupId = function () {
 				if (options.id)
 					return options.id;
-				if (teamSchedule.SelectedGroup())
-					return teamSchedule.SelectedGroup();
-				if (teamSchedule.GroupPages().length > 0 && teamSchedule.GroupPages()[0].Groups().length > 0)
-					return teamSchedule.GroupPages()[0].Groups()[0].Id;
+				if (viewModel.SelectedGroup())
+					return viewModel.SelectedGroup();
+				if (viewModel.GroupPages().length > 0 && viewModel.GroupPages()[0].Groups().length > 0)
+					return viewModel.GroupPages()[0].Groups()[0].Id;
 				return null;
 			};
 
 			var currentSkillId = function () {
 				if (options.secondaryId)
 					return options.secondaryId;
-				var skills = teamSchedule.Skills();
+				var skills = viewModel.Skills();
 				if (skills.length > 0)
 					return skills[0].Id;
 				return null;
@@ -216,16 +216,18 @@ define([
 					return moment(date, 'YYYYMMDD');
 				}
 			};
-			teamSchedule.Loading(true);
+			
+			viewModel.Loading(true);
 
-			teamSchedule.SelectedDate(currentDate());
+			viewModel.SelectedDate(currentDate());
+			
 			loadSkills({
 				success: function () {
-					teamSchedule.SelectSkillById(currentSkillId());
-					teamSchedule.LoadingStaffingMetrics(true);
+					viewModel.SelectSkillById(currentSkillId());
+					viewModel.LoadingStaffingMetrics(true);
 					loadDailyStaffingMetrics({
 						success: function () {
-							teamSchedule.LoadingStaffingMetrics(false);
+							viewModel.LoadingStaffingMetrics(false);
 						}
 					});
 				}
@@ -235,17 +237,17 @@ define([
 			var loadPersonsAndSchedules = function () {
 				var currentGroup = currentGroupId();
 				if (!currentGroup) {
-					teamSchedule.Loading(false);
+					viewModel.Loading(false);
 					deferred.resolve();
 					return;
 				}
 
-				teamSchedule.SelectedGroup(currentGroup);
+				viewModel.SelectedGroup(currentGroup);
 				loadPersons({
 					success: function () {
 						loadSchedules({
 							success: function () {
-								teamSchedule.Loading(false);
+								viewModel.Loading(false);
 								if (currentState.SelectedPersonId()) {
 									$('html, body').animate({
 										scrollTop: $("[data-person-id='" + currentState.SelectedPersonId() + "']").offset().top
@@ -258,7 +260,7 @@ define([
 				});
 			};
 
-			if (teamSchedule.GroupPages().length != 0 && teamSchedule.GroupPages()[0].Groups().length != 0) {
+			if (viewModel.GroupPages().length != 0 && viewModel.GroupPages()[0].Groups().length != 0) {
 				loadPersonsAndSchedules();
 			} else {
 				loadGroupPages({
@@ -276,7 +278,7 @@ define([
 		},
 
 		setDateFromTest: function (date) {
-			teamSchedule.SelectedDate(moment(date));
+			viewModel.SelectedDate(moment(date));
 		}
 
 	};
