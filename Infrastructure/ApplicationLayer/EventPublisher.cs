@@ -26,7 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlers = _resolver.Resolve(enumerableHandlerType) as IEnumerable;
 		    if (handlers == null) return;
 
-			_eventContextPopulator.SetMessageDetail(@event);
+			_eventContextPopulator.PopulateEventContext(@event);
+
 		    foreach (var handler in handlers)
 		    {
 		        var method = handler.GetType().GetMethods()
