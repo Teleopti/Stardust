@@ -61,14 +61,14 @@ define([
                 }
 
                 var promise = view.display(routeInfo);
-
+	            
                 if (view.clearaction)
-                    view.clearaction(routeInfo);
-                if (routeInfo.action)
-                    view[routeInfo.action](routeInfo);
+                	view.clearaction(routeInfo);
 
                 if (promise) {
-                    promise.done(function () {
+                	promise.done(function () {
+                		if (routeInfo.action)
+                			view[routeInfo.action](routeInfo);
                         view.ready = true;
                     });
                 } else {
