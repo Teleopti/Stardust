@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(date), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the 2 standard preferences in the calendar")]
@@ -122,10 +122,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			var data = DataMaker.Data().UserData<StandardPreference>();
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains(CalendarCells.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should not see the former standard preference in the calendar")]
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
 			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}", cell, "possible-start-times"), expected);
+			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-start-times"), expected);
 		}
 
 		[Then(@"I should see the end time boundry (.*) to (.*)")]
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var expected = GetExpectedTimesString(earliest, latest);
 			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}",cell,"possible-end-times"),expected);
+			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-end-times"), expected);
 		}
 
 		[Then(@"I should see the contract time boundry (\d+) to (\d+)")]
@@ -227,14 +227,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var expected = GetExpectedContractTimesString(earliest, latest, culture);
 
 			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format("{0} .{1}", cell, "possible-contract-times"), expected);
+			Browser.Interactions.AssertFirstContains(string.Format("{0} .{1}", cell, "possible-contract-times"), expected);
 		}
 
 		[Then(@"I should see that there are no available shifts")]
 		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
 		{
 			var cell = CalendarCells.DateSelector(DateOnlyForBehaviorTests.TestToday);
-			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,Resources.NoAvailableShifts);
+			Browser.Interactions.AssertFirstContains(cell, Resources.NoAvailableShifts);
 		}
 
 		[Then(@"I should see the preference feedback")]
@@ -243,9 +243,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var date = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 
 			var cell = CalendarCells.DateSelector(date);
-			Browser.Interactions.AssertNotExistsUsingJQuery("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-start-times"));
-			Browser.Interactions.AssertNotExistsUsingJQuery("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-end-times"));
-			Browser.Interactions.AssertNotExistsUsingJQuery("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-contract-times"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-start-times"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-end-times"));
+			Browser.Interactions.AssertNotExists("#Preference-body-inner", string.Format("{0} .{1}:empty", cell, "possible-contract-times"));
 		}
 
 		[When(@"I click the delete preference button")]
