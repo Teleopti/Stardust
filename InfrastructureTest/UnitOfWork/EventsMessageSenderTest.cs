@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			root.Stub(x => x.PopAllEvents()).Return(Enumerable.Empty<IEvent>());
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
-			target.Execute(null, roots);
+			target.Execute(roots);
 
 			root.AssertWasCalled(x => x.PopAllEvents());
 		}
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), dateTimeperiod.StartDateTime, dateTimeperiod.EndDateTime);
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 
-			target.Execute(null, roots);
+			target.Execute(roots);
 
 			eventsPublisher.PublishedEvents.Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
 		}

@@ -18,7 +18,7 @@ using Teleopti.Messaging.Events;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SchedulerMessageBrokerHandler : IMessageBrokerIdentifier, IDisposable, IReassociateDataForSchedules, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages, IMessageQueueRemoval
+	public class SchedulerMessageBrokerHandler : IInitiatorIdentifier, IDisposable, IReassociateDataForSchedules, IUpdateScheduleDataFromMessages, IUpdateMeetingsFromMessages, IUpdatePersonRequestsFromMessages, IMessageQueueRemoval
 	{
 		private SchedulingScreen _owner;
 		private readonly IScheduleScreenRefresher _scheduleScreenRefresher;

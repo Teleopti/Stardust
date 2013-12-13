@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public interface IMessageSender
 	{
-		void Execute(IMessageBrokerIdentifier messageBrokerIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots);
+		void Execute(IEnumerable<IRootChangeInfo> modifiedRoots);
 	}
 }

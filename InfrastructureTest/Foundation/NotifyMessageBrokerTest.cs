@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
             IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
             IEventMessage mess3 = mocks.StrictMock<IEventMessage>();
-            IMessageBrokerIdentifier identifier = mocks.StrictMock<IMessageBrokerIdentifier>();
+            IInitiatorIdentifier identifier = mocks.StrictMock<IInitiatorIdentifier>();
             new Repository(uow).Add(obj);
 
             using (mocks.Record())

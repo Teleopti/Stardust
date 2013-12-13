@@ -3,9 +3,9 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-    public class EmptyMessageBrokerIdentifier : IMessageBrokerIdentifier
+    public class EmptyInitiatorIdentifier : IInitiatorIdentifier
     {
-        public EmptyMessageBrokerIdentifier()
+        public EmptyInitiatorIdentifier()
         {
             InstanceId = Guid.Empty;
         }

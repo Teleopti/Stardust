@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class EventPublisher : IEventPublisher, IPublishEventsFromEventHandlers
 	{
 		private readonly IResolve _resolver;
-	    private readonly ICurrentIdentity _currentIdentity;
+		private readonly IEventContextPopulator _eventContextPopulator;
 
-	    public EventPublisher(IResolve resolver, ICurrentIdentity currentIdentity)
+		public EventPublisher(IResolve resolver, IEventContextPopulator eventContextPopulator)
 		{
 		    _resolver = resolver;
-		    _currentIdentity = currentIdentity;
+		    _eventContextPopulator = eventContextPopulator;
 		}
 
 		public void Publish(IEvent @event)
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlers = _resolver.Resolve(enumerableHandlerType) as IEnumerable;
 		    if (handlers == null) return;
 
-		    @event.SetMessageDetail(_currentIdentity);
+			_eventContextPopulator.SetMessageDetail(@event);
 		    foreach (var handler in handlers)
 		    {
 		        var method = handler.GetType().GetMethods()

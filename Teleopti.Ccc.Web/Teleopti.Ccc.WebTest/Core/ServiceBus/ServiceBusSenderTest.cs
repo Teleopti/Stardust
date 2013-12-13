@@ -4,11 +4,17 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.WebTest.Core.ServiceBus
@@ -19,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 		[Test]
 		public void ShouldEnsureBus()
 		{
-			using (var sender = new ServiceBusSender(new CurrentIdentity()))
+			using (var sender = new ServiceBusSender())
 			{
 				sender.EnsureBus();
 				sender.FieldValue<IContainer>("_customHost").Should().Not.Be.Null();
@@ -37,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 		    var dataSource = MockRepository.GenerateMock<IDataSource>();
 		    identity.Stub(x => x.DataSource).Return(dataSource);
 		    dataSource.Stub(x => x.Application).Return(MockRepository.GenerateMock<IUnitOfWorkFactory>());
-			using (var sender = new TestServiceBusSender(currentIdentity))
+			using (var sender = new TestServiceBusSender())
 			{
 				var bus = MockRepository.GenerateMock<IOnewayBus>();
 				sender.Resolveable = bus;
@@ -55,10 +61,6 @@ namespace Teleopti.Ccc.WebTest.Core.ServiceBus
 
 		public class TestServiceBusSender : ServiceBusSender
 		{
-		    public TestServiceBusSender(ICurrentIdentity currentIdentity) : base(currentIdentity)
-		    {
-		    }
-
 		    public object Resolveable { get; set; }
 
 			protected override T Resolve<T>()

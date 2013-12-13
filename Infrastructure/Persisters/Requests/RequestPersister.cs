@@ -13,19 +13,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Requests
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IClearReferredShiftTradeRequests _clearReferredRequests;
-		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
+		private readonly IInitiatorIdentifier _initiatorIdentifier;
 		private readonly IPrincipalAuthorization _principalAuthorization;
 
 		public RequestPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 												IPersonRequestRepository personRequestRepository,
 												IClearReferredShiftTradeRequests clearReferredRequests,
-												IMessageBrokerIdentifier messageBrokerIdentifier,
+												IInitiatorIdentifier initiatorIdentifier,
 												IPrincipalAuthorization principalAuthorization)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_personRequestRepository = personRequestRepository;
 			_clearReferredRequests = clearReferredRequests;
-			_messageBrokerIdentifier = messageBrokerIdentifier;
+			_initiatorIdentifier = initiatorIdentifier;
 			_principalAuthorization = principalAuthorization;
 		}
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Requests
 					}
 					personRequest.Persisted();
 				}
-				uow.PersistAll(_messageBrokerIdentifier);
+				uow.PersistAll(_initiatorIdentifier);
 			}
 			_clearReferredRequests.ClearReferredShiftTradeRequests();
 		}

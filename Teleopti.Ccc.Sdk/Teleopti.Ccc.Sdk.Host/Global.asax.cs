@@ -66,14 +66,15 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
-        	var busSender = new ServiceBusSender(new CurrentIdentity());
+			var busSender = new ServiceBusSender();
+	        var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
         			                       new List<IMessageSender>
         			                       	{
-												new EventsMessageSender(new SyncEventsPublisher(new ServiceBusEventPublisher(busSender))),
-                                                new ScheduleMessageSender(busSender),
+												new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+                                                new ScheduleMessageSender(eventPublisher),
                                                 new MeetingMessageSender(busSender),
                                                 new GroupPageChangedMessageSender(busSender),
                                                 new TeamOrSiteChangedMessageSender(busSender),

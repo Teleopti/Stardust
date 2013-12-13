@@ -8,7 +8,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCode.Common.Configuration
 {
-    public class SetScorecardPresenter : IDisposable, IMessageBrokerIdentifier
+    public class SetScorecardPresenter : IDisposable, IInitiatorIdentifier
     {
         private readonly ISetScorecardView _view;
         private readonly IUnitOfWork _unitOfWork;

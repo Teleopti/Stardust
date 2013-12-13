@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -10,18 +10,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class ScheduleMessageSender : IMessageSender
 	{
-		private readonly IServiceBusSender _serviceBusSender;
+		private readonly IEventPublisher _eventPublisher;
 		private static readonly Type[] IncludedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
 
-		public ScheduleMessageSender(IServiceBusSender serviceBusSender)
+		public ScheduleMessageSender(IEventPublisher eventPublisher)
 		{
-			_serviceBusSender = serviceBusSender;
+			_eventPublisher = eventPublisher;
 		}
 
-		public void Execute(IMessageBrokerIdentifier messageBrokerIdentifier, IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			if (!_serviceBusSender.EnsureBus()) return;
-
 			var scheduleData = extractScheduleChangesOnly(modifiedRoots);
 			if (!scheduleData.Any()) return;
 
@@ -42,13 +40,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 					var message = new ScheduleChangedEvent
 					              	{
-										InitiatorId = messageBrokerIdentifier.InstanceId,
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
 										StartDateTime = startDateTime.AddHours(-24), //Bug fix for #23647
 					              		EndDateTime = endDateTime,
 					              		PersonId = person.Id.GetValueOrDefault(),
 					              	};
-					_serviceBusSender.Send(message);
+					_eventPublisher.Publish(message);
 				}
 			}
 		}

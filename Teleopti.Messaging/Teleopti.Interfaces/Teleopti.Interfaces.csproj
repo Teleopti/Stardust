@@ -738,7 +738,7 @@
     <Compile Include="Domain\TimeZoneHelper.cs" />
     <Compile Include="Domain\WorkTime.cs" />
     <Compile Include="Domain\WorkTimeDirective.cs" />
-    <Compile Include="Infrastructure\IMessageBrokerIdentifier.cs" />
+    <Compile Include="Infrastructure\IInitiatorIdentifier.cs" />
     <Compile Include="Infrastructure\ISessionData.cs" />
     <Compile Include="Infrastructure\TransactionIsolationLevel.cs" />
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />

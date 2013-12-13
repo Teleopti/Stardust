@@ -5,7 +5,6 @@ using Autofac;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
 using Rhino.ServiceBus.Internal;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -21,15 +20,7 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 		private IContainer _customHost;
 		private static readonly object LockObject = new object();
         private bool _isRunning; 
-        private readonly ICurrentIdentity _currentIdentity;
-
-	    public ServiceBusSender(ICurrentIdentity currentIdentity)
-	    {
-	        _currentIdentity = currentIdentity;
-	    }
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
-			"CA2000:Dispose objects before losing scope")]
+		
 		private void MoveThatBus()
 		{
 			lock (LockObject)
@@ -67,13 +58,11 @@ namespace Teleopti.Ccc.WinCode.Common.ServiceBus
 		{
 			var bus = _customHost.Resolve<IOnewayBus>();
 
-            var raptorDomainMessage = message as IRaptorDomainMessageInfo;
-            raptorDomainMessage.SetMessageDetail(_currentIdentity);
-
 			if (Logger.IsDebugEnabled)
 			{
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
+				var raptorDomainMessage = message as IRaptorDomainMessageInfo;
 				if (raptorDomainMessage != null)
 				{
 					datasource = raptorDomainMessage.Datasource;

@@ -83,11 +83,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetExplicitSeMessageBrokerIdentifier()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeMessageBrokerIdentifier(), null));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeInitiatorIdentifier(), null));
 			using (var container = containerBuilder.Build())
 			{
-				container.Resolve<IMessageBrokerIdentifier>()
-								 .Should().Be.OfType<FakeMessageBrokerIdentifier>();
+				container.Resolve<IInitiatorIdentifier>()
+								 .Should().Be.OfType<FakeInitiatorIdentifier>();
 			}
 		}
 
