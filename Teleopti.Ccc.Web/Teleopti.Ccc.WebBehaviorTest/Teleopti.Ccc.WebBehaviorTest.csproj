@@ -176,6 +176,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\MyReportStepDefinition.cs" />
+    <Compile Include="MyTime\MyReportDailyMetrics.feature.cs">
+      <DependentUpon>MyReportDailyMetrics.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature.cs">
       <DependentUpon>WeekScheduleAvailableAbsenceHeadCount.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -729,6 +735,10 @@
     <None Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\MyReportDailyMetrics.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MyReportDailyMetrics.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

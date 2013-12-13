@@ -210,6 +210,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule();
 		}
 
+		[Given(@"I click MyReport tab")]
+		public void GivenIClickMyReportTab()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToMyReport();
+		}
+
+
 		[Given(@"I am viewing team schedule for tomorrow")]
 		[Given(@"I am viewing group schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()

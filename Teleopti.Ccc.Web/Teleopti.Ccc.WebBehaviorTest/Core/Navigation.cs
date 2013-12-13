@@ -315,6 +315,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			if (Browser.Current != null)
 				Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
+
+		public static void GoToMyReport()
+		{
+			GoToWaitForCompleted("MyTime#MyReport/Index", new ApplicationStartupTimeout());
+		}
 	}
 
 	public class GotoArgs

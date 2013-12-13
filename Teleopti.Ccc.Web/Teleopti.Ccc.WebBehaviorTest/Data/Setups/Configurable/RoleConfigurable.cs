@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToStudentAvailability { get; set; }
 		public bool AccessToCalendarLink { get; set; }
 		public bool AccessToOvertimeAvailability { get; set; }
+		public bool AccessToMyReport { get; set; }
 
 		public bool AccessToViewAllGroupPages { get; set; }
 
@@ -64,6 +65,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
+			AccessToMyReport = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -175,6 +177,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if(!AccessToOvertimeAvailability)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb
+									   select f;
+			if (!AccessToMyReport)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportWeb
 									   select f;
 			return applicationFunctions;
 		}
