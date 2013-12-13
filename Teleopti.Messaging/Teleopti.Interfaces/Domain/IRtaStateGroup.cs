@@ -85,7 +85,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: jonas n
         /// Created date: 2008-10-09
         /// </remarks>
-        void MoveStateTo(IRtaStateGroup target, IRtaState state);
+        IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state);
 
 		/// <summary>
 		///  Deletes the State completely from the Db.
