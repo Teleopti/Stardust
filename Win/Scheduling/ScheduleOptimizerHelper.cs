@@ -691,22 +691,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
-			//move into IOC
-			ISwapServiceNew swapService = new SwapServiceNew();
-			ITeamBlockPeriodValidator teamBlockPeriodValidator = new TeamBlockPeriodValidator();
-			ITeamMemberCountValidator teamMemberCountValidator = new TeamMemberCountValidator();
-			ITeamBlockContractTimeValidator teamBlockContractTimeValidator = new TeamBlockContractTimeValidator();
+			
 			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
-			ITeamBlockSeniorityValidator teamBlockSeniorityValidator = new TeamBlockSeniorityValidator();
-			ITeamBlockSwapValidator teamBlockSwapValidator = new TeamBlockSwapValidator(selectedPersons, selectedPeriod, teamSelectionValidator, teamMemberCountValidator, teamBlockPeriodValidator, teamBlockContractTimeValidator, teamBlockSeniorityValidator);
-			ITeamBlockPersonsSkillChecker teamBlockPersonsSkillChecker = new TeamBlockPersonsSkillChecker();
-			ITeamBlockSwapDayValidator teamBlockSwapDayValidator = new TeamBlockSwapDayValidator(teamBlockPersonsSkillChecker);
-			ITeamBlockSwap teamBlockSwap = new TeamBlockSwap(swapService, teamBlockSwapValidator, teamBlockSwapDayValidator);
-
+			if(!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod)) return;
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
-			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
-			                                                      schedulingOptions, _stateHolder.ShiftCategories.ToList(),
-																  _schedulerStateHolder.Schedules, rollbackService, teamBlockSwap);
+
+			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
+			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,schedulingOptions, _stateHolder.ShiftCategories.ToList(),_schedulerStateHolder.Schedules, rollbackService);
+			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
         private IList<IScheduleMatrixOriginalStateContainer> createMatrixContainerList(IEnumerable<IScheduleMatrixPro> matrixList)

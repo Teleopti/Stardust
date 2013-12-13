@@ -7,24 +7,27 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     public interface ITeamBlockPriorityDefinitionInfo
     {
         int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
-	    void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority);
+	    void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, int priority);
 	    void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority);
 	    IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo { get; }
-		IList<ITeamBlockInfo> LowToHighSeniorityListBlockInfo { get; }
+	    IList<ITeamBlockInfo> HighToLowShiftCategoryPriority();
     }
 
 	public class TeamBlockPriorityDefinitionInfo : ITeamBlockPriorityDefinitionInfo
 	{
 		private readonly IList<ITeamBlockInfoPriority> _teamBlockInfoPriorityList;
+		private readonly IDictionary<ITeamBlockInfo, int> _teamBlockShiftCategoryPriority;
 
 		public TeamBlockPriorityDefinitionInfo()
 		{
 			_teamBlockInfoPriorityList = new List<ITeamBlockInfoPriority>();
+			_teamBlockShiftCategoryPriority = new Dictionary<ITeamBlockInfo, int>();
 		}
 
-		public void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority)
+		public void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, int priority)
 		{
 			_teamBlockInfoPriorityList.Add(teamBlockInfoPriority);
+			_teamBlockShiftCategoryPriority.Add(teamBlockInfo, priority);
 		}
 
 		public IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo
@@ -32,22 +35,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			get { return (_teamBlockInfoPriorityList.OrderByDescending(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
 		}
 
-		public IList<ITeamBlockInfo> LowToHighSeniorityListBlockInfo
+		public IList<ITeamBlockInfo> HighToLowShiftCategoryPriority()
 		{
-			get { return (_teamBlockInfoPriorityList.OrderBy(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
+			var result = _teamBlockInfoPriorityList.OrderByDescending(s => s.ShiftCategoryPriority).Select(s => s.TeamBlockInfo).ToList();
+			return result;
 		}
 
 		public int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
 		{
-			var teamBlockInfoPriority = _teamBlockInfoPriorityList.FirstOrDefault(blockInfoPriority => blockInfoPriority.TeamBlockInfo.Equals(teamBlockInfo));
-			return teamBlockInfoPriority != null ? teamBlockInfoPriority.ShiftCategoryPriority : 0;
+			return _teamBlockShiftCategoryPriority[teamBlockInfo];
 		}
 
 		public void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority)
 		{
-			var teamBlockInfoPriority = _teamBlockInfoPriorityList.FirstOrDefault(blockInfoPriority => blockInfoPriority.TeamBlockInfo.Equals(teamBlockInfo));
-			if (teamBlockInfoPriority == null) return;
-			teamBlockInfoPriority.ShiftCategoryPriority = shiftCategoryPriority;
+			_teamBlockShiftCategoryPriority[teamBlockInfo] = shiftCategoryPriority;
 		}
 	}
 }
