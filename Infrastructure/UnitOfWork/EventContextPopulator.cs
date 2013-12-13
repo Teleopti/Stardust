@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			message.Timestamp = DateTime.UtcNow;
 			var initiatorIdentifier = _initiatorIdentifier.Current();
 			if (initiatorIdentifier != null)
-				message.InitiatorId = initiatorIdentifier.InstanceId;
+				message.InitiatorId = initiatorIdentifier.InitiatorId;
 			if (_identity != null)
 			{
 				var identity = _identity.Current();

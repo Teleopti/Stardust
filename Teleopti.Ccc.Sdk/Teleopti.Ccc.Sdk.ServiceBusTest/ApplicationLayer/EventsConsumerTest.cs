@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 
 			target.Consume(@event);
 
-			unitOfWork.AssertWasCalled(x => x.PersistAll(Arg<IInitiatorIdentifier>.Matches(i => i.InstanceId == @event.InitiatorId)));
+			unitOfWork.AssertWasCalled(x => x.PersistAll(Arg<IInitiatorIdentifier>.Matches(i => i.InitiatorId == @event.InitiatorId)));
 		}
 
 	}

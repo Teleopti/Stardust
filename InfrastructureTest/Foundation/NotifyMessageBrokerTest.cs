@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             {
                 using (mocks.Ordered())
                 {
-                    Expect.Call(identifier.InstanceId).Return(moduleId).Repeat.Any();
+                    Expect.Call(identifier.InitiatorId).Return(moduleId).Repeat.Any();
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);

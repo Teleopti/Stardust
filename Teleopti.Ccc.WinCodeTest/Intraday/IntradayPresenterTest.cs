@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
             
             _view.Stub(x => x.InvokeRequired).Return(false);
-            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InitiatorId);
 
             _target.OnEventForecastDataMessageHandler(null, new EventMessageArgs(eventMessage));
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
             _view.Stub(x => x.InvokeRequired).Return(false);
-            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InitiatorId);
 
             _target.OnEventMeetingMessageHandler(null, new EventMessageArgs(eventMessage));
 
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
             _view.Stub(x => x.InvokeRequired).Return(false);
-            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InitiatorId);
 
             _target.OnEventScheduleMessageHandler(null, new EventMessageArgs(eventMessage));
 
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         public void VerifyOnEventExternalAgentStateMessageHandlerSameModuleId()
         {
             IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
-            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InitiatorId);
 
             _target.OnEventActualAgentStateMessageHandler(null, new EventMessageArgs(eventMessage));
         }
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         {
             IEventMessage eventMessage = MockRepository.GenerateMock<IEventMessage>();
             _view.Stub(x => x.InvokeRequired).Return(false);
-            eventMessage.Stub(x => x.ModuleId).Return(_target.InstanceId);
+            eventMessage.Stub(x => x.ModuleId).Return(_target.InitiatorId);
 
             _target.OnEventStatisticMessageHandler(null, new EventMessageArgs(eventMessage));
 
@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             Assert.IsTrue(string.IsNullOrEmpty(_target.ChartIntradayDescription));
             Assert.AreEqual(_period.StartDate, _target.IntradayDate);
             Assert.IsNotNull(_target.RtaStateHolder);
-            Assert.AreNotEqual(Guid.Empty, _target.InstanceId);
+            Assert.AreNotEqual(Guid.Empty, _target.InitiatorId);
             Assert.IsTrue(_target.RealTimeAdherenceEnabled);
             Assert.IsTrue(_target.EarlyWarningEnabled);
         }

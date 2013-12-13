@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			Guid moduleId = identifier == null ? Guid.Empty : identifier.InstanceId;
+			Guid moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
 			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
 		}
 

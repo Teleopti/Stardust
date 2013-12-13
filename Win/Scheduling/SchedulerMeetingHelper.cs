@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             using (MeetingComposerView meetingComposerView = new MeetingComposerView(meetingViewModel, _schedulerStateHolder, editPermission, viewSchedulesPermission, new EventAggregator()))
             {
-				meetingComposerView.SetInstanceId(_initiatorIdentifier.InstanceId);
+				meetingComposerView.SetInstanceId(_initiatorIdentifier.InitiatorId);
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;
                 meetingComposerView.ShowDialog();
                 meetingComposerView.ModificationOccurred -= meetingComposerView_ModificationOccurred;
