@@ -283,5 +283,46 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 
+		[Test]
+		public void ShouldIgoreATeamIfSomeoneFailedButContinueWithOtherTeams()
+		{
+			var groupPerson2 = _mock.StrictMock<IGroupPerson>();
+			var teamBlockInfoMock2 = _mock.StrictMock<ITeamBlockInfo>();
+			var teamInfoMock2 = _mock.StrictMock<ITeamInfo>();
+			var person2 = PersonFactory.CreatePerson("2");
+			var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>> { _matrixList });
+			var teamInfo2 = new TeamInfo(groupPerson2, new List<IList<IScheduleMatrixPro>> { _matrixList });
+			var personList = new List<IPerson> {_person, person2};
+			using (_mock.Record())
+			{
+				Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(person2, _dateOnlyPeriod, _matrixList)).Return(teamInfo2);
+				Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock, _date, _matrixList,
+																		  _schedulingOptions))
+					  .IgnoreArguments()
+					  .Return(_teamBlockInfoMock);
+				Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfoMock2, _date, _matrixList,
+																		  _schedulingOptions))
+					  .IgnoreArguments()
+					  .Return(teamBlockInfoMock2);
+				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
+																	 _dateOnlyPeriod, new List<IPerson>{_person}, _rollbackService)).IgnoreArguments().Return(false);
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfoMock2, _date, _schedulingOptions,
+																	 _dateOnlyPeriod, new List<IPerson> { person2 }, _rollbackService)).IgnoreArguments().Return(true);
+				Expect.Call(teamBlockInfoMock2.TeamInfo).Return(teamInfoMock2);
+				Expect.Call(teamInfoMock2.MatrixesForGroupAndDate(_date)).Return(_matrixList);
+				Expect.Call(_matrixPro.Person).Return(new Person());
+				Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(_date, _schedulingOptions)).IgnoreArguments().Return(true);
+			}
+
+			using (_mock.Playback())
+			{
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, personList, _rollbackService));
+			}
+		}
+
     }
 }
