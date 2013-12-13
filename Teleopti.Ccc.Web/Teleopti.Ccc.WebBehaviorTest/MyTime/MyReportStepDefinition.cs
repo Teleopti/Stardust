@@ -24,5 +24,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			ScenarioContext.Current.Pending();
 		}
 
+		[Then(@"I should see a message saying I dont have access to MyReport")]
+		public void ThenIShouldSeeAMessageSayingIDontHaveAccess()
+		{
+			//todo...
+			Browser.Interactions.AssertExists(".error");
+		}
+
+
 	}
 }

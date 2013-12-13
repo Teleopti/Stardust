@@ -13,6 +13,15 @@ namespace Teleopti.Ccc.Web.Filters
 		}
 	}
 
+	public sealed class MyReportPermissionAttribute : ApplicationFunctionAttribute
+	{
+		public MyReportPermissionAttribute()
+			:base(DefinedRaptorApplicationFunctionPaths.MyReportWeb)
+		{
+			
+		}
+	}
+
 	public sealed class PreferencePermissionAttribute : ApplicationFunctionAttribute
 	{
 		public PreferencePermissionAttribute() : base(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb,DefinedRaptorApplicationFunctionPaths.StandardPreferences)

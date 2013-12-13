@@ -17,12 +17,21 @@ Scenario: No permission to MyReport module
 	When I am viewing preferences
 	Then MyReport tab should not be visible 
 
+Scenario: No permission to MyReport module when navigating with URL
+	Given there is a role with
+	| Field						| Value						|
+	| Name						| No access to MyReport		|
+	| Access to MyReport		| False					    |
+	And I have the role 'No access to MyReport'
+	When I navigate to MyReport
+	Then I should see a message saying I dont have access to MyReport
+
 @ignore
 Scenario: Open MyReport shows yesterdays figures
 	Given I am an agent
 	And I view my week schedule for date '2013-10-03'
 	And the current time is '2013-10-03'
-	And I click MyReport tab
+	When I click MyReport tab
 	Then I should see MyReport for '2013-10-02'
 
 

@@ -210,7 +210,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule();
 		}
 
-		[Given(@"I click MyReport tab")]
+		[When(@"I click MyReport tab")]
+		[When(@"I navigate to MyReport")]
 		public void GivenIClickMyReportTab()
 		{
 			TestControllerMethods.Logon();
@@ -314,8 +315,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Navigation.GotoRequestsShiftTrade(date);
 		}
-
-
 
 	}
 }

@@ -262,6 +262,7 @@
     <Compile Include="Areas\Anywhere\Core\TeamScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
@@ -1064,6 +1065,7 @@
     <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
+    <Content Include="Areas\MyTime\Views\MyReport\MyReportPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
