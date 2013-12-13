@@ -31,7 +31,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private void setValuesFromIdentity(IRaptorDomainMessageInfo message)
 		{
 			message.Timestamp = DateTime.UtcNow;
-			message.InitiatorId = _initiatorIdentifier.Current().InstanceId;
+			var initiatorIdentifier = _initiatorIdentifier.Current();
+			if (initiatorIdentifier != null)
+				message.InitiatorId = initiatorIdentifier.InstanceId;
 			if (_identity != null)
 			{
 				var identity = _identity.Current();
