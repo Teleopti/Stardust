@@ -50,8 +50,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             if (_cancelMe)
                 return;
 
+			var selectedMatrixes = new List<IScheduleMatrixPro>();
+			foreach (var scheduleMatrixPro in allMatrixList)
+			{
+				if(selectedPersons.Contains(scheduleMatrixPro.Person))
+					selectedMatrixes.Add(scheduleMatrixPro);
+			}
+
             _missingDaysOffScheduler.DayScheduled += dayScheduled;
-            _missingDaysOffScheduler.Execute(allMatrixList, schedulingOptions, rollbackService);
+			_missingDaysOffScheduler.Execute(selectedMatrixes, schedulingOptions, rollbackService);
             _missingDaysOffScheduler.DayScheduled -= dayScheduled;
         }
 

@@ -178,6 +178,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					continue;
 
 				IScheduleDay part = matrix.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
+				if(part.IsScheduled())
+					continue;
 
 				if (!_hasContractDayOffDefinition.IsDayOff(part))
 					continue;
