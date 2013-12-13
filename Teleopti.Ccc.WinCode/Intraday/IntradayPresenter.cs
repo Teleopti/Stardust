@@ -435,7 +435,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             return false;
         }
 
-        public Guid InstanceId
+        public Guid InitiatorId
         {
             get { return _instanceId; }
         }

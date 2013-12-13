@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeInitiatorIdentifier : IInitiatorIdentifier
 	{
-		public Guid InstanceId { get; set; }
+		public Guid InitiatorId { get; set; }
 	}
 }

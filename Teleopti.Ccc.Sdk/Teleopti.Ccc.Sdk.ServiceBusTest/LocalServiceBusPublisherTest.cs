@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				bus,
 				new EventContextPopulator(null,
 					new FakeCurrentInitiatorIdentifier(
-						new FakeInitiatorIdentifier { InstanceId = initiatorId })));
+						new FakeInitiatorIdentifier { InitiatorId = initiatorId })));
 
 			target.Publish(@event);
 

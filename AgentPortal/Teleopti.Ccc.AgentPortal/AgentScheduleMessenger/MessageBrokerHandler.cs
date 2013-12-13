@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
             _pushMessageController = pushMessageController;
         }
 
-        public Guid InstanceId
+        public Guid InitiatorId
         {
             get { return _instanceId; }
         }

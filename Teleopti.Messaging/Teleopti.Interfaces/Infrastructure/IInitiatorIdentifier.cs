@@ -4,6 +4,6 @@ namespace Teleopti.Interfaces.Infrastructure
 {
     public interface IInitiatorIdentifier
     {
-        Guid InstanceId { get; }
+        Guid InitiatorId { get; }
     }
 }

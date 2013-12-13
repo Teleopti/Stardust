@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
     {
         public EmptyInitiatorIdentifier()
         {
-            InstanceId = Guid.Empty;
+            InitiatorId = Guid.Empty;
         }
 
-        public Guid InstanceId { get; private set; }
+        public Guid InitiatorId { get; private set; }
     }
 }

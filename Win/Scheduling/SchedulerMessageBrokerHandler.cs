@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private static readonly ILog Log = LogManager.GetLogger(typeof(SchedulerMessageBrokerHandler));
 		private readonly IList<IEventMessage> _messageQueue = new List<IEventMessage>();
 
-		public Guid InstanceId
+		public Guid InitiatorId
 		{
 			get { return _instanceId; }
 		}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void OnEventMessage(object sender, EventMessageArgs e)
 		{
 			if (_owner.IsDisposed) return;
-			if (e.Message.ModuleId == InstanceId) return;
+			if (e.Message.ModuleId == InitiatorId) return;
 			if (_owner.InvokeRequired)
 			{
 				_owner.BeginInvoke(new EventHandler<EventMessageArgs>(OnEventMessage), sender, e);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				if (_owner.IsDisposed) return;
 				Log.Debug("Message broker - catched event");
-				if (eventMessage.ModuleId != InstanceId)
+				if (eventMessage.ModuleId != InitiatorId)
 				{
 					var deletedRequest = deleteOnEventRequest(eventMessage);
 					var onRequestDeletedFromBroker = RequestDeletedFromBroker;

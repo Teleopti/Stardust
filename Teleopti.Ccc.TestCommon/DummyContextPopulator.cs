@@ -6,11 +6,11 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class DummyContextPopulator : IEventContextPopulator
 	{
-		public void SetMessageDetail(IEvent @event)
+		public void PopulateEventContext(IEvent @event)
 		{
 		}
 
-		public void SetMessageDetail(IRaptorDomainMessageInfo @event)
+		public void PopulateEventContext(IRaptorDomainMessageInfo @event)
 		{
 		}
 	}

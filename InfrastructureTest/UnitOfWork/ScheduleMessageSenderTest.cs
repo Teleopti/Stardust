@@ -129,13 +129,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
-			var initiatorIdentifier = new FakeInitiatorIdentifier { InstanceId = Guid.NewGuid() };
+			var initiatorIdentifier = new FakeInitiatorIdentifier { InitiatorId = Guid.NewGuid() };
 			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new EventContextPopulator(null, new FakeCurrentInitiatorIdentifier(initiatorIdentifier))));
 
 			target.Execute(new[] { rootChangeInfo });
 
 			serviceBusSender.AssertWasCalled(x => x.Send(Arg<object>.Matches(e =>
-				((ScheduleChangedEvent)e).InitiatorId == initiatorIdentifier.InstanceId
+				((ScheduleChangedEvent)e).InitiatorId == initiatorIdentifier.InitiatorId
 				)));
 		}
 
