@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				else
 				{
 					OnDayScheduledFailed();
-					break;
+					continue;
 				}
                 if (_cancelMe)
                     break;
