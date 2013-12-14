@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
 				foreach (var teamInfo in teamInfoList)
 				{
-					var groupPerson = teamInfo.GroupPerson;
-					if (groupPerson.GroupMembers.Any(groupMember => !selectedPersonList.Contains(groupMember)))
+					if (teamInfo.GroupMembers.Any(groupMember => !selectedPersonList.Contains(groupMember)))
 					{
 						return false;
 					}

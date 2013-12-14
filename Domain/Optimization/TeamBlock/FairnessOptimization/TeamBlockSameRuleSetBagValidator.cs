@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 	{
 		public bool ValidateSameRuleSetBag(ITeamBlockInfo teamBlock1, ITeamBlockInfo teamBlock2)
 		{
-			var teamBlock1Members = teamBlock1.TeamInfo.GroupPerson.GroupMembers.ToList();
-			var teamBlock2Members = teamBlock1.TeamInfo.GroupPerson.GroupMembers.ToList();
+			var teamBlock1Members = teamBlock1.TeamInfo.GroupMembers.ToList();
+			var teamBlock2Members = teamBlock1.TeamInfo.GroupMembers.ToList();
 			var roleModelPerson = teamBlock1Members[0];
 
 			foreach (var dateOnly in teamBlock1.BlockInfo.BlockPeriod.DayCollection())

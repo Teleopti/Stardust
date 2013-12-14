@@ -51,12 +51,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> GeneratePerDay(ITeamBlockInfo teamBlockInfo )
         {
-            var groupPerson =teamBlockInfo.TeamInfo .GroupPerson;
+            var groupMembers =teamBlockInfo.TeamInfo.GroupMembers;
             var dateOnlyList =teamBlockInfo.BlockInfo .BlockPeriod.DayCollection();
             var activityIntervalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
-            var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod).ToList();
+			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, dateOnlyPeriod).ToList();
 		    var openHoursPerActivity = _openHourRestrictionForTeamBlock.GetOpenHoursPerActivity(teamBlockInfo);
             var minimumResolution = _resolutionProvider.MinimumResolution(skills);
             var activityData = new Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>>();

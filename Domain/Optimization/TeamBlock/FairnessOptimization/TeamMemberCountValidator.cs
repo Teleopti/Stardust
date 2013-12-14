@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 	{
 		public bool ValidateMemberCount(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2)
 		{
-			return teamBlockInfo1.TeamInfo.GroupPerson.GroupMembers.Count().Equals(teamBlockInfo2.TeamInfo.GroupPerson.GroupMembers.Count());
+			return teamBlockInfo1.TeamInfo.GroupMembers.Count().Equals(teamBlockInfo2.TeamInfo.GroupMembers.Count());
 		}
 	}
 }

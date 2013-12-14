@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
 		    if (dateOnlyList == null) return null;
 
-		    var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+		    var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
 		    var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 		    var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                                                                          new WorkTimeLimitation(), null, null, null,
 		                                                                          new List<IActivityRestriction>());
 
-		    effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupPerson.GroupMembers, schedulingOptions,
+		    effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupMembers, schedulingOptions,
 				                                      scheduleDictionary), dateOnlyList, matrixList, effectiveRestriction);
 
 		    effectiveRestriction = combineRestriction(new SameStartTimeRestriction(timeZone), dateOnlyList,

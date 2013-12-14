@@ -20,8 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			var selectedPersons = new List<IPerson>();
 			foreach (var teamInfo in teamInfos)
 			{
-				var groupPerson = teamInfo.GroupPerson;
-				foreach (var groupMember in groupPerson.GroupMembers)
+				foreach (var groupMember in teamInfo.GroupMembers)
 				{
 					selectedPersons.Add(groupMember);
 				}
@@ -39,14 +38,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			foreach (var teamInfo in teamInfos)
 			{
 				var totalSeniorityPoints = 0;
-				var groupPerson = teamInfo.GroupPerson;
-				foreach (var groupMember in groupPerson.GroupMembers)
+				foreach (var groupMember in teamInfo.GroupMembers)
 				{
 					var seniorityValue = result[groupMember];
 					totalSeniorityPoints += seniorityValue;
 				}
 
-				var averageValue = totalSeniorityPoints / (double)groupPerson.GroupMembers.Count();
+				var averageValue = totalSeniorityPoints / (double)teamInfo.GroupMembers.Count();
 				var seniorityInfo = new SeniorityInfo(teamInfo, averageValue);
 				seniorityInfos.Add(teamInfo, seniorityInfo);
 			}

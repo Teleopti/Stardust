@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			ITeamInfo teamInfo, DateOnly dateOnly, IDayOffTemplate dayOffTemplate)
 		{
-			foreach (var person in teamInfo.GroupPerson.GroupMembers)
+			foreach (var person in teamInfo.GroupMembers)
 			{
 				AddDayOffForMember(schedulePartModifyAndRollbackService, person, dateOnly, dayOffTemplate, false);
 			}
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void RemoveDayOffForTeam(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                                ITeamInfo teamInfo, DateOnly dateOnly)
 		{
-			foreach (var person in teamInfo.GroupPerson.GroupMembers)
+			foreach (var person in teamInfo.GroupMembers)
 			{
 				RemoveDayOffForMember(schedulePartModifyAndRollbackService, person, dateOnly);
 			}

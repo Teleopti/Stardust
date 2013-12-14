@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			_cancelMe = false;
 			var allSelectedDaysAreScheduled = false;
-			var selectedTeamMembers = selectedPersons.Intersect(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers).ToList();
+			var selectedTeamMembers = selectedPersons.Intersect(teamBlockInfo.TeamInfo.GroupMembers).ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
 			while (!allSelectedDaysAreScheduled)
 			{

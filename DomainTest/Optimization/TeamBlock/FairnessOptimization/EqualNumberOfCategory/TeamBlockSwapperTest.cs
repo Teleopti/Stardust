@@ -45,19 +45,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void ShouldSwapIfNoBusinessRuleResponse()
 		{
 			var teamInfo1 = _mocks.StrictMock<ITeamInfo>();
-			var groupPerson1 = _mocks.StrictMock<IGroupPerson>();
 			var person1 = PersonFactory.CreatePerson();
 			var person2 = PersonFactory.CreatePerson();
 			var swapList = new List<IScheduleDay> {_day1, _day2};
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo1.TeamInfo).Return(teamInfo1);
-				Expect.Call(teamInfo1.GroupPerson).Return(groupPerson1);
-				Expect.Call(groupPerson1.GroupMembers).Return(new List<IPerson> {person1});
+				Expect.Call(teamInfo1.GroupMembers).Return(new List<IPerson> { person1 });
 				Expect.Call(_teamBlockInfo1.BlockInfo).Return(new BlockInfo(new DateOnlyPeriod(2013, 12, 3, 2013, 12, 3)));
 				Expect.Call(_teamBlockInfo2.TeamInfo).Return(teamInfo1);
-				Expect.Call(teamInfo1.GroupPerson).Return(groupPerson1);
-				Expect.Call(groupPerson1.GroupMembers).Return(new List<IPerson> {person2});
+				Expect.Call(teamInfo1.GroupMembers).Return(new List<IPerson> { person2 });
 				Expect.Call(_scheduleDictionary[person1]).Return(_range1);
 				Expect.Call(_range1.ScheduledDay(new DateOnly(2013, 12, 3))).Return(_day1);
 				Expect.Call(_scheduleDictionary[person2]).Return(_range2);
@@ -80,7 +77,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		public void ShouldNotSwapIfAnyBusinessRuleResponse()
 		{
 			var teamInfo1 = _mocks.StrictMock<ITeamInfo>();
-			var groupPerson1 = _mocks.StrictMock<IGroupPerson>();
 			var person1 = PersonFactory.CreatePerson();
 			var person2 = PersonFactory.CreatePerson();
 			var swapList = new List<IScheduleDay> { _day1, _day2 };
@@ -90,12 +86,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo1.TeamInfo).Return(teamInfo1);
-				Expect.Call(teamInfo1.GroupPerson).Return(groupPerson1);
-				Expect.Call(groupPerson1.GroupMembers).Return(new List<IPerson> { person1 });
+				Expect.Call(teamInfo1.GroupMembers).Return(new List<IPerson> { person1 });
 				Expect.Call(_teamBlockInfo1.BlockInfo).Return(new BlockInfo(new DateOnlyPeriod(2013, 12, 3, 2013, 12, 3)));
 				Expect.Call(_teamBlockInfo2.TeamInfo).Return(teamInfo1);
-				Expect.Call(teamInfo1.GroupPerson).Return(groupPerson1);
-				Expect.Call(groupPerson1.GroupMembers).Return(new List<IPerson> { person2 });
+				Expect.Call(teamInfo1.GroupMembers).Return(new List<IPerson> { person2 });
 				Expect.Call(_scheduleDictionary[person1]).Return(_range1);
 				Expect.Call(_range1.ScheduledDay(new DateOnly(2013, 12, 3))).Return(_day1);
 				Expect.Call(_scheduleDictionary[person2]).Return(_range2);

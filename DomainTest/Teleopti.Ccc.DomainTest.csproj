@@ -424,7 +424,6 @@
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManagerTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilderTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />

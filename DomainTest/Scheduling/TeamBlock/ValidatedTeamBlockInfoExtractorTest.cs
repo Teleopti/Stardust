@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _matrixList = new List<IScheduleMatrixPro> { _matrixPro };
             _dateOnlyPeriod = new DateOnlyPeriod(_date, _date);
             _blockInfo = new BlockInfo(_dateOnlyPeriod);
-            _groupPerson = _mocks.StrictMock<IGroupPerson>();
+            _groupPerson = new GroupPerson(new List<IPerson>{_person}, _date, "hjk", null);
             _teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
             _teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();

@@ -36,10 +36,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
         public double TargetValue(ITeamBlockInfo teamBlockInfo , IAdvancedPreferences advancedPreferences)
         {
-            var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+            var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
             var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
-            var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod).ToList() ;
+			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, dateOnlyPeriod).ToList();
             var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 
             var skillIntervalPerDayList = getSkillIntervalListForEachDay(dateOnlyList,skills ,minimumResolution );

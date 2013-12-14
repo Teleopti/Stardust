@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             dateToSkillIntervalDic.Add(DateOnly.Today,new List<ISkillIntervalData>{skillIntervalData1 });
             using (_mock.Record())
             {
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
                 Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList() )).Return(15);
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay>{_skillDay1 });
                 Expect.Call(_skillDay1.CurrentDate).Return(DateOnly.Today);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             
             using (_mock.Record())
             {
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
                 Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay> { _skillDay1 });
 

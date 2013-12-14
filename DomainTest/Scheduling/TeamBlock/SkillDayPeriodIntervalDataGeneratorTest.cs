@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ReadOnlyCollection<ISkillStaffPeriod> _skillStaffPeriodCollection;
         private ISkillStaffPeriod _skillStaffPeriod;
 	    private IGroupPersonSkillAggregator _groupPersonSkillAggregator;
-	    private IGroupPerson _groupPerson;
 	    private DateTime _date;
 	    private BlockInfo _blockInfo;
         private ITeamBlockInfo _teamBlockInfo2;
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     		_intervalDivider = _mock.StrictMock<ISkillIntervalDataDivider>();
             _skillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
 			_groupPersonSkillAggregator =  _mock.StrictMock<IGroupPersonSkillAggregator>();
-			_groupPerson = _mock.StrictMock<IGroupPerson>();
 			_date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
             _skillStaffPeriodCollection = new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>{_skillStaffPeriod});
             _openHourrestrcitionForTeamBlock = _mock.StrictMock<IOpenHourRestrictionForTeamBlock>();
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
                        Return(_skillDayList);
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList,
                                                                          new DateOnlyPeriod(new DateOnly(_date),
                                                                                             new DateOnly(_date)))).IgnoreArguments()
                       .Return(new List<ISkill> { _skill1, _skill2 });
@@ -140,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
                        Return(_skillDayList);
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList,
                                                                          new DateOnlyPeriod(new DateOnly(_date),
                                                                                             new DateOnly(_date)))).IgnoreArguments()
                       .Return(new List<ISkill> { skill1 });
@@ -219,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             {
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
                        Return(_skillDayList);
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList,
                                                                          new DateOnlyPeriod(new DateOnly(_date),
                                                                                             new DateOnly(_date)))).IgnoreArguments() 
                       .Return(new List<ISkill> { _skill1, _skill2 });
@@ -280,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
                        Return(_skillDayList);
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList,
                                                                          new DateOnlyPeriod(new DateOnly(_date),
                                                                                             new DateOnly(_date)))).IgnoreArguments() 
                       .Return(new List<ISkill> { _skill1 });

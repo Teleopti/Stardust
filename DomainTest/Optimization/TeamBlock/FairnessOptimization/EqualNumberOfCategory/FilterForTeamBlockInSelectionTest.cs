@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private IPerson _person1;
 		private IPerson _person2;
 		private ITeamInfo _teamInfo;
-		private IGroupPerson _groupPerson;
 
 		[SetUp]
 		public void Setup()
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_person1 = PersonFactory.CreatePerson();
 			_person2 = PersonFactory.CreatePerson();
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
-			_groupPerson = _mocks.StrictMock<IGroupPerson>();
 		}
 
 		[Test]
@@ -43,8 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			{
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson> {_person1, _person2});
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
 			}
 
 			using (_mocks.Playback())
@@ -63,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			{
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
+				Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
 			}
 
 			using (_mocks.Playback())

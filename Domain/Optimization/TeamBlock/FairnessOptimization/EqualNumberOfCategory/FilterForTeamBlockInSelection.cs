@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					continue;
 
 				var memberNotFound = false;
-				foreach (var groupMember in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+				foreach (var groupMember in teamBlockInfo.TeamInfo.GroupMembers)
 				{
 					if (!selectedPersons.Contains(groupMember))
 						memberNotFound = true;

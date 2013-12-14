@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				bool unscheduledFound = false;
 				foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 				{
-					foreach (var groupMember in teamBlock.TeamInfo.GroupPerson.GroupMembers)
+					foreach (var groupMember in teamBlock.TeamInfo.GroupMembers)
 					{
 						if (scheduleDictionary[groupMember].ScheduledDay(dateOnly).SignificantPart() != SchedulePartView.MainShift)
 						{

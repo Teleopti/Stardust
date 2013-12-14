@@ -161,20 +161,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _groupPerson, false, BlockFinderType.SingleDay)).Return(caches);
+                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
 				Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestriction)).Return(caches);
 				Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
 				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult)).Return(caches);
 				Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, caches, _finderResult)).Return(caches);
-				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _groupPerson, caches, effectiveRestriction, _finderResult)).Return(caches);
-				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _groupPerson, caches, effectiveRestriction, _finderResult))
+				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestriction, _finderResult)).Return(caches);
+				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestriction, _finderResult))
 				      .Return(caches);
 				Expect.Call(_workTimeLimitationShiftFilter.Filter(caches, effectiveRestriction, _finderResult)).Return(caches);
 				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, caches,
 				                                            _schedulingOptions, _finderResult)).Return(caches);
 				//Expect.Call(_businessRulesShiftFilter.Filter(_groupPerson, caches, _dateOnly, _finderResult)).Return(caches);
-				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
-				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
+				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
+				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
 				      .Return(caches);
 			}
@@ -199,19 +199,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _groupPerson, false, BlockFinderType.SingleDay)).Return(caches);
+				Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
                 Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
                 Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
                 Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, null, _finderResult)).Return(null);
                 Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
-                Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _groupPerson, null, effectiveRestriction, _finderResult)).Return(null);
-                Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _groupPerson, null, effectiveRestriction, _finderResult))
+				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult)).Return(null);
+				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult))
                       .Return(null);
                 Expect.Call(_workTimeLimitationShiftFilter.Filter(null, effectiveRestriction, _finderResult)).Return(null);
 				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> {_matrix}, caches,
 				                                            _schedulingOptions, _finderResult)).Return(caches);
-                Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _groupPerson, null, _finderResult)).Return(null);
-                Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, null, _finderResult)).Return(null);
+				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
+				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
 				      .Return(null);
 
@@ -237,20 +237,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _groupPerson, false, BlockFinderType.SingleDay)).Return(caches);
+				Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
                 Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
                 Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
                 Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, null, _finderResult)).Return(null);
                 Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
-                Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _groupPerson, null, effectiveRestriction, _finderResult)).Return(null);
-                Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _groupPerson, null, effectiveRestriction, _finderResult))
+				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult)).Return(null);
+				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, null, effectiveRestriction, _finderResult))
                       .Return(null);
                 Expect.Call(_workTimeLimitationShiftFilter.Filter(null, effectiveRestriction, _finderResult)).Return(null);
                 Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> { _matrix }, caches,
                                                             _schedulingOptions, _finderResult)).Return(caches);
                 //Expect.Call(_businessRulesShiftFilter.Filter(_groupPerson, caches, _dateOnly, _finderResult)).Return(caches);
-                Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _groupPerson, null, _finderResult)).Return(null);
-                Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, null, _finderResult)).Return(null);
+				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
+				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
                       .Return(null);
 			}
@@ -310,20 +310,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 					  .Return(true);
-                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _groupPerson, false, BlockFinderType.SingleDay)).Return(caches);
+                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
 				Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestrictionWithShiftCategory)).Return(caches);
 				Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
 				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestrictionWithShiftCategory.ShiftCategory, caches, _finderResult)).Return(caches);
 				Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, caches, _finderResult)).Return(caches);
-				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _groupPerson, caches, effectiveRestrictionWithShiftCategory, _finderResult)).Return(caches);
-				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _groupPerson, caches, effectiveRestrictionWithShiftCategory, _finderResult))
+				Expect.Call(_activityRestrictionsShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestrictionWithShiftCategory, _finderResult)).Return(caches);
+				Expect.Call(_timeLimitsRestrictionShiftFilter.Filter(_dateOnly, _person, caches, effectiveRestrictionWithShiftCategory, _finderResult))
 					  .Return(caches);
 				Expect.Call(_workTimeLimitationShiftFilter.Filter(caches, effectiveRestrictionWithShiftCategory, _finderResult)).Return(caches);
 				Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> { _matrix }, caches,
 															_schedulingOptions, _finderResult)).Return(caches);
 				//Expect.Call(_businessRulesShiftFilter.Filter(_groupPerson, caches, _dateOnly, _finderResult)).Return(caches);
-				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
-				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
+				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
+				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
                       .Return(caches);
 			}

@@ -522,10 +522,8 @@
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateHolder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonFactory.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonFactory.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonsBuilder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
     <Compile Include="ResourceCalculation\IPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyService.cs" />
