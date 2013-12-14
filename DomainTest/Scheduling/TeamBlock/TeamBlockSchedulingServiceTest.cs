@@ -301,6 +301,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var personList = new List<IPerson> {_person, person2};
 			using (_mock.Record())
 			{
+				Expect.Call(groupPerson2.GroupMembers).Return(new List<IPerson>{person2}).Repeat.Any();
+				Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson>{_person}).Repeat.Any();
 				Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person2, _dateOnlyPeriod, _matrixList)).Return(teamInfo2);
