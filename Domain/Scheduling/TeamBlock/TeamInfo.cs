@@ -5,7 +5,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamInfo
 	{
-		IGroupPerson GroupPerson { get;	}
+
+		IEnumerable<IPerson> GroupMembers { get; }
+		string Name { get; }
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroup();
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index);
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndDate(DateOnly dateOnly);
@@ -27,9 +29,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_matrixesForMembers = matrixesForMembers;
 		}
 
-		public IGroupPerson GroupPerson
+		public IEnumerable<IPerson> GroupMembers
 		{
-			get { return _groupPerson; }
+			get
+			{
+				return _groupPerson.GroupMembers;
+			}
+		}
+
+		public string Name
+		{
+			get { return _groupPerson.Name.ToString(); }
 		}
 
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup()
@@ -104,10 +114,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return ret;
 		}
 
-
 		public override int GetHashCode()
 		{
-			return _groupPerson.GetHashCode();
+			int combinedHash = 0;
+			foreach (var groupMember in GroupMembers)
+			{
+				combinedHash = combinedHash ^ groupMember.GetHashCode();
+			}
+			return combinedHash;
 		}
 
 		public override bool Equals(object obj)
@@ -124,10 +138,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return false;
 			if (this == other)
 				return true;
-			if (!other.GroupPerson.Id.HasValue || !GroupPerson.Id.HasValue)
-				return false;
 
-			return (GroupPerson.Id.Value == other.GroupPerson.Id.Value);
+			return (GetHashCode() == other.GetHashCode());
 		}
 	}
 }

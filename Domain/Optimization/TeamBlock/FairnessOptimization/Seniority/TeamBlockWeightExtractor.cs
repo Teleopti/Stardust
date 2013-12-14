@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             return new TeamBlockWeight
                 {
-                    TeamWeight = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Count(),
+                    TeamWeight = teamBlockInfo.TeamInfo.GroupMembers.Count(),
                     BlockWeight = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Count
                 };
         }

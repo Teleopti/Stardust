@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			foreach (var teamBlockInfo in teamBlockListRaw)
 			{
 				var foundCorrect = false;
-				foreach (var groupMember in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+				foreach (var groupMember in teamBlockInfo.TeamInfo.GroupMembers)
 				{
 					var wfcs = groupMember.WorkflowControlSet;
 					if (wfcs == null || !wfcs.UseShiftCategoryFairness)

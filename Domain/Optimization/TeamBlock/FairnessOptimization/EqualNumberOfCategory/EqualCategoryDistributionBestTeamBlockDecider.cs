@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		public ITeamBlockInfo FindBestSwap(ITeamBlockInfo teamBlockToSwap, IList<ITeamBlockInfo> possibleSwaps,
 		                                   IDistributionSummary totalDistribution, IScheduleDictionary scheduleDictionary)
 		{
-			var distributionToWorkWith = _distributionForPersons.CreateSummary(teamBlockToSwap.TeamInfo.GroupPerson.GroupMembers,
+			var distributionToWorkWith = _distributionForPersons.CreateSummary(teamBlockToSwap.TeamInfo.GroupMembers,
 			                                                                   scheduleDictionary);
 
 			var diffValues = new Dictionary<IShiftCategory, double>();
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		                                               Dictionary<IShiftCategory, double> diffValues)
 		{
 			double? teamBlockValue = null;
-			var teamBlockInfoGroupMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList();
+			var teamBlockInfoGroupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			for (int i = 0; i < teamBlockInfoGroupMembers.Count(); i++)
 			{
 				foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())

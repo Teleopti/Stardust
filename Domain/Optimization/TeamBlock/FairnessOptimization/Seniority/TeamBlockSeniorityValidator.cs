@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		public bool ValidateSeniority(ITeamBlockInfo teamBlockInfo)
 		{
 			var teamInfo = teamBlockInfo.TeamInfo;
-			var groupPerson = teamInfo.GroupPerson;
-			var groupMembers = groupPerson.GroupMembers;
+			var groupMembers = teamInfo.GroupMembers;
 
 			foreach (var workflowControlSet in groupMembers.Select(groupMember => groupMember.WorkflowControlSet))
 			{

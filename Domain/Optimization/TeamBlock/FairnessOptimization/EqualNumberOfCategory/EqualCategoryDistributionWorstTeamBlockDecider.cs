@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			var teamBlockInfoDistributionValue = 0d;
 			foreach (var teamBlockInfo in availableTeamBlocks)
 			{
-				var distribution = _distributionForPersons.CreateSummary(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers,
+				var distribution = _distributionForPersons.CreateSummary(teamBlockInfo.TeamInfo.GroupMembers,
 																		 scheduleDictionary);
 				var absDiff = distributionDiff(totalDistribution, distribution);
 				if (absDiff > teamBlockInfoDistributionValue)

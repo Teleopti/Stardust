@@ -47,10 +47,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 			var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
 			if (dateOnlyList == null) return null;
 
-			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-			var timeZone = groupPerson.PermissionInformation.DefaultTimeZone();
+			var timeZone = groupMembers[0].PermissionInformation.DefaultTimeZone();
 			var matrixesOfFirstPerson = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 
 			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, person, schedulingOptions,
 													  scheduleDictionary), dateOnlyList, matrixList, effectiveRestriction);
-			
-			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupPerson.GroupMembers, schedulingOptions,
+
+			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupMembers, schedulingOptions,
 													  scheduleDictionary), datePointer, matrixList, effectiveRestriction);
 			
 

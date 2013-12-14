@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		                 ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary)
 		{
 			List<IScheduleDay> totalModifyList = new List<IScheduleDay>();
-			var teamBlock1GroupMembers = teamBlock1.TeamInfo.GroupPerson.GroupMembers.ToList();
+			var teamBlock1GroupMembers = teamBlock1.TeamInfo.GroupMembers.ToList();
 			for (int i = 0; i < teamBlock1GroupMembers.Count(); i++)
 			{
 				foreach (var dateOnly in teamBlock1.BlockInfo.BlockPeriod.DayCollection())
 				{
 					var person1 = teamBlock1GroupMembers[i];
-					var person2 = teamBlock2.TeamInfo.GroupPerson.GroupMembers.ToList()[i];
+					var person2 = teamBlock2.TeamInfo.GroupMembers.ToList()[i];
 					var day1 = scheduleDictionary[person1].ScheduledDay(dateOnly);
 					var day2 = scheduleDictionary[person2].ScheduledDay(dateOnly);
 					totalModifyList.AddRange(_swapServiceNew.Swap(new List<IScheduleDay> {day1, day2}, scheduleDictionary));

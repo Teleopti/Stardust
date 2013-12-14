@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 	{
 		private MockRepository _mock;
 		private ITeamInfo _teamInfo;
-		private IGroupPerson _groupPerson;
 		private SeniorityExtractor _target;
 		private IPerson _person1;
 		private IPerson _person2;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			_mock = new MockRepository();
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
-			_groupPerson = _mock.StrictMock<IGroupPerson>();
 			_person1 = PersonFactory.CreatePerson("A", "A");
 			_person2 = PersonFactory.CreatePerson("B", "B");
 			_groupMembers = new List<IPerson> { _person1, _person2 };
@@ -45,8 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Record())
 			{
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson).Repeat.AtLeastOnce();
-				Expect.Call(_groupPerson.GroupMembers).Return(_groupMembers).Repeat.AtLeastOnce();
+				Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers).Repeat.AtLeastOnce();
 			}
 
 			using (_mock.Playback())

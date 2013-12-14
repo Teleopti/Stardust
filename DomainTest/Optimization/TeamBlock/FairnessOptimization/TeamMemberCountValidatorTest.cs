@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		private ITeamBlockInfo _teamBlockInfo2;
 		private ITeamInfo _teamInfo1;
 		private ITeamInfo _teamInfo2;
-		private IGroupPerson _groupPerson1;
-		private IGroupPerson _groupPerson2;
 		private IPerson _person;
 
 		[SetUp]
@@ -29,8 +27,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_teamBlockInfo2 = _mock.StrictMock<ITeamBlockInfo>();
 			_teamInfo1 = _mock.StrictMock<ITeamInfo>();
 			_teamInfo2 = _mock.StrictMock<ITeamInfo>();
-			_groupPerson1 = _mock.StrictMock<IGroupPerson>();
-			_groupPerson2 = _mock.StrictMock<IGroupPerson>();
 			_person = PersonFactory.CreatePerson("Person", "Person");
 			_target = new TeamMemberCountValidator();	
 		}
@@ -42,10 +38,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			{
 				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
 				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
-				Expect.Call(_teamInfo1.GroupPerson).Return(_groupPerson1);
-				Expect.Call(_teamInfo2.GroupPerson).Return(_groupPerson2);
-				Expect.Call(_groupPerson1.GroupMembers).Return(new List<IPerson>());
-				Expect.Call(_groupPerson2.GroupMembers).Return(new List<IPerson>());
+				Expect.Call(_teamInfo1.GroupMembers).Return(new List<IPerson>());
+				Expect.Call(_teamInfo2.GroupMembers).Return(new List<IPerson>());
 			}
 
 			using (_mock.Playback())
@@ -62,10 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			{
 				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
 				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
-				Expect.Call(_teamInfo1.GroupPerson).Return(_groupPerson1);
-				Expect.Call(_teamInfo2.GroupPerson).Return(_groupPerson2);
-				Expect.Call(_groupPerson1.GroupMembers).Return(new List<IPerson>());
-				Expect.Call(_groupPerson2.GroupMembers).Return(new List<IPerson>{_person});
+				Expect.Call(_teamInfo1.GroupMembers).Return(new List<IPerson>());
+				Expect.Call(_teamInfo2.GroupMembers).Return(new List<IPerson> { _person });
 			}
 
 			using (_mock.Playback())

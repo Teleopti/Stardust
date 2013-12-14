@@ -23,8 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		private IScheduleMatrixPro _scheduleMatrixPro2;
 		private ITeamInfo _teamInfo1;
 		private ITeamInfo _teamInfo2;
-		private IGroupPerson _groupPerson1;
-		private IGroupPerson _groupPerson2;
 		private DateOnlyPeriod _dateOnlyPeriod;
 			
 		[SetUp]
@@ -42,8 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_teamInfo1 = _mock.StrictMock<ITeamInfo>();
 			_teamInfo2 = _mock.StrictMock<ITeamInfo>();
-			_groupPerson1 = _mock.StrictMock<IGroupPerson>();
-			_groupPerson2 = _mock.StrictMock<IGroupPerson>();
 			_target = new TeamSelectionValidator(_teamInfoFactory, _scheduleMatrixList);
 		}
 
@@ -54,10 +50,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person1, _dateOnly, _scheduleMatrixList)).Return(_teamInfo1);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person2, _dateOnly, _scheduleMatrixList)).Return(_teamInfo2);
-				Expect.Call(_teamInfo1.GroupPerson).Return(_groupPerson1);
-				Expect.Call(_teamInfo2.GroupPerson).Return(_groupPerson2);
-				Expect.Call(_groupPerson1.GroupMembers).Return(new List<IPerson> {_person1});
-				Expect.Call(_groupPerson2.GroupMembers).Return(new List<IPerson> { _person2 });
+				Expect.Call(_teamInfo1.GroupMembers).Return(new List<IPerson> { _person1 });
+				Expect.Call(_teamInfo2.GroupMembers).Return(new List<IPerson> { _person2 });
 			}
 
 			using (_mock.Playback())
@@ -76,8 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			using (_mock.Record())
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person1, _dateOnly, _scheduleMatrixList)).Return(_teamInfo1);
-				Expect.Call(_teamInfo1.GroupPerson).Return(_groupPerson1);
-				Expect.Call(_groupPerson1.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
+				Expect.Call(_teamInfo1.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
 			}
 
 			using (_mock.Playback())

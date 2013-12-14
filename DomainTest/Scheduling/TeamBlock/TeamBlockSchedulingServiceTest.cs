@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() {_matrixList});
              using(_mock.Record())
              {
+	             Expect.Call(_groupPerson.GroupMembers).Return(_personList);
                  Expect.Call(() => _teamBlockScheduler .DayScheduled += null).IgnoreArguments();
                  Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod , _matrixList)).Return(teamInfo);
                  Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
@@ -101,6 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList }); 
             using (_mock.Record())
             {
+	            Expect.Call(_groupPerson.GroupMembers).Return(_personList);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock , _date, _matrixList,
@@ -126,6 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
             using (_mock.Record())
             {
+				Expect.Call(_groupPerson.GroupMembers).Return(_personList);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock, _date, _matrixList,
@@ -155,6 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
             using (_mock.Record())
             {
+				Expect.Call(_groupPerson.GroupMembers).Return(_personList);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock, _date, _matrixList,
@@ -187,6 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
             using (_mock.Record())
             {
+	            Expect.Call(_groupPerson.GroupMembers).Return(_personList);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock, _date, _matrixList,
@@ -222,6 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
             using (_mock.Record())
             {
+	            Expect.Call(_groupPerson.GroupMembers).Return(_personList);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_validatedTeamBlockExtractor.GetTeamBlockInfo(_teamInfoMock, _date, _matrixList,

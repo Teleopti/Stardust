@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ISkill _skill2;
 		private ISkill _skill3;
 		private IPerson _person2;
-		private GroupPerson _groupPerson;
 
 		[SetUp]
 		public void Setup()
@@ -29,26 +27,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                                      new List<ISkill> {_skill1, _skill2});
 			_person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue,
 																  new List<ISkill> { _skill2, _skill3 });
-			_groupPerson = new GroupPerson(new List<IPerson> {_person1, _person2}, DateOnly.MinValue, "hej", null);
 		}
 
 		[Test]
 		public void ShouldReturnUnionOfAllSkills()
 		{
-			IList<ISkill> result = new List<ISkill>(_target.AggregatedSkills(_groupPerson, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+			IList<ISkill> result = new List<ISkill>(_target.AggregatedSkills(new List<IPerson> { _person1, _person2 }, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
 			Assert.IsTrue(result.Contains(_skill1));
 			Assert.IsTrue(result.Contains(_skill2));
 			Assert.IsTrue(result.Contains(_skill3));
 			Assert.AreEqual(3, result.Count);
-		}
-
-		[Test]
-		public void ShouldReturnUnionOfAllSkillsOfOnePerson()
-		{
-			IList<ISkill> result = new List<ISkill>(_target.AggregatedSkillsPerPerson(_person1, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
-			Assert.IsTrue(result.Contains(_skill1));
-			Assert.IsTrue(result.Contains(_skill2));
-			Assert.AreEqual(2, result.Count);
 		}
 
 	}

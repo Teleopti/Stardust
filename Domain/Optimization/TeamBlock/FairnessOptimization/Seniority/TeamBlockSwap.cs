@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		{
 			var scheduleDays = new List<IScheduleDay>();
 			var period = teamBlockInfo.BlockInfo.BlockPeriod;
-			var teamBlock1GroupMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.ToList();
+			var teamBlock1GroupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 
 			for (var i = 0; i < teamBlock1GroupMembers.Count(); i++)
 			{

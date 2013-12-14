@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		private ITeamBlockPersonsSkillChecker _teamBlockPersonsSkillChecker;
 		private ITeamBlockInfo _teamBlockInfo;
 		private ITeamInfo _teamInfo;
-		private IGroupPerson _groupPerson;
 		private IPerson _person1;
 		private IPerson _person2;
 		private BlockInfo _blockInfo;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_target = new TeamBlockSameSkillValidator(_teamBlockPersonsSkillChecker);
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
-			_groupPerson = _mocks.StrictMock<IGroupPerson>();
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly());
 			_person2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly());
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(2013, 12, 4, 2013, 12, 4));
@@ -44,12 +42,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(members1);
+				Expect.Call(_teamInfo.GroupMembers).Return(members1);
 
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(members2);
+				Expect.Call(_teamInfo.GroupMembers).Return(members2);
 
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 
@@ -76,12 +72,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(members1);
+				Expect.Call(_teamInfo.GroupMembers).Return(members1);
 
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(members2);
+				Expect.Call(_teamInfo.GroupMembers).Return(members2);
 
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 
@@ -105,12 +99,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(members1);
+				Expect.Call(_teamInfo.GroupMembers).Return(members1);
 
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(members2);
+				Expect.Call(_teamInfo.GroupMembers).Return(members2);
 
 				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 

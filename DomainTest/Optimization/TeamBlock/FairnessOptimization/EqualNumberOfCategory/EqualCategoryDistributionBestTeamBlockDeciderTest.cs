@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private ITeamBlockInfo _teamBlockToSwap;
 		private ITeamBlockInfo _possibleTeamBlock;
 		private ITeamInfo _teamInfo;
-		private IGroupPerson _groupPerson;
 		private IScheduleRange _range;
 		private IScheduleDay _day;
 
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_teamBlockToSwap = _mocks.StrictMock<ITeamBlockInfo>();
 			_possibleTeamBlock = _mocks.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
-			_groupPerson = _mocks.StrictMock<IGroupPerson>();
 			_range = _mocks.StrictMock<IScheduleRange>();
 			_day = _mocks.StrictMock<IScheduleDay>();
 		}
@@ -58,13 +56,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockToSwap.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(groupMembers1);
+				Expect.Call(_teamInfo.GroupMembers).Return(groupMembers1);
 				Expect.Call(_distributionForPersons.CreateSummary(groupMembers1, _scheduleDictionary)).Return(distributionSummary2);
 
 				Expect.Call(_possibleTeamBlock.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(groupMembers2);
+				Expect.Call(_teamInfo.GroupMembers).Return(groupMembers2);
 				Expect.Call(_possibleTeamBlock.BlockInfo).Return(new BlockInfo(new DateOnlyPeriod(2013, 12, 3, 2013, 12, 3)));
 				Expect.Call(_scheduleDictionary[person2]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 12, 3))).Return(_day);

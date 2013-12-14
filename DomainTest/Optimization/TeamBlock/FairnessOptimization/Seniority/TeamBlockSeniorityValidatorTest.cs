@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -17,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private ITeamBlockInfo _teamBlockInfo;
 		private ITeamInfo _teamInfo;
 		private TeamBlockSeniorityValidator _target;
-		private IGroupPerson _groupPerson;
 		private IPerson _person;
 		private IList<IPerson> _persons;
 		private IWorkflowControlSet _workflowControlSet;
@@ -28,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_mock = new MockRepository();
 			_teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
 			_teamInfo = _mock.StrictMock<ITeamInfo>();
-			_groupPerson = _mock.StrictMock<IGroupPerson>();
 			_person = _mock.StrictMock<IPerson>();
 			_persons = new List<IPerson>{_person};
 			_workflowControlSet = _mock.StrictMock<IWorkflowControlSet>();
@@ -41,8 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mock.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(_persons);
+				Expect.Call(_teamInfo.GroupMembers).Return(_persons);
 				Expect.Call(_person.WorkflowControlSet).Return(_workflowControlSet);
 				Expect.Call(_workflowControlSet.UseShiftCategoryFairness).Return(false);
 			}
@@ -60,8 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mock.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(_persons);
+				Expect.Call(_teamInfo.GroupMembers).Return(_persons);
 				Expect.Call(_person.WorkflowControlSet).Return(_workflowControlSet);
 				Expect.Call(_workflowControlSet.UseShiftCategoryFairness).Return(true);
 			}

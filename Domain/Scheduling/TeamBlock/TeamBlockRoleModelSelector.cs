@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Collection;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,
 																	schedulingOptions,
-																	new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer),
+																	new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupMembers.First(), datePointer),
 																	_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo));
 			if (shifts.IsNullOrEmpty())
 				return null;

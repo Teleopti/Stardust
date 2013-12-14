@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -24,13 +25,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private IPerson _person1;
 		private List<IList<IScheduleMatrixPro>> _groupMatrixes;
 		private Guid _groupPersonId;
+		private IPerson _person2;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_groupPersonId = Guid.NewGuid();
-			_person1 = PersonFactory.CreatePerson();
+			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), new DateOnly());
+			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), new DateOnly());
 			_groupPerson = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", _groupPersonId);
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -137,13 +140,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldContainGroupPerson()
-		{
-			IGroupPerson groupPerson = _target.GroupPerson;
-			Assert.AreSame(_groupPerson, groupPerson);
-		}
-
-		[Test]
 		public void ShouldContainMatrixListForAllGroupMembers()
 		{
 			Assert.AreEqual(2, _target.MatrixesForGroup().Count());
@@ -153,33 +149,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldContainMatrixesForOneGroupMember()
 		{
 			Assert.AreEqual(2, _target.MatrixesForGroupMember(0).Count());
-		}
-
-		[Test]
-		public void ShouldReturnSameHashAsContainedGroupPersonAndStartDateForTheTeam()
-		{
-			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
-			_target = new TeamInfo(groupPerson1, new List<IList<IScheduleMatrixPro>>());
-
-			Assert.AreEqual(groupPerson1.GetHashCode(), _target.GetHashCode());
-		}
-
-		[Test]
-		public void EqualsShouldWorkWithDifferentGroupPersonsOnSameDate()
-		{
-			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
-            IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
-			
-			Assert.IsFalse(groupPerson1.Equals(groupPerson2));
-			Assert.IsTrue(groupPerson1.Equals(groupPerson1));
-
-			HashSet<IGroupPerson> list = new HashSet<IGroupPerson>();
-			list.Add(groupPerson1);
-			list.Add(groupPerson1);
-			Assert.AreEqual(1, list.Count);
-
-			list.Add(groupPerson2);
-			Assert.AreEqual(2, list.Count);
 		}
 
 		[Test]
@@ -208,21 +177,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldCheckIfEqualsWithAnotherTeamInfo()
+		public void TwoTeamInfoWithSameTeamMembersShouldBeEqual()
 		{
 			Assert.That(_target.Equals(null), Is.False);
 			
 			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
 			var teamInfo1 = new TeamInfo(groupPerson1, _groupMatrixes);
-			Assert.That(_target.Equals(teamInfo1), Is.False);
+			Assert.That(_target.Equals(teamInfo1), Is.True);
 
-			IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", null);
+			IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hopp", null);
 			var teamInfo2 = new TeamInfo(groupPerson2, _groupMatrixes);
-			Assert.That(_target.Equals(teamInfo2), Is.False);
+			Assert.That(teamInfo1.Equals(teamInfo2), Is.True);
 
-			IGroupPerson groupPerson3 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", _groupPersonId);
+			IGroupPerson groupPerson3 = new GroupPerson(new List<IPerson> { _person2 }, DateOnly.MaxValue, "Hej", _groupPersonId);
 			var teamInfo3 = new TeamInfo(groupPerson3, _groupMatrixes);
-			Assert.That(_target.Equals(teamInfo3), Is.True);
+			Assert.That(teamInfo2.Equals(teamInfo3), Is.False);
+
+			IGroupPerson groupPerson4 = new GroupPerson(new List<IPerson> { _person1, _person2 }, DateOnly.MaxValue, "Hej", _groupPersonId);
+			var teamInfo4 = new TeamInfo(groupPerson4, _groupMatrixes);
+			Assert.That(teamInfo3.Equals(teamInfo4), Is.False);
 		}
+
 	}
 }
