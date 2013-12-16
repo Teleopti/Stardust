@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using NUnit.Framework;
@@ -6,12 +7,13 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.ServerTest
 {
 	[TestFixture]
-	public class DatabaseHandlerTest
+	public class DatabaseReaderTest
 	{
 		private DatabaseReader _target;
 
@@ -268,7 +270,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
-		public void GetMissingAgentStatesFromBatch()
+		public void VerifyGetMissingAgentStatesFromBatch()
 		{
 			var parameters = _mock.StrictMock<IDataParameterCollection>();
 			const string dataSourceId = "2";
@@ -321,6 +323,51 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			var result = _target.GetMissingAgentStatesFromBatch(batchId, dataSourceId);
 			result.Count.Should().Be.EqualTo(1);
+			_mock.VerifyAll();
+		}
+
+		[Test]
+		public void VerifyLoadAllExternalLogOns()
+		{
+			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var secondBusinessUnit = Guid.NewGuid();
+			var parameters = _mock.DynamicMock<IDataParameterCollection>();
+			
+			_stringHandler.Expect(s => s.AppConnectionString()).Return("con");
+			_connectionFactory.Expect(d => d.CreateConnection("con")).Return(_connection);
+			_connection.Expect(c => c.CreateCommand()).Return(_command);
+
+			_command.CommandType = CommandType.StoredProcedure;
+			_command.CommandText = "dbo.rta_load_external_logon"; 
+			_command.Expect(c => c.Parameters).Return(parameters);
+			parameters.Expect(p => p.Add(null)).IgnoreArguments().Return(1);
+			_connection.Open();
+
+			_command.Expect(c => c.ExecuteReader(CommandBehavior.CloseConnection)).Return(_reader);
+			_reader.Expect(d => d.Read()).Return(true).Repeat.Twice();
+
+			_reader.Expect(d => d.GetOrdinal("datasource_id")).Return(0).Repeat.Twice();
+			_reader.Expect(d => d.GetInt32(0)).Return(2).Repeat.Twice();
+			_reader.Expect(d => d.GetOrdinal("acd_login_original_id")).Return(1).Repeat.Twice();
+			_reader.Expect(d => d.GetString(1)).Return("A0001").Repeat.Twice();
+			_reader.Expect(d => d.GetOrdinal("person_code")).Return(2).Repeat.Twice();
+			_reader.Expect(d => d.GetGuid(2)).Return(personId).Repeat.Twice();
+			_reader.Expect(d => d.GetOrdinal("business_unit_code")).Return(3).Repeat.Twice();
+			_reader.Expect(d => d.GetGuid(3)).Return(businessUnitId);
+			_reader.Expect(d => d.GetGuid(3)).Return(secondBusinessUnit);
+
+			_reader.Expect(d => d.Read()).Return(false);
+			_reader.Close();
+			_connection.Expect(c => c.Dispose());
+			_mock.ReplayAll();
+
+			var dictionary = _target.LoadAllExternalLogOns();
+			
+			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
+			dictionary.TryGetValue("2|A0001", out personWithBusinessUnits).Should().Be(true);
+			Assert.That(personWithBusinessUnits.Count(p => p.BusinessUnitId == businessUnitId && p.PersonId == personId), Is.EqualTo(1));
+			Assert.That(personWithBusinessUnits.Count(p => p.BusinessUnitId == secondBusinessUnit && p.PersonId == personId), Is.EqualTo(1));
 			_mock.VerifyAll();
 		}
 	}

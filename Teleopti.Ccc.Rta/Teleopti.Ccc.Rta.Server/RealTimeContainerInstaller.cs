@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Rta.Server
 										return instance;
 									});
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
-			builder.RegisterType<DatabaseReader>().As<IDatabaseReader>();
+			//builder.RegisterType<DatabaseReader>().As<IDatabaseReader>();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
 			builder.RegisterType<ActualAgentStateCache>().As<IActualAgentStateCache>().SingleInstance();

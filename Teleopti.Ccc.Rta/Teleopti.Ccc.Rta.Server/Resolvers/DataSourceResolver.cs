@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Rta.Server.Resolvers
 {
 	public class DataSourceResolver : IDataSourceResolver
 	{
-		private const string CacheKey = "DataSourceCache";
+		private const string cacheKey = "DataSourceCache";
 		private readonly Cache _cache;
 		private readonly IDatabaseReader _databaseReader;
 
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Rta.Server.Resolvers
 
 		public bool TryResolveId(string sourceId, out int dataSourceId)
 		{
-			var dictionary = (ConcurrentDictionary<string, int>)_cache.Get(CacheKey) ?? initialize();
+			var dictionary = (ConcurrentDictionary<string, int>)_cache.Get(cacheKey) ?? initialize();
 			return dictionary.TryGetValue(sourceId, out dataSourceId);
 		}
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Rta.Server.Resolvers
 
 			var dictionary = _databaseReader.LoadDatasources();
 
-			_cache.Add(CacheKey, dictionary, null, DateTime.Now.AddMinutes(10), Cache.NoSlidingExpiration,
+			_cache.Add(cacheKey, dictionary, null, DateTime.Now.AddMinutes(10), Cache.NoSlidingExpiration,
 					   CacheItemPriority.Default, onRemoveCallback);
 
 			LoggingSvc.Debug("Done loading new data into cache.");
