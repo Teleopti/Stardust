@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 							Datasource = message.Datasource,
 							BusinessUnitId = message.BusinessUnitId,
 							PersonId = person,
-							Timestamp = DateTime.UtcNow
+							Timestamp = DateTime.UtcNow,
+							PersonHaveExternalLogOn = true
 						});
 
 					Logger.DebugFormat(
