@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IList<IMatrixData> _matrixDataList;
 		private IList<IScheduleMatrixPro> _matrixList;
 		private List<IScheduleDayPro> _scheduleDayProList;
-		private IGroupPerson _groupPerson;
+		private Group _group;
 		private IScheduleDictionary _scheduleDictionary;
 		private IScheduleDay _scheduleDay;
 		private EffectiveRestriction _effectiveRestriction;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_matrixDataList = new List<IMatrixData> { _matrixData1 };
 			_matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 			_scheduleDayProList = new List<IScheduleDayPro> {_scheduleDayPro};
-			_groupPerson = _mocks.StrictMock<IGroupPerson>();
+			_group = new Group(_selectedPersons, "");
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
@@ -283,9 +284,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		private void getMatrixesAndRestrictionMocks()
 		{
-			Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person1, new DateOnly(2013, 2, 1)))
-			      .Return(_groupPerson);
-			Expect.Call(_groupPerson.GroupMembers).Return(_selectedPersons);
+			Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_person1, new DateOnly(2013, 2, 1)))
+			      .Return(_group);
 			Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
 			Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_selectedPersons, new DateOnly(2013, 2, 1),
 			                                                                 _schedulingOptions, _scheduleDictionary))

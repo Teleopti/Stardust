@@ -181,60 +181,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.AreEqual(1, _target.PreferenceList.Count());
         }
 
-		[Test]
-		public void ShouldExtractRestrictionsFromAllPersonsInGroupPerson()
-		{
-			var sr = new PreferenceRestriction
-			         	{
-			         		ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej")
-			         	};
-			var pd = new PreferenceDay(_person, new DateOnly(2010, 1, 1), sr);
-			var personRestrictionCollection = new ReadOnlyCollection<IScheduleData>(new List<IScheduleData> { pd });
+		
 
-			var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var person1 = _mocks.StrictMock<IPerson>();
-			var person2 = _mocks.StrictMock<IPerson>();
-			var persons = new ReadOnlyCollection<IPerson>(new List<IPerson> {person1, person2});
-
-			Expect.Call(groupPerson.GroupMembers).Return(persons);
-            Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Twice();
-			Expect.Call(_dic[person1]).Return(_range);
-			Expect.Call(_dic[person2]).Return(_range);
-			Expect.Call(_range.ScheduledDay(_date)).Return(_part).Repeat.Any();
-			Expect.Call(_part.PersonRestrictionCollection()).Return(personRestrictionCollection).Repeat.Twice();
-			Expect.Call(_part.RestrictionCollection()).Return(new List<IRestrictionBase> { sr }).Repeat.Twice();
-
-			_mocks.ReplayAll();
-			_target.ExtractFromGroupPerson(groupPerson, _date);
-		    _target.PreferenceList.Count().Should().Be.EqualTo(2);
-			_mocks.VerifyAll();
-		}
-
-        [Test]
-        public void ShouldNotStackValuesWhenExtractingGroupOfPeople()
-        {
-            var sr = new PreferenceRestriction
-            {
-                ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("Hej")
-            };
-            
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var person1 = _mocks.StrictMock<IPerson>();
-            var persons = new ReadOnlyCollection<IPerson>(new List<IPerson> { person1 });
-
-            Expect.Call(groupPerson.GroupMembers).Return(persons).Repeat.Twice();
-            Expect.Call(_stateHolder.Schedules).Return(_dic).Repeat.Twice();
-            Expect.Call(_dic[person1]).Return(_range).Repeat.Twice();
-            Expect.Call(_range.ScheduledDay(_date)).Return(_part).Repeat.Any();
-            Expect.Call(_part.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.Twice();
-            Expect.Call(_part.RestrictionCollection()).Return(new List<IRestrictionBase> { sr }).Repeat.Twice();
-
-            _mocks.ReplayAll();
-            _target.ExtractFromGroupPerson(groupPerson, _date);
-            _target.ExtractFromGroupPerson(groupPerson, _date);
-            _target.PreferenceList.Count().Should().Be.EqualTo(1);
-            _mocks.VerifyAll();
-        }
+        
 
         private void Extract(IEnumerable<IRestrictionBase> restrictions, ReadOnlyCollection<IScheduleData> studentRestriction)
         {

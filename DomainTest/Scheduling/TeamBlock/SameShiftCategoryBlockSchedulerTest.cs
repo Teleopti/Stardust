@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private DateOnly _dateOnly;
 		private IPerson _person1;
 		private IScheduleMatrixPro _scheduleMatrixPro1;
-		private GroupPerson _groupPerson;
+		private Group _group;
 		private DateOnlyPeriod _blockPeriod;
 		private TeamBlockInfo _teamBlockInfo;
 		private SchedulingOptions _schedulingOptions;
@@ -48,10 +49,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			_groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.Empty);
+			_group = new Group(new List<IPerson> { _person1 }, "Hej");
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
-			ITeamInfo teamInfo = new TeamInfo(_groupPerson, groupMatrixes);
+			ITeamInfo teamInfo = new TeamInfo(_group, groupMatrixes);
 			_blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_blockPeriod));
 			_schedulingOptions = new SchedulingOptions();

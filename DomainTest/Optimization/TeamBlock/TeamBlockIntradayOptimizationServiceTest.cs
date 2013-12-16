@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -60,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> {person};
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var groupPerson = new GroupPerson(new List<IPerson> {person}, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> {person}, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -105,8 +106,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> {person};
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var groupPerson = new GroupPerson(new List<IPerson> {person}, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -147,8 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -192,8 +193,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();

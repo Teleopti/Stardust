@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -99,10 +100,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                      out IEffectiveRestriction restriction)
 		{
 			var selectedMatrixesForTeam = new List<IScheduleMatrixPro>();
-			var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+			var group = groupPersonBuilderForOptimization.BuildGroup(person, scheduleDate);
 
 			List<IScheduleMatrixPro> matrixesOfOneTeam;
-			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, groupPerson, scheduleDate, out matrixesOfOneTeam);
+			restriction = getMatrixOfOneTeam(matrixListAll, schedulingOptions, group, scheduleDate, out matrixesOfOneTeam);
 
 			foreach (var scheduleMatrixPro in matrixesOfOneTeam)
 			{
@@ -114,11 +115,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private IEffectiveRestriction getMatrixOfOneTeam(IEnumerable<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions,
-	                                                     IGroupPerson groupPerson, DateOnly scheduleDate,
+	                                                     Group group, DateOnly scheduleDate,
 	                                                     out List<IScheduleMatrixPro> matrixesOfOneTeam)
 	    {
 	        var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-			var groupMembers = groupPerson.GroupMembers.ToList();
+			var groupMembers = group.GroupMembers.ToList();
 			var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupMembers,
 	                                                                               scheduleDate, schedulingOptions,
 	                                                                               scheduleDictionary);

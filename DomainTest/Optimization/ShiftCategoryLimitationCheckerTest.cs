@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +29,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IPersonPeriod _personPeriod;
         private IPersonContract _personContract;
         private ISchedulingResultStateHolder _stateHolder;
-        private SchedulePeriod _schedulePeriod2;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -50,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,_dateTimePeriod);
             _shiftCategoryLimitation = new ShiftCategoryLimitation(_personAssignment.ShiftCategory);
             _schedulePeriod.AddShiftCategoryLimitation(_shiftCategoryLimitation);
-            _schedulePeriod2 = new SchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1);
             _range = _mocks.DynamicMock<IScheduleRange>();
             _part = _mocks.DynamicMock<IScheduleDay>();
            _partWithoutShift = _mocks.DynamicMock<IScheduleDay>();
@@ -257,147 +252,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_part.Person).Return(_person).Repeat.Any();
             }
         }
-
-        [Test]
-        public void VerifySetBlockedDiffShiftCategoryWhenUsingLimitationPeriodForGroup()
-        {
-            IPersonAssignment personAssignment2;
-            IGroupPerson groupPerson;
-            IScenario scenario;
-            IPersonAssignment personAssignment1;
-            var dateOnly = SetupPersonAndShiftCategory(out personAssignment2, out groupPerson, out scenario, out personAssignment1,false,false);
-
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new SchedulingOptions())
-            {
-                SchedulingOptions = { UseShiftCategoryLimitations = true }
-            };
-            var range = _mocks.DynamicMock<IScheduleRange>();
-            var dic = new ScheduleDictionary(scenario , new ScheduleDateTimePeriod(_dateTimePeriod));
-            ((ScheduleRange)dic[personAssignment1 .Person]).Add(personAssignment1 );
-            ((ScheduleRange)dic[personAssignment2 .Person]).Add(personAssignment2 );
-            using (_mocks.Record())
-            {
-                Expect.Call(_stateHolder.Schedules).Return(dic).Repeat.Any();
-                Expect.Call(range.ScheduledDay(new DateOnly(2011, 1, 1))).Return(_part).Repeat.Any();
-            }
-            using (_mocks.Playback())
-            {
-                _target.SetBlockedShiftCategories(preferences.SchedulingOptions, groupPerson, dateOnly);
-                Assert.AreEqual(2, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
-            }
-        }
-        
-        [Test]
-        public void VerifySetBlockedSameShiftCategoryWhenUsingLimitationPeriodForGroup()
-        {
-            IPersonAssignment personAssignment2;
-            IGroupPerson groupPerson;
-            IScenario scenario;
-            IPersonAssignment personAssignment1;
-            var dateOnly = SetupPersonAndShiftCategory(out personAssignment2, out groupPerson, out scenario, out personAssignment1, true,false);
-
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new SchedulingOptions())
-            {
-                SchedulingOptions = { UseShiftCategoryLimitations = true }
-            };
-            var range = _mocks.DynamicMock<IScheduleRange>();
-            var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(_dateTimePeriod));
-            ((ScheduleRange)dic[personAssignment1.Person]).Add(personAssignment1);
-            ((ScheduleRange)dic[personAssignment2.Person]).Add(personAssignment2);
-            using (_mocks.Record())
-            {
-                Expect.Call(_stateHolder.Schedules).Return(dic).Repeat.Any();
-                Expect.Call(range.ScheduledDay(new DateOnly(2011, 1, 1))).Return(_part).Repeat.Any();
-            }
-            using (_mocks.Playback())
-            {
-                _target.SetBlockedShiftCategories(preferences.SchedulingOptions, groupPerson, dateOnly);
-                Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
-            }
-
-        }
-
-        [Test]
-        public void VerifySetBlockedDiffShiftCategoryWhenUsingLimitationWeekForGroup()
-        {
-            IPersonAssignment personAssignment2;
-            IGroupPerson groupPerson;
-            IScenario scenario;
-            IPersonAssignment personAssignment1;
-            var dateOnly = SetupPersonAndShiftCategory(out personAssignment2, out groupPerson, out scenario, out personAssignment1, false,true);
-
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new SchedulingOptions())
-            {
-                SchedulingOptions = { UseShiftCategoryLimitations = true }
-            };
-            var range = _mocks.DynamicMock<IScheduleRange>();
-            var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(_dateTimePeriod));
-            ((ScheduleRange)dic[personAssignment1.Person]).Add(personAssignment1);
-            ((ScheduleRange)dic[personAssignment2.Person]).Add(personAssignment2);
-            using (_mocks.Record())
-            {
-                Expect.Call(_stateHolder.Schedules).Return(dic).Repeat.Any();
-                Expect.Call(range.ScheduledDay(new DateOnly(2011, 1, 1))).Return(_part).Repeat.Any();
-            }
-            using (_mocks.Playback())
-            {
-                _target.SetBlockedShiftCategories(preferences.SchedulingOptions, groupPerson, dateOnly);
-                Assert.AreEqual(2, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
-            }
-        }
-
-        [Test]
-        public void VerifySetBlockedSameShiftCategoryWhenUsingLimitationWeekForGroup()
-        {
-           IPersonAssignment personAssignment2;
-            IGroupPerson groupPerson;
-            IScenario scenario;
-            IPersonAssignment personAssignment1;
-            var dateOnly = SetupPersonAndShiftCategory(out personAssignment2, out groupPerson, out scenario, out personAssignment1, true, true);
-
-            IOptimizerOriginalPreferences preferences = new OptimizerOriginalPreferences(new SchedulingOptions())
-            {
-                SchedulingOptions = { UseShiftCategoryLimitations = true }
-            };
-            var range = _mocks.DynamicMock<IScheduleRange>();
-            var dic = new ScheduleDictionary(scenario, new ScheduleDateTimePeriod(_dateTimePeriod));
-            ((ScheduleRange)dic[personAssignment1.Person]).Add(personAssignment1);
-            ((ScheduleRange)dic[personAssignment2.Person]).Add(personAssignment2);
-            using (_mocks.Record())
-            {
-                Expect.Call(_stateHolder.Schedules).Return(dic).Repeat.Any();
-                Expect.Call(range.ScheduledDay(new DateOnly(2011, 1, 1))).Return(_part).Repeat.Any();
-            }
-            using (_mocks.Playback())
-            {
-                _target.SetBlockedShiftCategories(preferences.SchedulingOptions, groupPerson, dateOnly);
-                Assert.AreEqual(1, preferences.SchedulingOptions.NotAllowedShiftCategories.Count);
-            }
-        }
-
-        private DateOnly SetupPersonAndShiftCategory(out IPersonAssignment personAssignment2, out IGroupPerson groupPerson,
-                                                    out IScenario scenario, out IPersonAssignment personAssignment1, bool withSameShiftCategory, bool isWeekPerdiod)
-        {
-            var dateOnly = new DateOnly(2010, 1, 1);
-            scenario = ScenarioFactory.CreateScenarioAggregate();
-            var person1 = PersonFactory.CreatePerson("P1");
-            person1.AddSchedulePeriod(_schedulePeriod2);
-            person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(dateOnly));
-            personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1, _dateTimePeriod);
-            var shiftCategoryLimitation1 =
-                new ShiftCategoryLimitation(personAssignment1.ShiftCategory) { MaxNumberOf = 1, Weekly = isWeekPerdiod };
-            person1.SchedulePeriod(dateOnly).AddShiftCategoryLimitation(shiftCategoryLimitation1);
-            var person2 = PersonFactory.CreatePerson("P2");
-            person2.AddSchedulePeriod(_schedulePeriod2);
-            person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(dateOnly));
-            personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, _dateTimePeriod);
-            var shiftCategoryLimitation2 =
-                new ShiftCategoryLimitation(personAssignment2.ShiftCategory) { MaxNumberOf = 1, Weekly = isWeekPerdiod };
-            if (!withSameShiftCategory)
-                person2.SchedulePeriod(dateOnly).AddShiftCategoryLimitation(shiftCategoryLimitation2);
-            groupPerson = new GroupPersonFactory().CreateGroupPerson(new List<IPerson> { person1, person2 }, dateOnly, "gp1", null);
-            return dateOnly;
-        }
-
     }
 }

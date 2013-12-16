@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.TestCommon
         public IList<IPerson> PersonList { get; set; }
         public ReadOnlyCollection<IPerson> ReadOnlyCollectionPersonList { get; set; }
 
-        public IGroupPerson GroupPerson { get; set; }
+        public Group Group { get; set; }
 
 
         public ISchedulingOptions SchedulingOptions { get; set; }
@@ -61,9 +61,6 @@ namespace Teleopti.Ccc.TestCommon
 
             BaseDateOnly = DateOnly.Today;
 
-            var groupPersonFactory = new GroupPersonFactory();
-            GroupPerson = groupPersonFactory.CreateGroupPerson(PersonList, BaseDateOnly, "GroupPerson", new Guid());
-
             SampleSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
             SamplePersonSkill = PersonSkillFactory.CreatePersonSkillWithSamePercent(SampleSkill);
             SchedulingOptions = new SchedulingOptions();
@@ -71,6 +68,7 @@ namespace Teleopti.Ccc.TestCommon
             GroupPageOptions = new GroupPageOptions(PersonList);
             Scenario = new Scenario("test");
             BlockOfThreeDays  = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(3)));
+			Group = new Group(new List<IPerson>{Person1, Person2}, "Kalle");
         }
 
         public BaseLineData()

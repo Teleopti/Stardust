@@ -227,7 +227,6 @@
     <Compile Include="Domain\IDateOnlyAsDateTimePeriod.cs" />
     <Compile Include="Domain\IGroupPage.cs" />
     <Compile Include="Domain\IGroupPageDataProvider.cs" />
-    <Compile Include="Domain\IGroupPerson.cs" />
     <Compile Include="Domain\IKeyPerformanceIndicator.cs" />
     <Compile Include="Domain\IKpiTarget.cs" />
     <Compile Include="Domain\IMoveTimeOptimizer.cs" />

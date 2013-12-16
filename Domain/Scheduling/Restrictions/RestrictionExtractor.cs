@@ -31,19 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			}
 			return schedulePart;
 		}
-
-		public void ExtractFromGroupPerson(IGroupPerson groupPerson, DateOnly dateOnly)
-		{
-			InParameter.NotNull("groupPerson", groupPerson);
-
-			ClearLists();
-			foreach (var person in groupPerson.GroupMembers)
-			{
-				var scheduleDay = GetScheduleDay(person, dateOnly);
-				ExtractDay(scheduleDay);
-			}
-
-		}
 	}
 
     public class RestrictionExtractorWithoutStateHolder : IRestrictionExtractorWithoutStateHolder

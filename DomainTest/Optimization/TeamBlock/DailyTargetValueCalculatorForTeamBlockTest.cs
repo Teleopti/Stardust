@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _groupPersonSkillAggregator = _mock.StrictMock<IGroupPersonSkillAggregator>();
             _advancePrefrences = new AdvancedPreferences {TargetValueCalculation = TargetValueOptions.StandardDeviation};
             _baseLineData = new BaseLineData();
-            _teamInfo = new TeamInfo(_baseLineData.GroupPerson, new List<IList<IScheduleMatrixPro>>());
+            _teamInfo = new TeamInfo(_baseLineData.Group, new List<IList<IScheduleMatrixPro>>());
             _dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
             _blockInfo = new BlockInfo(_dateOnlyPeriod);
             _teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);

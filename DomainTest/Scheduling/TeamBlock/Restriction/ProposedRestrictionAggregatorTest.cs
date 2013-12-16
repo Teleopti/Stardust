@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -44,10 +45,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_dateOnly = new DateOnly(2013, 11, 14);
 			var person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
 			var person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
-			var groupPerson = new GroupPerson(new List<IPerson> { person1, person2 }, _dateOnly, "Hej", Guid.Empty);
+			var group = new Group(new List<IPerson> { person1, person2 }, "Hej");
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro>();
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
-			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
+			ITeamInfo teamInfo = new TeamInfo(group, groupMatrixes);
 			var blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1));
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(blockPeriod));
 		}

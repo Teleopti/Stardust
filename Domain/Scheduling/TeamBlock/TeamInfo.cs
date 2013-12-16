@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -19,13 +20,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class TeamInfo : ITeamInfo
 	{
-		private readonly IGroupPerson _groupPerson;
 		private readonly IList<IList<IScheduleMatrixPro>> _matrixesForMembers;
-
+		private readonly IList<IPerson> _groupMembers= new List<IPerson>();
+		private readonly string _name;
+			 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public TeamInfo(IGroupPerson groupPerson, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
+		public TeamInfo(Group group, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
 		{
-			_groupPerson = groupPerson;
+			_name = group.Name;
+			foreach (var member in group.GroupMembers)
+			{
+				_groupMembers.Add(member);
+			}
 			_matrixesForMembers = matrixesForMembers;
 		}
 
@@ -33,13 +39,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			get
 			{
-				return _groupPerson.GroupMembers;
+				return _groupMembers;
 			}
 		}
 
 		public string Name
 		{
-			get { return _groupPerson.Name.ToString(); }
+			get { return _name; }
 		}
 
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup()

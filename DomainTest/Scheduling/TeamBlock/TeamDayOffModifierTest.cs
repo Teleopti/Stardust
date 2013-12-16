@@ -2,8 +2,8 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
 			IList<IPerson> members = new List<IPerson>{_person1, _person2};
-			IGroupPerson groupPerson = new GroupPerson(members, DateOnly.MinValue, "hej", null);
-			_teamInfo = new TeamInfo(groupPerson, new List<IList<IScheduleMatrixPro>>());
+			Group group = new Group(members, "hej");
+			_teamInfo = new TeamInfo(group, new List<IList<IScheduleMatrixPro>>());
 			_schedulingOptions = new SchedulingOptions {UseSameDayOffs = true};
 			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
