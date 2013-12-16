@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		{
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 			
-			if (!doesPersonHaveExternalLogOn(message.PersonId)) return;
+			if (!message.PersonHaveExternalLogOn && !doesPersonHaveExternalLogOn(message.PersonId)) return;
 			
 			try
 			{

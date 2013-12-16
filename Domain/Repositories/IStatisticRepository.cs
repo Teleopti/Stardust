@@ -128,9 +128,5 @@ namespace Teleopti.Ccc.Domain.Repositories
         IActualAgentState LoadOneActualAgentState(Guid value);
 
         void AddOrUpdateActualAgentState(IActualAgentState actualAgentState);
-
-		ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId);
     }
-
-
 }

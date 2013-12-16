@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
@@ -15,7 +16,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
     public class BusinessUnitInfoConsumerTest
     {
         private MockRepository mocks;
-        private IStatisticRepository statisticRepository;
+		private IBusinessUnitRepository businessUnitRepository;
+	    private ICurrentUnitOfWorkFactory unitOfWorkFactory;
         private IServiceBus serviceBus;
         private BusinessUnitInfoConsumer target;
 
@@ -23,34 +25,39 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
         public void Setup()
         {
             mocks = new MockRepository();
-            statisticRepository = mocks.DynamicMock<IStatisticRepository>();
+            businessUnitRepository = mocks.DynamicMock<IBusinessUnitRepository>();
+	        unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
             serviceBus = mocks.DynamicMock<IServiceBus>();
-            target = new BusinessUnitInfoConsumer(statisticRepository, serviceBus);
+	        target = new BusinessUnitInfoConsumer(serviceBus, unitOfWorkFactory, businessUnitRepository);
         }
 
-        [Test]
-        public void IsConsumerCalled()
-        {
-            var person = PersonFactory.CreatePerson();
+		[Test]
+		public void IsConsumerCalled()
+		{
+			var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
 
-            var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
-            bussinessUnit.SetId(Guid.NewGuid());
-            
-            var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
+			var bussinessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit("TestBU");
+			bussinessUnit.SetId(Guid.NewGuid());
 
-            var message = new BusinessUnitInfo();
-            message.Timestamp = period.StartDateTime;
-            message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
+			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 
-            var personList = new List<Guid> {person.Id.GetValueOrDefault()};
+			var message = new BusinessUnitInfo();
+			message.Timestamp = period.StartDateTime;
+			message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 
-	        Expect.Call(statisticRepository.PersonIdsWithExternalLogOn(Guid.Empty)).IgnoreArguments().Return(personList);
-            
-            mocks.ReplayAll();
-            target.Consume(message);
-            mocks.VerifyAll();
+			var personList = new List<Guid> { person.Id.GetValueOrDefault() };
+			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var loggedOnUnitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 
-        }
+			Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(loggedOnUnitOfWorkFactory);
+			Expect.Call(loggedOnUnitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(businessUnitRepository.LoadAllPersonsWithExternalLogOn(Guid.Empty, DateOnly.Today)).IgnoreArguments().Return(personList);
+
+			mocks.ReplayAll();
+			target.Consume(message);
+			mocks.VerifyAll();
+
+		}
     }
 }

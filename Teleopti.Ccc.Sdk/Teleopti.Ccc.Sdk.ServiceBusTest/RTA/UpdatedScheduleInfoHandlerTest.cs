@@ -345,6 +345,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		}
 
 		[Test]
+		public void PersonActivityStarting_PersonHaveExternalLogOn_ShouldCheckAgain()
+		{
+			personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			target = new UpdatedScheduleInfoHandler(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService,
+			                                           personRepository);
+			var message = new PersonActivityStarting {PersonHaveExternalLogOn = true};
+
+			target.Handle(message);
+
+			personRepository.AssertWasNotCalled(r => r.DoesPersonHaveExternalLogOn(DateOnly.Today, Guid.Empty), a => a.IgnoreArguments());
+		}
+
+		[Test]
 		public void Coverage()
 		{
 			target = new UpdatedScheduleInfoHandler(MockRepository.GenerateMock<ISendDelayedMessages>(), MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>(), MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>(), MockRepository.GenerateMock<IPersonRepository>());

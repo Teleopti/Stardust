@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Rta.Interfaces;
+using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using log4net;
 
@@ -238,6 +240,80 @@ namespace Teleopti.Ccc.Rta.Server
 			return
 				new ConcurrentDictionary<Tuple<Guid,Guid,Guid>, List<RtaAlarmLight>>(stateGroups.GroupBy(g => new Tuple<Guid,Guid,Guid>(g.ActivityId,g.StateGroupId,g.BusinessUnit))
 																			   .ToDictionary(k => k.Key, v => v.ToList()));
+		}
+
+		public ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> LoadAllExternalLogOns()
+		{
+			var dictionary = new ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>>();
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
+			{
+				var command = connection.CreateCommand();
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandText = "dbo.rta_load_external_logon";
+				command.Parameters.Add(new SqlParameter("@now", DateTime.UtcNow.Date));
+				connection.Open();
+				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+				while (reader.Read())
+				{
+					int loadedDataSourceId = reader.GetInt32(reader.GetOrdinal("datasource_id"));
+					string originalLogOn = reader.GetString(reader.GetOrdinal("acd_login_original_id"));
+					Guid personId = reader.GetGuid(reader.GetOrdinal("person_code"));
+					Guid businessUnitId = reader.GetGuid(reader.GetOrdinal("business_unit_code"));
+
+					var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", loadedDataSourceId, originalLogOn).ToUpper(CultureInfo.InvariantCulture);
+					var personWithBusinessUnit = new PersonWithBusinessUnit
+					{
+						PersonId = personId,
+						BusinessUnitId = businessUnitId
+					};
+
+					IEnumerable<PersonWithBusinessUnit> list;
+					if (dictionary.TryGetValue(lookupKey, out list))
+					{
+						((ICollection<PersonWithBusinessUnit>)list).Add(personWithBusinessUnit);
+					}
+					else
+					{
+						var newCollection = new Collection<PersonWithBusinessUnit> { personWithBusinessUnit };
+						dictionary.AddOrUpdate(lookupKey, newCollection, (s, units) => newCollection);
+					}
+				}
+				reader.Close();
+			}
+			return dictionary;
+		}
+
+		public ConcurrentDictionary<string, int> LoadDatasources()
+		{
+			var dictionary = new ConcurrentDictionary<string, int>();
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.DataStoreConnectionString()))
+			{
+				var command = connection.CreateCommand();
+				command.CommandType = CommandType.StoredProcedure;
+				command.CommandText = "RTA.rta_load_datasources";
+				connection.Open();
+				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
+				while (reader.Read())
+				{
+					var loadedSourceId = reader["source_id"];
+					int loadedDataSourceId = reader.GetInt16(reader.GetOrdinal("datasource_id")); //This one cannot be null as it's the PK of the table
+					if (loadedSourceId == DBNull.Value)
+					{
+						LoggingSvc.WarnFormat("No source id is defined for data source = {0}", loadedDataSourceId);
+						continue;
+					}
+					var loadedSourceIdAsString = (string)loadedSourceId;
+					if (dictionary.ContainsKey(loadedSourceIdAsString))
+					{
+						LoggingSvc.WarnFormat("There is already a source defined with the id = {0}",
+											   loadedSourceIdAsString);
+						continue;
+					}
+					dictionary.AddOrUpdate(loadedSourceIdAsString, loadedDataSourceId, (s, i) => loadedDataSourceId);
+				}
+				reader.Close();
+			}
+			return dictionary;
 		}
 	}
 }

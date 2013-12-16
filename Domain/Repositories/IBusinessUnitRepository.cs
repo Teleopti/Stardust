@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -24,5 +25,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <param name="businessUnit">The business unit.</param>
         /// <returns></returns>
         IBusinessUnit LoadHierarchyInformation(IBusinessUnit businessUnit);
+
+	    IList<Guid> LoadAllPersonsWithExternalLogOn(Guid businessUnitId, DateOnly now);
     }
 }
