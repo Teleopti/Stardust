@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.Rta.WebService
 			var container = buildIoc();
 			AutofacHostFactory.Container = container;
 			_timer = new Timer(myCallback, container, 0, 5000);
+
+			setDefaultGenericPrincipal();
 		}
 
 		private static IContainer buildIoc()
@@ -57,7 +59,6 @@ namespace Teleopti.Ccc.Rta.WebService
 
 		protected void Application_AuthenticateRequest(object sender, EventArgs e)
 		{
-			setDefaultGenericPrincipal();
 		}
 
 		private static void setDefaultGenericPrincipal()
