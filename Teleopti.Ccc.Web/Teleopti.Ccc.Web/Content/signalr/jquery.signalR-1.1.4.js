@@ -1,7 +1,7 @@
 /* jquery.signalR.core.js */
 /*global window:false */
 /*!
- * ASP.NET SignalR JavaScript Library v1.1.2
+ * ASP.NET SignalR JavaScript Library v1.1.4
  * http://signalr.net/
  *
  * Copyright Microsoft Open Technologies, Inc. All rights reserved.
@@ -220,7 +220,10 @@
         init: function (url, qs, logging) {
             this.url = url;
             this.qs = qs;
-            this._ = {};
+            this._ = {
+                pollTimeoutId: null,
+                reconnectTimeoutId: null
+            };
             if (typeof (logging) === "boolean") {
                 this.logging = logging;
             }            
@@ -457,7 +460,7 @@
                         // Timeout to designate when to force the connection into reconnecting converted to milliseconds
                         keepAliveData.timeout = res.KeepAliveTimeout * 1000;
 
-                        // Timeout to designate when to warn the developer that the connection may be dead or is hanging.
+                        // Timeout to designate when to warn the developer that the connection may be dead or is not responding.
                         keepAliveData.timeoutWarning = keepAliveData.timeout * connection.keepAliveWarnAt;
 
                         // Instantiate the frequency in which we check the keep alive.  It must be short in order to not miss/pick up any changes
@@ -880,7 +883,7 @@
                         // so just hack around it on the client for now.
                         return;
                     }
-                    $(connection).triggerHandler(events.onError, [errData]);
+                    $(connection).triggerHandler(events.onError, [errData, data]);
                 }
             });
         },
@@ -1240,7 +1243,7 @@
             // After connecting, if after the specified timeout there's no response stop the connection
             // and raise on failed
             connectTimeOut = window.setTimeout(function () {
-                if (opened === false) {
+                if (opened === false && connection.eventSource) {
                     connection.log("EventSource timed out trying to connect");
                     connection.log("EventSource readyState: " + connection.eventSource.readyState);
 
@@ -1622,11 +1625,11 @@
                     onSuccess();
                     connection.log("Longpolling connected");
                 },
+                privateData = connection._,
                 reconnectErrors = 0,
-                reconnectTimeoutId = null,
                 fireReconnected = function (instance) {
-                    window.clearTimeout(reconnectTimeoutId);
-                    reconnectTimeoutId = null;
+                    window.clearTimeout(privateData.reconnectTimeoutId);
+                    privateData.reconnectTimeoutId = null;
 
                     if (changeState(connection,
                                     signalR.connectionState.reconnecting,
@@ -1644,12 +1647,15 @@
                 connection.stop();
             }
 
+            privateData.reconnectTimeoutId = null;
+            privateData.pollTimeoutId = null;
+
             // We start with an initialization procedure which pings the server to verify that it is there.
             // On scucessful initialization we'll then proceed with starting the transport.
             that.init(connection, function () {
                 connection.messageId = null;
 
-                window.setTimeout(function () {
+                privateData.pollTimeoutId = window.setTimeout(function () {
                     (function poll(instance, raiseReconnect) {
                         var messageId = instance.messageId,
                             connect = (messageId === null),
@@ -1679,7 +1685,7 @@
                                 reconnectErrors = 0;
 
                                 // If there's currently a timeout to trigger reconnect, fire it now before processing messages
-                                if (reconnectTimeoutId !== null) {
+                                if (privateData.reconnectTimeoutId !== null) {
                                     fireReconnected();
                                 }
 
@@ -1706,7 +1712,7 @@
 
                                 // We never want to pass a raiseReconnect flag after a successful poll.  This is handled via the error function
                                 if (delay > 0) {
-                                    window.setTimeout(function () {
+                                    privateData.pollTimeoutId = window.setTimeout(function () {
                                         poll(instance, false);
                                     }, delay);
                                 } else {
@@ -1717,8 +1723,8 @@
                             error: function (data, textStatus) {
                                 // Stop trying to trigger reconnect, connection is in an error state
                                 // If we're not in the reconnect state this will noop
-                                window.clearTimeout(reconnectTimeoutId);
-                                reconnectTimeoutId = null;
+                                window.clearTimeout(privateData.reconnectTimeoutId);
+                                privateData.reconnectTimeoutId = null;
 
                                 if (textStatus === "abort") {
                                     connection.log("Aborted xhr requst.");
@@ -1736,14 +1742,19 @@
                                 }
 
                                 // Transition into the reconnecting state
-                                transportLogic.ensureReconnectingState(instance);
+                                // If this fails then that means that the user transitioned the connection into the disconnected or connecting state within the above error handler trigger.
+                                if (!transportLogic.ensureReconnectingState(instance)) {
+                                    return;
+                                }
 
-                                // If we've errored out we need to verify that the server is still there, so re-start initialization process
-                                // This will ping the server until it successfully gets a response.
-                                that.init(instance, function () {
-                                    // Call poll with the raiseReconnect flag as true
-                                    poll(instance, true);
-                                });
+                                privateData.pollTimeoutId = window.setTimeout(function () {
+                                    // If we've errored out we need to verify that the server is still there, so re-start initialization process
+                                    // This will ping the server until it successfully gets a response.
+                                    that.init(instance, function () {
+                                        // Call poll with the raiseReconnect flag as true
+                                        poll(instance, true);
+                                    });
+                                }, that.reconnectDelay);
                             }
                         });
 
@@ -1755,7 +1766,7 @@
                             // triggering reconnected.  This depends on the "error" handler of Poll to cancel this 
                             // timeout if it triggers before the Reconnected event fires.
                             // The Math.min at the end is to ensure that the reconnect timeout does not overflow.
-                            reconnectTimeoutId = window.setTimeout(function () { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
+                            privateData.reconnectTimeoutId = window.setTimeout(function () { fireReconnected(instance); }, Math.min(1000 * (Math.pow(2, reconnectErrors) - 1), maxFireReconnectedTimeout));
                         }
                     }(connection));
 
@@ -1780,6 +1791,12 @@
         stop: function (connection) {
             /// <summary>Stops the long polling connection</summary>
             /// <param name="connection" type="signalR">The SignalR connection to stop</param>
+            window.clearTimeout(connection._.pollTimeoutId);
+            window.clearTimeout(connection._.reconnectTimeoutId);
+
+            delete connection._.pollTimeoutId;
+            delete connection._.reconnectTimeoutId;
+
             if (connection.pollXhr) {
                 connection.pollXhr.abort();
                 connection.pollXhr = null;
@@ -1803,9 +1820,7 @@
     "use strict";
 
     // we use a global id for tracking callbacks so the server doesn't have to send extra info like hub name
-    var callbackId = 0,
-        callbacks = {},
-        eventNamespace = ".hubProxy";
+    var eventNamespace = ".hubProxy";
 
     function makeEventName(event) {
         return event + eventNamespace;
@@ -1837,6 +1852,28 @@
         }
 
         return false;
+    }
+
+    function clearInvocationCallbacks(connection, error) {
+        /// <param name="connection" type="hubConnection" />
+        var callbacks = connection._.invocationCallbacks,
+            callback;
+        
+        connection.log("Clearing hub invocation callbacks with error: " + error);
+        
+        // Reset the callback cache now as we have a local var referencing it
+        connection._.invocationCallbackId = 0;
+        delete connection._.invocationCallbacks;
+        connection._.invocationCallbacks = {};
+
+        // Loop over the callbacks and invoke them.
+        // We do this using a local var reference and *after* we've cleared the cache
+        // so that if a fail callback itself tries to invoke another method we don't 
+        // end up with its callback in the list we're looping over.
+        for (var callbackId in callbacks) {
+            callback = callbacks[callbackId];
+            callback.method.call(callback.scope, { E: error });
+        }
     }
 
     // hubProxy
@@ -1929,9 +1966,10 @@
             /// <param name="methodName" type="String">The name of the server hub method.</param>
 
             var self = this,
+                connection = self.connection,
                 args = $.makeArray(arguments).slice(1),
                 argValues = map(args, getArgValue),
-                data = { H: self.hubName, M: methodName, A: argValues, I: callbackId },
+                data = { H: self.hubName, M: methodName, A: argValues, I: connection._.invocationCallbackId },
                 d = $.Deferred(),
                 callback = function (minResult) {
                     var result = self._maximizeHubResponse(minResult);
@@ -1942,7 +1980,7 @@
                     if (result.Error) {
                         // Server hub method threw an exception, log it & reject the deferred
                         if (result.StackTrace) {
-                            self.connection.log(result.Error + "\n" + result.StackTrace);
+                            connection.log(result.Error + "\n" + result.StackTrace);
                         }
                         d.rejectWith(self, [result.Error]);
                     } else {
@@ -1951,14 +1989,14 @@
                     }
                 };
 
-            callbacks[callbackId.toString()] = { scope: self, method: callback };
-            callbackId += 1;
+            connection._.invocationCallbacks[connection._.invocationCallbackId.toString()] = { scope: self, method: callback };
+            connection._.invocationCallbackId += 1;
 
             if (!$.isEmptyObject(self.state)) {
                 data.S = self.state;
             }
             
-            self.connection.send(window.JSON.stringify(data));
+            connection.send(window.JSON.stringify(data));
 
             return d.promise();
         },
@@ -1999,10 +2037,10 @@
 
     hubConnection.fn.init = function (url, options) {
         var settings = {
-            qs: null,
-            logging: false,
-            useDefaultPath: true
-        },
+                qs: null,
+                logging: false,
+                useDefaultPath: true
+            },
             connection = this;
 
         $.extend(settings, options);
@@ -2012,6 +2050,9 @@
 
         // Object to store hub proxies for this connection
         connection.proxies = {};
+
+        connection._.invocationCallbackId = 0;
+        connection._.invocationCallbacks = {};
 
         // Wire up the received handler
         connection.received(function (minData) {
@@ -2023,11 +2064,11 @@
             if (typeof (minData.I) !== "undefined") {
                 // We received the return value from a server method invocation, look up callback by id and call it
                 dataCallbackId = minData.I.toString();
-                callback = callbacks[dataCallbackId];
+                callback = connection._.invocationCallbacks[dataCallbackId];
                 if (callback) {
                     // Delete the callback from the proxy
-                    callbacks[dataCallbackId] = null;
-                    delete callbacks[dataCallbackId];
+                    connection._.invocationCallbacks[dataCallbackId] = null;
+                    delete connection._.invocationCallbacks[dataCallbackId];
 
                     // Invoke the callback
                     callback.method.call(callback.scope, minData);
@@ -2049,6 +2090,52 @@
                 $.extend(proxy.state, data.State);
                 $(proxy).triggerHandler(makeEventName(eventName), [data.Args]);
             }
+        });
+
+        connection.error(function (errData, origData) {
+            var data, callbackId, callback;
+
+            if (connection.transport && connection.transport.name === "webSockets") {
+                // WebSockets connections have all callbacks removed on reconnect instead
+                // as WebSockets sends are fire & forget
+                return;
+            }
+
+            if (!origData) {
+                // No original data passed so this is not a send error
+                return;
+            }
+
+            try {
+                data = window.JSON.parse(origData);
+                if (!data.I) {
+                    // The original data doesn't have a callback ID so not a send error
+                    return;
+                }
+            } catch (e) {
+                // The original data is not a JSON payload so this is not a send error
+                return;
+            }
+            
+            callbackId = data.I;
+            callback = connection._.invocationCallbacks[callbackId];
+
+            // Invoke the callback with an error to reject the promise
+            callback.method.call(callback.scope, { E: errData });
+
+            // Delete the callback
+            connection._.invocationCallbacks[callbackId] = null;
+            delete connection._.invocationCallbacks[callbackId];
+        });
+
+        connection.reconnecting(function () {
+            if (connection.transport && connection.transport.name === "webSockets") {
+                clearInvocationCallbacks(connection, "Connection started reconnecting before invocation result was received.");
+            }
+        });
+
+        connection.disconnected(function () {
+            clearInvocationCallbacks(connection, "Connection was disconnected before invocation result was received.");
         });
     };
 
@@ -2119,5 +2206,5 @@
 /*global window:false */
 /// <reference path="jquery.signalR.core.js" />
 (function ($) {
-    $.signalR.version = "1.1.2";
+    $.signalR.version = "1.1.4";
 }(window.jQuery));
