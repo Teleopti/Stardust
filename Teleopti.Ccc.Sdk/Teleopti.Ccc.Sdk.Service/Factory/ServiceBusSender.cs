@@ -17,19 +17,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
     public class ServiceBusSender : IServiceBusSender
     {
-        private readonly ICurrentIdentity _currentIdentity;
         private static readonly ILog Logger = LogManager.GetLogger(typeof (ServiceBusSender));
         private IContainer _customHost;
         private static readonly object LockObject = new object();
         private bool _isRunning;
 
-        public ServiceBusSender(ICurrentIdentity currentIdentity)
-        {
-            _currentIdentity = currentIdentity;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
-		    "CA2000:Dispose objects before losing scope")]
 	    private void MoveThatBus()
 	    {
 		    lock (LockObject)
@@ -67,13 +59,11 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		{
             var bus = _customHost.Resolve<IOnewayBus>();
 
-            var raptorDomainMessage = message as IRaptorDomainMessageInfo;
-            raptorDomainMessage.SetMessageDetail(_currentIdentity);
-			
             if (Logger.IsDebugEnabled)
 			{
 				var identity = "<unknown>";
 				var datasource = "<unknown>";
+				var raptorDomainMessage = message as IRaptorDomainMessageInfo;
 				if (raptorDomainMessage != null)
 				{
 					datasource = raptorDomainMessage.Datasource;

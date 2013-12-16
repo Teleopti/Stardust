@@ -3,9 +3,7 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using Autofac;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
@@ -15,18 +13,11 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 {
 	public class ServiceBusSender : IServiceBusSender
 	{
-	    private readonly ICurrentIdentity _currentIdentity;
 	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ServiceBusSender));
 		private IContainer _customHost;
 		private static readonly object LockObject = new object();
 		private bool _isRunning;
-
-	    public ServiceBusSender(ICurrentIdentity currentIdentity)
-	    {
-	        _currentIdentity = currentIdentity;
-	    }
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		
 		private void MoveThatBus()
 		{
 			lock (LockObject)
@@ -68,7 +59,6 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 			var bus = Resolve<IOnewayBus>();
 
             var raptorDomainMessage = message as IRaptorDomainMessageInfo;
-            raptorDomainMessage.SetMessageDetail(_currentIdentity);
 
 			if (Logger.IsDebugEnabled)
 			{

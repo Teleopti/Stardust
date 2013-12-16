@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Interfaces.Messages;
 using log4net;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -76,12 +75,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	public class InternalServiceBusSender : IServiceBusSender
 	{
 		private readonly Func<IServiceBus> _serviceBus;
-        private readonly Func<ICurrentIdentity> _currentIdentity;
         
-		public InternalServiceBusSender(Func<IServiceBus> serviceBus, Func<ICurrentIdentity> currentIdentity)
+		public InternalServiceBusSender(Func<IServiceBus> serviceBus)
 		{
 		    _serviceBus = serviceBus;
-		    _currentIdentity = currentIdentity;
 		}
 
 	    public void Dispose()
@@ -90,12 +87,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Send(object message)
 		{
-            var raptorDomainMessage = message as IRaptorDomainMessageInfo;
-            if (raptorDomainMessage != null)
-            {
-                raptorDomainMessage.SetMessageDetail(_currentIdentity());
-            }
-
 			_serviceBus().Send(message);
 		}
 
@@ -117,10 +108,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		public IList<IMessageSender> Create()
 		{
 			var sender = _serviceBusSender;
+			var eventPublisher = new ServiceBusEventPublisher(sender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
 			return new List<IMessageSender>
 				{
-					new EventsMessageSender(new SyncEventsPublisher(new ServiceBusEventPublisher(sender))),
-					new ScheduleMessageSender(sender),
+					new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+					new ScheduleMessageSender(eventPublisher),
 					new MeetingMessageSender(sender),
 					new GroupPageChangedMessageSender(sender),
 					new TeamOrSiteChangedMessageSender(sender),

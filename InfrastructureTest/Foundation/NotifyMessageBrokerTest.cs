@@ -222,14 +222,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IEventMessage mess1 = mocks.StrictMock<IEventMessage>();
             IEventMessage mess2 = mocks.StrictMock<IEventMessage>();
             IEventMessage mess3 = mocks.StrictMock<IEventMessage>();
-            IMessageBrokerIdentifier identifier = mocks.StrictMock<IMessageBrokerIdentifier>();
+            IInitiatorIdentifier identifier = mocks.StrictMock<IInitiatorIdentifier>();
             new Repository(uow).Add(obj);
 
             using (mocks.Record())
             {
                 using (mocks.Ordered())
                 {
-                    Expect.Call(identifier.InstanceId).Return(moduleId).Repeat.Any();
+                    Expect.Call(identifier.InitiatorId).Return(moduleId).Repeat.Any();
                     Expect.Call(messBroker.IsInitialized).Return(true);
                     Expect.Call(messBroker.CreateEventMessage(moduleId, obj.Id.Value, obj.GetType(), DomainUpdateType.Insert))
                                         .Return(mess1);

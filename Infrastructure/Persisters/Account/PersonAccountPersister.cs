@@ -9,19 +9,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 	{
 		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
+		private readonly IInitiatorIdentifier _initiatorIdentifier;
 		private readonly IPersonAccountConflictCollector _personAccountConflictCollector;
 		private readonly IPersonAccountConflictResolver _personAccountConflictResolver;
 
 		public PersonAccountPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory, 
 																IPersonAbsenceAccountRepository personAbsenceAccountRepository,
-																IMessageBrokerIdentifier messageBrokerIdentifier,
+																IInitiatorIdentifier initiatorIdentifier,
 																IPersonAccountConflictCollector personAccountConflictCollector,
 																IPersonAccountConflictResolver personAccountConflictResolver)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
-			_messageBrokerIdentifier = messageBrokerIdentifier;
+			_initiatorIdentifier = initiatorIdentifier;
 			_personAccountConflictCollector = personAccountConflictCollector;
 			_personAccountConflictResolver = personAccountConflictResolver;
 		}
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 				var conflictingPersonAccounts = _personAccountConflictCollector.GetConflicts(personAbsenceAccounts);
 				_personAccountConflictResolver.Resolve(conflictingPersonAccounts);
 				_personAbsenceAccountRepository.AddRange(personAbsenceAccounts);
-				uow.PersistAll(_messageBrokerIdentifier);				
+				uow.PersistAll(_initiatorIdentifier);				
 			}
 			personAbsenceAccounts.Clear();
 		}

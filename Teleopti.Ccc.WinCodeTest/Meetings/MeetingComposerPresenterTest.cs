@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyModuleIdGetsAValue()
         {
-            Assert.AreNotEqual(Guid.Empty, _target.InstanceId);
+            Assert.AreNotEqual(Guid.Empty, _target.InitiatorId);
         }
 
         [Test]

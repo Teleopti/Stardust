@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(null, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(null, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 	}
