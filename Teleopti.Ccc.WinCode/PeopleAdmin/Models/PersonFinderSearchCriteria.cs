@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         private int _pageSize;
         private int _currentPage;
         private readonly IList<IPersonFinderDisplayRow> _displayRows;
-        private readonly DateOnly _terminalDate;
+        private DateOnly _terminalDate;
         
         public PersonFinderSearchCriteria(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, int sortColumn, int sortDirection)
         {
@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
         public DateOnly TerminalDate
         {
             get { return _terminalDate; }
+			  set { _terminalDate = value; }
         }
 
         public int TotalPages
