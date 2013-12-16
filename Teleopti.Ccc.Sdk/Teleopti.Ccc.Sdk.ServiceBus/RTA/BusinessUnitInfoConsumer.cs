@@ -16,23 +16,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 	{
 		private readonly IServiceBus _serviceBus;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (BusinessUnitInfoConsumer));
-		private  IBusinessUnitRepository _businessRepository;
-		private readonly IUnitOfWorkFactory unitOfWorkFactory;
+		private readonly IBusinessUnitRepository _businessRepository;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public BusinessUnitInfoConsumer(IServiceBus serviceBus, IUnitOfWorkFactory unitOfWorkFactory)
+		public BusinessUnitInfoConsumer(IServiceBus serviceBus, ICurrentUnitOfWorkFactory unitOfWorkFactory, IBusinessUnitRepository businessRepository)
 		{
 			_serviceBus = serviceBus;
-			this.unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_businessRepository = businessRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void Consume(BusinessUnitInfo message)
 		{
 			IList<Guid> persons;
-			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				_businessRepository = new BusinessUnitRepository(uow);
-				persons = _businessRepository.LoadAllPersonsWithExternalLogOn(message.BusinessUnitId, DateOnly.Today);
+				persons = _businessRepository.LoadAllPersonsWithExternalLogOn(message.BusinessUnitId, DateOnly.Today);	
 			}
 
 			foreach (var person in persons)
