@@ -270,7 +270,6 @@
     <Compile Include="Optimization\DailyBoostedSkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerValidatorTest.cs" />
-    <Compile Include="Optimization\GroupPersonBuilderForOptimizationTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
@@ -424,7 +423,6 @@
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManagerTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />
     <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeCheckerTest.cs" />

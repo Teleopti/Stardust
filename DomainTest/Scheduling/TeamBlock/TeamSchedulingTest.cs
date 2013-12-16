@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ITeamScheduling _target;
         private IShiftProjectionCache _shiftProjectionCache;
         private IScheduleMatrixPro _matrix;
-        private IGroupPerson _groupPerson;
+        private Group _group;
         private IResourceCalculateDelayer _resourceCalculateDelayer;
         private IScheduleDayPro _scheduleDayPro;
         private IScheduleDay _scheduleDay;
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_schedulePartModifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_target = new TeamScheduling(_resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
-			_groupPerson = new GroupPerson(new List<IPerson>{ _person },DateOnly.MinValue,"hej", null);
+			_group = new Group(new List<IPerson>{ _person }, "hej");
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_mainShift = new EditableShift(new ShiftCategory("hej"));
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
 			_groupMatrixList = new List<IList<IScheduleMatrixPro>>();
 			_groupMatrixList.Add(_matrixList);
-			_teaminfo = new TeamInfo(_groupPerson, _groupMatrixList);
+			_teaminfo = new TeamInfo(_group, _groupMatrixList);
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
 			_teamBlockInfo = new TeamBlockInfo(_teaminfo, _blockInfo);
 			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone());

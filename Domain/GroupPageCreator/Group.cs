@@ -8,6 +8,15 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 		private readonly IList<IPerson> _groupMembers = new List<IPerson>();
 		private string _name;
 
+		public Group()
+		{}
+
+		public Group(IList<IPerson> groupMembers, string name)
+		{
+			_groupMembers = groupMembers;
+			_name = name;
+		}
+
 		public IEnumerable<IPerson> GroupMembers
 		{
 			get { return _groupMembers; }

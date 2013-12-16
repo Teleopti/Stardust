@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    _blockInfo = new BlockInfo(new DateOnlyPeriod(new DateOnly(_date), new DateOnly(_date)));
 
             _baseLineData = new BaseLineData();
-            _teamInfo2 = new TeamInfo(_baseLineData.GroupPerson,new List<IList<IScheduleMatrixPro>>() );
+            _teamInfo2 = new TeamInfo(_baseLineData.Group ,new List<IList<IScheduleMatrixPro>>() );
             _teamBlockInfo2 = new TeamBlockInfo(_teamInfo2,_blockInfo  );
 
             _activity1 = ActivityFactory.CreateActivity("phone1");

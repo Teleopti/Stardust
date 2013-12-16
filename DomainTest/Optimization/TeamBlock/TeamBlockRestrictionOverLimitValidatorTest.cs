@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_optimizerPreferences = new OptimizationPreferences();
 			_target = new TeamBlockRestrictionOverLimitValidator(_restrictionOverLimitDecider, _maxMovedDaysOverLimitValidator);
 			IPerson groupMember = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
-			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { groupMember }, DateOnly.MinValue, "hej", null);
+			Group group = new Group(new List<IPerson> { groupMember }, "hej");
 			IList<IList<IScheduleMatrixPro>> matrixes = new List<IList<IScheduleMatrixPro>>();
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
 			matrixes.Add(matrixList);
-			_teamInfo = new TeamInfo(groupPerson, matrixes);
+			_teamInfo = new TeamInfo(group, matrixes);
 			_teamBlockInfo = new TeamBlockInfo(_teamInfo,
 			                                   new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();

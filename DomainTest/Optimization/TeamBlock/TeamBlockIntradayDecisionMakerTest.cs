@@ -2,10 +2,10 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		    var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixList};
 
 			var person = PersonFactory.CreatePerson();
-			var groupPerson = new GroupPerson(new List<IPerson>{person}, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson>{person}, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
             var blockInfo1 = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
             var teamBlockInfo1 = new TeamBlockInfo(teaminfo, blockInfo1);
 			var dataExtractor1 = _mocks.StrictMock<IScheduleResultDataExtractor>();
@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixList };
 
 			var person = PersonFactory.CreatePerson();
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo1 = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var blockInfo2 = new BlockInfo(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)));
 			var teamBlockInfo1 = new TeamBlockInfo(teaminfo, blockInfo1);

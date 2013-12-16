@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 		private IPerson _person2;
 		private IScheduleMatrixPro _scheduleMatrixPro1;
 		private IScheduleMatrixPro _scheduleMatrixPro2;
-		private GroupPerson _groupPerson;
+		private Group _group;
 		private DateOnlyPeriod _blockPeriod;
 		private TeamBlockInfo _teamBlockInfo;
 		private SchedulingOptions _schedulingOptions;
@@ -51,10 +51,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_scheduleMatrixPro2 = _mocks.StrictMock<IScheduleMatrixPro>();
-			_groupPerson = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "Hej", Guid.Empty);
+			_group = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, _scheduleMatrixPro2 };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
-			ITeamInfo teamInfo = new TeamInfo(_groupPerson, groupMatrixes);
+			ITeamInfo teamInfo = new TeamInfo(_group, groupMatrixes);
 			_blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_blockPeriod));
 			_schedulingOptions = new SchedulingOptions();
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson>{_person1},_dateOnly,
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(_scheduleMatrixPro2.SchedulePeriod).Return(schedulePeriod2).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,
@@ -476,7 +476,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(schedulePeriod1.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 				Expect.Call(schedulePeriod2.DateOnlyPeriod).Return(_blockPeriod).Repeat.AtLeastOnce();
 
-				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_groupPerson.GroupMembers, _dateOnly,
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_group.GroupMembers, _dateOnly,
 																				 _schedulingOptions, scheduleDictionary))
 					  .Return(effectiveRestrictionForDayOne);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { _person1 }, _dateOnly,

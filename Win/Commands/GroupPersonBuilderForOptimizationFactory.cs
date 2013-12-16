@@ -1,6 +1,7 @@
 ﻿
 
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -47,10 +48,10 @@ namespace Teleopti.Ccc.Win.Commands
 					                                         schedulingOptions.GroupOnGroupPageForTeamBlockPer,
 					                                         true);
 			}
-			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
+
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
-				new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
-													  _groupPagePerDateHolder);
+				new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState,
+													  _groupPagePerDateHolder, new GroupCreator());
 			return groupPersonBuilderForOptimization;
 		}
 	}

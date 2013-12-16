@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleMatrixPro _matrix;
 		private IPerson _person;
 		private IList<IScheduleMatrixPro> _matrixList;
-		private IGroupPerson _groupPerson;
+		private Group _group;
 		private IList<IList<IScheduleMatrixPro>> _matrixes;
 		private ILockableBitArray _originalArray;
 		private ILockableBitArray _workingArray;
@@ -72,14 +73,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
 			_matrixList = new List<IScheduleMatrixPro> {_matrix};
-			_groupPerson = new GroupPerson(new List<IPerson>{_person}, DateOnly.MinValue, "hej", null);
+			_group = new Group(new List<IPerson>{_person}, "hej");
 			_matrixes = new List<IList<IScheduleMatrixPro>>();
 			_matrixes.Add(_matrixList);
 			_originalArray = new LockableBitArray(2, false, false, null);
 			_originalArray.Set(1, true);
 			_workingArray = new LockableBitArray(2, false, false, null);
 			_workingArray.Set(0, true);
-			_teamInfo = new TeamInfo(_groupPerson, _matrixes);
+			_teamInfo = new TeamInfo(_group, _matrixes);
 			_schedulingOptions = new SchedulingOptions();
 			_teamBlockInfo = new TeamBlockInfo(_teamInfo,
 			                                   new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1))));

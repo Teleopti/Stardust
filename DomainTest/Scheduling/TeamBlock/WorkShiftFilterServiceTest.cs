@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private DateOnly _dateOnly;
 		private WorkShiftFinderResult _finderResult;
 		private ITeamBlockInfo _teamBlockInfo;
-		private GroupPerson _groupPerson;
+		private Group _group;
 		private List<IScheduleMatrixPro> _matrixList;
 		private ICommonActivityFilter _commonActivityFilter;
 
@@ -93,10 +93,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 												 _timeLimitsRestrictionShiftFilter, _workTimeLimitationShiftFilter,
 												 _shiftLengthDecider, _workShiftMinMaxCalculator, _commonActivityFilter);
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_groupPerson = new GroupPerson(new List<IPerson>{_person}, _dateOnly, "Hej", Guid.NewGuid());
+			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>>{ _matrixList };
-			var teaminfo = new TeamInfo(_groupPerson, groupMatrixes);
+			var teaminfo = new TeamInfo(_group, groupMatrixes);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly));
 			_teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 		}
@@ -125,10 +125,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldReturnNullIfMatrixListIsEmpty()
 		{
 			var dateOnly = new DateOnly(2012, 12, 12);
-			var groupPerson = new GroupPerson(new List<IPerson> { _person }, dateOnly, "Hej", Guid.NewGuid());
+			var group = new Group(new List<IPerson> { _person }, "Hej");
 			var matrixList = new List<IScheduleMatrixPro>();
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixes);
+			var teaminfo = new TeamInfo(group, groupMatrixes);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
