@@ -113,7 +113,7 @@
 		public const string ShiftTradeRequestsWeb = "Raptor/MyTimeWeb/ShiftTradeRequests";
 		public const string ShareCalendar = "Raptor/MyTimeWeb/ShareCalendar";
 		public const string OvertimeAvailabilityWeb = "Raptor/MyTimeWeb/OvertimeAvailabilityWeb";
-		public const string MyReportWeb = "Raptor/MyTimeWeb/MyReportyWeb";
+		public const string MyReportWeb = "Raptor/MyTimeWeb/MyReportWeb";
 
 		// Anywhere
 		public const string SchedulesAnywhere = "Raptor/Anywhere/Schedules";
