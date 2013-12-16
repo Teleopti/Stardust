@@ -87,6 +87,7 @@
 	<Name>Teleopti.Analytics.Etl.IntegrationTest</Name>
   </Assemblies>
   <FrameworkAssemblies>
+	<Name>System.Web.Optimization</Name>
     <Name>nunit.framework</Name>
     <Name>SharpTestsEx</Name>
     <Name>mscorlib</Name>
