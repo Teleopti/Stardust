@@ -24,12 +24,12 @@ define([
             var personId;
             var groupId;
 	        
-            this.SetData = function (data, groupid) {
+            this.SetData = function (data) {
                 personId = data.PersonId;
                 self.StartDate(data.Date);
                 self.EndDate(data.Date);
                 self.AbsenceTypes(data.Absences);
-                groupId = groupid;
+                groupId = data.GroupId;
             };
 
             this.StartDateFormatted = ko.computed(function() {

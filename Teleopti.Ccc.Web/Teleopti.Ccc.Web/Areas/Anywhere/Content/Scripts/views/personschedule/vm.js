@@ -134,10 +134,10 @@ define([
 
 			data.PersonId = self.PersonId();
 			data.Date = self.Date();
-			
-			self.AddFullDayAbsenceForm.SetData(data, self.GroupId());
+			data.GroupId = self.GroupId();
+			self.AddFullDayAbsenceForm.SetData(data);
 			self.AddActivityForm.SetData(data);
-			self.AddIntradayAbsenceForm.SetData(data, self.GroupId());
+			self.AddIntradayAbsenceForm.SetData(data);
 		};
 
 		this.UpdateSchedules = function (data, timeLine) {

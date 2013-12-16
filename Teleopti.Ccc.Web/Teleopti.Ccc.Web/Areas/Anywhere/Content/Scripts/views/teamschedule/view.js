@@ -250,9 +250,11 @@ define([
 							success: function () {
 								viewModel.Loading(false);
 								if (currentState.SelectedPersonId()) {
-									$('html, body').animate({
-										scrollTop: $("[data-person-id='" + currentState.SelectedPersonId() + "']").offset().top
-									}, 20);
+									var person = $("[data-person-id='" + currentState.SelectedPersonId() + "']");
+									if (person.length != 0)
+										$('html, body').animate({
+											scrollTop: person.offset().top
+										}, 20);
 								}
 								deferred.resolve();
 							}
