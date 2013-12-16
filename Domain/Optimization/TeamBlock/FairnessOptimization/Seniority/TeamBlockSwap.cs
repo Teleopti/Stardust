@@ -49,7 +49,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			}
 
 			rollbackService.ClearModificationCollection();
-			rollbackService.ModifyParts(swappedDays);
+			var modifyResults = rollbackService.ModifyParts(swappedDays);
+			if (modifyResults.Any())
+			{
+				rollbackService.Rollback();
+				return false;
+			}
 			rollbackService.ClearModificationCollection();
 
 			return true;
