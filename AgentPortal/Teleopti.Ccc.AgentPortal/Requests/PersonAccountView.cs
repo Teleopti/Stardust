@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Common;
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.AgentPortal.Requests
 		{
 			base.OnLoad(e);
 			_presenter.Initialize();
+			dateTimePickerAdvSelectedDate.Culture = Thread.CurrentThread.CurrentCulture;
 			gridControlPersonAccounts.BeginUpdate();
 			InitializeGrid();
 			gridControlPersonAccounts.EndUpdate();
