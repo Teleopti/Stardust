@@ -44,6 +44,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             _target.UpdateFindPersonData(new Guid[] { Guid.NewGuid() });
 		}
+
+		[Test]
+		public void ShouldHandleTooSmallDate()
+		{
+			UnitOfWork.PersistAll();
+			SkipRollback();
+			var crit = new PersonFinderSearchCriteriaForTest(PersonFinderField.All, "hejhej", 10,
+																			 new DateOnly(1012, 1, 1), 1, 1);
+			_target = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
+			_target.Find(crit);
+			Assert.That(crit.TotalRows, Is.EqualTo(0));
+		}
     }
 
     internal class PersonFinderSearchCriteriaForTest : IPersonFinderSearchCriteria
@@ -53,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private int _pageSize;
         private int _currentPage;
         private readonly IList<IPersonFinderDisplayRow> _displayRows;
-        private readonly DateOnly _terminalDate;
+        private DateOnly _terminalDate;
 
         public PersonFinderSearchCriteriaForTest(PersonFinderField field, string searchValue, int pageSize, DateOnly terminalDate, int sortColumn, int sortDirection)
         {
@@ -102,6 +114,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public DateOnly TerminalDate
         {
             get { return _terminalDate; }
+			  set { _terminalDate = value; }
         }
 
         public int TotalPages
