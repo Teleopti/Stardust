@@ -254,3 +254,25 @@ CREATE NONCLUSTERED INDEX [IX_dim_person_DimPersonLocalized] ON [mart].[dim_pers
 INCLUDE ([person_id])
 GO
 
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-12-16
+--Desc: bug #26204 - make hard join on null guid instead of isnull
+----------------
+--dim
+update mart.dim_absence
+set absence_code='00000000-0000-0000-0000-000000000000'
+where absence_id=-1
+
+update mart.dim_activity
+set activity_code='00000000-0000-0000-0000-000000000000'
+where activity_id=-1
+
+update mart.dim_overtime
+set overtime_code='00000000-0000-0000-0000-000000000000'
+where overtime_id=-1
+
+update mart.dim_shift_category
+set shift_category_code='00000000-0000-0000-0000-000000000000'
+where shift_category_id =-1

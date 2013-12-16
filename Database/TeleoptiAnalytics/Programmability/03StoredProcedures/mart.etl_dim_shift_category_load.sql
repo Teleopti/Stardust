@@ -26,7 +26,8 @@ SET IDENTITY_INSERT mart.dim_shift_category ON
 
 INSERT INTO mart.dim_shift_category
 	(
-	shift_category_id, 
+	shift_category_id,
+	shift_category_code,
 	shift_category_name, 
 	shift_category_shortname, 
 	display_color, 
@@ -37,6 +38,7 @@ INSERT INTO mart.dim_shift_category
 	)
 SELECT 
 	shift_category_id			= -1, 
+	shift_category_code			= '00000000-0000-0000-0000-000000000000', 
 	shift_category_name			= 'Not Defined', 
 	shift_category_shortname	= 'Not Defined', 
 	business_unit_id			= -1,
