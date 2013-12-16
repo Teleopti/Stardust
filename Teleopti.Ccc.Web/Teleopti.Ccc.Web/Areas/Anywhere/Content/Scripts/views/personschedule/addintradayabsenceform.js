@@ -89,8 +89,10 @@ define([
 
 		this.SetShiftStartAndEnd = function(data) {
 			var layers = data.Projection;
-			self.ShiftStart(layers.length > 0 ? moment(layers[0].Start) : undefined);
-			self.ShiftEnd(layers.length > 0 ? moment(layers[layers.length - 1].Start).add('m', layers[layers.length - 1].Minutes) : undefined);
+			if (layers) {
+				self.ShiftStart(layers.length > 0 ? moment(layers[0].Start) : undefined);
+				self.ShiftEnd(layers.length > 0 ? moment(layers[layers.length - 1].Start).add('m', layers[layers.length - 1].Minutes) : undefined);
+			}
 		};
 		
 		this.Apply = function() {

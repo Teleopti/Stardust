@@ -178,5 +178,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			result.Single().PersonId.Should().Be(personPermitted.Id.Value.ToString());
 		}
+
+		[Test]
+		public void ShouldMapPersonWithEmptySchedule()
+		{
+			var personWithSchedule = PersonFactory.CreatePersonWithId();
+			var personWithoutSchedule = PersonFactory.CreatePersonWithId();
+			var target = new GroupScheduleViewModelMapper();
+
+			var data = new GroupScheduleData
+			{
+				CanSeePersons = new[] { personWithSchedule, personWithoutSchedule },
+				Schedules = new[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									PersonId = personWithSchedule.Id.Value
+								}
+						}
+			};
+
+			var result = target.Map(data);
+
+			result.Count().Should().Be(2);
+		}
 	}
 }

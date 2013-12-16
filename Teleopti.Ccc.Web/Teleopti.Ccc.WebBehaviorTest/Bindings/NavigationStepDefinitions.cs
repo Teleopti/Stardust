@@ -177,9 +177,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view person schedules add activity form for '(.*)' in '(.*)' on '(.*)'")]
 		public void WhenIViewPersonSchedulesAddActivityFormForAndOn(string name, string @group, DateTime date)
 		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
 			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywherePersonScheduleAddActivityForm(personId, groupIdByName(@group), date);
+			Navigation.GotoAnywherePersonScheduleAddActivityForm(personId, IdForTeam(@group), date);
 		}
 
 		private static Guid groupIdByName(string team)
