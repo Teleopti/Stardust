@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             personFinderSearchCriteria.TotalRows = 0;
             int cultureId = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.UICulture.LCID;
+	        if (personFinderSearchCriteria.TerminalDate < new DateOnly(1753, 1, 1))
+		        personFinderSearchCriteria.TerminalDate = new DateOnly(1753, 1, 1);
 
             var uow = _currentUnitOfWork.Current();
             var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
