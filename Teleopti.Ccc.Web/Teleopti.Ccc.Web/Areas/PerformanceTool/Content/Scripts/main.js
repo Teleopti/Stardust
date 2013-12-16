@@ -7,7 +7,7 @@ require.config({
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		moment: '../../../../Content/moment/moment',
 		bootstrap: '../../../../Content/bootstrap/bootstrap.min',
-		signalr: '../../../../Content/signalr/jquery.signalR-1.1.3.min',
+		signalr: '../../../../Content/signalr/jquery.signalR-1.1.4.min',
 		
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
