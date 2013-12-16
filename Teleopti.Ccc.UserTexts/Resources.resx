@@ -11866,4 +11866,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Please add intraday absence on existing shift.</value>
     <comment>Please add intraday absence on existing shift</comment>
   </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>With Add Activity you cannot create a second shift.</value>
+    <comment>With Add Activity you cannot create a second shift.</comment>
+  </data>
 </root>

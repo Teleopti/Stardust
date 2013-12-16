@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.Absence,
 					UserTexts.Resources.InvalidIntradayAbsenceTimes,
 					UserTexts.Resources.InvalidEndTime,
+					UserTexts.Resources.CannotCreateSecondShiftWhenAddingActivity,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

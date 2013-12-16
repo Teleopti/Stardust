@@ -167,8 +167,10 @@ define([
 				person.AddData(schedule, timeLine);
 				
 				// make shiftstart and end computeds please!
-				if (person == self.SelectedPerson())
+				if (person == self.SelectedPerson()) {
 					self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
+					self.AddActivityForm.SetShiftStartAndEnd(schedule);
+				}
 			}
 			
 			self.Persons().sort(function (first, second) {

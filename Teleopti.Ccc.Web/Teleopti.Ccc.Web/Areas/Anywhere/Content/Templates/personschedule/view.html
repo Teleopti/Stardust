@@ -98,6 +98,12 @@
 												<span class="add-on"><i class="icon-step-forward"></i></span>
 												<input type="text" class="end-time" data-bind="value: EndTime" />
 											</div>
+											
+											<!-- ko if: ErrorMessage() -->
+											<div class="alert">
+												<span data-bind="text: ErrorMessage()"></span>
+											</div>
+											<!-- /ko -->
 
 											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddActivity, click: Apply"></button>
 					
