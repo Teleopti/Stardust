@@ -15,22 +15,18 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		private readonly IPersonRepository _personRepository;
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
 		private readonly IAbsenceRepository _absenceRepository;
+		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonScheduleViewModelMapper _personScheduleViewModelMapper;
 		private readonly IPersonAbsenceRepository _personAbsenceRepository;
 		private readonly IJsonDeserializer _deserializer;
 		private readonly IPermissionProvider _permissionProvider;
 
-		public PersonScheduleViewModelFactory(IPersonRepository personRepository,
-											  IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository,
-											  IAbsenceRepository absenceRepository,
-											  IPersonScheduleViewModelMapper personScheduleViewModelMapper,
-											  IPersonAbsenceRepository personAbsenceRepository,
-											  IJsonDeserializer deserializer,
-											  IPermissionProvider permissionProvider)
+		public PersonScheduleViewModelFactory(IPersonRepository personRepository, IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRepository, IPersonScheduleViewModelMapper personScheduleViewModelMapper, IPersonAbsenceRepository personAbsenceRepository, IJsonDeserializer deserializer, IPermissionProvider permissionProvider)
 		{
 			_personRepository = personRepository;
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 			_absenceRepository = absenceRepository;
+			_activityRepository = activityRepository;
 			_personScheduleViewModelMapper = personScheduleViewModelMapper;
 			_personAbsenceRepository = personAbsenceRepository;
 			_deserializer = deserializer;
@@ -48,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				Person = person,
 				Date = date,
 				Absences = _absenceRepository.LoadAllSortByName(),
+				Activities = _activityRepository.LoadAllSortByName(),
 				HasViewConfidentialPermission = hasViewConfidentialPermission
 			};
 
