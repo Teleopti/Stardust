@@ -10,7 +10,7 @@ require.config({
 		moment: '../../../../Content/moment/moment',
 		bootstrap: '../../../../Content/bootstrap/bootstrap.min',
 		signals: '../../../../Content/signals/signals',
-		signalr: '../../../../Content/signalr/jquery.signalR-1.1.3.min',
+		signalr: '../../../../Content/signalr/jquery.signalR-1.1.4.min',
 		crossroads: '../../../../Content/crossroads/crossroads',
 		hasher: '../../../../Content/hasher/hasher',
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',

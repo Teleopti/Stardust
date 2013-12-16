@@ -1,5 +1,5 @@
 ﻿/*!
- * ASP.NET SignalR JavaScript Library v1.1.2
+ * ASP.NET SignalR JavaScript Library v1.1.4
  * http://signalr.net/
  *
  * Copyright Microsoft Open Technologies, Inc. All rights reserved.
@@ -97,6 +97,11 @@
             removeSubscription: function (route) {
                 return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["RemoveSubscription"], $.makeArray(arguments)));
             }
+        };
+
+        proxies.testableHub = this.createHubProxy('testableHub');
+        proxies.testableHub.client = {};
+        proxies.testableHub.server = {
         };
 
         return proxies;
