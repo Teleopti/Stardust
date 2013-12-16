@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterType<CurrentInitiatorIdentifier>().As<ICurrentInitiatorIdentifier>();
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>();
 			builder.RegisterType<LocalServiceBusPublisher>()
 			   .As<IPublishEventsFromEventHandlers>()
