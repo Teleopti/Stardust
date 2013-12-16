@@ -25,7 +25,7 @@ define([
 					return minutes.ForHourOfDay(8);
 				
 				return minutes.StartOfHour(start);
-			}).extend({ throttle: 10 });
+			});
 
 			this.EndMinutes = ko.computed(function () {
 				var end = undefined;
@@ -45,7 +45,7 @@ define([
 
 			this.Minutes = ko.computed(function () {
 				return self.EndMinutes() - self.StartMinutes();
-			}).extend({ throttle: 10 });
+			});
 
 			this.PixelsPerMinute = ko.computed(function () {
 				return self.WidthPixels() / self.Minutes();
@@ -60,7 +60,8 @@ define([
 					time = minutes.AddHours(time, 1);
 				}
 				return times;
-			}).extend({ throttle: 10 });
+			}).extend({ throttle: 1 });
+			// delay until thread is done
 
 			this.StartTime = ko.computed(function () {
 				var times = self.Times();
