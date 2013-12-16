@@ -151,12 +151,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target.AddOrUpdateActualAgentState(agentState);
 		}
 
-		[Test]
-		public void VerifyPersonIdsWithExternalLogOn()
-		{
-			target.PersonIdsWithExternalLogOn(Guid.Empty);
-		}
-
         protected override void SetupForRepositoryTest()
         {
             target = StatisticRepositoryFactory.Create();

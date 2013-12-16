@@ -145,7 +145,7 @@
     <Compile Include="ActualAgentStateCacheTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
-    <Compile Include="DatabaseHandlerTest.cs" />
+    <Compile Include="DatabaseReaderTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="DatabaseWriterTest.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />

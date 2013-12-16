@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 
 		private static void useMultiThread(SendSettings sendSettings, ClientHandler clientHandler)
 		{
-			const int numberOfThreads = 10;
+			var numberOfThreads = sendSettings.NumberOfThreads;
 			var fullStateList = getThreadStateLists(numberOfThreads, sendSettings);
 			var threadStateList = new List<Thread>();
 
