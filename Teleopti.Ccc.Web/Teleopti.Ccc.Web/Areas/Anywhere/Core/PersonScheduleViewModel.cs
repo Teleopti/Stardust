@@ -6,8 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PersonScheduleViewModel
 	{
 		public string Name { get; set; }
-		public string Site { get; set; }
-		public string Team { get; set; }
 
 		public IEnumerable<PersonScheduleViewModelAbsence> Absences { get; private set; }
 		public IEnumerable<PersonScheduleViewModelPersonAbsence> PersonAbsences  { get; private set; }

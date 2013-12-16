@@ -53,38 +53,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapTeam()
-		{
-			var target = new PersonScheduleViewModelMapper();
-			var team = new Team { Description = new Description("A-Team") };
-			var person = new Person();
-			person.AddPersonPeriod(new PersonPeriod(DateOnly.Today.AddDays(-10), PersonContractFactory.CreatePersonContract(), new Team()));
-			person.AddPersonPeriod(new PersonPeriod(DateOnly.Today, PersonContractFactory.CreatePersonContract(), team));
-			person.AddPersonPeriod(new PersonPeriod(DateOnly.Today.AddDays(10), PersonContractFactory.CreatePersonContract(), new Team()));
-
-			var result = target.Map(new PersonScheduleData { Date = DateTime.Today, Person = person });
-
-			result.Team.Should().Be("A-Team");
-		}
-
-		[Test]
-		public void ShouldMapSite()
-		{
-			var target = new PersonScheduleViewModelMapper();
-			var team = new Team
-				{
-					Site = new Site("Moon"),
-					Description = new Description("A-Team")
-				};
-			var person = new Person();
-			person.AddPersonPeriod(new PersonPeriod(DateOnly.Today, PersonContractFactory.CreatePersonContract(), team));
-
-			var result = target.Map(new PersonScheduleData { Date = DateTime.Today, Person = person });
-
-			result.Site.Should().Be("Moon");
-		}
-
-		[Test]
 		public void ShouldMapDefaultIntradayAbsenceTimesInUserTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();

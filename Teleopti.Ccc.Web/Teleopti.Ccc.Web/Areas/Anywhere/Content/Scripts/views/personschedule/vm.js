@@ -74,7 +74,7 @@ define([
 			return undefined;
 		});
 		
-		this.IsShift = ko.computed(function () {
+		this.HasShift = ko.computed(function () {
 			if(self.Shift())
 				return self.Shift().Layers().length > 0;
 			return false;

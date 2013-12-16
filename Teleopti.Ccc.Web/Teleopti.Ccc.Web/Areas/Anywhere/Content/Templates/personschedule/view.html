@@ -29,7 +29,6 @@
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
-									<!-- ko if: IsShift -->
 									<!-- ko with: Shift -->
 									<div class="shift" data-bind="
 										template: {
@@ -37,7 +36,6 @@
 											foreach: Layers
 										}
 									"></div>
-									<!-- /ko -->
 									<!-- /ko -->
 
 									<!-- ko if: IsDayOff() -->

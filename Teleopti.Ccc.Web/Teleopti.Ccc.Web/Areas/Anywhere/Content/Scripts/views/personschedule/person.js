@@ -16,10 +16,7 @@ define([
 		var self = this;
 
 		this.Id = data.Id;
-		this.Name = ko.observable();
-
-		this.Site = ko.observable();
-		this.Team = ko.observable();
+		this.Name = ko.observable(data.FirstName ? data.FirstName + " " + data.LastName : "");
 
 		this.WorkTimeMinutes = ko.observable(0);
 		this.ContractTimeMinutes = ko.observable(0);
@@ -27,7 +24,7 @@ define([
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
 
-		this.IsShift = ko.computed(function () {
+		this.HasShift = ko.computed(function () {
 			return self.Shifts().length > 0;
 		});
 
@@ -49,26 +46,22 @@ define([
 		};
 		
 		this.AddData = function (data, timeline) {
-			self.Name(data.Name);
+			
+			if (data.Name)
+				self.Name(data.Name);
 
-			if (data.Site)
-				self.Site(data.Site);
-			if (data.Team)
-				self.Team(data.Team);
-
-			if (data.Projection) {
-				if (data.Projection.length > 0) {
-					var newShift = new shift(timeline);
-					newShift.AddLayers(data);
-					// this might be a wrong assumption
-					if (newShift.Layers()[0].StartMinutes() > 0)
-						self.Shifts.push(newShift);
-				}
-				if (data.DayOff) {
-					data.DayOff.Date = data.Date;
-					var newDayOff = new dayOff(timeline, data.DayOff);
-					self.DayOffs.push(newDayOff);
-				}
+			if (data.Projection && data.Projection.length > 0) {
+				var newShift = new shift(timeline);
+				newShift.AddLayers(data);
+				// this might be a wrong assumption
+				if (newShift.Layers()[0].StartMinutes() > 0)
+					self.Shifts.push(newShift);
+			}
+			
+			if (data.DayOff) {
+				data.DayOff.Date = data.Date;
+				var newDayOff = new dayOff(timeline, data.DayOff);
+				self.DayOffs.push(newDayOff);
 			}
 			
 			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);

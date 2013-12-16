@@ -70,9 +70,9 @@ define([
 				});
 
 				viewModel.Persons.valueHasMutated();
-
-				options.success();
 				
+				options.success();
+
 				resize.notify();
 
 				for (var k = 0; k < currentPersons.length; k++) {
@@ -140,6 +140,7 @@ define([
 				options.success();
 			});
 	};
+
 	var loadGroupPages = function (options) {
 		ajax.ajax({
 			url: 'GroupPage/AvailableGroupPages',
@@ -189,6 +190,15 @@ define([
 
 		display: function (options) {
 
+			var currentSkillId = function () {
+				if (options.secondaryId)
+					return options.secondaryId;
+				var skills = viewModel.Skills();
+				if (skills.length > 0)
+					return skills[0].Id;
+				return null;
+			};
+
 			var currentGroupId = function () {
 				if (options.id)
 					return options.id;
@@ -196,15 +206,6 @@ define([
 					return viewModel.SelectedGroup();
 				if (viewModel.GroupPages().length > 0 && viewModel.GroupPages()[0].Groups().length > 0)
 					return viewModel.GroupPages()[0].Groups()[0].Id;
-				return null;
-			};
-
-			var currentSkillId = function () {
-				if (options.secondaryId)
-					return options.secondaryId;
-				var skills = viewModel.Skills();
-				if (skills.length > 0)
-					return skills[0].Id;
 				return null;
 			};
 

@@ -68,7 +68,7 @@
 				</div>
 				<!-- /ko -->
 
-				<table class="table table-hover" data-bind="if: Persons().length>0">
+				<table class="table table-hover" data-bind="if: Persons().length > 0">
 					<thead>
 						<tr>
 							<th></th>
@@ -79,7 +79,6 @@
 					<tbody data-bind="foreach: Persons">
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonOrShiftSelected }">
 							<td class="person-name person-name-column">
-								<!-- Must do it this way to get correct overflow: hidden in IE -->
 								<div class="person-name nowrap" data-bind="text: Name, click: $root.SelectPerson"></div>
 							</td>
 							<td class="schedule schedule-column" data-bind="click: $root.SelectPerson">
@@ -99,11 +98,11 @@
 										class="dayoff absolute"
 										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
 										<!-- ko if: $root.DisplayDescriptions -->
-										<!-- ko if: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
+										<!-- ko if: $parent.HasShift() -->
 										<span class="label layer-description floatleft" data-bind="text: DayOffName"></span>
 										<span class="label layer-description floatright" data-bind="text: DayOffName"></span>
 										<!-- /ko -->
-										<!-- ko ifnot: $parent.IsShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
+										<!-- ko ifnot: $parent.HasShift() -->
 										<span class="label layer-description" data-bind="text: DayOffName"></span>
 										<!-- /ko -->
 										<!-- /ko -->

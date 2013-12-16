@@ -42,8 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			CreateMap<PersonScheduleData, PersonScheduleViewModel>()
 				.ForMember(x => x.Name, o => o.MapFrom(s => s.Person.Name.ToString()))
-				.ForMember(x => x.Team, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Description.Name))
-				.ForMember(x => x.Site, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Site.Description.Name))
 				.ForMember(x => x.PersonAbsences, o => o.MapFrom(
 					s => from p in s.PersonAbsences ?? new IPersonAbsence[] {}
 					     select new MapContext<PersonScheduleData, IPersonAbsence>(s, p)))
