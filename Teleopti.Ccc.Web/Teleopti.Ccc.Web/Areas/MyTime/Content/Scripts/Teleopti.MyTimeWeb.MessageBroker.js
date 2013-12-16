@@ -1,4 +1,4 @@
-/// <reference path="../../../../Content/Scripts/jquery.signalR-1.1.3.js" />
+/// <reference path="../../../../Content/Scripts/jquery.signalR-1.1.4.js" />
 /// <reference path="../../../../Content/Scripts/jquery-1.9.1.js" />
 
 
