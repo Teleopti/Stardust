@@ -3,12 +3,15 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
@@ -24,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			gotoAddRequestToday();
 		}
 
+		[Given(@"I view Add Shift Trade Request for date '(.*)'")]
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)
 		{
@@ -46,9 +50,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
 		public void ThenIShouldSeeAMessageTextSayingIAmMissingAWorkflowControlSet()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeMissingWorkflowControlsSetMessage.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(".shift-trade-missing-wcs-message");
 		}
 
+		[Given(@"I should see a message text saying that no possible shift trades could be found")]
 		[Then(@"I should see a message text saying that no possible shift trades could be found")]
 		public void ThenIShouldSeeAMessageTextSayingThatNoPossibleShiftTradesCouldBeFound()
 		{
@@ -77,16 +82,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);
 		}
 
-
-		[Then(@"I should see a possible schedule trade with")]
-		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
+		[Then(@"I should see a possible schedule trade with '(.*)'")]
+		public void ThenIShouldSeeAPossibleScheduleTradeWith(string name)
 		{
-			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
-
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
+			Browser.Interactions.AssertAnyContains(".shift-trade-agent-name", name);
 		}
 
+		[Then(@"I should see '(.*)' first in the list")]
+		public void ThenIShouldSeeFirstInTheList(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".shift-trade-person-schedule-row:first-child:contains('{0}')", agentName));
+		}
+
+		[Then(@"I should see '(.*)' last in the list")]
+		public void ThenIShouldSeeLastInTheList(string agentName)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".shift-trade-person-schedule-row:first-child:contains('{0}')", agentName));
+		}
+
+		[Then(@"I should not see a possible schedule trade with '(.*)'")]
+		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(string name)
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-my-schedule", string.Format(".shift-trade-agent-name:contains('{0}')", name));
+		}
+		
 		[Then(@"I should not see a possible schedule to trade with")]
 		public void ThenIShouldNotSeeAPossibleScheduleToTradeWith()
 		{
@@ -103,12 +122,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Day.ToString());
 		}
 
+		[When(@"I uncheck the my team filter checkbox")]
+		public void WhenIUncheckTheMyTeamFilterCheckbox()
+		{
+			Browser.Interactions.Click(".shift-trade-myteam-filter");
+		}
+
+		[When(@"I click the search button")]
+		public void WhenIClickTheSearchButton()
+		{
+			Browser.Interactions.Click(".shift-trade-search");
+		}
+
 		[When(@"I click on the next date")]
 		public void WhenIClickOnTheNextDate()
 		{
 			Browser.Interactions.Click(".icon-arrow-right");
 		}
-
 
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)
@@ -230,6 +260,63 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
         {
             Browser.Interactions.AssertUrlContains("ShiftTrade/"+date.ToString("yyyyMMdd"));
         }
+
+		[Given(@"I have possible shift trades with")]
+		public void GivenIHavePossibleShiftTradesWith(Table table)
+		{
+			var date = DateTime.Parse(table.Rows[0][1]);
+			var possibleTradeCount = int.Parse(table.Rows[1][1]);
+			var wcs = table.Rows[2][1];
+			var personPeriodDate = DateTime.Parse(table.Rows[3][1]);
+			var shiftCategory = table.Rows[4][1];
+
+			for (int i = 0; i < possibleTradeCount; i++)
+			{
+				string agentName = i.ToString(CultureInfo.InvariantCulture);
+				
+				var personPeriod = new PersonPeriodConfigurable {StartDate = personPeriodDate};
+				DataMaker.Person(agentName).Apply(personPeriod);
+
+				var userWorkflowControlSet = new WorkflowControlSetForUser { Name = wcs };
+				DataMaker.Person(agentName).Apply(userWorkflowControlSet);
+
+				DataMaker.Person(agentName).Apply(new ShiftConfigurable
+				{
+					ShiftCategory = shiftCategory,
+					StartTime = date.AddHours(8),
+					EndTime = date.AddHours(16),
+					LunchStartTime = date.AddHours(12),
+					LunchEndTime = date.AddHours(13),
+				});
+			}
+		}
+
+		[Given(@"I can see '(.*)' possible shift trades")]
+		[Then(@"I can see '(.*)' possible shift trades")]
+		public void GivenICanSeePossibleShiftTrades(int possibleShiftTradeCount)
+		{
+			var script = string.Format("return $('.shift-trade-person-schedule-row').length == {0}", possibleShiftTradeCount);
+			Browser.Interactions.AssertJavascriptResultContains(script, "true");
+		}
+
+		[When(@"I scroll down to the bottom of the shift trade section")]
+		public void WhenIScrollDownToTheBottomOfTheShiftTradeSection()
+		{
+			Browser.Interactions.Javascript("$('body, html').animate({ scrollTop: $('.shift-trade-person-schedule-row').filter(':last').offset().top }, 1);");
+		}
+
+		[Then(@"the option '(.*)' should be selected")]
+		public void ThenTheOptionShouldBeSelected(string optionSelected)
+		{
+			Select2Box.AssertSelectedOptionText("Team-Picker", optionSelected);
+		}
+
+		[When(@"I select the '(.*)'")]
+		public void WhenISelectThe(string optionToSelect)
+		{
+			Select2Box.OpenWhenOptionsAreLoaded("Team-Picker");
+			Select2Box.SelectItemByText("Team-Picker", optionToSelect);
+		}
 
 	}
 }

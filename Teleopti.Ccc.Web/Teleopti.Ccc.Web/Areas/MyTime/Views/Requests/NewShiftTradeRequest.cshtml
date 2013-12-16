@@ -5,72 +5,98 @@
         <span id="Request-add-loaded-ready"></span>
     </div>
     <span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
-	<div id="Request-add-shift-trade-missing-wcs-message" class="alert alert-block" data-bind="visible : missingWorkflowControlSet">
-		@Resources.MissingWorkflowControlSet
+    <div class="shift-trade-missing-wcs-message alert alert-block" data-bind="visible: missingMyTeam">
+        @Resources.MissingWorkflowControlSet
+    </div>
+    <div class="shift-trade-missing-team-message alert alert-block" data-bind="visible: missingWorkflowControlSet">
+		xxYou do not belong to a team for the selected date.
 	</div>
-	<div data-bind="if : !missingWorkflowControlSet()" class="input-append input-prepend">
-		<span class="add-on" data-bind="clickable: previousDateValid">
-			<i class="icon-arrow-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
-		</span>
-		<input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
-		<span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
-			<i class="icon-th" ></i>
-		</span>
-		<span class="add-on" data-bind="clickable: nextDateValid, enable: nextDateValid">
-			<i class="icon-arrow-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
-			
-		</span>
-	</div>
+    <div data-bind="if : !missingWorkflowControlSet()">
+        <table class="table-condensed">
+            <tr>
+                <td>
+                    <div class="input-append input-prepend">
+                        <span class="add-on" data-bind="clickable: previousDateValid">
+                            <i class="icon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
+                        </span>
+                        <input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+                        <span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+                            <i class="icon-calendar" ></i>
+                        </span>
+                        <span class="add-on" data-bind="clickable: nextDateValid, enable: nextDateValid">
+                            <i class="icon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
+                        </span>
+                    </div>
+                </td>
+                <td>
+                    <div style="margin-bottom: 10px">
+                        <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+                            <option data-bind="text: text, value: id"></option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
 	<div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
-		<div class="shift-trade-add-schedule">
-			<div class="shift-trade-timeline" data-bind="foreach: hours">
-				<span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
-					<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
-				</span>
-			</div>
-			<div class="relative" >
-				<div class="shift-trade-my-schedule-row">
-					<span style="width: 150px; float: left" data-bind="text: mySchedule().agentName"></span>
-					<div class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-						<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ dayoff : $parent.mySchedule().showDayOffStyle() }">
-							<span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
-						</span>
-					</div>
-				</div>
-				<div class="shift-trade-schedule-loading">
-					<div class="loading-gradient"  data-bind="visible: IsLoading, fadeInDuration: 900, fadeOutDuration: 10, hideWhenFadedOut: true" style="pointer-events:none" >
-						<div class="loading"></div>
-					</div>
-				</div>
-	        </div>
-			<div data-bind="foreach: possibleTradeSchedules">
-				<div class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
-					<span class="shift-trade-agent-name" data-bind="text: agentName"></span>
-					<div class="shift-trade-possible-trade-schedule" data-bind="foreach: $data.layers">
-						<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.showDayOffStyle(), dayoff : $parent.showDayOffStyle() }">
-							<span class="shift-trade-dayoff-name" data-bind="text: $parent.dayOffText"></span>
-						</span>					
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="shift-trade-add-schedule">
+            <div class="shift-trade-timeline">
+                <div class="relative">
+                    <div data-bind="foreach: hours">
+                        <div class="shift-trade-ruler absolute" data-bind="style: { left: leftPos() + 'px' }, visible: showHourLine"></div>
+                        <div class="shift-trade-label label label-info absolute" data-bind="style: { left: leftPos() - 16 + 'px' }, text: hourText"></div>
+                    </div>
+                </div>
+            </div>
+            <table style="width: 100%">
+                <thead>
+                    <tr>
+                        <td>&nbsp;</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="shift-trade-my-schedule-row">
+                        <td class="shift-trade-agent-name">@Resources.MySchedule</td>
+                        <td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
+                            <div class="shift-trade-layer-container floatleft">
+                                <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }"></div>                                
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+                <tbody data-bind="foreach: possibleTradeSchedules">
+                    <tr class="shift-trade-person-schedule-row" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
+                        <td class="shift-trade-agent-name" data-bind="text: $data.agentName"></td>
+                        <td class="shift-trade-possible-trade-schedule">
+                            <div class="hejsan" style="height: 22px;width: 100%;" data-bind="foreach: $data.layers">
+                                <div class="shift-trade-layer-container floatleft">
+                                    <div class="shift-trade-layer absolute" data-bind="style: { left: leftPos, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }"></div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="tooltipContainer" class="tooltipContainer"></div>
+        </div>
 		
-		<p></p>
-		<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
-			<div>
+        <p></p>
+        <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
+            <div>
 				<input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
-			</div>
-			<div>
+            </div>
+            <div>
 				<textarea id="Request-add-shift-trade-message-input" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
-			</div>
-		<div class="pull-right">
-			<button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
-			<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
-		</div>
-		<div class="error" data-bind="html: errorMessage"></div>
-		</div>
-		<div id="Request-add-shift-trade-no-possible-trades" class="shift-trade-no-possible-trades" data-bind="visible : noPossibleShiftTrades()">
-			@Resources.NoAgentsAvailableForShiftTrade
-		</div>
-	</div>
+            </div>
+            <div class="pull-right">
+                <button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+                <button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
+            </div>
+            <div class="error" data-bind="html: errorMessage"></div>
+        </div>
+        <div id="Request-add-shift-trade-no-possible-trades" class="shift-trade-no-possible-trades" data-bind="visible : noPossibleShiftTrades()">
+            @Resources.NoAgentsAvailableForShiftTrade
+        </div>
+    </div>
 </div>

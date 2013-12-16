@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -14,6 +13,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -224,7 +224,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				HasWorkflowControlSet = true,
 				OpenPeriodRelativeStart = 2,
-				OpenPeriodRelativeEnd = 30
+				OpenPeriodRelativeEnd = 30,
+				NowYear = 2013,
+				NowMonth = 12,
+				NowDay = 9,
 			};
 
 			modelFactory.Stub(x => x.CreateShiftTradePeriodViewModel()).Return(model);
@@ -236,19 +239,38 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			data.HasWorkflowControlSet.Should().Be.EqualTo(model.HasWorkflowControlSet);
 			data.OpenPeriodRelativeStart.Should().Be.EqualTo(model.OpenPeriodRelativeStart);
 			data.OpenPeriodRelativeEnd.Should().Be.EqualTo(model.OpenPeriodRelativeEnd);
+			data.NowYear = model.NowYear;
+			data.NowMonth = model.NowMonth;
+			data.NowDay = model.NowDay;
 		}
 
 		[Test]
-		public void ShouldGetLayersForMySchedule()
+		public void ShouldGetIdOfTeamIBelongTo()
 		{
+			var givenDate = DateTime.Now;
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var date = DateTime.Now;
-			var calendarDate = new DateTime(date.Year, date.Month, date.Day, CultureInfo.CurrentCulture.Calendar);
-			var model = new ShiftTradeScheduleViewModel();
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(calendarDate)).Return(model);
+			var myTeamId = Guid.NewGuid().ToString();
+
+			modelFactory.Stub(x => x.CreateShiftTradeMyTeamSimpleViewModel(new DateOnly(givenDate))).Return(myTeamId);
 
 			var target = new RequestsController(modelFactory, null, null, null, null);
-			var result = target.ShiftTradeRequestSchedule(date);
+			var result = target.ShiftTradeRequestMyTeam(givenDate);
+
+			var data = (string)result.Data;
+			data.Should().Be.EqualTo(myTeamId);
+		}
+
+		[Test]
+		public void ShouldGetScheduleModel()
+		{
+			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var model = new ShiftTradeScheduleViewModel();
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
+			            .Return(model);
+
+			var target = new RequestsController(modelFactory, null, null, null, null);
+			
+			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, true,new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 		
