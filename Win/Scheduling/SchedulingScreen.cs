@@ -489,10 +489,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorkerDelete.DoWork += _backgroundWorkerDelete_DoWork;
 			_backgroundWorkerDelete.RunWorkerCompleted += _backgroundWorkerDelete_RunWorkerCompleted;
 
+			_backgroundWorkerResourceCalculator.WorkerSupportsCancellation = true;
 			_backgroundWorkerResourceCalculator.DoWork += _backgroundWorkerResourceCalculator_DoWork;
 			_backgroundWorkerResourceCalculator.ProgressChanged += _backgroundWorkerResourceCalculator_ProgressChanged;
 			_backgroundWorkerResourceCalculator.RunWorkerCompleted += _backgroundWorkerResourceCalculator_RunWorkerCompleted;
 
+			_backgroundWorkerValidatePersons.WorkerSupportsCancellation = true;
 			_backgroundWorkerValidatePersons.RunWorkerCompleted += _backgroundWorkerValidatePersons_RunWorkerCompleted;
 			_backgroundWorkerValidatePersons.DoWork += _backgroundWorkerValidatePersons_DoWork;
 
