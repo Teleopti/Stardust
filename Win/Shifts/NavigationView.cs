@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Win.Shifts
             _defaultTreeView.ShouldSelectNodeOnEnter = false;
             _defaultTreeView.SelectionMode = TreeSelectionMode.MultiSelectAll;
             _defaultTreeView.BorderStyle = BorderStyle.None;
-            _defaultTreeView.NodeEditorValidating += _defaultTreeView_NodeEditorValidating;
+            _defaultTreeView.NodeEditorValidating += treeViewNodeEditorValidating;
             _defaultTreeView.NodeEditorValidated += treeViewNodeEditorValidated;
             _defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
             _defaultTreeView.KeyUp += treeViewKeyUp;
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Win.Shifts
         	_defaultTreeView.LeftImageList = imageListTreeView;
         }
 
-        void _defaultTreeView_NodeEditorValidating(object sender, TreeNodeAdvCancelableEditEventArgs e)
+        void treeViewNodeEditorValidating(object sender, TreeNodeAdvCancelableEditEventArgs e)
         {
             if(string.IsNullOrEmpty(e.Label))
                 e.Cancel = true;
@@ -402,6 +402,7 @@ namespace Teleopti.Ccc.Win.Shifts
         /// </summary>
         public override void Add()
         {
+			endAndSaveCurrentEditing(); // tamasb: I did not find better way to force ending the current edit (#26260: Usability: New rule set's name is lost)
             string name = string.Empty;
             object tagObject = null;
                 try
@@ -437,7 +438,12 @@ namespace Teleopti.Ccc.Win.Shifts
                 }
         }
 
-        public override void Delete()
+	    private void endAndSaveCurrentEditing()
+	    {
+		    _defaultTreeView.EndEdit();
+	    }
+
+	    public override void Delete()
         {
             if (ExplorerView.AskForDelete())
             {

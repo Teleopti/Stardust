@@ -39,20 +39,19 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             var stateGroup1 = new RtaStateGroup("Pause", false, true);
             var stateGroup2 = new RtaStateGroup("ACD", true, false);
             stateGroup1.AddState(_name, _stateCode, _platformTypeId);
-			stateGroup1.MoveStateTo(stateGroup2, stateGroup1.StateCollection[0]);
-			_target = stateGroup2.StateCollection[0];
-            
+			_target = stateGroup1.MoveStateTo(stateGroup2, stateGroup1.StateCollection[0]);
+			
             Assert.AreEqual(stateGroup2.Name, _target.StateGroup.Name);
             Assert.AreEqual(stateGroup2.Available, _target.StateGroup.Available);
             Assert.AreEqual(stateGroup2.DefaultStateGroup, _target.StateGroup.DefaultStateGroup);
             Assert.IsFalse(stateGroup1.StateCollection.Contains(_target));
 
-            stateGroup2.MoveStateTo(null, _target);
+            Assert.IsNull(stateGroup2.MoveStateTo(null, _target));
 
 			Assert.AreEqual(stateGroup1.StateCollection.Count, 0);
 			Assert.AreEqual(stateGroup2.StateCollection.Count, 0);
 
-            stateGroup2.MoveStateTo(stateGroup1, null);
+            Assert.IsNull(stateGroup2.MoveStateTo(stateGroup1, null));
 
             Assert.AreEqual(stateGroup1.StateCollection.Count, 0);
             Assert.AreEqual(stateGroup2.StateCollection.Count, 0);

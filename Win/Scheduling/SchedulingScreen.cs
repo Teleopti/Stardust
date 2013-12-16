@@ -4722,6 +4722,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					toolStripSpinningProgressControl1 = new Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
 				toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = true;
 				disableSave();
+				toolStripStatusLabelContractTime.Enabled = false;
 			}
 		}
 
@@ -4747,6 +4748,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//av nån #%¤#¤%#¤% anledning tänds alla knappar i toggleQuick... ovan. Måste explicit tända/släcka igen.
 			_schedulerMessageBrokerHandler.NotifyMessageQueueSizeChange();
 			disableButtonsIfTeamLeaderMode();
+			toolStripStatusLabelContractTime.Enabled = true;
 		}
 
 		private void disableButtonsIfTeamLeaderMode()
