@@ -52,5 +52,20 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 				Assert.IsTrue(_target.WordDictionary.ContainsKey("Tasks"));
             }
         }
+
+		[Test]
+		public void ShouldShowTalkTimeForInboundTelephony()
+		{
+			using (mocks.Record())
+			{
+				Expect.Call(_skillType.ForecastSource).Return(ForecastSource.InboundTelephony);
+			}
+			using (mocks.Playback())
+			{
+				_target = new TextManager(_skillType);
+				Assert.That(_target.WordDictionary["AverageTaskTime"], Is.EqualTo(UserTexts.Resources.TalkTime));
+				Assert.That(_target.WordDictionary["TotalStatisticAverageTaskTime"], Is.EqualTo(UserTexts.Resources.TalkTime));
+			}
+		}
     }
 }
