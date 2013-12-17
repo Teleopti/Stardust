@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
 				Assert.IsTrue(result);
 			}
 		}
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
 				Assert.IsFalse(result);
 			}	
 		}
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
 				Assert.IsFalse(result);	
 			}
 		}
@@ -170,9 +170,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
 				Assert.IsFalse(result);
 			}	
+		}
+
+		[Test]
+		public void ShouldNotSwapDaysOutsideSelectedPeriod()
+		{
+			var selectedPeriod = new DateOnlyPeriod(_dateOnlyPeriod.EndDate.AddDays(1), _dateOnlyPeriod.EndDate.AddDays(1));
+			
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSwapValidator.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
+				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
+				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
+				Expect.Call(_teamInfo1.GroupMembers).Return(_persons1);
+				Expect.Call(_teamInfo2.GroupMembers).Return(_persons2);
+				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
+				Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
+				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(() => _modifyAndRollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
+				Expect.Call(_modifyAndRollbackService.ModifyParts(new List<IScheduleDay>())).Return(new List<IBusinessRuleResponse>());
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, selectedPeriod);
+				Assert.IsTrue(result);
+			}		
 		}
 	}
 }

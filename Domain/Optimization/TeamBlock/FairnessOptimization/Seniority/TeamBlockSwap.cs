@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ITeamBlockSwap
 	{
-		bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary);
+		bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod);
 	}
 
 	public class TeamBlockSwap : ITeamBlockSwap
@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_teamBlockSwapValidator = teamBlockSwapValidator;
 		}
 
-		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary)
+		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod)
 		{
 			if (!_teamBlockSwapValidator.ValidateCanSwap(teamBlockInfo1, teamBlockInfo2)) return false;
-			var scheduleDays1 = extractScheduleDays(teamBlockInfo1, scheduleDictionary).ToList();
-			var scheduleDays2 = extractScheduleDays(teamBlockInfo2, scheduleDictionary).ToList();
+			var scheduleDays1 = extractScheduleDays(teamBlockInfo1, scheduleDictionary, selectedPeriod).ToList();
+			var scheduleDays2 = extractScheduleDays(teamBlockInfo2, scheduleDictionary, selectedPeriod).ToList();
 			var index = scheduleDays1.Count;
 			var daysToSwap = new List<IScheduleDay>();
 			var swappedDays = new List<IScheduleDay>();
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		}
 
 
-		private IEnumerable<IScheduleDay> extractScheduleDays(ITeamBlockInfo teamBlockInfo, IScheduleDictionary scheduleDictionary)
+		private IEnumerable<IScheduleDay> extractScheduleDays(ITeamBlockInfo teamBlockInfo, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod)
 		{
 			var scheduleDays = new List<IScheduleDay>();
 			var period = teamBlockInfo.BlockInfo.BlockPeriod;
@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			{
 				foreach (var dateOnly in period.DayCollection())
 				{
+					if(!selectedPeriod.Contains(dateOnly)) continue;
 					var person = teamBlock1GroupMembers[i];
 					var scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
 					scheduleDays.Add(scheduleDay);

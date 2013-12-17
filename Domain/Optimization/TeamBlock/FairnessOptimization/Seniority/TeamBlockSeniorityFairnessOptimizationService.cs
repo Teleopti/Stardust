@@ -64,6 +64,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		        foreach (var teamBlockInfoLowSeniority in priorityList)
 		        {
+			        if (teamBlockInfoHighSeniority.Equals(teamBlockInfoLowSeniority))
+			        {
+						priorityList.Remove(teamBlockInfoHighSeniority);
+				        break;
+			        }
+		       
 					if (!_teamBlockPeriodValidator.ValidatePeriod(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority)) continue;
 			        var lowSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoLowSeniority);
 			        if (analyzedTeamBlocks.Contains(teamBlockInfoLowSeniority)) continue;
@@ -72,8 +78,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				        priorityList.Remove(teamBlockInfoHighSeniority);
 				        break;
 			        }
-			        if (teamBlockInfoHighSeniority.Equals(teamBlockInfoLowSeniority)) continue;
-			        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,scheduleDictionary)) continue;
+			        
+			        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,scheduleDictionary, selectedPeriod)) continue;
 
 			        teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoLowSeniority, highSeniorityPoints);
 
