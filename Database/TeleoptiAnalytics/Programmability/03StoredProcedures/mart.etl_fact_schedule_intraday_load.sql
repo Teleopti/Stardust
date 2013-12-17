@@ -14,9 +14,19 @@ GO
 --	2013-10-25	DJ		#25309 - improve performance in mart.etl_fact_schedule_intraday_load
 -- =============================================
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
---exec mart.etl_fact_schedule_intraday_load '928DD0BC-BF40-412E-B970-9B5E015AADEA'
+--exec mart.etl_fact_schedule_intraday_load '928DD0BC-BF40-412E-B970-9B5E015AADEA',1
+/*
+select 1
+DBCC DROPCLEANBUFFERS --drop all data from SQL Server cache
+DBCC FREEPROCCACHE --drop all pre-compiled query plans
+
+SET STATISTICS IO ON --show I/O acitivity
+SET STATISTICS TIME ON --show execution time
+*/
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@debug bit = 0 
+WITH EXECUTE AS OWNER
 AS
 
 SET NOCOUNT ON
@@ -27,6 +37,21 @@ IF @scenario_code IS NULL
 BEGIN
 	RETURN 0
 END
+
+--debug
+declare @timeStat table (step int,laststep_ms int,totalTime int)
+declare @startTime datetime
+declare @lastStep datetime
+set @lastStep=getdate()
+set @startTime=getdate()
+declare @step int
+set @step=0
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
 
 --temp table for perf.
 CREATE TABLE #stg_schedule(
@@ -42,6 +67,12 @@ CREATE TABLE #stg_schedule_changed(
 	[scenario_id] [smallint] NOT NULL
 )
 
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
+
 --remove dates from utc tables that does not exist in stage tables, so that we don't delete more rows than we can handle
 DELETE FROM utc
 FROM Stage.stg_schedule_updated_ShiftStartDateUTC utc
@@ -50,6 +81,12 @@ INNER JOIN mart.dim_date d
 LEFT OUTER JOIN stage.stg_schedule stg
 	ON stg.schedule_date  = d.date_date
 WHERE stg.schedule_date IS NULL
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
 
 --Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
 if (select count(*)
@@ -63,6 +100,12 @@ BEGIN
 	RAISERROR (@ErrorMsg,16,1)
 	RETURN 0
 END
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
 
 --prepare a temp table for better performance on delete
 INSERT INTO #stg_schedule_changed
@@ -82,6 +125,12 @@ INNER JOIN mart.dim_scenario ds
 	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
 		ON dd.person_id = dp.person_id
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
 
 -- special delete if something is left, a shift over midninght for example
 INSERT INTO #stg_schedule
@@ -106,8 +155,20 @@ ON stg.schedule_date = dsd.date_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
 
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
+
 --return rows to ETL
 SET NOCOUNT OFF
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
 
 DELETE fs
 FROM mart.fact_schedule fs
@@ -115,6 +176,12 @@ INNER JOIN #stg_schedule_changed a
 	ON	a.person_id = fs.person_id
 	AND a.scenario_id = fs.scenario_id
 	AND a.shift_startdate_id = fs.shift_startdate_id
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
 
 DELETE fs
 FROM #stg_schedule tmp
@@ -124,7 +191,16 @@ INNER JOIN mart.fact_schedule fs
 	AND tmp.interval_id = fs.interval_id
 	AND tmp.scenario_id = fs.scenario_id
 
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
+
 --insert new and updated
+--disable FK
+ALTER TABLE mart.fact_schedule NOCHECK CONSTRAINT ALL
+
 INSERT INTO mart.fact_schedule
 	(
 	schedule_date_id, 
@@ -164,5 +240,19 @@ INSERT INTO mart.fact_schedule
 	datasource_update_date,
 	overtime_id
 	)
-SELECT * FROM Stage.v_stg_Schedule_load
+SELECT * FROM [Stage].[v_stg_schedule_load]
+
+--enable FK
+ALTER TABLE mart.fact_schedule CHECK CONSTRAINT ALL
+
+if @debug=1
+begin
+	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
+	set @lastStep=getdate();set @step=@step+1
+end
+
+if @debug=1
+begin
+	select * from @timeStat
+end
 GO
