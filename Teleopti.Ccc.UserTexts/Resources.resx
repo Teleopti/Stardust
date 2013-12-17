@@ -11797,4 +11797,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Trying to resolve unscheduled days...</value>
     <comment>This message is shown when scheduling is finished and the scheduler tries to resolve the white spots.</comment>
   </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Active Agents</value>
+    <comment>caption on form ActiveAgents</comment>
+  </data>
 </root>
