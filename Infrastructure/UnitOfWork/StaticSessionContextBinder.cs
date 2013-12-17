@@ -21,10 +21,20 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return uowRelatedData[session.GetSessionImplementation().SessionId].IsolationLevel;
 		}
 
+		public IInitiatorIdentifier Initiator(ISession session)
+		{
+			return uowRelatedData[session.GetSessionImplementation().SessionId].Initiator;
+		}
+
 		public void Bind(ISession session, TransactionIsolationLevel isolationLevel)
 		{
 			uowRelatedData[session.GetSessionImplementation().SessionId] = new NHibernateSessionRelatedData(new NHibernateFilterManager(session.SessionFactory), isolationLevel);
 			CurrentSessionContext.Bind(session);
+		}
+
+		public void BindInitiator(ISession session, IInitiatorIdentifier initiator)
+		{
+			uowRelatedData[session.GetSessionImplementation().SessionId].Initiator = initiator;
 		}
 
 		public void Unbind(ISession session)

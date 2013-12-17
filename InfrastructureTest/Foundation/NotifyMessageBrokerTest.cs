@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 
         private IUnitOfWork createUnitOfWorkWithMessageMock()
         {
-            return ((NHibernateUnitOfWorkFactory)SetupFixtureForAssembly.DataSource.Application).CreateAndOpenUnitOfWork(messBroker, TransactionIsolationLevel.Default);
+            return ((NHibernateUnitOfWorkFactory)SetupFixtureForAssembly.DataSource.Application).CreateAndOpenUnitOfWork(messBroker, TransactionIsolationLevel.Default, null);
         }
 
         //denna är gjord här för det finns inga rötter som har denna komb

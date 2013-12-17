@@ -415,6 +415,7 @@
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAndSession.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkInitiatorIdentifierHandlingTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>

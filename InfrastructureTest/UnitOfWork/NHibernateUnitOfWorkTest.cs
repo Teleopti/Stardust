@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		private class TestUnitOfWork : NHibernateUnitOfWork
 		{
 			public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
-				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic, TransactionIsolationLevel.Default)
+				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic, (s, i) => {}, TransactionIsolationLevel.Default, null)
 			{
 			}
 

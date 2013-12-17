@@ -51,7 +51,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                 throw new NotImplementedException();
             }
 
-        	public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
+	        public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
+	        {
+		        throw new NotImplementedException();
+	        }
+
+	        public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
             {
                 throw new NotImplementedException();
             }
