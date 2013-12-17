@@ -50,6 +50,7 @@
 			this.groupBarModules.Name = "groupBarModules";
 			this.groupBarModules.PopupClientSize = new System.Drawing.Size(0, 0);
 			this.groupBarModules.ShowItemImageInHeader = true;
+			this.groupBarModules.ShowChevron = false;
 			this.groupBarModules.Size = new System.Drawing.Size(359, 457);
 			this.groupBarModules.StackedMode = true;
 			this.groupBarModules.TabIndex = 0;
