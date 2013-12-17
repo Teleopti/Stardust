@@ -31,125 +31,118 @@ define([
 
 	var viewModel;
 
-	var setSelectedLayer = function (shifts) {
-		var layers = lazy(shifts).map(function(x) { return x.Layers(); }).flatten();
-		var selectedStart = currentState.SelectedLayer().StartMinutes();
-		var selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
-		if (!selectedLayer) {
-			selectedStart += 1440;
-			selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
-		}
-		if (selectedLayer)
-			selectedLayer.Selected(true);
-	};
+	//var setSelectedLayer = function (shifts) {
+	//	var layers = lazy(shifts).map(function(x) { return x.Layers(); }).flatten();
+	//	var selectedStart = currentState.SelectedLayer().StartMinutes();
+	//	var selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
+	//	if (!selectedLayer) {
+	//		selectedStart += 1440;
+	//		selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
+	//	}
+	//	if (selectedLayer)
+	//		selectedLayer.Selected(true);
+	//};
 
-	var loadSchedules = function (options) {
-		subscriptions.subscribeGroupSchedule(
-			viewModel.SelectedGroup(),
-			helpers.Date.ToServer(viewModel.SelectedDate()),
-			function (schedules) {
-				var currentPersons = viewModel.Persons();
+	//var loadSchedules = function (options) {
+	//	subscriptions.subscribeGroupSchedule(
+	//		viewModel.SelectedGroup(),
+	//		helpers.Date.ToServer(viewModel.Date()),
+	//		function (schedules) {
+	//			var currentPersons = viewModel.Persons();
 
-				var dateClone = viewModel.SelectedDate().clone();
+	//			var dateClone = viewModel.Date().clone();
 
-				for (var i = 0; i < currentPersons.length; i++) {
-					currentPersons[i].ClearData();
+	//			for (var i = 0; i < currentPersons.length; i++) {
+	//				currentPersons[i].ClearData();
 
-					for (var j = 0; j < schedules.length; j++) {
-						if (currentPersons[i].Id == schedules[j].PersonId) {
-							schedules[j].Date = dateClone;
-							currentPersons[i].AddData(schedules[j], viewModel.TimeLine, viewModel.SelectedGroup());
-						}
-					}
-				}
+	//				for (var j = 0; j < schedules.length; j++) {
+	//					if (currentPersons[i].Id == schedules[j].PersonId) {
+	//						schedules[j].Date = dateClone;
+	//						currentPersons[i].AddData(schedules[j], viewModel.TimeLine, viewModel.SelectedGroup());
+	//					}
+	//				}
+	//			}
 
-				currentPersons.sort(function (first, second) {
-					first = first.OrderBy();
-					second = second.OrderBy();
-					return first == second ? 0 : (first < second ? -1 : 1);
-				});
+	//			currentPersons.sort(function (first, second) {
+	//				first = first.OrderBy();
+	//				second = second.OrderBy();
+	//				return first == second ? 0 : (first < second ? -1 : 1);
+	//			});
 
-				viewModel.Persons.valueHasMutated();
+	//			viewModel.Persons.valueHasMutated();
 				
-				options.success();
+	//			options.success();
 
-				resize.notify();
+	//			resize.notify();
 
-				for (var k = 0; k < currentPersons.length; k++) {
-					if (currentState.SelectedPersonId() == currentPersons[k].Id) {
-						if (currentState.SelectedLayer()) {
-							setSelectedLayer(currentPersons[k].Shifts());
-						}
-					}
-				}
-			},
-			function (notification) {
-				for (var i = 0; i < viewModel.Persons().length; i++) {
-					if (notification.DomainReferenceId == viewModel.Persons()[i].Id) {
-						return true;
-					}
-				}
-				return false;
-			}
-		);
-	};
+	//			for (var k = 0; k < currentPersons.length; k++) {
+	//				if (currentState.SelectedPersonId() == currentPersons[k].Id) {
+	//					if (currentState.SelectedLayer()) {
+	//						setSelectedLayer(currentPersons[k].Shifts());
+	//					}
+	//				}
+	//			}
+	//		},
+	//		function (notification) {
+	//			for (var i = 0; i < viewModel.Persons().length; i++) {
+	//				if (notification.DomainReferenceId == viewModel.Persons()[i].Id) {
+	//					return true;
+	//				}
+	//			}
+	//			return false;
+	//		}
+	//	);
+	//};
 
-	var loadPersons = function (options) {
-		var groupid = viewModel.SelectedGroup();
+	//var loadPersons = function (options) {
+	//	var groupid = viewModel.SelectedGroup();
 		
-		ajax.ajax({
-			url: 'Person/PeopleInGroup',
-			data: {
-				date: helpers.Date.ToServer(viewModel.SelectedDate()),
-				groupId: groupid
-			},
-			success: function (people, textStatus, jqXHR) {
-				var newItems = ko.utils.arrayMap(people, function (s) {
-					s["GroupId"] = groupid;
-					s["Date"] = viewModel.SelectedDate().format("YYYYMMDD");
-					return new personViewModel(s);
-				});
-				viewModel.SetPersons(newItems);
-				options.success();
-			}
-		});
-	};
+	//	ajax.ajax({
+	//		url: 'Person/PeopleInGroup',
+	//		data: {
+	//			date: helpers.Date.ToServer(viewModel.Date()),
+	//			groupId: groupid
+	//		},
+	//		success: function (people, textStatus, jqXHR) {
+	//			var newItems = ko.utils.arrayMap(people, function (s) {
+	//				s["GroupId"] = groupid;
+	//				s["Date"] = viewModel.Date().format("YYYYMMDD");
+	//				return new personViewModel(s);
+	//			});
+	//			viewModel.SetPersons(newItems);
+	//			options.success();
+	//		}
+	//	});
+	//};
 
-	var loadSkills = function (options) {
+	var loadSkills = function (date, callback) {
 		$.ajax({
 			url: 'StaffingMetrics/AvailableSkills',
 			cache: false,
 			dataType: 'json',
-			data: {
-				date: viewModel.SelectedDate().toDate().toJSON()
-			},
+			data: { date: date },
 			success: function (data, textStatus, jqXHR) {
-				viewModel.SetSkills(data.Skills);
-				options.success();
+				callback(data);
 			}
 		});
 	};
 
-	var loadDailyStaffingMetrics = function (options) {
-		if (viewModel.SelectedSkill() == null) return;
+	var loadDailyStaffingMetrics = function (skillId, options) {
 		subscriptions.subscribeDailyStaffingMetrics(
-			helpers.Date.ToServer(viewModel.SelectedDate()),
-			viewModel.SelectedSkill().Id,
-			function (data) {
+			helpers.Date.ToServer(viewModel.Date()),
+			skillId,
+			function(data) {
 				viewModel.SetDailyMetrics(data);
 				options.success();
 			});
 	};
 
-	var loadGroupPages = function (options) {
+	var loadGroupPages = function (date, callback) {
 		ajax.ajax({
 			url: 'GroupPage/AvailableGroupPages',
-			data: {
-				date: helpers.Date.ToServer(viewModel.SelectedDate()),
-			},
+			data: { date: date },
 			success: function (data, textStatus, jqXHR) {
-				viewModel.SetGroupPages(data);
-				options.success();
+				callback(data);
 			}
 		});
 	};
@@ -169,20 +162,20 @@ define([
 				if (viewModel.Loading())
 					return;
 				currentState.Clear();
-				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.SelectedDate(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
-			viewModel.SelectedDate.subscribe(function () {
+			viewModel.Date.subscribe(function () {
 				if (viewModel.Loading())
 					return;
 				currentState.Clear();
-				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.SelectedDate(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.SelectedSkill.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.SelectedDate(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			ko.applyBindings(viewModel, options.bindingElement);
@@ -220,56 +213,108 @@ define([
 			
 			viewModel.Loading(true);
 
-			viewModel.SelectedDate(currentDate());
+			viewModel.Date(currentDate());
 			
-			loadSkills({
-				success: function () {
-					viewModel.SelectSkillById(currentSkillId());
-					viewModel.LoadingStaffingMetrics(true);
-					loadDailyStaffingMetrics({
-						success: function () {
-							viewModel.LoadingStaffingMetrics(false);
-						}
-					});
-				}
-			});
+			//loadSkills({
+			//	success: function () {
+			//		viewModel.SelectSkillById(currentSkillId());
+			//		viewModel.LoadingStaffingMetrics(true);
+			//		loadDailyStaffingMetrics({
+			//			success: function () {
+			//				viewModel.LoadingStaffingMetrics(false);
+			//			}
+			//		});
+			//	}
+			//});
 
-			var deferred = $.Deferred();
-			var loadPersonsAndSchedules = function () {
-				var currentGroup = currentGroupId();
-				if (!currentGroup) {
-					viewModel.Loading(false);
-					deferred.resolve();
-					return;
-				}
+			//var deferred = $.Deferred();
+			//var loadPersonsAndSchedules = function () {
+			//	var currentGroup = currentGroupId();
+			//	if (!currentGroup) {
+			//		viewModel.Loading(false);
+			//		deferred.resolve();
+			//		return;
+			//	}
 
-				viewModel.SelectedGroup(currentGroup);
-				loadPersons({
-					success: function () {
-						loadSchedules({
-							success: function () {
-								viewModel.Loading(false);
-								if (currentState.SelectedPersonId()) {
-									var person = $("[data-person-id='" + currentState.SelectedPersonId() + "']");
-									if (person.length != 0)
-										$('html, body').animate({
-											scrollTop: person.offset().top
-										}, 20);
-								}
-								deferred.resolve();
-							}
-						});
+			//	viewModel.SelectedGroup(currentGroup);
+			//	loadPersons({
+			//		success: function () {
+			//			loadSchedules({
+			//				success: function () {
+			//					viewModel.Loading(false);
+			//					if (currentState.SelectedPersonId()) {
+			//						var person = $("[data-person-id='" + currentState.SelectedPersonId() + "']");
+			//						if (person.length != 0)
+			//							$('html, body').animate({
+			//								scrollTop: person.offset().top
+			//							}, 20);
+			//					}
+			//					deferred.resolve();
+			//				}
+			//			});
+			//		}
+			//	});
+			//};
+
+			//if (viewModel.GroupPages().length != 0 && viewModel.GroupPages()[0].Groups().length != 0) {
+			//	loadPersonsAndSchedules();
+			//} else {
+			//	loadGroupPages({
+			//		success: loadPersonsAndSchedules
+			//	});
+			//}
+
+
+			var groupPagesDeferred = $.Deferred();
+			loadGroupPages(
+				helpers.Date.ToServer(viewModel.Date()),
+				function(data) {
+					viewModel.SetGroupPages(data);
+					// why do we set the group twice? it was done like this before...
+					viewModel.SelectedGroup(data.SelectedGroupId); // selected group id is team id? a bug?
+					var groupId = currentGroupId();
+					viewModel.SelectedGroup(groupId);
+					groupPagesDeferred.resolve();
+				});
+
+			var groupScheduleDeferred = $.Deferred();
+			groupPagesDeferred.done(function () {
+				subscriptions.subscribeGroupSchedule(
+					viewModel.SelectedGroup(),
+					helpers.Date.ToServer(viewModel.Date()),
+					function (data) {
+						viewModel.UpdateSchedules(data, viewModel.TimeLine);
+						groupScheduleDeferred.resolve();
 					}
+				);
+			});
+			
+			var skillsDeferred = $.Deferred();
+			loadSkills(
+				helpers.Date.ToServer(viewModel.Date()),
+				function(data) {
+					viewModel.SetSkills(data.Skills);
+					viewModel.SelectSkillById(currentSkillId());
+					skillsDeferred.resolve();
 				});
-			};
 
-			if (viewModel.GroupPages().length != 0 && viewModel.GroupPages()[0].Groups().length != 0) {
-				loadPersonsAndSchedules();
-			} else {
-				loadGroupPages({
-					success: loadPersonsAndSchedules
+			skillsDeferred.done(function () {
+				if (!viewModel.SelectedSkill())
+					return;
+				viewModel.LoadingStaffingMetrics(true);
+				loadDailyStaffingMetrics(
+					viewModel.SelectedSkill().Id,
+					function() {
+						viewModel.LoadingStaffingMetrics(false);
+					}
+				);
+			});
+			
+			return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)
+				.done(function() {
+					viewModel.Loading(false);
+					resize.notify();
 				});
-			}
 
 			return deferred.promise();
 		},
@@ -281,7 +326,7 @@ define([
 		},
 
 		setDateFromTest: function (date) {
-			viewModel.SelectedDate(moment(date));
+			viewModel.Date(moment(date));
 		}
 
 	};
