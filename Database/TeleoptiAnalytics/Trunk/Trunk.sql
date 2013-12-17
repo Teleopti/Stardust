@@ -316,3 +316,17 @@ CREATE NONCLUSTERED INDEX [IX_dim_overtime_code] ON [mart].[dim_overtime]
 
 GO
 
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[fact_schedule]') AND name = N'IX_fact_schedule_scenario_id')
+DROP INDEX [IX_fact_schedule_scenario_id] ON [mart].[fact_schedule]
+GO
+
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[fact_schedule]') AND name = N'IX_fact_schedule_scenario_shift_category')
+DROP INDEX [IX_fact_schedule_scenario_shift_category] ON [mart].[fact_schedule]
+GO
+
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[fact_schedule]') AND name = N'idx_fact_schedule_schedule_date_id')
+DROP INDEX [idx_fact_schedule_schedule_date_id] ON [mart].[fact_schedule]
+GO
+
+
+
