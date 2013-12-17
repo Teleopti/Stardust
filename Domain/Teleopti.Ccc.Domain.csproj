@@ -574,6 +574,7 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcition.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregator.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\TeamBlockOpenHourService.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\SameShiftCategoryBlockScheduler.cs" />
@@ -955,7 +956,7 @@
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculation.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillDayPeriodIntervalDataGenerator.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillIntervalData.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\SkillIntervalData.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplyer.cs" />

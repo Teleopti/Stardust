@@ -42,10 +42,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var restriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo, schedulingOptions);
 			if (restriction == null)
 				return null;
+
+			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo);
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,
 																	schedulingOptions,
 																	new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer),
-																	_sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo));
+																	isSameOpenHoursInBlock);
 			if (shifts.IsNullOrEmpty())
 				return null;
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
