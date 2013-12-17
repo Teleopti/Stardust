@@ -268,7 +268,7 @@ define([
 			var groupPagesDeferred = $.Deferred();
 			loadGroupPages(
 				helpers.Date.ToServer(viewModel.Date()),
-				function(data) {
+				function (data) {
 					viewModel.SetGroupPages(data);
 					// why do we set the group twice? it was done like this before...
 					viewModel.GroupId(data.SelectedGroupId); // selected group id is team id? a bug?

@@ -42,8 +42,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var published = new PublishedScheduleSpecification(canSeePersons, data.Date);
 
 			return (from item in personsAndSchedules
-				let displaySchedule = data.CanSeeUnpublishedSchedules || published.IsSatisfiedBy(item.schedule)
-				let schedule = displaySchedule ? item.schedule : null
+			        let displaySchedule = data.CanSeeUnpublishedSchedules ||
+			                              (
+				                              item.schedule != null && published.IsSatisfiedBy(item.schedule)
+			                              )
+			        let schedule = displaySchedule ? item.schedule : null
 			        let model = JsonConvert.DeserializeObject<Model>((schedule == null ? null : schedule.Model) ?? "{}")
 			        let shift = model.Shift ?? new Shift()
 			        let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == schedule.PersonId)
