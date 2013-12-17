@@ -30,16 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ShouldReturnNull()
         {
-            var result = _target.Calculate(15, null);
+            var result = _target.Calculate(null);
             Assert.IsNull(result);
-        }
-
-        [Test]
-        public void ShouldHaveCorrectIntervals()
-        {
-            IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-            var result = _target.Calculate(15, list);
-            Assert.AreEqual(result.Count(), 0);
         }
 
         [Test]
@@ -68,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3 });
 
 
-            var result = _target.Calculate(60, list);
+            var result = _target.Calculate(list);
             Assert.AreEqual(result.Count, 6);
             Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 3);
             Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 4);
@@ -113,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3, skillIntervalData4, skillIntervalData5 });
 
 
-            var result = _target.Calculate(60, list);
+            var result = _target.Calculate(list);
             Assert.AreEqual(result.Count, 8);
             Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 5);
             Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 3);
@@ -165,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData6, skillIntervalData4, skillIntervalData5 });
 
 
-            var result = _target.Calculate(60, list);
+            var result = _target.Calculate(list);
             Assert.AreEqual(result.Count, 7);
             Assert.AreEqual(result[new TimeSpan(0, 15, 0, 0)].ForecastedDemand, 4);
             Assert.AreEqual(result[new TimeSpan(0, 16, 0, 0)].ForecastedDemand, 4);

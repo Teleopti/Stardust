@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             foreach (var activityBasedData in activityData)
             {
-                var intervalData = _dayIntervalDataCalculator.Calculate(minimumResolution, activityBasedData.Value);
+                var intervalData = _dayIntervalDataCalculator.Calculate(activityBasedData.Value);
                 activityIntervalData.Add(activityBasedData.Key, intervalData);
             }
 

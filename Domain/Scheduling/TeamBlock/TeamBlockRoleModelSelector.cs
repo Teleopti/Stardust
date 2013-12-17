@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					dateOnlyDicForActivity.Add(dateOnly, skillIntervalDataPerDateAndActivity[dateOnly][activity]);
 				}
 
-				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(15, dateOnlyDicForActivity);
+				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
 				activityInternalData.Add(activity, dataForActivity);
 			}
 

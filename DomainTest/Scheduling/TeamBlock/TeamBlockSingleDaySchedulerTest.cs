@@ -37,6 +37,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private SchedulingOptions _schedulingOptions;
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
+		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
+		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -45,15 +48,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
 			_proposedRestrictionAggregator = _mocks.StrictMock<IProposedRestrictionAggregator>();
+			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
 			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
-			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_teamScheduling = _mocks.StrictMock<ITeamScheduling>();
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
-			_target = new TeamBlockSingleDayScheduler(_teamBlockSchedulingCompletionChecker, _proposedRestrictionAggregator,
-			                                          _workShiftFilterService, _skillDayPeriodIntervalDataGenerator,
-			                                          _workShiftSelector, _teamScheduling, _teamBlockSchedulingOptions);
+			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
+			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
+			_target = new TeamBlockSingleDayScheduler(
+				_teamBlockSchedulingCompletionChecker, 
+				_proposedRestrictionAggregator,                                        
+				_workShiftFilterService, 
+				_skillDayPeriodIntervalDataGenerator,
+				_workShiftSelector, 
+				_teamScheduling, 
+				_teamBlockSchedulingOptions,
+				_dayIntervalDataCalculator,
+				_createSkillIntervalDataPerDateAndActivity,
+				_schedulingResultStateHolder);
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);

@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, blockPeriod).ToList();
+			
 
 			foreach (var dateOnly in blockPeriod.DayCollection())
 			{
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 	public interface ICalculateAggregatedDataForActivtyAndDate
 	{
-		IList<ISkillIntervalData> CalculateFor(List<ISkillDay> skillDaysForPersonalSkill, IActivity skillActivity);
+		IList<ISkillIntervalData> CalculateFor(List<ISkillDay> skillDaysForPersonalSkill, IActivity skillActivity, int resolution);
 	}
 
 	public class CalculateAggregatedDataForActivtyAndDate : ICalculateAggregatedDataForActivtyAndDate
@@ -144,29 +145,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private readonly ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
 		private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
+		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 
 		public CalculateAggregatedDataForActivtyAndDate(
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,
-			ISkillIntervalDataAggregator intervalDataAggregator)
+			ISkillIntervalDataAggregator intervalDataAggregator,
+			ISkillIntervalDataDivider intervalDataDivider)
 		{
 			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
 			_skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
 			_intervalDataAggregator = intervalDataAggregator;
+			_intervalDataDivider = intervalDataDivider;
 		}
 
-		public IList<ISkillIntervalData> CalculateFor(List<ISkillDay> skillDaysForPersonalSkill, IActivity skillActivity)
+		public IList<ISkillIntervalData> CalculateFor(List<ISkillDay> skillDaysForPersonalSkill, IActivity skillActivity, int resolution)
 		{
+			
 			var skillIntervalDatasForActivity = new List<IList<ISkillIntervalData>>();
 			foreach (var skillDay in skillDaysForPersonalSkill)
 			{
+				var skillStaffPeriods = skillDay.SkillStaffPeriodCollection;
+				if(skillStaffPeriods.Count == 0)
+					continue;
+
 				var skill = skillDay.Skill;
 				if (skill.Activity == skillActivity)
 				{
 					var skillIntervalDatas =
-						_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
+						_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriods);
+					var splittedDatas = _intervalDataDivider.SplitSkillIntervalData(skillIntervalDatas, resolution);
 					var adjustedIntervalDatas = new List<ISkillIntervalData>();
-					foreach (var skillIntervalData in skillIntervalDatas)
+					foreach (var skillIntervalData in splittedDatas)
 					{
 						var adjustedIntervalData = _skillIntervalDataSkillFactorApplier.ApplyFactors(skillIntervalData, skill);
 						adjustedIntervalDatas.Add(adjustedIntervalData);
@@ -189,16 +199,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 	public class CreateSkillIntervalDatasPerActivtyForDate : ICreateSkillIntervalDatasPerActivtyForDate
 	{
 		private readonly ICalculateAggregatedDataForActivtyAndDate _calculateAggregatedDataForActivtyAndDate;
+		private readonly ISkillResolutionProvider _resolutionProvider;
 
-		public CreateSkillIntervalDatasPerActivtyForDate(ICalculateAggregatedDataForActivtyAndDate calculateAggregatedDataForActivtyAndDate)
+		public CreateSkillIntervalDatasPerActivtyForDate(ICalculateAggregatedDataForActivtyAndDate calculateAggregatedDataForActivtyAndDate, ISkillResolutionProvider resolutionProvider)
 		{
 			_calculateAggregatedDataForActivtyAndDate = calculateAggregatedDataForActivtyAndDate;
+			_resolutionProvider = resolutionProvider;
 		}
 
 		public Dictionary<IActivity, IList<ISkillIntervalData>> CreateFor(DateOnly dateOnly, List<ISkill> skills,
 		                                                                  ISchedulingResultStateHolder
 			                                                                  schedulingResultStateHolder)
 		{
+			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 			var skilldaysForDate = schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> {dateOnly});
 			var skillDaysForPersonalSkill = new List<ISkillDay>();
 			foreach (var skillDay in skilldaysForDate)
@@ -216,7 +229,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			var dayIntervalDataPerActivity = new Dictionary<IActivity, IList<ISkillIntervalData>>();
 			foreach (var skillActivity in skillActivities)
 			{
-				var dayIntervalData = _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkill, skillActivity);
+				var dayIntervalData = _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkill, skillActivity, minimumResolution);
 				dayIntervalDataPerActivity.Add(skillActivity, dayIntervalData);
 			}
 			return dayIntervalDataPerActivity;

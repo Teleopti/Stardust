@@ -31,6 +31,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IWorkShiftSelector _workShiftSelector;
 		private ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
 		private IPerson _person;
+		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
+		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -38,10 +41,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_mocks = new MockRepository();
 			_restrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
 			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
+			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_sameOpenHoursInTeamBlockSpecification = _mocks.StrictMock<ISameOpenHoursInTeamBlockSpecification>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
-
+			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
 			_dateOnly = new DateOnly(2013, 4, 8);
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrixes = new List<IScheduleMatrixPro> { _matrix1 };
@@ -54,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			_schedulingOptions = new SchedulingOptions();
 
-			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _skillDayPeriodIntervalDataGenerator,
-													 _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
-													 _workShiftSelector);
+			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
+													 _workShiftSelector, _dayIntervalDataCalculator, _createSkillIntervalDataPerDateAndActivity,
+													 _schedulingResultStateHolder);
 		}
 
 		[Test]

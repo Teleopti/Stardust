@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
                                                         skill2)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.Calculate(new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData1);
                 Expect.Call(_intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>(0)))
                       .IgnoreArguments()
@@ -241,9 +241,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
                                                         _skill2)).IgnoreArguments().Return(skillIntervalData2).Repeat.Times(2);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.Calculate(new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData1);
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.Calculate(new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData2);
                 Expect.Call(_openHourrestrcitionForTeamBlock.GetOpenHoursPerActivity(_teamBlockInfo2)).Return(openHour);
                 Expect.Call(_skillStaffPeriod.Period).Return(new DateTimePeriod(_date, _date.AddMinutes(15))).Repeat.AtLeastOnce();
@@ -299,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
                                                         _skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                Expect.Call(_dayIntervalDataCalculator.Calculate(new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
                        IgnoreArguments().Return(intervalData1);
                 Expect.Call(_openHourrestrcitionForTeamBlock.GetOpenHoursPerActivity(_teamBlockInfo2)).Return(openHour);
                 Expect.Call(_skillStaffPeriod.Period).Return(new DateTimePeriod(_date, _date.AddMinutes(15))).Repeat.AtLeastOnce();

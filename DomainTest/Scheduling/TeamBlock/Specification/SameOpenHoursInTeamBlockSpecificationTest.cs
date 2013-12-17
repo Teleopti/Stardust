@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
         private BaseLineData _baseLineData;
         private ISameOpenHoursInTeamBlockSpecification _target;
         private MockRepository _mock;
-        private ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
-        private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodMapper;
         private ISkillDay _skillDay1;
         private ISkillDay _skillDay2;
         private ISkillDay _skillDay3;
@@ -27,6 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
         private readonly DateOnly _today = new DateOnly(2013, 10, 17);
         private ISchedulingResultStateHolder _scheduleResultStartHolder;
         private ISkillStaffPeriod _sampleSkillStaffPeriod;
+	    private IOpenHourForDate _openHourForDate;
+	    private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 
         [SetUp]
         public void Setup()
@@ -35,27 +35,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             _mock = new MockRepository();
 
             _scheduleResultStartHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-            _skillIntervalDataOpenHour = new SkillIntervalDataOpenHour();
-            _skillStaffPeriodMapper = _mock.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
+	        _openHourForDate = _mock.StrictMock<IOpenHourForDate>();
+			_createSkillIntervalDataPerDateAndActivity = _mock.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
             _skillDay1 = _mock.StrictMock<ISkillDay>();
             _skillDay2 = _mock.StrictMock<ISkillDay>();
             _skillDay3 = _mock.StrictMock<ISkillDay>();
             _teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
             _skill1 = _mock.StrictMock<ISkill>();
             _sampleSkillStaffPeriod = _mock.StrictMock<ISkillStaffPeriod>();
-            _target = new SameOpenHoursInTeamBlockSpecification(_skillIntervalDataOpenHour, _skillStaffPeriodMapper, _scheduleResultStartHolder);
+			_target = new SameOpenHoursInTeamBlockSpecification(_openHourForDate, _createSkillIntervalDataPerDateAndActivity, _scheduleResultStartHolder);
 
         }
 
-        private void expectCallForDay(IList<ISkillIntervalData> dayInterval, ISkillDay skillDay, ISkill skill, IActivity activity)
+        private void expectCallForDay(ISkillDay skillDay, ISkill skill, IActivity activity)
         {
             var readOnlyListOfSkillInterval =
                    new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod>{_sampleSkillStaffPeriod});
             Expect.Call(skillDay.Skill).Return(skill);
             Expect.Call(skill.Activity).Return(activity);
             Expect.Call(skillDay.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments().Repeat.AtLeastOnce();
-            Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments() 
-                  .Return(dayInterval);
         }
 
         private IList<ISkillIntervalData> generateIntervalForDay(DateOnly startDate, int startHour, int endHour)
@@ -69,50 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             return result;
         }
 
-        [Test]
-        public void ShouldSelectValidSampleDay()
-        {
-			ISkillIntervalDataOpenHour skillIntervalDataOpenHour = _mock.StrictMock<ISkillIntervalDataOpenHour>();
-            var day2Interval = generateIntervalForDay(new DateOnly(2013, 10, 18), 9, 11);
-            IList<ISkillDay> skillDays = new List<ISkillDay> { _skillDay1, _skillDay2 };
-            var readOnlyListOfSkillInterval =
-                    new ReadOnlyCollection<ISkillStaffPeriod>(new List<ISkillStaffPeriod> { _sampleSkillStaffPeriod  });
-	        var blockPeriod = new DateOnlyPeriod(2013, 10, 18, 2013, 10, 19);
-	        var openHourPeriod = new TimePeriod(11, 0, 12, 0);
-
-
-            using (_mock.Record())
-            {
-				Expect.Call(_teamBlockInfo.BlockInfo).Return(new BlockInfo(blockPeriod));
-                Expect.Call(_scheduleResultStartHolder.SkillDaysOnDateOnly(
-						blockPeriod.DayCollection())).Return(skillDays);
-
-				//sample
-	            Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval);
-				Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(readOnlyListOfSkillInterval)).Return(day2Interval);
-	            Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 18));
-				Expect.Call(skillIntervalDataOpenHour.GetOpenHours(day2Interval, new DateOnly(2013, 10, 18))).Return(openHourPeriod);
-
-				//compare to 1
-				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval);
-				Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(readOnlyListOfSkillInterval)).Return(day2Interval);
-				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 18));
-				Expect.Call(skillIntervalDataOpenHour.GetOpenHours(day2Interval, new DateOnly(2013, 10, 18))).Return(openHourPeriod);
-
-				//compare to 2
-				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval);
-				Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(readOnlyListOfSkillInterval)).Return(day2Interval);
-				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly(2013, 10, 19));
-				Expect.Call(skillIntervalDataOpenHour.GetOpenHours(day2Interval, new DateOnly(2013, 10, 19))).Return(openHourPeriod);
-
-            }
-            using (_mock.Playback())
-            {
-				_target = new SameOpenHoursInTeamBlockSpecification(skillIntervalDataOpenHour, _skillStaffPeriodMapper, _scheduleResultStartHolder);
-                Assert.IsTrue(_target.IsSatisfiedBy(_teamBlockInfo));
-            }
-
-        }
+        
 
         [Test]
         public void HasDifferentOpenHourForTeamBlock()
@@ -137,10 +92,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 17));
 				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly(2013, 10, 18));
 				Expect.Call(_skillDay3.CurrentDate).Return(new DateOnly(2013, 10, 19));
-                expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day2Interval, _skillDay2, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day3Interval, _skillDay3, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay1, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay1, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay2, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay3, _skill1, _baseLineData.Activity1);
 
 
             }
@@ -170,10 +125,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
 				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly(2013, 10, 17));
 				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly(2013, 10, 18));
 				Expect.Call(_skillDay3.CurrentDate).Return(new DateOnly(2013, 10, 19));
-                expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day1Interval, _skillDay1, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day2Interval, _skillDay2, _skill1, _baseLineData.Activity1);
-                expectCallForDay(day3Interval, _skillDay3, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay1, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay1, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay2, _skill1, _baseLineData.Activity1);
+                expectCallForDay(_skillDay3, _skill1, _baseLineData.Activity1);
             }
             Assert.IsTrue(_target.IsSatisfiedBy(_teamBlockInfo ));
         }
@@ -199,8 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
                 Expect.Call(_skillDay1 .Skill).Return(_skill1);
                 Expect.Call(_skill1.Activity).Return(_baseLineData.Activity1);
                 Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(readOnlyListOfSkillInterval).IgnoreArguments().Repeat.AtLeastOnce();
-                Expect.Call(_skillStaffPeriodMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments()
-                      .Return(day1Interval);
+
             }
             Assert.IsTrue(_target.IsSatisfiedBy(_teamBlockInfo));
         }

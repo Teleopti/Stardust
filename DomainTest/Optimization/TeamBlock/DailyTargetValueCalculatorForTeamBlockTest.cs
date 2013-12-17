@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -20,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
     {
         private MockRepository _mock;
         private IDailyTargetValueCalculatorForTeamBlock _target;
-        //private ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
         private ISkillResolutionProvider _resolutionProvider;
         private ISkillIntervalDataDivider _intervalDataDivider;
         private ISkillIntervalDataAggregator _intervalDataAggregator;
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
             _blockInfo = new BlockInfo(_dateOnlyPeriod);
             _teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
-            _skillList = new List<ISkill>(){_baseLineData.SampleSkill };
+            _skillList = new List<ISkill>{_baseLineData.SampleSkill };
             _skillDay1 = _mock.StrictMock<ISkillDay  >() ;
 
             _skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
@@ -100,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                     _intervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData> {skillIntervalData1},15)).Return(new List<ISkillIntervalData>{skillIntervalData1 });
 
                 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo,_advancePrefrences), 0.0);
@@ -134,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                             skillIntervalList
                         })).IgnoreArguments().Return(skillIntervalList);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
