@@ -194,5 +194,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			result.Single().PersonId.Should().Be(person.Id.Value.ToString());
 		}
+
+		[Test]
+		public void ShouldExcludeUnpublishedSchedulesButIncludePerson()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var target = new GroupScheduleViewModelMapper();
+			var data = new GroupScheduleData
+				{
+					CanSeeUnpublishedSchedules = false,
+					CanSeePersons = new[] {person},
+					CanSeeConfidentialAbsencesFor = new IPerson[] {},
+					Schedules = new PersonScheduleDayReadModel[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									PersonId = person.Id.Value
+								},
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().PersonId.Should().Be(person.Id.Value.ToString());
+			result.Single().Projection.Should().Have.Count.EqualTo(0);
+		}
 	}
 }
