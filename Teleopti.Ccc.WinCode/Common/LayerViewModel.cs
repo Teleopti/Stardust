@@ -8,7 +8,6 @@ using Teleopti.Ccc.WinCode.Common.Models;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling.Editor;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
 {
