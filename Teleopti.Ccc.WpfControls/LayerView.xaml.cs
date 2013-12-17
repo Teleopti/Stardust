@@ -69,9 +69,10 @@ namespace Teleopti.Ccc.WpfControls
 		private void Thumb_Start_DragDelta(object sender, DragDeltaEventArgs e)
 		{
 			var item = VisualTreeFinder.FindVisualParent<ContentPresenter>(this);
+			var panel = VisualTreeFinder.FindVisualParent<DateTimePeriodPanel>(this);
 			ILayerViewModel model = DataContext as LayerViewModel;
 			if (item != null && model != null)
-				model.StartTimeChanged(item, e.HorizontalChange);
+				model.StartTimeChanged(panel, e.HorizontalChange);
 		}
 
 		#region DragDelta
