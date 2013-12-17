@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.Color, o => o.MapFrom(s => (s.Child.Layer.Payload.Confidential && !s.Parent.HasViewConfidentialPermission) ? ConfidentialPayloadValues.DisplayColorHex : s.Child.Layer.Payload.DisplayColor.ToHtml()))
 				;
 
+			CreateMap<IActivity, PersonScheduleViewModelActivity>();
 			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
-
 		}
 	}
 }

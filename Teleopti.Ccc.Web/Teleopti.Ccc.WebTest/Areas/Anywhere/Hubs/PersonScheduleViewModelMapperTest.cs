@@ -89,6 +89,41 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldMapActivities()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var activities = new[] { new Activity("test1"), new Activity("test2") };
+
+			var result = target.Map(new PersonScheduleData { Activities = activities });
+
+			result.Activities.Should().Have.Count.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldMapActivityName()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var activities = new[] { new Activity("test1")};
+
+			var result = target.Map(new PersonScheduleData { Activities = activities });
+
+			result.Activities.Single().Name.Should().Be("test1");
+		}
+
+		[Test]
+		public void ShouldMapActivityId()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var activity = new Activity("test1");
+			activity.SetId(Guid.NewGuid());
+			var activities = new[] { activity };
+
+			var result = target.Map(new PersonScheduleData { Activities = activities });
+
+			result.Activities.Single().Id.Should().Be(activity.Id.Value.ToString());
+		}
+
+		[Test]
 		public void ShouldMapAbsences()
 		{
 			var target = new PersonScheduleViewModelMapper();
