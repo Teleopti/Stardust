@@ -11870,4 +11870,8 @@ Reduce the complexity to use these shifts.</value>
     <value>MyReport</value>
     <comment>Applicationfunction for MyReport for web</comment>
   </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Active Agents</value>
+    <comment>caption on form ActiveAgents</comment>
+  </data>
 </root>
