@@ -47,8 +47,14 @@ Scenario: View team mates schedules
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-11-18 |
+	And 'John King' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-18 11:00 |
+	| End time       | 2013-11-18 17:00 |
 	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
-	Then I should see no schedule for 'John King'
+	Then I should see schedule for 'John King'
 
 @ignore
 Scenario: Add after midnight on night shift
