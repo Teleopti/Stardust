@@ -66,8 +66,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personWithUnpublishedSchedule = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(_scheduleDate.AddDays(-1)));
 			var readModels = new[]
 				{
-					new PersonScheduleDayReadModel {PersonId = personWithPublishedSchedule.Id.Value},
-					new PersonScheduleDayReadModel {PersonId = personWithUnpublishedSchedule.Id.Value}
+					new PersonScheduleDayReadModel {PersonId = personWithPublishedSchedule.Id.Value, Model = MakeJsonModel(new SimpleLayer
+								{
+									Description = "Vacation",
+									Color = "Red",
+									IsAbsenceConfidential = false
+								})},
+					new PersonScheduleDayReadModel {PersonId = personWithUnpublishedSchedule.Id.Value, Model = MakeJsonModel(new SimpleLayer
+								{
+									Description = "Vacation",
+									Color = "Red",
+									IsAbsenceConfidential = false
+								})}
 				};
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new []{personWithPublishedSchedule.Id.Value, personWithUnpublishedSchedule.Id.Value})).IgnoreArguments().Return(readModels);
@@ -77,7 +87,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
 
-			result.Single().PersonId.Should().Be.EqualTo(personWithPublishedSchedule.Id.Value.ToString());
+			result.Count().Should().Be(2);
+			result.First().PersonId.Should().Be.EqualTo(personWithPublishedSchedule.Id.Value.ToString());
+			result.First().Projection.Should().Not.Be.Null();
+			result.Last().PersonId.Should().Be.EqualTo(personWithUnpublishedSchedule.Id.Value.ToString());
+			result.Last().Projection.Should().Be.Null();
 		}
 
 		[Test]
