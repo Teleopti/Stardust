@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// <summary>
     /// Repository for activities
     /// </summary>
-    public class ActivityRepository : Repository<IActivity>, IActivityRepository
+	public class ActivityRepository : Repository<IActivity>, IActivityRepository, IProxyForId<IActivity>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="ActivityRepository"/> class.

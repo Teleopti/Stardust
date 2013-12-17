@@ -17,7 +17,7 @@ define([
 		var self = this;
 
 		this.Activity = ko.observable("");
-
+		this.ActivityTypes = ko.observableArray();
 		this.Date = ko.observable();
 		this.StartTime = ko.observable("16:00");
 		this.EndTime = ko.observable("18:00");
@@ -26,31 +26,34 @@ define([
 		this.ShiftEnd = ko.observable();
 		
 		var personId;
-		
+		var groupId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
 
 		this.SetData = function (data) {
 			personId = data.PersonId;
+			groupId = data.GroupId;
 			self.Date(data.Date);
-			self.ActivityTypes([
-				{
-					Id: 1,
-					Name: "Phone"
-				}, {
-					Id: 2,
-					Name: "Lunch"
-				}, {
-					Id: 3,
-					Name: "Break"
-				}
-			]);
+			self.ActivityTypes(data.Activities);
 		};
 
-		this.ActivityTypes = ko.observableArray();
-
 		this.Apply = function () {
-			navigation.GotoPersonScheduleWithoutHistory(personId, self.Date());
+			var requestData = JSON.stringify({
+				Date: self.Date().format(),
+				StartTime: startTimeAsMoment.format(),
+				EndTime: endTimeAsMoment.format(),
+				ActivityId: self.Activity(),
+				PersonId: personId
+			});
+			ajax.ajax({
+					url: 'PersonScheduleCommand/AddActivity',
+					type: 'POST',
+					data: requestData,
+					success: function(data, textStatus, jqXHR) {
+						navigation.GotoPersonScheduleWithoutHistory(groupId, personId, self.Date());
+					}
+				}
+			);
 		};
 		
 		var getMomentFromInput = function (input) {
