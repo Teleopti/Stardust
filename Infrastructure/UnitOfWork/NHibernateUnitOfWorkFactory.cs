@@ -114,17 +114,22 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public virtual IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default)
 		{
-			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, isolationLevel);
+			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, isolationLevel, null);
 		}
 
-		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBroker messageBroker, TransactionIsolationLevel isolationLevel)
+		public IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator)
+		{
+			return CreateAndOpenUnitOfWork(StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, TransactionIsolationLevel.Default, initiator);
+		}
+
+		public IUnitOfWork CreateAndOpenUnitOfWork(IMessageBroker messageBroker, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			var identity = Thread.CurrentPrincipal.Identity as ITeleoptiIdentity;
 			var buId = (identity !=null && identity.BusinessUnit!=null) ? identity.BusinessUnit.Id.GetValueOrDefault() : Guid.Empty;
 			var interceptor = new AggregateRootInterceptor();
 			var nhibSession = createNhibSession(interceptor, buId, isolationLevel);
 
-			var nhUow = MakeUnitOfWork(nhibSession, messageBroker, SessionContextBinder.FilterManager(nhibSession), isolationLevel, null);
+			var nhUow = MakeUnitOfWork(nhibSession, messageBroker, SessionContextBinder.FilterManager(nhibSession), isolationLevel, initiator);
 			return nhUow;
 		}
 

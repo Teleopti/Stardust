@@ -24,15 +24,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 
 		public void Consume(IEvent message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+			if (raptorDomainMessage == null)
 			{
-				_publisher.Publish(message);
-
-				var raptorDomainMessage = message as IRaptorDomainMessageInfo;
-				if (raptorDomainMessage == null)
+				using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+				{
+					_publisher.Publish(message);
 					unitOfWork.PersistAll();
-				else
-					unitOfWork.PersistAll(new InitiatorIdentifierFromMessage(raptorDomainMessage));
+				}
+			}
+			else
+			{
+				using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(raptorDomainMessage)))
+				{
+					_publisher.Publish(message);
+					unitOfWork.PersistAll();
+				}
 			}
 		}
 

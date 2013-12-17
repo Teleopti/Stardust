@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_unbind = unbind;
 			_bindInitiator = bindInitiator;
 			_isolationLevel = isolationLevel;
-			_initiator = initiator;
+			setInitiator(initiator);
 			_messageSenders = messageSenders;
 		}
 
@@ -90,6 +90,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					throw new DataSourceException("Cannot start transaction", transactionException);
 				}
 			}
+		}
+
+		private void setInitiator(IInitiatorIdentifier initiator)
+		{
+			_initiator = initiator;
+			if (_initiator != null)
+				_bindInitiator(_session, _initiator);
 		}
 
 		public IInitiatorIdentifier Initiator()
@@ -135,8 +142,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public virtual IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
 		{
 			// next step: move to only use constructor injection.
-			_initiator = initiator;
-			_bindInitiator(_session, _initiator);
+			setInitiator(initiator);
 
 			//man borde nog styra upp denna genom att använda ISynchronization istället,
 			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);

@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public IUnitOfWork Current()
 		{
 			return _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork();
-
 		}
 
 		public static ICurrentUnitOfWork Make()

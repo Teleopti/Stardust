@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	public class UnitOfWorkInitiatorIdentifierHandlingTest
 	{
 		[Test]
-		public void ShouldKeepInitiatorIdentifier()
+		public void ShouldReturnInitiatorFromPersistAll()
 		{
 			var uowFactory = SetupFixtureForAssembly.DataSource.Application;
 			using (var uow = uowFactory.CreateAndOpenUnitOfWork())
@@ -22,13 +22,24 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		public void ShouldKeepInitiatorIdentifierForCurrentUnitOfWorkCall()
+		public void ShouldReturnInitiatorFromCurrentUnitOfWorkFromPersistAll()
 		{
 			var uowFactory = SetupFixtureForAssembly.DataSource.Application;
 			using (var uow = uowFactory.CreateAndOpenUnitOfWork())
 			{
 				var initiatorIdentifier = new FakeInitiatorIdentifier();
 				uow.PersistAll(initiatorIdentifier);
+				CurrentUnitOfWork.Make().Current().Initiator().Should().Be(initiatorIdentifier);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnInitiatorFromCurrentUnitOfWorkFromOpeningOfUnitOfWork()
+		{
+			var uowFactory = SetupFixtureForAssembly.DataSource.Application;
+			var initiatorIdentifier = new FakeInitiatorIdentifier();
+			using (uowFactory.CreateAndOpenUnitOfWork(initiatorIdentifier))
+			{
 				CurrentUnitOfWork.Make().Current().Initiator().Should().Be(initiatorIdentifier);
 			}
 		}

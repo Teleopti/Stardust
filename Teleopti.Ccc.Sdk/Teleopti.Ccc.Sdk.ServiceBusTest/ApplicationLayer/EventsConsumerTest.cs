@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
@@ -62,16 +63,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 		{
             var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
             var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			var target = new EventsConsumer(MockRepository.GenerateMock<IEventPublisher>(), null, new FakeCurrentUnitOfWorkFactory(unitOfWorkFactory));
 			var @event = new AnEventWithInitiatorId
 				{
 					InitiatorId = Guid.NewGuid()
 				};
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork(Arg<IInitiatorIdentifier>.Is.Anything)).Return(unitOfWork);
 
 			target.Consume(@event);
 
-			unitOfWork.AssertWasCalled(x => x.PersistAll(Arg<IInitiatorIdentifier>.Matches(i => i.InitiatorId == @event.InitiatorId)));
+			unitOfWorkFactory.AssertWasCalled(x => x.CreateAndOpenUnitOfWork(Arg<IInitiatorIdentifier>.Matches(i => i.InitiatorId == @event.InitiatorId)));
 		}
 
 	}
@@ -94,4 +95,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			return _unitOfWorkFactory;
 		}
 	}
+
 }
