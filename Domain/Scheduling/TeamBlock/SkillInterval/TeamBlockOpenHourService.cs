@@ -77,6 +77,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		}
 	}
 
+	//public class CreateWorkShiftSelectorIntervalDataListForRoleModel
+	//{
+	//	private IDictionary<TimeSpan, IList<ISkillIntervalData>> createDicFromList(
+	//		IList<ISkillIntervalData> skillIntervalDatas)
+	//	{
+			
+	//	}
+
+	//	private TimeSpan createKey(ISkillIntervalData skillIntervalData)
+	//	{
+			
+	//	}
+	//}
+
 	public interface ICreateSkillIntervalDataPerDateAndActivity
 	{
 		Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> CreateFor(ITeamBlockInfo teamBlockInfo,
