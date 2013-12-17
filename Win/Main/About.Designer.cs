@@ -170,7 +170,7 @@
 			this.buttonAdvViewActive.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
 			this.buttonAdvViewActive.Size = new System.Drawing.Size(75, 23);
 			this.buttonAdvViewActive.TabIndex = 7;
-			this.buttonAdvViewActive.Text = "xxView";
+			this.buttonAdvViewActive.Text = "xxDisplay";
 			this.buttonAdvViewActive.UseVisualStyle = true;
 			this.buttonAdvViewActive.UseVisualStyleBackColor = true;
 			this.buttonAdvViewActive.Click += new System.EventHandler(this.buttonAdvViewActive_Click);

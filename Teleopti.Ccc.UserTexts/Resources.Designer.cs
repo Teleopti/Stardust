@@ -412,6 +412,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active Agents.
+        /// </summary>
+        public static string ActiveAgents {
+            get {
+                return ResourceManager.GetString("ActiveAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active agents in use:.
         /// </summary>
         public static string ActiveAgentsInUseColon {
