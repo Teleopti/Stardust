@@ -26,7 +26,7 @@ SET STATISTICS TIME ON --show execution time
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
 @business_unit_code uniqueidentifier,
 @debug bit = 0 
-
+WITH EXECUTE AS OWNER
 AS
 
 SET NOCOUNT ON
@@ -198,6 +198,9 @@ begin
 end
 
 --insert new and updated
+--disable FK
+ALTER TABLE mart.fact_schedule NOCHECK CONSTRAINT ALL
+
 INSERT INTO mart.fact_schedule
 	(
 	schedule_date_id, 
@@ -238,6 +241,10 @@ INSERT INTO mart.fact_schedule
 	overtime_id
 	)
 SELECT * FROM [Stage].[v_stg_schedule_load]
+
+--enable FK
+ALTER TABLE mart.fact_schedule CHECK CONSTRAINT ALL
+
 if @debug=1
 begin
 	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
