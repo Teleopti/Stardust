@@ -248,6 +248,11 @@ _wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.Handlin
             _wordDictionary.Add("DeviationCallsColon", UserTexts.Resources.DeviationCallsColon);
 			_wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationTalkTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
+			_wordDictionary["OriginalAverageTaskTime"] = UserTexts.Resources.OriginalTalkTime;
+			_wordDictionary["AverageTalkTime"] = UserTexts.Resources.AverageTalkTime;
+			_wordDictionary["ForecastedHandlingTime"] = UserTexts.Resources.ForecastedTalkTime;
+			_wordDictionary["ActualHandlingTime"] = UserTexts.Resources.ActualTalkTime;
+			_wordDictionary["TotalAverageTaskTime"] = UserTexts.Resources.TotalTalkTime;
         }
 
 		private void chatSetUp()

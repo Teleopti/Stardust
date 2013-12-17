@@ -65,6 +65,11 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
 				_target = new TextManager(_skillType);
 				Assert.That(_target.WordDictionary["AverageTaskTime"], Is.EqualTo(UserTexts.Resources.TalkTime));
 				Assert.That(_target.WordDictionary["TotalStatisticAverageTaskTime"], Is.EqualTo(UserTexts.Resources.TalkTime));
+				Assert.That(_target.WordDictionary["OriginalAverageTaskTime"], Is.EqualTo(UserTexts.Resources.OriginalTalkTime));
+				Assert.That(_target.WordDictionary["AverageTalkTime"], Is.EqualTo(UserTexts.Resources.AverageTalkTime));
+				Assert.That(_target.WordDictionary["ForecastedHandlingTime"], Is.EqualTo(UserTexts.Resources.ForecastedTalkTime));
+				Assert.That(_target.WordDictionary["ActualHandlingTime"], Is.EqualTo(UserTexts.Resources.ActualTalkTime));
+				Assert.That(_target.WordDictionary["TotalAverageTaskTime"], Is.EqualTo(UserTexts.Resources.TotalTalkTime));
 			}
 		}
     }
