@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class TeamBlockRoleModelSelector : ITeamBlockRoleModelSelector
 	{
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
-		private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
 		private readonly IWorkShiftSelector _workShiftSelector;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
-										  ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 										  IWorkShiftFilterService workShiftFilterService,
 										  ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification,
 										  IWorkShiftSelector workShiftSelector,
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 											ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
-			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_workShiftFilterService = workShiftFilterService;
 			_sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
 			_workShiftSelector = workShiftSelector;
@@ -59,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, restriction,
 																	schedulingOptions,
 																	new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer),
-																	true);
+																	isSameOpenHoursInBlock);
 			if (shifts.IsNullOrEmpty())
 				return null;
 

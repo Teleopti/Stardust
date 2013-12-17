@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 	public class TeamBlockOpenHourService : ITeamBlockOpenHourService
 	{
-		private readonly ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
+		private readonly IOpenHourForDate _openHourForDate;
 		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 
-		public TeamBlockOpenHourService(ISkillIntervalDataOpenHour skillIntervalDataOpenHour, ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity)
+		public TeamBlockOpenHourService(IOpenHourForDate openHourForDate, ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity)
 		{
-			_skillIntervalDataOpenHour = skillIntervalDataOpenHour;
+			_openHourForDate = openHourForDate;
 			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
 		}
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			var openHoursForBlock = new TimePeriod(TimeSpan.MaxValue, TimeSpan.MinValue);
 			foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			{
-				var openHours = openHoursForDate(dateOnly, dayIntervalDataPerDateAndActivity);
+				var openHours = _openHourForDate.OpenHours(dateOnly, dayIntervalDataPerDateAndActivity[dateOnly]);
 				var narrowed = getNarrowTimePeriod(openHoursForBlock, openHours);
 				if (!narrowed.HasValue)
 					return null;
@@ -55,41 +55,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 
 			return new TimePeriod(newStart, newEnd);
 		}
+	}
 
-		//class
-		private TimePeriod openHoursForDate(DateOnly dateOnly, Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> dayIntervalDataPerDateAndActivity)
+	public interface IOpenHourForDate
+	{
+		TimePeriod OpenHours(DateOnly dateOnly, IDictionary<IActivity, IList<ISkillIntervalData>> dayIntervalDataPerActivityForDate);
+	}
+
+	public class OpenHourForDate : IOpenHourForDate
+	{
+		private readonly ISkillIntervalDataOpenHour _skillIntervalDataOpenHour;
+
+		public OpenHourForDate(ISkillIntervalDataOpenHour skillIntervalDataOpenHour)
+		{
+			_skillIntervalDataOpenHour = skillIntervalDataOpenHour;
+		}
+
+		public TimePeriod OpenHours(DateOnly dateOnly, IDictionary<IActivity, IList<ISkillIntervalData>> dayIntervalDataPerActivityForDate)
 		{
 			var minOpen = TimeSpan.MaxValue;
 			var maxOpen = TimeSpan.MinValue;
-			var intervalDataPerActivity = dayIntervalDataPerDateAndActivity[dateOnly];
-			foreach (var activity in intervalDataPerActivity.Keys)
+			foreach (var activity in dayIntervalDataPerActivityForDate.Keys)
 			{
-				var openPeriod = _skillIntervalDataOpenHour.GetOpenHours(intervalDataPerActivity[activity], dateOnly);
+				var openPeriod = _skillIntervalDataOpenHour.GetOpenHours(dayIntervalDataPerActivityForDate[activity], dateOnly);
 
 				if (openPeriod.StartTime < minOpen)
 					minOpen = openPeriod.StartTime;
 
 				if (openPeriod.EndTime > maxOpen)
-					maxOpen = openPeriod.StartTime;
+					maxOpen = openPeriod.EndTime;
 			}
 
 			return new TimePeriod(minOpen, maxOpen);
 		}
 	}
-
-	//public class CreateWorkShiftSelectorIntervalDataListForRoleModel
-	//{
-	//	private IDictionary<TimeSpan, IList<ISkillIntervalData>> createDicFromList(
-	//		IList<ISkillIntervalData> skillIntervalDatas)
-	//	{
-			
-	//	}
-
-	//	private TimeSpan createKey(ISkillIntervalData skillIntervalData)
-	//	{
-			
-	//	}
-	//}
 
 	public interface ICreateSkillIntervalDataPerDateAndActivity
 	{
