@@ -28,7 +28,7 @@
 		<div class="span12">
 			<form>
 				<div class="control-group">
-					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: SelectedGroup } ">
+					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
 						<optgroup data-bind="attr: { label: Name }, foreach: Groups">
 							<option data-bind="text: Name, value: Id"></option>
 						</optgroup>

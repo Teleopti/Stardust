@@ -74,6 +74,7 @@ define([
 		});
 		
 		this.SetData = function (data) {
+			groupId = data.GroupId;
 			personId = data.PersonId;
 			self.Date(data.Date);
 
@@ -84,7 +85,6 @@ define([
 				endTimeAsMoment = getMomentFromInput(self.EndTime());
 			}
 			self.AbsenceTypes(data.Absences);
-			groupId = data.GroupId;
 		};
 
 		this.SetShiftStartAndEnd = function(data) {

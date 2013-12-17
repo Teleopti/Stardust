@@ -45,7 +45,7 @@ define([
 
 	//var loadSchedules = function (options) {
 	//	subscriptions.subscribeGroupSchedule(
-	//		viewModel.SelectedGroup(),
+	//		viewModel.GroupId(),
 	//		helpers.Date.ToServer(viewModel.Date()),
 	//		function (schedules) {
 	//			var currentPersons = viewModel.Persons();
@@ -58,7 +58,7 @@ define([
 	//				for (var j = 0; j < schedules.length; j++) {
 	//					if (currentPersons[i].Id == schedules[j].PersonId) {
 	//						schedules[j].Date = dateClone;
-	//						currentPersons[i].AddData(schedules[j], viewModel.TimeLine, viewModel.SelectedGroup());
+	//						currentPersons[i].AddData(schedules[j], viewModel.TimeLine, viewModel.GroupId());
 	//					}
 	//				}
 	//			}
@@ -95,7 +95,7 @@ define([
 	//};
 
 	//var loadPersons = function (options) {
-	//	var groupid = viewModel.SelectedGroup();
+	//	var groupid = viewModel.GroupId();
 		
 	//	ajax.ajax({
 	//		url: 'Person/PeopleInGroup',
@@ -158,24 +158,24 @@ define([
 				viewModel.TimeLine.WidthPixels($('.time-line-for').width());
 			});
 
-			viewModel.SelectedGroup.subscribe(function () {
+			viewModel.GroupId.subscribe(function () {
 				if (viewModel.Loading())
 					return;
 				currentState.Clear();
-				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.Date.subscribe(function () {
 				if (viewModel.Loading())
 					return;
 				currentState.Clear();
-				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.SelectedSkill.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				navigation.GoToTeamSchedule(viewModel.SelectedGroup(), viewModel.Date(), viewModel.SelectedSkill());
+				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			ko.applyBindings(viewModel, options.bindingElement);
@@ -195,8 +195,8 @@ define([
 			var currentGroupId = function () {
 				if (options.id)
 					return options.id;
-				if (viewModel.SelectedGroup())
-					return viewModel.SelectedGroup();
+				if (viewModel.GroupId())
+					return viewModel.GroupId();
 				if (viewModel.GroupPages().length > 0 && viewModel.GroupPages()[0].Groups().length > 0)
 					return viewModel.GroupPages()[0].Groups()[0].Id;
 				return null;
@@ -236,7 +236,7 @@ define([
 			//		return;
 			//	}
 
-			//	viewModel.SelectedGroup(currentGroup);
+			//	viewModel.GroupId(currentGroup);
 			//	loadPersons({
 			//		success: function () {
 			//			loadSchedules({
@@ -271,16 +271,16 @@ define([
 				function(data) {
 					viewModel.SetGroupPages(data);
 					// why do we set the group twice? it was done like this before...
-					viewModel.SelectedGroup(data.SelectedGroupId); // selected group id is team id? a bug?
+					viewModel.GroupId(data.SelectedGroupId); // selected group id is team id? a bug?
 					var groupId = currentGroupId();
-					viewModel.SelectedGroup(groupId);
+					viewModel.GroupId(groupId);
 					groupPagesDeferred.resolve();
 				});
 
 			var groupScheduleDeferred = $.Deferred();
 			groupPagesDeferred.done(function () {
 				subscriptions.subscribeGroupSchedule(
-					viewModel.SelectedGroup(),
+					viewModel.GroupId(),
 					helpers.Date.ToServer(viewModel.Date()),
 					function (data) {
 						viewModel.UpdateSchedules(data, viewModel.TimeLine);

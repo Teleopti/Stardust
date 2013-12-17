@@ -34,7 +34,7 @@ define([
 
 		this.Resources = resources;
 
-		this.SelectedGroup = ko.observable();
+		this.GroupId = ko.observable();
 		this.Date = ko.observable(moment());
 
 		this.GroupPages = ko.observableArray();
@@ -53,7 +53,7 @@ define([
 			self.GroupPages([]);
 
 			var groupPages = data.GroupPages;
-			//self.SelectedGroup(data.SelectedGroupId);
+			//self.GroupId(data.SelectedGroupId);
 
 			var newItems = ko.utils.arrayMap(groupPages, function (d) {
 				return new groupPageViewModel(d);
@@ -90,11 +90,12 @@ define([
 			// add schedule data. a person might get more than 1 schedule added
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
+				schedule.GroupId = self.GroupId();
 				schedule.Date = self.Date();
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);
 
-				// make shiftstart and end computeds please!
+				// refact
 				//if (person == self.SelectedPerson())
 				//	self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
 			}

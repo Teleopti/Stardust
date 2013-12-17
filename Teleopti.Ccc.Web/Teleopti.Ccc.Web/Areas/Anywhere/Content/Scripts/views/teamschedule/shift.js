@@ -14,32 +14,45 @@ define([
 	shiftMenu
 	) {
 
-	return function(timeline, groupid, personid, date) {
+	return function(data, timeline) {
 
 		var self = this;
 
 		this.Layers = ko.observableArray();
 
-		this.PersonId = personid;
-
 		this.IsAnyLayerSelected = function () {
+			// refact
 			return $(self.Layers()).is(function (index) {
 				return this.Selected();
 			});
 		};
 
-		this.ShiftMenu = new shiftMenu(groupid, personid, date);
+		this.ShiftMenu = new shiftMenu();
 
 		this.AddLayers = function (data) {
-			var layers = data.Projection != undefined ? data.Projection : data.Layers;
-			var newItems = ko.utils.arrayMap(layers, function (l) {
+			var newItems = ko.utils.arrayMap(data.Projection, function (l) {
 				l.Date = data.Date;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
 				return new layer(timeline, l, self);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
+			
+
+			// refact
+			var resultDate = undefined;
+			ko.utils.arrayForEach(self.Layers(), function (l) {
+				var startDate = l.StartDate();
+				if (resultDate === undefined)
+					resultDate = startDate;
+				if (resultDate.diff(startDate, 'days') > 0)
+					resultDate = startDate;
+			});
+			self.ShiftMenu.GroupId = data.GroupId;
+			self.ShiftMenu.PersonId = data.PersonId;
+			self.ShiftMenu.Date = resultDate;
 		};
 
+		// refact
 		this.StartsOnSelectedDay = ko.computed(function () {
 			return self.Layers().length > 0 && self.Layers()[0].StartMinutes() < 25 * 60;
 		});
