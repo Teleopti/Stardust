@@ -708,7 +708,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			else
 			{
 				int parentColIndex = Grid.CurrentCell.ColIndex;
-				columnIndex = (parentColIndex == 1) ? (3) : parentColIndex; // TODO: Use constants instead.
+				columnIndex = (parentColIndex < 2) ? (3) : parentColIndex; // TODO: Use constants instead.
 			}
 			return columnIndex;
 		}
