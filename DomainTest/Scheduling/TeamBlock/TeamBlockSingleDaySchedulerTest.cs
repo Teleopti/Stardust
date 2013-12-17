@@ -158,6 +158,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> {_shift};
 			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
+			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
@@ -182,7 +184,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				      .Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person2, _teamBlockInfo, restriction,
 				                                           _schedulingOptions, finderResult)).Return(shifts);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo)).Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					.Return(skillIntervalDataDic).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,

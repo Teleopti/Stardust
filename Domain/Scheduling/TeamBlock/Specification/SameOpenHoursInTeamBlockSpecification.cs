@@ -34,9 +34,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification
 	        var dates = skillIntervalDataPerDateAndActivity.Keys;
 	        var sampleDate = dates.First();
 	        var sampleOpenHour = _openHourForDate.OpenHours(sampleDate, skillIntervalDataPerDateAndActivity[sampleDate]);
+		    var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 	        foreach (var dateOnly in dates)
 	        {
-		        if(!teamBlockInfo.BlockInfo.BlockPeriod.Contains(dateOnly))
+				if (!blockPeriod.Contains(dateOnly))
 					continue;
 
 		        var compareOpenHour = _openHourForDate.OpenHours(dateOnly, skillIntervalDataPerDateAndActivity[dateOnly]);
