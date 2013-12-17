@@ -35,18 +35,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private NHibernateFilterManager _filterManager;
 		private IEnumerable<IMessageSender> _messageSenders;
 		private readonly Action<ISession> _unbind;
+		private readonly Action<ISession, IInitiatorIdentifier> _bindInitiator;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
-		private static readonly EmptyInitiatorIdentifier EmptyInitiatorIdentifier = new EmptyInitiatorIdentifier();
 		private IInitiatorIdentifier _initiator;
 
-		protected internal NHibernateUnitOfWork(ISession session,
-												IMessageBroker messageBroker,
-												IEnumerable<IMessageSender> messageSenders,
-												NHibernateFilterManager filterManager,
-												ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
-												Action<ISession> unbind,
-																						TransactionIsolationLevel isolationLevel)
+		protected internal NHibernateUnitOfWork(ISession session, IMessageBroker messageBroker, IEnumerable<IMessageSender> messageSenders, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;
@@ -54,7 +48,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_unbind = unbind;
+			_bindInitiator = bindInitiator;
 			_isolationLevel = isolationLevel;
+			_initiator = initiator;
 			_messageSenders = messageSenders;
 		}
 
@@ -138,7 +134,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public virtual IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
 		{
-			_initiator = initiator; // next step: move to constructor injection.
+			// next step: move to only use constructor injection.
+			_initiator = initiator;
+			_bindInitiator(_session, _initiator);
 
 			//man borde nog styra upp denna genom att använda ISynchronization istället,
 			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);
