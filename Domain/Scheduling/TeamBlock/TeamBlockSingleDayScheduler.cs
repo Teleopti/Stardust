@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly IProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
-		private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
@@ -38,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 										   IProposedRestrictionAggregator proposedRestrictionAggregator,
 										   IWorkShiftFilterService workShiftFilterService,
-										   ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 										   IWorkShiftSelector workShiftSelector,
 										   ITeamScheduling teamScheduling,
 										   ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
@@ -49,7 +47,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
-			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_workShiftSelector = workShiftSelector;
 			_teamScheduling = teamScheduling;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;

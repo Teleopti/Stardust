@@ -383,7 +383,6 @@
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\BlockRestrictionAggregatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHourRestrictionForTeamBlockTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcitionTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ResctrictionFromRoleModelRestrictionTest.cs" />
@@ -756,7 +755,6 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\OpenHoursToEffectiveRestrictionConverterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillDayPeriodIntervalDataGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplierTest.cs" />

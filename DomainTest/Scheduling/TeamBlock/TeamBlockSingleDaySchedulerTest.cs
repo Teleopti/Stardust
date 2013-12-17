@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private IWorkShiftFilterService _workShiftFilterService;
 		private IWorkShiftSelector _workShiftSelector;
-		private ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private ITeamScheduling _teamScheduling;
 		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private MockRepository _mocks;
@@ -50,18 +49,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_proposedRestrictionAggregator = _mocks.StrictMock<IProposedRestrictionAggregator>();
 			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
-			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_teamScheduling = _mocks.StrictMock<ITeamScheduling>();
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
-			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
 			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_target = new TeamBlockSingleDayScheduler(
 				_teamBlockSchedulingCompletionChecker, 
 				_proposedRestrictionAggregator,                                        
 				_workShiftFilterService, 
-				_skillDayPeriodIntervalDataGenerator,
 				_workShiftSelector, 
 				_teamScheduling, 
 				_teamBlockSchedulingOptions,

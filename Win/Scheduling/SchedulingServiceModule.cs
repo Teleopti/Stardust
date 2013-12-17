@@ -30,17 +30,12 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Win.Commands;
-using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using ISkillIntervalDataDivider = Teleopti.Ccc.Domain.Scheduling.TeamBlock.ISkillIntervalDataDivider;
-using ISkillStaffPeriodToSkillIntervalDataMapper = Teleopti.Ccc.Domain.Scheduling.TeamBlock.ISkillStaffPeriodToSkillIntervalDataMapper;
-using SkillIntervalDataDivider = Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillIntervalDataDivider;
-using SkillStaffPeriodToSkillIntervalDataMapper = Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillStaffPeriodToSkillIntervalDataMapper;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -114,7 +109,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<AdvanceDaysOffSchedulingService>().As<IAdvanceDaysOffSchedulingService>();
             builder.RegisterType<SkillResolutionProvider>().As<ISkillResolutionProvider>().InstancePerLifetimeScope();
             builder.RegisterType<SkillIntervalDataDivider>().As<ISkillIntervalDataDivider>().InstancePerLifetimeScope();
-            builder.RegisterType<SkillDayPeriodIntervalDataGenerator>().As<ISkillDayPeriodIntervalDataGenerator>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillStaffPeriodToSkillIntervalDataMapper>().As<ISkillStaffPeriodToSkillIntervalDataMapper>().InstancePerLifetimeScope();
             builder.RegisterType<SkillIntervalDataSkillFactorApplier>().As<ISkillIntervalDataSkillFactorApplier>().InstancePerLifetimeScope();
 			builder.RegisterType<SkillIntervalDataAggregator>().As<ISkillIntervalDataAggregator>().InstancePerLifetimeScope();
@@ -275,7 +269,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<MedianCalculatorForDays>().As<IMedianCalculatorForDays>();
             builder.RegisterType<TwoDaysIntervalGenerator>().As<ITwoDaysIntervalGenerator>();
             builder.RegisterType<MedianCalculatorForSkillInterval>().As<IMedianCalculatorForSkillInterval>();
-            builder.RegisterType<OpenHourRestrictionForTeamBlock>().As<IOpenHourRestrictionForTeamBlock>();
             builder.RegisterType<SkillIntervalDataOpenHour>().As<ISkillIntervalDataOpenHour>();
             builder.RegisterType<SameOpenHoursInTeamBlockSpecification>().As<ISameOpenHoursInTeamBlockSpecification>();
 			builder.RegisterType<SameEndTimeTeamSpecification>().As<ISameEndTimeTeamSpecification>();
