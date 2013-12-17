@@ -178,5 +178,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			result.Single().PersonId.Should().Be(personPermitted.Id.Value.ToString());
 		}
+
+		[Test]
+		public void ShouldIncludePersonsWithoutSchedules()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var target = new GroupScheduleViewModelMapper();
+			var data = new GroupScheduleData
+				{
+					CanSeePersons = new[] {person},
+					Schedules = new PersonScheduleDayReadModel[] {}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().PersonId.Should().Be(person.Id.Value.ToString());
+		}
 	}
 }

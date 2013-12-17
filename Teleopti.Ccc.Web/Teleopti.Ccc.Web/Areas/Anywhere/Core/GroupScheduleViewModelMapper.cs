@@ -13,20 +13,46 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public IEnumerable<GroupScheduleShiftViewModel> Map(GroupScheduleData data)
 		{
 			var canSeePersons = data.CanSeePersons.ToArray();
+
+			var schedulesWithPersons = from s in data.Schedules
+			                           let person = (from p in canSeePersons
+			                                         where p.Id.Value == s.PersonId
+			                                         select p).SingleOrDefault()
+			                           where person != null
+			                           select new
+				                           {
+					                           person,
+					                           schedule = s
+				                           };
+
+			var personsWithoutSchedules = from p in canSeePersons
+			                              let schedules = from s in data.Schedules
+			                                              where s.PersonId == p.Id.Value
+			                                              select s
+			                              where !schedules.Any()
+						      select new
+						      {
+							      person = p,
+							      schedule = (PersonScheduleDayReadModel)null
+						      };
+
+			var personsAndSchedules = schedulesWithPersons.Concat(personsWithoutSchedules).ToArray();
+
 			var canSeeConfidentialAbsencesFor = data.CanSeeConfidentialAbsencesFor ?? new IPerson[] { };
 			var published = new PublishedScheduleSpecification(canSeePersons, data.Date);
-			return (from s in data.Schedules
-			        where canSeePersons.Any(p => p.Id.Equals(s.PersonId))
-			        where data.CanSeeUnpublishedSchedules || published.IsSatisfiedBy(s)
-			        let model = JsonConvert.DeserializeObject<Model>(s.Model ?? "{}")
+
+			return (from item in personsAndSchedules
+			        where data.CanSeeUnpublishedSchedules || published.IsSatisfiedBy(item.schedule)
+			        let schedule = item.schedule
+			        let model = JsonConvert.DeserializeObject<Model>((schedule == null ? null : schedule.Model) ?? "{}")
 			        let shift = model.Shift ?? new Shift()
-			        let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == s.PersonId)
+			        let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == schedule.PersonId)
 			        let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
-			        select makeViewModel(s, model, shift, layers, data.UserTimeZone))
+			        select makeViewModel(item.person, model, shift, layers, data.UserTimeZone))
 				.ToArray();
 		}
 
-		private static GroupScheduleShiftViewModel makeViewModel(PersonScheduleDayReadModel readModel, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
+		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
 		{
 			GroupScheduleDayOffViewModel dayOff = null;
 			if (model.DayOff != null)
@@ -39,8 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return new GroupScheduleShiftViewModel
 				{
 					ContractTimeMinutes = shift.ContractTimeMinutes,
-					PersonId = readModel.PersonId.ToString(),
-					Name = model.FirstName + " " + model.LastName,
+					PersonId = person.Id.ToString(),
+					Name = person.Name.ToString(),
 					Projection = layers,
 					IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
 					DayOff = dayOff
