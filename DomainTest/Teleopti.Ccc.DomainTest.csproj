@@ -165,6 +165,7 @@
     <Compile Include="Common\JobResultDetailTest.cs" />
     <Compile Include="Common\JobResultTest.cs" />
     <Compile Include="Common\PersonComparerTest.cs" />
+    <Compile Include="Common\PersonIsActiveSpecificationTest.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
     <Compile Include="Common\TrueFalseRandomizerTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />

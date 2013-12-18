@@ -213,6 +213,7 @@
     <Compile Include="Common\Logging\Log4NetConfiguration.cs" />
     <Compile Include="Common\Logging\SchedulingOptionsValueExtractor.cs" />
     <Compile Include="Common\Logging\SystemInformationHelper.cs" />
+    <Compile Include="Common\PersonIsActiveSpecification.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificDataSource.cs" />
     <Compile Include="Common\TrueFalseRandomizer.cs" />
