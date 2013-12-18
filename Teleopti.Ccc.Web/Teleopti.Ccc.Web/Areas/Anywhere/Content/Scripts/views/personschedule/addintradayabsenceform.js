@@ -74,6 +74,7 @@ define([
 		});
 		
 		this.SetData = function (data) {
+			groupId = data.GroupId;
 			personId = data.PersonId;
 			groupId = data.GroupId;
 			self.Date(data.Date);

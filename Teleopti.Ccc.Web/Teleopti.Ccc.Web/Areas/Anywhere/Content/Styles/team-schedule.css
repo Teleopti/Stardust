@@ -96,21 +96,10 @@ sh
 }
 
 
-.team-schedule .shift-menu-background {
-	background: #eeeeee;
-	
-}
-
-.team-schedule .shift-menu-row:hover > td{
-	background-color: #eeeeee;
-}
-
-.team-schedule .shift-menu-background.person-name-column {
-	
-}
-
-.team-schedule .shift-menu
+.team-schedule .shift-menu,
+.team-schedule .shift-menu:hover > td
 {
+	background: #eeeeee;
 }
 
 .team-schedule .shift-details .label {

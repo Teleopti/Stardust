@@ -12,7 +12,7 @@ define([
 	layer
 	) {
 
-	return function(timeline) {
+	return function(data, timeline) {
 
 		var self = this;
 
@@ -24,13 +24,14 @@ define([
 			});
 		};
 		
+		// refact
 		this.IsFullDayAbsence = ko.observable();
 		
 		this.AddLayers = function (data) {
-			var layers = data.Projection != undefined ? data.Projection : data.Layers;
-			var newItems = ko.utils.arrayMap(layers, function (l) {
+			var newItems = ko.utils.arrayMap(data.Projection, function (l) {
 				l.Date = data.Date;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
+				// refact
 				self.IsFullDayAbsence(data.IsFullDayAbsence);
 				return new layer(timeline, l, self);
 			});

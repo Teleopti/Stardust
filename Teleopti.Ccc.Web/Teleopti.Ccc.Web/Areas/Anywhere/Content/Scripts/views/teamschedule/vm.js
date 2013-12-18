@@ -1,23 +1,25 @@
 define([
-        'knockout',
-        'navigation',
-        'lazy',
-		'shared/timeline',
-		'shared/group-page',
-        'resources!r',
-        'moment',
-		'select2',
-		'shared/current-state'
+	'knockout',
+	'navigation',
+	'lazy',
+	'shared/timeline',
+	'shared/group-page',
+	'views/teamschedule/person',
+	'resources!r',
+	'moment',
+	'select2',
+	'shared/current-state'
 ], function (
-        ko,
-        navigation,
-        lazy,
-        timeLineViewModel,
-	    groupPageViewModel,
-        resources,
-        moment,
-	    select2,
-	    currentState
+	ko,
+	navigation,
+	lazy,
+	timeLineViewModel,
+	groupPageViewModel,
+	personViewModel,
+	resources,
+	moment,
+	select2,
+	currentState
     ) {
 
 	return function () {
@@ -32,8 +34,8 @@ define([
 
 		this.Resources = resources;
 
-		this.SelectedGroup = ko.observable();
-		this.SelectedDate = ko.observable(moment());
+		this.GroupId = ko.observable();
+		this.Date = ko.observable(moment());
 
 		this.GroupPages = ko.observableArray();
 
@@ -42,16 +44,16 @@ define([
 			self.DisplayDescriptions(!self.DisplayDescriptions());
 		};
 
-		this.SetPersons = function (persons) {
-			self.Persons([]);
-			self.Persons.push.apply(self.Persons, persons);
-		};
+		//this.SetPersons = function (persons) {
+		//	self.Persons([]);
+		//	self.Persons.push.apply(self.Persons, persons);
+		//};
 
 		this.SetGroupPages = function (data) {
 			self.GroupPages([]);
 
 			var groupPages = data.GroupPages;
-			self.SelectedGroup(data.SelectedGroupId);
+			//self.GroupId(data.SelectedGroupId);
 
 			var newItems = ko.utils.arrayMap(groupPages, function (d) {
 				return new groupPageViewModel(d);
@@ -59,12 +61,58 @@ define([
 			self.GroupPages.push.apply(self.GroupPages, newItems);
 		};
 
+		var personForId = function (id) {
+			if (!id)
+				return undefined;
+			var person = lazy(self.Persons())
+				.select(function (x) { return x.Id == id; })
+				.first();
+			if (!person) {
+				person = new personViewModel({ Id: id });
+				self.Persons.push(person);
+			}
+			return person;
+		};
+
+		this.UpdateSchedules = function (data, timeLine) {
+			// data might include the same person more than once, with data for more than one day
+			// clear all existing persons schedules
+			var persons = self.Persons();
+			for (var i = 0; i < persons.length; i++) {
+				persons[i].ClearData();
+			}
+			// create any missing persons
+			for (var i = 0; i < data.length; i++) {
+				var schedule = data[i];
+				personForId(schedule.PersonId);
+			}
+
+			// add schedule data. a person might get more than 1 schedule added
+			for (var i = 0; i < data.length; i++) {
+				var schedule = data[i];
+				schedule.GroupId = self.GroupId();
+				schedule.Date = self.Date();
+				var person = personForId(schedule.PersonId);
+				person.AddData(schedule, timeLine);
+
+				// refact
+				//if (person == self.SelectedPerson())
+				//	self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
+			}
+
+			self.Persons().sort(function (first, second) {
+				first = first.OrderBy();
+				second = second.OrderBy();
+				return first == second ? 0 : (first < second ? -1 : 1);
+			});
+		};
+
 		this.NextDay = function () {
-			self.SelectedDate(self.SelectedDate().add('d', 1));
+			self.Date(self.Date().add('d', 1));
 		};
 
 		this.PreviousDay = function () {
-			self.SelectedDate(self.SelectedDate().add('d', -1));
+			self.Date(self.Date().add('d', -1));
 		};
 
 		this.SelectPerson = function (person) {
@@ -88,11 +136,11 @@ define([
 
 		var deselectAllPersons = function (person) {
 			var selectedPersons = lazy(self.Persons())
-	            .filter(function (x) {
-	            	if (person && x === person)
-	            		return false;
-	            	return x.Selected();
-	            });
+		    .filter(function (x) {
+			if (person && x === person)
+				return false;
+			return x.Selected();
+		    });
 			selectedPersons.each(function (x) {
 				x.Selected(false);
 			});
@@ -105,10 +153,10 @@ define([
 				   .map(function (x) { return x.Layers(); })
 				   .flatten()
 				   .filter(function (x) {
-				   	if (layer && x === layer) {
-				   		return false;
-				   	}
-				   	return x.Selected();
+					if (layer && x === layer) {
+						return false;
+					}
+					return x.Selected();
 				   });
 			selectedLayers.each(function (x) {
 				x.Selected(false);

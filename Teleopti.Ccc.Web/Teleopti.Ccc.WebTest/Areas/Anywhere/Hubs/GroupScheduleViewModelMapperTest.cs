@@ -180,27 +180,44 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapPersonWithEmptySchedule()
+		public void ShouldIncludePersonsWithoutSchedules()
 		{
-			var personWithSchedule = PersonFactory.CreatePersonWithId();
-			var personWithoutSchedule = PersonFactory.CreatePersonWithId();
+			var person = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
-
 			var data = new GroupScheduleData
-			{
-				CanSeePersons = new[] { personWithSchedule, personWithoutSchedule },
-				Schedules = new[]
-						{
-							new PersonScheduleDayReadModel
-								{
-									PersonId = personWithSchedule.Id.Value
-								}
-						}
-			};
+				{
+					CanSeePersons = new[] {person},
+					Schedules = new PersonScheduleDayReadModel[] {}
+				};
 
 			var result = target.Map(data);
 
-			result.Count().Should().Be(2);
+			result.Single().PersonId.Should().Be(person.Id.Value.ToString());
+		}
+
+		[Test]
+		public void ShouldExcludeUnpublishedSchedulesButIncludePerson()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var target = new GroupScheduleViewModelMapper();
+			var data = new GroupScheduleData
+				{
+					CanSeeUnpublishedSchedules = false,
+					CanSeePersons = new[] {person},
+					CanSeeConfidentialAbsencesFor = new IPerson[] {},
+					Schedules = new PersonScheduleDayReadModel[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									PersonId = person.Id.Value
+								},
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().PersonId.Should().Be(person.Id.Value.ToString());
+			result.Single().Projection.Should().Have.Count.EqualTo(0);
 		}
 	}
 }

@@ -25,11 +25,11 @@ define([
             var groupId;
 	        
             this.SetData = function (data) {
-                personId = data.PersonId;
+            	groupId = data.GroupId;
+            	personId = data.PersonId;
                 self.StartDate(data.Date);
                 self.EndDate(data.Date);
                 self.AbsenceTypes(data.Absences);
-                groupId = data.GroupId;
             };
 
             this.StartDateFormatted = ko.computed(function() {

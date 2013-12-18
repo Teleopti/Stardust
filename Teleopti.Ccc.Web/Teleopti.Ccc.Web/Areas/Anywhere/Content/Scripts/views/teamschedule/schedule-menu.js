@@ -4,9 +4,12 @@ define([
 	navigation
 	) {
 
-	return function (personid, groupid, date) {
+	return function () {
+		var self = this;
+		
 		this.AddFullDayAbsence = function () {
-			navigation.GotoPersonScheduleAddFullDayAbsenceForm(groupid, personid, date);
+			console.log(self);
+			navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.GroupId, self.PersonId, self.Date);
 		};
 	};
 });

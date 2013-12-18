@@ -49,9 +49,9 @@
 							</td>
 						</tr>
 						
-						<tr class="shift-menu-row" data-bind="if: DisplayShiftMenu">
-							<td class="shift-menu-background person-name-column"></td>
-							<td class="shift-menu-background schedule-column">
+						<tr class="form-placeholder" data-bind="if: DisplayForm">
+							<td class="person-name-column"></td>
+							<td class="schedule-column">
 								<div class="row-fluid space" data-bind="style: { 'margin-left': FormStartPixel() + 'px' }">
 									<div class="span3">
 										<!-- ko if: $root.AddingIntradayAbsence -->
@@ -201,7 +201,7 @@
 		</div>
 	</div>
 	
-	<div class="row" data-bind="ifnot: DisplayShiftMenu()">
+	<div class="row" data-bind="ifnot: DisplayForm()">
 		<div class="span8">
 			<table class="table absence-list">
 				<tbody data-bind="foreach: Absences">

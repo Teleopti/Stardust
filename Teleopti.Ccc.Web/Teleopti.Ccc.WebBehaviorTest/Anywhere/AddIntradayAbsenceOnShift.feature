@@ -190,25 +190,6 @@ Scenario: Prevent adding outside of shift
 	| End time   | 18:00   |
 	Then I should see the alert 'Please add intraday absence on existing shift'
 
-Scenario: Back to viewing selected person shift menu after adding
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-15 11:00 |
-	| End time       | 2013-11-15 17:00 |
-	When I view schedules for 'Team green' on '2013-11-15'
-	And I select any schedule activity for 'Pierre Baldi'
-	And I click 'add intraday absence' in shift menu
-	And I input these intraday absence values
-	| Field      | Value   |
-	| Absence    | Illness |
-	| Start time | 15:00   |
-	| End time   | 16:00   |
-	And I initiate 'apply'	
-	Then I should see 'Pierre Baldi's shift menu
-
 Scenario: Go to yesterday when select the night shift starting from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with

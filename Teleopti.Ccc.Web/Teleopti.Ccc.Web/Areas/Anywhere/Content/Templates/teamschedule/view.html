@@ -28,13 +28,13 @@
 		<div class="span12">
 			<form>
 				<div class="control-group">
-					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: SelectedGroup } ">
+					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
 						<optgroup data-bind="attr: { label: Name }, foreach: Groups">
 							<option data-bind="text: Name, value: Id"></option>
 						</optgroup>
 					</select>
 					<div class="pull-right">
-						<div class="input-append date input-prepend" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+						<div class="input-append date input-prepend" id="date-picker" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
 
 							<button class="btn" data-bind="attr: { title: Resources.Previous }, click: PreviousDay"><i class="icon-chevron-left"></i></button>
 							<input class="add-on date-input" size="16" type="text" readonly="readonly" />
@@ -117,9 +117,9 @@
 						<!-- ko foreach: Shifts -->
 						<!-- ko foreach: Layers -->
 						<!-- ko if: Selected -->
-						<tr class="shift-menu-row">
-							<td class="shift-menu-background person-name-column"></td>
-							<td class="shift-menu-background schedule-column" colspan="2">
+						<tr class="shift-menu">
+							<td class="person-name-column"></td>
+							<td class="schedule-column" colspan="2">
 								<div class="activity-details" data-bind="style: { 'margin-left': StartPixels() + 'px' }">
 									<p>
 										<span class="label" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description + ' ' + StartTime() + ' - ' + EndTime()"></span>

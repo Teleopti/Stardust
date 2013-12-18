@@ -6,29 +6,28 @@ define([
 	navigation
 	) {
 
-	return function (groupid, personid, date) {
+	return function (data) {
 		var self = this;
 
-		this.Date = ko.observable(date);
-
 		this.ShowDetails = function() {
-			navigation.GotoPersonSchedule(groupid, personid, self.Date());
+			navigation.GotoPersonSchedule(self.GroupId, self.PersonId, self.Date);
 		};
 
 		this.AddFullDayAbsence = function() {
-			navigation.GotoPersonScheduleAddFullDayAbsenceForm(groupid, personid, self.Date());
+			navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.GroupId, self.PersonId, self.Date);
 		};
 
 		this.AddActivity = function () {
-			navigation.GotoPersonScheduleAddActivityForm(groupid, personid, self.Date());
+			navigation.GotoPersonScheduleAddActivityForm(self.GroupId, self.PersonId, self.Date);
 		};
 		
 		this.AddIntradayAbsence = function () {
-			navigation.GotoPersonScheduleAddIntradayAbsenceForm(groupid, personid, self.Date());
+			console.log(self);
+			navigation.GotoPersonScheduleAddIntradayAbsenceForm(self.GroupId, self.PersonId, self.Date);
 		};
 		
 		this.RemoveAbsence = function () {
-			navigation.GotoPersonSchedule(groupid, personid, self.Date());
+			navigation.GotoPersonSchedule(self.GroupId, self.PersonId, self.Date);
 		};
 	};
 });

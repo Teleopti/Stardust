@@ -110,7 +110,7 @@ define([
 		this.AddIntradayAbsenceForm = new addIntradayAbsenceFormViewModel();
 		this.AddingIntradayAbsence = ko.observable(false);
 
-		this.DisplayShiftMenu = ko.computed(function() {
+		this.DisplayForm = ko.computed(function() {
 			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence();
 		});
 
@@ -162,6 +162,7 @@ define([
 			// add schedule data. a person might get more than 1 schedule added
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
+				schedule.GroupId = self.GroupId();
 				schedule.Date = self.Date();
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);

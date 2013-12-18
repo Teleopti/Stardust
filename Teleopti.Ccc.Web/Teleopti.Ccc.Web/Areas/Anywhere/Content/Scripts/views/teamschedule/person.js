@@ -47,18 +47,14 @@ define([
 			self.ContractTimeMinutes(0);
 		};
 
-		this.AddData = function (data, timeline, selectedGroup) {
-			
+		this.AddData = function (data, timeline) {
+
 			if (data.Name)
 				self.Name(data.Name);
 
 			if (data.Projection && data.Projection.length > 0) {
-				var newShift = new shift(timeline, selectedGroup, self.Id, data.Date);
+				var newShift = new shift(data, timeline);
 				newShift.AddLayers(data);
-				// this might be a wrong assumption
-				if (newShift.Layers()[0].StartMinutes() < 0) { 
-					newShift.ShiftMenu.Date(data.Date.clone().subtract('days', 1));
-				}
 				self.Shifts.push(newShift);
 			}
 
@@ -70,6 +66,10 @@ define([
 
 			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
 			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
+			
+			self.ScheduleMenu.GroupId = data.GroupId;
+			self.ScheduleMenu.PersonId = self.Id;
+			self.ScheduleMenu.Date = data.Date;
 		};
 
 		var layers = function () {
@@ -112,12 +112,9 @@ define([
 			
 			return 20000;
 		};
-		
 
 
-
-
-		this.ScheduleMenu = new scheduleMenu(data.Id, data.GroupId, data.Date);
+		this.ScheduleMenu = new scheduleMenu();
 
 		this.Selected = ko.observable(false);
 

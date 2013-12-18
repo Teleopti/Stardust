@@ -60,14 +60,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldFilterOutUnpublishedSchedule()
-		{
-			var personWithPublishedSchedule = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(_scheduleDate.AddDays(1)));
-			var personWithUnpublishedSchedule = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(_scheduleDate.AddDays(-1)));
-			var readModels = new[]
-				{
-					new PersonScheduleDayReadModel {PersonId = personWithPublishedSchedule.Id.Value, Model = MakeJsonModel(new SimpleLayer
-								{
 									Description = "Vacation",
 									Color = "Red",
 									IsAbsenceConfidential = false
@@ -78,23 +70,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 									Color = "Red",
 									IsAbsenceConfidential = false
 								})}
-				};
-			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new []{personWithPublishedSchedule.Id.Value, personWithUnpublishedSchedule.Id.Value})).IgnoreArguments().Return(readModels);
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)).Return(false);
-			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, permissionProvider, new FakeSchedulePersonProvider(new[] { personWithPublishedSchedule, personWithUnpublishedSchedule }));
-
-			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
-
-			result.Count().Should().Be(2);
 			result.First().PersonId.Should().Be.EqualTo(personWithPublishedSchedule.Id.Value.ToString());
 			result.First().Projection.Should().Not.Be.Null();
 			result.Last().PersonId.Should().Be.EqualTo(personWithUnpublishedSchedule.Id.Value.ToString());
 			result.Last().Projection.Should().Be.Null();
-		}
-
-		[Test]
 		public void ShouldGreyConfidentialAbsenceIfNoPermission()
 		{
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(_scheduleDate.AddDays(1)));
