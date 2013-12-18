@@ -15,7 +15,7 @@ GO
 --  2011-02-01 Added scenario filter ME
 --  2011-02-02 Moved the scenario filter for performance
 --  2011-06-22 Azure if DJ
---  2012-01-09 Pass BU to ReportAgentsMultipleTeams
+--  2012-01-09 Pass BU to report_get_AgentsMultipleTeams
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	<Scheduled Agents per Interval and Team>
 -- =============================================
@@ -99,7 +99,7 @@ ELSE
 
 /*Get all agents/persons that user has permission to see. */
 INSERT INTO #rights_agents 
-SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_from, @group_page_code, @group_page_group_set, '00000000-0000-0000-0000-000000000002', @site_id, @team_set, '00000000-0000-0000-0000-000000000002', @person_code, @report_id, @business_unit_code)
+EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_from, @group_page_code, @group_page_group_set, '00000000-0000-0000-0000-000000000002', @site_id, @team_set, '00000000-0000-0000-0000-000000000002', @person_code, @report_id, @business_unit_code)
 --SELECT * FROM mart.PermittedAgents(@person_code, @report_id, @site_id, @team_set, -2, @group_page_code, @group_page_group_set, -2)
 
 /*Get all teams that user has permission to see. */
