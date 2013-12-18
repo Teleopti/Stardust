@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldNotBeSatisfiedWithTerminalDateAfterDayInQuestion()
 		{
-			_person.TerminalDate = _terminalDate;
+			_person.TerminatePerson(_terminalDate, new PersonAccountUpdaterDummy());
 			_target = new PersonIsActiveSpecification(_dayAfterTerminalDate);
 			Assert.IsFalse(_target.IsSatisfiedBy(_person));
 		}
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldBeSatisfiedWithTerminalDateBeforeDayInQuestion()
 		{
-			_person.TerminalDate = _terminalDate;
+			_person.TerminatePerson(_terminalDate, new PersonAccountUpdaterDummy());
 			_target = new PersonIsActiveSpecification(_dayBeforeTerminalDate);
 			Assert.IsTrue(_target.IsSatisfiedBy(_person));
 		}
