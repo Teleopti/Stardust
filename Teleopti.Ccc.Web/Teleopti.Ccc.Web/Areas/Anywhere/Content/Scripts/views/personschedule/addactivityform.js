@@ -3,13 +3,15 @@ define([
 	'moment',
 	'navigation',
 	'ajax',
-	'resources!r'
+	'resources!r',
+	'timepicker'
 ], function (
 	ko,
 	moment,
 	navigation,
 	ajax,
-	resources
+	resources,
+	timepicker
     ) {
 
 	return function () {

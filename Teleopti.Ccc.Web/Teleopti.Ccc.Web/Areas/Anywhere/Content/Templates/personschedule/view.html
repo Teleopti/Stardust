@@ -87,16 +87,18 @@
 										<!-- ko if: $root.AddingActivity -->
 										<!-- ko with: $root.AddActivityForm -->
 										<form action="#" class="activity-form">
-											<select id="activity-type" class="activity-type" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity">
+											<select class="activity-type" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity">
 											</select>
 
-											<div class="input-prepend">
+											<div class="input-append input-prepend bootstrap-timepicker">
 												<span class="add-on"><i class="icon-step-backward"></i></span>
-												<input type="text" class="start-time" data-bind="value: StartTime" />
+												<input type="text" class="start-time input-mini" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
-											<div class="input-prepend">
+											<div class="input-append input-prepend bootstrap-timepicker">
 												<span class="add-on"><i class="icon-step-forward"></i></span>
-												<input type="text" class="end-time" data-bind="value: EndTime" />
+												<input type="text" class="end-time input-mini" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
+												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
 											
 											<!-- ko if: ErrorMessage() -->
@@ -105,7 +107,7 @@
 											</div>
 											<!-- /ko -->
 
-											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !$root.Loading(), text: $root.Resources.AddActivity, click: Apply"></button>
+											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
 					
 										</form>
 														
@@ -152,17 +154,6 @@
 						
 
 						<!-- ko if: AddingActivity -->
-						
-						<tr>
-							<td colspan="2" style="background-color: white; border: none" >
-								<h4>
-									<span >Part-Time Percentage</span>
-									\ 
-									<span >100%</span>
-								</h4>
-							</td>
-						</tr>
-
 						<!-- ko foreach: Persons -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
