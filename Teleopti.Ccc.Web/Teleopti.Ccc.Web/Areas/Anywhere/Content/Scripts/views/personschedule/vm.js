@@ -163,7 +163,8 @@ define([
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
-				schedule.Date = self.Date();
+				schedule.Offset = self.Date();
+				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);
 				

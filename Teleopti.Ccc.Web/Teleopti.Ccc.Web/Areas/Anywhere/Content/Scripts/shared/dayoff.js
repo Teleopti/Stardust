@@ -13,7 +13,7 @@ define([
 	return function (timeline, data) {
 
 		var unit = new unitViewModel(timeline, data);
-				
+
 		this.StartMinutes = unit.CutInsideDayStartMinutes;
 		this.StartPixels = unit.CutInsideTimeLineStartPixels;
 		this.LengthPixels = unit.CutInsideTimeLineLengthPixels;

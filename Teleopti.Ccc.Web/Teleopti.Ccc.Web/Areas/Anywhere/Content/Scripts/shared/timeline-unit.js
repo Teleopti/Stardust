@@ -13,10 +13,8 @@ define([
 		var self = this;
 
 		var startTime = moment(data.Start, resources.FixedDateTimeFormatForMoment);
-		var startDate = startTime.clone().startOf('day');
-		var startTimeMinutes = startTime.diff(data.Date, 'minutes');
+		var startTimeMinutes = startTime.diff(data.Offset, 'minutes');
 		var lengthMinutes = data.Minutes;
-
 		
 		var startMinutesToPixels = function (minutes) {
 			var start = minutes - timeline.StartMinutes();
@@ -29,10 +27,6 @@ define([
 			return Math.round(pixels);
 		};
 
-		this.StartDate = function () {
-			return startDate;
-		};
-		
 		this.StartMinutes = function() {
 			return startTimeMinutes;
 		};

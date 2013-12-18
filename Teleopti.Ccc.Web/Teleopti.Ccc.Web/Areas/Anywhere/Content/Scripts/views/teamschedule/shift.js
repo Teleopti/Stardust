@@ -4,14 +4,16 @@ define([
 		'navigation',
 		'lazy',
 		'shared/layer',
-		'views/teamschedule/shift-menu'
+		'views/teamschedule/shift-menu',
+		'resources!r'
 ], function (
 	ko,
 	moment,
 	navigation,
 	lazy,
 	layer,
-	shiftMenu
+	shiftMenu,
+	resources
 	) {
 
 	return function(data, timeline) {
@@ -24,24 +26,15 @@ define([
 
 		this.AddLayers = function (data) {
 			var newItems = ko.utils.arrayMap(data.Projection, function (l) {
-				l.Date = data.Date;
+				l.Offset = data.Offset;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
 				return new layer(timeline, l);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
 			
-			// refact
-			var resultDate = undefined;
-			ko.utils.arrayForEach(self.Layers(), function (l) {
-				var startDate = l.StartDate();
-				if (resultDate === undefined)
-					resultDate = startDate;
-				if (resultDate.diff(startDate, 'days') > 0)
-					resultDate = startDate;
-			});
 			self.ShiftMenu.GroupId = data.GroupId;
 			self.ShiftMenu.PersonId = data.PersonId;
-			self.ShiftMenu.Date = resultDate;
+			self.ShiftMenu.Date = data.Date;
 		};
 
 		this.ShiftStartPixels = ko.computed(function () {

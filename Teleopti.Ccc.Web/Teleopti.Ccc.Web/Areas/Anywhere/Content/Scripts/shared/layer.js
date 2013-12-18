@@ -19,8 +19,6 @@ define([
 
 		var unit = new unitViewModel(timeline, data);
 
-		this.StartDate = unit.StartDate;
-
 		this.LengthMinutes = unit.LengthMinutes;
 		this.StartMinutes = unit.StartMinutes;
 		this.EndMinutes = unit.EndMinutes;

@@ -88,5 +88,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			return instance.ToString(FixedDateTimeFormat);
 		}
+
+		public static string ToFixedDateFormat(this DateTime instance)
+		{
+			return instance.ToString(FixedDateFormat);
+		}
 	}
 }

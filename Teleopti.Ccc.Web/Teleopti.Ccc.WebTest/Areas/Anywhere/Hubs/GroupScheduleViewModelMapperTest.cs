@@ -219,5 +219,29 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Single().PersonId.Should().Be(person.Id.Value.ToString());
 			result.Single().Projection.Should().Have.Count.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldMapShiftDate()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			var target = new GroupScheduleViewModelMapper();
+			var data = new GroupScheduleData
+				{
+					CanSeePersons = new[] {person},
+					Schedules = new PersonScheduleDayReadModel[]
+						{
+							new PersonScheduleDayReadModel
+								{
+									Date = new DateTime(2013, 12, 18),
+									PersonId = person.Id.Value
+								},
+						}
+				};
+
+			var result = target.Map(data);
+
+			result.Single().Date.Should().Be(new DateTime(2013, 12, 18).ToFixedDateFormat());
+		}
+
 	}
 }
