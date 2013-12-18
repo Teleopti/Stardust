@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
 			dynamic gp = result;
-			((object)gp.SelectedGroupId).Should().Be.EqualTo(secondGroup.GroupId);
+			((object)gp.DefaultGroupId).Should().Be.EqualTo(secondGroup.GroupId);
 		}
 
 		[Test]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			dynamic result = target.AvailableGroupPages(DateTime.Now).Data;
 
 			dynamic gp = result;
-			((object) gp.SelectedGroupId).Should().Be.Null();
+			((object)gp.DefaultGroupId).Should().Be.Null();
 		}
 
 		[Test]

@@ -81,24 +81,7 @@ define([
 
 		display: function (options) {
 
-			var currentSkillId = function () {
-				if (options.secondaryId)
-					return options.secondaryId;
-				var skills = viewModel.Skills();
-				if (skills.length > 0)
-					return skills[0].Id;
-				return null;
-			};
-
-			var currentGroupId = function () {
-				if (options.id)
-					return options.id;
-				if (viewModel.GroupId())
-					return viewModel.GroupId();
-				if (viewModel.GroupPages().length > 0 && viewModel.GroupPages()[0].Groups().length > 0)
-					return viewModel.GroupPages()[0].Groups()[0].Id;
-				return null;
-			};
+			viewModel.Loading(true);
 
 			var currentDate = function () {
 				var date = options.date;
@@ -108,8 +91,6 @@ define([
 					return moment(date, 'YYYYMMDD');
 				}
 			};
-			
-			viewModel.Loading(true);
 
 			viewModel.Date(currentDate());
 
@@ -117,11 +98,19 @@ define([
 			loadGroupPages(
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
+					
+					var currentGroupId = function () {
+						if (options.id)
+							return options.id;
+						if (data.DefaultGroupId)
+							return data.DefaultGroupId;
+						if (viewModel.GroupPages().length > 0 && viewModel.GroupPages()[0].Groups().length > 0)
+							return viewModel.GroupPages()[0].Groups()[0].Id;
+						return null;
+					};
+
 					viewModel.SetGroupPages(data);
-					// why do we set the group twice? it was done like this before...
-					viewModel.GroupId(data.SelectedGroupId); // selected group id is team id? a bug?
-					var groupId = currentGroupId();
-					viewModel.GroupId(groupId);
+					viewModel.GroupId(currentGroupId());
 					groupPagesDeferred.resolve();
 				});
 
@@ -140,7 +129,17 @@ define([
 			var skillsDeferred = $.Deferred();
 			loadSkills(
 				helpers.Date.ToServer(viewModel.Date()),
-				function(data) {
+				function (data) {
+					
+					var currentSkillId = function () {
+						if (options.secondaryId)
+							return options.secondaryId;
+						var skills = viewModel.Skills();
+						if (skills.length > 0)
+							return skills[0].Id;
+						return null;
+					};
+
 					viewModel.SetSkills(data.Skills);
 					viewModel.SelectSkillById(currentSkillId());
 					skillsDeferred.resolve();

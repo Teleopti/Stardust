@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				}).OrderBy(x => x.Name).ToList());
 
 			var team = _loggedOnUser.CurrentUser().MyTeam(new DateOnly(date));
-			var selectedGroupId = team != null ? team.Id : null;
+			var defaultGroupId = team != null ? team.Id : null;
 
-			return Json(new {GroupPages = actualGroupPages, SelectedGroupId = selectedGroupId}, JsonRequestBehavior.AllowGet);
+			return Json(new {GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
