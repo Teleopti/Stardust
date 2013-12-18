@@ -33,11 +33,10 @@ define([
 			var newItems = ko.utils.arrayMap(data.Projection, function (l) {
 				l.Date = data.Date;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
-				return new layer(timeline, l, self);
+				return new layer(timeline, l);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
 			
-
 			// refact
 			var resultDate = undefined;
 			ko.utils.arrayForEach(self.Layers(), function (l) {
@@ -51,11 +50,6 @@ define([
 			self.ShiftMenu.PersonId = data.PersonId;
 			self.ShiftMenu.Date = resultDate;
 		};
-
-		// refact
-		this.StartsOnSelectedDay = ko.computed(function () {
-			return self.Layers().length > 0 && self.Layers()[0].StartMinutes() < 25 * 60;
-		});
 
 		this.ShiftStartPixels = ko.computed(function () {
 			if (self.Layers().length > 0)

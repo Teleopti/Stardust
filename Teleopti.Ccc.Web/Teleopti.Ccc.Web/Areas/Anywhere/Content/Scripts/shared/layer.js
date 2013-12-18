@@ -14,13 +14,13 @@ define([
 		helpers
 	) {
 
-	return function (timeline, data, shift) {
+	return function (timeline, data) {
 		var self = this;
 
 		var unit = new unitViewModel(timeline, data);
 
 		this.StartDate = unit.StartDate;
-		
+
 		this.LengthMinutes = unit.LengthMinutes;
 		this.StartMinutes = unit.StartMinutes;
 		this.EndMinutes = unit.EndMinutes;
@@ -37,14 +37,8 @@ define([
 		this.IsFullDayAbsence = data.IsFullDayAbsence;
 
 		this.TimeLineAffectingStartMinute = unit.CutInsideDayStartMinutes;
+		this.TimeLineAffectingEndMinute = unit.EndMinutes;
 
-		// refact
-		this.TimeLineAffectingEndMinute = ko.computed(function() {
-			if (shift.StartsOnSelectedDay())
-				return unit.EndMinutes();
-			return 0;
-		});
-			
 		this.Selected = ko.observable(false);
 	};
 });

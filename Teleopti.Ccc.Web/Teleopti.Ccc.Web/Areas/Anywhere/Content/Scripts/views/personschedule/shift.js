@@ -33,14 +33,10 @@ define([
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
 				// refact
 				self.IsFullDayAbsence(data.IsFullDayAbsence);
-				return new layer(timeline, l, self);
+				return new layer(timeline, l);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
 		};
-
-		this.StartsOnSelectedDay = ko.computed(function () {
-			return self.Layers().length > 0 && self.Layers()[0].StartMinutes() < 25 * 60;
-		});
 
 		this.ShiftStartPixels = ko.computed(function () {
 			if (self.Layers().length > 0)
