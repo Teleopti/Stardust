@@ -6,9 +6,7 @@ define([
 	'shared/group-page',
 	'views/teamschedule/person',
 	'resources!r',
-	'moment',
-	'select2',
-	'shared/current-state'
+	'moment'
 ], function (
 	ko,
 	navigation,
@@ -17,9 +15,7 @@ define([
 	groupPageViewModel,
 	personViewModel,
 	resources,
-	moment,
-	select2,
-	currentState
+	moment
     ) {
 
 	return function () {
@@ -107,7 +103,6 @@ define([
 			deselectAllLayers();
 
 			person.Selected(!person.Selected());
-			currentState.SetSelectedPersonId(person.Id);
 		};
 
 		this.SelectLayer = function (layer, personId) {
@@ -115,10 +110,6 @@ define([
 			deselectAllLayers(layer);
 
 			layer.Selected(!layer.Selected());
-			currentState.SetSelectedPersonId(personId);
-			if (layer.Selected()) {
-				currentState.SetSelectedLayer(layer);
-			}
 		};
 
 		var deselectAllPersons = function(person) {
