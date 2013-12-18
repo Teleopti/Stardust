@@ -172,7 +172,7 @@ IF @intervals_per_day > 0 SELECT @intervals_length_m = 1440/@intervals_per_day
 
 --Get all agents/persons that user has permission to see in given period
 INSERT INTO #rights_agents
-SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code)
+EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code
 
 INSERT INTO #person_acd_subSP
 SELECT
