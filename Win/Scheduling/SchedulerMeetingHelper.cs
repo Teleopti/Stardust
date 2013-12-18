@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-        /// <summary>
+	    /// <summary>
         /// start meeting composer with supplied meeting, or null if new meeting should be created
         /// </summary>
         internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission)
@@ -138,15 +138,20 @@ namespace Teleopti.Ccc.Win.Scheduling
                         selectedPersons.Add(schedulePart.Person);
                 }
 
-                if (_schedulerStateHolder.CommonStateHolder.Activities.Count == 0 || selectedPersons.Count == 0) return;
+
+	            var meetingStartOrToday = meetingStart.GetValueOrDefault(DateOnly.Today);
+	            IList<IPerson> selectedActivePersons =
+		            selectedPersons.Where(new PersonIsActiveSpecification(meetingStartOrToday).IsSatisfiedBy).ToList();
+
+				if (_schedulerStateHolder.CommonStateHolder.Activities.Count == 0 || selectedActivePersons.Count == 0) return;
 
                 using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                 {
                     meetingViewModel =
                         MeetingComposerPresenter.CreateDefaultMeeting(
                             TeleoptiPrincipal.Current.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork)),
-                            _schedulerStateHolder, meetingStart.GetValueOrDefault(DateOnly.Today),
-                            selectedPersons, new Now(()=> null));
+                            _schedulerStateHolder, meetingStartOrToday,
+							selectedActivePersons, new Now(() => null));
                 }
             }
             else

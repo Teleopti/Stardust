@@ -235,7 +235,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public static IEnumerable<IPerson> CreatePersonsList(ClipHandler clipHandler)
+		[Obsolete("Not used")]
+		public static IEnumerable<IPerson> CreatePersonsList(ClipHandler clipHandler)
         {
             IEnumerable<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
 
