@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
 		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private List<IPerson> _groupMembers;
+		private ITeamInfo _teaminfo;
 
 		[SetUp]
 		public void Setup()

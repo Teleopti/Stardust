@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		                                                                                         ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var dayIntervalDataPerDateAndActivity = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
-			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
-			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, blockPeriod).ToList();
+			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
 			
 
 			foreach (var dateOnly in blockPeriod.DayCollection())
