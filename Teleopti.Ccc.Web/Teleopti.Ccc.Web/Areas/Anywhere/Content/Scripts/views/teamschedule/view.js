@@ -61,14 +61,12 @@ define([
 			viewModel.GroupId.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				currentState.Clear();
 				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
 			viewModel.Date.subscribe(function () {
 				if (viewModel.Loading())
 					return;
-				currentState.Clear();
 				navigation.GoToTeamSchedule(viewModel.GroupId(), viewModel.Date(), viewModel.SelectedSkill());
 			});
 
@@ -155,7 +153,7 @@ define([
 
 				subscriptions.subscribeDailyStaffingMetrics(
 					helpers.Date.ToServer(viewModel.Date()),
-					skillId,
+					viewModel.SelectedSkill().Id,
 					function (data) {
 						viewModel.SetDailyMetrics(data);
 						viewModel.LoadingStaffingMetrics(false);
