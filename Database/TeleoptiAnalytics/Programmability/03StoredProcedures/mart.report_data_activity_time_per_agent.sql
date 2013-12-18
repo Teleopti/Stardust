@@ -108,7 +108,7 @@ ELSE
 
 /* Get the agents to report on */
 INSERT INTO #rights_agents
-EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code)
+EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code
 
 /*Get all teams that user has permission to see. */
 INSERT INTO #rights_teams 
