@@ -395,6 +395,8 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockResctrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SameShiftCategoryBlockSchedulerTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDatasPerActivtyForDateTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\OpenHourForDateTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryTeamSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerTest.cs" />
@@ -752,13 +754,12 @@
     <Compile Include="Scheduling\TeamBlock\EqualWorkShiftValueDeciderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculatorTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHoursToEffectiveRestrictionConverterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplierTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillIntervalDataTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\SkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\SuggestedShiftRestrictionExtractorTest.cs" />
