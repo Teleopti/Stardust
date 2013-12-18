@@ -254,7 +254,17 @@ CREATE NONCLUSTERED INDEX [IX_dim_person_DimPersonLocalized] ON [mart].[dim_pers
 INCLUDE ([person_id])
 GO
 
-
+----------------  
+--Name: David Jonsson
+--Date: 2013-12-18
+--Desc: Bug #26329 - Adding index for faster report permissions
+----------------
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'IX_dim_person_to_be_deleted')
+CREATE NONCLUSTERED INDEX IX_dim_person_to_be_deleted
+ON [mart].[dim_person] ([to_be_deleted])
+INCLUDE ([person_id],[team_id],[business_unit_code])
+GO
+ 
 ----------------  
 --Name: David Jonsson
 --Date: 2013-12-16
