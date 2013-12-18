@@ -32,6 +32,7 @@ SET IDENTITY_INSERT mart.dim_absence ON
 INSERT INTO mart.dim_absence
 	(
 	absence_id,
+	absence_code,
 	absence_name, 
 	display_color,
 	in_contract_time,
@@ -46,6 +47,7 @@ INSERT INTO mart.dim_absence
 	)
 SELECT 
 	absence_id				= -1, 
+	absence_code			= '00000000-0000-0000-0000-000000000000',
 	absence_name			= 'Not Defined', 
 	display_color			= -1,
 	in_contract_time		= 0,

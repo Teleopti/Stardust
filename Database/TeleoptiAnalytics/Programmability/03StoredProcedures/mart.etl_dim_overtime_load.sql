@@ -19,15 +19,17 @@ SET IDENTITY_INSERT mart.dim_overtime ON
 INSERT INTO mart.dim_overtime
 	(
 	overtime_id,
+	overtime_code,
 	overtime_name,
 	business_unit_id,
 	datasource_id
 	)
 SELECT
-	multiplicator_definition_set_id		= -1,
-	multiplicator_definition_set_name	= 'Not Defined',
-	business_unit_id					= -1,
-	datasource_id						= -1
+	overtime_id			= -1,
+	overtime_code		= '00000000-0000-0000-0000-000000000000',
+	overtime_name		= 'Not Defined',
+	business_unit_id	= -1,
+	datasource_id		= -1
 WHERE NOT EXISTS (SELECT * FROM mart.dim_overtime where overtime_id = -1)
 
 SET IDENTITY_INSERT mart.dim_overtime OFF
