@@ -11,7 +11,8 @@ define([
 		'text!templates/teamschedule/view.html',
 		'resizeevent',
 		'shared/current-state',
-		'ajax'
+		'ajax',
+		'select2'
 ], function (
 		ko,
 		$,
@@ -24,7 +25,8 @@ define([
 		view,
 		resize,
 		currentState,
-		ajax
+		ajax,
+		select2 // not a direct dependency, but still a view dependency
 	) {
 
 	var viewModel;
