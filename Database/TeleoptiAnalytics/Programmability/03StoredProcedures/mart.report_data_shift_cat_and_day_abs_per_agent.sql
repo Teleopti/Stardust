@@ -16,7 +16,7 @@ GO
 --					2011-09-20 Added date. note: This SP is now used from two rdlc-files!
 --					2011-10-21 Change paramaters @group_page_group_id and @teamd_id to 
 --					@group_page_group_set and @team_set
---					2012-01-09 Pass BU to ReportAgentsMultipleTeams
+--					2012-01-09 Pass BU to report_get_AgentsMultipleTeams
 --					2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by reports:
 -- 1) select * from mart.report where report_id = 20

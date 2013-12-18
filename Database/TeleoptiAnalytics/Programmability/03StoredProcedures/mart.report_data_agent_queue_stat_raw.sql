@@ -20,7 +20,7 @@ GO
 --					2011-01-24 Use agent_code instead of agent_id
 --					2011-10-24 Change paramaters @group_page_group_id and @teamd_id to 
 --					@group_page_group_set and @team_set
---					2012-01-09 Pass BU to ReportAgentsMultipleTeams
+--					2012-01-09 Pass BU to report_get_AgentsMultipleTeams
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Agent Queue Statistics -  Raw
 -- =============================================

@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (treeViewAdv1.SelectedNode == null)
 				return;
 
-			var stateGroupToDelete = treeViewAdv1.SelectedNode.Tag as IRtaStateGroup;
+			var stateGroupToDelete = treeViewAdv1.SelectedNode.TagObject as IRtaStateGroup;
 			if(stateGroupToDelete != null)
 				DeleteStateGroup(stateGroupToDelete);
-			var stateToDelete = treeViewAdv1.SelectedNode.Tag as IRtaState;
+			var stateToDelete = treeViewAdv1.SelectedNode.TagObject as IRtaState;
 			if (stateToDelete != null)
 				DeleteState(stateToDelete);
         }
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         	TreeNodeAdv nodeWithDefaultGroup = null;
 			foreach (TreeNodeAdv node in treeViewAdv1.Nodes)
         	{
-				var group = node.Tag as IRtaStateGroup;
+				var group = node.TagObject as IRtaStateGroup;
 				if (group != null && group.DefaultStateGroup)
 				{
 					nodeWithDefaultGroup = node;
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					if (retNode != null) return retNode;
 				}
 			}
-			if (node.Tag.Equals(state))
+			if (node.TagObject.Equals(state))
 				return node;
 			foreach (TreeNodeAdv treeNodeAdv in node.Nodes)
 			{
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
                 treeViewAdv1.Nodes.Add(parentNode);
 
-                if (stateGroupToSelect != null && stateGroupToSelect == parentNode.Tag)
+                if (stateGroupToSelect != null && stateGroupToSelect == parentNode.TagObject)
                 {
                     selectedNode = parentNode;
                 }
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private static TreeNodeAdv CreateNode(IRtaStateGroup stateGroup)
         {
-            var node = new TreeNodeAdv(stateGroup.Name) {Tag = stateGroup};
+            var node = new TreeNodeAdv(stateGroup.Name) {TagObject = stateGroup};
         	SetNodeToolTip(node);
             node.InteractiveCheckBox = true;
 
@@ -306,13 +306,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private static void CreateChildNode(TreeNodeAdv parentNode, IRtaState state)
         {
-            var node = new TreeNodeAdv(state.Name) {Tag = state};
+            var node = new TreeNodeAdv(state.Name) {TagObject = state};
         	parentNode.Nodes.Add(node);
         }
 
         private static void SetNodeToolTip(TreeNodeAdv node)
         {
-            var stateGroup = node.Tag as IRtaStateGroup;
+            var stateGroup = node.TagObject as IRtaStateGroup;
             if (stateGroup == null)
             {
                 // If node is not a state group we don´t set tooltip
@@ -375,19 +375,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             else
                 droppable = false;
 
-        	//droppable = true;
             e.Effect = droppable ? DragDropEffects.Move : DragDropEffects.None;
 
             var pt = treeViewAdv1.PointToClient(new Point(e.X, e.Y));
             treeViewAdv1.SelectedNode = treeViewAdv1.GetNodeAtPoint(pt);
-            //Console.WriteLine(treeViewAdv1.SelectedNode.Text);
         }
 
         private static bool CanNodeBeDropped(TreeNodeAdv sourceNode, TreeNodeAdv destinationNode)
         {
 			if (destinationNode == null) return false;
-            var sourceState = sourceNode.Tag as IRtaState;
-            var destinationStateGroup = destinationNode.Tag as IRtaStateGroup;
+            var sourceState = sourceNode.TagObject as IRtaState;
+            var destinationStateGroup = destinationNode.TagObject as IRtaStateGroup;
             if (sourceState != null && destinationStateGroup != null && sourceState.StateGroup != destinationStateGroup)
                 return true;
 
@@ -407,7 +405,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
             // Let us get only the first selected node.
             var node = nodes[0];
-            var state = node.Tag as IRtaState;
+            var state = node.TagObject as IRtaState;
 			if(node == null) return;
         	treeViewAdv.DoDragDrop(nodes, state != null ? DragDropEffects.Move : DragDropEffects.None);
         }
@@ -416,19 +414,18 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
         	foreach (var treeNodeAdv in sourceNode)
         	{
-				var stateGroup = destinationNode.Tag as IRtaStateGroup;
-				var state = treeNodeAdv.Tag as IRtaState;
+				var stateGroup = destinationNode.TagObject as IRtaStateGroup;
+				var state = treeNodeAdv.TagObject as IRtaState;
 				if (stateGroup != null && state != null)
 				{
-					state.StateGroup.MoveStateTo(stateGroup, state);
+					treeNodeAdv.TagObject = state.StateGroup.MoveStateTo(stateGroup, state);
 				}
         	}
-            
         }
 
         private static void SetAvailableDescriptionToNode(TreeNodeAdv node)
         {
-            var stateGroup = node.Tag as IRtaStateGroup;
+            var stateGroup = node.TagObject as IRtaStateGroup;
             if (stateGroup != null)
             {
                 node.Text = node.Checked
@@ -439,7 +436,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private static void SetUseForLogOutDescriptionToNode(TreeNodeAdv node)
         {
-            var stateGroup = node.Tag as IRtaStateGroup;
+            var stateGroup = node.TagObject as IRtaStateGroup;
             if (stateGroup != null)
             {
                 node.Text = stateGroup.IsLogOutState
@@ -489,7 +486,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void treeViewAdv1_NodeEditorValidated(object sender, TreeNodeAdvEditEventArgs e)
         {
             // New text change is made - Save Name change in object
-            var stateGroup = e.Node.Tag as IRtaStateGroup;
+			var stateGroup = e.Node.TagObject as IRtaStateGroup;
             if (stateGroup != null)
             {
                 // State Group name changed
@@ -501,7 +498,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             else
             {
                 // State name changed
-                var state = e.Node.Tag as IRtaState;
+				var state = e.Node.TagObject as IRtaState;
                 if (state != null) state.Name = e.Node.Text;
             }
         }
@@ -509,7 +506,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private void treeViewAdv1_AfterCheck(object sender, TreeNodeAdvEventArgs e)
         {
             // The available checkbox is changed
-            var stateGroup = e.Node.Tag as IRtaStateGroup;
+			var stateGroup = e.Node.TagObject as IRtaStateGroup;
         	if (stateGroup == null) return;
         	// State Group changed
         	stateGroup.Available = e.Node.Checked;
@@ -526,7 +523,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         	//If the selected node is not equal to null, check for the condition
         	if (treeViewAdv1.SelectedNode == null) return;
         	// Only State group node should have contextmenu
-        	var stateGroup = treeViewAdv1.SelectedNode.Tag as IRtaStateGroup;
+			var stateGroup = treeViewAdv1.SelectedNode.TagObject as IRtaStateGroup;
         	if (stateGroup == null) return;
         	_currentSourceNode = treeViewAdv1.SelectedNode;
         	BuildContextMenu();
@@ -553,7 +550,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void MenuItemSetLogOutClick(object sender, EventArgs e)
         {
-            var stateGroupToSet = _currentSourceNode.Tag as IRtaStateGroup;
+			var stateGroupToSet = _currentSourceNode.TagObject as IRtaStateGroup;
             if (stateGroupToSet == null) return;
 
             stateGroupToSet.IsLogOutState = !stateGroupToSet.IsLogOutState;
@@ -567,7 +564,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void SetDefaultStateGroup()
         {
-            var stateGroupToSet = _currentSourceNode.Tag as IRtaStateGroup;
+			var stateGroupToSet = _currentSourceNode.TagObject as IRtaStateGroup;
 
             if (stateGroupToSet == null)
                 return;
@@ -587,7 +584,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void treeViewAdv1_BeforeEdit(object sender, TreeNodeAdvBeforeEditEventArgs e)
         {
-            var stateGroup = e.Node.Tag as IRtaStateGroup;
+			var stateGroup = e.Node.TagObject as IRtaStateGroup;
             if (stateGroup != null)
             {
                 // be sure to remove ev. desc. in node text before editing state group name

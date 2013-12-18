@@ -15,7 +15,7 @@ GO
 --  2011-02-01 Added scenario filter ME
 --  2011-02-02 Moved the scenario filter for performance
 --  2011-06-22 Azure if DJ
---  2012-01-09 Pass BU to ReportAgentsMultipleTeams
+--  2012-01-09 Pass BU to report_get_AgentsMultipleTeams
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	<Scheduled Agents per Interval and Team>
 -- =============================================
