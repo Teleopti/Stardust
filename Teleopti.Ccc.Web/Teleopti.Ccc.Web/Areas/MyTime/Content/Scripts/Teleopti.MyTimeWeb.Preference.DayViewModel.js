@@ -139,7 +139,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	this.ReadPreference = function (data) {
 		if (!data) return;
 
-		self.Color('rgb(' + data.Color + ')');
+		if (data.Color)
+			self.Color('rgb(' + data.Color + ')');
 		self.Preference(data.Preference);
 		self.Extended(data.Extended);
 		self.MustHave(data.MustHave);
