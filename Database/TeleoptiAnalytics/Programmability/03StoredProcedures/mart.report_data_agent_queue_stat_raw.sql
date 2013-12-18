@@ -20,7 +20,7 @@ GO
 --					2011-01-24 Use agent_code instead of agent_id
 --					2011-10-24 Change paramaters @group_page_group_id and @teamd_id to 
 --					@group_page_group_set and @team_set
---					2012-01-09 Pass BU to ReportAgentsMultipleTeams
+--					2012-01-09 Pass BU to report_get_AgentsMultipleTeams
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by report Agent Queue Statistics -  Raw
 -- =============================================
@@ -70,7 +70,7 @@ SET @selected_end_interval=(SELECT right(i.interval_name,5) FROM mart.dim_interv
 
 /* Get relevant agents */
 INSERT INTO #rights_agents
-	SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code)
+	EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code)
 
 /*Get all teams that user has permission to see. */
 INSERT INTO #rights_teams 

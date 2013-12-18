@@ -92,7 +92,7 @@ ELSE
 
 /*Get all agents/persons that user has permission to see. */
 INSERT INTO #rights_agents 
-SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, '00000000-0000-0000-0000-000000000002', @site_id, @team_set, '00000000-0000-0000-0000-000000000002', @person_code, @report_id, @business_unit_code)
+EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, '00000000-0000-0000-0000-000000000002', @site_id, @team_set, '00000000-0000-0000-0000-000000000002', @person_code, @report_id, @business_unit_code)
 --SELECT * FROM mart.PermittedAgents(@person_code, @report_id, @site_id, @team_set, -2, @group_page_code, @group_page_group_set, -2)
 
 /*Get all teams that user has permission to see. */
