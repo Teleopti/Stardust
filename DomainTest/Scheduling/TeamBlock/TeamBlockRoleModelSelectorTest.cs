@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockRoleModelSelector _target;
 		private MockRepository _mocks;
 		private ITeamBlockRestrictionAggregator _restrictionAggregator;
-		private ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private IWorkShiftFilterService _workShiftFilterService;
 		private DateOnly _dateOnly;
 		private ITeamBlockInfo _teamBlockInfo;
@@ -27,18 +27,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IWorkShiftSelector _workShiftSelector;
 		private ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
 		private IPerson _person;
-		private ITeamInfo _teaminfo;
-		private List<IPerson> _groupMembers;
+		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
+		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_restrictionAggregator = _mocks.StrictMock<ITeamBlockRestrictionAggregator>();
-			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
+			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_sameOpenHoursInTeamBlockSpecification = _mocks.StrictMock<ISameOpenHoursInTeamBlockSpecification>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
+			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
 			_dateOnly = new DateOnly(2013, 4, 8);
 			_person = PersonFactory.CreatePerson("bill");
 			_groupMembers = new List<IPerson> {_person};
@@ -46,9 +49,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_schedulingOptions = new SchedulingOptions();
 
-			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _skillDayPeriodIntervalDataGenerator,
-													 _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
-													 _workShiftSelector);
+			_target = new TeamBlockRoleModelSelector(_restrictionAggregator, _workShiftFilterService, _sameOpenHoursInTeamBlockSpecification,
+													 _workShiftSelector, _dayIntervalDataCalculator, _createSkillIntervalDataPerDateAndActivity,
+													 _schedulingResultStateHolder);
 		}
 
 		[Test]
@@ -120,7 +123,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																	   new WorkShiftFinderResult(_person, _dateOnly), true))
 					  .Return(shifts);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo)).Return(activityData);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+				      .Return(new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>());
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,

@@ -21,6 +21,7 @@ using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Tracking;
@@ -3692,10 +3693,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 					var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 																			 _container.Resolve<IProposedRestrictionAggregator>(),
 																			 _container.Resolve<IWorkShiftFilterService>(),
-																			 _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 																			 _container.Resolve<IWorkShiftSelector>(),
 																			 teamScheduling, 
-																			 _container.Resolve<ITeamBlockSchedulingOptions>());
+																			 _container.Resolve<ITeamBlockSchedulingOptions>(),
+																			 _container.Resolve<IDayIntervalDataCalculator>(),
+																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
+																			 _schedulerState.SchedulingResultState);
 
 	                var sameShiftCategoryBlockScheduler =
 		                new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
@@ -4099,10 +4102,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 						var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 						                                                         _container.Resolve<IProposedRestrictionAggregator>(),
 						                                                         _container.Resolve<IWorkShiftFilterService>(),
-						                                                         _container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 						                                                         _container.Resolve<IWorkShiftSelector>(),
 																				 teamScheduling, 
-																				 _container.Resolve<ITeamBlockSchedulingOptions>());
+																				 _container.Resolve<ITeamBlockSchedulingOptions>(),
+																			 _container.Resolve<IDayIntervalDataCalculator>(),
+																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
+																			 _schedulerState.SchedulingResultState);
 
 						var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
 						                                                                          singleDayScheduler,
