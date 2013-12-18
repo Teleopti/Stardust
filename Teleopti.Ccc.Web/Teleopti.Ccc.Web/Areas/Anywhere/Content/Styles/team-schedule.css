@@ -87,14 +87,11 @@ sh
 
 
 
-.team-schedule .schedule-menu-row:hover > td{
-	background-color: #eeeeee;
-}
-
-.team-schedule .schedule-menu-background {
+.team-schedule .person-menu,
+.team-schedule .person-menu:hover > td
+{
 	background: #eeeeee;
 }
-
 
 .team-schedule .shift-menu,
 .team-schedule .shift-menu:hover > td

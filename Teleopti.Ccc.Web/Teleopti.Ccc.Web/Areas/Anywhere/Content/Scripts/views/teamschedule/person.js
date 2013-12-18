@@ -3,14 +3,14 @@ define([
 		'moment',
 		'lazy',
 		'views/teamschedule/shift',
-		'views/teamschedule/schedule-menu',
+		'views/teamschedule/person-menu',
 		'shared/dayoff'
 ], function (
 		ko,
 		moment,
 		lazy,
 		shift,
-		scheduleMenu,
+		menu,
 		dayOff
 	) {
 
@@ -67,9 +67,9 @@ define([
 			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
 			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
 			
-			self.ScheduleMenu.GroupId = data.GroupId;
-			self.ScheduleMenu.PersonId = self.Id;
-			self.ScheduleMenu.Date = data.Date;
+			self.Menu.GroupId = data.GroupId;
+			self.Menu.PersonId = self.Id;
+			self.Menu.Date = data.Date;
 		};
 
 		var layers = function () {
@@ -114,7 +114,7 @@ define([
 		};
 
 
-		this.ScheduleMenu = new scheduleMenu();
+		this.Menu = new menu();
 
 		this.Selected = ko.observable(false);
 

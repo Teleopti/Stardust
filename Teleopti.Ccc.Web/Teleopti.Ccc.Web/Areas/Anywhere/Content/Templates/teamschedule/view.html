@@ -151,11 +151,11 @@
 						<!-- /ko -->
 						
 						<!-- ko if: Selected -->
-						<tr class="schedule-menu-row">
-							<td class="schedule-menu-background person-name-column"></td>
-							<td class="schedule-menu-background schedule-column" colspan="2">
+						<tr class="person-menu">
+							<td class="person-name-column"></td>
+							<td class="schedule-column" colspan="2">
 								<div class="schedule-menu">
-									<!-- ko with: ScheduleMenu -->
+									<!-- ko with: Menu -->
 									<div class="btn-group">
 										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
 									</div>
