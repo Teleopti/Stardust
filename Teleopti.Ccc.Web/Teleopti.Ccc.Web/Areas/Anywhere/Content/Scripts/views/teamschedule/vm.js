@@ -44,18 +44,9 @@ define([
 			self.DisplayDescriptions(!self.DisplayDescriptions());
 		};
 
-		//this.SetPersons = function (persons) {
-		//	self.Persons([]);
-		//	self.Persons.push.apply(self.Persons, persons);
-		//};
-
 		this.SetGroupPages = function (data) {
 			self.GroupPages([]);
-
-			var groupPages = data.GroupPages;
-			//self.GroupId(data.SelectedGroupId);
-
-			var newItems = ko.utils.arrayMap(groupPages, function (d) {
+			var newItems = ko.utils.arrayMap(data.GroupPages, function (d) {
 				return new groupPageViewModel(d);
 			});
 			self.GroupPages.push.apply(self.GroupPages, newItems);
@@ -94,10 +85,6 @@ define([
 				schedule.Date = self.Date();
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);
-
-				// refact
-				//if (person == self.SelectedPerson())
-				//	self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
 			}
 
 			self.Persons().sort(function (first, second) {
@@ -134,14 +121,14 @@ define([
 			}
 		};
 
-		var deselectAllPersons = function (person) {
+		var deselectAllPersons = function(person) {
 			var selectedPersons = lazy(self.Persons())
-		    .filter(function (x) {
-			if (person && x === person)
-				return false;
-			return x.Selected();
-		    });
-			selectedPersons.each(function (x) {
+				.filter(function(x) {
+					if (person && x === person)
+						return false;
+					return x.Selected();
+				});
+			selectedPersons.each(function(x) {
 				x.Selected(false);
 			});
 		};
