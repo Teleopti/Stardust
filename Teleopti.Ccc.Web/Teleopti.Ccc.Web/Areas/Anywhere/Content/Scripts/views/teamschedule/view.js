@@ -11,8 +11,7 @@ define([
 		'text!templates/teamschedule/view.html',
 		'resizeevent',
 		'shared/current-state',
-		'ajax',
-		'lazy'
+		'ajax'
 ], function (
 		ko,
 		$,
@@ -25,95 +24,10 @@ define([
 		view,
 		resize,
 		currentState,
-		ajax,
-		lazy
+		ajax
 	) {
 
 	var viewModel;
-
-	//var setSelectedLayer = function (shifts) {
-	//	var layers = lazy(shifts).map(function(x) { return x.Layers(); }).flatten();
-	//	var selectedStart = currentState.SelectedLayer().StartMinutes();
-	//	var selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
-	//	if (!selectedLayer) {
-	//		selectedStart += 1440;
-	//		selectedLayer = lazy(layers).select(function(x) { return x.StartMinutes() == selectedStart; }).first();
-	//	}
-	//	if (selectedLayer)
-	//		selectedLayer.Selected(true);
-	//};
-
-	//var loadSchedules = function (options) {
-	//	subscriptions.subscribeGroupSchedule(
-	//		viewModel.GroupId(),
-	//		helpers.Date.ToServer(viewModel.Date()),
-	//		function (schedules) {
-	//			var currentPersons = viewModel.Persons();
-
-	//			var dateClone = viewModel.Date().clone();
-
-	//			for (var i = 0; i < currentPersons.length; i++) {
-	//				currentPersons[i].ClearData();
-
-	//				for (var j = 0; j < schedules.length; j++) {
-	//					if (currentPersons[i].Id == schedules[j].PersonId) {
-	//						schedules[j].Date = dateClone;
-	//						currentPersons[i].AddData(schedules[j], viewModel.TimeLine, viewModel.GroupId());
-	//					}
-	//				}
-	//			}
-
-	//			currentPersons.sort(function (first, second) {
-	//				first = first.OrderBy();
-	//				second = second.OrderBy();
-	//				return first == second ? 0 : (first < second ? -1 : 1);
-	//			});
-
-	//			viewModel.Persons.valueHasMutated();
-				
-	//			options.success();
-
-	//			resize.notify();
-
-	//			for (var k = 0; k < currentPersons.length; k++) {
-	//				if (currentState.SelectedPersonId() == currentPersons[k].Id) {
-	//					if (currentState.SelectedLayer()) {
-	//						setSelectedLayer(currentPersons[k].Shifts());
-	//					}
-	//				}
-	//			}
-	//		},
-	//		function (notification) {
-	//			for (var i = 0; i < viewModel.Persons().length; i++) {
-	//				if (notification.DomainReferenceId == viewModel.Persons()[i].Id) {
-	//					return true;
-	//				}
-	//			}
-	//			return false;
-	//		}
-	//	);
-	//};
-
-	//var loadPersons = function (options) {
-	//	var groupid = viewModel.GroupId();
-		
-	//	ajax.ajax({
-	//		url: 'Person/PeopleInGroup',
-	//		data: {
-	//			date: helpers.Date.ToServer(viewModel.Date()),
-	//			groupId: groupid
-	//		},
-	//		success: function (people, textStatus, jqXHR) {
-	//			var newItems = ko.utils.arrayMap(people, function (s) {
-	//				s["GroupId"] = groupid;
-	//				s["Date"] = viewModel.Date().format("YYYYMMDD");
-	//				return new personViewModel(s);
-	//			});
-	//			viewModel.SetPersons(newItems);
-	//			options.success();
-	//		}
-	//	});
-	//};
 
 	var loadSkills = function (date, callback) {
 		$.ajax({
@@ -121,29 +35,15 @@ define([
 			cache: false,
 			dataType: 'json',
 			data: { date: date },
-			success: function (data, textStatus, jqXHR) {
-				callback(data);
-			}
+			success: callback
 		});
-	};
-
-	var loadDailyStaffingMetrics = function (skillId, options) {
-		subscriptions.subscribeDailyStaffingMetrics(
-			helpers.Date.ToServer(viewModel.Date()),
-			skillId,
-			function(data) {
-				viewModel.SetDailyMetrics(data);
-				options.success();
-			});
 	};
 
 	var loadGroupPages = function (date, callback) {
 		ajax.ajax({
 			url: 'GroupPage/AvailableGroupPages',
 			data: { date: date },
-			success: function (data, textStatus, jqXHR) {
-				callback(data);
-			}
+			success: callback
 		});
 	};
 
@@ -214,56 +114,6 @@ define([
 			viewModel.Loading(true);
 
 			viewModel.Date(currentDate());
-			
-			//loadSkills({
-			//	success: function () {
-			//		viewModel.SelectSkillById(currentSkillId());
-			//		viewModel.LoadingStaffingMetrics(true);
-			//		loadDailyStaffingMetrics({
-			//			success: function () {
-			//				viewModel.LoadingStaffingMetrics(false);
-			//			}
-			//		});
-			//	}
-			//});
-
-			//var deferred = $.Deferred();
-			//var loadPersonsAndSchedules = function () {
-			//	var currentGroup = currentGroupId();
-			//	if (!currentGroup) {
-			//		viewModel.Loading(false);
-			//		deferred.resolve();
-			//		return;
-			//	}
-
-			//	viewModel.GroupId(currentGroup);
-			//	loadPersons({
-			//		success: function () {
-			//			loadSchedules({
-			//				success: function () {
-			//					viewModel.Loading(false);
-			//					if (currentState.SelectedPersonId()) {
-			//						var person = $("[data-person-id='" + currentState.SelectedPersonId() + "']");
-			//						if (person.length != 0)
-			//							$('html, body').animate({
-			//								scrollTop: person.offset().top
-			//							}, 20);
-			//					}
-			//					deferred.resolve();
-			//				}
-			//			});
-			//		}
-			//	});
-			//};
-
-			//if (viewModel.GroupPages().length != 0 && viewModel.GroupPages()[0].Groups().length != 0) {
-			//	loadPersonsAndSchedules();
-			//} else {
-			//	loadGroupPages({
-			//		success: loadPersonsAndSchedules
-			//	});
-			//}
-
 
 			var groupPagesDeferred = $.Deferred();
 			loadGroupPages(
@@ -298,16 +148,18 @@ define([
 					skillsDeferred.resolve();
 				});
 
-			skillsDeferred.done(function () {
+			skillsDeferred.done(function() {
 				if (!viewModel.SelectedSkill())
 					return;
 				viewModel.LoadingStaffingMetrics(true);
-				loadDailyStaffingMetrics(
-					viewModel.SelectedSkill().Id,
-					function() {
+
+				subscriptions.subscribeDailyStaffingMetrics(
+					helpers.Date.ToServer(viewModel.Date()),
+					skillId,
+					function (data) {
+						viewModel.SetDailyMetrics(data);
 						viewModel.LoadingStaffingMetrics(false);
-					}
-				);
+					});
 			});
 			
 			return $.when(groupPagesDeferred, groupScheduleDeferred, skillsDeferred)
@@ -315,8 +167,6 @@ define([
 					viewModel.Loading(false);
 					resize.notify();
 				});
-
-			return deferred.promise();
 		},
 
 		dispose: function (options) {
