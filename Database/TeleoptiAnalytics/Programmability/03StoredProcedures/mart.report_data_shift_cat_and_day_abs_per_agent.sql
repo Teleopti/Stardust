@@ -16,7 +16,7 @@ GO
 --					2011-09-20 Added date. note: This SP is now used from two rdlc-files!
 --					2011-10-21 Change paramaters @group_page_group_id and @teamd_id to 
 --					@group_page_group_set and @team_set
---					2012-01-09 Pass BU to ReportAgentsMultipleTeams
+--					2012-01-09 Pass BU to report_get_AgentsMultipleTeams
 --					2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- Description:	Used by reports:
 -- 1) select * from mart.report where report_id = 20
@@ -81,7 +81,7 @@ INSERT INTO #rights_teams
 	SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
 
 INSERT INTO #rights_agents
-	SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code)
+	EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code)
 
 INSERT INTO #shift_categories
 SELECT * FROM mart.SplitStringInt(@shift_category_set)
