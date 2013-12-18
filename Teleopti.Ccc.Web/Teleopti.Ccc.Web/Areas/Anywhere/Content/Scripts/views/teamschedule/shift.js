@@ -20,13 +20,6 @@ define([
 
 		this.Layers = ko.observableArray();
 
-		this.IsAnyLayerSelected = function () {
-			// refact
-			return $(self.Layers()).is(function (index) {
-				return this.Selected();
-			});
-		};
-
 		this.ShiftMenu = new shiftMenu();
 
 		this.AddLayers = function (data) {

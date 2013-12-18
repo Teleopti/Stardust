@@ -126,13 +126,13 @@
 									</p>
 								</div>
 								
-								<div class="shift-details" data-bind="if: $parent.IsAnyLayerSelected() && $root.DisplayDescriptions, style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+								<div class="shift-details" data-bind="if: $root.DisplayDescriptions, style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
 									<!-- ko foreach: $parent.DistinctLayers -->
 									<span class="label" data-bind="style: { 'background-color': Color, 'color': TextColor }, text: Description"></span>
 									<!-- /ko -->
 								</div>
 								
-								<div class="shift-menu" data-bind="if: $parent.IsAnyLayerSelected(), style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
+								<div class="shift-menu" data-bind="style: { 'margin-left': $parent.ShiftStartPixels() + 'px' }">
 									<!-- ko with: $parent.ShiftMenu -->
 									<div class="btn-group">
 										<a href="#" class="btn btn-small add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="icon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>

@@ -18,12 +18,6 @@ define([
 
 		this.Layers = ko.observableArray();
 
-		this.IsAnyLayerSelected = function () {
-			return $(self.Layers()).is(function (index) {
-				return this.Selected();
-			});
-		};
-		
 		// refact
 		this.IsFullDayAbsence = ko.observable();
 		

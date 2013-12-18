@@ -118,12 +118,9 @@ define([
 
 		this.Selected = ko.observable(false);
 
-		this.IsPersonOrShiftSelected = ko.computed(function () {
-			if (self.Selected())
-				return true;
-			return $(self.Shifts()).is(function (index) {
-				return this.IsAnyLayerSelected();
-			});
+		this.IsPersonOrShiftSelected = ko.computed(function() {
+			return self.Selected() ||
+				layers().some(function(l) { return l.Selected(); });
 		});
 
 	};
