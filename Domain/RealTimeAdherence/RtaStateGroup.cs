@@ -9,9 +9,9 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
     public class RtaStateGroup : AggregateRootWithBusinessUnit,
-                                 IRtaStateGroup, IDeleteTag
+                                 IRtaStateGroup
     {
-        private readonly IList<IRtaState> _stateCollection = new List<IRtaState>();
+        private  IList<IRtaState> _stateCollection = new List<IRtaState>();
         private bool _available;
         private bool _defaultStateGroup;
         private string _name;
@@ -138,5 +138,34 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             _isDeleted = true;
         }
+
+	    public virtual object Clone()
+	    {
+		    return EntityClone();
+	    }
+
+		public virtual IRtaStateGroup NoneEntityClone()
+		{
+			var clone = createClone((_, __) => { });
+			clone.SetId(null);
+			return clone;
+		}
+
+		public virtual IRtaStateGroup EntityClone()
+		{
+			return createClone((oldstate, newstate) => newstate.SetId(oldstate.Id));
+		}
+
+	    private RtaStateGroup createClone(Action<IEntity, IEntity> action)
+	    {
+		    var clone = (RtaStateGroup) MemberwiseClone();
+		    clone._stateCollection = new List<IRtaState>();
+		    foreach (var state in StateCollection)
+		    {
+			    var newState = clone.AddState(state.Name, state.StateCode, state.PlatformTypeId);
+				action(state, newState);
+		    }
+		    return clone;
+	    }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Interfaces.Domain;
 
@@ -66,6 +67,34 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _target.Tracker = null;
         }
 
+		[Test]
+		public void ShouldCloneCorrectly()
+		{
+			_target.AddState("state 1", "100", Guid.NewGuid());
+			_target.StateCollection[0].SetId(Guid.NewGuid());
+			_target.SetId(Guid.NewGuid());
+
+			var clone = _target.EntityClone();
+			clone.Name.Should().Be.EqualTo(_target.Name);
+			clone.Id.Should().Be.EqualTo(_target.Id);
+			clone.StateCollection.Should().Not.Be.SameInstanceAs(_target.StateCollection);
+			clone.StateCollection[0].Should().Be.EqualTo(_target.StateCollection[0]);
+			clone.StateCollection[0].Should().Not.Be.SameInstanceAs(_target.StateCollection[0]);
+
+			clone = (IRtaStateGroup) _target.Clone();
+			clone.Name.Should().Be.EqualTo(_target.Name);
+			clone.Id.Should().Be.EqualTo(_target.Id);
+			clone.StateCollection.Should().Not.Be.SameInstanceAs(_target.StateCollection);
+			clone.StateCollection[0].Should().Be.EqualTo(_target.StateCollection[0]);
+			clone.StateCollection[0].Should().Not.Be.SameInstanceAs(_target.StateCollection[0]);
+
+			clone = _target.NoneEntityClone();
+			clone.Name.Should().Be.EqualTo(_target.Name);
+			clone.Id.HasValue.Should().Be.False();
+			clone.StateCollection.Should().Not.Be.SameInstanceAs(_target.StateCollection);
+			clone.StateCollection[0].Should().Not.Be.EqualTo(_target.StateCollection[0]);
+			clone.StateCollection[0].Id.HasValue.Should().Be.False();
+		}
 
         [Test]
         public void VerifySetDeleted()

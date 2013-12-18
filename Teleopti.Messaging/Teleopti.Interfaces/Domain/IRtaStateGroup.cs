@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -10,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: Jonas N
     /// Created date: 2008-10-03
     /// </remarks>
-    public interface IRtaStateGroup : IPayload
+	public interface IRtaStateGroup : IPayload, ICloneableEntity<IRtaStateGroup>, IDeleteTag
     {
         /// <summary>
         /// Gets or sets the name.
