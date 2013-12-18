@@ -15,21 +15,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var canSeePersons = data.CanSeePersons.ToArray();
 
 			var schedulesWithPersons = from s in data.Schedules
-			                           let person = (from p in canSeePersons
-			                                         where p.Id.Value == s.PersonId
-			                                         select p).SingleOrDefault()
-			                           where person != null
-			                           select new
-				                           {
-					                           person,
-					                           schedule = s
-				                           };
+						   let person = (from p in canSeePersons
+								 where p.Id.Value == s.PersonId
+								 select p).SingleOrDefault()
+						   where person != null
+						   select new
+						   {
+							   person,
+							   schedule = s
+						   };
 
 			var personsWithoutSchedules = from p in canSeePersons
-			                              let schedules = from s in data.Schedules
-			                                              where s.PersonId == p.Id.Value
-			                                              select s
-			                              where !schedules.Any()
+						      let schedules = from s in data.Schedules
+								      where s.PersonId == p.Id.Value
+								      select s
+						      where !schedules.Any()
 						      select new
 						      {
 							      person = p,
@@ -42,26 +42,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var published = new PublishedScheduleSpecification(canSeePersons, data.Date);
 
 			return (from item in personsAndSchedules
-			        let displaySchedule = data.CanSeeUnpublishedSchedules ||
-			                              (
-				                              item.schedule != null && published.IsSatisfiedBy(item.schedule)
-			                              )
-			        let schedule = displaySchedule ? item.schedule : null
-			        let model = JsonConvert.DeserializeObject<Model>((schedule == null ? null : schedule.Model) ?? "{}")
-					var canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == personScheduleDayReadModel.PersonId);
-			        let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == schedule.PersonId)
-					yield return makeViewModel(personScheduleDayReadModel.PersonId, model, shift, layers, data.UserTimeZone);
-			        select makeViewModel(item.person, model, shift, layers, data.UserTimeZone))
-				else
-				{
-					yield return new GroupScheduleShiftViewModel
-					{
-						PersonId = person.Id.Value.ToString(),
-						Name = person.Name.FirstName + " " + person.Name.LastName,
-						IsFullDayAbsence = false,
-					};
-				}
-			}
+				let displaySchedule = data.CanSeeUnpublishedSchedules ||
+						      (
+							      item.schedule != null && published.IsSatisfiedBy(item.schedule)
+						      )
+				let schedule = displaySchedule ? item.schedule : null
+				let model = JsonConvert.DeserializeObject<Model>((schedule == null ? null : schedule.Model) ?? "{}")
+				let shift = model.Shift ?? new Shift()
+				let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == schedule.PersonId)
+				let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
+				select makeViewModel(item.person, model, shift, layers, data.UserTimeZone))
+				.ToArray();
 		}
 
 		private static GroupScheduleShiftViewModel makeViewModel(IPerson person, Model model, Shift shift, IEnumerable<GroupScheduleLayerViewModel> layers, TimeZoneInfo userTimeZone)
@@ -69,20 +60,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			GroupScheduleDayOffViewModel dayOff = null;
 			if (model.DayOff != null)
 				dayOff = new GroupScheduleDayOffViewModel
-					{
-						DayOffName = model.DayOff.Title,
-						Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
-						Minutes = (int)model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
-					};
-			return new GroupScheduleShiftViewModel
 				{
-					ContractTimeMinutes = shift.ContractTimeMinutes,
-					PersonId = person.Id.ToString(),
-					Name = person.Name.ToString(),
-					Projection = layers,
-					IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
-					DayOff = dayOff
+					DayOffName = model.DayOff.Title,
+					Start = TimeZoneInfo.ConvertTimeFromUtc(model.DayOff.Start, userTimeZone).ToFixedDateTimeFormat(),
+					Minutes = (int)model.DayOff.End.Subtract(model.DayOff.Start).TotalMinutes
 				};
+			return new GroupScheduleShiftViewModel
+			{
+				ContractTimeMinutes = shift.ContractTimeMinutes,
+				PersonId = person.Id.ToString(),
+				Name = person.Name.ToString(),
+				Projection = layers,
+				IsFullDayAbsence = model.Shift != null && model.Shift.IsFullDayAbsence,
+				DayOff = dayOff
+			};
 		}
 
 		private static IEnumerable<GroupScheduleLayerViewModel> mapLayers(TimeZoneInfo userTimeZone, Shift shift, bool canSeeConfidentialAbsence)
@@ -95,12 +86,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					   let description = canSeeLayerInfo ? l.Description : ConfidentialPayloadValues.Description.Name
 					   let start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, userTimeZone)
 					   select new GroupScheduleLayerViewModel
-						   {
-							   Color = color,
-							   Description = description,
-							   Start = start.ToFixedDateTimeFormat(),
-							   Minutes = l.Minutes
-						   })
+					   {
+						   Color = color,
+						   Description = description,
+						   Start = start.ToFixedDateTimeFormat(),
+						   Minutes = l.Minutes
+					   })
 				.ToArray();
 		}
 

@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = PersonFactory.CreatePersonWithId();
 			var timeZone = TimeZoneInfoFactory.HelsinkiTimeZoneInfo();
 			var data = new GroupScheduleData
-				{
-					UserTimeZone = timeZone,
-					CanSeePersons = new[] { person },
-					Schedules = new[]
+			{
+				UserTimeZone = timeZone,
+				CanSeePersons = new[] { person },
+				Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 										})
 								}
 						}
-				};
+			};
 
 			var result = target.Map(data);
 
@@ -99,9 +99,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new GroupScheduleViewModelMapper();
 
 			var data = new GroupScheduleData
-				{
-					CanSeePersons = new[] { person },
-					Schedules = new[]
+			{
+				CanSeePersons = new[] { person },
+				Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 										})
 								}
 						}
-				};
+			};
 
 			var result = target.Map(data);
 
@@ -130,9 +130,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new GroupScheduleViewModelMapper();
 
 			var data = new GroupScheduleData
-				{
-					CanSeePersons = new[] { person },
-					Schedules = new[]
+			{
+				CanSeePersons = new[] { person },
+				Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 										})
 								}
 						}
-				};
+			};
 
 			var result = target.Map(data);
 
@@ -159,9 +159,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new GroupScheduleViewModelMapper();
 
 			var data = new GroupScheduleData
-				{
-					CanSeePersons = new[] { personPermitted },
-					Schedules = new[]
+			{
+				CanSeePersons = new[] { personPermitted },
+				Schedules = new[]
 						{
 							new PersonScheduleDayReadModel
 								{
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 									PersonId = personNotPermitted.Id.Value
 								}
 						}
-				};
+			};
 
 			var result = target.Map(data);
 
@@ -185,10 +185,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
 			var data = new GroupScheduleData
-				{
-					CanSeePersons = new[] {person},
-					Schedules = new PersonScheduleDayReadModel[] {}
-				};
+			{
+				CanSeePersons = new[] { person },
+				Schedules = new PersonScheduleDayReadModel[] { }
+			};
 
 			var result = target.Map(data);
 
@@ -201,18 +201,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
 			var data = new GroupScheduleData
-				{
-					CanSeeUnpublishedSchedules = false,
-					CanSeePersons = new[] {person},
-					CanSeeConfidentialAbsencesFor = new IPerson[] {},
-					Schedules = new PersonScheduleDayReadModel[]
+			{
+				CanSeeUnpublishedSchedules = false,
+				CanSeePersons = new[] { person },
+				CanSeeConfidentialAbsencesFor = new IPerson[] { },
+				Schedules = new PersonScheduleDayReadModel[]
 						{
 							new PersonScheduleDayReadModel
 								{
 									PersonId = person.Id.Value
 								},
 						}
-				};
+			};
 
 			var result = target.Map(data);
 

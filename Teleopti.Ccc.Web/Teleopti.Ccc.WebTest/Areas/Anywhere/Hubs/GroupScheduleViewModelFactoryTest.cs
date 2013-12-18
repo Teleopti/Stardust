@@ -33,15 +33,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			return JsonConvert.SerializeObject(
 				new Model
+				{
+					Shift = new Shift
 					{
-						Shift = new Shift
-							{
-								Projection = new[]
+						Projection = new[]
 									{
 										layer
 									}
-							}
-					});
+					}
+				});
 		}
 
 		[Test]
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var readModels = new[] { new PersonScheduleDayReadModel { PersonId = person.Id.Value } };
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(period, new []{person.Id.Value})).Return(readModels);
+			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(period, new[] { person.Id.Value })).Return(readModels);
 			var target = new GroupScheduleViewModelFactory(new GroupScheduleViewModelMapper(), new FakeLoggedOnUser(), personScheduleDayReadModelRepository, new FakePermissionProvider(), new FakeSchedulePersonProvider(new[] { person }));
 
 			var result = target.CreateViewModel(Guid.Empty, _scheduleDate);
@@ -60,20 +60,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-									Description = "Vacation",
-									Color = "Red",
-									IsAbsenceConfidential = false
-								})},
-					new PersonScheduleDayReadModel {PersonId = personWithUnpublishedSchedule.Id.Value, Model = MakeJsonModel(new SimpleLayer
-								{
-									Description = "Vacation",
-									Color = "Red",
-									IsAbsenceConfidential = false
-								})}
-			result.First().PersonId.Should().Be.EqualTo(personWithPublishedSchedule.Id.Value.ToString());
-			result.First().Projection.Should().Not.Be.Null();
-			result.Last().PersonId.Should().Be.EqualTo(personWithUnpublishedSchedule.Id.Value.ToString());
-			result.Last().Projection.Should().Be.Null();
 		public void ShouldGreyConfidentialAbsenceIfNoPermission()
 		{
 			var person = PersonFactory.CreatePersonWithSchedulePublishedToDate(new DateOnly(_scheduleDate.AddDays(1)));
@@ -86,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 						}
 				};
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new []{person.Id.Value})).IgnoreArguments().Return(readModels);
+			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new[] { person.Id.Value })).IgnoreArguments().Return(readModels);
 			var schedulePersonProvider = MockRepository.GenerateStub<ISchedulePersonProvider>();
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
 				.Return(new[] { person });
@@ -117,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 						}
 				};
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new []{person.Id.Value})).IgnoreArguments().Return(shifts);
+			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new[] { person.Id.Value })).IgnoreArguments().Return(shifts);
 			var schedulePersonProvider = MockRepository.GenerateStub<ISchedulePersonProvider>();
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
 				.Return(new[] { person });
@@ -150,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 						}
 				};
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
-			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new []{person.Id.Value})).IgnoreArguments().Return(shifts);
+			personScheduleDayReadModelRepository.Stub(x => x.ForPeople(new DateTimePeriod(), new[] { person.Id.Value })).IgnoreArguments().Return(shifts);
 			var schedulePersonProvider = MockRepository.GenerateStub<ISchedulePersonProvider>();
 			schedulePersonProvider.Stub(x => x.GetPermittedPersonsForGroup(new DateOnly(_scheduleDate), Guid.Empty, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere))
 				.Return(new[] { person });
