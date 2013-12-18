@@ -110,7 +110,7 @@ define([
 		this.AddIntradayAbsenceForm = new addIntradayAbsenceFormViewModel();
 		this.AddingIntradayAbsence = ko.observable(false);
 
-		this.DisplayShiftMenu = ko.computed(function() {
+		this.DisplayForm = ko.computed(function() {
 			return self.AddingActivity() || self.AddingFullDayAbsence() || self.AddingIntradayAbsence();
 		});
 

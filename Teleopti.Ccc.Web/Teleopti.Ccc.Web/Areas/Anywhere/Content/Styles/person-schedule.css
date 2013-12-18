@@ -101,18 +101,10 @@ sh
 	background-color: beige;
 }
 
-
-
-.person-schedule .shift-menu-background {
-	background: #eeeeee;
-}
-
-.person-schedule .shift-menu
+.person-schedule .form-placeholder,
+.person-schedule .form-placeholder:hover > td
 {
-}
-
-.person-schedule .shift-menu-row:hover > td{
-	background-color: #eeeeee;
+	background: #eeeeee;
 }
 
 .person-schedule .shift-details .label {
