@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
 	public interface ISkillIntervalData
 	{

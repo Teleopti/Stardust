@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var minDateTime = (from o in skillIntervalDataList
                            select o.Period.StartDateTime).Min();
             var maxDateTime = (from o in skillIntervalDataList
-                           select o.Period.EndDateTime).Max( );
+                           select o.Period.EndDateTime).Max();
 
 	        var minTime = minDateTime.TimeOfDay;
 	        int minDayOffset = (int)minDateTime.Date.Subtract(skillDayDate).TotalDays;
