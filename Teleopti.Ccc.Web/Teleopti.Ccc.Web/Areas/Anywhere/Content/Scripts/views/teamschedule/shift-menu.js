@@ -22,7 +22,6 @@ define([
 		};
 		
 		this.AddIntradayAbsence = function () {
-			console.log(self);
 			navigation.GotoPersonScheduleAddIntradayAbsenceForm(self.GroupId, self.PersonId, self.Date);
 		};
 		

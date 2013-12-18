@@ -8,7 +8,6 @@ define([
 		var self = this;
 		
 		this.AddFullDayAbsence = function () {
-			console.log(self);
 			navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.GroupId, self.PersonId, self.Date);
 		};
 	};
