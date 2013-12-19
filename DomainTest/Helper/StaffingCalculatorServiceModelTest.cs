@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		[SetUp]
 		public void Setup()
 		{
-			_calculatorService = new StaffingCalculatorService();
+			_calculatorService = new Domain.Calculation.StaffingCalculatorService();
 			_delta = 0.0001;
 
 		}

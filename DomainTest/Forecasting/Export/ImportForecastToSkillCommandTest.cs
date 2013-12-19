@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
             var dateTimePeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
                                                     new DateTime(2000, 1, 1, 10, 15, 0, DateTimeKind.Utc));
             var skillStaffPeriod = new SkillStaffPeriod(dateTimePeriod, new Task(10,TimeSpan.FromMinutes(2),TimeSpan.FromMinutes(1)), new ServiceAgreement(),
-                                                        new StaffingCalculatorService());
+                                                        new Domain.Calculation.StaffingCalculatorService());
             skillStaffPeriodDictionary.Add(dateTimePeriod, skillStaffPeriod);
             var forecastRow = new ForecastsRow {AfterTaskTime = 1, TaskTime = 12, Tasks = 10};
             using(_mocks.Record())
