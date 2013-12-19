@@ -171,6 +171,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .AddScalar("ReportName", NHibernateUtil.String)
                 .AddScalar("ReportUrl", NHibernateUtil.String)
                 .AddScalar("TargetFrame", NHibernateUtil.String)
+                .AddScalar("Version", NHibernateUtil.String)
                 .SetReadOnly(true)
                 .SetResultTransformer(Transformers.AliasToBean(typeof(MatrixReportInfo)));
         }
