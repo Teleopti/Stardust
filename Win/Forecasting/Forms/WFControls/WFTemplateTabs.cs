@@ -99,12 +99,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
                         ShowDataSourceExcetionDialog(dataSourceException);
                         return;
                     }
-                    dw.ReloadWorkloadDayTemplates();
                     dw.RefreshWorkloadDaysForTemplatesWithStatistics(historicalWorkloadDays);
 
                 }
 
-
+				dw.ReloadWorkloadDayTemplates();
+                
                 dw.EnableFilterData(false);
                 var selectedDatesHastSet = new HashSet<DateOnly>();
                 foreach (var dateOnlyPeriod in selectedDates)
