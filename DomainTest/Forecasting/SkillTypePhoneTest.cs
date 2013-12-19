@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(15, target.DefaultResolution);
             Assert.AreEqual(new Description(_name), target.Description);
             Assert.AreEqual(ForecastSource.InboundTelephony, target.ForecastSource);
-            Assert.IsInstanceOf<StaffingCalculatorService>(target.StaffingCalculatorService);
+			Assert.IsInstanceOf<Domain.Calculation.StaffingCalculatorService>(target.StaffingCalculatorService);
             Assert.IsNotNull(target.TaskTimeDistributionService);
             Assert.IsInstanceOf<TaskTimePhoneDistributionService>(target.TaskTimeDistributionService);
 
