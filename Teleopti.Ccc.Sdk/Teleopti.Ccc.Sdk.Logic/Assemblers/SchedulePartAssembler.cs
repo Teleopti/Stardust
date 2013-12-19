@@ -217,10 +217,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private void fillPersonAssignment(SchedulePartDto part, IPersonAssignment assignment)
         {
             part.PersonAssignmentCollection.Clear();
-					if (assignment != null)
-					{
-						part.PersonAssignmentCollection.Add(_personAssignmentAssembler.DomainEntityToDto(assignment));
-					}
+	        if (assignment == null) return;
+	        
+			var domainEntityToDto = _personAssignmentAssembler.DomainEntityToDto(assignment);
+	        if (domainEntityToDto != null)
+		        part.PersonAssignmentCollection.Add(domainEntityToDto);
         }
 
         private void fillPersonDayOff(SchedulePartDto part, IPersonAssignment dayOff)
