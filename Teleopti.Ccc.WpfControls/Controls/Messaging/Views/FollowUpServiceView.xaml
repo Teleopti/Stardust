@@ -128,7 +128,7 @@
 
         </WrapPanel>
 
-		<ScrollViewer HorizontalScrollBarVisibility="Hidden" 
+		<ScrollViewer HorizontalScrollBarVisibility="Disabled" 
                       VerticalScrollBarVisibility="Auto"  
                       DockPanel.Dock="Top">
 			<ItemsControl  
