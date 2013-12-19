@@ -1001,6 +1001,7 @@
     <Compile Include="Services\StateManager.cs" />
     <Compile Include="Settings\AbsenceView.cs" />
     <Compile Include="Settings\PageHelper.cs" />
+    <Compile Include="Settings\StateGroupActivityAlarmModel.cs" />
     <Compile Include="Settings\TrackerView.cs" />
     <Compile Include="Common\GuiHelpers\ApplicationTextHelper.cs" />
     <Compile Include="Common\GuiHelpers\GuiSettings.cs" />

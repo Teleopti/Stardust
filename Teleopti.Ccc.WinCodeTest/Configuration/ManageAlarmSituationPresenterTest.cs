@@ -4,708 +4,702 @@ using System.Collections.Specialized;
 using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Syncfusion.Styles;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
-    [TestFixture]
-    public class ManageAlarmSituationPresenterTest : IDisposable
-    {
-        private MockRepository mocks;
-        private ManageAlarmSituationPresenter _target;
-        private IActivityRepository _activityRepository;                                                            
-        private IAlarmTypeRepository _alarmTypeRepository;
-        private IRtaStateGroupRepository _rtaStateGroupRepository;
-        private IStateGroupActivityAlarmRepository _stateGroupActvityAlarmRepository;
-        private IMessageBroker _messageBroker;
-        private IManageAlarmSituationView _manageAlarmSituationView;
+	[TestFixture]
+	public class ManageAlarmSituationPresenterTest : IDisposable
+	{
+		private ManageAlarmSituationPresenter _target;
+		private IActivityRepository _activityRepository;
+		private IAlarmTypeRepository _alarmTypeRepository;
+		private IRtaStateGroupRepository _rtaStateGroupRepository;
+		private IStateGroupActivityAlarmRepository _stateGroupActvityAlarmRepository;
+		private IMessageBroker _messageBroker;
+		private IManageAlarmSituationView _manageAlarmSituationView;
+		private IUnitOfWorkFactory _unitOfWorkFactory;
 
-        [SetUp]
-        public void CreateManageSituationPresenter()
-        {
-            mocks = new MockRepository();
+		[SetUp]
+		public void CreateManageSituationPresenter()
+		{
+			_messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+			_activityRepository = MockRepository.GenerateMock<IActivityRepository>();
+			_alarmTypeRepository = MockRepository.GenerateMock<IAlarmTypeRepository>();
+			_rtaStateGroupRepository = MockRepository.GenerateMock<IRtaStateGroupRepository>();
+			_stateGroupActvityAlarmRepository = MockRepository.GenerateMock<IStateGroupActivityAlarmRepository>();
+			_manageAlarmSituationView = MockRepository.GenerateMock<IManageAlarmSituationView>();
+			_unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+		}
 
-            _messageBroker = mocks.StrictMock<IMessageBroker>();
-            _activityRepository = mocks.StrictMock<IActivityRepository>();
-            _alarmTypeRepository = mocks.StrictMock<IAlarmTypeRepository>();
-            _rtaStateGroupRepository = mocks.StrictMock<IRtaStateGroupRepository>();
-            _stateGroupActvityAlarmRepository = mocks.StrictMock<IStateGroupActivityAlarmRepository>();
-            _manageAlarmSituationView = mocks.StrictMock<IManageAlarmSituationView>();
-        }
+		[Test]
+		public void VerifyAddAlarmType()
+		{
+			var alarmTypeId = Guid.NewGuid();
+			var alarmType = MockRepository.GenerateMock<IAlarmType>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Insert).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(alarmTypeId);
 
-        [Test]
-        public void VerifyAddAlarmType()
-        {
-            Guid alarmTypeId = Guid.NewGuid();
-            IAlarmType alarmType = mocks.StrictMock<IAlarmType>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Insert).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(alarmTypeId);
+			IList<IAlarmType> alarmTypes = new List<IAlarmType>();
+			prepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
+			_alarmTypeRepository.Stub(x => x.Get(alarmTypeId)).Return(alarmType);
 
-            IList<IAlarmType> alarmTypes = new List<IAlarmType>();
-            PrepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            Expect.Call(_alarmTypeRepository.Get(alarmTypeId)).Return(alarmType);
-            _manageAlarmSituationView.RefreshGrid();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-            mocks.ReplayAll();
+			_target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
+			_manageAlarmSituationView.AssertWasCalled(x => x.RefreshGrid());
+		}
 
-            _target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
-            
-            mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyUpdateAlarmType()
-        {
-            Guid alarmTypeId = Guid.NewGuid();
-            IAlarmType alarmType = mocks.StrictMock<IAlarmType>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Update).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(alarmTypeId).Repeat.AtLeastOnce();
-            Expect.Call(alarmType.Id).Return(alarmTypeId).Repeat.AtLeastOnce();
+		[Test]
+		public void VerifyUpdateAlarmType()
+		{
+			Guid alarmTypeId = Guid.NewGuid();
+			var alarmType = MockRepository.GenerateMock<IAlarmType>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Update).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(alarmTypeId).Repeat.AtLeastOnce();
+			alarmType.Stub(x => x.Id).Return(alarmTypeId).Repeat.AtLeastOnce();
 
 			IList<IAlarmType> alarmTypes = new List<IAlarmType>();
 			alarmTypes.Add(alarmType);
-            PrepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            Expect.Call(_alarmTypeRepository.Get(alarmTypeId)).Return(alarmType);
-            _manageAlarmSituationView.RefreshGrid();
+			prepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
+			_alarmTypeRepository.Stub(x => x.Get(alarmTypeId)).Return(alarmType);
+			_manageAlarmSituationView.RefreshGrid();
 
-            mocks.ReplayAll();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
+			Assert.AreEqual(1, alarmTypes.Count);
+			_target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
+			Assert.AreEqual(1, alarmTypes.Count);
+		}
 
-            Assert.AreEqual(1, alarmTypes.Count);
-            _target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(1, alarmTypes.Count);
+		[Test]
+		public void VerifyDeleteAlarmType()
+		{
+			Guid alarmTypeId = Guid.NewGuid();
+			var alarmType = MockRepository.GenerateMock<IAlarmType>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Delete).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(alarmTypeId).Repeat.AtLeastOnce();
+			alarmType.Stub(x => x.Id).Return(alarmTypeId).Repeat.AtLeastOnce();
 
-            mocks.VerifyAll();
-        }
+			IList<IAlarmType> alarmTypes = new List<IAlarmType> {alarmType};
+			prepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
+			
 
-        [Test]
-        public void VerifyDeleteAlarmType()
-        {
-            Guid alarmTypeId = Guid.NewGuid();
-            IAlarmType alarmType = mocks.StrictMock<IAlarmType>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Delete).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(alarmTypeId).Repeat.AtLeastOnce();
-            Expect.Call(alarmType.Id).Return(alarmTypeId).Repeat.AtLeastOnce();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-            IList<IAlarmType> alarmTypes = new List<IAlarmType> { alarmType };
-            PrepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            _manageAlarmSituationView.RefreshGrid();
+			
+			_target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
+			
+			_manageAlarmSituationView.AssertWasCalled(x => x.RefreshGrid());
+		}
 
-            mocks.ReplayAll();
+		[Test]
+		public void VerifyAddRtaStateGroup()
+		{
+			Guid rtaStateGroupId = Guid.NewGuid();
+			var rtaStateGroup = MockRepository.GenerateMock<IRtaStateGroup>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Insert).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(rtaStateGroupId);
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
+			IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>();
+			prepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
+			var uow = MockRepository.GenerateStub<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			_rtaStateGroupRepository.Stub(x => x.Get(rtaStateGroupId)).Return(rtaStateGroup);
+			_manageAlarmSituationView.RefreshGrid();
 
-            _target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
-            
-            mocks.VerifyAll();
-        }
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-        [Test]
-        public void VerifyAddRtaStateGroup()
-        {
-            Guid rtaStateGroupId = Guid.NewGuid();
-            IRtaStateGroup rtaStateGroup = mocks.StrictMock<IRtaStateGroup>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Insert).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(rtaStateGroupId);
-
-            IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>();
-            PrepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            Expect.Call(_rtaStateGroupRepository.Get(rtaStateGroupId)).Return(rtaStateGroup);
-            _manageAlarmSituationView.RefreshGrid();
-
-            mocks.ReplayAll();
-
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-
-            Assert.AreEqual(1, _target.ColCount);
-            _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(2, _target.ColCount);
+			Assert.AreEqual(1, _target.ColCount);
+			_target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
+			Assert.AreEqual(2, _target.ColCount);
 
 			_target.OnSave();
+		}
 
-            mocks.VerifyAll();
-        }
+		[Test]
+		public void VerifyUpdateRtaStateGroup()
+		{
+			Guid rtaStateGroupId = Guid.NewGuid();
+			var rtaStateGroup = MockRepository.GenerateMock<IRtaStateGroup>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Update).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(rtaStateGroupId).Repeat.AtLeastOnce();
+			rtaStateGroup.Stub(x => x.Id).Return(rtaStateGroupId).Repeat.AtLeastOnce();
 
-        [Test]
-        public void VerifyUpdateRtaStateGroup()
-        {
-            Guid rtaStateGroupId = Guid.NewGuid();
-            IRtaStateGroup rtaStateGroup = mocks.StrictMock<IRtaStateGroup>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Update).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(rtaStateGroupId).Repeat.AtLeastOnce();
-            Expect.Call(rtaStateGroup.Id).Return(rtaStateGroupId).Repeat.AtLeastOnce();
-
-            IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>();
+			IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>();
 			rtaStateGroups.Add(rtaStateGroup);
-			PrepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            Expect.Call(_rtaStateGroupRepository.Get(rtaStateGroupId)).Return(rtaStateGroup);
-            _manageAlarmSituationView.RefreshGrid();
+			prepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
+			_rtaStateGroupRepository.Stub(x => x.Get(rtaStateGroupId)).Return(rtaStateGroup);
+			_manageAlarmSituationView.RefreshGrid();
 
-            mocks.ReplayAll();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-			
-            Assert.AreEqual(2, _target.ColCount);
-            _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(2, _target.ColCount);
+			Assert.AreEqual(2, _target.ColCount);
+			_target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
+			Assert.AreEqual(2, _target.ColCount);
+		}
 
-            mocks.VerifyAll();
-        }
+		[Test]
+		public void VerifyDeleteRtaStateGroup()
+		{
+			Guid rtaStateGroupId = Guid.NewGuid();
+			var rtaStateGroup = MockRepository.GenerateMock<IRtaStateGroup>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Delete).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(rtaStateGroupId).Repeat.AtLeastOnce();
+			rtaStateGroup.Stub(x => x.Id).Return(rtaStateGroupId).Repeat.AtLeastOnce();
 
-        [Test]
-        public void VerifyDeleteRtaStateGroup()
-        {
-            Guid rtaStateGroupId = Guid.NewGuid();
-            IRtaStateGroup rtaStateGroup = mocks.StrictMock<IRtaStateGroup>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Delete).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(rtaStateGroupId).Repeat.AtLeastOnce();
-            Expect.Call(rtaStateGroup.Id).Return(rtaStateGroupId).Repeat.AtLeastOnce();
+			IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup> {rtaStateGroup};
+			prepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
+			_manageAlarmSituationView.RefreshGrid();
 
-            IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup> { rtaStateGroup };
-            PrepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            _manageAlarmSituationView.RefreshGrid();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-            mocks.ReplayAll();
+			Assert.AreEqual(2, _target.ColCount);
+			_target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
+			Assert.AreEqual(1, _target.ColCount);
+		}
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
+		[Test]
+		public void VerifyAddActivity()
+		{
+			Guid activityId = Guid.NewGuid();
+			var activity = MockRepository.GenerateMock<IActivity>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Insert).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(activityId);
 
-            Assert.AreEqual(2, _target.ColCount);
-            _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(1, _target.ColCount);
+			IList<IActivity> activities = new List<IActivity>();
+			prepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities,
+			                   new List<IStateGroupActivityAlarm>());
+			_activityRepository.Stub(x => x.Get(activityId)).Return(activity);
+			_manageAlarmSituationView.RefreshGrid();
 
-            mocks.VerifyAll();
-        }
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-        [Test]
-        public void VerifyAddActivity()
-        {
-            Guid activityId = Guid.NewGuid();
-            IActivity activity = mocks.StrictMock<IActivity>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Insert).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(activityId);
+			Assert.AreEqual(1, _target.RowCount);
+			_target.OnActivityEvent(null, new EventMessageArgs(eventMessage));
+			Assert.AreEqual(2, _target.RowCount);
+		}
 
-            IList<IActivity> activities = new List<IActivity>();
-            PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
-            Expect.Call(_activityRepository.Get(activityId)).Return(activity);
-            _manageAlarmSituationView.RefreshGrid();
+		[Test]
+		public void VerifyUpdateActivity()
+		{
+			Guid activityId = Guid.NewGuid();
+			var activity = MockRepository.GenerateMock<IActivity>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Update).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(activityId).Repeat.AtLeastOnce();
+			activity.Stub(x => x.Id).Return(activityId).Repeat.AtLeastOnce();
 
-            mocks.ReplayAll();
+			IList<IActivity> activities = new List<IActivity> {activity};
+			prepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities,
+			                   new List<IStateGroupActivityAlarm>());
+			_activityRepository.Stub(x => x.Get(activityId)).Return(activity);
+			_manageAlarmSituationView.RefreshGrid();
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-
-            Assert.AreEqual(1,_target.RowCount);
-            _target.OnActivityEvent(null,new EventMessageArgs(eventMessage));
-            Assert.AreEqual(2, _target.RowCount);
-
-            mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyUpdateActivity()
-        {
-            Guid activityId = Guid.NewGuid();
-            IActivity activity = mocks.StrictMock<IActivity>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Update).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(activityId).Repeat.AtLeastOnce();
-            Expect.Call(activity.Id).Return(activityId).Repeat.AtLeastOnce();
-
-			IList<IActivity> activities = new List<IActivity> { activity };
-            PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
-            Expect.Call(_activityRepository.Get(activityId)).Return(activity);
-            _manageAlarmSituationView.RefreshGrid();
-
-            mocks.ReplayAll();
-
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
 			Assert.AreEqual(2, _target.RowCount);
-            _target.OnActivityEvent(null, new EventMessageArgs(eventMessage));
+			_target.OnActivityEvent(null, new EventMessageArgs(eventMessage));
 			Assert.AreEqual(2, _target.RowCount);
+		}
 
-            mocks.VerifyAll();
-        }
+		[Test]
+		public void VerifyDeleteActivity()
+		{
+			Guid activityId = Guid.NewGuid();
+			var activity = MockRepository.GenerateMock<IActivity>();
+			var eventMessage = MockRepository.GenerateMock<IEventMessage>();
+			eventMessage.Stub(x => x.DomainUpdateType).Return(DomainUpdateType.Delete).Repeat.AtLeastOnce();
+			eventMessage.Stub(x => x.DomainObjectId).Return(activityId).Repeat.AtLeastOnce();
+			activity.Stub(x => x.Id).Return(activityId).Repeat.AtLeastOnce();
 
-        [Test]
-        public void VerifyDeleteActivity()
-        {
-            Guid activityId = Guid.NewGuid();
-            IActivity activity = mocks.StrictMock<IActivity>();
-            IEventMessage eventMessage = mocks.StrictMock<IEventMessage>();
-            Expect.Call(eventMessage.DomainUpdateType).Return(DomainUpdateType.Delete).Repeat.AtLeastOnce();
-            Expect.Call(eventMessage.DomainObjectId).Return(activityId).Repeat.AtLeastOnce();
-            Expect.Call(activity.Id).Return(activityId).Repeat.AtLeastOnce();
+			IList<IActivity> activities = new List<IActivity> {activity};
+			prepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities,
+			                   new List<IStateGroupActivityAlarm>());
+			_manageAlarmSituationView.RefreshGrid();
 
-            IList<IActivity> activities = new List<IActivity>{activity};
-            PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
-            _manageAlarmSituationView.RefreshGrid();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
 
-            mocks.ReplayAll();
+			Assert.AreEqual(2, _target.RowCount);
+			_target.OnActivityEvent(null, new EventMessageArgs(eventMessage));
+			Assert.AreEqual(1, _target.RowCount);
+		}
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-
-            Assert.AreEqual(2, _target.RowCount);
-            _target.OnActivityEvent(null, new EventMessageArgs(eventMessage));
-            Assert.AreEqual(1, _target.RowCount);
-
-            mocks.VerifyAll();
-        }
-
-        private void PrepareMockForLoad(IList<IRtaStateGroup> rtaStateGroups, IList<IAlarmType> alarmTypes, IList<IActivity> activities, IList<IStateGroupActivityAlarm> stateGroupActivityAlarms)
-        {
+		private void prepareMockForLoad(IList<IRtaStateGroup> rtaStateGroups, IList<IAlarmType> alarmTypes,
+		                                IList<IActivity> activities, IList<IStateGroupActivityAlarm> stateGroupActivityAlarms)
+		{
 #pragma warning disable 618
-            Expect.Call(_rtaStateGroupRepository.LoadAllCompleteGraph()).Return(rtaStateGroups);
-            Expect.Call(_alarmTypeRepository.LoadAll()).Return(alarmTypes);
-            Expect.Call(_activityRepository.LoadAll()).Return(activities);
-            Expect.Call(_stateGroupActvityAlarmRepository.LoadAllCompleteGraph()).Return(stateGroupActivityAlarms);
+			_rtaStateGroupRepository.Stub(x => x.LoadAllCompleteGraph()).Return(rtaStateGroups);
+			_alarmTypeRepository.Stub(x => x.LoadAll()).Return(alarmTypes);
+			_activityRepository.Stub(x => x.LoadAll()).Return(activities);
+			_stateGroupActvityAlarmRepository.Stub(x => x.LoadAllCompleteGraph()).Return(stateGroupActivityAlarms);
 #pragma warning restore 618
-            _messageBroker.RegisterEventSubscription(null, Guid.Empty, null, typeof(IActivity));
-            LastCall.IgnoreArguments().Repeat.Times(3);
-        }
+		}
 
-        [Test]
-        public void QueryRowCountShouldReturnOne()
-        {
-            PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
+		[Test]
+		public void QueryRowCountShouldReturnOne()
+		{
+			prepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
 
-            mocks.ReplayAll();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository, _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
+			var e = new GridRowColCountEventArgs();
+			_target.QueryRowCount(null, e);
 
-            var e = new GridRowColCountEventArgs();
-            _target.QueryRowCount(null, e);
-            mocks.VerifyAll();
-            Assert.AreEqual(1,e.Count );//with no activities added the constructor adds the default no activity present null object
-            Assert.AreEqual(1,_target.RowCount);
-        }
+			Assert.AreEqual(1, e.Count);
+				//with no activities added the constructor adds the default no activity present null object
+			Assert.AreEqual(1, _target.RowCount);
+		}
 
-        [Test]
-        public void QueryColumnCountShouldReturnOne()
-        {
-            PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            mocks.ReplayAll();
+		[Test]
+		public void QueryColumnCountShouldReturnOne()
+		{
+			prepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository, _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
 
-            var e = new GridRowColCountEventArgs();
-            _target.QueryColCount(null, e);
-            mocks.VerifyAll();
-            Assert.AreEqual(1, e.Count);//with no state groups added the constructor adds the default no state group present null object
+			var e = new GridRowColCountEventArgs();
+			_target.QueryColCount(null, e);
 
-        }
+			Assert.AreEqual(1, e.Count);
+				//with no state groups added the constructor adds the default no state group present null object
+
+		}
 
 
-        [Test]
-        public void QueryCountReturnCount()
-        {
-            var activities = new List<IActivity>();
-            var rtagroups = new List<IRtaStateGroup>();
+		[Test]
+		public void QueryCountReturnCount()
+		{
+			var activities = new List<IActivity>();
+			var rtagroups = new List<IRtaStateGroup>();
 
 			activities.Add(new Activity("Test"));
-			rtagroups.Add(new RtaStateGroup("in",false,true));
-			rtagroups.Add(new RtaStateGroup("out",false,false));
-            using (mocks.Record())
-            {
-                PrepareMockForLoad(rtagroups, new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
-            }
+			rtagroups.Add(new RtaStateGroup("in", false, true));
+			rtagroups.Add(new RtaStateGroup("out", false, false));
 
-            using (mocks.Playback())
-            {
-                _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-                _target.Load();
-                var e = new GridRowColCountEventArgs();
+			prepareMockForLoad(rtagroups, new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
 
-                _target.QueryColCount(null, e);
-                var e2 = new GridRowColCountEventArgs();
-                _target.QueryRowCount(null, e2);
-                
-                Assert.AreEqual(3, e.Count);
-                Assert.AreEqual(2, e2.Count);
-                Assert.AreEqual(2, _target.RowCount);
-                Assert.AreEqual(3, _target.ColCount);
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
+			var e = new GridRowColCountEventArgs();
 
-                mocks.VerifyAll();
-            }
-        }
+			_target.QueryColCount(null, e);
+			var e2 = new GridRowColCountEventArgs();
+			_target.QueryRowCount(null, e2);
 
-        [Test]
-        public void QueryCellInfoWithBadIndex()
-        {
-            PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
-            mocks.ReplayAll();
+			Assert.AreEqual(3, e.Count);
+			Assert.AreEqual(2, e2.Count);
+			Assert.AreEqual(2, _target.RowCount);
+			Assert.AreEqual(3, _target.ColCount);
+		}
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository, _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-            var style = new GridStyleInfo();
-            var e = new GridQueryCellInfoEventArgs(-1, -1, style);
-            _target.QueryCellInfo(null, e);
-        }
+		[Test]
+		public void QueryCellInfoWithBadIndex()
+		{
+			prepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), new List<IActivity>(),
+			                   new List<IStateGroupActivityAlarm>());
 
-        [Test]
-        public void QueryCellInfoShouldReturnGrid()
-        {
-            var activity = ActivityFactory.CreateActivity("activity");
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo();
+			var e = new GridQueryCellInfoEventArgs(-1, -1, style);
+			_target.QueryCellInfo(null, e);
+		}
 
-            var rtaitem1 = new RtaStateGroup("stategroup1", true, false);
-            var rtaitem2 = new RtaStateGroup("stategroup2", true, false);
+		[Test]
+		public void QueryCellInfoShouldReturnGrid()
+		{
+			var activity = ActivityFactory.CreateActivity("activity");
 
-            var alarms = new List<IAlarmType>();
-            alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
-                                     AlarmTypeMode.UserDefined, 0.8));
-            alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
-            alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
-                                     AlarmTypeMode.Unknown, 0.8));
+			var rtaitem1 = new RtaStateGroup("stategroup1", true, false);
+			var rtaitem2 = new RtaStateGroup("stategroup2", true, false);
 
-            var stategroupactivityalarm1 = new StateGroupActivityAlarm(rtaitem1, activity);
-            stategroupactivityalarm1.AlarmType = alarms[1];
+			var alarms = new List<IAlarmType>
+				{
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
+					              AlarmTypeMode.UserDefined, 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
+					              AlarmTypeMode.Unknown, 0.8)
+				};
 
-            var stategroupactivityalarm2 = new StateGroupActivityAlarm(null, null);
-            stategroupactivityalarm2.AlarmType = alarms[1];
+			var stategroupactivityalarm1 = new StateGroupActivityAlarm(rtaitem1, activity) {AlarmType = alarms[1]};
 
-            PrepareMockForLoad(new List<IRtaStateGroup> {rtaitem1, rtaitem2}, alarms, new List<IActivity> {activity},
-                               new List<IStateGroupActivityAlarm> {stategroupactivityalarm1,stategroupactivityalarm2});
+			var stategroupactivityalarm2 = new StateGroupActivityAlarm(null, null) {AlarmType = alarms[1]};
 
-            var list = new StringCollection();
-            foreach (IAlarmType type in alarms)
-            {
-                list.Add(type.Description.Name);
-            }
+			prepareMockForLoad(new List<IRtaStateGroup> {rtaitem1, rtaitem2}, alarms, new List<IActivity> {activity},
+			                   new List<IStateGroupActivityAlarm> {stategroupactivityalarm1, stategroupactivityalarm2});
 
-            mocks.ReplayAll();
+			var list = new StringCollection();
+			foreach (IAlarmType type in alarms)
+			{
+				list.Add(type.Description.Name);
+			}
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-            var style = new GridStyleInfo();
-            var e = new GridQueryCellInfoEventArgs(0, 0, style);
-            _target.QueryCellInfo(null, e);
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo();
+			var e = new GridQueryCellInfoEventArgs(0, 0, style);
+			_target.QueryCellInfo(null, e);
 
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(0, 1, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual("stategroup1", style.Text);
+			style = new GridStyleInfo();
+			e = new GridQueryCellInfoEventArgs(0, 1, style);
+			_target.QueryCellInfo(null, e);
+			Assert.AreEqual("stategroup1", style.Text);
 
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(0, 2, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual("stategroup2", style.Text);
+			style = new GridStyleInfo();
+			e = new GridQueryCellInfoEventArgs(0, 2, style);
+			_target.QueryCellInfo(null, e);
+			Assert.AreEqual("stategroup2", style.Text);
 
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(0, 3, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(UserTexts.Resources.NoStateGroupPresent, style.Text);
+			style = new GridStyleInfo();
+			e = new GridQueryCellInfoEventArgs(0, 3, style);
+			_target.QueryCellInfo(null, e);
+			Assert.AreEqual(UserTexts.Resources.NoStateGroupPresent, style.Text);
 
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(1, 0, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual("activity", style.Text);
+			style = new GridStyleInfo();
+			e = new GridQueryCellInfoEventArgs(1, 0, style);
+			_target.QueryCellInfo(null, e);
+			Assert.AreEqual("activity", style.Text);
 
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(1, 1, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual("", style.ChoiceList[0]);
-            Assert.AreEqual("ok", style.Text);
+			style = new GridStyleInfo();
+			e = new GridQueryCellInfoEventArgs(1, 1, style);
+			_target.QueryCellInfo(null, e);
+			Assert.AreEqual("", style.ChoiceList[0]);
+			Assert.AreEqual("ok", style.Text);
 
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(1, 2, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual("", style.Text);
+			style = new GridStyleInfo();
+			e = new GridQueryCellInfoEventArgs(1, 2, style);
+			_target.QueryCellInfo(null, e);
+			Assert.AreEqual("", style.Text);
 
-            style = new GridStyleInfo();
-            e = new GridQueryCellInfoEventArgs(2, 0, style);
-            _target.QueryCellInfo(null, e);
-            Assert.AreEqual(UserTexts.Resources.NoScheduledActivity , style.Text);
-        }
+			style = new GridStyleInfo();
+			e = new GridQueryCellInfoEventArgs(2, 0, style);
+			_target.QueryCellInfo(null, e);
+			Assert.AreEqual(UserTexts.Resources.NoScheduledActivity, style.Text);
+		}
 
 
-        [Test]
-        public void SaveCellInfoInsert()
-        {
-            var alarms = new List<IAlarmType>();
-            alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
-                                     AlarmTypeMode.UserDefined, 0.8));
-            alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
-            alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
-                                     AlarmTypeMode.Unknown, 0.8));
-
-            using (mocks.Record())
-            {
-                _stateGroupActvityAlarmRepository.Add(null);
-                LastCall.IgnoreArguments();
-
-				var activity = mocks.StrictMock<IActivity>();
-				Expect.Call(activity.Name).Return("activity").Repeat.AtLeastOnce();
-				
-				var activities = new List<IActivity>();
-				activities.Add(activity);
-
-				var rtaitem = mocks.StrictMock<IRtaStateGroup>();
-				Expect.Call(rtaitem.Name).Return("stategroup").Repeat.AtLeastOnce();
-				
-				var rtagroups = new List<IRtaStateGroup>();
-                rtagroups.Add(rtaitem);
-                
-				PrepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm>());
-            }
-
-            mocks.ReplayAll();
-
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository,
-                                                        _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-            var style = new GridStyleInfo();
-            style.Text = alarms[1].Description.Name;
-
-            var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
-
-            _target.SaveCellInfo(null, e);
-        }
-
-        [Test]
-        public void SaveCellInfoRemove()
-        {
-            var alarms = new List<IAlarmType>();
-            alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
-                                     AlarmTypeMode.UserDefined, 0.8));
-            alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
-            alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
-                                     AlarmTypeMode.Unknown, 0.8));
+		[Test]
+		public void SaveCellInfoInsert()
+		{
+			var alarms = new List<IAlarmType>
+				{
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
+					              AlarmTypeMode.UserDefined, 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
+					              AlarmTypeMode.Unknown, 0.8)
+				};
 
 			var activity = ActivityFactory.CreateActivity("activity");
-			var activities = new List<IActivity>();
-			activities.Add(activity);
+			var activities = new List<IActivity> {activity};
+			var rtaitem = new RtaStateGroup("stategroup", false, true);
+			var rtagroups = new List<IRtaStateGroup> {rtaitem};
+
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm>());
+
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository,
+			                                            _messageBroker, _manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo {Text = alarms[1].Description.Name};
+
+			var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
+
+			_target.SaveCellInfo(null, e);
+		}
+
+		[Test]
+		public void SaveCellInfoRemove()
+		{
+			var alarms = new List<IAlarmType>
+				{
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1),
+					              AlarmTypeMode.UserDefined, 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1),
+					              AlarmTypeMode.Unknown, 0.8)
+				};
+
+			var activity = ActivityFactory.CreateActivity("activity");
+			var activities = new List<IActivity> {activity};
 
 			var rtaitem = new RtaStateGroup("stategroup", true, false);
-			var rtagroups = new List<IRtaStateGroup>();
-	        rtagroups.Add(rtaitem);
+			var rtagroups = new List<IRtaStateGroup> {rtaitem};
 
-            using (mocks.Record())
-            {
-                var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, activity);
-                stategroupactivityalarm.AlarmType = alarms[1];
+			var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, activity) {AlarmType = alarms[1]};
 
-                _stateGroupActvityAlarmRepository.Remove(null);
-                LastCall.IgnoreArguments();
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> {stategroupactivityalarm});
 
-                PrepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> { stategroupactivityalarm });
-            }
-            mocks.ReplayAll();
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo {Text = ""};
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-            var style = new GridStyleInfo();
-            style.Text = "";
+			var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
 
-            var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
+			_target.SaveCellInfo(null, e);
 
-            _target.SaveCellInfo(null, e);
+			style = new GridStyleInfo();
+			e = new GridSaveCellInfoEventArgs(0, 1, style, StyleModifyType.Changes);
+			_target.SaveCellInfo(null, e);
 
-            style = new GridStyleInfo();
-             e = new GridSaveCellInfoEventArgs(0, 1, style, StyleModifyType.Changes);
-            _target.SaveCellInfo(null, e);
+			style = new GridStyleInfo();
+			e = new GridSaveCellInfoEventArgs(1, 0, style, StyleModifyType.Changes);
+			_target.SaveCellInfo(null, e);
+		}
 
-            style = new GridStyleInfo();
-            e = new GridSaveCellInfoEventArgs(1, 0, style, StyleModifyType.Changes);
-            _target.SaveCellInfo(null, e);
-        }
-
-        [Test]
-        public void SaveCellInfoUpdate()
-        {
+		[Test]
+		public void SaveCellInfoUpdate()
+		{
 #pragma warning disable 618
 
-            var alarms = new List<IAlarmType>();
-            alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8));
-            alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
-            alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
+			var alarms = new List<IAlarmType>
+				{
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+				};
 
-            var activities = new List<IActivity>();
-            var activity = ActivityFactory.CreateActivity("activity");
+			var activities = new List<IActivity>();
+			var activity = ActivityFactory.CreateActivity("activity");
 			activities.Add(activity);
 
-            var rtagroups = new List<IRtaStateGroup>();
-            var rtaitem = new RtaStateGroup("stategroup", true, false);
-            rtagroups.Add(rtaitem);
-
-            var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, activity);
-            stategroupactivityalarm.AlarmType = alarms[1];
-
-            PrepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> { stategroupactivityalarm });
-            mocks.ReplayAll();
-
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository, _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-            var style = new GridStyleInfo();
-            style.Text = "userALARM";
-
-            var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
-
-            _target.SaveCellInfo(null, e);
-            Assert.AreEqual("userALARM", stategroupactivityalarm.AlarmType.Description.Name);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void SaveCellInfoUpdateWithNullRtaStateGroup()
-        {
-#pragma warning disable 618
-
-            var alarms = new List<IAlarmType>();
-            alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8));
-            alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
-            alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
-
-            var activities = new List<IActivity>();
-            var activity = ActivityFactory.CreateActivity("activity");
-			activities.Add(activity);
-            
-            var rtagroups = new List<IRtaStateGroup>();
-            
-            var stategroupactivityalarm = new StateGroupActivityAlarm(null, activity);
-            stategroupactivityalarm.AlarmType = alarms[1];
-
-            PrepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> { stategroupactivityalarm });
-            mocks.ReplayAll();
-
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository, _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-            var style = new GridStyleInfo();
-            style.Text = "userALARM";
-
-            var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
-
-            _target.SaveCellInfo(null, e);
-            Assert.AreEqual("userALARM", stategroupactivityalarm.AlarmType.Description.Name);
-        }
-
-        [Test]
-        public void SaveCellInfoUpdateWithNullActivity()
-        {
-#pragma warning disable 618
-
-            var alarms = new List<IAlarmType>();
-            alarms.Add(new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8));
-            alarms.Add(new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8));
-            alarms.Add(new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8));
-
-            var activities = new List<IActivity>();
-        
 			var rtagroups = new List<IRtaStateGroup>();
-            var rtaitem = new RtaStateGroup("stategroup", true, false);
-            rtagroups.Add(rtaitem);
-            
-            var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, null);
-            stategroupactivityalarm.AlarmType = alarms[1];
+			var rtaitem = new RtaStateGroup("stategroup", true, false);
+			rtagroups.Add(rtaitem);
 
-            PrepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> { stategroupactivityalarm });
-            mocks.ReplayAll();
+			var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, activity) {AlarmType = alarms[1]};
 
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository, _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker, _manageAlarmSituationView);
-            _target.Load();
-            var style = new GridStyleInfo();
-            style.Text = "userALARM";
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> {stategroupactivityalarm});
 
-            var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo {Text = "userALARM"};
 
-            _target.SaveCellInfo(null, e);
-            Assert.AreEqual("userALARM", stategroupactivityalarm.AlarmType.Description.Name);
-        }
+			var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
 
-        [TearDown]
-        public void Teardown()
-        {
-            _target = new ManageAlarmSituationPresenter(_alarmTypeRepository, _rtaStateGroupRepository,
-                                                        _activityRepository, _stateGroupActvityAlarmRepository, null,
-                                                        _manageAlarmSituationView);
-            _target.Dispose();
-        }
+			_target.SaveCellInfo(null, e);
+			_target.QueryCellInfo(null, new GridQueryCellInfoEventArgs(1, 1, style));
+			style.CellValue.ToString().Should().Be("userALARM");
+		}
 
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"),
+		 Test]
+		public void SaveCellInfoUpdateWithNullRtaStateGroup()
+		{
+#pragma warning disable 618
 
-        /// <summary>
-        /// Virtual dispose method
-        /// </summary>
-        /// <param name="disposing">
-        /// If set to <c>true</c>, explicitly called.
-        /// If set to <c>false</c>, implicitly called from finalizer.
-        /// </param>
-        private void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                ReleaseManagedResources();
+			var alarms = new List<IAlarmType>
+				{
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+				};
 
-            }
-            ReleaseUnmanagedResources();
-        }
+			var activities = new List<IActivity>();
+			var activity = ActivityFactory.CreateActivity("activity");
+			activities.Add(activity);
 
-        /// <summary>
-        /// Releases the unmanaged resources.
-        /// </summary>
-        protected virtual void ReleaseUnmanagedResources()
-        {
-        }
+			var rtagroups = new List<IRtaStateGroup>();
 
-        /// <summary>
-        /// Releases the managed resources.
-        /// </summary>
-        protected virtual void ReleaseManagedResources()
-        {
-            _target.Dispose();
-        }
-    }
+			var stategroupactivityalarm = new StateGroupActivityAlarm(null, activity) {AlarmType = alarms[1]};
+
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> {stategroupactivityalarm});
+
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo {Text = "userALARM"};
+
+			var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
+
+			_target.SaveCellInfo(null, e); 
+			_target.QueryCellInfo(null, new GridQueryCellInfoEventArgs(1, 1, style));
+			style.CellValue.ToString().Should().Be("userALARM");
+		}
+
+		[Test]
+		public void SaveCellInfoUpdateWithNullActivity()
+		{
+#pragma warning disable 618
+
+			var alarms = new List<IAlarmType>
+				{
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+				};
+
+			var activities = new List<IActivity>();
+
+			var rtagroups = new List<IRtaStateGroup>();
+			var rtaitem = new RtaStateGroup("stategroup", true, false);
+			rtagroups.Add(rtaitem);
+
+			var stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, null) {AlarmType = alarms[1]};
+
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> {stategroupactivityalarm});
+
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+			                                            _manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo {Text = "userALARM"};
+
+			var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
+
+			_target.SaveCellInfo(null, e);
+			_target.QueryCellInfo(null, new GridQueryCellInfoEventArgs(1, 1, style));
+			style.CellValue.ToString().Should().Be("userALARM");
+		}
+
+		[Test]
+		public void ShouldSaveChangedStateGroupActivityAlarm()
+		{
+			var alarms = new List<IAlarmType>
+				{
+					new AlarmType(new Description("userALARM"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.UserDefined, 0.8),
+					new AlarmType(new Description("ok"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Ok, 0.8),
+					new AlarmType(new Description("unknown"), Color.Blue, new TimeSpan(0, 0, 1), AlarmTypeMode.Unknown, 0.8)
+				};
+
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var activities = new List<IActivity>();
+			var rtagroups = new List<IRtaStateGroup>();
+			var rtaitem = new RtaStateGroup("stategroup", true, false);
+			rtagroups.Add(rtaitem);
+
+			IStateGroupActivityAlarm stategroupactivityalarm = new StateGroupActivityAlarm(rtaitem, null) { AlarmType = alarms[1] };
+			stategroupactivityalarm.SetId(Guid.NewGuid());
+			prepareMockForLoad(rtagroups, alarms, activities, new List<IStateGroupActivityAlarm> { stategroupactivityalarm });
+
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			unitOfWork.Stub(x => x.Merge(stategroupactivityalarm)).IgnoreArguments().Return(stategroupactivityalarm);
+
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+														_activityRepository, _stateGroupActvityAlarmRepository, _messageBroker,
+														_manageAlarmSituationView);
+			_target.Load();
+			var style = new GridStyleInfo { Text = "userALARM" };
+
+			var e = new GridSaveCellInfoEventArgs(1, 1, style, StyleModifyType.Changes);
+
+			_target.SaveCellInfo(null, e);
+			_target.OnSave();
+
+			unitOfWork.AssertWasCalled(x => x.Merge(stategroupactivityalarm),
+			                           o =>
+			                           o.Constraints(Rhino.Mocks.Constraints.Is.Equal(stategroupactivityalarm)));
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
+			_alarmTypeRepository.AssertWasCalled(x => x.LoadAll());
+			_activityRepository.AssertWasCalled(x => x.LoadAll());
+			_rtaStateGroupRepository.AssertWasCalled(x => x.LoadAll());
+		}
+
+		[TearDown]
+		public void Teardown()
+		{
+			_target = new ManageAlarmSituationPresenter(_unitOfWorkFactory, _alarmTypeRepository, _rtaStateGroupRepository,
+			                                            _activityRepository, _stateGroupActvityAlarmRepository, null,
+			                                            _manageAlarmSituationView);
+			_target.Dispose();
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		private void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				ReleaseManagedResources();
+			}
+			ReleaseUnmanagedResources();
+		}
+
+		protected virtual void ReleaseUnmanagedResources()
+		{
+		}
+
+		protected virtual void ReleaseManagedResources()
+		{
+			_target.Dispose();
+		}
+	}
 }

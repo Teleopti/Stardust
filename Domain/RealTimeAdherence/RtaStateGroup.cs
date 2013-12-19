@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
+using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         public virtual ReadOnlyCollection<IRtaState> StateCollection
         {
-            get { return new ReadOnlyCollection<IRtaState>(_stateCollection); }
+            get { return new ReadOnlyCollection<IRtaState>(_stateCollection.ToList()); }
         }
 
         public virtual bool IsLogOutState
