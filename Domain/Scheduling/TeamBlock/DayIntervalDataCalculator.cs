@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             if (dayIntervalData == null) return null;
 	        var resolution = dayIntervalData.First().Value[0].Period.ElapsedTime().TotalMinutes;
-            var twoDayIntervalsForAllDays =_twoDaysIntervalGenerator.GenerateTwoDaysInterval( dayIntervalData, (int)resolution);
+            var twoDayIntervalsForAllDays =_twoDaysIntervalGenerator.GenerateTwoDaysInterval( dayIntervalData);
 
             return _medianCalculatorForDays.CalculateMedian(twoDayIntervalsForAllDays, resolution);;
         }
