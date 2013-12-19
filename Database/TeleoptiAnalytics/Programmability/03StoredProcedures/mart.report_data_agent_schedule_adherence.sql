@@ -533,6 +533,60 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 	AND b2.time_zone_id=@time_zone_id
 ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
 
+--b) insert agent statistics outside shift
+INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
+person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
+adherence_type_selected,hide_time_zone,count_activity_per_interval)
+	SELECT	b1.date_id,
+			b1.date_date,
+			d.date_id,
+			d.date_date,
+			i.interval_id,
+			i.interval_name,
+			@intervals_per_day,
+			p.site_id,
+			p.site_name,
+			p.team_id,
+			p.team_name,
+			p.person_code,
+			p.person_id,
+			p.first_name,
+			p.last_name,
+			p.person_name,
+			CASE @adherence_id 
+				WHEN 1 THEN  isnull(fsd.deviation_schedule_ready_s,0)
+				WHEN 2 THEN  isnull(fsd.deviation_schedule_s,0)
+				WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
+			END AS 'deviation_s',
+			isnull(fsd.ready_time_s,0) 'ready_time_s',
+			isnull(fsd.is_logged_in,0) as 'is_logged_in',
+			-1, --isnull = not defined
+			-1, --isnull = not defined
+			CASE @adherence_id 
+				WHEN 1 THEN 0
+				WHEN 2 THEN 0
+				WHEN 3 THEN isnull(fsd.contract_time_s,0)
+			END AS 'adherence_calc_s',
+			@selected_adherence_type,
+			@hide_time_zone,
+			2 --fake a mixed shift = white color	
+	FROM mart.dim_person p
+	INNER JOIN #fact_schedule_deviation fsd
+		ON fsd.person_id=p.person_id
+	INNER JOIN #bridge_time_zone b1
+		ON	fsd.shift_startinterval_id= b1.interval_id
+		AND fsd.shift_startdate_id=b1.date_id
+	INNER JOIN bridge_time_zone b2
+		ON	fsd.interval_id= b2.interval_id
+		AND fsd.date_id= b2.date_id
+	INNER JOIN mart.dim_interval i
+		ON b2.local_interval_id = i.interval_id			
+	INNER JOIN mart.dim_date d 
+		ON b2.local_date_id = d.date_id
+	AND b2.time_zone_id=@time_zone_id
+	WHERE NOT EXISTS (SELECT 1 FROM #result r where r.person_id=fsd.person_id and r.interval_id=i.interval_id and r.date_id=d.date_id)--WHERE NO MATCH ON SCHEDULE
+ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
+
 ----------
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
 ----------
