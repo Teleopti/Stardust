@@ -2,8 +2,8 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -190,5 +190,14 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(ass.PersonalLayers().Single().Id, dto.PersonalShiftCollection.First().LayerCollection.First().Id);
             Assert.AreEqual(ass.OvertimeLayers().Single().Id, dto.OvertimeShiftCollection.First().LayerCollection.First().Id);
         }
+
+		[Test]
+		public void ShouldNotReturnEmptyDtoWhenNoLayersInAssignment()
+		{
+			IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
+			ass.SetId(Guid.NewGuid());
+			
+			target.DomainEntityToDto(ass).Should().Be.Null();
+		}
     }
 }

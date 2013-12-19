@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -279,6 +280,32 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(personAssignmentDto,schedulePartDto.PersonAssignmentCollection.First());
             mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldIgnoreNullAssignmentsWhenCreatingDto()
+		{
+			var assResult = mocks.StrictMock<IPersonAssignment>();
+			var part = mocks.StrictMock<IScheduleDay>();
+			PrepareSchedulePartForDoToDto(part);
+			IEnumerable<IPersistableScheduleData> restrictions = new List<IPersistableScheduleData>().ToArray();
+			
+			Expect.Call(part.PersonAbsenceCollection()).Return(
+				new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
+			Expect.Call(part.PersonAssignment()).Return(assResult);
+			Expect.Call(assignmentAssembler.DomainEntityToDto(assResult)).Return(null);
+			Expect.Call(absenceAssembler.DomainEntitiesToDtos(new List<IPersonAbsence>())).Return(
+				new List<PersonAbsenceDto>());
+
+			Expect.Call(part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> ()));
+			Expect.Call(personMeetingAssembler.DomainEntitiesToDtos(new List<IPersonMeeting> ())).Return(new List<PersonMeetingDto> ());
+			Expect.Call(part.PersistableScheduleDataCollection()).Return(restrictions).Repeat.Twice();
+			Expect.Call(part.ScheduleTag()).Return(NullScheduleTag.Instance);
+			Expect.Call(_tagAssembler.DomainEntityToDto(NullScheduleTag.Instance)).Return(null);
+			mocks.ReplayAll();
+			SchedulePartDto schedulePartDto = target.DomainEntityToDto(part);
+			schedulePartDto.PersonAssignmentCollection.Should().Be.Empty();
+			mocks.VerifyAll();
+		}
 
         [Test]
         public void VerifyDoToDtoWithPersonAbsence()
