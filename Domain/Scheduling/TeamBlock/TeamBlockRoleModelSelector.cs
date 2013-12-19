@@ -79,7 +79,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var dateOnlyDicForActivity = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
 				foreach (var dateOnly in skillIntervalDataPerDateAndActivity.Keys)
 				{
-					dateOnlyDicForActivity.Add(dateOnly, skillIntervalDataPerDateAndActivity[dateOnly][activity]);
+					var dateDic = skillIntervalDataPerDateAndActivity[dateOnly];
+					if (!dateDic.ContainsKey(activity))
+						continue;
+
+					dateOnlyDicForActivity.Add(dateOnly, dateDic[activity]);
 				}
 
 				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);

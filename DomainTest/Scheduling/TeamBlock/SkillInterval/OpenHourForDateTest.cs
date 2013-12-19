@@ -50,9 +50,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 				var result = _target.OpenHours(_dateOnly, _skillIntervalDataPerActivty);
 				Assert.That(result.Equals(new TimePeriod(8, 0, 18, 0)));
 			}
-      
-      
+		}
 
+		[Test]
+		public void ShouldReturnNullIfAllIsClosed()
+		{
+			_skillIntervalDataPerActivty.Add(_activity2, new List<ISkillIntervalData>());
+			using (_mocks.Record())
+			{
+				Expect.Call(_skillIntervalDataOpenHour.GetOpenHours(_skillIntervalDataPerActivty[_activity2], _dateOnly))
+					  .Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.OpenHours(_dateOnly, _skillIntervalDataPerActivty);
+				Assert.IsFalse(result.HasValue);
+			}
 		}
 
 	}
