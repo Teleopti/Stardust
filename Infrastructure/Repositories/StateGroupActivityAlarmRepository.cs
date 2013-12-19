@@ -28,7 +28,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    
 	    }
 
-        /// <summary>
+	    public StateGroupActivityAlarmRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    {
+	    }
+
+	    /// <summary>
         /// Loads all complete graph.
         /// </summary>
         /// <returns></returns>
