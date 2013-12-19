@@ -378,7 +378,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityDefinitionInfo.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockListSwapAnalyzer.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillChecker.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwap.cs" />
