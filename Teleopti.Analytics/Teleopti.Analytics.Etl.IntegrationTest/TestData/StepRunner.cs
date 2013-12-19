@@ -58,6 +58,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			step = new DimShiftCategoryJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
+			step = new StageOvertimeJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			step = new DimOvertimeJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			
 			return result;
 		}
 	}
