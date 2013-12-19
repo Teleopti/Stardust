@@ -69,3 +69,6 @@ SELECT
 UPDATE TeleoptiAnalytics_Demo.dbo.aspnet_Users
 SET UserName=system_user,LoweredUserName=system_user
 WHERE userid=@userid
+
+--flush old RTA AcutalAgentState, else report can't handle seconds more than 24 hours
+TRUNCATE TABLE TeleoptiAnalytics_Demo.rta.ActualAgentState  
