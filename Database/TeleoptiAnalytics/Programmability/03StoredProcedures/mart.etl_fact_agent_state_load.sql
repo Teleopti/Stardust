@@ -9,15 +9,11 @@ GO
 -- Update date: 
 -- =============================================
 --EXEC [mart].[etl_fact_agent_state_load] '00000000-0000-0000-0000-000000000000'
-IF (SELECT compatibility_level FROM sys.databases WHERE name = DB_NAME()) > 90
-BEGIN
-EXEC dbo.sp_executesql @statement = N'
 CREATE PROCEDURE [mart].[etl_fact_agent_state_load] 
 @business_unit_code uniqueidentifier
 WITH EXECUTE AS OWNER	
 AS
 SET NOCOUNT ON
-
 
 --re-load dim_state_group with state groups that might have poped in between ETL.dim_state_group and now()
 EXEC [mart].[etl_dim_state_group_load_livefeed]
@@ -25,43 +21,42 @@ EXEC [mart].[etl_dim_state_group_load_livefeed]
 --continue
 SET NOCOUNT OFF
 
-MERGE mart.fact_agent_state AS f
-USING mart.v_fact_agent_state_merge AS v
+--existing rows
+UPDATE f
+SET f.time_in_state_s = f.time_in_state_s + v.time_in_state_s
+FROM mart.fact_agent_state AS f WITH (TABLOCK)
+INNER JOIN mart.v_fact_agent_state_merge AS v
 ON (
 		f.date_id		= v.date_id
 	AND f.person_id		= v.person_id
---	AND f.interval_id	= v.interval_id
 	AND f.state_group_id= v.state_group_id
 	)
-WHEN MATCHED
-    THEN
-	UPDATE SET f.time_in_state_s = f.time_in_state_s + v.time_in_state_s
-WHEN NOT MATCHED THEN
-    INSERT (date_id, person_id,
-	--interval_id,
-	state_group_id, time_in_state_s, datasource_id, insert_date)
-        VALUES (v.date_id, v.person_id,
-		--v.interval_id,
-		v.state_group_id, v.time_in_state_s, v.datasource_id, v.insert_date);
+
+--new rows
+INSERT INTO mart.fact_agent_state
+	(
+	date_id,
+	person_id,
+	state_group_id,
+	time_in_state_s,
+	datasource_id,
+	insert_date
+	)
+SELECT
+	date_id,
+	person_id,
+	state_group_id,
+	time_in_state_s,
+	datasource_id,
+	insert_date
+FROM mart.v_fact_agent_state_merge v
+WHERE NOT EXISTS (
+	SELECT 1
+	FROM mart.fact_agent_state
+	WHERE
+	date_id				= v.date_id
+	AND person_id		= v.person_id
+	AND state_group_id	= v.state_group_id
+	)
 
 TRUNCATE TABLE [stage].[stg_agent_state]
-' 
-END
-ELSE
-BEGIN
-EXEC dbo.sp_executesql @statement = N'
-CREATE PROCEDURE [mart].[etl_fact_agent_state_load] 
-@business_unit_code uniqueidentifier
-WITH EXECUTE AS OWNER
-AS
---if we you see this version of the SP; we have the wrong compabilty level on the database
---We flush the data until compability level is fixed
-IF (SELECT compatibility_level FROM sys.databases WHERE name = DB_NAME()) > 90
-BEGIN
-	TRUNCATE TABLE [stage].[stg_agent_state]
-END
-' 
-END
-GO
-
-
