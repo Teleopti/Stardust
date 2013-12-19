@@ -83,19 +83,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
 					if (shifts.IsNullOrEmpty()) break;
 
+					//transform
 					var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
 																										   _schedulingResultStateHolder);
-					var skillIntervalDataPerActivityForDate = skillIntervalDataPerDateAndActivity[day];
+					var activities = new HashSet<IActivity>();
+					foreach (var dicPerActivity in skillIntervalDataPerDateAndActivity.Values)
+					{
+						foreach (var activity in dicPerActivity.Keys)
+						{
+							activities.Add(activity);
+						}
+					}
 
 					var activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
-					foreach (var activity in skillIntervalDataPerActivityForDate.Keys)
+					foreach (var activity in activities)
 					{
 						var dateOnlyDicForActivity = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+						foreach (var dateOnly in skillIntervalDataPerDateAndActivity.Keys)
+						{
+							if(dateOnly == day || dateOnly == day.AddDays(1))
+							{
+								var dateDic = skillIntervalDataPerDateAndActivity[dateOnly];
+								if (!dateDic.ContainsKey(activity))
+									continue;
 
-						dateOnlyDicForActivity.Add(day, skillIntervalDataPerDateAndActivity[day][activity]);
+								dateOnlyDicForActivity.Add(dateOnly, dateDic[activity]);
+							}
+						}
 
-						IDictionary<TimeSpan, ISkillIntervalData> dataForActivity =
-							_dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
+						IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
 						activityInternalData.Add(activity, dataForActivity);
 					}
 
