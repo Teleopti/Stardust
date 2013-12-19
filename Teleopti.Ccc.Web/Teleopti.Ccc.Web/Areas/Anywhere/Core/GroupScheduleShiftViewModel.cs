@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -6,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public string PersonId { get; set; }
 		public string Name { get; set; }
+		public string Date { get; set; }
 		public int WorkTimeMinutes { get; set; }
 		public int ContractTimeMinutes { get; set; }
 

@@ -23,7 +23,7 @@ define([
 		
 		this.AddLayers = function (data) {
 			var newItems = ko.utils.arrayMap(data.Projection, function (l) {
-				l.Date = data.Date;
+				l.Offset = data.Offset;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
 				// refact
 				self.IsFullDayAbsence(data.IsFullDayAbsence);

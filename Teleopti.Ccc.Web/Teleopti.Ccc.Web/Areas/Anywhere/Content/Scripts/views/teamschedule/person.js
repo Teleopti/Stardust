@@ -59,7 +59,7 @@ define([
 			}
 
 			if (data.DayOff) {
-				data.DayOff.Date = data.Date;
+				data.DayOff.Offset = data.Offset;
 				var newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
@@ -69,7 +69,7 @@ define([
 			
 			self.Menu.GroupId = data.GroupId;
 			self.Menu.PersonId = self.Id;
-			self.Menu.Date = data.Date;
+			self.Menu.Date = data.Offset;
 		};
 
 		var layers = function () {

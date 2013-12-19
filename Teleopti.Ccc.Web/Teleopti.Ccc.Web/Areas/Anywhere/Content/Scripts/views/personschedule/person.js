@@ -59,7 +59,7 @@ define([
 			}
 			
 			if (data.DayOff) {
-				data.DayOff.Date = data.Date;
+				data.DayOff.Offset = data.Offset;
 				var newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
