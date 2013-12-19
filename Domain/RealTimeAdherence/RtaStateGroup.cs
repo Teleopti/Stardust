@@ -11,9 +11,9 @@ using Teleopti.Interfaces.Infrastructure;
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
     public class RtaStateGroup : AggregateRootWithBusinessUnit,
-                                 IRtaStateGroup
+                                 IRtaStateGroup, IDeleteTag
     {
-		private Iesi.Collections.Generic.ISet<IRtaState> _stateCollection = new HashedSet<IRtaState>();
+        private readonly IList<IRtaState> _stateCollection = new List<IRtaState>();
         private bool _available;
         private bool _defaultStateGroup;
         private string _name;
@@ -140,35 +140,6 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             _isDeleted = true;
         }
-
-	    public virtual object Clone()
-	    {
-		    return EntityClone();
-	    }
-
-		public virtual IRtaStateGroup NoneEntityClone()
-		{
-			var clone = createClone(r => r.NoneEntityClone());
-			clone.SetId(null);
-			return clone;
-		}
-
-		public virtual IRtaStateGroup EntityClone()
-		{
-			return createClone(r => r.EntityClone());
-		}
-
-	    private RtaStateGroup createClone(Func<IRtaState, IRtaState> func)
-	    {
-		    var clone = (RtaStateGroup) MemberwiseClone();
-		    clone._stateCollection = new HashedSet<IRtaState>();
-		    foreach (var state in _stateCollection)
-		    {
-			    var newState = func(state);
-				newState.SetParent(clone);
 			    clone._stateCollection.Add(newState);
-		    }
-		    return clone;
-	    }
     }
 }

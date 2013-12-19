@@ -128,10 +128,10 @@
 			this.treeViewAdv1.EditCancelled += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEditEventHandler(this.treeViewAdv1_EditCancelled);
 			this.treeViewAdv1.BeforeEdit += new Syncfusion.Windows.Forms.Tools.TreeViewAdvBeforeEditEventHandler(this.treeViewAdv1_BeforeEdit);
 			this.treeViewAdv1.AfterCheck += new Syncfusion.Windows.Forms.Tools.TreeNodeAdvEventHandler(this.treeViewAdv1_AfterCheck);
-			this.treeViewAdv1.DragDrop += new System.Windows.Forms.DragEventHandler(this.treeViewAdv1DragDrop);
-			this.treeViewAdv1.DragOver += new System.Windows.Forms.DragEventHandler(this.treeViewAdv1DragOver);
+			this.treeViewAdv1.DragDrop += new System.Windows.Forms.DragEventHandler(this.TreeViewAdv1DragDrop);
+			this.treeViewAdv1.DragOver += new System.Windows.Forms.DragEventHandler(this.TreeViewAdv1DragOver);
 			this.treeViewAdv1.QueryContinueDrag += new System.Windows.Forms.QueryContinueDragEventHandler(this.treeViewAdv1_QueryContinueDrag);
-			this.treeViewAdv1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewAdv1MouseDown);
+			this.treeViewAdv1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeViewAdv1MouseDown);
 			// 
 			// tableLayoutPanelSubHeader1
 			// 
