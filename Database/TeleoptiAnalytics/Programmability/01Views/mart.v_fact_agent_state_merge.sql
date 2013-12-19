@@ -7,7 +7,6 @@ AS
 SELECT 
 date_id			= btz.local_date_id,
 person_id		= ISNULL(dp.person_id,-1),
---interval_id		= btz.local_interval_id,
 state_group_id	= sg.state_group_id,
 time_in_state_s	= sum(stg.time_in_state_s),
 datasource_id	= 1,
@@ -34,6 +33,5 @@ INNER JOIN mart.bridge_time_zone btz
 GROUP BY
 	btz.local_date_id,
 	person_id,
---	btz.local_interval_id,
 	state_group_id
 GO

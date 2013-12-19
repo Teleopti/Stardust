@@ -18,13 +18,12 @@ SET NOCOUNT ON
 --re-load dim_state_group with state groups that might have poped in between ETL.dim_state_group and now()
 EXEC [mart].[etl_dim_state_group_load_livefeed]
 
---continue
 SET NOCOUNT OFF
 
 --existing rows
 UPDATE f
 SET f.time_in_state_s = f.time_in_state_s + v.time_in_state_s
-FROM mart.fact_agent_state AS f WITH (TABLOCK)
+FROM mart.fact_agent_state AS f
 INNER JOIN mart.v_fact_agent_state_merge AS v
 ON (
 		f.date_id		= v.date_id
@@ -60,3 +59,4 @@ WHERE NOT EXISTS (
 	)
 
 TRUNCATE TABLE [stage].[stg_agent_state]
+GO
