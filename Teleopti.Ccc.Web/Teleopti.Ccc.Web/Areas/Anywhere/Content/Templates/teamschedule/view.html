@@ -98,11 +98,11 @@
 										class="dayoff absolute"
 										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
 										<!-- ko if: $root.DisplayDescriptions -->
-										<!-- ko if: $parent.HasShift() -->
+										<!-- ko if: $parent.HasShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes() -->
 										<span class="label layer-description floatleft" data-bind="text: DayOffName"></span>
 										<span class="label layer-description floatright" data-bind="text: DayOffName"></span>
 										<!-- /ko -->
-										<!-- ko ifnot: $parent.HasShift() -->
+										<!-- ko ifnot: $parent.HasShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes()-->
 										<span class="label layer-description" data-bind="text: DayOffName"></span>
 										<!-- /ko -->
 										<!-- /ko -->
