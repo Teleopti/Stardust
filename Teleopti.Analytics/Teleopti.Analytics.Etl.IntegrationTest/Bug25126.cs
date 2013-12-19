@@ -35,7 +35,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 		 
-		[Ignore] //temporary ignored until full test data is available
 		[Test]
 		public void ShouldWorkForStockholm()
 		{
@@ -87,6 +86,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			JobStepBase step = new StageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
 			step = new FactScheduleJobStep(jobParameters,false);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
@@ -104,6 +106,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			step = new FactScheduleJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
 			factSchedules = from s in db.fact_schedule select s;
 
 			// still it should have data on all three dates 96 interval, in the bug only 64 one day extra before the two was deleted
@@ -113,8 +116,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 		}
 
-
-		[Ignore] //temporary ignored until full test data is available
 		[Test]
 		public void ShouldWorkForBrasil()
 		{
@@ -166,6 +167,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var result = StepRunner.RunBasicStepsBeforeSchedule(jobParameters);
 
 			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			step = new DimShiftLengthJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleJobStep(jobParameters, false);
