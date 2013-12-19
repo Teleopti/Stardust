@@ -140,6 +140,5 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             _isDeleted = true;
         }
-			    clone._stateCollection.Add(newState);
     }
 }

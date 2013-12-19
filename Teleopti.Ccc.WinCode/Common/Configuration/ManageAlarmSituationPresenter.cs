@@ -172,6 +172,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 					if (!stateGroupActivityAlarm.Id.HasValue)
 					{
 						_stateGroupActivityAlarmRepository.Add(stateGroupActivityAlarm.ContainedEntity);
+						stateGroupActivityAlarm.UpdateAfterMerge(stateGroupActivityAlarm.ContainedEntity);
 					}
 					else
 					{

@@ -10,6 +10,7 @@ using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Intraday;
@@ -132,6 +133,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>();
 			prepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(),
 			                   new List<IStateGroupActivityAlarm>());
+			var uow = MockRepository.GenerateStub<IUnitOfWork>();
+			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			_rtaStateGroupRepository.Stub(x => x.Get(rtaStateGroupId)).Return(rtaStateGroup);
 			_manageAlarmSituationView.RefreshGrid();
 

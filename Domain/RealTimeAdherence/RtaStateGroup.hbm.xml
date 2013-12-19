@@ -44,12 +44,12 @@
     <property name="Available"
           type="boolean"
           not-null="true" />
-    <set name="StateCollection"
+    <bag name="StateCollection"
 				 cascade="all-delete-orphan"
          inverse="true">
       <key column="Parent" />
       <one-to-many class="RtaState"/>
-    </set>
+    </bag>
 		<many-to-one name="BusinessUnit"
 					 class="Teleopti.Ccc.Domain.Common.BusinessUnit"
             access="nosetter.camelcase-underscore" 

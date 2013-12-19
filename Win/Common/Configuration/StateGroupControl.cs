@@ -212,7 +212,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		public void SaveChanges()
 		{
-						uow.Reassociate(stateGroupView.ContainedOriginalEntity);
 		}
 
 		public void Unload()
