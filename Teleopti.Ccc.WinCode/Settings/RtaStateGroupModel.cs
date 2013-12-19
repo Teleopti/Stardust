@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Settings
 {
-	public class RtaStateGroupView : EntityContainer<IRtaStateGroup>
+	public class RtaStateGroupModel : EntityContainer<IRtaStateGroup>
 	{
 		public string Name
 		{
@@ -36,48 +36,48 @@ namespace Teleopti.Ccc.WinCode.Settings
 			set { ContainedEntity.IsLogOutState = value; }
 		}
 
-		public bool InContractTime
-		{
-			get { return ContainedEntity.InContractTime; }
-			set { ContainedEntity.InContractTime = value; }
-		}
+		//public bool InContractTime
+		//{
+		//	get { return ContainedEntity.InContractTime; }
+		//	set { ContainedEntity.InContractTime = value; }
+		//}
 
-		public IPayload UnderlyingPayload
-		{
-			get { return ContainedEntity.UnderlyingPayload; }
-		}
+		//public IPayload UnderlyingPayload
+		//{
+		//	get { return ContainedEntity.UnderlyingPayload; }
+		//}
 
 		public bool IsDeleted
 		{
 			get { return ContainedEntity.IsDeleted; }
 		}
 
-		public IBusinessUnit BusinessUnit
-		{
-			get { return ContainedEntity.BusinessUnit; }
-		}
+		//public IBusinessUnit BusinessUnit
+		//{
+		//	get { return ContainedEntity.BusinessUnit; }
+		//}
 
-		public string CreatedBy
-		{
-			get { return ContainedEntity.CreatedBy != null ? ContainedEntity.CreatedBy.Name.ToString() : string.Empty; }
-		}
+		//public string CreatedBy
+		//{
+		//	get { return ContainedEntity.CreatedBy != null ? ContainedEntity.CreatedBy.Name.ToString() : string.Empty; }
+		//}
 
-		public DateTime? CreatedOn
-		{
-			get { return ContainedEntity.CreatedOn; }
-		}
+		//public DateTime? CreatedOn
+		//{
+		//	get { return ContainedEntity.CreatedOn; }
+		//}
 
-		public string UpdatedBy
-		{
-			get { return ContainedEntity.UpdatedBy != null ? ContainedEntity.UpdatedBy.Name.ToString() : string.Empty; }
-		}
+		//public string UpdatedBy
+		//{
+		//	get { return ContainedEntity.UpdatedBy != null ? ContainedEntity.UpdatedBy.Name.ToString() : string.Empty; }
+		//}
 
-		public DateTime? UpdatedOn
-		{
-			get { return ContainedEntity.UpdatedOn; }
-		}
+		//public DateTime? UpdatedOn
+		//{
+		//	get { return ContainedEntity.UpdatedOn; }
+		//}
 
-		public RtaStateGroupView(IRtaStateGroup stateGroup)
+		public RtaStateGroupModel(IRtaStateGroup stateGroup)
 		{
 			setContainedEntity(stateGroup);
 		}

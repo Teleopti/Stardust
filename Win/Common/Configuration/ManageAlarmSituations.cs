@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.Configuration;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -11,8 +12,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
     public partial class ManageAlarmSituations : BaseUserControl, ISettingPage
     {
-        private IUnitOfWork _uow;
-
         private ManageAlarmSituationView _view;
 
 
@@ -33,11 +32,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public void SetUnitOfWork(IUnitOfWork value)
         {
-            _uow = value;
         }
 
         public void Persist()
-        {}
+        {
+	        
+        }
 
         public void InitializeDialogControl()
         {
@@ -64,7 +64,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         public void LoadControl()
         {
 			_view = new ManageAlarmSituationView(teleoptiGridControl1);
-			_view.Presenter = new ManageAlarmSituationPresenter(new AlarmTypeRepository(_uow), new RtaStateGroupRepository(_uow), new ActivityRepository(_uow), new StateGroupActivityAlarmRepository(_uow), StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging, _view);
+	        var currentUnitOfWork = UnitOfWorkFactory.CurrentUnitOfWork();
+	        _view.Presenter = new ManageAlarmSituationPresenter(UnitOfWorkFactory.Current,
+																new AlarmTypeRepository(currentUnitOfWork),
+	                                                            new RtaStateGroupRepository(currentUnitOfWork),
+	                                                            new ActivityRepository(currentUnitOfWork),
+	                                                            new StateGroupActivityAlarmRepository(currentUnitOfWork),
+	                                                            StateHolderReader.Instance.StateReader.ApplicationScopeData
+	                                                                             .Messaging, _view);
 			_view.LoadGrid();
 		}
 

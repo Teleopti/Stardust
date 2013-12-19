@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
 	public partial class StateGroupControl : BaseUserControl, ISettingPage
 	{
-		private readonly List<RtaStateGroupView> _stateGroupCollection = new List<RtaStateGroupView>();
-		private readonly List<RtaStateGroupView> _statesToDelete = new List<RtaStateGroupView>();
+		private readonly List<RtaStateGroupModel> _stateGroupCollection = new List<RtaStateGroupModel>();
+		private readonly List<RtaStateGroupModel> _statesToDelete = new List<RtaStateGroupModel>();
 		// Helps keep track of the node that is being dragged (and which node has contextmenu visible).
 		private TreeNodeAdv _currentSourceNode;
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			if (treeViewAdv1.SelectedNode == null)
 				return;
 
-			var stateGroupToDelete = treeViewAdv1.SelectedNode.TagObject as RtaStateGroupView;
+			var stateGroupToDelete = treeViewAdv1.SelectedNode.TagObject as RtaStateGroupModel;
 			if (stateGroupToDelete != null)
 				deleteStateGroup(stateGroupToDelete);
 			var stateToDelete = treeViewAdv1.SelectedNode.TagObject as IRtaState;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			treeViewAdv1.SelectedNode.Remove();
 		}
 
-		private void deleteStateGroup(RtaStateGroupView stateGroupToDelete)
+		private void deleteStateGroup(RtaStateGroupModel stateGroupToDelete)
 		{
 			var reloadTree = false;
 			// A state group set as default can not be deleted
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var defaultStateGroup = getDefaultStateGroup();
 
 			var nodeWithDefaultGroup = (from TreeNodeAdv node in treeViewAdv1.Nodes
-			                            let stateGroupView = node.TagObject as RtaStateGroupView
+			                            let stateGroupView = node.TagObject as RtaStateGroupModel
 			                            where stateGroupView != null && stateGroupView.DefaultStateGroup
 			                            select node).FirstOrDefault();
 			
@@ -151,14 +151,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void addStateGroup()
 		{
 			var newStateGroup = new RtaStateGroup(Resources.NewStateGroup, false, false);
-			var stateGroupView = new RtaStateGroupView(newStateGroup);
+			var stateGroupView = new RtaStateGroupModel(newStateGroup);
 			_stateGroupCollection.Add(stateGroupView);
 			var parentNode = (createNode(stateGroupView));
 			treeViewAdv1.Nodes.Add(parentNode);
 			treeViewAdv1.Root.Sort(TreeNodeAdvSortType.Text);
 		}
 
-		private RtaStateGroupView getDefaultStateGroup()
+		private RtaStateGroupModel getDefaultStateGroup()
 		{
 			return _stateGroupCollection.FirstOrDefault(s => s.DefaultStateGroup);
 		}
@@ -217,11 +217,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					}
 					else
 					{
+						uow.Reassociate(stateGroupView.ContainedOriginalEntity);
 						var state = uow.Merge(stateGroupView.ContainedEntity);
-						if(!LazyLoadingManager.IsInitialized(state.CreatedBy))
-							LazyLoadingManager.Initialize(state.CreatedBy);
-						if(!LazyLoadingManager.IsInitialized(state.UpdatedBy))
-							LazyLoadingManager.Initialize(state.UpdatedBy);
 						stateGroupView.UpdateAfterMerge(state);
 					}
 				}
@@ -259,12 +256,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 				foreach (var stateGroup in stateGroupCollection)
 				{
-					if (!LazyLoadingManager.IsInitialized(stateGroup.CreatedBy))
-						LazyLoadingManager.Initialize(stateGroup.CreatedBy);
-					if (!LazyLoadingManager.IsInitialized(stateGroup.UpdatedBy))
-						LazyLoadingManager.Initialize(stateGroup.UpdatedBy);
-
-					_stateGroupCollection.Add(new RtaStateGroupView(stateGroup));
+					_stateGroupCollection.Add(new RtaStateGroupModel(stateGroup));
 				}
 			}
 		}
@@ -278,7 +270,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			treeViewAdv1.ContextMenu = new ContextMenu();
 		}
 
-		private void updateTreeview(RtaStateGroupView stateGroupToSelect, bool isNew)
+		private void updateTreeview(RtaStateGroupModel stateGroupToSelect, bool isNew)
 		{
 			treeViewAdv1.Nodes.Clear();
 			TreeNodeAdv selectedNode = null;
@@ -320,7 +312,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 		}
 
-		private static TreeNodeAdv createNode(RtaStateGroupView stateGroup)
+		private static TreeNodeAdv createNode(RtaStateGroupModel stateGroup)
 		{
             var node = new TreeNodeAdv(stateGroup.Name) {TagObject = stateGroup};
 			setNodeToolTip(node);
@@ -351,7 +343,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private static void setNodeToolTip(TreeNodeAdv node)
 		{
-            var stateGroup = node.TagObject as RtaStateGroupView;
+            var stateGroup = node.TagObject as RtaStateGroupModel;
 			if (stateGroup == null)
 			{
 				// If node is not a state group we don´t set tooltip
@@ -424,7 +416,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			if (destinationNode == null) return false;
             var sourceState = sourceNode.TagObject as IRtaState;
-            var destinationStateGroup = destinationNode.TagObject as RtaStateGroupView;
+            var destinationStateGroup = destinationNode.TagObject as RtaStateGroupModel;
 			if (sourceState != null && destinationStateGroup != null && sourceState.StateGroup != destinationStateGroup.ContainedEntity)
 				return true;
 
@@ -453,7 +445,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		{
 			foreach (var treeNodeAdv in sourceNode)
 			{
-				var stateGroup = destinationNode.TagObject as RtaStateGroupView;
+				var stateGroup = destinationNode.TagObject as RtaStateGroupModel;
 				var state = treeNodeAdv.TagObject as IRtaState;
 				if (stateGroup != null && state != null)
 				{
@@ -464,7 +456,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private static void setAvailableDescriptionToNode(TreeNodeAdv node)
 		{
-            var stateGroup = node.TagObject as RtaStateGroupView;
+            var stateGroup = node.TagObject as RtaStateGroupModel;
 			if (stateGroup != null)
 			{
 				node.Text = node.Checked
@@ -475,7 +467,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private static void setUseForLogOutDescriptionToNode(TreeNodeAdv node)
 		{
-            var stateGroup = node.TagObject as RtaStateGroupView;
+            var stateGroup = node.TagObject as RtaStateGroupModel;
 			if (stateGroup != null)
 			{
 				node.Text = stateGroup.IsLogOutState
@@ -525,7 +517,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void treeViewAdv1_NodeEditorValidated(object sender, TreeNodeAdvEditEventArgs e)
 		{
 			// New text change is made - Save Name change in object
-			var stateGroup = e.Node.TagObject as RtaStateGroupView;
+			var stateGroup = e.Node.TagObject as RtaStateGroupModel;
 			if (stateGroup != null)
 			{
 				// State Group name changed
@@ -545,7 +537,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void treeViewAdv1_AfterCheck(object sender, TreeNodeAdvEventArgs e)
 		{
 			// The available checkbox is changed
-			var stateGroup = e.Node.TagObject as RtaStateGroupView;
+			var stateGroup = e.Node.TagObject as RtaStateGroupModel;
 			if (stateGroup == null) return;
 			// State Group changed
 			stateGroup.Available = e.Node.Checked;
@@ -562,7 +554,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			//If the selected node is not equal to null, check for the condition
 			if (treeViewAdv1.SelectedNode == null) return;
 			// Only State group node should have contextmenu
-			var stateGroup = treeViewAdv1.SelectedNode.TagObject as RtaStateGroupView;
+			var stateGroup = treeViewAdv1.SelectedNode.TagObject as RtaStateGroupModel;
 			if (stateGroup == null) return;
 			_currentSourceNode = treeViewAdv1.SelectedNode;
 			buildContextMenu();
@@ -589,7 +581,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void menuItemSetLogOutClick(object sender, EventArgs e)
 		{
-			var stateGroupToSet = _currentSourceNode.TagObject as RtaStateGroupView;
+			var stateGroupToSet = _currentSourceNode.TagObject as RtaStateGroupModel;
 			if (stateGroupToSet == null) return;
 
 			stateGroupToSet.IsLogOutState = !stateGroupToSet.IsLogOutState;
@@ -603,7 +595,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void setDefaultStateGroup()
 		{
-			var stateGroupToSet = _currentSourceNode.TagObject as RtaStateGroupView;
+			var stateGroupToSet = _currentSourceNode.TagObject as RtaStateGroupModel;
 
 			if (stateGroupToSet == null)
 				return;
@@ -623,7 +615,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private void treeViewAdv1_BeforeEdit(object sender, TreeNodeAdvBeforeEditEventArgs e)
 		{
-			var stateGroup = e.Node.TagObject as RtaStateGroupView;
+			var stateGroup = e.Node.TagObject as RtaStateGroupModel;
 			if (stateGroup != null)
 			{
 				// be sure to remove ev. desc. in node text before editing state group name

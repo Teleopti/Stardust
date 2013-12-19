@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
+using Iesi.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -11,7 +13,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
     public class RtaStateGroup : AggregateRootWithBusinessUnit,
                                  IRtaStateGroup
     {
-        private  IList<IRtaState> _stateCollection = new List<IRtaState>();
+		private Iesi.Collections.Generic.ISet<IRtaState> _stateCollection = new HashedSet<IRtaState>();
         private bool _available;
         private bool _defaultStateGroup;
         private string _name;
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         public virtual ReadOnlyCollection<IRtaState> StateCollection
         {
-            get { return new ReadOnlyCollection<IRtaState>(_stateCollection); }
+            get { return new ReadOnlyCollection<IRtaState>(_stateCollection.ToList()); }
         }
 
         public virtual bool IsLogOutState
@@ -146,24 +148,25 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
 		public virtual IRtaStateGroup NoneEntityClone()
 		{
-			var clone = createClone((_, __) => { });
+			var clone = createClone(r => r.NoneEntityClone());
 			clone.SetId(null);
 			return clone;
 		}
 
 		public virtual IRtaStateGroup EntityClone()
 		{
-			return createClone((oldstate, newstate) => newstate.SetId(oldstate.Id));
+			return createClone(r => r.EntityClone());
 		}
 
-	    private RtaStateGroup createClone(Action<IEntity, IEntity> action)
+	    private RtaStateGroup createClone(Func<IRtaState, IRtaState> func)
 	    {
 		    var clone = (RtaStateGroup) MemberwiseClone();
-		    clone._stateCollection = new List<IRtaState>();
-		    foreach (var state in StateCollection)
+		    clone._stateCollection = new HashedSet<IRtaState>();
+		    foreach (var state in _stateCollection)
 		    {
-			    var newState = clone.AddState(state.Name, state.StateCode, state.PlatformTypeId);
-				action(state, newState);
+			    var newState = func(state);
+				newState.SetParent(clone);
+			    clone._stateCollection.Add(newState);
 		    }
 		    return clone;
 	    }

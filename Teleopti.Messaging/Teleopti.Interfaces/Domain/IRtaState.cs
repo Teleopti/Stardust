@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: Jonas N
     /// Created date: 2008-10-03
     /// </remarks>
-    public interface IRtaState : IAggregateEntity
+    public interface IRtaState : IAggregateEntity, ICloneableEntity<IRtaState>
     {
         /// <summary>
         /// Gets or sets the name.

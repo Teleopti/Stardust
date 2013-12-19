@@ -42,5 +42,22 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         {
             get { return _platformTypeId; }
         }
+
+	    public virtual object Clone()
+	    {
+		    return MemberwiseClone();
+	    }
+
+		public virtual IRtaState NoneEntityClone()
+	    {
+		    var clone = (IRtaState)MemberwiseClone();
+		    clone.SetId(null);
+		    return clone;
+	    }
+
+		public virtual IRtaState EntityClone()
+	    {
+		    return (IRtaState) MemberwiseClone();
+	    }
     }
 }
