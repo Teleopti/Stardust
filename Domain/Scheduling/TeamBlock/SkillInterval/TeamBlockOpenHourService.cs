@@ -28,7 +28,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 			{
 				var openHours = _openHourForDate.OpenHours(dateOnly, dayIntervalDataPerDateAndActivity[dateOnly]);
-				var narrowed = getNarrowTimePeriod(openHoursForBlock, openHours);
+				if (!openHours.HasValue)
+					return null;
+
+				var narrowed = getNarrowTimePeriod(openHoursForBlock, openHours.Value);
 				if (!narrowed.HasValue)
 					return null;
 

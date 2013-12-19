@@ -8,15 +8,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface ISkillIntervalDataOpenHour
     {
-		TimePeriod GetOpenHours(IList<ISkillIntervalData> skillIntervalDataList, DateOnly skillDayDate);
+		TimePeriod? GetOpenHours(IEnumerable<ISkillIntervalData> skillIntervalDataList, DateOnly skillDayDate);
     }
 
     public class SkillIntervalDataOpenHour : ISkillIntervalDataOpenHour
     {
         
-        public TimePeriod GetOpenHours(IList<ISkillIntervalData> skillIntervalDataList, DateOnly skillDayDate)
+        public TimePeriod? GetOpenHours(IEnumerable<ISkillIntervalData> skillIntervalDataList, DateOnly skillDayDate)
         {
-			
+	        if (!skillIntervalDataList.Any())
+		        return null;
+
             var minDateTime = (from o in skillIntervalDataList
                            select o.Period.StartDateTime).Min();
             var maxDateTime = (from o in skillIntervalDataList
