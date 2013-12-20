@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public class ShiftTradeRequestStatusChecker : IBatchShiftTradeRequestStatusChecker, IClearReferredShiftTradeRequests
+	public class ShiftTradeRequestStatusChecker : IBatchShiftTradeRequestStatusChecker
     {
         private readonly ICurrentScenario _scenarioRepository;
         private readonly IScheduleRepository _scheduleRepository;
@@ -112,10 +112,5 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
             return scheduleUnchanged;
         }
-
-		public void ClearReferredShiftTradeRequests()
-		{
-			
-		}
     }
 }

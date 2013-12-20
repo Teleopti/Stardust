@@ -7,14 +7,9 @@ using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WinCode.Common.Collections;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 {
@@ -34,14 +29,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		private readonly IList<IPerson> _permittedPersons;
 		private readonly IUndoRedoContainer _undoRedoContainer;
 		private readonly IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
-		private readonly IEventAggregator _eventAggregator;
+		private IEventAggregator _eventAggregator;
 		private readonly IPersonRequestCheckAuthorization _authorization;
 		private readonly TimeZoneInfo _timeZoneInfo;
 		private static readonly object FilterLock = new object();
-		private readonly IRepositoryFactory _repositoryFactory;
-		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 
-		public ListCollectionView PersonRequestViewModels { get; set; }
+	    public ListCollectionView PersonRequestViewModels { get; set; }
 
 		public IList<PersonRequestViewModel> SelectedModels
 		{
@@ -62,7 +55,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 												IDictionary<IPerson, IPersonAccountCollection> allAccounts,
 												IEventAggregator eventAggregator,
 			                                    IPersonRequestCheckAuthorization authorization,
-                                                TimeZoneInfo timeZoneInfo, IRepositoryFactory repositoryFactory)
+                                                TimeZoneInfo timeZoneInfo)
 		{
 			_eventAggregator = eventAggregator;
 			_authorization = authorization;
@@ -80,7 +73,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			filterItems();
 			_undoRedoContainer.ChangedHandler += _undoRedoContainer_ChangedHandler;
 		    _timeZoneInfo = timeZoneInfo;
-			_repositoryFactory = repositoryFactory;
 		}
 
 		void _undoRedoContainer_ChangedHandler(object sender, EventArgs e)
@@ -106,7 +98,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 					});
 		}
 
-		public void CreatePersonRequestViewModels(IList<IPersonRequest> personRequests, IPersonRequestCheckAuthorization authorization)
+		public void CreatePersonRequestViewModels(IList<IPersonRequest> personRequests,IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)
 		{
 			lock (FilterLock)
 			{
@@ -114,7 +106,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 				_showOnlymodels = new List<PersonRequestViewModel>();
 				foreach (var request in personRequests)
 				{
-					InsertPersonRequestViewModel(request, authorization);
+					InsertPersonRequestViewModel(request, statusChecker, authorization);
 				}	
 			}
 			filterItems();
@@ -126,30 +118,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			PersonRequestViewModels.CustomSort = customSorter;
 		}
 
-		public void InsertPersonRequestViewModel(IPersonRequest request, IPersonRequestCheckAuthorization authorization)
+		public void InsertPersonRequestViewModel(IPersonRequest request, IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)
 		{
 			if (!authorization.HasViewRequestPermission(request) || request.IsNew) return;
 
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var defaultScenarioFromRepository =
-					new DefaultScenarioFromRepository(_repositoryFactory.CreateScenarioRepository(uow));
-				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusChecker(
-					defaultScenarioFromRepository,
-					_repositoryFactory.CreateScheduleRepository(uow), authorization);
+			var model = new PersonRequestViewModel(request, statusChecker, _allAccounts[request.Person], _eventAggregator, _timeZoneInfo);
+			var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(statusChecker);
+			var referredSpecification = new ShiftTradeRequestReferredSpecification(statusChecker);
+			var afterPeriodSpecification = new ShiftTradeRequestIsAfterLoadedPeriodSpecification(_schedulePeriod);
 
-
-
-				var model = new PersonRequestViewModel(request, _shiftTradeRequestStatusChecker, _allAccounts[request.Person],
-				                                       _eventAggregator,
-				                                       _timeZoneInfo);
-				var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
-				var referredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
-
-				if (!okByMeSpecification.IsSatisfiedBy(request) &&
-				    !referredSpecification.IsSatisfiedBy(request))
-					AddPersonRequestViewModel(model);
-			}
+			if (afterPeriodSpecification.IsSatisfiedBy(request) ||
+				(!okByMeSpecification.IsSatisfiedBy(request) &&
+				!referredSpecification.IsSatisfiedBy(request)))
+				AddPersonRequestViewModel(model);
 		}
 
 		public void AddPersonRequestViewModel(PersonRequestViewModel personRequestViewModel)

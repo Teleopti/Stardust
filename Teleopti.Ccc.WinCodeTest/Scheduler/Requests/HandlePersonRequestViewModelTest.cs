@@ -2,13 +2,10 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
@@ -33,9 +30,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         private IEventAggregator _eventAggregator;
         private int _propertyChangedEventCallCount;
         private TimeZoneInfo _TimeZoneInfo;
-	    private IRepositoryFactory _repositoryFactory;
 
-	    [SetUp]
+        [SetUp]
         public void Setup()
         {
             _person = PersonFactory.CreatePerson("First", "Last");
@@ -53,12 +49,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _schedulePeriod = new DateTimePeriod(1800, 1, 1, 2999, 1, 1);
             _source = CreateRequestObject(_person, _period);
             _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerForTestDoesNothing();
-		    _repositoryFactory = MockRepository.GenerateStub<IRepositoryFactory>();
 
             _allAccounts = new Dictionary<IPerson, IPersonAccountCollection> { { _person, acc } };
             _TimeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
             _target = new HandlePersonRequestViewModel(_schedulePeriod, new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts,
-                _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo, _repositoryFactory);
+                _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
         }
 
         [Test]
@@ -103,7 +98,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         {
 
             IList<IPersonRequest> reguests = new List<IPersonRequest> { _source };
-            _target.CreatePersonRequestViewModels(reguests, new PersonRequestAuthorizationCheckerForTest());
+            _target.CreatePersonRequestViewModels(reguests, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
             Assert.AreEqual(_target.PersonRequestViewModels.Count, 1);
             //Select the first:
@@ -124,7 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
 
 
             IList<IPersonRequest> personRequests = new List<IPersonRequest> { request1, request2, request4, request3 };
-            _target.CreatePersonRequestViewModels(personRequests, new PersonRequestAuthorizationCheckerForTest());
+            _target.CreatePersonRequestViewModels(personRequests, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
 
             IList<IPersonRequest> sortedList = new List<IPersonRequest> { request1, request2, request3, request4 };
@@ -149,17 +144,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriod()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo, _repositoryFactory);
+                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
-            _target.CreatePersonRequestViewModels(requests, new PersonRequestAuthorizationCheckerForTest());
+            _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
 
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MinValue.AddDays(2).ToUniversalTime()),
-				new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo, _repositoryFactory);
-            _target.CreatePersonRequestViewModels(requests, new PersonRequestAuthorizationCheckerForTest());
+                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+            _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is outside the period, so it should be set to false when created");
         }
@@ -168,17 +163,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         public void VerifyValidatesAgainstSchedulePeriodAndPerson()
         {
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-				new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo, _repositoryFactory);
+                new List<IPerson> { _person }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
 
             IList<IPersonRequest> requests = new List<IPersonRequest> { _source };
-            _target.CreatePersonRequestViewModels(requests, new PersonRequestAuthorizationCheckerForTest());
+            _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
 
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsTrue(_target.SelectedModel.IsWithinSchedulePeriod, "The model is within the period, so its set to true");
 
             _target = new HandlePersonRequestViewModel(new DateTimePeriod(DateTime.MinValue.ToUniversalTime(), DateTime.MaxValue.ToUniversalTime()),
-				new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo, _repositoryFactory);
-            _target.CreatePersonRequestViewModels(requests, new PersonRequestAuthorizationCheckerForTest());
+                new List<IPerson> { PersonFactory.CreatePerson("Tommy") }, new UndoRedoContainer(1), _allAccounts, _eventAggregator, new PersonRequestAuthorizationCheckerForTest(), _TimeZoneInfo);
+            _target.CreatePersonRequestViewModels(requests, new ShiftTradeRequestStatusCheckerForTestDoesNothing(), new PersonRequestAuthorizationCheckerForTest());
             _target.PersonRequestViewModels.MoveCurrentToFirst();
             Assert.IsFalse(_target.SelectedModel.IsWithinSchedulePeriod, "Model is within the period but purson is not within, so it should be set to false when created");
         }
@@ -244,7 +239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             //Its not so often, but just incase, if somebody ads a new request, this will be shown even if the filter is active
             var modelToAdd = CreateModel(_person);
             IList<IPersonRequest> reguests = new List<IPersonRequest> { _source };
-            _target.CreatePersonRequestViewModels(reguests, new PersonRequestAuthorizationCheckerForTest());
+            _target.CreatePersonRequestViewModels(reguests, _shiftTradeRequestStatusChecker, new PersonRequestAuthorizationCheckerForTest());
 
             Assert.AreEqual(_target.PersonRequestViewModels.Count, 1);
             _target.ShowOnly(GetAllModels());

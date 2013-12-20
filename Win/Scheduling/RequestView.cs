@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
@@ -32,17 +31,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         
 
 
-        public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator, RepositoryFactory repositoryFactory)
+        public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
         {
             _eventAggregator = eventAggregator;
             _container = container;
             _personRequestList = schedulerStateHolder.PersonRequests;
             _authorization = new PersonRequestCheckAuthorization();
             _shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(schedulerStateHolder.Schedules,_authorization);
-	        _model = new HandlePersonRequestViewModel(schedulerStateHolder.RequestedPeriod.Period(),
-	                                                  schedulerStateHolder.AllPermittedPersons, _container,
-	                                                  allAccountPersonCollection, _eventAggregator, _authorization,
-	                                                  schedulerStateHolder.TimeZoneInfo, repositoryFactory);
+            _model = new HandlePersonRequestViewModel(schedulerStateHolder.RequestedPeriod.Period(), schedulerStateHolder.AllPermittedPersons, _container, allAccountPersonCollection, _eventAggregator, _authorization, schedulerStateHolder.TimeZoneInfo);
             CreatePersonRequestViewModels(schedulerStateHolder, handlePersonRequestView);
             
             InitObservableListEvents();
@@ -50,13 +46,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void CreatePersonRequestViewModels(ISchedulerStateHolder schedulerStateHolder, FrameworkElement handlePersonRequestView)
         {
-            _model.CreatePersonRequestViewModels(schedulerStateHolder.PersonRequests, _authorization);
+            _model.CreatePersonRequestViewModels(schedulerStateHolder.PersonRequests, _shiftTradeRequestStatusChecker, _authorization);
             handlePersonRequestView.DataContext = _model;
         }
 
         public void InsertPersonRequestViewModel(IPersonRequest personRequest)
         {
-            _model.InsertPersonRequestViewModel(personRequest, _authorization);
+            _model.InsertPersonRequestViewModel(personRequest, _shiftTradeRequestStatusChecker, _authorization);
         }
 
         public void DeletePersonRequestViewModel(IPersonRequest personRequest)
