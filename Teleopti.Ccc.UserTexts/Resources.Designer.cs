@@ -14860,6 +14860,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No schedule period present.
+        /// </summary>
+        public static string NoSchedulePeriodPresent {
+            get {
+                return ResourceManager.GetString("NoSchedulePeriodPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No shifts available for this preference.
         /// </summary>
         public static string NoShiftsAvailableForThisPreference {
