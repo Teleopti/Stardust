@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		private DateTimePeriod? _loadedPeriod;
 		private IScenario _requestedScenario;
 		private readonly IList<IPersonRequest> _workingPersonRequests = new List<IPersonRequest>();
-		private ShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
+		private ShiftTradeRequestStatusCheckerWithSchedule _shiftTradeRequestStatusChecker;
 		private TimeZoneInfo _timeZoneInfo = TeleoptiPrincipal.Current.Regional.TimeZone;
 		private CommonNameDescriptionSetting _commonNameDescription = new CommonNameDescriptionSetting();
 		private CommonNameDescriptionSettingScheduleExport _commonNameDescriptionScheduleExport = new CommonNameDescriptionSettingScheduleExport();
@@ -207,7 +207,8 @@ namespace Teleopti.Ccc.WinCode.Common
 			{
 				var defaultScenarioFromRepository = new DefaultScenarioFromRepository(repositoryFactory.CreateScenarioRepository(unitOfWork));
 				var scheduleRepository = repositoryFactory.CreateScheduleRepository(unitOfWork);
-				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusChecker(defaultScenarioFromRepository,scheduleRepository, authorization);
+				//defaultScenarioFromRepository,scheduleRepository, authorization
+				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(SchedulingResultState.Schedules, authorization);
 			}
 
 			IPersonRequestRepository personRequestRepository = null;
