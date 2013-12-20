@@ -504,14 +504,22 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                                                            UseStudentAvailability = false,
                                                            UseRotations = true
                                                        };
-            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
-            
-            helper.SchedulePeriodData();
-            if (!helper.Period.HasValue)
-                return;
 
             listViewSchedulePeriod.Items.Clear();
 
+			var personNameItem = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
+			personNameItem.Font = personNameItem.Font.ChangeToBold();
+			listViewSchedulePeriod.Items.Add(personNameItem);
+
+			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
+			helper.SchedulePeriodData();
+			if (nullOrZeroPeriod(helper.Period))
+			{
+				var noPeriodPresentItem = new ListViewItem(Resources.NoSchedulePeriodPresent);
+				listViewSchedulePeriod.Items.Add(noPeriodPresentItem);
+				return;
+			}
+				
             int freeSlots = helper.Period.Value.DayCount() - helper.CurrentOccupiedSlots;
             TimeSpan avgWorkTimePerSlot = TimeSpan.Zero;
             if (freeSlots > 0)
@@ -520,10 +528,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                     TimeSpan.FromTicks(helper.SchedulePeriodTargetTime.Subtract(helper.CurrentContractTime).Ticks/
                                        freeSlots);
             }
-
-            var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
-            item.Font = item.Font.ChangeToBold();
-            listViewSchedulePeriod.Items.Add(item);
 
             createAndAddItem(listViewSchedulePeriod, Resources.Period, helper.Period.Value.DateString, 1);
             createAndAddItem(listViewSchedulePeriod, Resources.Type, _schedulePeriodTypeList[helper.SchedulePeriod.PeriodType], 2);
@@ -563,7 +567,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
            
 
             createAndAddItem(listViewSchedulePeriod, Resources.Current, helper.Period.Value.DateString, 1);
-            item = createAndAddItem(listViewSchedulePeriod, Resources.DaysOff,
+            var item = createAndAddItem(listViewSchedulePeriod, Resources.DaysOff,
                                     helper.CurrentDaysOff.ToString(CultureInfo.CurrentCulture), 2);
             if (employmentType == EmploymentType.FixedStaffNormalWorkTime)
             {
@@ -606,7 +610,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
         }
 
-        private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)
+	    private bool nullOrZeroPeriod(DateOnlyPeriod? period)
+	    {
+		    if (!period.HasValue)
+			    return true;
+		    var periodValue = period.Value;
+		    return (periodValue.StartDate == DateTime.MinValue && periodValue.EndDate == DateTime.MinValue);
+	    }
+
+	    private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)
         {
             var item = new ListViewItem(itemText);
             
