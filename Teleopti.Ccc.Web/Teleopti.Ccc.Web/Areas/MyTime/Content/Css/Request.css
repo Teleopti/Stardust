@@ -163,16 +163,20 @@
 .shift-trade-layer-container:first-child {
 	height: 30px;
 }
-.shift-trade-layer
+.shift-trade-layer.add
 {
 	height: 20px;
 	top: 5px;
-	/*position: absolute;
+	position: absolute;
+}
+.shift-trade-layer.edit
+{
+	position: absolute;
 	zoom: 1;
 	filter: alpha(opacity=80);
 	opacity: 0.80;
 	height: 18px;
-	z-index: 10;*/
+	z-index: 10;
 }
 .shift-trade-add-schedule
 {

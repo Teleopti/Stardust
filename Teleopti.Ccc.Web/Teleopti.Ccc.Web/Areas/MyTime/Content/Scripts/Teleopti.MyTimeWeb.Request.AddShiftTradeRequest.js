@@ -433,8 +433,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 	
 	function loadAPageIfRequired() {
-		
-		$('#tooltipContainer').each(function(i, el) {
+
+	    if ($('.Request-add-shift-trade').filter(':visible').length == 0) {
+	        return;
+	    }
+	    $('#tooltipContainer').each(function (i, el) {
 			// Is this element visible onscreen?
 			// LoadMore
 			var elem = $(el);

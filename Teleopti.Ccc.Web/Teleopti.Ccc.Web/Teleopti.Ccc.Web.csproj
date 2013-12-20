@@ -381,7 +381,6 @@
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePeriodViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModel.cs" />
-    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePeriodViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />

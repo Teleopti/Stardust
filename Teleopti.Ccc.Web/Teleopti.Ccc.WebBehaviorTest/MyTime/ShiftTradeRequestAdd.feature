@@ -97,7 +97,7 @@ Scenario: Show possible shift trades
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -123,7 +123,7 @@ Scenario: Do not show person that agent has no permission to
 	Given I am an agent in a team with access only to my own data
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -153,7 +153,7 @@ Scenario: Time line should cover all scheduled shifts
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -175,12 +175,12 @@ Scenario: When clicking an agent in shift trade list, the other agent's should b
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent2 have a shift with
+	And OtherAgent2 has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 07:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -211,7 +211,7 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -238,12 +238,12 @@ Scenario: Cancel a shift trade request before sending
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent2 have a shift with
+	And OtherAgent2 has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 07:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -310,12 +310,12 @@ Scenario: Default to my team
 	| StartTime             | 2030-01-02 06:00 |
 	| EndTime               | 2030-01-02 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-02 10:00 |
 	| EndTime               | 2030-01-02 20:00 |
 	| Shift category		| Late	           |
-	And OtherAgentNotInMyTeam have a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-02 08:00 |
 	| EndTime               | 2030-01-02 18:00 |
@@ -335,7 +335,7 @@ Scenario: Change team
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgentNotInMyTeam have a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -365,7 +365,7 @@ Scenario: Show possible shift trades from my team
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 10:00 |
 	| EndTime               | 2030-01-01 20:00 |
@@ -390,12 +390,12 @@ Scenario: Show possible shift trades from another team
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 10:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Late	           |
-	And OtherAgentNotInMyTeam have a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -433,12 +433,12 @@ Scenario: Sort possible shift trades by starttime
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And OtherAgent have a shift with
+	And OtherAgent has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 09:00 |
 	| EndTime               | 2030-01-01 18:00 |
 	| Shift category		| Day	           |
-	And OtherAgent2 have a shift with
+	And OtherAgent2 has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -460,7 +460,7 @@ Scenario: Do not show shifts with other starttime and endtime than desired
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And Ashley Andeen have a shift with
+	And Ashley Andeen has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -471,7 +471,7 @@ Scenario: Do not show shifts with other starttime and endtime than desired
 	| Start time		          | 10:30 |
 	| End time			          | 16:30 |
 	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should not see any possible schedule trades
+	Then I should see a message text saying that no possible shift trades could be found
 	
 @ignore
 Scenario: Show possible shifts with desired starttime and endtime
@@ -483,7 +483,7 @@ Scenario: Show possible shifts with desired starttime and endtime
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And Ashley Andeen have a shift with
+	And Ashley Andeen has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -506,7 +506,7 @@ Scenario: Show possible shift trades where agents name is the same as the filter
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And Ashley Andeen have a shift with
+	And Ashley Andeen has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |
@@ -528,7 +528,7 @@ Scenario: Do not show possible shift trades where agent has other name than the 
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
-	And Ashley Andeen have a shift with
+	And Ashley Andeen has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |

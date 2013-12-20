@@ -256,7 +256,6 @@
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\CreateHourTextTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeRequestMapperTest.cs" />
-    <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradePeriodViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelFactoryTest.cs" />
