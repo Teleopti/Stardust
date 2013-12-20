@@ -95,39 +95,5 @@ ON
 	s.business_unit_code	= bu.business_unit_code
 WHERE 
 	NOT EXISTS (SELECT shift_category_id FROM mart.dim_shift_category d WHERE d.shift_category_code = s.shift_category_code and datasource_id = 1)
-
-
-
----------------------------------------------------------------------------
--- insert from stg_schedule_
--- Varför hämtar vi shift_categories den här vägen?! //DJ, 2010-07-26
--- Lämnar den utan is_deleted tills vidare, då lär vi ju märka om den används ;-) //DJ, 2010-07-26
-INSERT INTO mart.dim_shift_category
-	(
-	shift_category_code, 
-	datasource_id,
-	datasource_update_date
-	)
-SELECT 
-	shift_category_code		= s.shift_category_code,
-	datasource_id			= 1,
-	datasource_update_date	= s.datasource_update_date
-FROM
-	(
-		SELECT
-			shift_category_code,
-			datasource_update_date=max(datasource_update_date)
-		FROM Stage.stg_schedule
-		WHERE NOT shift_category_code IS NULL
-		GROUP BY shift_category_code
-	) s
-WHERE 
-	NOT EXISTS
-		(
-			SELECT shift_category_id
-			FROM mart.dim_shift_category d
-			WHERE d.shift_category_code = s.shift_category_code
-			and d.datasource_id=1
-		)
 GO
 
