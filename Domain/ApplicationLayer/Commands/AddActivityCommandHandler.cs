@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Common;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
@@ -32,8 +33,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 					Scenario = _currentScenario.Current(),
 					Person = _personForId.Load(command.PersonId)
 				});
+			if (personAssignment == null)
+				return;
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, _timeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(command.EndTime, _timeZone.TimeZone()));
-
 			personAssignment.AddActivity(activity, period);
 		}
 	}

@@ -21,8 +21,8 @@ define([
 		this.Activity = ko.observable("");
 		this.ActivityTypes = ko.observableArray();
 		this.Date = ko.observable();
-		this.StartTime = ko.observable("16:00");
-		this.EndTime = ko.observable("18:00");
+		this.StartTime = ko.observable();
+		this.EndTime = ko.observable();
 
 		this.ShiftStart = ko.observable();
 		this.ShiftEnd = ko.observable();
@@ -57,11 +57,6 @@ define([
 				}
 			);
 		};
-		
-		var getMomentFromInput = function (input) {
-			var momentInput = moment(input, resources.TimeFormatForMoment);
-			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
-		};
 
 		var startTimeWithinShift = function () {
 			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) < 0;
@@ -71,11 +66,27 @@ define([
 			return self.ShiftStart().date() != self.ShiftEnd().date() && startTimeAsMoment.diff(endTimeAsMoment) > 0;
 		};
 		
-		this.SetShiftStartAndEnd = function (data) {
+		var getMomentFromInput = function (input) {
+			var momentInput = moment(input, resources.TimeFormatForMoment);
+			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
+		};
+
+		this.SetShiftStartAndEnd = function(data) {
 			var layers = data.Projection;
-			if (layers) {
+			if (layers && layers.length > 0) {
 				self.ShiftStart(layers.length > 0 ? moment(layers[0].Start) : undefined);
 				self.ShiftEnd(layers.length > 0 ? moment(layers[layers.length - 1].Start).add('m', layers[layers.length - 1].Minutes) : undefined);
+				var now = moment();
+				var start;
+				if (self.ShiftStart() < now && now < self.ShiftEnd()) {
+					var minutes = Math.ceil(now.minute() / 15) * 15;
+					start = now.startOf('hour').minutes(minutes);
+					self.StartTime(start.format(resources.TimeFormatForMoment));
+				} else {
+					start = self.ShiftStart();
+					self.StartTime(start.format(resources.TimeFormatForMoment));
+				}
+				self.EndTime(start.clone().add("hours", 1).format(resources.TimeFormatForMoment));
 			}
 		};
 		
@@ -98,7 +109,7 @@ define([
 				return false;
 			}
 			return true;
-		});
+		}).extend({ throttle: 1 });
 		
 		this.ErrorMessage = ko.computed(function () {
 			if (!self.StartTimeWithinShift()) {
