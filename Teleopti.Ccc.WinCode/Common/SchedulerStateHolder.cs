@@ -204,18 +204,15 @@ namespace Teleopti.Ccc.WinCode.Common
 		public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory, IPersonRequestCheckAuthorization authorization)
 		{
 			if (_shiftTradeRequestStatusChecker == null)
-			{
-				var defaultScenarioFromRepository = new DefaultScenarioFromRepository(repositoryFactory.CreateScenarioRepository(unitOfWork));
-				var scheduleRepository = repositoryFactory.CreateScheduleRepository(unitOfWork);
-				//defaultScenarioFromRepository,scheduleRepository, authorization
 				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(SchedulingResultState.Schedules, authorization);
-			}
+				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(SchedulingResultState.Schedules, authorization);
 
 			IPersonRequestRepository personRequestRepository = null;
 			if (repositoryFactory != null)
 				personRequestRepository = repositoryFactory.CreatePersonRequestRepository(unitOfWork);
 			var referredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
 			var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
+			var afterLoadedPeriodSpecification = new ShiftTradeRequestIsAfterLoadedPeriodSpecification(SchedulingResultState.Schedules.Period.VisiblePeriod);
 			_workingPersonRequests.Clear();
 
 			var period = new DateTimePeriod(DateTime.UtcNow.Date.AddDays(_NUMBER_OF_PERSONREQUEST_DAYS), DateTime.SpecifyKind(DateTime.MaxValue.Date, DateTimeKind.Utc));
@@ -227,8 +224,9 @@ namespace Teleopti.Ccc.WinCode.Common
 					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(AllPermittedPersons, period);
 
 			var requests =
-				personRequests.FilterBySpecification(new All<IPersonRequest>().AndNot(referredSpecification)
-				                                                              .AndNot(okByMeSpecification));
+				personRequests.FilterBySpecification(new All<IPersonRequest>().And(afterLoadedPeriodSpecification)
+				                                                              .Or(new All<IPersonRequest>().AndNot(referredSpecification)
+				                                                                                           .AndNot(okByMeSpecification)));
 
 			foreach (var personRequest in requests)
 			{
@@ -318,10 +316,13 @@ namespace Teleopti.Ccc.WinCode.Common
 
 				var shiftTradeRequestReferredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
 				var shiftTradeRequestOkByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
-				
+				var shiftTradeRequestAfterLoadedPeriodSpecification =
+					new ShiftTradeRequestIsAfterLoadedPeriodSpecification(Schedules.Period.VisiblePeriod);
 
-				if (!shiftTradeRequestOkByMeSpecification.IsSatisfiedBy(updatedRequest) &&
-				    !shiftTradeRequestReferredSpecification.IsSatisfiedBy(updatedRequest))
+
+				if (shiftTradeRequestAfterLoadedPeriodSpecification.IsSatisfiedBy(updatedRequest) ||
+					(!shiftTradeRequestOkByMeSpecification.IsSatisfiedBy(updatedRequest) &&
+					 !shiftTradeRequestReferredSpecification.IsSatisfiedBy(updatedRequest)))
 				{
 					updatedRequest.Changed = false;
 					_workingPersonRequests.Add(updatedRequest);
