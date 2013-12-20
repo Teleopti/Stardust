@@ -15,6 +15,7 @@ define([
 		var unit = new unitViewModel(timeline, data);
 
 		this.StartMinutes = unit.CutInsideDayStartMinutes;
+		this.EndMinutes = unit.EndMinutes;
 		this.StartPixels = unit.CutInsideTimeLineStartPixels;
 		this.LengthPixels = unit.CutInsideTimeLineLengthPixels;
 
