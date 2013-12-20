@@ -81,7 +81,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				ITeamBlockInfo teamBlockInfoToWorkWith =
 					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, blocksToWorkWith,
 					                                                                    scheduleDictionary);
-				blocksToWorkWith.Remove(teamBlockInfoToWorkWith);
+
+				if (teamBlockInfoToWorkWith == null) blocksToWorkWith.Clear();
+				else blocksToWorkWith.Remove(teamBlockInfoToWorkWith);
 
 				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(blocksToWorkWith, teamBlockInfoToWorkWith);
 				if(possibleTeamBlocksToSwapWith.Count == 0)

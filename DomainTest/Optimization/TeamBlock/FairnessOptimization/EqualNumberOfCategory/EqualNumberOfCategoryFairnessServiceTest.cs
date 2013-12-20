@@ -148,6 +148,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			}
 		}
 
+		[Test]
+		public void ShouldBailOutWhenNothingToWorkWith()
+		{
+			var allMatrixes = new List<IScheduleMatrixPro> { _matrix1 };
+			var person = PersonFactory.CreatePerson();
+			var selectedPersons = new List<IPerson> { person };
+			var schedulingOptions = new SchedulingOptions();
+			var teamBlockInfos = new List<ITeamBlockInfo> { _teamBlockInfo1, _teamBlockInfo2 };
+			var totalDistributionSummary = new DistributionSummary(new Dictionary<IShiftCategory, int>());
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_filterPersonsForTotalDistribution.Filter(allMatrixes)).Return(selectedPersons);
+				Expect.Call(_constructTeamBlock.Construct(allMatrixes, new DateOnlyPeriod(), selectedPersons, schedulingOptions)).Return(teamBlockInfos);
+				Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(teamBlockInfos)).Return(teamBlockInfos);
+
+				Expect.Call(_distributionForPersons.CreateSummary(selectedPersons, _sceduleDictionary)).IgnoreArguments().Return(totalDistributionSummary);
+				Expect.Call(_filterForTeamBlockInSelection.Filter(teamBlockInfos, selectedPersons, new DateOnlyPeriod())).Return(teamBlockInfos);
+				Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(teamBlockInfos, _sceduleDictionary)).Return(teamBlockInfos);
+
+				Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistributionSummary,teamBlockInfos, _sceduleDictionary)).Return(null);
+				Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockInfos, null)).Return(new List<ITeamBlockInfo>());
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(allMatrixes, new DateOnlyPeriod(), selectedPersons, schedulingOptions, _sceduleDictionary, _rollbackService);
+			}
+		}
+
 		void _targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
