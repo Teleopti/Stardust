@@ -239,32 +239,29 @@ INNER JOIN #fact_schedule_subSP fs --only inlclude scheduled intervals
 	AND fsd.interval_id = fs.interval_id
 	AND fsd.person_id = fs.person_id
 
---if @adherence_id=2 we include intervals that have ready_time but no scheduled time. Fake scheduled_time_m = Interval Lenght
-IF @adherence_id=2
-BEGIN
-	DECLARE @intervals_length_m INT
-	DECLARE @intervals_per_day INT
-	SELECT @intervals_per_day = COUNT(interval_id) FROM mart.dim_interval
-	SELECT @intervals_length_m = 1440/@intervals_per_day
+--include intervals that have ready_time but no scheduled time. 
+INSERT #pre_result_subSP(date_id,interval_id,person_id,adherence_calc_s,deviation_s)
+SELECT	fsd.date_id,
+		fsd.interval_id,
+		fsd.person_id,
+		CASE @adherence_id 
+			WHEN 1 THEN 0
+			WHEN 2 THEN 0
+			WHEN 3 THEN isnull(fsd.contract_time_s,0)
+		END,
+		deviation_s		=
+		CASE @adherence_id 
+			WHEN 1 THEN fsd.deviation_schedule_ready_s
+			WHEN 2 THEN fsd.deviation_schedule_s
+			WHEN 3 THEN fsd.deviation_contract_s
+		END
+FROM #fact_schedule_deviation_subSP fsd
+INNER JOIN #person a
+	ON a.person_id = fsd.person_id
+WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id				
+AND NOT EXISTS (SELECT 1 FROM #fact_schedule_subSP fs WHERE fsd.person_id=fs.person_id	AND fsd.date_id=fs.schedule_date_id
+				AND fsd.interval_id=fs.interval_id)
 
-	INSERT #pre_result_subSP(date_id,interval_id,person_id,adherence_calc_s,deviation_s)
-	SELECT	fsd.date_id,
-			fsd.interval_id,
-			fsd.person_id,
-			@intervals_length_m*60,
-			deviation_s		=
-			CASE @adherence_id 
-				WHEN 1 THEN fsd.deviation_schedule_ready_s
-				WHEN 2 THEN fsd.deviation_schedule_s
-				WHEN 3 THEN fsd.deviation_contract_s
-			END
-	FROM #fact_schedule_deviation_subSP fsd
-	INNER JOIN #person a
-		ON a.person_id = fsd.person_id
-	WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id				
-	AND NOT EXISTS (SELECT 1 FROM #fact_schedule_subSP fs WHERE fsd.person_id=fs.person_id	AND fsd.date_id=fs.schedule_date_id
-		AND fsd.interval_id=fs.interval_id)
-END
 
 UPDATE #pre_result_subSP
 SET
