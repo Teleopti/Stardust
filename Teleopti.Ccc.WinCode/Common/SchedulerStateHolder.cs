@@ -203,16 +203,14 @@ namespace Teleopti.Ccc.WinCode.Common
 		/// <param name="authorization">Authorization check for person requests.</param>
 		public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory, IPersonRequestCheckAuthorization authorization)
 		{
-			if (_shiftTradeRequestStatusChecker == null)
-			{
-				var defaultScenarioFromRepository = new DefaultScenarioFromRepository(repositoryFactory.CreateScenarioRepository(unitOfWork));
-				var scheduleRepository = repositoryFactory.CreateScheduleRepository(unitOfWork);
-				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusChecker(defaultScenarioFromRepository,scheduleRepository, authorization);
-			}
-
-			IPersonRequestRepository personRequestRepository = null;
-			if (repositoryFactory != null)
-				personRequestRepository = repositoryFactory.CreatePersonRequestRepository(unitOfWork);
+			var defaultScenarioFromRepository =
+				new DefaultScenarioFromRepository(repositoryFactory.CreateScenarioRepository(unitOfWork));
+			var scheduleRepository = repositoryFactory.CreateScheduleRepository(unitOfWork);
+			_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusChecker(defaultScenarioFromRepository,
+			                                                                     scheduleRepository,
+			                                                                     authorization);
+			
+			var personRequestRepository = repositoryFactory.CreatePersonRequestRepository(unitOfWork);
 			var referredSpecification = new ShiftTradeRequestReferredSpecification(_shiftTradeRequestStatusChecker);
 			var okByMeSpecification = new ShiftTradeRequestOkByMeSpecification(_shiftTradeRequestStatusChecker);
 			_workingPersonRequests.Clear();

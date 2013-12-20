@@ -2825,7 +2825,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				using (PerformanceOutput.ForOperation("Creating new RequestView"))
 				{
-					_requestView = new RequestView(_handlePersonRequestView1, _schedulerState, _undoRedo, SchedulerState.SchedulingResultState.AllPersonAccounts, _eventAggregator);
+					_requestView = new RequestView(_handlePersonRequestView1, _schedulerState, _undoRedo,
+					                               SchedulerState.SchedulingResultState.AllPersonAccounts, _eventAggregator,
+					                               new RepositoryFactory());
 				}
 				toolStripComboBoxExFilterDays.SelectedIndex = toolStripComboBoxExFilterDays.Items.Count - 1;
 				_requestView.PropertyChanged += _requestView_PropertyChanged;
