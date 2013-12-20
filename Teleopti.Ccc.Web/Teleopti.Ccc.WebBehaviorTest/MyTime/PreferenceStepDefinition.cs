@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the standard preference split-button")]
 		public void WhenIClickTheStandardPreferenceSplit_Button()
 		{
-			Browser.Interactions.Javascript("$('#preference-split-button .dropdown-toggle .caret').mousedown();");
+			Browser.Interactions.ClickUsingJQuery("#preference-split-button .dropdown-toggle");
 		}
 
 		[When(@"I change standard preference")]
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I try to select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
-			Browser.Interactions.Click("#preference-split-button .dropdown-toggle");
+			Browser.Interactions.ClickUsingJQuery("#preference-split-button .dropdown-toggle");
 			var shiftCategory = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			Browser.Interactions.ClickContaining("a", shiftCategory.Description.Name);
+			Browser.Interactions.ClickUsingJQuery(string.Format("a:contains('{0}')", shiftCategory.Description.Name));
 		}
 
 		[When(@"I select an editable day without preference")]
@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList()
 		{
 			var data = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			Browser.Interactions.Click("#preference-split-button .dropdown-toggle");
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.ShiftCategory.Description.Name);
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.DayOffTemplate.Description.Name);
 			Browser.Interactions.AssertFirstContains("#preference-split-button", data.Absence.Description.Name);
