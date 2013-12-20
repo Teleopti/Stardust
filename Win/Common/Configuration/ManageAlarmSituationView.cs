@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 {
     public class ManageAlarmSituationView : ViewBase<ManageAlarmSituationPresenter>, IDisposable, IManageAlarmSituationView
     {
-        private readonly GridControl _grid;
+        private GridControl _grid;
 
         public ManageAlarmSituationView(GridControl grid)
             : base(null)
@@ -114,6 +114,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             SetEventHandlers(false);
             Presenter.Dispose();
+	        Presenter = null;
+	        _grid = null;
         }
         #endregion
     }

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 		private readonly IList<StateGroupActivityAlarmModel> _stateGroupActivityAlarmsToRemove = new List<StateGroupActivityAlarmModel>();
 		private readonly IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
 		private readonly IMessageBroker _messageBroker;
-		private readonly IManageAlarmSituationView _manageAlarmSituationView;
+		private IManageAlarmSituationView _manageAlarmSituationView;
 		private readonly IRtaStateGroupRepository _rtaStateGroupRepository;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -457,6 +457,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
 				_messageBroker.UnregisterEventSubscription(OnAlarmEvent);
 				_messageBroker.UnregisterEventSubscription(OnRtaStateGroupEvent);
 			}
+			_manageAlarmSituationView = null;
 		}
 	}
 }
