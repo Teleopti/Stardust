@@ -30,8 +30,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockInfoList, ITeamBlockInfo teamBlockInfoToWorkWith)
 		{
 			var possibleTeamBlocksToSwapWith = new List<ITeamBlockInfo>();
+		
 			foreach (var teamBlockInfo in teamBlockInfoList)
 			{
+				if (teamBlockInfoToWorkWith == null) break;
+
 				if (!_teamBlockPeriodValidator.ValidatePeriod(teamBlockInfo, teamBlockInfoToWorkWith))
 					continue;
 

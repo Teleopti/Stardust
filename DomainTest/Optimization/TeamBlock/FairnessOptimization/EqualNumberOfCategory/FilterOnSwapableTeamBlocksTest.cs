@@ -157,5 +157,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			}
 		}
 
+		[Test]
+		public void ShouldRemoveNullBlock()
+		{
+			var teamBlock1 = _mocks.StrictMock<ITeamBlockInfo>();
+			var result = _target.Filter(new List<ITeamBlockInfo> {teamBlock1}, null);
+			Assert.That(result.Count == 0);
+			_mocks.ReplayAll();
+		}
 	}
 }
