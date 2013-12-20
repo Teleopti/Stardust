@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the next day button")]
 		public void WhenIClickNextVirtualSchedulePeriodButton()
 		{
-			Browser.Interactions.Click(".navbar-form button:nth-of-type(3)");
+			Browser.Interactions.ClickUsingJQuery(".navbar-form button:has(i.icon-arrow-right)");
 		}
 
 		[When(@"I click previous virtual schedule period button")]
 		[When(@"I click the previous day button")]
 		public void WhenIClickPreviousVirtualSchedulePeriodButton()
 		{
-			Browser.Interactions.Click(".navbar-form button:nth-of-type(1)");
+			Browser.Interactions.ClickUsingJQuery(".navbar-form button:has(i.icon-arrow-left)");
 		}
 
 		[Then(@"I should see an error message")]
