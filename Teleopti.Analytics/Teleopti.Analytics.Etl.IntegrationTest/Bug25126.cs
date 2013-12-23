@@ -86,6 +86,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			JobStepBase step = new StageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
+			step = new DimShiftLengthJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
 			step = new FactScheduleJobStep(jobParameters,false);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
@@ -103,6 +106,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			step = new FactScheduleJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
 			factSchedules = from s in db.fact_schedule select s;
 
 			// still it should have data on all three dates 96 interval, in the bug only 64 one day extra before the two was deleted
@@ -111,8 +115,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step = new FactScheduleDayCountJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 		}
-
-		
 
 		[Test]
 		public void ShouldWorkForBrasil()
@@ -165,6 +167,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var result = StepRunner.RunBasicStepsBeforeSchedule(jobParameters);
 
 			JobStepBase step = new StageScheduleJobStep(jobParameters);
+			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+
+			step = new DimShiftLengthJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleJobStep(jobParameters, false);

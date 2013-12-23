@@ -412,6 +412,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Active Agents.
+        /// </summary>
+        public static string ActiveAgents {
+            get {
+                return ResourceManager.GetString("ActiveAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Active agents in use:.
         /// </summary>
         public static string ActiveAgentsInUseColon {
@@ -9959,6 +9968,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Optimizing with block between days off and not keeping team days off together is not supported.
+        /// </summary>
+        public static string IllegalTeamBlockCombination {
+            get {
+                return ResourceManager.GetString("IllegalTeamBlockCombination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The input is not a valid time value.
         /// </summary>
         public static string IllegalTimeInput {
@@ -13615,6 +13633,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to MyReport.
+        /// </summary>
+        public static string MyReportWeb {
+            get {
+                return ResourceManager.GetString("MyReportWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to My Schedule.
         /// </summary>
         public static string MySchedule {
@@ -14856,6 +14883,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoSchedulePeriodIsSelected {
             get {
                 return ResourceManager.GetString("NoSchedulePeriodIsSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No schedule period present.
+        /// </summary>
+        public static string NoSchedulePeriodPresent {
+            get {
+                return ResourceManager.GetString("NoSchedulePeriodPresent", resourceCulture);
             }
         }
         
@@ -23525,6 +23561,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TeamSettings {
             get {
                 return ResourceManager.GetString("TeamSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team to compare with.
+        /// </summary>
+        public static string TeamToCompareWith {
+            get {
+                return ResourceManager.GetString("TeamToCompareWith", resourceCulture);
             }
         }
         

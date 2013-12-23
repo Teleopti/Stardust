@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 				var terminateDate = Owner.Person.TerminalDate.Value;
 				if (terminateDate < endDate)
 					endDate = terminateDate;
-				if (terminateDate < StartDate)
+				if (endDate < StartDate)
 					endDate = StartDate;
 			}
 

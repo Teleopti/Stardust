@@ -31,21 +31,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private IMessageBroker _messageBroker;
 		private bool disposed;
 		private ITransaction _transaction;
-		private readonly ILog _logger = LogManager.GetLogger(typeof (NHibernateUnitOfWork));
+		private readonly ILog _logger = LogManager.GetLogger(typeof(NHibernateUnitOfWork));
 		private NHibernateFilterManager _filterManager;
 		private IEnumerable<IMessageSender> _messageSenders;
 		private readonly Action<ISession> _unbind;
+		private readonly Action<ISession, IInitiatorIdentifier> _bindInitiator;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
-	    private static readonly EmptyMessageBrokerIdentifier EmptyMessageBrokerIdentifier = new EmptyMessageBrokerIdentifier();
+		private IInitiatorIdentifier _initiator;
 
-	    protected internal NHibernateUnitOfWork(ISession session,
-		                                        IMessageBroker messageBroker,
-		                                        IEnumerable<IMessageSender> messageSenders,
-		                                        NHibernateFilterManager filterManager,
-		                                        ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
-		                                        Action<ISession> unbind,
-																						TransactionIsolationLevel isolationLevel)
+		protected internal NHibernateUnitOfWork(ISession session, IMessageBroker messageBroker, IEnumerable<IMessageSender> messageSenders, NHibernateFilterManager filterManager, ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService, Action<ISession> unbind, Action<ISession, IInitiatorIdentifier> bindInitiator, TransactionIsolationLevel isolationLevel, IInitiatorIdentifier initiator)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;
@@ -53,8 +48,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_unbind = unbind;
-		    _isolationLevel = isolationLevel;
-		    _messageSenders = messageSenders;
+			_bindInitiator = bindInitiator;
+			_isolationLevel = isolationLevel;
+			setInitiator(initiator);
+			_messageSenders = messageSenders;
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -63,7 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				if (_interceptor == null)
 				{
-					_interceptor = (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor;
+					_interceptor = (AggregateRootInterceptor)_session.GetSessionImplementation().Interceptor;
 				}
 				return _interceptor;
 			}
@@ -84,8 +81,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				try
 				{
-					_transaction = _isolationLevel==TransactionIsolationLevel.Default ? 
-						_session.BeginTransaction() : 
+					_transaction = _isolationLevel == TransactionIsolationLevel.Default ?
+						_session.BeginTransaction() :
 						_session.BeginTransaction(IsolationLevel.Serializable);
 				}
 				catch (TransactionException transactionException)
@@ -95,6 +92,18 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
+		private void setInitiator(IInitiatorIdentifier initiator)
+		{
+			_initiator = initiator;
+			if (_initiator != null)
+				_bindInitiator(_session, _initiator);
+		}
+
+		public IInitiatorIdentifier Initiator()
+		{
+			return _initiator;
+		}
+
 		public void Clear()
 		{
 			Session.Clear();
@@ -102,7 +111,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public T Merge<T>(T root) where T : class, IAggregateRoot
 		{
-			if(root.Id==null)
+			if (root.Id == null)
 				throw new DataSourceException("Cannot merge transient root.");
 			try
 			{
@@ -130,8 +139,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 
-		public virtual IEnumerable<IRootChangeInfo> PersistAll(IMessageBrokerIdentifier identifierUsedForPersist)
+		public virtual IEnumerable<IRootChangeInfo> PersistAll(IInitiatorIdentifier initiator)
 		{
+			// next step: move to only use constructor injection.
+			setInitiator(initiator);
+
 			//man borde nog styra upp denna genom att använda ISynchronization istället,
 			//när tran startas, lägg på en sync callback via tran.RegisterSynchronization(callback);
 			ICollection<IRootChangeInfo> modifiedRoots;
@@ -140,7 +152,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
-				invokeMessageSenders(identifierUsedForPersist, modifiedRoots);
+				invokeMessageSenders(modifiedRoots);
 				if (Transaction.Current == null)
 				{
 					_transaction.Commit();
@@ -148,17 +160,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					_transaction = null;
 				}
 			}
-			catch(TooManyActiveAgentsException exception)
+			catch (TooManyActiveAgentsException exception)
 			{
 				persistExceptionHandler(exception);
 				throw;
 			}
-			catch(DataSourceException ex)
+			catch (DataSourceException ex)
 			{
 				persistExceptionHandler(ex);
-				throw;					
+				throw;
 			}
-			catch(Exception ex)
+			catch (Exception ex)
 			{
 				persistExceptionHandler(ex);
 				throw new DataSourceException("Cannot commit transaction! ", ex);
@@ -167,20 +179,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				Interceptor.Clear();
 			}
-			notifyBroker(identifierUsedForPersist, modifiedRoots);
+			notifyBroker(initiator, modifiedRoots);
 			return modifiedRoots;
 		}
 
-		private void invokeMessageSenders(IMessageBrokerIdentifier identifierUsedForPersist, IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void invokeMessageSenders(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			if (_messageSenders == null) return;
 
-		    var identifierToUse = identifierUsedForPersist ?? EmptyMessageBrokerIdentifier;
 			_messageSenders.ForEach(d =>
 				{
 					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
 					{
-                        d.Execute(identifierToUse, modifiedRoots);
+						d.Execute(modifiedRoots);
 					}
 				});
 		}
@@ -278,9 +289,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private void notifyBroker(IMessageBrokerIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void notifyBroker(IInitiatorIdentifier identifier, IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			Guid moduleId = identifier == null ? Guid.Empty : identifier.InstanceId;
+			Guid moduleId = identifier == null ? Guid.Empty : identifier.InitiatorId;
 			new NotifyMessageBroker(_messageBroker).Notify(moduleId, modifiedRoots);
 		}
 
@@ -340,7 +351,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			{
 				safeRollback();
 				_unbind.Invoke(_session);
-				
+
 				_session.Dispose();
 				_session = null;
 

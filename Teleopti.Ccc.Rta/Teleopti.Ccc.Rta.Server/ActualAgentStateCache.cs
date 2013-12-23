@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			Log.InfoFormat("Added AgentState to cache: {0}", state);
 			BatchedAgents.AddOrUpdate(state.PersonId, state,
-									  (guid, oldState) => state.ReceivedTime > oldState.ReceivedTime
+									  (guid, oldState) => state.ReceivedTime >= oldState.ReceivedTime
 															  ? state
 															  : oldState);
 		}

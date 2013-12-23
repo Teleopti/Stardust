@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Collection
             _dtp1 = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
             _dtp2 = new DateTimePeriod(new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
             _dtpWrongKey = new DateTimePeriod(2004, 1, 1, 2005, 1, 1);
-            _ssp1 = new SkillStaffPeriod(_dtp1, new Task(), new ServiceAgreement(), new StaffingCalculatorService());
-            _ssp2 = new SkillStaffPeriod(_dtp2, new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+			_ssp1 = new SkillStaffPeriod(_dtp1, new Task(), new ServiceAgreement(), new Domain.Calculation.StaffingCalculatorService());
+			_ssp2 = new SkillStaffPeriod(_dtp2, new Task(), new ServiceAgreement(), new Domain.Calculation.StaffingCalculatorService());
             _target.Add(_ssp1);
             _target.Add(_ssp2);
 
@@ -126,12 +126,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
         public void VerifyOpenHoursCollection()
         {
             DateTimePeriod dtp = new DateTimePeriod(new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 14, 0, 0, DateTimeKind.Utc));
-            ISkillStaffPeriod ssp = new SkillStaffPeriod(dtp, new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+			ISkillStaffPeriod ssp = new SkillStaffPeriod(dtp, new Task(), new ServiceAgreement(), new Domain.Calculation.StaffingCalculatorService());
             Assert.AreEqual(2, _target.SkillOpenHoursCollection.Count);
             _target.Add(ssp);
             Assert.AreEqual(2, _target.SkillOpenHoursCollection.Count);
             dtp = new DateTimePeriod(1998, 1, 1, 1999, 1, 1);
-            ssp = new SkillStaffPeriod(dtp, new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+			ssp = new SkillStaffPeriod(dtp, new Task(), new ServiceAgreement(), new Domain.Calculation.StaffingCalculatorService());
             _target.Add(ssp);
             Assert.AreEqual(3, _target.SkillOpenHoursCollection.Count);
         }

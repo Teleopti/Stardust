@@ -154,6 +154,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         		activityRepository.Remove(activity);
         	}
 
+			_gridColumnHelper.SetSourceList(GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
+
         	InvalidateGrid<IActivity>(gridType);
         }
 
@@ -264,9 +266,9 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             var groupingActivityRepository = new GroupingActivityRepository(_unitOfWork);
             var activityRepository = new ActivityRepository(_unitOfWork);
+			_sourceList.Add(GridType.GroupingActivity, groupingActivityRepository.LoadAll());
+			_sourceList.Add(GridType.Activity, activityRepository.LoadAll());
 
-            _sourceList.Add(GridType.GroupingActivity, groupingActivityRepository.LoadAll());
-            _sourceList.Add(GridType.Activity, activityRepository.LoadAll());
         }
 
         private List<T> GetSource<T>(GridType gridType)

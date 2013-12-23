@@ -524,13 +524,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         	foreach (IPersonPeriodModel personPeriodModel in selectedPersonPeriods)
         	{
         		IPersonPeriod currentPeriod = personPeriodModel.Period;
-
+        		var person = personPeriodModel.Parent;
         		if (currentPeriod != null)
         		{
         			IExternalLogOn externalLogOnFromCollection = currentPeriod.ExternalLogOnCollection.FirstOrDefault(s => s.Equals(externalLogOn));
         			if (externalLogOnFromCollection== null)
         			{
-        				currentPeriod.AddExternalLogOn(externalLogOn);
+						person.AddExternalLogOn(externalLogOn, currentPeriod);
         				personPeriodModel.CanBold = true;
         			}
         		}
@@ -543,13 +543,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         	foreach (IPersonPeriodModel personPeriodModel in selectedPersonPeriods)
         	{
         		IPersonPeriod currentPeriod = personPeriodModel.Period;
-
+				var person = personPeriodModel.Parent;
         		if (currentPeriod != null)
         		{
         			IExternalLogOn externalLogOnFromCollection = currentPeriod.ExternalLogOnCollection.FirstOrDefault(s => s.Equals(externalLogOn));
         			if (externalLogOnFromCollection!=null)
         			{
-        				currentPeriod.RemoveExternalLogOn(externalLogOnFromCollection);
+						person.RemoveExternalLogOn(externalLogOnFromCollection, currentPeriod);
         				personPeriodModel.CanBold = true;
         			}
         		}

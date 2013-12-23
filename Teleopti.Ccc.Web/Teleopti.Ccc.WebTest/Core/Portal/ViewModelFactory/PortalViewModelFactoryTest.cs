@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			var result = target.CreatePortalViewModel();
 
-			result.NavigationItems.Should().Have.Count.EqualTo(6);
+			result.NavigationItems.Should().Have.Count.EqualTo(7);
 			result.NavigationItems.ElementAt(0).Action.Should().Be("Week");
 			result.NavigationItems.ElementAt(0).Controller.Should().Be("Schedule");
 			result.NavigationItems.ElementAt(1).Action.Should().Be("Index");
@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.NavigationItems.ElementAt(4).Controller.Should().Be("Requests");
 			result.NavigationItems.ElementAt(5).Action.Should().Be("Index");
 			result.NavigationItems.ElementAt(5).Controller.Should().Be("Message");
+			result.NavigationItems.ElementAt(6).Action.Should().Be("Index");
+			result.NavigationItems.ElementAt(6).Controller.Should().Be("MyReport");
 		}
 
 		[Test]

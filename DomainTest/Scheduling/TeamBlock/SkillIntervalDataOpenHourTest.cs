@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                                        new DateTime(2013, 10, 17, 11, 0, 0, DateTimeKind.Utc)), 10, 11, 12, 13, 14);
             IList<ISkillIntervalData> skillIntervalList = new List<ISkillIntervalData> { skillIntervalData1, skillIntervalData2, skillIntervalData3 };
             var result = _target.GetOpenHours(skillIntervalList, currentDate);
-            Assert.AreEqual(result, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(11)));
+            Assert.AreEqual(result.Value, new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(11)));
         }
 
 		[Test]
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			IList<ISkillIntervalData> skillIntervalList = new List<ISkillIntervalData> { skillIntervalData1, skillIntervalData2, skillIntervalData3 };
 			var result = _target.GetOpenHours(skillIntervalList, currentDate);
-			Assert.AreEqual(result, new TimePeriod(new TimeSpan(-1, 23, 0, 0), TimeSpan.FromHours(2)));
+			Assert.AreEqual(result.Value, new TimePeriod(new TimeSpan(-1, 23, 0, 0), TimeSpan.FromHours(2)));
 		}
 
         [Test]
@@ -92,10 +93,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             IList<ISkillIntervalData> skillIntervalList = new List<ISkillIntervalData> { skillIntervalData1, skillIntervalData2, skillIntervalData3,skillIntervalData4 };
             var result = _target.GetOpenHours(skillIntervalList, currentDate);
-            Assert.AreEqual(result, new TimePeriod(TimeSpan.FromHours(22), new TimeSpan(1,2,0,0)));
+            Assert.AreEqual(result.Value, new TimePeriod(TimeSpan.FromHours(22), new TimeSpan(1,2,0,0)));
         }
 
-      
+	    [Test]
+	    public void ShouldReturnNullIfClosed()
+	    {
+			var currentDate = new DateOnly(2013, 10, 17);
+
+			IList<ISkillIntervalData> skillIntervalList = new List<ISkillIntervalData>();
+			var result = _target.GetOpenHours(skillIntervalList, currentDate);
+			Assert.IsFalse(result.HasValue);
+	    }
+
     }
 
     

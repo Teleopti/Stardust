@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         public virtual ReadOnlyCollection<IRtaState> StateCollection
         {
-            get { return new ReadOnlyCollection<IRtaState>(_stateCollection); }
+            get { return new ReadOnlyCollection<IRtaState>(_stateCollection.ToList()); }
         }
 
         public virtual bool IsLogOutState
@@ -74,13 +75,15 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             state.SetParent(this);
         }
 
-        public virtual void MoveStateTo(IRtaStateGroup target, IRtaState state)
+        public virtual IRtaState MoveStateTo(IRtaStateGroup target, IRtaState state)
         {
             _stateCollection.Remove(state);
             RtaStateGroup internalAdd = target as RtaStateGroup;
-            if (internalAdd==null) return;
-            if (state==null) return;
-            internalAdd.AddStateInternal(new RtaState(state.Name,state.StateCode,state.PlatformTypeId));
+            if (internalAdd==null) return null;
+            if (state==null) return null;
+	        var rtaState = new RtaState(state.Name, state.StateCode, state.PlatformTypeId);
+	        internalAdd.AddStateInternal(rtaState);
+	        return rtaState;
         }
 
 		public virtual void DeleteState(IRtaState state)

@@ -1,10 +1,12 @@
+using System;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.RealTimeAdherence
 {
     public class StateGroupActivityAlarm : VersionedAggregateRootWithBusinessUnit, IStateGroupActivityAlarm
-    {
+
+	{
         private readonly IRtaStateGroup _stateGroup;
         private readonly IActivity _activity;
         private IAlarmType _alarmType;
@@ -33,5 +35,22 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             get { return _alarmType; }
             set { _alarmType = value; }
         }
-    }
+
+		public virtual object Clone()
+		{
+			return EntityClone();
+		}
+
+		public virtual IStateGroupActivityAlarm NoneEntityClone()
+		{
+			var clone = (IStateGroupActivityAlarm)MemberwiseClone();
+			clone.SetId(null);
+			return clone;
+		}
+
+		public virtual IStateGroupActivityAlarm EntityClone()
+		{
+			return (IStateGroupActivityAlarm) MemberwiseClone();
+		}
+	}
 }

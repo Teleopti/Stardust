@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
@@ -25,11 +26,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
 			DateOnly firstDateOfMatrix = dateOnly;
-			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, firstDateOfMatrix);
-			if (!groupPerson.GroupMembers.Any()) return null;
+			Group group = _groupPersonBuilderForOptimization.BuildGroup(person, firstDateOfMatrix);
+			if (!group.GroupMembers.Any()) return null;
 
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
-			foreach (var groupMember in groupPerson.GroupMembers)
+			foreach (var groupMember in group.GroupMembers)
 			{
 				foreach (var matrixPro in allMatrixesInScheduler)
 				{
@@ -42,18 +43,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 			}
 
-			return new TeamInfo(groupPerson, matrixesForGroup);
+			return new TeamInfo(group, matrixesForGroup);
 		}
 
 		public ITeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
-		    IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period.StartDate);
-		    if (groupPerson == null) return null;
-			if (!groupPerson.GroupMembers.Any()) return null;
+		    Group group = _groupPersonBuilderForOptimization.BuildGroup(person, period.StartDate);
+		    if (group == null) return null;
+			if (!group.GroupMembers.Any()) return null;
 
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
-			foreach (var groupMember in groupPerson.GroupMembers)
+			foreach (var groupMember in group.GroupMembers)
 			{
 				IList<IScheduleMatrixPro> memberList = new List<IScheduleMatrixPro>();
 				foreach (var matrixPro in allMatrixesInScheduler)
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				matrixesForGroup.Add(memberList);
 			}
 
-			return new TeamInfo(groupPerson, matrixesForGroup);
+			return new TeamInfo(group, matrixesForGroup);
 		}
 	}
 }

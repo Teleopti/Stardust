@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Sdk.ClientProxies;
@@ -86,14 +87,15 @@ namespace Teleopti.Ccc.WinCode.Main
                 messageBrokerDisabled = true;
             }
         	
-			var sendToServiceBus = new ServiceBusSender(new CurrentIdentity());
+			var sendToServiceBus = new ServiceBusSender();
+			var eventPublisher = new ServiceBusEventPublisher(sendToServiceBus, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
 												  new List<IMessageSender>
 												      {
-														  new EventsMessageSender(new SyncEventsPublisher(new ServiceBusEventPublisher(sendToServiceBus))),
-												          new ScheduleMessageSender(sendToServiceBus), 
+														  new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+												          new ScheduleMessageSender(eventPublisher), 
                                                           new MeetingMessageSender(sendToServiceBus),
                                                           new GroupPageChangedMessageSender(sendToServiceBus),
                                                           new TeamOrSiteChangedMessageSender(sendToServiceBus),

@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -24,28 +25,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly IProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
-		private readonly ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
+		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private bool _cancelMe;
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 										   IProposedRestrictionAggregator proposedRestrictionAggregator,
 										   IWorkShiftFilterService workShiftFilterService,
-										   ISkillDayPeriodIntervalDataGenerator skillDayPeriodIntervalDataGenerator,
 										   IWorkShiftSelector workShiftSelector,
 										   ITeamScheduling teamScheduling,
-										   ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+										   ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
+											IDayIntervalDataCalculator dayIntervalDataCalculator,
+											ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
+											ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
-			_skillDayPeriodIntervalDataGenerator = skillDayPeriodIntervalDataGenerator;
 			_workShiftSelector = workShiftSelector;
 			_teamScheduling = teamScheduling;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
+			_dayIntervalDataCalculator = dayIntervalDataCalculator;
+			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public bool ScheduleSingleDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
@@ -57,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
 			
 			var bestShiftProjectionCache = roleModelShift;
-			var groupMembers = teamInfo.GroupPerson.GroupMembers;
+			var groupMembers = teamInfo.GroupMembers;
 			var selectedTeamMembers = groupMembers.Intersect(selectedPersons).ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
 			if (isTeamBlockScheduledForSelectedTeamMembers(selectedTeamMembers, day, teamBlockSingleDayInfo))
@@ -73,9 +80,41 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 					if (restriction == null) return false;
 					var shifts = _workShiftFilterService.Filter(day, person, teamBlockSingleDayInfo, restriction, schedulingOptions,
-					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupPerson, day));
+					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
 					if (shifts.IsNullOrEmpty()) break;
-					var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockSingleDayInfo);
+
+					//transform
+					var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
+																										   _schedulingResultStateHolder);
+					var activities = new HashSet<IActivity>();
+					foreach (var dicPerActivity in skillIntervalDataPerDateAndActivity.Values)
+					{
+						foreach (var activity in dicPerActivity.Keys)
+						{
+							activities.Add(activity);
+						}
+					}
+
+					var activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+					foreach (var activity in activities)
+					{
+						var dateOnlyDicForActivity = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+						foreach (var dateOnly in skillIntervalDataPerDateAndActivity.Keys)
+						{
+							if(dateOnly == day || dateOnly == day.AddDays(1))
+							{
+								var dateDic = skillIntervalDataPerDateAndActivity[dateOnly];
+								if (!dateDic.ContainsKey(activity))
+									continue;
+
+								dateOnlyDicForActivity.Add(dateOnly, dateDic[activity]);
+							}
+						}
+
+						IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
+						activityInternalData.Add(activity, dataForActivity);
+					}
+
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																								 schedulingOptions
 																									 .WorkShiftLengthHintOption,

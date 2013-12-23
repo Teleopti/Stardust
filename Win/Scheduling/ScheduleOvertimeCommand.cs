@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						oldRmsValue = newRmsValue;
 					}
 
-					OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
+					OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 				}
 			}
 		}

@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-            personPeriod.AddExternalLogOn(new ExternalLogOn(1,1,"test Id","test acd",true));
+				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _person.AddPersonPeriod(personPeriod);
             
             using (_mock.Record())
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-            personPeriod.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true));
+				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             
             using (_mock.Record())
             {
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-            personPeriod.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true));
+				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _changePersonEmploymentCommandDto.PersonContract = null;
 
             using (_mock.Record())
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-            personPeriod.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true));
+				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _changePersonEmploymentCommandDto.Team = null;
 
             using (_mock.Record())
@@ -288,7 +288,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             var unitOfWork = _mock.StrictMock<IUnitOfWork>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today.AddDays(-7));
-            personPeriod.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true));
+				_person.AddExternalLogOn(new ExternalLogOn(1, 1, "test Id", "test acd", true), personPeriod);
             _team.Site.SetBusinessUnit(new BusinessUnit("asdf"));
             _team.Site.BusinessUnit.SetId(Guid.NewGuid());
 

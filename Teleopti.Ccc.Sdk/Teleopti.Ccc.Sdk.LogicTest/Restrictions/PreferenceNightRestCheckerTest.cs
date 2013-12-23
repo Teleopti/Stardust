@@ -175,5 +175,26 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 			Assert.That(dtos[2].ViolatesNightlyRest, Is.False);
 			_mocks.VerifyAll();
 		}
+
+		[Test]
+		public void ShouldNotCheckNightRestIfTheFollowingDayIsUnavailable()
+		{
+			var date1 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 1) };
+			var date2 = new DateOnlyDto { DateTime = new DateOnly(2011, 9, 2) };
+			var day1 = new ValidatedSchedulePartDto { DateOnly = date1, MinEndTimeMinute = (int)TimeSpan.FromHours(21).TotalMinutes, MaxStartTimeMinute = (int)TimeSpan.FromHours(15).TotalMinutes };
+			var day2 = new ValidatedSchedulePartDto { DateOnly = date2 };
+			var dtos = new List<ValidatedSchedulePartDto> { day1, day2 };
+			using (_mocks.Record())
+			{
+				Expect.Call(_nightlyRestFromPersonOnDayExtractor.NightlyRestOnDay(date1)).Return(TimeSpan.FromHours(12));
+			}
+			using (_mocks.Playback())
+			{
+				_target.CheckNightlyRest(dtos);
+
+				Assert.That(dtos[0].ViolatesNightlyRest, Is.False);
+				Assert.That(dtos[1].ViolatesNightlyRest, Is.False);
+			}
+		}
 	}	
 }

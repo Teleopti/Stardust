@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -25,13 +24,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private DateOnly _dateOnly;
 		private IPerson _person1;
 		private IScheduleMatrixPro _scheduleMatrixPro1;
-		private GroupPerson _groupPerson;
+		private Group _group;
 		private DateOnlyPeriod _blockPeriod;
 		private TeamBlockInfo _teamBlockInfo;
 		private SchedulingOptions _schedulingOptions;
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
 		private IPerson _person2;
+		private bool _isScheduleFailed;
 
 		[SetUp]
 		public void Setup()
@@ -43,17 +43,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_target = new SameShiftCategoryBlockScheduler(_roleModelSelector, _singleDayScheduler,
-			                                              _teamBlockSchedulingCompletionChecker, _teamBlockClearer,
-			                                              _rollbackService);
+			                                              _teamBlockSchedulingCompletionChecker, _teamBlockClearer);
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			_groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.Empty);
+			_group = new Group(new List<IPerson> { _person1 }, "Hej");
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
-			ITeamInfo teamInfo = new TeamInfo(_groupPerson, groupMatrixes);
+			ITeamInfo teamInfo = new TeamInfo(_group, groupMatrixes);
 			_blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_blockPeriod));
 			_schedulingOptions = new SchedulingOptions();
@@ -70,7 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons);
+				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons,
+														  _rollbackService);
 
 				Assert.That(result, Is.False);
 			}
@@ -100,7 +100,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons);
+				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons,
+														  _rollbackService);
 
 				Assert.That(result, Is.False);
 			}
@@ -128,7 +129,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons);
+				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons,
+														  _rollbackService);
 
 				Assert.That(result, Is.True);
 			}
@@ -140,8 +142,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_selectedPersons = new List<IPerson> {_person2};
 
 			var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-			                              _selectedPersons);
+										  _selectedPersons,
+														  _rollbackService);
 			Assert.That(result, Is.True);
+		}
+
+		[Test]
+		public void ShouldNotifySubscribersWhenScheduleFailed()
+		{
+			_target.DayScheduled += targetDayScheduled;
+			using (_mocks.Record())
+			{
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				Assert.That(_isScheduleFailed, Is.False);
+				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
+										  _selectedPersons, _rollbackService);
+
+				Assert.That(result, Is.False);
+				Assert.That(_isScheduleFailed, Is.True);
+			}
+			_target.DayScheduled -= targetDayScheduled;
+		}
+
+		private void targetDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+		{
+			if (e is SchedulingServiceFailedEventArgs)
+				_isScheduleFailed = true;
 		}
 	}
 }

@@ -6,7 +6,7 @@ using WatiN.Core.Native.InternetExplorer;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Legacy
 {
-	public static class ElementExtensions
+	internal static class ElementExtensions
 	{
 		public static bool PositionedOnScreen(this Element element)
 		{
@@ -69,34 +69,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Legacy
 			JQuery.SelectById(GetIdForJQuerySelection(element))
 				.Change()
 				.Eval();
-		}
-
-		public static void ScrollIntoView(this Element element)
-		{
-			if (element.NativeElement is IEElement)
-			{
-				// doing this through reflection so I dont have to reference the browser api assembly:
-				// (element.NativeElement as IEElement).AsHtmlElement.scrollIntoView();
-
-				var nativeElement = element.NativeElement as IEElement;
-				var nativeElementType = nativeElement.GetType();
-				var htmlElementProperty = nativeElementType.GetProperty("AsHtmlElement");
-
-				var htmlElement = htmlElementProperty.GetValue(nativeElement, null);
-				var htmlElementType = htmlElementProperty.PropertyType;
-				var method = htmlElementType.GetMethod("scrollIntoView");
-
-				method.Invoke(htmlElement, new object[] {null});
-			}
-			else if (element.NativeElement is JSElement)
-			{
-				var nativeElement = element.NativeElement as JSElement;
-				nativeElement.ExecuteMethod("scrollIntoView");
-			}
-			else
-			{
-				throw new Exception("Unknown browser");
-			}
 		}
 	}
 }

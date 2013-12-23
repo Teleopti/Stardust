@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
-    [TestFixture]
+	[TestFixture]
     public class HandlingOfUowTest
     {
         private IUnitOfWorkFactory uowFactory;

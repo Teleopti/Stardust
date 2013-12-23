@@ -99,9 +99,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Iesi.Collections.4.0.1.4000\lib\net40\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -267,8 +267,12 @@
     <Compile Include="Repositories\PersonScheduleDayReadModelPersister.cs" />
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
-    <Compile Include="UnitOfWork\EmptyMessageBrokerIdentifier.cs" />
-    <Compile Include="UnitOfWork\EventExtensions.cs" />
+    <Compile Include="UnitOfWork\CurrentInitiatorIdentifier.cs" />
+    <Compile Include="UnitOfWork\EmptyInitiatorIdentifier.cs" />
+    <Compile Include="UnitOfWork\ICurrentInitiatorIdentifier.cs" />
+    <Compile Include="UnitOfWork\EventContextPopulator.cs" />
+    <Compile Include="UnitOfWork\IEventContextPopulator.cs" />
+    <Compile Include="UnitOfWork\InitiatorIdentifierFromMessage.cs" />
     <Compile Include="UnitOfWork\ISessionContextBinder.cs" />
     <Compile Include="UnitOfWork\StaticSessionContextBinder.cs" />
     <Compile Include="UnitOfWork\TeamOrSiteChangedMessageSender.cs" />

@@ -17,5 +17,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             : base(unitOfWork)
         {
         }
+
+	    public AlarmTypeRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    {
+	    }
     }
 }

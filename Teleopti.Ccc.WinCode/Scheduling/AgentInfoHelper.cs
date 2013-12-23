@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, IncludeScheduling(), false, false);
             setCurrentScheduled();
             setMinMaxData();
-            setRestrictionFullfillment();
+            
         }
 
         private void setMinMaxData()
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions);
         }
 
-        private void setRestrictionFullfillment()
+        public void SetRestrictionFullfillment()
         {
             RestrictionOverLimitDecider restrictionOverLimitDecider = new RestrictionOverLimitDecider(new RestrictionChecker());
             _preferenceFulfillment = restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1), _matrix).BrokenPercentage;

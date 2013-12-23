@@ -1,11 +1,14 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamInfo
 	{
-		IGroupPerson GroupPerson { get;	}
+
+		IEnumerable<IPerson> GroupMembers { get; }
+		string Name { get; }
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroup();
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index);
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndDate(DateOnly dateOnly);
@@ -17,19 +20,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class TeamInfo : ITeamInfo
 	{
-		private readonly IGroupPerson _groupPerson;
 		private readonly IList<IList<IScheduleMatrixPro>> _matrixesForMembers;
-
+		private readonly IList<IPerson> _groupMembers= new List<IPerson>();
+		private readonly string _name;
+			 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public TeamInfo(IGroupPerson groupPerson, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
+		public TeamInfo(Group group, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
 		{
-			_groupPerson = groupPerson;
+			_name = group.Name;
+			foreach (var member in group.GroupMembers)
+			{
+				_groupMembers.Add(member);
+			}
 			_matrixesForMembers = matrixesForMembers;
 		}
 
-		public IGroupPerson GroupPerson
+		public IEnumerable<IPerson> GroupMembers
 		{
-			get { return _groupPerson; }
+			get
+			{
+				return _groupMembers;
+			}
+		}
+
+		public string Name
+		{
+			get { return _name; }
 		}
 
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup()
@@ -104,10 +120,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return ret;
 		}
 
-
 		public override int GetHashCode()
 		{
-			return _groupPerson.GetHashCode();
+			int combinedHash = 0;
+			foreach (var groupMember in GroupMembers)
+			{
+				combinedHash = combinedHash ^ groupMember.GetHashCode();
+			}
+			return combinedHash;
 		}
 
 		public override bool Equals(object obj)
@@ -124,10 +144,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return false;
 			if (this == other)
 				return true;
-			if (!other.GroupPerson.Id.HasValue || !GroupPerson.Id.HasValue)
-				return false;
 
-			return (GroupPerson.Id.Value == other.GroupPerson.Id.Value);
+			return (GetHashCode() == other.GetHashCode());
 		}
 	}
 }

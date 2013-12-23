@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -15,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     public class TeamBlockScheduledDayCheckerTest
     {
         private MockRepository _mocks;
-        private IGroupPerson _groupPerson;
+        private Group _group;
         private IScheduleMatrixPro _matrix1;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleRange _scheduleRange;
@@ -29,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         public void Setup()
         {
             _mocks = new MockRepository();
-            _groupPerson = _mocks.StrictMock<IGroupPerson>();
+            _group = new Group();
             _matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
             _matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
@@ -47,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             
             var matrixes = new List<IScheduleMatrixPro> { _matrix1 };
             var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-			var teaminfo = new TeamInfo(_groupPerson, groupMatrixList);
+			var teaminfo = new TeamInfo(_group, groupMatrixList);
             IBlockInfo blockInfo = new BlockInfo(period);
             ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
@@ -67,10 +64,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             IPerson person2 = PersonFactory.CreatePerson("test2");
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
             var matrixes = new List<IScheduleMatrixPro> { _matrix1,_matrix2  };
             var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-            var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var teaminfo = new TeamInfo(_group, groupMatrixList);
             IBlockInfo blockInfo = new BlockInfo(period);
             ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
@@ -100,10 +96,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             IPerson person2 = PersonFactory.CreatePerson("test2");
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
             var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
             var matrixes = new List<IScheduleMatrixPro> { _matrix1, _matrix2 };
             var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-            var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var teaminfo = new TeamInfo(_group, groupMatrixList);
             IBlockInfo blockInfo = new BlockInfo(period);
             ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
@@ -133,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             var matrixes = new List<IScheduleMatrixPro> { _matrix1 };
             var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-            var teaminfo = new TeamInfo(_groupPerson, groupMatrixList);
+			var teaminfo = new TeamInfo(_group, groupMatrixList);
             IBlockInfo blockInfo = new BlockInfo(period);
             ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
@@ -169,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             var matrixes = new List<IScheduleMatrixPro> { _matrix1,_matrix2  };
             var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-            var teaminfo = new TeamInfo(_groupPerson, groupMatrixList);
+			var teaminfo = new TeamInfo(_group, groupMatrixList);
             IBlockInfo blockInfo = new BlockInfo(period);
             ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
@@ -213,10 +208,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			  var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			  var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
 			  var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
-			  var groupPerson = _mocks.StrictMock<IGroupPerson>();
 			  var matrixes = new List<IScheduleMatrixPro> { _matrix1, _matrix2 };
 			  var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-			  var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			  var teaminfo = new TeamInfo(_group, groupMatrixList);
 			  IBlockInfo blockInfo = new BlockInfo(period);
 			  ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			  var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();

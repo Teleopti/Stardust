@@ -31,6 +31,7 @@ SET IDENTITY_INSERT mart.dim_activity ON
 INSERT INTO mart.dim_activity
 	(
 	activity_id,
+	activity_code,
 	activity_name, 
 	display_color,
 	in_ready_time,
@@ -46,6 +47,7 @@ INSERT INTO mart.dim_activity
 	)
 SELECT 
 	activity_id				= -1, 
+	activity_code			= '00000000-0000-0000-0000-000000000000',
 	activity_name			= 'Not Defined', 
 	display_color			= -1,
 	in_ready_time			= 0,

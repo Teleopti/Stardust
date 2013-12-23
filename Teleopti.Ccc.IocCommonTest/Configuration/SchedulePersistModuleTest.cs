@@ -3,8 +3,8 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -83,11 +83,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetExplicitSeMessageBrokerIdentifier()
 		{
-			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeMessageBrokerIdentifier(), null));
+			containerBuilder.RegisterModule(SchedulePersistModule.ForScheduler(new FakeInitiatorIdentifier(), null));
 			using (var container = containerBuilder.Build())
 			{
-				container.Resolve<IMessageBrokerIdentifier>()
-								 .Should().Be.OfType<FakeMessageBrokerIdentifier>();
+				container.Resolve<IInitiatorIdentifier>()
+								 .Should().Be.OfType<FakeInitiatorIdentifier>();
 			}
 		}
 

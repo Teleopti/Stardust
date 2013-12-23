@@ -19,6 +19,8 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 											, int intervalsPerDay
 											, IVisualLayerCollection layerCollection)
         {
+			var nullGuid = Guid.Empty;
+
             DateTimePeriod personPayloadPeriod = GetShiftPeriod(scheduleProjection.SchedulePartProjectionMerged, layer);
             IPayload payload = layer.Payload;
             DataRow row = dataTable.NewRow();
@@ -29,8 +31,8 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             row["activity_start"] = layer.Period.StartDateTime; // activity_start
             row["scenario_code"] = scheduleProjection.SchedulePart.Scenario.Id; // scenario_code
 
-            row["activity_code"] = DBNull.Value;
-            row["absence_code"] = DBNull.Value;
+			row["activity_code"] = nullGuid;
+			row["absence_code"] = nullGuid;
 
             var meetingPayload = payload as IMeetingPayload;
             var activity = payload as IActivity;
@@ -42,7 +44,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             if (absence != null)
             {
                 row["absence_code"] = absence.Id;
-                row["shift_category_code"] = DBNull.Value;
+				row["shift_category_code"] = nullGuid;
             }
 
             if (activity != null)
@@ -53,7 +55,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 								if (personAssignment.ShiftCategory != null && personAssignment.ShiftCategory.Id != null)
 									row["shift_category_code"] = personAssignment.ShiftCategory.Id;
                 else
-                    row["shift_category_code"] = DBNull.Value;
+					row["shift_category_code"] = nullGuid;
             }
 
             row["activity_end"] = layer.Period.EndDateTime;
@@ -104,10 +106,14 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             row["update_date"] = insertDateTime;
             row["datasource_update_date"] = insertDateTime;
 
-        	if (timeInfo.OverTime.Time > 0)
-        	{
+			if (timeInfo.OverTime.Time > 0)
+			{
 				row["overtime_code"] = layer.DefinitionSet.Id;
-        	}
+			}
+			else
+			{
+				row["overtime_code"] = nullGuid;
+			}
 			
             return row;
         }

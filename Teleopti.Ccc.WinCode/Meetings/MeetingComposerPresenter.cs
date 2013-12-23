@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCode.Meetings
 {
-    public class MeetingComposerPresenter : IMessageBrokerIdentifier, IDisposable
+    public class MeetingComposerPresenter : IInitiatorIdentifier, IDisposable
     {
         private ISchedulerStateHolder _schedulerStateHolder;
         private readonly IMeetingComposerView _view;
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             _view.Close();
         }
 
-        public Guid InstanceId
+        public Guid InitiatorId
         {
             get { return _instanceId; }
         }

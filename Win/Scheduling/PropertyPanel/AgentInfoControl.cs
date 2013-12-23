@@ -4,7 +4,10 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -36,7 +39,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private IList<IOptionalColumn> _optionalColumns;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
         private ISchedulerGroupPagesProvider _groupPagesProvider;
-        private IList<IGroupPageLight> _groupPages;
+	    private readonly ILifetimeScope _container;
+	    private readonly DateOnlyPeriod _requestedPeriod;
+	    private IList<IGroupPageLight> _groupPages;
+	    private IGroupPagePerDate _groupPagePerDate;
 
     	public AgentInfoControl()
         {
@@ -48,11 +54,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider)
+		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider, ILifetimeScope container, DateOnlyPeriod requestedPeriod)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 		    _groupPagesProvider = groupPagesProvider;
+			_container = container;
+			_requestedPeriod = requestedPeriod;
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -67,7 +75,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 listViewPersonPeriod.Items.Clear();
                 listViewRestrictions.Items.Clear();
                 listViewPerson.Items.Clear();
-                //listViewFairness.Items.Clear();
+				perPersonAndGroupListView.Items.Clear();
                 return;
             }
             _dateIsSelected = true;
@@ -105,8 +113,10 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				timerRefresh.Enabled = true;
                 updatePersonInfo(_selectedPerson);
             }
-            
-            
+	        if (tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
+		        updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+
+
         }
 
         private void initializeFairnessTab()
@@ -117,6 +127,28 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             comboBoxAgentGrouping.ValueMember = "Key";
         }
 
+		private void resetGroupPageData()
+		{
+			_groupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(_requestedPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), (IGroupPageLight)comboBoxAgentGrouping.SelectedItem);
+		}
+
+		private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+		{
+			perPersonAndGroupListView.Items.Clear();
+			var service = _container.Resolve<IDistributionReportService>();
+			var report = service.CreateReport(person, _groupPagePerDate.GetGroupPageByDate(dateOnly), state.PersonsInOrganization.ToList(), state.Schedules);
+			foreach (var shiftCategory in report.DistributionDictionary.Keys)
+			{
+				var item = new ListViewItem(shiftCategory.Description.Name);
+				item.Font.ChangeToBold();
+				item.SubItems.Add(new Percent(report.DistributionDictionary[shiftCategory].Agent).ToString());
+				item.SubItems.Add(new Percent(report.DistributionDictionary[shiftCategory].Team).ToString());
+				item.SubItems.Add(new Percent(report.DistributionDictionary[shiftCategory].All).ToString());
+
+				perPersonAndGroupListView.Items.Add(item);
+			}
+		}
+
         private void updateRestrictionData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
         {
             var extractor = new RestrictionExtractor(state);
@@ -126,6 +158,36 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
             item.Font = item.Font.ChangeToBold();
             listViewRestrictions.Items.Add(item);
+			createAndAddItem(listViewRestrictions, "", "", 0);
+
+			ISchedulingOptions schedulingOptions = new SchedulingOptions
+                                                       {
+                                                           UseAvailability = true,
+                                                           UsePreferences = true,
+                                                           UseStudentAvailability = false,
+                                                           UseRotations = true
+                                                       };
+            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
+			helper.SetRestrictionFullfillment();
+			var period = person.Period(helper.SelectedDate);
+			if (period != null)
+			{
+				var employmentType = period.PersonContract.Contract.EmploymentType;
+				if (employmentType != EmploymentType.HourlyStaff)
+				{
+					createAndAddItem(listViewRestrictions, Resources.PreferenceFulfillment, helper.PreferenceFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewRestrictions, Resources.MustHaveFulfillment, helper.MustHavesFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewRestrictions, Resources.RotationFulfillment, helper.RotationFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+					createAndAddItem(listViewRestrictions, Resources.AvailabilityFulfillment, helper.AvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+				}
+				else
+				{
+					createAndAddItem(listViewRestrictions, Resources.StudentAvailabilityFulfillment, helper.StudentAvailabilityFulfillment.ToString(CultureInfo.CurrentCulture), 2);
+				}
+			}
+
+			createAndAddItem(listViewRestrictions, "", "", 0);
+			createAndAddItem(listViewRestrictions, "", "", 0);
 
             createAndAddItem(listViewRestrictions, Resources.Availability, "", 1);
             handleAvailabilities(extractor.AvailabilityList);
@@ -156,6 +218,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 createAndAddItem(listViewRestrictions, personAbsenceAccount.Absence.Description.Name, personAbsenceAccount.Absence.Tracker.Description.Name, 1);
                 foreach (var account in personAbsenceAccount.AccountCollection())
                 {
+						 if (account.StartDate > person.TerminalDate) continue;
                     if (account.GetType() == typeof(AccountDay))
                         updateDayAccount(account);
                     else
@@ -441,14 +504,22 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                                                            UseStudentAvailability = false,
                                                            UseRotations = true
                                                        };
-            var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
-            
-            helper.SchedulePeriodData();
-            if (!helper.Period.HasValue)
-                return;
 
             listViewSchedulePeriod.Items.Clear();
 
+			var personNameItem = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
+			personNameItem.Font = personNameItem.Font.ChangeToBold();
+			listViewSchedulePeriod.Items.Add(personNameItem);
+
+			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
+			helper.SchedulePeriodData();
+			if (nullOrZeroPeriod(helper.Period))
+			{
+				var noPeriodPresentItem = new ListViewItem(Resources.NoSchedulePeriodPresent);
+				listViewSchedulePeriod.Items.Add(noPeriodPresentItem);
+				return;
+			}
+				
             int freeSlots = helper.Period.Value.DayCount() - helper.CurrentOccupiedSlots;
             TimeSpan avgWorkTimePerSlot = TimeSpan.Zero;
             if (freeSlots > 0)
@@ -457,10 +528,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                     TimeSpan.FromTicks(helper.SchedulePeriodTargetTime.Subtract(helper.CurrentContractTime).Ticks/
                                        freeSlots);
             }
-
-            var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
-            item.Font = item.Font.ChangeToBold();
-            listViewSchedulePeriod.Items.Add(item);
 
             createAndAddItem(listViewSchedulePeriod, Resources.Period, helper.Period.Value.DateString, 1);
             createAndAddItem(listViewSchedulePeriod, Resources.Type, _schedulePeriodTypeList[helper.SchedulePeriod.PeriodType], 2);
@@ -500,7 +567,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
            
 
             createAndAddItem(listViewSchedulePeriod, Resources.Current, helper.Period.Value.DateString, 1);
-            item = createAndAddItem(listViewSchedulePeriod, Resources.DaysOff,
+            var item = createAndAddItem(listViewSchedulePeriod, Resources.DaysOff,
                                     helper.CurrentDaysOff.ToString(CultureInfo.CurrentCulture), 2);
             if (employmentType == EmploymentType.FixedStaffNormalWorkTime)
             {
@@ -543,7 +610,15 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
         }
 
-        private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)
+	    private bool nullOrZeroPeriod(DateOnlyPeriod? period)
+	    {
+		    if (!period.HasValue)
+			    return true;
+		    var periodValue = period.Value;
+		    return (periodValue.StartDate == DateTime.MinValue && periodValue.EndDate == DateTime.MinValue);
+	    }
+
+	    private static ListViewItem createAndAddItem(ListView listView, string itemText, string subItemText, int indent)
         {
             var item = new ListViewItem(itemText);
             
@@ -637,6 +712,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             initializeFairnessTab();
 	        timerRefresh.Interval = 2000;
+			resetGroupPageData();
         }
 
 		private void timerRefreshTick(object sender, EventArgs e)
@@ -651,5 +727,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             tabControlAgentInfo.SelectedIndex  = 0;
         }
+
+		private void comboBoxAgentGrouping_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			resetGroupPageData();
+			update();
+		}
     }
 }

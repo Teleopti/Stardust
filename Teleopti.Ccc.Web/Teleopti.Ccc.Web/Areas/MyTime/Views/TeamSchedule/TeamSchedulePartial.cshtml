@@ -12,10 +12,10 @@
 	<div class="navbar-inner">
 		<form class="navbar-form pull-left">
 			<div class="input-append input-prepend">
-				<button class="btn" data-bind="click: previousDay"><i class="icon-arrow-left"></i></button>
+				<button class="btn" data-bind="click: previousDay, css: 'done'"><i class="icon-arrow-left"></i></button>
 				<input data-bind="value: displayDate" type="text" class="span2 text-center" readonly="readonly"/>
 				<button class="btn moment-datepicker"><i class="icon-th"></i></button>
-				<button class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
+				<button class="btn" data-bind="click: nextDay, css: 'done'"><i class="icon-arrow-right"></i></button>
 			</div>
 		</form>
 		<ul class="nav" data-bind="if: showTeamPicker">

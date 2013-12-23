@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
     {
         private MockRepository _mock;
         private IDailyTargetValueCalculatorForTeamBlock _target;
-        //private ISkillIntervalDataSkillFactorApplier _skillIntervalDataSkillFactorApplier;
         private ISkillResolutionProvider _resolutionProvider;
         private ISkillIntervalDataDivider _intervalDataDivider;
         private ISkillIntervalDataAggregator _intervalDataAggregator;
@@ -54,11 +53,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _groupPersonSkillAggregator = _mock.StrictMock<IGroupPersonSkillAggregator>();
             _advancePrefrences = new AdvancedPreferences {TargetValueCalculation = TargetValueOptions.StandardDeviation};
             _baseLineData = new BaseLineData();
-            _teamInfo = new TeamInfo(_baseLineData.GroupPerson, new List<IList<IScheduleMatrixPro>>());
+            _teamInfo = new TeamInfo(_baseLineData.Group, new List<IList<IScheduleMatrixPro>>());
             _dateOnlyPeriod = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
             _blockInfo = new BlockInfo(_dateOnlyPeriod);
             _teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
-            _skillList = new List<ISkill>(){_baseLineData.SampleSkill };
+            _skillList = new List<ISkill>{_baseLineData.SampleSkill };
             _skillDay1 = _mock.StrictMock<ISkillDay  >() ;
 
             _skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
@@ -87,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             dateToSkillIntervalDic.Add(DateOnly.Today,new List<ISkillIntervalData>{skillIntervalData1 });
             using (_mock.Record())
             {
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
                 Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList() )).Return(15);
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay>{_skillDay1 });
                 Expect.Call(_skillDay1.CurrentDate).Return(DateOnly.Today);
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                     _intervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData> {skillIntervalData1},15)).Return(new List<ISkillIntervalData>{skillIntervalData1 });
 
                 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo,_advancePrefrences), 0.0);
@@ -121,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             
             using (_mock.Record())
             {
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList, _dateOnlyPeriod)).IgnoreArguments().Return(_skillList);
                 Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay> { _skillDay1 });
 
@@ -133,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                             skillIntervalList
                         })).IgnoreArguments().Return(skillIntervalList);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(15, dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);

@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod, selectedPersons);
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService);
 				if (!success)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                                                                                                       optimizationPreferences
                                                                                                           .Advanced);
 				var isWorse = newTargetValue >= previousTargetValue;
-				string teamName = StringHelper.DisplayString(teamBlockInfo.TeamInfo.GroupPerson.Name.ToString(), 20);
+				string teamName = StringHelper.DisplayString(teamBlockInfo.TeamInfo.Name, 20);
 				string commonProgress = Resources.OptimizingIntraday + Resources.Colon + "(" + totalTeamBlockInfos + ")(" +
 				                        runningTeamBlockCounter + ") " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " +
 				                        teamName + " ";

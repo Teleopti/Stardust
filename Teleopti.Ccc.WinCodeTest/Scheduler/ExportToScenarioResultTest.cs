@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,7 +14,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Text=Rhino.Mocks.Constraints.Text;
+using Text = Rhino.Mocks.Constraints.Text;
 using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScenario exportScenario;
 		private IScenario orginalScenario;
 		private IList<IScheduleDay> partsToMove;
-		private IScheduleDictionaryPersister scheduleDictionaryPersister;
+		private IScheduleDictionaryPersister scheduleDictionaryBatchPersister;
 		private IUnitOfWorkFactory uowFactory;
 		private List<IPerson> persons;
 		private IReassociateDataForSchedules callback;
@@ -42,13 +43,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			scheduleRepository = mocks.StrictMock<IScheduleRepository>();
 			moveSvc = mocks.StrictMock<IMoveDataBetweenSchedules>();
 			uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			scheduleDictionaryPersister = mocks.DynamicMock<IScheduleDictionaryPersister>();
+			scheduleDictionaryBatchPersister = mocks.DynamicMock<IScheduleDictionaryPersister>();
 			callback = mocks.DynamicMock<IReassociateDataForSchedules>();
 			partsToMove = new List<IScheduleDay>();
 			persons = new List<IPerson>();
 			exportScenario = new Scenario("export");
 			orginalScenario = new Scenario("original");
-			target = new Presenter(uowFactory, view, scheduleRepository, moveSvc, callback, persons, partsToMove, exportScenario, scheduleDictionaryPersister);
+			target = new Presenter(uowFactory, view, scheduleRepository, moveSvc, callback, persons, partsToMove, exportScenario, scheduleDictionaryBatchPersister);
 		}
 
 		[Test]
@@ -61,6 +62,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var warnings = threeRuleResponsesTwoWithSameMessageAndPerson();
 			using (mocks.Record())
 			{
+				Expect.Call(() => view.DisableInteractions());
+				Expect.Call(() => view.EnableInteractions());
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
 				callback.ReassociateDataForAllPeople();
 				Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).IgnoreArguments()
@@ -73,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 			using (mocks.Playback())
 			{
-				target.Initialize();
+				Initialize(target);
 			}
 			Assert.AreSame(dictionaryToExportTo, target.ScheduleDictionaryToPersist);
 		}
@@ -88,6 +91,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var warnings = new List<IBusinessRuleResponse>();
 			using (mocks.Record())
 			{
+				Expect.Call(() => view.DisableInteractions());
+				Expect.Call(() => view.EnableInteractions());
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
 				callback.ReassociateDataForAllPeople();
 				Expect.Call(scheduleRepository.FindSchedulesForPersons(null, null, null, null, null)).Return(dictionaryToExportTo);
@@ -99,7 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 			using (mocks.Playback())
 			{
-				target.Initialize();
+				Initialize(target);
 			}
 			Assert.AreSame(dictionaryToExportTo, target.ScheduleDictionaryToPersist);
 		}
@@ -121,7 +126,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void VerifyInitializeWhenPersonIsMissingForSchedule()
 		{
 			partsToMove.Add(createDummyPart(new Person()));
-			Assert.Throws<ArgumentException>(target.Initialize); //annat exception här?
+			Assert.Throws<ArgumentException>(() => Initialize(target)); //annat exception här?
 		}
 
 		[Test]
@@ -146,7 +151,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (mocks.Record())
 			{
 				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Any();
-				scheduleDictionaryPersister.Persist(target.ScheduleDictionaryToPersist);
+				scheduleDictionaryBatchPersister.Persist(target.ScheduleDictionaryToPersist);
 				view.CloseForm();
 			}
 			using (mocks.Playback())
@@ -155,38 +160,56 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
-        [Test]
-        public void ShouldCallViewToShowErrorOnDataSourceException()
-        {
-            var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()));
-            target.SetPersistingDic(dic);
-            var err = new DataSourceException();
+		[Test]
+		public void ShouldCallViewToShowErrorOnDataSourceException()
+		{
+			var dic = new ScheduleDictionary(orginalScenario, new ScheduleDateTimePeriod(new DateTimePeriod()));
+			target.SetPersistingDic(dic);
+			var err = new DataSourceException();
 
-            Expect.Call(() => scheduleDictionaryPersister.Persist(target.ScheduleDictionaryToPersist)).Throw(err);
-            Expect.Call(() => view.ShowDataSourceException(err));
-            Expect.Call(() => view.CloseForm());
-            mocks.ReplayAll();
-            target.OnConfirm();
-            mocks.VerifyAll();
-        }
+			Expect.Call(() => scheduleDictionaryBatchPersister.Persist(target.ScheduleDictionaryToPersist)).Throw(err);
+			Expect.Call(() => view.ShowDataSourceException(err));
+			Expect.Call(() => view.CloseForm());
+			mocks.ReplayAll();
+			target.OnConfirm();
+			mocks.VerifyAll();
+		}
 
-        [Test]
-        public void ShouldCallViewToShowErrorOnDataSourceExceptionInInit()
-        {
-            var person = new Person();
-            partsToMove.Add(createDummyPart(person));
-            persons.Add(person);
-            var err = new DataSourceException();
-            Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
-            Expect.Call(() => callback.ReassociateDataForAllPeople()).Throw(err);
-            Expect.Call(() => view.ShowDataSourceException(err));
-            Expect.Call(() => view.CloseForm());
-            mocks.ReplayAll();
+		[Test]
+		public void ShouldCallViewToShowErrorOnDataSourceExceptionInInit()
+		{
+			var person = new Person();
+			partsToMove.Add(createDummyPart(person));
+			persons.Add(person);
+			var err = new DataSourceException();
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(null);
+			Expect.Call(() => callback.ReassociateDataForAllPeople()).Throw(err);
+			Expect.Call(() => view.ShowDataSourceException(err));
+			Expect.Call(() => view.CloseForm());
+			mocks.ReplayAll();
 
-            target.Initialize();
-            
-            mocks.VerifyAll();
-        }
+			var export = target.CommitExport();
+			target.ExportFinished(export);
+
+			mocks.VerifyAll();
+		}
+
+		[Test]
+		public void Initialize_WhenWarnings_ShouldSetWarningsOnTheView()
+		{
+			var moveDataBetweenSchedules = MockRepository.GenerateMock<IMoveDataBetweenSchedules>();
+			var exportToScenarioView = MockRepository.GenerateMock<IExportToScenarioResultView>();
+
+			moveDataBetweenSchedules.Expect(m => m.CopySchedulePartsToAnotherDictionary(null, null))
+									.IgnoreArguments()
+									.Return(threeRuleResponsesTwoWithSameMessageAndPerson());
+
+			var exportPresenter = new exportToScenarioResultPresenterStubFactory() { View = exportToScenarioView, MoveSchedules = moveDataBetweenSchedules }.Create();
+
+			Initialize(exportPresenter);
+
+			exportToScenarioView.AssertWasCalled(e => e.SetWarningText(null), o => o.IgnoreArguments());
+		}
 
 		[Test]
 		public void ExportToScenarioEqualsOperators()
@@ -199,6 +222,36 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsTrue(data3 == data2);
 			Assert.IsFalse(data3 != data2);
 			Assert.IsFalse(data3.Equals(new object()));
+		}
+
+		[Test]
+		public void Initialize_WhenFinishedSuccesfully_ShouldEnableControlsOnTheView()
+		{
+			var exportToScenarioView = MockRepository.GenerateMock<IExportToScenarioResultView>();
+			var exportPresenter = new exportToScenarioResultPresenterStubFactory() { View = exportToScenarioView }.Create();
+
+			exportPresenter.ExportFinished(true);
+
+			exportToScenarioView.AssertWasCalled(e => e.EnableInteractions());
+		}
+
+		[Test]
+		public void Initialize_BeforeLoadingStarts_ShouldDisableInteractions()
+		{
+			var exportToScenarioView = MockRepository.GenerateMock<IExportToScenarioResultView>();
+
+			var exportPresenter = new exportToScenarioResultPresenterStubFactory() { View = exportToScenarioView }.Create();
+
+			exportPresenter.PrepareForExport();
+			exportToScenarioView.AssertWasCalled(e => e.DisableInteractions());
+		}
+
+		#region helpers
+		private static void Initialize(ExportToScenarioResultPresenter presenter)
+		{
+			presenter.PrepareForExport();
+			var exportSuccessful = presenter.CommitExport();
+			presenter.ExportFinished(exportSuccessful);
 		}
 
 		private void verifyAgentText(string textToSearchFor)
@@ -225,7 +278,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 															   new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1,
 																											 2000, 1, 2)),
 															   new Dictionary<IPerson, IScheduleRange>());
-			return ExtractedSchedule.CreateScheduleDay(tempDictionary, person, new DateOnly(2000,1,1));
+			return ExtractedSchedule.CreateScheduleDay(tempDictionary, person, new DateOnly(2000, 1, 1));
 		}
 
 		private static IEnumerable<IBusinessRuleResponse> threeRuleResponsesTwoWithSameMessageAndPerson()
@@ -242,8 +295,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		private class Presenter : ExportToScenarioResultPresenter
 		{
-			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleRepository scheduleRepository, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryPersister scheduleDictionaryPersister)
-				: base(uowFactory, view, scheduleRepository, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryPersister)
+			public Presenter(IUnitOfWorkFactory uowFactory, IExportToScenarioResultView view, IScheduleRepository scheduleRepository, IMoveDataBetweenSchedules moveSchedules, IReassociateDataForSchedules callback, IEnumerable<IPerson> persons, IEnumerable<IScheduleDay> schedulePartsToExport, IScenario exportScenario, IScheduleDictionaryPersister scheduleDictionaryBatchPersister)
+				: base(uowFactory, view, scheduleRepository, moveSchedules, callback, persons, schedulePartsToExport, exportScenario, scheduleDictionaryBatchPersister)
 			{
 			}
 
@@ -252,5 +305,70 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				SetScheduleDictionaryToPersist(dic);
 			}
 		}
+
+		private class exportToScenarioResultPresenterStubFactory
+		{
+			public IUnitOfWorkFactory UowFactory { get; set; }
+			public IExportToScenarioResultView View { get; set; }
+			public IScheduleRepository ScheduleRepository { get; set; }
+			public IMoveDataBetweenSchedules MoveSchedules { get; set; }
+			public IReassociateDataForSchedules Callback { get; set; }
+			public IEnumerable<IPerson> FullyLoadedPersonsToMove { get; set; }
+			public IEnumerable<IScheduleDay> SchedulePartsToExport { get; set; }
+			public IScenario ExportScenario { get; set; }
+			public IScheduleDictionaryPersister ScheduleDictionaryBatchPersister { get; set; }
+
+			public ExportToScenarioResultPresenter Create()
+			{
+				var fakeFactory = new MockRepository();
+				if (UowFactory == null)
+				{
+					UowFactory = fakeFactory.Stub<IUnitOfWorkFactory>();
+				}
+				if (View == null)
+				{
+					View = fakeFactory.Stub<IExportToScenarioResultView>();
+				}
+				if (ScheduleRepository == null)
+				{
+					ScheduleRepository = fakeFactory.Stub<IScheduleRepository>();
+				}
+				if (Callback == null)
+				{
+					Callback = fakeFactory.Stub<IReassociateDataForSchedules>();
+				}
+				if (MoveSchedules == null)
+				{
+					MoveSchedules = fakeFactory.DynamicMock<IMoveDataBetweenSchedules>();
+					MoveSchedules.Expect(m => m.CopySchedulePartsToAnotherDictionary(null, null))
+								 .IgnoreArguments()
+								 .Return(new List<IBusinessRuleResponse>());
+				}
+				if (SchedulePartsToExport == null)
+				{
+					SchedulePartsToExport = new List<IScheduleDay>()
+						                        {
+							                        new SchedulePartFactoryForDomain().CreatePartWithMainShift()
+						                        };
+				}
+				if (FullyLoadedPersonsToMove == null)
+				{
+					FullyLoadedPersonsToMove = from s in SchedulePartsToExport
+											   select s.Person;
+				}
+				if (ExportScenario == null)
+				{
+					ExportScenario = ScenarioFactory.CreateScenarioWithId("whatever", false);
+				}
+
+				if (ScheduleDictionaryBatchPersister == null)
+				{
+					ScheduleDictionaryBatchPersister = fakeFactory.Stub<IScheduleDictionaryPersister>();
+				}
+				fakeFactory.ReplayAll();
+				return new ExportToScenarioResultPresenter(UowFactory, View, ScheduleRepository, MoveSchedules, Callback, FullyLoadedPersonsToMove, SchedulePartsToExport, ExportScenario, ScheduleDictionaryBatchPersister);
+			}
+		}
+		#endregion
 	}
 }

@@ -127,23 +127,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeOvertimeAvailabilityBarWith(Table table)
 		{
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
-			var layers = _page.DayLayers(overtimeAvailability.Date);
+			var layerTop =
+				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").position().top",
+				              overtimeAvailability.Date.ToString("yyyy-MM-dd"));
+			var layerHeight =
+				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").height()",
+							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
+			var layerWidth =
+				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").width()",
+							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
 			if (overtimeAvailability.Date.Day == 20)
 			{
-				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("111px"));
-				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("445px"));
+				Browser.Interactions.AssertJavascriptResultContains(layerTop,"111");
+				Browser.Interactions.AssertJavascriptResultContains(layerHeight,"445");
 			}
 			if (overtimeAvailability.Date.Day == 21)
 			{
-				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("459px"));
-				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("208px"));
+				Browser.Interactions.AssertJavascriptResultContains(layerTop, "459");
+				Browser.Interactions.AssertJavascriptResultContains(layerHeight, "208");
 			}
 			if (overtimeAvailability.Date.Day == 22)
 			{
-				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Top"), Is.EqualTo("0px"));
-				EventualAssert.That(() => layers[0].Style.GetAttributeValue("Height"), Is.EqualTo("89px"));
+				Browser.Interactions.AssertJavascriptResultContains(layerTop, "0");
+				Browser.Interactions.AssertJavascriptResultContains(layerHeight, "89");
 			}
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("Width"), Is.EqualTo("20px"));
+			Browser.Interactions.AssertJavascriptResultContains(layerWidth, "20");
 		}
 
 		[Then(@"I should see activities on date '(.*)'")]

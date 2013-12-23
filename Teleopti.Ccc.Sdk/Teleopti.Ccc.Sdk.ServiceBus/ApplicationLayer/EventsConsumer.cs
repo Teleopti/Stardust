@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 {
@@ -21,17 +22,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(IEvent message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			var raptorDomainMessage = message as IRaptorDomainMessageInfo;
+			if (raptorDomainMessage == null)
 			{
-				_publisher.Publish(message);
-				unitOfWork.PersistAll();
+				using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+				{
+					_publisher.Publish(message);
+					unitOfWork.PersistAll();
+				}
+			}
+			else
+			{
+				using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(new InitiatorIdentifierFromMessage(raptorDomainMessage)))
+				{
+					_publisher.Publish(message);
+					unitOfWork.PersistAll();
+				}
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(EventsPackageMessage message)
 		{
 			_bus.Send(message.Events.ToArray());

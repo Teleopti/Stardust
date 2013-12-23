@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Preferences feedback pre scheduled
+﻿Feature: Preferences feedback pre scheduled
 	In order to clearly see preferences that collide with the pre scheduled personal shift or meeting.
 	As an agent
 	I want good feedback about personal shifts, meetings and the the preferences in collision   

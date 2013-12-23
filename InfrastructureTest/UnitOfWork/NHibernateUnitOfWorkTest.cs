@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 					.Call(session.BeginTransaction())
 					.Return(tx);
 
-				Expect.Call(() => messageSender.Execute(null, new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
+				Expect.Call(() => messageSender.Execute(new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
 				
 				Expect.Call(messageBroker.IsInitialized).Return(true);
 			}
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		private class TestUnitOfWork : NHibernateUnitOfWork
 		{
 			public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
-				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic, TransactionIsolationLevel.Default)
+				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic, (s, i) => {}, TransactionIsolationLevel.Default, null)
 			{
 			}
 

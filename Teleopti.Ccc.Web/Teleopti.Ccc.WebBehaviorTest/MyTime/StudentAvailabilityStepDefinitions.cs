@@ -1,13 +1,10 @@
 ﻿using System;
-using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -15,15 +12,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class StudentAvailabilityStepDefinitions
 	{
-		private StudentAvailabilityPage _page;
-
 		[Given(@"I am viewing student availability")]
 		[When(@"I view student availability")]
 		public void WhenIViewStudentAvailability()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAvailability();
-			_page = Browser.Current.Page<StudentAvailabilityPage>();
 		}
 
 		[When(@"I navigate to the student availability page")]
@@ -36,32 +30,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheStudentAvailabilityPeriodInformation()
 		{
 			var data = DataMaker.Data().UserData<ExistingWorkflowControlSet>();
-			var innerHtml = _page.StudentAvailabilityPeriod.InnerHtml;
-			innerHtml.Should().Contain(data.StudentAvailabilityInputPeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
-			innerHtml.Should().Contain(data.StudentAvailabilityInputPeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
-			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.StartDate.ToShortDateString(DataMaker.Data().MyCulture));
-			innerHtml.Should().Contain(data.StudentAvailabilityPeriod.EndDate.ToShortDateString(DataMaker.Data().MyCulture));
+			var cultureInfo = DataMaker.Data().MyCulture;
+
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityInputPeriod.StartDate.ToShortDateString(cultureInfo));
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityInputPeriod.EndDate.ToShortDateString(cultureInfo));
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityPeriod.StartDate.ToShortDateString(cultureInfo));
+			Browser.Interactions.AssertFirstContainsUsingJQuery("#StudentAvailability-period",data.StudentAvailabilityPeriod.EndDate.ToShortDateString(cultureInfo));
 		}
 
 		[Then(@"the student availabilty calendar should be editable")]
 		public void ThenTheCalendarShouldBeEditable()
 		{
-			if (_page == null)
-				ScenarioContext.Current.Pending();
 			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			_page.SelectCalendarCellForDateByClick(editableDate);
-			_page.CalendarCellForDate(editableDate).ClassName.Should().Contain("ui-selected");
+			var cell = CalendarCells.DateSelector(editableDate);
+			Browser.Interactions.ClickUsingJQuery(cell);
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0}.{1}",cell,"ui-selected"));
 		}
 
 		[Then(@"the student availability calendar should not be editable")]
 		public void ThenTheCalendarShouldNotBeEditable()
 		{
-			_page.CalendarCells.ForEach(cell =>
-			                            	{
-												cell.ClassName.Should().Not.Contain("ui-selectee");
-												_page.SelectCalendarCellByClick(cell);
-												cell.ClassName.Should().Not.Contain("ui-selected");
-			                            	});
+			var amount = Convert.ToInt32(Browser.Interactions.Javascript("return $('li[data-mytime-date]').length;"));
+			for (int i = 0; i < amount; i++)
+			{
+				var cell = string.Format("li[data-mytime-date]:nth({0})", i);
+				Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0}.{1}", cell, "ui-selectee"));
+				Browser.Interactions.ClickUsingJQuery(cell);
+				Browser.Interactions.AssertNotExistsUsingJQuery(cell, string.Format("{0}.{1}", cell, "ui-selected"));
+			}
 		}
 
 		[Then(@"I should not be able to see student availability link")]
@@ -77,7 +73,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var startTime = TimeHelper.TimeOfDayFromTimeSpan(data.StartTime, DataMaker.Data().MyCulture);
 			var endTime = TimeHelper.TimeOfDayFromTimeSpan(data.EndTime, DataMaker.Data().MyCulture);
 
-			EventualAssert.That(()=> _page.CalendarCellForDate(data.Date).InnerHtml, Is.StringContaining(startTime).And.StringContaining(endTime));
+			var cell = CalendarCells.DateSelector(data.Date);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,startTime);
+			Browser.Interactions.AssertFirstContainsUsingJQuery(cell,endTime);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open student availability period")]
@@ -95,15 +93,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		private void calendarShouldRangeBetween(DateTime firstDateDisplayed, DateTime lastDateDisplayed)
 		{
-			EventualAssert.That(() => _page.FirstCalendarCellDate, Is.EqualTo(firstDateDisplayed.ToString("yyyy-MM-dd")));
-			EventualAssert.That(() => _page.LastCalendarCellDate, Is.EqualTo(lastDateDisplayed.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(firstDateDisplayed), CalendarCells.DateSelector(firstDateDisplayed.AddDays(-1)));
+			Browser.Interactions.AssertNotExistsUsingJQuery(CalendarCells.DateSelector(lastDateDisplayed), CalendarCells.DateSelector(lastDateDisplayed.AddDays(1)));
 		}
-
-		private void cellShouldContainInputValues(DateTime date)
-		{
-			EventualAssert.That(() => _page.CalendarCellForDate(date).InnerHtml, Is.StringContaining("05:00"));
-			EventualAssert.That(() => _page.CalendarCellForDate(date).InnerHtml, Is.StringContaining("14:00"));
-		}
-
 	}
 }

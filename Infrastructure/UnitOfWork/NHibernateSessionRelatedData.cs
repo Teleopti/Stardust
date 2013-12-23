@@ -13,5 +13,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public NHibernateFilterManager FilterManager { get; private set; }
 
 		public TransactionIsolationLevel IsolationLevel { get; private set; }
+
+		public IInitiatorIdentifier Initiator { get; set; }
+
 	}
 }

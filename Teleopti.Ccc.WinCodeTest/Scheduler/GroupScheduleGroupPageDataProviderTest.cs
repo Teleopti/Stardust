@@ -186,40 +186,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
-		[Test]
-		public void ShouldNotReassociateGroupPerson()
-		{
-			var repository = _mocks.StrictMock<IGroupPageRepository>();
-			var person = PersonFactory.CreatePerson("bill");
-			var groupPerson1 = new GroupPerson(new List<IPerson> { _person1 }, new DateOnly(), "Hej", Guid.NewGuid());
-			
-			var wholePeriod = new DateTimePeriod(2012, 1, 1, 2012, 3, 31);
-			IScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(wholePeriod);
-			IScenario scenario = new Scenario("Scenario");
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, scheduleDateTimePeriod, new Dictionary<IPerson, IScheduleRange>());
-
-			var dayPeriod = new DateTimePeriod(2012, 1, 1, 2012, 3, 31);
-			IScheduleParameters parameters1 = new ScheduleParameters(scenario, groupPerson1, dayPeriod);
-			IScheduleParameters parameters2 = new ScheduleParameters(scenario, person, dayPeriod);
-			IScheduleRange range1 = new ScheduleRange(scheduleDictionary, parameters1);
-			IScheduleRange range2 = new ScheduleRange(scheduleDictionary, parameters2);
-			scheduleDictionary.AddTestItem(groupPerson1, range1);
-			scheduleDictionary.AddTestItem(person, range2);
-			using (_mocks.Record())
-			{
-				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
-				Expect.Call(_resultHolder.Schedules).Return(scheduleDictionary).Repeat.AtLeastOnce();
-				Expect.Call(() => _uow.Reassociate(new List<IPerson>{person}));
-				Expect.Call(_repositoryFactory.CreateGroupPageRepository(_uow)).Return(repository);
-				Expect.Call(repository.LoadAllGroupPageWhenPersonCollectionReAssociated()).Return(new List<IGroupPage>());
-				Expect.Call(() => _uow.Dispose());
-			}
-
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
-			}
-		}
+		
 
         [Test]
         public void VerifySkillCollection()

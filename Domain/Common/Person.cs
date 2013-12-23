@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -182,7 +183,40 @@ namespace Teleopti.Ccc.Domain.Common
 			});
 		}
 
-		public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
+		public virtual void AddExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
+		{
+			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
+			if (modify == null) return;
+			modify.AddExternalLogOn(externalLogOn);
+			addPersonActivityStartingEvent();
+		}
+
+		public virtual void ResetExternalLogOn(IPersonPeriod personPeriod)
+	   {
+			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
+			if (modify == null) return;
+			modify.ResetExternalLogOn();
+			addPersonActivityStartingEvent();
+	   }
+
+	   public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn, IPersonPeriod personPeriod)
+	   {
+			var modify = personPeriod as IPersonPeriodModifyExternalLogon;
+		   if (modify == null) return;
+		   modify.RemoveExternalLogOn(externalLogOn);
+		   addPersonActivityStartingEvent();
+	   }
+
+		// adding this event so servicebus and rta do a check if person should be monitored in rta
+		private void addPersonActivityStartingEvent()
+		{
+			AddEvent(new PersonActivityStarting
+			{
+				PersonId = Id.GetValueOrDefault()
+			});
+		}
+
+	    public virtual void ActivateSkill(ISkill skill, IPersonPeriod personPeriod)
 		{
 			InParameter.NotNull("skill", skill);
 			InParameter.NotNull("personPeriod", personPeriod);

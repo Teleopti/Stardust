@@ -28,16 +28,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 		public IEffectiveRestriction Aggregate(DateOnly dateOnly,  ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache roleModel)
 		{
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers.ToList();
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
-			var timeZone = groupPerson.PermissionInformation.DefaultTimeZone();
+			var timeZone = groupMembers[0].PermissionInformation.DefaultTimeZone();
 
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
 																			  new EndTimeLimitation(),
 																			  new WorkTimeLimitation(), null, null, null,
 																			  new List<IActivityRestriction>());
 
-			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupPerson.GroupMembers, schedulingOptions,
+			effectiveRestriction = combineRestriction(new TeamBlockEffectiveRestrcition(_effectiveRestrictionCreator, groupMembers, schedulingOptions,
 																	 scheduleDictionary), dateOnly, matrixList, effectiveRestriction);
 			
 			if (_teamBlockSchedulingOptions.IsTeamSchedulingWithSameStartTime(schedulingOptions))

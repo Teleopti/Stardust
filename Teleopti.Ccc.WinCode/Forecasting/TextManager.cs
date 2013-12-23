@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
         private void BaseSetUp()
         {
-            _wordDictionary.Add("AverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("ForecastedIncomingDemand", UserTexts.Resources.HoursInc);
             _wordDictionary.Add("ForecastedDistributedDemand", UserTexts.Resources.Hours);
             _wordDictionary.Add("ForecastedDistributedDemandWithShrinkage", UserTexts.Resources.HoursIncShrinkage);
@@ -65,7 +64,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("OriginalAverageTaskTime", UserTexts.Resources.OriginalHandlingTime);
             _wordDictionary.Add("AverageTalkTime", UserTexts.Resources.AverageHandlingTime);
             _wordDictionary.Add("ValidatedAverageTaskTime", UserTexts.Resources.ValidatedAverageHandlingTime);
-            _wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("ForecastedHandlingTime", UserTexts.Resources.ForecastedHandlingTime);//
             _wordDictionary.Add("ActualHandlingTime", UserTexts.Resources.ActualHandlingTime);//
 
@@ -85,6 +83,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Emails);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalEmails);
+			_wordDictionary.Add("AverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalAEW);
             _wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.AEW);
             _wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignEmailsHandlingtimePercent);
@@ -94,6 +93,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("TotalStatisticAbandonedTasks", UserTexts.Resources.AbandonedEmails);
             _wordDictionary.Add("TotalStatisticAnsweredTasks", UserTexts.Resources.AnsweredEmails);
             _wordDictionary.Add("TotalStatisticAverageAfterTaskTime", UserTexts.Resources.AEW);
+			_wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("TaskIndex", UserTexts.Resources.IndexEmails);
             _wordDictionary.Add("TalkTimeIndex", UserTexts.Resources.IndexHandlingTime);
             _wordDictionary.Add("AfterTalkTimeIndex", UserTexts.Resources.IndexAEW);
@@ -115,6 +115,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Tasks);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalTasks);
+			_wordDictionary.Add("AverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalATW);
             _wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.ATW);
             _wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignTaskPercent);
@@ -124,6 +125,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("TotalStatisticAbandonedTasks", UserTexts.Resources.AbandonedTasks);
             _wordDictionary.Add("TotalStatisticAnsweredTasks", UserTexts.Resources.AnsweredTasks);
             _wordDictionary.Add("TotalStatisticAverageAfterTaskTime", UserTexts.Resources.ATW);
+_wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("TaskIndex", UserTexts.Resources.IndexTasks);
             _wordDictionary.Add("TalkTimeIndex", UserTexts.Resources.IndexHandlingTime);
             _wordDictionary.Add("AfterTalkTimeIndex", UserTexts.Resources.IndexATW);
@@ -146,6 +148,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_wordDictionary.Add("Tasks", UserTexts.Resources.Customers);
 			_wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalCustomers);
 			_wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
+			_wordDictionary.Add("AverageTaskTime", UserTexts.Resources.HandlingTime);
 			_wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.ACW);
 			_wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignTalkTimePercentSign);
 			_wordDictionary.Add("CampaignAfterTaskTime", UserTexts.Resources.CampaignACWPercentSign);
@@ -155,6 +158,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_wordDictionary.Add("TotalStatisticAnsweredTasks", UserTexts.Resources.ServedCustomers);
 			_wordDictionary.Add("TotalStatisticAverageAfterTaskTime", UserTexts.Resources.ACW);
 			_wordDictionary.Add("TaskIndex", UserTexts.Resources.IndexCustomers);
+			_wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.HandlingTime);
 			_wordDictionary.Add("TalkTimeIndex", UserTexts.Resources.IndexTalkTime);
 			_wordDictionary.Add("AfterTalkTimeIndex", UserTexts.Resources.IndexAfterCustomerWork);
 			_wordDictionary.Add("OriginalTasks", UserTexts.Resources.OriginalOfferedCustomers);
@@ -187,6 +191,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalHandlingTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Facsimiles);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalFacsimiles);
+			_wordDictionary.Add("AverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalAFW);
             _wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.AFW);
             _wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignFacsimilesHandlingtime);
@@ -196,6 +201,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("TotalStatisticAbandonedTasks", UserTexts.Resources.AbandonedFacsimiles);
             _wordDictionary.Add("TotalStatisticAnsweredTasks", UserTexts.Resources.AnsweredFacsimiles);
             _wordDictionary.Add("TotalStatisticAverageAfterTaskTime", UserTexts.Resources.AFW);
+			_wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.HandlingTime);
             _wordDictionary.Add("TaskIndex", UserTexts.Resources.IndexFacsimiles);
             _wordDictionary.Add("TalkTimeIndex", UserTexts.Resources.IndexHandlingTime);
             _wordDictionary.Add("AfterTalkTimeIndex", UserTexts.Resources.IndexAFW);
@@ -217,6 +223,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalTalkTime);
             _wordDictionary.Add("Tasks", UserTexts.Resources.Calls);
             _wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalCalls);
+			_wordDictionary.Add("AverageTaskTime", UserTexts.Resources.TalkTime);
             _wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
             _wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.ACW);
             _wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignTalkTimePercentSign);
@@ -226,6 +233,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("TotalStatisticAbandonedTasks", UserTexts.Resources.AbandonedCalls);
             _wordDictionary.Add("TotalStatisticAnsweredTasks", UserTexts.Resources.AnsweredCalls);
             _wordDictionary.Add("TotalStatisticAverageAfterTaskTime", UserTexts.Resources.ACW);
+			_wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.TalkTime);
             _wordDictionary.Add("TaskIndex", UserTexts.Resources.IndexCalls);
             _wordDictionary.Add("TalkTimeIndex", UserTexts.Resources.IndexHandlingTime);
             _wordDictionary.Add("AfterTalkTimeIndex", UserTexts.Resources.IndexACW);
@@ -240,6 +248,11 @@ namespace Teleopti.Ccc.WinCode.Forecasting
             _wordDictionary.Add("DeviationCallsColon", UserTexts.Resources.DeviationCallsColon);
 			_wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationTalkTimeColon);
             _wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
+			_wordDictionary["OriginalAverageTaskTime"] = UserTexts.Resources.OriginalTalkTime;
+			_wordDictionary["AverageTalkTime"] = UserTexts.Resources.AverageTalkTime;
+			_wordDictionary["ForecastedHandlingTime"] = UserTexts.Resources.ForecastedTalkTime;
+			_wordDictionary["ActualHandlingTime"] = UserTexts.Resources.ActualTalkTime;
+			_wordDictionary["TotalAverageTaskTime"] = UserTexts.Resources.TotalTalkTime;
         }
 
 		private void chatSetUp()

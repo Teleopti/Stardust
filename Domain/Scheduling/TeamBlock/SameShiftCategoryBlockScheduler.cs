@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public interface ISameShiftCategoryBlockScheduler
 	{
 		bool Schedule(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions,
-		                              DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
+									  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
@@ -20,28 +20,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamBlockSingleDayScheduler _singleDayScheduler;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
-		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private bool _cancelMe;
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public SameShiftCategoryBlockScheduler(ITeamBlockRoleModelSelector roleModelSelector,
 											   ITeamBlockSingleDayScheduler singleDayScheduler,
 											   ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
-											   ITeamBlockClearer teamBlockClearer,
-											   ISchedulePartModifyAndRollbackService rollbackService)
+											   ITeamBlockClearer teamBlockClearer)
 		{
 			_roleModelSelector = roleModelSelector;
 			_singleDayScheduler = singleDayScheduler;
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_teamBlockClearer = teamBlockClearer;
-			_rollbackService = rollbackService;
 		}
 
 		public bool Schedule(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions,
-									  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+									  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+			ISchedulePartModifyAndRollbackService rollbackService)
 		{
+			_cancelMe = false;
 			var allSelectedDaysAreScheduled = false;
-			var selectedTeamMembers = selectedPersons.Intersect(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers).ToList();
+			var selectedTeamMembers = selectedPersons.Intersect(teamBlockInfo.TeamInfo.GroupMembers).ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
 			while (!allSelectedDaysAreScheduled)
 			{
@@ -49,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (roleModelShift == null)
 				{
 					clearBlockedShiftCategories(schedulingOptions);
+					OnDayScheduledFailed();
 					return false;
 				}
 				var shiftCategoryToBeBlocked = roleModelShift.TheWorkShift.ShiftCategory;
@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (_cancelMe)
 					{
 						clearBlockedShiftCategories(schedulingOptions);
+						OnDayScheduledFailed();
 						return false;
 					}
 					_singleDayScheduler.DayScheduled += OnDayScheduled;
@@ -68,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				allSelectedDaysAreScheduled = selectedBlockDays.All(x => _teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons( teamBlockInfo, x,selectedPersons));
 				if (!allSelectedDaysAreScheduled)
 				{
-					_teamBlockClearer.ClearTeamBlock(schedulingOptions, _rollbackService, teamBlockInfo);
+					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					blockAShiftCategory(schedulingOptions, shiftCategoryToBeBlocked);
 				}
 			}
@@ -95,6 +96,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				temp(this, e);
 			}
 			_cancelMe = e.Cancel;
+		}
+
+		public void OnDayScheduledFailed()
+		{
+			var temp = DayScheduled;
+			if (temp != null)
+			{
+				temp(this, new SchedulingServiceFailedEventArgs());
+			}
 		}
 	}
 

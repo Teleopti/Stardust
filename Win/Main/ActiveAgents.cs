@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Win.Main
 {
@@ -25,6 +26,11 @@ namespace Teleopti.Ccc.Win.Main
 			{
 				textBox1.SelectAll();
 			}
+		}
+
+		private void ActiveAgents_Load(object sender, EventArgs e)
+		{
+			Text = Resources.ActiveAgents;
 		}
 		
 	}

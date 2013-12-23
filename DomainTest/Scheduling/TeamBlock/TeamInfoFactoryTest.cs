@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IScheduleMatrixPro matrixOnOtherPerson = _mocks.StrictMock<IScheduleMatrixPro>();
 			IScheduleMatrixPro matrixOnOtherPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
 			IScheduleMatrixPro matrixOnPersonAndPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
-			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+			Group group = new Group(new List<IPerson> { _baseLineData.Person1 }, "");
 
 			var allMatrixesInScheduler = new List<IScheduleMatrixPro> { matrixOnOtherPerson, matrixOnOtherPeriod, matrixOnPersonAndPeriod };
 
@@ -43,9 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(groupPerson);
-				Expect.Call(groupPerson.GroupMembers)
-				      .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_baseLineData.Person1})).Repeat.Twice();
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
 
 				Expect.Call(matrixOnOtherPerson.Person).Return(_baseLineData.Person2);
 
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				ITeamInfo result = _target.CreateTeamInfo(_baseLineData.Person1, new DateOnly(2013, 2, 26), allMatrixesInScheduler);
-				Assert.AreSame(groupPerson, result.GroupPerson);
 				Assert.AreSame(matrixOnPersonAndPeriod, result.MatrixesForGroup().FirstOrDefault());
 				Assert.AreEqual(1, result.MatrixesForGroup().Count());
 			}
@@ -74,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IScheduleMatrixPro matrixOnOtherPerson = _mocks.StrictMock<IScheduleMatrixPro>();
 			IScheduleMatrixPro matrixOnOtherPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
 			IScheduleMatrixPro matrixOnPersonAndPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
-			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
+			Group group = new Group(new List<IPerson> { _baseLineData.Person1 }, "");
 
 			var allMatrixesInScheduler = new List<IScheduleMatrixPro> { matrixOnOtherPerson, matrixOnOtherPeriod, matrixOnPersonAndPeriod };
 
@@ -82,10 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(groupPerson);
-				Expect.Call(groupPerson.GroupMembers)
-					  .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _baseLineData.Person1 })).Repeat.Twice();
-
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroup(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(group);
 				Expect.Call(matrixOnOtherPerson.Person).Return(_baseLineData.Person2);
 
 				Expect.Call(matrixOnOtherPeriod.Person).Return(_baseLineData.Person1);
@@ -100,7 +95,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				ITeamInfo result = _target.CreateTeamInfo(_baseLineData.Person1, new DateOnlyPeriod(new DateOnly(2013, 2, 26), new DateOnly(2013, 2, 27)), allMatrixesInScheduler);
-				Assert.AreSame(groupPerson, result.GroupPerson);
 				IList<IScheduleMatrixPro> matrixesForGroupMember0 = result.MatrixesForGroupMember(0).ToList();
 				Assert.AreSame(matrixOnOtherPeriod, matrixesForGroupMember0[0]);
 				Assert.AreSame(matrixOnPersonAndPeriod, matrixesForGroupMember0[1]);
@@ -108,29 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Test]
-		public void ShouldNotReturnTeamInfoWithoutAnyPerson()
-		{
-			IScheduleMatrixPro matrixOnOtherPerson = _mocks.StrictMock<IScheduleMatrixPro>();
-			IScheduleMatrixPro matrixOnOtherPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
-			IScheduleMatrixPro matrixOnPersonAndPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
-			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
-
-			var allMatrixesInScheduler = new List<IScheduleMatrixPro> { matrixOnOtherPerson, matrixOnOtherPeriod, matrixOnPersonAndPeriod };
-			
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(groupPerson);
-				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>()));
-			}
-
-			using (_mocks.Playback())
-			{
-				ITeamInfo result = _target.CreateTeamInfo(_baseLineData.Person1, new DateOnly(2013, 2, 26), allMatrixesInScheduler);
-				Assert.IsNull(result);
-			}
-		}
-
+		
         [Test]
         public void ShouldReturnIfTeamBlockInfoNull()
         {

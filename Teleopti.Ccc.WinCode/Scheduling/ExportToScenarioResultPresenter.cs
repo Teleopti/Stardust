@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -23,7 +24,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IReassociateDataForSchedules _callback;
 		private readonly IEnumerable<IPerson> _fullyLoadedPersonsToMove;
 		private readonly IEnumerable<IScheduleDay> _schedulePartsToExport;
-		private readonly IScheduleDictionaryPersister _scheduleDictionaryPersister;
+		private readonly IScheduleDictionaryPersister _scheduleDictionaryBatchPersister;
+		private readonly BackgroundWorker _exportBackrgroundWorker = new BackgroundWorker();
+		private bool _exportSuccesful;
+		private IEnumerable<IBusinessRuleResponse> _warnings;
+		private DataSourceException _exception;
 
 		public IScheduleDictionary ScheduleDictionaryToPersist { get; private set; }
 
@@ -37,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 												IEnumerable<IPerson> fullyLoadedPersonsToMove,
 												IEnumerable<IScheduleDay> schedulePartsToExport,
 												IScenario exportScenario,
-												IScheduleDictionaryPersister scheduleDictionaryPersister)
+												IScheduleDictionaryPersister scheduleDictionaryBatchPersister)
 		{
 			_uowFactory = uowFactory;
 			_moveSchedules = moveSchedules;
@@ -47,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_view = view;
 			_exportScenario = exportScenario;
 			_schedulePartsToExport = schedulePartsToExport;
-			_scheduleDictionaryPersister = scheduleDictionaryPersister;
+			_scheduleDictionaryBatchPersister = scheduleDictionaryBatchPersister;
 		}
 
 		protected void SetScheduleDictionaryToPersist(IScheduleDictionary dictionary)
@@ -62,32 +67,24 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				OnCancel();
 				return;
 			}
-			verifyNecessaryPersons();
-		    try
-		    {
-                var warnings = doExport();
-                var culture = TeleoptiPrincipal.Current.Regional.UICulture;
-                _view.SetScenarioText(string.Format(culture,
-                                                    Resources.ExportFromAndToScenario,
-                                                    _schedulePartsToExport.First().Scenario.Description.Name,
-                                                    _exportScenario.Description.Name));
-                _view.SetAgentText(string.Format(culture, Resources.ExportNoOfAgentInfo, noOfAgentsInvolved()));
-                if (warnings.Count() > 0)
-                {
-                    var warningStrings = buildWarningStrings(warnings);
-                    _view.SetWarningText(warningStrings);
-                }
-                else
-                {
-                    _view.DisableBodyText();
-                }
-		    }
-		    catch (DataSourceException exception)
-		    {
-                _view.ShowDataSourceException(exception);
-                _view.CloseForm();
-		    }
-			
+			_exportBackrgroundWorker.DoWork += exportBackrgroundWorkerDoWork;
+			_exportBackrgroundWorker.RunWorkerCompleted += exportBackrgroundWorkerRunWorkerCompleted;
+			PrepareForExport();
+			_exportBackrgroundWorker.RunWorkerAsync();
+
+
+		}
+
+		void exportBackrgroundWorkerDoWork(object sender, DoWorkEventArgs e)
+		{
+			_exportSuccesful = CommitExport();
+		}
+
+		void exportBackrgroundWorkerRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+		{
+			_exportBackrgroundWorker.DoWork -= exportBackrgroundWorkerDoWork;
+			_exportBackrgroundWorker.RunWorkerCompleted -= exportBackrgroundWorkerRunWorkerCompleted;
+			ExportFinished(_exportSuccesful);
 		}
 
 		public void OnCancel()
@@ -97,15 +94,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public void OnConfirm()
 		{
-		    try
-		    {
-                _scheduleDictionaryPersister.Persist(ScheduleDictionaryToPersist);
-		    }
-		    catch (DataSourceException exception)
-		    {
-		        _view.ShowDataSourceException(exception);
-		    }
-            _view.CloseForm();
+			try
+			{
+				_scheduleDictionaryBatchPersister.Persist(ScheduleDictionaryToPersist);
+			}
+			catch (DataSourceException exception)
+			{
+				_view.ShowDataSourceException(exception);
+			}
+			_view.CloseForm();
 		}
 
 		private int noOfAgentsInvolved()
@@ -130,15 +127,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		private IEnumerable<IBusinessRuleResponse> doExport()
 		{
-            using (_uowFactory.CreateAndOpenUnitOfWork())
-            {
-                var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
-                var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
-                _callback.ReassociateDataForAllPeople();
-                ScheduleDictionaryToPersist =
-                    _scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
-                return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);
-            }
+			using (_uowFactory.CreateAndOpenUnitOfWork())
+			{
+				var personProvider = new PersonProvider(_fullyLoadedPersonsToMove);
+				var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+				_callback.ReassociateDataForAllPeople();
+				ScheduleDictionaryToPersist =
+					_scheduleRepository.FindSchedulesForPersons(new ScheduleDateTimePeriod(schedulePartPeriod(), _fullyLoadedPersonsToMove), _exportScenario, personProvider, scheduleDictionaryLoadOptions, _fullyLoadedPersonsToMove);
+				return _moveSchedules.CopySchedulePartsToAnotherDictionary(ScheduleDictionaryToPersist, _schedulePartsToExport);
+			}
 		}
 
 		private DateTimePeriod schedulePartPeriod()
@@ -161,6 +158,56 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				if (!_fullyLoadedPersonsToMove.Contains(part.Person))
 					throw new ArgumentException("Person " + part.Person + " not provided.");
+			}
+		}
+
+		public void PrepareForExport()
+		{
+			var culture = TeleoptiPrincipal.Current.Regional.UICulture;
+			_view.SetScenarioText(string.Format(culture,
+												Resources.ExportFromAndToScenario,
+												_schedulePartsToExport.First().Scenario.Description.Name,
+												_exportScenario.Description.Name));
+			_view.SetAgentText(string.Format(culture, Resources.ExportNoOfAgentInfo, noOfAgentsInvolved()));
+			_view.DisableInteractions();
+		}
+
+		public bool CommitExport()
+		{
+			verifyNecessaryPersons();
+			try
+			{
+				_warnings = doExport();
+
+			}
+			catch (DataSourceException exception)
+			{
+				_exception = exception;
+				return false;
+			}
+			return true;
+		}
+
+		public void ExportFinished(bool exportSuccessful)
+		{
+			if (exportSuccessful)
+			{
+				_view.EnableInteractions();
+
+				if (_warnings != null && _warnings.Count() > 0)
+				{
+					var warningStrings = buildWarningStrings(_warnings);
+					_view.SetWarningText(warningStrings);
+				}
+				else
+				{
+					_view.DisableBodyText();
+				}
+			}
+			else
+			{
+				_view.ShowDataSourceException(_exception);
+				_view.CloseForm();
 			}
 		}
 	}

@@ -62,9 +62,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField RequestDetailSubjectInput { get; set; }
 
-		[FindBy(Id = "Approve-shift-trade")]
-		public Button ApproveShiftTradeButton { get; set; }
-
 		[FindBy(Id = "Deny-shift-trade")]
 		public Button DenyShiftTradeButton { get; set; }
 
@@ -101,17 +98,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-deny-reason")]
 		public Span RequestDetailDenyReason { get; set; }
 
-		public Div MoreToLoadArrow 
-		{ 
-			get
-			{
-				return Document.Divs.Filter(QuicklyFind.ByClass("arrow-down")).FirstOrDefault();
-			}
-		}
-
-		[FindBy(Id = "Requests-no-requests-found")]
-		public Div NoRequestsFound { get; set; }
-		
 		[FindBy(Id = "Request-add-shift-trade-missing-wcs-message")]
 		public Div AddShiftTradeMissingWorkflowControlsSetMessage { get; set; }
 

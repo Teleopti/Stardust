@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 						persons.Remove(person);
 					}
 
-					var eventArgs = new SchedulingServiceBaseEventArgs(part);
+					var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
 					OnDayScheduled(eventArgs);
 					if (eventArgs.Cancel) return everyPersonScheduled;
 				}

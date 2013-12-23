@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             target = new ChangePasswordPresenter(view, passwordPolicy, unitOfWorkFactory, repositoryFactory, oneWayEncryption);
         }
 
-        private void InitializeExpectation()
+        private void initializeExpectation()
         {
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             using (mocks.Record())
             {
-                InitializeExpectation();
+                initializeExpectation();
                 Expect.Call(()=>view.SetOldPasswordValid(false));
                 Expect.Call(oneWayEncryption.EncryptString("currentNotEncryptedPassword2")).Return(
                     "currentEncryptedPassword2");
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             using (mocks.Record())
             {
-                InitializeExpectation();
+                initializeExpectation();
                 Expect.Call(() => view.SetNewPasswordValid(false));
                 Expect.Call(passwordPolicy.CheckPasswordStrength("newNotEncryptedPassword2")).Return(false);
             }
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             using (mocks.Record())
             {
-                InitializeExpectation();
+                initializeExpectation();
                 Expect.Call(() => view.SetNewPasswordValid(true));
                 Expect.Call(passwordPolicy.CheckPasswordStrength("newNotEncryptedPassword2")).Return(true);
                 Expect.Call(() => view.SetConfirmPasswordValid(true));
@@ -109,11 +109,11 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifySaveNewPasswordsWhenMatch()
         {
-            IUserDetailRepository userDetailRepository = mocks.StrictMock<IUserDetailRepository>();
-            IUserDetail userDetail = mocks.StrictMock<IUserDetail>();
+            var userDetailRepository = mocks.StrictMock<IUserDetailRepository>();
+            var userDetail = mocks.StrictMock<IUserDetail>();
             using (mocks.Record())
             {
-                InitializeExpectation();
+                initializeExpectation();
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
                 Expect.Call(repositoryFactory.CreateUserDetailRepository(unitOfWork)).Return(userDetailRepository);
@@ -143,11 +143,11 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyWhenPasswordCouldNotBeChanged()
         {
-            IUserDetailRepository userDetailRepository = mocks.StrictMock<IUserDetailRepository>();
-            IUserDetail userDetail = mocks.StrictMock<IUserDetail>();
+            var userDetailRepository = mocks.StrictMock<IUserDetailRepository>();
+            var userDetail = mocks.StrictMock<IUserDetail>();
             using (mocks.Record())
             {
-                InitializeExpectation();
+                initializeExpectation();
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
                 Expect.Call(repositoryFactory.CreateUserDetailRepository(unitOfWork)).Return(userDetailRepository);
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             using (mocks.Record())
             {
-                InitializeExpectation();
+                initializeExpectation();
                 Expect.Call(view.ShowValidationError);
             }
             using (mocks.Playback())
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         {
             using (mocks.Record())
             {
-                InitializeExpectation();
+                initializeExpectation();
                 Expect.Call(view.ShowValidationError);
             }
             using (mocks.Playback())

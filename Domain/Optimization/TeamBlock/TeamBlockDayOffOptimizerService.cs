@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentTeamInfoCounter++;
 
-				if (teamInfo.GroupPerson.GroupMembers.Any())
+				if (teamInfo.GroupMembers.Any())
 				{
 					rollbackService.ClearModificationCollection();
 					bool failed = false;
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				currentTeamInfoCounter++;
 
-				if (teamInfo.GroupPerson.GroupMembers.Any())
+				if (teamInfo.GroupMembers.Any())
 				{
 					foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 					{
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
 			                 currentTeamInfoCounter.ToString("####") + ") " +
-			                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
+			                 StringHelper.DisplayString(teamInfo.Name, 20) + " (" + currentPeriodValue +
 			                 ")");
 
 			return previousPeriodValue;
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-				                                                        selectedPersons);
+																		selectedPersons, rollbackService);
 				if (!success)
 					return false;
 			}

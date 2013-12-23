@@ -83,9 +83,12 @@
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="DummyContextPopulator.cs" />
+    <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />
+    <Compile Include="FakeInitiatorIdentifier.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDataReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAssignmentRepository.cs" />
@@ -258,6 +261,7 @@
     <Compile Include="TestData\Setups\Configurable\PersonPeriodConfigurable.cs" />
     <Compile Include="TestData\Setups\Specific\PersonThatCreatesTestData.cs" />
     <Compile Include="TestData\Setups\Specific\StockholmTimeZone.cs" />
+    <Compile Include="TestData\Setups\Specific\SwedeSpeakingEnglishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\SwedishCulture.cs" />
     <Compile Include="TestData\Setups\Specific\USCulture.cs" />
     <Compile Include="TestData\Setups\Configurable\UserConfigurable.cs" />
@@ -281,6 +285,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
       <Project>{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}</Project>
       <Name>Teleopti.Ccc.DBManager.Library</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
+      <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
+      <Name>Teleopti.Ccc.Domain.Calculation</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>

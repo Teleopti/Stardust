@@ -1,6 +1,8 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
@@ -13,20 +15,25 @@ namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IGetUpdatedScheduleChangeFromTeleoptiRtaService _teleoptiRtaService;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (UpdatedScheduleInfoHandler));
+		private readonly IPersonRepository _personRepository;
 
 		public UpdatedScheduleInfoHandler(
 			ISendDelayedMessages serviceBus,
 			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository,
-			IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService)
+			IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService, 
+			IPersonRepository personRepository)
 		{
 			_serviceBus = serviceBus;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 			_teleoptiRtaService = teleoptiRtaService;
+			_personRepository = personRepository;
 		}
 
 		public void Handle(PersonWithExternalLogOn message)
 		{
 			Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
+
+			if (!doesPersonHaveExternalLogOn(message.PersonId)) return;
 
 			try
 			{
@@ -62,10 +69,13 @@ namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 			                  message.BusinessUnitId, message.PersonId, nextActivityStartTime);
 		}
 
+
 		public void Handle(UpdatedScheduleDay message)
 		{
 			Logger.Info("Start consuming UpdatedScheduleDay message.");
-			
+
+			if (!doesPersonHaveExternalLogOn(message.PersonId)) return;
+
 			try
 			{
 				_teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
@@ -100,6 +110,16 @@ namespace Teleopti.Ccc.Domain.ApplicationRtaQueue
 					});
 			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.",
 			                  message.BusinessUnitId, message.PersonId, nextActivityStartTime);
+		}
+
+		private bool doesPersonHaveExternalLogOn(Guid personId)
+		{
+			if (!_personRepository.DoesPersonHaveExternalLogOn(DateOnly.Today, personId))
+			{
+				Logger.InfoFormat("Person: {0} is not connected to an External Log On, discarding mesage", personId);
+				return false;
+			}
+			return true;
 		}
 	}
 }

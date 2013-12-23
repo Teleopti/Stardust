@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private IWorkShiftFilterService _workShiftFilterService;
 		private IWorkShiftSelector _workShiftSelector;
-		private ISkillDayPeriodIntervalDataGenerator _skillDayPeriodIntervalDataGenerator;
 		private ITeamScheduling _teamScheduling;
 		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private MockRepository _mocks;
@@ -30,12 +31,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IPerson _person2;
 		private IScheduleMatrixPro _scheduleMatrixPro1;
 		private IScheduleMatrixPro _scheduleMatrixPro2;
-		private GroupPerson _groupPerson;
+		private Group _group;
 		private DateOnlyPeriod _blockPeriod;
 		private TeamBlockInfo _teamBlockInfo;
 		private SchedulingOptions _schedulingOptions;
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
+		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
+		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -44,25 +48,33 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
 			_proposedRestrictionAggregator = _mocks.StrictMock<IProposedRestrictionAggregator>();
+			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
-			_skillDayPeriodIntervalDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
-			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_teamScheduling = _mocks.StrictMock<ITeamScheduling>();
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
-			_target = new TeamBlockSingleDayScheduler(_teamBlockSchedulingCompletionChecker, _proposedRestrictionAggregator,
-			                                          _workShiftFilterService, _skillDayPeriodIntervalDataGenerator,
-			                                          _workShiftSelector, _teamScheduling, _teamBlockSchedulingOptions);
+			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
+			_target = new TeamBlockSingleDayScheduler(
+				_teamBlockSchedulingCompletionChecker, 
+				_proposedRestrictionAggregator,                                        
+				_workShiftFilterService, 
+				_workShiftSelector, 
+				_teamScheduling, 
+				_teamBlockSchedulingOptions,
+				_dayIntervalDataCalculator,
+				_createSkillIntervalDataPerDateAndActivity,
+				_schedulingResultStateHolder);
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
 			_person2 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("ball"), _dateOnly);
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_scheduleMatrixPro2 = _mocks.StrictMock<IScheduleMatrixPro>();
-			_groupPerson = new GroupPerson(new List<IPerson> { _person1, _person2 }, _dateOnly, "Hej", Guid.Empty);
+			_group = new Group(new List<IPerson> { _person1, _person2 }, "Hej");
 			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1, _scheduleMatrixPro2 };
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
-			ITeamInfo teamInfo = new TeamInfo(_groupPerson, groupMatrixes);
+			ITeamInfo teamInfo = new TeamInfo(_group, groupMatrixes);
 			_blockPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(_blockPeriod));
 			_schedulingOptions = new SchedulingOptions();
@@ -140,9 +152,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                                                        new EndTimeLimitation(),
                                                        new WorkTimeLimitation(), null, null, null,
                                                        new List<IActivityRestriction>());
-			var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
+			var finderResult = new WorkShiftFinderResult(_person1, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> {_shift};
 			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
+			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
@@ -167,7 +181,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				      .Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person2, _teamBlockInfo, restriction,
 				                                           _schedulingOptions, finderResult)).Return(shifts);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo)).Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					.Return(skillIntervalDataDic).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,

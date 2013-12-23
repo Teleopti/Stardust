@@ -4,6 +4,8 @@
   <Assemblies>
 	<Name>Teleopti.Interfaces</Name>
     <Name>Teleopti.Ccc.Domain</Name>
+	<Name>Teleopti.Ccc.Domain.Calculation</Name>
+	<Name>Teleopti.Support.Code</Name>
     <Name>Teleopti.Ccc.Infrastructure</Name>
     <Name>Teleopti.Ccc.DatabaseConverter</Name>
     <Name>Teleopti.Ccc.Win</Name>
@@ -85,6 +87,7 @@
 	<Name>Teleopti.Analytics.Etl.IntegrationTest</Name>
   </Assemblies>
   <FrameworkAssemblies>
+	<Name>System.Web.Optimization</Name>
     <Name>nunit.framework</Name>
     <Name>SharpTestsEx</Name>
     <Name>mscorlib</Name>

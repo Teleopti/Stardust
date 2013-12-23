@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStartDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvStartDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvStartDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvStartDate.Calendar.Size = new System.Drawing.Size(198, 174);
+			this.dateTimePickerAdvStartDate.Calendar.Size = new System.Drawing.Size(194, 174);
 			this.dateTimePickerAdvStartDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvStartDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvStartDate.Calendar.TabIndex = 0;
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			// 
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
+			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Location = new System.Drawing.Point(122, 0);
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvStartDate.Calendar.NoneButton.UseVisualStyle = true;
@@ -226,11 +226,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Size = new System.Drawing.Size(198, 20);
+			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Size = new System.Drawing.Size(194, 20);
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvStartDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvStartDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvStartDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
+			this.dateTimePickerAdvStartDate.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvStartDate.DropDownImage = null;
 			this.dateTimePickerAdvStartDate.EnableNullDate = false;
 			this.dateTimePickerAdvStartDate.EnableNullKeys = false;
@@ -243,7 +244,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStartDate.Size = new System.Drawing.Size(114, 19);
 			this.dateTimePickerAdvStartDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvStartDate.TabIndex = 1;
-			this.dateTimePickerAdvStartDate.UseCurrentCulture = true;
 			this.dateTimePickerAdvStartDate.Value = new System.DateTime(2009, 10, 28, 16, 45, 2, 975);
 			this.dateTimePickerAdvStartDate.ValueChanged += new System.EventHandler(this.dateTimePickerAdvStartDate_ValueChanged);
 			this.dateTimePickerAdvStartDate.PopupClosed += new Syncfusion.Windows.Forms.PopupClosedEventHandler(this.DateTimePickerAdvStartDatePopupClosed);
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEndDate.Calendar.Name = "monthCalendar";
 			this.dateTimePickerAdvEndDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.dateTimePickerAdvEndDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.dateTimePickerAdvEndDate.Calendar.Size = new System.Drawing.Size(198, 174);
+			this.dateTimePickerAdvEndDate.Calendar.Size = new System.Drawing.Size(194, 174);
 			this.dateTimePickerAdvEndDate.Calendar.SizeToFit = true;
 			this.dateTimePickerAdvEndDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvEndDate.Calendar.TabIndex = 0;
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			// 
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
+			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Location = new System.Drawing.Point(122, 0);
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.Text = "None";
 			this.dateTimePickerAdvEndDate.Calendar.NoneButton.UseVisualStyle = true;
@@ -294,11 +294,12 @@ namespace Teleopti.Ccc.Win.Meetings
 			// 
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Size = new System.Drawing.Size(198, 20);
+			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Size = new System.Drawing.Size(194, 20);
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.Text = "Today";
 			this.dateTimePickerAdvEndDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.dateTimePickerAdvEndDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.dateTimePickerAdvEndDate.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
+			this.dateTimePickerAdvEndDate.Culture = new System.Globalization.CultureInfo("sv-SE");
 			this.dateTimePickerAdvEndDate.DropDownImage = null;
 			this.dateTimePickerAdvEndDate.Enabled = false;
 			this.dateTimePickerAdvEndDate.EnableNullDate = false;
@@ -312,7 +313,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEndDate.Size = new System.Drawing.Size(114, 19);
 			this.dateTimePickerAdvEndDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvEndDate.TabIndex = 1;
-			this.dateTimePickerAdvEndDate.UseCurrentCulture = true;
 			this.dateTimePickerAdvEndDate.Value = new System.DateTime(2009, 10, 28, 16, 45, 2, 975);
 			// 
 			// outlookTimePickerStartTime
@@ -382,8 +382,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.monthCalendarAdvDateSelection.Name = "monthCalendarAdvDateSelection";
 			this.monthCalendarAdvDateSelection.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.monthCalendarAdvDateSelection.SelectedDates = new System.DateTime[] {
-        new System.DateTime(2013, 11, 20, 0, 0, 0, 0),
-        new System.DateTime(2013, 11, 20, 0, 0, 0, 0)};
+        new System.DateTime(2013, 12, 12, 0, 0, 0, 0)};
 			this.monthCalendarAdvDateSelection.Size = new System.Drawing.Size(168, 134);
 			this.monthCalendarAdvDateSelection.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.monthCalendarAdvDateSelection.TabIndex = 0;

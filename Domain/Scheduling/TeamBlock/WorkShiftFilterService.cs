@@ -72,10 +72,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 			if (teamBlockInfo == null)
 				return null;
-			var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).ToList();
 			if (matrixList.Count == 0) return null;
-			var firstMember = groupPerson.GroupMembers.First();
+			var firstMember = teamBlockInfo.TeamInfo.GroupMembers.First();
 			var currentSchedulePeriod = firstMember.VirtualSchedulePeriod(dateOnly);
 			if (!currentSchedulePeriod.IsValid)
 				return null;
@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson, false,schedulingOptions.BlockFinderTypeForAdvanceScheduling );
-			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupPerson, matrixList, sameContractTime);
+			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupMembers.First(), false, schedulingOptions.BlockFinderTypeForAdvanceScheduling);
+			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupMembers.First(), matrixList, sameContractTime);
 			if (shiftList == null)
 				return null;
 			return shiftList.Count == 0 ? null : shiftList;

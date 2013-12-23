@@ -33,6 +33,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.IsSelected = ko.observable(false);
         self.IsLoading = ko.observable(false);
         self.CanDelete = ko.observable(true);
+        self.IsEditable = ko.observable(false);
         self.StatusClass = ko.observable();
         self.DetailItem = undefined;
         self.parent = requestPageViewModel;
@@ -244,6 +245,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.StatusClass(_classFromStatus(data));
             self.RequestPayload(data.Payload);
             self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1);
+            self.IsEditable(data.Link.Methods.indexOf("PUT") != -1);
 	        self.isCreatedByUser(data.IsCreatedByUser);
 	        self.isReferred(data.IsReferred);
             if (data.TypeEnum == 2 && !data.IsCreatedByUser) self.CanDelete(false);

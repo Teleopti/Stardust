@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		[Test]
 		public void ShouldCancelAfterFirstIfAsked()
 		{
-			SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
+			SchedulingServiceBaseEventArgs args = new SchedulingServiceSuccessfulEventArgs(null);
 			args.Cancel = true;
 			using (_mocks.Record())
 			{
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		[Test]
 		public void ShouldListenToEventsFromAllClasses()
 		{
-			SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
+			SchedulingServiceBaseEventArgs args = new SchedulingServiceSuccessfulEventArgs(null);
 			args.Cancel = true;
 
 			using (_mocks.Record())

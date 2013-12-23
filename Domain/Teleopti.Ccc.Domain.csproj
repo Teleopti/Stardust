@@ -97,9 +97,9 @@
     <Reference Include="Domain">
       <HintPath>..\Version6\Domain.dll</HintPath>
     </Reference>
-    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
@@ -263,6 +263,7 @@
     <Compile Include="Common\Logging\Log4NetConfiguration.cs" />
     <Compile Include="Common\Logging\SchedulingOptionsValueExtractor.cs" />
     <Compile Include="Common\Logging\SystemInformationHelper.cs" />
+    <Compile Include="Common\PersonIsActiveSpecification.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
     <Compile Include="Common\SpecificBusinessUnit.cs" />
     <Compile Include="Common\ThisCurrentScenario.cs" />
@@ -333,6 +334,8 @@
     <Compile Include="Forecasting\QueueStatisticsCalculator.cs" />
     <Compile Include="GroupPageCreator\ContractGroupPage.cs" />
     <Compile Include="GroupPageCreator\ContractScheduleGroupPage.cs" />
+    <Compile Include="GroupPageCreator\Group.cs" />
+    <Compile Include="GroupPageCreator\GroupCreator.cs" />
     <Compile Include="GroupPageCreator\GroupPageLight.cs" />
     <Compile Include="GroupPageCreator\GroupPageOptions.cs" />
     <Compile Include="GroupPageCreator\IGroupingsCreator.cs" />
@@ -354,10 +357,49 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportData.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportService.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionBestTeamBlockDecider.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionWorstTeamBlockDecider.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForFullyScheduledBlocks.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterPersonsForTotalDistribution.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\TeamBlockSwapper.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionForPersons.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionSummary.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualNumberOfCategoryFairnessService.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForEqualNumberOfCategoryFairness.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForTeamBlockInSelection.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocks.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseWeekDay.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriority.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityDefinitionInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockListSwapAnalyzer.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillChecker.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwap.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameRuleSetBagValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameSkillValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\DetermineTeamBlockPriority.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationService.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSizeClassifier.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockWeight.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockWeightExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
@@ -398,6 +440,7 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityAddedEvent.cs" />
+    <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
@@ -480,13 +523,7 @@
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDate.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateHolder.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPerson.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonFactory.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\GroupPersonsBuilder.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPagePerDate.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonFactory.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonsBuilder.cs" />
-    <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
     <Compile Include="ResourceCalculation\IPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
@@ -509,9 +546,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
-    <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverter.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
-    <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
     <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
@@ -522,7 +557,6 @@
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\BlockRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\CommonActivity.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHourRestrictionForTeamBlock.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\NightlyRestRestrcition.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ProposedRestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\ResctrictionFromRoleModelRestriction.cs" />
@@ -534,10 +568,14 @@
     <Compile Include="Scheduling\TeamBlock\Restriction\SameStartTimeRestriction.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamBlockEffectiveRestrcition.cs" />
     <Compile Include="Scheduling\TeamBlock\Restriction\TeamRestrictionAggregator.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\CalculateAggregatedDataForActivtyAndDate.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDataPerDateAndActivity.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDatasPerActivtyForDate.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\OpenHourForDate.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\TeamBlockOpenHourService.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\SameShiftCategoryBlockScheduler.cs" />
-    <Compile Include="Scheduling\TeamBlock\Specification\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
@@ -728,7 +766,6 @@
     <Compile Include="Forecasting\Template\TemplateReference.cs" />
     <Compile Include="Forecasting\Template\WorkloadDayTemplateReference.cs" />
     <Compile Include="Helper\SerializationHelper.cs" />
-    <Compile Include="Helper\StaffingCalculatorService.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
@@ -911,12 +948,10 @@
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidator.cs" />
-    <Compile Include="Scheduling\TeamBlock\Restriction\OpenHoursToEffectiveRestrictionConverter.cs" />
     <Compile Include="Scheduling\TeamBlock\RestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculation.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractor.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillDayPeriodIntervalDataGenerator.cs" />
-    <Compile Include="Scheduling\TeamBlock\SkillIntervalData.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\SkillIntervalData.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataDivider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplyer.cs" />
@@ -1846,6 +1881,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
+    <Folder Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

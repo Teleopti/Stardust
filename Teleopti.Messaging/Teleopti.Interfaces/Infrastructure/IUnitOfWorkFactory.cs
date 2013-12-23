@@ -20,6 +20,8 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// </remarks>
 		IUnitOfWork CreateAndOpenUnitOfWork(TransactionIsolationLevel isolationLevel = TransactionIsolationLevel.Default);
 
+		IUnitOfWork CreateAndOpenUnitOfWork(IInitiatorIdentifier initiator);
+
 		/// <summary>
 		/// Creates and opens a stateless unit of work.
 		/// </summary>

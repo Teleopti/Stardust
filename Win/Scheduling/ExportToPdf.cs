@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					personDic.Add(part.Person, _schedulerStateHolder.CommonAgentNameScheduleExport(part.Person));
 			}
 
-			var period = ViewBaseHelper.GetPeriod(selection);
+			var period = OptimizerHelperHelper.GetSelectedPeriod(selection);
 
 			string path;
 

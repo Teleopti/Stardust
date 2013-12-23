@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <returns></returns>
         public static SkillStaffPeriod CreateSkillStaffPeriod(DateTimePeriod period, ITask task, ServiceAgreement serviceAgreement)
         {
-            var staffPeriod =  new SkillStaffPeriod(period, task, serviceAgreement,new StaffingCalculatorService());
+			var staffPeriod = new SkillStaffPeriod(period, task, serviceAgreement, new StaffingCalculatorService());
 			staffPeriod.SetSkillDay(SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("skill"),period.StartDateTime));
 	        return staffPeriod;
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -7,17 +8,20 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	public class ServiceBusEventPublisher : IEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
+		private readonly IEventContextPopulator _eventContextPopulator;
 
-		public ServiceBusEventPublisher(IServiceBusSender sender)
+		public ServiceBusEventPublisher(IServiceBusSender sender, IEventContextPopulator eventContextPopulator)
 		{
 			_sender = sender;
+			_eventContextPopulator = eventContextPopulator;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public void Publish(IEvent @event)
 		{
 			if (!_sender.EnsureBus())
 				throw new ApplicationException("Cant find the bus, cant publish the event!");
+
+			_eventContextPopulator.PopulateEventContext(@event);
 
 			_sender.Send(@event);
 		}

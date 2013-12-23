@@ -52,8 +52,9 @@
     <Reference Include="IISExpress.Automation">
       <HintPath>..\..\packages\IISExpress.Automation.0.1.1\lib\net40\IISExpress.Automation.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -175,6 +176,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\MyReportStepDefinition.cs" />
+    <Compile Include="MyTime\MyReportDailyMetrics.feature.cs">
+      <DependentUpon>MyReportDailyMetrics.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature.cs">
       <DependentUpon>WeekScheduleAvailableAbsenceHeadCount.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -201,6 +208,7 @@
     <Compile Include="Core\BrowserDriver\CoypuImpl\CoypuPhantomJsActivator.cs" />
     <Compile Include="Data\Setups\Configurable\CalendarLinkConfigurable.cs" />
     <Compile Include="Data\ScenarioDataFactory.cs" />
+    <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="PerformanceTool\PerformanceView.feature.cs">
       <DependentUpon>PerformanceView.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -498,7 +506,6 @@
     <Compile Include="Pages\MobileGlobalMenuPage.cs" />
     <Compile Include="Pages\PasswordPage.cs" />
     <Compile Include="Pages\RegionalSettingsPage.cs" />
-    <Compile Include="Pages\TeamSchedulePage.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutTeamScheduleAccess.cs" />
     <Compile Include="Bindings\NavigationStepDefinitions.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\Administrator.cs" />
@@ -576,7 +583,7 @@
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />
-    <Compile Include="Pages\Common\CalendarCellsPage.cs" />
+    <Compile Include="Pages\Common\CalendarCells.cs" />
     <Compile Include="Pages\Common\DatePicker.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduleIsPublished.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\StudentAgent.cs" />
@@ -586,7 +593,6 @@
     <Compile Include="Pages\jQuery\jQuery.cs" />
     <Compile Include="Pages\jQuery\JQueryExpression.cs" />
     <Compile Include="Pages\PortalPage.cs" />
-    <Compile Include="Pages\PreferencePage.cs" />
     <Compile Include="Pages\Common\SplitButton.cs" />
     <Compile Include="Core\ScenarioContextLazy.cs" />
     <Compile Include="MyTime\Preferences.feature.cs">
@@ -628,7 +634,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SignOut.feature</DependentUpon>
     </Compile>
-    <Compile Include="Pages\StudentAvailabilityPage.cs" />
     <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
     <Compile Include="Core\SystemLevelLock.cs" />
@@ -728,6 +733,10 @@
     <None Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\MyReportDailyMetrics.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MyReportDailyMetrics.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

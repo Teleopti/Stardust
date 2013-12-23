@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         private SkillStaffPeriod _target;
         private DateTimePeriod _tp;
         private ITask _task;
-        private readonly IStaffingCalculatorService _staffingCalculatorService = new StaffingCalculatorService();
+		private readonly IStaffingCalculatorService _staffingCalculatorService = new Domain.Calculation.StaffingCalculatorService();
         private ServiceAgreement _sa;
         private DateTime _dt = new DateTime(2008, 2, 1, 0, 0, 0, DateTimeKind.Utc);
         private MockRepository mocks;

@@ -514,8 +514,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPerson per2 = PersonFactory.CreatePerson("tamas", "balog");
 
 			IExternalLogOn login1 = ExternalLogOnFactory.CreateExternalLogOn();
-			personPeriod1.AddExternalLogOn(login1);
-			personPeriod2.AddExternalLogOn(login1);
+			per1.AddExternalLogOn(login1, personPeriod1);
+			per1.AddExternalLogOn(login1, personPeriod2);
 
 			//Persist
 			PersistAndRemoveFromUnitOfWork(site);
@@ -1598,9 +1598,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IPerson person = PersonFactory.CreatePersonWithWindowsPermissionInfo("sunil", "toptinet1");
 			IPersonPeriod personPeriod1 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2000, 1, 1), team);
+			var personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2001, 3, 31), team);
 			person.AddPersonPeriod(personPeriod1);
-			personPeriod1.AddExternalLogOn(logOn1);
-			personPeriod1.AddExternalLogOn(logOn2);
+			person.AddPersonPeriod(personPeriod2);
+			person.AddExternalLogOn(logOn1, personPeriod1);
+			person.AddExternalLogOn(logOn2, personPeriod2);
 			//IPersonPeriod personPeriod2 = PersonPeriodFactory.CreatePersonPeriod(new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc), team);
 			//person.AddPersonPeriod(personPeriod2);
 
@@ -1610,6 +1612,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod1.PersonContract.PartTimePercentage);
 			PersistAndRemoveFromUnitOfWork(personPeriod1.PersonContract.Contract);
 			PersistAndRemoveFromUnitOfWork(personPeriod1.PersonContract.ContractSchedule);
+			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.PartTimePercentage);
+			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.Contract);
+			PersistAndRemoveFromUnitOfWork(personPeriod2.PersonContract.ContractSchedule);
 			PersistAndRemoveFromUnitOfWork(logOn1);
 			PersistAndRemoveFromUnitOfWork(logOn2);
 			PersistAndRemoveFromUnitOfWork(person);
@@ -1617,8 +1622,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ICollection<IPerson> res = target.FindPeopleInOrganization(new DateOnlyPeriod(2000, 1, 1, 2000, 1, 2), false);
 			Assert.AreEqual(1, res.Count);
 			IPerson per = res.First();
-			Assert.AreEqual(1, per.PersonPeriodCollection.Count());
-			Assert.AreEqual(2, per.PersonPeriodCollection.First().ExternalLogOnCollection.Count);
+			Assert.AreEqual(2, per.PersonPeriodCollection.Count());
+			Assert.AreEqual(2, per.PersonPeriodCollection.Sum(x => x.ExternalLogOnCollection.Count));
 		}
 
         [Test]

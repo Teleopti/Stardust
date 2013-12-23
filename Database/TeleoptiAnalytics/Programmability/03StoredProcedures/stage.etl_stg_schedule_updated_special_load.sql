@@ -48,12 +48,11 @@ INNER JOIN	#DimPersonLocalized dp_loc
 				(stg.schedule_date	>= dp_loc.valid_from_date_local)
 
 			AND
-				(stg.schedule_date < dp_loc.valid_to_date_local)
+				(stg.schedule_date <= dp_loc.valid_to_date_local)
 		)
 INNER JOIN mart.bridge_time_zone btz
 	ON	btz.local_date_id = dd.date_id
 	AND btz.time_zone_id = dp.time_zone_id
-
 END
 
 GO

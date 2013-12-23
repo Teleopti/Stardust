@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WinCode.Common;
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Rows
             };
 			
 			ISkillStaffPeriod skillStaffPeriod1 = new SkillStaffPeriod(new DateTimePeriod(_baseDate, _baseDate).ChangeEndTime(
-						TimeSpan.FromMinutes(30)),new Task(), new ServiceAgreement(), new StaffingCalculatorService());
+						TimeSpan.FromMinutes(30)), new Task(), new ServiceAgreement(), new StaffingCalculatorService());
         	skillStaffPeriod1.Payload.ManualAgents = value;
 
 

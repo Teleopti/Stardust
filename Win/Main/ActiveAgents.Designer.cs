@@ -52,6 +52,7 @@
 			this.Name = "ActiveAgents";
 			this.ShowIcon = false;
 			this.Text = "ActiveAgents";
+			this.Load += new System.EventHandler(this.ActiveAgents_Load);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 

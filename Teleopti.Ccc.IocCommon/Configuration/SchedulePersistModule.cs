@@ -12,20 +12,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	public class SchedulePersistModule : Module
 	{
 		private readonly bool _checkConflicts;
-		private readonly IMessageBrokerIdentifier _messageBrokerIdentifier;
+		private readonly IInitiatorIdentifier _initiatorIdentifier;
 		private readonly IReassociateDataForSchedules _reassociateDataForSchedules;
 
 		//todo: försök att bli av med dessa beroende - bara bool:en ska vara kvar
-		private SchedulePersistModule(IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, bool checkConflicts)
+		private SchedulePersistModule(IInitiatorIdentifier initiatorIdentifier, IReassociateDataForSchedules reassociateDataForSchedules, bool checkConflicts)
 		{
 			_checkConflicts = checkConflicts;
-			_messageBrokerIdentifier = messageBrokerIdentifier ?? new EmptyMessageBrokerIdentifier();
+			_initiatorIdentifier = initiatorIdentifier ?? new EmptyInitiatorIdentifier();
 			_reassociateDataForSchedules = reassociateDataForSchedules ?? new nullReassociateDataForSchedules();
 		}
 
-		public static SchedulePersistModule ForScheduler(IMessageBrokerIdentifier messageBrokerIdentifier, IReassociateDataForSchedules reassociateDataForSchedules)
+		public static SchedulePersistModule ForScheduler(IInitiatorIdentifier initiatorIdentifier, IReassociateDataForSchedules reassociateDataForSchedules)
 		{
-			return new SchedulePersistModule(messageBrokerIdentifier, reassociateDataForSchedules, true);
+			return new SchedulePersistModule(initiatorIdentifier, reassociateDataForSchedules, true);
 		}
 
 		public static SchedulePersistModule ForOtherModules()
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>().SingleInstance();
 			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().SingleInstance();
-			builder.Register(c => _messageBrokerIdentifier).As<IMessageBrokerIdentifier>();
+			builder.Register(c => _initiatorIdentifier).As<IInitiatorIdentifier>();
 			builder.Register(c => _reassociateDataForSchedules).As<IReassociateDataForSchedules>();
 		}
 

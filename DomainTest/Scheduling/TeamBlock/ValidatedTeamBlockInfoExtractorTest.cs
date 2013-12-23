@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IPerson _person;
         private List<IScheduleMatrixPro> _matrixList;
         private DateOnlyPeriod _dateOnlyPeriod;
-        private IGroupPerson _groupPerson;
+        private Group _group;
         private BlockInfo _blockInfo;
         private TeamBlockInfo _teamBlockInfo;
         private IScheduleMatrixPro _matrixPro;
@@ -56,8 +52,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _matrixList = new List<IScheduleMatrixPro> { _matrixPro };
             _dateOnlyPeriod = new DateOnlyPeriod(_date, _date);
             _blockInfo = new BlockInfo(_dateOnlyPeriod);
-            _groupPerson = _mocks.StrictMock<IGroupPerson>();
-            _teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
+            _group = new Group(new List<IPerson>{_person}, "hjk");
+            _teamInfo = new TeamInfo(_group, new List<IList<IScheduleMatrixPro>>{ _matrixList });
             _teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             _scheduleDay = _mocks.StrictMock<IScheduleDay>();
             _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();

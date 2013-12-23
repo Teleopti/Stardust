@@ -275,6 +275,8 @@ DELETE FROM [ReadModel].[GroupingReadOnly] WHERE PersonId in(SELECT * FROM #ids)
 		ON pg.persongroup=tr.queryid
 	INNER JOIN person p
 		ON p.id=pg.person AND p.isdeleted=0
+	INNER JOIN #ids i
+		ON i.person = p.Id
 	LEFT JOIN PersonPeriodWithEndDate pp
 		ON pp.parent=p.id
 	LEFT JOIN team t

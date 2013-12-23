@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -60,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> {person};
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var groupPerson = new GroupPerson(new List<IPerson> {person}, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> {person}, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-				                                                     persons))
+																	 persons, _schedulePartModifyAndRollbackService))
 				      .Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
@@ -105,8 +106,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> {person};
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
-			var groupPerson = new GroupPerson(new List<IPerson> {person}, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-				                                                     persons))
+																	 persons, _schedulePartModifyAndRollbackService))
 				      .Return(false);
                 Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
                       .Return(5.0);
@@ -147,8 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
@@ -164,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-																	 persons))
+																	 persons, _schedulePartModifyAndRollbackService))
 					  .Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 					  .Return(false);
@@ -192,8 +193,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var persons = new List<IPerson> { person };
 			var schedulingOptions = new SchedulingOptions();
 			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
 			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 			var optimizationPreferences = new OptimizationPreferences();
