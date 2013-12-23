@@ -205,7 +205,6 @@ namespace Teleopti.Ccc.WinCode.Common
 		{
 			if (_shiftTradeRequestStatusChecker == null)
 				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(SchedulingResultState.Schedules, authorization);
-				_shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(SchedulingResultState.Schedules, authorization);
 
 			IPersonRequestRepository personRequestRepository = null;
 			if (repositoryFactory != null)
@@ -222,12 +221,13 @@ namespace Teleopti.Ccc.WinCode.Common
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _requestedScenario.DefaultScenario)
 				if (personRequestRepository != null)
 					personRequests = personRequestRepository.FindAllRequestModifiedWithinPeriodOrPending(AllPermittedPersons, period);
+			
+			var requests = personRequests.FilterBySpecification(new All<IPersonRequest>()
+				                                                .And(afterLoadedPeriodSpecification).Or(
+					                                                new All<IPersonRequest>().AndNot(referredSpecification)
+					                                                                         .AndNot(okByMeSpecification)));
 
-			var requests =
-				personRequests.FilterBySpecification(new All<IPersonRequest>().And(afterLoadedPeriodSpecification)
-				                                                              .Or(new All<IPersonRequest>().AndNot(referredSpecification)
-				                                                                                           .AndNot(okByMeSpecification)));
-
+			
 			foreach (var personRequest in requests)
 			{
 				personRequest.Changed = false;
@@ -321,8 +321,8 @@ namespace Teleopti.Ccc.WinCode.Common
 
 
 				if (shiftTradeRequestAfterLoadedPeriodSpecification.IsSatisfiedBy(updatedRequest) ||
-					(!shiftTradeRequestOkByMeSpecification.IsSatisfiedBy(updatedRequest) &&
-					 !shiftTradeRequestReferredSpecification.IsSatisfiedBy(updatedRequest)))
+				    (!shiftTradeRequestOkByMeSpecification.IsSatisfiedBy(updatedRequest) &&
+				    !shiftTradeRequestReferredSpecification.IsSatisfiedBy(updatedRequest))) 
 				{
 					updatedRequest.Changed = false;
 					_workingPersonRequests.Add(updatedRequest);
