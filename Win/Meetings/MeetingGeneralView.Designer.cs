@@ -270,7 +270,6 @@ namespace Teleopti.Ccc.Win.Meetings
             this.dateTimePickerAdvStartDate.TabIndex = 4;
             this.dateTimePickerAdvStartDate.ThemesEnabled = true;
             this.dateTimePickerAdvStartDate.Value = new System.DateTime(2008, 8, 5, 8, 1, 24, 984);
-            this.dateTimePickerAdvStartDate.ValueChanged += new System.EventHandler(this.dateTimePickerAdvStartDate_ValueChanged);
             this.dateTimePickerAdvStartDate.PopupClosed += new Syncfusion.Windows.Forms.PopupClosedEventHandler(this.dateTimePickerAdvStartDate_PopupClosed);
             // 
             // autoLabel3
