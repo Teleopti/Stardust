@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
 			var activeAgentCounts = _statisticRepository.LoadActiveAgentCount(skill, period);
 
-			var taskPeriods = Statistic.CreateTaskPeriodsFromPeriodized(skillStaffPeriods);
+			var taskPeriods = skillStaffPeriods.CreateTaskPeriodsFromPeriodized();
 			var provider = new QueueStatisticsProvider(statisticTasks,
 			                                           new QueueStatisticsCalculator(
 			                                           	skill.WorkloadCollection.First().QueueAdjustments));
 			var stat = new Statistic(null);
 			foreach (var taskPeriod in taskPeriods)
 			{
-				stat.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
+				provider.GetStatisticsForPeriod(taskPeriod.Period).ApplyStatisticsTo(taskPeriod);
 			}
 			stat.Match(skillStaffPeriods, taskPeriods, activeAgentCounts);
 		}

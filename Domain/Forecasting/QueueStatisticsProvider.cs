@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if (_statisticsPerInterval.TryGetValue(key, out foundStatisticTask))
                 {
                     _statisticsPerInterval.Remove(key);
-                    _statisticsPerInterval.Add(key, Statistic.MergeStatisticTasks(new List<IStatisticTask> { foundStatisticTask, statisticTask }));
+					_statisticsPerInterval.Add(key, new List<IStatisticTask> { foundStatisticTask, statisticTask }.MergeStatisticTasks());
                 }
                 else
                 {
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
 
                 //Merge!
-                value = Statistic.MergeStatisticTasks(foundStatistics);
+				value = foundStatistics.MergeStatisticTasks();
                 return true;
             }
 

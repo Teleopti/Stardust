@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,24 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-	public interface IStatistic
-	{
-		void Match(IEnumerable<IWorkloadDayBase> workloadDays, IList<IStatisticTask> statisticTasks);
-
-		void Match(IWorkload workload, IEnumerable<IWorkloadDayBase> workloadDays, IList<IStatisticTask> statisticTasks);
-
-		IWorkload CalculateTemplateDays(IList<IWorkloadDayBase> workloadDays);
-
-		IWorkload CalculateCustomTemplateDay(IList<IWorkloadDayBase> workloadDays, int dayIndex);
-
-		IWorkloadDayBase GetTemplateWorkloadDay(IWorkloadDayTemplate workloadDayTemplate, IList<IWorkloadDayBase> workloadDays);
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		void Match(IList<ISkillStaffPeriod> targetSkillStaffPeriods, IList<ITemplateTaskPeriod> templateTaskPeriodsWithStatistics, IEnumerable<IActiveAgentCount> activeAgentCountCollection);
-
-		void UpdateStatisticTask(IStatisticTask statisticTask, ITemplateTaskPeriod taskPeriod);
-	}
-
 	/// <summary>
     /// Class for handling StatisticTask 
     /// </summary>
@@ -67,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             if (statisticTasks.Count == 0) return;
             
-            QueueStatisticsProvider queueStatisticsProvider = new QueueStatisticsProvider(statisticTasks,new QueueStatisticsCalculator(_workload.QueueAdjustments));
+            var queueStatisticsProvider = new QueueStatisticsProvider(statisticTasks,new QueueStatisticsCalculator(_workload.QueueAdjustments));
             workloadDays.ForEach(w => w.SetQueueStatistics(queueStatisticsProvider));
 
             workloadDays.ForEach(wld =>
@@ -107,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 										   workloadDayTemplate
 											   .OpenHourList.ToList());
 
-				calculateTemplateDay(workloadDayTemplate, GroupDays(day, workloadDays));
+				calculateTemplateDay(workloadDayTemplate, getOnlyDaysOfGivenWeekDay(day, workloadDays));
 			}
 			return _workload;
 		}
@@ -138,141 +119,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
         	return _workload;
         }
 
-        /// <summary>
-        /// Merges the statistic tasks.
-        /// </summary>
-        /// <param name="statisticTasksToMerge">The statistic tasks to merge.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-25
-        /// </remarks>
-        public static IStatisticTask MergeStatisticTasks(IEnumerable<IStatisticTask> statisticTasksToMerge)
-        {
-            if (statisticTasksToMerge.Count() == 1) return statisticTasksToMerge.First();
-
-            double statAbandonedTasks = 0;
-            double statAbandonedTasksWithinServiceLevel = 0;
-            double statAbandonedShortTasks = 0;
-            double statAnsweredTasks = 0;
-			double statAnsweredTasksWithinSL = 0;
-            double statCalculatedTasks = 0;
-            double statOfferedTasks = 0;
-            double statTaskAverageAfterTaskTimeSeconds = 0;
-            double statTaskAverageTaskTimeSeconds = 0;
-            double statTaskAverageQueueTimeSeconds = 0;
-
-            double statOverflowInTasks = 0;
-            double statOverflowOutTasks = 0;
- 
-            foreach (IStatisticTask statisticTask in statisticTasksToMerge)
-            {
-                statAbandonedTasks += statisticTask.StatAbandonedTasks;
-                statAbandonedTasksWithinServiceLevel += statisticTask.StatAbandonedTasksWithinSL;
-                statAbandonedShortTasks += statisticTask.StatAbandonedShortTasks;
-                statAnsweredTasks += statisticTask.StatAnsweredTasks;
-				statAnsweredTasksWithinSL += statisticTask.StatAnsweredTasksWithinSL;
-                statCalculatedTasks += statisticTask.StatCalculatedTasks;
-                statOfferedTasks += statisticTask.StatOfferedTasks;
-                statTaskAverageAfterTaskTimeSeconds += statisticTask.StatAnsweredTasks * statisticTask.StatAverageAfterTaskTimeSeconds;
-                statTaskAverageTaskTimeSeconds += statisticTask.StatAnsweredTasks * statisticTask.StatAverageTaskTimeSeconds;
-                statTaskAverageQueueTimeSeconds += statisticTask.StatAnsweredTasks * statisticTask.StatAverageQueueTimeSeconds;
-
-                statOverflowInTasks += statisticTask.StatOverflowInTasks;
-                statOverflowOutTasks += statisticTask.StatOverflowOutTasks;
-            }
-
-            IStatisticTask newStatisticTask = new StatisticTask();
-            newStatisticTask.Interval = statisticTasksToMerge.First().Interval;
-            newStatisticTask.StatAbandonedTasks = statAbandonedTasks;
-            newStatisticTask.StatAbandonedTasksWithinSL = statAbandonedTasksWithinServiceLevel;
-            newStatisticTask.StatAbandonedShortTasks = statAbandonedShortTasks;
-            newStatisticTask.StatAnsweredTasks = statAnsweredTasks;
-        	newStatisticTask.StatAnsweredTasksWithinSL = statAnsweredTasksWithinSL;
-            newStatisticTask.StatCalculatedTasks = statCalculatedTasks;
-            newStatisticTask.StatOfferedTasks = statOfferedTasks;
-            
-            newStatisticTask.StatOverflowInTasks = statOverflowInTasks;
-            newStatisticTask.StatOverflowOutTasks = statOverflowOutTasks;
-
-            if (statAnsweredTasks > 0)
-            {
-                newStatisticTask.StatAverageAfterTaskTimeSeconds =
-                    (int)(statTaskAverageAfterTaskTimeSeconds / statAnsweredTasks);
-                newStatisticTask.StatAverageTaskTimeSeconds = (int)(statTaskAverageTaskTimeSeconds / statAnsweredTasks);
-                newStatisticTask.StatAverageQueueTimeSeconds = (int)(statTaskAverageQueueTimeSeconds / statAnsweredTasks);
-            }
-            else
-            {
-                newStatisticTask.StatAverageAfterTaskTimeSeconds = 0;
-                newStatisticTask.StatAverageTaskTimeSeconds = 0;
-                newStatisticTask.StatAverageQueueTimeSeconds = 0;
-            }
-
-            return newStatisticTask;
-        }
-
-        /// <summary>
-        /// Updates the statistic statisticTask.
-        /// </summary>
-        /// <param name="statisticTask">The task.</param>
-        /// <param name="taskPeriod">The statisticTask period.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-02-26
-        /// </remarks>
-        public void UpdateStatisticTask(IStatisticTask statisticTask, ITemplateTaskPeriod taskPeriod)
-        {
-            taskPeriod.StatisticTask.Interval = statisticTask.Interval;
-            taskPeriod.StatisticTask.StatAbandonedTasks = statisticTask.StatAbandonedTasks;
-            taskPeriod.StatisticTask.StatAnsweredTasks = statisticTask.StatAnsweredTasks;
-            taskPeriod.StatisticTask.StatOfferedTasks = statisticTask.StatOfferedTasks;
-            taskPeriod.StatisticTask.StatCalculatedTasks = statisticTask.StatCalculatedTasks;
-
-            taskPeriod.StatisticTask.StatAverageAfterTaskTimeSeconds =
-                statisticTask.StatAverageAfterTaskTimeSeconds;
-            taskPeriod.StatisticTask.StatAverageTaskTimeSeconds =
-                statisticTask.StatAverageTaskTimeSeconds;
-
-            taskPeriod.StatisticTask.StatAbandonedShortTasks = statisticTask.StatAbandonedShortTasks;
-            taskPeriod.StatisticTask.StatAbandonedTasksWithinSL= statisticTask.StatAbandonedTasksWithinSL;
-            taskPeriod.StatisticTask.StatAnsweredTasksWithinSL = statisticTask.StatAnsweredTasksWithinSL;
-            taskPeriod.StatisticTask.StatOverflowInTasks = statisticTask.StatOverflowInTasks;
-            taskPeriod.StatisticTask.StatOverflowOutTasks = statisticTask.StatOverflowOutTasks;
-
-            taskPeriod.StatisticTask.StatAverageHandleTimeSeconds = statisticTask.StatAverageHandleTimeSeconds;
-            taskPeriod.StatisticTask.StatAverageQueueTimeSeconds = statisticTask.StatAverageQueueTimeSeconds;
-            taskPeriod.StatisticTask.StatAverageTimeLongestInQueueAbandonedSeconds = statisticTask.StatAverageTimeLongestInQueueAbandonedSeconds;
-            taskPeriod.StatisticTask.StatAverageTimeLongestInQueueAnsweredSeconds = statisticTask.StatAverageTimeLongestInQueueAnsweredSeconds;
-            taskPeriod.StatisticTask.StatAverageTimeToAbandonSeconds = statisticTask.StatAverageTimeToAbandonSeconds;
-        }
-
-        /// <summary>
-        /// Groups the days o week.
-        /// </summary>
-        /// <param name="dayOfWeek">The day of week.</param>
-        /// <param name="workloadDays">The workload days.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2008-02-20
-        /// </remarks>
-        private static IEnumerable<IWorkloadDayBase> GroupDays(DayOfWeek dayOfWeek, IEnumerable<IWorkloadDayBase> workloadDays)
+        private static IEnumerable<IWorkloadDayBase> getOnlyDaysOfGivenWeekDay(DayOfWeek dayOfWeek, IEnumerable<IWorkloadDayBase> workloadDays)
         {
             return workloadDays.Where(w => w.CurrentDate.DayOfWeek == dayOfWeek);
         }
 
-    	/// <summary>
-    	/// Calculates the template days.
-    	/// </summary>
-    	/// <param name="workloadDayTemplate">The workload day template.</param>
-    	/// <param name="workloadDays">The workload days.</param>
-    	/// <param name="includeStatistics">Include statistics.</param>
-    	/// <returns></returns>
-    	/// <remarks>
-    	/// Created by: peterwe, zoet
-    	/// Created date: 2008-02-20
-    	/// </remarks>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void calculateTemplateDay(IWorkloadDayTemplate workloadDayTemplate, IEnumerable<IWorkloadDayBase> workloadDays, bool includeStatistics = false)
     	{
@@ -418,27 +269,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         /// <summary>
-        /// Creates the task periods from periodized.
-        /// </summary>
-        /// <param name="periodizedData">The periodized data.</param>
-        /// <returns>An empty template task period for each period in periodized data collection</returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-09-22
-        /// </remarks>
-        public static IList<ITemplateTaskPeriod> CreateTaskPeriodsFromPeriodized(IEnumerable periodizedData)
-        {
-            IEnumerable<IPeriodized> typedPeriodizedData = periodizedData.OfType<IPeriodized>();
-
-            IList<ITemplateTaskPeriod> taskPeriods = new List<ITemplateTaskPeriod>();
-            foreach (IPeriodized periodized in typedPeriodizedData)
-            {
-                taskPeriods.Add(new TemplateTaskPeriod(new Task(), periodized.Period));
-            }
-            return taskPeriods;
-        }
-
-        /// <summary>
         /// Matches the specified target skill staff periods. Adds the statistics information to the skill staff period.
         /// </summary>
         /// <param name="targetSkillStaffPeriods">The target skill staff periods.</param>
@@ -459,42 +289,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     templateTaskPeriodsWithStatistics.FirstOrDefault(
                         t => t.Period.StartDateTime == dateTimePeriod.StartDateTime);
                 if (taskPeriod != null)
-                    skillStaffPeriod.StatisticTask =
-                        GetStatisticsWithPercentage(taskPeriod.StatisticTask,
-                                                    skillDay.SkillDayCalculator.GetPercentageForInterval(
-                                                        skillDay.Skill, dateTimePeriod));
+                    skillStaffPeriod.StatisticTask = taskPeriod.StatisticTask.GetStatisticsWithPercentage(skillDay.SkillDayCalculator.GetPercentageForInterval(skillDay.Skill, dateTimePeriod));
 
                 IActiveAgentCount activeAgentCount =
                     activeAgentCountCollection.FirstOrDefault(a => dateTimePeriod.Contains(a.Interval));
                 skillStaffPeriod.ActiveAgentCount = new ActiveAgentCount();
                 if (activeAgentCount != null) skillStaffPeriod.ActiveAgentCount.ActiveAgents = activeAgentCount.ActiveAgents;
             }
-        }
-
-        private static IStatisticTask GetStatisticsWithPercentage(IStatisticTask statisticTask,Percent percentage)
-        {
-            if (percentage.Value==1) return statisticTask;
-
-            IStatisticTask statisticTaskToReturn = new StatisticTask();
-            statisticTaskToReturn.Interval = statisticTask.Interval;
-            statisticTaskToReturn.StatAbandonedShortTasks = statisticTask.StatAbandonedShortTasks * percentage.Value;
-            statisticTaskToReturn.StatAbandonedTasks = statisticTask.StatAbandonedTasks * percentage.Value;
-            statisticTaskToReturn.StatAbandonedTasksWithinSL = statisticTask.StatAbandonedTasksWithinSL * percentage.Value;
-            statisticTaskToReturn.StatAnsweredTasks = statisticTask.StatAnsweredTasks * percentage.Value;
-            statisticTaskToReturn.StatAnsweredTasksWithinSL = statisticTask.StatAnsweredTasksWithinSL * percentage.Value;
-            statisticTaskToReturn.StatAverageAfterTaskTimeSeconds = statisticTask.StatAverageAfterTaskTimeSeconds;
-            statisticTaskToReturn.StatAverageHandleTimeSeconds = statisticTask.StatAverageHandleTimeSeconds;
-            statisticTaskToReturn.StatAverageQueueTimeSeconds = statisticTask.StatAverageQueueTimeSeconds;
-            statisticTaskToReturn.StatAverageTaskTimeSeconds = statisticTask.StatAverageTaskTimeSeconds;
-            statisticTaskToReturn.StatAverageTimeLongestInQueueAbandonedSeconds = statisticTask.StatAverageTimeLongestInQueueAbandonedSeconds;
-            statisticTaskToReturn.StatAverageTimeLongestInQueueAnsweredSeconds = statisticTask.StatAverageTimeLongestInQueueAnsweredSeconds;
-            statisticTaskToReturn.StatAverageTimeToAbandonSeconds = statisticTask.StatAverageTimeToAbandonSeconds;
-            statisticTaskToReturn.StatCalculatedTasks = statisticTask.StatCalculatedTasks * percentage.Value;
-            statisticTaskToReturn.StatOfferedTasks = statisticTask.StatOfferedTasks * percentage.Value;
-            statisticTaskToReturn.StatOverflowInTasks = statisticTask.StatOverflowInTasks * percentage.Value;
-            statisticTaskToReturn.StatOverflowOutTasks = statisticTask.StatOverflowOutTasks * percentage.Value;
-
-            return statisticTaskToReturn;
         }
     }
 }

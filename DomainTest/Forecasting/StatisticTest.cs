@@ -179,14 +179,13 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkillStaffPeriod skillStaffPeriod1 = mocks.StrictMock<ISkillStaffPeriod>();
             ISkillStaffPeriod skillStaffPeriod2 = mocks.StrictMock<ISkillStaffPeriod>();
 
-            Expect.Call(((IPeriodized)skillStaffPeriod1).Period).Return(period1).Repeat.AtLeastOnce();
-            Expect.Call(((IPeriodized)skillStaffPeriod2).Period).Return(period2).Repeat.AtLeastOnce();
+            Expect.Call(skillStaffPeriod1.Period).Return(period1).Repeat.AtLeastOnce();
+            Expect.Call(skillStaffPeriod2.Period).Return(period2).Repeat.AtLeastOnce();
 
             mocks.ReplayAll();
 
-            IList<ITemplateTaskPeriod> taskPeriods =
-                Statistic.CreateTaskPeriodsFromPeriodized(new List<ISkillStaffPeriod>
-                                                              {skillStaffPeriod1, skillStaffPeriod2});
+            IList<ITemplateTaskPeriod> taskPeriods = new List<ISkillStaffPeriod>
+                                                              {skillStaffPeriod1, skillStaffPeriod2}.CreateTaskPeriodsFromPeriodized();
 
             mocks.VerifyAll();
 
@@ -463,7 +462,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				StatOverflowInTasks = 33,
 				StatOverflowOutTasks = 36
 			});
-			var stat = Statistic.MergeStatisticTasks(tasks);
+			var stat = tasks.MergeStatisticTasks();
 
 			Assert.AreEqual(6, stat.StatAbandonedTasks);
 			Assert.AreEqual(14, stat.StatAbandonedTasksWithinSL);

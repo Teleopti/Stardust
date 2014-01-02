@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -397,7 +396,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 //rk : temp
                 string objText = "[" + optLockEx.EntityName + ":" + optLockEx.RootId + "]";
 
-                _view.ShowInformationMessage(string.Concat(UserTexts.Resources.SomeoneElseHaveChanged + " " + objText + " " +
+                _view.ShowInformationMessage(string.Concat(UserTexts.Resources.SomeoneElseHaveChanged, " ", objText, " ",
                          UserTexts.Resources.YourChangesWillBeDiscardedReloading), "  ");
 
                 _view.ToggleSchedulePartModified(false);

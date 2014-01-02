@@ -40,15 +40,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			
 			statisticTasks.AddRange(workloadDay.OpenTaskPeriodList.Select(t => t.StatisticTask));
 			
-			//var activeAgentCounts = statisticRepository.LoadActiveAgentCount(skill, period);
-
-			var taskPeriods = Statistic.CreateTaskPeriodsFromPeriodized(skillStaffPeriods);
+			var taskPeriods = skillStaffPeriods.CreateTaskPeriodsFromPeriodized();
 			var provider = new QueueStatisticsProvider(statisticTasks,
 													   new QueueStatisticsCalculator(
 														workloadDay.Workload.QueueAdjustments));
+
 			foreach (var taskPeriod in taskPeriods)
 			{
-				_statistic.UpdateStatisticTask(provider.GetStatisticsForPeriod(taskPeriod.Period), taskPeriod);
+				provider.GetStatisticsForPeriod(taskPeriod.Period).ApplyStatisticsTo(taskPeriod);
 			}
 			// we don't care about active agents
 			_statistic.Match(skillStaffPeriods, taskPeriods, new List<IActiveAgentCount>());
