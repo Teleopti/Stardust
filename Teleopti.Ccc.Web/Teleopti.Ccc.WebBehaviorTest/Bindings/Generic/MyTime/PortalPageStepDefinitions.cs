@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeLicensedToInformation()
 		{
 			Browser.Interactions.AssertFirstContains("#licensed-to-label", UserTexts.Resources.LicensedToColon);
-			Browser.Interactions.AssertFirstContains("#licensed-to-text", "Teleopti RD NOT for production use!");
+			Browser.Interactions.AssertFirstContains("#licensed-to-text", "Teleopti_RD");
 		}
 
 		[Then(@"I should see an application page")]
