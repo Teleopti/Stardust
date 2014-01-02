@@ -305,7 +305,6 @@ INSERT INTO #fact_schedule_deviation
 	shift_startinterval_id,
 	shift_endinterval_id,
 	interval_id,
-	acd_login_id,--new 20131128
 	person_id,
 	is_logged_in, 
 	scheduled_ready_time_s,
@@ -318,7 +317,6 @@ SELECT
 	shift_startinterval_id	= fs.shift_startinterval_id,
 	shift_endinterval_id	= di.interval_id,
 	interval_id				= fs.interval_id,
-	acd_login_id			= b.acd_login_id,--new 20131128
 	person_id				= fs.person_id,
 	is_logged_in			= 0, --Mark schedule rows as Not loggged in 
 	scheduled_ready_time_s	= fs.scheduled_ready_time_m*60,
@@ -341,12 +339,20 @@ INNER JOIN
 ON 
 	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) > di.interval_start
 	and dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) <= di.interval_end
-LEFT JOIN mart.bridge_acd_login_person b --new 20131128
-ON
-	p.person_id=b.person_id
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.business_unit_id = @business_unit_id
+
+
+/*#26421 Update schedule data with acd_login_id to handle nights shifts and person_period change*/
+UPDATE #fact_schedule_deviation
+SET acd_login_id=b.acd_login_id
+FROM mart.bridge_acd_login_person b 
+INNER JOIN #fact_schedule_deviation shifts
+ON shifts.person_id=b.person_id
+WHERE shifts.shift_startdate_id IS NOT NULL --only schedule data
+AND shifts.acd_login_id IS NULL 
+AND b.acd_login_id in (select acd_login_id from #fact_schedule_deviation stat where stat.shift_startdate_id IS NULL and stat.acd_login_id is not null)--pick only when acd_login exists
 
 
 /*#25900:20131128 Handle night shifts and person_period change, must update person_id in stat from correct shift*/
