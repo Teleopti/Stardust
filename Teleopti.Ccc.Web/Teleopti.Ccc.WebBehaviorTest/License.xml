@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <License>
-  <CustomerName>Teleopti RD NOT for production use!</CustomerName>
-  <ExpirationDate>2013-12-31T11:17:02</ExpirationDate>
-  <ExpirationGracePeriod>P0D</ExpirationGracePeriod>
+  <CustomerName>Teleopti_RD</CustomerName>
+  <ExpirationDate>2014-09-26T13:19:36</ExpirationDate>
+  <ExpirationGracePeriod>P15D</ExpirationGracePeriod>
   <MaxActiveAgents>15000</MaxActiveAgents>
-  <MaxActiveAgentsGrace>100</MaxActiveAgentsGrace>
+  <MaxActiveAgentsGrace>5</MaxActiveAgentsGrace>
   <AgentsOrSeats>0</AgentsOrSeats>
   <MaxSeats>15000</MaxSeats>
   <SeatRatio>1.5</SeatRatio>
@@ -21,6 +21,7 @@
     <MyTimeWeb>true</MyTimeWeb>
     <MobileReports>true</MobileReports>
     <SMSLink>true</SMSLink>
+    <CalendarLink>true</CalendarLink>
     <Version8>true</Version8>
   </TeleoptiCCC>
   <Agreement>Teleopti.Ccc.Infrastructure.Licensing.Agreements.TeleoptiLic_En_Sw_St.txt</Agreement>
@@ -33,9 +34,9 @@
           <Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
         </Transforms>
         <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
-        <DigestValue>iHH1eLmSceUJ7wFicvSkfgwC7po=</DigestValue>
+        <DigestValue>7OSt1b4DMAr6Jti0bB17k2OYUkw=</DigestValue>
       </Reference>
     </SignedInfo>
-    <SignatureValue>okJhAAG5mxGTqtXJTa2HZu8p9bab0Zsc1tfguee4RyvKKlBjr/2KkE7a5aVlIUks/NURFC6gGxwYxHf9/hhLENe1rsHlrC3pI/iSZIYNy4S/fYPwyvj+LflvPKcXVQqpwcUIBH2gt4JQ6q1i60cYVtTWD+RZ3JstoLZfGFvDm5Y=</SignatureValue>
+    <SignatureValue>rsRvSboJjnZ/lZ2vE7FEZnSoYe8pF1hW+GVDjAWnlZidiO7X3Mim2ozvOmJJkRfEqrfg1+6/W75mEhRBbPCo3Tj/poOLqZ+YlhRe6oYJu8WtmWGkFLo46pAR6s5YyKm/mSaV89iBPxxFfVUoxVvSuguPqkaIaYo1X5VEqmwVPr4=</SignatureValue>
   </Signature>
 </License>
