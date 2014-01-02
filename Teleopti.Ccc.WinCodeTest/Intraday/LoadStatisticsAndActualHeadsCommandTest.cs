@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			using (mocks.Playback())
 			{
-				target.Execute(day, skill, skillStaffPeriods);
+				target.Execute(day, skill, dayPeriod, skillStaffPeriods);
 			}
 		}
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			using (mocks.Playback())
 			{
-				target.Execute(day, skill, skillStaffPeriods);
+				target.Execute(day, skill, dayPeriod, skillStaffPeriods);
 			}
 		}
 	}
