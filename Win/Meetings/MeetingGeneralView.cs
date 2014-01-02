@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.Win.Meetings
             
             dateTimePickerAdvStartDate.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
             dateTimePickerAdvEndDate.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
-            
+
+			dateTimePickerAdvStartDate.ValueChanged += dateTimePickerAdvStartDate_ValueChanged;
         }
 
         private void SetColors()
