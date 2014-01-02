@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _chartIntradayDescription = PrepareChartDescription("{0} - {1}", skill.Name,
                                                                 _intradayDate.ToShortDateString());
 
-            _loadStatisticsAndActualHeadsCommand.Execute(_intradayDate, skill, skillStaffPeriods);
+            _loadStatisticsAndActualHeadsCommand.Execute(_intradayDate, skill, utcDayPeriod, skillStaffPeriods);
 
             return skillStaffPeriods;
         }
