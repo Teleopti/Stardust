@@ -147,9 +147,9 @@
 
 		<Message Importance="high" Text="ETLCompile starting ... " />
 		
-		<CallTarget Targets="PrepareFiles" />
-		
 		<CallTarget Targets="PreCompile" />
+		
+		<CallTarget Targets="PrepareFiles" />
 				
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\Teleopti.Analytics.Etl.ServiceHost.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
