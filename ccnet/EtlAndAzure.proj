@@ -148,6 +148,8 @@
 		<Message Importance="high" Text="ETLCompile starting ... " />
 		
 		<CallTarget Targets="PrepareFiles" />
+		
+		<CallTarget Targets="PreCompile" />
 				
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\Teleopti.Analytics.Etl.ServiceHost.csproj"
 				Properties="Configuration=$(Configuration);Platform=AnyCPU"
@@ -176,6 +178,12 @@
 		<Message Importance="high" Text="Compile of Db Manager starting..." />
 		<Message Text="DbManagerOutput:   @(DbManagerExe)" />
 		<Message Importance="high" Text="ETLCompile finished!" />
+	</Target>
+	
+	<Target Name="PreCompile" Condition="Exists('$(CCNetWorkingDirectory)\.nuget\packages.config')">
+		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
+		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages -NoCache"
+				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 
 	<Target Name="PrepareFiles">
