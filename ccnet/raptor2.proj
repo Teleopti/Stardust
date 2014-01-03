@@ -91,7 +91,7 @@
 	
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;BuildSSASXmla">
+	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;BuildSSASXmla;PreCompile">
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
@@ -105,7 +105,7 @@
 
 	<Target Name="PreCompile" Condition="Exists('$(CCNetWorkingDirectory)\.nuget\packages.config')">
 		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
-		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages -nocache"
+		<Exec Command=".nuget\nuget.exe restore '@(SolutionFile)'"
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
