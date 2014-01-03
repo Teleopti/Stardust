@@ -368,7 +368,6 @@
 			this.dateTimePickerAdvtDate.TabIndex = 5;
 			this.dateTimePickerAdvtDate.ThemesEnabled = true;
 			this.dateTimePickerAdvtDate.Value = new System.DateTime(2008, 8, 5, 8, 1, 24, 984);
-			this.dateTimePickerAdvtDate.ValueChanged += new System.EventHandler(this.dateTimePickerAdvtDate_ValueChanged);
 			// 
 			// buttonAdvGo
 			// 
