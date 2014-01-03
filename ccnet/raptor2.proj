@@ -100,7 +100,7 @@
 
 	<Target Name="PreCompile" Condition="Exists('$(CCNetWorkingDirectory)\.nuget\packages.config')">
 		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
-		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages -nocache" WorkingDirectory="$(CCNetWorkingDirectory)"/>
+		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages" WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
     <Target Name="BuildSSASXmla" Condition="Exists('$(vs2020ide)') And Exists('$(AsDBDeploy)')">
