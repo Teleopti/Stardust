@@ -182,7 +182,7 @@
 
 	<Target Name="PreCompile">
 		<Message Importance="high" Text="Installing nuget packages for Teleopti.Support.Tool"/>
-		<Exec Command=".nuget\nuget.exe restore &quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool\packages.config&quot; -PackagesDirectory ..\packages -Source http://hestia/nuget;https://nuget.org/api/v2 -Verbosity detailed"
+		<Exec Command=".nuget\nuget.exe restore &quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool\packages.config&quot; -PackagesDirectory packages -Source http://hestia/nuget;https://nuget.org/api/v2 -Verbosity detailed"
 				WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
