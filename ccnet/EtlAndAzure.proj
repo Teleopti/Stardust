@@ -147,6 +147,8 @@
 
 		<Message Importance="high" Text="ETLCompile starting ... " />
 				
+		<CallTarget Targets="PreCompile" />
+		
 		<CallTarget Targets="PrepareFiles" />
 				
 		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\Teleopti.Analytics.Etl.ServiceHost.csproj"
@@ -178,6 +180,12 @@
 		<Message Importance="high" Text="ETLCompile finished!" />
 	</Target>
 
+	<Target Name="PreCompile">
+		<Message Importance="high" Text="Installing nuget packages for Teleopti.Support.Tool"/>
+		<Exec Command=".nuget\nuget.exe restore &quot;$(CCNetWorkingDirectory)\Teleopti.Support.Tool&quot; -Source http://hestia/nuget;https://nuget.org/api/v2 -Verbosity detailed"
+				WorkingDirectory="$(CCNetWorkingDirectory)"/>
+	</Target>
+	
 	<Target Name="PrepareFiles">
 		<!-- Delete Old and Copy new ETL bin files + config to a temporary dir-->
 		<Message Text="Prepare Files. Working..." Importance="high" />
