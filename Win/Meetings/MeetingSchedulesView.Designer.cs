@@ -245,7 +245,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStartDate.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.dateTimePickerAdvStartDate.TabIndex = 1;
 			this.dateTimePickerAdvStartDate.Value = new System.DateTime(2009, 10, 28, 16, 45, 2, 975);
-			this.dateTimePickerAdvStartDate.ValueChanged += new System.EventHandler(this.dateTimePickerAdvStartDate_ValueChanged);
 			this.dateTimePickerAdvStartDate.PopupClosed += new Syncfusion.Windows.Forms.PopupClosedEventHandler(this.DateTimePickerAdvStartDatePopupClosed);
 			// 
 			// dateTimePickerAdvEndDate

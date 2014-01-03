@@ -54,6 +54,8 @@ namespace Teleopti.Ccc.Win.Meetings
 			 dateTimePickerAdvStartDate.SetSafeBoundary();
 			 dateTimePickerAdvEndDate.SetSafeBoundary();
 
+			 dateTimePickerAdvStartDate.ValueChanged += dateTimePickerAdvStartDate_ValueChanged;
+
 			 gridControlSchedules.HScrollPixel = true;
 			 gridControlSchedules.MouseUp += GridControlSchedulesMouseUp;
 			 gridControlSchedules.MouseDown += GridControlSchedulesMouseDown;

@@ -381,7 +381,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvStart.TabIndex = 10;
 			this.dateTimePickerAdvStart.ThemesEnabled = true;
 			this.dateTimePickerAdvStart.Value = new System.DateTime(2008, 12, 5, 6, 42, 38, 484);
-			this.dateTimePickerAdvStart.ValueChanged += new System.EventHandler(this.DateTimePickerAdvStartValueChanged);
 			// 
 			// labelEndBy
 			// 
@@ -463,7 +462,6 @@ namespace Teleopti.Ccc.Win.Meetings
 			this.dateTimePickerAdvEnd.TabIndex = 11;
 			this.dateTimePickerAdvEnd.ThemesEnabled = true;
 			this.dateTimePickerAdvEnd.Value = new System.DateTime(2008, 12, 5, 6, 42, 0, 0);
-			this.dateTimePickerAdvEnd.ValueChanged += new System.EventHandler(this.DateTimePickerAdvEndValueChanged);
 			// 
 			// tableLayoutPanel5
 			// 

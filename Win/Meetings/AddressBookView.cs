@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Win.Meetings
             {
                 SetTexts();
                 dateTimePickerAdvtDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
+				dateTimePickerAdvtDate.ValueChanged += dateTimePickerAdvtDate_ValueChanged;
             }
         }
 
