@@ -41,7 +41,10 @@ namespace Teleopti.Ccc.Win.Meetings
 
             dateTimePickerAdvStart.SetCultureInfoSafe(CultureInfo.CurrentCulture);
             dateTimePickerAdvEnd.SetCultureInfoSafe(CultureInfo.CurrentCulture);
-            
+
+			dateTimePickerAdvStart.ValueChanged += DateTimePickerAdvStartValueChanged;
+			dateTimePickerAdvEnd.ValueChanged += DateTimePickerAdvEndValueChanged;
+
 			UseOffice2007SchemeBackColor = false;
 
 		}
