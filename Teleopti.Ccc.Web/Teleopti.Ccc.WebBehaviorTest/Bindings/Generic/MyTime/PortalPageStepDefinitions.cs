@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var page = Browser.Current.Page<PortalPage>();
 
 			EventualAssert.WhenElementExists(page.LicensedToLabel, c => c.Text, Contains.Substring(UserTexts.Resources.LicensedToColon));
-			EventualAssert.WhenElementExists(page.LicensedToText, c => c.Text, Contains.Substring("Teleopti RD NOT for production use!"));
+			EventualAssert.WhenElementExists(page.LicensedToText, c => c.Text, Contains.Substring("Teleopti_RD"));
 		}
 	}
 }
