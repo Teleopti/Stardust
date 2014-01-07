@@ -92,20 +92,20 @@ define([
 		};
 
 		this.SelectPerson = function (person) {
-			deselectAllPersons(person.Id);
-			deselectAllLayers();
+			deselectAllPersonsExcept(person);
+			deselectAllLayersExcept();
 
 			person.Selected(!person.Selected());
 		};
 
-		this.SelectLayer = function (layer, personId) {
-			deselectAllPersons();
-			deselectAllLayers(layer);
+		this.SelectLayer = function (layer) {
+			deselectAllPersonsExcept();
+			deselectAllLayersExcept(layer);
 
 			layer.Selected(!layer.Selected());
 		};
 
-		var deselectAllPersons = function(person) {
+		var deselectAllPersonsExcept = function(person) {
 			var selectedPersons = lazy(self.Persons())
 				.filter(function(x) {
 					if (person && x === person)
@@ -117,7 +117,7 @@ define([
 			});
 		};
 
-		var deselectAllLayers = function (layer) {
+		var deselectAllLayersExcept = function (layer) {
 			var selectedLayers = lazy(self.Persons())
 				   .map(function (x) { return x.Shifts(); })
 				   .flatten()
