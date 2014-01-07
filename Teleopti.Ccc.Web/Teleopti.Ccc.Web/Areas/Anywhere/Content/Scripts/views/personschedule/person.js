@@ -76,7 +76,7 @@ define([
 
 		var visibleLayers = function () {
 			return layers()
-				.select(function(x) { return x.OverlapsTimeLine(); });
+				.filter(function (x) { return x.OverlapsTimeLine(); });
 		};
 
 		var visibleDayOffs = function () {

@@ -52,7 +52,7 @@ define([
 			if (!id)
 				return undefined;
 			var person = lazy(self.Persons())
-				.select(function (x) { return x.Id == id; })
+				.filter(function (x) { return x.Id == id; })
 				.first();
 			if (!person) {
 				person = new personViewModel({ Id: id });

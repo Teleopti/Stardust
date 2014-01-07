@@ -44,7 +44,7 @@ define([
 			if (!id)
 				return undefined;
 			var person = lazy(self.Persons())
-				.select(function (x) { return x.Id == id; })
+				.filter(function (x) { return x.Id == id; })
 				.first();
 			if (!person) {
 				person = new personViewModel({ Id: id });
@@ -144,7 +144,7 @@ define([
 			// if we dont display group mates, then filter out their data
 			if (!self.DisplayGroupMates()) {
 				data = lazy(data)
-					.select(function (x) { return x.PersonId == self.PersonId(); })
+					.filter(function (x) { return x.PersonId == self.PersonId(); })
 					.toArray();
 			}
 			// data might include the same person more than once, with data for more than one day
