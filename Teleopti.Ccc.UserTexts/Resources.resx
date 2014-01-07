@@ -8716,7 +8716,7 @@ Period: {3}</value>
     <value>Matching skills</value>
   </data>
   <data name="SorryForTheInconvenianceButSchedulerHasToCloseNowEtc" xml:space="preserve">
-    <value>Your changes are in conflict with other users changes. Sorry for the inconveniance but Scheduler has to close now. You may start Scheduler again and continue working.</value>
+    <value>Your changes are in conflict with other users' changes. Sorry for the inconveniance but Scheduler has to close now. You may start Scheduler again and continue working.</value>
     <comment>Error message</comment>
   </data>
   <data name="MoveOneIntervalEarlier" xml:space="preserve">
@@ -9687,7 +9687,7 @@ Period</comment>
     <comment>The maximum length of an assignment is {0} hours. Current assignment's length is {1} hours.</comment>
   </data>
   <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
-    <value>Database connection has been lost. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
+    <value>Database connection has been lost. To preserve data consistency, the form will be closed. Sorry, your changes have been lost.</value>
     <comment>Database connection is lost. Form will be close</comment>
   </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
@@ -11223,7 +11223,7 @@ These options are activated:
     <comment>Used in creating Shift Trade on web</comment>
   </data>
   <data name="DataHasBeenDeleted" xml:space="preserve">
-    <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
+    <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes have been lost.</value>
     <comment>used for SQL Server ForeignKeyException type of errors</comment>
   </data>
   <data name="ResShiftStartDateColon" xml:space="preserve">
