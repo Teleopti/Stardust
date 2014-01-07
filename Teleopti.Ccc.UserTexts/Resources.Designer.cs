@@ -14698,6 +14698,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No period present.
+        /// </summary>
+        public static string NoPeriodPresent {
+            get {
+                return ResourceManager.GetString("NoPeriodPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no permission to view restricted scenarios and all scenarios are restricted..
         /// </summary>
         public static string NoPermissionToViewRestrictedScenarios {
@@ -14847,15 +14856,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoSchedulePeriodIsSelected {
             get {
                 return ResourceManager.GetString("NoSchedulePeriodIsSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No schedule period present.
-        /// </summary>
-        public static string NoSchedulePeriodPresent {
-            get {
-                return ResourceManager.GetString("NoSchedulePeriodPresent", resourceCulture);
             }
         }
         
