@@ -53,7 +53,7 @@ define([
 			if (data.Projection && data.Projection.length > 0) {
 				var newShift = new shift(data, timeline);
 				newShift.AddLayers(data);
-				// this might be a wrong assumption
+				// refact : this might be a wrong assumption
 				if (newShift.Layers()[0].StartMinutes() > 0)
 					self.Shifts.push(newShift);
 			}
