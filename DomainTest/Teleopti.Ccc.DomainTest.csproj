@@ -131,7 +131,7 @@
     <Compile Include="AgentInfo\Requests\InvalidRequestStateTransitionExceptionTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
-    <Compile Include="AgentInfo\Requests\ShiftTradeRequestWithinLoadedPeriodSpecificationTest.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftTradeRequestIsAfterLoadedPeriodSpecificationTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
     <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CoverageTests.cs" />

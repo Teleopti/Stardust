@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 
 	    [Test]
-		public void LoadPersonRequests_ShiftTradeAfterLoadedPeriodAndReferred_ShouldLoad()
+		public void LoadPersonRequests_ShiftTradeAfterLoadedPeriodAndReferred_ShouldNotLoad()
 		{
 			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
 			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
@@ -196,9 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
 
-		    target.PersonRequests.Count.Should().Be.GreaterThan(0);
-		    target.PersonRequests[0].Should().Not.Be.Null();
-		    target.PersonRequests[0].Id.Should().Be.EqualTo(requestList[0].Id);
+			target.PersonRequests.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]
@@ -237,7 +235,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		}
 
 		[Test]
-		public void LoadPersonRequests_ShiftTradeAfterLoadedPeriodAndOkByMe_ShouldLoad()
+		public void LoadPersonRequests_ShiftTradeAfterLoadedPeriodAndOkByMe_ShouldNotLoad()
 		{
 			var unitOfWork = MockRepository.GenerateStrictMock<IUnitOfWork>();
 			var repositoryFactory = MockRepository.GenerateStrictMock<IRepositoryFactory>();
@@ -269,9 +267,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
 			target.LoadPersonRequests(unitOfWork, repositoryFactory, new PersonRequestAuthorizationCheckerForTest());
 
-			target.PersonRequests.Count.Should().Be.GreaterThan(0);
-			target.PersonRequests[0].Should().Not.Be.Null();
-			target.PersonRequests[0].Id.Should().Be.EqualTo(requestList[0].Id);
+			target.PersonRequests.Count.Should().Be.EqualTo(0);
 		}
 
         [Test]
