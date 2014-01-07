@@ -88,6 +88,8 @@ define([
 				}
 				self.EndTime(start.clone().add("hours", 1).format(resources.TimeFormatForMoment));
 			}
+			self.ShiftStart(moment(self.Date()).startOf('d'));
+			self.ShiftEnd(moment(self.Date()).startOf('d').add('d', 1));
 		};
 		
 		this.StartTimeWithinShift = ko.computed(function () {
