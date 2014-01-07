@@ -65,13 +65,15 @@ define([
 		
 		this.Absences = ko.observableArray();
 		
-		var layers = lazy(self.Persons())
-			.map(function (x) { return x.Shifts(); })
-			.flatten()
-			.map(function (x) { return x.Layers(); })
-			.flatten();
-		
-		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers.toArray(); }));
+		var layers = function () {
+			return lazy(self.Persons())
+				.map(function (x) { return x.Shifts(); })
+				.flatten()
+				.map(function (x) { return x.Layers(); })
+				.flatten();
+		};
+
+		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
 
 		this.Shift = ko.computed(function () {
 			var person = self.SelectedPerson();

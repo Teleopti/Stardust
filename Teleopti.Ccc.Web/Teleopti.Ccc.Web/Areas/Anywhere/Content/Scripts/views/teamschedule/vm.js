@@ -26,13 +26,15 @@ define([
 
 		this.Persons = ko.observableArray();
 
-		var layers = lazy(self.Persons())
-			.map(function(x) { return x.Shifts(); })
-			.flatten()
-			.map(function(x) { return x.Layers(); })
-			.flatten();
+		var layers = function() {
+			return lazy(self.Persons())
+				.map(function(x) { return x.Shifts(); })
+				.flatten()
+				.map(function(x) { return x.Layers(); })
+				.flatten();
+		};
 
-		this.TimeLine = new timeLineViewModel(ko.computed(function() { return layers.toArray(); }));
+		this.TimeLine = new timeLineViewModel(ko.computed(function() { return layers().toArray(); }));
 		
 		this.Resources = resources;
 
@@ -124,7 +126,7 @@ define([
 		};
 
 		var deselectAllLayersExcept = function (layer) {
-			var selectedLayers = layers
+			var selectedLayers = layers()
 				   .filter(function (x) {
 					if (layer && x === layer) {
 						return false;
