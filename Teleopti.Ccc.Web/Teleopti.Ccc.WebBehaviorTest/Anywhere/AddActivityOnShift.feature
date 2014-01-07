@@ -26,10 +26,9 @@ Background:
 	| Field | Value  |
 	| Name  | Lunch  |
 	| Color | Yellow |
-@ignore
-Scenario: View form
+
+Scenario: View form with shift
 	Given I have the role 'Anywhere Team Green'
-	#? need a shift if can be added on existing shift only
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
@@ -40,7 +39,14 @@ Scenario: View form
 	And I select any schedule activity for 'Pierre Baldi'
 	And I click 'add activity' in shift menu
 	Then I should see the add activity form
-@ignore
+
+Scenario: View form without shift
+	Given I have the role 'Anywhere Team Green'
+	When I view schedules for 'Team green' on '2013-11-18'
+	And I click person name 'Pierre Baldi'
+	And I click 'add activity' in schedule menu
+	Then I should see the add activity form
+
 Scenario: View team mates schedules
 	Given I have the role 'Anywhere Team Green'
 	And 'John King' has a person period with
@@ -125,7 +131,7 @@ Scenario: Default times
 	| Field      | Value |
 	| Start time | 13:30 |
 	| End time   | 14:30 |
-@ignore
+
 Scenario: Add to day with no shift
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
@@ -156,7 +162,7 @@ Scenario: Default times (2)
 	| Field      | Value |
 	| Start time | 13:30 |
 	| End time   | 14:30 |
-@ignore
+
 Scenario: Add on shift	
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
