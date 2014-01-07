@@ -18,15 +18,10 @@ define([
 
 		this.Layers = ko.observableArray();
 
-		// refact
-		this.IsFullDayAbsence = ko.observable();
-		
 		this.AddLayers = function (data) {
 			var newItems = ko.utils.arrayMap(data.Projection, function (l) {
 				l.Offset = data.Offset;
 				l.IsFullDayAbsence = data.IsFullDayAbsence;
-				// refact
-				self.IsFullDayAbsence(data.IsFullDayAbsence);
 				return new layer(timeline, l);
 			});
 			self.Layers.push.apply(self.Layers, newItems);
