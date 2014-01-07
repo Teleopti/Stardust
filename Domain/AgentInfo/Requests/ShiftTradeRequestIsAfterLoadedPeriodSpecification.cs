@@ -21,13 +21,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 			var shiftTrade = obj.Request as IShiftTradeRequest;
 			if (shiftTrade == null) return false;
-
-			if (shiftTrade.ShiftTradeSwapDetails.All(
-					d => _loadedPeriod.StartDateTime <= d.DateFrom && _loadedPeriod.EndDateTime >= d.DateTo))
-				return false;
+			if (areAllDetailsOutsidePeriod(shiftTrade)) return false;
 
 			var shiftTradeStatus = shiftTrade.GetShiftTradeStatus(_emptyShiftTradeRequestChecker);
 			return shiftTradeStatus == ShiftTradeStatus.OkByBothParts;
+		}
+
+		private bool areAllDetailsOutsidePeriod(IShiftTradeRequest shiftTrade)
+		{
+			return shiftTrade.ShiftTradeSwapDetails.All(
+				d => _loadedPeriod.StartDateTime <= d.DateFrom && 
+				     _loadedPeriod.EndDateTime >= d.DateTo);
 		}
 	}
 }

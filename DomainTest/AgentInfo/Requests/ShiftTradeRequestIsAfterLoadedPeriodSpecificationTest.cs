@@ -96,36 +96,5 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 					new ShiftTradeSwapDetail(person1, person2, startDate, endDate)
 				}));
 		}
-
-		//[Test]
-		//public void IsSatisfiedBy_RequestWithinPeriod_ReturnFalse()
-		//{
-		//	var dateOnly = new DateOnly(2013, 10, 15);
-		//	var personRequest = createShiftTrade(dateOnly, dateOnly);
-
-		//	var result = _target.IsSatisfiedBy(personRequest);
-		//	result.Should().Be.False();
-		//}
-
-		//[Test]
-		//public void IsSatisfiedBy_RequestOutsidePeriod_ReturnTrue()
-		//{
-		//	var dateOnly = new DateOnly(2013, 09, 01);
-		//	var personRequest = createShiftTrade(dateOnly, dateOnly);
-
-		//	var result = _target.IsSatisfiedBy(personRequest);
-		//	result.Should().Be.True();
-		//}
-
-		//[Test]
-		//public void IsSatisfiedBy_RequestParitiallyWithinPeriod_ReturnFalse()
-		//{
-		//	var startDate = new DateOnly(2013, 09, 30);
-		//	var endDate = new DateOnly(2013, 10, 01);
-		//	var personRequest = createShiftTrade(startDate, endDate);
-
-		//	var result = _target.IsSatisfiedBy(personRequest);
-		//	result.Should().Be.False();
-		//}
 	}
 }
