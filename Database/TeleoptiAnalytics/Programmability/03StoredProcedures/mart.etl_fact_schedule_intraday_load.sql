@@ -30,6 +30,9 @@ WITH EXECUTE AS OWNER
 AS
 
 SET NOCOUNT ON
+
+EXEC [mart].[stage_schedule_remove_overlapping_shifts]
+
 --if no @scenario, no data then break
 DECLARE @scenario_code uniqueidentifier
 SELECT TOP 1 @scenario_code=scenario_code FROM Stage.stg_schedule_changed
