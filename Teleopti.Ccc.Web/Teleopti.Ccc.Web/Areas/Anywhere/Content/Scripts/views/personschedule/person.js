@@ -84,14 +84,6 @@ define([
 				.filter(function (x) { return x.OverlapsTimeLine(); });
 		};
 
-		this.TimeLineAffectingStartMinute = ko.computed(function () {
-			return layers().map(function(x) { return x.TimeLineAffectingStartMinute(); }).min();
-		});
-
-		this.TimeLineAffectingEndMinute = ko.computed(function () {
-			return layers().map(function(x) { return x.TimeLineAffectingEndMinute(); }).max();
-		});
-
 		this.OrderBy = function () {
 
 			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });

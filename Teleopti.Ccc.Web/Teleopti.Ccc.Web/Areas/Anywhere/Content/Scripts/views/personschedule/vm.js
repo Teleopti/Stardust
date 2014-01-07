@@ -65,8 +65,14 @@ define([
 		
 		this.Absences = ko.observableArray();
 		
-		this.TimeLine = new timeLineViewModel(this.Persons);
+		var layers = lazy(self.Persons())
+			.map(function (x) { return x.Shifts(); })
+			.flatten()
+			.map(function (x) { return x.Layers(); })
+			.flatten();
 		
+		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers.toArray(); }));
+
 		this.Shift = ko.computed(function () {
 			var person = self.SelectedPerson();
 			if (person)
