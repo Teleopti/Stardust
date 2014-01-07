@@ -11326,10 +11326,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Välj ett SDK</value>
     <comment>When having more than one in config when logging on</comment>
   </data>
-  <data name="Stop" xml:space="preserve">
-    <value>Avbryt</value>
-    <comment>Stop current background operation in scheduler</comment>
-  </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
     <value>Agentkompetenser</value>
     <comment>Agent Kompetenser</comment>
@@ -11357,5 +11353,34 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
     <value>Skiftbyte nekat då skiften är på olika datum.</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Optimering med block mellan fridagar och att inte hålla ihop teamens fridagar supportas inte</value>
+    <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Aktiva agenter</value>
+    <comment>caption on form ActiveAgents</comment>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stoppa</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Team att jämföra med</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>Min rapport</value>
+  </data>
+  <data name="NoSchedulePeriodPresent" xml:space="preserve">
+    <value>Ingen aktuell schemaperiod</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Ogiltig sluttid.</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Var god lägg till frånvaro inom dagen för befintligt skift.</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Med Lägg till aktivitet kan du inte skapa ett andra skift.</value>
   </data>
 </root>
