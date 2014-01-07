@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .AddScalar("StatOverflowOutTasks", NHibernateUtil.Double)
                 .AddScalar("StatOverflowInTasks", NHibernateUtil.Double)
                 .AddScalar("StatAverageQueueTimeSeconds", NHibernateUtil.Int32)
-                .AddScalar("StatAverageHandleTimeSeconds", NHibernateUtil.Int32)
+                .AddScalar("StatAverageHandleTimeSeconds", NHibernateUtil.Double)
                 .AddScalar("StatAverageTimeToAbandonSeconds", NHibernateUtil.Int32)
                 .AddScalar("StatAverageTimeLongestInQueueAnsweredSeconds", NHibernateUtil.Int32)
                 .AddScalar("StatAverageTimeLongestInQueueAbandonedSeconds", NHibernateUtil.Int32)
