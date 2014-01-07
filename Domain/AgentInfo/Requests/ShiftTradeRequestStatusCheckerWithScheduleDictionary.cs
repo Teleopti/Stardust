@@ -61,13 +61,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public void ClearReferredShiftTradeRequests()
         {
             _referredShiftTradeRequests.Clear();
-        }
-
-        private class EmptyShiftTradeRequestChecker : IShiftTradeRequestStatusChecker
-        {
-            public void Check(IShiftTradeRequest shiftTradeRequest)
-            {
-            }
-        }
+		}
     }
 }
