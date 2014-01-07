@@ -188,7 +188,7 @@ Scenario: Prevent adding outside of shift
 	| Absence    | Illness |
 	| Start time | 17:00   |
 	| End time   | 18:00   |
-	Then I should see the alert 'Please add intraday absence on existing shift'
+	Then I should see the alert 'Invalid Intraday Absence Times'
 
 Scenario: Go to yesterday when select the night shift starting from yesterday
 	Given I have the role 'Anywhere Team Green'
