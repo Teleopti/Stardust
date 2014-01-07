@@ -41,8 +41,8 @@ define([
 		this.ClearData = function() {
 			self.Shifts([]);
 			self.DayOffs([]);
-			self.ContractTimeMinutes(0);
 			self.WorkTimeMinutes(0);
+			self.ContractTimeMinutes(0);
 		};
 		
 		this.AddData = function (data, timeline) {
@@ -53,9 +53,7 @@ define([
 			if (data.Projection && data.Projection.length > 0) {
 				var newShift = new shift(data, timeline);
 				newShift.AddLayers(data);
-				// refact : this might be a wrong assumption
-				if (newShift.Layers()[0].StartMinutes() > 0)
-					self.Shifts.push(newShift);
+				self.Shifts.push(newShift);
 			}
 			
 			if (data.DayOff) {
