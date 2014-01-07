@@ -258,27 +258,30 @@ GO
 --Name: Karin
 --Date: 2013-04-29
 --Desc: Add new column must_haves and absence_id in [mart].[fact_schedule_preference]
+
+--Name: David
+--Date: 2014-01-07
+--Desc: #26271 - We can't drop PK in Azure for a table holding data
 ----------------
-ALTER TABLE mart.fact_schedule_preference 
-ADD must_haves int NULL, 
-	absence_id int null
-
-GO
-UPDATE mart.fact_schedule_preference
-SET must_haves=0, absence_id=-1
-WHERE must_haves IS NULL AND absence_id IS NULL
-GO
---set absence_id to not null
-ALTER TABLE mart.fact_schedule_preference alter column absence_id int NOT NULL
-GO
-
---drop current primary
-ALTER TABLE mart.fact_schedule_preference
-DROP CONSTRAINT PK_fact_schedule_preference
-GO
---add new primary with absence_id added
-ALTER TABLE mart.fact_schedule_preference
-ADD CONSTRAINT [PK_fact_schedule_preference] PRIMARY KEY CLUSTERED 
+CREATE TABLE [mart].[fact_schedule_preference_new](
+	[date_id] [int] NOT NULL,
+	[interval_id] [smallint] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[scenario_id] [smallint] NOT NULL,
+	[preference_type_id] [int] NOT NULL,
+	[shift_category_id] [int] NOT NULL,
+	[day_off_id] [int] NOT NULL,
+	[preferences_requested_count] [int] NULL,
+	[preferences_accepted_count] [int] NULL,
+	[preferences_declined_count] [int] NULL,
+	[business_unit_id] [int] NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NULL,
+	[must_haves] [int] NULL,
+	[absence_id] [int] NOT NULL
+ CONSTRAINT [PK_fact_schedule_preference_new] PRIMARY KEY CLUSTERED 
 (
 	[date_id] ASC,
 	[interval_id] ASC,
@@ -287,15 +290,75 @@ ADD CONSTRAINT [PK_fact_schedule_preference] PRIMARY KEY CLUSTERED
 	[preference_type_id] ASC,
 	[shift_category_id] ASC,
 	[day_off_id] ASC,
-	[absence_id] ASC)
+	[absence_id] ASC
+)
+)
 GO
---add fk asbence
-ALTER TABLE [mart].[fact_schedule_preference]  WITH CHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_absence] FOREIGN KEY([absence_id])
-REFERENCES [mart].[dim_absence] ([absence_id])
+INSERT INTO [mart].[fact_schedule_preference_new]
+(
+	[date_id]
+	,[interval_id]
+	,[person_id]
+	,[scenario_id]
+	,[preference_type_id]
+	,[shift_category_id]
+	,[day_off_id]
+	,[preferences_requested_count]
+	,[preferences_accepted_count]
+	,[preferences_declined_count]
+	,[business_unit_id]
+	,[datasource_id]
+	,[insert_date]
+	,[update_date]
+	,[datasource_update_date]
+	,[must_haves]
+	,[absence_id]
+)
+SELECT [date_id]
+      ,[interval_id]
+      ,[person_id]
+      ,[scenario_id]
+      ,[preference_type_id]
+      ,[shift_category_id]
+      ,[day_off_id]
+      ,[preferences_requested_count]
+      ,[preferences_accepted_count]
+      ,[preferences_declined_count]
+      ,[business_unit_id]
+      ,[datasource_id]
+      ,[insert_date]
+      ,[update_date]
+      ,[datasource_update_date]
+      ,0 --must_haves=0
+      ,-1 --absence_id=-1
+  FROM [mart].[fact_schedule_preference]
+GO
+DROP TABLE [mart].[fact_schedule_preference]
+GO
+EXEC dbo.sp_rename @objname = N'[mart].[fact_schedule_preference_new]', @newname = N'fact_schedule_preference', @objtype = N'OBJECT'
+EXEC dbo.sp_rename @objname = N'[mart].[fact_schedule_preference].[PK_fact_schedule_preference_new]', @newname = N'PK_fact_schedule_preference', @objtype =N'INDEX'
+
+ALTER TABLE [mart].[fact_schedule_preference] ADD  CONSTRAINT [DF_fact_preferences_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [mart].[fact_schedule_preference] ADD  CONSTRAINT [DF_fact_preferences_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [mart].[fact_schedule_preference] ADD  CONSTRAINT [DF_fact_preferences_update_date]  DEFAULT (getdate()) FOR [update_date]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH CHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_absence] FOREIGN KEY([absence_id]) REFERENCES [mart].[dim_absence] ([absence_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_absence]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_date] FOREIGN KEY([date_id]) REFERENCES [mart].[dim_date] ([date_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_date]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_day_off] FOREIGN KEY([day_off_id]) REFERENCES [mart].[dim_day_off] ([day_off_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_day_off]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_interval] FOREIGN KEY([interval_id]) REFERENCES [mart].[dim_interval] ([interval_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_interval]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_person] FOREIGN KEY([person_id]) REFERENCES [mart].[dim_person] ([person_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_person]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_preference_type] FOREIGN KEY([preference_type_id]) REFERENCES [mart].[dim_preference_type] ([preference_type_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_preference_type]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_scenario] FOREIGN KEY([scenario_id]) REFERENCES [mart].[dim_scenario] ([scenario_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_scenario]
+ALTER TABLE [mart].[fact_schedule_preference]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_shift_category] FOREIGN KEY([shift_category_id]) REFERENCES [mart].[dim_shift_category] ([shift_category_id])
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_shift_category]
 GO
 
-ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_absence]
-GO
 ----------------  
 --Name: Karin
 --Date: 2013-04-29
