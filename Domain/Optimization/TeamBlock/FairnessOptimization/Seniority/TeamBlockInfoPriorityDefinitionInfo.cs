@@ -6,59 +6,49 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockPriorityDefinitionInfo
     {
-        IEnumerable<double> HighToLowSeniorityList { get; }
-        IEnumerable<int> HighToLowShiftCategoryPriorityList { get; }
-        IEnumerable<int> LowToHighShiftCategoryPriorityList { get; }
-        IEnumerable<double> LowToHighSeniorityList { get; }
-        ITeamBlockInfo BlockOnSeniority(double seniority);
         int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
-	    void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority);
+	    void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, int priority);
+	    void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority);
+	    IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo { get; }
+	    IList<ITeamBlockInfo> HighToLowShiftCategoryPriority();
     }
 
-    public class TeamBlockPriorityDefinitionInfo : ITeamBlockPriorityDefinitionInfo
-    {
-        private readonly IList<ITeamBlockInfoPriority> _teamBlockInfoPriorityList;
+	public class TeamBlockPriorityDefinitionInfo : ITeamBlockPriorityDefinitionInfo
+	{
+		private readonly IList<ITeamBlockInfoPriority> _teamBlockInfoPriorityList;
+		private readonly IDictionary<ITeamBlockInfo, int> _teamBlockShiftCategoryPriority;
 
-        public TeamBlockPriorityDefinitionInfo()
-        {
-            _teamBlockInfoPriorityList = new List<ITeamBlockInfoPriority>( );
-        }
+		public TeamBlockPriorityDefinitionInfo()
+		{
+			_teamBlockInfoPriorityList = new List<ITeamBlockInfoPriority>();
+			_teamBlockShiftCategoryPriority = new Dictionary<ITeamBlockInfo, int>();
+		}
 
-        public void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority)
-        {
-            _teamBlockInfoPriorityList.Add(teamBlockInfoPriority);
-        }
+		public void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, int priority)
+		{
+			_teamBlockInfoPriorityList.Add(teamBlockInfoPriority);
+			_teamBlockShiftCategoryPriority.Add(teamBlockInfo, priority);
+		}
 
-        public IEnumerable<double> HighToLowSeniorityList
-        {
-            get { return (_teamBlockInfoPriorityList.Select(s => s.Seniority)).ToList().OrderByDescending(s => s); }
-        }
+		public IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo
+		{
+			get { return (_teamBlockInfoPriorityList.OrderByDescending(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
+		}
 
-        public IEnumerable<int> HighToLowShiftCategoryPriorityList
-        {
-            get{return (_teamBlockInfoPriorityList.Select(s => s.ShiftCategoryPriority)).ToList().OrderByDescending(s => s);}
-        }
+		public IList<ITeamBlockInfo> HighToLowShiftCategoryPriority()
+		{
+			var result = _teamBlockInfoPriorityList.OrderByDescending(s => s.ShiftCategoryPriority).Select(s => s.TeamBlockInfo).ToList();
+			return result;
+		}
 
-        public IEnumerable<int> LowToHighShiftCategoryPriorityList
-        {
-            get { return (_teamBlockInfoPriorityList.Select(s => s.ShiftCategoryPriority)).ToList().OrderBy(s => s); }
-        }
+		public int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
+		{
+			return _teamBlockShiftCategoryPriority[teamBlockInfo];
+		}
 
-        public IEnumerable<double> LowToHighSeniorityList
-        {
-            get { return (_teamBlockInfoPriorityList.Select(s => s.Seniority)).ToList().OrderBy(s => s); }
-        }
-
-
-        public ITeamBlockInfo BlockOnSeniority(double seniority)
-        {
-            return _teamBlockInfoPriorityList.FirstOrDefault(s => s.Seniority == seniority).TeamBlockInfo;
-        }
-
-        public int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
-        {
-            return _teamBlockInfoPriorityList.FirstOrDefault(s => s.TeamBlockInfo == teamBlockInfo).ShiftCategoryPriority;
-        }
-
-    }
+		public void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority)
+		{
+			_teamBlockShiftCategoryPriority[teamBlockInfo] = shiftCategoryPriority;
+		}
+	}
 }
