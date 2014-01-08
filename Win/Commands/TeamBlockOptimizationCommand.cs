@@ -159,20 +159,10 @@ namespace Teleopti.Ccc.Win.Commands
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
-				//move into IOC
-				ISwapServiceNew swapService = new SwapServiceNew();
-				ITeamBlockPeriodValidator teamBlockPeriodValidator = new TeamBlockPeriodValidator();
-				ITeamMemberCountValidator teamMemberCountValidator = new TeamMemberCountValidator();
-				ITeamBlockContractTimeValidator teamBlockContractTimeValidator = new TeamBlockContractTimeValidator();
+				
 				ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, allMatrixes);
-				ITeamBlockSeniorityValidator  teamBlockSeniorityValidator = new TeamBlockSeniorityValidator();
-				ITeamBlockSwapValidator teamBlockSwapValidator = new TeamBlockSwapValidator(selectedPersons, selectedPeriod, teamSelectionValidator, teamMemberCountValidator, teamBlockPeriodValidator, teamBlockContractTimeValidator, teamBlockSeniorityValidator);
-				ITeamBlockPersonsSkillChecker teamBlockPersonsSkillChecker = new TeamBlockPersonsSkillChecker();
-				ITeamBlockSwapDayValidator teamBlockSwapDayValidator = new TeamBlockSwapDayValidator(teamBlockPersonsSkillChecker);
-				ITeamBlockSwap teamBlockSwap = new TeamBlockSwap(swapService, teamBlockSwapValidator, teamBlockSwapDayValidator);
-
-
-				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation, teamBlockSwap);
+				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod)) return;
+				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
 			}
 				
         }
