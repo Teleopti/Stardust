@@ -4,14 +4,16 @@ define([
 	'navigation',
 	'ajax',
 	'resources!r',
-	'timepicker'
+	'timepicker',
+	'lazy'
 ], function (
 	ko,
 	moment,
 	navigation,
 	ajax,
 	resources,
-	timepicker
+	timepicker,
+	lazy
     ) {
 
 	return function () {
@@ -23,9 +25,7 @@ define([
 		this.Date = ko.observable();
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
-
-		this.ShiftStart = ko.observable();
-		this.ShiftEnd = ko.observable();
+		this.Person = ko.observable();
 		
 		var personId;
 		var groupId;
@@ -58,6 +58,58 @@ define([
 			);
 		};
 
+		this.visibleLayers = ko.computed(function () {
+			var person = self.Person();
+			if (person) {
+				return lazy(person.Shifts())
+					.map(function(x) { return x.Layers(); })
+					.flatten()
+					.filter(function(x) { return x.OverlapsTimeLine(); })
+					.toArray();
+			}
+			return [];
+		});
+
+		this.ShiftStart = ko.computed(function () {
+			var visibleLayers = self.visibleLayers();
+			if (visibleLayers.length > 0) {
+				return moment(self.Date()).add("minutes", visibleLayers[0].StartMinutes());
+			}
+			return moment(self.Date()).startOf('d');
+		});
+		
+		this.ShiftEnd = ko.computed(function () {
+			var visibleLayers = self.visibleLayers();
+			if (visibleLayers.length > 0) {
+				return moment(self.Date()).add("minutes", visibleLayers[visibleLayers.length - 1].EndMinutes());
+			}
+			return moment(self.Date()).startOf('d').add('d', 1);
+		});
+		
+		this.DefaultStart = ko.computed(function () {
+			var now = moment();
+			var start;
+			if (self.ShiftStart() < now && now < self.ShiftEnd()) {
+				var minutes = Math.ceil(now.minute() / 15) * 15;
+				start = now.startOf('hour').minutes(minutes);
+				self.StartTime(start.format(resources.TimeFormatForMoment));
+			} else {
+				start = self.ShiftStart().clone();
+				if (self.visibleLayers().length > 0) {
+					self.StartTime(start.format(resources.TimeFormatForMoment));
+				} else {
+					self.StartTime(start.add("hours", 8).format(resources.TimeFormatForMoment));
+				}
+			}
+			return start;
+		});
+
+		this.DefaultEnd = ko.computed(function () {
+			self.EndTime(self.DefaultStart().clone().add("hours", 1).format(resources.TimeFormatForMoment));
+		});
+		
+
+		
 		var startTimeWithinShift = function () {
 			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) < 0;
 		};
@@ -71,31 +123,6 @@ define([
 			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
-		this.SetShiftStartAndEnd = function(data) {
-			var layers = data.Projection;
-			if (layers && layers.length > 0) {
-				self.ShiftStart(layers.length > 0 ? moment(layers[0].Start) : undefined);
-				self.ShiftEnd(layers.length > 0 ? moment(layers[layers.length - 1].Start).add('m', layers[layers.length - 1].Minutes) : undefined);
-				var now = moment();
-				var start;
-				if (self.ShiftStart() < now && now < self.ShiftEnd()) {
-					var minutes = Math.ceil(now.minute() / 15) * 15;
-					start = now.startOf('hour').minutes(minutes);
-					self.StartTime(start.format(resources.TimeFormatForMoment));
-				} else {
-					start = self.ShiftStart();
-					self.StartTime(start.format(resources.TimeFormatForMoment));
-				}
-				self.EndTime(start.clone().add("hours", 1).format(resources.TimeFormatForMoment));
-			} else {
-				self.ShiftStart(moment(self.Date()).startOf('d'));
-				self.ShiftEnd(moment(self.Date()).startOf('d').add('d', 1));
-				self.StartTime(self.ShiftStart().clone().add("hours", 8).format(resources.TimeFormatForMoment));
-				self.EndTime(self.ShiftStart().clone().add("hours", 17).format(resources.TimeFormatForMoment));
-			}
-			
-		};
-		
 		this.StartTimeWithinShift = ko.computed(function () {
 			if (self.ShiftStart() && self.ShiftEnd()) {
 				startTimeAsMoment = getMomentFromInput(self.StartTime());

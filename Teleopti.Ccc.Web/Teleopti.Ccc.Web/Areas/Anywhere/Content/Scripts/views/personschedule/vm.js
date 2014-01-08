@@ -165,7 +165,7 @@ define([
 				// make shiftstart and end computeds please!
 				if (person == self.SelectedPerson()) {
 					self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
-					self.AddActivityForm.SetShiftStartAndEnd(schedule);
+					self.AddActivityForm.Person(person);
 				}
 			}
 			
