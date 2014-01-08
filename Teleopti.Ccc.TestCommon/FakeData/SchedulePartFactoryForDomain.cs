@@ -133,19 +133,28 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return this;
         }
 
+		public SchedulePartFactoryForDomain AddOvertime()
+		{
+			return AddOvertime("overtime");
+		}
 
-        public SchedulePartFactoryForDomain AddOvertime()
+		public SchedulePartFactoryForDomain AddPersonalLayer()
+		{
+			return AddPersonalLayer("PersonalActivity");
+		}
+
+		public SchedulePartFactoryForDomain AddMainShiftLayer()
+		{
+			return AddMainShiftLayer("main");
+		}
+
+        public SchedulePartFactoryForDomain AddOvertime(string activityName)
         {
             var newMultiplicatorSet = new MultiplicatorDefinitionSet("multplic", MultiplicatorType.Overtime);
            IPersonPeriod period = _part.Person.Period(new DateOnly(CurrentPeriod.StartDateTime));
            period.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(newMultiplicatorSet);
-           _part.CreateAndAddOvertime(ActivityFactory.CreateActivity("overtime"), CurrentPeriod, newMultiplicatorSet);
+		   _part.CreateAndAddOvertime(ActivityFactory.CreateActivity(activityName), CurrentPeriod, newMultiplicatorSet);
             return this;
-        }
-
-        public SchedulePartFactoryForDomain AddPersonalLayer()
-        {
-			return AddPersonalLayer("PersonalActivity");
         }
 
 		public SchedulePartFactoryForDomain AddPersonalLayer(string activityName)
@@ -154,26 +163,17 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return this;
 		}
 
-
-
 		public SchedulePartFactoryForDomain AddPersonalLayer(IScheduleDay scheduleDay)
 		{
 			scheduleDay.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("PersonActivity"), CurrentPeriod);
 			return this;
 		}
 
-        public SchedulePartFactoryForDomain AddMainShiftLayer()
-        {
-	        return AddMainShiftLayer("main");
-        }
-
 		public SchedulePartFactoryForDomain AddMainShiftLayer(string activityName)
 		{
 			_part.CreateAndAddActivity(ActivityFactory.CreateActivity(activityName), CurrentPeriod, ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
 			return this;
 		}
-
-
     }
 }
 
