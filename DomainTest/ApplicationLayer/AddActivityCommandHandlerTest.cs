@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -29,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
-								   activityRepository, personRepository, new UtcTimeZone());
+								   activityRepository, personRepository, new UtcTimeZone(), null);
 
 			var command = new AddActivityCommand
 			{
@@ -64,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario), 
-								   activityRepository, personRepository, new UtcTimeZone());
+								   activityRepository, personRepository, new UtcTimeZone(), null);
 
 			var command = new AddActivityCommand
 			{
@@ -98,8 +102,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var target = new AddActivityCommandHandler(personAssignmentRepository,
 								   new ThisCurrentScenario(personAssignmentRepository.Single().Scenario),
 								   activityRepository, personRepository,
-								   new SpecificTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo())
-								   );
+								   new SpecificTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo()), null);
 
 			var command = new AddActivityCommand
 			{
@@ -114,6 +117,38 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var addedLayer = personAssignmentRepository.Single().ShiftLayers.Last();
 			addedLayer.Period.StartDateTime.Should().Be(TimeZoneHelper.ConvertToUtc(command.StartTime, TimeZoneInfoFactory.HawaiiTimeZoneInfo()));
 			addedLayer.Period.EndDateTime.Should().Be(TimeZoneHelper.ConvertToUtc(command.EndTime, TimeZoneInfoFactory.HawaiiTimeZoneInfo()));
+		}
+
+		[Test]
+		public void ShouldCreateNewPersonAssignmentIfNotExists()
+		{
+			var personRepository = new FakeWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
+			var addedActivity = ActivityFactory.CreateActivity("Added activity");
+			var activityRepository = new FakeWriteSideRepository<IActivity> { addedActivity };
+			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
+			var shiftCategoryRepository = MockRepository.GenerateMock<IShiftCategoryRepository>();
+			var shiftCategory = new ShiftCategory("Day");
+			shiftCategoryRepository.Stub(x => x.FindAll()).Return(new List<IShiftCategory> {shiftCategory});
+
+			var target = new AddActivityCommandHandler(personAssignmentRepository,
+								   new ThisCurrentScenario(ScenarioFactory.CreateScenarioWithId("   ", true)),
+								   activityRepository, personRepository,
+								   new UtcTimeZone(), shiftCategoryRepository
+								   );
+
+			personAssignmentRepository.Count().Should().Be.EqualTo(0);
+
+			var command = new AddActivityCommand
+			{
+				PersonId = personRepository.Single().Id.Value,
+				Date = new DateOnly(2013, 11, 14),
+				ActivityId = addedActivity.Id.Value
+			};
+			target.Handle(command);
+
+			personAssignmentRepository.Count().Should().Be.EqualTo(1);
+			personAssignmentRepository.Single().MainActivities().Single().Payload.Name.Should().Be("Added activity");
+			personAssignmentRepository.Single().ShiftCategory.Should().Be.SameInstanceAs(shiftCategory);
 		}
 
 	}
