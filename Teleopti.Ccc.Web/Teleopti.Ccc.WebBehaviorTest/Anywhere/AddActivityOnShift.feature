@@ -120,12 +120,12 @@ Scenario: Prevent creation of second shift
 	| Activity   | Phone |
 	| Start time | 17:00 |
 	| End time   | 18:00 |
-	Then I should see the alert 'With Add Activity you cannot create a second shift'
+	Then I should see the alert 'Cannot Create Second Shift When Adding Activity'
 @ignore
 # THE SCENARIOS BELOW ARE APPLICABLE ONLY IF WE CAN ADD ACTIVITIES TO EMPTY DAYS OUT OF THE BOX
 Scenario: Default times
 	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-17 13:20'
+	And the current time is '2013-11-18 13:20'
 	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	Then I should see the add activity form with
 	| Field      | Value |
@@ -150,7 +150,7 @@ Scenario: Add to day with no shift
 # THE SCENARIOS BELOW ARE APPLICABLE IF WE DECIDE TO ONLY ADD ACTIVITIES TO EXISTING SHIFTS INSTEAD
 Scenario: Default times (2)
 	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-17 13:20'
+	And the current time is '2013-11-18 13:20'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
