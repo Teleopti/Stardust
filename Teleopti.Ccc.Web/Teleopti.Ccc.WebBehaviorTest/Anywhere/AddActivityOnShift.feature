@@ -105,8 +105,24 @@ Scenario: Add over midnight on night shift
 	| Start time | 2013-11-19 23:00 |
 	| End time   | 2013-11-20 01:00 |
 	| Color      | Yellow           |
-@ignore
+
 Scenario: Prevent creation of second shift
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2013-11-19 11:00 |
+	| End time       | 2013-11-19 17:00 |
+	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
+	And I input these add activity values
+	| Field      | Value |
+	| Activity   | Phone |
+	| Start time | 17:01 |
+	| End time   | 18:00 |
+	Then I should see the alert 'Cannot Create Second Shift When Adding Activity'
+
+Scenario: Can extend existing shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
@@ -120,7 +136,12 @@ Scenario: Prevent creation of second shift
 	| Activity   | Phone |
 	| Start time | 17:00 |
 	| End time   | 18:00 |
-	Then I should see the alert 'Cannot Create Second Shift When Adding Activity'
+	And I initiate 'apply'
+	Then I should see 'Pierre Baldi' with the scheduled activity
+	| Field      | Value |
+	| Start time | 17:00 |
+	| End time   | 18:00 |
+	| Color      | Green |
 
 Scenario: Default times without shift today
 	Given I have the role 'Anywhere Team Green'

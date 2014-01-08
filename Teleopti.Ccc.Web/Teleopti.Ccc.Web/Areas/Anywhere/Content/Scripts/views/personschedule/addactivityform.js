@@ -111,7 +111,7 @@ define([
 
 		
 		var startTimeWithinShift = function () {
-			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) < 0;
+			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) <= 0;
 		};
 
 		var nightShiftWithEndTimeOnNextDay = function () {
