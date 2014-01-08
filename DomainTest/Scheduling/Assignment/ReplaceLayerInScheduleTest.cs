@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
 
 			scheduleDay.PersonAssignment().OvertimeLayers().Select(l => l.Payload.Description.Name)
-										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+										 .Should().Have.SameSequenceAs("activity1", "activity2", "activity3");
 		}
 	}
 }

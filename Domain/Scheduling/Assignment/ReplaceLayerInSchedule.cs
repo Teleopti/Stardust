@@ -47,17 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
 			if (layerAsPersonal != null)
 			{
-				var personalShiftLayers = assignment.PersonalLayers().ToList();
-				var indexOfLayer = personalShiftLayers.IndexOf(layerAsPersonal);
+				var shiftLayers = assignment.ShiftLayers.ToList();
+				var indexOfLayer = shiftLayers.IndexOf(layerAsPersonal);
 				if (indexOfLayer > -1)
 				{
-					personalShiftLayers.RemoveAt(indexOfLayer);
-					personalShiftLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
-					assignment.ClearPersonalLayers();
-					foreach (var layer in personalShiftLayers)
-					{
-						assignment.AddPersonalLayer(layer.Payload, layer.Period);
-					}
+					assignment.RemoveLayer(layerAsPersonal);
+					assignment.InsertPersonalLayer(newActivity, newPeriod, indexOfLayer);
 					return true;
 				}
 			}
@@ -69,17 +64,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
 			if (layerAsOvertime != null)
 			{
-				var overtimeLayers = assignment.OvertimeLayers().ToList();
-				var indexOfLayer = overtimeLayers.IndexOf(layerAsOvertime);
+				var shiftLayers = assignment.ShiftLayers.ToList();
+				var indexOfLayer = shiftLayers.IndexOf(layerAsOvertime);
 				if (indexOfLayer > -1)
 				{
-					overtimeLayers.RemoveAt(indexOfLayer);
-					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));
-					assignment.ClearOvertimeLayers();
-					foreach (var layer in overtimeLayers)
-					{
-						assignment.AddOvertimeLayer(layer.Payload, layer.Period, layer.DefinitionSet);
-					}
+					assignment.RemoveLayer(layerAsOvertime);
+					assignment.InsertOvertimeLayer(newActivity, newPeriod, indexOfLayer,layerAsOvertime.DefinitionSet);
 					return true;
 				}
 			}
