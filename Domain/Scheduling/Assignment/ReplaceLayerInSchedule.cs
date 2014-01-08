@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (ass != null)
 			{
 				if (tryReplaceMainLayer(ass, layerToRemove, newActivity, newPeriod) ||
-				    tryReplacePersonalLayer(ass, layerToRemove, newActivity, newPeriod) ||
-				    tryReplaceOvertimeLayer(ass, layerToRemove, newActivity, newPeriod))
+					tryReplacePersonalLayer(ass, layerToRemove, newActivity, newPeriod) ||
+					tryReplaceOvertimeLayer(ass, layerToRemove, newActivity, newPeriod))
 				{
 					return;
 				}
@@ -24,13 +24,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
 		}
 
+
+
 		private static bool tryReplaceMainLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
 			var layerAsMain = layerToRemove as IMainShiftLayer;
 			if (layerAsMain != null)
 			{
-				var mainLayers = assignment.MainActivities().ToList();
-				var indexOfLayer = mainLayers.IndexOf(layerAsMain);
+				var indexOfLayer = assignment.ShiftLayers.ToList().IndexOf(layerAsMain);
 				if (indexOfLayer > -1)
 				{
 					assignment.RemoveActivity(layerAsMain);
@@ -46,17 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
 			if (layerAsPersonal != null)
 			{
-				var mainLayers = assignment.PersonalActivities().ToList();
-				var indexOfLayer = mainLayers.IndexOf(layerAsPersonal);
+				var shiftLayers = assignment.ShiftLayers.ToList();
+				var indexOfLayer = shiftLayers.IndexOf(layerAsPersonal);
 				if (indexOfLayer > -1)
 				{
-					mainLayers.RemoveAt(indexOfLayer);
-					mainLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
-					assignment.ClearPersonalActivities();
-					foreach (var layer in mainLayers)
-					{
-						assignment.AddPersonalActivity(layer.Payload, layer.Period);
-					}
+					assignment.RemoveLayer(layerAsPersonal);
+					assignment.InsertPersonalLayer(newActivity, newPeriod, indexOfLayer);
 					return true;
 				}
 			}
@@ -68,17 +64,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsOvertime = layerToRemove as IOvertimeShiftLayer;
 			if (layerAsOvertime != null)
 			{
-				var overtimeLayers = assignment.OvertimeActivities().ToList();
-				var indexOfLayer = overtimeLayers.IndexOf(layerAsOvertime);
+				var shiftLayers = assignment.ShiftLayers.ToList();
+				var indexOfLayer = shiftLayers.IndexOf(layerAsOvertime);
 				if (indexOfLayer > -1)
 				{
-					overtimeLayers.RemoveAt(indexOfLayer);
-					overtimeLayers.Insert(indexOfLayer, new OvertimeShiftLayer(newActivity, newPeriod, layerAsOvertime.DefinitionSet));
-					assignment.ClearOvertimeActivities();
-					foreach (var layer in overtimeLayers)
-					{
-						assignment.AddOvertimeActivity(layer.Payload, layer.Period, layer.DefinitionSet);
-					}
+					assignment.RemoveLayer(layerAsOvertime);
+					assignment.InsertOvertimeLayer(newActivity, newPeriod, indexOfLayer,layerAsOvertime.DefinitionSet);
 					return true;
 				}
 			}

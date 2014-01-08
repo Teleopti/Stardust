@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static void moveLayer(IPersonAssignment personAssignment, ILayer<IActivity> layer, int positionMove)
 		{
+
+
 			if (layer is IMainShiftLayer)
 			{
 				var layers = createNewCollectionOfLayers(personAssignment.MainActivities(), layer, positionMove);

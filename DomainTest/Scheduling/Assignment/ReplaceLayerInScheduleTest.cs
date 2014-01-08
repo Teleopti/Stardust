@@ -123,8 +123,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain()
 											.AddOvertime()
 											.AddMainShiftLayer()
-											.AddMainShiftLayer()
 											.AddPersonalLayer()
+											.AddPersonalLayer()
+											.AddMainShiftLayer()
 											.CreatePart();
 			target.Replace(scheduleDay, scheduleDay.PersonAssignment().MainActivities().First(), newActivity, new DateTimePeriod());
 			scheduleDay.PersonAssignment().MainActivities().First().Payload
@@ -207,6 +208,90 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.Replace(scheduleDay, secondMainShiftLayer, newPayload, newPeriod);
 
 			scheduleDay.PersonAssignment().MainActivities().First().Should().Be.SameInstanceAs(firstMainShiftLayer);
+		}
+
+		[Test]
+		public void ReplaceMainShiftLayer_WhenOtherLayersExistsInMixedOrder_ShouldNotChangeTheOrderOfTheMainShiftLayers()
+		{
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity1")
+											.AddMainShiftLayer("activity2")
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity3")
+											.AddPersonalLayer()
+											.AddPersonalLayer()
+											.CreatePart();
+
+			var layer = scheduleDay.PersonAssignment().MainLayers().First(l => l.Payload.Name == "activity2");
+			target.Replace(scheduleDay,layer,layer.Payload,layer.Period);
+
+			scheduleDay.PersonAssignment().MainLayers().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity2", "activity3");
+		}
+
+		[Test]
+		public void ReplaceMainShiftLayer_WhenOnlyOneLayer_ShouldNotChangeTheAmountOfLayers()
+		{
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddMainShiftLayer()
+											.CreatePart();
+
+			var layer = scheduleDay.PersonAssignment().MainLayers().First();
+			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
+
+			scheduleDay.PersonAssignment().MainLayers().Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ReplacePersonalShiftLayer_WhenOtherLayersExistsInMixedVerticalOrder_ShouldNotChangeTheOrderOfThePersonalShiftLayers()
+		{
+			//var target = new MoveLayerVertical();
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer("activity1")
+											.AddMainShiftLayer()
+											.AddMainShiftLayer()
+											.AddPersonalLayer("activity2")
+											.AddMainShiftLayer()
+											.AddOvertime()
+											.AddPersonalLayer("activity3")
+											.CreatePart();
+
+			var layer = scheduleDay.PersonAssignment().PersonalLayers().First(l => l.Payload.Name == "activity2");
+			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
+
+			scheduleDay.PersonAssignment().PersonalLayers().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity2", "activity3");
+		}
+
+		[Test]
+		public void ReplaceOvertimeLayer_WhenOtherLayersExistsInMixedVerticalOrder_ShouldNotChangeTheOrderOfTheOvertimeLayers()
+		{
+			var target = new ReplaceLayerInSchedule();
+
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime("activity1")
+											.AddPersonalLayer()
+											.AddMainShiftLayer()
+											.AddMainShiftLayer()
+											.AddOvertime("activity2")
+											.AddPersonalLayer()
+											.AddMainShiftLayer()
+											.AddPersonalLayer()
+											.AddPersonalLayer()
+											.AddOvertime("activity3")
+											.CreatePart();
+
+			var layer = scheduleDay.PersonAssignment().OvertimeLayers().First(l => l.Payload.Name == "activity2");
+			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
+
+			scheduleDay.PersonAssignment().OvertimeLayers().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity2", "activity3");
 		}
 	}
 }

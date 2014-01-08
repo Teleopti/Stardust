@@ -314,6 +314,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		}
 
+		public virtual void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index,
+		                                IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
+		{
+			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
+			layer.SetParent(this);
+			_shiftLayers.Insert(index,layer);
+		}
+
+		public virtual void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index)
+		{
+			var layer = new PersonalShiftLayer(activity, period);
+			layer.SetParent(this);
+			_shiftLayers.Insert(index,layer);
+		}
+
 		public virtual IDayOff DayOff()
 		{
 			if (_dayOffTemplate == null)
