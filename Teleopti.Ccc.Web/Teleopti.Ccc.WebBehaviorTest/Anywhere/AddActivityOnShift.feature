@@ -79,10 +79,10 @@ Scenario: Add after midnight on night shift
 	| End time   | 02:00 |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-20 01:00 |
-	| End time   | 2013-11-20 02:00 |
-	| Color      | Yellow           |
+	| Field      | Value  |
+	| Start time | 01:00  |
+	| End time   | 02:00  |
+	| Color      | Yellow |
 
 @ignore
 Scenario: Add over midnight on night shift
@@ -101,10 +101,10 @@ Scenario: Add over midnight on night shift
 	| End time   | 01:00 |
 	And I initiate 'apply'
 	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value            |
-	| Start time | 2013-11-19 23:00 |
-	| End time   | 2013-11-20 01:00 |
-	| Color      | Yellow           |
+	| Field      | Value  |
+	| Start time | 23:00  |
+	| End time   | 01:00  |
+	| Color      | Yellow |
 
 Scenario: Prevent creation of second shift
 	Given I have the role 'Anywhere Team Green'
