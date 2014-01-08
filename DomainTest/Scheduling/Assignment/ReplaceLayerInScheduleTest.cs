@@ -233,6 +233,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ReplaceMainShiftLayer_WhenOnlyOneLayer_ShouldNotChangeTheAmountOfLayers()
+		{
+			var target = new ReplaceLayerInSchedule();
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddMainShiftLayer()
+											.CreatePart();
+
+			var layer = scheduleDay.PersonAssignment().MainLayers().First();
+			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
+
+			scheduleDay.PersonAssignment().MainLayers().Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ReplacePersonalShiftLayer_WhenOtherLayersExistsInMixedVerticalOrder_ShouldNotChangeTheOrderOfThePersonalShiftLayers()
 		{
 			//var target = new MoveLayerVertical();

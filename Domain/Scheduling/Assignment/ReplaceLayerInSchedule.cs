@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (ass != null)
 			{
 				if (tryReplaceMainLayer(ass, layerToRemove, newActivity, newPeriod) ||
-				    tryReplacePersonalLayer(ass, layerToRemove, newActivity, newPeriod) ||
-				    tryReplaceOvertimeLayer(ass, layerToRemove, newActivity, newPeriod))
+					tryReplacePersonalLayer(ass, layerToRemove, newActivity, newPeriod) ||
+					tryReplaceOvertimeLayer(ass, layerToRemove, newActivity, newPeriod))
 				{
 					return;
 				}
@@ -24,13 +24,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			throw new ArgumentException(string.Format(CultureInfo.CurrentUICulture, exMessageLayerNotFound, layerToRemove));
 		}
 
+
+
 		private static bool tryReplaceMainLayer(IPersonAssignment assignment, ILayer<IActivity> layerToRemove, IActivity newActivity, DateTimePeriod newPeriod)
 		{
 			var layerAsMain = layerToRemove as IMainShiftLayer;
 			if (layerAsMain != null)
 			{
-				var mainLayers = assignment.MainLayers().ToList();
-				var indexOfLayer = mainLayers.IndexOf(layerAsMain);
+				var indexOfLayer = assignment.ShiftLayers.ToList().IndexOf(layerAsMain);
 				if (indexOfLayer > -1)
 				{
 					assignment.RemoveLayer(layerAsMain);
@@ -46,14 +47,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerAsPersonal = layerToRemove as IPersonalShiftLayer;
 			if (layerAsPersonal != null)
 			{
-				var mainLayers = assignment.PersonalLayers().ToList();
-				var indexOfLayer = mainLayers.IndexOf(layerAsPersonal);
+				var personalShiftLayers = assignment.PersonalLayers().ToList();
+				var indexOfLayer = personalShiftLayers.IndexOf(layerAsPersonal);
 				if (indexOfLayer > -1)
 				{
-					mainLayers.RemoveAt(indexOfLayer);
-					mainLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
+					personalShiftLayers.RemoveAt(indexOfLayer);
+					personalShiftLayers.Insert(indexOfLayer, new PersonalShiftLayer(newActivity, newPeriod));
 					assignment.ClearPersonalLayers();
-					foreach (var layer in mainLayers)
+					foreach (var layer in personalShiftLayers)
 					{
 						assignment.AddPersonalLayer(layer.Payload, layer.Period);
 					}
