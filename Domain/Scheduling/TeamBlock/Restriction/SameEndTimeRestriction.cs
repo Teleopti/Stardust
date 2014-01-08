@@ -26,20 +26,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
                     var schedule = matrix.GetScheduleDayByKey(dateOnly);
                     if (schedule == null)
                         continue;
-
-                    var period = schedule.DaySchedulePart().ProjectionService().CreateProjection().Period();
-                    if (period == null) continue;
-                    if (endTimeLimitation.StartTime == null && endTimeLimitation.EndTime == null)
-                    {
-                        var timePeriod = period.Value.TimePeriod(_timeZone);
-                        endTimeLimitation = new EndTimeLimitation(timePeriod.EndTime, timePeriod.EndTime);
-                    }
-                    else
-                    {
-                        var timePeriod = period.Value.TimePeriod(_timeZone);
-                        if (endTimeLimitation.StartTime != timePeriod.EndTime || endTimeLimitation.EndTime != timePeriod.EndTime)
-							return null;
-                    }
+					var scheduleDay = schedule.DaySchedulePart();
+	                if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
+	                {
+		                var period = scheduleDay.ProjectionService().CreateProjection().Period();
+		                if (period == null) continue;
+		                if (endTimeLimitation.StartTime == null && endTimeLimitation.EndTime == null)
+		                {
+			                var timePeriod = period.Value.TimePeriod(_timeZone);
+			                endTimeLimitation = new EndTimeLimitation(timePeriod.EndTime, timePeriod.EndTime);
+		                }
+		                else
+		                {
+			                var timePeriod = period.Value.TimePeriod(_timeZone);
+			                if (endTimeLimitation.StartTime != timePeriod.EndTime ||
+			                    endTimeLimitation.EndTime != timePeriod.EndTime)
+				                return null;
+		                }
+	                }
                 }
             }
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),

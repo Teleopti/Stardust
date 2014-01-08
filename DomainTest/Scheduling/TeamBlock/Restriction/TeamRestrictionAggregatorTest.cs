@@ -124,6 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(visualLayerCollection1.Period()).Return(period1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mocks.Playback())
@@ -168,6 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);
 				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
 				Expect.Call(visualLayerCollection1.Period()).Return(period1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mocks.Playback())

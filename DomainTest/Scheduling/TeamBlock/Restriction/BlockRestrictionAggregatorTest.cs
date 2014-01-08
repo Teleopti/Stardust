@@ -189,6 +189,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
 				Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
 				Expect.Call(projectionService2.CreateProjection()).Return(visualLayerCollection2);
 				Expect.Call(visualLayerCollection2.Period()).Return(period2);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
 			}
 
 			using (_mocks.Playback())
