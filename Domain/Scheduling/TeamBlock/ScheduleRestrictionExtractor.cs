@@ -229,19 +229,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var schedule = matrix.GetScheduleDayByKey(dateOnly);
 					if (schedule == null)
 						continue;
-
-					var period = schedule.DaySchedulePart().ProjectionService().CreateProjection().Period();
-					if (period == null) continue;
-					if (startTimeLimitation.StartTime == null && startTimeLimitation.EndTime == null)
+					var scheduleDay = schedule.DaySchedulePart();
+					if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 					{
-						var timePeriod = period.Value.TimePeriod(timeZone);
-						startTimeLimitation = new StartTimeLimitation(timePeriod.StartTime, timePeriod.StartTime);
-					}
-					else
-					{
-						var timePeriod = period.Value.TimePeriod(timeZone);
-						if (startTimeLimitation.StartTime != timePeriod.StartTime || startTimeLimitation.EndTime != timePeriod.StartTime)
-							return null;
+						var period = scheduleDay.ProjectionService().CreateProjection().Period();
+						if (period == null) continue;
+						if (startTimeLimitation.StartTime == null && startTimeLimitation.EndTime == null)
+						{
+							var timePeriod = period.Value.TimePeriod(timeZone);
+							startTimeLimitation = new StartTimeLimitation(timePeriod.StartTime, timePeriod.StartTime);
+						}
+						else
+						{
+							var timePeriod = period.Value.TimePeriod(timeZone);
+							if (startTimeLimitation.StartTime != timePeriod.StartTime || startTimeLimitation.EndTime != timePeriod.StartTime)
+								return null;
+						}
 					}
 				}
 			}
@@ -262,19 +265,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var schedule = matrix.GetScheduleDayByKey(dateOnly);
 					if (schedule == null)
 						continue;
-
-					var period = schedule.DaySchedulePart().ProjectionService().CreateProjection().Period();
-					if (period == null) continue;
-					if (endTimeLimitation.StartTime == null && endTimeLimitation.EndTime == null)
+					var scheduleDay = schedule.DaySchedulePart();
+					if (scheduleDay.SignificantPart() == SchedulePartView.MainShift)
 					{
-						var timePeriod = period.Value.TimePeriod(timeZone);
-						endTimeLimitation = new EndTimeLimitation(timePeriod.EndTime, timePeriod.EndTime);
-					}
-					else
-					{
-						var timePeriod = period.Value.TimePeriod(timeZone);
-						if (endTimeLimitation.StartTime != timePeriod.EndTime || endTimeLimitation.EndTime != timePeriod.EndTime)
-							return null;
+						var period = scheduleDay.ProjectionService().CreateProjection().Period();
+						if (period == null) continue;
+						if (endTimeLimitation.StartTime == null && endTimeLimitation.EndTime == null)
+						{
+							var timePeriod = period.Value.TimePeriod(timeZone);
+							endTimeLimitation = new EndTimeLimitation(timePeriod.EndTime, timePeriod.EndTime);
+						}
+						else
+						{
+							var timePeriod = period.Value.TimePeriod(timeZone);
+							if (endTimeLimitation.StartTime != timePeriod.EndTime || endTimeLimitation.EndTime != timePeriod.EndTime)
+								return null;
+						}
 					}
 				}
 			}

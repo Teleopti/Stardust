@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -407,6 +405,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(_teamBlockInfo)).Return(new EffectiveRestriction(new StartTimeLimitation(),
                                                         new EndTimeLimitation(),
                                                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>()));
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
@@ -451,6 +451,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
                 Expect.Call(projectionService2.CreateProjection()).Return(visualLayerCollection2);
                 Expect.Call(visualLayerCollection2.Period()).Return(period2);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
@@ -495,6 +497,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(_teamBlockInfo)).Return(new EffectiveRestriction(new StartTimeLimitation(),
                                                         new EndTimeLimitation(),
                                                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>()));
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
@@ -539,6 +543,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(scheduleDay2);
                 Expect.Call(projectionService2.CreateProjection()).Return(visualLayerCollection2);
                 Expect.Call(visualLayerCollection2.Period()).Return(period2);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             }
             using (_mocks.Playback())
             {
@@ -584,6 +590,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(_teamBlockInfo)).Return(new EffectiveRestriction(new StartTimeLimitation(),
                                                         new EndTimeLimitation(),
                                                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>()));
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
+				Expect.Call(scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
             }
             using (_mocks.Playback())
             {
@@ -618,6 +626,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1).Repeat.Twice();
                 Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1).Repeat.Twice();
                 Expect.Call(visualLayerCollection1.Period()).Return(period1).Repeat.Twice();
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
             }
             using (_mocks.Playback())
             {
@@ -856,6 +865,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(_teamBlockInfo)).Return(new EffectiveRestriction(new StartTimeLimitation(),
                                                         new EndTimeLimitation(),
                                                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>()));
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
@@ -917,6 +927,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_nightlyRestRestrictionForTeamBlock.AggregatedNightlyRestRestriction(_teamBlockInfo)).Return(new EffectiveRestriction(new StartTimeLimitation(),
                                                         new EndTimeLimitation(),
                                                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>()));
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
