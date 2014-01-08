@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var indexOfLayer = shiftLayers.IndexOf(layerAsPersonal);
 				if (indexOfLayer > -1)
 				{
-					assignment.RemoveLayer(layerAsPersonal);
+					assignment.RemoveActivity(layerAsPersonal);
 					assignment.InsertPersonalLayer(newActivity, newPeriod, indexOfLayer);
 					return true;
 				}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				var indexOfLayer = shiftLayers.IndexOf(layerAsOvertime);
 				if (indexOfLayer > -1)
 				{
-					assignment.RemoveLayer(layerAsOvertime);
+					assignment.RemoveActivity(layerAsOvertime);
 					assignment.InsertOvertimeLayer(newActivity, newPeriod, indexOfLayer,layerAsOvertime.DefinitionSet);
 					return true;
 				}

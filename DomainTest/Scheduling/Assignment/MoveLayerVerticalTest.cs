@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			target.MoveUp(scheduleDay.PersonAssignment(), scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3"));
 
-			scheduleDay.PersonAssignment().MainLayers().Select(l => l.Payload.Description.Name)
+			scheduleDay.PersonAssignment().MainActivities().Select(l => l.Payload.Description.Name)
 			                             .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
 		}
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			target.MoveUp(scheduleDay.PersonAssignment(), scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3"));
 
-			scheduleDay.PersonAssignment().PersonalLayers().Select(l => l.Payload.Description.Name)
+			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
 		}
 	}

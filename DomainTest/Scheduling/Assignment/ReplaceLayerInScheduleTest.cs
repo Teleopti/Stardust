@@ -225,10 +225,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddPersonalLayer()
 											.CreatePart();
 
-			var layer = scheduleDay.PersonAssignment().MainLayers().First(l => l.Payload.Name == "activity2");
+			var layer = scheduleDay.PersonAssignment().MainActivities().First(l => l.Payload.Name == "activity2");
 			target.Replace(scheduleDay,layer,layer.Payload,layer.Period);
 
-			scheduleDay.PersonAssignment().MainLayers().Select(l => l.Payload.Description.Name)
+			scheduleDay.PersonAssignment().MainActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity2", "activity3");
 		}
 
@@ -240,10 +240,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddMainShiftLayer()
 											.CreatePart();
 
-			var layer = scheduleDay.PersonAssignment().MainLayers().First();
+			var layer = scheduleDay.PersonAssignment().MainActivities().First();
 			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
 
-			scheduleDay.PersonAssignment().MainLayers().Count().Should().Be.EqualTo(1);
+			scheduleDay.PersonAssignment().MainActivities().Count().Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -262,10 +262,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddPersonalLayer("activity3")
 											.CreatePart();
 
-			var layer = scheduleDay.PersonAssignment().PersonalLayers().First(l => l.Payload.Name == "activity2");
+			var layer = scheduleDay.PersonAssignment().PersonalActivities().First(l => l.Payload.Name == "activity2");
 			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
 
-			scheduleDay.PersonAssignment().PersonalLayers().Select(l => l.Payload.Description.Name)
+			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity2", "activity3");
 		}
 
@@ -287,10 +287,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddOvertime("activity3")
 											.CreatePart();
 
-			var layer = scheduleDay.PersonAssignment().OvertimeLayers().First(l => l.Payload.Name == "activity2");
+			var layer = scheduleDay.PersonAssignment().OvertimeActivities().First(l => l.Payload.Name == "activity2");
 			target.Replace(scheduleDay, layer, layer.Payload, layer.Period);
 
-			scheduleDay.PersonAssignment().OvertimeLayers().Select(l => l.Payload.Description.Name)
+			scheduleDay.PersonAssignment().OvertimeActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity2", "activity3");
 		}
 	}
