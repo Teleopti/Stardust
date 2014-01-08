@@ -82,12 +82,6 @@ define([
 			return undefined;
 		});
 		
-		this.HasShift = ko.computed(function () {
-			if(self.Shift())
-				return self.Shift().Layers().length > 0;
-			return false;
-		});
-		
 		this.DayOff = ko.computed(function () {
 			if (self.SelectedPerson()) {
 				return self.SelectedPerson().DayOffs()[0];

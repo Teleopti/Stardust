@@ -26,10 +26,6 @@ define([
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
 
-		this.HasShift = ko.computed(function () {
-			return self.Shifts().length > 0;
-		});
-
 		this.ContractTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 			return time.format("H:mm");
