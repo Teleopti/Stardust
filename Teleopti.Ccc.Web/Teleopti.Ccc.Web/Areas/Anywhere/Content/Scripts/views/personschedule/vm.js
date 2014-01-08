@@ -165,9 +165,10 @@ define([
 				// make shiftstart and end computeds please!
 				if (person == self.SelectedPerson()) {
 					self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
-					self.AddActivityForm.Person(person);
 				}
 			}
+
+			self.AddActivityForm.Person(personForId(self.PersonId()));
 			
 			self.Persons().sort(function (first, second) {
 				first = first.OrderBy();
