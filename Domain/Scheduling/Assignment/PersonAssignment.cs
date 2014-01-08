@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SetDayOff(null);
 		}
 
-		public void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index,
+		public virtual void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index,
 		                                IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 		{
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Insert(index,layer);
 		}
 
-		public void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index)
+		public virtual void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index)
 		{
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
