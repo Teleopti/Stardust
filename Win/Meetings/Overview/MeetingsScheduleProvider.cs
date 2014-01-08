@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             var toRemove = new List<IScheduleAppointment>();
             foreach (IScheduleAppointment appointment in _lastList)
             {
-                if(appointment.StartTime < startDate.Date || appointment.StartTime > endDate.Date)
+                if(appointment.StartTime < startDate.Date || appointment.StartTime.Date > endDate.Date)
                     toRemove.Add(appointment);
             }
             foreach (var scheduleAppointment in toRemove)
