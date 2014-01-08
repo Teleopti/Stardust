@@ -1,5 +1,4 @@
-﻿using System.Web;
-using Teleopti.Ccc.Domain.Auditing;
+﻿using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -28,7 +27,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			_findApplicationUser = findApplicationUser;
 			_ipAddressResolver = ipAddressResolver;
 		}
-
 
 		public AuthenticateResult AuthenticateWindowsUser(string dataSourceName)
 		{
@@ -59,7 +57,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				uow.PersistAll();
 				return new AuthenticateResult {DataSource = dataSource, Person = authResult.Person, Successful = authResult.Successful, HasMessage = authResult.HasMessage, Message = authResult.Message, PasswordExpired = authResult.PasswordExpired};
 			}
-
 		}
 
 		public void SaveAuthenticateResult(string userName, AuthenticateResult result)
@@ -87,9 +84,5 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				uow.PersistAll();
 			}
 		}
-
-		
-
-
 	}
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -14,6 +13,5 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public IEnumerable<GroupScheduleLayerViewModel> Projection { get; set; }
 		public bool IsFullDayAbsence { get; set; }
 		public GroupScheduleDayOffViewModel DayOff { get; set; }
-
 	}
 }

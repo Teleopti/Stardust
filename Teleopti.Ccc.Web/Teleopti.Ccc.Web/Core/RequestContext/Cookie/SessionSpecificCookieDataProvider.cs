@@ -2,7 +2,6 @@
 using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 
