@@ -145,9 +145,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public SchedulePartFactoryForDomain AddPersonalLayer()
         {
-            _part.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity("PersonActivity"),CurrentPeriod);
-            return this;
+			return AddPersonalLayer("PersonalActivity");
         }
+
+		public SchedulePartFactoryForDomain AddPersonalLayer(string activityName)
+		{
+			_part.CreateAndAddPersonalActivity(ActivityFactory.CreateActivity(activityName), CurrentPeriod);
+			return this;
+		}
+
 
 
 		public SchedulePartFactoryForDomain AddPersonalLayer(IScheduleDay scheduleDay)
@@ -158,9 +164,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public SchedulePartFactoryForDomain AddMainShiftLayer()
         {
-	        _part.CreateAndAddActivity(ActivityFactory.CreateActivity("Main"), CurrentPeriod, ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
-            return this;
+	        return AddMainShiftLayer("main");
         }
+
+		public SchedulePartFactoryForDomain AddMainShiftLayer(string activityName)
+		{
+			_part.CreateAndAddActivity(ActivityFactory.CreateActivity(activityName), CurrentPeriod, ShiftCategoryFactory.CreateShiftCategory("Shiftcategory"));
+			return this;
+		}
+
+
     }
 }
 

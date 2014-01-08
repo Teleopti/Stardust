@@ -123,8 +123,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain()
 											.AddOvertime()
 											.AddMainShiftLayer()
-											.AddMainShiftLayer()
 											.AddPersonalLayer()
+											.AddPersonalLayer()
+											.AddMainShiftLayer()
 											.CreatePart();
 			target.Replace(scheduleDay, scheduleDay.PersonAssignment().MainLayers().First(), newActivity, new DateTimePeriod());
 			scheduleDay.PersonAssignment().MainLayers().First().Payload
