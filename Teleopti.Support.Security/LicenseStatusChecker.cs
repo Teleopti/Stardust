@@ -1,13 +1,15 @@
 using System;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Threading;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using log4net.Config;
+using log4net;
 
 namespace Teleopti.Support.Security
 {
     public class LicenseStatusChecker : ICommandLineCommand
     {
+		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
         public int Execute(CommandLineArgument commandLineArgument)
         {
@@ -20,14 +22,12 @@ namespace Teleopti.Support.Security
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
+                    log.Debug("Could not open Sql Connection. Error message: "+ ex.Message);
                     return 1;
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
+                    log.Debug("Could not open Sql Connection. Error message: "+ ex.Message);
                     return 1;
                 }
                 //Check version
@@ -38,12 +38,11 @@ namespace Teleopti.Support.Security
                     var versionCount = (int)command.ExecuteScalar();
                     if (versionCount > 0)
                     {
-                        Console.WriteLine("The Check has been done.");
-                        Thread.Sleep(TimeSpan.FromSeconds(2));
                         return 0;
                     }
                 }
 
+				log.Debug("LicenseStatusChecker ...");
                 var status = new LicenseStatusXml
                                  {
                                      StatusOk = true,
@@ -65,14 +64,11 @@ namespace Teleopti.Support.Security
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine("Could not save the status: {0}", ex.Message);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
+                    log.Debug("Could not save the status: "+ ex.Message);
                     return 1;
                 }
-                
-                Thread.Sleep(TimeSpan.FromSeconds(2));
             }
-
+			log.Debug("LicenseStatusChecker. Done!");
 	        return 0;
         }
     }
