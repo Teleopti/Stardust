@@ -197,6 +197,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.Broker.Backplane", "Teleopti.Ccc.Web.Broker.Backplane\Teleopti.Ccc.Web.Broker.Backplane.csproj", "{31C00166-E856-49D3-A664-424224D90C2C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.MessagingTest", "Teleopti.MessagingTest\Teleopti.MessagingTest.csproj", "{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1259,6 +1261,18 @@ Global
 		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{31C00166-E856-49D3-A664-424224D90C2C}.Release|x86.ActiveCfg = Release|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Release|.NET.ActiveCfg = Release|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{FD9C18B6-5E4F-4F79-9472-ACA3240AC4D8}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
