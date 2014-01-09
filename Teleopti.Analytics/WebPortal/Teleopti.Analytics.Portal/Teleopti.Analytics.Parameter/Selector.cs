@@ -20,7 +20,6 @@ namespace Teleopti.Analytics.Parameters
     {
         private Guid _reportId;
         private int _savedId = -1;
-        private ValidationSummary _valSum;
         private IList<SqlParameter> _startParams = new List<SqlParameter>();
         private IList<SqlParameter> _params;
         private IList<string> _paramTexts;
@@ -525,11 +524,6 @@ namespace Teleopti.Analytics.Parameters
 			writer.AddAttribute(HtmlTextWriterAttribute.Colspan, "3");
 			writer.AddStyleAttribute("border-bottom", "none");
 			writer.RenderBeginTag(HtmlTextWriterTag.Td);
-
-			_valSum = new ValidationSummary { ForeColor = Color.Red };
-
-			Controls.Add(_valSum);
-			_valSum.RenderControl(writer);
 
 			writer.RenderEndTag();
 			writer.RenderEndTag();
