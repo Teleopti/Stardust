@@ -27,20 +27,7 @@ Background:
 	| Name  | Lunch  |
 	| Color | Yellow |
 
-Scenario: View form with shift
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-18 11:00 |
-	| End time       | 2013-11-18 17:00 |
-	When I view schedules for 'Team green' on '2013-11-18'
-	And I select any schedule activity for 'Pierre Baldi'
-	And I click 'add activity' in shift menu
-	Then I should see the add activity form
-
-Scenario: View form without shift
+Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for 'Team green' on '2013-11-18'
 	And I click person name 'Pierre Baldi'
@@ -120,28 +107,7 @@ Scenario: Prevent creation of second shift
 	| End time   | 18:00 |
 	Then I should see the alert 'Cannot Create Second Shift When Adding Activity'
 
-Scenario: Can extend existing shift
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-19 11:00 |
-	| End time       | 2013-11-19 17:00 |
-	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
-	And I input these add activity values
-	| Field      | Value |
-	| Activity   | Phone |
-	| Start time | 17:00 |
-	| End time   | 18:00 |
-	And I initiate 'apply'
-	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value |
-	| Start time | 17:00 |
-	| End time   | 18:00 |
-	| Color      | Green |
-
-Scenario: Default times without shift today
+Scenario: Default to next hour for today
 	Given I have the role 'Anywhere Team Green'
 	And the current time is '2013-11-18 13:20'
 	When I view schedules for 'Team green' on '2013-11-18'
@@ -153,33 +119,7 @@ Scenario: Default times without shift today
 	| Start time | 13:30 |
 	| End time   | 14:30 |
 
-Scenario: Default times with shift today
-	Given I have the role 'Anywhere Team Green'
-	And the current time is '2013-11-18 13:20'
-	And 'Pierre Baldi' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-18 11:00 |
-	| End time       | 2013-11-18 17:00 |
-	When I view schedules for 'Team green' on '2013-11-18'
-	And I select any schedule activity for 'Pierre Baldi'
-	And the current browser time is '2013-11-18 13:20'
-	And I click 'add activity' in shift menu
-	Then I should see the add activity form with
-	| Field      | Value |
-	| Start time | 13:30 |
-	| End time   | 14:30 |
-
-Scenario: Default times without shift
-	Given I have the role 'Anywhere Team Green'
-	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
-	Then I should see the add activity form with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 09:00 |
-
-Scenario: Default times with shift
+Scenario: Default to shift's first hour on day with shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
 	| Field          | Value            |
@@ -193,7 +133,7 @@ Scenario: Default times with shift
 	| Start time | 11:00 |
 	| End time   | 12:00 |
 
-Scenario: Add to day with no shift
+Scenario: Add to day
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	And I input these add activity values
@@ -208,24 +148,4 @@ Scenario: Add to day with no shift
 	| End time   | 12:00 |
 	| Color      | Green |
 
-Scenario: Add on shift	
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Activity       | Phone            |
-	| Start time     | 2013-11-19 11:00 |
-	| End time       | 2013-11-19 17:00 |
-	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-19'
-	And I input these add activity values
-	| Field      | Value |
-	| Activity   | Lunch |
-	| Start time | 13:00 |
-	| End time   | 14:00 |
-	And I initiate 'apply'
-	Then I should see 'Pierre Baldi' with the scheduled activity
-	| Field      | Value  |
-	| Start time | 13:00  |
-	| End time   | 14:00  |
-	| Color      | Yellow |
 
