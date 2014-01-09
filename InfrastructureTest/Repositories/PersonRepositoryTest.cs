@@ -24,6 +24,7 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -87,6 +88,42 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void CanCreate()
 		{
 			new PersonRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldIncludeSuperAdminThatIsAgentInAnotherBu()
+		{
+			var builtInRole = new ApplicationRole {BuiltIn = true, Name = "dummy role simulating super user"};
+			var site = SiteFactory.CreateSimpleSite("for test");
+			var team = TeamFactory.CreateSimpleTeam("for test");
+			site.AddTeam(team);
+
+			var fakeBu = new BusinessUnit("fake BU");
+
+			var p = PersonFactory.CreatePerson();
+			var c = new Contract("sdf");
+			var pt = new PartTimePercentage("sdf");
+			var cc = new ContractSchedule("sdf");
+			var csw = new ContractScheduleWeek();
+			cc.AddContractScheduleWeek(csw);
+			p.AddPersonPeriod(new PersonPeriod(new DateOnly(1801, 1, 1), new PersonContract(c, pt, cc), team));
+
+			p.PermissionInformation.AddApplicationRole(builtInRole);
+
+			PersistAndRemoveFromUnitOfWork(fakeBu);
+			PersistAndRemoveFromUnitOfWork(builtInRole);
+			PersistAndRemoveFromUnitOfWork(cc);
+			PersistAndRemoveFromUnitOfWork(pt);
+			PersistAndRemoveFromUnitOfWork(site);
+			PersistAndRemoveFromUnitOfWork(team);
+			PersistAndRemoveFromUnitOfWork(c);
+			PersistAndRemoveFromUnitOfWork(p);
+
+			using (FakeLogon.ToBusinessUnit(fakeBu))
+			{
+				target.FindAllSortByName(true).Should().Contain(p);
+				target.FindAllSortByName().Should().Not.Contain(p);				
+			}
 		}
 
 		[Test]

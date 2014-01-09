@@ -1457,9 +1457,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IPersonRepository personRepository = new PersonRepository(uow);
-				IPersonProvider provider = new PersonProvider(personRepository);
 
-				MatrixPermissionsResolver permissionsResolver = new MatrixPermissionsResolver(provider,
+				MatrixPermissionsResolver permissionsResolver = new MatrixPermissionsResolver(personRepository,
 																							  new FunctionsForRoleProvider(
 																								  new LicensedFunctionsProvider(
 																									  new DefinedRaptorApplicationFunctionFactory
