@@ -11801,4 +11801,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Active Agents</value>
     <comment>caption on form ActiveAgents</comment>
   </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>On this date you are no longer an employee</value>
+    <comment>On this date you are no longer an employee</comment>
+  </data>
 </root>
