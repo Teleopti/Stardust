@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading;
+using log4net.Config;
+using log4net;
 
 namespace Teleopti.Support.Security
 {
     internal class ForecasterDateAdjustment : ICommandLineCommand
     {
+		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
         public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
@@ -19,14 +22,12 @@ namespace Teleopti.Support.Security
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
+                    log.Debug("Could not open Sql Connection. Error message: " + ex.Message);
                     return 1;
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
+                    log.Debug("Could not open Sql Connection. Error message: " + ex.Message);
                     return 1;
                 }
                 //Check version
@@ -37,11 +38,11 @@ namespace Teleopti.Support.Security
                     var versionCount = (int) command.ExecuteScalar();
                     if (versionCount > 0)
                     {
-                        Console.WriteLine("The database is up to date.");
-                        Thread.Sleep(TimeSpan.FromSeconds(2));
                         return 1;
                     }
                 }
+
+				log.Debug("ForecastDateAdjuster ...");
 
                 //Load all timezones for Skills and Workloads
                 var timeZoneDictionary = new Dictionary<Guid, TimeZoneInfo>();
@@ -58,7 +59,7 @@ namespace Teleopti.Support.Security
                                                    TimeZoneInfo.FindSystemTimeZoneById(reader.GetString(1)));
                         }
                     }
-                    Console.WriteLine("Created a dictionary for all skills and workloads with time zone information.");
+                    log.Debug("Created a dictionary for all skills and workloads with time zone information.");
                 }
 
                 //Open transaction
@@ -67,7 +68,7 @@ namespace Teleopti.Support.Security
                 {
                     transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted);
 
-                    Console.WriteLine("Updating skill days...");
+                    log.Debug("Updating skill days...");
                     using (SqlDataAdapter daPerson = new SqlDataAdapter("SELECT * FROM dbo.SkillDay", connection))
                     {
                         daPerson.SelectCommand.Transaction = transaction;
@@ -97,9 +98,9 @@ namespace Teleopti.Support.Security
                             }
                         }
                     }
-                    Console.WriteLine("Done updating skill days.");
+                    log.Debug("Done updating skill days.");
 
-                    Console.WriteLine("Updating validated days...");
+                    log.Debug("Updating validated days...");
                     using (SqlDataAdapter daPerson = new SqlDataAdapter("SELECT * FROM dbo.ValidatedVolumeDay", connection))
                     {
                         daPerson.SelectCommand.Transaction = transaction;
@@ -129,9 +130,9 @@ namespace Teleopti.Support.Security
                             }
                         }
                     }
-                    Console.WriteLine("Done updating validated days.");
+                    log.Debug("Done updating validated days.");
 
-                    Console.WriteLine("Updating workload days...");
+                    log.Debug("Updating workload days...");
                     using (SqlDataAdapter daPerson = new SqlDataAdapter("SELECT * FROM dbo.WorkloadDayBase", connection))
                     {
                         daPerson.SelectCommand.Transaction = transaction;
@@ -158,9 +159,9 @@ namespace Teleopti.Support.Security
                             }
                         }
                     }
-                    Console.WriteLine("Done updating workload days.");
+                    log.Debug("Done updating workload days.");
 
-                    Console.WriteLine("Updating multisite days...");
+                    log.Debug("Updating multisite days...");
                     using (SqlDataAdapter daPerson = new SqlDataAdapter("SELECT * FROM dbo.MultisiteDay", connection))
                     {
                         daPerson.SelectCommand.Transaction = transaction;
@@ -190,34 +191,31 @@ namespace Teleopti.Support.Security
                             }
                         }
                     }
-                    Console.WriteLine("Done updating multisite days.");
+                    log.Debug("Done updating multisite days.");
 
-                    Console.WriteLine("Updating database version...");
+                    log.Debug("Updating database version...");
                     command = connection.CreateCommand();
                     command.CommandText = string.Format(System.Globalization.CultureInfo.InvariantCulture,
                                                         "INSERT INTO dbo.DatabaseVersion (BuildNumber,SystemVersion,AddedDate,AddedBy) VALUES ('-330','7.1.330.1',GetDate(),'{0}')",
                                                         Environment.UserName);
                     command.Transaction = transaction;
                     command.ExecuteNonQuery();
-                    Console.WriteLine("Done updating database version.");
+                    log.Debug("Done updating database version.");
 
                     //Commit!
-                    Console.WriteLine("Committing transaction...");
+                    log.Debug("Committing transaction...");
                     transaction.Commit();
-                    Console.WriteLine("Transaction successfully committed! Done.");
+                    log.Debug("Transaction successfully committed! Done.");
                 }
                 catch (Exception ex)
                 {
                     if (transaction != null)
                         transaction.Rollback();
-                    Console.WriteLine("Something went wrong! Error message: {0}", ex.Message);
-
+                    log.Debug("Something went wrong! Error message: " + ex.Message);
 	                return 1;
                 }
-
-                Thread.Sleep(TimeSpan.FromSeconds(2));
             }
-
+			log.Debug("ForecastDateAdjuster. Done!");
 	        return 0;
         }
     }
