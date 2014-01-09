@@ -11608,4 +11608,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Trying to resolve unscheduled days...</value>
     <comment>This message is shown when scheduling is finished and the scheduler tries to resolve the white spots.</comment>
   </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>On this date you are no longer an employee</value>
+    <comment>On this date you are no longer an employee</comment>
+  </data>
 </root>
