@@ -158,5 +158,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			throw new NotImplementedException();
 		}
+
+		public ICollection<IPerson> FindAllSortByName(bool includeSuperUserThatAlsoIsAgent)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }
