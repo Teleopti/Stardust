@@ -987,4 +987,112 @@
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>按天的遵时率</value>
   </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>满足的</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>满足率</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>必须有</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>不满足的</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>当前页</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>找到</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>找到下一个</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>在报表里寻找文本</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>无效页数</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>最后一页</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>下一个</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>下一页</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>无法找到更多匹配</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>的</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>页面设置</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>页面宽度</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>上一页</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>打印布局</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>打印</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>停止翻译</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>没有找到文本</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>总页数</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>整页</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>与数据库的链接超时，请限制你的搜索条件</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>每个坐席代表的可用性</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>有效天数</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>有效时间</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>被排班天数</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>利用率</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>仅激活的技能</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>坐席技能</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>仅激活的技能</value>
+  </data>
 </root>
