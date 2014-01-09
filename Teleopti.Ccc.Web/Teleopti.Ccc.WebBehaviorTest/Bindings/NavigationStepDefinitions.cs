@@ -67,6 +67,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
             Navigation.GotoWeekSchedulePage(date);
         }
 
+        [Given(@"I view my month schedule for date '(.*)'")]
+        [When(@"I view my month schedule for date '(.*)'")]
+        public void WhenIViewMyMonthScheduleForDate(DateTime date)
+        {
+            TestControllerMethods.Logon();
+            Navigation.GotoMonthSchedulePage(date);
+        }
+
 		[Given(@"I am viewing preferences")]
 		[When(@"I am viewing preferences")]
 		[When(@"I view preferences")]

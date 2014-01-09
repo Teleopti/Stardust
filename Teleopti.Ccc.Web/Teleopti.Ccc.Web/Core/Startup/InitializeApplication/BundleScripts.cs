@@ -82,7 +82,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerBootstrapCssIndividualDueToRelativePathsInsideCss()
 		{
 			var bootstrapCss = new StyleBundle(BootstrapCss)
-				.Include("~/Content/bootstrap/bootstrap.css");
+				.Include("~/Content/bootstrap/bootstrap.css",
+					"~/Content/bootstrap/bootstrap-responsive.css");
 			BundleTable.Bundles.Add(bootstrapCss);
 		}
 

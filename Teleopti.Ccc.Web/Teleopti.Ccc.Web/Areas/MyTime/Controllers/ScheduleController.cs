@@ -36,12 +36,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
-		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ActionResult Month()
-		{
-			return new ContentResult { Content = "<br/><h2>Soon...</h2>" };
-		}
+        [EnsureInPortal]
+        public ActionResult Month()
+        {
+            return View("MonthPartial");
+        }
 
 		[UnitOfWorkAction]
 		public JsonResult FetchData(DateOnly? date)

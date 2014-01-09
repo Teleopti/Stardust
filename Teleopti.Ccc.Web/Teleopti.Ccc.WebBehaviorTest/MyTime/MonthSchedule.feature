@@ -35,7 +35,7 @@ Given there is a role with
        
 Scenario: View full month with full first and last week
 Given I am an agent
-When I navigate to month view for '2014-01-07'
+When I view my month schedule for date '2014-01-07'
 Then I should see '2013-12-30' as the first day 
 And I should see '2014-02-02' as the last day
 

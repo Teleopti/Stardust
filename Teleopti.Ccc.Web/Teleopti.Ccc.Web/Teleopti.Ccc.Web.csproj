@@ -745,8 +745,11 @@
     <Content Include="Areas\MobileReports\Content\moment\moment.js" />
     <Content Include="Areas\MobileReports\Content\moment\moment.min.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\json2.js" />
+    <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Month.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.UserInfo.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.js" />
@@ -1067,6 +1070,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\MyReport\MyReportPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\MonthPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
