@@ -104,7 +104,7 @@ And I should see '2014-02-01' as the last day
 
 Scenario: Can switch to monthly schedule when showing weekly schedule 
 Given I am an agent 
-When I navigate to week view for '2014-01-07'
+When I view my week schedule for date '2014-01-07'
 And I choose to go to month view
 Then I should end up in month view for '2014-01-07'
 

@@ -151,6 +151,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		    Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 		};
 
+		self.month = function () {
+		    var d = self.selectedDate();
+		    Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+		};
+	    
 		self.isWithinSelected = function (startDate, endDate) {
 			return (startDate <= self.maxDate() && endDate >= self.minDate());
 		    
