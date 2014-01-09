@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -44,11 +45,11 @@ namespace Teleopti.Ccc.DomainTest.Security.Matrix
         [Test]
         public void VerifyConstructor1()
         {
-            IPersonProvider personProvider = _mockRepository.StrictMock<IPersonProvider>();
+            var personProvider = _mockRepository.StrictMock<IPersonRepository>();
             
             using(_mockRepository.Record())
             {
-                Expect.Call(personProvider.GetPersons()).Return(new List<IPerson> { _person1, _person2 });
+                Expect.Call(personProvider.FindAllSortByName(true)).Return(new List<IPerson> { _person1, _person2 });
             }
             using(_mockRepository.Playback())
             {
