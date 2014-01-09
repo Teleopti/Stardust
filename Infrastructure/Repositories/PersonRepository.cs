@@ -343,11 +343,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return totalInAllBusinessUnits;
         }
 
+				public ICollection<IPerson> FindAllSortByName()
+				{
+					return FindAllSortByName(false);
+				}
+
         /// <summary>
         /// Finds all persons with teams name sorting.
         /// </summary>
         /// <returns></returns>
-        public ICollection<IPerson> FindAllSortByName()
+				public ICollection<IPerson> FindAllSortByName(bool includeSuperUserThatAlsoIsAgent)
         {
 			try
 			{
@@ -358,23 +363,34 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.Add(Restrictions.Eq("site.BusinessUnit", identity.BusinessUnit))
 					.SetProjection(Projections.Property("personPeriod.Parent"));
 
-				var list = Session.CreateMultiCriteria()
-					.Add(DetachedCriteria.For<Person>("users")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-						.Add(Restrictions.IsEmpty("PersonPeriodCollection"))
-						)
-
-					.Add(DetachedCriteria.For<Person>("per")
-						.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
-						.Add(Subqueries.PropertyIn("per.Id", personsubQuery))
-						.SetResultTransformer(Transformers.DistinctRootEntity))
-					.List();
+				var criterias = Session.CreateMultiCriteria()
+				                       .Add(DetachedCriteria.For<Person>("users")
+				                                            .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+				                                            .Add(Restrictions.IsEmpty("PersonPeriodCollection"))
+					)
+				                       .Add(DetachedCriteria.For<Person>("per")
+				                                            .SetFetchMode("PersonPeriodCollection", FetchMode.Join)
+				                                            .Add(Subqueries.PropertyIn("per.Id", personsubQuery))
+				                                            .SetResultTransformer(Transformers.DistinctRootEntity));
+				if (includeSuperUserThatAlsoIsAgent)
+				{
+						criterias.Add(DetachedCriteria.For<Person>()
+							.SetFetchMode("PersonPeriodColleciton", FetchMode.Join)
+							.CreateAlias("PermissionInformation.personInApplicationRole", "ApplicationRole", JoinType.InnerJoin)
+							//this is really strange - we consider "BuiltIn" to be super user (!)
+							.Add(Restrictions.Eq("ApplicationRole.BuiltIn", true)));
+				}
+				var list=criterias.List();
 
 				var result = new List<IPerson>();
 				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[0]));
 				result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[1]));
+				if (includeSuperUserThatAlsoIsAgent)
+				{
+					result.AddRange(CollectionHelper.ToDistinctGenericCollection<IPerson>(list[2]));			
+				}
 
-				return result.OrderBy(p => p.Name.LastName).ThenBy(p => p.Name.FirstName).ToArray();
+				return new HashSet<IPerson>(result.OrderBy(p => p.Name.LastName).ThenBy(p => p.Name.FirstName));
 			}
 			catch (SqlException sqlException)
 			{
