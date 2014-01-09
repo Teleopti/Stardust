@@ -11874,4 +11874,8 @@ Reduce the complexity to use these shifts.</value>
     <value>No period present</value>
     <comment>No period present for empty agent info page</comment>
   </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>On this date you are no longer an employee</value>
+    <comment>On this date you are no longer an employee</comment>
+  </data>
 </root>

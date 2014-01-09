@@ -148,4 +148,8 @@ Scenario: Default to first virtual schedule period overlapping open preference p
 	Then I should see the first virtual schedule period overlapping open preference period
 
 
+Scenario: Show friendly message on preference page when selected date is after leaving date
+	Given I am an agent in a team that leaves tomorrow
+	When I view preferences for date '2030-01-01'
+	Then I should see a user-friendly message explaining I dont have anything to view
 
