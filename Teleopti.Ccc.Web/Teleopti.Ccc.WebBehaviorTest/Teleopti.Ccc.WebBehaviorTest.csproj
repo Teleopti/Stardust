@@ -734,6 +734,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
     </None>
+    <None Include="MyTime\MonthSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MonthSchedule.feature.cs</LastGenOutput>
+    </None>
     <None Include="MyTime\MyReportDailyMetrics.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyReportDailyMetrics.feature.cs</LastGenOutput>
