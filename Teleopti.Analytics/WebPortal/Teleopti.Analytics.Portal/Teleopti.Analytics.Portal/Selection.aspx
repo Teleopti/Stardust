@@ -46,6 +46,9 @@
 					<Analytics:Selector LabelWidth="30%" List1Width="75%" ID="Parameter" runat="server" OnInit="Selector_OnInit">
 					</Analytics:Selector>
 				</div>
+                <div>
+	                <asp:ValidationSummary ID="ValidationSummary1" runat="server" ForeColor="Red"/>
+                </div>
 				<div style="text-align: center;padding-bottom: 30px;padding-top: 10px">
 					<asp:ImageButton  OnClick="ButtonShow_Click" ID="buttonShow" SkinID="Show" ToolTip='' 
 						runat="server" />
