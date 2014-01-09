@@ -108,44 +108,37 @@ define([
 			self.EndTime(self.DefaultStart().clone().add("hours", 1).format(resources.TimeFormatForMoment));
 		});
 		
-
 		
-		var startTimeWithinShift = function () {
-			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) <= 0;
+		var intersectWithShift = function () {
+			return endTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) <= 0;
 		};
 
-		var nightShiftWithEndTimeOnNextDay = function () {
-			return self.ShiftStart().date() != self.ShiftEnd().date() && startTimeAsMoment.diff(endTimeAsMoment) > 0;
-		};
-		
 		var getMomentFromInput = function (input) {
 			var momentInput = moment(input, resources.TimeFormatForMoment);
 			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
 		};
 
-		this.StartTimeWithinShift = ko.computed(function () {
-			if (self.ShiftStart() && self.ShiftEnd()) {
-				startTimeAsMoment = getMomentFromInput(self.StartTime());
-				endTimeAsMoment = getMomentFromInput(self.EndTime());
-				if (startTimeWithinShift()) {
-					if (nightShiftWithEndTimeOnNextDay()) {
-						endTimeAsMoment.add('d', 1);
-					}
+		this.PossbileIntersectWithShift = ko.computed(function () {
+			startTimeAsMoment = getMomentFromInput(self.StartTime());
+			endTimeAsMoment = getMomentFromInput(self.EndTime());
+			if (startTimeAsMoment.diff(endTimeAsMoment) < 0) {
+				if (intersectWithShift())
 					return true;
-				}
-				if (self.ShiftStart().date() != self.ShiftEnd().date()) {
-					startTimeAsMoment.add('d', 1);
-					endTimeAsMoment.add('d', 1);
-					if (startTimeWithinShift())
-						return true;
-				}
+				startTimeAsMoment.add('d', 1);
+				endTimeAsMoment.add('d', 1);
+				if (intersectWithShift())
+					return true;
+				return false;
+			} else {
+				endTimeAsMoment.add('d', 1);
+				if (intersectWithShift())
+					return true;
 				return false;
 			}
-			return true;
 		}).extend({ throttle: 1 });
 		
 		this.ErrorMessage = ko.computed(function () {
-			if (!self.StartTimeWithinShift()) {
+			if (!self.PossbileIntersectWithShift()) {
 				return resources.CannotCreateSecondShiftWhenAddingActivity;
 			}
 			return undefined;

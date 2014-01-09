@@ -62,7 +62,6 @@ Scenario: View team mates schedules
 	When I view person schedules add activity form for 'Pierre Baldi' in 'Team green' on '2013-11-18'
 	Then I should see schedule for 'John King'
 
-@ignore
 Scenario: Add after midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
@@ -84,7 +83,6 @@ Scenario: Add after midnight on night shift
 	| End time   | 02:00  |
 	| Color      | Yellow |
 
-@ignore
 Scenario: Add over midnight on night shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has a shift with
