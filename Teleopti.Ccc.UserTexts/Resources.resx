@@ -11890,4 +11890,8 @@ Reduce the complexity to use these shifts.</value>
     <value>With Add Activity you cannot create a second shift.</value>
     <comment>With Add Activity you cannot create a second shift.</comment>
   </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>On this date you are no longer an employee</value>
+    <comment>On this date you are no longer an employee</comment>
+  </data>
 </root>

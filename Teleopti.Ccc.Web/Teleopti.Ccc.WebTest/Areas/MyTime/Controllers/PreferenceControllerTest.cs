@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
 			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null, null);
 
-			virtualSchedulePeriodProvider.Stub(x => x.MissingPersonPeriod()).Return(true);
+			virtualSchedulePeriodProvider.Stub(x => x.MissingPersonPeriod(new DateOnly())).Return(true);
 
 			var result = target.Index(null);
 
