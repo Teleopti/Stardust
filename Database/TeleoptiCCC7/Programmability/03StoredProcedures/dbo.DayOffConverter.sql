@@ -61,11 +61,13 @@ ROLLBACK TRAN
 	SET @SystemVersion=''
 	SET @ErrorMsg = ''
 
+	PRINT char(9)
+
 	--Convert only once
 	IF EXISTS (SELECT 1 FROM dbo.DatabaseVersion WHERE BuildNumber=@BuildNumber)
 	BEGIN
-		SELECT @ErrorMsg='This database have already been converted for DayOff. Do nothing.'
-		PRINT @ErrorMsg
+		SELECT @ErrorMsg='DayOffs already converted, do nothing.'
+		PRINT char(9) + char(9) + char(9) + char(9) + @ErrorMsg
 		RETURN 0
 	END
 	
@@ -77,9 +79,7 @@ ROLLBACK TRAN
 		from dbo.PersonDayOff
 		group by Person, Scenario,convert(datetime,floor(convert(decimal(18,8),anchor)))
 	) a
-	PRINT '----'
-	PRINT 'Total number of DayOff to be converted: ' + +cast(@Assert as nvarchar(10))
-	PRINT '----'
+	PRINT char(9) + 'Total number of DayOff to be converted: ' + +cast(@Assert as nvarchar(10))
 
 	--Check which BU a person belongs to
 	;WITH personTeam AS
@@ -123,11 +123,7 @@ ROLLBACK TRAN
 		GROUP by plkt.Person
 		having count(Bu.id) > 1
 	IF @PersonsMultipleBu>0
-	BEGIN
-		PRINT char(9) + 'WARNING: Some agents have belonged to more than one business unit!!'
-		PRINT char(9) + '@PersonsMultipleBu=' +cast(@PersonsMultipleBu as nvarchar(10))
-		PRINT char(9) + 'DayOff conversion might put the wrong scenario_id in personAssignment'
-	END
+		PRINT char(9) + 'WARNING: Some agents have belonged to more than one business unit'
 
 	--DayOff connected to a person without Person Period = No Business Unit
 	select @PersonsWithoutBu=
@@ -138,10 +134,8 @@ ROLLBACK TRAN
 			on pdo.Person = p.Person --106469
 		where p.person is null
 	)
-	BEGIN
-		PRINT char(9) + 'WARNING: Some PersonDayOff belong to a person without team/site/businessUnit'
-		PRINT char(9) + '@PersonsWithoutBu: ' +cast(@PersonsWithoutBu as nvarchar(10))
-	END
+	IF @PersonsWithoutBu>0
+		PRINT char(9) + 'WARNING: Some DayOffs belong to persons without valid person period'
 
 	--Recreate DayOffTemplate that is no longer to find by Name
 	INSERT INTO [dbo].[DayOffTemplate]
@@ -218,7 +212,7 @@ ROLLBACK TRAN
 		and dot.BusinessUnit = pdo.Businessunit
 
 	SELECT @ThisStep=@@ROWCOUNT
-	PRINT 'Step 1) - Add DayOff where Assignment already existed with perfecty match on person, date and scenario: ' + cast(@ThisStep as nvarchar(10))
+	PRINT char(9) + 'DayOff on days with existing shift: ' + cast(@ThisStep as nvarchar(10))
 	SELECT @Converted = @Converted + @ThisStep
 
 	--Step 2) - Existing Days off on new Assignment dates
@@ -249,35 +243,19 @@ ROLLBACK TRAN
 		GROUP BY pdo.Person,pdo.scenario,convert(datetime,floor(convert(decimal(18,8),pdo.anchor)))
 
 		SELECT @ThisStep=@@ROWCOUNT
-		PRINT 'Step 2) - Existing Days off on new Assignment dates: ' + cast(@ThisStep as nvarchar(10))
+		PRINT char(9) + 'DayOff on days without shift: ' + cast(@ThisStep as nvarchar(10))
 		SELECT @Converted = @Converted + @ThisStep
-
-	--re-init auditing after conversion
-	declare @count int
-	declare @auditOn int
-
-	select @count = count(*) from [Auditing].[Revision]
-	select @auditOn = IsScheduleEnabled from [Auditing].[AuditSetting] where Id=1
-
-	if (@count=0)
-	begin
-		if (@auditOn=1)
-		begin
-			exec [Auditing].[InitAuditTables]
-		end
-	end
 
 	IF @Assert<>@Converted
 	BEGIN
-		SELECT @ErrorMsg='WARNING: The number of DayOff converted did not match the original number of DayOffs. Expected: ' + cast(@Assert as nvarchar(10)) +' but was: ' + cast(@Converted as nvarchar(10))
-		PRINT char(9) + @ErrorMsg
+		SELECT @ErrorMsg= char(9)+ 'WARNING: The number of DayOff converted did not match' + char(13)
+		+ char(9) + 'Expected: ' + cast(@Assert as nvarchar(10)) +' but was: ' + cast(@Converted as nvarchar(10))
+		PRINT @ErrorMsg
 		WAITFOR DELAY '00:00:05'
 		--RAISERROR (@ErrorMsg,16,1)
 	END
 
-	PRINT '----'
-	PRINT 'Total number of DayOff converted:' + cast(@Converted as nvarchar(10))
-	PRINT '----'
+	PRINT char(9) + 'Total number of DayOff converted:' + cast(@Converted as nvarchar(10))
 
 	INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@BuildNumber,@SystemVersion) 
 
