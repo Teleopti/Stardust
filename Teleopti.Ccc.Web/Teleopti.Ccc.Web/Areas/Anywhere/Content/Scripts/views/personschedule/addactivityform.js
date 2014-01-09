@@ -25,7 +25,7 @@ define([
 		this.Date = ko.observable();
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
-		this.Person = ko.observable();
+		this.WorkingShift = ko.observable();
 		
 		var personId;
 		var groupId;
@@ -59,11 +59,9 @@ define([
 		};
 
 		this.visibleLayers = ko.computed(function () {
-			var person = self.Person();
-			if (person) {
-				return lazy(person.Shifts())
-					.map(function(x) { return x.Layers(); })
-					.flatten()
+			var shift = self.WorkingShift();
+			if (shift) {
+				return lazy(shift.Layers())
 					.filter(function(x) { return x.OverlapsTimeLine(); })
 					.toArray();
 			}

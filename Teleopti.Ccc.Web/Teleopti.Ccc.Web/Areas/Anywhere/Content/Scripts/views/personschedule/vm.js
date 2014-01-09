@@ -75,10 +75,19 @@ define([
 
 		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
 
-		this.Shift = ko.computed(function () {
+		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
 			if (person)
-				return person.Shifts()[0];
+				return lazy(person.Shifts()).filter(function(x) {
+					return x.Layers()[0].StartMinutes() > 0;
+				}).toArray()[0];
+			return undefined;
+		});
+
+		this.Shifts = ko.computed(function() {
+			var person = self.SelectedPerson();
+			if (person)
+				return person.Shifts();
 			return undefined;
 		});
 		
@@ -96,8 +105,8 @@ define([
 		});
 		
 		this.FormStartPixel = ko.computed(function () {
-			if (self.Shift()) {
-				return self.Shift().Layers().length > 0 ? self.Shift().ShiftStartPixels() : 0;
+			if (self.WorkingShift()) {
+				return self.WorkingShift().Layers().length > 0 ? self.WorkingShift().ShiftStartPixels() : 0;
 			}
 			return 0;
 		});
@@ -168,7 +177,7 @@ define([
 				}
 			}
 
-			self.AddActivityForm.Person(personForId(self.PersonId()));
+			self.AddActivityForm.WorkingShift(self.WorkingShift());
 			
 			self.Persons().sort(function (first, second) {
 				first = first.OrderBy();
