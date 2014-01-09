@@ -10047,4 +10047,517 @@ Teleopti R&amp;D</value>
   <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
     <value>添加小时工可用性</value>
   </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>保存错误。最有可能的原因是你正在修改的数据已经被另一用户删除。为了避免此冲突，该界面将被关闭。对不起，您的修改将会丢失。</value>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>弱</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>中等</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>强</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>快速预测</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>季节性和趋势数据范围</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>平滑形式：</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>给模板选择历史数据</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>显示历史信息</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>错误</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>快速预测会在向导完成后作为一个后台工作运行。你可以通过历史查看工作进度。</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>当换班请求是新建，拒绝，或者批准的状态时，不会显示班表</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>新建模板名</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>置空偏好的模板名</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>名称不能置空且长度必须长于５０个字符</value>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>人员分配不足：</value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>人员分配不足在：{0}</value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>在被请求的时段中的一天或者多天{0}没有可以申请的配额</value>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>这个时段没有配额{0}</value>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>没有配额给坐席{0}</value>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>这一天没有足够配额{0}</value>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>你的请求已经被拒绝。申请的日期没有开放。</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>你的请求已经被拒绝。这一天没有开放申请。下一个开放日期是{0}</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>严重缺员在{0}</value>
+  </data>
+  <data name="CurrentNumberOfShifts" xml:space="preserve">
+    <value>当前班次的数量：</value>
+  </data>
+  <data name="GeneratingShifts" xml:space="preserve">
+    <value>建立班次</value>
+  </data>
+  <data name="ShiftGenerationStop" xml:space="preserve">
+    <value>停止！这些规则太复杂，班次无法在最大限制下创建。这条规则设置里的班次都将无法用于排班和优化。减少复杂性再使用这些班次。</value>
+  </data>
+  <data name="ShiftGenerationWarning" xml:space="preserve">
+    <value>警告！根据这些规则创建班次会花费很长时间。这将会在后面的排班和优化步骤中影响性能</value>
+  </data>
+  <data name="TooComplexRuleset" xml:space="preserve">
+    <value>是一个非常复杂的规则设置</value>
+  </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>查看所有组的页面</value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>创建预测给</value>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>被选的缺勤</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>执行中．．．</value>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>信息({0})</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>配额组总数</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>人头数</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>当天配额不足</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>添加全天缺勤</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>无效结束日期</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>分辨率(分钟)</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>单一坐席组</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>同样的班次</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>请在批次优化里的“相同班次类型”，“相同的开始时间”，“相同班次”选项中至少选择一项</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>ｈ</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>确认移除</value>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>不允许移动一个班次到另一天，请创建一个新的</value>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>缺勤申请被批准的机会是：</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>添加偏好</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>很有可能</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>不大可能</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>搜集数据</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>改进的</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>接受者已经答复了你早些时候的信息。刷新窗口查看回复。你的信息将不会发送。</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>每个坐席代表的可用性</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>小组批次时段不在合法状态</value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>请在批次排班里的“班次类型”，“开始时间”，“相同班次”选项中至少选择一项</value>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>你的缺勤申请已经被拒绝。申请日期没有开放，你可以发送以下日期的申请：{0}</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>最大平行任务数：</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>查看激活的坐席</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>在线服务</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>放弃的任务量</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>应答的任务量</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>平均任务量</value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>拒绝的</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>当地时间</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>添加加班可用性</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>统计的任务量</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>活动的任务量…％</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>加班可用性</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>之前保存的加班可用性：</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>在线服务</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>任务量偏差：</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>预测的任务量</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>任务量索引</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>提供的任务量</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>原始提供的任务量</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>总的任务量</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>验证的任务量</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>活动的任务时间％</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>在线服务任务量</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>总的任务量</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>过滤加班可用性</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>分配选项</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>加班长度</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>排加班</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>排加班选项</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>技能活动</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>修改标签：</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>加班种类</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>每周允许超过合同最大工作时长</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>允许超过合同夜间休息时长</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>允许超过合同每周休息时长</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>延长存在班次的结束时间</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>加班长度：</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>技能活动：</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>加班种类：</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>当前页</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>导出</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>查找</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>查找下一个</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>在报表里查到文本</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>首页</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>最后一页</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>下一个</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>下一页</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>没有找到匹配</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>的</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>页面设置</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>页面宽度</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>前一页</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>打印布局</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>打印</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>刷新</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>停止解译</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>没有找到文本</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>总的页数</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>整页</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>缩放</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>连接数据库超时，请减少搜索条件</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>满足的</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>满自率％</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>必须有</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>不满足的</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>班次类型</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>切换到被选坐席代表查看点</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>分享日历</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>分享我的日历</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>撤回</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>要定制你的班表从一个日历应用。可以使用以下链接。如果需要最常用日历应用的手册请查看：</value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>重发</value>
+  </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>加班可用性</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>付薪时间</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>兼职工作时间百分比</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>班次规则包</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>追踪类型</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>工作流控制集</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>工作时长</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>过滤小时可用性</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>小时可用性</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>信息</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>标题太长</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>平均</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>分布</value>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>加班班次</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>每一个日期</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>班次类型分布</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>每一个坐席</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>每一个班次类型</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>分析信息</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>这里</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>被选活动总的时长</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>请选择ＳＤＫ</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>停止</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;保持&gt;</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>修改可用性</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>使用月中天的季节性</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>坐席技能</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>没有给你的配额</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>尝试解决没有被排班的日期</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>因为两个班次在不同日期，该调班申请被拒绝。</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>添加当天缺勤</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>当天缺勤</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>在两个休息日之间进行批次优化和不保持组内休息日是不支持的</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>可对比的小组</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>我的报告</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>激活的坐席代表</value>
+  </data>
+  <data name="NoSchedulePeriodPresent" xml:space="preserve">
+    <value>没有排班时段显示</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>无效结束时间</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>请在存在的班次上添加当天缺勤</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>你不能通过添加活动来创建第二个班次</value>
+  </data>
 </root>
