@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
             _personRoleResolvers = personRoleResolvers;
         }
 
-        public MatrixPermissionsResolver(IPersonProvider provider, IFunctionsForRoleProvider functionsForRoleProvider, ISiteRepository siteRepository)
+        public MatrixPermissionsResolver(IPersonRepository personRepository, IFunctionsForRoleProvider functionsForRoleProvider, ISiteRepository siteRepository)
         {
             _personRoleResolvers = new List<IPersonRoleResolver>();
-            foreach (IPerson person in provider.GetPersons())
+            foreach (IPerson person in personRepository.FindAllSortByName(true))
             {
                 ITeamResolver teamResolver = new TeamResolver(person,siteRepository);
                 IApplicationFunctionResolver functionResolver = new ApplicationFunctionResolver(functionsForRoleProvider);
