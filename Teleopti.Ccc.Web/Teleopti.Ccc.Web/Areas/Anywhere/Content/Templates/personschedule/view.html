@@ -76,9 +76,9 @@
 												<span data-bind="text: ErrorMessage()"></span>
 											</div>
 											<!-- /ko -->
-											
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+											</div>
 										</form>
 										
 										<!-- /ko -->
@@ -106,9 +106,9 @@
 												<span data-bind="text: ErrorMessage()"></span>
 											</div>
 											<!-- /ko -->
-
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+											</div>
 										</form>
 														
 										<!-- /ko -->
@@ -139,9 +139,9 @@
 												<span data-bind="text: $root.Resources.InvalidEndDate"></span>
 											</div>
 											<!-- /ko -->
-
-											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
+											</div>
 										</form>
 										<!-- /ko -->
 										<!-- /ko -->
