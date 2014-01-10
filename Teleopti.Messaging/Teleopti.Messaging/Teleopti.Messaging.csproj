@@ -145,6 +145,7 @@
     <Compile Include="SignalR\ISignalWrapper.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
+    <Compile Include="SignalR\SignalSubscriber.cs" />
     <Compile Include="SignalR\SignalWrapper.cs" />
   </ItemGroup>
   <ItemGroup>

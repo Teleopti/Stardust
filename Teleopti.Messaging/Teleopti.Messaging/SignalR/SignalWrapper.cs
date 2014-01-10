@@ -5,7 +5,6 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
-using Newtonsoft.Json.Linq;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
@@ -13,64 +12,17 @@ using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
-	internal class SignalSubscriber
+	public class SignalWrapper : ISignalWrapper
 	{
 		private readonly IHubProxy _hubProxy;
-		private const string eventName = "OnEventMessage";
-
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignalSubscriber));
-
-		public event Action<Notification> OnNotification;
-
-		public SignalSubscriber(IHubProxy hubProxy)
-		{
-			_hubProxy = hubProxy;
-		}
-
-		public void Start()
-		{
-			_hubProxy.Subscribe(eventName).Received += subscription_Data;
-		}
-
-		public void Stop()
-		{
-			try
-			{
-				_hubProxy.Subscribe(eventName).Received -= subscription_Data;
-			}
-			catch (Exception ex)
-			{
-				Logger.Error("An error happened when stopping connection.", ex);
-			}
-		}
-
-		private void subscription_Data(IList<JToken> obj)
-		{
-			var handler = OnNotification;
-			if (handler != null)
-			{
-				var d = obj[0].ToObject<Notification>();
-				handler.BeginInvoke(d, onNotificationCallback, handler);
-			}
-		}
-
-		private void onNotificationCallback(IAsyncResult ar)
-		{
-			((Action<Notification>)ar.AsyncState).EndInvoke(ar);
-		}
-	}
-
-	internal class SignalWrapper : ISignalWrapper
-	{
-		private readonly IHubProxy _hubProxy;
-		private readonly HubConnection _hubConnection;
+		private readonly IHubConnectionWrapper _hubConnection;
 		private int _retryCount;
 		private bool _isRunning;
 
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignalWrapper));
 		private static readonly object LockObject = new object();
 		
-		public SignalWrapper(IHubProxy hubProxy, HubConnection hubConnection)
+		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection)
 		{
 			_isRunning = false;
 			_hubProxy = hubProxy;
@@ -153,6 +105,7 @@ namespace Teleopti.Messaging.SignalR
 
 		private void startHubConnection()
 		{
+			// lås
 			try
 			{
 				Exception exception = null;
@@ -265,6 +218,64 @@ namespace Teleopti.Messaging.SignalR
 		public bool IsInitialized()
 		{
 			return _hubProxy != null && _isRunning;
+		}
+	}
+
+	public interface IHubConnectionWrapper
+	{
+		ConnectionState State { get; }
+		ICredentials Credentials { get; set; }
+		Task Start();
+		void Stop();
+		event Action Closed;
+		event Action Reconnected;
+		event Action<Exception> Error;
+		IHubProxy CreateHubProxy(string hubName);
+	}
+
+	public class HubConnectionWrapper : IHubConnectionWrapper
+	{
+		private readonly HubConnection _hubConnection;
+
+		public HubConnectionWrapper(HubConnection hubConnection)
+		{
+			_hubConnection = hubConnection;
+		}
+
+		public ConnectionState State { get { return _hubConnection.State; } }
+		public ICredentials Credentials { get { return _hubConnection.Credentials; } set { _hubConnection.Credentials = value; } }
+
+		public Task Start()
+		{
+			return _hubConnection.Start();
+		}
+
+		public void Stop()
+		{
+			_hubConnection.Stop();
+		}
+
+		public event Action Closed
+		{
+			add { _hubConnection.Closed += value; }
+			remove { _hubConnection.Closed -= value; }
+		}
+
+		public event Action Reconnected
+		{
+			add { _hubConnection.Reconnected += value; }
+			remove { _hubConnection.Reconnected -= value; }
+		}
+
+		public event Action<Exception> Error
+		{
+			add { _hubConnection.Error += value; }
+			remove { _hubConnection.Error -= value; }
+		}
+
+		public IHubProxy CreateHubProxy(string hubName)
+		{
+			return _hubConnection.CreateHubProxy(hubName);
 		}
 	}
 }
