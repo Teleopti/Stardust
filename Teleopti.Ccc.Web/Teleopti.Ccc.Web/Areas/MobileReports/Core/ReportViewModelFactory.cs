@@ -1,5 +1,4 @@
 using AutoMapper;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout;
 using Teleopti.Ccc.Web.Areas.MobileReports.Models.Report;

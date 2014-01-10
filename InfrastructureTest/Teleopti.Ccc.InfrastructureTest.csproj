@@ -161,6 +161,7 @@
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
     <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
+    <Compile Include="Helper\FakeLogon.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
     <Compile Include="Persisters\Account\ConflictEagerLoadingTest.cs" />
     <Compile Include="Persisters\Account\UpdateConflictWithDeleteAccountTest.cs" />

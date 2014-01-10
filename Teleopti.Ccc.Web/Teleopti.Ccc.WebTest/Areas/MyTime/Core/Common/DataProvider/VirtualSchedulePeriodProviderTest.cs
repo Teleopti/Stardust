@@ -80,37 +80,59 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.Should().Be.True();
 		}
 
-		[Test]
-		public void ShouldDetermineThatPersonHasNoPeriodPeriods()
-		{
-			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
-			var person = MockRepository.GenerateMock<IPerson>();
-
-			personProvider.Stub(x => x.CurrentUser()).Return(person);
-			person.Stub(x => x.PersonPeriodCollection).Return(new List<IPersonPeriod>());
-
+ 		[Test]
+		public void ShouldDetermineThatPersonHasNoPersonPeriod()
+ 		{
+ 			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
+ 			var person = MockRepository.GenerateMock<IPerson>();
+ 
+ 			personProvider.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.PersonPeriodCollection).Return(null);
+ 
+ 			var target = new VirtualSchedulePeriodProvider(personProvider, null);
+ 
+			var result = target.MissingPersonPeriod(DateOnly.Today);
+ 
+ 			result.Should().Be.True();
+ 		}
+ 
+ 		[Test]
+		public void ShouldDetermineThatPersonHasPersonPeriod()
+ 		{
+ 			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
+ 			var person = MockRepository.GenerateMock<IPerson>();
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+ 
+ 			personProvider.Stub(x => x.CurrentUser()).Return(person);
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(7));
+			personPeriod.Stub(x => x.Period).Return(period);
+			person.Stub(x => x.PersonPeriodCollection).Return(new List<IPersonPeriod>(new[] { personPeriod }));
+			
 			var target = new VirtualSchedulePeriodProvider(personProvider, null);
 
-			var result = target.MissingPersonPeriod();
-
-			result.Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldDetermineThatPersonHasPeriodPeriods()
-		{
-			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
-			var person = MockRepository.GenerateMock<IPerson>();
-
-			personProvider.Stub(x => x.CurrentUser()).Return(person);
-			person.Stub(x => x.PersonPeriodCollection).Return(new List<IPersonPeriod>(new[] { MockRepository.GenerateMock<IPersonPeriod>() }));
-
-			var target = new VirtualSchedulePeriodProvider(personProvider, null);
-
-			var result = target.MissingPersonPeriod();
+			var result = target.MissingPersonPeriod(DateOnly.Today.AddDays(2));
 
 			result.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldDetermineThatPersonMissesPersonPeriodOnSpecificDate()
+		{
+			var personProvider = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var personPeriod = MockRepository.GenerateMock<IPersonPeriod>();
+
+			personProvider.Stub(x => x.CurrentUser()).Return(person);
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(7));
+			personPeriod.Stub(x => x.Period).Return(period);
+			person.Stub(x => x.PersonPeriodCollection).Return(new List<IPersonPeriod>(new[] { personPeriod }));
+ 
+ 			var target = new VirtualSchedulePeriodProvider(personProvider, null);
+ 
+			var result = target.MissingPersonPeriod(DateOnly.Today.AddDays(8));
+ 
+			result.Should().Be.True();
+ 		}
 
 		[Test]
 		public void ShouldCalculateDefaultDateForStudentAvailabilityUsingCalculator()

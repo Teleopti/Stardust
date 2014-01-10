@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Interfaces.Domain;
@@ -74,6 +71,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
                 Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
                 Expect.Call(_visualLayerCollection2.Period()).Return(period2);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
@@ -105,6 +104,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
                 Expect.Call(_projectionService2.CreateProjection()).Return(_visualLayerCollection2);
                 Expect.Call(_visualLayerCollection2.Period()).Return(period2);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
@@ -133,6 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService1);
                 Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
                 Expect.Call(_visualLayerCollection1.Period()).Return(period1);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {
@@ -178,6 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Restriction
                 Expect.Call(_scheduleDay1.ProjectionService()).Return(_projectionService1);
                 Expect.Call(_projectionService1.CreateProjection()).Return(_visualLayerCollection1);
                 Expect.Call(_visualLayerCollection1.Period()).Return(null);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
             }
             using (_mocks.Playback())
             {

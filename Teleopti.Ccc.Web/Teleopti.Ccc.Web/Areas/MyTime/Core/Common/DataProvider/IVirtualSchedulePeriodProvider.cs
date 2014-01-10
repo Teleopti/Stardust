@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		IVirtualSchedulePeriod VirtualSchedulePeriodForDate(DateOnly date);
 		DateOnlyPeriod GetCurrentOrNextVirtualPeriodForDate(DateOnly date);
 		bool MissingSchedulePeriod();
-		bool MissingPersonPeriod();
+		bool MissingPersonPeriod(DateOnly? date);
 		DateOnly CalculateStudentAvailabilityDefaultDate();
 		DateOnly CalculatePreferenceDefaultDate();
 	}

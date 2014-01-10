@@ -1,10 +1,7 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.Mapping
 {
 	public class SettingsMappingProfile : Profile
 	{
-
 		protected override void Configure()
 		{
 			CreateMap<CultureInfo, CultureViewModel>()

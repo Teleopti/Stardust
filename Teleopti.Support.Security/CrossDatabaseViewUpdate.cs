@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading;
+using log4net.Config;
+using log4net;
 
 namespace Teleopti.Support.Security
 {
 	internal class CrossDatabaseViewUpdate : ICommandLineCommand
 	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
+
 		public int Execute(CommandLineArgument commandLineArgument)
 		{
+			log.Debug("Link Analytics to Agg datatbase ...");
 			//Select database version 
 			using (SqlConnection connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
 			{
@@ -19,14 +23,12 @@ namespace Teleopti.Support.Security
 				}
 				catch (SqlException ex)
 				{
-					Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-					Thread.Sleep(TimeSpan.FromSeconds(2));
+					log.Debug("Could not open Sql Connection. Error message: " + ex.Message);
 					return 1;
 				}
 				catch (InvalidOperationException ex)
 				{
-					Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-					Thread.Sleep(TimeSpan.FromSeconds(2));
+					log.Debug("Could not open Sql Connection. Error message: " + ex.Message);
 					return 1;
 				}
 
@@ -50,7 +52,7 @@ namespace Teleopti.Support.Security
 
 					catch (Exception ex)
 					{
-						Console.WriteLine("Something went wrong! Error message: {0}", ex.Message);
+						log.Debug("Something went wrong! Error message: " + ex.Message);
 						return 1;
 					}
 					finally
@@ -58,10 +60,9 @@ namespace Teleopti.Support.Security
 						// done with using
 						//connection.Dispose();
 					}
-					Thread.Sleep(TimeSpan.FromSeconds(2));
 				}
 			}
-
+			log.Debug("Link Analytics to Agg datatbase. Done!");
 			return 0;
 		}
 	}

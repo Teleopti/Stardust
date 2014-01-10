@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Dynamic;
 using System.Reflection;
 using Autofac;
 using Autofac.Configuration;
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 {
 	public class ContainerConfiguration : IContainerConfiguration
 	{
-
 		public IContainer Configure()
 		{
 			var builder = new ContainerBuilder();
@@ -112,6 +110,5 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterType<UnitOfWorkAspect>();
 		}
-
 	}
 }

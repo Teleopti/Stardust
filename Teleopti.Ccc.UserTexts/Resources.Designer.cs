@@ -15364,6 +15364,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On this date you are no longer an employee.
+        /// </summary>
+        public static string OnThisDateYouAreNoLongerAnEmployee {
+            get {
+                return ResourceManager.GetString("OnThisDateYouAreNoLongerAnEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Op&amp;tions &gt;&gt;.
         /// </summary>
         public static string OpAmpersandtionsGreaterThanGreaterThan {
