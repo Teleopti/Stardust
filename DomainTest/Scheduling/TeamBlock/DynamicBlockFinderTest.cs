@@ -142,47 +142,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.BetweenDayOff, false));
             }
         }
-
-        [Test]
-        public void ShouldReturnNullIfProvidedDateIsAbsenceWithSingleAgentTeam()
-        {
-            using (_mock.Record())
-            {
-                Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro });
-                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-                Expect.Call(_scheduleDictionary[_person]).Return(_range);
-                Expect.Call(_matrixPro.Person).Return(_person);
-                Expect.Call(_range.ScheduledDay(_date.AddDays(1))).Return(_scheduleDay) ;
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence).Repeat.AtLeastOnce();
-            }
-
-            using (_mock.Playback())
-            {
-                Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.BetweenDayOff, true ));
-            }
-        }
-
-        [Test]
-        public void ShouldReturnNullIfProvidedDateIsFullDayAbsenceWithSingleAgentTeam()
-        {
-            using (_mock.Record())
-            {
-                Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro });
-                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
-                Expect.Call(_scheduleDictionary[_person]).Return(_range);
-                Expect.Call(_matrixPro.Person).Return(_person);
-                Expect.Call(_range.ScheduledDay(_date.AddDays(1))).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.AtLeastOnce();
-            }
-
-            using (_mock.Playback())
-            {
-                Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.BetweenDayOff, true));
-            }
-        }
-
         
     }
 
