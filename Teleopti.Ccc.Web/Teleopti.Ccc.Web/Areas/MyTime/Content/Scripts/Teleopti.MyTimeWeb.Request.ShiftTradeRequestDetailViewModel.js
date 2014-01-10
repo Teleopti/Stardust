@@ -142,11 +142,24 @@ Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewMod
 	self.hourText = hour.HourText;
 	self.lengthInMinutes = hour.LengthInMinutesToDisplay;
 	self.leftPx = ko.observable('-8px');
+    self.startTime = moment(hour.StartTime);
+    self.endTime = moment(hour.EndTime);
 
 	self.hourWidth = ko.computed(function () {
 		return self.lengthInMinutes * parentViewModel.pixelPerMinute() - self.borderSize + 'px';
 	});
+    
+	self.leftPos = ko.computed(function () {
+	    if (parentViewModel.timeLineStartTime) {
+	        var minutesSinceTimeLineStart = self.startTime.diff(parentViewModel.timeLineStartTime(), 'minutes');
+	        return minutesSinceTimeLineStart * parentViewModel.pixelPerMinute();
+	    }
+	    return 0;
+	});
 
+    self.showHourLine = ko.computed(function() {
+        return self.hourText.length > 0;
+    });
 };
 
 Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLineStart, pixelPerMinute) {
@@ -159,14 +172,20 @@ Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLine
 		var timeLineoffset = minutesSinceTimeLineStart;
 		return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
 	});
-	self.paddingLeft = ko.computed(function() {
+	self.leftPos = ko.computed(function () {
+	    return (minutesSinceTimeLineStart * pixelPerMinute) + 'px';
+	});
+	self.widthPx = ko.computed(function () {
 		return self.lengthInMinutes * pixelPerMinute + 'px';
 	});
 	self.title = ko.computed(function() {
 		if (self.payload) {
-			return layer.Title + ' ' + self.payload;
+			return layer.TitleTime + ' ' + self.payload;
 		}
 		return '';
+	});
+	self.tooltipText = ko.computed(function () {
+	    return "<div>{0}</div>{1}".format(layer.TitleHeader, layer.TitleTime);
 	});
 };
 

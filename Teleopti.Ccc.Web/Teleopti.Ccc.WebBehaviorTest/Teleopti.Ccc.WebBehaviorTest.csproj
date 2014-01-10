@@ -182,6 +182,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="MyTime\ShiftTradeRequestAdd.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ShiftTradeRequestAdd.feature</DependentUpon>
+    </Compile>
+    </Compile>
     <Compile Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature.cs">
       <DependentUpon>WeekScheduleAvailableAbsenceHeadCount.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -189,6 +195,11 @@
     </Compile>
     <Compile Include="MyTime\OveritmeAvailability.feature.cs">
       <DependentUpon>OveritmeAvailability.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="MyTime\ShiftTradeRequestEdit.feature.cs">
+      <DependentUpon>ShiftTradeRequestEdit.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
@@ -388,11 +399,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesFeedbackPreSchedule.feature</DependentUpon>
-    </Compile>
-    <Compile Include="MyTime\ShiftTradeRequests.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\WeekScheduleAvailableAbsenceBudgetgroup.feature.cs">
       <AutoGen>True</AutoGen>
@@ -738,6 +744,10 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyReportDailyMetrics.feature.cs</LastGenOutput>
     </None>
+    <None Include="MyTime\ShiftTradeRequestAdd.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequestAdd.feature.cs</LastGenOutput>
+    </None>
     <None Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleAvailableAbsenceHeadCount.feature.cs</LastGenOutput>
@@ -745,6 +755,10 @@
     <None Include="MyTime\OveritmeAvailability.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>OveritmeAvailability.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\ShiftTradeRequestEdit.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ShiftTradeRequestEdit.feature.cs</LastGenOutput>
     </None>
     <None Include="PerformanceTool\PerformanceView.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -824,10 +838,6 @@
     <None Include="MyTime\PreferencesFeedbackPreSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackPreSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="MyTime\ShiftTradeRequests.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ShiftTradeRequests.feature.cs</LastGenOutput>
     </None>
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />

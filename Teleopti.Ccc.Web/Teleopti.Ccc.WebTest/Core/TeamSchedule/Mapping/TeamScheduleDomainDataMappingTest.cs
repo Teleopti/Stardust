@@ -133,90 +133,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		}
 
 		[Test]
-		public void ShouldMapDisplayTimePeriodToQuartersHour()
-		{
-			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
-			var startTime = new DateTime(2012, 1, 1, 8, 0, 0, DateTimeKind.Utc);
-			var endTime = new DateTime(2012, 1, 1, 17, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(startTime, endTime);
-
-			var layers = new TeamScheduleProjection(new[]
-			             	{
-			             		new TeamScheduleLayer
-			             			{
-			             				Period = period
-			             			}
-			             	}, DateTime.MaxValue);
-			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
-			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
-			projectionProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
-
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
-
-			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 7, 45, 0));
-			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 17, 15, 0));
-		}
-
-		[Test]
-		public void ShouldMapDisplayTimePeriodFromQuartersToHour()
-		{
-			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
-			var startTime = new DateTime(2012, 1, 1, 8, 15, 0, DateTimeKind.Utc);
-			var endTime = new DateTime(2012, 1, 1, 17, 15, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(startTime, endTime);
-
-			var layers = new TeamScheduleProjection(new[]
-			             	{
-			             		new TeamScheduleLayer
-			             			{
-			             				Period = period
-			             			}
-			             	}, DateTime.MaxValue);
-			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
-			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
-			projectionProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
-
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
-
-			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 8, 0, 0));
-			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 17, 30, 0));
-		}
-
-		[Test]
-		public void ShouldMapDisplayTimeRoundToWholeQuarters()
-		{
-			var persons = new[] { new Person() };
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
-			var startTime = new DateTime(2012, 1, 1, 8, 55, 0, DateTimeKind.Utc);
-			var endTime = new DateTime(2012, 1, 1, 17, 5, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(startTime, endTime);
-
-			var layers = new TeamScheduleProjection(new[]
-			             	{
-			             		new TeamScheduleLayer
-			             			{
-			             				Period = period
-			             			}
-			             	}, DateTime.MaxValue);
-			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.ViewSchedules)).Return(persons);
-			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
-			projectionProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
-
-			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
-
-			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 8, 30, 0));
-			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(new DateTime(2012, 1, 1, 17, 30, 0));
-		}
-
-		[Test]
 		public void ShouldMapDisplayTimeToDefaultIfNull()
 		{
 			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
 
-			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime).AddMinutes(-15));
-			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime).AddMinutes(15));
+			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime));
+			result.DisplayTimePeriod.EndDateTime.Should().Be.EqualTo(DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime));
 		}
 
 		[Test]
@@ -226,10 +148,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
 
-			var startDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime).AddMinutes(-15);
+			var startDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime);
 			var expectedStartDateTime = timeZone.SafeConvertTimeToUtc(startDateTimeLocal);
 
-			var endDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime).AddMinutes(15);
+			var endDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime);
 			var expectedEndDateTime = timeZone.SafeConvertTimeToUtc(endDateTimeLocal);
 
 			result.DisplayTimePeriod.StartDateTime.Should().Be.EqualTo(expectedStartDateTime);
