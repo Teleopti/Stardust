@@ -10,5 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
         //void PasteISchedulePart(GridControl gridControl, ClipHandler<T> clipHandler, IGridPasteAction<T> gridPasteAction,
         //                        GridRangeInfoList rangelist);
         IPasteBehavior PasteBehavior { get; }
+
+		PasteOptions PasteOptions { get; }
     }
 }
