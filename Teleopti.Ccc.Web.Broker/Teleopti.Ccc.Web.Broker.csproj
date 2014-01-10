@@ -64,6 +64,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Autofac.3.3.0\lib\net40\Autofac.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Integration.SignalR">
+      <HintPath>..\packages\Autofac.SignalR.3.0.1\lib\net40\Autofac.Integration.SignalR.dll</HintPath>
+    </Reference>
     <Reference Include="Contrib.SignalR.SignalRMessageBus, Version=1.1.7.0, Culture=neutral, PublicKeyToken=cd2e232b0d2204e6, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Contrib.SignalR.SignalRMessageBus.1.1.7\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
@@ -125,7 +128,6 @@
   <ItemGroup>
     <Compile Include="ActionImmediate.cs" />
     <Compile Include="ActionThrottle.cs" />
-    <Compile Include="AutofacDependencyResolver.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

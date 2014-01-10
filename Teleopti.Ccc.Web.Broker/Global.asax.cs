@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Web;
 using Autofac;
+using Autofac.Integration.SignalR;
 using Microsoft.AspNet.SignalR;
 using log4net;
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Web.Broker
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>();
 			containerBuilder.RegisterType<SubscriptionPassThrough>().As<IBeforeSubscribe>();
-			containerBuilder.RegisterType<MessageBrokerHub>();
+			containerBuilder.RegisterHubs(typeof (MessageBrokerHub).Assembly);
 			_container = containerBuilder.Build();
 			GlobalHost.DependencyResolver = new AutofacDependencyResolver(_container.BeginLifetimeScope()); 
 			
