@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			}
 			else
 			{
-				_batchMemento.MementoCollection.Add(memento);
+				_batchMemento.AddMemento(memento);
 			}
 		}
 
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			if (_batchMemento == null)
 				throw new InvalidOperationException("Ending a non-existing batch memento");
 
-			if (_batchMemento.MementoCollection.Count > 0)
+			if (!_batchMemento.IsEmpty())
 			{
 				saveStateInternal(_batchMemento);
 				fireChanged();

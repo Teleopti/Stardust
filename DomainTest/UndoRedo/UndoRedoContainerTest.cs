@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[Test]
 		public void VerifyContainerSize()
 		{
-			target = new UndoRedoContainer(1);
+				target = new UndoRedoContainer(1);
 		    var mem = new dummy("1");
 		    target.SaveState(mem);
 		    mem.state = "2";
