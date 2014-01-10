@@ -146,13 +146,11 @@
 										<!-- /ko -->
 										<!-- /ko -->
 									</div>
-									
-									
 								</div>
 							</td>
 						</tr>
 						
-
+						<!-- ko if: !Loading() -->
 						<!-- ko if: AddingActivity -->
 						<!-- ko foreach: Persons -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
@@ -183,12 +181,10 @@
 						</tr>
 						<!-- /ko -->
 						<!-- /ko -->
-						
+						<!-- /ko -->
 					</tbody>
 				</table>
-				
 			</div>
-
 		</div>
 	</div>
 	
