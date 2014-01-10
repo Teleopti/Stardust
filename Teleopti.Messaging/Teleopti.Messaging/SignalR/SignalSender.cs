@@ -29,6 +29,7 @@ namespace Teleopti.Messaging.SignalR
 		private readonly Thread workerThread;
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalSender));
+		private bool _queueProcessed;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "0#")]
 		public SignalSender(string serverUrl)
@@ -88,6 +89,7 @@ namespace Teleopti.Messaging.SignalR
 					BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject)),
 					BusinessUnitId = Subscription.IdToString(businessUnitId)
 				};
+			_queueProcessed = false;
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(DateTime.UtcNow, notification));
 		}
 
@@ -113,15 +115,25 @@ namespace Teleopti.Messaging.SignalR
 				}
 				if (retryCount > 3)
 					Logger.Error("Could not send batch messages.");
+
+				if (_notificationQueue.Count == 0)
+					_queueProcessed = true;
 			}
 		}
 
-		private bool trySend(int attemptNumber, IEnumerable<Notification> notification)
+		public void WaitUntilQueueProcessed()
+		{
+			while (!_queueProcessed)
+			{
+			}
+		}
+
+		private bool trySend(int attemptNumber, IEnumerable<Notification> notifications)
 		{
 			try
 			{
 				Exception exception = null;
-				var task = _wrapper.NotifyClients(notification);
+				var task = _wrapper.NotifyClients(notifications);
 				task.ContinueWith(t =>
 					{
 						if (t.IsFaulted && t.Exception != null)
@@ -130,7 +142,7 @@ namespace Teleopti.Messaging.SignalR
 							Logger.Error("An error happened when notifying multiple.", exception);
 						}
 					}, TaskContinuationOptions.OnlyOnFaulted);
-				var waitResult = task.Wait(1000,cancelToken.Token);
+				var waitResult = task.Wait(1000, cancelToken.Token);
 				if (exception != null)
 					throw exception;
 
@@ -138,7 +150,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 			catch (Exception)
 			{
-				Thread.Sleep(250*attemptNumber);
+				Thread.Sleep(250 * attemptNumber);
 				InstantiateBrokerService();
 			}
 			return false;
@@ -183,7 +195,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_wrapper != null) _wrapper.StopHub();
 
-				var connection = new HubConnection(_serverUrl);
+				var connection = MakeHubConnection();
 				var proxy = connection.CreateHubProxy("MessageBrokerHub");
 
 				_wrapper = new SignalWrapper(proxy, connection);
@@ -197,6 +209,11 @@ namespace Teleopti.Messaging.SignalR
 			{
 				Logger.Error("The message broker seems to be down.", exception);
 			}
+		}
+
+		protected virtual IHubConnectionWrapper MakeHubConnection()
+		{
+			return new HubConnectionWrapper(new HubConnection(_serverUrl));
 		}
 	}
 }

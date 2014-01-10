@@ -4,7 +4,7 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Messaging.SignalR
 {
-	internal interface ISignalWrapper
+	public interface ISignalWrapper
 	{
 		void StartHub();
 		void StopHub();
