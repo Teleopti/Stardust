@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         {
             ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 10.80, 5, 0, null, null);
             double result = _target.PeriodValue(skillIntervalData, 30, false, false);
-            Assert.AreEqual(7.72, result, 0.01);
+			Assert.AreEqual(25, result, 0.01);
         }
 
         //[Test]
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         {
             ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 0, -1, 0, null, null);
             double result = _target.PeriodValue(skillIntervalData, 30, false, false);
-            Assert.AreEqual(-3000000, result, 0.01);
+			Assert.AreEqual(-9000, result, 0.01);
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         {
             ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 0, 0, null, null);
             double result = _target.PeriodValue(skillIntervalData, 30, false, false);
-            Assert.AreEqual(-0.44, result, 0.01);
+			Assert.AreEqual(0, result, 0.01);
         }
 
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         {
             ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, 11);
             double rawResult = _target.PeriodValue(skillIntervalData, 30, true, true);
-            Assert.AreEqual(4, rawResult, 0.01);
+			Assert.AreEqual(18, rawResult, 0.01);
 
             skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, null, 11);
             double result = _target.PeriodValue(skillIntervalData, 30, true, true);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         {
             ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 11, 13, 11);
             double result = _target.PeriodValue(skillIntervalData, 30, true, true);
-            Assert.AreEqual(4 + 100000, result, 0.01);
+			Assert.AreEqual(18 + 100000, result, 0.01);
         }
 
         [Test]
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         {
             ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 15, 5, 10, null, null);
             double result = _target.PeriodValue(skillIntervalData, 30, true, true);
-            Assert.AreEqual(4, result, 0.01);
+			Assert.AreEqual(18, result, 0.01);
         }
 
         [Test]
@@ -183,6 +183,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             var skillIntervalData = new SkillIntervalData(_period, 5, -16, 21, null, null);
             double result = _target.PeriodValue(skillIntervalData, 30, true, true);
             Assert.AreEqual(-132, result, 0.01);
+		}
+
+		[Test]
+		public void ShouldBeMoreImportantToScheduleAHigherForecastThanALowerWhenDiffPercentIsSame()
+		{
+			var skillIntervalDataHigh = new SkillIntervalData(_period, 60, 60, 0, null, null);
+			var skillIntervalDataLow = new SkillIntervalData(_period, 20, 20, 0, null, null);
+			double resultLow = _target.PeriodValue(skillIntervalDataLow, 30, true, true);
+			double resultHigh = _target.PeriodValue(skillIntervalDataHigh, 30, true, true);
+			Assert.That(resultHigh > resultLow);
         }
     }
 }
