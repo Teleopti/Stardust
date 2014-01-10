@@ -22,6 +22,11 @@ namespace Teleopti.Ccc.Win.Common
             get { return _options.PasteBehavior; }
         }
 
+	    public PasteOptions PasteOptions
+	    {
+			get { return _options; }
+	    }
+
         public SchedulePasteAction(PasteOptions options, IGridlockManager lockManager, SchedulePartFilter schedulePartFilter)
         {
             _lockManager = lockManager;
