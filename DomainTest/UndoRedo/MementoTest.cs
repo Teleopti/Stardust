@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 			}
 			using (mocks.Playback())
 			{
-				target = new Memento<IPerson>(orig, org, "a");
+				target = new Memento<IPerson>(orig, org);
 
 				target.Restore().Should()
 					.Be.SameInstanceAs(retAgent);
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[Test]
 		public void VerifyNotNullAsOriginator()
 		{
-			new Action(() => new Memento<IPerson>(null, new Person(), "a"))
+			new Action(() => new Memento<IPerson>(null, new Person()))
 				.Should()
 				.Throw<ArgumentNullException>();
 		}
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[Test]
 		public void VerifyNotNullAsOldState()
 		{
-			new Action(() => new Memento<IPerson>(orig, null, "a"))
+			new Action(() => new Memento<IPerson>(orig, null))
 				 .Should()
 				 .Throw<ArgumentNullException>();
 		}

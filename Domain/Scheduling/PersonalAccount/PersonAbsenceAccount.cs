@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 		public virtual IMemento CreateMemento()
 		{
 			return new Memento<IPersonAbsenceAccount>(this,
-												EntityClone(),
-												string.Format(CultureInfo.CurrentUICulture, Resources.UndoRedoModifySchedule, Person.Name, DateTime.Today));
+												EntityClone());
 		}
 
 		public virtual object Clone()

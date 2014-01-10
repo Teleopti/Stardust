@@ -762,8 +762,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public IMemento CreateMemento()
         {
             return new Memento<IScheduleDay>(this, 
-                                    Owner[Person].ReFetch(this),
-                                    string.Format(CultureInfo.CurrentUICulture, Resources.UndoRedoModifySchedule, Person.Name, Period.StartDateTime.ToShortDateString()));
+                                    Owner[Person].ReFetch(this));
         }
 
         public override string ToString()

@@ -10,14 +10,12 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 	public class UndoRedoContainerTest
 	{
 		private IUndoRedoContainer target;
-		private int containerSize;
 		private bool changedEventFired;
 
 		[SetUp]
 		public void Setup()
 		{
-			containerSize = 10;
-			target = new UndoRedoContainer(containerSize);
+			target = new UndoRedoContainer(10);
 			changedEventFired = false;
 			target.ChangedHandler+=OnChanged;
 		}
@@ -411,14 +409,13 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 
 			public IMemento CreateMemento()
 			{
-				return new Memento<dummyThatCreatesMementoWhileRestoring>(this, this, "sdf");
+				return new Memento<dummyThatCreatesMementoWhileRestoring>(this, this);
 			}
 		}
 
 		private class dummy : IOriginator<dummy>
 		{
 			internal string state;
-			public const string desc = "heja gnaget!";
 
 			internal dummy(string currentState)
 			{
@@ -432,7 +429,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 
 			public IMemento CreateMemento()
 			{
-				return new Memento<dummy>(this, new dummy(state), desc);
+				return new Memento<dummy>(this, new dummy(state));
 			}
 		}
 	}

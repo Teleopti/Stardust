@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.UndoRedo
@@ -10,12 +9,9 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 		{
 			MementoCollection = new List<IMemento>();
 			Description = description;
-			Time = DateTime.Now;
 		}
 
 		public IList<IMemento> MementoCollection { get; private set; }
-
-		public DateTime Time { get; private set; }
 
 		public string Description { get; private set; }
 

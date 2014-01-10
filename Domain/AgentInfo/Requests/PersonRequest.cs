@@ -333,11 +333,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual IMemento CreateMemento()
         {
-            return new Memento<IPersonRequest>(this,
-                                               EntityClone(),
-                                               string.Format(CultureInfo.CurrentUICulture,
-                                                             Resources.UndoRedoModifyPersonRequest,
-                                                             Person.Name));
+            return new Memento<IPersonRequest>(this, EntityClone());
         }
 
         public virtual void SetDeleted()
