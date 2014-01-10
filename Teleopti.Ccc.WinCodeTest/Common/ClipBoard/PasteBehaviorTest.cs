@@ -198,6 +198,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 	                Expect.Call(part.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
 	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
 	                Expect.Call(part.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData>());
+	                Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions()).Repeat.AtLeastOnce();
                 }
 
                 using (mockRep.Playback())
@@ -338,6 +339,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 					Expect.Call(pasteAction.PasteBehavior).Return(normalBehavior);
 					Expect.Call(part.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
 					Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
+					Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions());
 
 					Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(destination);
 					Expect.Call(destination.PersistableScheduleDataCollection()).Return(persistableScheduleData);
@@ -388,6 +390,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         {
             get { return new PasteBehaviorForTest(); }
         }
+
+		public PasteOptions PasteOptions
+		{
+			get { return new PasteOptions(); }
+		}
 
     }
 

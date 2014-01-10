@@ -1154,6 +1154,11 @@ namespace Teleopti.Ccc.Win.Common
             get { return new ExtenderPasteBehavior(); }
         }
 
+		public PasteOptions PasteOptions
+		{
+			get { return new PasteOptions(); }
+		}
+
         #endregion
     }
 
@@ -1164,6 +1169,11 @@ namespace Teleopti.Ccc.Win.Common
         {
             get { return new NormalPasteBehavior(); }
         }
+
+		public PasteOptions PasteOptions
+		{
+			get { return new PasteOptions(); }
+		}
 
         public string Paste(GridControl gridControl, Clip<string> clip, int rowIndex, int columnIndex)
         {

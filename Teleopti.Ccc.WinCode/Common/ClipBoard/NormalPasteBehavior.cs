@@ -55,8 +55,16 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
                                         T pasteResult;
 										if(IsFullDayAbsence(part))
 										{
-											Clip<T> reducedClip = new Clip<T>(clip.RowOffset, clip.ColOffset, (T)ReducedAbsence(part));
-											
+
+											var reducedPart = ReducedAbsence(part);
+											if (!gridPasteAction.PasteOptions.MainShift)
+											{
+												var ass = reducedPart.AssignmentHighZOrder();
+												if (ass != null) reducedPart.Remove(ass);
+											}
+
+											Clip<T> reducedClip = new Clip<T>(clip.RowOffset, clip.ColOffset, (T)reducedPart);
+
 											//IScheduleDay dest = gridControl[row + reducedClip.RowOffset, col + reducedClip.ColOffset].CellValue as IScheduleDay;
 											// skip the Paste if there already is a FullDayAbsence
 											//if (!IsFullDayAbsence(dest))
@@ -134,8 +142,8 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
                 personAbsence.Layer.MoveLayer(diff);
             }
 
-	        var ass = part.AssignmentHighZOrder();
-			if(ass != null) part.Remove(ass);
+			//var ass = part.AssignmentHighZOrder();
+			//if(ass != null) part.Remove(ass);
 	
             return part;
         }
