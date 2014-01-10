@@ -34,5 +34,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertNotExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", date),
                                                  string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", dateAfter));
         }
+
+        [Then(@"I should see the day '(.*)' is not part of current month")]
+        public void ThenIShouldSeeTheDayIsNotPartOfCurrentMonth(DateTime date)
+        {
+            Browser.Interactions.AssertExists(string.Format(".cal-day-outmonth span[data-cal-date='{0:yyyy-MM-dd}']", date));
+        }
+
     }
 }

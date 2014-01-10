@@ -23,12 +23,13 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 	
 	function _bindData(data) {
 	    var startDate = new moment('2013-12-30');
+	    var selectedDate = startDate.clone().add('days',3);
 	    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
 	    for (var i = 0; i < 5; i++) {
 	        var newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
 	        for (var j = 0; j < 7; j++) {
 	            var date = startDate.clone();
-	            var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(date);
+	            var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(date,selectedDate);
 	            startDate.add('days', 1);
 	            newWeek.dayViewModels.push(newDay);
 	        }
