@@ -388,7 +388,6 @@
     <Compile Include="Domain\ILicense.cs" />
     <Compile Include="Domain\ILimitation.cs" />
     <Compile Include="Domain\IMemento.cs" />
-    <Compile Include="Domain\IMementoInformation.cs" />
     <Compile Include="Domain\IMultiplicator.cs" />
     <Compile Include="Domain\IMultiplicatorDefinition.cs" />
     <Compile Include="Domain\IMultiplicatorDefinitionSet.cs" />

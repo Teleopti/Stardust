@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.UndoRedo;
@@ -30,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		{
 			target.ChangedHandler -= OnChanged;
 		}
-
 
 		[Test]
 		public void VerifyContainerSize()
@@ -284,46 +280,21 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 			changedEventFired.Should().Be.False();
 		}
 
-		[Test]
-		public void VerifyUndoCollection()
-		{
-			var mem = new dummy("sdf");
-			target.SaveState(mem);
-			IList<IMementoInformation> coll = new List<IMementoInformation>(target.UndoCollection());
-
-			coll.Count.Should().Be.EqualTo(1);
-			coll[0].Should().Be.AssignableFrom<Memento<dummy>>();
-			coll[0].Description.Should().Be.EqualTo(dummy.desc);
-			target.RedoCollection().Count().Should().Be.EqualTo(0);
-		}
 
 		[Test]
-		public void VerifyDateTimeAndDescription()
+		public void VerifyBatchDescriptionUsedForErrorMessage()
 		{
-			var mem = new dummy("sdf");
 			target.CreateBatch("gnaget");
-			target.SaveState(mem);
-			target.CommitBatch();
-			IList<IMementoInformation> coll = new List<IMementoInformation>(target.UndoCollection());
-
-			coll[0].Time.Should()
-				.Be.IncludedIn(DateTime.Now.AddMinutes(-1), DateTime.Now.AddMinutes(1));
-			coll[0].Description.Should()
-				.Be.EqualTo("gnaget");
-			((BatchMemento)coll[0]).MementoCollection[0].Time.Should()
-				.Be.IncludedIn(DateTime.Now.AddMinutes(-1), DateTime.Now.AddMinutes(1));
-		}
-
-		[Test]
-		public void VerifyRedoCollection()
-		{
-			dummy mem = new dummy("sdf");
-			target.SaveState(mem);
-			target.Undo();
-			IList<IMementoInformation> coll = new List<IMementoInformation>(target.RedoCollection());
-			coll.Count.Should().Be.EqualTo(1);
-			coll[0].Should().Be.AssignableFrom<Memento<dummy>>();
-			target.UndoCollection().Count().Should().Be.EqualTo(0);
+			try
+			{
+				target.Undo();
+			}
+			catch (Exception ex)
+			{
+				ex.Message.Should().Contain("gnaget");
+				return;
+			}
+			Assert.Fail("Should throw");
 		}
 
 		[Test]
@@ -333,46 +304,6 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 			target.CommitBatch();
 			target.CanUndo().Should().Be.False();
 			changedEventFired.Should().Be.False();
-		}
-
-		[Test]
-		public void VerifyUndoUntil()
-		{
-			var mem = new dummy("start");
-			
-			target.SaveState(mem);
-			mem.state = "newer";
-			
-			target.SaveState(mem);
-			mem.state = "even newer";
-			Thread.Sleep(100);
-			var rollbackTime = DateTime.Now;
-			
-			target.SaveState(mem);
-			mem.state = "newest";
-
-			target.UndoUntil(rollbackTime);
-			mem.state.Should().Be.EqualTo("even newer");
-		}
-
-		[Test]
-		public void VerifyUndoUntilDoNothingOnEmptyUndoCollection()
-		{
-			dummy mem = new dummy("start");
-		  
-			target.UndoUntil(DateTime.MinValue);
-			mem.state.Should().Be.EqualTo("start");
-		}
-
-		[Test]
-		public void VerifyUndoUntilDoNothingIfDateIsLate()
-		{
-			dummy mem = new dummy("start");
-			target.SaveState(mem);
-			mem.state = "newer";
-
-			target.UndoUntil(DateTime.MaxValue);
-			mem.state.Should().Be.EqualTo("newer");
 		}
 
 		[Test]
