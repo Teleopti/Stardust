@@ -25,6 +25,13 @@ define([
 		this.Loading = ko.observable(false);
 
 		this.Persons = ko.observableArray();
+		this.SortedPersons = ko.computed(function() {
+			return self.Persons().sort(function(first, second) {
+				first = first.OrderBy();
+				second = second.OrderBy();
+				return first == second ? 0 : (first < second ? -1 : 1);
+			});
+		});
 
 		var layers = function() {
 			return lazy(self.Persons())
@@ -83,12 +90,6 @@ define([
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);
 			}
-
-			self.Persons().sort(function (first, second) {
-				first = first.OrderBy();
-				second = second.OrderBy();
-				return first == second ? 0 : (first < second ? -1 : 1);
-			});
 		};
 
 		this.NextDay = function () {

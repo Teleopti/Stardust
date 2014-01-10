@@ -152,7 +152,7 @@
 						
 						<!-- ko if: !Loading() -->
 						<!-- ko if: AddingActivity -->
-						<!-- ko foreach: Persons -->
+						<!-- ko foreach: SortedPersons -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
 								<div class="person-name nowrap" data-bind="text: Name"></div>

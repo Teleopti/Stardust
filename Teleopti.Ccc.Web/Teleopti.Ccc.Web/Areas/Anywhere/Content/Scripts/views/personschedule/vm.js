@@ -35,6 +35,13 @@ define([
 		this.Loading = ko.observable(false);
 		
 		this.Persons = ko.observableArray();
+		this.SortedPersons = ko.computed(function () {
+			return self.Persons().sort(function(first, second) {
+				first = first.OrderBy();
+				second = second.OrderBy();
+				return first == second ? 0 : (first < second ? -1 : 1);
+			});
+		});
 
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
@@ -174,12 +181,6 @@ define([
 
 			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
-			
-			self.Persons().sort(function (first, second) {
-				first = first.OrderBy();
-				second = second.OrderBy();
-				return first == second ? 0 : (first < second ? -1 : 1);
-			});
 		};
 		
 	};
