@@ -187,7 +187,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequestAdd.feature</DependentUpon>
     </Compile>
-    </Compile>
     <Compile Include="MyTime\WeekScheduleAvailableAbsenceHeadCount.feature.cs">
       <DependentUpon>WeekScheduleAvailableAbsenceHeadCount.feature</DependentUpon>
       <AutoGen>True</AutoGen>
