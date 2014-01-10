@@ -12,6 +12,7 @@ using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
+	[CLSCompliant(false)]
 	public class SignalWrapper : ISignalWrapper
 	{
 		private readonly IHubProxy _hubProxy;
@@ -221,6 +222,7 @@ namespace Teleopti.Messaging.SignalR
 		}
 	}
 
+	[CLSCompliant(false)]
 	public interface IHubConnectionWrapper
 	{
 		ConnectionState State { get; }
@@ -233,6 +235,7 @@ namespace Teleopti.Messaging.SignalR
 		IHubProxy CreateHubProxy(string hubName);
 	}
 
+	[CLSCompliant(false)]
 	public class HubConnectionWrapper : IHubConnectionWrapper
 	{
 		private readonly HubConnection _hubConnection;
