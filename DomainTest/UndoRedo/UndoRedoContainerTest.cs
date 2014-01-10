@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		    var mem = new dummy("1");
 		    target.SaveState(mem);
 		    mem.state = "2";
-            target.SaveState(mem);
+				target.SaveState(mem);
 		    mem.state = "3";
 
 		    target.Undo();
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[Test]
 		public void VerifyUndoAll()
 		{
-			dummy mem = new dummy("start");
+			var mem = new dummy("start");
 
 			target.SaveState(mem);
 			mem.state = "newer";
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		[Test]
 		public void VerifyUndoAllDoesNotCrashIfEmpty()
 		{
-			dummy mem = new dummy("start");
+			var mem = new dummy("start");
 
 			target.UndoAll();
 			mem.state.Should().Be.EqualTo("start");
@@ -385,6 +385,26 @@ namespace Teleopti.Ccc.DomainTest.UndoRedo
 		{
 			new Action(() => target.RollbackBatch())
 				.Should().Throw<InvalidOperationException>();
+		}
+
+		[Test]
+		public void VerifyUndoBatch()
+		{
+			var mem1 = new dummy("nytt");
+			target.CreateBatch("batchen");
+			target.SaveState(mem1);
+			target.CommitBatch();
+			mem1.state = "ändrat";
+			target.Undo();
+			mem1.state.Should().Be.EqualTo("nytt");
+		}
+
+		[Test]
+		public void EmptyBatchShouldNotCreateUndoItem()
+		{
+			target.CreateBatch("batchen");
+			target.CommitBatch();
+			target.CanUndo().Should().Be.EqualTo(false);
 		}
 
 		private void OnChanged(object sender, EventArgs e)
