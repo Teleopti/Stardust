@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see my schedule with")]
 		public void ThenIShouldSeeMyScheduleWith(Table table)
 		{
-			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
+			var expectedTimes = table.Rows[0][1] + " - " + table.Rows[1][1];
 
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
+			Browser.Interactions.AssertExists(".shift-trade-my-schedule .shift-trade-layer");
+			Browser.Interactions.AssertExists(string.Format(".shift-trade-my-schedule .shift-trade-layer[scheduleinfo*='{0}']", expectedTimes));
 		}
 
 		[Then(@"I should only see (.*)'s schedule")]
