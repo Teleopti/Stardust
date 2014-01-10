@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click on the next date")]
 		public void WhenIClickOnTheNextDate()
 		{
-			Browser.Interactions.Click(".icon-arrow-right");
+			Browser.Interactions.Click(".icon-chevron-right");
 		}
 
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
