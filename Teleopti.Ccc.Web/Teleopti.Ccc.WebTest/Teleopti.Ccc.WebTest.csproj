@@ -146,7 +146,6 @@
     <Compile Include="Areas\PerformanceTool\PerformanceToolAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Core\AutofacDependencyResolverTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\StaffingMetricsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\DailyStaffingMetricsViewModelFactoryTest.cs" />

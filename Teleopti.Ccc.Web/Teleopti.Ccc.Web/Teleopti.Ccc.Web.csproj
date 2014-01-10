@@ -75,6 +75,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.Mvc4.3.0.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Autofac.Integration.SignalR">
+      <HintPath>..\..\packages\Autofac.SignalR.3.0.1\lib\net40\Autofac.Integration.SignalR.dll</HintPath>
+    </Reference>
     <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
@@ -219,9 +222,6 @@
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\ActionThrottle.cs">
       <Link>Core\MessageBroker\ActionThrottle.cs</Link>
-    </Compile>
-    <Compile Include="..\..\Teleopti.Ccc.Web.Broker\AutofacDependencyResolver.cs">
-      <Link>Core\MessageBroker\AutofacDependencyResolver.cs</Link>
     </Compile>
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\IActionScheduler.cs">
       <Link>Core\MessageBroker\IActionScheduler.cs</Link>
