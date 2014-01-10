@@ -117,23 +117,26 @@ define([
 		};
 
 		this.PossbileIntersectWithShift = ko.computed(function () {
-			startTimeAsMoment = getMomentFromInput(self.StartTime());
-			endTimeAsMoment = getMomentFromInput(self.EndTime());
-			if (startTimeAsMoment.diff(endTimeAsMoment) < 0) {
-				if (intersectWithShift())
-					return true;
-				startTimeAsMoment.add('d', 1);
-				endTimeAsMoment.add('d', 1);
-				if (intersectWithShift())
-					return true;
-				return false;
-			} else {
-				endTimeAsMoment.add('d', 1);
-				if (intersectWithShift())
-					return true;
-				return false;
+			if (self.StartTime() && self.EndTime()) {
+				startTimeAsMoment = getMomentFromInput(self.StartTime());
+				endTimeAsMoment = getMomentFromInput(self.EndTime());
+				if (startTimeAsMoment.diff(endTimeAsMoment) < 0) {
+					if (intersectWithShift())
+						return true;
+					startTimeAsMoment.add('d', 1);
+					endTimeAsMoment.add('d', 1);
+					if (intersectWithShift())
+						return true;
+					return false;
+				} else {
+					endTimeAsMoment.add('d', 1);
+					if (intersectWithShift())
+						return true;
+					return false;
+				}
 			}
-		}).extend({ throttle: 1 });
+			return false;
+		});
 		
 		this.ErrorMessage = ko.computed(function () {
 			if (!self.PossbileIntersectWithShift()) {

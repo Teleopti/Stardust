@@ -170,13 +170,9 @@ define([
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);
-				
-				// make shiftstart and end computeds please!
-				if (person == self.SelectedPerson()) {
-					self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
-				}
 			}
 
+			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
 			self.AddActivityForm.WorkingShift(self.WorkingShift());
 			
 			self.Persons().sort(function (first, second) {
