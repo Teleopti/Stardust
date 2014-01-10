@@ -388,6 +388,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 				{
 					Expect.Call(pasteAction.PasteBehavior).Return(new NormalPasteBehavior());
 					Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(destination);
+					Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions());
 				}
 
 				using (mockRep.Playback())
