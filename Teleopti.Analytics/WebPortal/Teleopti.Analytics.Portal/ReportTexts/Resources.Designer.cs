@@ -2312,6 +2312,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time in State per Agent.
+        /// </summary>
+        public static string ResReportTimeInStatePerAgent {
+            get {
+                return ResourceManager.GetString("ResReportTimeInStatePerAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Request Period.
         /// </summary>
         public static string ResRequestPeriod {
@@ -2704,6 +2713,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResStandardDeviation {
             get {
                 return ResourceManager.GetString("ResStandardDeviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to State Groups:.
+        /// </summary>
+        public static string ResStateGroupColon {
+            get {
+                return ResourceManager.GetString("ResStateGroupColon", resourceCulture);
             }
         }
         
