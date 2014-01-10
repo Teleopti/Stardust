@@ -212,68 +212,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Test]
-		public void AbsenceShouldCountAsBlockDelimiterWhenUsingSingleAgentTeam()
-		{
-            //range period is 365 days
-            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
-            //matrix is 2 days
-            var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
-
-            using (_mocks.Record())
-            {
-                commonMocks(rangePeriod, matrixPeriod);
-
-                //1 is first because of nullcheck
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay).Repeat.Times(3);
-                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None).Repeat.AtLeastOnce();
-
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.Absence);
-                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.Absence);
-
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay2);
-                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
-            }
-
-            using (_mocks.Playback())
-            {
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), true);
-                Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
-            }
-		}
-
-        [Test]
-        public void FullAbsenceShouldCountAsBlockDelimiterWhenUsingSingleAgentTeam()
-        {
-            //range period is 365 days
-            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
-            //matrix is 2 days
-            var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
-
-            using (_mocks.Record())
-            {
-                commonMocks(rangePeriod, matrixPeriod);
-
-                //1 is first because of nullcheck
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay).Repeat.Times(3);
-	            Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None).Repeat.AtLeastOnce();
-
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.FullDayAbsence );
-                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
-
-                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay2);
-                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
-            }
-
-            using (_mocks.Playback())
-            {
-                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), true);
-                Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
-            }
-        }
-
         [Test]
         public void AbsenceShouldNotCountAsBlockDelimiterWithAbsence()
         {
