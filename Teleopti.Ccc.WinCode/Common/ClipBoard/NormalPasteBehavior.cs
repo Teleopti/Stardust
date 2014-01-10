@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCode.Common.Clipboard
 											var reducedPart = ReducedAbsence(part);
 											if (!gridPasteAction.PasteOptions.MainShift)
 											{
-												var ass = reducedPart.AssignmentHighZOrder();
+												var ass = reducedPart.PersonAssignment();
 												if (ass != null) reducedPart.Remove(ass);
 											}
 
