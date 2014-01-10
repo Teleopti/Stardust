@@ -118,14 +118,16 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_wrapper == null) return;
 
+
 				var task = _wrapper.NotifyClients(state);
 				task.ContinueWith(t =>
-				{
-					if (t.IsFaulted && t.Exception != null)
 					{
-						Logger.Error("An error happened when notifying multiple.", t.Exception.GetBaseException());
-					}
-				}, TaskContinuationOptions.OnlyOnFaulted);
+						if (t.IsFaulted && t.Exception != null)
+						{
+							Logger.Error("An error happened when notifying multiple.", t.Exception.GetBaseException());
+						}
+					}, TaskContinuationOptions.OnlyOnFaulted);
+				//task.Wait(10000);
 			}
 		}
 
@@ -134,22 +136,26 @@ namespace Teleopti.Messaging.SignalR
 			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			MessageId = "2")]
 		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
 			var notificationList = new List<Notification>();
 			var businessUnitIdString = Subscription.IdToString(businessUnitId);
 			foreach (var eventMessage in eventMessages)
 			{
-				notificationList.AddRange(CreateNotifications(dataSource,businessUnitIdString, eventMessage.EventStartDate, eventMessage.EventEndDate, eventMessage.ModuleId,
-								 eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache, eventMessage.DomainObjectId,
-								 eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType, eventMessage.DomainObject));
+				notificationList.AddRange(CreateNotifications(dataSource, businessUnitIdString, eventMessage.EventStartDate,
+				                                              eventMessage.EventEndDate, eventMessage.ModuleId,
+				                                              eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache,
+				                                              eventMessage.DomainObjectId,
+				                                              eventMessage.DomainObjectTypeCache, eventMessage.DomainUpdateType,
+				                                              eventMessage.DomainObject));
 
-				if (notificationList.Count>200)
-					{
+				if (notificationList.Count > 200)
+				{
 					callProxy(notificationList);
 					notificationList.Clear();
-					}
+				}
 			}
 			if (notificationList.Count > 0)
 			{
@@ -345,9 +351,9 @@ namespace Teleopti.Messaging.SignalR
 			{
 				_subscriberWrapper = new SignalSubscriber(hubProxy);
 				_subscriberWrapper.OnNotification += onNotification;
-				_subscriberWrapper.Start(); 
-				
-				_wrapper = new SignalWrapper(hubProxy, connection);
+				_subscriberWrapper.Start();
+
+				_wrapper = new SignalWrapper(hubProxy, new HubConnectionWrapper(connection));
 				_wrapper.StartHub();
 			}
 		}

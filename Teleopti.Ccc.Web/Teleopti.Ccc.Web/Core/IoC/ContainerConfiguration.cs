@@ -2,7 +2,9 @@
 using System.Reflection;
 using Autofac;
 using Autofac.Configuration;
+using Autofac.Extras.DynamicProxy2;
 using Autofac.Integration.Mvc;
+using Autofac.Integration.SignalR;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
@@ -34,6 +36,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			var builder = new ContainerBuilder();
 
 			builder.RegisterControllers(Assembly.GetExecutingAssembly());
+			builder.RegisterHubs(Assembly.GetExecutingAssembly()).EnableClassInterceptors();
 
 			builder.RegisterModule(new AutofacWebTypesModule());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
