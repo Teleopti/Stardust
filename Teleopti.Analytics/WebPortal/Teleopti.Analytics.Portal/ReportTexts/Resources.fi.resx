@@ -165,11 +165,11 @@
     <comment>Päivämäärä</comment>
   </data>
   <data name="ResDateFromColon" xml:space="preserve">
-    <value>Pvm. alkaen:</value>
+    <value>Päivämäärä alkaen:</value>
     <comment>Mistä</comment>
   </data>
   <data name="ResDateToColon" xml:space="preserve">
-    <value>Pvm. päättyen:</value>
+    <value>Päivämäärä päättyen:</value>
     <comment>Mihin</comment>
   </data>
   <data name="ResGrandTotal" xml:space="preserve">
@@ -177,7 +177,7 @@
     <comment>Yhteensä</comment>
   </data>
   <data name="ResInterval" xml:space="preserve">
-    <value>Aikajakso</value>
+    <value>Ajanjakso</value>
     <comment>Aikajakso</comment>
   </data>
   <data name="ResIntervalColon" xml:space="preserve">
@@ -219,11 +219,11 @@
     <comment>Absenteeism (%)</comment>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Noudattaminen (%) ???</value>
+    <value>Työvuorolistan noudattaminen (%)</value>
     <comment>Adherence (%)</comment>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
-    <value>Vastatut puhelut suunniteltua puhelintuntia kohti</value>
+    <value>Vastatut puhelut / Suunniteltu puhelintuntia </value>
     <comment>Answered Calls per Scheduled Phone Hour</comment>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
@@ -258,13 +258,13 @@
     <value>Tiimi - todellinen </value>
   </data>
   <data name="ResTrend" xml:space="preserve">
-    <value>Kehityssuunta</value>
+    <value>Trendi</value>
   </data>
   <data name="LogInButton" xml:space="preserve">
     <value>Sisäänkirjautuminen</value>
   </data>
   <data name="LogInError" xml:space="preserve">
-    <value>Sisäänkirjautumisyritys epäonnistui. Yritä uudelleen.</value>
+    <value>Sisäänkirjautuminen epäonnistui. Yritä uudelleen.</value>
   </data>
   <data name="LogInName" xml:space="preserve">
     <value>Käyttäjätunnus:</value>
@@ -294,7 +294,7 @@
     <value>Skenaario:</value>
   </data>
   <data name="ResAbandonRateExclShortCallsPercent" xml:space="preserve">
-    <value>Hylkäysprosentti  mukaan lukien lyhyet puhelut</value>
+    <value>Hylkäysprosentti ilman lyhyet puhelut</value>
   </data>
   <data name="ResAbandonRatePercent" xml:space="preserve">
     <value>Hylkäysaste (%)</value>
@@ -307,7 +307,7 @@
     <value>Keskimääräinen vastausaika (s)</value>
   </data>
   <data name="ResAverageTimeToAbandonSec" xml:space="preserve">
-    <value>Keskimääräinen hylkäysaika (s)</value>
+    <value>Keskimääräinen luovuttamisaika (s)</value>
   </data>
   <data name="ResDatePeriodColon" xml:space="preserve">
     <value>Jakso päivinä:</value>
@@ -324,7 +324,7 @@
     <value>Jakso</value>
   </data>
   <data name="ResReportAbandonmentAndSpeedOfAnswer" xml:space="preserve">
-    <value>Hylkäys ja vastausaika (s)</value>
+    <value>Hylkäys- ja vastausaika (s)</value>
   </data>
   <data name="ResSeconds" xml:space="preserve">
     <value>Sekuntia</value>
@@ -347,7 +347,7 @@
     <comment>Actual ATT</comment>
   </data>
   <data name="ResACW" xml:space="preserve">
-    <value>Jälkityö (ACW)</value>
+    <value>Jälkityöaika (ACW)</value>
     <comment>After Call Work (ACW)</comment>
   </data>
   <data name="ResATT" xml:space="preserve">
@@ -387,7 +387,7 @@
     <comment>Agents Ready</comment>
   </data>
   <data name="ResAgentsScheduled" xml:space="preserve">
-    <value>Suunnitellut agentit</value>
+    <value>Työvuorotetut agentit</value>
     <comment>Agents Scheduled</comment>
   </data>
   <data name="ResRelativeDifferencePercent" xml:space="preserve">
@@ -395,7 +395,7 @@
     <comment>Relative Difference (%)</comment>
   </data>
   <data name="ResForecastedTimeH" xml:space="preserve">
-    <value>Arvioitu / Ennustettu aika (hh:mm)</value>
+    <value>Ennustettu aika (tt:mm)</value>
     <comment>Forecasted Time (hh:mm)</comment>
   </data>
   <data name="ResOfferedCalls" xml:space="preserve">
@@ -419,7 +419,7 @@
     <comment>Service Level  and Agents Ready</comment>
   </data>
   <data name="ResScheduledReadyTime" xml:space="preserve">
-    <value>Suunniteltu valmis-aika</value>
+    <value>Työvuorotettu valmis-aika</value>
     <comment>Scheduled Ready Time</comment>
   </data>
   <data name="ResScheduledvsReady" xml:space="preserve">
@@ -427,11 +427,11 @@
     <comment>Scheduled vs Ready Agents</comment>
   </data>
   <data name="ResSmoothnessPercent" xml:space="preserve">
-    <value>Tasaisuus (%)</value>
+    <value>Tasoitus (%)</value>
     <comment>Smoothness (%)</comment>
   </data>
   <data name="ResWeekdayAndSkill" xml:space="preserve">
-    <value>Viikonpäivä / Taito </value>
+    <value>Viikonpäivä / taito </value>
     <comment>Weekday / Skill</comment>
   </data>
   <data name="ResAgentCategoryColon" xml:space="preserve">
@@ -439,7 +439,7 @@
     <comment>Agent Category:</comment>
   </data>
   <data name="ResAgentCategoryTypeColon" xml:space="preserve">
-    <value>Agenttiluokkatyyppi:</value>
+    <value>Agenttiluokka:</value>
     <comment>Agent Category Type:</comment>
   </data>
   <data name="ResAgentsColon" xml:space="preserve">
@@ -447,15 +447,15 @@
     <comment>Agents:</comment>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>Agentti työvuorotulos</value>
+    <value>Agentin metrikka</value>
     <comment>Agent Schedule Result</comment>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
-    <value>Noudattaminen (%)</value>
+    <value>Työvuorolistan noudattaminen (%)</value>
     <comment>Adherence (%)</comment>
   </data>
   <data name="ResAgentDate" xml:space="preserve">
-    <value>Agentti / Päivämäärä</value>
+    <value>Agentti / Päivä</value>
     <comment>Agent / Date</comment>
   </data>
   <data name="ResAnsweredCallsPerScheduledHour" xml:space="preserve">
@@ -475,7 +475,7 @@
     <comment>Ready Time</comment>
   </data>
   <data name="ResAdherenceCalculationColon" xml:space="preserve">
-    <value>Noudattamisen laskenta:</value>
+    <value>Työvuorolistan noudattaminen laskenta:</value>
     <comment>Adherence Calculation:</comment>
   </data>
   <data name="ResOfferedCallsPerAgent" xml:space="preserve">
@@ -499,7 +499,7 @@
     <comment>Sort by:</comment>
   </data>
   <data name="ResReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Valmis-aika / Suunniteltu valmiusaika (%)</value>
+    <value>Valmis-aika / suunniteltu valmiusaika (%)</value>
     <comment>Ready Time / Scheduled Ready Time  (%)</comment>
   </data>
   <data name="ResScheduledAgentsReady" xml:space="preserve">
@@ -519,7 +519,7 @@
     <comment>Previous</comment>
   </data>
   <data name="ResAdherencePerIntervalPercent" xml:space="preserve">
-    <value>Noudattaminen / Aikaväli (%)</value>
+    <value>Työvuorolistan noudattaminen / Ajanjakso (%)</value>
     <comment>Adherence / Interval (%)</comment>
   </data>
   <data name="ResDeviationPerIntervalMinute" xml:space="preserve">
@@ -535,7 +535,7 @@
     <comment>Queue Statistics</comment>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
-    <value>Palvelutason puitteissa hylätyt</value>
+    <value>Palvelutason sisällä hylätyt</value>
     <comment>Abandoned Within Service Level</comment>
   </data>
   <data name="ResAbandonedShortCalls" xml:space="preserve">
@@ -599,11 +599,11 @@
     <comment>Admin Time</comment>
   </data>
   <data name="ResDirectIncomingCalls" xml:space="preserve">
-    <value>Suorat saapuvat puhelut</value>
+    <value>Sisääntulevat suoratpuhelut</value>
     <comment>Direct Incoming Calls</comment>
   </data>
   <data name="ResDirectIncomingCallsTalkTime" xml:space="preserve">
-    <value>Suorien saapuvien puhelujen puheaika</value>
+    <value>Sisääntulevien suorienpuheluiden kesto</value>
     <comment>Direct Incoming Calls Talk Time</comment>
   </data>
   <data name="ResDirectOutboundCalls" xml:space="preserve">
@@ -611,7 +611,7 @@
     <comment>Direct Outbound Calls</comment>
   </data>
   <data name="ResDirectOutboundCallsTalkTime" xml:space="preserve">
-    <value>Suorien lähtevien puhelujen puheaika</value>
+    <value>Suorien lähtevien puhelujen kesto</value>
     <comment>Direct Outbound Calls Talk Time</comment>
   </data>
   <data name="ResIdleTime" xml:space="preserve">
@@ -631,7 +631,7 @@
     <comment>Date / Interval</comment>
   </data>
   <data name="ResPermissionDenied" xml:space="preserve">
-    <value>Lupa evätty</value>
+    <value>Pääsy evätty</value>
     <comment>Permission Denied</comment>
   </data>
   <data name="ResOverflowInCalls" xml:space="preserve">
@@ -643,11 +643,11 @@
     <comment>Overflow Out Calls</comment>
   </data>
   <data name="ResForecastedTimeIncludingShrinkageH" xml:space="preserve">
-    <value>Ennustettu aika sis. kutistuman (hh:mm)</value>
+    <value>Ennustettu aika sisältäen sairaspoissaolot (tt:mm)</value>
     <comment>Forecasted Time incl. Shrinkage (hh:mm)</comment>
   </data>
   <data name="ResScheduledTimeH" xml:space="preserve">
-    <value>Suunniteltu aika (hh:mm)</value>
+    <value>Suunniteltu aika (tt:mm)</value>
     <comment>Scheduled Time (hh:mm)</comment>
   </data>
   <data name="ResStandardDeviation" xml:space="preserve">
@@ -659,15 +659,15 @@
     <comment>Week:</comment>
   </data>
   <data name="ResReportScheduledTimePerAgent" xml:space="preserve">
-    <value>Suunniteltu aika agenttia kohti</value>
+    <value>Suunniteltu aika / agentti</value>
     <comment>Scheduled Time per Agent</comment>
   </data>
   <data name="ResScheduledAbsenceTime" xml:space="preserve">
-    <value>Suunniteltu poissaoloaika (hh:mm)</value>
+    <value>Suunniteltu poissaoloaika (tt:mm)</value>
     <comment>Scheduled Absence Time (hh:mm)</comment>
   </data>
   <data name="ResScheduledOverTime" xml:space="preserve">
-    <value>Suunniteltu ylityöaika (hh:mm)</value>
+    <value>Suunniteltu ylityöaika (tt:mm)</value>
     <comment>Scheduled Over Time (hh:mm)</comment>
   </data>
   <data name="ResAbsenceColon" xml:space="preserve">
@@ -679,23 +679,23 @@
     <comment>Activity:</comment>
   </data>
   <data name="ResForecastedHoursH" xml:space="preserve">
-    <value>Ennustetut tunnit (hh:mm)</value>
+    <value>Ennustetut tunnit (tt:mm)</value>
     <comment>Forecasted Hours (hh:mm)</comment>
   </data>
   <data name="ResScheduledHoursH" xml:space="preserve">
-    <value>Suunnitellut tunnit (hh:mm)</value>
+    <value>Suunnitellut tunnit (tt:mm)</value>
     <comment>Scheduled Hours (hh:mm)</comment>
   </data>
   <data name="ResForecastedHoursIncludingShrinkageH" xml:space="preserve">
-    <value>Ennustetut tunnit (kutistuma) (hh:mm)</value>
+    <value>Ennustetut tunnit (sairaspoissaolot) (tt:mm)</value>
     <comment>Prognostiserade timmar (shrinkage) (hh:mm)</comment>
   </data>
   <data name="ResRelativeDifferenceInclShrinkagePercent" xml:space="preserve">
-    <value>Suhteellinen erotus, sis. kutistuman (%)</value>
+    <value>Suhteellinen erotus sisältäen sairaspoissaolot (%)</value>
     <comment>Relative Difference incl. Shrinkage (%)</comment>
   </data>
   <data name="ResReportShiftCategoryPerDay" xml:space="preserve">
-    <value>Vuoroluokka päivää kohti </value>
+    <value>Vuoroluokka / päivä</value>
     <comment>Shift Category per Day</comment>
   </data>
   <data name="ResShiftCategoryColon" xml:space="preserve">
@@ -715,7 +715,7 @@
     <comment>Selections</comment>
   </data>
   <data name="ResReportScheduledTimePerActivity" xml:space="preserve">
-    <value>Suunniteltu aika aktiviteettia kohti</value>
+    <value>Suunniteltu aika / aktiviteetti</value>
     <comment>Scheduled Time per Activity</comment>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
@@ -723,27 +723,27 @@
     <comment>Team Metrics</comment>
   </data>
   <data name="ResTeamDate" xml:space="preserve">
-    <value>Tiimi / Päivämäärä</value>
+    <value>Tiimi / päivämäärä</value>
     <comment>Team / Date</comment>
   </data>
   <data name="ResAnsweredCallsPerReadyHour" xml:space="preserve">
-    <value>Vastatut puhelut / Valmiusaika (hh:mm)</value>
+    <value>Vastatut puhelut / Valmiusaika (tt:mm)</value>
     <comment>Answered Calls / Ready Hour</comment>
   </data>
   <data name="ResContractAbsenceTimeH" xml:space="preserve">
-    <value>Sopimuksen poissaoloaika (hh:mm)</value>
+    <value>Sopimuksen poissaoloaika (tt:mm)</value>
     <comment>Contract Absence Time (hh:mm)</comment>
   </data>
   <data name="ResContractTimeH" xml:space="preserve">
-    <value>Sopimusaika (hh:mm)</value>
+    <value>Sopimusaika (tt:mm)</value>
     <comment>Contract Time (hh:mm)</comment>
   </data>
   <data name="ResPaidTimeH" xml:space="preserve">
-    <value>Maksettu aika (hh:mm)</value>
+    <value>Maksettu aika (tt:mm)</value>
     <comment>Paid Time (hh:mm)</comment>
   </data>
   <data name="ResWorkTimeH" xml:space="preserve">
-    <value>Työaika (hh:mm)</value>
+    <value>Työaika (tt:mm)</value>
     <comment>Work Time (hh:mm)</comment>
   </data>
   <data name="ResPreferencesAccepted" xml:space="preserve">
@@ -779,7 +779,7 @@
     <comment>Scheduled Agents per Interval and Team</comment>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
-    <value>PARANTAA</value>
+    <value>IMPROVE</value>
     <comment>IMPROVE</comment>
   </data>
   <data name="ResHandlingTimePerPaidTime" xml:space="preserve">
@@ -867,15 +867,15 @@
     <comment>Agent Scorecard</comment>
   </data>
   <data name="ResAbsencePaidTimeH" xml:space="preserve">
-    <value>Maksettu aika (hh:mm)</value>
+    <value>Maksettu aika (tt:mm)</value>
     <comment>Absence Paid Time (hh:mm)</comment>
   </data>
   <data name="ResAbsenceWorkTimeH" xml:space="preserve">
-    <value>Työaika (hh:mm)</value>
+    <value>Työaika (tt:mm)</value>
     <comment>Absence Work Time (hh:mm)</comment>
   </data>
   <data name="ResReportAbsenceTimePerAgent" xml:space="preserve">
-    <value>Poissaoloaika agenttia kohti</value>
+    <value>Poissaoloaika / Agentti</value>
     <comment>Absence Time per Agent</comment>
   </data>
   <data name="ResAbsenceDayCount" xml:space="preserve">
@@ -895,7 +895,7 @@
     <comment>When using Windows authentication at the web application it is not valid to use Application authentication at the client side.</comment>
   </data>
   <data name="PleaseUseApplicationLoginInstead" xml:space="preserve">
-    <value>Käytä sen sijaan aplikaatiosisäänkirjautumista.</value>
+    <value>Käytä aplikaatiosisäänkirjautumista.</value>
     <comment>Please use application login instead.</comment>
   </data>
   <data name="PossibleSolution" xml:space="preserve">
@@ -915,7 +915,7 @@
     <comment>Technical information</comment>
   </data>
   <data name="UnknownError" xml:space="preserve">
-    <value>Tuntematon virhe</value>
+    <value>Odottamaton virhe</value>
     <comment>Unknown Error</comment>
   </data>
   <data name="ResAbsence" xml:space="preserve">
@@ -927,7 +927,7 @@
     <comment>Activity</comment>
   </data>
   <data name="ResAdherence" xml:space="preserve">
-    <value>Noudattaminen</value>
+    <value>Työvuorolistan noudattaminen</value>
     <comment>Adherence</comment>
   </data>
   <data name="ResAll" xml:space="preserve">
@@ -991,15 +991,15 @@
     <comment>Not Defined</comment>
   </data>
   <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Valmiusaika vs sopimustyöaika</value>
+    <value>Valmiusaika / sopimustyöaika</value>
     <comment>Ready Time vs. Contracted Schedule Time</comment>
   </data>
   <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
-    <value>Valmiusaika vs suunniteltu valmiusaika</value>
+    <value>Valmiusaika / suunniteltu valmiusaika</value>
     <comment>Ready Time vs Scheduled Ready Time</comment>
   </data>
   <data name="ResReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Valmiusaika vs suunniteltu aika (sis. ajan ennen ja jälkeen vuoron aloituksen)</value>
+    <value>Valmiusaika / suunniteltu aika (sis. ajan ennen ja jälkeen vuoron aloituksen)</value>
     <comment>Ready Time vs. Scheduled Time (incl time before and after shiftstart)</comment>
   </data>
   <data name="ResSaturday" xml:space="preserve">
@@ -1011,7 +1011,7 @@
     <comment>Shift Category</comment>
   </data>
   <data name="ResShiftStartTime" xml:space="preserve">
-    <value>Vuoron aloitusaika</value>
+    <value>Työvuoron alkamisaika</value>
     <comment>Shift Start Time</comment>
   </data>
   <data name="ResSunday" xml:space="preserve">
@@ -1050,16 +1050,16 @@
     <value>Tuloskortti ei ole saatavilla</value>
   </data>
   <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
-    <value>Poissaoloaika per poissa poissaolotyyppi</value>
+    <value>Poissaoloaika / Poissaolo</value>
   </data>
   <data name="Main" xml:space="preserve">
     <value>Liiketoimintahierarkia</value>
   </data>
   <data name="Contracts" xml:space="preserve">
-    <value>Sopimukset</value>
+    <value>Työsopimukset</value>
   </data>
   <data name="ContractSchedule" xml:space="preserve">
-    <value>Sopimusaikataulu</value>
+    <value>Sopimus aikataulu</value>
   </data>
   <data name="Note" xml:space="preserve">
     <value>Huomautus</value>
@@ -1080,7 +1080,7 @@
     <value>Taito</value>
   </data>
   <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
-    <value>Suunniteltu ylityö / Agentti</value>
+    <value>Työvuorotettu ylityö / agentti</value>
   </data>
   <data name="ResOvertimeColon" xml:space="preserve">
     <value>Ylityö:</value>
@@ -1089,40 +1089,40 @@
     <value>Ylityön tyyppi:</value>
   </data>
   <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
-    <value>Keskimääräinen After Call Work (s)</value>
+    <value>Keskimääräinen puhelun jälkeinen työ (s)</value>
   </data>
   <data name="ResKpiAverageHandleTime" xml:space="preserve">
     <value>Keskimääräinen käsittelyaika (s)</value>
   </data>
   <data name="ResKpiAverageTalkTime" xml:space="preserve">
-    <value>Keskimääräinen Puheaika (s)</value>
+    <value>Keskimääräinen puheaika (s)</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>Agenttin jono metriikka</value>
+    <value>Agentin jonometriikka</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Aktiviteettien aika / Agentti</value>
+    <value>Aktiviteetti aika / Agentti</value>
   </data>
   <data name="ResOvertimeH" xml:space="preserve">
-    <value>Ylityö (hh:mm)</value>
+    <value>Ylityö (tt:mm)</value>
   </data>
   <data name="ResShiftEndTime" xml:space="preserve">
     <value>Työvuoron päättymisaika</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
-    <value>Työvuoroluokka ja Kokonaiset poissaolopäivät / Agentti</value>
+    <value>Työvuoroluokka ja kokonaiset poissaolopäivät / agentti</value>
   </data>
   <data name="ResRequestTypeAbsence" xml:space="preserve">
     <value>Poissaolo</value>
   </data>
   <data name="ResRequestTypeShiftTrade" xml:space="preserve">
-    <value>Vuoronvaihto</value>
+    <value>Vuoronvaihtopyyntö</value>
   </data>
   <data name="ResRequestTypeText" xml:space="preserve">
     <value>Teksti</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Pyyntö / Agentti</value>
+    <value>Pyynnöt / agentti</value>
   </data>
   <data name="ResRequestStatusApproved" xml:space="preserve">
     <value>Hyväksytty</value>
@@ -1146,7 +1146,7 @@
     <value>Pyydetyt päivät</value>
   </data>
   <data name="ResRequestsStartDayCount" xml:space="preserve">
-    <value>Pyyntö</value>
+    <value>Pyynnöt</value>
   </data>
   <data name="ResRequestType" xml:space="preserve">
     <value>Tyyppi</value>
@@ -1155,15 +1155,147 @@
     <value>Hakemus päivämäärä</value>
   </data>
   <data name="ResRequestPeriod" xml:space="preserve">
-    <value>Pyyntöjakso</value>
+    <value>Pyyntökausi</value>
   </data>
   <data name="RedirectNow" xml:space="preserve">
-    <value>Ohjaauudelleen</value>
+    <value>Lähetä edelleen</value>
   </data>
   <data name="SessionExpiredHeader" xml:space="preserve">
     <value>Istunto päättynyt</value>
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
     <value>Sinun istuntosi on päättynyt, koska et ole ollut aktiivisena. Sinut ohjataan sisäänkirjautumissivulle. </value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Työvuorolistan noudattaminen / Agentti</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Työvuorolistan noudattaminen / Päivä</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agentin taidot</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Käytettävyys / Agentti</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Käytettävissä olevat päivät</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Käytettävyys aika</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Yhteys tietokantaan katkennut, yritä rajoittaa hakua.</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Nykyinen sivu</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Päivä (työvuoro alkaa):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Päivämäärä alkaen (työvuoro alkaa):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Päivään (työvuoro alkaa):</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Tallenna</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Etsi</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Etsi seuraava</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Etsi teksti raportissa</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>Ensimmäinen sivu</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Toteutunut</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Toteutumisprosentti (%)</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Virheellinen sivunumero</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Viimeinen sivu</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>"Pakolliset toiveet"</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Seuraava</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Seuraava sivu</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Muita osumia ei löytynyt.</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>pois päältä</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Vain aktiiviset taidot</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Vain aktiiviset taidot:</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Sivun asetukset</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Sivun leveys</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Edellinen sivu</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Tulosta</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Tulostuksen asetukset</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Päivitä</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Suunnitellut agenttit / aktiviteetti</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Työvuorotetut päivät</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Uloskirjautuminen</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Pysäytä tulkinta</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Tekstiä ei löytynyt.</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Kaikki sivut</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Kaikki</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Ei toteutunut</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Käyttöaste</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Koko sivu</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Suurenna</value>
   </data>
 </root>
