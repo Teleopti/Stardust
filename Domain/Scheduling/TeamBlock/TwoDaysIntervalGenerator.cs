@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -9,66 +8,47 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     
     public interface ITwoDaysIntervalGenerator
     {
-        Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> GenerateTwoDaysInterval(
-            IEnumerable<KeyValuePair<DateOnly, IList<ISkillIntervalData>>> dayIntervalData, int resolution);
+	    Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> GenerateTwoDaysInterval(
+		    IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
     }
 
     public class TwoDaysIntervalGenerator : ITwoDaysIntervalGenerator 
     {
-        public  Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> GenerateTwoDaysInterval(IEnumerable<KeyValuePair<DateOnly, IList<ISkillIntervalData>>> dayIntervalData, int resolution)
-        {
-            var twoDayIntervalsForAllDays = new Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>>();
+	    public Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> GenerateTwoDaysInterval(
+		    IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData)
+	    {
+		    var twoDayIntervalsForAllDays = new Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>>();
 
-            foreach (var dayInterval in dayIntervalData)
-            {
-                var firstDayBaseDate = new DateOnly(dayInterval.Value.Select(x => x.Period.StartDateTime.Date).Min());
-                var intervalToSkillInterval = new Dictionary<TimeSpan, ISkillIntervalData>();
-                getDataForAllIntervals(DayIntervalGenerator.IntervalForFirstDay(resolution), dayInterval.Value, firstDayBaseDate, intervalToSkillInterval);
-                var secondDayBaseDate = new DateOnly(dayInterval.Value.Select(x => x.Period.StartDateTime.Date).Max());
-                if (firstDayBaseDate == secondDayBaseDate)
-                {
-                    twoDayIntervalsForAllDays.Add(secondDayBaseDate, intervalToSkillInterval);
-                    continue;
-                }
-                getDataForAllIntervals(DayIntervalGenerator.IntervalForSecondDay(resolution), dayInterval.Value, secondDayBaseDate, intervalToSkillInterval);
-                twoDayIntervalsForAllDays.Add(firstDayBaseDate, intervalToSkillInterval);
-            }
-            return twoDayIntervalsForAllDays;
-        }
+		    var firstDate = dayIntervalData.Keys.Min();
+		    for (int i = 0; i < dayIntervalData.Count - 1; i++)
+		    {
+			    var dateOnly = firstDate.AddDays(i);
+			    var timeSpanDic = new Dictionary<TimeSpan, ISkillIntervalData>();
 
-        private void getDataForAllIntervals(IEnumerable<TimeSpan> listOfIntervals, IList<ISkillIntervalData> dayIntervalList, DateOnly firstDayBaseDate, Dictionary<TimeSpan, ISkillIntervalData> toSkillInterval)
-        {
-            foreach (var interval in listOfIntervals)
-            {
-                TimeSpan interval1 = interval;
-                var actualInterval = getTheExactInterval(dayIntervalList, firstDayBaseDate, interval);
-                if (actualInterval == null) continue;
-                if (new DateOnly(actualInterval.Period.StartDateTime) == firstDayBaseDate &&
-                    matchInterval(actualInterval.Period.StartDateTime.TimeOfDay, interval))
-                    toSkillInterval.Add(interval1, actualInterval);
+			    var sourceList = dayIntervalData[dateOnly];
+			    foreach (var skillIntervalData in sourceList)
+			    {
+				    var keyTimeSpan = toLocalTimeKey(skillIntervalData.Period.StartDateTime, dateOnly);
+				    timeSpanDic.Add(keyTimeSpan, skillIntervalData);
+			    }
 
-            }
-        }
-        private bool matchInterval(TimeSpan actualInterval, TimeSpan interval)
-        {
-            var sourceTime = new TimeSpan(interval.Hours, interval.Minutes, interval.Seconds);
-            if (sourceTime == actualInterval)
-                return true;
-            return false;
-        }
+				sourceList = dayIntervalData[dateOnly.AddDays(1)];
+				foreach (var skillIntervalData in sourceList)
+				{
+					var keyTimeSpan = toLocalTimeKey(skillIntervalData.Period.StartDateTime, dateOnly);
+					timeSpanDic.Add(keyTimeSpan, skillIntervalData);
+				}
 
-        private ISkillIntervalData getTheExactInterval(IEnumerable<ISkillIntervalData> skillIntervalDatas, DateTime baseDate, TimeSpan focusedInterval)
-        {
-            var trimFocusedDate = new TimeSpan(0, focusedInterval.Hours, focusedInterval.Minutes,
-                                               focusedInterval.Seconds);
-            var extractSkillData = (from eachInterval in skillIntervalDatas
-                                    where new DateOnly(eachInterval.Period.StartDateTime) == baseDate
-                                    select eachInterval).ToList();
-            var returningSkillData = (from eachData in extractSkillData
-                                      where eachData.Period.StartDateTime.TimeOfDay == trimFocusedDate
-                                      select eachData).FirstOrDefault();
-            return returningSkillData;
+				twoDayIntervalsForAllDays.Add(dateOnly, timeSpanDic);
+		    }
 
-        }
+		    return twoDayIntervalsForAllDays;
+	    }
+
+	    private TimeSpan toLocalTimeKey(DateTime dateTime, DateOnly baseDate)
+		{
+			var dateOffset = dateTime.Date.Subtract(baseDate);
+			return dateTime.TimeOfDay.Add(dateOffset);
+		}
     }
 }

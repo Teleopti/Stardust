@@ -544,6 +544,9 @@
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverter.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\TeamBlock\CalculateAggregatedDataForActivtyAndDate.cs" />
+    <Compile Include="Scheduling\TeamBlock\CreateSkillIntervalDataPerDateAndActivity.cs" />
+    <Compile Include="Scheduling\TeamBlock\CreateSkillIntervalDatasPerActivtyForDate.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataEntendedMedianCalculator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />

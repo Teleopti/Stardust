@@ -43,8 +43,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockClearer _teamBlockCleaner;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 	    private IOpenHourRestrictionForTeamBlock _openHourRestrictionforTeamBlock;
+		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
+		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> _skillIntervalDataPerDateAndActivity;
 
-	    [SetUp]
+		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -75,9 +78,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_openHoursToEffectiveRestrictionConverter = _mocks.StrictMock<IOpenHoursToEffectiveRestrictionConverter>();
 			_teamBlockCleaner = _mocks.StrictMock<ITeamBlockClearer>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_target = new TeamBlockScheduler(_skillDayPeriodIntervalDataGenerator, _restrictionAggregator,
-											 _workShiftFilterService, _teamScheduling, _workShiftSelector,
-											 _openHoursToEffectiveRestrictionConverter, _teamBlockCleaner, _rollbackService,_openHourRestrictionforTeamBlock );
+		    _dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
+		    _createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
+			_target = new TeamBlockScheduler(_skillDayPeriodIntervalDataGenerator, 
+											_restrictionAggregator,
+											 _workShiftFilterService, 
+											 _teamScheduling, 
+											 _workShiftSelector,
+											 _teamBlockCleaner, 
+											 _rollbackService,
+											 _openHourRestrictionforTeamBlock,
+											 _createSkillIntervalDataPerDateAndActivity,
+											 _schedulingResultStateHolder,
+											 _dayIntervalDataCalculator);
+			_skillIntervalDataPerDateAndActivity =
+				new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
 		}
 
 		[Test]
@@ -98,8 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-	  .Return(activityData).Repeat.AtLeastOnce();
+
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true)).Return(null);
@@ -125,8 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
@@ -154,8 +167,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-.Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true)).Return(shifts);
@@ -192,8 +205,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions, finderResult, true))
 					  .Return(shifts).Repeat.AtLeastOnce();
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
@@ -255,8 +268,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
 					  .Return(shifts);
 
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 
@@ -295,6 +308,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			var shifts = getCashes();
 			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			using (_mocks.Record())
 			{
@@ -306,8 +320,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
 					  .Return(shifts);
 
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
@@ -350,8 +364,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   finderResult, true))
 					  .Return(shifts).Repeat.AtLeastOnce();
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
@@ -400,8 +414,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
 					  .Return(shifts);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
@@ -442,8 +456,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person, _teamBlockInfo, restriction, shifts[0], _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly)))
 					  .Return(shifts);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
@@ -499,8 +513,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
 					  .Return(shifts);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
@@ -536,8 +550,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 														   new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
 					  .Return(shifts);
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
@@ -598,8 +612,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 															new WorkShiftFinderResult(_groupPerson, _dateOnly), true))
 					  .Return(shifts).Repeat.AtLeastOnce();
-				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
-					  .Return(activityData).Repeat.AtLeastOnce();
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					  .Return(_skillIntervalDataPerDateAndActivity).Repeat.AtLeastOnce();
 				//Expect.Call(_openHoursToEffectiveRestrictionConverter.Convert(activityData)).Return(restriction).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
