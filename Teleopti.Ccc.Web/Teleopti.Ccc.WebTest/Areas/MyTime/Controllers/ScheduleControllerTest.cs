@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			}
 		}
         
-        //TODO: Implement
         [Test]
         public void ShouldReturnJsonScheduleForCurrentMonth()
         {
