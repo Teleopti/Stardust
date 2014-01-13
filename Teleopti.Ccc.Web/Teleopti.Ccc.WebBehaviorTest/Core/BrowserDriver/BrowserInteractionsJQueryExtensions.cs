@@ -79,6 +79,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.AssertJavascriptResultContains(js, "not visible but existing");
 		}
 
+		public static void AssertFirstContainsUsingJQuery(this IBrowserInteractions interactions, string selector, string text)
+		{
+			var jquery = dollar(selector);
+			var script = f("var jq = {0};", jquery) +
+						 "if (jq.length > 0) {" +
+						 "var text = jq.first().text();" +
+						 f("if (text.indexOf('{0}') > -1) return 'found';", text.JSEncode()) +
+						 f("throw \"Cannot find element with selector '{0}' that contains text '{1}' using jquery \";", selector,
+						   text) +
+						 "} else {" +
+						 f("throw \"Cannot find element with selector '{0}' that contains text '{1}' using jquery \";", selector,
+						   text) +
+						 "}";
+			interactions.AssertJavascriptResultContains(script, "found");
+		}
+
 		public static void AssertFirstContainsResourceTextUsingJQuery(this IBrowserInteractions interactions, string selector, string resourceText)
 		{
 			var english = Resources.ResourceManager.GetString(resourceText, new CultureInfo("en-US"));
