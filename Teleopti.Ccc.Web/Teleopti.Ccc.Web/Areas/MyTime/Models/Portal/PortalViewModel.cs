@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		ISelectOptionItem[] children { get; }
 	}
 
-	public class SelectSelectGroup : ISelectGroup
+	public class SelectGroup : ISelectGroup
 	{
 		public string text { get; set; }
 		public ISelectOptionItem[] children { get; set; }
