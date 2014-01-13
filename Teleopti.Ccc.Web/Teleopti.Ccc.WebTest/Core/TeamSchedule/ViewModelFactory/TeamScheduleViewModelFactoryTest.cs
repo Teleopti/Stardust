@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void PermissionForShiftTrade_WhenAgentHasNoPermissionToViewShiftTrade_ShouldBFalse()
 		{
-			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null);
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null, new UserTextTranslator());
 
 			var result = target.CreateViewModel(DateOnly.Today, new Guid());
 			Assert.That(result.ShiftTradePermisssion, Is.True);			
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void PermissionForShiftTrade_WhenAgentHasPermissionToViewShiftTrade_ShouldBeTrue()
 		{
-			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null);
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null, new UserTextTranslator());
 
 			var result = target.CreateViewModel(DateOnly.Today, new Guid());
 			Assert.That(result.ShiftTradePermisssion, Is.True);
