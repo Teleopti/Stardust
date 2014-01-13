@@ -12,10 +12,13 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
     Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (date, selectedDate) {
-    
-    this.date = date.format('YYYY-MM-DD');
+Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate) {
+    var date = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
+        
+    this.date = scheduleDate.FixedDate;
     this.dayOfMonth = date.date();
+    this.isWorkingDay = scheduleDate.IsWorkingDay;
+    this.displayColor = scheduleDate.DisplayColor;
 
     this.isOutsideMonth = (selectedDate.month() != date.month());
 };

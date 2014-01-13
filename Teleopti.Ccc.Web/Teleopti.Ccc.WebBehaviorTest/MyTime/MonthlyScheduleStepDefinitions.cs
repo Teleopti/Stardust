@@ -41,5 +41,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertExists(string.Format(".cal-day-outmonth span[data-cal-date='{0:yyyy-MM-dd}']", date));
         }
 
+        [Then(@"I should see an indication implying I should work on '(.*)'")]
+        public void ThenIShouldSeeAnIndicationImplyingIShouldWorkOn(DateTime date)
+        {
+            Browser.Interactions.AssertExists(string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+        }
+
+
     }
 }

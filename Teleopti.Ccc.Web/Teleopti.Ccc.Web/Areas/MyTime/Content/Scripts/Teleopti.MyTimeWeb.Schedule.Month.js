@@ -17,25 +17,42 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
-	//var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
 	
-	function _bindData(data) {
-	    var startDate = new moment('2013-12-30');
-	    var selectedDate = startDate.clone().add('days',3);
-	    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
-	    for (var i = 0; i < 5; i++) {
-	        var newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
-	        for (var j = 0; j < 7; j++) {
-	            var date = startDate.clone();
-	            var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(date,selectedDate);
-	            startDate.add('days', 1);
-	            newWeek.dayViewModels.push(newDay);
+	function _fetchMonthData() {
+	    ajax.Ajax({
+	        url: 'Schedule/FetchMonthData',
+	        dataType: "json",
+	        type: 'GET',
+	        data: {
+	            date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+	        },
+	        success: function (data) {
+	            _bindData(data);
 	        }
-	        vm.weekViewModels.push(newWeek);
+	    });
+	}
+    
+	function _bindData(data) {
+	    var selectedDate = moment(data.FixedDate, 'YYYY-MM-DD');
+	    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+
+	    var newWeek;
+	    for (var i = 0; i < data.ScheduleDays.length; i++) {
+	        if (i % 7 == 0) {
+	            if (newWeek)
+	                vm.weekViewModels.push(newWeek);
+	            newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
+	        }
+
+	        var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], selectedDate);
+	        newWeek.dayViewModels.push(newDay);
 	    }
+	    vm.weekViewModels.push(newWeek);
 	    ko.applyBindings(vm, $('#page')[0]);
+	    completelyLoaded();
 	}
     
 	function _cleanBindings() {
@@ -53,9 +70,9 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 			}
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-		    _bindData();
+		    completelyLoaded = completelyLoadedCallback;
+		    _fetchMonthData();
 		    readyForInteractionCallback();
-		    completelyLoadedCallback();
 		},
 		PartialDispose: function () {
 		    _cleanBindings();

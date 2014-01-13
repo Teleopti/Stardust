@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -104,6 +105,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			return createWeekDayModels(dateOnly, 7);
 		}
 
+        public MonthScheduleViewModel CreateMonthViewModel(DateOnly dateOnly)
+        {
+            return new MonthScheduleViewModel();
+        }
 
 		private WeekScheduleViewModel createWeekDayModels(DateOnly dateOnly, int count)
 		{

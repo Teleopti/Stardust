@@ -158,6 +158,7 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
+    <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
@@ -374,8 +375,7 @@
     <Compile Include="Core\Portal\ViewModelFactory\CultureSpecificViewModelDataFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\ProjectionProviderTest.cs" />
     <Compile Include="Core\Mapping\TestMappingDependencyResolver.cs" />
-    <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleDomainDataMappingTest.cs" />
-    <Compile Include="Core\WeekSchedule\Mapping\WeekScheduleViewModelMappingTest.cs" />
+    <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingTest.cs" />
     <Compile Include="Core\Startup\ApplicationStartModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterModelBindersTaskTest.cs" />
     <Compile Include="Core\Authentication\Services\WebLogOnTest.cs" />
@@ -464,7 +464,9 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Core\WeekSchedule\Mapping\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

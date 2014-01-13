@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public string DatePickerFormat { get; set; }
 	}
 
-	public class RequestPermission
+    public class RequestPermission
 	{
 		public bool TextRequestPermission { get; set; }
 		public bool AbsenceRequestPermission { get; set; }

@@ -263,11 +263,16 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
