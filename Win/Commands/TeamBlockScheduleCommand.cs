@@ -48,8 +48,11 @@ namespace Teleopti.Ccc.Win.Commands
 		private int _scheduledCount;
 		private ISchedulingOptions _schedulingOptions;
 	    private IOpenHourRestrictionForTeamBlock _openHourRestrictionForTeamBlock;
+		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
 
-	    public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
+		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			ISchedulerStateHolder schedulerStateHolder,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -68,7 +71,11 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
 			IOpenHoursToEffectiveRestrictionConverter openHoursToEffectiveRestrictionConverter,
-			ITeamBlockClearer teamBlockClearer, IOpenHourRestrictionForTeamBlock openHourRestrictionForTeamBlock)
+			ITeamBlockClearer teamBlockClearer, 
+			IOpenHourRestrictionForTeamBlock openHourRestrictionForTeamBlock,
+			ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IDayIntervalDataCalculator dayIntervalDataCalculator)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -91,6 +98,9 @@ namespace Teleopti.Ccc.Win.Commands
 			_openHoursToEffectiveRestrictionConverter = openHoursToEffectiveRestrictionConverter;
 			_teamBlockClearer = teamBlockClearer;
 	        _openHourRestrictionForTeamBlock = openHourRestrictionForTeamBlock;
+		    _createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_dayIntervalDataCalculator = dayIntervalDataCalculator;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedSchedules)
@@ -195,7 +205,12 @@ namespace Teleopti.Ccc.Win.Commands
 									   _workShiftFilterService, 
 									   teamScheduling,
 									   _workShiftSelector,
-									   _openHoursToEffectiveRestrictionConverter, _teamBlockClearer, rollbackService,_openHourRestrictionForTeamBlock);
+									   _teamBlockClearer, 
+									   rollbackService,
+									   _openHourRestrictionForTeamBlock,
+									   _createSkillIntervalDataPerDateAndActivity,
+									   _schedulingResultStateHolder,
+									   _dayIntervalDataCalculator);
 
 			var advanceSchedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,
