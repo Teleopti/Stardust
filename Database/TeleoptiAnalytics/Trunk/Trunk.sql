@@ -211,7 +211,7 @@ CREATE TABLE [stage].[stg_agent_state](
 	[state_group_code] uniqueidentifier NOT NULL,
 	[StateStart] datetime NOT NULL,
 --	[interval] smalldatetime NOT NULL,
-	[time_in_state_s] int NOT NULL
+	[StateEnd] datetime NOT NULL
 )
 
 CREATE CLUSTERED INDEX [CIX_stg_agent_state] ON [stage].[stg_agent_state]

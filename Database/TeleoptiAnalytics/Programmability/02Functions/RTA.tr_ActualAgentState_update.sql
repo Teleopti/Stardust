@@ -37,7 +37,7 @@ BEGIN
 		state_group_code= d.StateId,
 		StateStart		= d.StateStart,
 --		interval		= cast(dateadd(MINUTE,(DATEPART(HOUR,d.StateStart)*60+DATEPART(MINUTE,d.StateStart)),'1900-01-01') as smalldatetime),
-		time_in_state_s = datediff(ss,d.StateStart,i.StateStart)
+		StateEnd		= i.StateStart
 	FROM DELETED d
 	INNER JOIN INSERTED i
 		ON d.StateStart<>i.StateStart  --Only if time have changed

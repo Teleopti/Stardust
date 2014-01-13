@@ -24,7 +24,7 @@ SET NOCOUNT OFF
 UPDATE f
 SET f.time_in_state_s = f.time_in_state_s + v.time_in_state_s
 FROM mart.fact_agent_state AS f
-INNER JOIN mart.v_fact_agent_state_merge AS v
+INNER JOIN [stage].[v_stg_agent_state_sum] AS v
 ON (
 		f.date_id		= v.date_id
 	AND f.person_id		= v.person_id
@@ -48,7 +48,7 @@ SELECT
 	time_in_state_s,
 	datasource_id,
 	insert_date
-FROM mart.v_fact_agent_state_merge v
+FROM [stage].[v_stg_agent_state_sum] v
 WHERE NOT EXISTS (
 	SELECT 1
 	FROM mart.fact_agent_state
