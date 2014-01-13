@@ -33,7 +33,8 @@ INSERT INTO mart.dim_state_group
 	insert_date,
 	update_date,
 	datasource_update_date,
-	is_deleted
+	is_deleted,
+	is_log_out_state
 	)
 SELECT 
 	state_group_code			= state_group_code, 
@@ -43,7 +44,8 @@ SELECT
 	insert_date					= getdate(),
 	update_date					= getdate(),
 	datasource_update_date		= getdate(),
-	is_deleted					= 0
+	is_deleted					= 0,
+	is_log_out_state			= -1
 FROM stage.v_stg_state_group s
 WHERE 
 	NOT EXISTS (SELECT state_group_id FROM mart.dim_state_group d WHERE d.state_group_code = s.state_group_code and d.datasource_id = s.datasource_id)
