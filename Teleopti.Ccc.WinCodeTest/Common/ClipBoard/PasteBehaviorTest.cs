@@ -158,6 +158,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 	                Expect.Call(() => part.Remove(personAssignment)).Repeat.AtLeastOnce();
 	                Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(new DateOnly(2001, 1, 1), TeleoptiPrincipal.Current.Regional.TimeZone));
 	                Expect.Call(personAssignment.Period).Return(new DateTimePeriod(2013, 1, 1, 2013, 1, 1)).Repeat.AtLeastOnce();
+	                Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions()).Repeat.AtLeastOnce();
                 }
 
                 using (mockRep.Playback())
@@ -242,6 +243,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 				using (mockRep.Record())
 				{
 					Expect.Call(pasteAction.PasteBehavior).Return(new NormalPasteBehavior());
+					Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions());
 					Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(destination);	
 				}
 
@@ -287,6 +289,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
 				{
 					Expect.Call(pasteAction.PasteBehavior).Return(new NormalPasteBehavior());
 					Expect.Call(pasteAction.Paste(gridControl, clip, 1, 1)).Return(destination);
+					Expect.Call(pasteAction.PasteOptions).Return(new PasteOptions());
 				}
 
 				using (mockRep.Playback())
@@ -324,6 +327,11 @@ namespace Teleopti.Ccc.WinCodeTest.Common.Clipboard
         {
             get { return new PasteBehaviorForTest(); }
         }
+
+		public PasteOptions PasteOptions
+		{
+			get { return new PasteOptions(); }
+		}
 
     }
 

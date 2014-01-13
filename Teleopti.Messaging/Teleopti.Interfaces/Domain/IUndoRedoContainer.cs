@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -113,28 +112,6 @@ namespace Teleopti.Interfaces.Domain
         void RollbackBatch();
 
         /// <summary>
-        /// The undo mementos.
-        /// Used for presentation and debugging.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-11-13
-        /// </remarks>
-        IEnumerable<IMementoInformation> UndoCollection();
-
-        /// <summary>
-        /// The redo mementos.
-        /// Used for presentation and debugging.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-11-13
-        /// </remarks>
-        IEnumerable<IMementoInformation> RedoCollection();
-
-        /// <summary>
         /// Occurs when container has changed.
         /// </summary>
         /// <remarks>
@@ -142,16 +119,6 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-11-19
         /// </remarks>
         event EventHandler ChangedHandler;
-
-        /// <summary>
-        /// Undoes until a specific time.
-        /// </summary>
-        /// <param name="time">The time.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-11-19
-        /// </remarks>
-        void UndoUntil(DateTime time);
 
         /// <summary>
         /// Undoes all.

@@ -1,9 +1,9 @@
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
-    /// A historical snapshot of an aggregate root
+    /// A historical snapshot of an aggregate
     /// </summary>
-    public interface IMemento : IMementoInformation
+    public interface IMemento
     {
         /// <summary>
         /// Restores the previous state of target.

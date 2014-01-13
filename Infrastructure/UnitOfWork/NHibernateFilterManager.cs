@@ -6,12 +6,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class NHibernateFilterManager
 	{
-		private readonly ISessionFactory _sessionFactory;
+		//would be much better to have a ref to ISesssionFactory here instead
+		//feels a lot safer regarding memory leaks...
+		//unfortunatly - it won't work 100% in desktop app currently 
+		//where we have nested uows/ISessions
+		private readonly ISession _session;
 		private readonly DisabledFilterCounter _disabledFilterCounter;
 
-		public NHibernateFilterManager(ISessionFactory sessionFactory)
+		public NHibernateFilterManager(ISession session)
 		{
-			_sessionFactory = sessionFactory;
+			_session = session;
 			_disabledFilterCounter = new DisabledFilterCounter();
 		}
 
@@ -19,16 +23,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			_disabledFilterCounter.Increase(filter);
 			var scope = new DisableFilterScope(this, filter);
-			_sessionFactory.GetCurrentSession().DisableFilter(filter.Name);
+			_session.DisableFilter(filter.Name);
 			return scope;	
 		}
 
 		public void Enable(IQueryFilter filter)
 		{
 			if (_disabledFilterCounter.DecreaseAndCheckIfDisabled(filter))
-			{
-				_sessionFactory.GetCurrentSession().EnableFilter(filter.Name);				
-			}
+				_session.EnableFilter(filter.Name);
 		}
 	}
 }
