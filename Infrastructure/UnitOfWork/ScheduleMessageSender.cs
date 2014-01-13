@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					              	{
 										InitiatorId = messageBrokerIdentifier.InstanceId,
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
-										StartDateTime = startDateTime.AddHours(-24), //Bug fix for #23647
+										StartDateTime = startDateTime,
 					              		EndDateTime = endDateTime,
 					              		PersonId = person.Id.GetValueOrDefault(),
 					              	};
