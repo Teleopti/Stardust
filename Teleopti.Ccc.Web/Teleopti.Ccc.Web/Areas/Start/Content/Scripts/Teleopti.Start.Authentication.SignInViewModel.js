@@ -30,6 +30,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			self.DisplayUserNameAndPasswordBoxes(false);
 			self.UserNameFocus(false);
 		}
+		self.ErrorMessage('');
 	};
 
 	this.LoadDataSources = function () {
