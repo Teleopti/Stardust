@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -39,26 +37,12 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			fireChanged();
 		}
 
-		public void UndoUntil(DateTime time)
-		{
-			while (isNextItemInUndoStackCreatedAfterTime(time))
-			{
-				Undo();
-			}
-		}
-
 		public void UndoAll()
 		{
 			while (_undoStack.Peek() != null)
 			{
 				Undo();
 			}
-		}
-
-		private bool isNextItemInUndoStackCreatedAfterTime(DateTime time)
-		{
-			var nextMemento = _undoStack.Peek();
-			return nextMemento != null && nextMemento.Time >= time;
 		}
 
 		public void SaveState<T>(IOriginator<T> state)
@@ -75,7 +59,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			}
 			else
 			{
-				_batchMemento.MementoCollection.Add(memento);
+				_batchMemento.AddMemento(memento);
 			}
 		}
 
@@ -127,7 +111,7 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			if (_batchMemento == null)
 				throw new InvalidOperationException("Ending a non-existing batch memento");
 
-			if (_batchMemento.MementoCollection.Count > 0)
+			if (!_batchMemento.IsEmpty())
 			{
 				saveStateInternal(_batchMemento);
 				fireChanged();
@@ -140,16 +124,6 @@ namespace Teleopti.Ccc.Domain.UndoRedo
 			if (_batchMemento == null)
 				throw new InvalidOperationException("Ending a non-existing batch memento");
 			_batchMemento = null;
-		}
-
-		public IEnumerable<IMementoInformation> UndoCollection()
-		{
-			return _undoStack.ToList().OfType<IMementoInformation>();
-		}
-
-		public IEnumerable<IMementoInformation> RedoCollection()
-		{
-			return _redoStack.ToList().OfType<IMementoInformation>();
 		}
 
 		private void fireChanged()

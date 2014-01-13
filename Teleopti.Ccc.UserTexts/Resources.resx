@@ -7069,14 +7069,6 @@ Updated on: {1}</value>
     <value>Scheduling</value>
     <comment>Scheduling (undo/redo info)</comment>
   </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modifying person request for {0}</value>
-    <comment>Modifying person request (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modifying schedule for {0}, date {1}</value>
-    <comment>Modifying schedule (undo/redo info)</comment>
-  </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Export to PDF</value>
     <comment>Export to PDF</comment>
@@ -11858,7 +11850,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Intraday absence</value>
     <comment>Intraday absence</comment>
   </data>
- <data name="IllegalTeamBlockCombination" xml:space="preserve">
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
     <value>Optimizing with block between days off and not keeping team days off together is not supported</value>
     <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
   </data>
