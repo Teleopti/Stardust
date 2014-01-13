@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
@@ -21,14 +22,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly ITeamProvider _teamProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
+		private readonly IUserTextTranslator _userTextTranslator;
 		private const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
-		public TeamScheduleViewModelFactory(IMappingEngine mapper, ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository)
+		public TeamScheduleViewModelFactory(IMappingEngine mapper, ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator)
 		{
 			_mapper = mapper;
 			_teamProvider = teamProvider;
 			_permissionProvider = permissionProvider;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
+			_userTextTranslator = userTextTranslator;
 		}
 
 
@@ -74,15 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private IEnumerable<ISelectOption> createGroupPagesOptions(DateOnly date)
 		{
 			var groupPages = _groupingReadOnlyRepository.AvailableGroupPages().Select(
-				p =>
-					{
-						if (p.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
-						{
-							p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
-						}
-						return new SelectGroup {text = p.PageName, PageId = p.PageId};
-					}).OrderBy(x => x.text).ToArray();
-
+				p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId }).OrderBy(x => x.text).ToArray();
 
 			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
 
