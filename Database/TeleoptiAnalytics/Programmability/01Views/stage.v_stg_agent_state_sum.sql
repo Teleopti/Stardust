@@ -34,6 +34,5 @@ LEFT JOIN mart.bridge_time_zone btz
 GROUP BY
 	btz.local_date_id,
 	dp.person_id,
-	sg.state_group_id,
-	cast(dateadd(MINUTE,(DATEPART(HOUR,stg.StateStart)*60+DATEPART(MINUTE,stg.StateStart)),'1900-01-01') as smalldatetime)
+	sg.state_group_id
 GO

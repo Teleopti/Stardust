@@ -18,7 +18,7 @@ WITH d(n,person_code,state_group_name,state_group_code, org_from_date,org_to_dat
 		DATEADD(day, n.n, DATEDIFF(day, 0, d.StateStart)),
 		DATEADD(day, n.n+1, DATEDIFF(day, 0, d.StateStart))
 	FROM mart.sys_numbers n
-	INNER JOIN [stage].[stg_agent_state] AS d
+	INNER JOIN [stage].[stg_agent_state] AS d WITH (TABLOCKX)
 		ON d.StateEnd > DATEADD(DAY, n.n-1, d.StateStart)
 	AND n<10
 )
