@@ -373,6 +373,7 @@
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
     <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\CreateSkillIntervalDatasPerActivtyForDateTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMinimumMedianCalculatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
