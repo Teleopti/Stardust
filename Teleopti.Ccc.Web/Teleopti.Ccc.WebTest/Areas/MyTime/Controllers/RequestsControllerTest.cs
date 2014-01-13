@@ -265,12 +265,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var model = new ShiftTradeScheduleViewModel();
+
 			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<ShiftTradeScheduleViewModelData>.Is.Anything))
 			            .Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null, null);
 			
-			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, true,new Paging());
+			var result = target.ShiftTradeRequestSchedule(DateOnly.Today, Guid.NewGuid().ToString(), new Paging());
 			result.Data.Should().Be.SameInstanceAs(model);
 		}
 		

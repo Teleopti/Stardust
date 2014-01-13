@@ -30,9 +30,11 @@ Background:
 	And OtherAgent has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And OtherAgent2 has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And OtherAgentNotInMyTeam has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -370,7 +372,7 @@ Scenario: Show possible shift trades from my team
 	| StartTime             | 2030-01-01 10:00 |
 	| EndTime               | 2030-01-01 20:00 |
 	| Shift category		| Late	           |
-	And OtherAgentNotInMyTeam have a shift with
+	And OtherAgentNotInMyTeam has a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 08:00 |
 	| EndTime               | 2030-01-01 18:00 |

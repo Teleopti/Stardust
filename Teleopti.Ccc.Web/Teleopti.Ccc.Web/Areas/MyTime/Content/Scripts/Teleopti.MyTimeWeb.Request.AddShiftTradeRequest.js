@@ -265,7 +265,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				contentType: 'application/json; charset=utf-8',
 				data: {
 				    selectedDate: self.requestedDateInternal().toDate().toJSON(),
-				    loadOnlyMyTeam: false,
+				    teamId: self.selectedTeam(),
 				    Take: take,
 				    Skip: skip
 				},

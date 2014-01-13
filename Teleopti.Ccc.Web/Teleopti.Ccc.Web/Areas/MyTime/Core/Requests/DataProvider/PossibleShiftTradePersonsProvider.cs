@@ -35,10 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public DatePersons RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments)
 		{
 			var me = _loggedOnUser.CurrentUser();
-			Guid? myTeamid = shiftTradeArguments.LoadOnlyMyTeam
-				                 ? me.Period(shiftTradeArguments.ShiftTradeDate).Team.Id
-				                 : null;
-			var personForShiftTradeList = _personForShiftTradeRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, myTeamid);
+			var personForShiftTradeList =
+				_personForShiftTradeRepository.GetPersonForShiftTrade(shiftTradeArguments.ShiftTradeDate, shiftTradeArguments.TeamId);
 
 			personForShiftTradeList = personForShiftTradeList.Where(
 				personGuid => personGuid.PersonId != me.Id &&

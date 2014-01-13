@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using AutoMapper;
-using Castle.Components.DictionaryAdapter;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -41,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapMyScheduleFromReadModel()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid() };
 			var readModel = new PersonScheduleDayReadModel();
 			var mySchedule = new ShiftTradePersonScheduleViewModel();
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>() };
@@ -57,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapIAmNotScheduledFromReadModel()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid() };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>() };
 			IPersonScheduleDayReadModel mySchedule = null;
 
@@ -73,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPossibleTradesFromReadModel()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true, Paging = new Paging()};
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
 			var possibleTradeScheduleViewModels = new List<ShiftTradePersonScheduleViewModel>();
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();
@@ -91,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapNoPossibleScheduleFromPersonAndDate()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid() };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new List<IPerson>() };
 
 			_possibleShiftTradePersonsProvider.Stub(x => x.RetrievePersons(data)).Return(persons);
@@ -104,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapIsLastPageFromReadModel()
 		{
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, LoadOnlyMyTeam = true, Paging = new Paging() };
+			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = DateOnly.Today, TeamId = Guid.NewGuid(), Paging = new Paging() };
 			var persons = new DatePersons { Date = data.ShiftTradeDate, Persons = new[] { new Person() } };
 			var possibleTradeScheduleViewModels = new List<ShiftTradePersonScheduleViewModel>{new ShiftTradePersonScheduleViewModel{IsLastPage = false}};
 			var scheduleReadModels = new List<IPersonScheduleDayReadModel>();

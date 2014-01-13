@@ -22,12 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_unitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
 		}
 
-		public IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, Guid? teamId)
+		public IList<IAuthorizeOrganisationDetail> GetPersonForShiftTrade(DateOnly shiftTradeDate, Guid teamId)
 		{
 			return ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.CreateSQLQuery(
 				"exec ReadModel.LoadPersonForShiftTrade @shiftTradeDate=:shiftTradeDate, @myTeamId=:myTeamId")
 			                                          .SetDateTime("shiftTradeDate", shiftTradeDate)
-			                                          .SetParameter("myTeamId", teamId.HasValue ? teamId.Value : (Guid?)null)
+			                                          .SetParameter("myTeamId", teamId)
 			                                          .SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
 			                                          .SetReadOnly(true)
 			                                          .List<IAuthorizeOrganisationDetail>();

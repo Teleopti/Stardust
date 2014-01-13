@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see a possible schedule trade with '(.*)'")]
 		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(string name)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-my-schedule", string.Format(".shift-trade-agent-name:contains('{0}')", name));
+			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-person-schedule-row", string.Format(".shift-trade-agent-name:contains('{0}')", name));
 		}
 		
 		[Then(@"I should not see a possible schedule to trade with")]

@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Infrastructure;
 
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
@@ -30,36 +24,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new PersonForShiftTradeRepository(UnitOfWork);
 			var result = _target.GetPersonForShiftTrade(date, team.Id.Value);
 
+			result.Count.Should().Be.EqualTo(1);
 			result.First().PersonId.Should().Be.EqualTo(person.Id.Value);
 			result.First().TeamId.Should().Be.EqualTo(team.Id.Value);
 			result.First().SiteId.Should().Be.EqualTo(team.Site.Id.Value);
 			result.First().BusinessUnitId.Should().Be.EqualTo(team.Site.BusinessUnit.Id.Value);
-		}
-
-		[Test]
-		public void ShouldLoadPersonInAnyTeamForShiftTrade()
-		{
-			var date = new DateOnly(2012, 12, 27);
-			var team1 = TeamFactory.CreateSimpleTeam("team one");
-			var person1 = persistPerson(date, team1);
-			var team2 = TeamFactory.CreateSimpleTeam("team two");
-			var person2 = persistPerson(date, team2);
-
-			_target = new PersonForShiftTradeRepository(UnitOfWork);
-			var result = _target.GetPersonForShiftTrade(date, null);
-
-			var firstPerson = result.First();
-			var lastPerson = result.Last();
-
-			firstPerson.PersonId.Should().Be.EqualTo(person1.Id.Value);
-			firstPerson.TeamId.Should().Be.EqualTo(team1.Id.Value);
-			firstPerson.SiteId.Should().Be.EqualTo(team1.Site.Id.Value);
-			firstPerson.BusinessUnitId.Should().Be.EqualTo(team1.Site.BusinessUnit.Id.Value);
-
-			lastPerson.PersonId.Should().Be.EqualTo(person2.Id.Value);
-			lastPerson.TeamId.Should().Be.EqualTo(team2.Id.Value);
-			lastPerson.SiteId.Should().Be.EqualTo(team2.Site.Id.Value);
-			lastPerson.BusinessUnitId.Should().Be.EqualTo(team2.Site.BusinessUnit.Id.Value);
 		}
 
 		private IPerson persistPerson(DateOnly startDate, ITeam team)

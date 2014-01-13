@@ -20,41 +20,22 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-    IF (@myTeamId IS null)
-	BEGIN
-		SELECT pp.Parent as PersonId, pp.Team as TeamId, t.Site as SiteId, s.BusinessUnit as BusinessUnitId
-		FROM PersonPeriodWithEndDate pp
-			INNER JOIN Team t ON pp.Team = t.id
-			INNER JOIN Site s ON t.Site = s.Id
-			INNER JOIN Person p ON pp.Parent = p.Id
-		WHERE p.WorkflowControlSet IS NOT NULL
-			AND (@shiftTradeDate BETWEEN StartDate AND EndDate) 
-			/* We should do the name search from a separate SP */
-			--AND Parent in 
-			--(
-			--	SELECT Distinct personid FROM [ReadModel].[FindPerson] 
-			--	WHERE SearchValue like '%' 
-			--		AND (SearchType in ('FirstName','LastName','EmployeeNumber'))
-			--)
-	END
-	ELSE
-	BEGIN
-		SELECT pp.Parent as PersonId, pp.Team as TeamId, t.Site as SiteId, s.BusinessUnit as BusinessUnitId
-		FROM PersonPeriodWithEndDate pp
-			INNER JOIN Team t ON pp.Team = t.id
-			INNER JOIN Site s ON t.Site = s.Id
-			INNER JOIN Person p ON pp.Parent = p.Id
-		WHERE p.WorkflowControlSet IS NOT NULL
-			AND pp.Team = @myTeamId
-			AND (@shiftTradeDate BETWEEN StartDate AND EndDate) 
-			/* We should do the name search from a separate SP */
-			--AND Parent in 
-			--(
-			--	SELECT Distinct personid FROM [ReadModel].[FindPerson] 
-			--	WHERE SearchValue like '%' 
-			--		AND (SearchType in ('FirstName','LastName','EmployeeNumber'))
-			--)
-	END	
+    
+	SELECT pp.Parent as PersonId, pp.Team as TeamId, t.Site as SiteId, s.BusinessUnit as BusinessUnitId
+	FROM PersonPeriodWithEndDate pp
+		INNER JOIN Team t ON pp.Team = t.id
+		INNER JOIN Site s ON t.Site = s.Id
+		INNER JOIN Person p ON pp.Parent = p.Id
+	WHERE p.WorkflowControlSet IS NOT NULL
+		AND pp.Team = @myTeamId
+		AND (@shiftTradeDate BETWEEN StartDate AND EndDate) 
+		/* We should do the name search from a separate SP */
+		--AND Parent in 
+		--(
+		--	SELECT Distinct personid FROM [ReadModel].[FindPerson] 
+		--	WHERE SearchValue like '%' 
+		--		AND (SearchType in ('FirstName','LastName','EmployeeNumber'))
+		--)
 END
 
 GO
