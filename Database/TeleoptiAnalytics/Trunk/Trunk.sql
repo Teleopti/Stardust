@@ -291,6 +291,21 @@ ALTER TABLE [mart].[fact_agent_state] ADD CONSTRAINT [PK_fact_agent_state] PRIMA
 --	[interval_id] ASC,
 	[state_group_id] ASC
 )
+
+--A number table
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_numbers]') AND type in (N'U'))
+DROP TABLE [mart].[sys_numbers]
+GO
+CREATE TABLE mart.sys_numbers (n smallint not null)
+ALTER TABLE mart.sys_numbers ADD CONSTRAINT
+PK_sys_number PRIMARY KEY CLUSTERED
+(
+	n
+)
+
+INSERT INTO mart.sys_numbers
+SELECT top(100) ROW_NUMBER() OVER (ORDER BY [object_id])-1 FROM sys.all_columns
+
 GO
 ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_date] FOREIGN KEY([date_id])
 REFERENCES [mart].[dim_date] ([date_id])
