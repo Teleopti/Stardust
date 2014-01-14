@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		{
 			var result = new Dictionary<IShiftCategory, int>();
 			var shiftCategoryPoint = 0;
-			foreach (var shiftCategory in shiftCategories.OrderByDescending(s => s.Description.Name))
+			foreach (var shiftCategory in shiftCategories.OrderByDescending(s => s.Description.ShortName))
 			{
 				result.Add(shiftCategory, shiftCategoryPoint);
 				shiftCategoryPoint++;
