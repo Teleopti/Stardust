@@ -106,5 +106,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         }
 
 
+        [Then(@"I should see the month name being '(.*)'")]
+        public void ThenIShouldSeeTheMonthName(string name)
+        {
+            Browser.Interactions.AssertInputValueUsingJQuery("input",name);
+        }
     }
 }

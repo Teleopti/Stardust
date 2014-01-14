@@ -99,9 +99,9 @@ Then I should not see any indication for day '2014-01-02'
 Scenario: Language setting
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
-And I have my language set to German
+And I am german
 When I view my month schedule for date '2014-01-07'
-Then I should see the month name 'Januar'
+Then I should see the month name being 'Januar'
 
 Scenario: First day of week
 Given I have the role 'Full access to mytime'

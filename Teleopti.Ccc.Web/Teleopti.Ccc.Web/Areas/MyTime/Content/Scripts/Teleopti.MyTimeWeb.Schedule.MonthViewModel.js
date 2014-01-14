@@ -32,6 +32,9 @@ Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
 Teleopti.MyTimeWeb.Schedule.MonthViewModel = function (monthData, selectedDate) {
     this.weekViewModels = ko.observableArray();
     this.weekDayNames = monthData.DayHeaders;
+    this.selectedDate = selectedDate;
+    this.formattedSelectedDate = selectedDate.format('MMMM YYYY');
+
     this.nextMonth = function() {
         var date = selectedDate.clone();
         date.add('months', 1);
