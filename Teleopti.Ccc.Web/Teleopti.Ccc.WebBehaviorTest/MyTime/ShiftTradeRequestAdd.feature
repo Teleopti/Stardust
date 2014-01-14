@@ -352,16 +352,6 @@ Scenario: Change team
 Scenario: Change date and keep selected team
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-02 06:00 |
-	| EndTime               | 2030-01-02 16:00 |
-	| Shift category		| Day	           |
-	And OtherAgentNotInMyTeam has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-02 08:00 |
-	| EndTime               | 2030-01-02 18:00 |
-	| Shift category		| Day	           |
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	When I select the 'Other team'
