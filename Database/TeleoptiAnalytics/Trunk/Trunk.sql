@@ -298,7 +298,7 @@ DROP TABLE [mart].[sys_numbers]
 GO
 CREATE TABLE mart.sys_numbers (n smallint not null)
 ALTER TABLE mart.sys_numbers ADD CONSTRAINT
-PK_sys_number PRIMARY KEY CLUSTERED
+PK_sys_numbers PRIMARY KEY CLUSTERED
 (
 	n
 )
