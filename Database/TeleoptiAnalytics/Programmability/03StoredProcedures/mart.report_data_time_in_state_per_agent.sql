@@ -125,6 +125,7 @@ SET NOCOUNT ON;
 			fas.date_id,
 			fas.state_group_id
 
+/* this select will lock the table [stage].[stg_agent_state] and block the RTA-trigger [RTA].[tr_ActualAgentState_update], which in turn will block RTA-flow
 		UNION ALL
 
 		--completed states, but not yet agregated
@@ -139,6 +140,7 @@ SET NOCOUNT ON;
 			fas.person_id,
 			fas.date_id,
 			fas.state_group_id
+*/
 	) as fas
 	INNER JOIN #RESULT r 
 		ON fas.person_id=r.person_id
