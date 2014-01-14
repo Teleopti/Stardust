@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
