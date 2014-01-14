@@ -313,8 +313,10 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockPriorityDefinitionInfoTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockLockValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillCheckerTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidatorTest.cs" />
