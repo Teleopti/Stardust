@@ -10845,7 +10845,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Utjämning:</value>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
-    <value>Välj historisk data för mallar</value>
+    <value>Välj historisk data för dagmallar</value>
   </data>
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Visa informationsmeddelanden</value>
@@ -11382,5 +11382,11 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
     <value>Med Lägg till aktivitet kan du inte skapa ett andra skift.</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>Ingen gällande period</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>På valt datum är du inte längre anställd</value>
   </data>
 </root>
