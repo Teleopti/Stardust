@@ -53,5 +53,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertExists(string.Format(".not-working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
         }
 
+        [Then(@"I should not see any indication for day '(.*)'")]
+        public void ThenIShouldNotSeeAnyIndicationForDay(DateTime date)
+        {
+            Browser.Interactions.AssertNotExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", date),
+                string.Format(".not-working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+            Browser.Interactions.AssertNotExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", date), 
+                string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+        }
+
     }
 }
