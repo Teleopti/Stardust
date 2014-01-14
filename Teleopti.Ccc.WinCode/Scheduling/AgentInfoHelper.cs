@@ -65,6 +65,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             }
         }
 
+	    public bool HasMatrix
+	    {
+			get { return _matrix != null; }
+	    }
+
     	public bool PeriodInLegalState
         {
             get { return _periodInLegalState; }
@@ -268,7 +273,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         public void SetRestrictionFullfillment()
         {
-            RestrictionOverLimitDecider restrictionOverLimitDecider = new RestrictionOverLimitDecider(new RestrictionChecker());
+            var restrictionOverLimitDecider = new RestrictionOverLimitDecider(new RestrictionChecker());
             _preferenceFulfillment = restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1), _matrix).BrokenPercentage;
 			_mustHavesFulfillment = restrictionOverLimitDecider.MustHavesOverLimit(new Percent(1), _matrix).BrokenPercentage;
 			_rotationFulfillment = restrictionOverLimitDecider.RotationOverLimit(new Percent(1), _matrix).BrokenPercentage;
