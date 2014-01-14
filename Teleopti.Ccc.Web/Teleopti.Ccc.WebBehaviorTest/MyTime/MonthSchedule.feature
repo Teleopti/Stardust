@@ -139,8 +139,8 @@ Scenario: Can switch to weekly schedule when showing monthly schedule
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
 When I view my month schedule for date '2014-01-07'
-And I choose to go to week view
-Then I should end up in week view for '2014-01-07'
+And I choose the day '2014-01-14'
+Then I should end up in week view for '2014-01-14'
 
 Scenario: Navigate to next month
 Given I have the role 'Full access to mytime'

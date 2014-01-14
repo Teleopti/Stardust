@@ -81,5 +81,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.SetWidth(480);
         }
 
+        [When(@"I choose the day '(.*)'")]
+        public void WhenIChooseTheDay(DateTime date)
+        {
+            Browser.Interactions.Click(string.Format(".cal-month-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+        }
+
+        [Then(@"I should end up in week view for '(.*)'")]
+        public void ThenIShouldEndUpInWeekViewFor(DateTime date)
+        {
+            Browser.Interactions.AssertUrlContains(string.Format("Week/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
+        }
+
     }
 }

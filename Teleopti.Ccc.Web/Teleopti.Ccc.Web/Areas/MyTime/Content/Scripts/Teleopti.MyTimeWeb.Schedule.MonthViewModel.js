@@ -13,15 +13,16 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selectedDate) {
-    var date = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
-        
+    var currentDate = moment(scheduleDate.FixedDate, 'YYYY-MM-DD');
+
+    this.currentDate = currentDate;
     this.date = scheduleDate.FixedDate;
-    this.dayOfMonth = date.date();
+    this.dayOfMonth = currentDate.date();
     this.isWorkingDay = scheduleDate.IsWorkingDay;
     this.isNotWorkingDay = scheduleDate.IsNotWorkingDay;
     this.displayColor = scheduleDate.DisplayColor;
-
-    this.isOutsideMonth = (selectedDate.month() != date.month());
+    
+    this.isOutsideMonth = (selectedDate.month() != currentDate.month());
 };
 
 Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
@@ -31,6 +32,11 @@ Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
 Teleopti.MyTimeWeb.Schedule.MonthViewModel = function (monthData) {
     this.weekViewModels = ko.observableArray();
     this.weekDayNames = monthData.DayHeaders;
+
+    this.week = function (day) {
+        var d = day.currentDate;
+        Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+    };
 };
 
 

@@ -31,7 +31,7 @@
             <div class="cal-month-box" data-bind="foreach: weekViewModels">
                 <div class="cal-row-fluid" data-bind="foreach: dayViewModels">
                     <div class="cal-cell">
-                        <div class="cal-month-day" data-bind="css: { 'cal-day-outmonth': isOutsideMonth, 'working-day': isWorkingDay, 'not-working-day': isNotWorkingDay}, style: {backgroundColor: displayColor}">
+                        <div class="cal-month-day" data-bind="click: $root.week, css: { 'cal-day-outmonth': isOutsideMonth, 'working-day': isWorkingDay, 'not-working-day': isNotWorkingDay}, style: {backgroundColor: displayColor}">
                             <span data-bind="text: dayOfMonth, attr:{'data-cal-date': date}" class="pull-right label label-inverse"></span>
                         </div>
                     </div>
