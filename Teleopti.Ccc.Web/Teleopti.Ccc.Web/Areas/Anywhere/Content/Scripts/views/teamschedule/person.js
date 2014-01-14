@@ -52,6 +52,11 @@ define([
 				var newShift = new shift(data, timeline);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
+
+				if (newShift.Layers()[0].StartMinutes() > 0) {
+					self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+					self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
+				}
 			}
 
 			if (data.DayOff) {
@@ -59,9 +64,6 @@ define([
 				var newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
-
-			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
-			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
 			
 			self.Menu.GroupId = data.GroupId;
 			self.Menu.PersonId = self.Id;
