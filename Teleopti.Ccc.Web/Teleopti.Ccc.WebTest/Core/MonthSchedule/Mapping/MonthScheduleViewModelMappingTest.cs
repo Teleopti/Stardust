@@ -20,11 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void Setup()
 		{
 			Mapper.Reset();
-			Mapper.Initialize(c =>
-			                  	{
-			                  		c.AddProfile(new MonthScheduleViewModelMappingProfile());
-			                  		c.AddProfile(new CommonViewModelMappingProfile());
-			                  	});
+			Mapper.Initialize(c => c.AddProfile(new MonthScheduleViewModelMappingProfile()));
 		}
 
 		[Test]
@@ -55,7 +51,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 
 		[Test]
-		public void ShouldMapSummaryForMainShift()
+		public void ShouldMapIsWorkingDayForMainShift()
 		{
 			var stubs = new StubFactory();
 			var personAssignment =
@@ -70,6 +66,20 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			result.IsWorkingDay.Should().Be.True();			
             result.DisplayColor.Should().Be.EqualTo(scheduleDay.PersonAssignment().ShiftCategory.DisplayColor.ToHtml());
 		}
+
+        [Test]
+        public void ShouldMapIsNotWorkingDayForDayOff()
+        {
+            var stubs = new StubFactory();
+            var personAssignment =
+                stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
+                                                              new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
+            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.DayOff, personAssignment);
+
+            var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+            result.IsNotWorkingDay.Should().Be.True();
+        }
 
         [Test]
         public void ShouldMapDaysOfMonth()

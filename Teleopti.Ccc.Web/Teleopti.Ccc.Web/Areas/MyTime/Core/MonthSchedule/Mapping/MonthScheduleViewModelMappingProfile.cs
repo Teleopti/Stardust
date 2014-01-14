@@ -23,6 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
                                 var significantPart =s.ScheduleDay.SignificantPartForDisplay();
                                 return (significantPart == SchedulePartView.MainShift);
                         }))
+                .ForMember(d => d.IsNotWorkingDay, c => c.ResolveUsing(
+                    s =>
+                    {
+                        var significantPart = s.ScheduleDay.SignificantPartForDisplay();
+                        return (significantPart == SchedulePartView.DayOff);
+                    }))
                 .ForMember(d => d.DisplayColor, c => c.ResolveUsing(
                     s =>
                         {

@@ -105,15 +105,7 @@ span[data-cal-date] {
 .cal-day-outmonth {
     opacity: 0.3;
 }
-.notworking {
+.not-working-day {
     background-color: beige;
     background-image: url(../Images/stripe.png);
-}
-
-.earlyshift {
-    background-color: #00ff00;
-}
-
-.dayshift {
-    background-color: #ffc0ff;
 }
