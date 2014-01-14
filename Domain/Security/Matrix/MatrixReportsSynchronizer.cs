@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.Domain.Security.Matrix
                     MatrixReportInfo.FindByReportId(matrixReports, new Guid(function.ForeignId));
                 if (report != null)
                 {
-                    function.FunctionCode = RemoveLeadingXFromDescription(report.ReportName);
+                    function.FunctionCode = report.Version + RemoveLeadingXFromDescription(report.ReportName);
                     function.FunctionDescription = report.ReportName;
                 }
             }

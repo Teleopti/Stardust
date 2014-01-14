@@ -1327,6 +1327,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 												_dataMartConnectionString);
 		}
 
+		public int FillStateGroupDataMart(IBusinessUnit businessUnit)
+		{
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_state_group_load", null,
+												_dataMartConnectionString);
+		}
+
 		public int FillBusinessUnitDataMart(IBusinessUnit businessUnit)
 		{
             var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
@@ -1546,6 +1553,23 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 												  _dataMartConnectionString), DateTimeKind.Unspecified);
 		}
 
+		public IList<IRtaStateGroup> LoadRtaStateGroups(IBusinessUnit businessUnitId)
+		{
+			IList<IRtaStateGroup> rtaStateGroupForBusinessUnit;
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var stateGroupRepository = new RtaStateGroupRepository(uow);
+				//rtaStateGroupForBusinessUnit = stateGroupRepository.LoadAllCompleteGraph().Where(r => r.BusinessUnit.Id.Value.Equals(businessUnitId)).ToList();
+				rtaStateGroupForBusinessUnit = stateGroupRepository.LoadAll();
+			}
+			return rtaStateGroupForBusinessUnit;
+		}
+
+		public int PersistStateGroup(DataTable dataTable)
+		{
+			HelperFunctions.TruncateTable("stage.etl_stg_state_group_delete", _dataMartConnectionString);
+			return HelperFunctions.BulkInsert(dataTable, "stage.stg_state_group", _dataMartConnectionString);
+		}
 
 		public int PersistKpi(DataTable dataTable)
 		{
@@ -1625,6 +1649,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_kpi_targets_team_delete", _dataMartConnectionString);
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_kpi_targets_team", _dataMartConnectionString);
+		}
+
+		public int AggregateFactAgentStateDataMart(IBusinessUnit businessUnit)
+		{
+			List<SqlParameter> parameterList = new List<SqlParameter>();
+			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_agent_state_load", parameterList,
+											  _dataMartConnectionString);
 		}
 
 		public int FillKpiTargetTeamDataMart(IBusinessUnit businessUnit)
