@@ -93,5 +93,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertUrlContains(string.Format("Week/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
         }
 
+        [When(@"I choose to go to next month")]
+        public void WhenIChooseToGoToNextMonth()
+        {
+            Browser.Interactions.Click(".icon-arrow-right");
+        }
+
     }
 }

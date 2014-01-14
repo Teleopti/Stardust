@@ -37,7 +37,7 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
     
 	function _bindData(data) {
 	    var selectedDate = moment(data.FixedDate, 'YYYY-MM-DD');
-	    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel(data);
+	    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel(data, selectedDate);
 
 	    var newWeek;
 	    for (var i = 0; i < data.ScheduleDays.length; i++) {
