@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
@@ -15,12 +16,15 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
     {
         private MatrixNavigationModel _target;
         private MockRepository _mocks;
+	    private ILicenseActivator _licenseActivator;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _target = new MatrixNavigationModel(() => "http://MatrixWebSiteUrl/");
+				_licenseActivator = _mocks.DynamicMock<ILicenseActivator>();
+				DefinedLicenseDataFactory.LicenseActivator = _licenseActivator;
         }
 
         [Test]
@@ -100,6 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             using (_mocks.Record())
             {
                 Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+					 Expect.Call(_licenseActivator.EnabledLicenseOptionPaths).Return(new List<string>());
             }
             using (_mocks.Playback())
             {
@@ -116,6 +121,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
         [Test]
         public void ShouldProvideOrphanPermittedMatrixFunctions()
         {
+
             var authorization = _mocks.StrictMock<IPrincipalAuthorization>();
             var matrixFunctions = new List<IApplicationFunction>
                                       {
@@ -126,6 +132,7 @@ namespace Teleopti.Ccc.WinCodeTest.Matrix
             using (_mocks.Record())
             {
                 Expect.Call(authorization.GrantedFunctionsBySpecification(null)).IgnoreArguments().Return(matrixFunctions).Repeat.AtLeastOnce();
+	            Expect.Call(_licenseActivator.EnabledLicenseOptionPaths).Return(new List<string>());
             }
             using (_mocks.Playback())
             {

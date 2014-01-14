@@ -87,5 +87,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             get { return _targetFrame; }
             set { _targetFrame = value; }
         }
+
+	    public string Version { get; set; }
     }
 }
