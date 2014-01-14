@@ -206,31 +206,18 @@ ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [AlarmName] nvarchar(50)
 
 --new stage table
 CREATE TABLE [stage].[stg_agent_state](
-	[person_code] uniqueidentifier NOT NULL,
-	[state_group_name] nvarchar(50) NOT NULL,
-	[state_group_code] uniqueidentifier NOT NULL,
 	[StateStart] datetime NOT NULL,
---	[interval] smalldatetime NOT NULL,
-	[StateEnd] datetime NOT NULL
-)
-
-CREATE CLUSTERED INDEX [CIX_stg_agent_state] ON [stage].[stg_agent_state]
-(
-	[person_code] ASC
-)
-
-/*
-CREATE TABLE [stage].[stg_agent_state_loading](
 	[person_code] uniqueidentifier NOT NULL,
-	[state_group_code] uniqueidentifier NOT NULL,
-	[time_in_state_s] int NOT NULL,
-	[state_start] datetime NOT NULL
-	)
-CREATE CLUSTERED INDEX [CIX_stg_agent_state_loading] ON [stage].[stg_agent_state_loading]
+	[StateEnd] datetime NOT NULL,
+	[state_group_name] nvarchar(50) NOT NULL,
+	[state_group_code] uniqueidentifier NOT NULL
+)
+
+CREATE UNIQUE CLUSTERED INDEX [CIX_stg_agent_state] ON [stage].[stg_agent_state]
 (
+	[StateStart] ASC,
 	[person_code] ASC
 )
-*/
 
 --new stage table
 CREATE TABLE [stage].[stg_state_group](

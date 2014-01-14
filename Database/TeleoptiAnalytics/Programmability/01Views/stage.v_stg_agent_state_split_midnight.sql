@@ -18,9 +18,10 @@ WITH d(n,person_code,state_group_name,state_group_code, org_from_date,org_to_dat
 		DATEADD(day, n.n, DATEDIFF(day, 0, d.StateStart)),
 		DATEADD(day, n.n+1, DATEDIFF(day, 0, d.StateStart))
 	FROM mart.sys_numbers n
-	INNER JOIN [stage].[stg_agent_state] AS d WITH (TABLOCKX)
+	INNER JOIN [stage].[stg_agent_state] AS d
 		ON d.StateEnd > DATEADD(DAY, n.n-1, d.StateStart)
-	AND n<10
+	where DATEDIFF(dd, 0, d.StateStart) <> DATEDIFF(dd, 0, d.StateEnd) --only the ones stretching across utc midnight
+	AND n<10 --max 10 day ahead
 )
 SELECT
 	d.person_code,

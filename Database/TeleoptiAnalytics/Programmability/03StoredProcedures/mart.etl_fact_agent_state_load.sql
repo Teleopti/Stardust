@@ -15,9 +15,6 @@ WITH EXECUTE AS OWNER
 AS
 SET NOCOUNT ON
 
---re-load dim_state_group with state groups that might have poped in between ETL.dim_state_group and now()
-EXEC [mart].[etl_dim_state_group_load_livefeed]
-
 SET NOCOUNT OFF
 
 --existing rows

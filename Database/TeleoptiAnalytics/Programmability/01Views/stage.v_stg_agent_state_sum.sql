@@ -12,7 +12,12 @@ state_group_id	= ISNULL(sg.state_group_id,-1),
 time_in_state_s	= sum(datediff(ss,stg.StateStart,stg.StateEnd)),
 datasource_id	= 1,
 insert_date		= cast(getdate() as smalldatetime)
-FROM [stage].[v_stg_agent_state_split_midnight] stg
+FROM (
+	SELECT person_code, state_group_name, state_group_code, StateStart, StateEnd FROM [stage].[stg_agent_state] WITH (TABLOCKX)
+	WHERE DATEDIFF(dd, 0, StateStart) = DATEDIFF(dd, 0, StateEnd) --On the same utc day
+	UNION ALL
+	SELECT person_code, state_group_name, state_group_code, StateStart, StateEnd FROM [stage].[v_stg_agent_state_split_midnight] --stretching across utc midnight
+	) stg
 LEFT JOIN mart.dim_person dp
 	ON stg.person_code = dp.person_code
 	AND --trim

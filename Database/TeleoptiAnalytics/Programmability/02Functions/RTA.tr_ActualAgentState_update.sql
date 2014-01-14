@@ -11,7 +11,7 @@ AS
 --====================
 --How to check/fire the trigger only on specific column changes
 --====================
-In our case we always update all columns so their is no need for this (yet).
+In our case we always update all columns so there is no need for this (yet).
 To check whether any one of columns 2, 3 or 4 has been updated:
 IF (COLUMNS_UPDATED() & 14) > 0
 
@@ -30,14 +30,13 @@ and name in ('State')  --(aka StateGroup)
 
 --IF (COLUMNS_UPDATED() & 8) > 0
 BEGIN
-	INSERT INTO [stage].[stg_agent_state]
+	INSERT INTO [stage].[stg_agent_state] (StateStart, person_code, StateEnd, state_group_name, state_group_code)
 	SELECT
-		person_code		= d.PersonId,
-		state_code		= d.StateCode,
-		state_group_code= d.StateId,
 		StateStart		= d.StateStart,
---		interval		= cast(dateadd(MINUTE,(DATEPART(HOUR,d.StateStart)*60+DATEPART(MINUTE,d.StateStart)),'1900-01-01') as smalldatetime),
-		StateEnd		= i.StateStart
+		person_code		= d.PersonId,
+		StateEnd		= i.StateStart,
+		state_code		= d.StateCode,
+		state_group_code= d.StateId
 	FROM DELETED d
 	INNER JOIN INSERTED i
 		ON d.StateStart<>i.StateStart  --Only if time have changed
