@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using AutoMapper;
+using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon;
@@ -75,6 +76,20 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
                 stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
                                                               new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
             var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.DayOff, personAssignment);
+
+            var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+            result.IsNotWorkingDay.Should().Be.True();
+        }
+
+        [Test]
+        public void ShouldMapIsNotWorkingDayForFullDayAbsence()
+        {
+            var stubs = new StubFactory();
+            var personAbsence =
+                stubs.PersonAbsenceStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
+                    new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
+            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
 
             var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
 

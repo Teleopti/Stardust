@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
                     s =>
                     {
                         var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-                        return (significantPart == SchedulePartView.DayOff);
+                        return (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.FullDayAbsence);
                     }))
                 .ForMember(d => d.DisplayColor, c => c.ResolveUsing(
                     s =>
