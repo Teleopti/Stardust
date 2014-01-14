@@ -99,5 +99,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.Click(".icon-arrow-right");
         }
 
+        [When(@"I choose to go to previous month")]
+        public void WhenIChooseToGoToPreviousMonth()
+        {
+            Browser.Interactions.Click(".icon-arrow-left");
+        }
+
+
     }
 }
