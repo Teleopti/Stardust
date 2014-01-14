@@ -1,3 +1,6 @@
+using System.Globalization;
+using System.Linq;
+using System.Threading;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +15,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 
             CreateMap<MonthScheduleDomainData, MonthScheduleViewModel>()
                 .ForMember(d => d.ScheduleDays, c => c.MapFrom(s => s.Days))
-                .ForMember(d => d.FixedDate, c => c.MapFrom(s => s.CurrentDate.ToFixedClientDateOnlyFormat()));
+                .ForMember(d => d.FixedDate, c => c.MapFrom(s => s.CurrentDate.ToFixedClientDateOnlyFormat()))
+                .ForMember(d => d.DayHeaders,
+                    c =>
+                        c.MapFrom(
+                            s =>
+                                DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture)
+                                    .Select(
+                                        w =>
+                                            new Description(CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(w),
+                                                CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedDayName(w)))));
+                
             
             CreateMap<MonthScheduleDayDomainData, MonthDayViewModel>()
                 .ForMember(d => d.Date, c => c.MapFrom(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly))

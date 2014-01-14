@@ -123,5 +123,15 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
             var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
             result.FixedDate.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
         }
+
+	    [Test]
+        [SetCulture("de-DE")]
+	    public void ShouldMapDayHeaderOfWeek()
+	    {
+            var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
+            var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+            result.DayHeaders.First().Name.Should().Be.EqualTo("Montag");
+            result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
+        }
 	}
 }

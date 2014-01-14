@@ -20,24 +20,12 @@
         </div>
 
         <div id="calendar" class="cal-context" style="width: 100%;">
-            <div class="cal-row-fluid cal-row-head visible-desktop">
-                <div class="cal-cell">Monday</div>
-                <div class="cal-cell">Tuesday</div>
-                <div class="cal-cell">Wednesday</div>
-                <div class="cal-cell">Thursday</div>
-                <div class="cal-cell">Friday</div>
-                <div class="cal-cell">Saturday</div>
-                <div class="cal-cell">Sunday</div>
+            <div class="cal-row-fluid cal-row-head visible-desktop" data-bind="foreach: weekDayNames">
+                <div class="cal-cell" data-bind="text: Name"></div>
             </div>
 
-            <div class="cal-row-fluid cal-row-head hidden-desktop">
-                <div class="cal-cell">Mon</div>
-                <div class="cal-cell">Tue</div>
-                <div class="cal-cell">Wed</div>
-                <div class="cal-cell">Thu</div>
-                <div class="cal-cell">Fri</div>
-                <div class="cal-cell">Sat</div>
-                <div class="cal-cell">Sun</div>
+            <div class="cal-row-fluid cal-row-head hidden-desktop" data-bind="foreach: weekDayNames">
+                <div class="cal-cell" data-bind="text: ShortName" ></div>
             </div>
 
             <div class="cal-month-box" data-bind="foreach: weekViewModels">

@@ -28,8 +28,9 @@ Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
     this.dayViewModels = ko.observableArray();
 };
 
-Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
+Teleopti.MyTimeWeb.Schedule.MonthViewModel = function (monthData) {
     this.weekViewModels = ko.observableArray();
+    this.weekDayNames = monthData.DayHeaders;
 };
 
 

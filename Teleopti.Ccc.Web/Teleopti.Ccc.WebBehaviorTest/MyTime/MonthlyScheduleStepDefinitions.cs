@@ -1,6 +1,7 @@
 ﻿using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -66,6 +67,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldEndUpInMonthViewForCurrentMonth()
         {
             Browser.Interactions.AssertExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", DateTime.Today));
+        }
+
+        [Then(@"I should see '(.*)' as the first day of week label")]
+        public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string dayOfWeek)
+        {
+            Browser.Interactions.AssertVisibleUsingJQuery(".cal-row-head .cal-cell:first:contains('"+dayOfWeek+"')");
+        }
+
+        [Given(@"I am using a device with narrow view")]
+        public void GivenIAmUsingADeviceWithNarrowView()
+        {
+            Browser.Interactions.SetWidth(480);
         }
 
     }
