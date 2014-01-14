@@ -62,5 +62,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
                 string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
         }
 
+        [Then(@"I should end up in month view for current month")]
+        public void ThenIShouldEndUpInMonthViewForCurrentMonth()
+        {
+            Browser.Interactions.AssertExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", DateTime.Today));
+        }
+
     }
 }

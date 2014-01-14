@@ -121,7 +121,7 @@ Then I should end up in month view for '2014-01-07'
 Scenario: View current month
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
-When I navigate to month view
+When I view my month schedule
 Then I should end up in month view for current month
 
 Scenario: Can switch to weekly schedule when showing monthly schedule 
