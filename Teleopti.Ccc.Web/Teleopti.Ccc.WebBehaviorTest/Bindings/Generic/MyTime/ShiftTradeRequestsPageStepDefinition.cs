@@ -74,17 +74,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(string.Format(".shift-trade-my-schedule .shift-trade-layer[scheduleinfo*='{0}']", expectedTimes));
 		}
 
-		[Then(@"I should only see (.*)'s schedule")]
-		public void ThenIShouldOnlySeeOtherAgentSSchedule(string agentName)
-		{
-			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Count(div => div.IsDisplayed()), Is.EqualTo(1));
-			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).First(div => div.IsDisplayed()).Text, Is.StringContaining(agentName));
-		}
-
 		[Then(@"I should see (.*) in the shift trade list")]
 		public void ThenIShouldSeeOtherAgentSSchedule(string agentName)
 		{
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);
+		}
+
+		[Then(@"I should only see a possible schedule trade with '(.*)'")]
+		public void ThenIShouldOnlySeeAPossibleScheduleTradeWith(string name)
+		{
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".shift-trade-agent-name:visible:contains('{0}')", name));
+			Browser.Interactions.AssertJavascriptResultContains("return $('.agent:visible').length;", "1");
 		}
 
 		[Then(@"I should see a possible schedule trade with '(.*)'")]

@@ -184,8 +184,8 @@ Scenario: When clicking an agent in shift trade list, the other agent's should b
 	| Shift category		| Day	           |
 	And the current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
-	And I click agent 'OtherAgent'
-	Then I should only see OtherAgent's schedule
+	And I click agent 'OtherAgent2'
+	Then I should only see a possible schedule trade with 'OtherAgent2'
 	
 Scenario: Time line should cover scheduled night shift
 	Given I have the role 'Full access to mytime'
@@ -197,7 +197,7 @@ Scenario: Time line should cover scheduled night shift
 	| Shift category		| Night	           |
 	And the current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-03'
-	Then I should see the time line hours span from '22' to '7'
+	Then I should see the time line hours span from '22:00' to '07:00'
 
 Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	Given I have the role 'Full access to mytime'
@@ -295,7 +295,7 @@ Scenario: Show my scheduled day off
 	And the current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-04'
 	Then I should see my scheduled day off 'DayOff'
-	And I should see the time line hours span from '8' to '17'
+	And I should see the time line hours span from '08:00' to '17:00'
 
 Scenario: Default to my team
 	Given I have the role 'Full access to mytime'
