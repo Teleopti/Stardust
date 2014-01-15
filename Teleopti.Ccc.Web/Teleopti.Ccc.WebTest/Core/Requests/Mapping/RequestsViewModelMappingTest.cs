@@ -162,35 +162,51 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapDatesForOneDate()
+		public void ShouldMapDate()
 		{
 			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
-			var startDateTime = DateTime.UtcNow;
-			var period = new DateTimePeriod(startDateTime, startDateTime.AddHours(5));
-			
+			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5));
+
 			var request = new PersonRequest(new Person(), new TextRequest(period));
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.Dates.Should().Be.EqualTo(startDateTime.ToShortDateString());
+			result.Dates.Should().Be.EqualTo(period.ToShortDateTimeString(timeZone));
 		}
 
 		[Test]
-		public void ShouldMapDatesForDatePeriod()
+		public void ShouldMapDatesForShiftRequestForOneDate()
 		{
 			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
 
-			var startDateTime = DateTime.UtcNow;
-			var period = new DateTimePeriod(startDateTime, startDateTime.AddDays(5));
-
-			var request = new PersonRequest(new Person(), new TextRequest(period));
+			var startDate = new DateOnly(DateTime.UtcNow);
+			var request = createShiftTrade(_loggedOnPerson, PersonFactory.CreatePerson("Receiver"),
+										   startDate, startDate);
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.Dates.Should().Be.EqualTo(period.ToDateOnlyPeriod(_userTimeZone.TimeZone()).ToShortDateString(_userCulture.GetCulture()));
+			result.Dates.Should().Be.EqualTo(startDate.ToShortDateString());
+		}
+
+		[Test]
+		public void ShouldMapDatesForShiftRequestForDatePeriod()
+		{
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(timeZone);
+
+			var startDate = new DateOnly(DateTime.UtcNow);
+			var endDate = startDate.AddDays(5);
+			var request = createShiftTrade(_loggedOnPerson, PersonFactory.CreatePerson("Receiver"),
+										   startDate, endDate);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			result.Dates.Should().Be.EqualTo(new DateOnlyPeriod(startDate, endDate).ToShortDateString(_userCulture.GetCulture()));
 		}
 
 		[Test]
@@ -557,6 +573,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			var tradeDate = new DateOnly(2010, 1, 1);
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(from, to, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(from) { Subject = "Subject of request", Request = shiftTradeRequest };
+			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
+			personRequest.SetId(new Guid());
+			return personRequest;
+		}
+
+		private static IPersonRequest createShiftTrade(IPerson from, IPerson to, DateOnly fromDate, DateOnly toDate)
+		{
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(from, to, fromDate, toDate);
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
 			var personRequest = new PersonRequest(from) { Subject = "Subject of request", Request = shiftTradeRequest };
 			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
