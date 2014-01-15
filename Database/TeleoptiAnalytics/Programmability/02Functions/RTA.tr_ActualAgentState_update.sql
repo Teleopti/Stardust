@@ -8,6 +8,8 @@ AFTER UPDATE
 AS
 
 /*
+delete from RTA.ActualAgentState
+
 --====================
 --How to check/fire the trigger only on specific column changes
 --====================
@@ -30,12 +32,11 @@ and name in ('State')  --(aka StateGroup)
 
 --IF (COLUMNS_UPDATED() & 8) > 0
 BEGIN
-	INSERT INTO [stage].[stg_agent_state]
+	INSERT INTO [stage].[stg_agent_state](StateStart, person_code, time_in_state_s, state_group_code, days_cross_midnight)
 	SELECT
 		StateStart		= d.StateStart,
 		person_code		= d.PersonId,
 		time_in_state_s = datediff(ss,d.StateStart,i.StateStart),
-		state_code		= d.StateCode,
 		state_group_code= d.StateId,
 		days_cross_midnight = datediff(dd, 0, i.StateStart) - datediff(dd, 0, d.StateStart)
 	FROM DELETED d

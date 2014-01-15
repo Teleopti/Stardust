@@ -7,13 +7,12 @@ GO
 --2013-11-25 12:34:00.560
 CREATE VIEW [stage].[v_stg_agent_state_split_midnight]
 AS
-WITH d(n,person_code,state_group_name,state_group_code, org_from_date,org_to_date,period_days,begin_period,end_period) AS 
+WITH d(n,person_code,state_group_code, org_from_date,org_to_date,period_days,begin_period,end_period) AS 
 (
 	SELECT
 		n.n,
 		d.person_code,
-		d.state_group_name,
-		d.state_group_code, 
+		d.state_group_code,
 		d.StateStart,
 		DATEADD(ss,d.time_in_state_s,d.StateStart),
 		DATEDIFF(DAY, d.StateStart, DATEDIFF(DAY, d.StateStart, DATEADD(ss,d.time_in_state_s,d.StateStart))),
@@ -26,7 +25,6 @@ WITH d(n,person_code,state_group_name,state_group_code, org_from_date,org_to_dat
 )
 SELECT
 	d.person_code,
-	d.state_group_name,
 	d.state_group_code,
 	begin_period,
 	end_period,

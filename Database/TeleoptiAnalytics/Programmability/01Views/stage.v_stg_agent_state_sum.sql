@@ -1,7 +1,7 @@
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[stage].[v_stg_agent_state_sum]'))
 DROP VIEW [stage].[v_stg_agent_state_sum]
 GO
---SELECT * FROM stage.v_stg_agent_state_sum;SELECT * FROM stage.stg_agent_state
+--SELECT * FROM stage.v_stg_agent_state_sum;SELECT * FROM stage.stg_agent_state;SELECT count(*) FROM stage.stg_agent_state
 --set statistics time on
 CREATE VIEW stage.v_stg_agent_state_sum
 AS
@@ -15,7 +15,6 @@ insert_date		= cast(getdate() as smalldatetime)
 FROM (
 	SELECT
 		person_code,
-		state_group_name,
 		state_group_code,
 		StateStart,
 		time_in_state_s
@@ -26,7 +25,6 @@ FROM (
 
 	SELECT
 		person_code,
-		state_group_name,
 		state_group_code,
 		StateStart,
 		DATEDIFF(ss,StateStart,StateEnd) as 'time_in_state_s'
