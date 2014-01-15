@@ -8,11 +8,11 @@ declare @teamId uniqueidentifier
 --Not run this script in SQLCMD-mode. see "Query"-menu
 
 --2) your app db
-USE REPLACE_TO_MATCH_APP_DB
+USE main_DemoSales_TeleoptiCCC7
 
 --3) your analytics db
 --change 
-:setvar analytics REPLACE_TO_MATCH_ANALYTICS_DB
+:setvar analytics main_DemoSales_TeleoptiAnalytics
 
 --show all available teams
 select bu.Name 'BusinessUnit',s.Name 'Site',t.Name 'Team',t.Id as 'Team Id',count(p.Id) 'number of agents'
@@ -26,13 +26,14 @@ inner join PersonPeriodWithEndDate pp
 	and getdate() between pp.StartDate and pp.EndDate
 inner join Person p
 	on p.Id = pp.Parent
+	and p.isDeleted = 0
 group by bu.Name,s.Name,t.Name,t.Id
 order by 1,2,3
 
 
 --4) team.Id
 --set this values to match the team_code (aka team.Id) you would like to send RTA events to
-set @teamId = '2448F8CA-8082-455B-BF60-A1490101AA29' 
+set @teamId = '34590A63-6331-4921-BC9F-9B5E015AB495' 
 --==========
 
 IF OBJECT_ID('tempdb.dbo.#t') IS NOT NULL DROP TABLE #t
