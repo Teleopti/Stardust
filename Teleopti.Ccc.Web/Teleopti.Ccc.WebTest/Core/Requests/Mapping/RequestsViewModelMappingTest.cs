@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private ILoggedOnUser _loggedOnUser;
 		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private IPerson _loggedOnPerson;
+		private IUserCulture _userCulture;
 
 		[SetUp]
 		public void Setup()
@@ -38,13 +39,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
 			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
 			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+			_userCulture = MockRepository.GenerateMock<IUserCulture>();
+			_userCulture.Stub(x => x.GetCulture()).Return(CultureInfo.CurrentCulture);
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
 				_userTimeZone, 
 				_linkProvider,
 				_loggedOnUser,
-				_shiftTradeRequestStatusChecker
+				_shiftTradeRequestStatusChecker,
+				_userCulture
 				)));
 		}
 
@@ -158,18 +162,35 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapDate()
+		public void ShouldMapDatesForOneDate()
 		{
 			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
-			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5));
+			var startDateTime = DateTime.UtcNow;
+			var period = new DateTimePeriod(startDateTime, startDateTime.AddHours(5));
 			
 			var request = new PersonRequest(new Person(), new TextRequest(period));
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.Dates.Should().Be.EqualTo(period.ToShortDateTimeString(timeZone));
+			result.Dates.Should().Be.EqualTo(startDateTime.ToShortDateString());
+		}
+
+		[Test]
+		public void ShouldMapDatesForDatePeriod()
+		{
+			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+
+			var startDateTime = DateTime.UtcNow;
+			var period = new DateTimePeriod(startDateTime, startDateTime.AddDays(5));
+
+			var request = new PersonRequest(new Person(), new TextRequest(period));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			result.Dates.Should().Be.EqualTo(period.ToDateOnlyPeriod(_userTimeZone.TimeZone()).ToShortDateString(_userCulture.GetCulture()));
 		}
 
 		[Test]
