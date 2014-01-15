@@ -339,12 +339,10 @@ Scenario: Change date and keep selected team
 	Then the option 'The site/Other team' should be selected
 
 Scenario: Cannot trade shifts when teamless
-	Given I have the role 'Full access to mytime'
+	Given I am an agent in a team that leaves tomorrow
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I left the organisation '2029-12-24'
-	And the current time is '2030-01-01'
 	When I view Add Shift Trade Request
-	Then I should see a message that I do not belong to a team
+	Then I should see a message text saying that I have no access to any teams
 
 Scenario: Show possible shift trades from my team
 	Given I have the role 'Full access to mytime'
@@ -375,13 +373,13 @@ Scenario: Paging possible shifts
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have possible shift trades with
-	| Field                    | Value                                     |
-	| Date                     | 2030-01-01                                |
-	| Possible trade count     | 60                                        |
+	| Field                              | Value                                     |
+	| Date                               | 2030-01-01                                |
+	| Possible trade count               | 60                                        |
 	| Workflow control set     | Trade from tomorrow until 30 days forward |
 	| Person period start date | 2012-06-18                                |
-	| Shift category           | Day                                       |
-	| Team                     | My team                                   |
+	| Shift category            | Day                                       |
+	| Team                      | My team                                   |
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I can see '50' possible shift trades
@@ -413,98 +411,6 @@ Scenario: Sort possible shift trades by starttime
 	Then I should see 'OtherAgent2' first in the list
 	And I should see 'OtherAgent' last in the list
 
-#Scenario för när man klickat i att shift trades utanför team ska visas
-
-@ignore
-Scenario: Do not show shifts with other starttime and endtime than desired
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	And Ashley Andeen has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 18:00 |
-	| Shift category		| Day	           |
-	And the current time is '2029-12-27'
-	And I input shift trade filtering fields with
-	| Field                       | Value |
-	| Start time		          | 10:30 |
-	| End time			          | 16:30 |
-	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should see a message text saying that no possible shift trades could be found
-	
-@ignore
-Scenario: Show possible shifts with desired starttime and endtime
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	And Ashley Andeen has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 18:00 |
-	| Shift category		| Day	           |
-	And the current time is '2029-12-27'
-	And I input shift trade filtering fields with
-	| Field                       | Value |
-	| Start time		          | 08:00 |
-	| End time			          | 18:00 |
-	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should see a possible schedule trade with 'Ashley Andeen'
-
-@ignore
-Scenario: Show possible shift trades where agents name is the same as the filtered 
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	And Ashley Andeen has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 18:00 |
-	| Shift category		| Day	           |
-	And the current time is '2029-12-27'
-	#And I input shift trade filtering fields with
-	#| Field                       | Value			|
-	#| Name				          | Ashley Andeen	|
-	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should see a possible schedule trade with 'Ashley Andeen'
-	
-@ignore
-Scenario: Do not show possible shift trades where agent has other name than the filtered 
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	And Ashley Andeen has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 18:00 |
-	| Shift category		| Day	           |
-	And the current time is '2029-12-27'
-	#And I input shift trade filtering fields with
-	#| Field                       | Value			|
-	#| Name				          | John Smith		|
-	When I view Add Shift Trade Request for date '2030-01-01'
-	#Then I should not see a possible schedule trade with 'Ashley Andeen'
-	Then I should not see a possible schedule trade with 'OtherAgent'
 
 
 
