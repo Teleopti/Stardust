@@ -175,6 +175,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsFalse(_target.WeekInLegalState);
         }
 
+		[Test]
+		public void ShouldReturnStatusOfMatrix()
+		{
+			Assert.IsTrue(_target.HasMatrix);
+			_target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime);	
+			Assert.IsFalse(_target.HasMatrix);
+		}
+
         [Test]
         public void ShouldNotIncreaseCurrentValuesForEachCallToLoadSchedulePeriodData()
         {

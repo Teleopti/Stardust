@@ -168,7 +168,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                                                            UseRotations = true
                                                        };
             var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
-			helper.SetRestrictionFullfillment();
+			if(helper.HasMatrix)
+				helper.SetRestrictionFullfillment();
 			var period = person.Period(helper.SelectedDate);
 			if (period != null)
 			{
