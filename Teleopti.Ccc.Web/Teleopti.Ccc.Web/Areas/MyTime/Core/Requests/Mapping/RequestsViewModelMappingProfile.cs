@@ -40,10 +40,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Dates,
 									 o => o.ResolveUsing(s =>
 										 {
-											 var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
-											 return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate
-												        ? dateOnlyPeriod.StartDate.ToShortDateString(_userCulture.GetCulture())
-												        : dateOnlyPeriod.ToShortDateString(_userCulture.GetCulture());
+											 if (s.Request.RequestType == RequestType.ShiftTradeRequest)
+											 {
+												 var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
+												 return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate
+													        ? dateOnlyPeriod.StartDate.ToShortDateString(_userCulture.GetCulture())
+													        : dateOnlyPeriod.ToShortDateString(_userCulture.GetCulture());
+											 }
+											 return s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone());
 										 }))
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 					{
