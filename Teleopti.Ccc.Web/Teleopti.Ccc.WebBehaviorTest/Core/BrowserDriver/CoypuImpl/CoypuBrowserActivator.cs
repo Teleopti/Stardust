@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					AppHost = "about:blank",
 					Port = 80,
 					SSL = false,
-					ConsiderInvisibleElements = falseDueToUpgradeIssues(),
+					ConsiderInvisibleElements = true,
 					WaitBeforeClick = TimeSpan.Zero,
 					RetryInterval = retry,
 					Timeout = timeout,
@@ -39,11 +39,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.ResizeTo(1100, 1000);	// an element must be in view to selenium to interact with it
 			_interactions = new CoypuBrowserInteractions(_browser, configuration);
 		}
-
-	    private bool falseDueToUpgradeIssues()
-	    {
-	        return false;
-	    }
 
 	    public void Close()
 		{
