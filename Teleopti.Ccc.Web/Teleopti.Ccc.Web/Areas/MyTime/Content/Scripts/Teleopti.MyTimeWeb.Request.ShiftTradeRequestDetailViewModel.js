@@ -141,7 +141,7 @@ Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewMod
 	self.showLabel = ko.observable(true);
 	self.hourText = hour.HourText;
 	self.lengthInMinutes = hour.LengthInMinutesToDisplay;
-	self.leftPx = ko.observable('-8px');
+	self.leftPx = ko.observable('-17px');
     self.startTime = moment(hour.StartTime);
     self.endTime = moment(hour.EndTime);
 

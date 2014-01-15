@@ -28,7 +28,7 @@
 		<div class="shift-trade-swap-detail-schedule-row" >
 			
 			<div class="shift-trade-swap-detail-schedule" data-bind="foreach: mySchedule().layers, hoverToggle: 'hoverBorder', hoverTarget: '#sender-info'">
-				<span class="shift-trade-layer edit" data-bind="style: { left: leftPx, backgroundColor: backgroundColor, paddingLeft: widthPx }, tooltip: { title: title }, attr: {'scheduleinfo' : title()}, css:{ dayoff : $parent.mySchedule().showDayOffStyle() }">
+				<span class="shift-trade-layer edit my" data-bind="style: { left: leftPx, backgroundColor: backgroundColor, paddingLeft: widthPx }, tooltip: { title: title }, attr: {'scheduleinfo' : title()}, css:{ dayoff : $parent.mySchedule().showDayOffStyle() }">
 					<span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
 				</span>
 			</div>

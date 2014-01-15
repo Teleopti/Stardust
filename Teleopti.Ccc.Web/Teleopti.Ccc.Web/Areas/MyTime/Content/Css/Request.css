@@ -1,10 +1,6 @@
 ﻿.hoverBorder {
 	outline: solid 1px rgba(0, 0, 0, 0.15);
 }
-.add-shifttrade-datepicker {
-	
-}
-
 .request-body-inner ol
 {
 	list-style: none;
@@ -110,24 +106,6 @@
 {
 	width: 8em;
 }
-
-.date-from {
-	
-}
-
-.time-from {
-	
-}
-
-
-.time-to {
-	
-}
-
-.date-to {
-	
-}
-
 .request-data-subject {
 	word-wrap: break-word;
 	margin: 0 0 5px 0;
@@ -178,18 +156,13 @@
 	height: 18px;
 	z-index: 10;
 }
+.shift-trade-layer.edit.my {
+	top: 3px;	
+}
 .shift-trade-add-schedule
 {
 	position: relative;
 	/*margin-top: 18px;*/
-}
-
-tr.shift-trade-my-schedule-row
-{
-	/*margin-top: 4px;
-	height: 34px;
-	position: relative;
-	font-style: italic;*/
 }
 .shift-trade-schedule-loading {
     position: absolute; 
@@ -198,42 +171,13 @@ tr.shift-trade-my-schedule-row
     top:0; 
     left:0;
 }
-.shift-trade-person-schedule-row
-{
-	/*margin-top: 2px;
-	height: 18px;
-	position: relative;*/
-}
-.shift-trade-my-schedule
-{
-	/*position: absolute;
-	left: 150px;
-	display: inline;*/
-}
-
-.shift-trade-possible-trade-schedule
-{
-	/*position: absolute;
-	left: 150px;
-	display: inline;*/
-}
 .shift-trade-timeline 
 {
 	height: 100%;
-	/*width: 100%;*/
 	position: absolute;
 	left: 166px; /* 150 + 8 + 8 , padding in first column*/
 }
 
-.shift-trade-timeline .shift-trade-timeline-line:last-child
-{
-	/*border-right: 0px;*/
-}
-.shift-trade-timeline .shift-trade-timeline-line:first-child .shift-trade-timeline-number:first-child
-{
-	/*border: 0px;
-	background: none;*/
-}
 .shift-trade-timeline-line 
 {
 	height: 100%;
@@ -243,10 +187,16 @@ tr.shift-trade-my-schedule-row
 
 .shift-trade-timeline-number
 {
+	width: 27px;
+	float: left;
+	line-height: 10px;
+	text-align: center;
+	/*margin-top: 5px;*/
+
 	padding-left: 2px;
 	padding-right: 3px;
 	position: relative;
-	top: -19px;
+	top: -14px;
 	font-family: verdana;
 	font-size: 8px;
 	white-space: nowrap;
@@ -293,17 +243,6 @@ tr.shift-trade-my-schedule-row
 	overflow: hidden;
 	white-space: nowrap;
 	width: 166px;
-	/*position: absolute;
-	overflow: hidden;
-	white-space: nowrap;
-	width: 150px;
-	height: 18px;
-	float: left; 
-	text-overflow: ellipsis;*/		
-}
-.rtl .shift-trade-agent-name {
-	/*right: auto;
-	left: 0;*/
 }
 .shift-trade-agent-name-hover
 {
@@ -337,6 +276,7 @@ tr.shift-trade-my-schedule-row
 
 .shift-trade-swap-detail-timeline 
 {
+	margin-left: 10px;
 	height: 46px;
 	position: absolute;
 	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
@@ -368,7 +308,6 @@ tr.shift-trade-my-schedule-row
 .shift-trade-add-schedule .shift-trade-timeline,
 .shift-trade-add-schedule .shift-trade-timeline div {
 	height: 100%;
-	/*z-index: -10;*/
 }
 .shift-trade-ruler {
 	height: 100%;
@@ -376,11 +315,6 @@ tr.shift-trade-my-schedule-row
 	background-color: rgba(0,0,0,0.2);
 	z-index: 100;
 }
-/*.shift-trade-timeline .label {
-	font-size: xx-small;
-	height: 12px !important;
-	z-index: 111;
- }*/
 .shift-trade-label
 {
 	font-size: xx-small;
