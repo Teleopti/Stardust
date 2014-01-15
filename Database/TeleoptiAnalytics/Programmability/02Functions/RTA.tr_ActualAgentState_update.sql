@@ -30,13 +30,14 @@ and name in ('State')  --(aka StateGroup)
 
 --IF (COLUMNS_UPDATED() & 8) > 0
 BEGIN
-	INSERT INTO [stage].[stg_agent_state] (StateStart, person_code, StateEnd, state_group_name, state_group_code)
+	INSERT INTO [stage].[stg_agent_state]
 	SELECT
 		StateStart		= d.StateStart,
 		person_code		= d.PersonId,
-		StateEnd		= i.StateStart,
+		time_in_state_s = datediff(ss,d.StateStart,i.StateStart),
 		state_code		= d.StateCode,
-		state_group_code= d.StateId
+		state_group_code= d.StateId,
+		days_cross_midnight = datediff(dd, 0, i.StateStart) - datediff(dd, 0, d.StateStart)
 	FROM DELETED d
 	INNER JOIN INSERTED i
 		ON d.StateStart<>i.StateStart  --Only if time have changed
