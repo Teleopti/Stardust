@@ -7,6 +7,7 @@ GO
 --exec mart.report_data_agent_schedule_result @date_from='2013-05-12 00:00:00',@date_to='2013-05-17 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=N'3',@team_set=N'19',@agent_set=N'9f0311d3-b4ca-4481-a344-a00b00a2d494,af4c77d7-7782-4e8d-a517-a00b009ec05b,4d2d554d-903a-4493-ae65-a00b00a21358,a6bcb63c-2d8f-47c7-872c-a00b00a2d494',@adherence_id=N'1',@time_zone_id=N'2',@person_code='D0F3F560-0E23-46A4-80AD-9FF1521EA8A8',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=1033,@business_unit_code='C05D8FA4-A6C7-484D-BE81-9F410120F050'
 -- ashley i sales demo
 -- exec mart.report_data_agent_schedule_result @date_from='2013-02-05 00:00:00',@date_to='2013-02-07 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=null,@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=null,@team_set=null,@agent_set=N'11610fe4-0130-4568-97de-9b5e015b2564',@adherence_id=N'1',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=103,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+-- exec mart.report_data_agent_schedule_result @date_from='2013-02-05 00:00:00',@date_to='2013-02-07 00:00:00',@interval_from=N'0',@interval_to=N'95',@group_page_code=null,@group_page_group_set=NULL,@group_page_agent_set=NULL,@site_id=null,@team_set=null,@agent_set=null,@adherence_id=N'1',@time_zone_id=N'2',@person_code='11610fe4-0130-4568-97de-9b5e015b2564',@report_id='0065AA84-FD47-4022-ABE3-DD1B54FD096C',@language_id=103,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA', @from_matrix=0
 
 -- =============================================
 -- Author:		KJ
@@ -54,7 +55,8 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_result]
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@from_matrix bit=1
 AS
 SET NOCOUNT ON
 
@@ -142,25 +144,37 @@ INNER JOIN mart.dim_date d
 	ON b.local_date_id = d.date_id
 WHERE	d.date_date	between @date_from AND @date_to
 
---Get all agents/persons that user has permission to see in given period
-INSERT INTO #rights_agents
-EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code
+if(@from_matrix=1)
+begin
+	--Get all agents/persons that user has permission to see in given period
+	INSERT INTO #rights_agents
+	EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code
 
-IF mart.GroupPageCodeIsBusinessHierarchy(@group_page_code) = 0
-	BEGIN
-		-- Some Group Page was picked
-		-- Split the person codes
-		INSERT INTO #agents
-		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@group_page_agent_set, @date_from, @date_to, @site_id, @team_set)
+	IF mart.GroupPageCodeIsBusinessHierarchy(@group_page_code) = 0
+		BEGIN
+			-- Some Group Page was picked
+			-- Split the person codes
+			INSERT INTO #agents
+			SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@group_page_agent_set, @date_from, @date_to, @site_id, @team_set)
 
-	END
-ELSE
-	BEGIN
-		-- Business Hierarchy picked
-		-- Split the person codes
-		INSERT INTO #agents
-		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@agent_set, @date_from, @date_to, @site_id, @team_set)
-	END
+		END
+	ELSE
+		BEGIN
+			-- Business Hierarchy picked
+			-- Split the person codes
+			INSERT INTO #agents
+			SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@agent_set, @date_from, @date_to, @site_id, @team_set)
+		END
+end
+else
+begin
+	declare @me_as_id int
+	select @me_as_id=id from mart.PersonCodeToId(@person_code, @date_from, @date_to, null, null)
+	INSERT INTO #rights_agents  --Insert the current agent
+	SELECT @me_as_id
+	INSERT INTO #agents --Insert the current agent
+	SELECT @me_as_id
+end
 
 --Join the ResultSets above as:
 --a) allowed to see = #rights_agents
