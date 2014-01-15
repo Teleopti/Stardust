@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Globalization;
+using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Chart;
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
         //Cannot figuer out how to handle days in the grid and months on the label
         //without getting day resolution on the gridlines, therefor I have to draw
         //something called striplines
-        private void addStripLines()
+        private void addStripLines(int numberOfDaysinMonth)
         {
             _chartControl.PrimaryXAxis.StripLines.Clear();
             ChartStripLine sl = new ChartStripLine();
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             sl.StartAtAxisPosition = true;
             sl.Offset = 0;
             sl.Width = 0.3;
-            sl.Period = 30.5;
+			sl.Period = numberOfDaysinMonth;
             sl.Text = "";
             sl.Interior = new BrushInfo(100, new BrushInfo(GradientStyle.None, Color.Black, Color.Black));
 
@@ -137,8 +138,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             var xAxisLabels = new string[365];          
             _chartControl.Series.Clear();
 
-
-            createPrimaryAxisLabels(xAxisLabels);
+            createPrimaryAxisLabels(xAxisLabels, taskOwnerPeriods);
 
             if (taskOwnerPeriods.Count == 0)
                 clearChartDefaultJunkData();
@@ -153,31 +153,24 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             Cursor = Cursors.Default;
         }
 
-
-
-        //TODO:Fix suppresson
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        private void createPrimaryAxisLabels(string[] xAxisLabels)
+		private void createPrimaryAxisLabels(string[] xAxisLabels, IList<TaskOwnerPeriod> taskOwnerPeriods)
         {
-            int month = 1;
-            int accumulatedMonthPosition = 0;
-            foreach (string monthName in CultureInfo.CurrentUICulture.DateTimeFormat.MonthNames)
-            {
-                //TODO how do we handle this?, The MonthNames collection seem to have 13 months last one is "" (other cultures?)
-                //and it crashes on GetDaysInMonth if we are in a culture that only has 12 months
-                //But I guess there is cultures with more then 12 months 
-                try
-                {  
-                    int numberOfDaysinMonth = CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(2007, month);  
-                    int position = accumulatedMonthPosition;// -(numberOfDaysinMonth / 2);
-                    accumulatedMonthPosition += numberOfDaysinMonth;
-                    addStripLines();
-                    
-                    xAxisLabels.SetValue(StringHelper.Capitalize(monthName),position+1);
-                }
-                catch (Exception){}
-                month++;
-            }
+            var month = 1;
+            var accumulatedMonthPosition = 0;
+	        foreach (var monthName in CultureInfo.CurrentUICulture.DateTimeFormat.MonthNames.Where(m => m != string.Empty))
+	        {
+		        if (!taskOwnerPeriods.Any()) break;
+
+		        var numberOfDaysinMonth =
+			        CultureInfo.CurrentCulture.Calendar.GetDaysInMonth(
+				        CultureInfo.CurrentCulture.Calendar.GetYear(taskOwnerPeriods[0].CurrentDate.Date),
+				        month);
+		        var position = accumulatedMonthPosition;
+		        accumulatedMonthPosition += numberOfDaysinMonth;
+		        addStripLines(numberOfDaysinMonth);
+		        xAxisLabels.SetValue(StringHelper.Capitalize(monthName), position + 1);
+		        month++;
+	        }
         }
 
         private void drawValuesInChart(IList<TaskOwnerPeriod> taskOwnerPeriods)
