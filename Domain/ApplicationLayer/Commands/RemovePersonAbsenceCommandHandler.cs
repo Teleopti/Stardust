@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.Scheduling;
+﻿using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands

@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 {

@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/jquery/jquery-1.10.2.js",
 					"~/Content/Scripts/jquery.ba-hashchange.js",
 					"~/Content/Scripts/modernizr-2.6.2.js",
-					"~/Content/jquery-plugin/jquery.placeholder.js",
 					"~/Content/bootstrap/bootstrap.js",
 					"~/Content/Scripts/knockout-2.2.1.js",
 					"~/Content/signals/signals.js",

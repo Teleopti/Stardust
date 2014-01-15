@@ -1,10 +1,5 @@
-﻿#region Imports
-
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Scheduling;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
-
-#endregion
 
 namespace Teleopti.Ccc.Domain.Repositories
 {

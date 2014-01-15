@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				let schedule = displaySchedule ? item.schedule : null
 				let model = JsonConvert.DeserializeObject<Model>((schedule == null ? null : schedule.Model) ?? "{}")
 				let shift = model.Shift ?? new Shift()
-				let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => x.Id == schedule.PersonId)
+				let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => schedule != null && x.Id == schedule.PersonId)
 				let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)
 				select makeViewModel(item.person, schedule, model, shift, layers, data.UserTimeZone))
 				.ToArray();
