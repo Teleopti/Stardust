@@ -50,11 +50,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _chartControl.Dock = DockStyle.Fill;
             
             _currentHistoricPeriod = new TaskOwnerPeriod(historicDepth[0].CurrentDate, historicDepth, TaskOwnerPeriodType.Other);
-
             setStaticChartRequiremants();
         }
 
-        private void SetColors()
+	    private void SetColors()
         {
             BrushInfo myBrush = ColorHelper.ControlGradientPanelBrush();
             gradientPanel2.BackgroundColor = myBrush;
@@ -117,24 +116,34 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
             _chartControl.PrimaryYAxis.GridLineType.ForeColor = Color.Black;
             if (RightToLeft == RightToLeft.Yes) _chartControl.PrimaryXAxis.Inversed = true;
             _chartControl.TextRenderingHint = TextRenderingHint.AntiAlias;
-            _chartControl.PrimaryXAxis.ValueType = ChartValueType.DateTime;
             _chartControl.PrimaryXAxis.HidePartialLabels = true;
             _chartControl.PrimaryXAxis.LabelIntersectAction = ChartLabelIntersectAction.Rotate;
             _chartControl.PrimaryXAxis.DateTimeFormat = "d";
-            _chartControl.PrimaryXAxis.ValueType = ChartValueType.DateTime;
             _chartControl.PrimaryYAxis.Range.Min = 0;
+
+			// ErikS: BUG: 26483
+			// Ugly hack to make syncfusion to work
+			// Throws ArgumentOutOfRangeException if set to DateTime when using ar-SA
+			_chartControl.PrimaryXAxis.ValueType = CultureInfo.CurrentCulture.Calendar.AlgorithmType ==
+												   CalendarAlgorithmType.SolarCalendar
+													   ? ChartValueType.DateTime
+													   : ChartValueType.Custom;
+	        _chartControl.PrimaryXAxis.TickLabelsDrawingMode = ChartAxisTickLabelDrawingMode.UserMode;
         }
 
         private void setChartRequirements()
         {
-            int count =_currentHistoricPeriod.TaskOwnerDayCollection.Count;
-            _chartControl.PrimaryYAxis.RangeType = ChartAxisRangeType.Auto;
-            _chartControl.Series.Clear();
-            _chartControl.Series.Capacity = count;
-            _chartControl.PrimaryXAxis.Range = new MinMaxInfo(1, count, 1);
-            _chartControl.PrimaryXAxis.DateTimeRange = new ChartDateTimeRange(_currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate, _currentHistoricPeriod.TaskOwnerDayCollection[count-1].CurrentDate, 10, ChartDateTimeIntervalType.Days);
+	        int count = _currentHistoricPeriod.TaskOwnerDayCollection.Count;
+	        _chartControl.PrimaryYAxis.RangeType = ChartAxisRangeType.Auto;
+	        _chartControl.Series.Clear();
+	        _chartControl.Series.Capacity = count;
+			_chartControl.PrimaryXAxis.DateTimeRange =
+				new ChartDateTimeRange(_currentHistoricPeriod.TaskOwnerDayCollection[0].CurrentDate,
+									   _currentHistoricPeriod.TaskOwnerDayCollection[count - 1].CurrentDate, 10,
+									   ChartDateTimeIntervalType.Days);
         }
-        private void drawValuesInChart()
+
+	    private void drawValuesInChart()
         {
             //Here we need to create series and add them to a list,
             //this is because if there are historical data with "holes" in it.
@@ -162,9 +171,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.SeasonPages
                     currentChartSerie++;
                 }
                 _currentHistoricPeriodSeries[currentChartSerie].Points.Add(chartPoint);
-                
-                currentDate = taskOwner.CurrentDate;
+	            currentDate = taskOwner.CurrentDate;
                 doubles.Add(chartPoint.YValues[0]);
+
+				// ErikS: BUG: 26483
+				// Writing out labels manually since syncfusion doesnt
+				if (doubles.Count > 0 && doubles.Count % 10 == 0)
+					_chartControl.PrimaryXAxis.Labels.Add(new ChartAxisLabel(taskOwner.CurrentDate, "d"));
             }
 
             ChartSeries chartSeriesTrend = calculateChartSeriesTrend(doubles);
