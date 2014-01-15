@@ -5,13 +5,13 @@
         <span id="Request-add-loaded-ready"></span>
     </div>
     <span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
-    <div class="shift-trade-missing-wcs-message alert alert-block" data-bind="visible: missingMyTeam">
+    <div class="shift-trade-missing-wcs-message alert alert-block" data-bind="visible: missingWorkflowControlSet">
         @Resources.MissingWorkflowControlSet
     </div>
-    <div class="shift-trade-missing-team-message alert alert-block" data-bind="visible: missingWorkflowControlSet">
-		xxYou do not belong to a team for the selected date.
-	</div>
-    <div data-bind="if : !missingWorkflowControlSet()">
+    <div class="shift-trade-missing-team-message alert alert-block" data-bind="visible: missingMyTeam">
+        xxYou don't have access to any teams.
+    </div>
+    <div data-bind="if: !missingWorkflowControlSet()">
         <table class="table-condensed">
             <tr>
                 <td>
@@ -29,7 +29,7 @@
                     </div>
                 </td>
                 <td>
-                    <div style="margin-bottom: 10px">
+                    <div style="margin-bottom: 10px" data-bind="if: !missingMyTeam()">
                         <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
                             <option data-bind="text: text, value: id"></option>
                         </select>

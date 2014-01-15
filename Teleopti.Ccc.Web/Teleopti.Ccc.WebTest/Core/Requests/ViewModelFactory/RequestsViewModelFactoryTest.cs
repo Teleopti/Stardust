@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldRetrieveNullWhenNotBelongingToATeam()
+		public void ShouldRetrieveEmptyStringWhenNotBelongingToATeam()
 		{
 			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			var shiftTradeDate = DateOnly.Today;
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 													  MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>(), null,
 													  MockRepository.GenerateMock<INow>(), null, null);
 
-			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(null);
+			target.CreateShiftTradeMyTeamSimpleViewModel(shiftTradeDate).Should().Be.EqualTo(string.Empty);
 		}
 
 		[Test]

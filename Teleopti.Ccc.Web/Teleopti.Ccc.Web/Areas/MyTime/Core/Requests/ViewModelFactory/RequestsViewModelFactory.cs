@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			Guid? myTeam = _shiftTradeRequestprovider.RetrieveMyTeamId(selectedDate);
 
-			return myTeam.HasValue ? myTeam.ToString() : null;
+			return myTeam.HasValue ? myTeam.ToString() : "";
 		}
 	}
 }

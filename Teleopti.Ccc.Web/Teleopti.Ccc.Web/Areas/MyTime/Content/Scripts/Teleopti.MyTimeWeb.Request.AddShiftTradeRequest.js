@@ -205,8 +205,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                     if (!data) {
                         self.myTeamId(undefined);
                         self.missingMyTeam(true);
+                        self.setScheduleLoadedReady();
+                        self.isReadyLoaded(true);
                         return;
                     }
+                    self.missingMyTeam(false);
                     self.myTeamId(data);
                     self.loadTeams();
                     
@@ -238,6 +241,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                     self.selectedTeam(null);
                     self.availableTeams(data);
                     self.selectedTeam(teamToSelect);
+                    
                 },
                 error: function (e) {
                     //console.log(e);

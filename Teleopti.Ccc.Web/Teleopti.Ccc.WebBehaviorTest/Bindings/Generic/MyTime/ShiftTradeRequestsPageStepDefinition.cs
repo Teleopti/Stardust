@@ -56,9 +56,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a message text saying that no possible shift trades could be found")]
 		public void ThenIShouldSeeAMessageTextSayingThatNoPossibleShiftTradesCouldBeFound()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeNoPossibleShiftTradesMessage.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(".shift-trade-missing-wcs-message");
 		}
 
+		[Then(@"I should see a message text saying that I have no access to any teams")]
+		public void ThenIShouldSeeAMessageTextSayingThatIHaveNoAccessToAnyTeams()
+		{
+			Browser.Interactions.AssertVisibleUsingJQuery(".shift-trade-missing-team-message");
+		}
+		
 		[Then(@"I should see my schedule with")]
 		public void ThenIShouldSeeMyScheduleWith(Table table)
 		{
@@ -102,7 +108,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see a possible schedule trade with '(.*)'")]
 		public void ThenIShouldNotSeeAPossibleScheduleTradeWith(string name)
 		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-person-schedule-row", string.Format(".shift-trade-agent-name:contains('{0}')", name));
+			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-my-schedule-row", string.Format(".shift-trade-agent-name:contains('{0}')", name));
 		}
 		
 		[Then(@"I should not see a possible schedule to trade with")]
@@ -142,15 +148,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
 		public void ThenIShouldSeeTheTimeLineHoursSpanFromTo(string timeLineHourFrom, string timeLineHourTo)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Any(), Is.True);
-
-			Span firstHour = Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.First().EventualGet();
-			Span alternativeFirstHour = Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems[1].EventualGet();
-			if (string.IsNullOrEmpty(firstHour.Text))
-				firstHour = alternativeFirstHour;
-
-			Assert.That(firstHour.Text, Is.EqualTo(timeLineHourFrom));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeTimeLineItems.Last().Text, Is.EqualTo(timeLineHourTo));
+			Browser.Interactions.AssertJavascriptResultContains("return $('.shift-trade-label:lt(1)').text() + ' ' + $('.shift-trade-label:lt(2)').text();", timeLineHourFrom);
+			Browser.Interactions.AssertFirstContains(".shift-trade-label:last-child", timeLineHourTo);
 		}
 
 		[Then(@"I should see my scheduled day off '(.*)'")]
