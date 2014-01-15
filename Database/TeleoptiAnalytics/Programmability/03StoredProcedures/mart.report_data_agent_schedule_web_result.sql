@@ -9,7 +9,6 @@ exec mart.report_data_agent_schedule_web_result
 @adherence_id=N'1',
 @time_zone_id=N'2',
 @person_code='11610fe4-0130-4568-97de-9b5e015b2564',
-@language_id=103,
 @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 */
 
@@ -19,7 +18,6 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_web_result]
 @adherence_id int,
 @time_zone_id int,
 @person_code uniqueidentifier,
-@language_id int,
 @business_unit_code uniqueidentifier
 as
 set nocount on
@@ -46,7 +44,7 @@ exec mart.report_data_agent_schedule_result
 @time_zone_id=@time_zone_id,
 @person_code=@person_code,
 @report_id=null,
-@language_id=@language_id,
+@language_id=null,
 @business_unit_code=@business_unit_code, 
 @from_matrix=0
 
