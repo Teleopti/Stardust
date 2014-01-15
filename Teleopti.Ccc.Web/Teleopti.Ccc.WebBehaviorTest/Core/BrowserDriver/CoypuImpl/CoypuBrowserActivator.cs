@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 					AppHost = "about:blank",
 					Port = 80,
 					SSL = false,
-					ConsiderInvisibleElements = true,
+					ConsiderInvisibleElements = falseDueToUpgradeIssues(),
 					WaitBeforeClick = TimeSpan.Zero,
 					RetryInterval = retry,
 					Timeout = timeout,
@@ -40,7 +40,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_interactions = new CoypuBrowserInteractions(_browser, configuration);
 		}
 
-		public void Close()
+	    private bool falseDueToUpgradeIssues()
+	    {
+	        return false;
+	    }
+
+	    public void Close()
 		{
 			if (_browser == null) return;
 			_browser.Dispose();

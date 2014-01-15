@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string dayOfWeek)
         {
             Browser.Interactions.AssertVisibleUsingJQuery(".cal-row-head .cal-cell:first:contains('"+dayOfWeek+"')");
+            Browser.Interactions.SetWidth(1100, 1000);
         }
 
         [Given(@"I am using a device with narrow view")]

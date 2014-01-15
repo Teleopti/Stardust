@@ -22,7 +22,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		public void SetTimeout(TimeSpan timeout)
 		{
 			if (timeout == _configuration.Timeout)
-				_options = null;
+				_options = new Options
+				{
+				    ConsiderInvisibleElements = _configuration.ConsiderInvisibleElements
+				};
 			else
 			{
 				_options = new Options
