@@ -1,6 +1,4 @@
 using System;
-using System.Linq;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {

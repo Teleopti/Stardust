@@ -313,8 +313,10 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockPriorityDefinitionInfoTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockLockValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPeriodValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockPersonSkillCheckerTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapDayValidatorTest.cs" />
@@ -1062,6 +1064,7 @@
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForAbsenceTest.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForActivitiesTest.cs" />
     <Compile Include="Time\DateOnlyPeriodTest.cs" />
+    <Compile Include="Time\SetupDateTimePeriodToSelectedScheduleTest.cs" />
     <Compile Include="Time\TimeZoneInfoExtensionsTest.cs" />
     <Compile Include="Time\DateOnlyTest.cs" />
     <Compile Include="Time\DateTimePeriodTest.cs" />

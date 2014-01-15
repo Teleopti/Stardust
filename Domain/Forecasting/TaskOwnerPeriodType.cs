@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Teleopti.Ccc.Domain.Forecasting
+﻿namespace Teleopti.Ccc.Domain.Forecasting
 {
     /// <summary>
     /// Type of period to work with in workload period

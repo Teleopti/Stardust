@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.WebReport;
 
 namespace Teleopti.Ccc.Domain.Repositories

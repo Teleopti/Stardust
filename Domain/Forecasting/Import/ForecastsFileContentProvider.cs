@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting.ForecastsFile;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.General;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Import

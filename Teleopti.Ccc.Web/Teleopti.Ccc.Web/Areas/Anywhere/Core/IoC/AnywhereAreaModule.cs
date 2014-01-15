@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;

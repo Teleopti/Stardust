@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using System;
 using Teleopti.Ccc.Domain.Collection;
