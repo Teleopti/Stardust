@@ -3738,7 +3738,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to With Add Activity you cannot create a second shift..
+        ///   Looks up a localized string similar to You cannot create a second shift with add activity..
         /// </summary>
         public static string CannotCreateSecondShiftWhenAddingActivity {
             get {
