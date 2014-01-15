@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldCreateViewModelByTwoStepMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new TeamScheduleViewModelFactory(mapper, null,new FakePermissionProvider(), null);
+			var target = new TeamScheduleViewModelFactory(mapper, null, new FakePermissionProvider(), null, new UserTextTranslator());
 			var viewModel = new TeamScheduleViewModel();
 			var data = new TeamScheduleDomainData();
 			var id = Guid.NewGuid();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(teams);
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages)).Return(false);
-			var target = new TeamScheduleViewModelFactory(null, teamProvider, permissionProvider, null);
+			var target = new TeamScheduleViewModelFactory(null, teamProvider, permissionProvider, null, new UserTextTranslator());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today);
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var readOnlyGroupPage = new ReadOnlyGroupPage { PageId = pageId, PageName = "xxMain" };
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> { readOnlyGroupPage });
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "team", GroupId = teamId } });
-			var target = new TeamScheduleViewModelFactory(null, null, permissionProvider, groupingReadOnlyRepository);
+			var target = new TeamScheduleViewModelFactory(null, null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var readOnlyGroupPage = new ReadOnlyGroupPage { PageId = pageId, PageName = "xxContract" };
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> { readOnlyGroupPage });
 			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "full time", GroupId = teamId } });
-			var target = new TeamScheduleViewModelFactory(null, null, permissionProvider, groupingReadOnlyRepository);
+			var target = new TeamScheduleViewModelFactory(null, null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator());
 
 			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void PermissionForShiftTrade_WhenAgentHasNoPermissionToViewShiftTrade_ShouldBFalse()
 		{
-			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null);
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null, new UserTextTranslator());
 
 			var result = target.CreateViewModel(DateOnly.Today, new Guid());
 			Assert.That(result.ShiftTradePermisssion, Is.True);			
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void PermissionForShiftTrade_WhenAgentHasPermissionToViewShiftTrade_ShouldBeTrue()
 		{
-			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null);
+			var target = new TeamScheduleViewModelFactory(createMappingEngine(), null, new FakePermissionProvider(), null, new UserTextTranslator());
 
 			var result = target.CreateViewModel(DateOnly.Today, new Guid());
 			Assert.That(result.ShiftTradePermisssion, Is.True);

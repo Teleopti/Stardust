@@ -5,6 +5,9 @@
 	@Styles.Render(BundleScripts.SignInCss)
 	@Scripts.Render(BundleScripts.SignInJs)
 	
+	<!-- dont want to minify this one... Will be corrupt using IE8 (bug 26427)-->
+	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.js")"></script>
+
 	<script type="text/javascript">
 		var authentication;
 		$(function () {

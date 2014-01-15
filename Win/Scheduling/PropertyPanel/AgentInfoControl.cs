@@ -168,7 +168,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                                                            UseRotations = true
                                                        };
             var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
-			helper.SetRestrictionFullfillment();
+			if(helper.HasMatrix)
+				helper.SetRestrictionFullfillment();
 			var period = person.Period(helper.SelectedDate);
 			if (period != null)
 			{
@@ -455,15 +456,19 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
             listViewPersonPeriod.Items.Clear();
 
+			var personNameItem = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
+			personNameItem.Font = personNameItem.Font.ChangeToBold();
+			listViewPersonPeriod.Items.Add(personNameItem);
+
             IPersonPeriod personPeriod = person.Period(dateOnly);
-            if(personPeriod == null)
-                return;
+	        if (personPeriod == null)
+	        {
+				var noPeriodPresentItem = new ListViewItem(Resources.NoPeriodPresent);
+				listViewPersonPeriod.Items.Add(noPeriodPresentItem);
+				return;
+	        }
 
             DateOnlyPeriod period = personPeriod.Period;
-
-            var item = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
-            item.Font = item.Font.ChangeToBold();
-            listViewPersonPeriod.Items.Add(item);
 
             createAndAddItem(listViewPersonPeriod, Resources.Period, period.DateString, 1);
             createAndAddItem(listViewPersonPeriod, Resources.Team, personPeriod.Team.SiteAndTeam, 2);
@@ -497,25 +502,25 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
         private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
         {
-            ISchedulingOptions schedulingOptions = new SchedulingOptions
-                                                       {
-                                                           UseAvailability = true,
-                                                           UsePreferences = true,
-                                                           UseStudentAvailability = false,
-                                                           UseRotations = true
-                                                       };
-
             listViewSchedulePeriod.Items.Clear();
 
 			var personNameItem = new ListViewItem(person.Name.ToString(NameOrderOption.FirstNameLastName));
 			personNameItem.Font = personNameItem.Font.ChangeToBold();
 			listViewSchedulePeriod.Items.Add(personNameItem);
 
+			ISchedulingOptions schedulingOptions = new SchedulingOptions
+			{
+				UseAvailability = true,
+				UsePreferences = true,
+				UseStudentAvailability = false,
+				UseRotations = true
+			};
+
 			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
 			helper.SchedulePeriodData();
 			if (nullOrZeroPeriod(helper.Period))
 			{
-				var noPeriodPresentItem = new ListViewItem(Resources.NoSchedulePeriodPresent);
+				var noPeriodPresentItem = new ListViewItem(Resources.NoPeriodPresent);
 				listViewSchedulePeriod.Items.Add(noPeriodPresentItem);
 				return;
 			}

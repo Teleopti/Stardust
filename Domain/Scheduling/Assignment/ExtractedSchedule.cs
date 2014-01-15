@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using System;
 using Teleopti.Ccc.Domain.Collection;
@@ -711,9 +709,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             if (!authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
                 return;
 
-            if(SignificantPart() == SchedulePartView.DayOff)
-                return;
-
 					var ass = PersonAssignment();
 					if (ass != null && 
 						(DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))) //should not start before day I presume? Fix later - will be handled inside PersonAssignment/AgentDay instead...
@@ -765,8 +760,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         public IMemento CreateMemento()
         {
             return new Memento<IScheduleDay>(this, 
-                                    Owner[Person].ReFetch(this),
-                                    string.Format(CultureInfo.CurrentUICulture, Resources.UndoRedoModifySchedule, Person.Name, Period.StartDateTime.ToShortDateString()));
+                                    Owner[Person].ReFetch(this));
         }
 
         public override string ToString()

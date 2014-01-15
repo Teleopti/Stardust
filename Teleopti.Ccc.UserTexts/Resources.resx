@@ -7069,14 +7069,6 @@ Updated on: {1}</value>
     <value>Scheduling</value>
     <comment>Scheduling (undo/redo info)</comment>
   </data>
-  <data name="UndoRedoModifyPersonRequest" xml:space="preserve">
-    <value>Modifying person request for {0}</value>
-    <comment>Modifying person request (undo/redo info)</comment>
-  </data>
-  <data name="UndoRedoModifySchedule" xml:space="preserve">
-    <value>Modifying schedule for {0}, date {1}</value>
-    <comment>Modifying schedule (undo/redo info)</comment>
-  </data>
   <data name="ExportToPDF" xml:space="preserve">
     <value>Export to PDF</value>
     <comment>Export to PDF</comment>
@@ -11267,12 +11259,12 @@ These options are activated:
     <comment>Used in Quick forecast wizard page</comment>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
-    <value>Select historical data for templates</value>
+    <value>Select historical data for day templates</value>
     <comment>Quick forecast wizard page</comment>
   </data>
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Show Info Messages</value>
-    <comment>if to show these messages in jobhistory in forecast navigator</comment>
+    <comment>if to show these messages in job history in forecast navigator</comment>
   </data>
   <data name="Errors" xml:space="preserve">
     <value>Errors</value>
@@ -11858,7 +11850,7 @@ Reduce the complexity to use these shifts.</value>
     <value>Intraday absence</value>
     <comment>Intraday absence</comment>
   </data>
- <data name="IllegalTeamBlockCombination" xml:space="preserve">
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
     <value>Optimizing with block between days off and not keeping team days off together is not supported</value>
     <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
   </data>
@@ -11874,9 +11866,9 @@ Reduce the complexity to use these shifts.</value>
     <value>Active Agents</value>
     <comment>caption on form ActiveAgents</comment>
   </data>
-  <data name="NoSchedulePeriodPresent" xml:space="preserve">
-    <value>No schedule period present</value>
-    <comment>No schedule period present for empty agent info page</comment>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>No period present</value>
+    <comment>No period present for empty agent info page</comment>
   </data>
   <data name="InvalidEndTime" xml:space="preserve">
     <value>Invalid end time.</value>
@@ -11889,5 +11881,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
     <value>You cannot create a second shift with add activity.</value>
     <comment>You cannot create a second shift with add activity.</comment>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>On this date you are no longer an employee</value>
+    <comment>On this date you are no longer an employee</comment>
   </data>
 </root>

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
@@ -17,12 +16,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
 			var result = new List<ValidationResult>();
-			if (IsInvalid(StartTime, EndTime))
+			if (isInvalid(StartTime, EndTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.EndTime)));
 			return result;
 		}
 
-		private bool IsInvalid(TimeOfDay early, TimeOfDay late)
+		private bool isInvalid(TimeOfDay early, TimeOfDay late)
 		{
 			return early.Time > late.ToTimeSpan(EndTimeNextDay);
 		}

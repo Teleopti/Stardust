@@ -11,6 +11,7 @@
 			interactions.AssertExistsUsingJQuery(optionSelector);
 			interactions.Javascript("$(\"{0}\").val($(\"{1}\").val());", selectSelector.JSEncode(), optionSelector.JSEncode());
 			interactions.Javascript("$(\"{0}\").change();", selectSelector.JSEncode());
+			interactions.AssertFirstContainsUsingJQuery(selector + " :selected", text);
 		}
 
 		public static void TypeTextIntoInputTextUsingJQuery(this IBrowserInteractions interactions, string selector, string text)

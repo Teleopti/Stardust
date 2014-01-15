@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
@@ -88,8 +85,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 		public virtual IMemento CreateMemento()
 		{
 			return new Memento<IPersonAbsenceAccount>(this,
-												EntityClone(),
-												string.Format(CultureInfo.CurrentUICulture, Resources.UndoRedoModifySchedule, Person.Name, DateTime.Today));
+												EntityClone());
 		}
 
 		public virtual object Clone()

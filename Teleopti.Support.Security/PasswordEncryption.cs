@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Threading;
 using Teleopti.Ccc.Domain.Security;
+using log4net.Config;
+using log4net;
 
 namespace Teleopti.Support.Security
 {
     internal class PasswordEncryption : ICommandLineCommand
     {
+		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
         public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
@@ -19,14 +21,12 @@ namespace Teleopti.Support.Security
                 }
                 catch (SqlException ex)
                 {
-                    Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
+                    log.Debug("Could not open Sql Connection. Error message: " + ex.Message);
                     return 1;
                 }
                 catch (InvalidOperationException ex)
                 {
-                    Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
-                    Thread.Sleep(TimeSpan.FromSeconds(2));
+                    log.Debug("Could not open Sql Connection. Error message: " + ex.Message);
                     return 1;
                 }
                 //Check version
@@ -35,7 +35,6 @@ namespace Teleopti.Support.Security
                 var versionCount = (int)command.ExecuteScalar();
                 if (versionCount > 0)
                 {
-                    Console.WriteLine("The database is up to date.");
                     return 0;
                 }
 
@@ -103,7 +102,7 @@ namespace Teleopti.Support.Security
                 {
                     if (transaction != null)
                         transaction.Rollback();
-                    Console.WriteLine("Something went wrong! Error message: {0}", ex.Message);
+                    log.Debug("Something went wrong! Error message: " + ex.Message);
 	                return 1;
                 }
             }

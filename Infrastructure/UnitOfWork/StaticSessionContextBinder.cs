@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Bind(ISession session, TransactionIsolationLevel isolationLevel)
 		{
-			uowRelatedData[session.GetSessionImplementation().SessionId] = new NHibernateSessionRelatedData(new NHibernateFilterManager(session.SessionFactory), isolationLevel);
+			uowRelatedData[session.GetSessionImplementation().SessionId] = new NHibernateSessionRelatedData(new NHibernateFilterManager(session), isolationLevel);
 			CurrentSessionContext.Bind(session);
 		}
 

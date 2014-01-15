@@ -1,10 +1,5 @@
-#region Imports
-
-using System;
 using Teleopti.Interfaces.Domain;
 using System.Collections.Generic;
-
-#endregion
 
 namespace Teleopti.Ccc.Domain.Repositories
 {

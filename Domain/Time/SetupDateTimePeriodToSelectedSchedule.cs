@@ -1,4 +1,5 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Time
 {
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Time
         {
             _fallback = fallback;
             var assignment = scheduleDay.PersonAssignment();
-            if (assignment!=null)
+            if (assignment!=null && assignment.ShiftLayers.Any())
             {
                 _period = assignment.Period;
             }

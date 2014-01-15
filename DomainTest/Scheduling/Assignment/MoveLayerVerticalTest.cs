@@ -148,5 +148,46 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			ass.OvertimeActivities().Last().Payload.Should().Be.SameInstanceAs(activityToLookFor);
 		}
+
+		[Test]
+		public void MoveUpMainLayers_WhenThereAreMainAndPersonalLayers_ShouldNotChangeTheOrderOfTheMainShiftLayers()
+		{
+			var target = new MoveLayerVertical();
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity1")
+											.AddMainShiftLayer("activity2")
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity3")
+											.AddPersonalLayer()
+											.AddPersonalLayer()
+											.CreatePart();
+
+			target.MoveUp(scheduleDay.PersonAssignment(), scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3"));
+
+			scheduleDay.PersonAssignment().MainActivities().Select(l => l.Payload.Description.Name)
+			                             .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+		}
+
+		[Test]
+		public void MoveUpPersonal_WhenThereAreMainAndPersonalLayers_ShouldNotChangeTheOrderOfTheMainShiftLayers()
+		{
+			var target = new MoveLayerVertical();
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer("activity1")
+											.AddMainShiftLayer()
+											.AddMainShiftLayer()
+											.AddPersonalLayer("activity2")
+											.AddMainShiftLayer()
+											.AddPersonalLayer("activity3")
+											.CreatePart();
+
+			target.MoveUp(scheduleDay.PersonAssignment(), scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3"));
+
+			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+		}
 	}
 }

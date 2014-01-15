@@ -5527,7 +5527,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Database connection has been lost. To preserve data consistency, the form will be closed. Sorry, your changes has been lost..
+        ///   Looks up a localized string similar to Database connection has been lost. To preserve data consistency, the form will be closed. Sorry, your changes have been lost..
         /// </summary>
         public static string DatabaseConnectionLostFormClose {
             get {
@@ -5565,7 +5565,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost..
+        ///   Looks up a localized string similar to Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes have been lost..
         /// </summary>
         public static string DataHasBeenDeleted {
             get {
@@ -14734,6 +14734,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No period present.
+        /// </summary>
+        public static string NoPeriodPresent {
+            get {
+                return ResourceManager.GetString("NoPeriodPresent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You have no permission to view restricted scenarios and all scenarios are restricted..
         /// </summary>
         public static string NoPermissionToViewRestrictedScenarios {
@@ -14883,15 +14892,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoSchedulePeriodIsSelected {
             get {
                 return ResourceManager.GetString("NoSchedulePeriodIsSelected", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to No schedule period present.
-        /// </summary>
-        public static string NoSchedulePeriodPresent {
-            get {
-                return ResourceManager.GetString("NoSchedulePeriodPresent", resourceCulture);
             }
         }
         
@@ -15360,6 +15360,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OnlyShowUnsuccessfulAttempts {
             get {
                 return ResourceManager.GetString("OnlyShowUnsuccessfulAttempts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to On this date you are no longer an employee.
+        /// </summary>
+        public static string OnThisDateYouAreNoLongerAnEmployee {
+            get {
+                return ResourceManager.GetString("OnThisDateYouAreNoLongerAnEmployee", resourceCulture);
             }
         }
         
@@ -22638,7 +22647,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your changes are in conflict with other users changes. Sorry for the inconveniance but Scheduler has to close now. You may start Scheduler again and continue working..
+        ///   Looks up a localized string similar to Your changes are in conflict with other users&apos; changes. Sorry for the inconveniance but Scheduler has to close now. You may start Scheduler again and continue working..
         /// </summary>
         public static string SorryForTheInconvenianceButSchedulerHasToCloseNowEtc {
             get {
@@ -24778,24 +24787,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string UndoRedoDeleteSchedules {
             get {
                 return ResourceManager.GetString("UndoRedoDeleteSchedules", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Modifying person request for {0}.
-        /// </summary>
-        public static string UndoRedoModifyPersonRequest {
-            get {
-                return ResourceManager.GetString("UndoRedoModifyPersonRequest", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Modifying schedule for {0}, date {1}.
-        /// </summary>
-        public static string UndoRedoModifySchedule {
-            get {
-                return ResourceManager.GetString("UndoRedoModifySchedule", resourceCulture);
             }
         }
         

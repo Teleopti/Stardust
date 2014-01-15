@@ -34,6 +34,7 @@ AS
 DECLARE @start_date_id	INT
 DECLARE @end_date_id	INT
 
+EXEC [mart].[stage_schedule_remove_overlapping_shifts]
 
 --There must not be any timevalue on the interface values, since that will mess things up around midnight!
 --Consider: DECLARE @end_date smalldatetime;SET @end_date = '2006-01-31 23:59:30';SELECT @end_date

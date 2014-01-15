@@ -1,5 +1,4 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -19,8 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IScheduleRange rangeForPerson = scheduleMatrixPro.SchedulingStateHolder.Schedules[person];
 	        
 			IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
-            // the day off and absence should be checked  on team level
-            if ( isDayOff(scheduleDay) || (isSingleAgentTeam &&  isAbsenceDay(scheduleDay )) )
+            if (isDayOff(scheduleDay))
 		        return null;
 
 			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod( TimeZoneGuard.Instance.TimeZone);
@@ -45,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			while (rangePeriod.Contains(edgeDate) && currentSchedulePeriod.Contains(edgeDate) && edgeDate >= personPeriodStartDate)
 			{
 				IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(edgeDate);
-				if (isDayOff(scheduleDay) || (isSingleAgentTeam && isAbsenceDay(scheduleDay)))
+				if (isDayOff(scheduleDay))
 					break;
 
 				edgeDate = edgeDate.AddDays(stepDays);
@@ -60,17 +58,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var significantPart = scheduleDay.SignificantPart();
             if (significantPart == SchedulePartView.DayOff ||
                 significantPart == SchedulePartView.ContractDayOff)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private static bool isAbsenceDay(IScheduleDay scheduleDay)
-        {
-            var significantPart = scheduleDay.SignificantPart();
-            if (significantPart == SchedulePartView.Absence ||
-                significantPart == SchedulePartView.FullDayAbsence )
             {
                 return true;
             }

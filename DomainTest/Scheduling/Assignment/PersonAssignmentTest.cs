@@ -638,5 +638,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.InsertActivity(new Activity("any activity"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2), 0);
 			target.MainActivities().Skip(1).First().Should().Be.SameInstanceAs(firstLayer);
 		}
+
+		[Test]
+		public void InsertPersonalLayer_WhenOtherLayersExistsOnTheAssignmanet_ShouldCreateAndInsertTheLayerAtTheGivenPosition()
+		{
+			var personassignment = PersonAssignmentFactory.CreateAssignmentWithOvertimePersonalAndMainshiftLayers();
+			var period = personassignment.ShiftLayers.First().Period.MovePeriod(TimeSpan.FromMinutes(1));
+			personassignment.InsertPersonalLayer(new Activity("for test"), period, 2);
+			var expectedLayer = personassignment.ShiftLayers.Skip(2).First();
+
+			Assert.That(expectedLayer.Payload.Name, Is.EqualTo("for test"));
+			Assert.That(expectedLayer.Period, Is.EqualTo(period));			
+			Assert.That(expectedLayer is PersonalShiftLayer);
+		}
+
+		[Test]
+		public void InsertOvertimeLayer_WhenOtherLayersExistsOnTheAssignment_ShouldCreateAndInsertTheLayerAtTheGivenPosition()
+		{
+			var personassignment = PersonAssignmentFactory.CreateAssignmentWithOvertimePersonalAndMainshiftLayers();
+			var period = personassignment.ShiftLayers.First().Period.MovePeriod(TimeSpan.FromMinutes(1));
+			personassignment.InsertOvertimeLayer(new Activity("for test"), period, 1, new MultiplicatorDefinitionSet("multi", MultiplicatorType.Overtime));
+			var expectedLayer = personassignment.ShiftLayers.Skip(1).First();
+
+			Assert.That(expectedLayer.Payload.Name,Is.EqualTo("for test"));
+			Assert.That(expectedLayer.Period,Is.EqualTo(period));
+			Assert.That(expectedLayer is OvertimeShiftLayer);
+		}
 	}
 }

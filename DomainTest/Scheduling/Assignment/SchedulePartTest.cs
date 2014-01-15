@@ -623,7 +623,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyCreateAndAddActivityNoPermissionModifyDayOff()
+		public void VerifyCreateAndAddActivityOnDayOff()
 		{
 			setupForMergeTests();
 			destination.PersonAssignment(true).SetDayOff(DayOffFactory.CreateDayOff());
@@ -639,7 +639,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 using (new CustomAuthorizationContext(authorization))
                 {
 									destination.CreateAndAddActivity(ActivityFactory.CreateActivity("activity"), destination.Period, shiftCategory);
-                    Assert.IsTrue(destination.HasDayOff());
+                    Assert.IsFalse(destination.HasDayOff());
                 }
             }
 		}

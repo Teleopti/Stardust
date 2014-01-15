@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Autofac.Extras.DynamicProxy2;
 using Microsoft.AspNet.SignalR.Hubs;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,10 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			// TODO: Replace with RegisterHubs when upgrading Autofac
-			builder.RegisterType<GroupScheduleHub>().EnableClassInterceptors();
-			builder.RegisterType<PersonScheduleHub>().EnableClassInterceptors();
-
 			builder.RegisterType<ExceptionHandlerPipelineModule>().As<IHubPipelineModule>();
 
 			builder.RegisterType<GroupScheduleViewModelFactory>().As<IGroupScheduleViewModelFactory>().SingleInstance();
