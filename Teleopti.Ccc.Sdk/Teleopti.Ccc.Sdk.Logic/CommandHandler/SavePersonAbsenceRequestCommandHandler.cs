@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersistPersonRequest _persistPersonRequest;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonRequestRepository _personRequestRepository;
-        private readonly IServiceBusSender _serviceBusSender;
+        private readonly IServiceBusEventPublisher _serviceBusSender;
 
 
-        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusSender serviceBusSender)
+        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusEventPublisher serviceBusSender)
         {
             _persistPersonRequest = persistPersonRequest;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		                {
 			                PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
 		                };
-                    _serviceBusSender.Send(message);
+                    _serviceBusSender.Publish(message);
                 }
             }
 			command.Result = new CommandResultDto { AffectedId = result.Id, AffectedItems = 1 };

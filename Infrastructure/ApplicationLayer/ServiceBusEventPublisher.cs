@@ -2,10 +2,17 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class ServiceBusEventPublisher : IEventPublisher
+	public interface IServiceBusEventPublisher : IEventPublisher
+	{
+		bool EnsureBus();
+		void Publish(IRaptorDomainMessageInfo message);
+	}
+
+	public class ServiceBusEventPublisher : IServiceBusEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
 		private readonly IEventContextPopulator _eventContextPopulator;
@@ -25,5 +32,21 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 			_sender.Send(@event);
 		}
+		
+		public void Publish(IRaptorDomainMessageInfo message)
+		{
+			if (!_sender.EnsureBus())
+				throw new ApplicationException("Cant find the bus, cant publish the event!");
+
+			_eventContextPopulator.PopulateEventContext(message);
+
+			_sender.Send(message);
+		}
+
+		public bool EnsureBus()
+		{
+			return _sender.EnsureBus();
+		}
+
 	}
 }

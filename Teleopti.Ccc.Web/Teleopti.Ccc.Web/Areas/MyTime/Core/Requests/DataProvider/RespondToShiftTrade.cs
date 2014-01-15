@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IMappingEngine _mapper;
-		private readonly IServiceBusSender _serviceBusSender;
+		private readonly IServiceBusEventPublisher _serviceBusSender;
 		private readonly INow _nu;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 									ILoggedOnUser loggedOnUser,
 									IMappingEngine mapper,
-									IServiceBusSender serviceBusSender,
+									IServiceBusEventPublisher serviceBusSender,
 									INow nu)
 		{
 			_personRequestRepository = personRequestRepository;
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			personRequest.Request.Accept(personRequest.Person, _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
 			if (_serviceBusSender.EnsureBus())
 			{
-				_serviceBusSender.Send(new NewShiftTradeRequestCreated
+				_serviceBusSender.Publish(new NewShiftTradeRequestCreated
 				{
 					PersonRequestId = personRequest.Id.GetValueOrDefault()
 				});
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		{
 			if (_serviceBusSender.EnsureBus())
 			{
-				_serviceBusSender.Send(new AcceptShiftTrade
+				_serviceBusSender.Publish(new AcceptShiftTrade
 													   {
 														   PersonRequestId = personRequest.Id.GetValueOrDefault(),
 														   AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
