@@ -6,8 +6,6 @@ GO
 exec mart.report_data_agent_schedule_web_result 
 @date_from='2013-02-05 00:00:00',
 @date_to='2013-02-07 00:00:00',
-@interval_from=N'0',
-@interval_to=N'95',
 @adherence_id=N'1',
 @time_zone_id=N'2',
 @person_code='11610fe4-0130-4568-97de-9b5e015b2564',
@@ -18,8 +16,6 @@ exec mart.report_data_agent_schedule_web_result
 CREATE PROCEDURE [mart].[report_data_agent_schedule_web_result] 
 @date_from datetime,
 @date_to datetime,
-@interval_from int,
-@interval_to int,
 @adherence_id int,
 @time_zone_id int,
 @person_code uniqueidentifier,
@@ -27,6 +23,13 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_web_result]
 @business_unit_code uniqueidentifier
 as
 set nocount on
+
+declare @interval_from int
+declare @interval_to int
+set @interval_from=0
+select @interval_to=max(interval_id) from mart.dim_interval
+
+
 
 exec mart.report_data_agent_schedule_result 
 @date_from=@date_from,
