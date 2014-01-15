@@ -111,5 +111,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         {
             Browser.Interactions.AssertInputValueUsingJQuery("input",name);
         }
+
+        [When(@"I select the month '(.*)' in the calendar")]
+        public void WhenISelectTheMonthInTheCalendar(string monthName)
+        {
+            Browser.Interactions.Click(".icon-th");
+            string selector = string.Format(".datepicker-months .month:contains('{0}')",monthName);
+            Browser.Interactions.AssertVisibleUsingJQuery(selector);
+            Browser.Interactions.ClickUsingJQuery(selector);
+        }
     }
 }

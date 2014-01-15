@@ -9,7 +9,7 @@
                     <div class="input-append input-prepend">
                         <button class="btn" data-bind="click: previousMonth"><i class="icon-arrow-left"></i></button>
                         <input type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" class="span3 text-center">
-                        <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true }"><i class="icon-th"></i></button>
+                        <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }"><i class="icon-th"></i></button>
                         <button class="btn" data-bind="click: nextMonth"><i class="icon-arrow-right"></i></button>
                     </div>
                 </form>

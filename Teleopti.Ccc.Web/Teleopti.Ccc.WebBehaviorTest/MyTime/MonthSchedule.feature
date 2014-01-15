@@ -160,5 +160,5 @@ Scenario: Pick a month in the calendar
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
 And I view my month schedule for date '2014-01-07'
-When I select a month '2014-05' in the calendar 
+When I select the month 'maj' in the calendar 
 Then I should end up in month view for '2014-05-01'

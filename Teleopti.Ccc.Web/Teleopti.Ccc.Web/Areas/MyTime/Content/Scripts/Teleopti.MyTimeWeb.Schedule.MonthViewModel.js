@@ -30,28 +30,33 @@ Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
 };
 
 Teleopti.MyTimeWeb.Schedule.MonthViewModel = function (monthData, selectedDate) {
+    var self = this;
     this.weekViewModels = ko.observableArray();
     this.weekDayNames = monthData.DayHeaders;
-    this.selectedDate = selectedDate;
+    this.selectedDate = ko.observable(selectedDate);
     this.formattedSelectedDate = selectedDate.format('MMMM YYYY');
 
     this.nextMonth = function() {
         var date = selectedDate.clone();
         date.add('months', 1);
-        date.startOf('month');
-        Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+        self.selectedDate(date);
     };
 
     this.previousMonth = function () {
         var date = selectedDate.clone();
         date.add('months', -1);
-        date.startOf('month');
-        Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+        self.selectedDate(date);
     };
+
     this.week = function (day) {
         var d = day.currentDate;
         Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
     };
+
+    this.selectedDate.subscribe(function (date) {
+        date.startOf('month');
+        Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+    });
 };
 
 
