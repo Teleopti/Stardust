@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -10,6 +11,8 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -72,12 +75,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 			Browser.Interactions.AssertExists(".shift-trade-my-schedule .shift-trade-layer");
 			Browser.Interactions.AssertExists(string.Format(".shift-trade-my-schedule .shift-trade-layer[scheduleinfo*='{0}']", expectedTimes));
-		}
-
-		[Then(@"I should see (.*) in the shift trade list")]
-		public void ThenIShouldSeeOtherAgentSSchedule(string agentName)
-		{
-			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);
 		}
 
 		[Then(@"I should only see a possible schedule trade with '(.*)'")]
@@ -262,31 +259,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Given(@"I have possible shift trades with")]
 		public void GivenIHavePossibleShiftTradesWith(Table table)
 		{
-			var date = DateTime.Parse(table.Rows[0][1]);
-			var possibleTradeCount = int.Parse(table.Rows[1][1]);
-			var wcs = table.Rows[2][1];
-			var personPeriodDate = DateTime.Parse(table.Rows[3][1]);
-			var shiftCategory = table.Rows[4][1];
-
-			for (int i = 0; i < possibleTradeCount; i++)
-			{
-				string agentName = i.ToString(CultureInfo.InvariantCulture);
-				
-				var personPeriod = new PersonPeriodConfigurable {StartDate = personPeriodDate};
-				DataMaker.Person(agentName).Apply(personPeriod);
-
-				var userWorkflowControlSet = new WorkflowControlSetForUser { Name = wcs };
-				DataMaker.Person(agentName).Apply(userWorkflowControlSet);
-
-				DataMaker.Person(agentName).Apply(new ShiftConfigurable
-				{
-					ShiftCategory = shiftCategory,
-					StartTime = date.AddHours(8),
-					EndTime = date.AddHours(16),
-					LunchStartTime = date.AddHours(12),
-					LunchEndTime = date.AddHours(13),
-				});
-			}
+			var scheduledAgentsForShiftTrade = table.CreateInstance<ScheduledAgentsForShiftTrade>();
+			DataMaker.Data().Apply(scheduledAgentsForShiftTrade);
 		}
 
 		[Given(@"I can see '(.*)' possible shift trades")]

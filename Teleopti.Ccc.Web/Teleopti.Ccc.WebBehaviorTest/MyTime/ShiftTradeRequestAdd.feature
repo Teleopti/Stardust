@@ -249,8 +249,8 @@ Scenario: Cancel a shift trade request before sending
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I click cancel button
-	Then I should see OtherAgent in the shift trade list
-	And I should see OtherAgent2 in the shift trade list
+	Then I should see a possible schedule trade with 'OtherAgent'
+	And I should see a possible schedule trade with 'OtherAgent2'
 
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
@@ -281,21 +281,6 @@ Scenario: Show my full day absence
 	| Field			| Value |
 	| Start time	| 08:00 |
 	| End time		| 16:00 |
-
-Scenario: Show my scheduled day off
-	Given I have the role 'Full access to mytime'
-	And there is a dayoff with
-	| Field | Value  |
-	| Name  | DayOff |
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And 'I' have a day off with
-	| Field | Value      |
-	| Name  | DayOff     |
-	| Date  | 2030-01-04 |
-	And the current time is '2030-01-01'
-	When I view Add Shift Trade Request for date '2030-01-04'
-	Then I should see my scheduled day off 'DayOff'
-	And I should see the time line hours span from '08:00' to '17:00'
 
 Scenario: Default to my team
 	Given I have the role 'Full access to mytime'
@@ -386,43 +371,17 @@ Scenario: Show possible shift trades from my team
 	Then I should see a possible schedule trade with 'OtherAgent'
 	And I should not see a possible schedule trade with 'OtherAgentNotInMyTeam'
 
-Scenario: Show possible shift trades from another team
-	Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgentNotInMyTeam have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	And OtherAgent has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 20:00 |
-	| Shift category		| Late	           |
-	And OtherAgentNotInMyTeam has a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 08:00 |
-	| EndTime               | 2030-01-01 18:00 |
-	| Shift category		| Day	           |
-	And the current time is '2029-12-27'
-	And I view Add Shift Trade Request for date '2030-01-01'
-	When I uncheck the my team filter checkbox 
-	And I click the search button
-	Then I should see a possible schedule trade with 'OtherAgent'
-	And I should see a possible schedule trade with 'OtherAgentNotInMyTeam'
-
 Scenario: Paging possible shifts
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have possible shift trades with
-	| Field                              | Value                                     |
-	| Date                               | 2030-01-01                                |
-	| Possible trade count               | 60                                        |
-	| Workflow control set in common     | Trade from tomorrow until 30 days forward |
-	| Person period start date in common | 2012-06-18                                |
-	| Shift category in common           | Day                                       |
+	| Field                    | Value                                     |
+	| Date                     | 2030-01-01                                |
+	| Possible trade count     | 60                                        |
+	| Workflow control set     | Trade from tomorrow until 30 days forward |
+	| Person period start date | 2012-06-18                                |
+	| Shift category           | Day                                       |
+	| Team                     | My team                                   |
 	And the current time is '2029-12-27'
 	And I view Add Shift Trade Request for date '2030-01-01'
 	And I can see '50' possible shift trades
