@@ -4,59 +4,56 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @model PortalViewModel
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner bdd-mytime-top-menu">
-        <div class="container fixed-non-responsive">
-            <div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
-
-            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+<div class="navbar navbar-fixed-top bdd-mytime-top-menu">
+    <div class="container">
+        <div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
+        
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </a>
- 
-            <!-- Be sure to leave the brand out there if you want it shown -->
+            </button>
             <a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
- 
-            <!-- Everything you want hidden at 940px or less, place within here -->
-            <div class="collapse visibility">
-                <ul class="nav">
-                    @foreach (var navSection in Model.NavigationItems)
-                    {
-                        <li>
-                            @if (navSection.UnreadMessageCount>0)
-                            {
-                                <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
-                            }
-                            else
-                            {
-                                <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge badge-important hide"></span></a>
-                            }
-                        </li>
-                    }
-                </ul>
-                
-                <ul class="nav pull-right">
-                    <li class="dropdown">
-	                    <a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown"><i class="icon-user"></i><span class="user-name" title="@User.Identity.Name"><small> @User.Identity.Name</small></span> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
-                            @if (Model.ShowChangePassword)
-                            {
-                                <li><a href="#" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
-                            }
-                            <li class="divider"></li>
-                            @if (Model.HasAsmPermission)
-                            {
-                                <li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
-                                <li class="divider"></li>
-                            }
-                            <li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout"})</li>
-                        </ul>
+        </div>
+        
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                @foreach (var navSection in Model.NavigationItems)
+                {
+                    <li>
+                        @if (navSection.UnreadMessageCount>0)
+                        {
+                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
+                        }
+                        else
+                        {
+                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge badge-important hide"></span></a>
+                        }
                     </li>
-                </ul>
-            </div>
+                }
+            </ul>
+                
+            <ul class="nav navbar-nav pull-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><span class="user-name" title="@User.Identity.Name"><small> @User.Identity.Name</small></span> <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
+                        @if (Model.ShowChangePassword)
+                        {
+                            <li><a href="#" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
+                        }
+                        <li class="divider"></li>
+                        @if (Model.HasAsmPermission)
+                        {
+                            <li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
+                            <li class="divider"></li>
+                        }
+                        <li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout"})</li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

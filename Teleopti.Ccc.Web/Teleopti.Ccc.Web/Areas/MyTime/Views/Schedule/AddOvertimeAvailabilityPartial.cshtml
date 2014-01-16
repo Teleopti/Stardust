@@ -6,35 +6,35 @@
 			<table class="table-condensed">
 				<tr class="form-inline">
 					<td>
-						<i class="icon-step-backward"></i>
+						<i class="glyphicon glyphicon-step-backward"></i>
 					</td>
 					<td>
-						<div class="input-append">
+						<div class="input-group">
 							<input class="overtime-availability-start-date" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
-							<span class="add-on"><i class="icon-th"></i></span>
+							<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 						</div>
 					</td>
 					<td>
-						<div class="input-append bootstrap-timepicker" title="@Resources.StartTime">
-							<input type="text" class="overtime-availability-start-time input-small" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
-							<span class="add-on"><i class="icon-time"></i></span>
+						<div class="input-group bootstrap-timepicker" title="@Resources.StartTime">
+							<input type="text" class="overtime-availability-start-time input-sm" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
+							<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 						</div>
 					</td>
 				</tr>
 				<tr class="form-inline">
 					<td>
-						<i class="icon-step-forward"></i>
+						<i class="glyphicon glyphicon-step-forward"></i>
 					</td>
 					<td>
-						<div class="input-append">
+						<div class="input-group">
 							<input class="overtime-availability-end-date" data-bind="datepicker: DateToForDisplay(), datepickerOptions: { autoHide: true, format: DateFormat() }" type="text" disabled="disabled" />
-							<span class="add-on"><i class="icon-th"></i></span>
+							<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
 						</div>
 					</td>
 					<td>
-						<div class="input-append bootstrap-timepicker" title="@Resources.EndTime">
-							<input type="text" class="overtime-availability-end-time input-small" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
-							<span class="add-on"><i class="icon-time"></i></span>
+						<div class="input-group bootstrap-timepicker" title="@Resources.EndTime">
+							<input type="text" class="overtime-availability-end-time input-sm" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian, allowEmpty: false }" />
+							<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 						</div>
 						<input type="checkbox" class="overtime-availability-next-day" data-bind="checked: EndTimeNextDay" title="@Resources.NextDay" />
 					</td>

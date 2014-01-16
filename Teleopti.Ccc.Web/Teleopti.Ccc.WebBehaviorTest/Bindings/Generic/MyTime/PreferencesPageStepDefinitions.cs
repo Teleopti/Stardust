@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 			Browser.Interactions.AssertFirstContains(cell, fields.Date.Day.ToString(CultureInfo.CurrentCulture));
 
-			var mustHaveIcon = string.Format("{0} .{1}.{2}", cell, "preference-must-have", "icon-heart");
+			var mustHaveIcon = string.Format("{0} .{1}.{2}", cell, "preference-must-have", "glyphicon-heart");
 			if (fields.MustHave)
 				Browser.Interactions.AssertExists(mustHaveIcon);
 			else

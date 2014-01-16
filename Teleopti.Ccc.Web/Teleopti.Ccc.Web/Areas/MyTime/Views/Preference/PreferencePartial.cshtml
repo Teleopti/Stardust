@@ -8,18 +8,18 @@
 <div class="navbar">
     <div class="navbar-inner">
         <form class="navbar-form pull-left">
-            <div class="input-append input-prepend">
-                <button class="btn" data-bind="click: previousPeriod, css: 'done'"><i class="icon-arrow-left"></i></button>
+            <div class="input-group">
+                <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'"><i class="glyphicon glyphicon-arrow-left"></i></button>
                 <input data-bind="value: displayDate" type="text" class="col-md-3 text-center" readonly="readonly"/>
-                <button class="btn moment-datepicker"><i class="icon-th"></i></button>
-                <button class="btn" data-bind="click: nextPeriod, css: 'done'"><i class="icon-arrow-right"></i></button>
+                <button class="btn moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
+                <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'"><i class="glyphicon glyphicon-arrow-right"></i></button>
             </div>
         </form>
         <ul class="nav">
             <li class="divider-vertical"></li>
             @if (Model.ExtendedPreferencesPermission)
             {
-                <li><a href="#" id="Preference-add-extended-button"><i class="icon-edit"></i>&nbsp;@Resources.Preference</a></li>
+                <li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
             }
             else
             {
@@ -35,7 +35,7 @@
                                                                                                                 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
                                                                                                             }
                                                                                                         }]">
-                        <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
+                        <button class="btn btn-default" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
                      
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
@@ -51,12 +51,12 @@
                     </div>
                 </li>
             }
-            <li><a href="#" data-bind="click: deletePreference"><i class="icon-remove"></i>&nbsp;@Resources.Remove</a></li>
+            <li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
             <li class="divider-vertical"></li>
             <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
-            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="icon-minus"></i></a></li>
-            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="icon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
-            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="icon-plus"></i></a></li>
+            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
+            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="glyphicon glyphicon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
+            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="glyphicon glyphicon-plus"></i></a></li>
         </ul>
     </div>
 </div>
@@ -81,7 +81,7 @@
         @Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
         <!-- /ko -->
         <!-- ko if: PreferenceTimeIsOutOfRange -->
-        <span class="icon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"/>
         <!-- /ko -->
     </div>
     <div>
@@ -93,7 +93,7 @@
         <!-- /ko -->
         @Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
         <!-- ko if: PreferenceDaysOffIsOutOfRange-->
-        <span class="icon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <span class="glyphicon glyphicon-exclamation-sign" title="@Resources.YourPreferenceIsOutOfRange"/>
         <!-- /ko -->
     </div>
     <p></p>
@@ -147,7 +147,7 @@
                                         <div class="preference-indicator">
                                             <div class="preference-must-have" data-bind="css: {'icon-heart': MustHave}"></div>
                                         </div>
-                                        <div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"/>
+                                        <div class="label label-default preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"/>
                                         <div class="preference-indicator">
 				                            <!-- ko if: Extended -->
                                             <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
@@ -156,7 +156,7 @@
                                         <div class="preference-indicator">
                                             <!-- ko if: HasPersonalShiftsOrMeetings -->
                                             <i class="meeting-icon icon-user">
-                                                <i class="icon-user ml10"></i>
+                                                <i class="glyphicon glyphicon-user ml10"></i>
                                             </i>
                                             
                                             <div class="meeting-tooltip" style="display: none">

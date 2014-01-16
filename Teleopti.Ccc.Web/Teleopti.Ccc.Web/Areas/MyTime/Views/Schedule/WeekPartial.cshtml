@@ -44,11 +44,11 @@
 <div class="navbar">
     <div class="navbar-inner">
         <form class="navbar-form pull-left">
-            <div class="input-append input-prepend">
-                <button class="btn" data-bind="click: previousWeek, css: 'done'"><i class="icon-arrow-left"></i></button>
+            <div class="input-group">
+                <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'"><i class="glyphicon glyphicon-arrow-left"></i></button>
                 <input data-bind="value: displayDate" type="text" class="col-md-3 text-center" readonly="readonly"/>
-                <button class="btn moment-datepicker"><i class="icon-th" ></i></button>
-                <button class="btn" data-bind="click: nextWeek, css: 'done'"><i class="icon-arrow-right"></i></button>
+                <button class="btn moment-datepicker"><i class="glyphicon glyphicon-th" ></i></button>
+                <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'"><i class="glyphicon glyphicon-arrow-right"></i></button>
             </div>
         </form>
         <ul class="nav">
@@ -58,13 +58,13 @@
 </div>
 <ul class="nav nav-pills" data-bind="visible: showAddRequestToolbar">
 	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
-		<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="icon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
+		<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
 	</li>
 	<li data-bind="visible: textPermission, css: {active: textRequestActive}">
-		<a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a>
+		<a class="text-request-add" href="#" data-bind="click: textRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
 	</li>
 	<li data-bind="visible: absenceRequestPermission, css: { active: absenceRequestActive }">
-		<a class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+		<a class="absence-request-add" href="#" data-bind="click: absenceRequestActivate"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
 	</li>
 </ul>
 <div data-bind="with: requestViewModel">
@@ -104,18 +104,18 @@
             </div>
             <div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': textRequestPermission }">
                 <div class="weekview-day-symbol-request pull-right" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
-                    <i class="icon-comment"></i>
+                    <i class="glyphicon glyphicon-comment"></i>
                 </div>
                 <div class="holiday-agents weekview-day-show-request pull-right" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText(), html: true }">
                     <div class="small-circle" data-bind="style: {background: holidayChanceColor()}" >
                     </div>
                 </div>
 				<div class="overtime-availability-symbol floatright" data-bind="visible: overtimeAvailability().HasOvertimeAvailability, tooltip: { title: textOvertimeAvailabilityText, html: true }">
-					<i class="icon-time ir floatright" />
+					<i class="glyphicon glyphicon-time ir floatright" />
 				</div>
                 <!-- ko if: hasNote -->
                 <div class="pull-right" data-bind="tooltip: { title: noteMessage, html: true }">
-                    <i class="icon-exclamation-sign"></i>
+                    <i class="glyphicon glyphicon-exclamation-sign"></i>
                 </div>
                 <!-- /ko -->
                 <div id="add-request-cell" data-bind="css:{'add-request-space show-request': textRequestPermission}">
@@ -127,7 +127,7 @@
                 <!-- ko foreach: layers -->
 				<!-- ko if: isOvertimeAvailability() -->
 				<div class="weekview-day-schedule-layer absolute overtime-availability-bar" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }, click: function () { $data.showOvertimeAvailability($parents) }">
-					<i class="icon-time"></i>
+					<i class="glyphicon glyphicon-time"></i>
 				</div>
 				<!-- /ko -->
 				<!-- ko ifnot: isOvertimeAvailability() -->
@@ -135,7 +135,7 @@
                     <!-- ko if: hasMeeting -->
                     <div class="meeting floatright">
                         <i class="meeting-icon icon-user mr10">
-                            <i class="icon-user ml10"></i>
+                            <i class="glyphicon glyphicon-user ml10"></i>
                         </i>
                     </div>
                     <!-- /ko -->

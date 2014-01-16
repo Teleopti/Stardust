@@ -37,7 +37,7 @@
         var endDateText = options.endDate || this.element.data('datepicker-enddate') || undefined;
         this.endDate = (endDateText) ? DPGlobal.parseDate(endDateText, this.format) : undefined;
         this.isInput = this.element.is('input');
-        this.component = !this.isInput && this.element.is('.date') ? this.element.find('.add-on') : false;
+        this.component = !this.isInput && this.element.is('.date') ? this.element.find('.input-group-addon') : false;
 
         if (this.isInput) {
             this.element.on({

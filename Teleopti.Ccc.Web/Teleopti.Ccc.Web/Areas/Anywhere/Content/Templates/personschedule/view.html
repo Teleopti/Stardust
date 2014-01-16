@@ -59,16 +59,16 @@
 										<form action="#" class="intraday-absence-form">
 											<select class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
 											</select>
-											<div class="input-append input-prepend bootstrap-timepicker">
-												<span class="add-on"><i class="icon-step-backward"></i></span>
+											<div class="input-group bootstrap-timepicker">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
 												<input type="text" class="start-time input-mini" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-												<span class="add-on"><i class="icon-time"></i></span>
+												<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 											</div>
 											
-											<div class="input-append input-prepend bootstrap-timepicker">
-												<span class="add-on"><i class="icon-step-forward"></i></span>
+											<div class="input-group bootstrap-timepicker">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
 												<input type="text" class="end-time input-mini" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-												<span class="add-on"><i class="icon-time"></i></span>
+												<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 											</div>
 											
 											<!-- ko if: ErrorMessage() -->
@@ -90,15 +90,15 @@
 											<select class="activity-type" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity">
 											</select>
 
-											<div class="input-append input-prepend bootstrap-timepicker">
-												<span class="add-on"><i class="icon-step-backward"></i></span>
+											<div class="input-group bootstrap-timepicker">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
 												<input type="text" class="start-time input-mini" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-												<span class="add-on"><i class="icon-time"></i></span>
+												<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 											</div>
-											<div class="input-append input-prepend bootstrap-timepicker">
-												<span class="add-on"><i class="icon-step-forward"></i></span>
+											<div class="input-group bootstrap-timepicker">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
 												<input type="text" class="end-time input-mini" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: $root.Resources.ShowMeridian, allowEmpty: true }" />
-												<span class="add-on"><i class="icon-time"></i></span>
+												<span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
 											</div>
 											
 											<!-- ko if: ErrorMessage() -->
@@ -122,15 +122,15 @@
 											<select id="absence-type" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType">
 											</select>
 
-											<div class="input-prepend">
-												<span class="add-on"><i class="icon-step-backward"></i></span>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-step-backward"></i></span>
 												<input type="text" class="start-date" readonly="readonly" data-bind="value: StartDateFormatted" />
 											</div>
-											<div class="input-prepend input-append">
-												<span class="add-on"><i class="icon-step-forward"></i></span>
+											<div class="input-group">
+												<span class="input-group-addon"><i class="glyphicon glyphicon-step-forward"></i></span>
 												<span class="date" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.DateFormatForMoment, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
-													<input type="text" class="add-on end-date" readonly="readonly"/>
-													<span class="add-on"><i class="icon-calendar"></i></span>
+													<input type="text" class="input-group-addon end-date" readonly="readonly"/>
+													<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
 												</span>
 											</div>
 					
@@ -199,9 +199,9 @@
 					<tr class="absence">
 						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor() }">
 						<td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
-						<td class="absence-item"><i class="icon-step-backward"></i><span data-bind="text: StartTime"></span></td>
-						<td class="absence-item"><i class="icon-minus"></i></td>
-						<td class="absence-item"><span data-bind="text: EndTime"></span><i class="icon-step-forward"></i></td>
+						<td class="absence-item"><i class="glyphicon glyphicon-step-backward"></i><span data-bind="text: StartTime"></span></td>
+						<td class="absence-item"><i class="glyphicon glyphicon-minus"></i></td>
+						<td class="absence-item"><span data-bind="text: EndTime"></span><i class="glyphicon glyphicon-step-forward"></i></td>
 						<td class="absence-item">
 							<!-- ko if: !AboutToRemove() -->
 							<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />

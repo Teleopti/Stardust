@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 
 		public void SelectApplicationTestDataSource()
 		{
-			Browser.Interactions.ClickContaining("#DataSources .application a", "TestData");
+			Browser.Interactions.ClickContaining("#DataSources a.application", "TestData");
 		}
 
 		public void SelectWindowsTestDataSource()
 		{
-			Browser.Interactions.ClickContaining("#DataSources .windows a", "TestData");
+			Browser.Interactions.ClickContaining("#DataSources a.windows", "TestData");
 		}
 
 		private void SignInApplication(string username, string password)

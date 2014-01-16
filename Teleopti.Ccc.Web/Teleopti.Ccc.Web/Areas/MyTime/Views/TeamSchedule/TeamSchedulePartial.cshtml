@@ -11,11 +11,11 @@
 <div class="navbar">
 	<div class="navbar-inner">
 		<form class="navbar-form pull-left">
-			<div class="input-append input-prepend">
-				<button class="btn" data-bind="click: previousDay, css: 'done'"><i class="icon-arrow-left"></i></button>
+			<div class="input-group">
+				<button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-arrow-left"></i></button>
 				<input data-bind="value: displayDate" type="text" class="col-md-2 text-center" readonly="readonly"/>
-				<button class="btn moment-datepicker"><i class="icon-th"></i></button>
-				<button class="btn" data-bind="click: nextDay, css: 'done'"><i class="icon-arrow-right"></i></button>
+				<button class="btn moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
+				<button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-arrow-right"></i></button>
 			</div>
 		</form>
 		<ul class="nav" data-bind="if: showTeamPicker">
@@ -42,7 +42,7 @@
 				</ul>
 				<ul class="nav">
 					<li>
-						<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+						<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 					</li>
 				</ul>
 			</div>

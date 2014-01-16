@@ -29,7 +29,7 @@
         text-shadow: 0px 0px 30px rgba(0, 0, 0, 1);
         color: white;
     }
-    header .hero-unit
+    header .jumbotron
     {
         background-color: transparent;
     }
@@ -58,7 +58,7 @@
                            data-toggle="dropdown">Teleopti <b class="caret"></b>  
                         </a>  
                         <ul class="dropdown-menu">
-                            <li><a href="authentication/signout" tabindex="-1"><i class="icon-eject"></i> <span>Log out</span></a></li>  
+                            <li><a href="authentication/signout" tabindex="-1"><i class="glyphicon glyphicon-eject"></i> <span>Log out</span></a></li>  
                         </ul>
                     </li>  
                 </ul>
@@ -69,7 +69,7 @@
     <header>
         <br/>
         <div class="container">
-            <div class="hero-unit">
+            <div class="jumbotron">
                 <h1>Performance</h1>
                 <p>n' stuff ;)</p>
             </div>
@@ -92,7 +92,7 @@
                             <label>Configuration</label>
                             <textarea disabled="disabled" class="scenario-configuration" data-bind="value: Configuration, valueUpdate: 'afterkeydown', enable: EnableForm"></textarea>
                             <label></label>
-                            <button disabled="disabled" class="btn btn-large btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled, click: Run"></button>
+                            <button disabled="disabled" class="btn btn-lg btn-primary run" data-bind="text: RunButtonText, enable: RunButtonEnabled, click: Run"></button>
                         </fieldset>
                     </form>
                 </div>

@@ -6,23 +6,23 @@
             <table class="table-condensed">
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
                     <td>
-                        <i class="icon-step-backward"></i>
+                        <i class="glyphicon glyphicon-step-backward"></i>
                     </td>
                     <td>
-                        <div class="input-append bootstrap-timepicker" title="@Resources.StartTime">
-                            <input type="text" class="availability-start-time input-small" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="add-on"><i class="icon-time"></i></span>
+                        <div class="input-group bootstrap-timepicker" title="@Resources.StartTime">
+                            <input type="text" class="availability-start-time input-sm" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
                     </td>
                 </tr>
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
                     <td>
-                        <i class="icon-step-forward"></i>
+                        <i class="glyphicon glyphicon-step-forward"></i>
                     </td>
                     <td>
-                        <div class="input-append bootstrap-timepicker" title="@Resources.EndTime">
-                            <input type="text" class="availability-end-time input-small" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="add-on"><i class="icon-time"></i></span>
+                        <div class="input-group bootstrap-timepicker" title="@Resources.EndTime">
+                            <input type="text" class="availability-end-time input-sm" data-bind="timepicker: EndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                         </div>
                         <input type="checkbox" id="Student-availability-end-time-next-day" class="availability-next-day" data-bind="checked: NextDay" title="@Resources.NextDay" />
                     </td>
@@ -35,7 +35,7 @@
     <div class="availability-error-panel alert alert-danger" data-bind="html: ValidationError" />   
 </div>
 <div class="pull-right">
-    <button id="Student-availability-reset" class="btn" data-bind="click: reset">@Resources.Reset</button>
+    <button id="Student-availability-reset" class="btn btn-default" data-bind="click: reset">@Resources.Reset</button>
 	<button id="Student-availability-apply" class="btn btn-primary" data-bind="click: Teleopti.MyTimeWeb.StudentAvailability.SetStudentAvailability">@Resources.Apply</button>
 </div>		
 

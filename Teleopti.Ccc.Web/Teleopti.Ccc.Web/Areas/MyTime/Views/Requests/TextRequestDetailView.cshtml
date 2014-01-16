@@ -13,23 +13,23 @@
         <!-- /ko -->
     </div>
     <div>
-        <span class="input-append" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
+        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
             <input class="request-edit-datefrom" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}, enable: IsEditable" type="text" />
-            <span class="add-on"><i class="icon-th"></i></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
         </span>
-        <div class="request-edit-timefrom input-append bootstrap-timepicker">
-            <input type="text" class="input-small request-edit time-from" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-            <span class="add-on"><i class="icon-time"></i></span>
+        <div class="request-edit-timefrom input-group bootstrap-timepicker">
+            <input type="text" class="input-sm request-edit time-from" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
         </div>
     </div>
     <div>
-        <span class="request-edit-dateto input-append" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
+        <span class="request-edit-dateto input-group" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
             <input class="request-edit-date-to" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart(), format: DateFormat()}, enable: IsEditable" type="text"  />
-            <span class="add-on"><i class="icon-th"></i></span>
+            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
         </span>
-        <div class="request-edit-timeto input-append bootstrap-timepicker">
-            <input type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-            <span class="add-on"><i class="icon-time"></i></span>
+        <div class="request-edit-timeto input-group bootstrap-timepicker">
+            <input type="text" class="input-sm" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
         </div>
     </div>
     <label class="checkbox">

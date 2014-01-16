@@ -224,7 +224,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         if (data.IsApproved)
             return 'label-success';
         if (data.IsDenied)
-            return 'label-important';
+            return 'label-danger';
 
         return 'label-warning';
     };
