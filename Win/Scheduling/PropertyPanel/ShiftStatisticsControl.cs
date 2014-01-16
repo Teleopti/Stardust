@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void gridControl1_QueryColCount(object sender, GridRowColCountEventArgs e)
 		{
-			e.Count = 4;
+			e.Count = 3;
 			e.Handled = true;
 		}
 
