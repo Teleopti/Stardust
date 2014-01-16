@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		event EventHandler ChartUpdateNeeded;
 		void OnChartUpdateNeeded();
 		bool ShouldUpdateViews { get; set; }
+		IDictionary<int, int> GetFrequencyForShiftCategory(IShiftCategory shiftCategory);
 	}
 
 	public class ShiftCategoryDistributionModel : IShiftCategoryDistributionModel
@@ -58,6 +59,27 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 
 		public bool ShouldUpdateViews { get; set; }
 
+		public IDictionary<int, int> GetFrequencyForShiftCategory(IShiftCategory shiftCategory)
+		{
+			var frequency = new Dictionary<int, int>();
+
+			foreach (var sortedPerson in GetSortedPersons(false))
+			{
+				var num = ShiftCategoryCount(sortedPerson, shiftCategory);
+
+				if (!frequency.ContainsKey(num))
+				{
+					frequency.Add(num, 1);
+				}
+				else
+				{
+					frequency[num]++;
+				}
+			}
+
+			return frequency;
+		}
+
 		public ICachedShiftCategoryDistribution CachedShiftCategoryDistribution
 		{
 			get { return _cachedShiftCategoryDistribution; }
@@ -72,14 +94,22 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		//use something else than the _populationStatisticsCalculator, should be something you send in values to and it returns what you want and dont calculate anything else
 		public double GetAverageForShiftCategory(IShiftCategory shiftCategory)
 		{
-			var minMax = GetMinMaxForShiftCategory(shiftCategory);
-			return Domain.Calculation.Variances.Average(new double[]{minMax.Minimum,minMax.Maximum});
+			var values = new List<double>();
+			foreach (var sortedPerson in GetSortedPersons(false))
+			{
+				values.Add(ShiftCategoryCount(sortedPerson, shiftCategory));
+			}
+			return Domain.Calculation.Variances.Average(values);
 		}
 
 		public double GetStandardDeviationForShiftCategory(IShiftCategory shiftCategory)
 		{
-			var minMax = GetMinMaxForShiftCategory(shiftCategory);
-			return Domain.Calculation.Variances.StandardDeviation(new double[] { minMax.Minimum, minMax.Maximum });
+			var values = new List<double>();
+			foreach (var sortedPerson in GetSortedPersons(false))
+			{
+				values.Add(ShiftCategoryCount(sortedPerson, shiftCategory));
+			}
+			return Domain.Calculation.Variances.StandardDeviation(values);
 		}
 
 		public double GetSumOfDeviations()
