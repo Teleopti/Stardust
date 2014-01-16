@@ -11858,6 +11858,14 @@ Reduce the complexity to use these shifts.</value>
     <value>Team to compare with</value>
     <comment>Team to compare with</comment>
   </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Time in State per Agent</value>
+    <comment>Time in State per Agent</comment>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detailed Adherence</value>
+    <comment>Detailed Adherence Report Group</comment>
+  </data>
   <data name="MyReportWeb" xml:space="preserve">
     <value>MyReport</value>
     <comment>Applicationfunction for MyReport for web</comment>
