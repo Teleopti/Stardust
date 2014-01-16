@@ -6822,8 +6822,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 				auditHistoryView.ShowDialog(this);
 				if (auditHistoryView.DialogResult != DialogResult.OK || auditHistoryView.SelectedScheduleDay == null ||
 					isLocked) return;
+
+				var historyDay = auditHistoryView.SelectedScheduleDay;
+
+				var scheduleRange = SchedulerState.Schedules[historyDay.Person];
+				var currentDay = scheduleRange.ScheduledDay(historyDay.DateOnlyAsPeriod.DateOnly);
+				//schedule day can apperently have person absences from "other" day due to nightshifts and consecutive absence so we neet to add those to history day
+				foreach (var data in currentDay.PersistableScheduleDataCollection().OfType<PersonAbsence>().Where(data => !data.Period.Intersect(historyDay.Period)))
+				{
+					historyDay.Add(data);
+				}
+
 				var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
-				schedulePartModifyAndRollbackService.Modify(auditHistoryView.SelectedScheduleDay);
+				schedulePartModifyAndRollbackService.Modify(historyDay);
 				updateShiftEditor();
 			}
 		}
