@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class ExportMultisiteSkillToSkillCommandHandlerTest
     {
         private MockRepository _mock;
-        private IServiceBusSender _busSender;
+		private IServiceBusEventPublisher _busSender;
         private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IJobResultRepository _jobResultRepository;
         private ExportMultisiteSkillToSkillCommandHandler _target;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-            _busSender = _mock.StrictMock<IServiceBusSender>();
+			_busSender = _mock.StrictMock<IServiceBusEventPublisher>();
             _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _jobResultRepository = _mock.StrictMock<IJobResultRepository>();
             _target = new ExportMultisiteSkillToSkillCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
-                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkill())).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ExportMultisiteSkillsToSkill())).IgnoreArguments();
             }
 
             using(_mock.Playback())
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
-                Expect.Call(() => _busSender.Send(new ExportMultisiteSkillsToSkill())).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ExportMultisiteSkillsToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

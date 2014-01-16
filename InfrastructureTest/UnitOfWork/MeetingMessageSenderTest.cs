@@ -16,13 +16,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private IMessageSender target;
 		private MockRepository mocks;
-		private IServiceBusSender serviceBusSender;
+		private IServiceBusEventPublisher serviceBusSender;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			serviceBusSender = mocks.DynamicMock<IServiceBusSender>();
+			serviceBusSender = mocks.DynamicMock<IServiceBusEventPublisher>();
 			target = new MeetingMessageSender(serviceBusSender);
 		}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (mocks.Record())
 			{
 				Expect.Call(serviceBusSender.EnsureBus()).Return(true);
-				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments();
+				Expect.Call(()=>serviceBusSender.Publish(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (mocks.Record())
 			{
-				Expect.Call(()=>serviceBusSender.Send(null)).IgnoreArguments().Repeat.Never();
+				Expect.Call(()=>serviceBusSender.Publish(null)).IgnoreArguments().Repeat.Never();
 			}
 			using (mocks.Playback())
 			{

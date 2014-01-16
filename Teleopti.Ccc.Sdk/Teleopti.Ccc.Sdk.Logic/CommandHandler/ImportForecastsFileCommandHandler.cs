@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class ImportForecastsFileCommandHandler : IHandleCommand<ImportForecastsFileCommandDto>
     {
-        private readonly IServiceBusSender _busSender;
+		private readonly IServiceBusEventPublisher _busSender;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJobResultRepository _jobResultRepository;
 
-        public ImportForecastsFileCommandHandler(IServiceBusSender busSender,
+		public ImportForecastsFileCommandHandler(IServiceBusEventPublisher busSender,
             ICurrentUnitOfWorkFactory unitOfWorkFactory,
             IJobResultRepository jobResultRepository)
         {
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
                 ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
-            _busSender.Send(message);
+            _busSender.Publish(message);
 			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
         }
     }

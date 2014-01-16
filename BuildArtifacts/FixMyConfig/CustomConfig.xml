@@ -1,0 +1,5 @@
+$(CCC7DB),"Main_DemoSales_TeleoptiCCC7"
+$(AnalyticsDB),"Main_DemoSales_TeleoptiAnalytics"
+$(SitePath),c:\nhib
+$(ConnectionStringAnalytics),Data Source=.;Integrated Security=True;initial Catalog="Main_DemoSales_TeleoptiAnalytics";Current Language=us_english
+<compilation debug='false',<compilation debug='true'

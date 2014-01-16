@@ -14,15 +14,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IMappingEngine _mapper;
-		private readonly IServiceBusSender _serviceBusSender;
+		private readonly IServiceBusEventPublisher _serviceBusSender;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, 
-											IMappingEngine mapper, 
-											IServiceBusSender serviceBusSender, 
+											IMappingEngine mapper,
+											IServiceBusEventPublisher serviceBusSender, 
 											ICurrentBusinessUnit businessUnitProvider, 
 											ICurrentDataSource currentDataSource, 
 											INow now,
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcDateTime()
 				              	};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Publish(message));
 			}
 			else
 			{
