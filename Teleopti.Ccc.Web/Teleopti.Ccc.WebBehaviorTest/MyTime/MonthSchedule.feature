@@ -65,9 +65,13 @@ Given I have the role 'Full access to mytime'
 When I view my month schedule for date '2014-01-07'
 Then I should see an indication implying I should not work on '2014-01-07'
 
-Scenario: View when you are in absence
+Scenario: View when you are in absence on day off
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
+	And I have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2014-01-16 |
 	And I have an absence with
 	| Field		| Value            |
 	| Name      | Illness          |

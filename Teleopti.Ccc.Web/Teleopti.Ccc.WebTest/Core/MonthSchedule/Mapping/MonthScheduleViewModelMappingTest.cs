@@ -5,7 +5,10 @@ using AutoMapper;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
@@ -92,6 +95,26 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
             var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
 
             var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+            result.IsNotWorkingDay.Should().Be.True();
+        }
+
+        [Test]
+        public void ShouldMapIsNotWorkingDayForFullDayAbsenceOnDayOff()
+        {
+            var stubs = new StubFactory();
+            var personAssignment =
+                stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
+                                                              new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
+            personAssignment.Clear();
+            personAssignment.SetDayOff(DayOffFactory.CreateDayOff());
+
+            var personAbsence =
+                stubs.PersonAbsenceStub(new DateTimePeriod(new DateTime(2011, 5, 18, 0, 0, 0, DateTimeKind.Utc),
+                    new DateTime(2011, 5, 18, 23, 59, 0, DateTimeKind.Utc)));
+            var scheduleDayForDayoff = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.ContractDayOff, personAssignment, new[] {personAbsence}, null);
+
+            var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDayForDayoff });
 
             result.IsNotWorkingDay.Should().Be.True();
         }
