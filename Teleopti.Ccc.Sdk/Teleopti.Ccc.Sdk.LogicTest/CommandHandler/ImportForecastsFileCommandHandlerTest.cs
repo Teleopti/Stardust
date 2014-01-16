@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.Publish(new ImportForecastsFileToSkill())).IgnoreArguments();
+                Expect.Call(() => _busSender.PublishWithoutInitiatorInfo(new ImportForecastsFileToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
