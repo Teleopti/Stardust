@@ -4,7 +4,7 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 @model PortalViewModel
 
-<div class="navbar navbar-fixed-top bdd-mytime-top-menu">
+<div class="navbar navbar-default navbar-fixed-top bdd-mytime-top-menu">
     <div class="container">
         <div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
         
@@ -29,7 +29,7 @@
                         }
                         else
                         {
-                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge badge-important hide"></span></a>
+                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge hide"></span></a>
                         }
                     </li>
                 }
