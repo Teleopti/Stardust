@@ -205,8 +205,23 @@ ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [ScheduledNext] nvarchar(50)
 ALTER TABLE [RTA].[ActualAgentState] ALTER COLUMN [AlarmName] nvarchar(50)
 
 --new stage table
+CREATE TABLE [RTA].[ActualAgentState_History](
+	id int identity(1, 1) NOT NULL,
+	[StateStart] datetime NOT NULL,
+	[person_code] uniqueidentifier NOT NULL,
+	[time_in_state_s] int NOT NULL,
+	[state_group_code] uniqueidentifier NOT NULL,
+	[days_cross_midnight] smallint NOT NULL
+)
+
+CREATE UNIQUE CLUSTERED INDEX [CIX_ActualAgentState_History] ON [RTA].[ActualAgentState_History]
+(
+	days_cross_midnight desc,
+	id asc
+)
+
 CREATE TABLE [stage].[stg_agent_state](
-	id int identity(1,1) NOT NULL,
+	id int identity(1, 1) NOT NULL,
 	[StateStart] datetime NOT NULL,
 	[person_code] uniqueidentifier NOT NULL,
 	[time_in_state_s] int NOT NULL,
@@ -265,7 +280,6 @@ GO
 CREATE TABLE [mart].[fact_agent_state](
 	[date_id] int NOT NULL,
 	[person_id] int NOT NULL,
---	[interval_id] smallint NOT NULL,
 	[state_group_id] int NOT NULL,
 	[time_in_state_s] int NOT NULL,
 	[datasource_id] smallint NOT NULL,
@@ -276,14 +290,10 @@ ALTER TABLE [mart].[fact_agent_state] ADD CONSTRAINT [PK_fact_agent_state] PRIMA
 (
 	[date_id] ASC,
 	[person_id] ASC,
---	[interval_id] ASC,
 	[state_group_id] ASC
 )
 
 --A number table
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_numbers]') AND type in (N'U'))
-DROP TABLE [mart].[sys_numbers]
-GO
 CREATE TABLE mart.sys_numbers (n smallint not null)
 ALTER TABLE mart.sys_numbers ADD CONSTRAINT
 PK_sys_numbers PRIMARY KEY CLUSTERED
@@ -297,9 +307,6 @@ SELECT top(100) ROW_NUMBER() OVER (ORDER BY [object_id])-1 FROM sys.all_columns
 GO
 ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_date] FOREIGN KEY([date_id])
 REFERENCES [mart].[dim_date] ([date_id])
-GO
---ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_interval] FOREIGN KEY([interval_id])
---REFERENCES [mart].[dim_interval] ([interval_id])
 GO
 ALTER TABLE [mart].[fact_agent_state]  WITH CHECK ADD  CONSTRAINT [FK_fact_agent_state_dim_person] FOREIGN KEY([person_id])
 REFERENCES [mart].[dim_person] ([person_id])
@@ -322,14 +329,3 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agent_state' AND jobstep_id=86)
 INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(86,N'fact_agent_state')
 GO
-/*
-un-do
-DROP TABLE [mart].[fact_agent_skill]
-ALTER TABLE [stage].[stg_agent_skill] DROP COLUMN [Active]
-DROP TABLE [mart].[fact_agent_state]
-DROP TABLE [mart].[dim_state_group]
-DROP TABLE [stage].[stg_state_group]
-DROP TABLE [stage].[stg_agent_state_loading]
-DROP TABLE [stage].[stg_agent_state]
-
-*/
