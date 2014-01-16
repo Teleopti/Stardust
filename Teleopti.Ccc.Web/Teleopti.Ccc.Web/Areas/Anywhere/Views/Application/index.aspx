@@ -14,8 +14,8 @@
 		<meta name="apple-mobile-web-app-capable" content="yes" />
 		
 		<link rel="stylesheet" href="Content/jqueryui/smoothness/jquery-ui-1.10.1.custom.css" />
-		<link rel="stylesheet" href="Content/bootstrap/bootstrap.css" />
-		<link rel="stylesheet" href="Content/bootstrap/bootstrap-responsive.css" />
+		<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
+		<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />
 		<link rel="stylesheet" href="Content/moment-datepicker/datepicker.css" />
 		<link rel="stylesheet" href="Content/select2/select2.css"/>
 		<link rel="stylesheet" href="Content/bootstrap-timepicker/css/bootstrap-timepicker.css" />

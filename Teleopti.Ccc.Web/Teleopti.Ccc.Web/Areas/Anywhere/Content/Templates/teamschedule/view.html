@@ -25,10 +25,10 @@
 	</table>
 
 	<div class="row">
-		<div class="span12">
+		<div class="col-md-12">
 			<form>
 				<div class="control-group">
-					<select id="group-picker" class="span4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
+					<select id="group-picker" class="col-md-4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
 						<optgroup data-bind="attr: { label: Name }, foreach: Groups">
 							<option data-bind="text: Name, value: Id"></option>
 						</optgroup>
@@ -51,7 +51,7 @@
 	</div>
 
 	<div class="row">
-		<div class="span12">
+		<div class="col-md-12">
 			<!-- ko if: Loading -->
 			<div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
 			<!-- /ko -->

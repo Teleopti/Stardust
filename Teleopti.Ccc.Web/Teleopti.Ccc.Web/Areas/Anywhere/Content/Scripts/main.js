@@ -8,7 +8,7 @@ require.config({
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		respond: '../../../../Content/respondjs/respond.min',
 		moment: '../../../../Content/moment/moment',
-		bootstrap: '../../../../Content/bootstrap/bootstrap.min',
+		bootstrap: '../../../../Content/bootstrap/Scripts/bootstrap.min',
 		signals: '../../../../Content/signals/signals',
 		signalr: '../../../../Content/signalr/jquery.signalR-1.1.4.min',
 		crossroads: '../../../../Content/crossroads/crossroads',

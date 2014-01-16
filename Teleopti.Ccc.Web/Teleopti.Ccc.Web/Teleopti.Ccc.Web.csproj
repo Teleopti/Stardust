@@ -881,14 +881,14 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Content\bootstrap\Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap\Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
     <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.js" />
     <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.min.js" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap\bootstrap.css" />
-    <Content Include="Content\bootstrap\bootstrap.min.css" />
+    <Content Include="Content\bootstrap\Content\bootstrap.css" />
+    <Content Include="Content\bootstrap\Content\bootstrap.min.css" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
@@ -956,8 +956,6 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
     <Content Include="Content\select2\select2-bootstrap.css" />
     <Content Include="favicon.ico" />
-    <Content Include="Content\bootstrap\images\glyphicons-halflings-white.png" />
-    <Content Include="Content\bootstrap\images\glyphicons-halflings.png" />
     <Content Include="Areas\MobileReports\Content\Mobile\images\icons-18-black.png" />
     <Content Include="Areas\MobileReports\Content\Mobile\images\icons-18-white.png" />
     <Content Include="Areas\MobileReports\Content\Mobile\images\icons-36-black.png" />
@@ -1034,8 +1032,6 @@
     <Content Include="Content\signals\signals.js" />
     <Content Include="Content\signals\signals.min.js" />
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
-    <Content Include="Content\bootstrap\bootstrap.js" />
-    <Content Include="Content\bootstrap\bootstrap.min.js" />
     <Content Include="Content\Scripts\knockout-2.2.1.debug.js" />
     <Content Include="Content\Scripts\knockout-2.2.1.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko.js" />
@@ -1067,6 +1063,10 @@
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\MyReport\MyReportPartial.cshtml" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1074,6 +1074,8 @@
     <Content Include="Content\lazy\lazy.min.js" />
     <Content Include="Content\signalr\jquery.signalR-1.1.4.js" />
     <Content Include="Content\signalr\jquery.signalR-1.1.4.min.js" />
+    <Content Include="Content\bootstrap\Scripts\bootstrap.js" />
+    <Content Include="Content\bootstrap\Scripts\bootstrap.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>

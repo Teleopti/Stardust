@@ -12,8 +12,8 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0" />
 		
-    <link rel="stylesheet" href="Content/bootstrap/bootstrap.css" />
-    <link rel="stylesheet" href="Content/bootstrap/bootstrap-responsive.css" />
+    <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap.css" />
+    <link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />
 	
     <link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
 		
@@ -54,7 +54,7 @@
                 <ul class="nav">  
                     <li class="dropdown">  
                         <a href="#"  
-                           class="dropdown-toggle nowrap brand"  
+                           class="dropdown-toggle nowrap navbar-brand"  
                            data-toggle="dropdown">Teleopti <b class="caret"></b>  
                         </a>  
                         <ul class="dropdown-menu">
@@ -83,7 +83,7 @@
         <div class="container">
             <div class="row">
                 <br/>
-                <div class="span6">
+                <div class="col-md-6">
                     <form>
                         <fieldset>
                             <h2>Scenario</h2>
@@ -96,7 +96,7 @@
                         </fieldset>
                     </form>
                 </div>
-                <div class="span6">
+                <div class="col-md-6">
                     <h2>Progress</h2>
                     <!-- ko foreach: ProgressItems() -->
                     <p class="message-count">
@@ -107,13 +107,13 @@
                     </p>
                     <!-- /ko -->
                 </div>
-                <div class="span6">
+                <div class="col-md-6">
                     <h2>Result</h2>
                     <p class="total-run-time"><span class="badge badge-info" data-bind="text: TotalRunTime"></span> Total run time</p>
                     <p class="total-time-to-send-commands"><span class="badge badge-info" data-bind="text: TotalTimeToSendCommands"></span> Total time to send commands</p>
                     <p class="scenarios-per-second"><span class="badge badge-info" data-bind="text: ScenariosPerSecond"></span> Scenarios per second</p>
                 </div>
-                <div class="span6" data-bind="if: RunDone">
+                <div class="col-md-6" data-bind="if: RunDone">
                     <br/>
                     <br/>
                     <div class="alert alert-success result-success">Finished!</div>

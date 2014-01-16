@@ -209,7 +209,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	}
 
 	function _loadAPage() {
-		var skip = $('#AsmMessages-list .span6').length;
+		var skip = $('#AsmMessages-list .col-md-6').length;
 		var take = 20;
 		ajax.Ajax({
 			url: "Message/Messages",

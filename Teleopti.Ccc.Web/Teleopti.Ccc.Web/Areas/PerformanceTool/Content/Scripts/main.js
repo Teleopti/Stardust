@@ -6,7 +6,7 @@ require.config({
 		knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		moment: '../../../../Content/moment/moment',
-		bootstrap: '../../../../Content/bootstrap/bootstrap.min',
+		bootstrap: '../../../../Content/bootstrap/Scripts/bootstrap.min',
 		signalr: '../../../../Content/signalr/jquery.signalR-1.1.4.min',
 		
 		noext: '../../../../Content/require/noext',

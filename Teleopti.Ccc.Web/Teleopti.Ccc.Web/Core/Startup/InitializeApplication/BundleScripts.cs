@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/hasher/hasher.js",
 					"~/Content/crossroads/crossroads.js",
 					"~/Content/Scripts/modernizr-2.6.2.js",
-					"~/Content/bootstrap/bootstrap.js",
+					"~/Content/bootstrap/Scripts/bootstrap.js",
 					"~/Content/jqueryui/jquery-ui-1.10.2.custom.js",
 					"~/Content/Scripts/json2.js",
 					"~/Content/Scripts/jquery.hoverIntent.js",
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private static void registerBootstrapCssIndividualDueToRelativePathsInsideCss()
 		{
 			var bootstrapCss = new StyleBundle(BootstrapCss)
-				.Include("~/Content/bootstrap/bootstrap.css");
+				.Include("~/Content/bootstrap/Content/bootstrap.css");
 			BundleTable.Bundles.Add(bootstrapCss);
 		}
 
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			//use requiresJs here instead?
 			var cssBundle = new StyleBundle(SignInCss)
 				.Include(
-					"~/Content/bootstrap/bootstrap.css",
-					"~/Content/bootstrap/bootstrap-responsive.css",
+                    "~/Content/bootstrap/Content/bootstrap.css",
+                    "~/Content/bootstrap/Content/bootstrap-theme.css",
 					"~/Areas/Start/Content/Css/Login.css",
 					"~/Areas/Start/Content/Css/Site.css"
 				);
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/jquery/jquery-1.10.2.js",
 					"~/Content/Scripts/jquery.ba-hashchange.js",
 					"~/Content/Scripts/modernizr-2.6.2.js",
-					"~/Content/bootstrap/bootstrap.js",
+					"~/Content/bootstrap/Scripts/bootstrap.js",
 					"~/Content/Scripts/knockout-2.2.1.js",
 					"~/Content/signals/signals.js",
 					"~/Content/hasher/hasher.js",
