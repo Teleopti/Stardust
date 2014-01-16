@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 OwnerPersonId = person.Id.GetValueOrDefault(Guid.Empty),
                 ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
-            _busSender.Publish(message);
+            _busSender.PublishWithoutInitiatorInfo(message);
 			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
         }
     }
