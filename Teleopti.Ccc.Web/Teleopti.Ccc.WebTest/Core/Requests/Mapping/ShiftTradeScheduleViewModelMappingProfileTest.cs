@@ -622,8 +622,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.TimeLineHours.Count().Should().Be.EqualTo(11);
 			result.TimeLineHours.First().HourText.Should().Be.Empty();
 			result.TimeLineHours.First().LengthInMinutesToDisplay.Should().Be.EqualTo(15);
-			result.TimeLineHours.ElementAt(1).HourText.Should().Be.EqualTo("8");
-			result.TimeLineHours.Last().HourText.Should().Be.EqualTo("17");
+			result.TimeLineHours.ElementAt(1).HourText.Should().Be.EqualTo("9");
+			result.TimeLineHours.Last().HourText.Should().Be.EqualTo("18");
 			result.TimeLineHours.Last().LengthInMinutesToDisplay.Should().Be.EqualTo(15);
 		}
 
