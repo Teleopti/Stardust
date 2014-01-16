@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 			            PersonRequestId =
 				            _personRequestDto.Id.GetValueOrDefault(Guid.Empty)
 		            };
-                _serviceBusSender.Publish(message);
+                _serviceBusSender.PublishWithoutInitiatorInfo(message);
             }
         }
     }
