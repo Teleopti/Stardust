@@ -1,10 +1,10 @@
-using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
 	public interface IPossibleShiftTradePersonsProvider
 	{
-		IEnumerable<IPerson> RetrievePersons(DateOnly dateOnly);
+		DatePersons RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments);
 	}
 }
