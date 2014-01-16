@@ -14,6 +14,10 @@ Given there is a role with
 	And there is a dayoff with
 	| Field | Value  |
 	| Name  | DayOff |
+	And there is an absence with
+	| Field | Value    |
+	| Name  | Illness  |
+	| Color | Red      |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
@@ -60,6 +64,17 @@ Given I have the role 'Full access to mytime'
 	| Date  | 2014-01-07 |
 When I view my month schedule for date '2014-01-07'
 Then I should see an indication implying I should not work on '2014-01-07'
+
+Scenario: View when you are in absence
+Given I have the role 'Full access to mytime'
+    And I have the workflow control set 'Published schedule'
+	And I have an absence with
+	| Field		| Value            |
+	| Name      | Illness          |
+	| StartTime | 2014-01-16 00:00 |
+	| EndTime   | 2014-01-16 23:59 |
+When I view my month schedule for date '2014-01-07'
+Then I should see an indication implying I should not work on '2014-01-16'
 
 Scenario: View when you have full day absence 
 Given I have the role 'Full access to mytime'
