@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -17,13 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		private readonly ITeamProvider _teamProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
+		private readonly IUserTextTranslator _userTextTranslator;
 		private const string pageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
-		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository)
+		public TeamViewModelFactory(ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository, IUserTextTranslator userTextTranslator)
 		{
 			_teamProvider = teamProvider;
 			_permissionProvider = permissionProvider;
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
+			_userTextTranslator = userTextTranslator;
 		}
 
 		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)
@@ -59,15 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		private IEnumerable<ISelectOption> createGroupPagesOptions(DateOnly date)
 		{
 			var groupPages = _groupingReadOnlyRepository.AvailableGroupPages().Select(
-				p =>
-				{
-					if (p.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
-					{
-						p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
-					}
-					return new SelectGroup { text = p.PageName, PageId = p.PageId };
-				}).OrderBy(x => x.text).ToArray();
-
+				p => new SelectGroup { text = _userTextTranslator.TranslateText(p.PageName), PageId = p.PageId }).OrderBy(x => x.text).ToArray();
 
 			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
 
