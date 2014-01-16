@@ -17,15 +17,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_shiftTradeTimelineHoursViewModelFactory = shiftTradeTimelineHoursViewModelFactory;
 		}
 
-		public IEnumerable<ShiftTradeTimeLineHoursViewModel> Map(ShiftTradePersonScheduleViewModel mySchedule,
-		                                                         IEnumerable<ShiftTradePersonScheduleViewModel>
+		public IEnumerable<ShiftTradeTimeLineHoursViewModel> Map(ShiftTradeAddPersonScheduleViewModel mySchedule,
+		                                                         IEnumerable<ShiftTradeAddPersonScheduleViewModel>
 			                                                         possibleTradeSchedules, DateOnly shiftTradeDate)
 		{
 			return _shiftTradeTimelineHoursViewModelFactory.CreateTimeLineHours(getTimeLinePeriod(mySchedule, possibleTradeSchedules, shiftTradeDate));
 		}
 
-		private DateTimePeriod getTimeLinePeriod(ShiftTradePersonScheduleViewModel mySchedule,
-		                                         IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedules,
+		private DateTimePeriod getTimeLinePeriod(ShiftTradeAddPersonScheduleViewModel mySchedule,
+		                                         IEnumerable<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedules,
 		                                         DateOnly shiftTradeDate)
 		{
 			DateTimePeriod? myScheduleMinMax = getMyScheduleMinMax(mySchedule);
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return returnPeriod;
 		}
 
-		private DateTimePeriod? getMyScheduleMinMax(ShiftTradePersonScheduleViewModel mySchedule)
+		private DateTimePeriod? getMyScheduleMinMax(ShiftTradeAddPersonScheduleViewModel mySchedule)
 		{
 			if (mySchedule == null)
 				return null;
@@ -63,9 +63,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		private DateTimePeriod? getpossibleTradeScheduleMinMax(
-			IEnumerable<ShiftTradePersonScheduleViewModel> possibleTradeSchedules)
+			IEnumerable<ShiftTradeAddPersonScheduleViewModel> possibleTradeSchedules)
 		{
-			var schedules = possibleTradeSchedules as IList<ShiftTradePersonScheduleViewModel> ?? possibleTradeSchedules.ToList();
+			var schedules = possibleTradeSchedules as IList<ShiftTradeAddPersonScheduleViewModel> ?? possibleTradeSchedules.ToList();
 
 			if (!schedules.Any())
 				return null;

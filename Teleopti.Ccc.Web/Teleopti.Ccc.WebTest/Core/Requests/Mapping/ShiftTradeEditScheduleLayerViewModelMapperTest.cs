@@ -5,14 +5,13 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
-	public class ShiftTradeScheduleLayerViewModelMapperTest
+	public class ShiftTradeEditScheduleLayerViewModelMapperTest
 	{
 		private TimeZoneInfo _timeZone;
 		private IUserTimeZone _userTimeZone;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				IsAbsenceConfidential = false
 			};
 
-			var target = new ShiftTradeScheduleLayerViewModelMapper(_userTimeZone);
+			var target = new ShiftTradeEditScheduleLayerViewModelMapper(_userTimeZone);
 			var result = target.Map(new[] { readModelLayer });
 
 			var mappedlayer = result.First();
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Description = "Phone"
 			};
 
-			var target = new ShiftTradeScheduleLayerViewModelMapper(_userTimeZone);
+			var target = new ShiftTradeEditScheduleLayerViewModelMapper(_userTimeZone);
 			var result = target.Map(new[] { readModelLayer });
 
 			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Description = "Phone"
 			};
 
-			var target = new ShiftTradeScheduleLayerViewModelMapper(_userTimeZone);
+			var target = new ShiftTradeEditScheduleLayerViewModelMapper(_userTimeZone);
 			var result = target.Map(new[] { readModelLayer });
 
 			var expectedTimeString = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",

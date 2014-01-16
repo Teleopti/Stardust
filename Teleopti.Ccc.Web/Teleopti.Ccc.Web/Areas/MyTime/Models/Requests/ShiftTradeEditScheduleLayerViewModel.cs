@@ -2,11 +2,12 @@ using System;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
-	public class ShiftTradeScheduleLayerViewModel
+	public class ShiftTradeEditScheduleLayerViewModel
 	{
-		public string Payload { get; set; } //Prob remove
-		public int ElapsedMinutesSinceShiftStart { get; set; }	//Prob remove
+		public string Payload { get; set; }
+		public int ElapsedMinutesSinceShiftStart { get; set; }
 
+		//Which of below props should be removed?
 		public DateTime Start { get; set; }
 		public DateTime End { get; set; }
 		public int LengthInMinutes { get; set; }

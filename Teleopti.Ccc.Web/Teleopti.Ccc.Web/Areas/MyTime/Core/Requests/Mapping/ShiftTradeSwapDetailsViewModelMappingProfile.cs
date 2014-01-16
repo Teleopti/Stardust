@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		protected override void Configure()
 		{
 			CreateMap<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>()
-				.ForMember(d=>d.To, o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
-				.ForMember(d=>d.From, o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
+				.ForMember(d=>d.To, o=>o.NullSubstitute(new ShiftTradeEditPersonScheduleViewModel()))
+				.ForMember(d=>d.From, o=>o.NullSubstitute(new ShiftTradeEditPersonScheduleViewModel()))
 				.ForMember(d => d.PersonFrom, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().PersonFrom.Name.ToString()))
 				.ForMember(d => d.PersonTo, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().PersonTo.Name.ToString()))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartTo))
@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.CreateTimeLineHours(createTimelinePeriod(s))))
 				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime));
 
-			CreateMap<IScheduleDay, ShiftTradePersonScheduleViewModel>()
+			CreateMap<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>()
 				.ConvertUsing(o =>
 				{
 
 					var myScheduleDay = createPersonDay(o.Person, o);
 					var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), _userTimeZone.TimeZone());
-					var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
+					var myScheduleViewModel = new ShiftTradeEditPersonScheduleViewModel
 					{
 						Name = o.Person.Name.ToString(),
 						ScheduleLayers = createShiftTradeLayers(myScheduleDay, _userTimeZone.TimeZone(), timeLineRangeTot),
@@ -170,13 +170,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return returnDay;
 		}
 
-		private IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
+		private IEnumerable<ShiftTradeEditScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
 		{
 			if (personDay.SignificantPartForDisplay == SchedulePartView.DayOff)
 				return createShiftTradeDayOffLayer(timeLineRange, timeZone);
 
 			if (personDay.ScheduleLayers == null || !personDay.ScheduleLayers.Any())
-				return new ShiftTradeScheduleLayerViewModel[] { };
+				return new ShiftTradeEditScheduleLayerViewModel[] { };
 
 			var shiftStartTime = personDay.ScheduleLayers.Min(o => o.Period.StartDateTime);
 
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
 										 let endDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.EndDateTime, timeZone)
 										 let length = visualLayer.Period.ElapsedTime().TotalMinutes
-										 select new ShiftTradeScheduleLayerViewModel
+										 select new ShiftTradeEditScheduleLayerViewModel
 										 {
 											 Payload = visualLayer.DisplayDescription().Name,
 											 LengthInMinutes = (int)length,
@@ -203,11 +203,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 													 end.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture));
 		}
 
-		private static IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeDayOffLayer(DateTimePeriod timeLineRange, TimeZoneInfo timeZone)
+		private static IEnumerable<ShiftTradeEditScheduleLayerViewModel> createShiftTradeDayOffLayer(DateTimePeriod timeLineRange, TimeZoneInfo timeZone)
 		{
 			return new[]
 			       	{
-			       		new ShiftTradeScheduleLayerViewModel
+			       		new ShiftTradeEditScheduleLayerViewModel
 			       			{
 			       				ElapsedMinutesSinceShiftStart = 0,
 			       				LengthInMinutes = (int) (timeLineRange.TimePeriod(timeZone).SpanningTime().TotalMinutes - (timeLineOffset * 2)),

@@ -7,21 +7,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
-	public class ShiftTradeScheduleLayerViewModelMapper : IShiftTradeScheduleLayerViewModelMapper
+	public class ShiftTradeEditScheduleLayerViewModelMapper : IShiftTradeEditScheduleLayerViewModelMapper
 	{
 		private readonly IUserTimeZone _userTimeZone;
 
-		public ShiftTradeScheduleLayerViewModelMapper(IUserTimeZone userTimeZone)
+		public ShiftTradeEditScheduleLayerViewModelMapper(IUserTimeZone userTimeZone)
 		{
 			_userTimeZone = userTimeZone;
 		}
 
-		public IEnumerable<ShiftTradeScheduleLayerViewModel> Map(IEnumerable<SimpleLayer> sourceLayers)
+		public IEnumerable<ShiftTradeEditScheduleLayerViewModel> Map(IEnumerable<SimpleLayer> sourceLayers)
 		{
 			return sourceLayers.Select(mapLayer);
 		}
 
-		private ShiftTradeScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer)
+		private ShiftTradeEditScheduleLayerViewModel mapLayer(SimpleLayer sourceLayer)
 		{
 			var timeZone = _userTimeZone.TimeZone();
 			var start = TimeZoneHelper.ConvertFromUtc(sourceLayer.Start, timeZone);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var expectedTime = string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
 												start.ToShortTimeString(),
 												end.ToShortTimeString());
-			return new ShiftTradeScheduleLayerViewModel
+			return new ShiftTradeEditScheduleLayerViewModel
 				{
 					Start = start,
 					End = end,

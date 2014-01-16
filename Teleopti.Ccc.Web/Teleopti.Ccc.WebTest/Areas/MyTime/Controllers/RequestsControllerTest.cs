@@ -318,17 +318,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var requestViewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var shiftTradeSwapDetails = new ShiftTradeSwapDetailsViewModel
 				{
-														 From =  new ShiftTradePersonScheduleViewModel
+														 From =  new ShiftTradeEditPersonScheduleViewModel
 															 {
-																         ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>(),
+																         ScheduleLayers = new List<ShiftTradeEditScheduleLayerViewModel>(),
 																			DayOffText = "DO",
 																			HasUnderlyingDayOff = false,
 																			MinutesSinceTimeLineStart = 60,
 																			Name="xxx"
 															         },
-														 To =  new ShiftTradePersonScheduleViewModel
+														 To =  new ShiftTradeEditPersonScheduleViewModel
 															 {
-																		 ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>(),
+																		 ScheduleLayers = new List<ShiftTradeEditScheduleLayerViewModel>(),
 																		 DayOffText = "DO",
 																		 HasUnderlyingDayOff = false,
 																		 MinutesSinceTimeLineStart = 60,

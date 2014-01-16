@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void CreateScheduleViewModelsFromMapper()
 		{
-			var profileForProbing = new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>();
+			var profileForProbing = new MappingProfileForProbing<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>();
 
 			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub();
 
 			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
 
-			var shiftTradePersonScheduleViewModelStub = new ShiftTradePersonScheduleViewModel();
+			var shiftTradePersonScheduleViewModelStub = new ShiftTradeEditPersonScheduleViewModel();
 			profileForProbing.Result = shiftTradePersonScheduleViewModelStub;
 
 			Mapper.AddProfile(profileForProbing);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void CreateTimelineWhenOneNightShift()
 		{
-			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>());
 			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expectedEnd = expectedStart.AddHours(23);
 			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void CreateTimelineWhenToScheduleDayIsEmpty()
 		{
-			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>());
 			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expectedEnd = expectedStart.AddHours(10);
 			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub(new DateTimePeriod(expectedStart, expectedEnd));
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void CreateTimelineWhenFromScheduleDayIsEmpty()
 		{
-			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>());
 			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expectedEnd = expectedStart.AddHours(10);
 			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void CreateTimelineWhenBothScheduleDayIsEmpty()
 		{
-			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>());
 			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
 			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub();
 			_projectionProvider.Expect(x => x.Projection(scheduleDayFrom)).Return(_scheduleFactory.ProjectionStub());
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                {
 		                                                    _scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
 		                                                }));
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 			result.Name.Should().Be.EqualTo(_person.Name.ToString());
 		}
 
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 														{
 															_scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, startDate.AddHours(3)))
 														}));
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 			result.MinutesSinceTimeLineStart.Should().Be.EqualTo(15);
 		}
 
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 														{
 															_scheduleFactory.VisualLayerStub(new DateTimePeriod(startDate, endDate))
 														}));
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 
 			var expectedStartTime = TimeZoneHelper.ConvertFromUtc(startDate, _userTimeZone.TimeZone());
 			var expectedEndTime = TimeZoneHelper.ConvertFromUtc(startDate, _userTimeZone.TimeZone());
@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 															_scheduleFactory.VisualLayerStub(layerPeriod)
 														}));
 
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 
 			result.ScheduleLayers.First().LengthInMinutes.Should().Be.EqualTo(layerPeriod.ElapsedTime().TotalMinutes);
 		}
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 															_scheduleFactory.VisualLayerStub(activtyName)
 														}));
 
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 
 			result.ScheduleLayers.First().Payload.Should().Be.EqualTo(activtyName);
 		}
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			scheduleDay.Add(PersonAssignmentFactory.CreateAssignmentWithDayOff(new Scenario("d"), _person, new DateOnly(2000, 1, 1), new DayOffTemplate()));
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new IVisualLayer[0]));
 
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 			result.MinutesSinceTimeLineStart.Should().Be.IncludedIn(0, 60 * 24);
 			result.StartTimeUtc.Should().Be.IncludedIn(new DateTime(1999, 12, 31), new DateTime(2000, 1, 2));
 		}
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 															_scheduleFactory.VisualLayerStub(activtyColor)
 														}));
 
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 
 			result.ScheduleLayers.First().Color.Should().Be.EqualTo(ColorTranslator.ToHtml(activtyColor));
 		}
@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 															_scheduleFactory.VisualLayerStub(layerPeriod2)
 														}));
 
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 
 			var expectedValue = layerPeriod2.StartDateTime.Subtract(layerPeriod1.StartDateTime).TotalMinutes;
 			result.ScheduleLayers.Last().ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(expectedValue);
@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub());
 
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(scheduleDay);
 
 			result.ScheduleLayers.Count().Should().Be.EqualTo(1);
 			result.DayOffText.Should().Be.EqualTo(theDayOff.Description.Name);
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 															_scheduleFactory.VisualLayerStub(period, _person)
 														}));
 
-			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(myDay);
+			var result = Mapper.Map<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>(myDay);
 
 			result.HasUnderlyingDayOff.Should().Be.True();
 		}
@@ -375,9 +375,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 		private void AddNeededMappingProfiles()
 		{
-			var profileStubForHandlingScheduleDays = new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>
+			var profileStubForHandlingScheduleDays = new MappingProfileForProbing<IScheduleDay, ShiftTradeEditPersonScheduleViewModel>
 				{
-					Result = new ShiftTradePersonScheduleViewModel()
+					Result = new ShiftTradeEditPersonScheduleViewModel()
 				};
 			Mapper.AddProfile(profileStubForHandlingScheduleDays);
 		}

@@ -12,7 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 {
 	[TestFixture]
-	public class ShiftTradePersonScheduleViewModelMapperTest
+	public class ShiftTradeAddPersonScheduleViewModelMapperTest
 	{
 		[Test]
 		public void ShouldMapPersonScheduleFromReadModel()
@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Start = DateTime.Now,
 				Model = JsonConvert.SerializeObject(model)
 			};
-			var layerViewModels = new List<ShiftTradeScheduleLayerViewModel>();
-			var layerMapper = MockRepository.GenerateMock<IShiftTradeScheduleLayerViewModelMapper>();
+			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 			
-			var target = new ShiftTradePersonScheduleViewModelMapper(layerMapper);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper);
 			var result = target.Map(readModel);
 
 			result.PersonId.Should().Be.EqualTo(readModel.PersonId);
@@ -68,12 +68,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				Start = DateTime.Now,
 				Model = JsonConvert.SerializeObject(model)
 			};
-			var layerViewModels = new List<ShiftTradeScheduleLayerViewModel>();
-			var layerMapper = MockRepository.GenerateMock<IShiftTradeScheduleLayerViewModelMapper>();
+			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
-			var target = new ShiftTradePersonScheduleViewModelMapper(layerMapper);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper);
 			var result = target.Map(new[] { readModel, readModel });
 
 			result.Count.Should().Be.EqualTo(2);
@@ -100,12 +100,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				IsLastPage = false,
 				MinStart = new DateTime(2013,11,28,7,0,0)
 			};
-			var layerViewModels = new List<ShiftTradeScheduleLayerViewModel>();
-			var layerMapper = MockRepository.GenerateMock<IShiftTradeScheduleLayerViewModelMapper>();
+			var layerViewModels = new List<ShiftTradeAddScheduleLayerViewModel>();
+			var layerMapper = MockRepository.GenerateMock<IShiftTradeAddScheduleLayerViewModelMapper>();
 
 			layerMapper.Stub(x => x.Map(shift.Projection)).Return(layerViewModels);
 
-			var target = new ShiftTradePersonScheduleViewModelMapper(layerMapper);
+			var target = new ShiftTradeAddPersonScheduleViewModelMapper(layerMapper);
 			var result = target.Map(readModel);
 
 			result.IsLastPage.Should().Be.False();

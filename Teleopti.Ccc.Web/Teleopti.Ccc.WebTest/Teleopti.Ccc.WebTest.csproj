@@ -157,12 +157,13 @@
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
-    <Compile Include="Core\Requests\Mapping\ShiftTradePersonScheduleViewModelMapperTest.cs" />
-    <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleLayerViewModelMapperTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
+    <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelMapperTest.cs" />
     <Compile Include="FakeSchedulePersonProvider.cs" />

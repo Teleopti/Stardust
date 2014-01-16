@@ -8,22 +8,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
-	public class ShiftTradePersonScheduleViewModelMapper : IShiftTradePersonScheduleViewModelMapper
+	public class ShiftTradeAddPersonScheduleViewModelMapper : IShiftTradeAddPersonScheduleViewModelMapper
 	{
-		private readonly IShiftTradeScheduleLayerViewModelMapper _layerMapper;
+		private readonly IShiftTradeAddScheduleLayerViewModelMapper _layerMapper;
 
-		public ShiftTradePersonScheduleViewModelMapper(IShiftTradeScheduleLayerViewModelMapper layerMapper)
+		public ShiftTradeAddPersonScheduleViewModelMapper(IShiftTradeAddScheduleLayerViewModelMapper layerMapper)
 		{
 			_layerMapper = layerMapper;
 		}
 
-		public ShiftTradePersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel)
+		public ShiftTradeAddPersonScheduleViewModel Map(IPersonScheduleDayReadModel scheduleReadModel)
 		{
 			if (scheduleReadModel == null || scheduleReadModel.Start == null)
 				return null;
 
 			var shiftReadModel = JsonConvert.DeserializeObject<Model>(scheduleReadModel.Model);
-			return new ShiftTradePersonScheduleViewModel
+			return new ShiftTradeAddPersonScheduleViewModel
 			{
 				PersonId = scheduleReadModel.PersonId,
 				StartTimeUtc = scheduleReadModel.Start.Value,
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			};
 		}
 
-		public IList<ShiftTradePersonScheduleViewModel> Map(IEnumerable<IPersonScheduleDayReadModel> scheduleReadModels)
+		public IList<ShiftTradeAddPersonScheduleViewModel> Map(IEnumerable<IPersonScheduleDayReadModel> scheduleReadModels)
 		{
 			return scheduleReadModels.Select(Map).ToList();
 		}

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				                             });
 
 			var target = new ShiftTradeTimeLineHoursViewModelMapper(loggedOnUser, timeLineHoursViewModelFactory);
-			var result = target.Map(null, new List<ShiftTradePersonScheduleViewModel>(), date);
+			var result = target.Map(null, new List<ShiftTradeAddPersonScheduleViewModel>(), date);
 
 			result.ElementAt(1).HourText.Should().Be.EqualTo("8");
 			result.ElementAt(1).LengthInMinutesToDisplay.Should().Be.EqualTo(60);
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapTimeLineFromSchedules()
 		{
 			var date = DateOnly.Today;
-			var mySchedule = new ShiftTradePersonScheduleViewModel
+			var mySchedule = new ShiftTradeAddPersonScheduleViewModel
 				{
 					ScheduleLayers =
-						new List<ShiftTradeScheduleLayerViewModel>
+						new List<ShiftTradeAddScheduleLayerViewModel>
 							{
-								new ShiftTradeScheduleLayerViewModel
+								new ShiftTradeAddScheduleLayerViewModel
 									{
 										Start = date.Date.AddHours(11),
 										End = date.Date.AddHours(16)
@@ -66,12 +66,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 							}
 				};
 
-			var possibleTradeSchedule = new ShiftTradePersonScheduleViewModel
+			var possibleTradeSchedule = new ShiftTradeAddPersonScheduleViewModel
 				{
 					ScheduleLayers =
-						new List<ShiftTradeScheduleLayerViewModel>
+						new List<ShiftTradeAddScheduleLayerViewModel>
 							{
-								new ShiftTradeScheduleLayerViewModel
+								new ShiftTradeAddScheduleLayerViewModel
 									{
 										Start = date.Date.AddHours(6),
 										End = date.Date.AddHours(13)
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			timeLineHoursViewModelFactory.Stub(x => x.CreateTimeLineHours(period)).Return(timeLineHourViewModels);
 
 			var target = new ShiftTradeTimeLineHoursViewModelMapper(loggedOnUser, timeLineHoursViewModelFactory);
-			var result = target.Map(mySchedule, new List<ShiftTradePersonScheduleViewModel> {possibleTradeSchedule}, date);
+			var result = target.Map(mySchedule, new List<ShiftTradeAddPersonScheduleViewModel> {possibleTradeSchedule}, date);
 			result.Should().Be.SameInstanceAs(timeLineHourViewModels);
 		}
 	}

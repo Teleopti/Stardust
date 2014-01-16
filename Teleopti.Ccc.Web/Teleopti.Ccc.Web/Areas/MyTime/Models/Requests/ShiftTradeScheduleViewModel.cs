@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 			//so it is last if we don't get any
 			IsLastPage = true;
 		}
-		public ShiftTradePersonScheduleViewModel MySchedule { get; set; }
+		public ShiftTradeAddPersonScheduleViewModel MySchedule { get; set; }
 
-		public IEnumerable<ShiftTradePersonScheduleViewModel> PossibleTradeSchedules { get; set; }
+		public IEnumerable<ShiftTradeAddPersonScheduleViewModel> PossibleTradeSchedules { get; set; }
 
 		public IEnumerable<ShiftTradeTimeLineHoursViewModel> TimeLineHours { get; set; }
 

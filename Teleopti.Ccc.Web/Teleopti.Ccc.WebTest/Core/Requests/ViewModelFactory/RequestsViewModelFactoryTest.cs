@@ -231,10 +231,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
 			var personRequest = MockRepository.GenerateStub<IPersonRequest>(); personRequest.Request = shiftTrade;
-			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel()
+			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel
 				                                     {
-					                                     From = new ShiftTradePersonScheduleViewModel(),
-																	 To = new ShiftTradePersonScheduleViewModel()
+														From = new ShiftTradeEditPersonScheduleViewModel(),
+														To = new ShiftTradeEditPersonScheduleViewModel()
 				                                     };
 
 			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum, null, null, null);
@@ -265,8 +265,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel()
 			{
 				TimeLineStartDateTime = timelineStartTime,
-				From = new ShiftTradePersonScheduleViewModel() {StartTimeUtc = startTimeFromSchedule},
-				To = new ShiftTradePersonScheduleViewModel()	  {StartTimeUtc = startTimeToSchedule}
+				From = new ShiftTradeEditPersonScheduleViewModel {StartTimeUtc = startTimeFromSchedule},
+				To = new ShiftTradeEditPersonScheduleViewModel {StartTimeUtc = startTimeToSchedule}
 			};
 
 			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum, null, null, null);

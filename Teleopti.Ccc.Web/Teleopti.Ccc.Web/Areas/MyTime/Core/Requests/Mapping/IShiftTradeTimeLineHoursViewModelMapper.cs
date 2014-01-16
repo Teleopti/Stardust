@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public interface IShiftTradeTimeLineHoursViewModelMapper
 	{
-		IEnumerable<ShiftTradeTimeLineHoursViewModel> Map(ShiftTradePersonScheduleViewModel mySchedule,
-		                                                  IEnumerable<ShiftTradePersonScheduleViewModel>
+		IEnumerable<ShiftTradeTimeLineHoursViewModel> Map(ShiftTradeAddPersonScheduleViewModel mySchedule,
+		                                                  IEnumerable<ShiftTradeAddPersonScheduleViewModel>
 			                                                  possibleTradeSchedules, DateOnly shiftTradeDate);
 	}
 }

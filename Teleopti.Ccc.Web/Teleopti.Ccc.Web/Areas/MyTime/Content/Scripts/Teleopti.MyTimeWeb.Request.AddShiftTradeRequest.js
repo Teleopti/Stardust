@@ -35,7 +35,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		
 		self.noPossibleShiftTrades = ko.observable(false);
 		self.hours = ko.observableArray();
-		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
+		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
 		self.possibleTradeSchedulesRaw = [];
 		self.agentChoosed = ko.observable(null);
@@ -74,10 +74,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    if (myScheduleObject != null) {
 		        mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 		            var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
-		            return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
+		            return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());
 		        });
 		    }
-		    self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
+		    self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedlayers, myScheduleObject));
 		};
 
 		self._createPossibleTradeSchedules = function (possibleTradeSchedules) {
@@ -86,7 +86,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				
 			    var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
 			    	var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
-			    	return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());;
+			    	return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());;
 			    });
 			    var model = new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
 				 self.possibleTradeSchedules.push(model);
