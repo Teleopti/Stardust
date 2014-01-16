@@ -11259,12 +11259,12 @@ These options are activated:
     <comment>Used in Quick forecast wizard page</comment>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
-    <value>Select historical data for templates</value>
+    <value>Select historical data for day templates</value>
     <comment>Quick forecast wizard page</comment>
   </data>
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Show Info Messages</value>
-    <comment>if to show these messages in jobhistory in forecast navigator</comment>
+    <comment>if to show these messages in job history in forecast navigator</comment>
   </data>
   <data name="Errors" xml:space="preserve">
     <value>Errors</value>
