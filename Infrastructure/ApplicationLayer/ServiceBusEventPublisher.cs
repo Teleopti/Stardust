@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	{
 		bool EnsureBus();
 		void Publish(IRaptorDomainMessageInfo message);
+		void PublishWithoutInitiatorInfo(IRaptorDomainMessageInfo message);
 	}
 
 	public class ServiceBusEventPublisher : IServiceBusEventPublisher
@@ -34,6 +35,16 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		}
 		
 		public void Publish(IRaptorDomainMessageInfo message)
+		{
+			if (!_sender.EnsureBus())
+				throw new ApplicationException("Cant find the bus, cant publish the event!");
+
+			_eventContextPopulator.PopulateEventContext(message);
+
+			_sender.Send(message);
+		}
+
+		public void PublishWithoutInitiatorInfo(IRaptorDomainMessageInfo message)
 		{
 			if (!_sender.EnsureBus())
 				throw new ApplicationException("Cant find the bus, cant publish the event!");
