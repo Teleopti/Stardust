@@ -62,7 +62,6 @@
             this.chartControl1.Legend.Position = Syncfusion.Windows.Forms.Chart.ChartDock.Top;
             this.chartControl1.Location = new System.Drawing.Point(0, 0);
             this.chartControl1.Name = "chartControl1";
-            this.chartControl1.PrimaryXAxis.ValueType = Syncfusion.Windows.Forms.Chart.ChartValueType.DateTime;
             this.chartControl1.Size = new System.Drawing.Size(1042, 451);
             this.chartControl1.TabIndex = 0;
             this.chartControl1.TabStop = false;
