@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         payrollExport.ExportPersonCollection;
                 }
 
-                _serviceBusSender.Publish(message);
+                _serviceBusSender.PublishWithoutInitiatorInfo(message);
             }
             return payrollResultId;
         }
