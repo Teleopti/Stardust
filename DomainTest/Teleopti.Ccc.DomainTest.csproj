@@ -1064,6 +1064,7 @@
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForAbsenceTest.cs" />
     <Compile Include="Time\SetupDateTimePeriodDefaultLocalHoursForActivitiesTest.cs" />
     <Compile Include="Time\DateOnlyPeriodTest.cs" />
+    <Compile Include="Time\SetupDateTimePeriodToSelectedScheduleTest.cs" />
     <Compile Include="Time\TimeZoneInfoExtensionsTest.cs" />
     <Compile Include="Time\DateOnlyTest.cs" />
     <Compile Include="Time\DateTimePeriodTest.cs" />
