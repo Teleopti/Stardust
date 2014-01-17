@@ -1,4 +1,37 @@
-﻿@{
+﻿@using Teleopti.Ccc.UserTexts
+@{
 	Layout = null;
 }
+
 <h2>MyReportPartial</h2>
+	
+<div class="container-fluid">
+	<div>
+		val av Daily eller Weekly + datum (val och framåt bakåt)
+	</div>
+	<div class="myReportFigures">
+		<div class="myReportTable">
+			<div class="myReportHeader myReportTableRow"><div class="myReportText">xxMetric</div><div class="myReportValues">xxValue</div></div>
+			<div class="myReportTableRow"><div class="myReportText">@Resources.Adherence</div><div class="myReportValues" data-bind="text: vm.Adherence()"></div></div>
+			<div class="myReportTableRow" style="background: #f0f0ff"><div class="myReportText">xxReadiness</div><div class="myReportValues" data-bind="text: vm.Readiness()"></div></div>
+			<div class="myReportTableRow"><div class="myReportText">@Resources.AverageHandlingTime</div><div class="myReportValues" data-bind="text: vm.AverageHandlingTime()"></div></div>
+			<div class="myReportTableRow" style="background: #f0f0ff"><div class="myReportText">@Resources.AverageTalkTime</div><div class="myReportValues" data-bind="text: vm.AverageTalkTime()"></div></div>
+			<div class="myReportTableRow"><div class="myReportText">@Resources.AverageAfterCallWork</div><div class="myReportValues" data-bind="text: vm.AverageAfterWork()"></div></div>
+			<div class="myReportTableRow" style="background: #f0f0ff"><div class="myReportText">@Resources.AnsweredCalls</div><div class="myReportValues" data-bind="text: vm.AnsweredCalls()"></div></div>
+
+		</div>
+			
+	</div>
+	<div class="floatright">
+		diagram (visa inte nu)
+	</div>
+</div>
+
+<script>
+
+	var vm = new MyReportViewModel();
+	ko.applyBindings(vm);
+
+</script>
+
+			

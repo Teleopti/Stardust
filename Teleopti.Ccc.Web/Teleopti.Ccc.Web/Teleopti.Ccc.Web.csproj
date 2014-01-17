@@ -745,8 +745,10 @@
     <Content Include="Areas\MobileReports\Content\moment\moment.js" />
     <Content Include="Areas\MobileReports\Content\moment\moment.min.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\json2.js" />
+    <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.UserInfo.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.js" />
