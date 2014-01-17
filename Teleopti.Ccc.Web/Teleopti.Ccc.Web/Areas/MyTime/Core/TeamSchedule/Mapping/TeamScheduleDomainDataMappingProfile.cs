@@ -97,8 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                			max = periods.Select(p => p.EndDateTime).Max();
 				                		}
 				                		var timePeriod = new DateTimePeriod(min, max);
-				                		return timePeriod;
-				                		//return roundToWholeQuarters(timePeriod);
+				                		return roundToWholeQuarters(timePeriod);
 				                	});
 		}
 
