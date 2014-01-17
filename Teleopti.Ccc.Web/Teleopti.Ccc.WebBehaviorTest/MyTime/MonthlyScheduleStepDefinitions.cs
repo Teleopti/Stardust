@@ -121,5 +121,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertVisibleUsingJQuery(selector);
             Browser.Interactions.ClickUsingJQuery(selector);
         }
+
+        [Then(@"I should not be able to access month view")]
+        public void ThenIShouldNotBeAbleToAccessMonthView()
+        {
+            Browser.Interactions.AssertNotExists("#week-schedule-today", "#week-schedule-month");
+        }
     }
 }

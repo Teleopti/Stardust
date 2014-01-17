@@ -53,7 +53,7 @@
         </form>
         <ul class="nav">
             <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-            <li><a href="#" id="week-schedule-month" data-bind="click: month">@Resources.MonthView</a></li>
+            <li data-bind="if: underConstructionPermission"><a href="#" id="week-schedule-month" data-bind="click: month">@Resources.MonthView</a></li>
         </ul>
     </div>
 </div>

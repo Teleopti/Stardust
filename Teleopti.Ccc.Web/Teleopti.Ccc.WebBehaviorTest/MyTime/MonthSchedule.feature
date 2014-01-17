@@ -8,6 +8,10 @@ Background:
 Given there is a role with
 	| Field | Value                 |
 	| Name  | Full access to mytime |
+	And there is a role with
+	| Field                     | Value                            |
+	| Name                      | Production full access to mytime |
+	| AccessToUnderConstruction | false                            |
 	And there are shift categories 
 	| Name  |
 	| Early |
@@ -181,3 +185,9 @@ Given I have the role 'Full access to mytime'
 And I view my month schedule for date '2014-01-07'
 When I select the month 'maj' in the calendar 
 Then I should end up in month view for '2014-05-01'
+
+Scenario: Should not see month view in production yet
+Given I have the role 'Production full access to mytime'
+And I have the workflow control set 'Published schedule'
+When I view my week schedule for date '2014-01-07'
+Then I should not be able to access month view
