@@ -405,7 +405,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			//not nice! rewrite tooltips in the future!
 			var text = '';
 			if (self.hasMeeting()) {
-				text =  '<div>{0}</div><div><dl><dt>{1} {2}</dt><dt>{3} {4}</dt><dt>{5} {6}</dt></dl></div>'
+				text = ('<div>{0}</div><div style="text-align: left">' +
+					'<div style="overflow: hidden"><i>{1}</i> {2}</div>' +
+					'<div style="overflow: hidden"><i>{3}</i> {4}</div>' +
+					'<div style="white-space: normal"><i>{5}</i> {6}</div>' +
+					'</div>')
 					.format(self.timeSpan(),
 							parent.userTexts.subjectColon,
 							$('<div/>').text(self.meetingTitle()).html(),
