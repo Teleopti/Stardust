@@ -88,7 +88,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			    	var minutesSinceTimeLineStart = moment(layer.Start).diff(self.timeLineStartTime(), 'minutes');
 			    	return new Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel(layer, minutesSinceTimeLineStart, self.pixelPerMinute());;
 			    });
-			    var model = new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
+			    var model = new Teleopti.MyTimeWeb.Request.PersonScheduleAddShiftTradeViewModel(mappedLayers, personSchedule);
 				 self.possibleTradeSchedules.push(model);
 				 return model;
 			});
@@ -133,7 +133,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		    var lastTimeLineHour = moment(hours[hours.length - 1].EndTime);
 		    self.setTimeLineLengthInMinutes(firstTimeLineHour, lastTimeLineHour);
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
-			    return new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
+			    return new Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel(hour, self);
 			});
 		    
 			self.hours([]);
