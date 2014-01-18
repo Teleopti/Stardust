@@ -355,7 +355,7 @@ GO
 ----------------  
 --Name: David Jonsson
 --Date: 2014-01-18
---Desc: bug #26204 - remove duplicates before adding #12446.
+--Desc: bug #26580 - remove duplicates before adding #12446.
 --		Duplicates only exists when the exact same preference addded to different UTC dates, but merge to same local date (12246)
 ----------------
 create table #deleteUs (date_id int ,interval_id int ,person_id int ,scenario_id int ,preference_type_id int ,shift_category_id int , day_off_id int ,absence_id int)
