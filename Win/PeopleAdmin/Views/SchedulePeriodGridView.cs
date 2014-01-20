@@ -1092,7 +1092,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 			else
 			{
-				int parentColIndex = Grid.CurrentCell.ColIndex;
+				int parentColIndex = gridColumnIndex();
 				columnIndex = (parentColIndex == PeopleAdminConstants.GridParentColumnIndexCheckValue) ?
 					(PeopleAdminConstants.GridColumnIndexValue) :
 					parentColIndex;
@@ -1100,7 +1100,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			return columnIndex;
 		}
 
-		private void SortSchedulePeriodData(bool isAscending)
+	    private int gridColumnIndex()
+	    {
+            if (Grid.CurrentCell.ColIndex == -1) 
+                Grid.CurrentCell.MoveTo(0,0);
+	        return Grid.CurrentCell.ColIndex;
+	    }
+
+	    private void SortSchedulePeriodData(bool isAscending)
 		{
 			// Gets the filtered people grid data as a collection
 			List<SchedulePeriodModel> schedulePeriodcollection =

@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     public class PersonRequestFactory : IPersonRequestFactory
     {
         private readonly IPersistPersonRequest _persistPersonRequest;
-        private readonly IServiceBusSender _serviceBusSender;
+        private readonly IServiceBusEventPublisher _serviceBusSender;
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly ICurrentScenario _currentScenario;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IAssembler<IPersonRequest, PersonRequestDto> _personRequestAssembler;
 
-		  public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
+		  public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IServiceBusEventPublisher serviceBusSender, IPersonRequestRepository personRequestRepository, ICurrentScenario currentScenario, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
         {
             _persistPersonRequest = persistPersonRequest;
             _serviceBusSender = serviceBusSender;
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		            {
 			            PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
 		            };
-                _serviceBusSender.Send(message);
+                _serviceBusSender.Publish(message);
             }
 
             return new PersonRequestDto {Id = result.Id};
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 		                {
 			                PersonRequestId = personRequestDto.Id.GetValueOrDefault(Guid.Empty), AcceptingPersonId = person.Id.GetValueOrDefault(Guid.Empty), Message = personRequestDto.Message
 		                };
-	                _serviceBusSender.Send(message);
+	                _serviceBusSender.Publish(message);
                 }
                 else
                 {

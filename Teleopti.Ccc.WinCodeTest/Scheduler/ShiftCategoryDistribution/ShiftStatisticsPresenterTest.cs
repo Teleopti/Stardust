@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			_presenter.SetCellInfo(style, 0, 3, null);
 			Assert.AreEqual(UserTexts.Resources.Average, style.CellValue);
 
-			_presenter.SetCellInfo(style, 0, 4, null);
-			Assert.AreEqual(UserTexts.Resources.StandardDeviation, style.CellValue);
+			//_presenter.SetCellInfo(style, 0, 4, null);
+			//Assert.AreEqual(UserTexts.Resources.StandardDeviation, style.CellValue);
 		}
 
 		[Test]
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				_presenter.SetCellInfo(style, 1, 0, null);
 				Assert.AreEqual("short", style.CellValue);
 
-				_presenter.SetCellInfo(style, 2, 0, null);
-				Assert.AreEqual(UserTexts.Resources.Total, style.CellValue);
+				//_presenter.SetCellInfo(style, 2, 0, null);
+				//Assert.AreEqual(UserTexts.Resources.Total, style.CellValue);
 			}
 		}
 
@@ -133,60 +133,60 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			}	
 		}
 
-		[Test]
-		public void ShouldSortOnStandardDeviation()
-		{
-			var style = new GridStyleInfo();
+		//[Test]
+		//public void ShouldSortOnStandardDeviation()
+		//{
+		//	var style = new GridStyleInfo();
 
-			using (_mock.Record())
-			{
-				Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();
-				Expect.Call(_model.GetShiftCategoriesSortedByStandardDeviation(false)).Return(_shiftCategories);
-				Expect.Call(_model.ShouldUpdateViews).Return(false);
-			}
+		//	using (_mock.Record())
+		//	{
+		//		Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();
+		//		Expect.Call(_model.GetShiftCategoriesSortedByStandardDeviation(false)).Return(_shiftCategories);
+		//		Expect.Call(_model.ShouldUpdateViews).Return(false);
+		//	}
 
-			using (_mock.Playback())
-			{
-				_presenter.ReSort(4, false);
-				_presenter.SetCellInfo(style, 1, 1, null);
-			}	
-		}
+		//	using (_mock.Playback())
+		//	{
+		//		_presenter.ReSort(4, false);
+		//		_presenter.SetCellInfo(style, 1, 1, null);
+		//	}	
+		//}
 
-		[Test]
-		public void ShouldSetCellTypeToIgnoreOnTotalRowAndNotOnTotalCell()
-		{
-			var style = new GridStyleInfo();
+		//[Test]
+		//public void ShouldSetCellTypeToIgnoreOnTotalRowAndNotOnTotalCell()
+		//{
+		//	var style = new GridStyleInfo();
 
-			using (_mock.Record())
-			{
-				Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();	
-			}
+		//	using (_mock.Record())
+		//	{
+		//		Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();	
+		//	}
 
-			using (_mock.Playback())
-			{
-				_presenter.SetCellInfo(style, 2, 3, null);
-				Assert.AreEqual("IgnoreCellModel", style.CellType);
-			}
-		}
+		//	using (_mock.Playback())
+		//	{
+		//		_presenter.SetCellInfo(style, 2, 3, null);
+		//		Assert.AreEqual("IgnoreCellModel", style.CellType);
+		//	}
+		//}
 
-		[Test]
-		public void ShouldSetCellTypeToNumericReadOnlyCellOnTotalRowAndOnTotalCell()
-		{
-			var style = new GridStyleInfo();
+		//[Test]
+		//public void ShouldSetCellTypeToNumericReadOnlyCellOnTotalRowAndOnTotalCell()
+		//{
+		//	var style = new GridStyleInfo();
 
-			using (_mock.Record())
-			{
-				Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();
-				Expect.Call(_model.ShouldUpdateViews).Return(true);
-				Expect.Call(_model.GetSumOfDeviations()).Return(10d);
-			}
+		//	using (_mock.Record())
+		//	{
+		//		Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();
+		//		Expect.Call(_model.ShouldUpdateViews).Return(true);
+		//		Expect.Call(_model.GetSumOfDeviations()).Return(10d);
+		//	}
 
-			using (_mock.Playback())
-			{
-				_presenter.SetCellInfo(style, 2, 4, null);
-				Assert.AreEqual("NumericReadOnlyCell", style.CellType);
-			}		
-		}
+		//	using (_mock.Playback())
+		//	{
+		//		_presenter.SetCellInfo(style, 2, 4, null);
+		//		Assert.AreEqual("NumericReadOnlyCell", style.CellType);
+		//	}		
+		//}
 
 		[Test]
 		public void ShouldSetMinValue()
@@ -249,24 +249,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			}		
 		}
 
-		[Test]
-		public void ShouldSetStandardDeviationValue()
-		{
-			var style = new GridStyleInfo();
+		//[Test]
+		//public void ShouldSetStandardDeviationValue()
+		//{
+		//	var style = new GridStyleInfo();
 
-			using (_mock.Record())
-			{
-				Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();
-				Expect.Call(_model.ShouldUpdateViews).Return(true);
-				Expect.Call(_model.GetStandardDeviationForShiftCategory(_shiftCategory)).Return(15d);
-			}
+		//	using (_mock.Record())
+		//	{
+		//		Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories).Repeat.AtLeastOnce();
+		//		Expect.Call(_model.ShouldUpdateViews).Return(true);
+		//		Expect.Call(_model.GetStandardDeviationForShiftCategory(_shiftCategory)).Return(15d);
+		//	}
 
-			using (_mock.Playback())
-			{
-				_presenter.SetCellInfo(style, 1, 4, null);
-				Assert.AreEqual(15d, style.CellValue);
-			}	
-		}
+		//	using (_mock.Playback())
+		//	{
+		//		_presenter.SetCellInfo(style, 1, 4, null);
+		//		Assert.AreEqual(15d, style.CellValue);
+		//	}	
+		//}
 
 		[Test]
 		public void ShouldCauseUpdateChartWhenCellValueChangesOnCol1()
@@ -325,41 +325,41 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			}	
 		}
 
-		[Test]
-		public void ShouldSetSumDeviationsWhenShouldUpdateView()
-		{
-			var style = new GridStyleInfo();
+		//[Test]
+		//public void ShouldSetSumDeviationsWhenShouldUpdateView()
+		//{
+		//	var style = new GridStyleInfo();
 
-			using (_mock.Record())
-			{
-				Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories);
-				Expect.Call(_model.ShouldUpdateViews).Return(true);
-				Expect.Call(_model.GetSumOfDeviations()).Return(10d);
-			}
+		//	using (_mock.Record())
+		//	{
+		//		Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories);
+		//		Expect.Call(_model.ShouldUpdateViews).Return(true);
+		//		Expect.Call(_model.GetSumOfDeviations()).Return(10d);
+		//	}
 
-			using (_mock.Playback())
-			{
-				_presenter.SetCellInfo(style, 2, 4, null);
-				Assert.AreEqual(10d, (double)style.CellValue);
-			}		
-		}
+		//	using (_mock.Playback())
+		//	{
+		//		_presenter.SetCellInfo(style, 2, 4, null);
+		//		Assert.AreEqual(10d, (double)style.CellValue);
+		//	}		
+		//}
 
-		[Test]
-		public void ShouldNotSetSumDeviationsWhenShouldNotUpdateView()
-		{
-			var style = new GridStyleInfo();
+		//[Test]
+		//public void ShouldNotSetSumDeviationsWhenShouldNotUpdateView()
+		//{
+		//	var style = new GridStyleInfo();
 
-			using (_mock.Record())
-			{
-				Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories);
-				Expect.Call(_model.ShouldUpdateViews).Return(false);
-			}
+		//	using (_mock.Record())
+		//	{
+		//		Expect.Call(_model.GetSortedShiftCategories()).Return(_shiftCategories);
+		//		Expect.Call(_model.ShouldUpdateViews).Return(false);
+		//	}
 
-			using (_mock.Playback())
-			{
-				_presenter.SetCellInfo(style, 2, 4, null);
-			}	
-		}
+		//	using (_mock.Playback())
+		//	{
+		//		_presenter.SetCellInfo(style, 2, 4, null);
+		//	}	
+		//}
 
 		[Test]
 		public void ShouldGetRowCount()
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 			using (_mock.Playback())
 			{
 				var rowCount = _presenter.RowCount();
-				Assert.AreEqual(2, rowCount);
+				Assert.AreEqual(1, rowCount);
 			}
 		}
 	}

@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentDataSource _dataSourceProvider;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IServiceBusSender _serviceBusSender;
+		private readonly IServiceBusEventPublisher _serviceBusSender;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository, 
 																		IShiftTradeRequestMapper shiftTradeRequestMapper, 
 																		IMappingEngine autoMapper,
-																		IServiceBusSender serviceBusSender,
+																		IServiceBusEventPublisher serviceBusSender,
 																		INow now,
 																		ICurrentDataSource dataSourceProvider,
 																		ICurrentBusinessUnit businessUnitProvider,
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 						Timestamp = _now.UtcDateTime()
 					};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Publish(message));
 			}
 		}
 	}

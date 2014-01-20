@@ -88,13 +88,6 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 			GC.SuppressFinalize(this);
 		}
 
-		/// <summary>
-		/// Virtual dispose method
-		/// </summary>
-		/// <param name="disposing">
-		/// If set to <c>true</c>, explicitly called.
-		/// If set to <c>false</c>, implicitly called from finalizer.
-		/// </param>
 		private void Dispose(bool disposing)
 		{
 			if (disposing)
@@ -104,16 +97,10 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 			ReleaseUnmanagedResources();
 		}
 
-		/// <summary>
-		/// Releases the unmanaged resources.
-		/// </summary>
 		protected virtual void ReleaseUnmanagedResources()
 		{
 		}
 
-		/// <summary>
-		/// Releases the managed resources.
-		/// </summary>
 		protected virtual void ReleaseManagedResources()
 		{
 			if (_customHost!= null)

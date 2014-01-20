@@ -45,19 +45,10 @@ namespace ReplaceString
 			var directories = Directory.GetDirectories(path);
 			try
 			{
-				foreach (var file in files)
-					replaceLinks(file, false);
-
+				replaceLinksInMainFolder(files);
 				replaceFileNames(files, path);
-
-				foreach (var file in directories.SelectMany(Directory.GetFiles))
-					replaceLinks(file, true);
-
-				foreach (var directory in directories.Where(dir => dir.Contains("+")))
-				{
-					var newDir = directory.Replace("+", "_");
-					Directory.Move(directory, newDir);
-				}
+				replaceLinksInSubfolders(directories);
+				changeFolderNames(directories);
 			}
 			catch (Exception)
 			{
@@ -66,6 +57,27 @@ namespace ReplaceString
 			}
 
 			return appStatus;
+		}
+
+		private static void changeFolderNames(IEnumerable<string> directories)
+		{
+			foreach (var directory in directories.Where(dir => dir.Contains("+")))
+			{
+				var newDir = directory.Replace("+", "_");
+				Directory.Move(directory, newDir);
+			}
+		}
+
+		private static void replaceLinksInSubfolders(IEnumerable<string> directories)
+		{
+			foreach (var file in directories.SelectMany(Directory.GetFiles))
+				replaceLinks(file, true);
+		}
+
+		private static void replaceLinksInMainFolder(IEnumerable<string> files)
+		{
+			foreach (var file in files)
+				replaceLinks(file, false);
 		}
 
 		private static void replaceFileNames(IEnumerable<string> files, string path)
@@ -126,6 +138,9 @@ namespace ReplaceString
 		private static void replaceLinks(string filePath, bool isInSubFolder)
 		{
 			string content;
+			if (filePath.ToLower().EndsWith(".png") ||
+			    filePath.ToLower().EndsWith(".jpg"))
+				return;
 			using (var reader = new StreamReader(filePath))
 			{
 				content = reader.ReadToEnd();
