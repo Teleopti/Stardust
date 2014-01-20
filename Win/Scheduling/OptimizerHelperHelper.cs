@@ -225,13 +225,14 @@ namespace Teleopti.Ccc.Win.Scheduling
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IList<ISmartDayOffBackToLegalStateSolverContainer> CreateSmartDayOffSolverContainers(
             IEnumerable<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-            IDaysOffPreferences daysOffPreferences)
+            IDaysOffPreferences daysOffPreferences,
+			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx)
         {
             IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers = new List<ISmartDayOffBackToLegalStateSolverContainer>();
             foreach (var matrixOriginalStateContainer in matrixOriginalStateContainers)
             {
                 IScheduleMatrixLockableBitArrayConverter bitArrayConverter =
-                    new ScheduleMatrixLockableBitArrayConverter(matrixOriginalStateContainer.ScheduleMatrix);
+                    new ScheduleMatrixLockableBitArrayConverter(matrixOriginalStateContainer.ScheduleMatrix, scheduleMatrixLockableBitArrayConverterEx);
 
                 ILockableBitArray bitArray = bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
                                                                       daysOffPreferences.ConsiderWeekAfter);
@@ -252,13 +253,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             IDayOffTemplate dayOffTemplate, 
             IDaysOffPreferences daysOffPreferences, 
             IScheduleDayChangeCallback scheduleDayChangeCallback,
-            IScheduleTagSetter scheduleTagSetter)
+            IScheduleTagSetter scheduleTagSetter,
+			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx)
         {
             if (backToLegalStateSolverContainer.Result)
             {
                 IScheduleMatrixPro matrix = backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix;
                 IScheduleMatrixLockableBitArrayConverter bitArrayConverter =
-                    new ScheduleMatrixLockableBitArrayConverter(matrix);
+                    new ScheduleMatrixLockableBitArrayConverter(matrix, scheduleMatrixLockableBitArrayConverterEx);
 
                 ILockableBitArray doArray = bitArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore,
                                                                       daysOffPreferences.ConsiderWeekAfter);
