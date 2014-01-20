@@ -73,31 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
       
 
 		}
-
-		[Test]
-		public void ShouldNotCreateForEmptyActivity()
-		{
-			var skillList = new List<ISkill> { _skill1, _skill2 };
-			var skillDayList = new List<ISkillDay> { _skillDayForSkill1, _skillDayForSkill2 };
-			using (_mocks.Record())
-			{
-				Expect.Call(_skillResolutionProvider.MinimumResolution(skillList)).Return(15);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { new DateOnly() }))
-					  .Return(skillDayList);
-				Expect.Call(_skillDayForSkill1.Skill).Return(_skill1).Repeat.Any();
-				Expect.Call(_skillDayForSkill2.Skill).Return(_skill2).Repeat.Any();
-				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill1.Activity, 15))
-					  .Return(new List<ISkillIntervalData>());
-				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill2.Activity, 15))
-					  .Return(new List<ISkillIntervalData>());
-			}
-
-			using (_mocks.Playback())
-			{
-				var result = _target.CreateFor(new DateOnly(), skillList, _schedulingResultStateHolder);
-				Assert.AreEqual(0, result.Count);
-			}
-		}
-
+        
 	}
 }
