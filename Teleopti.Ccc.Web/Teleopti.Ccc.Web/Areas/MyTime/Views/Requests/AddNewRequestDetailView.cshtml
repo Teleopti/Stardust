@@ -2,49 +2,63 @@
 @{
     Layout = null;
 }
- 
-<div>
-    <input type="text" class="request-new-subject input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject" maxlength="80"/>
+
+<div class="form-group">
+    <input type="text" class="request-new-subject input-block-level form-control" placeholder="@Resources.Subject" data-bind="value: Subject" maxlength="80"/>
 </div>
-<div>
-    <textarea class="request-new-message input-block-level" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', limitCharacters: 2000" />
+<div class="form-group">
+    <textarea class="request-new-message input-block-level form-control" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', limitCharacters: 2000" />
 </div>
-<div data-bind="visible: ShowAbsencesCombo">
+
+<div class="form-group" data-bind="visible: ShowAbsencesCombo">
     <label>
         @Resources.AbsenceType
     </label>
-    <select class="request-new-absence" data-bind="value: AbsenceId">
-		@foreach (var absenceType in Model.AbsenceTypes)
-		{
-			<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-		}
-    </select>
-</div>
-<div>
-	<span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
-        <input class="request-new-datefrom" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}" type="text" />
-		<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-	</span>
-	<div class="input-group bootstrap-timepicker">
-        <input type="text" class="request-new-timefrom input-sm" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+    <div class ="row">
+        <div class="col-lg-4">
+            <select class="request-new-absence input-sm form-control" data-bind="value: AbsenceId">
+                @foreach (var absenceType in Model.AbsenceTypes)
+                {
+                    <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+                }
+            </select>
+        </div>
     </div>
 </div>
-<div>
-    <span class="input-group"  data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
-        <input class="request-new-dateto" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}" type="text"  />
-        <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-    </span>
-    <div class="input-group bootstrap-timepicker">
-        <input type="text" class="request-new-timeto input-sm" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+<div class="row form-group">
+    <div class="col-lg-4">
+        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
+            <input class="request-new-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+        </span>
+    </div>
+    <div class="col-lg-2 bootstrap-timepicker">
+        <div class="input-group">
+            <input type="text" class="request-new-timefrom input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+        </div>
+    </div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-4">
+        <span class="input-group" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
+            <input class="request-new-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+        </span>
+    </div>
+    <div class="col-lg-2 bootstrap-timepicker">
+        <div class="input-group">
+            <input type="text" class="request-new-timeto input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
+            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+        </div>
     </div>
 </div>
 <label class="checkbox">
-    <input type="checkbox" class="request-new-fullday" data-bind="checked: IsFullDay" /> @Resources.FullDay
+    <input type="checkbox" class="request-new-fullday" data-bind="checked: IsFullDay" />
+    @Resources.FullDay
 </label>
-<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
+<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />
 <div class="pull-right">
     <button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
-	<button class="request-new-send btn btn-primary" data-bind="click: AddRequest">@Resources.Save</button>
+    <button class="request-new-send btn btn-primary" data-bind="click: AddRequest">@Resources.Save</button>
 </div>
