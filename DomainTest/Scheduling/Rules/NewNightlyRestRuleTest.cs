@@ -235,6 +235,95 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 
         }
 
+		[Test]
+		public void ShouldCalculateOvertime()
+		{
+			var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			using (_mocks.Record())
+			{
+				//currentScheduleDay
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+				Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.Any();
+				Expect.Call(_range.Person).Return(_person).Repeat.Any();
+				Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
+					Repeat.Any();
+
+				//yesterday
+				Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 2).AddDays(-1))).Return(_yesterday).Repeat.Any();
+				Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
+				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+				//Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 1));
+
+				mockShift(_yesterday, new DateTimePeriod(new DateTime(2010, 1, 1, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 1, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.End);
+
+				//today
+				Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 2))).Return(_today).Repeat.Any();
+				Expect.Call(_today.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
+				Expect.Call(_today.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+				//Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2));
+
+				mockShift(_today, new DateTimePeriod(new DateTime(2010, 1, 2, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 2, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Both);
+
+				//tomorrow
+				Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 2).AddDays(1))).Return(_tomorrow).Repeat.Any();
+				Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
+				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+				//Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 3));
+
+				mockShift(_tomorrow, new DateTimePeriod(new DateTime(2010, 1, 3, 5, 0, 0, DateTimeKind.Utc), new DateTime(2010, 1, 3, 19, 0, 0, DateTimeKind.Utc)), WorkTimeOptions.Start);
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_responsList = _target.Validate(_ranges, _scheduleDays);
+			}
+
+			Assert.AreEqual(4, _responsList.Count());
+			Assert.IsFalse(_responsList.First().Mandatory);
+			Assert.AreEqual(_target.HaltModify, _responsList.First().Error);
+		}
+
+		[Test]
+		public void ShouldNotCalculateAbsence()
+		{
+			var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			using (_mocks.Record())
+			{
+
+				//currentScheduleDay
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.Any();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+				Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(new DateOnly(2010, 1, 2)).Repeat.Any();
+				Expect.Call(_range.Person).Return(_person).Repeat.Any();
+				Expect.Call(_range.BusinessRuleResponseInternalCollection).Return(new List<IBusinessRuleResponse>()).
+					Repeat.Any();
+
+				//yesterday
+				Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 2).AddDays(-1))).Return(_yesterday).Repeat.Any();
+				Expect.Call(_yesterday.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
+				Expect.Call(_yesterday.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+
+				//today
+				Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 2))).Return(_today).Repeat.Any();
+				Expect.Call(_today.SignificantPart()).Return(SchedulePartView.FullDayAbsence).Repeat.Any();
+				Expect.Call(_today.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+
+				//tomorrow
+				Expect.Call(_range.ScheduledDay(new DateOnly(2010, 1, 2).AddDays(1))).Return(_tomorrow).Repeat.Any();
+				Expect.Call(_tomorrow.SignificantPart()).Return(SchedulePartView.Overtime).Repeat.Any();
+				Expect.Call(_tomorrow.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.Any();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				_responsList = _target.Validate(_ranges, _scheduleDays);
+			}
+
+			Assert.AreEqual(0, _responsList.Count());
+		}
 		private enum WorkTimeOptions
 		{
 			Start,
