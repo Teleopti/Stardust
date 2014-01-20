@@ -353,9 +353,60 @@ WHERE collection_id = @control_collection_id
 	AND param_name = '@time_zone_id'
 GO
 ----------------  
+--Name: David Jonsson
+--Date: 2014-01-18
+--Desc: bug #26580 - remove duplicates before adding #12446.
+--		Duplicates only exists when the exact same preference addded to different UTC dates, but merge to same local date (12246)
+----------------
+create table #deleteUs (date_id int ,interval_id int ,person_id int ,scenario_id int ,preference_type_id int ,shift_category_id int , day_off_id int ,absence_id int)
+insert into #deleteUs 
+select date_id,interval_id,person_id,scenario_id,preference_type_id,shift_category_id,day_off_id,absence_id
+	from (
+	select f.date_id,f.interval_id,f.person_id,f.scenario_id,f.preference_type_id,f.shift_category_id,f.day_off_id,f.absence_id,
+		ROW_NUMBER() over (partition by	b.local_date_id,
+		p.person_id,
+		s.scenario_id,
+		pt.preference_type_id,
+		sc.shift_category_id,
+		do.day_off_id,
+		ab.absence_id
+		order by f.interval_id asc) RowNumber --keep first preference by UTC interval
+	from mart.fact_schedule_preference f
+	inner join mart.dim_person p
+		on p.person_id = f.person_id
+	inner join mart.dim_scenario s
+		on s.scenario_id = f.scenario_id
+	inner join mart.dim_preference_type pt
+		on pt.preference_type_id = f.preference_type_id
+	inner join mart.dim_shift_category sc
+		on sc.shift_category_id = f.shift_category_id
+	inner join mart.dim_day_off do
+		on do.day_off_id = f.day_off_id
+	inner join mart.dim_absence ab
+		on ab.absence_id = f.absence_id
+	inner join mart.bridge_time_zone b
+		on b.date_id = f.date_id
+		and b.interval_id = f.interval_id
+		and p.time_zone_id = b.time_zone_id
+	) a
+	where a.RowNumber>1
+
+DELETE f
+FROM mart.fact_schedule_preference f
+INNER JOIN #deleteUs t
+	ON t.date_id = f.date_id
+	AND t.interval_id = f.interval_id
+	AND t.person_id = f.person_id
+	AND t.scenario_id = f.scenario_id
+	AND t.preference_type_id = f.preference_type_id
+	AND t.shift_category_id = f.shift_category_id
+	AND t.day_off_id = f.day_off_id
+	AND t.absence_id = f.absence_id
+GO
+----------------  
 --Name: David
 --Date: 2013-08-14
---Desc: #12446 - convert UTC date to agent local date
+--Desc: #12246 - convert UTC date to agent local date
 -----------------
 update f
 set

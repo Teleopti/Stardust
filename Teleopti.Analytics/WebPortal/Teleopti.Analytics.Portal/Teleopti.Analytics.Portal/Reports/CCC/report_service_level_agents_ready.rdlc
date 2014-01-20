@@ -494,7 +494,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>2.99999cm</Height>
+        <Height>3cm</Height>
         <Width>18.44947cm</Width>
         <Style />
       </Tablix>
@@ -565,6 +565,9 @@
                   <Value>0.6</Value>
                 </CustomProperty>
               </CustomProperties>
+              <ChartItemInLegend>
+                <LegendText>=Parameters!ResAnsweredCallsWithinSL.Value</LegendText>
+              </ChartItemInLegend>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>
@@ -610,6 +613,9 @@
                   <Value>0.6</Value>
                 </CustomProperty>
               </CustomProperties>
+              <ChartItemInLegend>
+                <LegendText>=Parameters!ResAnsweredCallsAfterSL.Value</LegendText>
+              </ChartItemInLegend>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>
@@ -655,6 +661,9 @@
                   <Value>0.6</Value>
                 </CustomProperty>
               </CustomProperties>
+              <ChartItemInLegend>
+                <LegendText>=Parameters!ResAbandonedCalls.Value</LegendText>
+              </ChartItemInLegend>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>
@@ -853,8 +862,9 @@
               <FontSize>8pt</FontSize>
               <Color>DimGray</Color>
             </Style>
-            <Position>BottomLeft</Position>
+            <Position>BottomCenter</Position>
             <Layout>Row</Layout>
+            <DockOutsideChartArea>true</DockOutsideChartArea>
             <ChartLegendTitle>
               <Caption />
               <Style>
@@ -969,6 +979,9 @@
                   <Value>0.6</Value>
                 </CustomProperty>
               </CustomProperties>
+              <ChartItemInLegend>
+                <LegendText>=Parameters!ResScheduledAgentsReady.Value</LegendText>
+              </ChartItemInLegend>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>
@@ -1013,6 +1026,9 @@
                   <Value>0.6</Value>
                 </CustomProperty>
               </CustomProperties>
+              <ChartItemInLegend>
+                <LegendText>=Parameters!ResAgentsReady.Value</LegendText>
+              </ChartItemInLegend>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>
@@ -2567,7 +2583,6 @@ iif(
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2664,7 +2679,7 @@ iif(
         </PageBreak>
         <Top>24.75cm</Top>
         <Height>3.42895cm</Height>
-        <Width>18.91055cm</Width>
+        <Width>18.91057cm</Width>
         <ZIndex>3</ZIndex>
         <Style />
       </Tablix>
@@ -2727,6 +2742,9 @@ iif(
                   <Style />
                 </ChartDataLabel>
               </ChartEmptyPoints>
+              <ChartItemInLegend>
+                <LegendText>=Parameters!ResOfferedCallsPerScheduledAgent.Value</LegendText>
+              </ChartItemInLegend>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>
@@ -2767,6 +2785,9 @@ iif(
                   <Style />
                 </ChartDataLabel>
               </ChartEmptyPoints>
+              <ChartItemInLegend>
+                <LegendText>=Parameters!ResOfferedCallsPerAgentReady.Value</LegendText>
+              </ChartItemInLegend>
               <ValueAxisName>Primary</ValueAxisName>
               <CategoryAxisName>Primary</CategoryAxisName>
               <ChartSmartLabel>

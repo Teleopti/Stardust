@@ -741,14 +741,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				OptimizerHelperHelper.LockDaysForIntradayOptimization(matrixList, selectedPeriod);
 
                 optimizeIntraday(matrixContainerList, workShiftContainerList, optimizerPreferences);
-
-                // we create a rollback service and do the changes and check for the case that not all white spots can be scheduled
-                ISchedulePartModifyAndRollbackService rollbackService = new SchedulePartModifyAndRollbackService(stateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(KeepOriginalScheduleTag.Instance));
-                foreach (IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer in matrixContainerList)
-                {
-                    if (!matrixOriginalStateContainer.IsFullyScheduled())
-                        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
-                }
             }
         }
 

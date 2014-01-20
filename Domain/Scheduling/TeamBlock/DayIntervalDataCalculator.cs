@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if(!dayIntervalData.Any())
 				return new Dictionary<TimeSpan, ISkillIntervalData>();
 
-	        var resolution = dayIntervalData.First().Value.First().Period.ElapsedTime().TotalMinutes;
+	        var resolution = dayIntervalData.First(x=>x.Value.Count > 0).Value.First().Period.ElapsedTime().TotalMinutes;
             var twoDayIntervalsForAllDays =_twoDaysIntervalGenerator.GenerateTwoDaysInterval( dayIntervalData);
 
             return _medianCalculatorForDays.CalculateMedian(twoDayIntervalsForAllDays, resolution);;

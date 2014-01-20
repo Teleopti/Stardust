@@ -23,8 +23,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IWorkShiftTemplateGenerator _templateGenerator;
         private DefaultAccessibility _defaultAccessibility = DefaultAccessibility.Included;
-        private ISet<DayOfWeek> _accessibilityDaysOfWeek = new HashSet<DayOfWeek>();
-        private ISet<DateTime> _accessibilityDates = new HashSet<DateTime>();
+
+		//change to ISet when https://nhibernate.jira.com/browse/NH-3590 is fixed
+		private IList<DayOfWeek> _accessibilityDaysOfWeek;
+		private IList<DateTime> _accessibilityDates;
+		///
 		private Description _description;
 		private bool _onlyForRestrictions;
 
@@ -35,7 +38,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             _limiterCollection = new List<IWorkShiftLimiter>();
             _ruleSetBagCollection = new List<IRuleSetBag>();
             _templateGenerator = generator;
-            
+						_accessibilityDaysOfWeek = new List<DayOfWeek>();
+			_accessibilityDates = new List<DateTime>();
+
         }
 
 		protected WorkShiftRuleSet() { }
@@ -159,7 +164,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         public virtual void AddAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
         {
-	        _accessibilityDaysOfWeek.Add(dayOfWeek);
+					if (!_accessibilityDaysOfWeek.Contains(dayOfWeek))
+		        _accessibilityDaysOfWeek.Add(dayOfWeek);
         }
 
         public virtual void RemoveAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
@@ -171,7 +177,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         {
             InParameter.VerifyDateIsUtc("dateTime",dateTime);
             dateTime = dateTime.Date;
-	        _accessibilityDates.Add(dateTime);
+					if(!_accessibilityDates.Contains(dateTime))
+						_accessibilityDates.Add(dateTime);
         }
 
         public virtual void RemoveAccessibilityDate(DateTime dateTime)
@@ -205,8 +212,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         private void reinitializeFields()
         {
-            _accessibilityDaysOfWeek = new HashSet<DayOfWeek>();
-            _accessibilityDates = new HashSet<DateTime>();
+            _accessibilityDaysOfWeek = new List<DayOfWeek>();
+            _accessibilityDates = new List<DateTime>();
         }
         #endregion Methods 
 

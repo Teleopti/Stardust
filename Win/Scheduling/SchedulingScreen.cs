@@ -2650,12 +2650,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IScheduleDay scheduleDay = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 
 				if (scheduleDay == null)
+				{
+					SplitterManager.ShowEditor = false;
 					return;
+				}
 
 				scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
 
 				if (_showEditor)
+				{
+					if (!SplitterManager.ShowEditor) SplitterManager.ShowEditor = true;
 					schedulePartToEditor(scheduleDay);
+				}
 
 				checkEditable(_scheduleView.PartIsEditable());
 				if (scheduleDay != null)
@@ -6366,6 +6372,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			showFilterDialog();
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.RefreshTabInfoPanels();
+			updateShiftEditor();
 		}
 
 		private void refreshEntitiesUsingMessageBroker()
@@ -7079,6 +7086,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.RefreshTabInfoPanels();
+			updateShiftEditor();
 		}
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)
