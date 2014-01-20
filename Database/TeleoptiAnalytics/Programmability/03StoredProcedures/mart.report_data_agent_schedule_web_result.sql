@@ -5,7 +5,7 @@ GO
 /*
 exec mart.report_data_agent_schedule_web_result 
 @date_from='2013-02-05 00:00:00',
-@date_to='2013-02-07 00:00:00',
+@date_to='2013-02-06 00:00:00',
 @adherence_id=N'1',
 @time_zone_id=N'2',
 @person_code='11610fe4-0130-4568-97de-9b5e015b2564',
@@ -28,7 +28,27 @@ set @interval_from=0
 select @interval_to=max(interval_id) from mart.dim_interval
 
 
+CREATE TABLE #tmpResult
+	(
+	date smalldatetime,
+	person_code uniqueidentifier,
+	person_name nvarchar(200),
+	scheduled_ready_time decimal(20,2),
+	ready_time_s int,
+	ready_time_per_scheduled_ready_time decimal(20,2),
+	answered_calls int DEFAULT 0,
+	avg_answered_calls decimal(20,2),
+	avg_answered_calls_ready_hour decimal(20,2),
+	occupancy decimal(20,2),
+	adherence_calc_s decimal(20,2),
+	adherence decimal(20,2),
+	deviation_s decimal(20,2),
+	handling_time_s decimal(20,2),
+	after_call_work_time_s decimal(20,2),
+	talk_time_s  decimal(20,2)
+	)
 
+INSERT INTO  #tmpResult 
 exec mart.report_data_agent_schedule_result 
 @date_from=@date_from,
 @date_to=@date_to,
@@ -47,5 +67,41 @@ exec mart.report_data_agent_schedule_result
 @language_id=null,
 @business_unit_code=@business_unit_code, 
 @from_matrix=0
+
+SELECT 
+	--person_code,
+	date,
+		SUM(answered_calls) AS AnsweredCalls,
+		--CASE
+		--	WHEN SUM(answered_calls)<=0 THEN 0
+		--	ELSE SUM(talk_time_s) / SUM(answered_calls)
+		--END AS AverageTalkTime,
+		--CASE
+		--	WHEN SUM(answered_calls)<=0 THEN 0
+		--	ELSE SUM(after_call_work_time_s) / SUM(answered_calls)
+		--END AS AverageAfterWork,
+		--CASE
+		--	WHEN SUM(answered_calls)<=0 THEN 0
+		--	ELSE SUM(handling_time_s) / SUM(answered_calls)
+		--END AS AverageHandlingTime,
+		--CASE
+		--	WHEN SUM(adherence_calc_s) = 0 THEN 1
+		--	ELSE CONVERT(decimal(20,2),(SUM(adherence_calc_s) - SUM(deviation_s))/SUM(adherence_calc_s))
+		--END AS Adherence,
+		--CASE
+		--	WHEN SUM(scheduled_ready_time)<=0 THEN 0
+		--	ELSE CONVERT(decimal(20,2),SUM(ready_time_s)/SUM(scheduled_ready_time))
+		--END AS Readiness'
+		SUM(talk_time_s) AS TalkTime,
+		SUM(after_call_work_time_s) AS AfterCallWorkTime,
+		SUM(handling_time_s) AS HandlingTim,
+		SUM(ready_time_s) AS ReadyTime,
+		SUM(scheduled_ready_time) AS ScheduledReadyTime,
+		SUM(adherence_calc_s) AS AdherenceTime,
+		SUM(deviation_s) AS Deviation
+ FROM  #tmpResult
+ group by date
+
+DROP TABLE #tmpResult
 
 go
