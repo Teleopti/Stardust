@@ -90,6 +90,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 	return {
+		ActivatePlaceHolder: function() {
+			$('textarea, :text, :password').placeholder();
+		},
+		
 		//Activating tooltip where available
 		ActivateTooltip: function () {
 			$('.qtip-tooltip')

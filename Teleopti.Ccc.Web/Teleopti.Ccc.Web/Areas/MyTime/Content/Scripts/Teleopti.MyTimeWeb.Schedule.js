@@ -91,7 +91,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	    self.initialRequestDay = null;
 		self.selectedDateSubscription = null;
 
-	    self.showAddRequestToolbar = ko.computed(function() {
+		self.showAddRequestToolbar = ko.computed(function () {
 		    return (self.requestViewModel() || '') != '';
 	    });
 
@@ -171,14 +171,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		}
 
-	    self.showAddTextRequestForm = function() {
+		self.showAddTextRequestForm = function() {
 	        if (self.textPermission() !== true) {
 	            return;
 	        }
 	        self.setRequestViewModel();
 	        _fillFormData();
 	        self.requestViewModel().AddTextRequest(false);
-	    };
+			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+		};
 	    
 	    self.showAddAbsenceRequestForm = function () {
 	        if (self.absenceRequestPermission() !== true) {
@@ -187,6 +188,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	        self.setRequestViewModel();
 	        _fillFormData();
 	        self.requestViewModel().AddAbsenceRequest(false);
+	        Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 	    };
 
 		self.showAddOvertimeAvailabilityForm = function(data) {
@@ -214,6 +216,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	    	} else {
 	    		self.textRequestActivate();
 	    	}
+	    	Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 	    };
 	    
         self.setRequestViewModel = function()
@@ -225,15 +228,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
             self.requestViewModel(model);
         };
 		
+        function displayOvertimeAvailability(overtimeAvailability) {
+        	self.CancelAddingNewRequest();
+        	_fetchData();
+        }
+		
         self.setOvertimeAvailabilityViewModel = function () {
-        	var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, _displayOvertimeAvailability);
+        	var model = new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability);
 	        self.requestViewModel(model);
         };
-		
-        function _displayOvertimeAvailability(overtimeAvailability) {
-        	self.CancelAddingNewRequest();
-	        _fetchData();
-        }
 
 	    self.CancelAddingNewRequest = function() {
 	        self.requestViewModel(null);

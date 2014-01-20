@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/jqueryui/jquery-ui-1.10.2.custom.js",
 					"~/Content/Scripts/json2.js",
 					"~/Content/Scripts/jquery.hoverIntent.js",
-					"~/Content/jquery-plugin/jquery.placeholder.min.js",
 					"~/Content/Scripts/jquery.qtip.js",
 					"~/Content/Scripts/indexOf.js",
 					"~/Content/signalr/jquery.signalR-1.1.4.js",

@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
     }
 
 	function _addTextRequestClick() {
-	    _prepareForAddingRequest();
+		_prepareForAddingRequest();
 		parentViewModel.requestViewModel().AddTextRequest(true);
 	}
 
