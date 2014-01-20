@@ -2,9 +2,9 @@
 require.config({
 
 	paths: {
-	    jquery: '../../../../Content/jquery/jquery-1.10.2',
-	    lazy: '../../../../Content/lazy/lazy.min',
-	    knockout: '../../../../Content/Scripts/knockout-2.2.1',
+		jquery: '../../../../Content/jquery/jquery-1.10.2',
+		lazy: '../../../../Content/lazy/lazy.min',
+		knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		respond: '../../../../Content/respondjs/respond.min',
 		moment: '../../../../Content/moment/moment',
@@ -19,30 +19,34 @@ require.config({
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko-amd',
 		select2: '../../../../Content/select2/select2',
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
-	    
+		buster: '../../../../Content/busterjs/buster-test',
+
 		knockoutBindings: 'knockout.bindings',
-	    
+
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
 		resources: 'require/resources',
 
 		templates: '../templates',
-		
+
 		text: '../../../../Content/require/text'
 
 	},
 
 	// dependencies that requires loading order
 	shim: {
+		'buster': {
+			exports: 'buster'
+		},
 		'jquery': {
 			exports: 'jQuery'
 		},
 		'jqueryui': ['jquery'],
 		'lazy': {
-		    exports: 'Lazy'
+			exports: 'Lazy'
 		},
 		'bootstrap': ['jquery'],
-		
+
 		'knockoutBindings': ['knockout'],
 		'select2': ['jquery', 'knockoutBindings'],
 		'timepicker': ['bootstrap', 'knockoutBindings'],
@@ -56,31 +60,45 @@ require.config({
 	}
 });
 
-require([
-        'jquery',
-        'modernizr',
-        'respond',
-        'bootstrap',
-        'layout'
-    ], function() {
+var isTestRun = document.location.href.indexOf('Tests.html') > 0;
 
-    });
+if (isTestRun) {
 
-window.test = {
-    callViewMethodWhenReady: function (viewName, method) {
-        
-        var args = Array.prototype.slice.call(arguments, 2);
-        
-        require(['views/' + viewName + '/view'], function (view) {
-            
-            var callMethodIfReady = function () {
-                if (view.ready)
-                    view[method].apply(view, args);
-                else
-                    setTimeout(callMethodIfReady, 20);
-            };
-            setTimeout(callMethodIfReady, 0);
+	require([
+			'tests'
+	], function () {
 
-        });
-    }
-};
+	});
+
+} else {
+
+	require([
+			'jquery',
+			'modernizr',
+			'respond',
+			'bootstrap',
+			'layout'
+	], function () {
+
+	});
+
+	window.test = {
+		callViewMethodWhenReady: function (viewName, method) {
+
+			var args = Array.prototype.slice.call(arguments, 2);
+
+			require(['views/' + viewName + '/view'], function (view) {
+
+				var callMethodIfReady = function () {
+					if (view.ready)
+						view[method].apply(view, args);
+					else
+						setTimeout(callMethodIfReady, 20);
+				};
+				setTimeout(callMethodIfReady, 0);
+
+			});
+		}
+	};
+
+}
