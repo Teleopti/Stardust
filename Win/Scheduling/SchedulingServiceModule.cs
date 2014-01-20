@@ -202,6 +202,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
             builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
+			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>();
+
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
