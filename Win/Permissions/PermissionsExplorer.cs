@@ -335,6 +335,14 @@ namespace Teleopti.Ccc.Win.Permissions
             {
                 rootNode.Enabled = false;
             }
+
+	        if (applicationFunction.ForeignSource != "Matrix") return;
+	        if (applicationFunction.FunctionCode.StartsWith(@"V8/") &&
+	            !DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
+		            DefinedLicenseOptionPaths.TeleoptiCccVersion8))
+	        {
+		        rootNode.Enabled = false;
+	        }
         }
 
         private void changeCheckStateOfFunctionTree()
