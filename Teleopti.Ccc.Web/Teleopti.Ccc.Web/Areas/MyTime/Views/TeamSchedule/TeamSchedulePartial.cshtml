@@ -85,11 +85,14 @@
 									var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
-									<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
-										style="width: @(widthPixel)px;
-																																		  @left: @(leftPixel)px;
-																																		  background-color: @layer.Color;
-																																		  @(!agentSchedule.HasDayOffUnder)"> </li>
+                                    var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
+								    <li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
+								        style="
+                                            width: @(widthPixel)px;
+                                            @left: @(leftPixel)px;
+                                            background-color: @layer.Color;
+                                            @(!agentSchedule.HasDayOffUnder ? IEString : "")">
+								    </li>
 								}
 							}
 						</ul>
