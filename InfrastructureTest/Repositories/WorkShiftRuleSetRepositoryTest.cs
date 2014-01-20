@@ -116,30 +116,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyFindAllWithAccessibility()
-        {
-            IWorkShiftTemplateGenerator generator =
-                new WorkShiftTemplateGenerator(act, new TimePeriodWithSegment(8, 0, 10, 20, 15),
-                                               new TimePeriodWithSegment(17, 0, 19, 0, 25), shiftCat);
-            DateTime theDate = new DateTime(2008,1,1,0,0,0,DateTimeKind.Utc);
-            WorkShiftRuleSet ruleSet = new WorkShiftRuleSet(generator);
-            ruleSet.Description = new Description("first", "sdg");
-            ruleSet.AddAccessibilityDate(theDate);
-            ruleSet.AddAccessibilityDayOfWeek(DayOfWeek.Friday);
-
-            PersistAndRemoveFromUnitOfWork(ruleSet);
-
-            IList<IWorkShiftRuleSet> res = new WorkShiftRuleSetRepository(UnitOfWork).FindAllWithAccessibility();
-
-            Assert.AreEqual(1, res.Count);
-
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(res[0].AccessibilityDates));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(res[0].AccessibilityDaysOfWeek));
-            Assert.AreEqual(1,res[0].AccessibilityDates.Count());
-            Assert.AreEqual(1, res[0].AccessibilityDaysOfWeek.Count());
-        }
-
-        [Test]
         public void VerifyFindAllWithLimitersAndExtenders()
         {
             IWorkShiftTemplateGenerator generator =
