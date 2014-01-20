@@ -113,7 +113,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private TimeSpan? checkDays(IScheduleDay firstDay, IScheduleDay secondDay, TimeSpan nightRest)
         {
-            if(!(firstDay.SignificantPart() == SchedulePartView.MainShift && secondDay.SignificantPart() == SchedulePartView.MainShift))
+	        var firstSignificant = firstdDay.SignificantPart();
+	        var secondSignificant = secondDay.SignificantPart();
+
+			bool checkFirstDay = firstSignificant == SchedulePartView.MainShift ||
+								 firstSignificant == SchedulePartView.Overtime;
+			bool checkSecondDay = secondSignificant == SchedulePartView.MainShift ||
+								  secondSignificant == SchedulePartView.Overtime;
+
+			if(!(checkFirstDay && checkSecondDay))
                 return null;
 
         	var secondDayStart = _workTimeStartEndExtractor.WorkTimeStart(secondDay.ProjectionService().CreateProjection());
