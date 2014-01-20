@@ -23,4 +23,3 @@ FROM [RTA].[ActualAgentState_History] WITH (TABLOCKX)
 
 TRUNCATE TABLE [RTA].[ActualAgentState_History]
 
-DBCC CHECKIDENT ('RTA.ActualAgentState_History', RESEED, 0);
