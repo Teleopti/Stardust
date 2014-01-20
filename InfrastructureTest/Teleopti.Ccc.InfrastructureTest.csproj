@@ -417,6 +417,7 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkInitiatorIdentifierHandlingTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\SimpleAdherenceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
