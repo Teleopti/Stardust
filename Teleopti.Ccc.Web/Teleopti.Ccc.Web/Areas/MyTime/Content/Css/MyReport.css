@@ -39,3 +39,6 @@
 .fixed-non-responsive.container {
 	width: 99%;
 }
+.yesterday:hover  {
+	cursor: pointer;
+}

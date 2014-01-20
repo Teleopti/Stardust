@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		//}
 
 		[HttpGet]
-		public JsonResult OnDates()
+		public JsonResult OnDates(DateTime startDate)
 		{
 			var model = new MyReportModel
 			{
@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				AverageAfterWork = 15,
 				AverageHandlingTime = 135,
 				AverageTalkTime = 120,
-				Readiness = .88
+				Readiness = .88,
+				DisplayDate = startDate.ToShortDateString()
 			};
 
 			return Json(model, JsonRequestBehavior.AllowGet);
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	//temp here only
 	public class MyReportModel
 	{
+		public string DisplayDate { get; set; }
 		public double Adherence { get; set; }
 		public double Readiness { get; set; }
 		public int AverageHandlingTime { get; set; }
