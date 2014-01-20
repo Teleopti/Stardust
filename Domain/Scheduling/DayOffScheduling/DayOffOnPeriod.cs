@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			{
 				if (hasContractDayOffDefinition.IsDayOff(scheduleDay))
 				{
-					if (scheduleDay.PersonDayOffCollection().Count == 0) allContractDayOffIsSatisfied = false;
+					if (!scheduleDay.HasDayOff()) allContractDayOffIsSatisfied = false;
 					contractDayOffs.Add(scheduleDay);
 				}
 			}

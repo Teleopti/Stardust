@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mock.Record())
 			{
-				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(scheduleDay1.HasDayOff()).Return(false);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
 				Expect.Call(_dayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay1)).Return(false);
 			}
@@ -94,11 +94,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			var dateOnly1 = new DateOnly(2013, 10, 15);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly1, dateOnly1);
 			_target = new DayOffOnPeriod(dateOnlyPeriod, scheduleDays, 0);
-			var dayOff = PersonDayOffFactory.CreatePersonDayOff();
-
+			
 			using (_mock.Record())
 			{
-				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>{dayOff}));
+				Expect.Call(scheduleDay1.HasDayOff()).Return(true);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
 			}
 
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mock.Record())
 			{
-				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(scheduleDay1.HasDayOff()).Return(false);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
 				Expect.Call(_dayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay1)).Return(true);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay1, _schedulingOptions)).Return(effectiveRestriction);
@@ -186,8 +185,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mock.Record())
 			{
-				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
-				Expect.Call(scheduleDay5.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(scheduleDay1.HasDayOff()).Return(false);
+				Expect.Call(scheduleDay5.HasDayOff()).Return(false);
 
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay2)).Return(false);
