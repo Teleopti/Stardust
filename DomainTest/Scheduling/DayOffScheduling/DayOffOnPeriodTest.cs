@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
 
@@ -71,6 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mock.Record())
 			{
+				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
 				Expect.Call(_dayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay1)).Return(false);
 			}
@@ -80,6 +84,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				var scheduleDay = _target.FindBestSpotForDayOff(_hasContractDayOffDefinition, _dayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions);
 				Assert.IsNull(scheduleDay);
 			}	
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenAllContractDayOffsIsFulFilled()
+		{
+			var scheduleDay1 = _mock.StrictMock<IScheduleDay>();
+			var scheduleDays = new List<IScheduleDay> { scheduleDay1 };
+			var dateOnly1 = new DateOnly(2013, 10, 15);
+			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly1, dateOnly1);
+			_target = new DayOffOnPeriod(dateOnlyPeriod, scheduleDays, 0);
+			var dayOff = PersonDayOffFactory.CreatePersonDayOff();
+
+			using (_mock.Record())
+			{
+				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>{dayOff}));
+				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
+			}
+
+			using (_mock.Playback())
+			{
+				var scheduleDay = _target.FindBestSpotForDayOff(_hasContractDayOffDefinition, _dayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions);
+				Assert.IsNull(scheduleDay);
+			}		
 		}
 
 		[Test]
@@ -95,6 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mock.Record())
 			{
+				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
 				Expect.Call(_dayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay1)).Return(true);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay1, _schedulingOptions)).Return(effectiveRestriction);
@@ -158,6 +186,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 			using (_mock.Record())
 			{
+				Expect.Call(scheduleDay1.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+				Expect.Call(scheduleDay5.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>()));
+
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay1)).Return(true);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay2)).Return(false);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay3)).Return(false);
