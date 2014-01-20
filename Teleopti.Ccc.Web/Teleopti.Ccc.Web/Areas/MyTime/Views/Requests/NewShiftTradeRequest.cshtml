@@ -5,22 +5,27 @@
         <span id="Request-add-loaded-ready"></span>
     </div>
     <span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
-	<div id="Request-add-shift-trade-missing-wcs-message" class="alert alert-block" data-bind="visible : missingWorkflowControlSet">
-		@Resources.MissingWorkflowControlSet
-	</div>
-	<div data-bind="if : !missingWorkflowControlSet()" class="input-group">
-		<span class="input-group-addon" data-bind="clickable: previousDateValid">
-			<i class="glyphicon glyphicon-arrow-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
-		</span>
-		<input type="text" class="col-md-2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
-		<span class="input-group-addon" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
-			<i class="glyphicon glyphicon-th" ></i>
-		</span>
-		<span class="input-group-addon" data-bind="clickable: nextDateValid, enable: nextDateValid">
-			<i class="glyphicon glyphicon-arrow-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
-			
-		</span>
-	</div>
+    <div id="Request-add-shift-trade-missing-wcs-message" class="alert alert-block" data-bind="visible : missingWorkflowControlSet">
+        @Resources.MissingWorkflowControlSet
+    </div>
+    <div class="row">
+        <div class="col-lg-4 form-group">
+            <div data-bind="if: !missingWorkflowControlSet()" class="input-group">
+
+                <span class="input-group-addon" data-bind="clickable: previousDateValid">
+                    <i class="glyphicon glyphicon-arrow-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
+                </span>
+                <input type="text" class="col-md-2 add-shifttrade-datepicker form-control" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+                <span class="input-group-addon" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+                    <i class="glyphicon glyphicon-th"></i>
+                </span>
+                <span class="input-group-addon" data-bind="clickable: nextDateValid, enable: nextDateValid">
+                    <i class="glyphicon glyphicon-arrow-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
+
+                </span>
+            </div>
+        </div>
+        </div>
 	<div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
 		<div class="shift-trade-add-schedule">
 			<div class="shift-trade-timeline" data-bind="foreach: hours">
