@@ -748,8 +748,12 @@ Personal drop down menu
 End personal drop down menu
 */
 
-.fixed-non-responsive.container{
+.responsive-header.container{
 	max-width: 965px;
+}
+
+.fixed-non-responsive.container{
+	width: 965px;
 }
 
 .visibility {
