@@ -12,10 +12,10 @@
 	<div class="navbar-inner">
 		<form class="navbar-form pull-left">
 			<div class="input-append input-prepend">
-				<button class="btn" data-bind="click: previousDay, css: 'done'"><i class="icon-arrow-left"></i></button>
+				<button class="btn" data-bind="click: previousDay, css: 'done'"><i class="icon-chevron-left"></i></button>
 				<input data-bind="value: displayDate" type="text" class="span2 text-center" readonly="readonly"/>
 				<button class="btn moment-datepicker"><i class="icon-th"></i></button>
-				<button class="btn" data-bind="click: nextDay, css: 'done'"><i class="icon-arrow-right"></i></button>
+				<button class="btn" data-bind="click: nextDay, css: 'done'"><i class="icon-chevron-right"></i></button>
 			</div>
 		</form>
 		<ul class="nav" data-bind="if: showTeamPicker">
@@ -50,8 +50,8 @@
 		</div>
 	</div>
 </div>
-<div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
-	<div class="body-teamschedule-inner">
+<div id="TeamSchedule-body" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+	<div>
 		
 		<div class="teamschedule relative ui-corner-all">
 
@@ -61,7 +61,7 @@
 					@foreach (var time in Model.TimeLine)
 					{
 						<li class="teamschedule-timeline-time @(time.ShortTime.Contains(":") ? "minute" : "hour") absolute" style="@left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
-							<div class="teamschedule-timeline-label ui-corner-all">@time.ShortTime</div>
+							<div class="teamschedule-timeline-label label label-info ui-corner-all">@time.ShortTime</div>
 						</li>
 					}
 				</ul>
@@ -85,12 +85,11 @@
 									var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
-									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
 									<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
 										style="width: @(widthPixel)px;
 																																		  @left: @(leftPixel)px;
 																																		  background-color: @layer.Color;
-																																		  @(!agentSchedule.HasDayOffUnder ? IEString : "")"> </li>
+																																		  @(!agentSchedule.HasDayOffUnder)"> </li>
 								}
 							}
 						</ul>

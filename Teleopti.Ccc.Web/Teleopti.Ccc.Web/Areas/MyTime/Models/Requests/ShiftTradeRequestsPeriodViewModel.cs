@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
+﻿using System;
+
+namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
 	public class ShiftTradeRequestsPeriodViewModel
 	{

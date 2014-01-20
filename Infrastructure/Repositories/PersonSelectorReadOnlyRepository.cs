@@ -9,7 +9,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-
     public class PersonSelectorReadOnlyRepository : IPersonSelectorReadOnlyRepository
     {
         private readonly IStatelessUnitOfWork _unitOfWork;
@@ -80,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
     }
 
-    public class PersonSelectorOrganization : IPersonSelectorOrganization
+	public class PersonSelectorOrganization : IPersonSelectorOrganization
     {
         public Guid PersonId { get; set; }
 

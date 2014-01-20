@@ -1,23 +1,16 @@
-﻿using System;
-using System.Linq;
-using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class RequestsStepDefinition
 	{
-		private RequestsPage _page { get { return Pages.Pages.RequestsPage; } }
-
 		[When(@"I click on the request at position '(.*)' in the list")]
 		public void WhenIClickOnTheRequestAtPositionInTheList(int position)
 		{
@@ -158,14 +151,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the deny button")]
 		public void WhenIShouldNotSeeTheDenyButton()
 		{
-			EventualAssert.That(() => _page.DenyShiftTradeButton.IsDisplayed(), Is.False);
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Deny-shift-trade");
 		}
 
 		[When(@"I click the Deny button on the shift request")]
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
-			EventualAssert.That(() => _page.RequestsDeleteButton().IsDisplayed(), Is.False);
-			_page.DenyShiftTradeButton.EventualClick();
+			Browser.Interactions.AssertNotExists("#Deny-shift-trade", ".close");
+			Browser.Interactions.Click("#Deny-shift-trade");
 		}
 
 		[Then(@"I should not see a delete button on the request")]
@@ -177,13 +170,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see '(.*)' as the sender of the request")]
 		public void ThenIShouldSeeAsTheSenderOfTheRequest(string name)
 		{
-			EventualAssert.That(() => _page.ShiftTradeSender.Text, Is.EqualTo(name));
+			Browser.Interactions.AssertFirstContains("#Request-shift-trade-sender", name);
 		}
 
 		[Then(@"I should see '(.*)' as the receiver of the request")]
 		public void ThenIShouldSeeAsTheReceiverOfTheRequest(string name)
 		{
-			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
+			Browser.Interactions.AssertFirstContains("#Request-shift-trade-reciever", name);
 		}
 
 		[When(@"I click on shifttrade resend button")]

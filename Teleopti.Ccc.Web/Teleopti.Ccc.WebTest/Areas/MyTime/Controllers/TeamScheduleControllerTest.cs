@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -7,7 +6,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -63,32 +61,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			target.Index(DateOnly.Today, null);
 
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(DateOnly.Today, team.Id.Value));
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldReturnTeamsAsJson()
-		{
-			var teams = new[] {new SelectGroup()};
-			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			viewModelFactory.Stub(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today)).Return(teams);
-
-			var target = new TeamScheduleController(viewModelFactory, null);
-
-			var result = target.Teams(DateOnly.Today);
-
-			var data = result.Data as IEnumerable<SelectGroup>;
-			data.Should().Have.SameValuesAs(teams);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
-		{
-			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var target = new TeamScheduleController(viewModelFactory, null);
-
-			target.Teams(null);
-
-			viewModelFactory.AssertWasCalled(x => x.CreateTeamOrGroupOptionsViewModel(DateOnly.Today));
-		}
+		}	
 	}
 }
