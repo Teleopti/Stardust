@@ -18,16 +18,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly ILinkProvider _linkProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
+		private readonly IUserCulture _userCulture;
 
 		public RequestsViewModelMappingProfile(IUserTimeZone userTimeZone,
 																			ILinkProvider linkProvider,
 																			ILoggedOnUser loggedOnUser,
-																			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
+																			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, IUserCulture userCulture)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
+			_userCulture = userCulture;
 		}
 
 		protected override void Configure()
@@ -36,7 +38,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Link, o => o.MapFrom(s => s))
 				.ForMember(d => d.Subject, o => o.MapFrom(s => s.GetSubject(new NoFormatting())))
 				.ForMember(d => d.Dates,
-									 o => o.MapFrom(s => s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone())))
+									 o => o.ResolveUsing(s =>
+										 {
+											 if (s.Request.RequestType == RequestType.ShiftTradeRequest)
+											 {
+												 var dateOnlyPeriod = s.Request.Period.ToDateOnlyPeriod(_userTimeZone.TimeZone());
+												 return dateOnlyPeriod.StartDate == dateOnlyPeriod.EndDate
+													        ? dateOnlyPeriod.StartDate.ToShortDateString(_userCulture.GetCulture())
+													        : dateOnlyPeriod.ToShortDateString(_userCulture.GetCulture());
+											 }
+											 return s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone());
+										 }))
 				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 					{
 						var ret = s.StatusText;

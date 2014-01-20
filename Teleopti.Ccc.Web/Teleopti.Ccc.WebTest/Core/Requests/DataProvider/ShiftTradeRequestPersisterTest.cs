@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IShiftTradeRequestMapper mapper;
 		private IMappingEngine autoMapper;
 		private IPersonRequestRepository repository;
-		private IServiceBusSender serviceBusSender;
+		private IServiceBusEventPublisher serviceBusSender;
 		private IShiftTradeRequestSetChecksum shiftTradeSetChecksum;
 
 		[SetUp]
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			mapper = MockRepository.GenerateMock<IShiftTradeRequestMapper>();
 			autoMapper = MockRepository.GenerateMock<IMappingEngine>();
 			repository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			serviceBusSender = MockRepository.GenerateMock<IServiceBusEventPublisher>();
 			shiftTradeSetChecksum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 		}
 

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class ImportForecastsFileCommandHandlerTest
     {
         private MockRepository _mock;
-        private IServiceBusSender _busSender;
+		private IServiceBusEventPublisher _busSender;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private IJobResultRepository _jobResultRepository;
         private ImportForecastsFileCommandHandler _target;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-            _busSender = _mock.StrictMock<IServiceBusSender>();
+			_busSender = _mock.StrictMock<IServiceBusEventPublisher>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
             _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _jobResultRepository = _mock.StrictMock<IJobResultRepository>();
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(()=>unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(false);
-                Expect.Call(()=>_busSender.Send(new ImportForecastsFileToSkill())).IgnoreArguments();
+                Expect.Call(()=>_busSender.Publish(new ImportForecastsFileToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.Send(new ImportForecastsFileToSkill())).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ImportForecastsFileToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.Send(new ImportForecastsFileToSkill())).IgnoreArguments();
+                Expect.Call(() => _busSender.PublishWithoutInitiatorInfo(new ImportForecastsFileToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

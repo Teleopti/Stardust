@@ -231,6 +231,8 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	    self.ActivityPreferenceId('');
 	    self.ValidationError(undefined);
 	    self.SelectedTemplateId(undefined);
+	    self.NextDayMin(false);
+	    self.NextDayMax(false);
 	};
 
 	this.EnableActivityTimeEditing.subscribe(function (newValue) {

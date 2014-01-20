@@ -211,22 +211,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 				chartSeries.Style.Interior = new BrushInfo(selectedShiftCategory.DisplayColor);
 				perShiftCategoryChart1.Model.Series.Add(chartSeries);
 
-				var frequency = new Dictionary<int, int>();
+				var frequency = _model.GetFrequencyForShiftCategory(selectedShiftCategory);
 
-				foreach (var sortedPerson in _model.GetSortedPersons(false))
-				{
-					var num = _model.ShiftCategoryCount(sortedPerson, selectedShiftCategory);
-
-					if (!frequency.ContainsKey(num))
-					{
-						frequency.Add(num, 1);
-					}
-					else
-					{
-						frequency[num]++;
-					}
-				}
-				
 				frequency = addFakeValuesForEmptyPoints(frequency);
 				perShiftCategoryChart1.PrimaryXAxis.Range = new MinMaxInfo(-1, frequency.Count, 1);
 
