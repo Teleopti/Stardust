@@ -54,7 +54,7 @@ Describe "Write and read files with different encoding" {
         $testPath="TestDrive:\testUTF8.txt"
 		Set-Content $testPath -value "my test text."
 		$testPath | Out-File $testPath -Force -Encoding utf8
-		Get-FileEncoding "$testPath" | Should Be "Unicode (UTF-8)"
+		Get-IsEncodingUTF8 "$testPath" | Should Be True
 	}
 	
 	#This is ANSI
@@ -63,7 +63,6 @@ Describe "Write and read files with different encoding" {
 		Setup -File "\testUTF7.txt" "some file content"
         $testPath="TestDrive:\testUTF7.txt"
 		Set-Content $testPath -value "my test text."
-		
 		$testPath | Out-File $testPath -Force -Encoding utf7
 		Get-FileEncoding "$testPath" | Should Be "Unicode (UTF-7)"
 	}
@@ -73,7 +72,6 @@ Describe "Write and read files with different encoding" {
 		Setup -File "\test.txt" "some file content"
         $testPath="TestDrive:\test.txt"
 		Set-Content $testPath -value ""
-		
 		$testPath | Out-File $testPath -Force -Encoding utf7
 		Get-FileEncoding "$testPath" | Should Be "Unicode (UTF-7)"
 	}
@@ -131,3 +129,37 @@ Mock Get-Banan {return "gurka"}
 		$string | Should Be "banan"
 	}
 }
+
+Describe "Check Repo for wrong encoding" {
+
+	It "All *.sql files should be UTF8 or UTF8 without BOM" {
+		$files = CheckRepoEncoding -path "$here\..\..\.." -filter "*.sql"
+
+		#Expose to CCNet
+		If ($files.count -gt 0 ) {
+			Write-Host "----------Wrong Encoding found!-------------"
+			foreach($item in $files.GetEnumerator() | Sort Name)
+			{
+				Write-Host $item.Name ":" $item.Value
+			}
+			Write-Host "--------------------------------------------"
+		}		
+		$files.Count | Should Be 0
+	}
+
+	It "All *.cs  files should be UTF8 or UTF8 without BOM" {
+		$files = CheckRepoEncoding -path "$here\..\..\.." -filter "*.cs"
+
+		#Expose to CCNet
+		If ($files.count -gt 0 ) {
+			Write-Host "----------Wrong Encoding found!-------------"
+			foreach($item in $files.GetEnumerator() | Sort Name)
+			{
+				Write-Host $item.Name ":" $item.Value
+			}
+			Write-Host "--------------------------------------------"
+		}		
+		$files.Count | Should Be 0
+	}
+}
+
