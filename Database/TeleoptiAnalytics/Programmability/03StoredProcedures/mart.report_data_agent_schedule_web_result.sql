@@ -94,7 +94,7 @@ SELECT
 		--END AS Readiness'
 		SUM(talk_time_s) AS TalkTime,
 		SUM(after_call_work_time_s) AS AfterCallWorkTime,
-		SUM(handling_time_s) AS HandlingTim,
+		SUM(handling_time_s) AS HandlingTime,
 		SUM(ready_time_s) AS ReadyTime,
 		SUM(scheduled_ready_time) AS ScheduledReadyTime,
 		SUM(adherence_calc_s) AS AdherenceTime,
