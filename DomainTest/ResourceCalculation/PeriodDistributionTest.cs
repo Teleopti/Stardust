@@ -88,6 +88,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(2.33, _target.PeriodDetailAverage, 0.01);
         }
 
+		[Test]
+		public void VerifyWhenSequenceContainsNonNumericValuesOnly()
+		{
+			double expected = Domain.Calculation.Variances.StandardDeviation(new[] { Double.NaN });
+			Assert.AreEqual(0, expected);
+		}
+
         [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void VerifyWhenZero()
