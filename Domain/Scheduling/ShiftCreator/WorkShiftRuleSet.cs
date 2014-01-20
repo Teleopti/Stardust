@@ -164,7 +164,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
         public virtual void AddAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
         {
-	        _accessibilityDaysOfWeek.Add(dayOfWeek);
+					if (!_accessibilityDaysOfWeek.Contains(dayOfWeek))
+		        _accessibilityDaysOfWeek.Add(dayOfWeek);
         }
 
         public virtual void RemoveAccessibilityDayOfWeek(DayOfWeek dayOfWeek)
@@ -176,7 +177,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
         {
             InParameter.VerifyDateIsUtc("dateTime",dateTime);
             dateTime = dateTime.Date;
-	        _accessibilityDates.Add(dateTime);
+					if(!_accessibilityDates.Contains(dateTime))
+						_accessibilityDates.Add(dateTime);
         }
 
         public virtual void RemoveAccessibilityDate(DateTime dateTime)
