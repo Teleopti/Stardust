@@ -781,3 +781,7 @@ End personal drop down menu
 	float: none;
 	display: inline-block;
 }
+
+.placeholder {
+	color: #AAA !important;
+}
