@@ -1,4 +1,8 @@
-﻿
+﻿.asmMessage-body-inner {
+	width: 965px;
+	margin: 0 auto;
+}
+
 .asmMessage-body-inner ol
 {
 	list-style: none;

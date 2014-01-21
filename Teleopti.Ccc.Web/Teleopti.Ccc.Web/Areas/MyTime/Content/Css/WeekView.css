@@ -11,6 +11,8 @@
 	font-size: 0;
 	display: none;
 	position: relative;
+	width: 965px;
+	margin: 0 auto;
 }
 .weekview-day
 {

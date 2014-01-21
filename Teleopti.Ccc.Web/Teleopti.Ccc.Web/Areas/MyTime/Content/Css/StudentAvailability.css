@@ -4,3 +4,7 @@
 	padding: 0 0 0 0;
 	vertical-align: baseline;
 }
+.body-inner {
+	width: 965px;
+	margin: 0 auto;
+}

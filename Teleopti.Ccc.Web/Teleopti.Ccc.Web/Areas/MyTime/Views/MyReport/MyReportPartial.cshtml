@@ -6,7 +6,7 @@
 
 
 <h2>MyReportPartial</h2>
-<div class="navbar">
+<div class="navbar ">
     <div class="navbar-inner">
         <form class="navbar-form pull-left">
             <div class="input-append input-prepend">
@@ -17,7 +17,7 @@
             </div>
         </form>
         <ul class="nav">
-            <li><a class="yesterday" data-bind="click: Teleopti.MyTimeWeb.MyReport.yesterday">xxYesterday</a></li>
+            <li><a class="yesterday" data-bind="click: Teleopti.MyTimeWeb.MyReport.yesterday">@Resources.Yesterday</a></li>
         </ul>
     </div>
 </div>
@@ -25,9 +25,9 @@
 
 	<div class="myReportFigures">
 		<div class="myReportTable">
-			<div class="myReportHeader myReportTableRow"><div class="myReportText">xxMetric</div><div class="myReportValues">xxValue</div></div>
+			<div class="myReportHeader myReportTableRow"><div class="myReportText">@Resources.Metric</div><div class="myReportValues">@Resources.Value</div></div>
 			<div class="myReportTableRow"><div class="myReportText">@Resources.Adherence</div><div class="myReportValues" data-bind="text: Adherence()"></div></div>
-			<div class="myReportTableRow" style="background: #f0f0ff"><div class="myReportText">xxReadiness</div><div class="myReportValues" data-bind="text: Readiness()"></div></div>
+			<div class="myReportTableRow" style="background: #f0f0ff"><div class="myReportText">@Resources.Readiness</div><div class="myReportValues" data-bind="text: Readiness()"></div></div>
 			<div class="myReportTableRow"><div class="myReportText">@Resources.AverageHandlingTime</div><div class="myReportValues" data-bind="text: AverageHandlingTime()"></div></div>
 			<div class="myReportTableRow" style="background: #f0f0ff"><div class="myReportText">@Resources.AverageTalkTime</div><div class="myReportValues" data-bind="text: AverageTalkTime()"></div></div>
 			<div class="myReportTableRow"><div class="myReportText">@Resources.AverageAfterCallWork</div><div class="myReportValues" data-bind="text: AverageAfterWork()"></div></div>
@@ -36,7 +36,7 @@
 		</div>
 			
 	</div>
-	<div class="floatleft" id="chart_div" style="font-size: 40px;white-space: pre; border: 1px black solid; height: 200px; line-height: 40px;padding: 20px">diagram (visa inte nu)
+	<div class="myReportChart" id="chart_div" style="font-size: 40px;white-space: pre; border: 1px black solid; height: 200px; line-height: 40px;padding: 20px">diagram (visa inte nu)
 	</div>
 </div>
 
