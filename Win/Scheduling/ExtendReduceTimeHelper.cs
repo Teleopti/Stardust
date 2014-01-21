@@ -82,6 +82,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _container.Resolve<IEffectiveRestrictionCreator>();
             IResourceCalculateDaysDecider resourceCalculateDaysDecider =
                 _container.Resolve<IResourceCalculateDaysDecider>();
+	        IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx =
+		        _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 
             IList<IExtendReduceTimeOptimizer> optimizers = new List<IExtendReduceTimeOptimizer>();
             for (int i = 0; i < matrixList.Count; i++)
@@ -102,7 +104,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizerPreferences.Advanced, personalSkillsDataExtractor);
 
                 IExtendReduceTimeDecisionMaker decisionMaker = new ExtendReduceTimeDecisionMaker();
-                IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro);
+                IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro, scheduleMatrixLockableBitArrayConverterEx);
 
                 ICheckerRestriction restrictionChecker = new RestrictionChecker();
                 IOptimizationOverLimitByRestrictionDecider optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrixPro, restrictionChecker, optimizerPreferences, originalStateListForScheduleTag[i]);

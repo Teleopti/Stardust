@@ -29,13 +29,13 @@ Teleopti.MyTimeWeb.Request = (function ($) {
             self.resetToolbarActiveButtons();
             self.addTextRequestActive(true);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick();
-
+            Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
         };
         self.addAbsenceRequest = function () {
             self.resetToolbarActiveButtons();
             self.addAbsenceRequestActive(true);
             Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick();
-	        
+            Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
         };
         self.addShiftTradeRequest = function (date) {
 
@@ -45,6 +45,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	        self.resetToolbarActiveButtons();
 			self.addShiftTradeRequestActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow(date);
+			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
         };
 
         self.resetToolbarActiveButtons = function() {
@@ -58,10 +59,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
     		requestNavigationViewModel = new RequestNavigationViewModel();
     		ko.applyBindings(requestNavigationViewModel, $('div.navbar')[1]);
 	}
-
-    function _activatePlaceHolderText() {
-        $('textarea, :text, :password').placeholder();
-    }
 
 	return {
 		Init: function () {
@@ -84,7 +81,6 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
-			_activatePlaceHolderText();
 		},
 	    RequestPartialDispose: function() {
 	        Teleopti.MyTimeWeb.Request.List.Dispose();

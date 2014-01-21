@@ -44,8 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			foreach (var skillActivity in skillActivities)
 			{
 				var dayIntervalData = _calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDaysForPersonalSkill, skillActivity, minimumResolution);
-				if (dayIntervalData.Count > 0)
-					dayIntervalDataPerActivity.Add(skillActivity, dayIntervalData);
+				dayIntervalDataPerActivity.Add(skillActivity, dayIntervalData);
 			}
 			return dayIntervalDataPerActivity;
 		}
