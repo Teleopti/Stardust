@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("queue_id", typeof(int));
 			table.Columns.Add("acd_login_id", typeof(int));
 			table.Columns.Add("local_date_id", typeof(int));
+			table.Columns.Add("local_interval_id", typeof(int));
 			table.Columns.Add("talk_time_s", typeof(decimal));
 			table.Columns.Add("after_call_work_time_s", typeof(decimal));
 			table.Columns.Add("answered_calls", typeof(int));
@@ -42,12 +43,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["date_id"] = dateId;
 			row["interval_id"] = intervalId;
 			row["queue_id"] = queueId;
-			row["local_date_id"] = localDateId;
 			row["acd_login_id"] = acdLoginId;
+			row["local_date_id"] = localDateId;
+			row["local_interval_id"] = 95;
 			row["talk_time_s"] = talkTimeS;
 			row["after_call_work_time_s"] = afterCallWorkTimeS;
 			row["answered_calls"] = answeredCalls;
 			row["transfered_calls"] = transferedCalls;
+			row["datasource_id"] = 999;
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
 			row["datasource_update_date"] = DateTime.Now;
