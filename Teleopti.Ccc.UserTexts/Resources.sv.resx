@@ -11400,8 +11400,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Caption in My Report (web)</comment>
   </data>
   <data name="Readiness" xml:space="preserve">
-    <value>Readiness</value>
-    <comment>Readiness caption in My Report (web)</comment>
+    <value>Tillgänglighet</value>
+    <comment>caption in My Report (web)</comment>
   </data>
   <data name="Value" xml:space="preserve">
     <value>Värde</value>
