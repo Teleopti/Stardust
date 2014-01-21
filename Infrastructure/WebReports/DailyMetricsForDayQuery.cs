@@ -2,10 +2,8 @@
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.WebReports
 {
@@ -24,7 +22,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
-				return session(uow).CreateSQLQuery(tsql)
+				return uow.Session().CreateSQLQuery(tsql)
 					.AddScalar("AnsweredCalls", NHibernateUtil.Int32)
 					.AddScalar("AfterCallWorkTime", NHibernateUtil.Int32)
 					.AddScalar("TalkTime", NHibernateUtil.Int32)
@@ -37,11 +35,6 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.SetResultTransformer(Transformers.AliasToBean(typeof (DailyMetricsForDayResult)))
 					.UniqueResult<DailyMetricsForDayResult>();
 			}
-		}
-
-		private static IStatelessSession session(IStatelessUnitOfWork uow)
-		{
-			return ((NHibernateStatelessUnitOfWork)uow).Session;
 		}
 	}
 }
