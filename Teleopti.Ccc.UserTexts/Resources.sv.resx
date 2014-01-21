@@ -11223,7 +11223,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Infopanel</value>
   </data>
   <data name="Distribution" xml:space="preserve">
-    <value>Distribution</value>
+    <value>Fördelning</value>
   </data>
   <data name="AssignmentOptions" xml:space="preserve">
     <value>Inställningar för arbetspasset</value>
@@ -11305,7 +11305,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Per datum</value>
   </data>
   <data name="ShiftCategoryDistribution" xml:space="preserve">
-    <value>Skiftkategoridistribution</value>
+    <value>Skiftkategorifördelning</value>
   </data>
   <data name="Here" xml:space="preserve">
     <value>här</value>
@@ -11392,5 +11392,11 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
     <value>På valt datum är du inte längre anställd</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tid i status per agent</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detaljerad schemauppföljning</value>
   </data>
 </root>

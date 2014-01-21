@@ -1337,13 +1337,11 @@
     <value>Agentkompetenser</value>
     <comment>Agent Kompetenser</comment>
   </data>
-  <data name="ResOnlyActiveSkill" xml:space="preserve">
-    <value>Endast aktiva kompetenser</value>
-    <comment>Endast aktiva kompetenser</comment>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tid i status per agent</value>
   </data>
-  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
-    <value>Inkludera endast aktiva kompetenser:</value>
-    <comment>Inkludera endast aktiva kompetenser:</comment>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Statusgrupper:</value>
   </data>
   <data name="ResReportAgentSkills" xml:space="preserve">
     <value>Agent Kompetenser</value>
