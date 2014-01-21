@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -42,6 +43,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 		{
 			var skillList = new List<ISkill> {_skill1, _skill2};
 			var skillDayList = new List<ISkillDay> {_skillDayForSkill1, _skillDayForSkill2};
+			var skillIntervalData1 =
+				new SkillIntervalData(
+					new DateTimePeriod(new DateTime(2013, 10, 02, 16, 0, 0, DateTimeKind.Utc),
+									   new DateTime(2013, 10, 02, 17, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
+			var skillIntervalData2 =
+				new SkillIntervalData(
+					new DateTimePeriod(new DateTime(2013, 10, 02, 16, 0, 0, DateTimeKind.Utc),
+									   new DateTime(2013, 10, 02, 17, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
 			using (_mocks.Record())
 			{
 				Expect.Call(_skillResolutionProvider.MinimumResolution(skillList)).Return(15);
@@ -50,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
 				Expect.Call(_skillDayForSkill1.Skill).Return(_skill1).Repeat.Any();
 				Expect.Call(_skillDayForSkill2.Skill).Return(_skill2).Repeat.Any();
 				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill1.Activity, 15))
-				      .Return(new List<ISkillIntervalData>());
+					  .Return(new List<ISkillIntervalData> { skillIntervalData1 });
 				Expect.Call(_calculateAggregatedDataForActivtyAndDate.CalculateFor(skillDayList, _skill2.Activity, 15))
-					  .Return(new List<ISkillIntervalData>());
+					  .Return(new List<ISkillIntervalData> { skillIntervalData2});
 			}
 
 			using (_mocks.Playback())
@@ -64,6 +73,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
       
 
 		}
-
+        
 	}
 }

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<EventContextPopulator>().As<IEventContextPopulator>();
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
-			builder.RegisterType<ServiceBusEventPublisher>().As<IEventPublisher>().SingleInstance();
+			builder.RegisterType<ServiceBusEventPublisher>().As<IServiceBusEventPublisher>().As<IEventPublisher>().SingleInstance();
 			builder.RegisterType<CannotPublishEventsFromEventHandlers>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 			builder.RegisterType<CannotSendDelayedMessages>().As<ISendDelayedMessages>();
 			builder.RegisterType<CannotGetUpdatedScheduleChangeFromTeleoptiRtaService>().As<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();

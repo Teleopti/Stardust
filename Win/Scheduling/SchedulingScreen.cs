@@ -2650,12 +2650,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IScheduleDay scheduleDay = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 
 				if (scheduleDay == null)
+				{
+					SplitterManager.ShowEditor = false;
 					return;
+				}
 
 				scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
 
 				if (_showEditor)
+				{
+					if (!SplitterManager.ShowEditor) SplitterManager.ShowEditor = true;
 					schedulePartToEditor(scheduleDay);
+				}
 
 				checkEditable(_scheduleView.PartIsEditable());
 				if (scheduleDay != null)
@@ -6366,6 +6372,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			showFilterDialog();
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.RefreshTabInfoPanels();
+			updateShiftEditor();
 		}
 
 		private void refreshEntitiesUsingMessageBroker()
@@ -6822,8 +6829,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 				auditHistoryView.ShowDialog(this);
 				if (auditHistoryView.DialogResult != DialogResult.OK || auditHistoryView.SelectedScheduleDay == null ||
 					isLocked) return;
+
+				var historyDay = auditHistoryView.SelectedScheduleDay;
+
+				var scheduleRange = SchedulerState.Schedules[historyDay.Person];
+				var currentDay = scheduleRange.ScheduledDay(historyDay.DateOnlyAsPeriod.DateOnly);
+				//schedule day can apperently have person absences from "other" day due to nightshifts and consecutive absence so we neet to add those to history day
+				foreach (var data in currentDay.PersistableScheduleDataCollection().OfType<PersonAbsence>().Where(data => !data.Period.Intersect(historyDay.Period)))
+				{
+					historyDay.Add(data);
+				}
+
 				var schedulePartModifyAndRollbackService = new SchedulePartModifyAndRollbackService(SchedulerState.SchedulingResultState, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState), new ScheduleTagSetter(_defaultScheduleTag));
-				schedulePartModifyAndRollbackService.Modify(auditHistoryView.SelectedScheduleDay);
+				schedulePartModifyAndRollbackService.Modify(historyDay);
 				updateShiftEditor();
 			}
 		}
@@ -7068,6 +7086,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			_shiftCategoryDistributionModel.SetFilteredPersons(_schedulerState.FilteredPersonDictionary.Values);
 			schedulerSplitters1.RefreshTabInfoPanels();
+			updateShiftEditor();
 		}
 
 		private void toolStripMenuItemSwitchViewPointToTimeZoneOfSelectedAgent_Click(object sender, EventArgs e)

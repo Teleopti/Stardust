@@ -20,6 +20,8 @@
 	@Styles.Render(BundleScripts.Select2Css)
 	@Styles.Render(BundleScripts.MyTimeCss)
 	@Scripts.Render(BundleScripts.MyTimeJs)
+	
+	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.js")"></script>
 
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{

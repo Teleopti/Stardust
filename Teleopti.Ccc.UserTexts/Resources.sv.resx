@@ -11223,7 +11223,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Infopanel</value>
   </data>
   <data name="Distribution" xml:space="preserve">
-    <value>Distribution</value>
+    <value>Fördelning</value>
   </data>
   <data name="AssignmentOptions" xml:space="preserve">
     <value>Inställningar för arbetspasset</value>
@@ -11305,7 +11305,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Per datum</value>
   </data>
   <data name="ShiftCategoryDistribution" xml:space="preserve">
-    <value>Skiftkategoridistribution</value>
+    <value>Skiftkategorifördelning</value>
   </data>
   <data name="Here" xml:space="preserve">
     <value>här</value>
@@ -11358,10 +11358,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Optimering med block mellan fridagar och att inte hålla ihop teamens fridagar supportas inte</value>
     <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
   </data>
-  <data name="IllegalTeamBlockCombination" xml:space="preserve">
-    <value>Optimering med block mellan fridagar och att inte hålla ihop teamens fridagar supportas inte</value>
-    <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
-  </data>
   <data name="ActiveAgents" xml:space="preserve">
     <value>Aktiva agenter</value>
     <comment>caption on form ActiveAgents</comment>
@@ -11392,5 +11388,27 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
     <value>På valt datum är du inte längre anställd</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tid i status per agent</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detaljerad schemauppföljning</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Mått</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Tillgänglighet</value>
+    <comment>caption in My Report (web)</comment>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Värde</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Igår</value>
+    <comment>Link in My Report (web)</comment>
   </data>
 </root>

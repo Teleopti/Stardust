@@ -86,7 +86,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				window.scrollTo(0, 0);
 			}
 			self.agentChoosed(agent);
-			self.clearInputForm(); 
+			self.errorMessage('');
 		};
 
 		self.sendRequest = function () {
@@ -96,15 +96,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.cancelRequest = function () {
 		    self.chooseAgent(null);
-		};
-
-		self.clearInputForm = function () {
-			self.subject(undefined);
-			self.message(undefined);
-			self.errorMessage('');
-			//ugly hack to fire back event that something happened
-			/*setTimeout(function () { $("#Request-add-shift-trade-message-input").change(); }, 0);
-			setTimeout(function () { $("#Request-add-shift-trade-subject-input").change(); }, 0);*/
 		};
 
 		self._createTimeLine = function (hours) {
@@ -271,7 +262,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	function _openAddShiftTradeWindow() {
 	    Teleopti.MyTimeWeb.Request.RequestDetail.HideNewTextOrAbsenceRequestView();
-		$('#Request-add-shift-trade').show();
+	    $('#Request-add-shift-trade').show();
 	}
 
 	function _hideShiftTradeWindow() {

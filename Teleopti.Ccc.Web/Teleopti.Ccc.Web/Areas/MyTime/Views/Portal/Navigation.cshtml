@@ -6,7 +6,7 @@
 
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner bdd-mytime-top-menu">
-        <div class="container fixed-non-responsive">
+        <div class="container responsive-header">
             <div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
 
             <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
@@ -20,7 +20,7 @@
             <a class="brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
  
             <!-- Everything you want hidden at 940px or less, place within here -->
-            <div class="collapse visibility">
+            <div class="collapse nav-collapse">
                 <ul class="nav">
                     @foreach (var navSection in Model.NavigationItems)
                     {

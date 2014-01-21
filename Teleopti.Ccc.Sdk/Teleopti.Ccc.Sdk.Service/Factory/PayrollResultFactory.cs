@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
 	public class PayrollResultFactory : IPayrollResultFactory
     {
-        private readonly IServiceBusSender _serviceBusSender;
+		private readonly IServiceBusEventPublisher _serviceBusSender;
 
-        public PayrollResultFactory(IServiceBusSender serviceBusSender)
+		public PayrollResultFactory(IServiceBusEventPublisher serviceBusSender)
         {
             _serviceBusSender = serviceBusSender;
         }
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         payrollExport.ExportPersonCollection;
                 }
 
-                _serviceBusSender.Send(message);
+                _serviceBusSender.PublishWithoutInitiatorInfo(message);
             }
             return payrollResultId;
         }

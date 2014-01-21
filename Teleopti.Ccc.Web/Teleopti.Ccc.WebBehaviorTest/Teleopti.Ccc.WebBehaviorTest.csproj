@@ -176,6 +176,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\MonthlyScheduleStepDefinitions.cs" />
+    <Compile Include="MyTime\MonthSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MonthSchedule.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\MyReportStepDefinition.cs" />
     <Compile Include="MyTime\MyReportDailyMetrics.feature.cs">
       <DependentUpon>MyReportDailyMetrics.feature</DependentUpon>
@@ -733,6 +739,10 @@
     <None Include="MyTime\22851_FindShiftTradePageFromTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>22851_FindShiftTradePageFromTeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\MonthSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MonthSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\MyReportDailyMetrics.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

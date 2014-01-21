@@ -50,8 +50,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				sortedCategories = _model.GetShiftCategoriesSortedByMinMax(_lastSortOrderAscending, false).ToList();
 			if (_lastSortColumn == 3)
 				sortedCategories = _model.GetShiftCategoriesSortedByAverage(_lastSortOrderAscending).ToList();
-			if (_lastSortColumn == 4)
-				sortedCategories = _model.GetShiftCategoriesSortedByStandardDeviation(_lastSortOrderAscending).ToList();
+			//if (_lastSortColumn == 4)
+			//	sortedCategories = _model.GetShiftCategoriesSortedByStandardDeviation(_lastSortOrderAscending).ToList();
 
 			if (colIndex == 0 && rowIndex > 0)
 			{
@@ -65,20 +65,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				return;
 			}
 
-			if (rowIndex > sortedCategories.Count)
-			{
-				if (colIndex < 4)
-				{
-					style.CellType = "IgnoreCellModel";
-				}
-				else
-				{
-					if (!_model.ShouldUpdateViews) return;
-					style.CellType = "NumericReadOnlyCell";
-					style.CellValue = _model.GetSumOfDeviations();
-				}
+			//if (rowIndex > sortedCategories.Count)
+			//{
+			//	if (colIndex < 4)
+			//	{
+			//		style.CellType = "IgnoreCellModel";
+			//	}
+			//	else
+			//	{
+			//		if (!_model.ShouldUpdateViews) return;
+			//		style.CellType = "NumericReadOnlyCell";
+			//		style.CellValue = _model.GetSumOfDeviations();
+			//	}
 				
-			}
+			//}
 		}
 
 		private void setValues(GridStyleInfo style, int rowIndex, int colIndex, IList<IShiftCategory> sortedCategories)
@@ -95,12 +95,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				if(style.CellValue != tempCellValue)
 					_model.OnChartUpdateNeeded();
 			}
-			else
+			if (colIndex == 3)
 			{
 				style.CellType = "NumericReadOnlyCell";
-				style.CellValue = colIndex == 3
-					                  ? _model.GetAverageForShiftCategory(category)
-					                  : _model.GetStandardDeviationForShiftCategory(category);
+				style.CellValue = _model.GetAverageForShiftCategory(category);
+				//style.CellValue = colIndex == 3
+				//					  ? _model.GetAverageForShiftCategory(category)
+				//					  : _model.GetStandardDeviationForShiftCategory(category);
 			}
 		}
 
@@ -112,10 +113,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				style.CellValue = categoryDescription.ShortName;
 				style.CellTipText = categoryDescription.Name;
 			}
-			else
-			{
-				style.CellValue = UserTexts.Resources.Total;
-			}
+			//else
+			//{
+			//	style.CellValue = UserTexts.Resources.Total;
+			//}
 		}
 
 		private static void setColumnHeader(GridStyleInfo style, int colIndex)
@@ -131,16 +132,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 				case 3:
 					style.CellValue = UserTexts.Resources.Average;
 					break;
-				case 4:
-					style.CellValue = UserTexts.Resources.StandardDeviation;
-					break;
+				//case 4:
+				//	style.CellValue = UserTexts.Resources.StandardDeviation;
+				//	break;
 			}
 		}
 
 		public int RowCount()
 		{
 			//could be better
-			return _model.GetSortedShiftCategories().Count + 1;
+			return _model.GetSortedShiftCategories().Count;
 		}
 
 		public void ReSort(int colIndex, bool keepOrder)

@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	{
 		void PopulateEventContext(IEvent @event);
 		void PopulateEventContext(IRaptorDomainMessageInfo @event);
+		void PopulateEventContextWithoutInitiator(IRaptorDomainMessageInfo message);
 	}
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Criterion;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -95,17 +94,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     LazyLoadingManager.Initialize(extender.ExtendWithActivity); //activity
                 }
             }
-        }
-
-
-        public IList<IWorkShiftRuleSet> FindAllWithAccessibility()
-        {
-            IList<IWorkShiftRuleSet> retList = Session.CreateCriteria(typeof(WorkShiftRuleSet))
-                        .SetFetchMode("AccessibilityDates", FetchMode.Join)
-                        .SetFetchMode("AccessibilityDaysOfWeek", FetchMode.Join)
-                        .SetResultTransformer(Transformers.DistinctRootEntity)
-                        .List<IWorkShiftRuleSet>();
-            return retList;
         }
     }
 }
