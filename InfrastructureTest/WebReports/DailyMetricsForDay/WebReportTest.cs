@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[TearDown]
 		public void Teardown()
 		{
-			//DataSourceHelper.ClearAnalyticsData();
+			DataSourceHelper.ClearAnalyticsData();
 			_unitOfWork.Dispose();
 		} 
 	}

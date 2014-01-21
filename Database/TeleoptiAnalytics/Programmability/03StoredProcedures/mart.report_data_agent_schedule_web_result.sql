@@ -68,39 +68,9 @@ exec mart.report_data_agent_schedule_result
 @business_unit_code=@business_unit_code, 
 @from_matrix=0
 
-SELECT 
-	--person_code,
-	date,
-		SUM(answered_calls) AS AnsweredCalls,
-		--CASE
-		--	WHEN SUM(answered_calls)<=0 THEN 0
-		--	ELSE SUM(talk_time_s) / SUM(answered_calls)
-		--END AS AverageTalkTime,
-		--CASE
-		--	WHEN SUM(answered_calls)<=0 THEN 0
-		--	ELSE SUM(after_call_work_time_s) / SUM(answered_calls)
-		--END AS AverageAfterWork,
-		--CASE
-		--	WHEN SUM(answered_calls)<=0 THEN 0
-		--	ELSE SUM(handling_time_s) / SUM(answered_calls)
-		--END AS AverageHandlingTime,
-		--CASE
-		--	WHEN SUM(adherence_calc_s) = 0 THEN 1
-		--	ELSE CONVERT(decimal(20,2),(SUM(adherence_calc_s) - SUM(deviation_s))/SUM(adherence_calc_s))
-		--END AS Adherence,
-		--CASE
-		--	WHEN SUM(scheduled_ready_time)<=0 THEN 0
-		--	ELSE CONVERT(decimal(20,2),SUM(ready_time_s)/SUM(scheduled_ready_time))
-		--END AS Readiness'
-		SUM(talk_time_s) AS TalkTime,
-		SUM(after_call_work_time_s) AS AfterCallWorkTime,
-		SUM(handling_time_s) AS HandlingTime,
-		SUM(ready_time_s) AS ReadyTime,
-		SUM(scheduled_ready_time) AS ScheduledReadyTime,
-		SUM(adherence_calc_s) AS AdherenceTime,
-		SUM(deviation_s) AS Deviation
- FROM  #tmpResult
- group by date
+select answered_calls as AnsweredCalls,
+	after_call_work_time_s/answered_calls as AfterCallWorkTime
+from #tmpResult
 
 DROP TABLE #tmpResult
 
