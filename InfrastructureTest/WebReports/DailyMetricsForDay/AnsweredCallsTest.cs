@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
 	[TestFixture]
-	public class SimpleAnsweredCallsTest : WebReportTest
+	public class AnsweredCallsTest : WebReportTest
 	{
 		private const int answeredCalls = 3;
 
