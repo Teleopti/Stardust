@@ -1,10 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Infrastructure;
+using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
+using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
@@ -41,7 +43,6 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			_analyticsDataFactory.Setup(Datasource);
 			_analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, Datasource));
 			_analyticsDataFactory.Setup(agent);
-			//acd lgin
 			_analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, 1));
 			_analyticsDataFactory.Setup(scenario);
 
@@ -50,6 +51,11 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		}
 
 		protected abstract void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory);
+
+		protected DailyMetricsForDayQuery Target()
+		{
+			return new DailyMetricsForDayQuery(new CurrentDataSource(new CurrentIdentity()));
+		}
 
 		[TearDown]
 		public void Teardown()
