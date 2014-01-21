@@ -1337,4 +1337,10 @@
     <value>Agentkompetenser</value>
     <comment>Agent Kompetenser</comment>
   </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tid i status per agent</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Statusgrupper:</value>
+  </data>
 </root>
