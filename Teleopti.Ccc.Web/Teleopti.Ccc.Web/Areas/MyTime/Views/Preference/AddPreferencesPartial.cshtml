@@ -20,13 +20,13 @@
         </button>
         <span data-bind="if: IsSaveAsNewTemplate()">
             <span id="Template-name-section">
-                <input class="preference-template-name input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
+                <input class="preference-template-name form-control" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
                 <button id="Preference-extended-save-template" class="btn btn-xs btn-primary" data-bind="click: SaveAsNewTemplate">@Resources.Save</button>
             </span>
         </span>
     </span>
     <span data-bind="visible: HasTemplates">
-        <select class="preference-template-list" data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
+        <select class="preference-template-list form-control" data-bind="foreach: AvailableTemplates, value: SelectedTemplateId" title="@Resources.ExtendedPreferencesTemplate">
             <option data-bind="text: Text, value: Value"></option>
         </select>
         <button class="preference-template-delete btn btn-xs" data-bind="click: DeleteTemplate, enable: DeleteTemplateEnabled" title="@Resources.Delete">
@@ -37,7 +37,7 @@
         <i class="glyphicon glyphicon-circle-arrow-up" data-bind="css: IsPreferenceInputVisibleToggleCss"></i>
     </button>
 </span>
-<hr class="hr-thin" data-bind="visible: IsPreferenceInputVisible"/>
+<hr class="hr-thin" data-bind="visible: IsPreferenceInputVisible" />
 <div data-bind="if: ShowError">
     <div class="preference-error-panel alert alert-danger" data-bind="html: ValidationError" />
 </div>
@@ -57,10 +57,10 @@
                                 @foreach (var optionGroup in Model.Options.PreferenceOptions)
                                 {
                                     <optgroup label="@optionGroup.Text">
-                                    @foreach (var option in optionGroup.Options)
-                                    {
-                                        <option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
-                                    }
+                                        @foreach (var option in optionGroup.Options)
+                                        {
+                                            <option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
+                                        }
                                     </optgroup>
                                 }
                             </select>
@@ -73,49 +73,72 @@
                         <i class="glyphicon glyphicon-step-backward" title="@Resources.StartTime"></i>
                     </td>
                     <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.EarliestStartTime">
-                            <input type="text" class="preference-start-time-min input-sm" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <div class="input-group bootstrap-timepicker " title="@Resources.EarliestStartTime">
+                                    <input type="text" class="preference-start-time-min input-sm form-control" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                </div>
+                            </div>
                         </div>
                     </td>
                     <td></td>
                     <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
-                            <input type="text" class="preference-start-time-max input-sm" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
+                                    <input type="text" class="preference-start-time-max input-sm form-control" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                </div>
+                            </div>
                         </div>
                     </td>
                     <td></td>
                 </tr>
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
+                    <div class="form-group">
+                        <td>
+                            <i class="glyphicon glyphicon-step-forward" title="@Resources.EndTime"></i>
+                        </td>
+                        <td>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
+                                        <input type="text" class="preference-end-time-min input-sm form-control" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                                        <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="checkbox">
+                                <input type="checkbox" class="preference-end-time-min-next-day" data-bind="checked: NextDayMin, enable: EarliestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />
+                            </div>
+                        </td>
+                    </div>
                     <td>
-                        <i class="glyphicon glyphicon-step-forward" title="@Resources.EndTime"></i>
-                    </td>
-                    <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
-                            <input type="text" class="preference-end-time-min input-sm" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                        <div class="row">
+                            <div class="form-group col-lg-6">
+                                <div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
+                                    <input type="text" class="preference-end-time-max input-sm form-control" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                                </div>
+                            </div>
                         </div>
                     </td>
                     <td>
-                        <input type="checkbox" class="preference-end-time-min-next-day" data-bind="checked: NextDayMin, enable: EarliestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />  
-                    </td>
-                    <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
-                            <input type="text" class="preference-end-time-max input-sm" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                        </div>
-                    </td>
-                    <td>
-                        <input type="checkbox" class="preference-end-time-max-next-day" data-bind="checked: NextDayMax, enable: LatestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />  
+                        <input type="checkbox" class="preference-end-time-max-next-day" data-bind="checked: NextDayMax, enable: LatestEndTimeNextDayToggleEnabled" title="@Resources.NextDay" />
                     </td>
                 </tr>
+
+
                 <tr class="form-inline" data-bind="if: IsTimeInputVisible">
                     <td>
                         <i class="glyphicon glyphicon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
                     <td>
-                        <select class="preference-extended-work-time-min width131" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
+                        <select class="preference-extended-work-time-min width131 form-control" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
                             <option value=""></option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -125,7 +148,7 @@
                     </td>
                     <td></td>
                     <td>
-                        <select class="preference-extended-work-time-max width131" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
+                        <select class="preference-extended-work-time-max width131 form-control" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
                             <option value=""></option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -136,94 +159,94 @@
                     <td></td>
                 </tr>
             </table>
-        </td>
-        <td class="width10"></td>
-        <td class="td-vertical-divider" data-bind="visible: IsPreferenceInputVisible"></td>
-        <td class="width10"></td>
-        <td style="vertical-align: top;" data-bind="if: IsTimeInputVisible">
-            <table class="preference-activity-section table-condensed" data-bind="visible: IsPreferenceInputVisible">
-                <tr>
-                    <td>
-                        <i class="glyphicon glyphicon-tasks" title="@Resources.Activity"></i>
-                    </td>
-                    <td colspan="2" style="width: 272px;">
-                        <span title="@Resources.Activity">
-                            <select id="Preference-extended-activity-Picker" data-bind="select2: { value: ActivityPreferenceId, formatResult: FormatPreferencesOption, formatSelection: FormatPreferencesOption }">
-                                <option value="">&nbsp;</option>
-                                <optgroup label="@Model.Options.ActivityOptions.Text">
-                                @foreach (var option in Model.Options.ActivityOptions.Options)
-                                {
-                                    <option value="@option.Value" data-color="@option.Color">@option.Text</option>
-                                }
-                                </optgroup>
-                            </select>
-                        </span>
-                    </td>
-                </tr>
-                <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
-                    <td>
-                        <i class="glyphicon glyphicon-step-backward" title="@Resources.StartTime"></i>
-                    </td>
-                    <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.EarliestStartTime">
-                            <input type="text" class="preference-activity-start-time-min input-sm" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
-                            <input type="text" class="preference-activity-start-time-max input-sm" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
-                    <td>
-                        <i class="glyphicon glyphicon-step-forward" title="@Resources.EndTime"></i>
-                    </td>
-                    <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
-                            <input type="text" class="preference-activity-end-time-min input-sm" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
-                            <input type="text" class="preference-activity-end-time-max input-sm" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
-                        </div>
-                    </td>
-                </tr>
-                <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
-                    <td>
-                        <i class="glyphicon glyphicon-resize-horizontal" title="@Resources.WorkTime"></i>
-                    </td>
-                    <td>
-                        <select class="preference-activity-extended-work-time-min width131" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
-                            <option value="">&nbsp;</option>
-                            @foreach (var timeSpan in timeLengths)
+            </td>
+        <td class="col-mid-6"></td>
+<td class="td-vertical-divider" data-bind="visible: IsPreferenceInputVisible"></td>
+<td class="col-mid-6"></td>
+<td style="vertical-align: top;" data-bind="if: IsTimeInputVisible">
+    <table class="preference-activity-section table-condensed" data-bind="visible: IsPreferenceInputVisible">
+        <tr>
+            <td>
+                <i class="glyphicon glyphicon-tasks" title="@Resources.Activity"></i>
+            </td>
+            <td colspan="2" style="col-mid-3">
+                <span title="@Resources.Activity">
+                    <select id="Preference-extended-activity-Picker" data-bind="select2: { value: ActivityPreferenceId, formatResult: FormatPreferencesOption, formatSelection: FormatPreferencesOption }">
+                        <option value="">&nbsp;</option>
+                        <optgroup label="@Model.Options.ActivityOptions.Text">
+                            @foreach (var option in Model.Options.ActivityOptions.Options)
                             {
-                                <option value="@timeSpan.Value">@timeSpan.Text</option>
+                                <option value="@option.Value" data-color="@option.Color">@option.Text</option>
                             }
-                        </select>
-                    </td>
-                    <td>
-                        <select class="preference-activity-extended-work-time-max width131" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
-                            <option value="">&nbsp;</option>
-                            @foreach (var timeSpan in timeLengths)
-                            {
-                                <option value="@timeSpan.Value">@timeSpan.Text</option>
-                            }
-                        </select>
-                    </td>
-                </tr>
-            </table>
-        </td>
-        <td style="vertical-align: bottom">
-            <div class="pull-right" style="padding-bottom: 4px">
-                <button id="Preference-extended-reset" class="btn btn-default" data-bind="click: Reset">@Resources.Reset</button>
-                <button id="Preference-extended-apply" class="btn btn-primary" data-bind="click: SavePreferences">@Resources.Apply</button>
-            </div>
-        </td>
-    </tr>
+                        </optgroup>
+                    </select>
+                </span>
+            </td>
+        </tr>
+        <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
+            <td>
+                <i class="glyphicon glyphicon-step-backward" title="@Resources.StartTime"></i>
+            </td>
+            <td>
+                <div class="input-group bootstrap-timepicker" title="@Resources.EarliestStartTime">
+                    <input type="text" class="preference-activity-start-time-min form-control input-sm" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+            </td>
+            <td>
+                <div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
+                    <input type="text" class="preference-activity-start-time-max form-control input-sm" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+            </td>
+        </tr>
+        <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
+            <td>
+                <i class="glyphicon glyphicon-step-forward" title="@Resources.EndTime"></i>
+            </td>
+            <td>
+                <div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
+                    <input type="text" class="preference-activity-end-time-min input-sm" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+            </td>
+            <td>
+                <div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
+                    <input type="text" class="preference-activity-end-time-max input-sm" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+                </div>
+            </td>
+        </tr>
+        <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
+            <td>
+                <i class="glyphicon glyphicon-resize-horizontal" title="@Resources.WorkTime"></i>
+            </td>
+            <td>
+                <select class="preference-activity-extended-work-time-min col-mid-4" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
+                    <option value="">&nbsp;</option>
+                    @foreach (var timeSpan in timeLengths)
+                    {
+                        <option value="@timeSpan.Value">@timeSpan.Text</option>
+                    }
+                </select>
+            </td>
+            <td>
+                <select class="preference-activity-extended-work-time-max width131" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
+                    <option value="">&nbsp;</option>
+                    @foreach (var timeSpan in timeLengths)
+                    {
+                        <option value="@timeSpan.Value">@timeSpan.Text</option>
+                    }
+                </select>
+            </td>
+        </tr>
+    </table>
+</td>
+<td style="vertical-align: bottom">
+    <div class="pull-right" style="padding-bottom: 4px">
+        <button id="Preference-extended-reset" class="btn btn-default" data-bind="click: Reset">@Resources.Reset</button>
+        <button id="Preference-extended-apply" class="btn btn-primary" data-bind="click: SavePreferences">@Resources.Apply</button>
+    </div>
+</td>
+</tr>
 </table>
