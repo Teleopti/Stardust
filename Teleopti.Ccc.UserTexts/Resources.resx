@@ -11894,4 +11894,20 @@ Reduce the complexity to use these shifts.</value>
     <value>On this date you are no longer an employee</value>
     <comment>On this date you are no longer an employee</comment>
   </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Metric</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Readiness</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+    <comment>Link in My Report (web)</comment>
+  </data>
 </root>
