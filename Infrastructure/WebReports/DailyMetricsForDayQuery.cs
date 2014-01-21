@@ -1,4 +1,5 @@
-﻿using NHibernate;
+﻿using System;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.SetInt32("adherence_id", adherenceType)
 					.SetInt32("time_zone_id", timezoneType)
 					.SetGuid("person_code", agent.Id.Value)
-					.SetGuid("business_unit_code", businessUnit.Id.Value)
+					.SetGuid("business_unit_code", Guid.NewGuid()) //temp - do we need this one?
 					.SetResultTransformer(Transformers.AliasToBean(typeof (DailyMetricsForDayResult)))
 					.UniqueResult<DailyMetricsForDayResult>();
 			}
