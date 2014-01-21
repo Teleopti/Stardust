@@ -75,11 +75,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         			                       	{
 												new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
                                                 new ScheduleMessageSender(eventPublisher),
-                                                new MeetingMessageSender(busSender),
-                                                new GroupPageChangedMessageSender(busSender),
-                                                new TeamOrSiteChangedMessageSender(busSender),
-                                                new PersonChangedMessageSender(busSender),
-                                                new PersonPeriodChangedMessageSender(busSender)
+                                                new MeetingMessageSender(eventPublisher),
+                                                new GroupPageChangedMessageSender(eventPublisher),
+                                                new TeamOrSiteChangedMessageSender(eventPublisher),
+                                                new PersonChangedMessageSender(eventPublisher),
+                                                new PersonPeriodChangedMessageSender(eventPublisher)
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
         			new SignalBroker(MessageFilterManager.Instance))

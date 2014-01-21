@@ -260,6 +260,7 @@ _wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.Handlin
 			_wordDictionary.Add("TotalAverageTaskTime", UserTexts.Resources.TotalChatTime);
 			_wordDictionary.Add("Tasks", UserTexts.Resources.Chats);
 			_wordDictionary.Add("TotalTasks", UserTexts.Resources.TotalChats);
+			_wordDictionary.Add("AverageTaskTime", UserTexts.Resources.TalkTime);
 			_wordDictionary.Add("TotalAverageAfterTaskTime", UserTexts.Resources.TotalACW);
 			_wordDictionary.Add("AverageAfterTaskTime", UserTexts.Resources.ACW);
 			_wordDictionary.Add("CampaignTaskTime", UserTexts.Resources.CampaignChatTimePercentSign);
@@ -283,6 +284,7 @@ _wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.Handlin
 			_wordDictionary.Add("DeviationCallsColon", UserTexts.Resources.DeviationChatsColon);
 			_wordDictionary.Add("DeviationTalkTimeColon", UserTexts.Resources.DeviationTalkTimeColon);
 			_wordDictionary.Add("DeviationACWColon", UserTexts.Resources.DeviationACWColon);
+			_wordDictionary.Add("TotalStatisticAverageTaskTime", UserTexts.Resources.HandlingTime);
 		}
     }
 }

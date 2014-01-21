@@ -19,27 +19,39 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void PopulateEventContext(IEvent @event)
 		{
 			var domainEvents = @event as IRaptorDomainMessageInfo;
-			if (domainEvents != null)
-				PopulateEventContext(domainEvents);
+			if (domainEvents == null) return;
+			
+			setInitiator(domainEvents);
+			PopulateEventContext(domainEvents);
 		}
+
 
 		public void PopulateEventContext(IRaptorDomainMessageInfo @event)
 		{
+			setInitiator(@event);
 			setValuesFromIdentity(@event);
+		}
+
+		private void setInitiator(IRaptorDomainMessageInfo domainEvents)
+		{
+			var initiatorIdentifier = _initiatorIdentifier.Current();
+			if (initiatorIdentifier != null)
+				domainEvents.InitiatorId = initiatorIdentifier.InitiatorId;
+		}
+
+		public void PopulateEventContextWithoutInitiator(IRaptorDomainMessageInfo message)
+		{
+			setValuesFromIdentity(message);
 		}
 
 		private void setValuesFromIdentity(IRaptorDomainMessageInfo message)
 		{
 			message.Timestamp = DateTime.UtcNow;
-			var initiatorIdentifier = _initiatorIdentifier.Current();
-			if (initiatorIdentifier != null)
-				message.InitiatorId = initiatorIdentifier.InitiatorId;
-			if (_identity != null)
-			{
-				var identity = _identity.Current();
-				message.BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault();
-				message.Datasource = identity.DataSource.Application.Name;
-			}
+			if (_identity == null) return;
+
+			var identity = _identity.Current();
+			message.BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault();
+			message.Datasource = identity.DataSource.Application.Name;
 		}
 	}
 }

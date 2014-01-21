@@ -263,11 +263,16 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IOvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthDayViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
@@ -745,8 +750,13 @@
     <Content Include="Areas\MobileReports\Content\moment\moment.js" />
     <Content Include="Areas\MobileReports\Content\moment\moment.min.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\json2.js" />
+    <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
+    <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyReport.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Month.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.UserInfo.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.js" />
@@ -1067,6 +1077,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\MyReport\MyReportPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\MonthPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -167,14 +167,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		{
 			var person1 = PersonFactory.CreatePerson("Bertil");
 			var filteredPersons = new List<IPerson> { person1 };
-			var minMaxDic = new Dictionary<IShiftCategory, MinMax<int>>();
+			var dic = new Dictionary<IShiftCategory, int>();
 
 			var cat1 = new ShiftCategory("B");
 			var cat2 = new ShiftCategory("A");
-			var minMax1 = new MinMax<int>(5, 10);
-			var minMax2 = new MinMax<int>(1, 8);
-			minMaxDic.Add(cat1, minMax1);
-			minMaxDic.Add(cat2, minMax2);
+
+			dic.Add(cat1, 6);
+			dic.Add(cat2, 3);
 
 
 			using (_mocks.Record())
@@ -182,7 +181,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
-				Expect.Call(_cachedShiftCategoryDistribution.GetMinMaxDictionary(filteredPersons)).Return(minMaxDic).Repeat.AtLeastOnce();
+				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(dic).Repeat.AtLeastOnce();
 
 			}
 
@@ -203,14 +202,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		{
 			var person1 = PersonFactory.CreatePerson("Bertil");
 			var filteredPersons = new List<IPerson> { person1 };
-			var minMaxDic = new Dictionary<IShiftCategory, MinMax<int>>();
+			var dic = new Dictionary<IShiftCategory, int>();
 
 			var cat1 = new ShiftCategory("B");
 			var cat2 = new ShiftCategory("A");
-			var minMax1 = new MinMax<int>(1, 8);
-			var minMax2 = new MinMax<int>(5, 10);
-			minMaxDic.Add(cat1, minMax1);
-			minMaxDic.Add(cat2, minMax2);
+			dic.Add(cat1, 2);
+			dic.Add(cat2, 4);
 
 
 			using (_mocks.Record())
@@ -218,7 +215,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
 				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
 				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
-				Expect.Call(_cachedShiftCategoryDistribution.GetMinMaxDictionary(filteredPersons)).Return(minMaxDic).Repeat.AtLeastOnce();
+				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(dic).Repeat.AtLeastOnce();
+
 
 			}
 

@@ -13,5 +13,9 @@ namespace Teleopti.Ccc.TestCommon
 		public void PopulateEventContext(IRaptorDomainMessageInfo @event)
 		{
 		}
+
+		public void PopulateEventContextWithoutInitiator(IRaptorDomainMessageInfo message)
+		{
+		}
 	}
 }

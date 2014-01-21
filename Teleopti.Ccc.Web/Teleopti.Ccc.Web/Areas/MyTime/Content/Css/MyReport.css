@@ -1,0 +1,45 @@
+﻿
+.myReportFigures {
+	display: block;
+	float: left;
+	border: solid 1px gray;
+	margin-right: 50px;
+}
+
+.myReportTable {
+	display: table;
+	font-family: "Segoe UI";
+}
+
+.myReportTableRow {
+	display: table-row;
+}
+.myReportValues{
+	padding: 5px 10px 5px 5px;
+	display: table-cell;
+	vertical-align: top;
+	/*if we want the vertical line*/
+	/*border-left: gray 1px solid;*/
+}
+
+.myReportText {
+	padding: 5px 30px 5px 5px;	
+	float: left; 
+	display: table-cell;
+}
+
+.myReportHeader {
+	background: #0072c6;
+	color: white;
+	font-weight: bold;
+}
+
+.myReportHeaderText {
+	float: left;
+}
+.fixed-non-responsive.container {
+	width: 99%;
+}
+.yesterday:hover  {
+	cursor: pointer;
+}

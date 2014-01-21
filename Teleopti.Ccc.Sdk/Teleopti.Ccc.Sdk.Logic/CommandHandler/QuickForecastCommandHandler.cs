@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
 	public class QuickForecastCommandHandler : IHandleCommand<QuickForecastCommandDto>
     {
-    	private readonly IServiceBusSender _busSender;
+		private readonly IServiceBusEventPublisher _busSender;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public QuickForecastCommandHandler(IServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public QuickForecastCommandHandler(IServiceBusEventPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
 		{
 			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         UseDayOfMonth = command.UseDayOfMonth
 					};
 
-				_busSender.Send(message);
+				_busSender.Publish(message);
 			}
 
 			command.Result = new CommandResultDto {AffectedId = jobId, AffectedItems = 1};

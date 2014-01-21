@@ -1,3 +1,47 @@
+﻿function Get-FileEncoding4bytes
+{
+    [CmdletBinding()] Param (
+     [Parameter(Mandatory = $True, ValueFromPipelineByPropertyName = $True)] [string]$Path
+    )
+
+    [byte[]]$byte = get-content -Encoding byte -ReadCount 4 -TotalCount 4 -Path $Path
+	
+	if (!$byte) #file is empty
+	{ return "UTF8" }
+    if ( $byte[0] -eq 0xef -and $byte[1] -eq 0xbb -and $byte[2] -eq 0xbf )
+    { return "UTF8" }
+    elseif ($byte[0] -eq 0 -and $byte[1] -eq 0 -and $byte[2] -eq 0xfe -and $byte[3] -eq 0xff)
+    { return "UTF32" }
+    elseif ($byte[0] -eq 0x2b -and $byte[1] -eq 0x2f -and $byte[2] -eq 0x76)
+    { return "UTF7"}
+    elseif ($byte[0] -eq 0xff -and $byte[1] -eq 0xfe)
+    { return "UCS-2 Little Endian"}
+    elseif ($byte[0] -eq 0xfe -and $byte[1] -eq 0xff)
+    { return "UCS-2 Big Endian"}	
+    else
+	{ return "UTF8 without BOM"}	
+}
+
+function Get-IsEncodingUTF8 {
+    param(
+        ## The path of the file to get the encoding of.
+        $Path
+    )
+	$EncodingType = "UTF8"
+	$fileEncoding = Get-FileEncoding4bytes -Path $Path
+	return [bool]$fileEncoding.StartsWith($EncodingType)
+}
+
+function Get-IsEncodingType {
+    param(
+        ## The path of the file to get the encoding of.
+        $Path,
+		$EncodingType
+    )
+	$fileEncoding = Get-FileEncoding4bytes -Path $Path
+	return [bool]($fileEncoding -eq $EncodingType)
+}
+
 function Get-FileEncoding {
     param(
         ## The path of the file to get the encoding of.
@@ -84,27 +128,19 @@ function Get-Banan {
 return "banan"
 }
 
-function WrongTsqlEncoding {
+function CheckRepoEncoding {
     param(
-        $path
+        $path,
+		[string]$filter
     )
 	
-	#Enforced encoding
-	$encoding = "Unicode (UTF-7)"
+	$wrongFiles=@{}
+	$files = @(get-childitem -recurse -path $path -filter $filter)
 	
-	$extension = "*.sql"
-	
-	$Files = @{}
-	
-	$Files = Get-FileListOtherEncoding "$path" "*$extension" "$encoding"
-	
-	If ($Files.count -gt 0 ) {
-		Write-Host "----------Wrong Encoding found!-------------"
-		foreach($item in $Files.GetEnumerator() | Sort Name)
-		{
-			$item.Name + " : " + $item.Value
+	foreach ($file in $files) {
+		if (!(Get-IsEncodingUTF8 -Path $file.FullName)) {
+			$wrongFiles[$file.FullName] = Get-FileEncoding4bytes -Path $file.FullName
 		}
-		Write-Host "--------------------------------------------"
-	throw "There are Little Indians in the Village!"
 	}
+	return $wrongFiles
 }

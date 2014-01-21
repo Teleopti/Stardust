@@ -58,7 +58,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			                                        optimizerPreferences,
 			                                        _rollbackService,
 			                                        _schedulingResultStateHolder,
-			                                        _personSkillProvider, _mocks.DynamicMock<ICurrentTeleoptiPrincipal>());
+			                                        _personSkillProvider, 
+													_mocks.DynamicMock<ICurrentTeleoptiPrincipal>(),
+													new ScheduleMatrixLockableBitArrayConverterEx());
 		}
 
 		[Test]

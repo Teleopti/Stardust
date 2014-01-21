@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _container.Resolve<IEffectiveRestrictionCreator>();
             var resourceCalculateDaysDecider =
                 _container.Resolve<IResourceCalculateDaysDecider>();
+	        var scheduleMatrixLockableBitArrayConverterEx =
+		        _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
 
             IList<IExtendReduceDaysOffOptimizer> optimizers = new List<IExtendReduceDaysOffOptimizer>();
             for (int i = 0; i < matrixList.Count; i++)
@@ -110,7 +112,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 
                 IExtendReduceDaysOffDecisionMaker decisionMaker = new ExtendReduceDaysOffDecisionMaker();
-                IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro);
+                IScheduleMatrixLockableBitArrayConverter bitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro, scheduleMatrixLockableBitArrayConverterEx);
                 ILockableBitArray bitArray =
                     bitArrayConverter.Convert(optimizerPreferences.DaysOff.ConsiderWeekBefore,
                                               optimizerPreferences.DaysOff.ConsiderWeekAfter);
