@@ -6,18 +6,17 @@
 }
 
 <div id="AsmMessage-body-inner" class="asmMessage-body-inner relative">
-    <div class="alert alert-block bdd-show-message" data-bind="visible: shouldShowMessage">
+    <div class="alert alert-warning bdd-show-message" data-bind="visible: shouldShowMessage">
         @Resources.NoMessagesFound
     </div>
     <div id="AsmMessages-list" data-bind="foreach: asmMessageColumnList">
         <div class="row" data-bind="foreach: Items">
             <div class="col-md-6">
-                <div class="well well-small" data-bind="css: { 'asmMessage-selected': isSelected }">
+                <div class="well well-sm" data-bind="css: { 'asmMessage-selected': isSelected }">
                     <div class="bdd-asm-message-body" data-bind="click: toggleSelected" style="cursor: pointer">
                         <span class="displaynone" data-bind="text: messageId"></span>
                         <div>
-                            <h5 class="asmMessage-title" data-bind="text: title">
-                            </h5>
+                            <h4 class="asmMessage-title" data-bind="text: title" />
                         </div>
                         <div>
                             <div>
@@ -32,7 +31,7 @@
                     <div class="bdd-asm-message-detail" data-bind="visible: isSelected">
                         <hr />
                         <div>
-                            <label class="bdd-asm-message-detail-message" data-bind="text : message"></label>
+                            <span class="bdd-asm-message-detail-message" data-bind="text : message"></span>
                         </div>
                         <div class="bdd-asm-message-detail-dialogue">
                             <!-- ko foreach: dialogueMessages -->
