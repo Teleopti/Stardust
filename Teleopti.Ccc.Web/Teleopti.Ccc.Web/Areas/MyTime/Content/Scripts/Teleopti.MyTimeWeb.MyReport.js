@@ -18,10 +18,14 @@
 			
 	}
 
+	vm.selectedDate.subscribe(fillData);
+	
 	function fillData() {
 		$.ajax({
-			url: 'MyTime/MyReport/OnDates?startDate=' +  moment(vm.selectedDate()).format("YYYY-MM-DD"),
+			//url: 'MyTime/MyReport/OnDates?startDate=' +  moment(vm.selectedDate()).format("YYYY-MM-DD"),
+			url: 'MyTime/MyReport/OnDates',
 			dataType: 'json',
+			data: { OnDate: moment(vm.selectedDate()).format("YYYY-MM-DD"), ShowWeek: false },
 			success: function (data) {
 				vm.Adherence(data.Adherence);
 				vm.AnsweredCalls(data.AnsweredCalls);
@@ -30,8 +34,8 @@
 				vm.AverageTalkTime(data.AverageTalkTime);
 				vm.Readiness(data.Readiness);
 				vm.DisplayDate(data.DisplayDate);
-				//self.selectedDate = DisplayDate;
-
+				//vm.selectedDate = DisplayDate;
+				
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				alert(xhr.status);
@@ -42,26 +46,19 @@
 	}
 	
 
-	self.nextWeek = function () {
-		self.selectedDate(self.nextWeekDate());
-	};
-
-	self.previousWeek = function () {
-		self.selectedDate(self.previousWeekDate());
-	};
-	
-	
-
-	//this.yesterday = function () {
-	//	alert(self.selectedDate);
-	//	self.selectedDate(moment().startOf('day').clone().add('days', -1));
 		
+	// to week view
+	//vm.nextWeek = function () {
+	//	vm.selectedDate(self.nextWeekDate());
+	//};
+
+	//vm.previousWeek = function () {
+	//	vm.selectedDate(self.previousWeekDate());
 	//};
 	
 	return {
 		Init: function() {
 			fillData();
-			ko.applyBindings(vm);
 			
 			$.ajax({
 				url: 'UserInfo/Culture',
@@ -69,25 +66,21 @@
 				type: 'GET',
 				success: function (data) {
 					$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+					ko.applyBindings(vm);
 				}
 			});
 		},
 		
 		yesterday: function(){
 			vm.selectedDate(moment().startOf('day').clone().add('days', -1));
-			fillData();
 		},
 		
 		nextDay: function () {
 			vm.selectedDate(vm.selectedDate().clone().add('days', 1));
-			fillData();
 		},
 
-		previousDay: function () {
+		previousDay: function() {
 			vm.selectedDate(vm.selectedDate().clone().add('days', -1));
-			fillData();
-		}
+		}		
 	};
-		
-	
 })(jQuery)

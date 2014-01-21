@@ -3,6 +3,7 @@
 	display: block;
 	float: left;
 	border: solid 1px gray;
+	margin-right: 50px;
 }
 
 .myReportTable {
