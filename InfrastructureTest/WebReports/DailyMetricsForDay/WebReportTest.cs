@@ -12,13 +12,11 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 	public abstract class WebReportTest
 	{
 		private AnalyticsDataFactory _analyticsDataFactory;
-		private IUnitOfWork _unitOfWork;
 		protected ExistingDatasources Datasource;
 
 		[SetUp]
 		public void Setup()
 		{
-			_unitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
 			_analyticsDataFactory = new AnalyticsDataFactory();
 			insertCommonData();
 		}
@@ -57,7 +55,6 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void Teardown()
 		{
 			DataSourceHelper.ClearAnalyticsData();
-			_unitOfWork.Dispose();
 		} 
 	}
 }
