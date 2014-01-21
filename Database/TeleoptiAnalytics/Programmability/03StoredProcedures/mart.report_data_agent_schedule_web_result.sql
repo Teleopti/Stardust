@@ -69,7 +69,8 @@ exec mart.report_data_agent_schedule_result
 @from_matrix=0
 
 select answered_calls as AnsweredCalls,
-	after_call_work_time_s/answered_calls as AfterCallWorkTime
+	after_call_work_time_s/answered_calls as AfterCallWorkTime,
+	talk_time_s /answered_calls as TalkTime
 from #tmpResult
 
 DROP TABLE #tmpResult

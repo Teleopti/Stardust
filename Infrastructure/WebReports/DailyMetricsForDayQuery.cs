@@ -12,14 +12,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.WebReports
 {
-	//temp - flytta!
-	public class DailyMetricsForDayResult
-	{
-		public int AnsweredCalls { get; set; }
-		public int AfterCallWorkTime { get; set; }
-	}
-
-
 	public class DailyMetricsForDayQuery
 	{
 		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType, int timezoneType, IPerson agent, IBusinessUnit businessUnit)
@@ -33,6 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 				return session(uow).CreateSQLQuery(tsql)
 				                        .AddScalar("AnsweredCalls", NHibernateUtil.Int32)
 										.AddScalar("AfterCallWorkTime", NHibernateUtil.Int32)
+										.AddScalar("TalkTime", NHibernateUtil.Int32)
 				                        .SetDateTime("date_from", period.StartDate)
 				                        .SetDateTime("date_to", period.EndDate)
 				                        .SetInt32("adherence_id", adherenceType)

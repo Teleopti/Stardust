@@ -418,6 +418,7 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
+    <Compile Include="WebReports\DailyMetricsForDayResult.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

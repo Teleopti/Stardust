@@ -420,6 +420,7 @@
     <Compile Include="Util\CompressionExtensionsTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AnsweredCallsTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AverageAfterCallWorkTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AverageTalkTimeTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\WebReportTest.cs" />
   </ItemGroup>
   <ItemGroup>
