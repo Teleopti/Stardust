@@ -43,29 +43,27 @@
 
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat"/>
 
-<div class="navbar">
-	<div class="navbar-inner">
-		<ul class="nav">
-            @if (Model.RequestPermission.TextRequestPermission)
-            {
-                <li data-bind="css: { active: addTextRequestActive }">
-                    <a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
-                </li>
-            } 
-            @if (Model.RequestPermission.AbsenceRequestPermission)
-            {
-                <li data-bind="css: { active: addAbsenceRequestActive }">
-                    <a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
-                </li>
-            }
-            @if (Model.RequestPermission.ShiftTradeRequestPermission)
-            {
-                <li data-bind="css: { active: addShiftTradeRequestActive }">
-                    <a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-                </li>
-            }
-		</ul>
-	</div>
+<div class="navbar navbar-default">
+    <ul class="nav navbar-nav list-inline">
+        @if (Model.RequestPermission.TextRequestPermission)
+        {
+            <li data-bind="css: { active: addTextRequestActive }">
+                <a href="#" class="text-request-add" data-bind="click: addTextRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.TextRequest</a>
+            </li>
+        }
+        @if (Model.RequestPermission.AbsenceRequestPermission)
+        {
+            <li data-bind="css: { active: addAbsenceRequestActive }">
+                <a href="#" class="absence-request-add" data-bind="click: addAbsenceRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AbsenceRequest</a>
+            </li>
+        }
+        @if (Model.RequestPermission.ShiftTradeRequestPermission)
+        {
+            <li data-bind="css: { active: addShiftTradeRequestActive }">
+                <a href="#" class="shifttrade-request-add" data-bind="click: addShiftTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+            </li>
+        }
+    </ul>
 </div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
