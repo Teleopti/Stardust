@@ -23,7 +23,7 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_web_result]
 @person_code uniqueidentifier,
 @business_unit_code uniqueidentifier
 as
-set nocount on
+set nocount on	
 
 declare @interval_from int
 declare @interval_to int
@@ -70,7 +70,8 @@ exec mart.report_data_agent_schedule_result
 @business_unit_code=@business_unit_code, 
 @from_matrix=0
 
-select answered_calls as AnsweredCalls
+select answered_calls as AnsweredCalls,
+	after_call_work_time_s/answered_calls as AfterCallWorkTime
 from #result
 
 drop table #result
