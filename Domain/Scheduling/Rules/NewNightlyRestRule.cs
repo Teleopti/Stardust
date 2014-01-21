@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responsList;
         }
 
-        private TimeSpan? checkDays(IScheduleDay firstdDay, IScheduleDay secondDay, TimeSpan nightRest)
+        private TimeSpan? checkDays(IScheduleDay firstDay, IScheduleDay secondDay, TimeSpan nightRest)
         {
-	        var firstSignificant = firstdDay.SignificantPart();
+	        var firstSignificant = firstDay.SignificantPart();
 	        var secondSignificant = secondDay.SignificantPart();
 
 			bool checkFirstDay = firstSignificant == SchedulePartView.MainShift ||
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 return null;
 
         	var secondDayStart = _workTimeStartEndExtractor.WorkTimeStart(secondDay.ProjectionService().CreateProjection());
-        	var firstDayEnd = _workTimeStartEndExtractor.WorkTimeEnd(firstdDay.ProjectionService().CreateProjection());
+        	var firstDayEnd = _workTimeStartEndExtractor.WorkTimeEnd(firstDay.ProjectionService().CreateProjection());
 			if(secondDayStart != null && firstDayEnd != null)
 			{
 				var restTime = secondDayStart.Value.Subtract(firstDayEnd.Value);
