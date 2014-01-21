@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
     public class PersonPeriodChangedMessageSender :IMessageSender
     {
-	    private readonly IServiceBusSender _serviceBusSender;
+		private readonly IServiceBusEventPublisher _serviceBusSender;
 
 	    private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IPerson)
 		                                                        	};
 
-        public PersonPeriodChangedMessageSender(IServiceBusSender serviceBusSender)
+		public PersonPeriodChangedMessageSender(IServiceBusEventPublisher serviceBusSender)
 		{
 	        _serviceBusSender = serviceBusSender;
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                     
                     var message = new PersonPeriodChangedMessage();
 					message.SetPersonIdCollection(idsAsString);
-                    _serviceBusSender.Send(message);
+                    _serviceBusSender.Publish(message);
 				}
             }
         }

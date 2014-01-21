@@ -173,3 +173,7 @@
 .asmMessage-title {
 	margin: 0 0 5px 0;
 }
+
+.container hr {
+    border-color: #ffffff;
+}

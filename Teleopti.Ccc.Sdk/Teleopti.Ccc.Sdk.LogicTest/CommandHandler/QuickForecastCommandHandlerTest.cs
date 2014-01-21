@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	public class QuickForecastCommandHandlerTest
 	{
 		private MockRepository _mocks;
-		private  IServiceBusSender _busSender;
+		private IServiceBusEventPublisher _busSender;
 		private  ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private  IJobResultRepository _jobResultRepository;
 		private QuickForecastCommandHandler _target;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_busSender = _mocks.DynamicMock<IServiceBusSender>();
+			_busSender = _mocks.DynamicMock<IServiceBusEventPublisher>();
 			_unitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = _mocks.DynamicMock<IJobResultRepository>();
 			_target = new QuickForecastCommandHandler(_busSender, _unitOfWorkFactory, _jobResultRepository);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
 			Expect.Call(_busSender.EnsureBus()).Return(true);
-			Expect.Call(() => _busSender.Send(new QuickForecastWorkloadsMessage())).IgnoreArguments();
+			Expect.Call(() => _busSender.Publish(new QuickForecastWorkloadsMessage())).IgnoreArguments();
 			_mocks.ReplayAll();
 			var period = new DateOnlyPeriodDto
 				{

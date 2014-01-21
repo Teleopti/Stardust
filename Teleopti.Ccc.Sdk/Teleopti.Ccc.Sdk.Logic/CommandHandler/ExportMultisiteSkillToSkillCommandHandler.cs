@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class ExportMultisiteSkillToSkillCommandHandler : IHandleCommand<ExportMultisiteSkillToSkillCommandDto>
     {
-        private readonly IServiceBusSender _busSender;
+		private readonly IServiceBusEventPublisher _busSender;
         private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-        public ExportMultisiteSkillToSkillCommandHandler(IServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public ExportMultisiteSkillToSkillCommandHandler(IServiceBusEventPublisher busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
         {
             _busSender = busSender;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					message.MultisiteSkillSelections.Add(selection);
                 }
 
-                _busSender.Send(message);
+                _busSender.Publish(message);
             }
 			command.Result = new CommandResultDto { AffectedId = jobId, AffectedItems = 1 };
         }
