@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         private TimeSpan? checkDays(IScheduleDay firstDay, IScheduleDay secondDay, TimeSpan nightRest)
         {
-	        var firstSignificant = firstdDay.SignificantPart();
+	        var firstSignificant = firstDay.SignificantPart();
 	        var secondSignificant = secondDay.SignificantPart();
 
 			bool checkFirstDay = firstSignificant == SchedulePartView.MainShift ||
