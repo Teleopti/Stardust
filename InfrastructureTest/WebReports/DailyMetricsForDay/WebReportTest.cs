@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			var intervals = new QuarterOfAnHourInterval();
 			Datasource = new ExistingDatasources(timeZones);
 
+			//denna behöver nog fixas när vi blandar in scheman å sånt
 			var fakeBuId = Guid.NewGuid();
 
 			var agent = new Person(SetupFixtureForAssembly.loggedOnPerson, Datasource, 0, new DateTime(2010, 1, 1),
