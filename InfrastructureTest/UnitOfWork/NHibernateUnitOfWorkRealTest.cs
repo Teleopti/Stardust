@@ -111,9 +111,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 cantBePersisted = PersonFactory.CreatePerson();
                 repository.Add(cantBePersisted);
                 cantBePersisted.Email = null;
-                var loggedOnP = SetupFixtureForAssembly.loggedOnPerson;
-                loggedOnP.Name = new Name(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-                repository.Add(loggedOnP);
                 try
                 {
                     uow1.PersistAll();

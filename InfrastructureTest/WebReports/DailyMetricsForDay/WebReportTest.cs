@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[SetUp]
 		public void Setup()
 		{
+			DataSourceHelper.ClearAnalyticsData();
 			_analyticsDataFactory = new AnalyticsDataFactory();
 			insertCommonData();
 		}
@@ -56,11 +57,5 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		{
 			return new DailyMetricsForDayQuery(new CurrentDataSource(new CurrentIdentity()));
 		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			DataSourceHelper.ClearAnalyticsData();
-		} 
 	}
 }
