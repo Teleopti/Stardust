@@ -6,10 +6,10 @@
 Scenario: View sum of employees not adhering to schedule for each site
 	Given there is a shift category named 'Late'
 	And there is an activity named 'Phone'
-	And there is a site named 'Moon'
-	And there is a team named 'Green' on site 'Moon'
-	And there is a site named 'Europa'
-	And there is a team named 'Red' on site 'Europa'
+	And there is a site named 'Paris'
+	And there is a team named 'Green' on site 'Paris'
+	And there is a site named 'London'
+	And there is a team named 'Red' on site 'London'
 	And Pierre Baldi has a person period with
 	| Field      | Value      |
 	| Team       | Green      |
@@ -36,8 +36,8 @@ Scenario: View sum of employees not adhering to schedule for each site
 	 And Pierre Baldi has his phone state set to Pause
 	 And Ashley Andeen has her phone state set to Ready for taking call
 	 And I am viewing Real time adherence overview
-	 Then I should see site 'Moon' with an out of adherence sum of 1
-	 And I should see site 'Europa' with an out of adherence sum of 0
+	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
+	 And I should see site 'London' with 0 of 1 employees out of adherence
 
 Scenario: View sum of employees not adhering to schedule for each team within a site
 
