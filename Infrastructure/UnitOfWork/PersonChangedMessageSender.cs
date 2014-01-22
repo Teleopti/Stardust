@@ -11,14 +11,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
     public class PersonChangedMessageSender :IMessageSender
     {
-	    private readonly IServiceBusSender _serviceBusSender;
+		private readonly IServiceBusEventPublisher _serviceBusSender;
 
 	    private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
 		                                                        		typeof (IPerson),
 		                                                        	};
 
-		public PersonChangedMessageSender(IServiceBusSender serviceBusSender)
+		public PersonChangedMessageSender(IServiceBusEventPublisher serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			    var idsAsString = personList.Select(p => p.Id.GetValueOrDefault()).ToArray();
 			    var message = new PersonChangedMessage();
 			    message.SetPersonIdCollection(idsAsString);
-                    _serviceBusSender.Send(message);
+                    _serviceBusSender.Publish(message);
 		    }
 	    }
     }

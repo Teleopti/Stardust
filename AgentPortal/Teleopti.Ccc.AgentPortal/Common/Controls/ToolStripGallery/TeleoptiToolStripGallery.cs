@@ -207,17 +207,19 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls.ToolStripGallery
             {
                 ToolStripGalleryItem toolStripGalleryItem = GetClickedToolStripGalleryItem(e);
 
-                Parent.ContextMenuStrip.Click -= ContextMenuStrip_Click;
-                Parent.ContextMenuStrip.Click += ContextMenuStrip_Click;
+				if (Parent.ContextMenuStrip != null)
+				{
+					Parent.ContextMenuStrip.Click -= ContextMenuStrip_Click;
+					Parent.ContextMenuStrip.Click += ContextMenuStrip_Click;
 
-                Parent.ContextMenuStrip.Closing += delegate
-                {
-                    Parent.ContextMenuStrip.Items.Clear();
-                    Parent.ContextMenuStrip = new ContextMenuStrip();
-                };
-
-                isOpening = true;
-                OnItemClicked(e, toolStripGalleryItem, Parent.ContextMenuStrip);
+					Parent.ContextMenuStrip.Closing += delegate
+					{
+						Parent.ContextMenuStrip.Items.Clear();
+						Parent.ContextMenuStrip = new ContextMenuStrip();
+					};
+					isOpening = true;
+					OnItemClicked(e, toolStripGalleryItem, Parent.ContextMenuStrip);
+				}
             }
         }
 

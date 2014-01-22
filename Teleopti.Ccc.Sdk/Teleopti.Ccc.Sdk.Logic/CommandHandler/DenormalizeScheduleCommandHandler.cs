@@ -11,9 +11,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class DenormalizeScheduleCommandHandler : IHandleCommand<DenormalizeScheduleCommandDto>
     {
-    	private readonly IServiceBusSender _busSender;
+		private readonly IServiceBusEventPublisher _busSender;
 
-		public DenormalizeScheduleCommandHandler(IServiceBusSender busSender)
+		public DenormalizeScheduleCommandHandler(IServiceBusEventPublisher busSender)
 		{
 			_busSender = busSender;
 		}
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			              		PersonId = command.PersonId
 			              	};
 			
-			_busSender.Send(message);
+			_busSender.Publish(message);
 
 			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };
 		}

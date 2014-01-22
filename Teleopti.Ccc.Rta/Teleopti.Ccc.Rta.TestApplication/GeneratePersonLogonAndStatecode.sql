@@ -4,6 +4,7 @@ declare @BusinessUnit uniqueidentifier
 declare @teamId uniqueidentifier
 
 --===EDIT===
+-- The output is limited to one StateCode per active StateGroup
 --1) SQLCMD mode
 --Not run this script in SQLCMD-mode. see "Query"-menu
 
@@ -14,6 +15,11 @@ USE REPLACE_TO_MATCH_APP_DB
 --change 
 :setvar analytics REPLACE_TO_MATCH_ANALYTICS_DB
 
+--4) team.Id
+--set this values to match the team_code (aka team.Id) you would like to send RTA events to
+set @teamId = '34590A63-6331-4921-BC9F-9B5E015AB495' 
+
+--==========
 --show all available teams
 select bu.Name 'BusinessUnit',s.Name 'Site',t.Name 'Team',t.Id as 'Team Id',count(p.Id) 'number of agents'
 from BusinessUnit bu
@@ -28,12 +34,6 @@ inner join Person p
 	on p.Id = pp.Parent
 group by bu.Name,s.Name,t.Name,t.Id
 order by 1,2,3
-
-
---4) team.Id
---set this values to match the team_code (aka team.Id) you would like to send RTA events to
-set @teamId = '2448F8CA-8082-455B-BF60-A1490101AA29' 
---==========
 
 IF OBJECT_ID('tempdb.dbo.#t') IS NOT NULL DROP TABLE #t
 create table #t (BusinessUnit uniqueidentifier, SourceId int, PlatformTypeId char(36), LogOn nvarchar(50), Person char(36), StateCode nvarchar(25))
@@ -100,10 +100,23 @@ inner join ExternalLogOn ex
 	on ex.Id = exc.ExternalLogOn
 inner join RtaStateGroup rg
 	on rg.BusinessUnit = bu.Id
+	and rg.IsDeleted=0
 inner join RtaState rs
 	on rs.Parent = rg.Id
 where t.Id = @teamId
 and ex.DataSourceId = @DataSourceId
+and rs.Id in (
+	select a.Id from (
+		SELECT
+			a.Id,
+			ROW_NUMBER() over(PARTITION BY b.Id ORDER BY b.Name ASC) rowNumber
+		from RtaState a
+		inner join RtaStateGroup b
+			on a.parent = b.Id
+		where b.IsDeleted=0
+			) a
+	where a.rowNumber=1
+	)
 
 --fixed values
 select @BusinessUnit as BusinessUnit

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class DenormalizeScheduleCommandHandlerTest
     {
-        private IServiceBusSender _busSender;
+		private IServiceBusEventPublisher _busSender;
         private MockRepository _mock;
         private DenormalizeScheduleCommandHandler _target;
         private DenormalizeScheduleCommandDto _denormalizeScheduleCommandDto;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-            _busSender = _mock.StrictMock<IServiceBusSender>();
+			_busSender = _mock.StrictMock<IServiceBusEventPublisher>();
             _target = new DenormalizeScheduleCommandHandler(_busSender);
             _denormalizeScheduleCommandDto = new DenormalizeScheduleCommandDto();
         }
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.Send(new ScheduleChangedEvent())).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ScheduleChangedEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(false);
-                Expect.Call(() => _busSender.Send(new ScheduleChangedEvent())).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ScheduleChangedEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

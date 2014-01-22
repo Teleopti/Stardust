@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class MeetingMessageSender : IMessageSender
 	{
-		private readonly IServiceBusSender _serviceBusSender;
+		private readonly IServiceBusEventPublisher _serviceBusSender;
 
-		public MeetingMessageSender(IServiceBusSender serviceBusSender)
+		public MeetingMessageSender(IServiceBusEventPublisher serviceBusSender)
 		{
 			_serviceBusSender = serviceBusSender;
 		}
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					              		EndDateTime = customChange.Period.EndDateTime,
 					              		PersonId = customChange.MainRoot.Id.GetValueOrDefault()
 					              	};
-					_serviceBusSender.Send(message);
+					_serviceBusSender.Publish(message);
 				}
 			}
 		}

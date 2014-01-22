@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -35,12 +36,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
-		[EnsureInPortal]
-		[UnitOfWorkAction]
-		public ActionResult Month()
-		{
-			return new ContentResult { Content = "<br/><h2>Soon...</h2>" };
-		}
+        [EnsureInPortal]
+        public ActionResult Month()
+        {
+            return View("MonthPartial");
+        }
 
 		[UnitOfWorkAction]
 		public JsonResult FetchData(DateOnly? date)
@@ -50,12 +50,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-		[UnitOfWorkAction]
-		[HttpGet]
-		public JsonResult FetchData2()
-		{
-			return Json(new {Name="Remove me"}, JsonRequestBehavior.AllowGet);
-		}
+        [UnitOfWorkAction]
+        public JsonResult FetchMonthData(DateOnly? date)
+        {
+            var showForDate = date ?? _now.LocalDateOnly();
+            var model = _scheduleViewModelFactory.CreateMonthViewModel(showForDate);
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
 
 		public ActionResult Index()
 		{

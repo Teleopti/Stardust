@@ -96,11 +96,11 @@ namespace Teleopti.Ccc.WinCode.Main
 												      {
 														  new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
 												          new ScheduleMessageSender(eventPublisher), 
-                                                          new MeetingMessageSender(sendToServiceBus),
-                                                          new GroupPageChangedMessageSender(sendToServiceBus),
-                                                          new TeamOrSiteChangedMessageSender(sendToServiceBus),
-                                                          new PersonChangedMessageSender(sendToServiceBus),
-                                                          new PersonPeriodChangedMessageSender(sendToServiceBus)
+                                                          new MeetingMessageSender(eventPublisher),
+                                                          new GroupPageChangedMessageSender(eventPublisher),
+                                                          new TeamOrSiteChangedMessageSender(eventPublisher),
+                                                          new PersonChangedMessageSender(eventPublisher),
+                                                          new PersonPeriodChangedMessageSender(eventPublisher)
 												      }, DataSourceConfigurationSetter.ForDesktop()),
         			new SignalBroker(MessageFilterManager.Instance))
         			{

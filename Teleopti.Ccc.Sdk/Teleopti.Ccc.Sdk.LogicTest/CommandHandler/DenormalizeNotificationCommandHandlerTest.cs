@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class DenormalizeNotificationCommandHandlerTest
     {
-        private IServiceBusSender _busSender;
+		private IServiceBusEventPublisher _busSender;
         private MockRepository _mock;
         private DenormalizeNotificationCommandHandler _target;
         private DenormalizeNotificationCommandDto _denormalizeNotificationCommandDto;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-            _busSender = _mock.StrictMock<IServiceBusSender>();
+			_busSender = _mock.StrictMock<IServiceBusEventPublisher>();
             _target = new DenormalizeNotificationCommandHandler(_busSender);
             _denormalizeNotificationCommandDto = new DenormalizeNotificationCommandDto();
         }
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(()=>_busSender.Send(new ProcessDenormalizeQueue())).IgnoreArguments();
+                Expect.Call(()=>_busSender.Publish(new ProcessDenormalizeQueue())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(false);
-                Expect.Call(() => _busSender.Send(new ProcessDenormalizeQueue())).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ProcessDenormalizeQueue())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

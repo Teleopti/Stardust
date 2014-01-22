@@ -23,6 +23,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new RaptorAgentLogOnSynchronizationStep(jobParameters));
 			Add(new StagePersonJobStep(jobParameters));
 			Add(new StageAgentSkillJobStep(jobParameters));
+			Add(new StageStateGroupJobStep(jobParameters));
 			Add(new StageActivityJobStep(jobParameters));
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
@@ -53,6 +54,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new DimTeamJobStep(jobParameters));
 			Add(new DimSkillJobStep(jobParameters));
 			Add(new DimSkillSetJobStep(jobParameters));
+			Add(new DimStateGroupJobStep(jobParameters));
 			Add(new DimPersonJobStep(jobParameters));
 			Add(new DimActivityJobStep(jobParameters));
 			Add(new DimAbsenceJobStep(jobParameters));
@@ -80,6 +82,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentQueueJobStep(jobParameters));              // BU independent
 			Add(new FactQualityLoadJobStep(jobParameters));             // BU independent
+			Add(new FactAgentStateJobStep(jobParameters));
 			Add(new FactForecastWorkloadJobStep(jobParameters, true));
 			Add(new FactScheduleDeviationJobStep(jobParameters,true));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
