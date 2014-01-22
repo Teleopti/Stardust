@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -24,8 +25,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnAverageTalkTime()
 		{
 			const int expectedAverage = 30;
-			var result = Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest);
-			Assert.That(result.TalkTime, Is.EqualTo(expectedAverage));
+			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest)
+				.TalkTime.Should().Be.EqualTo(expectedAverage);
 		}
 	}
 }
