@@ -57,7 +57,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 												   optimizerPreferences,
 												   _rollbackService,
 												   _schedulingResultStateHolder,
-												   _personSkillProvider, new CurrentTeleoptiPrincipal());
+												   _personSkillProvider, 
+												   new CurrentTeleoptiPrincipal(),
+												   new ScheduleMatrixLockableBitArrayConverterEx());
 		}
 
 		[Test]

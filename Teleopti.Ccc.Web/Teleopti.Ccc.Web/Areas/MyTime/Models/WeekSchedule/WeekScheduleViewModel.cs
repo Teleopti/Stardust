@@ -14,11 +14,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public IEnumerable<TimeLineViewModel> TimeLine { get; set; }
 		public string TimeLineCulture { get; set; }
 		public bool AsmPermission { get; set; }
+        public bool UnderConstructionPermission { get; set; }
 		public bool IsCurrentWeek { get; set; }
 		public string DatePickerFormat { get; set; }
 	}
 
-	public class RequestPermission
+    public class RequestPermission
 	{
 		public bool TextRequestPermission { get; set; }
 		public bool AbsenceRequestPermission { get; set; }

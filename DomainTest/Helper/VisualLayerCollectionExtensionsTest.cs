@@ -119,5 +119,23 @@ namespace Teleopti.Ccc.DomainTest.Helper
 
 			result.Single().FractionPeriod.HasValue.Should().Be.False();
 		}
+
+		[Test]
+		public void ShouldNotAddResourceLayerOutsideProvidedLayersWhenLayersNotAdjacent()
+		{
+			var dateTimePeriod1 = new DateTimePeriod(new DateTime(2001, 1, 1, 10, 45, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 11, 0, 0, DateTimeKind.Utc));
+			var dateTimePeriod2 = new DateTimePeriod(new DateTime(2001, 1, 1, 12, 45, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 13, 0, 0, DateTimeKind.Utc));
+
+			var visualLayer1 = new VisualLayer(activity, dateTimePeriod1 , activity, person);
+			var visualLayer2 = new VisualLayer(activity, dateTimePeriod2, activity, person);
+
+			var layers = new List<IVisualLayer> {visualLayer1, visualLayer2};
+			var visualLayers = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+
+			var result = visualLayers.ToResourceLayers(15).ToArray();
+			Assert.AreEqual(2, result.Count());
+			Assert.IsTrue(result[0].Period.Equals(dateTimePeriod1));
+			Assert.IsTrue(result[1].Period.Equals(dateTimePeriod2));
+		}
 	}
 }
