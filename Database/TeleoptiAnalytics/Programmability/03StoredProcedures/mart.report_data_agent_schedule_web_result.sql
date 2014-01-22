@@ -70,7 +70,7 @@ exec mart.report_data_agent_schedule_result
 
 select answered_calls as AnsweredCalls,
 	after_call_work_time_s/answered_calls as AfterCallWorkTime,
-	talk_time_s /answered_calls as TalkTime
+	talk_time_s /answered_calls as TalkTime,
 	(after_call_work_time_s + talk_time_s) / answered_calls as HandlingTime 
 from #tmpResult
 
