@@ -172,6 +172,8 @@
     <Compile Include="TestData\Analytics\BusinessUnit.cs" />
     <Compile Include="TestData\Analytics\BrasilTimeZone.cs" />
     <Compile Include="TestData\Analytics\CurrentBeforeAndAfterWeekDates.cs" />
+    <Compile Include="TestData\Analytics\FactSchedule.cs" />
+    <Compile Include="TestData\Analytics\FactAgent.cs" />
     <Compile Include="TestData\Analytics\FactAgentQueue.cs" />
     <Compile Include="TestData\Analytics\FillBridgeAcdLoginPersonFromData.cs" />
     <Compile Include="TestData\Analytics\IStageRequest.cs" />
@@ -202,7 +204,9 @@
     <Compile Include="TestData\Analytics\Tables\bridge_queue_workload.cs" />
     <Compile Include="TestData\Analytics\Tables\bridge_time_zone.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_scenario.cs" />
+    <Compile Include="TestData\Analytics\Tables\fact_agent.cs" />
     <Compile Include="TestData\Analytics\Tables\fact_agent_queue.cs" />
+    <Compile Include="TestData\Analytics\Tables\fact_schedule.cs" />
     <Compile Include="TestData\Analytics\Tables\stg_request.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_person.cs" />
     <Compile Include="TestData\Analytics\Tables\dim_business_unit.cs" />

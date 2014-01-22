@@ -71,7 +71,8 @@ exec mart.report_data_agent_schedule_result
 select answered_calls as AnsweredCalls,
 	after_call_work_time_s/answered_calls as AfterCallWorkTime,
 	talk_time_s /answered_calls as TalkTime,
-	(after_call_work_time_s + talk_time_s) / answered_calls as HandlingTime 
+	(after_call_work_time_s + talk_time_s) / answered_calls as HandlingTime,
+	 ready_time_per_scheduled_ready_time * 100 as ReadyTimePerScheduledReadyTime
 from #tmpResult
 
 DROP TABLE #tmpResult

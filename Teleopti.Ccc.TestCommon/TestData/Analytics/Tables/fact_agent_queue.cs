@@ -34,10 +34,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int localDateId,
 			decimal talkTimeS,
 			decimal afterCallWorkTimeS,
-			decimal answeredCallsWithinSl,
 			int answeredCalls,
-			int transferedCalls,
-			int datasourceId)
+			int transferedCalls)
 		{
 			var row = dataTable.NewRow();
 			row["date_id"] = dateId;
