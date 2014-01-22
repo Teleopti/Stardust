@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.AddScalar("AnsweredCalls", NHibernateUtil.Int32)
 					.AddScalar("AfterCallWorkTime", NHibernateUtil.Int32)
 					.AddScalar("TalkTime", NHibernateUtil.Int32)
+					.AddScalar("HandlingTime", NHibernateUtil.Int32)
 					.SetDateTime("date_from", period.StartDate)
 					.SetDateTime("date_to", period.EndDate)
 					.SetInt32("adherence_id", adherenceType)

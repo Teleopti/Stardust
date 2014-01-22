@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
 	[TestFixture]
-	public class AverageTalkTime : WebReportTest
+	public class AverageTalkTimeTest : WebReportTest
 	{
 		private const int talkTimeQueueOne = 200;
 		private const int talkTimeQueueTwo = 400;
