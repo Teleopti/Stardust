@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see a message text saying that no possible shift trades could be found")]
 		public void ThenIShouldSeeAMessageTextSayingThatNoPossibleShiftTradesCouldBeFound()
 		{
-			Browser.Interactions.AssertVisibleUsingJQuery(".shift-trade-missing-wcs-message");
+			Browser.Interactions.AssertVisibleUsingJQuery(".shift-trade-no-possible-trades");
 		}
 
 		[Then(@"I should see a message text saying that I have no access to any teams")]
@@ -67,7 +67,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertVisibleUsingJQuery(".shift-trade-missing-team-message");
 		}
-		
+
+		[Given(@"my last working date as an agent in the organisation is '(.*)'")]
+		public void GivenMyLastWorkingDateAsAnAgentInTheOrganisationIs(DateTime leavingDate)
+		{
+			var leavingDateForUser = new LeavingDateForUser { LeavingDate = leavingDate };
+			DataMaker.Data().Apply(leavingDateForUser);
+		}
+
 		[Then(@"I should see my schedule with")]
 		public void ThenIShouldSeeMyScheduleWith(Table table)
 		{

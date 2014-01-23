@@ -8,9 +8,6 @@
     <div class="shift-trade-missing-wcs-message alert alert-block" data-bind="visible: missingWorkflowControlSet">
         @Resources.MissingWorkflowControlSet
     </div>
-    <div class="shift-trade-missing-team-message alert alert-block" data-bind="visible: missingMyTeam">
-        @Resources.YouDoNotHaveAccessToAnyTeams
-    </div>
     <div data-bind="if: !missingWorkflowControlSet()">
         <table class="table-condensed">
             <tr>
@@ -38,8 +35,11 @@
             </tr>
         </table>
     </div>
-	<div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
-        <div class="shift-trade-add-schedule">
+    <div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
+        <div class="shift-trade-missing-team-message alert alert-block" data-bind="visible: missingMyTeam">
+            @Resources.YouDoNotHaveAccessToAnyTeams
+        </div>
+        <div class="shift-trade-add-schedule" data-bind="visible: !missingMyTeam() && !missingWorkflowControlSet()">
             <div class="shift-trade-timeline">
                 <div class="relative">
                     <div data-bind="foreach: hours">
@@ -84,10 +84,10 @@
         <p></p>
         <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
             <div>
-				<input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
+                <input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
             </div>
             <div>
-				<textarea id="Request-add-shift-trade-message-input" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
+                <textarea id="Request-add-shift-trade-message-input" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
             </div>
             <div class="pull-right">
                 <button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
@@ -95,7 +95,7 @@
             </div>
             <div class="error" data-bind="html: errorMessage"></div>
         </div>
-        <div id="Request-add-shift-trade-no-possible-trades" class="shift-trade-no-possible-trades" data-bind="visible : noPossibleShiftTrades()">
+        <div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible : noPossibleShiftTrades()">
             @Resources.NoAgentsAvailableForShiftTrade
         </div>
     </div>

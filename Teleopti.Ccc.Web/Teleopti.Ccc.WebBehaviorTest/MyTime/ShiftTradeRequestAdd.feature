@@ -339,10 +339,24 @@ Scenario: Change date and keep selected team
 	Then the option 'The site/Other team' should be selected
 
 Scenario: Cannot trade shifts when teamless
-	Given I am an agent in a team that leaves tomorrow
+	Given I have the role 'Full access to mytime'
+	And my last working date as an agent in the organisation is '2030-01-01'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 06:00 |
+	| EndTime               | 2030-01-02 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent has a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-02 08:00 |
+	| EndTime               | 2030-01-02 18:00 |
+	| Shift category		| Day	           |
+	And the current time is '2030-01-01'
 	When I view Add Shift Trade Request
 	Then I should see a message text saying that I have no access to any teams
+	And I should not see a possible schedule trade with 'OtherAgent'
 
 Scenario: Show possible shift trades from my team
 	Given I have the role 'Full access to mytime'
