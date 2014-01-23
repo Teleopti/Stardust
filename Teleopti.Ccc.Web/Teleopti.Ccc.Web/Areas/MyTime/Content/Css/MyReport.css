@@ -3,10 +3,9 @@
 	display: block;
 	float: left;
 	border: solid 1px gray;
-	margin-right: 30px;
-	margin-bottom: 30px;
 	width: 30%;
 	min-width: 250px;
+	margin-bottom: 20px;
 }
 
 .myReportTable {
@@ -35,7 +34,9 @@
 	width: 80%;
 	min-width: 150px;
 }
-
+.myReportText:hover  {
+	cursor: pointer;
+}
 .myReportHeader {
 	background: #0072c6;
 	color: white;
@@ -43,7 +44,11 @@
 }
 
 .myReportHeaderText {
-	float: left;
+	padding: 5px 30px 5px 5px;	
+	float: left; 
+	display: table-cell;
+	width: 80%;
+	min-width: 150px;
 }
 .fixed-non-responsive.container {
 	width: 99%;
@@ -54,6 +59,8 @@
 
 .myReportChart {
 	width: 60%;
-	min-width: 200px;
+	min-width: 250px;
 	float: left;
+	display: block;
+	margin-top: -10px;
 }
