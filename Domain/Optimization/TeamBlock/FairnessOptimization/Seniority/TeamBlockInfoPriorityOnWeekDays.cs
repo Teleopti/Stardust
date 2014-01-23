@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
+{
+        public interface ITeamBlockInfoPriorityOnWeekDays
+        {
+            ITeamBlockInfo TeamBlockInfo { get; }
+            double Seniority { get; }
+            int WeekDayPoints { get; set; }
+        }
+
+        public class TeamBlockInfoPriorityOnWeekDays : ITeamBlockInfoPriorityOnWeekDays
+        {
+            public ITeamBlockInfo TeamBlockInfo { get; private set; }
+            public double Seniority { get; private set; }
+            public int WeekDayPoints { get; set; }
+
+            public TeamBlockInfoPriorityOnWeekDays(ITeamBlockInfo teamBlockInfo, double seniority, int weekDayPoints)
+            {
+                TeamBlockInfo = teamBlockInfo;
+                Seniority = seniority;
+                WeekDayPoints = weekDayPoints;
+            }
+        }
+    
+}

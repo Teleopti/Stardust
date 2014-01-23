@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         private bool _cancelMe;
         private IConstructTeamBlock _constructTeamBlock;
-        private ISeniorityExtractor _seniorityInfoExtractor;
-        private IWeekDayInfoExtractor _weekDayInfoExtractor;
+        private IDetermineTeamBlockWeekDayPriority _determieTeamBlockWeekDayPririty;
 
         public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock)
         {
@@ -53,23 +52,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private void calcualteDayValueForSelectedPeriod(IList<ITeamBlockInfo> listOfAllTeamBlock)
         {
             //populate the selected agents in a DS
-            var seniorityInfos = _seniorityInfoExtractor.ExtractSeniority(listOfAllTeamBlock);
+            _determieTeamBlockWeekDayPririty.CalculatePriority(listOfAllTeamBlock);
 
-            var weekDaysInfo = _weekDayInfoExtractor.ExtractWeekDayInfos(listOfAllTeamBlock);
-
-            var teamBlockPriorityDefinitionInfo = new TeamBlockPriorityDefinitionInfo();
-            foreach (var teamBlockInfo in listOfAllTeamBlock)
-            {
-                var seniorityInfo = seniorityInfos[teamBlockInfo];
-                var weekDayInfo = weekDaysInfo[teamBlockInfo];
-                var teamBlockInfoPriority = new TeamBlockInfoPriority(teamBlockInfo, seniorityInfo.Seniority, weekDayInfo.Points);
-                teamBlockPriorityDefinitionInfo.AddItem(teamBlockInfoPriority, teamBlockInfoPriority.TeamBlockInfo, teamBlockInfoPriority.ShiftCategoryPriority);
-            }
-            
             //sort the DS according the the agent priority
 
             //caculate the period value according to day value
-            
+
             //perform swaps if validated
         }
 
