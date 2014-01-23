@@ -1,11 +1,12 @@
 ﻿using System;
 using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Infrastructure;
+using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
+using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
@@ -13,13 +14,15 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 	public abstract class WebReportTest
 	{
 		private AnalyticsDataFactory _analyticsDataFactory;
-		private IUnitOfWork _unitOfWork;
 		protected ExistingDatasources Datasource;
+		protected int PersonId;
+		protected int AcdLoginId;
+		protected int ScenarioId;
 
 		[SetUp]
 		public void Setup()
 		{
-			_unitOfWork = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
+			DataSourceHelper.ClearAnalyticsData();
 			_analyticsDataFactory = new AnalyticsDataFactory();
 			insertCommonData();
 		}
@@ -31,10 +34,15 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			var intervals = new QuarterOfAnHourInterval();
 			Datasource = new ExistingDatasources(timeZones);
 
-			var agent = new Person(SetupFixtureForAssembly.loggedOnPerson, Datasource, 0, new DateTime(2010, 1, 1),
-					   new DateTime(2059, 12, 31), 0, -2, 0, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value,
-					   false);
-			var scenario = Scenario.DefaultScenarioFor(1, BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value);
+			//denna behöver nog fixas när vi blandar in scheman å sånt
+			var fakeBuId = Guid.NewGuid();
+			PersonId = 76;
+			AcdLoginId = 123;
+			ScenarioId = 12;
+
+			var agent = new Person(SetupFixtureForAssembly.loggedOnPerson, Datasource, PersonId, new DateTime(2010, 1, 1),
+					   new DateTime(2059, 12, 31), 0, -2, 0, fakeBuId,false);
+			var scenario = Scenario.DefaultScenarioFor(ScenarioId, fakeBuId);
 
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
 			_analyticsDataFactory.Setup(timeZones);
@@ -43,8 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			_analyticsDataFactory.Setup(Datasource);
 			_analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, Datasource));
 			_analyticsDataFactory.Setup(agent);
-			//acd lgin
-			_analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, 1));
+			_analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
 			_analyticsDataFactory.Setup(scenario);
 
 			InsertTestSpecificData(_analyticsDataFactory);
@@ -53,11 +60,9 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 		protected abstract void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory);
 
-		[TearDown]
-		public void Teardown()
+		protected DailyMetricsForDayQuery Target()
 		{
-			DataSourceHelper.ClearAnalyticsData();
-			_unitOfWork.Dispose();
-		} 
+			return new DailyMetricsForDayQuery(new CurrentDataSource(new CurrentIdentity()));
+		}
 	}
 }

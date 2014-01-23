@@ -5,5 +5,7 @@
 		public int AnsweredCalls { get; set; }
 		public int AfterCallWorkTime { get; set; }
 		public int TalkTime { get; set; }
+		public int HandlingTime { get; set; }
+		public int ReadyTimePerScheduledReadyTime { get; set; }
 	}
 }

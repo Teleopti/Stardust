@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	internal static class CurrentUnitOfWorkExtensions
+	internal static class UnitOfWorkExtensions
 	{
 		internal static ISession Session(this ICurrentUnitOfWork unitOfWork)
 		{
@@ -14,6 +14,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		internal static ISession Session(this IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			return ((NHibernateUnitOfWork) unitOfWorkFactory.CurrentUnitOfWork()).Session;
+		}
+
+		internal static IStatelessSession Session(this IStatelessUnitOfWork statelessUnitOfWork)
+		{
+			return ((NHibernateStatelessUnitOfWork)statelessUnitOfWork).Session;
 		}
 	}
 }

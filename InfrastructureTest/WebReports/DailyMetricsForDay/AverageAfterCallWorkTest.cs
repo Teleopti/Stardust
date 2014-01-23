@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.WebReports;
+using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -17,16 +17,16 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
-			analyticsDataFactory.Setup(new FactAgentQueue(0, 1, 1, 1,afterCallWorkQueueOne, 1, answeredCallsQueueOne, 1, Datasource.RaptorDefaultDatasourceId));
-			analyticsDataFactory.Setup(new FactAgentQueue(0, 2, 1, 1,afterCallWorkQueueTwo, 1, answeredCallsQueueTwo, 1, Datasource.RaptorDefaultDatasourceId));
+			analyticsDataFactory.Setup(new FactAgentQueue(0, 1, AcdLoginId, 1, afterCallWorkQueueOne, answeredCallsQueueOne, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(0, 2, AcdLoginId, 1, afterCallWorkQueueTwo, answeredCallsQueueTwo, 1));
 		}
 
 		[Test]
 		public void ShouldReturnAverageAfterCallWork()
 		{
 			const int expectedAverage = 30;
-			var result = new DailyMetricsForDayQuery().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest);
-			Assert.That(result.AfterCallWorkTime, Is.EqualTo(expectedAverage));
+			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest)
+				.AfterCallWorkTime.Should().Be.EqualTo(expectedAverage);
 		}
 	}
 }

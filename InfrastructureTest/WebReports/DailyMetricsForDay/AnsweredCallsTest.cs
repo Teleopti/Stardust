@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Teleopti.Ccc.Infrastructure.WebReports;
+using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -17,15 +17,15 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			const int answeredOne = 1;
 			const int answeredTwo = 2;
 			answeredCalls = answeredOne + answeredTwo;
-			analyticsDataFactory.Setup(new FactAgentQueue(0, 1, 1, 1, 1, 1, answeredOne, 1, Datasource.RaptorDefaultDatasourceId));
-			analyticsDataFactory.Setup(new FactAgentQueue(0, 2, 1, 1, 1, 1, answeredTwo, 1, Datasource.RaptorDefaultDatasourceId));
+			analyticsDataFactory.Setup(new FactAgentQueue(0, 1, AcdLoginId, 1, 1, answeredOne, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(0, 2, AcdLoginId, 1, 1, answeredTwo, 1));
 		}
 
 		[Test]
 		public void ShouldReturnAnsweredCallsFromAllQueues()
 		{
-			var result = new DailyMetricsForDayQuery().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest);
-			Assert.That(result.AnsweredCalls,Is.EqualTo(answeredCalls));
+			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest)
+				.AnsweredCalls.Should().Be.EqualTo(answeredCalls);
 		}
 	}
 }
