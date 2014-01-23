@@ -3,44 +3,56 @@
     Layout = null;
 }
 
-<div class="request-denyreason alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
+<div class="request-denyreason alert alert-warning" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
-        <input type="text" class="input-block-level request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, visible: IsEditable" />
+        <input type="text" class="form-control request-edit-subject" placeholder="@Resources.Subject" data-bind="value: Subject, visible: IsEditable" />
     </div>
         <!-- ko if: IsEditable -->
-            <textarea class="input-block-level request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
+            <textarea class="form-control request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
         <!-- /ko -->
-    <div>
-        <label>
-            @Resources.AbsenceType
-        </label>
-        <select class="request-edit-absence" data-bind="value: AbsenceId, enable: IsEditable">
-			@foreach (var absenceType in Model.AbsenceTypes)
-			{
-				<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-			}
-		</select>
-    </div>
-    <div>
-        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}, enable: IsEditable">
-            <input class="request-edit-datefrom"   data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}, enable: IsEditable" type="text" />
-            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-        </span>
-        <div class="request-edit-timefrom input-group bootstrap-timepicker">
-            <input type="text" class="input-sm" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+<div class="form-group">
+    <label>
+        @Resources.AbsenceType
+    </label>
+    <div class="row">
+        <div class="col-lg-6">
+            <select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable">
+                @foreach (var absenceType in Model.AbsenceTypes)
+                {
+                    <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+                }
+            </select>
         </div>
     </div>
-    <div>
-        <span class="input-group" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
-            <input class="request-edit-dateto" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}, enable: IsEditable" type="text"  />
-            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
+</div>
+<div class="row form-group">
+    <div class="col-lg-8">
+        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
+            <input class="request-edit-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
+            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-th"></i></span>
         </span>
-        <div class="request-edit-timeto input-group bootstrap-timepicker">
-            <input type="text" class="input-sm" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-            <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+    </div>
+    <div class="col-lg-4 bootstrap-timepicker">
+        <div class="request-edit-timefrom input-group">
+            <input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
+            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
         </div>
     </div>
+</div>
+<div class="row form-group">
+    <div class="col-lg-8">
+        <span class="input-group" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
+            <input class="request-edit-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
+            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-th"></i></span>
+        </span>
+    </div>
+    <div class="col-lg-4 bootstrap-timepicker">
+        <div class="request-edit-timeto input-group">
+            <input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
+            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
+        </div>
+    </div>
+</div>
     <label class="checkbox">
         <input type="checkbox" class="request-edit-fullday" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
     </label>
