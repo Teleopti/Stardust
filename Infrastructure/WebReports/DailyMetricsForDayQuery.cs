@@ -1,5 +1,4 @@
-﻿using System;
-using NHibernate;
+﻿using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -10,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 	public class DailyMetricsForDayQuery
 	{
 		private readonly ICurrentDataSource _currentDataSource;
-		private ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
 		private const string tsql =
 @"exec mart.report_data_agent_schedule_web_result 
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType, int timezoneType, IPerson agent, IBusinessUnit bussineeUnit)
+		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType, int timezoneType, IPerson agent)
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{

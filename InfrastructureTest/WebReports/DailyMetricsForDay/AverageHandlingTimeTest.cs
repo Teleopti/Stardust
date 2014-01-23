@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnAverageHandlingTime()
 		{
 			const int expectedAverage = 30;
-			var result = Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest);
+			var result = Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson);
 			Assert.That(result.HandlingTime, Is.EqualTo(expectedAverage));
 		}
 	}

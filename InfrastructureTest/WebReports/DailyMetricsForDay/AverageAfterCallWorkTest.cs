@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnAverageAfterCallWork()
 		{
 			const int expectedAverage = 30;
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson, BusinessUnitFactory.BusinessUnitUsedInTest)
+			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson)
 				.AfterCallWorkTime.Should().Be.EqualTo(expectedAverage);
 		}
 	}
