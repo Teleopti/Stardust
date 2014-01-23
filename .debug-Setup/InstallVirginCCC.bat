@@ -54,14 +54,14 @@ ECHO.
 ECHO ------
 ECHO Create databases ...
 
-::create Analytics
+::drop and create Analytics
 SQLCMD -S%INSTANCE% -E -dmaster -Q"ALTER DATABASE [%Branch%_%Customer%_TeleoptiAnalytics] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [%Branch%_%Customer%_TeleoptiAnalytics]"
 CD "%DBMANAGERPATH%"
 ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiAnalytics" -E -OTeleoptiAnalytics %CreateParams% -F"%DATABASEPATH%" 
 %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiAnalytics" -E -OTeleoptiAnalytics %CreateParams% -F"%DATABASEPATH%"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=2 & GOTO :Error
 
-::Upgrade Raptor DB to latest version
+::Drop and create TeleoptiCCC7
 SQLCMD -S%INSTANCE% -E -dmaster -Q"ALTER DATABASE [%Branch%_%Customer%_TeleoptiCCC7] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [%Branch%_%Customer%_TeleoptiCCC7]"
 ECHO %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCC7" -E -OTeleoptiCCC7 %CreateParams% -F"%DATABASEPATH%"
 %DBMANAGER% -S%INSTANCE% -D"%Branch%_%Customer%_TeleoptiCCC7" -E -OTeleoptiCCC7 %CreateParams% -F"%DATABASEPATH%"
@@ -95,8 +95,11 @@ ECHO Running: CrossDatabaseViewUpdate
 "%ROOTDIR%\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiAnalytics" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
+::insert initial ETL data + Agg log_object
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -i"%ROOTDIR%\database\tsql\mart.sys_setupTestData.sql"
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"exec mart.sys_setupTestData"
+
+::insert initial Agg Agent data + one Queue
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -i"%ROOTDIR%\database\tsql\dbo.Add_QueueAgent_stat.sql"
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"exec dbo.Add_QueueAgent_stat"
 
@@ -119,14 +122,10 @@ IF %ERRORLEV% NEQ 0 ECHO Errors found!
 IF %ERRORLEV% EQU 1 ECHO Could not connect Mart to Agg: EXEC mart.sys_crossdatabaseview_target_update 'TeleoptiCCCAgg', '%Branch%_%Customer%_TeleoptiCCCAgg'
 IF %ERRORLEV% EQU 2 ECHO Analytics DB have a bad trunk or the database is out of version sync
 IF %ERRORLEV% EQU 3 ECHO CCC7 DB have a bad trunk or the database is out of version sync
-IF %ERRORLEV% EQU 4 ECHO Agg DB have a bad trunk or the database is out of version sync
-IF %ERRORLEV% EQU 5 ECHO Could not create views in Mart: EXEC %Branch%_%Customer%_TeleoptiAnalytics.mart.sys_crossDatabaseView_load
 IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%temp%\build.log"
 IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
-IF %ERRORLEV% EQU 17 ECHO Failed to update msgBroker setings in Analytics
-IF %ERRORLEV% EQU 18 ECHO You dont have permisson or file missing: "%DBPath%"
 ECHO.
 ECHO --------
 PAUSE
