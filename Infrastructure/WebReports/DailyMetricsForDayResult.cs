@@ -7,5 +7,6 @@
 		public int TalkTime { get; set; }
 		public int HandlingTime { get; set; }
 		public int ReadyTimePerScheduledReadyTime { get; set; }
+		public int Adherence { get; set; }
 	}
 }
