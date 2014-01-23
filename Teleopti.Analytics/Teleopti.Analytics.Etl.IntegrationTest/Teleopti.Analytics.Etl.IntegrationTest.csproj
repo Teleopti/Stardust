@@ -369,7 +369,9 @@
     <Compile Include="Models\v_stg_queue.cs" />
     <Compile Include="Models\v_stg_schedule_load.cs" />
     <Compile Include="Models\v_time_zone_convertUpDown.cs" />
+    <Compile Include="FactScheduleTest.cs" />
     <Compile Include="TestData\AnalyticsRunner.cs" />
+    <Compile Include="TestData\BasicShiftSetup.cs" />
     <Compile Include="TestData\EtlReadModelSetup.cs" />
     <Compile Include="TestData\ScheduleDayReadModelSetup.cs" />
     <Compile Include="TestData\ShiftForDate.cs" />
@@ -416,7 +418,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
