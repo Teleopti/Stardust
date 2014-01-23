@@ -121,8 +121,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 		{
 			_helper.DumpUrl(writer, () => _browser.Url);
 		}
-		
-		private void validateSelector(string selector)
+
+	    public void SetWidth(int width, int height = 400)
+	    {
+	        _browser.SizeWindow(width,height);
+	    }
+
+	    private void validateSelector(string selector)
 		{
 			if (selector.Contains(":contains("))
 				throw new Exception(":contains() selector should not be used, but was used in " + selector);

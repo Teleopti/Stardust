@@ -95,9 +95,13 @@
     <Compile Include="AbsenceTransformer.cs" />
     <Compile Include="ActivityTransformer.cs" />
     <Compile Include="ConfigurationHandler.cs" />
+    <Compile Include="StateGroupTransformer.cs" />
     <Compile Include="IntradayHourlyAvailabilityTransformer.cs" />
     <Compile Include="HourlyAvailabilityTransformer.cs" />
     <Compile Include="IntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Job\Steps\StageStateGroupJobStep.cs" />
+    <Compile Include="Job\Steps\DimStateGroupJobStep.cs" />
+    <Compile Include="Job\Steps\FactAgentStateJobStep.cs" />
     <Compile Include="Job\Steps\FactAgentSkillJobStep.cs" />
     <Compile Include="Job\Steps\IntradayStageForecastWorkloadJobStep.cs" />
     <Compile Include="Job\Steps\FactAvailabilityJobStep.cs" />

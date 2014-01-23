@@ -22,7 +22,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		public void SetTimeout(TimeSpan timeout)
 		{
 			if (timeout == _configuration.Timeout)
-				_options = null;
+				_options = new Options
+				{
+				    ConsiderInvisibleElements = _configuration.ConsiderInvisibleElements
+				};
 			else
 			{
 				_options = new Options
@@ -49,6 +52,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			_browser.Visit(uri);
 		}
+
+	    public void SetWidth(int width, int height = 400)
+	    {
+	        _browser.ResizeTo(width,height);
+	    }
 
 		public void Click(string selector)
 		{

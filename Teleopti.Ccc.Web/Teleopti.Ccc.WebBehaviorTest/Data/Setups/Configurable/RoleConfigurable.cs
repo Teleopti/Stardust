@@ -43,8 +43,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToCalendarLink { get; set; }
 		public bool AccessToOvertimeAvailability { get; set; }
 		public bool AccessToMyReport { get; set; }
+        public bool AccessToUnderConstruction { get; set; }
 
-		public bool AccessToViewAllGroupPages { get; set; }
+	    public bool AccessToViewAllGroupPages { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -66,6 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
+		    AccessToUnderConstruction = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -181,7 +183,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToMyReport)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportWeb
-									   select f;
+                                       select f;
+            if (!AccessToUnderConstruction)
+                applicationFunctions = from f in applicationFunctions
+                                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.UnderConstruction
+                                       select f;
 			return applicationFunctions;
 		}
 	}

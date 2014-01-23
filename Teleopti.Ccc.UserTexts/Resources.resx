@@ -11858,6 +11858,14 @@ Reduce the complexity to use these shifts.</value>
     <value>Team to compare with</value>
     <comment>Team to compare with</comment>
   </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Time in State per Agent</value>
+    <comment>Time in State per Agent</comment>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detailed Adherence</value>
+    <comment>Detailed Adherence Report Group</comment>
+  </data>
   <data name="MyReportWeb" xml:space="preserve">
     <value>MyReport</value>
     <comment>Applicationfunction for MyReport for web</comment>
@@ -11885,5 +11893,21 @@ Reduce the complexity to use these shifts.</value>
   <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
     <value>On this date you are no longer an employee</value>
     <comment>On this date you are no longer an employee</comment>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Metric</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Readiness</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Value</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Yesterday</value>
+    <comment>Link in My Report (web)</comment>
   </data>
 </root>

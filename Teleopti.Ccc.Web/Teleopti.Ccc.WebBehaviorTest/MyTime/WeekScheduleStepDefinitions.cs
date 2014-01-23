@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the current week button")]
 		public void WhenIClickTheCurrentWeekButton()
 		{
-			Browser.Interactions.Click(".week-schedule-today");
+			Browser.Interactions.Click("#week-schedule-today");
 		}
 		
 		[Then(@"I should not see a shift on date '(.*)'")]

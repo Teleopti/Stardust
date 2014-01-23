@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     [TestFixture]
     public class ScheduleMatrixLockableBitArrayConverterTest
     {
+	    private IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
         private IScheduleMatrixLockableBitArrayConverter _target;
         private MockRepository _mocks;
         private IScheduleMatrixPro _matrix;
@@ -49,8 +51,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            //_matrix = ScheduleMatrixProFactory.Create(new DateOnlyPeriod(2010, 4, 13, 2010, 4, 20));
-            _target = new ScheduleMatrixLockableBitArrayConverter(_matrix);
+	        _scheduleMatrixLockableBitArrayConverterEx = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
+			_target = new ScheduleMatrixLockableBitArrayConverter(_matrix, _scheduleMatrixLockableBitArrayConverterEx);
 
             _scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
             _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
@@ -88,99 +90,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyConvert()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectations();
-                scheduleExpectations();
-            }
-            ILockableBitArray ret;
-            using (_mocks.Playback())
-            {
-                ret = _target.Convert(false, false);
-            }
-            
-            Assert.AreEqual(7, ret.Count);
-            Assert.AreEqual(new MinMax<int>(2, 4) , ret.PeriodArea);
-            Assert.IsFalse(ret[2]);
-            Assert.IsTrue(ret[3]);
-            Assert.IsTrue(ret.IsLocked(2, true));
-            Assert.IsFalse(ret.IsLocked(3, true));
-        }
-
-        [Test]
-        public void VerifyConvertWeekBefore()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectations();
-                scheduleExpectations();
-            }
-            ILockableBitArray ret;
-            using (_mocks.Playback())
-            {
-                ret = _target.Convert(true, false);
-            }
-
-            Assert.AreEqual(14, ret.Count);
-            Assert.AreEqual(new MinMax<int>(9, 11), ret.PeriodArea);
-        }
-
-        [Test]
-        public void VerifyConvertWeekAfter()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectations();
-                scheduleExpectations();
-            }
-            ILockableBitArray ret;
-            using (_mocks.Playback())
-            {
-                ret = _target.Convert(false, true);
-            }
-
-            Assert.AreEqual(14, ret.Count);
-            Assert.AreEqual(new MinMax<int>(2, 4), ret.PeriodArea);
-        }
-
-        [Test]
-        public void VerifyConvertWeekBeforeAndAfter()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectations();
-                scheduleExpectations();
-            }
-            ILockableBitArray ret;
-            using (_mocks.Playback())
-            {
-                ret = _target.Convert(true, true);
-            }
-
-            Assert.AreEqual(21, ret.Count);
-            Assert.AreEqual(new MinMax<int>(9, 11), ret.PeriodArea);
-        }
-
-        [Test]
-        public void VerifyFullDayAbsencesAreLockedByConverter()
-        {
-            using (_mocks.Record())
-            {
-                mockExpectations();
-                scheduleExpectations();
-            }
-            ILockableBitArray ret;
-            using (_mocks.Playback())
-            {
-                ret = _target.Convert(false, false);
-            }
-
-            Assert.IsTrue(ret.IsLocked(4, true));
-        }
-
-        [Test]
         public void VerifyCountWorkdays()
         {
             using (_mocks.Record())
@@ -200,8 +109,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             using (_mocks.Record())
             {
-                mockExpectations();
-                scheduleExpectations();
+	            mockExpectations();
+	            scheduleExpectations();
             }
             using (_mocks.Playback())
             {
@@ -298,6 +207,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                                       _scheduleDayPro21
                                                                   };
 
+			//Expect.Call(_scheduleMatrixLockableBitArrayConverterEx.Convert(_matrix, useWeekBefore, useWeekAfter)).Return(new LockableBitArray())
             Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedList)).Repeat.Any();
             Expect.Call(_matrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
             Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWeeksList)).Repeat.Any();

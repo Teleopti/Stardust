@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 
 		public MoveTimeOptimizerCreator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -32,7 +33,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPersonSkillProvider personSkillProvider,
-			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
+			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftContainerList = workShiftContainerList;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_personSkillProvider = personSkillProvider;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
 		}
 
 		/// <summary>
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IScheduleMatrixPro scheduleMatrixPro = scheduleMatrixContainer.ScheduleMatrix;
 
 				IScheduleMatrixLockableBitArrayConverter matrixConverter =
-					new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro);
+					new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro, _scheduleMatrixLockableBitArrayConverterEx);
 
 				IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
 				IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro, _optimizerPreferences.Advanced);

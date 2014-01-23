@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTimePeriod totalPeriod)
 		{
-			return ScheduleDayStub(totalPeriod.StartDateTime, new Person(), SchedulePartView.MainShift, null, null, null, null, totalPeriod);
+            var person = new Person();
+            person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			return ScheduleDayStub(totalPeriod.StartDateTime, person, SchedulePartView.MainShift, null, null, null, null, totalPeriod);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date)
@@ -69,7 +71,9 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
-			return ScheduleDayStub(date, new Person(), significantPartToDisplay, personAssignment, personAbsences, publicNote);
+            var person = new Person();
+            person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			return ScheduleDayStub(date, person, significantPartToDisplay, personAssignment, personAbsences, publicNote);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)

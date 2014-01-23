@@ -225,10 +225,6 @@ Teleopti.MyTimeWeb.Password = (function ($) {
         });
     }
 
-    function _activatePlaceHolderText() {
-        $(':text, :password').placeholder();
-    }
-
     return {
     	Init: function () {
             _init();
@@ -237,7 +233,7 @@ Teleopti.MyTimeWeb.Password = (function ($) {
             _partialInit();
             readyForInteraction();
             completelyLoaded();
-            _activatePlaceHolderText();
+            Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
         }
     };
 })(jQuery);

@@ -110,15 +110,15 @@
     <property name="DefaultAccessibility"
 			not-null="true"/>
 
-    <set name="AccessibilityDaysOfWeek">
+    <bag name="AccessibilityDaysOfWeek">
       <key column="RuleSet" foreign-key="FK_AccessibilityDaysOfWeek_WorkShiftRuleSet"/>
       <element column="DayOfWeek" type="System.DayOfWeek"/>
-    </set>
+    </bag>
 
-    <set name="AccessibilityDates">
+    <bag name="AccessibilityDates">
       <key column="RuleSet" foreign-key="FK_AccessibilityDates_WorkShiftRuleSet"/>
       <element column="Date" type="UtcDateTime"/>
-    </set>
+    </bag>
     
     <many-to-one name="BusinessUnit"
         class="Teleopti.Ccc.Domain.Common.BusinessUnit"
