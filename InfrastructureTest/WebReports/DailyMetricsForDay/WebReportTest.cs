@@ -69,9 +69,18 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(SetupFixtureForAssembly.loggedOnPerson);
+			var adherenceIdProvider = MockRepository.GenerateMock<IAdherenceIdProvider>();
+			adherenceIdProvider.Expect(x => x.Fetch()).Return(AdherenceId);
+
 			return new DailyMetricsForDayQuery(loggedOnUser, 
 				new CurrentDataSource(new CurrentIdentity()),	
-				new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()));
+				new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()),
+				adherenceIdProvider);
+		}
+
+		protected virtual int AdherenceId
+		{
+			get { return 1; }
 		}
 	}
 }

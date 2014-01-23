@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly IAdherenceIdProvider _adherenceIdProvider;
 
 		private const string tsql =
 @"exec mart.report_data_agent_schedule_web_result 
@@ -20,14 +21,18 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 @adherence_id=:adherence_id, 
 @business_unit_code=:business_unit_code";
 
-		public DailyMetricsForDayQuery(ILoggedOnUser loggedOnUser, ICurrentDataSource currentDataSource, ICurrentBusinessUnit currentBusinessUnit)
+		public DailyMetricsForDayQuery(ILoggedOnUser loggedOnUser, 
+																	ICurrentDataSource currentDataSource, 
+																	ICurrentBusinessUnit currentBusinessUnit,
+																	IAdherenceIdProvider adherenceIdProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_currentDataSource = currentDataSource;
 			_currentBusinessUnit = currentBusinessUnit;
+			_adherenceIdProvider = adherenceIdProvider;
 		}
 
-		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType)
+		public DailyMetricsForDayResult Execute(DateOnlyPeriod period)
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -39,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.AddScalar("ReadyTimePerScheduledReadyTime", NHibernateUtil.Int32)
 					.SetDateTime("date_from", period.StartDate)
 					.SetDateTime("date_to", period.EndDate)
-					.SetInt32("adherence_id", adherenceType)
+					.SetInt32("adherence_id", _adherenceIdProvider.Fetch())
 					.SetGuid("person_code", _loggedOnUser.CurrentUser().Id.Value)
 					.SetGuid("business_unit_code", _currentBusinessUnit.Current().Id.Value) 
 					.SetResultTransformer(Transformers.AliasToBean(typeof (DailyMetricsForDayResult)))
