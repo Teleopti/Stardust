@@ -28,10 +28,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         public IDictionary<TimeSpan, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData)
         {
             if (dayIntervalData == null) return null;
-			if(!dayIntervalData.Any())
+	        var sampleInterval = dayIntervalData.Where(x => x.Value.Count > 0).Select(x => x.Value).FirstOrDefault();
+			if (!dayIntervalData.Any() || sampleInterval == null)
 				return new Dictionary<TimeSpan, ISkillIntervalData>();
 
-	        var resolution = dayIntervalData.First(x=>x.Value.Count > 0).Value.First().Period.ElapsedTime().TotalMinutes;
+			var resolution = sampleInterval.First().Period.ElapsedTime().TotalMinutes;
             var twoDayIntervalsForAllDays =_twoDaysIntervalGenerator.GenerateTwoDaysInterval( dayIntervalData);
 
             return _medianCalculatorForDays.CalculateMedian(twoDayIntervalsForAllDays, resolution);;
