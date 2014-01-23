@@ -36,15 +36,14 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			var intervals = new QuarterOfAnHourInterval();
 			Datasource = new ExistingDatasources(timeZones);
 
-			//denna behöver nog fixas när vi blandar in scheman å sånt
-			var fakeBuId = new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()).Current().Id.Value;
+			var buId = new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()).Current().Id.Value;
 			PersonId = 76;
 			AcdLoginId = 123;
 			ScenarioId = 12;
 
 			var agent = new Person(SetupFixtureForAssembly.loggedOnPerson, Datasource, PersonId, new DateTime(2010, 1, 1),
-					   new DateTime(2059, 12, 31), 0, -2, 0, fakeBuId,false);
-			var scenario = Scenario.DefaultScenarioFor(ScenarioId, fakeBuId);
+					   new DateTime(2059, 12, 31), 0, -2, 0, buId,false);
+			var scenario = Scenario.DefaultScenarioFor(ScenarioId, buId);
 
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
 			_analyticsDataFactory.Setup(timeZones);
