@@ -1,16 +1,14 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.Add_QueueAgent_stat') AND type in (N'P', N'PC'))
+DROP PROCEDURE dbo.Add_QueueAgent_stat
+GO
+
+create proc dbo.Add_QueueAgent_stat
+@TestDay datetime = null
+as
+
 set nocount on
-declare @BuId uniqueidentifier
-declare @personId uniqueidentifier
-declare @Phone uniqueidentifier
-declare @Lunch uniqueidentifier
-declare @ShortBreak uniqueidentifier
-declare @Admin uniqueidentifier
-declare @Meeting uniqueidentifier
-declare @TBBreak uniqueidentifier
-declare @defaultScenario uniqueidentifier
-declare @shiftCat uniqueidentifier
-declare @defSet uniqueidentifier
-declare @overtime uniqueidentifier
+
+If @TestDay is null set @TestDay=getdate()
 
 declare @todayMinus2 smalldatetime
 declare @todayMinus1 smalldatetime

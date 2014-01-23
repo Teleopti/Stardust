@@ -6,6 +6,13 @@ SET ANSI_NULLS, QUOTED_IDENTIFIER ON
 GO
 
 create proc mart.sys_setupTestData
+@IntervalsPerDay INT = 96,
+@Culture nvarchar(200) = N'1053',
+@TimeZoneCode nvarchar(200) = N'W. Europe Standard Time',
+@time_zone_name nvarchar(100) = N'(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna',
+@utc_conversion int = 60,
+@utc_conversion_dst int = 120,
+@AdherenceMinutesOutsideShift nvarchar(200) = N'120'
 AS
 SET NOCOUNT ON
 
@@ -21,15 +28,13 @@ delete from [dbo].[log_object]
 delete from dbo.acd_type
 delete from dbo.ccc_system_info
 
-declare @IntervalsPerDay INT
 DECLARE @IntervalLengthMinutes INT
-SET @IntervalsPerDay=96
 set @IntervalLengthMinutes=1440/@IntervalsPerDay
 
-exec mart.sys_configuration_save @key=N'Culture',@value=1053
+exec mart.sys_configuration_save @key=N'Culture',@value=@Culture
 exec mart.sys_configuration_save @key=N'IntervalLengthMinutes',@value=@IntervalLengthMinutes
-exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=N'W. Europe Standard Time'
-exec mart.sys_configuration_save @key=N'AdherenceMinutesOutsideShift',@value=N'120'
+exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=@TimeZoneCode
+exec mart.sys_configuration_save @key=N'AdherenceMinutesOutsideShift',@value=@AdherenceMinutesOutsideShift
 
 --dim_interval
 delete from mart.dim_interval
@@ -61,7 +66,7 @@ SET IDENTITY_INSERT mart.dim_time_zone ON
 insert into mart.dim_time_zone (time_zone_id, time_zone_code, time_zone_name, default_zone, utc_conversion, utc_conversion_dst, datasource_id, insert_date, update_date, to_be_deleted)
 select 1,N'UTC',N'UTC',0,0,0,-1,getdate(),getdate(),-1
 union all
-select 2,N'W. Europe Standard Time',N'(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna',1,60,120,-1,getdate(),getdate(),-1
+select 2,@TimeZoneCode,@time_zone_name,1,@utc_conversion,@utc_conversion_dst,-1,getdate(),getdate(),-1
 SET IDENTITY_INSERT mart.dim_time_zone OFF
 
 ----------------  
@@ -173,7 +178,7 @@ exec [mart].[sys_datasource_set_raptor_time_zone]
 declare @time_zone_id int
 select @time_zone_id = time_zone_id
 from mart.dim_time_zone
-where time_zone_code = 'W. Europe Standard Time'
+where time_zone_code = @TimeZoneCode
 
 update mart.sys_datasource
 set time_zone_id = @time_zone_id

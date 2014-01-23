@@ -97,7 +97,8 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -i"%ROOTDIR%\database\tsql\mart.sys_setupTestData.sql"
 SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"exec mart.sys_setupTestData"
-SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -i"%ROOTDIR%\database\tsql\AgentQueueData.sql"
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -i"%ROOTDIR%\database\tsql\dbo.Add_QueueAgent_stat.sql"
+SQLCMD -S%INSTANCE% -E -d%Branch%_%Customer%_TeleoptiAnalytics -Q"exec dbo.Add_QueueAgent_stat"
 
 :Add lic
 ::Add license
