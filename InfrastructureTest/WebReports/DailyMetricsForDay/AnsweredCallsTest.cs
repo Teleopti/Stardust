@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldReturnAnsweredCallsFromAllQueues()
 		{
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, SetupFixtureForAssembly.loggedOnPerson)
+			Target().Execute(SetupFixtureForAssembly.loggedOnPerson, new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1)
 				.AnsweredCalls.Should().Be.EqualTo(answeredCalls);
 		}
 	}

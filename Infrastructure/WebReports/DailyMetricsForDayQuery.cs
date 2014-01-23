@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType, IPerson agent)
+		public DailyMetricsForDayResult Execute(IPerson agent, DateOnlyPeriod period, int adherenceType)
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
