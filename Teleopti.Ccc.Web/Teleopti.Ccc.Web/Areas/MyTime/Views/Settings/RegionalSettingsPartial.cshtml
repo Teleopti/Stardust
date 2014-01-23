@@ -2,38 +2,38 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 @model SettingsPermissionViewModel
 @{
-	Layout = null;
+    Layout = null;
 }
-<div id="settings" class="well well-small">
+<div id="settings" class="well well-sm">
     <div class="clearfix">
-        <label for="CultureUi-Picker">@Resources.Language</label>
-        <select id="CultureUi-Picker" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
+        <label for="CultureUi-Picker" class="col-lg-2 control-label">@Resources.Language</label>
+        <select id="CultureUi-Picker" class="col-lg-4" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
             <option data-bind="text: text, value: id"></option>
         </select>
     </div>
-    <br/>
-	<div class="clearfix">
-		<label for="Culture-Picker">@Resources.DateFormat</label>
-                        <select id="Culture-Picker" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
-			<option data-bind="text: text, value: id"></option>
-		</select>
-	</div>
-    <br/>
+    <br />
+    <div class="clearfix">
+        <label for="Culture-Picker" class="col-lg-2 control-label">@Resources.DateFormat</label>
+        <select id="Culture-Picker" class="col-lg-4" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
+            <option data-bind="text: text, value: id"></option>
+        </select>
+    </div>
+    <br />
     @if (Model.ShareCalendarPermission)
     {
-	    <div class="clearfix">
-		    <div class="btn-group">
-			    <button class="btn btn-lg share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
-			    <button class="btn btn-lg revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
-		    </div>
-		    <!-- ko if: CalendarSharingActive() -->
-			<div>
-			    <span>@Resources.ShareMyCalendarHint</span><a href="http://wiki.teleopti.com/TeleoptiCCC/CalendarLink" target="_blank">@Resources.Here</a>
-		    </div>
-		    <div>
-			    <input class="calendar-url col-md-10" data-bind="value: CalendarUrl, selected: true"/>
-		    </div>
-		    <!-- /ko -->
-	    </div>
+        <div class="clearfix">
+            <div class="btn-group">
+                <button class="btn btn-lg share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
+                <button class="btn btn-lg revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
+            </div>
+            <!-- ko if: CalendarSharingActive() -->
+            <div>
+                <span>@Resources.ShareMyCalendarHint</span><a href="http://wiki.teleopti.com/TeleoptiCCC/CalendarLink" target="_blank">@Resources.Here</a>
+            </div>
+            <div>
+                <input class="calendar-url col-md-10" data-bind="value: CalendarUrl, selected: true" />
+            </div>
+            <!-- /ko -->
+        </div>
     }
 </div>
