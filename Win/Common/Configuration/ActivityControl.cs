@@ -11,7 +11,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
@@ -34,6 +36,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         private const string GreaterThanChar = ">";
         private const string SpaceChar = " ";
         private readonly List<ReportLevelDetailAdapter> _reportLevelDetailAdapters;
+        private readonly IList<IActivity> _activitiesToBeDeleted;
+        private readonly IList<IActivity> _activitiesToAdd;
 
         public ActivityControl()
         {
@@ -41,6 +45,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _newActivityName = Resources.NewActivity;
             _reportLevelDetailAdapters = new List<ReportLevelDetailAdapter>();
             _sourceList = new Dictionary<GridType, object>();
+            _activitiesToBeDeleted = new List<IActivity>();
+            _activitiesToAdd = new List<IActivity>();
         }
 
         private void ButtonNewActivityClick(object sender, EventArgs e)
@@ -124,7 +130,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             var name = string.Format(CultureInfo.InvariantCulture, NewActivityNameFormat, _newActivityName, nextCount);
 
             IActivity newActivity = new Activity(name) {DisplayColor = Color.DodgerBlue, PayrollCode = string.Empty};
-
+            _activitiesToAdd.Add(newActivity );
         	return newActivity;
         }
 
@@ -135,23 +141,15 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             IList<IActivity> source = GetSource<IActivity>(gridType);
             IList<IActivity> itemsToDelete = _gridColumnHelper.FindSelectedItems();
 
-            // Part of fix for bug: 12922
-            // Fix disabled in 309.
-            //if (AreUsedInAnySkill(itemsToDelete))
-            //{
-            //    return;
-            //}
-
         	if (!IsReadyToDelete(source)) return;
-        	// Gets the items to be deleted
-        	// Instantiates the repository
-        	var activityRepository = new ActivityRepository(_unitOfWork);
+        	
+            //--var activityRepository = new ActivityRepository(_unitOfWork);
 
         	foreach (var activity in itemsToDelete)
         	{
         		// Removes the activity from the repository and the source data
-        		source.Remove(activity);
-        		activityRepository.Remove(activity);
+        	    source.Remove(activity);
+                _activitiesToBeDeleted.Add(activity );
         	}
 
 			_gridColumnHelper.SetSourceList(GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList());
@@ -264,6 +262,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void LoadSourceList()
         {
+            _sourceList.Clear();
             var groupingActivityRepository = new GroupingActivityRepository(_unitOfWork);
             var activityRepository = new ActivityRepository(_unitOfWork);
 			_sourceList.Add(GridType.GroupingActivity, groupingActivityRepository.LoadAll());
@@ -363,7 +362,26 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         }
 
         public void SaveChanges()
-        {}
+        {
+            Persist();
+        }
+        public void Persist()
+        {
+            var activityRepository = new ActivityRepository(_unitOfWork);
+
+            foreach (var activity in _activitiesToBeDeleted)
+            {
+                activityRepository.Remove(activity);
+            }
+            foreach (var activity in _activitiesToAdd)
+            {
+                activityRepository.Add(activity );
+            }
+
+            _unitOfWork.PersistAll();
+
+            LoadSourceList();
+        }
 
         public void Unload()
         {
@@ -388,8 +406,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             _unitOfWork = value;
         }
 
-        public void Persist()
-        {}
+        
 
         void ColumnGridHelperNewSourceEntityWanted(object sender, SFGridColumnGridHelperEventArgs<IActivity> e)
         {

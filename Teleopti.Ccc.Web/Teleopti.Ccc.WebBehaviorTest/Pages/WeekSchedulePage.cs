@@ -153,15 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "ScheduleDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
-
-		public Link TodayButton 
-		{
-			get
-			{
-				return Document.Link(QuicklyFind.ByClass("week-schedule-today"));
-			}
-		}
-
+        
 		public DivCollection DayLayers(DateTime date)
         {
 			return Document.Divs.Filter(Find.BySelector(DateSelector(date) + " .weekview-day-schedule-layer"));

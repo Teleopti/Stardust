@@ -74,6 +74,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IIntradayDecisionMaker decisionMaker = new IntradayDecisionMaker();
 			var scheduleService = _container.Resolve<IScheduleService>();
 
+			var scheduleMatrixLockableBitArrayConverterEx =
+				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
+
 			IIntradayOptimizer2Creator creator = new IntradayOptimizer2Creator(
 				matrixContainerList,
 				workShiftContainerList,
@@ -82,7 +85,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				optimizerPreferences,
 				rollbackService,
 				_stateHolder,
-				_personSkillProvider, new CurrentTeleoptiPrincipal());
+				_personSkillProvider, 
+				new CurrentTeleoptiPrincipal(),
+				scheduleMatrixLockableBitArrayConverterEx);
 
 			IList<IIntradayOptimizer2> optimizers = creator.Create();
 			IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -112,6 +117,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			var scheduleService = _container.Resolve<IScheduleService>();
 
+			var scheduleMatrixLockableBitArrayConverterEx =
+				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
+
 			IMoveTimeOptimizerCreator creator =
 				new MoveTimeOptimizerCreator(scheduleMatrixOriginalStateContainerList,
 				                             workShiftOriginalStateContainerList,
@@ -120,7 +128,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				                             optimizerPreferences,
 				                             rollbackService,
 				                             _stateHolder,
-				                             _personSkillProvider, new CurrentTeleoptiPrincipal());
+				                             _personSkillProvider, 
+											 new CurrentTeleoptiPrincipal(),
+											 scheduleMatrixLockableBitArrayConverterEx);
 
 			IList<IMoveTimeOptimizer> optimizers = creator.Create();
 			IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);
@@ -477,8 +487,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorker = backgroundWorker;
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 
+			var scheduleMatrixLockableBitArrayConverterEx =
+				_container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
+
 			IList<ISmartDayOffBackToLegalStateSolverContainer> solverContainers =
-				OptimizerHelperHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers, daysOffPreferences);
+				OptimizerHelperHelper.CreateSmartDayOffSolverContainers(matrixOriginalStateContainers, daysOffPreferences, scheduleMatrixLockableBitArrayConverterEx);
 
 			using (PerformanceOutput.ForOperation("SmartSolver for " + solverContainers.Count + " containers"))
 			{
@@ -504,6 +517,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 			}
 
+
+
 			using (PerformanceOutput.ForOperation("Moving days off according to solvers"))
 			{
 				foreach (ISmartDayOffBackToLegalStateSolverContainer backToLegalStateSolverContainer in solverContainers)
@@ -515,7 +530,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 							dayOffTemplate,
 							daysOffPreferences,
 							_scheduleDayChangeCallback,
-							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+							new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling),
+							scheduleMatrixLockableBitArrayConverterEx);
 
 						var restrictionChecker = new RestrictionChecker();
 						var matrix = backToLegalStateSolverContainer.MatrixOriginalStateContainer.ScheduleMatrix;
@@ -923,8 +939,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService =
                  OptimizerHelperHelper.CreateWorkShiftBackToLegalStateServicePro(_container);
 
+	        var scheduleMatrixLockableBitArrayConverterEx =
+		        _container.Resolve<IScheduleMatrixLockableBitArrayConverterEx>();
+
             IScheduleMatrixLockableBitArrayConverter scheduleMatrixArrayConverter =
-                new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix);
+                new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix, scheduleMatrixLockableBitArrayConverterEx);
             ILockableBitArray scheduleMatrixArray =
                 scheduleMatrixArrayConverter.Convert(daysOffPreferences.ConsiderWeekBefore, daysOffPreferences.ConsiderWeekAfter);
 

@@ -39,11 +39,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			var contractDayOffs = new List<IScheduleDay>();
 			IList<KeyValuePair<IScheduleDay, int>> bestSpotList = new List<KeyValuePair<IScheduleDay, int>>();
 
+			var allContractDayOffIsSatisfied = true;
+
 			foreach (var scheduleDay in _scheduleDays)
 			{
-				if(hasContractDayOffDefinition.IsDayOff(scheduleDay))
+				if (hasContractDayOffDefinition.IsDayOff(scheduleDay))
+				{
+					if (!scheduleDay.HasDayOff()) allContractDayOffIsSatisfied = false;
 					contractDayOffs.Add(scheduleDay);
+				}
 			}
+
+			if (allContractDayOffIsSatisfied) return null;
 
 			foreach (var scheduleDay in _scheduleDays)
 			{

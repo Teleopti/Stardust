@@ -1,0 +1,39 @@
+﻿@{
+	Layout = null;
+}
+
+   <div class="container-fluid">
+        <div class="navbar">
+            <div class="navbar-inner">
+                <form class="navbar-form pull-left">
+                    <div class="input-append input-prepend">
+                        <button class="btn" data-bind="click: previousMonth"><i class="icon-arrow-left"></i></button>
+                        <input type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" class="span3 text-center">
+                        <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }"><i class="icon-th"></i></button>
+                        <button class="btn" data-bind="click: nextMonth"><i class="icon-arrow-right"></i></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="calendar" class="cal-context" style="width: 100%;">
+            <div class="cal-row-fluid cal-row-head visible-desktop" data-bind="foreach: weekDayNames">
+                <div class="cal-cell" data-bind="text: Name"></div>
+            </div>
+
+            <div class="cal-row-fluid cal-row-head hidden-desktop" data-bind="foreach: weekDayNames">
+                <div class="cal-cell" data-bind="text: ShortName" ></div>
+            </div>
+
+            <div class="cal-month-box" data-bind="foreach: weekViewModels">
+                <div class="cal-row-fluid" data-bind="foreach: dayViewModels">
+                    <div class="cal-cell">
+                        <div class="cal-month-day" data-bind="click: $root.week, css: { 'cal-day-outmonth': isOutsideMonth, 'working-day': isWorkingDay, 'not-working-day': isNotWorkingDay}, style: {backgroundColor: displayColor}">
+                            <span data-bind="text: dayOfMonth, attr:{'data-cal-date': date}" class="pull-right label label-inverse"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>

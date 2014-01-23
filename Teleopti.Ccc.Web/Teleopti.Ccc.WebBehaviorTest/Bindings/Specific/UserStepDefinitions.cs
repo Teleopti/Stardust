@@ -457,6 +457,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			DataMaker.Data().Apply(new USCulture());
 		}
 
+        [Given(@"I am german")]
+        public void GivenIAmGerman()
+        {
+            DataMaker.Data().Apply(new GermanCulture());
+        }
+
 		[Given(@"I am englishspeaking swede")]
 		public void GivenIAmEnglishSpeakingSwede()
 		{

@@ -16,16 +16,23 @@
 
 .asm-outer-canvas
 {
-	width: 402px;
+	width: 410px;
 	background: white;
 	padding: 4px;
-	border: 1px solid rgb(216, 216, 216);	
-	margin: 2px;
-	height: 52px;
+	border: 1px solid rgb(216, 216, 216);
+	height: 65px;
 	display: none; /*hide when loaded, before moved to correct place*/
 	margin-left: 1px;
 	margin-right: 1px;
-	margin-top: -39px;
+    margin-bottom: 2px;
+}
+
+
+/* Large desktop */
+@media (min-width: 980px) {
+    .asm-outer-canvas {
+        margin-top: -59px;
+    }
 }
 
 .asm-layer
@@ -37,8 +44,6 @@
 	height: 12px;
 	top: 3px;
 }
-
-
 
 .asm-timeline-line
 {
@@ -82,7 +87,7 @@
 	border: 1px solid rgb(216, 216, 216);	
 	width: 400px;
 	overflow: hidden;
-	height: 12px;
+	height: 18px;
 	margin-top: 3px;
 }
 
@@ -91,7 +96,7 @@
 	font-size: 9px;
 	white-space: nowrap;
 	line-height: 9px;
-	margin-top: 0;
+	margin-top: 3px;
 }
 
 .asm-info-canvas-column-messages 
@@ -116,7 +121,6 @@
 }
 
 .asm-info-canvas-column-next {
-	top: 2px;
 	left: 200px;
 	width: 150px;
 	position: absolute;
