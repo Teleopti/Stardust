@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 //Creates a root Group object & add into GroupPage
                 string personGrpDesc = personGroup.Key.Length > 50 ? personGroup.Key.Substring(0, 48) + ".." : personGroup.Key;
                 IRootPersonGroup rootGroup = new RootPersonGroup(personGrpDesc);
-
+				if (!groupPage.IsUserDefined())
+					rootGroup.SetId(Guid.NewGuid());
                 foreach (var p in personGroup)
                 {
                     rootGroup.AddPerson(p);
