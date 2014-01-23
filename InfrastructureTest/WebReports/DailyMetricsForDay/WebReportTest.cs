@@ -2,11 +2,9 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.WebReports;
+using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -16,17 +14,18 @@ using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
 	[TestFixture]
-	public abstract class WebReportTest
+	public abstract class WebReportTest : DatabaseTest
 	{
 		private AnalyticsDataFactory _analyticsDataFactory;
-		protected ExistingDatasources Datasource;
+		private IPerson _loggedOnUser;
+		private ExistingDatasources _datasource;
+		private IBusinessUnit _currentBusinessUnit;
 		protected int PersonId;
 		protected int AcdLoginId;
 		protected int ScenarioId;
 		protected TodayDate Today;
 
-		[SetUp]
-		public void Setup()
+		protected override void SetupForRepositoryTest()
 		{
 			DataSourceHelper.ClearAnalyticsData();
 			_analyticsDataFactory = new AnalyticsDataFactory();
@@ -38,23 +37,29 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			var timeZones = new UtcAndCetTimeZones();
 			Today = new TodayDate();
 			var intervals = new QuarterOfAnHourInterval();
-			Datasource = new ExistingDatasources(timeZones);
+			_datasource = new ExistingDatasources(timeZones);
 
-			var buId = new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()).Current().Id.Value;
+			_loggedOnUser = new Domain.Common.Person();
+			_loggedOnUser.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersistAndRemoveFromUnitOfWork(_loggedOnUser);
+
+			_currentBusinessUnit = new Domain.Common.BusinessUnit("for test");
+			PersistAndRemoveFromUnitOfWork(_currentBusinessUnit);
+
 			PersonId = 76;
 			AcdLoginId = 123;
 			ScenarioId = 12;
 
-			var agent = new Person(SetupFixtureForAssembly.loggedOnPerson, Datasource, PersonId, new DateTime(2010, 1, 1),
-						 new DateTime(2059, 12, 31), 0, -2, 0, buId, false, timeZones.CetTimeZoneId);
-			var scenario = Scenario.DefaultScenarioFor(ScenarioId, buId);
+			var agent = new Person(_loggedOnUser, _datasource, PersonId, new DateTime(2010, 1, 1),
+						 new DateTime(2059, 12, 31), 0, -2, 0, _currentBusinessUnit.Id.Value, false, timeZones.CetTimeZoneId);
+			var scenario = Scenario.DefaultScenarioFor(ScenarioId, _currentBusinessUnit.Id.Value);
 
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
 			_analyticsDataFactory.Setup(timeZones);
 			_analyticsDataFactory.Setup(Today);
 			_analyticsDataFactory.Setup(intervals);
-			_analyticsDataFactory.Setup(Datasource);
-			_analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(Today, intervals, timeZones, Datasource));
+			_analyticsDataFactory.Setup(_datasource);
+			_analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(Today, intervals, timeZones, _datasource));
 			_analyticsDataFactory.Setup(agent);
 			_analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
 			_analyticsDataFactory.Setup(scenario);
@@ -68,13 +73,16 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		protected DailyMetricsForDayQuery Target()
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			loggedOnUser.Expect(x => x.CurrentUser()).Return(SetupFixtureForAssembly.loggedOnPerson);
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(_loggedOnUser);
 			var adherenceIdProvider = MockRepository.GenerateMock<IAdherenceIdProvider>();
 			adherenceIdProvider.Expect(x => x.Fetch()).Return(AdherenceId);
 
+			var currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			currentBu.Expect(x => x.Current()).Return(_currentBusinessUnit);
+
 			return new DailyMetricsForDayQuery(loggedOnUser, 
 				new CurrentDataSource(new CurrentIdentity()),	
-				new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()),
+				currentBu,
 				adherenceIdProvider);
 		}
 

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 @adherence_id=:adherence_id, 
 @business_unit_code=:business_unit_code";
 
-		public DailyMetricsForDayQuery(ILoggedOnUser loggedOnUser, 
+		public DailyMetricsForDayQuery(ILoggedOnUser loggedOnUser,
 																	ICurrentDataSource currentDataSource, 
 																	ICurrentBusinessUnit currentBusinessUnit,
 																	IAdherenceIdProvider adherenceIdProvider)
