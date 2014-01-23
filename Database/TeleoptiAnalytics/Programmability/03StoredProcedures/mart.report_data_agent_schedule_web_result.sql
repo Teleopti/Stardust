@@ -3,13 +3,13 @@ DROP PROCEDURE [mart].[report_data_agent_schedule_web_result]
 GO
 
 /*
-exec mart.report_data_agent_schedule_web_result 
-@date_from='2013-02-05 00:00:00',
-@date_to='2013-02-06 00:00:00',
-@adherence_id=N'1',
-@time_zone_id=N'2',
-@person_code='11610fe4-0130-4568-97de-9b5e015b2564',
-@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+exec sp_executesql N'exec mart.report_data_agent_schedule_web_result 
+@date_from=@p0, 
+@date_to=@p1, 
+@time_zone_id=@p2, 
+@person_code=@p3, 
+@adherence_id=@p4, 
+@business_unit_code=@p5',N'@p0 datetime,@p1 datetime,@p2 int,@p3 uniqueidentifier,@p4 int,@p5 uniqueidentifier',@p0='2000-01-01 00:00:00',@p1='2020-01-01 00:00:00',@p2=1,@p3='EFAD7425-AC53-47DA-9F1A-A2BC00B5C957',@p4=1,@p5='95143853-6EBF-4C24-8669-A97006B1E275'
 */
 
 CREATE PROCEDURE [mart].[report_data_agent_schedule_web_result] 
@@ -69,10 +69,19 @@ exec mart.report_data_agent_schedule_result
 @from_matrix=0
 
 select answered_calls as AnsweredCalls,
-	after_call_work_time_s/answered_calls as AfterCallWorkTime,
-	talk_time_s /answered_calls as TalkTime,
-	(after_call_work_time_s + talk_time_s) / answered_calls as HandlingTime,
-	 ready_time_per_scheduled_ready_time * 100 as ReadyTimePerScheduledReadyTime
+	case
+		when answered_calls = 0 then 0
+		else after_call_work_time_s/answered_calls
+	end as AfterCallWorkTime,
+	case
+		when answered_calls = 0 then 0
+		else talk_time_s/answered_calls
+	end as TalkTime,
+	case
+		when answered_calls = 0 then 0
+		else (after_call_work_time_s + talk_time_s) / answered_calls	
+	end as HandlingTime,
+	ready_time_per_scheduled_ready_time * 100 as ReadyTimePerScheduledReadyTime
 from #tmpResult
 
 DROP TABLE #tmpResult

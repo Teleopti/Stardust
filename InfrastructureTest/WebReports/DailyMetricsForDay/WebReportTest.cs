@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			Datasource = new ExistingDatasources(timeZones);
 
 			//denna behöver nog fixas när vi blandar in scheman å sånt
-			var fakeBuId = Guid.NewGuid();
+			var fakeBuId = new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()).Current().Id.Value;
 			PersonId = 76;
 			AcdLoginId = 123;
 			ScenarioId = 12;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 		protected DailyMetricsForDayQuery Target()
 		{
-			return new DailyMetricsForDayQuery(new CurrentDataSource(new CurrentIdentity()));
+			return new DailyMetricsForDayQuery(new CurrentDataSource(new CurrentIdentity()), new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()));
 		}
 	}
 }
