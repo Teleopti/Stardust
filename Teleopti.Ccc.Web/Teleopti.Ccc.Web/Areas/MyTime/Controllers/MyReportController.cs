@@ -121,50 +121,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			model.HandlingTimeValues = handlingTimeValues;
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
-
-		//[HttpGet]
-		//public JsonResult WeekValues(DateTime startDate)
-		//{
-		//	var models = new List<MyReportModel>
-		//		{
-		//			new MyReportModel
-		//				{
-		//					Adherence = .86,
-		//					AnsweredCalls = 55,
-		//					AverageAfterWork = 15,
-		//					AverageHandlingTime = 135,
-		//					AverageTalkTime = 120,
-		//					Readiness = .88,
-		//					DisplayDate = startDate.ToShortDateString()
-		//				},
-		//			new MyReportModel
-		//				{
-		//					Adherence = .88,
-		//					AnsweredCalls = 50,
-		//					AverageAfterWork = 12,
-		//					AverageHandlingTime = 140,
-		//					AverageTalkTime = 128,
-		//					Readiness = .87,
-		//					DisplayDate = startDate.AddDays(1).ToShortDateString()
-		//				},
-		//			new MyReportModel
-		//				{
-		//					Adherence = .85,
-		//					AnsweredCalls = 66,
-		//					AverageAfterWork = 10,
-		//					AverageHandlingTime = 130,
-		//					AverageTalkTime = 120,
-		//					Readiness = .92,
-		//					DisplayDate = startDate.AddDays(2).ToShortDateString()
-		//				}
-		//		};
-
-		//	return Json(models, JsonRequestBehavior.AllowGet);
-		//}
-    }
-
-	
-    }
+    }	
+}
 
 	//temp here only
 	public class MyReportModel
@@ -190,15 +148,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public List<ReportValue> HandlingTimeValues { get; set; }
 	}
 
+	public class ReportValue
+	{
+		public string Date { get; set; }
+		public int Value { get; set; }
+	}
+
 public class MyReportInput
 {
 	public DateTime OnDate { get; set; }
 	public bool ShowWeek { get; set; }
 }
 
-public class ReportValue
-{
-	public string Date { get; set; }
-	public int Value { get; set; }
-}
+
 
