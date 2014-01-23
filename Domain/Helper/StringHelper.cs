@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Helper
@@ -68,6 +70,16 @@ namespace Teleopti.Ccc.Domain.Helper
 				return string.Concat(trimEndAgain, dotsInEnd);
 			}
 			return input;
+		}
+
+		public static Guid GenerateGuid(string note)
+		{
+			using (var md5 = MD5.Create())
+			{
+				var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(note));
+				var guid = new Guid(hash);
+				return guid;
+			}
 		}
     }
 

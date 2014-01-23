@@ -250,32 +250,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             Assert.AreEqual(ruleSetBagGroupPage, ruleSetBagRow["group_page_name"]);
         }
 
-        [Test]
-        public void ShouldSetGroupIdToGuidEmptyIfMissing()
-        {
-            var userDefinedGroupings = _target.UserDefinedGroupings;
-            IList<IGroupPage> builtInGroupings = _target.BuiltInGroupPages;
-
-            // Make sure that there is group page groups that do not have the id set
-            Assert.IsTrue(builtInGroupings.Any(d => d.RootGroupCollection.Any(g => !g.Id.HasValue)));
-
-            bool isEmptyGuidSetInTranformer = false;
-            using (var dataTable = new DataTable())
-            {
-                dataTable.Locale = Thread.CurrentThread.CurrentCulture;
-                GroupPagePersonInfrastructure.AddColumnsToDataTable(dataTable);
-                _target.Transform(builtInGroupings, userDefinedGroupings, dataTable);
-
-                foreach (DataRow row in dataTable.Rows)
-                {
-                    Assert.IsTrue(row["group_code"] != DBNull.Value);
-                    if ((Guid) row["group_code"] == Guid.Empty)
-                        isEmptyGuidSetInTranformer = true;
-                }
-
-                Assert.IsTrue(isEmptyGuidSetInTranformer);
-            }
-        }
+		[Test]
+		public void AllBuildInGroupPageShouldHaveId()
+		{
+			var builtInGroupings = _target.BuiltInGroupPages;
+			Assert.IsTrue(builtInGroupings.All(d => d.RootGroupCollection.All(g => g.Id.HasValue)));
+		}
 
         private string TranslateToEnglish(string key)
         {
