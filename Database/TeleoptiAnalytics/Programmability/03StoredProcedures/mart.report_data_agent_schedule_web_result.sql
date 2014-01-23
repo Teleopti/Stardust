@@ -2,21 +2,10 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[repo
 DROP PROCEDURE [mart].[report_data_agent_schedule_web_result]
 GO
 
-/*
-exec sp_executesql N'exec mart.report_data_agent_schedule_web_result 
-@date_from=@p0, 
-@date_to=@p1, 
-@time_zone_id=@p2, 
-@person_code=@p3, 
-@adherence_id=@p4, 
-@business_unit_code=@p5',N'@p0 datetime,@p1 datetime,@p2 int,@p3 uniqueidentifier,@p4 int,@p5 uniqueidentifier',@p0='2000-01-01 00:00:00',@p1='2020-01-01 00:00:00',@p2=1,@p3='EFAD7425-AC53-47DA-9F1A-A2BC00B5C957',@p4=1,@p5='95143853-6EBF-4C24-8669-A97006B1E275'
-*/
-
 CREATE PROCEDURE [mart].[report_data_agent_schedule_web_result] 
 @date_from datetime,
 @date_to datetime,
 @adherence_id int,
-@time_zone_id int,
 @person_code uniqueidentifier,
 @business_unit_code uniqueidentifier
 as
@@ -24,9 +13,10 @@ set nocount on
 
 declare @interval_from int
 declare @interval_to int
+declare @time_zone_id int
 set @interval_from=0
 select @interval_to=max(interval_id) from mart.dim_interval
-
+select @time_zone_id = time_zone_id from mart.dim_person where person_code=@person_code
 
 CREATE TABLE #tmpResult
 	(

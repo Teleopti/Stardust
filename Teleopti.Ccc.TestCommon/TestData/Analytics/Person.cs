@@ -21,19 +21,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	    private readonly int _businessUnitId;
 	    private readonly Guid _businessUnitCode;
 	    private readonly bool _toBeDeleted;
-		/*
-		private readonly int _validToDateIdMax;
-		private readonly int _validToIntervalIdMax;
-		private readonly DateTime _validFromLocal;
-		private readonly DateTime _validToLocal;
-		private readonly int _validFromIdLocal;
-		private readonly int _validToIdLocal;
-		*/
+		private readonly int _timeZoneId;
+
 		public int PersonId { get; set; }
 		public IEnumerable<DataRow> Rows { get; set; }
 
         public Person(IPerson person, IDatasourceData datasource, int personId, DateTime validFrom, DateTime validTo, int validFromId,
-							int validToId, int businessUnitId, Guid businessUnitCode, bool toBeDeleted)
+							int validToId, int businessUnitId, Guid businessUnitCode, bool toBeDeleted, int timeZoneId)
         {
             _person = person;
 			_datasource = datasource;
@@ -44,7 +38,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
             _businessUnitId = businessUnitId;
             _businessUnitCode = businessUnitCode;
             _toBeDeleted = toBeDeleted;
-            PersonId = personId;
+	        _timeZoneId = timeZoneId;
+	        PersonId = personId;
 		}
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
@@ -53,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			{
 			    table.AddPerson(PersonId, _person.Id.Value, _person.Name.FirstName, _person.Name.LastName, _validFrom, _validTo,
 			                    _validFromId, 0, _validToId, 0, _businessUnitId, _businessUnitCode, "",
-			                    _datasource.RaptorDefaultDatasourceId, _toBeDeleted);
+			                    _datasource.RaptorDefaultDatasourceId, _toBeDeleted, _timeZoneId);
 
 				Bulk.Insert(connection, table);
 

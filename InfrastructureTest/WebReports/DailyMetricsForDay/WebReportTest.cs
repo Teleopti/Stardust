@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			ScenarioId = 12;
 
 			var agent = new Person(SetupFixtureForAssembly.loggedOnPerson, Datasource, PersonId, new DateTime(2010, 1, 1),
-					   new DateTime(2059, 12, 31), 0, -2, 0, buId,false);
+						 new DateTime(2059, 12, 31), 0, -2, 0, buId, false, timeZones.CetTimeZoneId);
 			var scenario = Scenario.DefaultScenarioFor(ScenarioId, buId);
 
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());

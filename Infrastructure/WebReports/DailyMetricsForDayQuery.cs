@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 		private const string tsql =
 @"exec mart.report_data_agent_schedule_web_result 
 @date_from=:date_from, 
-@date_to=:date_to, 
-@time_zone_id=:time_zone_id, 
+@date_to=:date_to,
 @person_code=:person_code, 
 @adherence_id=:adherence_id, 
 @business_unit_code=:business_unit_code";
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType, int timezoneType, IPerson agent)
+		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType, IPerson agent)
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.SetDateTime("date_from", period.StartDate)
 					.SetDateTime("date_to", period.EndDate)
 					.SetInt32("adherence_id", adherenceType)
-					.SetInt32("time_zone_id", timezoneType)
 					.SetGuid("person_code", agent.Id.Value)
 					.SetGuid("business_unit_code", _currentBusinessUnit.Current().Id.Value) 
 					.SetResultTransformer(Transformers.AliasToBean(typeof (DailyMetricsForDayResult)))

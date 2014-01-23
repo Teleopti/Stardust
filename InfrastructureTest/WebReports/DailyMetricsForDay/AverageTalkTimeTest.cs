@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnAverageTalkTime()
 		{
 			const int expectedAverage = 30;
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson)
+			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, SetupFixtureForAssembly.loggedOnPerson)
 				.TalkTime.Should().Be.EqualTo(expectedAverage);
 		}
 	}
