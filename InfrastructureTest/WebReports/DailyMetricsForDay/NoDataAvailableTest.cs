@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldHaveDataAvailableSetToFalse()
 		{
-			Target().Execute(SetupFixtureForAssembly.loggedOnPerson, new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1)
+			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1)
 				.DataAvailable.Should().Be.False();
 		}
 	}

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 {
 	public class DailyMetricsForDayQuery
 	{
+		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
@@ -19,13 +20,14 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 @adherence_id=:adherence_id, 
 @business_unit_code=:business_unit_code";
 
-		public DailyMetricsForDayQuery(ICurrentDataSource currentDataSource, ICurrentBusinessUnit currentBusinessUnit)
+		public DailyMetricsForDayQuery(ILoggedOnUser loggedOnUser, ICurrentDataSource currentDataSource, ICurrentBusinessUnit currentBusinessUnit)
 		{
+			_loggedOnUser = loggedOnUser;
 			_currentDataSource = currentDataSource;
 			_currentBusinessUnit = currentBusinessUnit;
 		}
 
-		public DailyMetricsForDayResult Execute(IPerson agent, DateOnlyPeriod period, int adherenceType)
+		public DailyMetricsForDayResult Execute(DateOnlyPeriod period, int adherenceType)
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.SetDateTime("date_from", period.StartDate)
 					.SetDateTime("date_to", period.EndDate)
 					.SetInt32("adherence_id", adherenceType)
-					.SetGuid("person_code", agent.Id.Value)
+					.SetGuid("person_code", _loggedOnUser.CurrentUser().Id.Value)
 					.SetGuid("business_unit_code", _currentBusinessUnit.Current().Id.Value) 
 					.SetResultTransformer(Transformers.AliasToBean(typeof (DailyMetricsForDayResult)))
 					.UniqueResult<DailyMetricsForDayResult>();

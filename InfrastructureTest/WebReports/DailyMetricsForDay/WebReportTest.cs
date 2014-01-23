@@ -1,11 +1,15 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Scenario = Teleopti.Ccc.TestCommon.TestData.Analytics.Scenario;
 
@@ -63,7 +67,11 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 		protected DailyMetricsForDayQuery Target()
 		{
-			return new DailyMetricsForDayQuery(new CurrentDataSource(new CurrentIdentity()), new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()));
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(SetupFixtureForAssembly.loggedOnPerson);
+			return new DailyMetricsForDayQuery(loggedOnUser, 
+				new CurrentDataSource(new CurrentIdentity()),	
+				new CurrentBusinessUnit(new CurrentTeleoptiPrincipal()));
 		}
 	}
 }
