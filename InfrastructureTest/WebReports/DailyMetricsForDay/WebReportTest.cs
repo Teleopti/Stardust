@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		protected int PersonId;
 		protected int AcdLoginId;
 		protected int ScenarioId;
+		protected TodayDate Today;
 
 		[SetUp]
 		public void Setup()
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		private void insertCommonData()
 		{
 			var timeZones = new UtcAndCetTimeZones();
-			var dates = new TodayDate();
+			Today = new TodayDate();
 			var intervals = new QuarterOfAnHourInterval();
 			Datasource = new ExistingDatasources(timeZones);
 
@@ -47,10 +48,10 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 			_analyticsDataFactory.Setup(new EternityAndNotDefinedDate());
 			_analyticsDataFactory.Setup(timeZones);
-			_analyticsDataFactory.Setup(dates);
+			_analyticsDataFactory.Setup(Today);
 			_analyticsDataFactory.Setup(intervals);
 			_analyticsDataFactory.Setup(Datasource);
-			_analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(dates, intervals, timeZones, Datasource));
+			_analyticsDataFactory.Setup(new FillBridgeTimeZoneFromData(Today, intervals, timeZones, Datasource));
 			_analyticsDataFactory.Setup(agent);
 			_analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
 			_analyticsDataFactory.Setup(scenario);

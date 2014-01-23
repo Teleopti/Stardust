@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
-			analyticsDataFactory.Setup(new FactAgentQueue(0, 1, AcdLoginId, talkTimeQueueOne, afterCallWorkQueueOne, answeredCallsQueueOne, 1));
-			analyticsDataFactory.Setup(new FactAgentQueue(0, 2, AcdLoginId, talkTimeQueueTwo, afterCallWorkQueueTwo, answeredCallsQueueTwo, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId, 1, AcdLoginId, talkTimeQueueOne, afterCallWorkQueueOne, answeredCallsQueueOne, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId, 2, AcdLoginId, talkTimeQueueTwo, afterCallWorkQueueTwo, answeredCallsQueueTwo, 1));
 		}
 
 		[Test]

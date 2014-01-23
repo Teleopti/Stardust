@@ -13,12 +13,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 	{
 		public IEnumerable<DataRow> Rows { get; set; }
 
+		public int DateId = 0;
+
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			using (var table = dim_date.CreateTable())
 			{
 				var date = DateTime.Now.Date;
-				table.AddDate(0, date, analyticsDataCulture);
+				table.AddDate(DateId, date, analyticsDataCulture);
 
 				Bulk.Insert(connection, table);
 
