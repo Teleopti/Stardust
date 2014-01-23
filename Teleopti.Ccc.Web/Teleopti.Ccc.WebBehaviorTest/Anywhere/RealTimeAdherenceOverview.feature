@@ -4,7 +4,10 @@
 	I want to see which parts of the organization currently not adhering to the schedule
 
 Scenario: Show site
-	Given there is a site named 'Paris'
+	Given I have a role with
+	| Field | Value             |
+	| Name  | Real time analyst |
+	And there is a site named 'Paris'
 	When I view Real time adherence overview
 	Then I should see the site 'Paris'
 

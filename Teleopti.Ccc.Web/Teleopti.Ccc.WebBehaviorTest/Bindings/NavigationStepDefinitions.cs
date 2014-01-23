@@ -198,6 +198,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywherePersonScheduleAddActivityForm(personId, IdForTeam(@group), date);
 		}
 
+		[When(@"I view Real time adherence overview")]
+		public void WhenIViewRealTimeAdherenceOverview()
+		{
+			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereRealTimeAdherenceOverview();
+		}
+
+
 		private static Guid groupIdByName(string team)
 		{
 			Guid groupid = Guid.Empty;

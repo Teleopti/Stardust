@@ -327,6 +327,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             GoToWaitForCompleted("MyTime#Schedule/Month",
                 new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
         }
+
+		public static void GotoAnywhereRealTimeAdherenceOverview()
+		{
+			GoToWaitForUrlAssert(
+				"Anywhere#realtimeadherence",
+				"Anywhere#realtimeadherence",
+				new ApplicationStartupTimeout());
+		}
 	}
 
 	public class GotoArgs
