@@ -372,6 +372,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
     <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverterTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
