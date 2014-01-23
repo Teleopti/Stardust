@@ -33,12 +33,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
                 {
                     double? valueForShift = this.valueForShift(skillIntervalDataDictionary, shiftProjectionCache, lengthFactor, useMinimumPersons,
                                                                useMaximumPersons);
+
                     if (valueForShift.HasValue)
                     {
                         if (!bestShiftValue.HasValue)
                         {
                             bestShiftValue = valueForShift.Value;
                             bestShift = shiftProjectionCache;
+							
                         }
                         else
                         {
@@ -55,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
                             }
 							
                         }
-
                     }
                 }
 
@@ -78,20 +79,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			double? totalForAllActivitesValue = null;
 			foreach (var keyValuePair in skillIntervalDatas)
 			{
-				double? skillValue = valueForActivity(keyValuePair, shiftProjectionCache, lengthFactor, useMinimumPersons,
-												   useMaximumPersons);
-				if (skillValue.HasValue)
+				double? skillValue = valueForActivity(keyValuePair, shiftProjectionCache, lengthFactor, useMinimumPersons, useMaximumPersons);
+				if (!skillValue.HasValue) return null;
+				
+				if (totalForAllActivitesValue.HasValue)
 				{
-					if (totalForAllActivitesValue.HasValue)
-					{
-						totalForAllActivitesValue = totalForAllActivitesValue + skillValue.Value;
-					}
-					else
-					{
-						totalForAllActivitesValue = skillValue.Value;
-					}
-
+					totalForAllActivitesValue = totalForAllActivitesValue + skillValue.Value;
 				}
+				else
+				{
+					totalForAllActivitesValue = skillValue.Value;
+				}
+
 			}
 
 			return totalForAllActivitesValue;
