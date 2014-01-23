@@ -10,6 +10,12 @@ AS
 SET NOCOUNT ON
 
 exec mart.etl_data_mart_delete 1
+truncate table dbo.queue_logg
+truncate table dbo.agent_logg
+
+delete from dbo.queues
+delete from dbo.agent_info
+
 truncate table mart.sys_configuration
 delete from [dbo].[log_object]
 delete from dbo.acd_type
@@ -23,6 +29,7 @@ set @IntervalLengthMinutes=1440/@IntervalsPerDay
 exec mart.sys_configuration_save @key=N'Culture',@value=1053
 exec mart.sys_configuration_save @key=N'IntervalLengthMinutes',@value=@IntervalLengthMinutes
 exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=N'W. Europe Standard Time'
+exec mart.sys_configuration_save @key=N'AdherenceMinutesOutsideShift',@value=N'120'
 
 --dim_interval
 delete from mart.dim_interval
@@ -32,7 +39,7 @@ select
 	CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*n,'1900-01-01 00:00:00'),114) + '-' + CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*(n+1),'1900-01-01 00:00:00'),114) as 'interval_name',
 	CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*n,'1900-01-01 00:00:00'),114) + '-' + CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*(n)+30,'1900-01-01 00:00:00'),114) as 'halfhour_name',
 	CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*n,'1900-01-01 00:00:00'),114) + '-' + CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*(n)+60,'1900-01-01 00:00:00'),114) as 'hour_name',
-	dateadd(MINUTE,@IntervalLengthMinutes*(n+1),'1900-01-01 00:00:00') as 'interval_start',
+	dateadd(MINUTE,@IntervalLengthMinutes*(n),'1900-01-01 00:00:00') as 'interval_start',
 	dateadd(MINUTE,@IntervalLengthMinutes*(n+1),'1900-01-01 00:00:00') as 'interval_end',
 	1 as 'datasource_id',
 	getdate() as 'insert_date',
@@ -173,4 +180,3 @@ set time_zone_id = @time_zone_id
 where datasource_name = 'Teleopti CCC Agg: Default log object'
 
 exec mart.sys_datasource_set_raptor_time_zone
-return 0
