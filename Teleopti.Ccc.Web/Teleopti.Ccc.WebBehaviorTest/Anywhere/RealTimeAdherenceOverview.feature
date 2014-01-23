@@ -12,7 +12,10 @@ Scenario: Show site
 	Then I should see the site 'Paris'
 
 Scenario: Show team
-	Given there is a site named 'Paris'
+	Given I have a role with
+	| Field | Value             |
+	| Name  | Real time analyst |
+	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	When I view Real time adherence for site 'Paris'
 	Then I should see the team 'Green'

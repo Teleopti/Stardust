@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
@@ -11,14 +12,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Name { get; set; }
 
 		public string BusinessUnit { get; set; }
+		public ISite Site { get; private set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
-			var site = SiteFactory.CreateSimpleSite(Name);
+			Site = SiteFactory.CreateSimpleSite(Name);
 			var siteRepository = new SiteRepository(uow);
-			siteRepository.Add(site);
+			siteRepository.Add(Site);
 			var businessUnit = new BusinessUnitRepository(uow).LoadAll().Single(b => b.Name == BusinessUnit);
-			businessUnit.AddSite(site);
+			businessUnit.AddSite(Site);
 		}
 	}
 }
