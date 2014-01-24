@@ -26,10 +26,6 @@ define([
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
 
-		this.HasShift = ko.computed(function () {
-			return self.Shifts().length > 0;
-		});
-
 		this.ContractTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 			return time.format("H:mm");
@@ -56,6 +52,11 @@ define([
 				var newShift = new shift(data, timeline);
 				newShift.AddLayers(data);
 				self.Shifts.push(newShift);
+
+				if (newShift.Layers()[0].StartMinutes() > 0) {
+					self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
+					self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
+				}
 			}
 
 			if (data.DayOff) {
@@ -63,9 +64,6 @@ define([
 				var newDayOff = new dayOff(timeline, data.DayOff);
 				self.DayOffs.push(newDayOff);
 			}
-
-			self.ContractTimeMinutes(self.ContractTimeMinutes() + data.ContractTimeMinutes);
-			self.WorkTimeMinutes(self.WorkTimeMinutes() + data.WorkTimeMinutes);
 			
 			self.Menu.GroupId = data.GroupId;
 			self.Menu.PersonId = self.Id;
@@ -80,21 +78,13 @@ define([
 
 		var visibleLayers = function () {
 			return layers()
-				.select(function(x) { return x.OverlapsTimeLine(); });
+				.filter(function (x) { return x.OverlapsTimeLine(); });
 		};
 
 		var visibleDayOffs = function () {
 			return lazy(self.DayOffs())
 				.filter(function (x) { return x.OverlapsTimeLine(); });
 		};
-
-		this.TimeLineAffectingStartMinute = ko.computed(function () {
-			return layers().map(function(x) { return x.TimeLineAffectingStartMinute(); }).min();
-		});
-
-		this.TimeLineAffectingEndMinute = ko.computed(function () {
-			return layers().map(function(x) { return x.TimeLineAffectingEndMinute(); }).max();
-		});
 
 		this.OrderBy = function () {
 

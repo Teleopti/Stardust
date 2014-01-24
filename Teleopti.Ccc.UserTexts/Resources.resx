@@ -11887,8 +11887,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Please add intraday absence on existing shift</comment>
   </data>
   <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
-    <value>With Add Activity you cannot create a second shift.</value>
-    <comment>With Add Activity you cannot create a second shift.</comment>
+    <value>You cannot create a second shift with add activity.</value>
+    <comment>You cannot create a second shift with add activity.</comment>
   </data>
   <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
     <value>On this date you are no longer an employee</value>

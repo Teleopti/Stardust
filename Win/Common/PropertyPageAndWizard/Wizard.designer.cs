@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
         /// </summary>
         private void InitializeComponent()
         {
-			System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Wizard");
+			System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Wizard");
 			this.buttonFinish = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonNext = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonBack = new Syncfusion.Windows.Forms.ButtonAdv();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.buttonFinish.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonFinish.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonFinish.Location = new System.Drawing.Point(404, 5);
+			this.buttonFinish.Location = new System.Drawing.Point(402, 3);
 			this.buttonFinish.Name = "buttonFinish";
 			this.buttonFinish.Size = new System.Drawing.Size(99, 23);
 			this.buttonFinish.TabIndex = 7;
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.buttonNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonNext.Location = new System.Drawing.Point(287, 5);
+			this.buttonNext.Location = new System.Drawing.Point(285, 3);
 			this.buttonNext.Name = "buttonNext";
 			this.buttonNext.Size = new System.Drawing.Size(99, 23);
 			this.buttonNext.TabIndex = 6;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.buttonBack.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonBack.Location = new System.Drawing.Point(170, 5);
+			this.buttonBack.Location = new System.Drawing.Point(168, 3);
 			this.buttonBack.Name = "buttonBack";
 			this.buttonBack.Size = new System.Drawing.Size(99, 23);
 			this.buttonBack.TabIndex = 5;
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(521, 5);
+			this.buttonCancel.Location = new System.Drawing.Point(519, 3);
 			this.buttonCancel.Name = "buttonCancel";
 			this.buttonCancel.Size = new System.Drawing.Size(99, 23);
 			this.buttonCancel.TabIndex = 8;
@@ -125,8 +125,8 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerPages.Panel2
 			// 
 			this.splitContainerPages.Panel2.Controls.Add(this.splitContainerVertical);
-			this.splitContainerPages.Size = new System.Drawing.Size(623, 440);
-			this.splitContainerPages.SplitterDistance = 170;
+			this.splitContainerPages.Size = new System.Drawing.Size(621, 437);
+			this.splitContainerPages.SplitterDistance = 169;
 			this.splitContainerPages.SplitterWidth = 1;
 			this.splitContainerPages.TabIndex = 6;
 			this.splitContainerPages.TabStop = false;
@@ -140,13 +140,13 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.treeViewPages.FullRowSelect = true;
 			this.treeViewPages.Location = new System.Drawing.Point(12, 12);
 			this.treeViewPages.Name = "treeViewPages";
-			treeNode2.Name = "Node0";
-			treeNode2.Text = "Wizard";
+			treeNode1.Name = "Node0";
+			treeNode1.Text = "Wizard";
 			this.treeViewPages.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
 			this.treeViewPages.ShowPlusMinus = false;
 			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(146, 416);
+			this.treeViewPages.Size = new System.Drawing.Size(145, 413);
 			this.treeViewPages.TabIndex = 0;
 			this.treeViewPages.TabStop = false;
 			this.treeViewPages.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewPages_BeforeCollapse);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.splitContainerVertical.Panel1.Controls.Add(this.gradientPanel1);
 			this.splitContainerVertical.Panel1MinSize = 40;
-			this.splitContainerVertical.Size = new System.Drawing.Size(452, 440);
+			this.splitContainerVertical.Size = new System.Drawing.Size(451, 437);
 			this.splitContainerVertical.SplitterDistance = 40;
 			this.splitContainerVertical.SplitterWidth = 1;
 			this.splitContainerVertical.TabIndex = 0;
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
 			this.gradientPanel1.Name = "gradientPanel1";
-			this.gradientPanel1.Size = new System.Drawing.Size(452, 40);
+			this.gradientPanel1.Size = new System.Drawing.Size(451, 40);
 			this.gradientPanel1.TabIndex = 0;
 			// 
 			// labelHeading
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.labelHeading.Font = new System.Drawing.Font("Segoe UI", 14F);
 			this.labelHeading.Location = new System.Drawing.Point(3, 5);
 			this.labelHeading.Name = "labelHeading";
-			this.labelHeading.Size = new System.Drawing.Size(101, 25);
+			this.labelHeading.Size = new System.Drawing.Size(127, 32);
 			this.labelHeading.TabIndex = 0;
 			this.labelHeading.Text = "xxHeading";
 			// 
@@ -211,8 +211,8 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerHorizontal.Panel2
 			// 
 			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
-			this.splitContainerHorizontal.Size = new System.Drawing.Size(623, 474);
-			this.splitContainerHorizontal.SplitterDistance = 440;
+			this.splitContainerHorizontal.Size = new System.Drawing.Size(621, 468);
+			this.splitContainerHorizontal.SplitterDistance = 437;
 			this.splitContainerHorizontal.SplitterWidth = 1;
 			this.splitContainerHorizontal.TabIndex = 7;
 			this.splitContainerHorizontal.TabStop = false;
@@ -233,20 +233,19 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(623, 33);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(621, 30);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 9;
 			// 
 			// Wizard
 			// 
 			this.AcceptButton = this.buttonNext;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.CancelButton = this.buttonCancel;
-			this.ClientSize = new System.Drawing.Size(623, 474);
+			this.ClientSize = new System.Drawing.Size(621, 468);
 			this.Controls.Add(this.splitContainerHorizontal);
 			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.MaximizeBox = false;
-			this.MaximumSize = new System.Drawing.Size(639, 513);
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(639, 513);
 			this.Name = "Wizard";

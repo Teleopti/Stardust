@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 					BusinessUnitId = @event.BusinessUnitId,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
-					StartDateTime = @event.StartDateTime,
+					StartDateTime = @event.StartDateTime.AddHours(-24),
 					EndDateTime = @event.EndDateTime
 				});
 		}
