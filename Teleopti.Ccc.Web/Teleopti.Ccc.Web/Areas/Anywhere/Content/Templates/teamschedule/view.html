@@ -58,7 +58,7 @@
 			<!-- ko if: !Loading() -->
 			<div class="relative">
 				<!-- ko with: TimeLine -->
-				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $parent.Persons().length>0">
+				<div class="time-line absolute" data-bind="attr: { 'data-start-time': StartTime, 'data-end-time': EndTime }, if: $parent.SortedPersons().length > 0">
 					<div class="relative">
 						<div data-bind="foreach: Times">
 							<div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
@@ -68,7 +68,7 @@
 				</div>
 				<!-- /ko -->
 
-				<table class="table table-hover" data-bind="if: Persons().length > 0">
+				<table class="table table-hover" data-bind="if: SortedPersons().length > 0">
 					<thead>
 						<tr>
 							<th></th>
@@ -76,7 +76,7 @@
 							<th class="contract-time contract-time-title"><span data-bind="text: Resources.ContractTime"></span></th>
 						</tr>
 					</thead>
-					<tbody data-bind="foreach: Persons">
+					<tbody data-bind="foreach: SortedPersons">
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, css: { 'selected-person': IsPersonOrShiftSelected }">
 							<td class="person-name person-name-column">
 								<div class="person-name nowrap" data-bind="text: Name, click: $root.SelectPerson"></div>
@@ -98,11 +98,11 @@
 										class="dayoff absolute"
 										data-bind="style: { left: StartPixels() + 'px', width: LengthPixels() + 'px' }">
 										<!-- ko if: $root.DisplayDescriptions -->
-										<!-- ko if: $parent.HasShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes() && $parent.TimeLineAffectingStartMinute() < EndMinutes()-->
+										<!-- ko if: HasOverlapingLayers($parent)-->
 										<span class="label label-default layer-description floatleft" data-bind="text: DayOffName"></span>
 										<span class="label label-default layer-description floatright" data-bind="text: DayOffName"></span>
 										<!-- /ko -->
-										<!-- ko ifnot: $parent.HasShift() && $parent.TimeLineAffectingEndMinute() > StartMinutes() && $parent.TimeLineAffectingStartMinute() < EndMinutes()-->
+										<!-- ko ifnot: HasOverlapingLayers($parent)-->
 										<span class="label label-default layer-description" data-bind="text: DayOffName"></span>
 										<!-- /ko -->
 										<!-- /ko -->
@@ -137,9 +137,7 @@
 									<div class="btn-group">
 										<a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
 										<a href="#" class="btn btn-sm add-intraday-absence" data-bind="click: $data.AddIntradayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="	text: $root.Resources.IntradayAbsence"></span></a>
-										<!-- ko if: false -->
-											<a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
-										<!-- /ko -->
+										<a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
 										<a href="#" class="btn btn-sm remove-absence" data-bind="click: $data.RemoveAbsence"><i class="glyphicon glyphicon-minus"></i><span data-bind="	text: $root.Resources.Absence"></span></a>
 									</div>
 									<!-- /ko -->
@@ -158,6 +156,7 @@
 									<!-- ko with: Menu -->
 									<div class="btn-group">
 										<a href="#" class="btn btn-sm add-full-day-absence" data-bind="click: $data.AddFullDayAbsence"><i class="glyphicon glyphicon-plus"></i><span data-bind="	text: $root.Resources.FullDayAbsence"></span></a>
+										<a href="#" class="btn btn-sm add-activity" data-bind="click: $data.AddActivity"><i class="glyphicon glyphicon-plus"></i><span data-bind="	text: $root.Resources.Activity"></span></a>
 									</div>
 									<!-- /ko -->
 								</div>
