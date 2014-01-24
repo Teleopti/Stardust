@@ -59,21 +59,29 @@ SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @s
 
 --prepare a temp table for better performance on delete
 INSERT INTO #stg_schedule_changed
-SELECT DISTINCT dd.person_id, dd.shift_startdate_id, ds.scenario_id 
-FROM	Stage.stg_schedule_changed stg
-INNER JOIN Stage.stg_schedule_updated_personLocal dp
-	ON stg.person_code		=	dp.person_code
-	AND --trim
+select DISTINCT
+	f.person_id,
+	f.date_id,
+	f.scenario_id
+from mart.fact_schedule_day_count f
+inner join mart.dim_person p
+	on p.person_id = f.person_id
+inner join mart.bridge_time_zone btz
+	on f.date_id = btz.date_id
+	and f.start_interval_id = btz.interval_id
+	and p.time_zone_id = btz.time_zone_id
+inner join mart.dim_date dd
+	on dd.date_id = btz.local_date_id
+inner join stage.stg_schedule_changed ch
+	on ch.person_code = p.person_code
+	and ch.schedule_date = dd.date_date
+		AND --trim
 		(
-				(stg.schedule_date	>= dp.valid_from_date_local)
+				(ch.schedule_date	>= p.valid_from_date_local)
 
 			AND
-				(stg.schedule_date <= dp.valid_to_date_local)
+				(ch.schedule_date <= p.valid_to_date_local)
 		)
-INNER JOIN mart.dim_scenario ds
-	ON stg.scenario_code = ds.scenario_code
-INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-		ON dd.person_id = dp.person_id
 
 -- special delete if something is left, a shift over midninght for example
 INSERT INTO #stg_schedule_day_off_count
@@ -148,7 +156,7 @@ SELECT
 	datasource_update_date	= MAX(datasource_update_date)
 FROM
 	mart.fact_schedule f
-INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC stg
+INNER JOIN #stg_schedule_changed stg
 	ON f.shift_startdate_id = stg.shift_startdate_id
 	AND f.person_id = stg.person_id
 	AND f.scenario_id = @scenario_id 
