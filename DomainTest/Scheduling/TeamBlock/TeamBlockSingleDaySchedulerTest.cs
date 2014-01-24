@@ -205,5 +205,63 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(result, Is.True);
 			}
 		}
+
+		[Test]
+		public void ShouldSkipIfNotShiftCanBeAssignedToTeamMember()
+		{
+			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+			var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
+			var shifts = new List<IShiftProjectionCache> { _shift };
+			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
+			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  _selectedPersons))
+					  .Return(false);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  new List<IPerson> { _person1 }))
+					  .Return(false);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  new List<IPerson> { _person2 }))
+					  .Return(false);
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(false).Repeat.Twice();
+				Expect.Call(_teamBlockSchedulingOptions.IsBlockSameShiftInTeamBlock(_schedulingOptions)).Return(false).Repeat.Twice();
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person1, _shift))
+					  .Return(restriction);
+				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person1, _teamBlockInfo, restriction,
+														   _schedulingOptions, finderResult)).Return(null);
+				Expect.Call(_proposedRestrictionAggregator.Aggregate(_schedulingOptions, _teamBlockInfo, _dateOnly, _person2, _shift))
+					  .Return(restriction);
+				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person2, _teamBlockInfo, restriction,
+														   _schedulingOptions, finderResult)).Return(shifts);
+				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
+					.Return(skillIntervalDataDic).Repeat.AtLeastOnce();
+				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
+																		  _schedulingOptions.WorkShiftLengthHintOption,
+																		  _schedulingOptions.UseMinimumPersons,
+																		  _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
+				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
+				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
+				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
+																											  _dateOnly,
+																											  _selectedPersons))
+					  .Return(true);
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
+													   _blockPeriod);
+				Assert.That(result, Is.True);
+			}
+		}
 	}
 }
