@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the approve button")]
 		public void ThenIShouldNotSeeTheApproveButton()
 		{
-			Browser.Interactions.AssertVisibleUsingJQuery("#Approve-shift-trade");
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Approve-shift-trade");
 		}
 
 		[Then(@"I should not see the deny button")]
