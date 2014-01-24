@@ -1,8 +1,8 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
@@ -13,9 +13,10 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		private const int scheduledReadyTimeTwoMinutes = 3;
 		private const int deviationScheduleReadyOneSeconds = 60;
 		private const int deviationScheduleReadyTwoSeconds = 120;
-		protected override int AdherenceId
+
+		protected override AdherenceReportSettingCalculationMethod? AdherenceSetting
 		{
-			get { return 1; }
+			get { return AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime; }
 		}
 
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
