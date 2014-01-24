@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
-				var res = uow.Session().CreateSQLQuery(tsql)
+				return uow.Session().CreateSQLQuery(tsql)
 					.AddScalar("AnsweredCalls", NHibernateUtil.Int32)
 					.AddScalar("AfterCallWorkTime", NHibernateUtil.Int32)
 					.AddScalar("TalkTime", NHibernateUtil.Int32)
@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.SetGuid("business_unit_code", _currentBusinessUnit.Current().Id.Value) 
 					.SetResultTransformer(Transformers.AliasToBean(typeof (DailyMetricsForDayResult)))
 					.UniqueResult<DailyMetricsForDayResult>();
-				return res ?? new DailyMetricsForDayResult {DataAvailable = false};
 			}
 		}
 	}
