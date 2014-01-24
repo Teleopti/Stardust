@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
             }
 			if (!scenario.DefaultScenario) return null;
 
-			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
+			var period = new DateTimePeriod(@event.StartDateTime.Subtract(TimeSpan.FromDays(1)), @event.EndDateTime);
 			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
 		    if (person == null)
 		    {
