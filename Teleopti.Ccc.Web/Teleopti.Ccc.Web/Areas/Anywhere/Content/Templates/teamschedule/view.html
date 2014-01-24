@@ -33,17 +33,17 @@
                             <option data-bind="text: Name, value: Id"></option>
                         </optgroup>
                     </select>
-                    <div class="container">
-                        <div class="pull-right">
-                            <div class="input-group date" id="date-picker" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+                    <div class="btn-toolbar pull-right">
+                        <div class="btn-group">
+                            <div class="input-group date" id="date-picker">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" data-bind="attr: { title: Resources.Previous }, click: PreviousDay">
                                         <i class="glyphicon glyphicon-chevron-left"></i>
                                     </button>
                                 </span>
-                                <input class="form-control date-input" size="16" type="text" readonly="readonly" />
+                                <input class="form-control date-input text-center" size="16" type="text" readonly="readonly" data-bind="value: DateFormatted"/>
                                 <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default">
+                                    <button type="button" class="btn btn-default" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
                                         <i class="glyphicon glyphicon-calendar"></i>
                                     </button>
                                     <!--<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>-->
@@ -52,6 +52,8 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
+                        <div class="btn-group">
                             <button class="btn btn-default toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions">
                                 <i class="glyphicon glyphicon-question-sign"></i>
                             </button>

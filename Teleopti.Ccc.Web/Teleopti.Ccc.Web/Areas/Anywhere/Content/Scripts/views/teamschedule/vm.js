@@ -48,6 +48,10 @@ define([
 		this.GroupId = ko.observable();
 		this.Date = ko.observable(moment());
 
+		this.DateFormatted = ko.computed(function () {
+		    return self.Date().format(resources.DateFormatForMoment);
+		});
+
 		this.GroupPages = ko.observableArray();
 
 		this.DisplayDescriptions = ko.observable(false);
