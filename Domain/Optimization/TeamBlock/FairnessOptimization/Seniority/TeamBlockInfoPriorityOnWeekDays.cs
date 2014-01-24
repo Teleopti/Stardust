@@ -10,16 +10,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             ITeamBlockInfo TeamBlockInfo { get; }
             double Seniority { get; }
-            int WeekDayPoints { get; set; }
+            double WeekDayPoints { get; set; }
         }
 
         public class TeamBlockInfoPriorityOnWeekDays : ITeamBlockInfoPriorityOnWeekDays
         {
             public ITeamBlockInfo TeamBlockInfo { get; private set; }
             public double Seniority { get; private set; }
-            public int WeekDayPoints { get; set; }
+            public double WeekDayPoints { get; set; }
 
-            public TeamBlockInfoPriorityOnWeekDays(ITeamBlockInfo teamBlockInfo, double seniority, int weekDayPoints)
+            public TeamBlockInfoPriorityOnWeekDays(ITeamBlockInfo teamBlockInfo, double seniority, double weekDayPoints)
             {
                 TeamBlockInfo = teamBlockInfo;
                 Seniority = seniority;

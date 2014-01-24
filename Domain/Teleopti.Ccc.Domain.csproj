@@ -385,7 +385,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityOnWeekDays.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityForWeekDay.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidator.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\WeekDayInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\WeekDayInfoExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\WeekDayPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidator.cs" />

@@ -5,6 +5,7 @@ using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
@@ -21,12 +22,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     class TeamBlockDayOffFairnessOptimizationService : ITeamBlockDayOffFairnessOptimizationService
     {
         private bool _cancelMe;
-        private IConstructTeamBlock _constructTeamBlock;
-        private IDetermineTeamBlockWeekDayPriority _determieTeamBlockWeekDayPririty;
+        private readonly IConstructTeamBlock _constructTeamBlock;
+        private readonly IDetermineTeamBlockWeekDayPriority _determineTeamBlockWeekDayPriority;
 
-        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock)
+        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority)
         {
             _constructTeamBlock = constructTeamBlock;
+            _determineTeamBlockWeekDayPriority = determineTeamBlockWeekDayPriority;
         }
 
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -47,18 +49,28 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         }
 
-        
-
         private void calcualteDayValueForSelectedPeriod(IList<ITeamBlockInfo> listOfAllTeamBlock)
         {
             //populate the selected agents in a DS
-            _determieTeamBlockWeekDayPririty.CalculatePriority(listOfAllTeamBlock);
+            var teamBlockPriorityDefinitionInfoForWeekDay = _determineTeamBlockWeekDayPriority.CalculatePriority(listOfAllTeamBlock);
 
-            //sort the DS according the the agent priority
+            //sort the DS according the the agent weekDayPriority
+            foreach (var teamBlock in teamBlockPriorityDefinitionInfoForWeekDay.HighToLowSeniorityListBlockInfo)
+            {
+                if (_cancelMe) break;
+                //var weekDayPointOfTeamBlock = teamBlockPriorityDefinitionInfoForWeekDay.GetWeekDayPriorityOfBlock(teamBlock);
+                var targetTeamBlock =
+                    teamBlockPriorityDefinitionInfoForWeekDay.ExtractAppropiateTeamBlock(teamBlock);
+                
+                //if swap is possible
 
-            //caculate the period value according to day value
+                //perform swap
 
-            //perform swaps if validated
+				//var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzedTeamBlocks.Count / totalBlockCount);
+				//OnReportProgress(message);
+				//analyzedTeamBlocks.Add(teamBlockInfoHighSeniority);
+	        
+            }
         }
 
         private void analyzeAndPerformPossibleSwaps()
@@ -70,9 +82,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             throw new NotImplementedException();
         }
-
         
-
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
         public virtual void OnReportProgress(string message)

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
         public interface IDetermineTeamBlockWeekDayPriority
         {
-            ITeamBlockPriorityDefinitionInfoPriorityForWeekDay CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos);
+            ITeamBlockPriorityDefinitionInfoForWeekDay CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos);
         }
 
         public class DetermineTeamBlockWeekDayPriority : IDetermineTeamBlockWeekDayPriority
@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 _weekDayInfoExtractor = weekDayInfoExtractor;
             }
 
-            public ITeamBlockPriorityDefinitionInfoPriorityForWeekDay CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos)
+            public ITeamBlockPriorityDefinitionInfoForWeekDay CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos)
             {
                 var seniorityInfos = _seniorityExtractor.ExtractSeniority(teamBlockInfos);
 
                 var weekDaysInfo = _weekDayInfoExtractor.ExtractWeekDayInfos(teamBlockInfos);
 
-                var teamBlockPriorityDefinitionInfoPriorityForWeekDay = new TeamBlockPriorityDefinitionInfoPriorityForWeekDay();
+                var teamBlockPriorityDefinitionInfoPriorityForWeekDay = new TeamBlockPriorityDefinitionInfoForWeekDay();
                 foreach (var teamBlockInfo in teamBlockInfos)
                 {
                     var seniorityInfo = seniorityInfos[teamBlockInfo];

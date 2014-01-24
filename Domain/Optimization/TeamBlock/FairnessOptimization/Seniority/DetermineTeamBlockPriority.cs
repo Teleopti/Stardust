@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             {
 	            var seniorityInfo = seniorityInfos[teamBlockInfo];
 	            var shiftCategoryPointInfo = shiftCategoryPointInfos[teamBlockInfo];
-				var teamBlockInfoPriority = new TeamBlockInfoPriority(teamBlockInfo, seniorityInfo.Seniority, shiftCategoryPointInfo.Point);
-                teamBlockPriorityDefinitionInfo.AddItem(teamBlockInfoPriority, teamBlockInfoPriority.TeamBlockInfo, teamBlockInfoPriority.ShiftCategoryPriority);
+				var teamBlockInfoPriority = new TeamBlockInfoPriority(teamBlockInfo, seniorityInfo.Seniority, shiftCategoryPointInfo.Points);
+                teamBlockPriorityDefinitionInfo.AddItem(teamBlockInfoPriority, teamBlockInfoPriority.TeamBlockInfo, teamBlockInfoPriority.ShiftCategoryPriority );
             }
 
             return teamBlockPriorityDefinitionInfo;

@@ -7,7 +7,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		ITeamInfo TeamInfo { get; }
 		double Seniority { get; }
 	}
-	public class SeniorityInfo : ISeniorityInfo
+	/// <summary>
+	/// going to use team info point instead of this class
+	/// </summary>
+    public class SeniorityInfo : ISeniorityInfo
 	{
 		public SeniorityInfo(ITeamInfo teamInfo, double seniority)
 		{

@@ -6,30 +6,31 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-    public interface ITeamBlockPriorityDefinitionInfoPriorityForWeekDay
+    public interface ITeamBlockPriorityDefinitionInfoForWeekDay
     {
-        int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
-        void AddItem(ITeamBlockInfoPriorityOnWeekDays teamBlockInfoPriorityOnWeekDays, ITeamBlockInfo teamBlockInfo, int priority);
-        void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority);
+        double GetWeekDayPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
+        void AddItem(ITeamBlockInfoPriorityOnWeekDays teamBlockInfoPriorityOnWeekDays, ITeamBlockInfo teamBlockInfo, double priority);
+        void SetWeekDayPriority(ITeamBlockInfo teamBlockInfo, double weekDayPriority);
         IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo { get; }
         IList<ITeamBlockInfo> HighToLowShiftCategoryPriority();
+        ITeamBlockInfo ExtractAppropiateTeamBlock(ITeamBlockInfo teamBlock);
     }
 
-    public class TeamBlockPriorityDefinitionInfoPriorityForWeekDay : ITeamBlockPriorityDefinitionInfoPriorityForWeekDay
+    public class TeamBlockPriorityDefinitionInfoForWeekDay : ITeamBlockPriorityDefinitionInfoForWeekDay
     {
         private readonly IList<ITeamBlockInfoPriorityOnWeekDays> _teamBlockInfoPriorityOnWeekDaysList;
-        private readonly IDictionary<ITeamBlockInfo, int> _teamBlockShiftCategoryPriority;
+        private readonly IDictionary<ITeamBlockInfo, double> _teamBlockWeekDayPriority;
 
-        public TeamBlockPriorityDefinitionInfoPriorityForWeekDay()
+        public TeamBlockPriorityDefinitionInfoForWeekDay()
         {
             _teamBlockInfoPriorityOnWeekDaysList = new List<ITeamBlockInfoPriorityOnWeekDays>();
-            _teamBlockShiftCategoryPriority = new Dictionary<ITeamBlockInfo, int>();
+            _teamBlockWeekDayPriority = new Dictionary<ITeamBlockInfo, double>();
         }
 
-        public void AddItem(ITeamBlockInfoPriorityOnWeekDays teamBlockInfoPriorityOnWeekDays, ITeamBlockInfo teamBlockInfo, int priority)
+        public void AddItem(ITeamBlockInfoPriorityOnWeekDays teamBlockInfoPriorityOnWeekDays, ITeamBlockInfo teamBlockInfo, double priority)
         {
             _teamBlockInfoPriorityOnWeekDaysList.Add(teamBlockInfoPriorityOnWeekDays);
-            _teamBlockShiftCategoryPriority.Add(teamBlockInfo, priority);
+            _teamBlockWeekDayPriority.Add(teamBlockInfo, priority);
         }
 
         public IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo
@@ -43,14 +44,25 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             return result;
         }
 
-        public int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
+        public ITeamBlockInfo ExtractAppropiateTeamBlock(ITeamBlockInfo teamBlock)
         {
-            return _teamBlockShiftCategoryPriority[teamBlockInfo];
+            var providedWeekDayPoint = GetWeekDayPriorityOfBlock(teamBlock);
+            var providedSenerioty =
+                _teamBlockInfoPriorityOnWeekDaysList.FirstOrDefault(s => teamBlock == s.TeamBlockInfo).Seniority ;
+            var canidateTeamBlock = _teamBlockInfoPriorityOnWeekDaysList.OrderBy(s => s.WeekDayPoints).FirstOrDefault(s => s.Seniority < providedSenerioty &&
+                                                                                                                           s.WeekDayPoints > providedWeekDayPoint) ;
+            if (canidateTeamBlock != null) return canidateTeamBlock.TeamBlockInfo;
+            return null;
         }
 
-        public void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority)
+        public double GetWeekDayPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
         {
-            _teamBlockShiftCategoryPriority[teamBlockInfo] = shiftCategoryPriority;
+            return _teamBlockWeekDayPriority[teamBlockInfo];
+        }
+
+        public void SetWeekDayPriority(ITeamBlockInfo teamBlockInfo, double weekDayPriority)
+        {
+            _teamBlockWeekDayPriority[teamBlockInfo] = weekDayPriority;
         }
     }
 }
