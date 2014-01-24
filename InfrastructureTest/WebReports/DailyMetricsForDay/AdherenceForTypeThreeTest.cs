@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
@@ -12,9 +13,10 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		private const int contractTimeOTwoSeconds = 180;
 		private const int deviationContractOneSeconds = 60;
 		private const int deviationContractTwoSeconds = 120;
-		protected override int AdherenceId
+
+		protected override AdherenceReportSettingCalculationMethod? AdherenceSetting
 		{
-			get { return 3; }
+			get { return AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime; }
 		}
 
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
