@@ -52,6 +52,15 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             Assert.IsTrue(nameList.Contains(gPage.RootGroupCollection[1].PersonCollection[0].Name));
         }
 
-       
+       [Test]
+       public void RootGroupNameShouldBeTruncatedTo50Characters()
+       {
+		   _baseLineData.GroupPageOptions.CurrentGroupPageName = "SingleAgentTeam";
+		   _baseLineData.GroupPageOptions.CurrentGroupPageNameKey = "SingleAgentTeam";
+	       var person = PersonFactory.CreatePerson("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+		   var gPage = _target.CreateGroupPage(new[]{person}, _baseLineData.GroupPageOptions);
+		   Assert.AreEqual(50, gPage.RootGroupCollection[0].Description.Name.Length);
+		   Assert.AreEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVW", gPage.RootGroupCollection[0].Description.Name);
+       }
     }
 }
