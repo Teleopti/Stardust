@@ -115,6 +115,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>

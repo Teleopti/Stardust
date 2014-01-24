@@ -357,6 +357,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhere();
 		}
 
+		[When(@"I view Anywhere")]
+		public void WhenIViewAnywhere()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhere();
+		}
+
+
 		[When(@"I navigate to shift trade for '(.*)'")]
 		public void WhenINavigateToShiftTradeFor(DateTime date)
 		{
