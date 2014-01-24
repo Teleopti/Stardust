@@ -71,7 +71,8 @@ select answered_calls as AnsweredCalls,
 		when answered_calls = 0 then 0
 		else (after_call_work_time_s + talk_time_s) / answered_calls	
 	end as HandlingTime,
-	ready_time_per_scheduled_ready_time * 100 as ReadyTimePerScheduledReadyTime
+	ready_time_per_scheduled_ready_time * 100 as ReadyTimePerScheduledReadyTime,
+	adherence * 100 as Adherence
 from #tmpResult
 
 DROP TABLE #tmpResult

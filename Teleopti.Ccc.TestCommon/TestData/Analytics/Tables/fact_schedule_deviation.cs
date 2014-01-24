@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("deviation_contract_s", typeof(int));
 			table.Columns.Add("business_unit_id", typeof(int));
 			table.Columns.Add("datasource_id", typeof(int));
-			table.Columns.Add("is_logged_in", typeof(int));
 			table.Columns.Add("insert_date", typeof (DateTime));
-			table.Columns.Add("update_date", typeof (DateTime));
+			table.Columns.Add("update_date", typeof(DateTime));
+			table.Columns.Add("is_logged_in", typeof(bool));
 			table.Columns.Add("shift_startdate_id", typeof (int));
 			table.Columns.Add("shift_startinterval_id", typeof (int));
 			return table;

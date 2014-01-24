@@ -6,14 +6,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
-	[TestFixture, Explicit("Not yet done")]
-	public class AdherenceTest : WebReportTest
+	[TestFixture]
+	public class AdherenceForTypeOneTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;
-		private const int scheduledReadyTimeTwoMinutes = 1;
-		private const int deviationScheduleReadyOneSeconds = 120;
+		private const int scheduledReadyTimeTwoMinutes = 3;
+		private const int deviationScheduleReadyOneSeconds = 60;
 		private const int deviationScheduleReadyTwoSeconds = 120;
-
+		protected override int AdherenceId
+		{
+			get { return 1; }
+		}
 
 		protected override void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory)
 		{
@@ -27,23 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnAdherenceForAdherenceType1()
 		{
 			const int expectedPercentage = 25;
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson)
-				.Adherence.Should().Be.EqualTo(expectedPercentage);
-		}
-
-		[Test]
-		public void ShouldReturnAdherenceForAdherenceType2()
-		{
-			const int expectedPercentage = 31;
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson)
-				.Adherence.Should().Be.EqualTo(expectedPercentage);
-		}
-
-		[Test]
-		public void ShouldReturnAdherenceForAdherenceType3()
-		{
-			const int expectedPercentage = 33;
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1), 1, 1, SetupFixtureForAssembly.loggedOnPerson)
+			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1))
 				.Adherence.Should().Be.EqualTo(expectedPercentage);
 		}
 	}
