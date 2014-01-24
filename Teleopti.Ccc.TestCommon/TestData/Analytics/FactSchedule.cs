@@ -110,10 +110,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_businessUnitId = business_unit_id;
 		}
 
-		public FactSchedule(int personId, int scheduleDateId, int scheduledReadyTimeMinutes, int intervalId, int scenarioId)
+		public FactSchedule(int personId, int scheduleDateId, int scheduledTimeM, int scheduledReadyTimeMinutes, int intervalId, int scenarioId)
 		{
 			_personId = personId;
 			_scheduleDateId = scheduleDateId;
+			_scheduledTimeM = scheduledTimeM;
 			_scheduledReadyTimeM = scheduledReadyTimeMinutes;
 			_intervalId = intervalId;
 			_scenarioId = scenarioId;

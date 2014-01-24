@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int dateId, 
 			int intervalId, 
 			int personId, 
+			int deviationScheduleS,
 			int deviationScheduleReadyS,
 			bool isLoggedIn)
 		{
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["date_id"] = dateId;
 			row["interval_id"] = intervalId;
 			row["person_id"] = personId;
+			row["deviation_schedule_s"] = deviationScheduleS;
 			row["deviation_schedule_ready_s"] = deviationScheduleReadyS;
 			row["is_logged_in"] = isLoggedIn;
 			row["insert_date"] = DateTime.Now;

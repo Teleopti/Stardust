@@ -422,6 +422,7 @@
     <Compile Include="WebReports\DailyMetricsForDay\AverageAfterCallWorkTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AverageTalkTimeTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AverageHandlingTimeTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AdherenceForTypeTwoTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\NoDataAvailableTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\AdherenceForTypeOneTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\ReadyTimePerScheduledReadyTimeTest.cs" />
