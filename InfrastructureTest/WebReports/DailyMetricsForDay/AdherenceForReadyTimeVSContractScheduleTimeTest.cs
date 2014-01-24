@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
 	[TestFixture]
-	public class AdherenceForTypeThreeTest : WebReportTest
+	public class AdherenceForReadyTimeVSContractScheduleTimeTest : WebReportTest
 	{
 		private const int contractTimeOneSeconds = 60;
 		private const int contractTimeOTwoSeconds = 180;

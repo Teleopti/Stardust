@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
 	[TestFixture]
-	public class AdherenceForTypeTwoTest : WebReportTest
+	public class AdherenceForTypeReadyTimeVSScheduledTimeTest : WebReportTest
 	{
 		private const int scheduledTimeOneMinutes = 1;
 		private const int scheduledTimeTwoMinutes = 3;
