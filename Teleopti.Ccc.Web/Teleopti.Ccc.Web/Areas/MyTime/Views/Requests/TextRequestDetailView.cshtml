@@ -13,13 +13,13 @@
         <!-- /ko -->
     </div>
 <div class="row form-group">
-    <div class="col-lg-8">
+    <div class="col-sm-8">
         <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
             <input class="input-sm request-edit-datefrom form-control" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}, enable: IsEditable" type="text" />
             <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-th"></i></span>
         </span>
     </div>
-    <div class="col-lg-4 bootstrap-timepicker">
+    <div class="col-sm-4 bootstrap-timepicker">
         <div class="request-edit-timefrom input-group">
             <input type="text" class="input-sm request-edit time-from form-control" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
@@ -27,13 +27,13 @@
     </div>
 </div>
 <div class="row form-group">
-    <div class="col-lg-8">
+    <div class="col-sm-8">
         <span class="request-edit-dateto input-group" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
             <input class="request-edit-date-to input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart(), format: DateFormat()}, enable: IsEditable" type="text"  />
             <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-th"></i></span>
         </span>
     </div>
-    <div class="col-lg-4 bootstrap-timepicker">
+    <div class="col-sm-4 bootstrap-timepicker">
         <div class="request-edit-timeto input-group">
             <input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
