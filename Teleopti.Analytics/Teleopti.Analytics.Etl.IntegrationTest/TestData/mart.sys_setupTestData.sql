@@ -149,6 +149,12 @@ VALUES (23,'Altitude 6.2')
 INSERT INTO acd_type
 VALUES (24,'Wicomrt')
 
+INSERT INTO acd_type
+VALUES (25,'Zoom QM')
+
+INSERT INTO acd_type
+VALUES (26,'Globitel Speechlog')
+
 --intervals = 96
 INSERT INTO ccc_system_info
 VALUES (1, 'CCC intervals per day', @IntervalsPerDay,NULL)
