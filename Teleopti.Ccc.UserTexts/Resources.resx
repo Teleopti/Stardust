@@ -11910,4 +11910,16 @@ Reduce the complexity to use these shifts.</value>
     <value>Yesterday</value>
     <comment>Link in My Report (web)</comment>
   </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Task time</value>
+    <comment>Task time is another name for handling time in forecast</comment>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Total task time</value>
+    <comment>Total task time is another name for total handling time in forecast</comment>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Chat time</value>
+    <comment>Another, more descriptive name for talk time in forecast</comment>
+  </data>
 </root>
