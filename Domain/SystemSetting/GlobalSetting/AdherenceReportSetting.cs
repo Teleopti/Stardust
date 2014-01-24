@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 
 	    public AdherenceReportSetting()
 	    {
-		    CalculationMethod = AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime;
+				CalculationMethod = AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime;
 	    }
 	    public AdherenceReportSettingCalculationMethod CalculationMethod { get; set; }
     }
