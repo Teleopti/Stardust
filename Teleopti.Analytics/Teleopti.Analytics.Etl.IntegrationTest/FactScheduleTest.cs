@@ -38,7 +38,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			AnalyticsRunner.RunSysSetupTestData();
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts(out person);
-
+			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
@@ -46,8 +46,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				Helper =
 					new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null)
 			};
-			
-			
+
+			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
 			var result = StepRunner.RunNightly(jobParameters);
 
 			
