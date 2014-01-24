@@ -17,5 +17,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			Browser.Interactions.AssertExists("#link-realtimeadherence");
 		}
+
+		[Then(@"I should not see Real time adherence overview in the menu")]
+		public void ThenIShouldNotSeeRealTimeAdherenceOverviewInTheMenu()
+		{
+			Browser.Interactions.AssertNotExists(".brand", "#link-realtimeadherence");
+		}
 	}
 }

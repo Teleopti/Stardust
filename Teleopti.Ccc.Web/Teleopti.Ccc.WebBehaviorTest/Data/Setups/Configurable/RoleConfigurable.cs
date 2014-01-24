@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToOvertimeAvailability { get; set; }
 		public bool AccessToMyReport { get; set; }
         public bool AccessToUnderConstruction { get; set; }
-
+		public bool AccessToRealTimeAdherenceOverview { get; set; }
 	    public bool AccessToViewAllGroupPages { get; set; }
 
 		public RoleConfigurable()
@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
 		    AccessToUnderConstruction = true;
+			AccessToRealTimeAdherenceOverview = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -187,6 +188,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
             if (!AccessToUnderConstruction)
                 applicationFunctions = from f in applicationFunctions
                                        where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.UnderConstruction
+                                       select f;
+			if (!AccessToRealTimeAdherenceOverview)
+                applicationFunctions = from f in applicationFunctions
+                                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
                                        select f;
 			return applicationFunctions;
 		}

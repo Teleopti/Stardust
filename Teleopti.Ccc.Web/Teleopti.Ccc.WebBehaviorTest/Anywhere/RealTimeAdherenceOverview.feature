@@ -119,7 +119,6 @@ Scenario: Should not be able to view Real time adherence overview when not permi
 	When I view Real time adherence overview
 	Then I should see a message that I have no permission for this function
 
-@ignore
 Scenario: Should not see Real time adherence overview in menu when not permitted
 	Given I have a role with
          | Field                                  | Value       |
