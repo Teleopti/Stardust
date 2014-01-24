@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		public void TestIt()
 		{
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
-
+			AnalyticsRunner.RunSysSetupTestData();
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts(out person);
 
