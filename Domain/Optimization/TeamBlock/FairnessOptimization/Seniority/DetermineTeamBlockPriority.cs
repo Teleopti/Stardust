@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     public class DetermineTeamBlockPriority : IDetermineTeamBlockPriority
     {
 	    private readonly ISeniorityExtractor _seniorityExtractor;
-	    private readonly IShiftCategoryPointInfoExtractor _shiftCategoryPointInfoExtractor;
+	    private readonly IShiftCategoryPointExtractor _shiftCategoryPointInfoExtractor;
 
-		public DetermineTeamBlockPriority(ISeniorityExtractor seniorityExtractor, IShiftCategoryPointInfoExtractor shiftCategoryPointInfoExtractor)
+        public DetermineTeamBlockPriority(ISeniorityExtractor seniorityExtractor, IShiftCategoryPointExtractor shiftCategoryPointInfoExtractor)
 		{
 			_seniorityExtractor = seniorityExtractor;
 			_shiftCategoryPointInfoExtractor = shiftCategoryPointInfoExtractor;

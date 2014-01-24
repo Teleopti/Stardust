@@ -6,16 +6,16 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-    public interface IWeekDayInfoExtractor
+    public interface IWeekDayPointExtractor
     {
         IDictionary<ITeamBlockInfo, ITeamBlockPoints> ExtractWeekDayInfos(IList<ITeamBlockInfo> teamBlockInfos);
     }
 
-    public class WeekDayInfoExtractor : IWeekDayInfoExtractor 
+    public class WeekDayPointExtractor : IWeekDayPointExtractor 
     {
         private readonly IWeekDayPoints _weekDayPoints;
 
-        public WeekDayInfoExtractor(IWeekDayPoints weekDayPoints)
+        public WeekDayPointExtractor(IWeekDayPoints weekDayPoints)
         {
             _weekDayPoints = weekDayPoints;
         }

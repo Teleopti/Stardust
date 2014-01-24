@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		int Point { get; }
 	}
 
+    //delete this call
 	public class ShiftCategoryPointInfo : IShiftCategoryPointInfo
 	{
 		public ITeamBlockInfo TeamBlockInfo { get; private set; }
