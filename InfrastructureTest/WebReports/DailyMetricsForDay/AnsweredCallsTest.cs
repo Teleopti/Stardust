@@ -2,7 +2,6 @@
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldReturnAnsweredCallsFromAllQueues()
 		{
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1))
+			Target().Execute(Today.Date)
 				.AnsweredCalls.Should().Be.EqualTo(answeredCalls);
 		}
 	}

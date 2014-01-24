@@ -1,9 +1,7 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnAverageAfterCallWork()
 		{
 			const int expectedAverage = 30;
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1))
+			Target().Execute(Today.Date)
 				.AfterCallWorkTime.Should().Be.EqualTo(expectedAverage);
 		}
 	}

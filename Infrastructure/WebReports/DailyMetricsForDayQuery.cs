@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 			_adherenceIdProvider = adherenceIdProvider;
 		}
 
-		public DailyMetricsForDayResult Execute(DateOnlyPeriod period)
+		public DailyMetricsForDayResult Execute(DateOnly date)
 		{
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.AddScalar("HandlingTime", NHibernateUtil.Int32)
 					.AddScalar("ReadyTimePerScheduledReadyTime", NHibernateUtil.Int32)
 					.AddScalar("Adherence", NHibernateUtil.Int32)
-					.SetDateTime("date_from", period.StartDate)
-					.SetDateTime("date_to", period.EndDate)
+					.SetDateTime("date_from", date.Date)
+					.SetDateTime("date_to", date.Date.AddDays(1))
 					.SetInt32("adherence_id", _adherenceIdProvider.Fetch())
 					.SetGuid("person_code", _loggedOnUser.CurrentUser().Id.Value)
 					.SetGuid("business_unit_code", _currentBusinessUnit.Current().Id.Value) 
