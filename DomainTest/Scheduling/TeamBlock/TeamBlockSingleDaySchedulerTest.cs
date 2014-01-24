@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 													   new EndTimeLimitation(),
 													   new WorkTimeLimitation(), null, null, null,
 													   new List<IActivityRestriction>());
-			var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
+			var finderResult = new WorkShiftFinderResult(_person1, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> { _shift };
 			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
 			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
