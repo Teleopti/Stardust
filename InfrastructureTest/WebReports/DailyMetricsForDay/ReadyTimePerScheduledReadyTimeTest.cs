@@ -2,6 +2,7 @@
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldReturnReadyTimePerScheduledReadyTime()
 		{
-			const int expectedPercentage = 25;
+			var expectedPercentage = new Percent(0.25);
 			Target().Execute(Today.Date)
 				.ReadyTimePerScheduledReadyTime.Should().Be.EqualTo(expectedPercentage);
 		}

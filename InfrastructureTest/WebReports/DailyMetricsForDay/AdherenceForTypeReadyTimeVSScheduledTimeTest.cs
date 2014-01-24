@@ -3,6 +3,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 {
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldReturnAdherenceForAdherenceType2()
 		{
-			const int expectedPercentage = 25;
+			var expectedPercentage = new Percent(0.25);
 			Target().Execute(Today.Date)
 				.Adherence.Should().Be.EqualTo(expectedPercentage);
 		}

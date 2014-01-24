@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -22,9 +23,9 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldReturnAverageTalkTime()
 		{
-			const int expectedAverage = 30;
+			var expectedAverage = TimeSpan.FromSeconds(30);
 			Target().Execute(Today.Date)
-				.TalkTime.Should().Be.EqualTo(expectedAverage);
+				.TalkTimeAverage.Should().Be.EqualTo(expectedAverage);
 		}
 	}
 }
