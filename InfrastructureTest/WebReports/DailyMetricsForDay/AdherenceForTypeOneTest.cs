@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnAdherenceForAdherenceType1()
 		{
 			const int expectedPercentage = 25;
-			Target().Execute(new DateOnlyPeriod(2000, 1, 1, 2020, 1, 1))
+			Target().Execute(Today.Date)
 				.Adherence.Should().Be.EqualTo(expectedPercentage);
 		}
 	}
