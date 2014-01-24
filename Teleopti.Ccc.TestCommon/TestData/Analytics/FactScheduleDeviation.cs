@@ -11,17 +11,21 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly int _dateId;
 		private readonly int _intervalId;
 		private readonly int _personId;
+		private readonly int _contractTimeS;
 		private readonly int _deviationScheduleS;
 		private readonly int _deviationScheduleReadyS;
+		private readonly int _deviationContractS;
 		private readonly bool _isLoggedIn;
 
-		public FactScheduleDeviation(int dateId, int intervalId, int personId, int deviationScheduleS, int deviationScheduleReadyS, bool isLoggedIn)
+		public FactScheduleDeviation(int dateId, int intervalId, int personId, int contractTimeS, int deviationScheduleS, int deviationScheduleReadyS, int deviationContractS, bool isLoggedIn)
 		{
 			_dateId = dateId;
 			_intervalId = intervalId;
 			_personId = personId;
+			_contractTimeS = contractTimeS;
 			_deviationScheduleS = deviationScheduleS;
 			_deviationScheduleReadyS = deviationScheduleReadyS;
+			_deviationContractS = deviationContractS;
 			_isLoggedIn = isLoggedIn;
 		}
 
@@ -29,7 +33,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = fact_schedule_deviation.CreateTable())
 			{
-				table.AddFactScheduleDeviation(_dateId, _intervalId, _personId, _deviationScheduleS, _deviationScheduleReadyS, _isLoggedIn);
+				table.AddFactScheduleDeviation(_dateId, _intervalId, _personId, _contractTimeS, _deviationScheduleS, _deviationScheduleReadyS, _deviationContractS, _isLoggedIn);
 				Bulk.Insert(connection, table);
 			}
 		}

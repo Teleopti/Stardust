@@ -33,16 +33,20 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int dateId, 
 			int intervalId, 
 			int personId, 
+			int contractTimeS,
 			int deviationScheduleS,
 			int deviationScheduleReadyS,
+			int deviationContractS,
 			bool isLoggedIn)
 		{
 			var row = dataTable.NewRow();
 			row["date_id"] = dateId;
 			row["interval_id"] = intervalId;
 			row["person_id"] = personId;
+			row["contract_time_s"] = contractTimeS;
 			row["deviation_schedule_s"] = deviationScheduleS;
 			row["deviation_schedule_ready_s"] = deviationScheduleReadyS;
+			row["deviation_contract_s"] = deviationContractS;
 			row["is_logged_in"] = isLoggedIn;
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
