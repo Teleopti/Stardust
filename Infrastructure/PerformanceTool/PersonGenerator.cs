@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly IExternalLogOnRepository _externalLogOnRepository;
 		private readonly IScheduleGenerator _scheduleGenerator;
+		private readonly INow _now;
 
 		public PersonGenerator(ICurrentUnitOfWork unitOfWork, 
 			IPersonRepository personRepository,
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 			IContractRepository contractRepository,
 			IContractScheduleRepository contractScheduleRepository,
 			IExternalLogOnRepository externalLogOnRepository,
-			IScheduleGenerator scheduleGenerator)
+			IScheduleGenerator scheduleGenerator, INow now)
 		{
 			_unitOfWork = unitOfWork;
 			_personRepository = personRepository;
@@ -55,11 +56,12 @@ namespace Teleopti.Ccc.Infrastructure.PerformanceTool
 			_contractScheduleRepository = contractScheduleRepository;
 			_externalLogOnRepository = externalLogOnRepository;
 			_scheduleGenerator = scheduleGenerator;
+			_now = now;
 		}
 
 		public PersonDataForLoadTest Generate(int count)
 		{
-			var date = new DateOnly(2014, 1, 1);
+			var date = new DateOnly(_now.UtcDateTime());
 			var site = new Site("site");
 			_siteRepository.Add(site);
 			var team = new Team {Site = site, Description = new Description("team")};

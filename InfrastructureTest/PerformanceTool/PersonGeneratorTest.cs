@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.PerformanceTool;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 {
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
 				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
-				scheduleGenerator);
+				scheduleGenerator, new Now());
 			target.Generate(1);
 			var persons = personRepository.LoadAll();
 			persons.Count.Should().Be(1);
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
 				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
-				scheduleGenerator);
+				scheduleGenerator, new Now());
 			target.Generate(2);
 			var persons = personRepository.LoadAll();
 			persons.Count.Should().Be(2);
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
 				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
-				scheduleGenerator);
+				scheduleGenerator, new Now());
 			var personData = target.Generate(1);
 			personData.Persons.Single().ExternalLogOn.Should().Be("0");
 		}
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.InfrastructureTest.PerformanceTool
 			var scheduleGenerator = MockRepository.GenerateMock<IScheduleGenerator>();
 			var target = new PersonGenerator(unitOfWork, personRepository, siteRepository, teamRepository,
 				partTimePercentageRepository, contractRepository, contractScheduleRepository, externalLogOnRepository,
-				scheduleGenerator);
+				scheduleGenerator, new Now());
 			var personData = target.Generate(1);
 			personData.TeamId.Should().Not.Be.Null();
 		}
