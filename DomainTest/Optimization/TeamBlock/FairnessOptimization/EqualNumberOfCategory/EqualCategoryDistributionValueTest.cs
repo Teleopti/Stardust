@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private ITeamBlockInfo _teamBlockInfo;
 		private IScheduleDictionary _scheduleDictionary;
 		private ITeamInfo _teamInfo;
-		private IGroupPerson _groupPerson;
 
 		[SetUp]
 		public void Setup()
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
-			_groupPerson = _mocks.StrictMock<IGroupPerson>();
 
 		}
 
@@ -51,8 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(personList);
+				Expect.Call(_teamInfo.GroupMembers).Return(personList);
 				Expect.Call(_distributionForPersons.CreateSummary(personList, _scheduleDictionary)).Return(personDistribution);
 			}
 
@@ -84,8 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(personList);
+				Expect.Call(_teamInfo.GroupMembers).Return(personList);
 				Expect.Call(_distributionForPersons.CreateSummary(personList, _scheduleDictionary)).Return(personDistribution);
 			}
 

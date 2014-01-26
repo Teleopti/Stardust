@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 		public double CalculateValue(ITeamBlockInfo teamBlockInfo, IDistributionSummary totalDistribution, IScheduleDictionary scheduleDictionary)
 		{
-			var distribution = _distributionForPersons.CreateSummary(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers,
+			var distribution = _distributionForPersons.CreateSummary(teamBlockInfo.TeamInfo.GroupMembers,
 																		 scheduleDictionary);
 			var absDiff = distributionDiff(totalDistribution, distribution);
 

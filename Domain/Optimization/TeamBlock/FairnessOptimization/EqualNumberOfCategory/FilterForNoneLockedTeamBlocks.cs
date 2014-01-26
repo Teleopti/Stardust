@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 				{
 					var teamInfo = teamBlockInfo.TeamInfo;
-					foreach (var person in teamInfo.GroupPerson.GroupMembers)
+					foreach (var person in teamInfo.GroupMembers)
 					{
 						var matrix = teamInfo.MatrixForMemberAndDate(person, dateOnly);
 						var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
