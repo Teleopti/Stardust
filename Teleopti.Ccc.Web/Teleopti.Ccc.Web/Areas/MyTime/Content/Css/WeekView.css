@@ -11,6 +11,7 @@
 	font-size: 0;
 	display: none;
 	position: relative;
+    width: 100%
 }
 .weekview-day
 {
@@ -20,7 +21,7 @@
 	font-size: 12px;
 	text-align: center;
 	vertical-align: top;
-	width: 131px;
+	width: 129px;
 	border-left: 1px solid #f9f9f9;
 	border-right: 1px solid #dfdfdf;
 	border-top: 1px solid  #f9f9f9;
@@ -69,7 +70,7 @@
     max-width: none;
 }
 .weekview-day-schedule {
-	width: 131px;
+	width: 129px;
 	height: 668px;
 }
 .weekview-day-schedule .tooltip {
@@ -80,18 +81,19 @@
 	height: 792px;
 	background: transparent;
 	border-right: 1px solid #dfdfdf;
+    position: relative;
 }
 .weekview-timeline-label {
 	font-size: 7pt;
 	width: 29px;
-	height: 20px;
+	height: 14px;
 	text-align: center;
 	overflow: hidden;
 	white-space: pre-wrap;
 }
 .weekview-day-time-indicator
 {
-	width: 131px;
+	width: 129px;
 	float: left;
 	z-index: 2;
 	border-bottom: 2px dashed black;
