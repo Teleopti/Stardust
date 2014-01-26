@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click remove must have button")]
 		public void WhenIClickOnRemoveMustHaveButton()
 		{
-            Browser.Interactions.Click(".icon-minus");
+            Browser.Interactions.Click(".glyphicon-minus");
 		}
 
 		[When(@"I select preference template with '(.*)'")]

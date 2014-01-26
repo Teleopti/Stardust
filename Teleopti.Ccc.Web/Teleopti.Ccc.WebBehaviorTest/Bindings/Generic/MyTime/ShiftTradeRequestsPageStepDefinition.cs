@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click on the next date")]
 		public void WhenIClickOnTheNextDate()
 		{
-			Browser.Interactions.Click(".icon-arrow-right");
+            Browser.Interactions.Click(".glyphicon-arrow-right");
 		}
 
 

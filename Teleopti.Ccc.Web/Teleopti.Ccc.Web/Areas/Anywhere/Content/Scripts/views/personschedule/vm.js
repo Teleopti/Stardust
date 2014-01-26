@@ -35,6 +35,13 @@ define([
 		this.Loading = ko.observable(false);
 		
 		this.Persons = ko.observableArray();
+		this.SortedPersons = ko.computed(function () {
+			return self.Persons().sort(function(first, second) {
+				first = first.OrderBy();
+				second = second.OrderBy();
+				return first == second ? 0 : (first < second ? -1 : 1);
+			});
+		});
 
 		this.PersonId = ko.observable();
 		this.GroupId = ko.observable();
@@ -44,7 +51,7 @@ define([
 			if (!id)
 				return undefined;
 			var person = lazy(self.Persons())
-				.select(function (x) { return x.Id == id; })
+				.filter(function (x) { return x.Id == id; })
 				.first();
 			if (!person) {
 				person = new personViewModel({ Id: id });
@@ -65,19 +72,30 @@ define([
 		
 		this.Absences = ko.observableArray();
 		
-		this.TimeLine = new timeLineViewModel(this.Persons);
-		
-		this.Shift = ko.computed(function () {
+		var layers = function () {
+			return lazy(self.Persons())
+				.map(function (x) { return x.Shifts(); })
+				.flatten()
+				.map(function (x) { return x.Layers(); })
+				.flatten();
+		};
+
+		this.TimeLine = new timeLineViewModel(ko.computed(function () { return layers().toArray(); }));
+
+		this.WorkingShift = ko.computed(function () {
 			var person = self.SelectedPerson();
 			if (person)
-				return person.Shifts()[0];
+				return lazy(person.Shifts()).filter(function(x) {
+					return x.Layers()[0].StartMinutes() > 0;
+				}).toArray()[0];
 			return undefined;
 		});
-		
-		this.HasShift = ko.computed(function () {
-			if(self.Shift())
-				return self.Shift().Layers().length > 0;
-			return false;
+
+		this.Shifts = ko.computed(function() {
+			var person = self.SelectedPerson();
+			if (person)
+				return person.Shifts();
+			return undefined;
 		});
 		
 		this.DayOff = ko.computed(function () {
@@ -94,8 +112,8 @@ define([
 		});
 		
 		this.FormStartPixel = ko.computed(function () {
-			if (self.Shift()) {
-				return self.Shift().Layers().length > 0 ? self.Shift().ShiftStartPixels() : 0;
+			if (self.WorkingShift()) {
+				return self.WorkingShift().Layers().length > 0 ? self.WorkingShift().ShiftStartPixels() : 0;
 			}
 			return 0;
 		});
@@ -144,7 +162,7 @@ define([
 			// if we dont display group mates, then filter out their data
 			if (!self.DisplayGroupMates()) {
 				data = lazy(data)
-					.select(function (x) { return x.PersonId == self.PersonId(); })
+					.filter(function (x) { return x.PersonId == self.PersonId(); })
 					.toArray();
 			}
 			// data might include the same person more than once, with data for more than one day
@@ -159,19 +177,10 @@ define([
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);
-				
-				// make shiftstart and end computeds please!
-				if (person == self.SelectedPerson()) {
-					self.AddIntradayAbsenceForm.SetShiftStartAndEnd(schedule);
-					self.AddActivityForm.SetShiftStartAndEnd(schedule);
-				}
 			}
-			
-			self.Persons().sort(function (first, second) {
-				first = first.OrderBy();
-				second = second.OrderBy();
-				return first == second ? 0 : (first < second ? -1 : 1);
-			});
+
+			self.AddIntradayAbsenceForm.WorkingShift(self.WorkingShift());
+			self.AddActivityForm.WorkingShift(self.WorkingShift());
 		};
 		
 	};

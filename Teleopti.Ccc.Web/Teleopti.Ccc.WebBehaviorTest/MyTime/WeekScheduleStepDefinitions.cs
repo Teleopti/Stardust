@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
-			Browser.Interactions.Click(string.Format(".weekview-day[data-mytime-date='{0}'] .icon-comment", date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.Click(string.Format(".weekview-day[data-mytime-date='{0}'] .glyphicon-comment", date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should not see any shifts on date '(.*)'")]
@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the public note on date '(.*)'")]
 		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .icon-exclamation-sign", date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .glyphicon-exclamation-sign", date.ToString("yyyy-MM-dd")));
 		}
 		
 		[When(@"I open the weekschedule date-picker")]
 		public void WhenIOpenTheWeekscheduleDate_Picker()
 		{
-			Browser.Interactions.Click(".icon-th:enabled");
+			Browser.Interactions.Click(".glyphicon-th:enabled");
 		}
 
 		[Then(@"I should see '(.*)' as the first day in the calender")]

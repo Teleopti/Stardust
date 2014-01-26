@@ -115,5 +115,12 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
             Assert.AreEqual(1, _groupPage.RootGroupCollection.Count(n => String.Compare(n.Description.Name, noteUpperCase, StringComparison.Ordinal) == 0));
             Assert.AreEqual(1, _groupPage.RootGroupCollection.Count(n => String.Compare(n.Description.Name, noteLowerCase, StringComparison.Ordinal) == 0));
         }
+
+		[Test]
+		public void ShouldEachRootPersonGroupHasAGuid()
+		{
+			Assert.That(_groupPage.RootGroupCollection[0].Id.ToString(), Is.EqualTo("ca53d6aa-e63e-6369-5f29-38b73098b6d7"));
+			Assert.That(_groupPage.RootGroupCollection[1].Id.ToString(), Is.EqualTo("c749063b-5026-13c3-a357-338dcdfb64ec"));
+		}
     }
 }

@@ -4,6 +4,7 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	var header = '';
 	var blinkTitleTimer;
 	var webNotification = function () { return true; }; //default also send as web notification if possible
+	var webNotifications = new Array();
 
 	function _setOptions(options) {
 		originalDocumentTitle = options.originalDocumentTitle;
@@ -32,16 +33,32 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 			}
 		});
 	}
+	
+	function isShowing(notifyText) {
+		var res = webNotifications.filter(function (item) {
+			return item.text == notifyText;
+		});
+		return res.length > 0;
+	}
 	function _webNotification(notifyText) {
 		if (window.webkitNotifications) {
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
-				if (webNotification()) {
+				if (webNotification() && !isShowing(notifyText)) {
 					var timeout = 5000;
 					var iconUrl = baseUrl + 'content/favicon.ico';
 					var notification = window.webkitNotifications.createNotification(iconUrl, header, notifyText);
 					notification.show();
+					webNotifications.push({ notification: notification, text: notifyText });
 					setTimeout(function () {
+						for (var i = 0; i < webNotifications.length; i++) {
+							if (webNotifications[i].notification == notification) {
+								notification.cancel();
+								webNotifications.splice(i, 1);
+							}
+						}
+
 						notification.cancel();
+						
 					}, timeout);
 				}
 			}

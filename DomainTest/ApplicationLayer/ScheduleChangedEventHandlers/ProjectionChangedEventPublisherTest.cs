@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -129,5 +130,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var scheduleDay = publisher.Published<ProjectionChangedEvent>().ScheduleDays.Single(x => x.Date == new DateTime(2013, 10, 29));
 			scheduleDay.IsFullDayAbsence.Should().Be.True();
 		}
+
+		[Test]
+		public void Handle_WhenScheduleChangeForACertainPeriod_ShouldCheckTheDayBeforeForProjectionChangesBecauseItCanBeAffectedIfItsANightShift()
+		{
+			//Bug 23647
+			var person = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(2013, 10, 29));
+			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(scenario, person, new DateOnly(2013, 10, 29), new DayOffTemplate(new Description("Day off", "DO")));
+			var scheduleRepository = new FakeScheduleDataReadScheduleRepository(personAssignment);
+			
+			var publisher = new FakePublishEventsFromEventHandlers();
+			var target = new ProjectionChangedEventPublisher(publisher, new FakeScenarioRepository(scenario),
+															 new FakePersonRepository(person), scheduleRepository,
+															 new ProjectionChangedEventBuilder());
+
+			var start = new DateTime(2013, 10, 29, 0, 0, 0, DateTimeKind.Utc);
+			target.Handle(new ScheduleChangedEvent
+			{
+				StartDateTime = start,
+				EndDateTime = start.AddHours(24).AddMinutes(-1),
+				PersonId = person.Id.Value,
+				ScenarioId = scenario.Id.Value
+			});
+
+			scheduleRepository.ThePeriodThatWasUsedForFindingSchedules.StartDateTime.Day.Should().Be.EqualTo(start.Day-1);
+		}
+
 	}
 }

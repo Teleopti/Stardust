@@ -36,6 +36,10 @@ define([
                 return self.StartDate().format(resources.DateFormatForMoment);
             });
 
+            this.EndDateFormatted = ko.computed(function () {
+                return self.EndDate().format(resources.DateFormatForMoment);
+            });
+
             this.AbsenceTypes = ko.observableArray();
 
             this.InvalidEndDate = ko.computed(function() {

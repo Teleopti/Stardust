@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -138,6 +141,34 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				((ScheduleChangedEvent)e).InitiatorId == initiatorIdentifier.InitiatorId
 				)));
 		}
+
+		[Test]
+		public void Execute_WhenTheSchedulesHasChanged_ShouldSetTheStartDateTimeForTheMessageToTheStartTimeOfTheChangedSchedule()
+		{
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
+			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
+			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
+			var publisher = new eventPublisherProbe();
+			var target = new ScheduleMessageSender(publisher);
+			target.Execute(new[] { rootChangeInfo });
+
+			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(personAssignment.Period.StartDateTime));
+		}
+
+		private class eventPublisherProbe : IEventPublisher
+		{
+			public ScheduleChangedEvent PublishedEvent;
+
+			public void Publish(IEvent @event)
+			{
+				PublishedEvent = (ScheduleChangedEvent) @event;
+			}
+
+		}
+		
 
 	}
 }

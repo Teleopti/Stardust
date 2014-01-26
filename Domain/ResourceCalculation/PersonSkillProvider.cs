@@ -29,7 +29,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			IPersonPeriod personPeriod = person.Period(date);
 			if (personPeriod == null) return new SkillCombination(string.Empty, new ISkill[0], new DateOnlyPeriod(), new Dictionary<Guid, double>());
 
-			var skills = personPeriod.PersonSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0)
+			var personSkillCollection = new List<IPersonSkill>();
+			foreach (var personSkill in personPeriod.PersonSkillCollection)
+			{
+				if(!((IDeleteTag)personSkill.Skill).IsDeleted)
+					personSkillCollection.Add(personSkill);
+			}
+
+			var skills = personSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0)
 				.Concat(personPeriod.PersonMaxSeatSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
 				.Concat(personPeriod.PersonNonBlendSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0))
 				.Select(s => s.Skill)
@@ -37,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				.ToList();
 
 			var skillEfficiencies =
-				personPeriod.PersonSkillCollection.Where(
+				personSkillCollection.Where(
 					s => s.Active && s.SkillPercentage.Value > 0 && s.SkillPercentage.Value != 1d).ToDictionary(k => k.Skill.Id.GetValueOrDefault(),v => v.SkillPercentage.Value);
 
 			var key = SkillCombination.ToKey(skills.Where(s => !((IDeleteTag)s).IsDeleted).Select(s => s.Id.GetValueOrDefault()));
