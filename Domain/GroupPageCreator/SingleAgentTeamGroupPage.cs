@@ -16,7 +16,10 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
             foreach (IPerson person in entityCollection)
             {
                 //Create a root Group Object & add into GroupPage
-                IRootPersonGroup rootGroup = new RootPersonGroup(person.Name.FirstName + "-" + person.Name.LastName );
+	            var descriptionName = person.Name.FirstName + "-" + person.Name.LastName;
+	            if (descriptionName.Length > 50)
+		            descriptionName = descriptionName.Substring(0, 50);
+                IRootPersonGroup rootGroup = new RootPersonGroup(descriptionName);
                 if (!groupPage.IsUserDefined())
                     rootGroup.SetId(person.Id);
 

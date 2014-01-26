@@ -16,7 +16,12 @@ namespace Teleopti.Support.Tool
         /// </summary>
         [STAThread]
         public static void Main(string[] args)
-        {
+        {            
+            // *********************************************************************************
+            // Don't remove this, used for showing groups in a ListView /Henry
+            System.Windows.Forms.Application.EnableVisualStyles();
+            // *********************************************************************************
+
             XmlConfigurator.Configure();
             if (args.Length.Equals(0))
                 new MainForm().ShowDialog();

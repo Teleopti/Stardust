@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (restriction == null) return false;
 					var shifts = _workShiftFilterService.Filter(day, person, teamBlockSingleDayInfo, restriction, schedulingOptions,
 					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
-					if (shifts.IsNullOrEmpty()) break;
+					if (shifts.IsNullOrEmpty()) continue;
 
 					//transform
 					var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 																									 .UseMinimumPersons,
 																								 schedulingOptions
 																									 .UseMaximumPersons);
-					if (bestShiftProjectionCache == null) break;
+					if (bestShiftProjectionCache == null) continue;
 				}
 
 				_teamScheduling.DayScheduled += OnDayScheduled;
