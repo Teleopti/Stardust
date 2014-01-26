@@ -97,13 +97,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I choose to go to next month")]
         public void WhenIChooseToGoToNextMonth()
         {
-            Browser.Interactions.Click(".icon-arrow-right");
+            Browser.Interactions.Click(".glyphicon-arrow-right");
         }
 
         [When(@"I choose to go to previous month")]
         public void WhenIChooseToGoToPreviousMonth()
         {
-            Browser.Interactions.Click(".icon-arrow-left");
+            Browser.Interactions.Click(".glyphicon-arrow-left");
         }
 
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I select the month '(.*)' in the calendar")]
         public void WhenISelectTheMonthInTheCalendar(string monthName)
         {
-            Browser.Interactions.Click(".icon-th");
+            Browser.Interactions.Click(".glyphicon-th");
             string selector = string.Format(".datepicker-months .month:contains('{0}')",monthName);
             Browser.Interactions.AssertVisibleUsingJQuery(selector);
             Browser.Interactions.ClickUsingJQuery(selector);

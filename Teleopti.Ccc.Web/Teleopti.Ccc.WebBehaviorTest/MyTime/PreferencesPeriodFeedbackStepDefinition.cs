@@ -128,25 +128,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see a warning for my dayoff preferences outside the target")]
 		public void ThenIShouldSeeAWarningForMyDayoffPreferencesOutsideTheTarget()
 		{
-			Browser.Interactions.AssertExists("#Preference-period-feedback-view div:nth-of-type(2) span.icon-exclamation-sign");
+			Browser.Interactions.AssertExists("#Preference-period-feedback-view div:nth-of-type(2) span.glyphicon-exclamation-sign");
 		}
 
 		[Then(@"I should not see a warning for my dayoff preferences outside the target")]
 		public void ThenIShouldNotSeeAWarningForMyDayoffPreferencesOutsideTheTarget()
 		{
-			Browser.Interactions.AssertNotExists("#Preference-period-feedback-view div:nth-of-type(2)", "#Preference-period-feedback-view div:nth-of-type(2) span.icon-exclamation-sign");
+			Browser.Interactions.AssertNotExists("#Preference-period-feedback-view div:nth-of-type(2)", "#Preference-period-feedback-view div:nth-of-type(2) span.glyphicon-exclamation-sign");
 		}
 
 		[Then(@"I should see a warning for my time preferences outside the target")]
 		public void ThenIShouldSeeAWarningForMyTimePreferencesOutsideTheTarget()
 		{
-			Browser.Interactions.AssertExists("#Preference-period-feedback-view div:nth-of-type(1) span.icon-exclamation-sign");
+			Browser.Interactions.AssertExists("#Preference-period-feedback-view div:nth-of-type(1) span.glyphicon-exclamation-sign");
 		}
 
 		[Then(@"I should not see a warning for my time preferences outside the target")]
 		public void ThenIShouldNotSeeAWarningForMyTimePreferencesOutsideTheTarget()
 		{
-			Browser.Interactions.AssertNotExists("#Preference-period-feedback-view div:nth-of-type(1)", "#Preference-period-feedback-view div:nth-of-type(1) span.icon-exclamation-sign");
+			Browser.Interactions.AssertNotExists("#Preference-period-feedback-view div:nth-of-type(1)", "#Preference-period-feedback-view div:nth-of-type(1) span.glyphicon-exclamation-sign");
 		}
 
 
