@@ -1,29 +1,32 @@
 
 <nav class="navbar navbar-inverse navbar-static-top">
-	<div class="navbar-inner">
 		<div class="container">
-			<ul class="nav">  
+			<ul class="nav navbar-nav">  
 				<li class="dropdown">  
 					<a href="#" class="nowrap navbar-brand">Teleopti</a>
 				</li>  
 			</ul>
-		    <ul class="nav">
+		    <ul class="nav navbar-nav">
 		        <li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
 		    </ul>
             
-		    <ul class="nav pull-right">
+		    <ul class="nav navbar-right">
 		        <li class="dropdown">
-		            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="css: { active: ActiveView() == 'settings' }"><i class="glyphicon glyphicon-user"></i><span class="user-name"><small data-bind="text: UserName"></small></span> <b class="caret"></b></a>
+		            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="css: { active: ActiveView() == 'settings' }">
+		                <i class="glyphicon glyphicon-user"></i>
+		                <span class="user-name">
+		                    <small data-bind="text: UserName"></small>
+		                </span> <b class="caret"></b>
+		            </a>
 		            <ul class="dropdown-menu">
 		                <li><a href="#" tabindex="-1"><span data-bind="text: Resources.Home"></span></a></li>
-						<li class="divider"></li>
-						<li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
-						<li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
-						<li class="divider"></li>
-						<li><a href="authentication/signout" tabindex="-1"><i class="glyphicon glyphicon-eject"></i> <span data-bind="text: Resources.LogOut"></span></a></li> 
+		                <li class="divider"></li>
+		                <li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
+		                <li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
+		                <li class="divider"></li>
+		                <li><a href="authentication/signout" tabindex="-1"><i class="glyphicon glyphicon-eject"></i> <span data-bind="text: Resources.LogOut"></span></a></li> 
 		            </ul>
 		        </li>
 		    </ul>
 		</div>
-	</div>
 </nav>

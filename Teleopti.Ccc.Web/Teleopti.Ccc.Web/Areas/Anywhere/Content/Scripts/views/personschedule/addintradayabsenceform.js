@@ -4,14 +4,16 @@ define([
 	'navigation',
 	'ajax',
 	'resources!r',
-	'timepicker'
+	'timepicker',
+	'lazy'
 ], function (
 	ko,
 	moment,
 	navigation,
 	ajax,
 	resources,
-	timepicker
+	timepicker,
+	lazy
 	) {
 
 	return function () {
@@ -19,21 +21,58 @@ define([
 		var self = this;
 		
 		this.Absence = ko.observable("");
+		this.AbsenceTypes = ko.observableArray();
 		this.Date = ko.observable();
 		this.StartTime = ko.observable();
 		this.EndTime = ko.observable();
-		this.AbsenceTypes = ko.observableArray();
+		this.WorkingShift = ko.observable();
 		
-		this.ShiftStart = ko.observable();
-		this.ShiftEnd = ko.observable();
-
 		var groupId;
 		var personId;
 		var startTimeAsMoment;
 		var endTimeAsMoment;
 
-		this.StartTimeWithinShift = ko.computed(function () {
-			if (self.ShiftStart() && self.ShiftEnd()) {
+		this.visibleLayers = ko.computed(function () {
+			var shift = self.WorkingShift();
+			if (shift) {
+				return lazy(shift.Layers())
+					.filter(function (x) { return x.OverlapsTimeLine(); })
+					.toArray();
+			}
+			return [];
+		});
+
+		this.ShiftStart = ko.computed(function () {
+			var visibleLayers = self.visibleLayers();
+			if (visibleLayers.length > 0) {
+				return moment(self.Date()).add("minutes", visibleLayers[0].StartMinutes());
+			}
+			return moment(self.Date()).startOf('d');
+		});
+
+		this.ShiftEnd = ko.computed(function () {
+			var visibleLayers = self.visibleLayers();
+			if (visibleLayers.length > 0) {
+				return moment(self.Date()).add("minutes", visibleLayers[visibleLayers.length - 1].EndMinutes());
+			}
+			return moment(self.Date()).startOf('d').add('d', 1);
+		});
+		
+		var getMomentFromInput = function (input) {
+			var momentInput = moment(input, resources.TimeFormatForMoment);
+			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
+		};
+
+		var startTimeWithinShift = function () {
+			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) < 0;
+		};
+
+		var nightShiftWithEndTimeOnNextDay = function () {
+			return self.ShiftStart().date() != self.ShiftEnd().date() && startTimeAsMoment.diff(endTimeAsMoment) > 0;
+		};
+		
+		this.PossbileStartTimeWithinShift = ko.computed(function () {
+			if (self.StartTime() && self.EndTime()) {
 				startTimeAsMoment = getMomentFromInput(self.StartTime());
 				endTimeAsMoment = getMomentFromInput(self.EndTime());
 				if (startTimeWithinShift()) {
@@ -50,11 +89,11 @@ define([
 				}
 				return false;
 			}
-			return true;
+			return false;
 		});
 
 		this.ValidEndTime = ko.computed(function () {
-			if (!self.StartTimeWithinShift())
+			if (!self.PossbileStartTimeWithinShift())
 				return true;
 			
 			if (startTimeAsMoment && startTimeAsMoment.diff(endTimeAsMoment) >= 0) {
@@ -64,7 +103,7 @@ define([
 		});
 		
 		this.ErrorMessage = ko.computed(function () {
-			if (!self.StartTimeWithinShift()) {
+			if (!self.PossbileStartTimeWithinShift()) {
 				return resources.InvalidIntradayAbsenceTimes;
 			}
 			if (!self.ValidEndTime()) {
@@ -87,14 +126,6 @@ define([
 			}
 			self.AbsenceTypes(data.Absences);
 		};
-
-		this.SetShiftStartAndEnd = function(data) {
-			var layers = data.Projection;
-			if (layers) {
-				self.ShiftStart(layers.length > 0 ? moment(layers[0].Start) : undefined);
-				self.ShiftEnd(layers.length > 0 ? moment(layers[layers.length - 1].Start).add('m', layers[layers.length - 1].Minutes) : undefined);
-			}
-		};
 		
 		this.Apply = function() {
 			var requestData = JSON.stringify({
@@ -112,19 +143,6 @@ define([
 					}
 				}
 			);
-		};
-		
-		var getMomentFromInput = function(input) {
-			var momentInput = moment(input, resources.TimeFormatForMoment);
-			return moment(self.Date()).add('h', momentInput.hours()).add('m', momentInput.minutes());
-		};
-
-		var startTimeWithinShift = function () {
-			return startTimeAsMoment.diff(self.ShiftStart()) >= 0 && startTimeAsMoment.diff(self.ShiftEnd()) < 0;
-		};
-
-		var nightShiftWithEndTimeOnNextDay = function () {
-			return self.ShiftStart().date() != self.ShiftEnd().date() && startTimeAsMoment.diff(endTimeAsMoment) > 0;
 		};
 	};
 });

@@ -619,13 +619,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 			else
 			{
-				int parentColIndex = Grid.CurrentCell.ColIndex;
+                int parentColIndex = gridColumnIndex();
 				columnIndex = (parentColIndex == PeopleAdminConstants.GridParentColumnIndexCheckValue)
 								  ? (PeopleAdminConstants.GridColumnIndexValue)
 								  : parentColIndex;
 			}
 			return columnIndex;
 		}
+
+        private int gridColumnIndex()
+	    {
+            if (Grid.CurrentCell.ColIndex == -1) 
+                Grid.CurrentCell.MoveTo(0,0);
+	        return Grid.CurrentCell.ColIndex;
+	    }
 
 		private void SortPeoplePeriodData(bool isAscending)
 		{

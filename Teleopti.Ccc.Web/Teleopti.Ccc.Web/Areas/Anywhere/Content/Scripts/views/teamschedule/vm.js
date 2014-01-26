@@ -25,13 +25,32 @@ define([
 		this.Loading = ko.observable(false);
 
 		this.Persons = ko.observableArray();
+		this.SortedPersons = ko.computed(function() {
+			return self.Persons().sort(function(first, second) {
+				first = first.OrderBy();
+				second = second.OrderBy();
+				return first == second ? 0 : (first < second ? -1 : 1);
+			});
+		});
 
-		this.TimeLine = new timeLineViewModel(this.Persons);
+		var layers = function() {
+			return lazy(self.Persons())
+				.map(function(x) { return x.Shifts(); })
+				.flatten()
+				.map(function(x) { return x.Layers(); })
+				.flatten();
+		};
 
+		this.TimeLine = new timeLineViewModel(ko.computed(function() { return layers().toArray(); }));
+		
 		this.Resources = resources;
 
 		this.GroupId = ko.observable();
 		this.Date = ko.observable(moment());
+
+		this.DateFormatted = ko.computed(function () {
+		    return self.Date().format(resources.DateFormatForMoment);
+		});
 
 		this.GroupPages = ko.observableArray();
 
@@ -52,7 +71,7 @@ define([
 			if (!id)
 				return undefined;
 			var person = lazy(self.Persons())
-				.select(function (x) { return x.Id == id; })
+				.filter(function (x) { return x.Id == id; })
 				.first();
 			if (!person) {
 				person = new personViewModel({ Id: id });
@@ -75,12 +94,6 @@ define([
 				var person = personForId(schedule.PersonId);
 				person.AddData(schedule, timeLine);
 			}
-
-			self.Persons().sort(function (first, second) {
-				first = first.OrderBy();
-				second = second.OrderBy();
-				return first == second ? 0 : (first < second ? -1 : 1);
-			});
 		};
 
 		this.NextDay = function () {
@@ -92,20 +105,20 @@ define([
 		};
 
 		this.SelectPerson = function (person) {
-			deselectAllPersons(person.Id);
-			deselectAllLayers();
+			deselectAllPersonsExcept(person);
+			deselectAllLayersExcept();
 
 			person.Selected(!person.Selected());
 		};
 
-		this.SelectLayer = function (layer, personId) {
-			deselectAllPersons();
-			deselectAllLayers(layer);
+		this.SelectLayer = function (layer) {
+			deselectAllPersonsExcept();
+			deselectAllLayersExcept(layer);
 
 			layer.Selected(!layer.Selected());
 		};
 
-		var deselectAllPersons = function(person) {
+		var deselectAllPersonsExcept = function(person) {
 			var selectedPersons = lazy(self.Persons())
 				.filter(function(x) {
 					if (person && x === person)
@@ -117,12 +130,8 @@ define([
 			});
 		};
 
-		var deselectAllLayers = function (layer) {
-			var selectedLayers = lazy(self.Persons())
-				   .map(function (x) { return x.Shifts(); })
-				   .flatten()
-				   .map(function (x) { return x.Layers(); })
-				   .flatten()
+		var deselectAllLayersExcept = function (layer) {
+			var selectedLayers = layers()
 				   .filter(function (x) {
 					if (layer && x === layer) {
 						return false;

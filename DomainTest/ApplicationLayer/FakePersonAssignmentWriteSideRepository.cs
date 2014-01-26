@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public IPersonAssignment LoadAggregate(PersonAssignmentKey id)
 		{
-			return _entities.Single(e => e.Person.Equals(id.Person) &&
+			return _entities.FirstOrDefault(e => e.Person.Equals(id.Person) &&
 			                             e.Scenario.Equals(id.Scenario) &&
 			                             e.Date.Equals(id.Date));
 		}

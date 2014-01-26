@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			{
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-																		  _skillIntervalDatas, _lengthHint, true, true)).Return(null);
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(7);
 
 				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
 				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherActivity,
