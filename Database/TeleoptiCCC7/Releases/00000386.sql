@@ -10,20 +10,13 @@ PRINT '-----------------------'
 --Date: 2014-01-24
 --Desc: #26710 Need to remove unwanted duplicates from schedule before converting to the new PersonAssignment
 --Duplicates, with same minimum, but maybe different updatedon
-delete  PersonAssignment
-from PersonAssignment paD
---These are the ones we want to delete
-inner join 
-	(select min(pa1.id) as id, pa1.Person, pa1.Minimum, pa1.Maximum, pa1.Scenario
-	--We want to keep one of the duplicates with even same updatedon
-	from PersonAssignment pa1
-	inner join
-		--We want to keep the duplicate that was created first, because that is how 384 displays in Schedules
-		(select min(pa.UpdatedOn) as updatedon, pa.Person, pa.Minimum, pa.Scenario
-		from PersonAssignment pa 
-		group by pa.Person, pa.Minimum, pa.Scenario
-		having count(1) > 1) inside on pa1.scenario = inside.scenario and pa1.Person = inside.Person and pa1.Minimum = inside.Minimum and pa1.UpdatedOn = inside.updatedon
-	group by pa1.Person, pa1.Minimum, pa1.Maximum, pa1.Scenario) outside on paD.scenario = outside.scenario and paD.Person = outside.Person and paD.Minimum = outside.Minimum and paD.Id <> outside.id
+delete PersonAssignment
+from PersonAssignment paD inner join
+	(select pa.id,
+	--We want to keep the duplicate that was created first, because that is how 384 displays in Schedules
+	--If multiple modified same time keep first one (lowest id)
+	ROW_NUMBER()OVER(PARTITION BY pa.person, pa.scenario, pa.minimum ORDER BY pa.updatedon, pa.id) as 'rn'
+	from PersonAssignment pa) inside on paD.id = inside.id and inside.rn <> 1
 
 --Overlapping, with different minimum, Schedules in 384 displays the one with earliest start = minimum
 delete PersonAssignment
