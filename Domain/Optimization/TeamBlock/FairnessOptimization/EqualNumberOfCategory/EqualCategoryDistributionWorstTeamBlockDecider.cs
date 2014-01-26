@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 
 	public class EqualCategoryDistributionWorstTeamBlockDecider : IEqualCategoryDistributionWorstTeamBlockDecider
 	{
-		private readonly IDistributionForPersons _distributionForPersons;
+		private readonly IEqualCategoryDistributionValue _equalCategoryDistributionValue;
 
-		public EqualCategoryDistributionWorstTeamBlockDecider(IDistributionForPersons distributionForPersons)
+		public EqualCategoryDistributionWorstTeamBlockDecider(IEqualCategoryDistributionValue equalCategoryDistributionValue)
 		{
-			_distributionForPersons = distributionForPersons;
+			_equalCategoryDistributionValue = equalCategoryDistributionValue;
 		}
 
 		public ITeamBlockInfo FindBlockToWorkWith(IDistributionSummary totalDistribution, IList<ITeamBlockInfo> availableTeamBlocks, IScheduleDictionary scheduleDictionary)
@@ -27,9 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			var teamBlockInfoDistributionValue = 0d;
 			foreach (var teamBlockInfo in availableTeamBlocks)
 			{
-				var distribution = _distributionForPersons.CreateSummary(teamBlockInfo.TeamInfo.GroupPerson.GroupMembers,
-																		 scheduleDictionary);
-				var absDiff = distributionDiff(totalDistribution, distribution);
+				var absDiff = _equalCategoryDistributionValue.CalculateValue(teamBlockInfo, totalDistribution, scheduleDictionary);
 				if (absDiff > teamBlockInfoDistributionValue)
 				{
 					teamBlockInfoDistributionValue = absDiff;
@@ -38,18 +36,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			}
 
 			return teamBlockInfoToWorkWith;
-		}
-
-		private double distributionDiff(IDistributionSummary totalDistribution,
-									 IDistributionSummary distributionToCalculate)
-		{
-			var absDiff = 0d;
-			foreach (var i in distributionToCalculate.PercentDicionary)
-			{
-				absDiff += Math.Abs(i.Value - totalDistribution.PercentDicionary[i.Key]);
-			}
-
-			return absDiff;
 		}
 	}
 }

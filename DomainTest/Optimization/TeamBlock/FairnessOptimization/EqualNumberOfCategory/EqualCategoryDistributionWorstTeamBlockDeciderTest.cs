@@ -14,22 +14,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 	{
 		private MockRepository _mocks;
 		private IEqualCategoryDistributionWorstTeamBlockDecider _target;
-		private IDistributionForPersons _distributionForPersons;
 		private IScheduleDictionary _scheduleDictionary;
 		private ITeamBlockInfo _teamBlockInfo1;
-		private ITeamInfo _teamInfo;
-		private IGroupPerson _groupPerson;
+		private IEqualCategoryDistributionValue _equalCategoryDistributionValue;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_distributionForPersons = _mocks.StrictMock<IDistributionForPersons>();
-			_target = new EqualCategoryDistributionWorstTeamBlockDecider(_distributionForPersons);
+			_equalCategoryDistributionValue = _mocks.StrictMock<IEqualCategoryDistributionValue>();
+			_target = new EqualCategoryDistributionWorstTeamBlockDecider(_equalCategoryDistributionValue);
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_teamBlockInfo1 = _mocks.StrictMock<ITeamBlockInfo>();
-			_teamInfo = _mocks.StrictMock<ITeamInfo>();
-			_groupPerson = _mocks.StrictMock<IGroupPerson>();
 		}
 		
 
@@ -40,17 +36,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			var category2 = ShiftCategoryFactory.CreateShiftCategory("hopp");
 			var distributionDic1 = new Dictionary<IShiftCategory, int> {{category1, 1}, {category2, 1}};
 			var totalDistribution = new DistributionSummary(distributionDic1);
-			var distributionDic2 = new Dictionary<IShiftCategory, int> {{category1, 1}};
-			var teamBlockDistribution = new DistributionSummary(distributionDic2);
-			var person1 = PersonFactory.CreatePerson();
-			var memberList = new List<IPerson> {person1};
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_groupPerson.GroupMembers).Return(memberList);
-				Expect.Call(_distributionForPersons.CreateSummary(memberList, _scheduleDictionary)).Return(teamBlockDistribution);
+				Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo1, totalDistribution, _scheduleDictionary)).Return(5);
 			}
 
 			using (_mocks.Playback())

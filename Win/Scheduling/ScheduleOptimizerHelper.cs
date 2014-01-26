@@ -6,6 +6,7 @@ using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
@@ -655,7 +656,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (optimizerPreferences.General.OptimizationStepFairness)
 					{
 						recalculateIfContinuedStep(continuedStep, selectedPeriod);
-						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod);
+						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizerPreferences);
 					}
 					
 				}
@@ -677,15 +678,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private void runFairness(IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
-			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences)
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
+			var restrictionExtractor = _container.Resolve<IRestrictionExtractor>();
+			OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, restrictionExtractor, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
+
+			var scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
+			IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones =
+				new Dictionary<IPerson, IScheduleRange>();
+
+			foreach (IPerson selectedPerson in selectedPersons)
+			{
+				allSelectedScheduleRangeClones.Add(selectedPerson, _schedulerStateHolder.Schedules[selectedPerson]);
+			}
+			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
+			   new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, scheduleDayEquator);
+			var restrictionOverLimitDecider = _container.Resolve<IRestrictionOverLimitDecider>();
+			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator
+				(restrictionOverLimitDecider, maxMovedDaysOverLimitValidator);
+
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
-			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService);
+			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService,
+			                                             teamBlockRestrictionOverLimitValidator, optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			var groupPersonBuilderForOptimizationFactory = _container.Resolve<IGroupPersonBuilderForOptimizationFactory>();
