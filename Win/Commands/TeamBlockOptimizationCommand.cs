@@ -154,9 +154,13 @@ namespace Teleopti.Ccc.Win.Commands
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
 				var rollbackServiceWithoutResourceCalculation = new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState, new DoNothingScheduleDayChangeCallBack(), tagSetter);
+				OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
+																optimizationPreferences, selectedPeriod);
 
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
-				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
+				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
+				                                       _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
+				                                       teamBlockRestrictionOverLimitValidator, optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				//move into IOC
