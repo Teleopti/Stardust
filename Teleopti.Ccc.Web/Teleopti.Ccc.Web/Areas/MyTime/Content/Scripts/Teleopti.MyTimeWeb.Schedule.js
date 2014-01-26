@@ -19,7 +19,7 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule = (function ($) {
 	var timeIndicatorDateTime;
 	var scheduleHeight = 668;
-	var timeLineOffset = 111;
+	var timeLineOffset = 116;
 	var pixelToDisplayAll = 38;
 	var pixelToDisplayTitle = 16;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
@@ -443,7 +443,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var bottom = Math.round(scheduleHeight * self.endPositionPercentage()) - 1;
 			return bottom - self.top();
 		});
-		self.width = ko.observable(layer.IsOvertimeAvailability ? '20' : '131');
+		self.width = ko.observable(layer.IsOvertimeAvailability ? '20' : '129');
 		self.topPx = ko.computed(function () {
 			return self.top() + 'px';
 		});
