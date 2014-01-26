@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not be able to see preferences link")]
 		public void ThenIShouldNotBeAbleToSeePreferencesLink()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-inner", "[href*='#PreferenceTab']");
+			Browser.Interactions.AssertNotExists(".container", "[href*='#PreferenceTab']");
 		}
 
 		[Then(@"I should see the contract time of '(.*)' hours")]
