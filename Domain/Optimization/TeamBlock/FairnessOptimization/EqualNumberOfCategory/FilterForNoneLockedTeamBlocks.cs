@@ -20,9 +20,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				var blockLocked = false;
 				foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
 				{
-					foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+					var teamInfo = teamBlockInfo.TeamInfo;
+					foreach (var person in teamInfo.GroupPerson.GroupMembers)
 					{
-						var matrix = teamBlockInfo.TeamInfo.MatrixForMemberAndDate(person, dateOnly);
+						var matrix = teamInfo.MatrixForMemberAndDate(person, dateOnly);
 						var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
 						if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 						{
