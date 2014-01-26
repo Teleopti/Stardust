@@ -357,13 +357,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see staffing metrics for skill '(.*)'")]
 		public void ThenIShouldSeeStaffingMetricsForSkill(string name)
 		{
-			Browser.Interactions.AssertFirstContains("#skill-selector a", name);
+            Browser.Interactions.AssertFirstContains("#skill-selector button", name);
 		}
 
 		[Then(@"I should see staffing metrics for skill '(.*)' with")]
 		public void ThenIShouldSeeStaffingMetricsForSkillWith(string name, Table table)
 		{
-			Browser.Interactions.AssertFirstContains("#skill-selector a", name);
+            Browser.Interactions.AssertFirstContains("#skill-selector button", name);
 
 			var staffingMetric = table.CreateInstance<StaffingMetricInfo>();
 
