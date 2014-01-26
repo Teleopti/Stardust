@@ -115,7 +115,7 @@ var TooltipBinding = function() {
     };
 
     var trackIsShowing = function($element) {
-        var tooltip = $element.data('tooltip');
+        var tooltip = $element.data('bs.tooltip');
         tooltip.options.showing = false;
         $element
             .on("hide", function () {
@@ -126,7 +126,7 @@ var TooltipBinding = function() {
     };
 
     var refreshIfShowing = function ($element) {
-        var tooltip = $element.data('tooltip');
+        var tooltip = $element.data('bs.tooltip');
         if (tooltip.showing) {
             var preserveAnimation = tooltip.options.animation;
             tooltip.options.animation = false;
@@ -143,7 +143,7 @@ var TooltipBinding = function() {
 
     this.update = function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
         var $element = $(element);
-        var tooltip = $element.data('tooltip');
+        var tooltip = $element.data('bs.tooltip');
         $.extend(tooltip.options, getOptions(valueAccessor));
         refreshIfShowing($element);
     };
