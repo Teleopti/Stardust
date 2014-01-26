@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the next day button")]
 		public void WhenIClickNextVirtualSchedulePeriodButton()
 		{
-			Browser.Interactions.ClickUsingJQuery(".navbar-form button.done:has(i.icon-arrow-right)");
+            Browser.Interactions.ClickUsingJQuery(".navbar-form button.done:has(i.glyphicon-arrow-right)");
 		}
 
 		[When(@"I click previous virtual schedule period button")]
 		[When(@"I click the previous day button")]
 		public void WhenIClickPreviousVirtualSchedulePeriodButton()
 		{
-			Browser.Interactions.ClickUsingJQuery(".navbar-form button.done:has(i.icon-arrow-left)");
+            Browser.Interactions.ClickUsingJQuery(".navbar-form button.done:has(i.glyphicon-arrow-left)");
 		}
 
 		[Then(@"I should see an error message")]
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIShouldSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
 		{
 			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
-			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .icon-comment", formattedDate));
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .glyphicon-comment", formattedDate));
 		}
 
 		[Then(@"I should see an overtime availability symbol with tooltip")]
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void ThenIShouldNotSeeASymbolAtTheTopOfTheScheduleForDate(DateTime date)
 		{
 			var formattedDate = date.ToString(CultureInfo.GetCultureInfo("sv-SE").DateTimeFormat.ShortDatePattern);
-			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .icon-comment", formattedDate));
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".weekview-day[data-mytime-date={0}] .glyphicon-comment", formattedDate));
 		}
 
 		[Then(@"I should not see an overtime availability symbol for date '(.*)'")]

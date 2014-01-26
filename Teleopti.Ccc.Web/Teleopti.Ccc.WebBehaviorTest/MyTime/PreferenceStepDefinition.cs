@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the delete preference button")]
 		public void WhenIClickTheDeletePreferenceButton()
 		{
-			Browser.Interactions.ClickUsingJQuery("a:has(i.icon-remove)");
+			Browser.Interactions.ClickUsingJQuery("a:has(i.glyphicon-remove)");
 		}
 
 		private static string GetExpectedContractTimesString(string earliest, string latest, CultureInfo culture)

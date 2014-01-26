@@ -54,7 +54,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
     };
 
     this.IsPreferenceInputVisibleToggleCss = ko.computed(function() {
-        return !self.IsPreferenceInputVisible() ? 'icon-circle-arrow-down' : undefined;
+        return !self.IsPreferenceInputVisible() ? 'glyphicon glyphicon-circle-arrow-down' : 'glyphicon glyphicon-circle-arrow-up';
     });
 
 	this.SelectedTemplateId = ko.computed({
@@ -126,7 +126,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	    self.IsSaveAsNewTemplate(!self.IsSaveAsNewTemplate());
 	};
 	this.IsSaveAsNewTemplateClass = ko.computed(function () {
-	    return self.IsSaveAsNewTemplate() ? 'icon-minus-sign' : undefined;
+	    return self.IsSaveAsNewTemplate() ? 'glyphicon glyphicon-minus-sign' : undefined;
 	});
 
 	_initPreferenceString();

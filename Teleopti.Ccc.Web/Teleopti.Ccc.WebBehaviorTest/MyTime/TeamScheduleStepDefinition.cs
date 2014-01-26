@@ -368,13 +368,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see shiftrade button")]
 		public void ThenIShouldNotSeeShiftradeButton()
 		{
-			Browser.Interactions.AssertNotExists("#TeamSchedule-body",".icon-random");
+			Browser.Interactions.AssertNotExists("#TeamSchedule-body",".glyphicon-random");
 		}
 
 		[When(@"I click any shifttrade button")]
 		public void WhenIClickAnyShifttradeButton()
 		{
-			Browser.Interactions.Click(".icon-random");
+			Browser.Interactions.Click(".glyphicon-random");
 		}
 
 		[Then(@"I should see the add shifttrade section")]
