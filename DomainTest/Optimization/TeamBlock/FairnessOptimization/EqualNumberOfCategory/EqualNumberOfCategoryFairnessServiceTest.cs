@@ -106,67 +106,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			}
 		}
 
-		private void successfulMove()
-		{
-			//first loop
-			firstInnerLoop();
-
-			//second loop
-			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
-			                                                                                _teamBlockInfos, _sceduleDictionary))
-			      .IgnoreArguments().Return(null);
-		}
-
-		private void firstInnerLoop()
-		{
-			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
-			                                                                                _teamBlockInfos, _sceduleDictionary))
-			      .Return(_teamBlockInfo1);
-			Expect.Call(_filterOnSwapableTeamBlocks.Filter(_teamBlockInfos, _teamBlockInfo1))
-			      .IgnoreArguments()
-			      .Return(_teamBlockInfos);
-			Expect.Call(_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(_teamBlockInfo1, _teamBlockInfos,
-			                                                                        _totalDistributionSummary, _sceduleDictionary))
-			      .Return(_teamBlockInfo2);
-			Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo1, _totalDistributionSummary,
-			                                                           _sceduleDictionary)).Return(5);
-			Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo2, _totalDistributionSummary,
-			                                                           _sceduleDictionary)).Return(5);
-			Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary))
-			      .Return(true);
-			Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
-			      .Return(true);
-			Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences))
-			      .Return(true);
-			Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo1, _totalDistributionSummary,
-			                                                           _sceduleDictionary)).Return(4);
-			Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo2, _totalDistributionSummary,
-			                                                           _sceduleDictionary)).Return(4);
-		}
-
-		private void commonMocks()
-		{
-			
-			Expect.Call(_filterPersonsForTotalDistribution.Filter(_allMatrixes)).Return(_selectedPersons);
-			Expect.Call(_constructTeamBlock.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions))
-			      .Return(_teamBlockInfos);
-			Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
-
-			Expect.Call(_distributionForPersons.CreateSummary(_selectedPersons, _sceduleDictionary)).IgnoreArguments()
-			      .Return(_totalDistributionSummary);
-			Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _selectedPersons, new DateOnlyPeriod()))
-			      .Return(_teamBlockInfos);
-			Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(_teamBlockInfos, _sceduleDictionary)).Return(_teamBlockInfos);
-			Expect.Call(_filterForNoneLockedTeamBlocks.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
-		}
-
 		[Test]
 		public void ShouldResponsToCancel()
 		{
 			using (_mocks.Record())
 			{
 				commonMocks();
-				firstInnerLoop();
+				firstInnerLoop(false, false);
 			}
 
 			using (_mocks.Playback())
@@ -197,9 +143,130 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			}
 		}
 
+		[Test]
+		public void ShouldRollBackIfValueIsNotBetter()
+		{
+			using (_mocks.Record())
+			{
+				commonMocks();
+				failOnValue();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
+								_rollbackService, _teamBlockRestrictionOverLimitValidator, _optimizationPreferences);
+			}
+		}
+
+		[Test]
+		public void ShouldRollBackIfBreakingRestrictionLimit()
+		{
+			using (_mocks.Record())
+			{
+				commonMocks();
+				failOnRestriction();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
+								_rollbackService, _teamBlockRestrictionOverLimitValidator, _optimizationPreferences);
+			}
+		}
+
 		void _targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
+		}
+
+		private void failOnRestriction()
+		{
+			//first loop
+			firstInnerLoop(false, true);
+
+			//second loop
+			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
+																							_teamBlockInfos, _sceduleDictionary))
+				  .IgnoreArguments().Return(null);
+		}
+
+		private void failOnValue()
+		{
+			//first loop
+			firstInnerLoop(true, false);
+
+			//second loop
+			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
+																							_teamBlockInfos, _sceduleDictionary))
+				  .IgnoreArguments().Return(null);
+		}
+
+		private void successfulMove()
+		{
+			//first loop
+			firstInnerLoop(false, false);
+
+			//second loop
+			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
+																							_teamBlockInfos, _sceduleDictionary))
+				  .IgnoreArguments().Return(null);
+		}
+
+		private void firstInnerLoop(bool failOnValue, bool failOnRestriction)
+		{
+			var valueAfter = 4;
+			if (failOnValue)
+				valueAfter = 6;
+
+			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
+																							_teamBlockInfos, _sceduleDictionary))
+				  .Return(_teamBlockInfo1);
+			Expect.Call(_filterOnSwapableTeamBlocks.Filter(_teamBlockInfos, _teamBlockInfo1))
+				  .IgnoreArguments()
+				  .Return(_teamBlockInfos);
+			Expect.Call(_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(_teamBlockInfo1, _teamBlockInfos,
+																					_totalDistributionSummary, _sceduleDictionary))
+				  .Return(_teamBlockInfo2);
+			Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo1, _totalDistributionSummary,
+																	   _sceduleDictionary)).Return(5);
+			Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo2, _totalDistributionSummary,
+																	   _sceduleDictionary)).Return(5);
+			Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _sceduleDictionary))
+				  .Return(true);
+			Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
+				  .Return(true);
+			Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences))
+				  .Return(!failOnRestriction);
+
+			if (!failOnRestriction)
+			{
+				Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo1, _totalDistributionSummary,
+														   _sceduleDictionary)).Return(valueAfter);
+				Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo2, _totalDistributionSummary,
+																		   _sceduleDictionary)).Return(valueAfter);
+			}
+
+			if (failOnValue || failOnRestriction)
+			{
+				Expect.Call(() => _rollbackService.Rollback());
+			}
+		}
+
+		private void commonMocks()
+		{
+
+			Expect.Call(_filterPersonsForTotalDistribution.Filter(_allMatrixes)).Return(_selectedPersons);
+			Expect.Call(_constructTeamBlock.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions))
+				  .Return(_teamBlockInfos);
+			Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
+
+			Expect.Call(_distributionForPersons.CreateSummary(_selectedPersons, _sceduleDictionary)).IgnoreArguments()
+				  .Return(_totalDistributionSummary);
+			Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _selectedPersons, new DateOnlyPeriod()))
+				  .Return(_teamBlockInfos);
+			Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(_teamBlockInfos, _sceduleDictionary)).Return(_teamBlockInfos);
+			Expect.Call(_filterForNoneLockedTeamBlocks.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
 		}
 
 	}
