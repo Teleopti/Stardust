@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="Bug25126.cs" />
     <Compile Include="Bug25131.cs" />
+    <Compile Include="Bug26500.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="Models\acd_type.cs" />
     <Compile Include="Models\acd_type_detail.cs" />
@@ -370,6 +371,7 @@
     <Compile Include="Models\v_stg_schedule_load.cs" />
     <Compile Include="Models\v_time_zone_convertUpDown.cs" />
     <Compile Include="TestData\AnalyticsRunner.cs" />
+    <Compile Include="TestData\BasicShiftSetup.cs" />
     <Compile Include="TestData\EtlReadModelSetup.cs" />
     <Compile Include="TestData\ScheduleDayReadModelSetup.cs" />
     <Compile Include="TestData\ShiftForDate.cs" />
