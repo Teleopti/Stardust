@@ -51,8 +51,22 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 				}
 				else
 				{
-					appointmentsToMark.Clear();
-					countOverlapping = 1;
+					var overlap = false;
+					foreach (var appointment in appointmentsToMark)
+					{
+						if (nextAppointment.StartDateTime < appointment.EndDateTime.AddMinutes(FindRemainsToEvenHalfHour(appointment.EndDateTime.Minute)))
+						{
+							overlap = true;
+							appointmentsToMark.Add(nextAppointment);
+							break;
+						}
+					}
+
+					if (overlap == false)
+					{
+						appointmentsToMark.Clear();
+						countOverlapping = 1;
+					}
 				}
 
 				if (countOverlapping > 5)
