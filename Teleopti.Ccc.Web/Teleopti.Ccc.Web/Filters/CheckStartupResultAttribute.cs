@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Filters
 			}
 			if (ApplicationStartModule.HasStartupError)
 			{
-                //throw ApplicationStartModule.ErrorAtStartup;
+                throw ApplicationStartModule.ErrorAtStartup;
 			}
 			base.OnAuthorization(filterContext);
 		}
