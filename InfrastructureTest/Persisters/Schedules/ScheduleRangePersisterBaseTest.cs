@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IScheduleRangePersister Target { get; set; }
 		protected IScheduleTag ScheduleTag { get; private set; }
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
-		private IEnumerable<IPersistableScheduleData> _givenState;
 
 		protected override void SetupForRepositoryTestWithoutTransaction()
 		{
@@ -81,8 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
 				var scheduleDatas = new List<IPersistableScheduleData>();
 				Given(scheduleDatas);
-				_givenState = scheduleDatas;
-				_givenState.ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
+				scheduleDatas.ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
 				unitOfWork.PersistAll();
 			}
 		}
