@@ -15,8 +15,8 @@
 		<ETLNightlyBuild-UnInstallSvcCmd>"$(ETLStuff)\ETLNightlyBuild-UnInstallSvc.cmd"</ETLNightlyBuild-UnInstallSvcCmd>
 		<SQLCmdConn>SQLCMD -S$(COMPUTERNAME) -E</SQLCmdConn>
 		<ETLServiceBinDir>C:\Temp\ETLNightlyBuild</ETLServiceBinDir>
-		<CCC7DB>$(DBNamePrefix)_ccc7</CCC7DB>
-		<AnalyticsDB>$(DBNamePrefix)_analytics</AnalyticsDB>
+		<CCC7DB>$(DBNamePrefix)_ccc7_temp</CCC7DB>
+		<AnalyticsDB>$(DBNamePrefix)_analytics_temp</AnalyticsDB>
 		<AggDB>$(DBNamePrefix)_agg</AggDB>
 		<AppSqlLogin>EtlNightlyUser</AppSqlLogin>
 		<AppSqlPwd>EtlNightlyPwd2</AppSqlPwd>
