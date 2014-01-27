@@ -79,14 +79,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             ISkillSkillStaffPeriodExtendedDictionary retDic = new SkillSkillStaffPeriodExtendedDictionary();
 
-            retDic.Add(skills["PhoneA"], prepareSkillDay(skills["PhoneA"], skillDayDate, 5));
-            retDic.Add(skills["PhoneB"], prepareSkillDay(skills["PhoneB"], skillDayDate, 10));
-            retDic.Add(skills["PhoneC"], prepareSkillDay(skills["PhoneC"], skillDayDate, 0));
+            retDic.Add(skills["PhoneA"], PrepareSkillDay(skills["PhoneA"], skillDayDate, 5));
+            retDic.Add(skills["PhoneB"], PrepareSkillDay(skills["PhoneB"], skillDayDate, 10));
+            retDic.Add(skills["PhoneC"], PrepareSkillDay(skills["PhoneC"], skillDayDate, 0));
 
             return retDic;
         }
 
-        private static ISkillStaffPeriodDictionary prepareSkillDay(ISkill skill,DateTime dateTime, double forecastValue)
+        public static ISkillStaffPeriodDictionary PrepareSkillDay(ISkill skill,DateTime dateTime, double forecastValue)
         {
             ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(skill, dateTime, forecastValue, 0d);
 

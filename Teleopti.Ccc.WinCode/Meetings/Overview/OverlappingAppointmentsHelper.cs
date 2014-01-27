@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Meetings.Overview
 {
@@ -51,8 +52,22 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 				}
 				else
 				{
-					appointmentsToMark.Clear();
-					countOverlapping = 1;
+					var overlap = false;
+					foreach (var appointment in appointmentsToMark)
+					{
+						if (nextAppointment.StartDateTime < appointment.EndDateTime.AddMinutes(FindRemainsToEvenHalfHour(appointment.EndDateTime.Minute)))
+						{
+							overlap = true;
+							appointmentsToMark.Add(nextAppointment);
+							break;
+						}
+					}
+
+					if (overlap == false)
+					{
+						appointmentsToMark.Clear();
+						countOverlapping = 1;
+					}
 				}
 
 				if (countOverlapping > 5)
@@ -67,6 +82,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
 			return null;
 		}
 
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "30-minute")]
 		public static int FindRemainsToEvenHalfHour(int minute)
 		{

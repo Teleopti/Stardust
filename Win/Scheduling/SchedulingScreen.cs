@@ -7152,6 +7152,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (_scheduleView.AllSelectedDates().Count == 0)
 					return;
 				IOvertimePreferences overtimePreferences = new OvertimePreferences();
+				overtimePreferences.SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(1));
 				try
 				{
                     var definitionSets = MultiplicatorDefinitionSet.Where(set => set.MultiplicatorType == MultiplicatorType.Overtime).ToList();

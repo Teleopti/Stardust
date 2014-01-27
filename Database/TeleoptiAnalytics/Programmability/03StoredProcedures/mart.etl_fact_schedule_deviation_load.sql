@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_schedule_deviation_load]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_fact_schedule_deviation_load]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 GO
 -- =============================================
@@ -50,6 +50,7 @@ DECLARE @max_date_id int
 DECLARE @min_date_id int
 DECLARE @business_unit_id int
 DECLARE @scenario_id int
+DECLARE @scenario_code uniqueidentifier
 DECLARE @date_min smalldatetime
 DECLARE @intervals_outside_shift int
 declare @interval_length_minutes int 
@@ -96,6 +97,11 @@ CREATE TABLE #intervals
 	interval_end smalldatetime null
 )
 
+CREATE TABLE #stg_schedule_changed(
+	[person_id] [int] NOT NULL,
+	[shift_startdate_id] [int] NOT NULL
+)
+
 INSERT #intervals(interval_id,interval_start,interval_end)
 SELECT interval_id= interval_id,
 	interval_start= interval_start,
@@ -121,6 +127,7 @@ SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @start_date = date_date
 SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 
 SET @scenario_id	=	(SELECT scenario_id FROM mart.dim_scenario WHERE business_unit_code = @business_unit_code AND default_scenario = 1)
+SET @scenario_code	=	(SELECT scenario_code FROM mart.dim_scenario WHERE business_unit_code = @business_unit_code AND default_scenario = 1)
 
 /*Get business unit id*/
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
@@ -128,10 +135,6 @@ SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHE
 /*Remove old data*/
 if (@isIntraday=0)
 BEGIN
-	DELETE FROM mart.fact_schedule_deviation
-	WHERE date_id between @start_date_id AND @end_date_id
-		AND business_unit_id = @business_unit_id
-
 	INSERT INTO #fact_schedule
 	SELECT
 		 fs.schedule_date_id, 
@@ -196,35 +199,46 @@ BEGIN
 	WHERE
 		fa.date_id BETWEEN @start_date_id AND @end_date_id
 		AND b.business_unit_id = @business_unit_id
+
+	DELETE FROM mart.fact_schedule_deviation
+	WHERE date_id between @start_date_id AND @end_date_id
+		AND business_unit_id = @business_unit_id
 END
 
 if (@isIntraday=1)
 BEGIN
+
+	INSERT INTO #stg_schedule_changed
+	select DISTINCT
+		f.person_id,
+		f.shift_startdate_id
+	from mart.fact_schedule_deviation f
+	inner join mart.dim_person p
+		on p.person_id = f.person_id
+	inner join mart.bridge_time_zone btz
+		on f.shift_startdate_id = btz.date_id
+		and f.shift_startinterval_id = btz.interval_id
+		and p.time_zone_id = btz.time_zone_id
+	inner join mart.dim_date dd
+		on dd.date_id = btz.local_date_id
+	inner join stage.stg_schedule_changed ch
+		on ch.person_code = p.person_code
+		and ch.schedule_date = dd.date_date
+			AND --trim
+			(
+					(ch.schedule_date	>= p.valid_from_date_local)
+
+				AND
+					(ch.schedule_date <= p.valid_to_date_local)
+			)
+	where ch.scenario_code = @scenario_code
 
 	--if in Intraday-mode, we have get the dates based on Agent stat job which is of no use.
 	--Instead use min/max date from changed table
 	SELECT
 		@start_date_id	= min(shift_startdate_id),
 		@end_date_id	= max(shift_startdate_id)
-	FROM Stage.stg_schedule_updated_ShiftStartDateUTC
-
-	DELETE fs
-	FROM Stage.stg_schedule_changed stg
-	INNER JOIN Stage.stg_schedule_updated_personLocal dp
-		ON stg.person_code		=	dp.person_code
-		AND --trim
-			(
-					(stg.schedule_date	>= dp.valid_from_date_local)
-
-				AND
-					(stg.schedule_date <= dp.valid_to_date_local)
-			)
-	INNER JOIN mart.fact_schedule_deviation fs
-		ON dp.person_id = fs.person_id
-	INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-		ON dd.shift_startdate_id = fs.shift_startdate_id 
-		AND dd.person_id = fs.person_id
-	WHERE stg.business_unit_code = @business_unit_code
+	FROM #stg_schedule_changed
 
 	INSERT INTO #fact_schedule
 	SELECT
@@ -239,9 +253,9 @@ BEGIN
 		sum(isnull(fs.scheduled_contract_time_m,0))'scheduled_contract_time_m',
 		fs.business_unit_id
 	FROM mart.fact_schedule fs
-	INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-		ON dd.shift_startdate_id = fs.shift_startdate_id 
-		AND dd.person_id = fs.person_id
+	INNER JOIN #stg_schedule_changed ch
+		ON ch.shift_startdate_id = fs.shift_startdate_id 
+		AND ch.person_id = fs.person_id
 	WHERE fs.business_unit_id = @business_unit_id
 	AND fs.scenario_id = @scenario_id
 	GROUP BY 
@@ -283,12 +297,19 @@ BEGIN
 					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
 					OR (fa.date_id = p.valid_to_date_id AND fa.interval_id <= p.valid_to_interval_id)
 			)
-	INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-		ON  dd.shift_startdate_id	= fa.date_id
-		AND dd.person_id			= b.person_id
+	INNER JOIN #stg_schedule_changed ch
+		ON  ch.shift_startdate_id	= fa.date_id
+		AND ch.person_id			= b.person_id
 		AND b.acd_login_id			= fa.acd_login_id
-		AND dd.shift_startdate_id	= fa.date_id
+		AND ch.shift_startdate_id	= fa.date_id
 	WHERE b.business_unit_id = @business_unit_id
+
+	DELETE fs
+	FROM #stg_schedule_changed ch
+	INNER JOIN mart.fact_schedule_deviation fs
+		ON ch.person_id = fs.person_id
+		AND ch.shift_startdate_id = fs.shift_startdate_id 
+	WHERE fs.business_unit_id = @business_unit_id
 
 END
 
@@ -460,7 +481,7 @@ GROUP BY
 --See: http://challenger/sites/DefaultCollection/matrix/Shared%20Documents/Design%20Specifications/Adherance.xlsx
 --First handle a special case for [deviation_schedule_ready_s]
 --If we have no Scheduled Ready Time there can be no deviation
-UPDATE	mart.fact_schedule_deviation
+UPDATE mart.fact_schedule_deviation
 SET
 	deviation_schedule_ready_s = 0
 WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id

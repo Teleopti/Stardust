@@ -46,7 +46,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				rollbackService.Rollback();
 				return false;
 			}
-			rollbackService.ClearModificationCollection();
 
 			return true;
 		}

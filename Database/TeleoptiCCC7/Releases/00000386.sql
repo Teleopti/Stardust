@@ -6,6 +6,32 @@ PRINT 'Start time: ' + CONVERT(VARCHAR(24),GETDATE(),113)
 PRINT '-----------------------'
 
 ----------------  
+--Name: Anders Forsberg
+--Date: 2014-01-24
+--Desc: #26710 Need to remove unwanted duplicates from schedule before converting to the new PersonAssignment
+--Duplicates, with same minimum, but maybe different updatedon
+delete PersonAssignment
+from PersonAssignment paD inner join
+	(select pa.id,
+	--We want to keep the duplicate that was created first, because that is how 384 displays in Schedules
+	--If multiple modified same time keep first one (lowest id)
+	ROW_NUMBER()OVER(PARTITION BY pa.person, pa.scenario, pa.minimum ORDER BY pa.updatedon, pa.id) as 'rn'
+	from PersonAssignment pa) inside on paD.id = inside.id and inside.rn <> 1
+
+--Overlapping, with different minimum, Schedules in 384 displays the one with earliest start = minimum
+delete PersonAssignment
+from PersonAssignment pD
+where exists (
+	select 1
+	from PersonAssignment pa
+	where pD.Scenario = pa.Scenario
+	and pD.Person = pa.Person
+	and pD.Minimum between pa.Minimum and pa.Maximum
+	and pD.id <> pa.id
+	and not (pD.Minimum = pa.Minimum))
+GO
+
+----------------  
 --Name: Roger Kratz
 --Date: 2013-04-15
 --Desc: Adding date for person assignment. Hard coded to 1800-1-1. Will be replaced by .net code

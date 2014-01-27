@@ -231,9 +231,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
 			retobj._shiftLayers = new List<IShiftLayer>();
-			foreach (var newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
+				newLayer.SetId(null);
 				retobj._shiftLayers.Add(newLayer);
 			}
 

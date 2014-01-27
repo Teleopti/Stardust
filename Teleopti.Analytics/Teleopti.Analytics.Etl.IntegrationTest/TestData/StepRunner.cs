@@ -66,6 +66,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			
 			return result;
 		}
+
 		public static List<IJobResult> RunNightly(JobParameters jobParameters)
 		{
 			var result = new List<IJobResult>();

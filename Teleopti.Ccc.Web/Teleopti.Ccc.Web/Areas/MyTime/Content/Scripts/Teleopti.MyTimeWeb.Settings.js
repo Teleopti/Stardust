@@ -43,10 +43,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
     };
 
-    function _init() {
-		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Index', Teleopti.MyTimeWeb.Settings.PartialInit);
-	}
-
     function _bindData() {
         ko.applyBindings(vm, $('#page')[0]);
     };
@@ -121,10 +117,18 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	        }
 	    });
 	}
+    
+	function _cleanBindings() {
+	    ko.cleanNode($('#page')[0]);
+	    if (vm != null)
+	        vm = null;
+	}
 
 	return {
-		Init: function () {
-			_init();
+	    Init: function () {
+	        if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
+	            Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Index', Teleopti.MyTimeWeb.Settings.PartialInit, Teleopti.MyTimeWeb.Settings.PartialDispose);
+	        }
 		},
 		PartialInit: function (readyForInteraction, completelyLoaded) {
 			$('#Test-Picker').select2();
@@ -135,7 +139,10 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 					completelyLoaded();
 				});
 		    _bindData();
-		}
+		},
+	    PartialDispose: function() {
+	        _cleanBindings();
+	    }
 	};
 })(jQuery);
 

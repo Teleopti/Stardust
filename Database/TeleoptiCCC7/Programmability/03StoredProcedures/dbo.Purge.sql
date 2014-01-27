@@ -24,6 +24,8 @@ declare @PayrollKeepYears int
 declare @PayrollKeepUntil datetime
 declare @SecurityAuditKeepDays int
 declare @SecurityAuditKeepUntil datetime
+declare @RequestsKeepMonths int
+declare @RequestsKeepUntil datetime
 
 declare @BatchSize int
 declare @MaxDate datetime
@@ -38,6 +40,7 @@ select @ScheduleKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'Y
 select @MessageKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepMessage'
 select @PayrollKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'
 select @SecurityAuditKeepDays = isnull(Value,30) from PurgeSetting where [Key] = 'DaysToKeepSecurityAudit'
+select @RequestsKeepMonths = isnull(Value,120) from PurgeSetting where [Key] = 'MonthsToKeepRequests'
 
 --Create a KeepUntil
 select @ForecastsKeepUntil = dateadd(year,-1*@ForecastKeepYears,getdate())
@@ -45,6 +48,7 @@ select @ScheduleKeepUntil = dateadd(year,-1*@ScheduleKeepYears,getdate())
 select @MessageKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
 select @PayrollKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
 select @SecurityAuditKeepUntil = dateadd(day,-1*@SecurityAuditKeepDays,getdate())
+select @RequestsKeepUntil = dateadd(month,-1*@RequestsKeepMonths,getdate())
 
 select @BatchSize = 14
 
@@ -196,6 +200,53 @@ and not exists (select 1
 --SecurityAudit
 delete [Auditing].[Security]
 where  [DateTimeUtc] < @SecurityAuditKeepUntil
+
+--Requests
+delete top (50000) ShiftTradeSwapDetail
+from ShiftTradeSwapDetail a
+inner join ShiftTradeRequest st on st.Request = a.Parent
+inner join Request r on r.id = st.Request
+where r.EndDateTime < @RequestsKeepUntil
+
+
+delete top (50000) ShiftTradeRequest
+from ShiftTradeRequest a
+inner join Request r on r.id = a.Request
+where r.EndDateTime < @RequestsKeepUntil
+and not exists (
+	select 1 from ShiftTradeSwapDetail stsd
+	where stsd.Parent = a.Request)
+
+delete top (50000) AbsenceRequest
+from AbsenceRequest a
+inner join Request r on r.id = a.Request
+where r.EndDateTime < @RequestsKeepUntil
+
+delete top (50000) TextRequest
+from TextRequest a
+inner join Request r on r.id = a.Request
+where r.EndDateTime < @RequestsKeepUntil
+
+
+delete top (50000) Request
+from Request r
+where r.EndDateTime < @RequestsKeepUntil
+and not exists (
+	select 1 from AbsenceRequest a
+	where a.Request = r.Id)
+and not exists (
+	select 1 from ShiftTradeRequest b
+	where b.Request = r.Id)
+and not exists (
+	select 1 from TextRequest c
+	where c.Request = r.Id)
+
+
+delete PersonRequest
+from PersonRequest pr
+where not exists (
+select 1 from Request r
+where r.Parent = pr.Id)
 
 END
 
