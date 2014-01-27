@@ -3,39 +3,56 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.StudentAvailability
 @model StudentAvailabilityViewModel
 @{
-	Layout = null;
+    Layout = null;
 }
 
-<div class="navbar">
-    <div class="navbar-inner">
+<div class="navbar navbar-default">
+    <div class="col-lg-5">
         <form class="navbar-form pull-left">
             <div class="input-group">
-                <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'"><i class="glyphicon glyphicon-arrow-left"></i></button>
-                <input data-bind="value: displayDate" type="text" class="col-md-3 text-center" readonly="readonly"/>
-                <button class="btn moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
-                <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'"><i class="glyphicon glyphicon-arrow-right"></i></button>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </button>
+                </span>
+                <input data-bind="value: displayDate" type="text" class="form-control text-center" readonly="readonly" />
+                <span class="input-group-btn">
+                    <button class="btn btn-default moment-datepicker">
+                        <i class="glyphicon glyphicon-th"></i>
+                    </button>
+                    <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'">
+                        <i class="glyphicon glyphicon-arrow-right"></i>
+                    </button>
+                </span>
             </div>
         </form>
-        <ul class="nav">
-            <li class="divider-vertical"></li>
-            <li><a href="#" id="Availability-edit-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability</a></li>
-            <li><a href="#" id="Availability-delete-button"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
-        </ul>
     </div>
+    <ul class="nav navbar-nav">
+        <li>
+            <a href="#" id="Availability-edit-button">
+                <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability
+            </a>
+        </li>
+        <li>
+            <a href="#" id="Availability-delete-button">
+                <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
+            </a>
+        </li>
+    </ul>
 </div>
-<div id="Student-availability-edit-form" class="well well-small clearfix" data-bind="visible: AddAvailabilityFormVisible">
+<div id="Student-availability-edit-form" class="well well-sm clearfix" data-bind="visible: AddAvailabilityFormVisible">
     @Html.Partial("AddStudentAvailabilityPartial")
 </div>
 <div id="StudentAvailability-period" class="alert alert-info">
-	@if (Model.StudentAvailabilityPeriod == null)
-	{
-		@String.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
-	}
-	else
-	{
-		@String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
-		@String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
-	}
+    @if (Model.StudentAvailabilityPeriod == null)
+    {
+        @String.Format("{0} : {1}", Resources.StudentAvailabilityPeriod, Resources.MissingWorkflowControlSet)
+    }
+    else
+    {
+        @String.Format("{0} : {1} | ", Resources.StudentAvailabilityPeriod, Model.StudentAvailabilityPeriod.Period)
+        @String.Format("{0} : {1}", Resources.IsOpen, Model.StudentAvailabilityPeriod.OpenPeriod)
+    }
 </div>
 <div id="StudentAvailability-body" class="clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
     <style>
@@ -43,7 +60,7 @@
         {
             @String.Format(".calendarview-week li.{0} div.day-content{{border-left-color: #{1}; border-right-color: #{1};}}\n", style.Name, style.ColorHex)
         }
-        </style>
+    </style>
     <div id="StudentAvailability-body-inner" class="well clearfix pd0">
         <ul class="weekdays">
             @foreach (var weekDayName in Model.WeekDayHeaders)
@@ -62,7 +79,7 @@
                 </li>
                 @foreach (var day in week.Days)
                 {
-                    <li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: {editable: Editable, 'non-editable': !Editable()}">
+                    <li data-mytime-editable="@day.Editable" data-mytime-date="@Html.Schedule().FormatDate(day.Date)" class="relative @(day.InPeriod ? "inperiod" : "non-editable")" data-bind="css: { editable: Editable, 'non-editable': !Editable() }">
                         <div>
                             <div class="day-header">
                                 <span class="floatleft badge day-header-left day-header-text">@day.Header.DayDescription</span><span class="floatright badge day-header-right day-header-text">@day.Header.DayNumber</span>
