@@ -30,6 +30,9 @@ WITH EXECUTE AS OWNER
 AS
 
 SET NOCOUNT ON
+
+EXEC [mart].[stage_schedule_remove_overlapping_shifts]
+
 --if no @scenario, no data then break
 DECLARE @scenario_code uniqueidentifier
 SELECT TOP 1 @scenario_code=scenario_code FROM Stage.stg_schedule_changed
@@ -73,21 +76,6 @@ begin
 	set @lastStep=getdate();set @step=@step+1
 end
 
---remove dates from utc tables that does not exist in stage tables, so that we don't delete more rows than we can handle
-DELETE FROM utc
-FROM Stage.stg_schedule_updated_ShiftStartDateUTC utc
-INNER JOIN mart.dim_date d
-	ON d.date_id = utc.shift_startdate_id
-LEFT OUTER JOIN stage.stg_schedule stg
-	ON stg.schedule_date  = d.date_date
-WHERE stg.schedule_date IS NULL
-
-if @debug=1
-begin
-	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
-	set @lastStep=getdate();set @step=@step+1
-end
-
 --Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
 if (select count(*)
 	from mart.dim_scenario
@@ -109,22 +97,29 @@ end
 
 --prepare a temp table for better performance on delete
 INSERT INTO #stg_schedule_changed
-SELECT DISTINCT dd.person_id, dd.shift_startdate_id, ds.scenario_id 
-FROM	Stage.stg_schedule_changed stg
-INNER JOIN Stage.stg_schedule_updated_personLocal dp
-	ON stg.person_code		=	dp.person_code
-	AND --trim
+select DISTINCT
+	f.person_id,
+	f.shift_startdate_id,
+	f.scenario_id
+from mart.fact_schedule f
+inner join mart.dim_person p
+	on p.person_id = f.person_id
+inner join mart.bridge_time_zone btz
+	on f.shift_startdate_id = btz.date_id
+	and f.shift_startinterval_id = btz.interval_id
+	and p.time_zone_id = btz.time_zone_id
+inner join mart.dim_date dd
+	on dd.date_id = btz.local_date_id
+inner join stage.stg_schedule_changed ch
+	on ch.person_code = p.person_code
+	and ch.schedule_date = dd.date_date
+		AND --trim
 		(
-				(stg.schedule_date	>= dp.valid_from_date_local)
+				(ch.schedule_date	>= p.valid_from_date_local)
 
 			AND
-				(stg.schedule_date <= dp.valid_to_date_local)
+				(ch.schedule_date <= p.valid_to_date_local)
 		)
-INNER JOIN mart.dim_scenario ds
-	ON stg.scenario_code = ds.scenario_code
-	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
-INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-		ON dd.person_id = dp.person_id
 
 if @debug=1
 begin
