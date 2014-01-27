@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         void AddItem(TeamBlockSeniorityOnWeekDays teamBlockInfoPriorityOnWeekDays, ITeamBlockInfo teamBlockInfo, double priority);
         void SetWeekDayPriority(ITeamBlockInfo teamBlockInfo, double weekDayPriority);
         IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo { get; }
-        IList<ITeamBlockInfo> HighToLowShiftCategoryPriority();
-        ITeamBlockInfo ExtractAppropiateTeamBlock(ITeamBlockInfo teamBlock);
+        IEnumerable<ITeamBlockInfo> ExtractAppropiateTeamBlock(ITeamBlockInfo teamBlock);
     }
 
     public class TeamBlockWeekDaySeniorityCalculator : ITeamBlockWeekDaySeniorityCalculator
@@ -38,21 +38,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             get { return (_teamBlockInfoPriorityOnWeekDaysList.OrderByDescending(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
         }
 
-        public IList<ITeamBlockInfo> HighToLowShiftCategoryPriority()
-        {
-            var result = _teamBlockInfoPriorityOnWeekDaysList.OrderByDescending(s => s.WeekDayPoints ).Select(s => s.TeamBlockInfo).ToList();
-            return result;
-        }
-
-        public ITeamBlockInfo ExtractAppropiateTeamBlock(ITeamBlockInfo teamBlock)
+        
+        public IEnumerable<ITeamBlockInfo> ExtractAppropiateTeamBlock(ITeamBlockInfo teamBlock)
         {
             var providedWeekDayPoint = GetWeekDayPriorityOfBlock(teamBlock);
             var providedSenerioty =
                 _teamBlockInfoPriorityOnWeekDaysList.FirstOrDefault(s => teamBlock == s.TeamBlockInfo).Seniority ;
-            var canidateTeamBlock = _teamBlockInfoPriorityOnWeekDaysList.OrderBy(s => s.WeekDayPoints).FirstOrDefault(s => s.Seniority < providedSenerioty &&
-                                                                                                                           s.WeekDayPoints > providedWeekDayPoint) ;
-            if (canidateTeamBlock != null) return canidateTeamBlock.TeamBlockInfo;
-            return null;
+            var canidateTeamBlocks = from t in _teamBlockInfoPriorityOnWeekDaysList
+                                     where t.WeekDayPoints > providedWeekDayPoint && t.Seniority < providedSenerioty
+                                     orderby t.WeekDayPoints descending
+                                     select t.TeamBlockInfo;
+
+            return canidateTeamBlocks;
         }
 
         public double GetWeekDayPriorityOfBlock(ITeamBlockInfo teamBlockInfo)

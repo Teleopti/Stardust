@@ -24,11 +24,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private bool _cancelMe;
         private readonly IConstructTeamBlock _constructTeamBlock;
         private readonly IDetermineTeamBlockWeekDayPriority _determineTeamBlockWeekDayPriority;
+        private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
+        private readonly ITeamBlockMatrixValidator _teamBlockMatrixValidator;
 
-        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority)
+        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockMatrixValidator teamBlockMatrixValidator)
         {
             _constructTeamBlock = constructTeamBlock;
             _determineTeamBlockWeekDayPriority = determineTeamBlockWeekDayPriority;
+            _teamBlockSwapValidator = teamBlockSwapValidator;
+            _teamBlockMatrixValidator = teamBlockMatrixValidator;
         }
 
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -59,14 +63,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             //sort the DS according the the agent weekDayPriority
             foreach (var teamBlock in teamBlockPriorityDefinitionInfoForWeekDay.HighToLowSeniorityListBlockInfo)
             {
-                if (_cancelMe) break;
-                //var weekDayPointOfTeamBlock = teamBlockPriorityDefinitionInfoForWeekDay.GetWeekDayPriorityOfBlock(teamBlock);
-                var targetTeamBlock =
-                    teamBlockPriorityDefinitionInfoForWeekDay.ExtractAppropiateTeamBlock(teamBlock);
-                
-                //if swap is possible
+                if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
+                foreach (
+                    var targetTeamBlock in teamBlockPriorityDefinitionInfoForWeekDay.ExtractAppropiateTeamBlock(teamBlock )
+                    )
+                {
+                    if (_cancelMe) break;
+                    if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
+                    if (_teamBlockSwapValidator.ValidateCanSwap(teamBlock, targetTeamBlock))
+                    {
+                        //perform swap
+                        break;
+                    }
 
-                //perform swap
+                }
+                if (_cancelMe) break;
+                
+               
 
 				//var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzedTeamBlocks.Count / totalBlockCount);
 				//OnReportProgress(message);
