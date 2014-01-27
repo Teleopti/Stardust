@@ -7,7 +7,7 @@
 }
 
 <div class="navbar navbar-default">
-    <div class="container">
+    <div class="col-lg-5">
         <form class="navbar-form pull-left">
             <div class="input-group">
                 <span class="input-group-btn">
@@ -15,7 +15,7 @@
                         <i class="glyphicon glyphicon-arrow-left"></i>
                     </button>
                 </span>
-                <input data-bind="value: displayDate" type="text" class="col-md-4 form-control text-center" readonly="readonly" />
+                <input data-bind="value: displayDate" type="text" class="form-control text-center" readonly="readonly" />
                 <span class="input-group-btn">
                     <button class="btn btn-default moment-datepicker">
                         <i class="glyphicon glyphicon-th"></i>
@@ -26,19 +26,19 @@
                 </span>
             </div>
         </form>
-        <ul class="nav navbar-nav">
-            <li>
-                <a href="#" id="Availability-edit-button">
-                    <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability
-                </a>
-            </li>
-            <li>
-                <a href="#" id="Availability-delete-button">
-                    <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
-                </a>
-            </li>
-        </ul>
     </div>
+    <ul class="nav navbar-nav">
+        <li>
+            <a href="#" id="Availability-edit-button">
+                <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability
+            </a>
+        </li>
+        <li>
+            <a href="#" id="Availability-delete-button">
+                <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
+            </a>
+        </li>
+    </ul>
 </div>
 <div id="Student-availability-edit-form" class="well well-sm clearfix" data-bind="visible: AddAvailabilityFormVisible">
     @Html.Partial("AddStudentAvailabilityPartial")
