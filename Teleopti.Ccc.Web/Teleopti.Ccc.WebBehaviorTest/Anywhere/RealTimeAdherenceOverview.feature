@@ -5,16 +5,18 @@
 
 Scenario: Show site
 	Given I have a role with
-	| Field | Value             |
-	| Name  | Real time analyst |
+	| Field                                  | Value             |
+	| Name                                   | Real time analyst |
+	| Access to real time adherence overview | True              |
 	And there is a site named 'Paris'
 	When I view Real time adherence overview
 	Then I should see the site 'Paris'
 
 Scenario: Show team
 	Given I have a role with
-	| Field | Value             |
-	| Name  | Real time analyst |
+	| Field                                  | Value             |
+	| Name                                   | Real time analyst |
+	| Access to real time adherence overview | True              |
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	When I view Real time adherence for site 'Paris'
@@ -110,7 +112,6 @@ Given there is an activity named 'Phone'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
 
-@ignore
 Scenario: Should not be able to view Real time adherence overview when not permitted
 	Given I have a role with
          | Field                                  | Value       |
