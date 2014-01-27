@@ -11,32 +11,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class SkillIntervalDataSkillFactorApplier : ISkillIntervalDataSkillFactorApplier
 	{
-        public SkillIntervalDataSkillFactorApplier(){}
-
-	    public ISkillIntervalData ApplyFactors(ISkillIntervalData skillIntervalData, ISkill skill)
+		//PBI 1156 contains an excel-sheet on how to calculate
+		public ISkillIntervalData ApplyFactors(ISkillIntervalData skillIntervalData, ISkill skill)
 		{
-	        if (skillIntervalData != null && skill != null)
-	        {
-	                double currentDemand = skillIntervalData.CurrentDemand * skill.PriorityValue;
-	                if(currentDemand > 0 && skill.OverstaffingFactor.Value < 0.5)
-	                {
-	                    currentDemand = currentDemand + (((0.5 - skill.OverstaffingFactor.Value)*2)*currentDemand);
-	                }
+			if (skillIntervalData != null && skill != null)
+			{
+				var intervalLength = skillIntervalData.Resolution().TotalMinutes;
+				var originalDemandsInMinutes = skillIntervalData.ForecastedDemand*intervalLength;
+				var assignedResourcesInMinutes = (skillIntervalData.ForecastedDemand - skillIntervalData.CurrentDemand) *
+				                                 intervalLength;
+				
+				double tweakedDemand = getTweakedCurrentDemand(originalDemandsInMinutes, assignedResourcesInMinutes,
+				                                                skill.PriorityValue, skill.OverstaffingFactor);
+				//Change sign because of demand is positive in teamblock
+				double currentDemand = tweakedDemand/intervalLength*-1;
 
-	                if(currentDemand < 0 && skill.OverstaffingFactor.Value > 0.5)
-	                {
-	                    currentDemand = currentDemand + (((skill.OverstaffingFactor.Value - 0.5)*2)*currentDemand);
-	                }
+				return new SkillIntervalData(skillIntervalData.Period, skillIntervalData.ForecastedDemand, currentDemand,
+				                             skillIntervalData.CurrentHeads, skillIntervalData.MinimumHeads,
+				                             skillIntervalData.MaximumHeads);
 
-	                double diff = currentDemand - skillIntervalData.CurrentDemand;
-	                double forecastedDemand = skillIntervalData.ForecastedDemand + diff;
+			}
+			return null;
+		}
 
-	                return new SkillIntervalData(skillIntervalData.Period, forecastedDemand, currentDemand,
-	                                             skillIntervalData.CurrentHeads, skillIntervalData.MinimumHeads,
-	                                             skillIntervalData.MaximumHeads);
-	            
-	        }
-	        return null;
+		private double getTweakedCurrentDemand(double originalDemandInMinutes, double assignedResourceInMinutes, double priorityValue, Percent overstaffingFactor)
+		{
+			double currentDemandInMinutes = assignedResourceInMinutes - originalDemandInMinutes;
+			double overUnderStaffFaktor = overstaffingFactor.Value;
+			if (currentDemandInMinutes < 0)
+				overUnderStaffFaktor = 1 - overstaffingFactor.Value;
+			return priorityValue * overUnderStaffFaktor * currentDemandInMinutes;
 		}
 	}
 }
