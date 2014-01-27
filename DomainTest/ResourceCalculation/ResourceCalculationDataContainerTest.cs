@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 								 });
 			var result = _target.AffectedResources(_activity, _period);
 			var affectedSkill = result.First().Value;
-			affectedSkill.SkillEffiencies.Count.Should().Be.EqualTo(0);
 			affectedSkill.Resource.Should().Be.EqualTo(0.8);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
