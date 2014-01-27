@@ -1,10 +1,9 @@
-﻿
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanning
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IDayOffRulesValidator
 	{
@@ -12,20 +11,20 @@ namespace Teleopti.Ccc.DayOffPlanning
 
 	public class DayOffRulesValidator : IDayOffRulesValidator
 	{
-		private readonly IDayOffLegalStateValidatorListCreator _dayOffLegalStateValidatorListCreator;
-		private readonly IScheduleMatrixLockableBitArrayConverter _matrixConverter;
+		private readonly DaysOffLegalStateValidatorsFactory _daysOffLegalStateValidatorsFactory;
+		private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 
-		public DayOffRulesValidator(IDayOffLegalStateValidatorListCreator dayOffLegalStateValidatorListCreator,
-			IScheduleMatrixLockableBitArrayConverter matrixConverter)
+		public DayOffRulesValidator(DaysOffLegalStateValidatorsFactory daysOffLegalStateValidatorsFactory,
+			IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
 		{
-			_dayOffLegalStateValidatorListCreator = dayOffLegalStateValidatorListCreator;
+			_daysOffLegalStateValidatorsFactory = daysOffLegalStateValidatorsFactory;
 			_matrixConverter = matrixConverter;
 		}
 
-		public bool Validate(ILockableBitArray array)
+		public bool Validate(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences)
 		{
-			//var array = _matrixConverter.Convert()
-			var validatorList = _dayOffLegalStateValidatorListCreator.BuildActiveValidatorList();
+			var array = _matrixConverter.Convert(matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore, optimizationPreferences.DaysOff.ConsiderWeekBefore);
+			var validatorList = _daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, optimizationPreferences);
 			BitArray longBitArray = array.ToLongBitArray();
 			int offset = 0;
 			if (array.PeriodArea.Minimum < 7)

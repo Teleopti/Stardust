@@ -25,14 +25,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IConstructTeamBlock _constructTeamBlock;
         private readonly IDetermineTeamBlockWeekDayPriority _determineTeamBlockWeekDayPriority;
         private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
-        private readonly ITeamBlockMatrixValidator _teamBlockMatrixValidator;
+        //private readonly ITeamBlockMatrixValidator _teamBlockMatrixValidator;
 
-        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockMatrixValidator teamBlockMatrixValidator)
+        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority, ITeamBlockSwapValidator teamBlockSwapValidator)//, ITeamBlockMatrixValidator teamBlockMatrixValidator)
         {
             _constructTeamBlock = constructTeamBlock;
             _determineTeamBlockWeekDayPriority = determineTeamBlockWeekDayPriority;
             _teamBlockSwapValidator = teamBlockSwapValidator;
-            _teamBlockMatrixValidator = teamBlockMatrixValidator;
+            //_teamBlockMatrixValidator = teamBlockMatrixValidator;
         }
 
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -63,20 +63,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             //sort the DS according the the agent weekDayPriority
             foreach (var teamBlock in teamBlockPriorityDefinitionInfoForWeekDay.HighToLowSeniorityListBlockInfo)
             {
-                if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
-                foreach (
-                    var targetTeamBlock in teamBlockPriorityDefinitionInfoForWeekDay.ExtractAppropiateTeamBlock(teamBlock )
-                    )
-                {
-                    if (_cancelMe) break;
-                    if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
-                    if (_teamBlockSwapValidator.ValidateCanSwap(teamBlock, targetTeamBlock))
-                    {
-                        //perform swap
-                        break;
-                    }
+				//if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
+				//foreach (
+				//	var targetTeamBlock in teamBlockPriorityDefinitionInfoForWeekDay.ExtractAppropiateTeamBlock(teamBlock )
+				//	)
+				//{
+				//	if (_cancelMe) break;
+				//	if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
+				//	if (_teamBlockSwapValidator.ValidateCanSwap(teamBlock, targetTeamBlock))
+				//	{
+				//		//perform swap
+				//		break;
+				//	}
 
-                }
+				//}
                 if (_cancelMe) break;
                 
                
