@@ -26783,6 +26783,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have access to any teams..
+        /// </summary>
+        public static string YouDoNotHaveAccessToAnyTeams {
+            get {
+                return ResourceManager.GetString("YouDoNotHaveAccessToAnyTeams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have permissions to view team schedules.
         /// </summary>
         public static string YouDoNotHavePermissionsToViewTeamSchedules {

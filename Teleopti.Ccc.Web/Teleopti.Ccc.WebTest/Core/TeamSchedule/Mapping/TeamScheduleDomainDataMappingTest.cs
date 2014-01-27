@@ -225,10 +225,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			timeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 
 			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
-
+			
 			var startDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.StartTime).AddMinutes(-15);
 			var expectedStartDateTime = timeZone.SafeConvertTimeToUtc(startDateTimeLocal);
-
+			
 			var endDateTimeLocal = DateTime.Now.Date.Add(TeamScheduleDomainData.DefaultDisplayTime.EndTime).AddMinutes(15);
 			var expectedEndDateTime = timeZone.SafeConvertTimeToUtc(endDateTimeLocal);
 

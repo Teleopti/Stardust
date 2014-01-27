@@ -503,6 +503,7 @@
     <Compile Include="Repositories\IOvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\IPersonFinderReadOnlyRepository.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IPersonScheduleDayReadModelFinder.cs" />
+    <Compile Include="Repositories\IPersonForShiftTradeRepository.cs" />
     <Compile Include="Repositories\IRequestHistoryReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPersonSelectorReadOnlyRepository.cs" />
     <Compile Include="Repositories\IPublicNoteRepository.cs" />

@@ -11922,4 +11922,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Chat time</value>
     <comment>Another, more descriptive name for talk time in forecast</comment>
   </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>You don't have access to any teams.</value>
+    <comment>Message when you don't have access to any teams and therefor you can not see any data.</comment>
+  </data>
 </root>
