@@ -133,11 +133,10 @@
                 </tr>
 
 
-                <tr class="form-inline" data-bind="if: IsTimeInputVisible">
+                <tr data-bind="if: IsTimeInputVisible">
                     <td>
                         <i class="glyphicon glyphicon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
-                    
                     <td>
                         <select class="preference-extended-work-time-min form-control" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
                             <option value=""></option>
@@ -149,7 +148,7 @@
                     </td>
                     <td></td>
                     <td class="select-input-auto">
-                        <select class="preference-extended-work-time-max  form-control" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
+                        <select class="preference-extended-work-time-max form-control" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
                             <option value=""></option>
                             @foreach (var timeSpan in timeLengths)
                             {
@@ -158,17 +157,6 @@
                         </select>
                     </td>
                         <td></td>
-                    <!--
-                    <td>
-                        <div class="btn-group preference-extended-work-time-min" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
-                            <button type="button" class="btn btn-default dropdown-toggle dropdown-menu-size" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu">
-                                <li><a href="#">Action</a></li>
-                            </ul>
-                        </div>
-                    </td>-->
                 </tr>
             </table>
             </td>
@@ -206,8 +194,6 @@
                     </div>
             </td>
             <td class="col-md-3">
-                <!--<div class="row">
-                    <div class="form-group col-md-12">-->
                 <div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
                     <input type="text" class="preference-activity-start-time-max form-control input-sm" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -231,12 +217,12 @@
                     </div>
             </td>
         </tr>
-        <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
+        <tr data-bind="visible: EnableActivityTimeEditing">
             <td class="col-md-1">
                 <i class="glyphicon glyphicon-resize-horizontal" title="@Resources.WorkTime"></i>
             </td>
             <td>
-                <select class="preference-activity-extended-work-time-min col-md-6" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
+                <select class="preference-activity-extended-work-time-min form-control" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
                     <option value="">&nbsp;</option>
                     @foreach (var timeSpan in timeLengths)
                     {
@@ -245,7 +231,7 @@
                 </select>
             </td>
             <td>
-                <select class="preference-activity-extended-work-time-max col-md-6" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
+                <select class="preference-activity-extended-work-time-max form-control" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
                     <option value="">&nbsp;</option>
                     @foreach (var timeSpan in timeLengths)
                     {
