@@ -29,20 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return ass.ShiftLayers.ToList().IndexOf(this);
 			}
 		}
-
-
-		public virtual object Clone()
-		{
-			return NoneEntityClone();
-		}
-
-		public virtual IShiftLayer NoneEntityClone()
-		{
-			var retObj = (IAggregateEntity)MemberwiseClone();
-			retObj.SetId(null);
-			retObj.SetParent(null);
-			return (IShiftLayer)retObj;
-		}
+		
 
 		public virtual IShiftLayer EntityClone()
 		{
