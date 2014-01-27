@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
@@ -32,8 +33,25 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
                 foreach (var dateOnly in period.DayCollection())
                 {
-                    int dayPoint = weekDayPoints[dateOnly.DayOfWeek];
-                    points += dayPoint;
+                    var matrixesOnThatDay = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly);
+                    foreach (var matrix in matrixesOnThatDay)
+                    {
+                        var scheduleDay = matrix.GetScheduleDayByKey(dateOnly);
+                        if (scheduleDay != null && scheduleDay.DaySchedulePart()!=null )
+                        {
+                            var significantPart = scheduleDay.DaySchedulePart().SignificantPart( );
+                            if (significantPart == SchedulePartView.DayOff)
+                            {
+                                int dayPoint = weekDayPoints[dateOnly.DayOfWeek];
+                                points += dayPoint;
+                            }
+                                
+                        }
+ 
+                           
+                               
+                    }
+                    
                 }
 
                 var weekDayInfo = new TeamBlockPoints(teamBlockInfo, points);

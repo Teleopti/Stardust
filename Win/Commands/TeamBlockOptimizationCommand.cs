@@ -58,8 +58,9 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 	    private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
+        private ITeamBlockDayOffFairnessOptimizationService _teamBlockDayOffFairnessOptimizationService;
 
-	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
+        public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											IScheduleDayEquator scheduleDayEquator,
                                             IRestrictionOverLimitDecider restrictionOverLimitDecider, 
 											ITeamBlockClearer teamBlockCleaner,
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Win.Commands
 											ITeamBlockSchedulingOptions teamBlockScheudlingOptions, 
 											IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
-											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService)
+											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService, ITeamBlockDayOffFairnessOptimizationService teamBlockDayOffFairnessOptimizationService)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayEquator = scheduleDayEquator;
@@ -109,7 +110,8 @@ namespace Teleopti.Ccc.Win.Commands
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
 			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
-        }
+            _teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
+	    }
 
         public void Execute(BackgroundWorker backgroundWorker, 
 							DateOnlyPeriod selectedPeriod,
@@ -162,7 +164,9 @@ namespace Teleopti.Ccc.Win.Commands
 				
 				ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, allMatrixes);
 				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod)) return;
-				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
+                //day off fairness
+                _teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
+                _teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
 			}
 				
         }

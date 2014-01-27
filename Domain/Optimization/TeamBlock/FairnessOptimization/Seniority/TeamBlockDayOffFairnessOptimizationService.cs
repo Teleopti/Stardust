@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-    internal interface ITeamBlockDayOffFairnessOptimizationService
+    public  interface ITeamBlockDayOffFairnessOptimizationService
     {
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                                      IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService);
     }
 
-    class TeamBlockDayOffFairnessOptimizationService : ITeamBlockDayOffFairnessOptimizationService
+    public class TeamBlockDayOffFairnessOptimizationService : ITeamBlockDayOffFairnessOptimizationService
     {
         private bool _cancelMe;
         private readonly IConstructTeamBlock _constructTeamBlock;
@@ -38,8 +38,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _cancelMe = false;
             var instance = PrincipalAuthorization.Instance();
             if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
-
-            var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+            var tempSchedulingOptions = schedulingOptions;
+            tempSchedulingOptions.UseTeamBlockPerOption = true;
+            tempSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
+            var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, tempSchedulingOptions);
             
             calcualteDayValueForSelectedPeriod(listOfAllTeamBlock);
 

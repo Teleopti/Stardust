@@ -192,6 +192,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockSchedulingService(builder);
             registerTeamBlockOptimizationService(builder);
             registerFairnessOptimizationService(builder);
+            registerDayOffFairnessOptimizationService(builder);
 			registerEqualNumberOfCategoryFairnessService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
@@ -204,6 +205,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
 			builder.RegisterType<ScheduleMatrixLockableBitArrayConverterEx>().As<IScheduleMatrixLockableBitArrayConverterEx>();
 
+        }
+
+        private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
+        {
+            builder.RegisterType<TeamBlockDayOffFairnessOptimizationService>().As<ITeamBlockDayOffFairnessOptimizationService >();
+            builder.RegisterType<DetermineTeamBlockWeekDayPriority>().As<IDetermineTeamBlockWeekDayPriority>();
+            builder.RegisterType<WeekDayPointExtractor>().As<IWeekDayPointExtractor>();
+            builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
@@ -234,9 +243,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
             builder.RegisterType<TeamBlockSizeClassifier>().As<ITeamBlockSizeClassifier>();
             builder.RegisterType<TeamBlockWeightExtractor>().As<ITeamBlockWeightExtractor>();
-            builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>();
-			builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>();
-			builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
 			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>();
 			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();
