@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return Document.Divs.Filter(Find.BySelector(".bdd-asm-message-detail"))[messagePositionInList - 1];
 		}
 
-		public Label Message(int messagePositionInList)
+		public Span Message(int messagePositionInList)
 		{
-			return MessageDetailSection(messagePositionInList).Label(Find.BySelector(".bdd-asm-message-detail-message"));
+			return MessageDetailSection(messagePositionInList).Span(Find.BySelector(".bdd-asm-message-detail-message"));
 		}
 
 		public TextField Reply(int messagePositionInList)
