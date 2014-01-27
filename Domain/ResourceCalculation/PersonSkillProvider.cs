@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 			var skillEfficiencies =
 				personSkillCollection.Where(
-					s => s.Active && s.SkillPercentage.Value > 0 && s.SkillPercentage.Value != 1d).ToDictionary(k => k.Skill.Id.GetValueOrDefault(),v => v.SkillPercentage.Value);
+					s => s.Active && s.SkillPercentage.Value > 0).ToDictionary(k => k.Skill.Id.GetValueOrDefault(),v => v.SkillPercentage.Value);
 
 			var key = SkillCombination.ToKey(skills.Where(s => !((IDeleteTag)s).IsDeleted).Select(s => s.Id.GetValueOrDefault()));
 

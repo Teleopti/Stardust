@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -71,6 +72,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             VerifyRelativePersonSkillResourcesSumData(dividedActivity);
       
         }
+
+		[Test]
+		public void ShouldConsiderBothAgentsWithAndWithoutProficiencyScheduledDuringTheSameInterval()
+		{
+			var skill = SkillFactory.CreateSkillWithId("Direct Sales");
+			var personPeriodStart = new DateOnly(2014, 1, 1);
+			var periodToCalculate = new DateTimePeriod(new DateTime(2014, 1, 1, 7, 0, 0, DateTimeKind.Utc), new DateTime(2014, 1, 1, 7, 15, 0, DateTimeKind.Utc));
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(personPeriodStart, new[] { skill });
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(personPeriodStart, new[] { skill });
+			person2.ChangeSkillProficiency(skill,new Percent(0.6), person2.Period(personPeriodStart));
+
+			_resources.Clear();
+			_resources.AddResources(person1,personPeriodStart,new ResourceLayer{PayloadId = skill.Activity.Id.GetValueOrDefault(),Period = periodToCalculate,Resource = 1});
+			_resources.AddResources(person2,personPeriodStart,new ResourceLayer{PayloadId = skill.Activity.Id.GetValueOrDefault(),Period = periodToCalculate,Resource = 1});
+
+			var skillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary
+				{
+					{skill, SkillDayFactory.PrepareSkillDay(skill, periodToCalculate.StartDateTime, 0)}
+				};
+			var dividedActivity = _target.DivideActivity(skillStaffPeriods,
+			                       new AffectedPersonSkillService(new DateOnlyPeriod(personPeriodStart, personPeriodStart),
+			                                                      new[] {skill}), skill.Activity, _resources,
+								   periodToCalculate);
+
+			var resourceMatrix = dividedActivity.KeyedSkillResourceEfficiencies;
+
+			Assert.IsNotNull(resourceMatrix);
+			Assert.AreEqual(0.8, resourceMatrix[skill.Id.Value.ToString()][skill], 0.001d);
+		}
 
         [Test]
         public void VerifyNotSequentialSkillDaysWorks()
