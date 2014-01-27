@@ -55,8 +55,9 @@ AS
 	INTO #tmpOut
 	FROM Ass 
 	WHERE RowNumber > @skip
-
-	DECLARE @lastPage bit = 0
+	
+	DECLARE @lastPage bit 
+	SET @lastPage = 0
 	IF ((SELECT COUNT(*) FROM #tmpOut) < @take)
 		SET @lastPage = 1
 
