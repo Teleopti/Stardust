@@ -146,7 +146,7 @@
                                     <span class="displayinline-block">
                                         <div class="preference-indicator" />
                                         <div class="preference-indicator">
-                                            <div class="preference-must-have" data-bind="css: { 'icon-heart': MustHave }"></div>
+                                            <div class="preference-must-have" data-bind="css: { 'glyphicon glyphicon-heart': MustHave }"></div>
                                         </div>
                                         <div class="label label-default preference-text" data-bind="text: Preference, attr: { title: Preference }, style: { color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }" />
                                         <div class="preference-indicator">
@@ -224,9 +224,9 @@
                                     <div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
                                     <!-- /ko -->
                                     <!-- ko if: DisplayFeedback -->
-                                    <div class="possible-start-times time-limitation icon-step-backward" data-bind="text: PossibleStartTimes"></div>
-                                    <div class="possible-end-times time-limitation icon-step-forward" data-bind="text: PossibleEndTimes"></div>
-                                    <div class="possible-contract-times time-limitation icon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
+                                    <div class="possible-start-times time-limitation glyphicon glyphicon-step-backward" data-bind="text: PossibleStartTimes"></div>
+                                    <div class="possible-end-times time-limitation glyphicon glyphicon-step-forward" data-bind="text: PossibleEndTimes"></div>
+                                    <div class="possible-contract-times time-limitation glyphicon glyphicon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
                                     <!-- /ko -->
                                     <!-- /ko -->
                                 }
