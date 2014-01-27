@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Teleopti.Analytics.Etl.IntegrationTest.Models;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
@@ -50,7 +51,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
 			var result = StepRunner.RunNightly(jobParameters);
 
-			
+			// now it should have data on all three dates, 96 interval
+			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+
+			var factSchedules = from s in db.fact_schedule select s;
+
+			Assert.That(factSchedules.Count(), Is.EqualTo(96));
 		}
 		
 
