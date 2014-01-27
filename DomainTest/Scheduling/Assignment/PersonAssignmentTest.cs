@@ -402,6 +402,56 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void NoneEntityClone_WhenLayersExists_ShouldClearTheIdOfEachLayer()
+		{
+			target.SetId(Guid.NewGuid());
+
+			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
+			var dayOffTemplate = new DayOffTemplate(new Description());
+
+			target.AddOvertimeActivity(persShiftActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
+			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.PersonalActivities().Single().SetId(Guid.NewGuid());
+			target.OvertimeActivities().Single().SetId(Guid.NewGuid());
+			target.SetDayOff(dayOffTemplate);
+
+			IPersonAssignment pAss = target.NoneEntityClone();
+			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
+			Assert.IsNull(pAss.Id);
+			Assert.IsNull(pAss.PersonalActivities().Single().Id);
+			Assert.AreEqual(target.PersonalActivities().Single().Parent, pAss.PersonalActivities().Single().Parent);
+			Assert.IsNull(pAss.OvertimeActivities().Single().Id);
+			Assert.AreEqual(target.OvertimeActivities().Single().Parent, pAss.OvertimeActivities().Single().Parent);
+			pAss.DayOff().Should().Not.Be.Null();
+
+		}
+
+		[Test]
+		public void EntityClone_WhenLayersExists_ShouldKeepTheIdAndparentOfEachLayer()
+		{
+			target.SetId(Guid.NewGuid());
+
+			IActivity persShiftActivity = ActivityFactory.CreateActivity("persShfit");
+			var dayOffTemplate = new DayOffTemplate(new Description());
+
+			target.AddOvertimeActivity(persShiftActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>());
+			target.AddPersonalActivity(persShiftActivity, new DateTimePeriod(2002, 1, 1, 2003, 1, 1));
+			target.PersonalActivities().Single().SetId(Guid.NewGuid());
+			target.OvertimeActivities().Single().SetId(Guid.NewGuid());
+			target.SetDayOff(dayOffTemplate);
+
+			IPersonAssignment pAss = target.EntityClone();
+			Assert.AreEqual(target.Id, pAss.Id);
+			Assert.AreEqual(target.PersonalActivities().Single().Id, pAss.PersonalActivities().Single().Id);
+			Assert.AreEqual(target.PersonalActivities().Single().Parent, pAss.PersonalActivities().Single().Parent);
+			Assert.AreEqual(target.OvertimeActivities().Single().Id, pAss.OvertimeActivities().Single().Id);
+			Assert.AreEqual(target.OvertimeActivities().Single().Parent, pAss.OvertimeActivities().Single().Parent);
+			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
+			pAss.DayOff().Should().Not.Be.Null();
+
+		}
+
+		[Test]
 		public void PersonalShiftMustBeInsideMainShiftOrOvertimeToBeIncludedInProjection()
 		{
 			var defSet = new MultiplicatorDefinitionSet("d", MultiplicatorType.Overtime);
