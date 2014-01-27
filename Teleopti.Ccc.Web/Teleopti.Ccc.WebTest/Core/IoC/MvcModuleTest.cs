@@ -26,6 +26,7 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
@@ -33,7 +34,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -336,9 +336,23 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldResolveTeamController()
+		{
+			requestContainer.Resolve<TeamController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldResolveTeamScheduleViewModelFactory()
 		{
 			requestContainer.Resolve<ITeamScheduleViewModelFactory>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveTeamViewModelFactory()
+		{
+			requestContainer.Resolve<ITeamViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
 
