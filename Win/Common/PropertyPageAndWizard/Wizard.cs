@@ -159,6 +159,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 		private Size getControlSize(Control control)
 		{
 			var savedAnchor = control.Anchor;
+			var saveDock = control.Dock;
 			control.Anchor =
 				((((AnchorStyles.Top
 					| AnchorStyles.Bottom)
@@ -169,6 +170,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			var currentControlWidth = control.Width;
 
 			control.Anchor = savedAnchor; //restore original state
+			control.Dock = saveDock;
 
 			return new Size(currentControlWidth, currentControlHeight);
 		}
