@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var id = team.Id.ToString();
 			var text = site + "/" + team.Description.Name;
 			Select2Box.SelectItemByIdAndText("Team-Picker", id, text);
-			Browser.Interactions.AssertExists(".navbar-form button:nth-of-type(3)");
+			Browser.Interactions.AssertExists(".input-group-btn button:nth-of-type(2)");
 		}
 
 		[When(@"I select '(.*)' in the team picker")]
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-inner", "#Team-Picker");
+			Browser.Interactions.AssertNotExists(".navbar-form", "#Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker")]
