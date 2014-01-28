@@ -145,20 +145,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		public void ReassociateDataForAllPeople()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ReassociateDataFor(IPerson person)
-		{
-			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
-			uow.Reassociate(person);
-			uow.Reassociate(Activity);
-			uow.Reassociate(ShiftCategory);
-			uow.Reassociate(Scenario);
-		}
-
 		protected virtual bool ExpectOptimistLockException
 		{
 			get { return false; }
@@ -170,5 +156,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
 			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper());
 		}
+
+		public abstract void ReassociateDataForAllPeople();
+		public abstract void ReassociateDataFor(IPerson person);
 	}
 }

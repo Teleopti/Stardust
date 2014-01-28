@@ -61,8 +61,11 @@
 						condition="exists(select 1 from Person p where Person=p.Id and p.IsDeleted=0)"/>
 
 	</class>
-	<query name="fetchIdAndVersionPersonAssignment">
-		select pa.Id, pa.Date, pa.Scenario.Id, pa.Person.Id, pa.Version from PersonAssignment pa
-		where pa.Scenario=:scenario and pa.Date between :start and :end
-	</query>
+  <!-- use hql query here when SetLockMode works on non entities. Seems to be a problem currently.-->
+	<sql-query name="fetchIdAndVersionPersonAssignment">
+    select pa.Id as paId, pa.Date, s.Id as sId, p.Id as pId, pa.Version from PersonAssignment pa with (updlock)
+    inner join Scenario s on s.Id=pa.Scenario
+    inner join Person p on p.Id=pa.Person
+    where pa.Scenario=:scenario and pa.Date between :start and :end
+  </sql-query>
 </hibernate-mapping>

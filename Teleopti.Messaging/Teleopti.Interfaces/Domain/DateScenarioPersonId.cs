@@ -8,10 +8,10 @@ namespace Teleopti.Interfaces.Domain
 		private readonly Guid _scenarioId;
 		private readonly Guid _personId;
 
-		public DateScenarioPersonId(Guid id, DateOnly date, Guid scenarioId, Guid personId, int version)
+		public DateScenarioPersonId(Guid id, DateTime date, Guid scenarioId, Guid personId, int version)
 		{
 			Id = id;
-			_date = date;
+			_date = new DateOnly(date);
 			_scenarioId = scenarioId;
 			_personId = personId;
 			Version = version;

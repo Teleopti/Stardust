@@ -173,6 +173,8 @@
     <Compile Include="Persisters\Requests\UpdateNoConflictTest.cs" />
     <Compile Include="Persisters\Requests\RequestPersisterBaseTest.cs" />
     <Compile Include="Persisters\Schedules\Bug25715.cs" />
+    <Compile Include="Persisters\Schedules\Concurrent\DeleteConflictWithDeleteAssignmentTest.cs" />
+    <Compile Include="Persisters\Schedules\Concurrent\ScheduleRangeConcurrentTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictNoteEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictPersonAbsenceEagerLoadingTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeConflictTest.cs" />

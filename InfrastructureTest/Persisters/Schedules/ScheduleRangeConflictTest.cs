@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
@@ -37,14 +39,28 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				Then(conflicts);
 				Then(myRange);
 
-				var canLoadAfterChangeDicVerifier = LoadScheduleDictionary()[Person];
 				if (!conflicts.Any())
 				{
 					//if no conflicts, db version should be same as users schedulerange
+					var canLoadAfterChangeDicVerifier = LoadScheduleDictionary()[Person];
 					Then(canLoadAfterChangeDicVerifier);
 				}
 				GeneralAsserts(myRange, conflicts);
 			}
+		}
+
+		public override void ReassociateDataForAllPeople()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void ReassociateDataFor(IPerson person)
+		{
+			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
+			uow.Reassociate(person);
+			uow.Reassociate(Activity);
+			uow.Reassociate(ShiftCategory);
+			uow.Reassociate(Scenario);
 		}
 	}
 }
