@@ -267,6 +267,7 @@
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\DataProvider\IMyReportDataProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\DataProvider\MyReportDataProvider.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\IDailyMetricsMapper.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\IMyReportViewModelFactory.cs" />

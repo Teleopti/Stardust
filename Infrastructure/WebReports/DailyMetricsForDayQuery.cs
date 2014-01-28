@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.WebReports
 {
-	public class DailyMetricsForDayQuery
+	public class DailyMetricsForDayQuery : IDailyMetricsForDayQuery
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentDataSource _currentDataSource;
@@ -19,12 +19,12 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 
 		private const string tsql =
-@"exec mart.report_data_agent_schedule_web_result 
-@date_from=:date_from, 
-@date_to=:date_to,
-@person_code=:person_code, 
-@adherence_id=:adherence_id, 
-@business_unit_code=:business_unit_code";
+									@"exec mart.report_data_agent_schedule_web_result 
+									@date_from=:date_from, 
+									@date_to=:date_to,
+									@person_code=:person_code, 
+									@adherence_id=:adherence_id, 
+									@business_unit_code=:business_unit_code";
 
 		public DailyMetricsForDayQuery(ILoggedOnUser loggedOnUser,
 																	ICurrentDataSource currentDataSource, 
