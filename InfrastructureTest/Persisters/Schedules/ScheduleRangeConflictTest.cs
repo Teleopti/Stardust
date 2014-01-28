@@ -19,14 +19,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		[Test]
 		public void DoTheTest()
 		{
-			var otherDic = LoadScheduleDictionary();
-			var otherRange = otherDic[Person];
+			var otherRange = LoadScheduleRange();
 			WhenOtherHasChanged(otherRange);
 
-			var myDic = LoadScheduleDictionary();
+			var myRange = LoadScheduleRange();
 			Target.Persist(otherRange);
 
-			var myRange = myDic[Person];
 			WhenImChanging(myRange);
 
 			if (ExpectOptimistLockException)
@@ -42,8 +40,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				if (!conflicts.Any())
 				{
 					//if no conflicts, db version should be same as users schedulerange
-					var canLoadAfterChangeDicVerifier = LoadScheduleDictionary()[Person];
-					Then(canLoadAfterChangeDicVerifier);
+					var canLoadAfterChangeVerifier = LoadScheduleRange();
+					Then(canLoadAfterChangeVerifier);
 				}
 				GeneralAsserts(myRange, conflicts);
 			}

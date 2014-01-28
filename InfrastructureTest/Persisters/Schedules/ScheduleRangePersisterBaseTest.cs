@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected IScheduleDictionary LoadScheduleDictionary()
+		protected IScheduleRange LoadScheduleRange()
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 																								 new PersonProvider(new[] { Person }),
 																								 new ScheduleDictionaryLoadOptions(true, true),
 																								 new List<IPerson> { Person });
-				return dictionary;
+				return dictionary[Person];
 			}
 		}
 

@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 		[Test]
 		public void DoTheTestConcurrent()
 		{
-			var otherRange = LoadScheduleDictionary()[Person];
-			var myRange = LoadScheduleDictionary()[Person];
+			var otherRange = LoadScheduleRange();
+			var myRange = LoadScheduleRange();
 			WhenOtherIsChanging(otherRange);
 			WhenImChanging(myRange);
 
