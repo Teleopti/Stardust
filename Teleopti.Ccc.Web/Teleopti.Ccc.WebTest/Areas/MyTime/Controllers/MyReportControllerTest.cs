@@ -1,6 +1,11 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -10,11 +15,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void Index_WhenUserHasPermissionForMyReport_ShouldReturnPartialView()
 		{
-			var target = new MyReportController();
-			
-			var result = target.Index();
+			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
+			var target = new MyReportController(viewModelFactory);
+			var model = new DailyMetricsViewModel();
+			var date = DateTime.Now.Date;
 
-			result.ViewName.Should().Be.EqualTo("MyReportPartial");
+			viewModelFactory.Stub(x => x.CreateDailyMetricsViewModel(new DateOnly(date))).Return(model);
+
+			var result = target.OnDates(date);
+				
+			result.Data.Should().Be.SameInstanceAs(model);
 		}
 	}
 }

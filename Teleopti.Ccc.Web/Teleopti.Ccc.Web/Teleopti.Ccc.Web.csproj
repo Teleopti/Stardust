@@ -266,6 +266,11 @@
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\DataProvider\IMyReportDataProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\Mapping\IDailyMetricsMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\IMyReportViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityInputMappingProfile.cs" />
@@ -273,6 +278,7 @@
     <Compile Include="Areas\MyTime\Core\WeekSchedule\Mapping\OvertimeAvailabilityViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\MyReport\DailyMetricsViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\OvertimeAvailabilityPersister.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkGenerator.cs" />
@@ -1078,6 +1084,7 @@
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\MyReport\MyReportPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\MonthPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\MyReport\NoReportPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1109,6 +1116,10 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Analytics\WebPortal\Teleopti.Analytics.Portal\ReportTexts\Teleopti.Analytics.ReportTexts.csproj">
+      <Project>{7c7067a8-c9ff-462e-8469-78e886c2e002}</Project>
+      <Name>Teleopti.Analytics.ReportTexts</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>

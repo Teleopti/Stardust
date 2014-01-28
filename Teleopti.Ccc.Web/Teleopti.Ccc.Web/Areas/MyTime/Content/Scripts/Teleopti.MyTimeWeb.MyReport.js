@@ -4,12 +4,6 @@
 
 	function MyReportViewModel() {
 		var self = this;
-		self.AdherenceText = '';
-		self.ReadinessText = '';
-		self.AnsweredCallsText = '';
-		self.AverageTalkTimeText = '';
-		self.AverageAfterWorkText = '';
-		self.AverageHandlingTimeText = '';
 		self.Adherence = ko.observable();
 		self.AnsweredCalls = ko.observable();
 		self.AverageAfterWork = ko.observable();
@@ -44,12 +38,6 @@
 				vm.AverageTalkTime(data.AverageTalkTime);
 				vm.Readiness(data.Readiness);
 				vm.DisplayDate(data.DisplayDate);
-				vm.AdherenceText = data.AdherenceText;
-				vm.ReadinessText = data.ReadinessText;
-				vm.AnsweredCallsText = data.AnsweredCallsText;
-				vm.AverageTalkTimeText = data.AverageTalkTimeText;
-				vm.AverageAfterWorkText = data.AverageAfterWorkText;
-				vm.AverageHandlingTimeText = data.AverageHandlingTimeText;
 
 				vm.AdherenceValues = data.AdherenceValues;
 				vm.ReadinessValues = data.ReadinessValues;
@@ -57,7 +45,6 @@
 				vm.TalkTimeValues = data.TalkTimeValues;
 				vm.AfterTalkTimeValues = data.AfterTalkTimeValues;
 				vm.AnsweredValues = data.AnsweredValues;
-				drawTheChart(vm.AdherenceValues, vm.AdherenceText);
 
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
@@ -67,33 +54,7 @@
 			}
 		});
 	}
-
-	function drawTheChart(datat, title) {
-		
-		// Create the data table.
-		var data = new google.visualization.DataTable();
-		data.addColumn('string', '');
-		data.addColumn('number', '');
-		
-		datat.forEach(function (entry) {
-			data.addRow([entry.Date, entry.Value]);
-		});
-
-		// Set chart options
-		var options = {
-			'width': '100%',
-			'height': 250,
-			vAxis: { minValue: 0 },
-			'fontName': "Segoe UI",
-			'title': title,
-			titleFontSize: 22,
-		};
-		// Instantiate and draw our chart, passing in some options.
-		var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-		chart.draw(data, options);
-	}
-	
-
+    
 	// to week view
 	//vm.nextWeek = function () {
 	//	vm.selectedDate(self.nextWeekDate());
@@ -116,10 +77,6 @@
 					ko.applyBindings(vm);
 				}
 			});
-		},
-
-		drawChart: function (datat, title) {
-			drawTheChart(datat, title);
 		},
 
 		yesterday: function() {

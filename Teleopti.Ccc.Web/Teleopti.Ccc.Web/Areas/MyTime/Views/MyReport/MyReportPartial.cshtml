@@ -24,19 +24,37 @@
 <div class="container-fluid">
 
 	<div class="myReportFigures">
-		<div class="myReportTable">
-			<div class="myReportHeader myReportTableRow"><div class="myReportHeaderText">@Resources.Metric</div><div class="myReportValues">@Resources.Value</div></div>
-			<div class="myReportTableRow"><div data-bind="click: function (data, event) { Teleopti.MyTimeWeb.MyReport.drawChart(AdherenceValues, AdherenceText, data, event) }" class="myReportText">@Resources.Adherence</div><div class="myReportValues" data-bind="	text: Adherence()"></div></div>
-			<div class="myReportTableRow" style="background: #f0f0ff"><div data-bind="click: function (data, event) { Teleopti.MyTimeWeb.MyReport.drawChart(ReadinessValues, ReadinessText, data, event) }" class="myReportText">@Resources.Readiness</div><div class="myReportValues" data-bind="	text: Readiness()"></div></div>
-			<div class="myReportTableRow"><div data-bind="click: function (data, event) { Teleopti.MyTimeWeb.MyReport.drawChart(HandlingTimeValues, AverageHandlingTimeText, data, event) }" class="myReportText">@Resources.AverageHandlingTime</div><div class="myReportValues" data-bind="	text: AverageHandlingTime()"></div></div>
-			<div class="myReportTableRow" style="background: #f0f0ff"><div data-bind="click: function (data, event) { Teleopti.MyTimeWeb.MyReport.drawChart(TalkTimeValues, AverageTalkTimeText, data, event) }" class="myReportText">@Resources.AverageTalkTime</div><div class="myReportValues" data-bind="	text: AverageTalkTime()"></div></div>
-			<div class="myReportTableRow"><div data-bind="click: function (data, event) { Teleopti.MyTimeWeb.MyReport.drawChart(AfterTalkTimeValues, AverageAfterWorkText, data, event) }" class="myReportText">@Resources.AverageAfterCallWork</div><div class="myReportValues" data-bind="	text: AverageAfterWork()"></div></div>
-			<div class="myReportTableRow" style="background: #f0f0ff"><div data-bind="click: function (data, event) { Teleopti.MyTimeWeb.MyReport.drawChart(AnsweredValues, AnsweredCallsText, data, event) }" class="myReportText">@Resources.AnsweredCalls</div><div class="myReportValues" data-bind="	text: AnsweredCalls()"></div></div>
-
-		</div>
+	    <div class="myReportTable">
+	        <div class="myReportHeader myReportTableRow">
+	            <div class="myReportHeaderText">@Resources.Metric</div>
+	            <div class="myReportValues">@Resources.Value</div>
+	        </div>
+	        <div class="myReportTableRow">
+	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResAdherencePercent</div>
+                <div class="myReportValues adherenceValue" data-bind="text: Adherence()"></div>
+	        </div>
+	        <div class="myReportTableRow" style="background: #f0f0ff">
+	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResReadyTimePerScheduledReadyTimePercent</div>
+                <div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: Readiness()"></div>
+	        </div>
+	        <div class="myReportTableRow">
+	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResHandleTime</div>
+	            <div class="myReportValues handlingTimeValue" data-bind="text: AverageHandlingTime()"></div>
+	        </div>
+	        <div class="myReportTableRow" style="background: #f0f0ff">
+	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResTalkTime</div>
+                <div class="myReportValues talkTimeValue" data-bind="text: AverageTalkTime()"></div>
+	        </div>
+	        <div class="myReportTableRow">
+	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResKpiAverageAfterCallWork</div>
+                <div class="myReportValues afterWorkValue" data-bind="text: AverageAfterWork()"></div>
+	        </div>
+	        <div class="myReportTableRow" style="background: #f0f0ff">
+	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResAnsweredCalls</div>
+                <div class="myReportValues answeredCallsValue" data-bind="text: AnsweredCalls()"></div>
+	        </div>
+	    </div>
 			
-	</div>
-	<div class="myReportChart" id="chart_div" style="height: 300px;">
 	</div>
 </div>
 

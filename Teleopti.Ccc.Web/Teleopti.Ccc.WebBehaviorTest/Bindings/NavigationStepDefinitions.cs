@@ -232,14 +232,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule();
 		}
 
-		[When(@"I click MyReport tab")]
-		[When(@"I navigate to MyReport")]
-		public void GivenIClickMyReportTab()
+		[When(@"I navigate to my report")]
+		public void WhenINavigateToMyReport()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GoToMyReport();
 		}
-
 
 		[Given(@"I am viewing team schedule for tomorrow")]
 		[Given(@"I am viewing group schedule for tomorrow")]

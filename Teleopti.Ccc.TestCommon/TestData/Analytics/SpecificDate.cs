@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -9,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
-	public class TodayDate : IDateData
+	public class SpecificDate : IDateData
 	{
 		public IEnumerable<DataRow> Rows { get; set; }
 
@@ -20,9 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			using (var table = dim_date.CreateTable())
 			{
-				var date = DateTime.Now.Date;
-				Date = new DateOnly(date);
-				table.AddDate(DateId, date, analyticsDataCulture);
+				table.AddDate(DateId, Date, analyticsDataCulture);
 
 				Bulk.Insert(connection, table);
 
