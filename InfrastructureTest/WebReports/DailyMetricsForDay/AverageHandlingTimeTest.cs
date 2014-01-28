@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -24,9 +25,9 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldReturnAverageHandlingTime()
 		{
-			const int expectedAverage = 30;
+			var expectedPercentage = TimeSpan.FromSeconds(30);
 			Target().Execute(Today.Date)
-				.HandlingTime.Should().Be.EqualTo(expectedAverage);
+				.HandlingTimeAverage.Should().Be.EqualTo(expectedPercentage);
 		}
 	}
 }

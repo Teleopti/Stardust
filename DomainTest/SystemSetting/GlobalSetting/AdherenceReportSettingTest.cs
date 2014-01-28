@@ -26,10 +26,9 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
         [Test]
         public static void VerifyMapToMatrix()
         {
-            Assert.AreEqual(1, AdherenceReportSetting.MapToMatrix(AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime));
-            Assert.AreEqual(2, AdherenceReportSetting.MapToMatrix(AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime));
-            Assert.AreEqual(3, AdherenceReportSetting.MapToMatrix(AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime));
-			Assert.AreEqual(0, AdherenceReportSetting.MapToMatrix((AdherenceReportSettingCalculationMethod)4));
+            Assert.AreEqual(1, (int)AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime);
+            Assert.AreEqual(2, (int)AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime);
+            Assert.AreEqual(3, (int)AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime);
         }
     }
 }

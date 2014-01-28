@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldHaveDataAvailableSetToFalse()
 		{
 			Target().Execute(Today.Date)
-				.DataAvailable.Should().Be.False();
+				.Should().Be.Null();
 		}
 	}
 }

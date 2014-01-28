@@ -2,6 +2,10 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -64,8 +68,23 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			_analyticsDataFactory.Setup(new FillBridgeAcdLoginPersonFromData(agent, AcdLoginId));
 			_analyticsDataFactory.Setup(scenario);
 
+			persistAdherenceSetting();
+
 			InsertTestSpecificData(_analyticsDataFactory);
 			_analyticsDataFactory.Persist();
+		}
+
+		private void persistAdherenceSetting()
+		{
+			if (AdherenceSetting.HasValue)
+			{
+				var globalSettingRep = new GlobalSettingDataRepository(UnitOfWork);
+				var adherenceSetting = new GlobalSettingDataRepository(UnitOfWork).FindValueByKey(AdherenceReportSetting.Key,
+					new AdherenceReportSetting());
+				adherenceSetting.CalculationMethod = AdherenceSetting.Value;
+				globalSettingRep.PersistSettingValue(adherenceSetting);
+				UnitOfWork.Flush();
+			}
 		}
 
 		protected abstract void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory);
@@ -74,8 +93,6 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(_loggedOnUser);
-			var adherenceIdProvider = MockRepository.GenerateMock<IAdherenceIdProvider>();
-			adherenceIdProvider.Expect(x => x.Fetch()).Return(AdherenceId);
 
 			var currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			currentBu.Expect(x => x.Current()).Return(_currentBusinessUnit);
@@ -83,12 +100,12 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			return new DailyMetricsForDayQuery(loggedOnUser, 
 				new CurrentDataSource(new CurrentIdentity()),	
 				currentBu,
-				adherenceIdProvider);
+				new GlobalSettingDataRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
 		}
 
-		protected virtual int AdherenceId
+		protected virtual AdherenceReportSettingCalculationMethod? AdherenceSetting
 		{
-			get { return 1; }
+			get { return null; }
 		}
 	}
 }
