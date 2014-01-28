@@ -38,7 +38,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 			AnalyticsRunner.RunSysSetupTestData();
 			IPerson person;
-			BasicShiftSetup.SetupBasicForShifts(out person);
+			BasicShiftSetup.SetupBasicForShifts();
+            BasicShiftSetup.AddPerson(out person,"Ola H");
+            BasicShiftSetup.AddThreeShifts("Ola H");
+
 			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);

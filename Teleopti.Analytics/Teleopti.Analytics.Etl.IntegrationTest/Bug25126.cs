@@ -45,7 +45,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 
 			IPerson person;
-			BasicShiftSetup.SetupBasicForShifts(out person);
+            BasicShiftSetup.SetupBasicForShifts();
+            BasicShiftSetup.AddPerson(out person, "Ola H");
+            BasicShiftSetup.AddThreeShifts("Ola H");
 
 			var readModel = new ScheduleDayReadModel
 			{
@@ -127,7 +129,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>{brasilTimeZone});
 
 			IPerson person;
-			BasicShiftSetup.SetupBasicForShifts(out person);
+            BasicShiftSetup.SetupBasicForShifts();
+            BasicShiftSetup.AddPerson(out person, "Ola H");
+            BasicShiftSetup.AddThreeShifts("Ola H");
 
 			Data.Person("Ola H").Apply(new BrasilianTimeZone());
 
