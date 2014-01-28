@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IWeekDayPointExtractor
     {
-        IDictionary<ITeamBlockInfo, ITeamBlockPoints> ExtractWeekDayInfos(IList<ITeamBlockInfo> teamBlockInfos);
+        IEnumerable<ITeamBlockPoints> ExtractWeekDayInfos(IEnumerable<ITeamBlockInfo> teamBlockInfos);
     }
 
     public class WeekDayPointExtractor : IWeekDayPointExtractor 
@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _weekDayPoints = weekDayPoints;
         }
 
-        public IDictionary<ITeamBlockInfo, ITeamBlockPoints> ExtractWeekDayInfos(IList<ITeamBlockInfo> teamBlockInfos)
+        public IEnumerable<ITeamBlockPoints> ExtractWeekDayInfos(IEnumerable<ITeamBlockInfo> teamBlockInfos)
         {
             var weekDayPoints = _weekDayPoints.GetWeekDaysPoints();
-            var result = new Dictionary<ITeamBlockInfo, ITeamBlockPoints >();
+            var result = new List<ITeamBlockPoints>( );
 
             foreach (var teamBlockInfo in teamBlockInfos)
             {
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 }
 
                 var weekDayInfo = new TeamBlockPoints(teamBlockInfo, points);
-                result.Add(teamBlockInfo, weekDayInfo);
+                result.Add(weekDayInfo);
             }
 
             return result;

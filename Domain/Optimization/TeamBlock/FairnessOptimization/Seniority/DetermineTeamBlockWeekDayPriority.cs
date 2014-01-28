@@ -9,13 +9,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
         public interface IDetermineTeamBlockWeekDayPriority
         {
-            ITeamBlockWeekDaySeniorityCalculator CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos);
+            ITeamBlockWeekDaySeniorityCalculator PerformTeamBlockCalculation(IList<ITeamBlockInfo> teamBlockInfos);
         }
 
         public class DetermineTeamBlockWeekDayPriority : IDetermineTeamBlockWeekDayPriority
         {
             private readonly ISeniorityExtractor _seniorityExtractor;
-            private IWeekDayPointExtractor _weekDayPointExtractor;
+            private readonly IWeekDayPointExtractor _weekDayPointExtractor;
 
             public DetermineTeamBlockWeekDayPriority(ISeniorityExtractor seniorityExtractor,  IWeekDayPointExtractor weekDayPointExtractor)
             {
@@ -23,22 +23,30 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 _weekDayPointExtractor = weekDayPointExtractor;
             }
 
-            public ITeamBlockWeekDaySeniorityCalculator CalculatePriority(IList<ITeamBlockInfo> teamBlockInfos)
+            public ITeamBlockWeekDaySeniorityCalculator PerformTeamBlockCalculation(IList<ITeamBlockInfo> teamBlockInfos)
             {
-                var seniorityInfos = _seniorityExtractor.ExtractSeniority(teamBlockInfos);
+                var seniorityInfos = _seniorityExtractor.ExtractSeniorityUsingTeamBlockPoints(teamBlockInfos).ToList();
 
-                var weekDaysInfo = _weekDayPointExtractor.ExtractWeekDayInfos(teamBlockInfos);
+                var weekDaysInfo = _weekDayPointExtractor.ExtractWeekDayInfos(teamBlockInfos).ToList();
 
                 var teamBlockPriorityDefinitionInfoPriorityForWeekDay = new TeamBlockWeekDaySeniorityCalculator();
                 foreach (var teamBlockInfo in teamBlockInfos)
                 {
-                    var seniorityInfo = seniorityInfos[teamBlockInfo];
-                    var weekDayInfo = weekDaysInfo[teamBlockInfo];
-                    var teamBlockInfoPriority = new TeamBlockSeniorityOnWeekDays(teamBlockInfo, seniorityInfo.Seniority, weekDayInfo.Points);
-                    teamBlockPriorityDefinitionInfoPriorityForWeekDay.AddItem(teamBlockInfoPriority, teamBlockInfoPriority.TeamBlockInfo, teamBlockInfoPriority.WeekDayPoints);
+                    var seniorityPoints = getTeamBlockPoints(teamBlockInfo,seniorityInfos);
+                    var weekDayPoints = getTeamBlockPoints(teamBlockInfo, weekDaysInfo);
+                    var teamBlockInfoPriority = new TeamBlockSeniorityOnWeekDays(teamBlockInfo, seniorityPoints, weekDayPoints);
+                    teamBlockPriorityDefinitionInfoPriorityForWeekDay.AddItem(teamBlockInfoPriority, teamBlockInfo, teamBlockInfoPriority.WeekDayPoints);
                 }
 
                 return teamBlockPriorityDefinitionInfoPriorityForWeekDay;
+            }
+
+           private double getTeamBlockPoints(ITeamBlockInfo teamBlock, IEnumerable<ITeamBlockPoints> teamBlockPointList)
+            {
+                var extractedTeamBlock = teamBlockPointList.FirstOrDefault(s => s.TeamBlockInfo.Equals(teamBlock));
+                if (extractedTeamBlock != null)
+                    return extractedTeamBlock.Points;
+                return -1;
             }
         }
     

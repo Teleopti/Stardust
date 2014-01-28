@@ -24,18 +24,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         private bool _cancelMe;
         private readonly IConstructTeamBlock _constructTeamBlock;
-        private readonly IDetermineTeamBlockWeekDayPriority _determineTeamBlockWeekDayPriority;
-        private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
         private ISeniorityExtractor _seniorityExtractor;
+        private IDayOffStep1 _dayOffStep1;
         //private readonly ITeamBlockMatrixValidator _teamBlockMatrixValidator;
 
-        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority, ITeamBlockSwapValidator teamBlockSwapValidator, ISeniorityExtractor seniorityExtractor)//, ITeamBlockMatrixValidator teamBlockMatrixValidator)
+        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock,  ISeniorityExtractor seniorityExtractor)
         {
             _constructTeamBlock = constructTeamBlock;
-            _determineTeamBlockWeekDayPriority = determineTeamBlockWeekDayPriority;
-            _teamBlockSwapValidator = teamBlockSwapValidator;
             _seniorityExtractor = seniorityExtractor;
-            //_teamBlockMatrixValidator = teamBlockMatrixValidator;
         }
 
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -45,12 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _cancelMe = false;
             var instance = PrincipalAuthorization.Instance();
             if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
-            var tempSchedulingOptions = schedulingOptions;
-            tempSchedulingOptions.UseTeamBlockPerOption = true;
-            tempSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
-            var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, tempSchedulingOptions);
-            
-            calcualteDayValueForSelectedPeriod(listOfAllTeamBlock);
+
+            _dayOffStep1.PerformStep1(schedulingOptions,allPersonMatrixList,selectedPeriod,selectedPersons );
 
             rearrangeDayOffAmongAagents();
 
@@ -59,39 +51,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         }
 
-        private void calcualteDayValueForSelectedPeriod(IList<ITeamBlockInfo> listOfAllTeamBlock)
-        {
-            //populate the selected agents in a DS
-            var teamBlockPriorityDefinitionInfoForWeekDay = _determineTeamBlockWeekDayPriority.CalculatePriority(listOfAllTeamBlock);
-
-            //sort the DS according the the agent weekDayPriority
-            foreach (var teamBlock in teamBlockPriorityDefinitionInfoForWeekDay.HighToLowSeniorityListBlockInfo)
-            {
-				//if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
-				//foreach (
-				//	var targetTeamBlock in teamBlockPriorityDefinitionInfoForWeekDay.ExtractAppropiateTeamBlock(teamBlock )
-				//	)
-				//{
-				//	if (_cancelMe) break;
-                //	if (!_teamBlockMatrixValidator.Validate(targetTeamBlock)) continue;
-				//	if (_teamBlockSwapValidator.ValidateCanSwap(teamBlock, targetTeamBlock))
-				//	{
-				//		//perform swap
-				//		break;
-				//	}
-
-				//}
-                if (_cancelMe) break;
-                
-				//var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzedTeamBlocks.Count / totalBlockCount);
-				//OnReportProgress(message);
-				//analyzedTeamBlocks.Add(teamBlockInfoHighSeniority);
-	        
-            }
-        }
 
         private void analyzeAndPerformPossibleSwaps(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions )
         {
+            //step 2 test code
             var tempSchedulingOptions = schedulingOptions;
             tempSchedulingOptions.UseBlockOptimizing = BlockFinderType.SingleDay ;
             var singleAgentGroupPage = new GroupPageLight {Key = "SingleAgentTeam", Name = "SingleAgentTeam"};
