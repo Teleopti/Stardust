@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,13 +26,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IConstructTeamBlock _constructTeamBlock;
         private readonly IDetermineTeamBlockWeekDayPriority _determineTeamBlockWeekDayPriority;
         private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
+        private ISeniorityExtractor _seniorityExtractor;
         //private readonly ITeamBlockMatrixValidator _teamBlockMatrixValidator;
 
-        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority, ITeamBlockSwapValidator teamBlockSwapValidator)//, ITeamBlockMatrixValidator teamBlockMatrixValidator)
+        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority, ITeamBlockSwapValidator teamBlockSwapValidator, ISeniorityExtractor seniorityExtractor)//, ITeamBlockMatrixValidator teamBlockMatrixValidator)
         {
             _constructTeamBlock = constructTeamBlock;
             _determineTeamBlockWeekDayPriority = determineTeamBlockWeekDayPriority;
             _teamBlockSwapValidator = teamBlockSwapValidator;
+            _seniorityExtractor = seniorityExtractor;
             //_teamBlockMatrixValidator = teamBlockMatrixValidator;
         }
 
@@ -51,7 +54,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
             rearrangeDayOffAmongAagents();
 
-            analyzeAndPerformPossibleSwaps();
+            if(!schedulingOptions.UseSameDayOffs )
+                analyzeAndPerformPossibleSwaps(selectedPersons, allPersonMatrixList, selectedPeriod, schedulingOptions);
 
         }
 
@@ -69,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				//	)
 				//{
 				//	if (_cancelMe) break;
-				//	if (!_teamBlockMatrixValidator.Validate(teamBlock)) continue;
+                //	if (!_teamBlockMatrixValidator.Validate(targetTeamBlock)) continue;
 				//	if (_teamBlockSwapValidator.ValidateCanSwap(teamBlock, targetTeamBlock))
 				//	{
 				//		//perform swap
@@ -79,8 +83,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				//}
                 if (_cancelMe) break;
                 
-               
-
 				//var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzedTeamBlocks.Count / totalBlockCount);
 				//OnReportProgress(message);
 				//analyzedTeamBlocks.Add(teamBlockInfoHighSeniority);
@@ -88,9 +90,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
         }
 
-        private void analyzeAndPerformPossibleSwaps()
+        private void analyzeAndPerformPossibleSwaps(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions )
         {
-            throw new NotImplementedException();
+            var tempSchedulingOptions = schedulingOptions;
+            tempSchedulingOptions.UseBlockOptimizing = BlockFinderType.SingleDay ;
+            var singleAgentGroupPage = new GroupPageLight {Key = "SingleAgentTeam", Name = "SingleAgentTeam"};
+            tempSchedulingOptions.GroupOnGroupPageForTeamBlockPer = singleAgentGroupPage;
+            var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, tempSchedulingOptions);
+            var seniorityInfos = _seniorityExtractor.ExtractSeniority(listOfAllTeamBlock);
+
         }
 
         private void rearrangeDayOffAmongAagents()
