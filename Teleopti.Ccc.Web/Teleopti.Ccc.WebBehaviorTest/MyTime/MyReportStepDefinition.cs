@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"MyReport tab should not be visible")]
 		public void ThenReportTabShouldNotBeVisible()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-inner","a[href$='#MyReportTab']");
+            Browser.Interactions.AssertNotExists(".navbar .navbar-default", "a[href$='#MyReportTab']");
 		}
 
 		[Then(@"MyReport tab should be visible")]
