@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 {
 	public abstract class ScheduleRangeConcurrentTest : ScheduleRangePersisterBaseTest
 	{
-		protected abstract void WhenOtherIsChanging(IScheduleRange otherScheduleRange);
+		protected abstract void WhenOtherIsChanging(IScheduleRange othersScheduleRange);
 		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
 
-		protected virtual void ThenBothPersistedSuccessful(IScheduleRange myScheduleRange, IScheduleRange otherScheduleRange)
+		protected virtual void ThenBothPersistedSuccessful(IScheduleRange myScheduleRange, IScheduleRange othersScheduleRange)
 		{
 			Assert.Fail("Both schedule ranges were persisted!");
 		}

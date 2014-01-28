@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 			return new[] { new PersonAssignment(Person, Scenario, date) };
 		}
 
-		protected override void WhenOtherIsChanging(IScheduleRange otherScheduleRange)
+		protected override void WhenOtherIsChanging(IScheduleRange othersScheduleRange)
 		{
 			var start = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
-			var day = otherScheduleRange.ScheduledDay(date);
+			var day = othersScheduleRange.ScheduledDay(date);
 			day.PersonAssignment().AddActivity(Activity, new DateTimePeriod(start, start.AddHours(3)));
 			DoModify(day);
 		}
