@@ -85,6 +85,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return skill;
         }
 
+
+		public static ISkill CreateSkillWithId(string skillName)
+		{
+			var skill = CreateSkill(skillName);
+			skill.SetId(Guid.NewGuid());
+			return skill;
+		}
+
         /// <summary>
         /// Creates the multisite skill.
         /// </summary>
@@ -163,6 +171,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             return skill;
         }
-
     }
 }
