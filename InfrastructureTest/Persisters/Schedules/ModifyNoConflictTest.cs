@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 1);
 
-		protected override IEnumerable<IAggregateRoot> Given()
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
 			return new[] { new PersonAssignment(Person, Scenario, date) };
 		}

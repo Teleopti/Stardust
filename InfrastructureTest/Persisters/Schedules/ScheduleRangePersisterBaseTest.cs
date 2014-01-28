@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			makeTarget();
 		}
 
-		protected abstract IEnumerable<IAggregateRoot> Given();
+		protected abstract IEnumerable<IPersistableScheduleData> Given();
 
 		private void makeTarget()
 		{

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 2);
 
-		protected override IEnumerable<IAggregateRoot> Given()
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
 			var restriction = new StudentAvailabilityRestriction
 			{

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override IEnumerable<IAggregateRoot> Given()
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
 			var restriction = new PreferenceRestriction { Absence = Absence };
 			restriction.AddActivityRestriction(new ActivityRestriction(Activity));

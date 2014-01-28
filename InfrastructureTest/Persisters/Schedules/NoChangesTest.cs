@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	public class NoChangesTest : ScheduleRangeConflictTest
 	{
-		protected override IEnumerable<IAggregateRoot> Given()
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
-			return Enumerable.Empty<IAggregateRoot>();
+			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
