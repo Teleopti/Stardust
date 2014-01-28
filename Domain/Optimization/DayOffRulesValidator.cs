@@ -1,20 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IDayOffRulesValidator
 	{
+		bool Validate(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class DayOffRulesValidator : IDayOffRulesValidator
 	{
-		private readonly DaysOffLegalStateValidatorsFactory _daysOffLegalStateValidatorsFactory;
+		private readonly IDaysOffLegalStateValidatorsFactory _daysOffLegalStateValidatorsFactory;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 
-		public DayOffRulesValidator(DaysOffLegalStateValidatorsFactory daysOffLegalStateValidatorsFactory,
+		public DayOffRulesValidator(IDaysOffLegalStateValidatorsFactory daysOffLegalStateValidatorsFactory,
 			IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
 		{
 			_daysOffLegalStateValidatorsFactory = daysOffLegalStateValidatorsFactory;
