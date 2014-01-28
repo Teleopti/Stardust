@@ -1,51 +1,42 @@
 ﻿Teleopti.MyTimeWeb.MyReport = (function() {
-
-	var vm = new MyReportViewModel();
-
-	function MyReportViewModel() {
-		var self = this;
-		self.Adherence = ko.observable();
-		self.AnsweredCalls = ko.observable();
-		self.AverageAfterWork = ko.observable();
-		self.AverageHandlingTime = ko.observable();
-		self.AverageTalkTime = ko.observable();
-		self.Readiness = ko.observable();
-		self.DisplayDate = ko.observable();
+    var vm;
+    
+	function MyReportViewModel(loadDataMethod) {
+	    var self = this;
+	    self.fillDataMethod = loadDataMethod;
+		self.adherence = ko.observable();
+		self.answeredCalls = ko.observable();
+		self.averageAfterWork = ko.observable();
+		self.averageHandlingTime = ko.observable();
+		self.averageTalkTime = ko.observable();
+		self.readyTimePerScheduledReadyTime = ko.observable();
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
-		self.selectedDate = ko.observable(moment().startOf('day').clone().add('days', -1));
-		self.AdherenceValues = "";
-		self.ReadinessValues = "";
-		self.HandlingTimeValues = "";
-		self.TalkTimeValues = "";
-		self.AfterTalkTimeValues = "";
-		self.AnsweredValues = "";
+		self.selectedDateInternal = ko.observable(moment().startOf('day').clone().add('days', -1));
+	    self.weekStart = ko.observable(1);
+		self.selectedDate = ko.computed({
+		    read: function () {
+		        return self.selectedDateInternal();
+		    },
+		    write: function (value) {
+		        self.selectedDateInternal(value);
+		        self.fillDataMethod(self.selectedDateInternal());
+		    }
+		});
 	}
-
-	vm.selectedDate.subscribe(fillData);
-
-	function fillData() {
+    
+	function fillData(date) {
 		$.ajax({
-			//url: 'MyTime/MyReport/OnDates?startDate=' +  moment(vm.selectedDate()).format("YYYY-MM-DD"),
 			url: 'MyTime/MyReport/OnDates',
 			dataType: 'json',
-			data: { OnDate: moment(vm.selectedDate()).format("YYYY-MM-DD"), ShowWeek: false },
+			data: { date: date.toDate().toJSON() },
 			success: function(data) {
-				vm.Adherence(data.Adherence);
-				vm.AnsweredCalls(data.AnsweredCalls);
-				vm.AverageAfterWork(data.AverageAfterWork);
-				vm.AverageHandlingTime(data.AverageHandlingTime);
-				vm.AverageTalkTime(data.AverageTalkTime);
-				vm.Readiness(data.Readiness);
-				vm.DisplayDate(data.DisplayDate);
-
-				vm.AdherenceValues = data.AdherenceValues;
-				vm.ReadinessValues = data.ReadinessValues;
-				vm.HandlingTimeValues = data.HandlingTimeValues;
-				vm.TalkTimeValues = data.TalkTimeValues;
-				vm.AfterTalkTimeValues = data.AfterTalkTimeValues;
-				vm.AnsweredValues = data.AnsweredValues;
-
+			    vm.adherence(data.Adherence);
+				vm.answeredCalls(data.AnsweredCalls);
+				vm.averageAfterWork(data.AverageAfterCallWork);
+				vm.averageHandlingTime(data.AverageHandlingTime);
+				vm.averageTalkTime(data.AverageTalkTime);
+				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
 				alert(xhr.status);
@@ -54,41 +45,45 @@
 			}
 		});
 	}
+  
+    function setWeekStart() {
+        $.ajax({
+            url: 'UserInfo/Culture',
+            dataType: "json",
+            type: 'GET',
+            success: function (data) {
+                vm.weekStart(data.WeekStart);
+            }
+        });
+    };
     
-	// to week view
-	//vm.nextWeek = function () {
-	//	vm.selectedDate(self.nextWeekDate());
-	//};
-
-	//vm.previousWeek = function () {
-	//	vm.selectedDate(self.previousWeekDate());
-	//};
+    function bindData() {
+        vm = new MyReportViewModel(fillData);
+        var elementToBind = $('.myreport-daily-metrics')[0];
+        ko.applyBindings(vm, elementToBind);
+    }
 
 	return {
 		Init: function() {
-			fillData();
-
-			$.ajax({
-				url: 'UserInfo/Culture',
-				dataType: "json",
-				type: 'GET',
-				success: function(data) {
-					$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
-					ko.applyBindings(vm);
-				}
-			});
+		    Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('MyReport/Index',
+		                Teleopti.MyTimeWeb.MyReport.MyReportPartialInit);
 		},
+		MyReportPartialInit: function () {
+		    if (!$('.myreport-daily-metrics').length) {
+		        return;
+		    }
 
+		    bindData();
+		    setWeekStart();
+		},
 		yesterday: function() {
-			vm.selectedDate(moment().startOf('day').clone().add('days', -1));
+			vm.selectedDateInternal(moment().startOf('day').clone().add('days', -1));
 		},
-
 		nextDay: function() {
-			vm.selectedDate(vm.selectedDate().clone().add('days', 1));
+		    vm.selectedDateInternal(vm.selectedDate().clone().add('days', 1));
 		},
-
 		previousDay: function() {
-			vm.selectedDate(vm.selectedDate().clone().add('days', -1));
+		    vm.selectedDateInternal(vm.selectedDate().clone().add('days', -1));
 		}
 	};
 })(jQuery);

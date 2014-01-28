@@ -23,6 +23,7 @@ $(function () {
 	Teleopti.MyTimeWeb.TeamSchedule.Init();
 	Teleopti.MyTimeWeb.Settings.Init();
 	Teleopti.MyTimeWeb.Password.Init();
+	Teleopti.MyTimeWeb.MyReport.Init();
 
 	_initMomentLanguageWithFallback();
 });
