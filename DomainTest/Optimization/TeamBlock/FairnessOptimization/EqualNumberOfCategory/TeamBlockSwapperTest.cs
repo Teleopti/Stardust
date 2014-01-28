@@ -63,7 +63,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {_day1, _day2}, _scheduleDictionary)).Return(swapList);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse>());
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 
 			using (_mocks.Playback())

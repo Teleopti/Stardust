@@ -72,8 +72,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [Then(@"I should see '(.*)' as the first day of week label")]
         public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string dayOfWeek)
         {
-            Browser.Interactions.AssertVisibleUsingJQuery(".cal-row-head .cal-cell:first:contains('"+dayOfWeek+"')");
-            Browser.Interactions.SetWidth(1100, 1000);
+			var shortNameClass = string.Empty;
+			if (dayOfWeek.Length <= 3)
+				shortNameClass = ".weekday-shortname";
+
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".cal-row-head .cal-cell{0}:first:contains('{1}')", shortNameClass, dayOfWeek));
+			Browser.Interactions.SetWidth(1100, 1000);
         }
 
         [Given(@"I am using a device with narrow view")]

@@ -20,6 +20,7 @@
 	padding-top: 25px;
 	padding-bottom: 15px;
 }
+
 .rgba .teamschedule 
 {
 	border: 1px solid rgba(0, 0, 0, 0.15);
@@ -66,7 +67,9 @@
 	background: white;
 	left: -12px;
 	position: relative;
-	width: 22px;
+	font-size: xx-small;
+	height: 12px !important;
+	width: 26px;
 	text-align: center;
 	white-space: nowrap;
 }
@@ -91,7 +94,8 @@
 {
 	vertical-align: bottom;
 	padding-top: 8px;
-	height: 28px;
+	padding-bottom: 8px;
+	height: 19px;
 	width: 100%;
 	border-bottom: 1px solid #dfdfdf;
 	vertical-align: bottom;
@@ -108,8 +112,9 @@
 	overflow: hidden;
 	white-space: nowrap;
 	width: 119px;
-	height: 23px;
+	height: 22px;
 	padding-top: 5px;
+	margin-right: 5px;
 	padding-left: 5px;
 	background-color: #f8f8f8;
 }
@@ -136,7 +141,7 @@
 .teamschedule .layer 
 {
 	vertical-align: bottom;
-	height: 19px;
+	height: 22px;
 	border-radius: 2px;
 }
 

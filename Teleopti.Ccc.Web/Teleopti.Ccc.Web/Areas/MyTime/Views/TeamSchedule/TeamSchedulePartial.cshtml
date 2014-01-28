@@ -13,12 +13,12 @@
         <form class="navbar-form pull-left">
             <div class="input-group">
                 <span class="input-group-btn">
-                    <button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-arrow-left"></i></button>
+			<button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
                 </span>
                 <input data-bind="value: displayDate" type="text" class="col-md-2 text-center form-control" readonly="readonly"/>
                 <div class="input-group-btn">
                     <button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
-                    <button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-arrow-right"></i></button>
+		    <button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
                 </div>
             </div>
         </form>
@@ -55,8 +55,8 @@
             }
         </div>
 </div>
-<div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
-	<div class="body-teamschedule-inner">
+<div id="TeamSchedule-body" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+	<div>
 		
 		<div class="teamschedule relative ui-corner-all">
 
@@ -66,7 +66,7 @@
 					@foreach (var time in Model.TimeLine)
 					{
 						<li class="teamschedule-timeline-time @(time.ShortTime.Contains(":") ? "minute" : "hour") absolute" style="@left: @(Math.Round(scheduleWidth*time.PositionPercent))px;">
-							<div class="teamschedule-timeline-label ui-corner-all">@time.ShortTime</div>
+							<div class="teamschedule-timeline-label label label-info ui-corner-all">@time.ShortTime</div>
 						</li>
 					}
 				</ul>
@@ -90,12 +90,14 @@
 									var leftPixel = (Math.Round(scheduleWidth * layer.PositionPercent));
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
-									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
-									<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
-										style="width: @(widthPixel)px;
-																																		  @left: @(leftPixel)px;
-																																		  background-color: @layer.Color;
-																																		  @(!agentSchedule.HasDayOffUnder ? IEString : "")"> </li>
+                                    var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
+								    <li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
+								        style="
+                                            width: @(widthPixel)px;
+                                            @left: @(leftPixel)px;
+                                            background-color: @layer.Color;
+                                            @(!agentSchedule.HasDayOffUnder ? IEString : "")">
+								    </li>
 								}
 							}
 						</ul>

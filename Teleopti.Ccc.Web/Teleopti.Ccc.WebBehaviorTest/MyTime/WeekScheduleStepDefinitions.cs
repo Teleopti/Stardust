@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I open the weekschedule date-picker")]
 		public void WhenIOpenTheWeekscheduleDate_Picker()
 		{
-			Browser.Interactions.Click(".glyphicon-th:enabled");
+			Browser.Interactions.Click(".glyphicon-calendar:enabled");
 		}
 
 		[Then(@"I should see '(.*)' as the first day in the calender")]

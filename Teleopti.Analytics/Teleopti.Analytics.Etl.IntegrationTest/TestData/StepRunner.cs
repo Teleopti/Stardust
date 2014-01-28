@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
+using Teleopti.Analytics.Etl.Transformer.Job.Jobs;
 using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
@@ -63,6 +64,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			step = new DimOvertimeJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 			
+			return result;
+		}
+
+		public static List<IJobResult> RunNightly(JobParameters jobParameters)
+		{
+			var result = new List<IJobResult>();
+			var nightly = new NightlyJobCollection(jobParameters);
+			foreach (var step in nightly)
+			{
+				step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			}
+
 			return result;
 		}
 	}

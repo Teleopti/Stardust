@@ -37,13 +37,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 			return View("TeamSchedulePartial", _teamScheduleViewModelFactory.CreateViewModel(date.Value, id.Value));
 		}
-
-		[UnitOfWorkAction]
-		public JsonResult Teams(DateOnly? date)
-		{
-			if (!date.HasValue)
-				date = DateOnly.Today;
-			return Json(_teamScheduleViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value), JsonRequestBehavior.AllowGet);
-		}
 	}
 }

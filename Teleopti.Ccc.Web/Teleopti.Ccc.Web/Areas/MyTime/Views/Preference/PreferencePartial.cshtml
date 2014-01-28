@@ -3,64 +3,62 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 @model PreferenceViewModel
 @{
-    Layout = null;
+	Layout = null;
 }
 <div class="navbar navbar-default">
     <div class="col-xs-5">
-        <form class="navbar-form navbar-left input-group">
-            <span class="input-group-btn">
-                <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'"><i class="glyphicon glyphicon-arrow-left"></i></button>
-            </span>
-            <input data-bind="value: displayDate" type="text" class="form-control text-center" readonly="readonly" />
-            <div class="input-group-btn">
+        <form class="navbar-form pull-left">
+            <div class="input-append input-prepend">
+                <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
+                <input data-bind="value: displayDate" type="text" class="span3 text-center" readonly="readonly"/>
                 <button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
-                <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'"><i class="glyphicon glyphicon-arrow-right"></i></button>
+                <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
             </div>
         </form>
-    </div>
-    <ul class="nav navbar-nav">
-        <li class="divider-vertical"></li>
-        @if (Model.ExtendedPreferencesPermission)
-        {
-            <li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
-        }
-        else
-        {
-            <li>
-                <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
-                                                                                                    {
-                                                                                                        if (optionGroup.Text != Resources.ShiftCategory)
+        <ul class="nav">
+            <li class="divider-vertical"></li>
+            @if (Model.ExtendedPreferencesPermission)
+            {
+                <li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
+            }
+            else
+            {
+                <li>
+                    <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
                                                                                                         {
+                                                                                                            if (optionGroup.Text != Resources.ShiftCategory)
+                                                                                                            {
                                                                                                                 @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
-                                                                                                        }
-                                                                                                        foreach (var option in optionGroup.Options)
-                                                                                                        {
+                                                                                                            }
+                                                                                                            foreach (var option in optionGroup.Options)
+                                                                                                            {
                                                                                                                 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
-                                                                                                        }
-                                                                                                    }]">
-                    <button class="btn btn-default" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
-
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
-                        <!-- ko if: Value != '-' -->
-                        <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
-                        <!-- /ko -->
-                        <!-- ko if: Value == '-' -->
-                        <li class="divider"></li>
-                        <!-- /ko -->
-                    </ul>
-                </div>
-            </li>
-        }
-        <li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
-        <li class="divider-vertical"></li>
-        <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
-        <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="    click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
-        <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="glyphicon glyphicon-heart"></i>&nbsp;<span data-bind="    text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="    text: maxMustHave" class="musthave-max"></span>)</span></li>
-        <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="    click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="glyphicon glyphicon-plus"></i></a></li>
-    </ul>
+                                                                                                            }
+                                                                                                        }]">
+                        <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
+                     
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
+                            <!-- ko if: Value != '-' -->
+                            <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
+                            <!-- /ko -->
+                            <!-- ko if: Value == '-' -->
+                            <li class="divider"></li>
+                            <!-- /ko -->
+                        </ul>
+                    </div>
+                </li>
+            }
+            <li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
+            <li class="divider-vertical"></li>
+            <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
+            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
+            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="glyphicon glyphicon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
+            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="glyphicon glyphicon-plus"></i></a></li>
+        </ul>
+    </div>
 </div>
 
 <div id="Preference-add-extended-form" class="well well-small clearfix" data-bind="visible: AddPreferenceFormVisible">
@@ -75,7 +73,7 @@
         <!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
         @Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
         <!-- /ko -->
-
+		
         <!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
         @Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
         <!-- /ko -->
@@ -100,20 +98,20 @@
     </div>
     <p></p>
     <div>
-        @if (Model.PreferencePeriod == null)
-        {
-            @String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-        }
-        else
-        {
-            @String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-            @String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-        }
+            @if (Model.PreferencePeriod == null)
+            {
+                @String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+            }
+            else
+            {
+                @String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+                @String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+            }
     </div>
 </div>
 
 <div id="Preference-body" class="clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
-
+		
     <div id="Preference-body-inner" class="well clearfix pd0">
         <ul class="weekdays">
             @foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
@@ -126,6 +124,7 @@
             <ul class="calendarview-week" onselectstart="return false;">
                 <li>
                     <div>
+
                     </div>
                 </li>
                 @foreach (DayViewModel day in week.Days)
@@ -144,22 +143,22 @@
 
                                 <div class="preference">
                                     <span class="displayinline-block">
-                                        <div class="preference-indicator" />
+                                        <div class="preference-indicator"/>
                                         <div class="preference-indicator">
-                                            <div class="preference-must-have" data-bind="css: { 'glyphicon glyphicon-heart': MustHave }"></div>
+                                            <div class="preference-must-have" data-bind="css: {'glyphicon glyphicon-heart': MustHave}"></div>
                                         </div>
-                                        <div class="label label-default preference-text" data-bind="text: Preference, attr: { title: Preference }, style: { color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }" />
+                                        <div class="label label-default preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"/>
                                         <div class="preference-indicator">
-                                            <!-- ko if: Extended -->
+				                            <!-- ko if: Extended -->
                                             <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
                                             <!-- /ko -->
                                         </div>
                                         <div class="preference-indicator">
                                             <!-- ko if: HasPersonalShiftsOrMeetings -->
-                                            <i class="meeting-icon icon-user">
+                                            <i class="meeting-icon glyphicon glyphicon-user">
                                                 <i class="glyphicon glyphicon-user ml10"></i>
                                             </i>
-
+                                            
                                             <div class="meeting-tooltip" style="display: none">
                                                 <!-- ko if: HasMeetings -->
                                                 <table>
@@ -171,7 +170,7 @@
                                                         <tr>
                                                             <td>
                                                                 <div class="preference-tooltip-subject">
-                                                                    <label class="preference-tooltip-font" data-bind="text: Subject"></label>
+                                                                    <label class="preference-tooltip-font" data-bind="text : Subject"></label>
                                                                 </div>
                                                             </td>
                                                             <!-- ko if: IsOptional -->
@@ -204,10 +203,10 @@
                                 <!-- /ko -->
 
                                 <!-- ko if: HasAbsence -->
-                                <div class="absence">
-                                    <span class="displayblock fullwidth" data-bind="text: Absence"></span>
-                                    <span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
-                                </div>
+                                    <div class="absence">
+										<span class="displayblock fullwidth" data-bind="text: Absence"></span>
+									    <span class="absence-contract-time displayblock fullwidth" data-bind="text: AbsenceContractTime"></span>
+									</div>
                                 <!-- /ko -->
 
                                 <!-- ko if: HasPersonAssignmentShiftCategory -->
