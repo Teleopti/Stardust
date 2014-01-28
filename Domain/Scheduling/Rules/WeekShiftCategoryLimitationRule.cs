@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                                 {
 	                                foreach (var schedule in rangeClones.Values)
 									{
+										if(!schedule.Person.Equals(person)) continue;
 										IList<DateOnly> datesWithCategory;
 										if (_limitationChecker.IsShiftCategoryOverWeekLimit(shiftCategoryLimitation, schedule, personWeek.Week, out datesWithCategory))
 										{
