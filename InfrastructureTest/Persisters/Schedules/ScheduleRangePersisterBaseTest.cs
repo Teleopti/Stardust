@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -32,8 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IShiftCategory ShiftCategory { get; private set; }
 		protected IAbsence Absence { get; private set; }
 		protected IMultiplicatorDefinitionSet DefinitionSet { get; private set; }
-		protected IScheduleRangePersister Target { get; set; }
-		protected IScheduleTag ScheduleTag { get; private set; }
+		protected IScheduleRangePersister Target { get; private set; }
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
 
 		protected override void SetupForRepositoryTestWithoutTransaction()
@@ -64,7 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Scenario = new Scenario("scenario");
 			Absence = new Absence { Description = new Description("perist", "test") };
 			DefinitionSet = new MultiplicatorDefinitionSet("persist test", MultiplicatorType.Overtime);
-			ScheduleTag = new ScheduleTag { Description = "persist test" };
 			DayOffTemplate = new DayOffTemplate(new Description("persist test"));
 		}
 
@@ -78,7 +74,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new ScenarioRepository(unitOfWork).Add(Scenario);
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
-				new ScheduleTagRepository(unitOfWork).Add(ScheduleTag);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
 				Given().ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
 				unitOfWork.PersistAll();
@@ -98,7 +93,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				unitOfWork.PersistAll();
 				unitOfWork.Clear();
 				repository.Remove(Person);
-				repository.Remove(ScheduleTag);
 				repository.Remove(DefinitionSet);
 				repository.Remove(Activity);
 				repository.Remove(ShiftCategory);
