@@ -69,6 +69,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", DateTime.Today));
         }
 
+        [Then(@"I should see '(.*)' as the first day of week label for wide screen")]
+        public void ThenIShouldSeeAsTheFirstDayOfWeekLabelForWideScreen(string dayOfWeek)
+        {
+            var shortNameClass = string.Empty;
+            if (dayOfWeek.Length <= 3)
+                shortNameClass = ".weekday-shortname";
+
+            Browser.Interactions.SetWidth(1300);
+            Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".cal-row-head .cal-cell{0}:first:contains('{1}')", shortNameClass, dayOfWeek));
+        }
+
         [Then(@"I should see '(.*)' as the first day of week label")]
         public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string dayOfWeek)
         {
