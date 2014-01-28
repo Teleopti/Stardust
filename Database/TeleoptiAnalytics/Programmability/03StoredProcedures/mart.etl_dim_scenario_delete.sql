@@ -25,6 +25,7 @@ BEGIN
 		AND scenario_id NOT IN (SELECT scenario_id FROM mart.fact_schedule_forecast_skill)
 		AND scenario_id NOT IN (SELECT scenario_id FROM mart.fact_schedule_preference)
 		AND scenario_id NOT IN (SELECT scenario_id FROM mart.fact_forecast_workload)
+		AND scenario_id NOT IN (SELECT scenario_id FROM mart.fact_hourly_availability)
 		AND scenario_id <> -1
 END
 
