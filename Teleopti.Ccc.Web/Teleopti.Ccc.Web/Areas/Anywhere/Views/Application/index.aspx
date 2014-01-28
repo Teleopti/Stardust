@@ -29,7 +29,7 @@
         <link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
         
 	    <script>var require = { urlArgs: 'v=<%=new ResourceVersion().Version()%>' };</script>
-
+		<script src="Areas/Anywhere/Content/Scripts/require/configuration.js"></script>
         <script data-main="Areas/Anywhere/Content/Scripts/main" type="text/javascript" src="Content/require/require.js"></script>
 		
 	</head>

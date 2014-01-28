@@ -732,9 +732,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\configuration.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\current-state.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-unit.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.js" />
