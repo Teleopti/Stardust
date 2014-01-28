@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     public interface IWeekDayPointExtractor
     {
         IEnumerable<ITeamBlockPoints> ExtractWeekDayInfos(IEnumerable<ITeamBlockInfo> teamBlockInfos);
+        double ExtractWeekDayPointForTeamBlock(ITeamBlockInfo roleModelTeamBlock);
     }
 
     public class WeekDayPointExtractor : IWeekDayPointExtractor 
@@ -59,6 +60,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
 
             return result;
+        }
+
+        public double ExtractWeekDayPointForTeamBlock(ITeamBlockInfo roleModelTeamBlock)
+        {
+            throw new NotImplementedException();
         }
     }
 }

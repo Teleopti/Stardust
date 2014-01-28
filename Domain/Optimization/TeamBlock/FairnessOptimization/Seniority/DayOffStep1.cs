@@ -20,6 +20,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IFilterForTeamBlockInSelection _filterForFullyScheduledBlocks;
         private readonly IDetermineTeamBlockWeekDayPriority _determineTeamBlockWeekDayPriority;
         private readonly IFilterForMultipleMatrixPerAgentInTeamBlock _filterForMultipleMatrixPerAgentInTeamBlock;
+        private ISeniorityExtractor  _seniorityExtractor;
+        private IFilterForSameTeamBlock  _filterForSameTeamBlock;
+        private IWeekDayPointExtractor  _weekDayPointExtractor;
 
         public DayOffStep1( IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterForTeamBlockInSelection filterForFullyScheduledBlocks, IDetermineTeamBlockWeekDayPriority determineTeamBlockWeekDayPriority, IFilterForMultipleMatrixPerAgentInTeamBlock filterForMultipleMatrixPerAgentInTeamBlock)
         {
@@ -36,6 +39,34 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             listOfAllTeamBlock = stepBFilterOutUnwantedBlocks(listOfAllTeamBlock,selectedPersons,selectedPeriod);
 
             var calcualtedTeamBlocks =  setpCCalcaulateScneriotyAndPoints(listOfAllTeamBlock);
+
+            setpDAnalyzeTeamBlockForPossibleSwap(calcualtedTeamBlocks);
+
+            //return the new result in the form of matrixes or?
+        }
+
+        public void PerformStep1SecondWay(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+        {
+            var listOfAllTeamBlock = stepAConstructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
+            listOfAllTeamBlock = stepBFilterOutUnwantedBlocks(listOfAllTeamBlock, selectedPersons, selectedPeriod);
+
+            var teamBlockPoints = _seniorityExtractor.ExtractSeniorityUsingTeamBlockPoints(listOfAllTeamBlock).ToList();
+            foreach (var teamBlockPoint in teamBlockPoints.OrderByDescending(s => s.Points))
+            {
+                var roleModelTeamBlock = teamBlockPoint.TeamBlockInfo;
+                var roleModelWeekDayPoints = _weekDayPointExtractor.ExtractWeekDayPointForTeamBlock(roleModelTeamBlock);
+                var filteredTeamBlockList = _filterForSameTeamBlock.Filter(roleModelTeamBlock, teamBlockPoints);
+                var weekDayPoints = _weekDayPointExtractor.ExtractWeekDayInfos(filteredTeamBlockList.Select(s=>s.TeamBlockInfo ));
+                foreach (var targetWeekDayPoint in weekDayPoints.OrderByDescending(s => s.Points))
+                {
+                    var targetBlock = targetWeekDayPoint.TeamBlockInfo;
+                    if (targetWeekDayPoint.Points <= roleModelWeekDayPoints)
+                        continue;
+                    //do the swap and move to the next least block
+                }
+            }
+            
+            var calcualtedTeamBlocks = setpCCalcaulateScneriotyAndPoints(listOfAllTeamBlock);
 
             setpDAnalyzeTeamBlockForPossibleSwap(calcualtedTeamBlocks);
 

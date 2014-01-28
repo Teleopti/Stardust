@@ -8,17 +8,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IFilterForSameTeamBlock
     {
-        IEnumerable<ITeamBlockPoints> Filter(ITeamBlockInfo teamBlock, IEnumerable<ITeamBlockPoints> listOfTeamBlocks);
+        IList<ITeamBlockPoints> Filter(ITeamBlockInfo teamBlock, IList<ITeamBlockPoints> listOfTeamBlocks);
     }
 
     public class FilterForSameTeamBlock : IFilterForSameTeamBlock
     {
-        public IEnumerable<ITeamBlockPoints> Filter(ITeamBlockInfo teamBlock, IEnumerable<ITeamBlockPoints> listOfTeamBlocks)
+        public IList<ITeamBlockPoints> Filter(ITeamBlockInfo teamBlock, IList<ITeamBlockPoints> listOfTeamBlocks)
         {
             return (from o in listOfTeamBlocks
                     where o.TeamBlockInfo.BlockInfo .BlockPeriod.Equals(teamBlock.BlockInfo.BlockPeriod)
                           && o.TeamBlockInfo.TeamInfo.GroupMembers.Count().Equals(teamBlock.TeamInfo.GroupMembers.Count())
-                    select o);
+                    select o).ToList();
         }
     }
 }
