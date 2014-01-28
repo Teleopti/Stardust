@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using Teleopti.Ccc.TestCommon;
@@ -48,7 +49,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				script = file.OpenText().ReadToEnd();
 
 				server.ConnectionContext.ExecuteNonQuery(script);
-				server.ConnectionContext.ExecuteNonQuery("exec dbo.Add_QueueAgent_stat");
+				server.ConnectionContext.ExecuteNonQuery(string.Format("exec dbo.Add_QueueAgent_stat @TestDay='{0}', @agent_id={1}, @orig_agent_id='{2}', @agent_name='{3}'",DateTime.Today,52,"152","Ola H"));
+
+               
 			}
 		}
 	}

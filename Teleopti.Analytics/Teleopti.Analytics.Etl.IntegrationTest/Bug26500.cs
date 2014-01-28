@@ -46,10 +46,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
-			BasicShiftSetup.AddPerson(out person, "Ola H");
+			BasicShiftSetup.AddPerson(out person, "Ola H", "");
 			BasicShiftSetup.AddThreeShifts("Ola H");
 			IPerson person2;
-			BasicShiftSetup.AddPerson(out person2, "David J");
+			BasicShiftSetup.AddPerson(out person2, "David J", "");
 			BasicShiftSetup.AddThreeShifts("David J");
 			
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
