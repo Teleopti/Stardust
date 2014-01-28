@@ -14,18 +14,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 	{
 		protected abstract void WhenOtherIsChanging(IScheduleRange othersScheduleRange);
 		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
-
-		protected virtual void ThenBothPersistedSuccessful(IScheduleRange myScheduleRange, IScheduleRange othersScheduleRange)
-		{
-			Assert.Fail("Both schedule ranges were persisted!");
-		}
-
-		protected virtual void ThenOneRangeHadConflicts(IScheduleRange unsavedScheduleRangeWithConflicts, 
-																									IEnumerable<PersistConflict> conflicts, 
-																									bool myScheduleRangeWasTheOneWithConflicts)
-		{
-			Assert.Fail("One schedulerange had conflicts");
-		}
+		protected abstract void ThenOneRangeHadConflicts(IScheduleRange unsavedScheduleRangeWithConflicts,
+			IEnumerable<PersistConflict> conflicts,
+			bool myScheduleRangeWasTheOneWithConflicts);
 
 		[Test]
 		public void DoTheTestConcurrent()
@@ -46,6 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 			{
 				if (otherConflicts.Count > 0)
 				{
+					//both conflicts
 					Assert.Fail("Both I and other got conflicts. Something wrong!");
 				}
 				//myconflict only
@@ -61,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 				else
 				{
 					//no conflicts
-					ThenBothPersistedSuccessful(myRange, otherRange);
+					Assert.Fail("No conflicts. Something wrong!");
 				}
 			}
 			GeneralAsserts(myRange, myConflicts);
