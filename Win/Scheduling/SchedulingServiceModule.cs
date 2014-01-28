@@ -214,6 +214,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<DetermineTeamBlockWeekDayPriority>().As<IDetermineTeamBlockWeekDayPriority>();
             builder.RegisterType<WeekDayPointExtractor>().As<IWeekDayPointExtractor>();
             builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
+			builder.RegisterType<TeamBlockDayOffSwap>().As<ITeamBlockDayOffSwap>();
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
