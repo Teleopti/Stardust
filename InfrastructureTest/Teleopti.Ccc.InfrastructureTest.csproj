@@ -175,6 +175,7 @@
     <Compile Include="Persisters\Schedules\Bug25715.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\DeleteConflictWithDeleteAssignmentTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\DeleteConflictWithUpdateAssignmentTest.cs" />
+    <Compile Include="Persisters\Schedules\Concurrent\InsertConflictWithInsertAssignmentTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\ScheduleRangeConcurrentTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\UpdateConflictWithUpdateAssignmentTest.cs" />
     <Compile Include="Persisters\Schedules\ConflictNoteEagerLoadingTest.cs" />
