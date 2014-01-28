@@ -12,16 +12,16 @@
         <table class="table-condensed">
             <tr>
                 <td>
-                    <div class="input-append input-prepend">
-                        <span class="add-on" data-bind="clickable: previousDateValid">
-                            <i class="icon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
+                    <div class="input-group">
+                        <span class="input-group-addon" data-bind="clickable: previousDateValid">
+                            <i class="glyphicon glyphicon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
                         </span>
-                        <input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
-                        <span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
-                            <i class="icon-calendar" ></i>
+                        <input type="text" class="col-lg-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+                        <span class="input-group-addon" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+                            <i class="glyphicon glyphicon-calendar" ></i>
                         </span>
-                        <span class="add-on" data-bind="clickable: nextDateValid, enable: nextDateValid">
-                            <i class="icon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
+                        <span class="input-group-addon" data-bind="clickable: nextDateValid, enable: nextDateValid">
+                            <i class="glyphicon glyphicon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
                         </span>
                     </div>
                 </td>
@@ -35,7 +35,7 @@
             </tr>
         </table>
     </div>
-    <div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
+    <div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150, fadeOutDuration: 50">
         <div class="shift-trade-missing-team-message alert alert-warning" data-bind="visible: missingMyTeam">
             @Resources.YouDoNotHaveAccessToAnyTeams
         </div>
@@ -90,12 +90,12 @@
                 <textarea id="Request-add-shift-trade-message-input" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
             </div>
             <div class="pull-right">
-                <button class="btn cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
+                <button class="btn btn-default cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
                 <button class="btn btn-primary send-button" data-bind="enable: isSendEnabled, click: sendRequest">@Resources.Send</button>
             </div>
             <div class="error" data-bind="html: errorMessage"></div>
         </div>
-        <div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible : noPossibleShiftTrades()">
+        <div class="shift-trade-no-possible-trades alert alert-info" data-bind="visible: noPossibleShiftTrades()">
             @Resources.NoAgentsAvailableForShiftTrade
         </div>
     </div>
