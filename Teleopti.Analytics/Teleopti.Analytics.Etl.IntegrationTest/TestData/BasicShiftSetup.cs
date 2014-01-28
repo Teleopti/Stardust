@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
@@ -17,6 +14,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Contract = new ContractConfigurable { Name = "Kontrakt" };
 			ContractSchedule = new ContractScheduleConfigurable { Name = "Kontraktsschema" };
 			PartTimePercentage = new PartTimePercentageConfigurable { Name = "ppp" };
+
 			Scenario = new ScenarioConfigurable
 			{
 				EnableReporting = true,
@@ -32,7 +30,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Apply(Scenario);
 		}
 
-		public static void AddPerson(out IPerson person, string name)
+		public static void AddPerson(out IPerson person, string name, string externalLogon)
 		{
 			person = TestState.TestDataFactory.Person(name).Person;
 			var pp = new PersonPeriodConfigurable
@@ -42,7 +40,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				ContractSchedule = ContractSchedule.ContractSchedule.Description.Name,
 				PartTimePercentage = PartTimePercentage.Name,
 				Team = Team.Name,
-				StartDate = DateTime.Today.AddDays(-6)
+				StartDate = DateTime.Today.AddDays(-6),
+                ExternalLogon = externalLogon
 			};
 			Data.Person(name).Apply(pp);
 			Data.Person(name).Apply(new StockholmTimeZone());
@@ -68,23 +67,23 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Person(onPerson).Apply(shift3);
 		}
 
-        public static void AddOverlapping(string onPerson)
-        {
-            var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
-            var act = new ActivityConfigurable { Name = "Phone" };
-            var act2 = new ActivityConfigurable { Name = "Lunch" };
-            Data.Apply(cat);
-            Data.Apply(act);
-            Data.Apply(act2);
+		public static void AddOverlapping(string onPerson)
+		{
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
+			var act = new ActivityConfigurable { Name = "Phone" };
+			var act2 = new ActivityConfigurable { Name = "Lunch" };
+			Data.Apply(cat);
+			Data.Apply(act);
+			Data.Apply(act2);
 
-            var shift = new ShiftForDate(DateTime.Today.AddDays(-1), TimeSpan.FromHours(21),TimeSpan.FromHours(32), Scenario.Scenario, cat.ShiftCategory, act.Activity,
-                                         act2.Activity);
-            var shift2 = new ShiftForDate(DateTime.Today, 6, Scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
-            
-            Data.Person(onPerson).Apply(shift);
-            Data.Person(onPerson).Apply(shift2);
-            
-        }
+			var shift = new ShiftForDate(DateTime.Today.AddDays(-1), TimeSpan.FromHours(21),TimeSpan.FromHours(32), Scenario.Scenario, cat.ShiftCategory, act.Activity,
+										 act2.Activity);
+			var shift2 = new ShiftForDate(DateTime.Today, 6, Scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
+			
+			Data.Person(onPerson).Apply(shift);
+			Data.Person(onPerson).Apply(shift2);
+			
+		}
 
 		public static SiteConfigurable Site { get; set; }
 		public static TeamConfigurable Team { get; set; }
