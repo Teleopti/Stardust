@@ -68,6 +68,24 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Person(onPerson).Apply(shift3);
 		}
 
+        public static void AddOverlapping(string onPerson)
+        {
+            var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
+            var act = new ActivityConfigurable { Name = "Phone" };
+            var act2 = new ActivityConfigurable { Name = "Lunch" };
+            Data.Apply(cat);
+            Data.Apply(act);
+            Data.Apply(act2);
+
+            var shift = new ShiftForDate(DateTime.Today.AddDays(-1), TimeSpan.FromHours(21),TimeSpan.FromHours(32), Scenario.Scenario, cat.ShiftCategory, act.Activity,
+                                         act2.Activity);
+            var shift2 = new ShiftForDate(DateTime.Today, 6, Scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
+            
+            Data.Person(onPerson).Apply(shift);
+            Data.Person(onPerson).Apply(shift2);
+            
+        }
+
 		public static SiteConfigurable Site { get; set; }
 		public static TeamConfigurable Team { get; set; }
 		public static ContractConfigurable Contract { get; set; }

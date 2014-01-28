@@ -100,18 +100,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(readM);
 
 
-			JobStepBase step = new IntradayStageScheduleJobStep(jobParameters);
-			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
-
-			step = new FactScheduleJobStep(jobParameters, true);
-			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+            result = StepRunner.RunNightly(jobParameters);
 
 			factSchedules = from s in db.fact_schedule select s;
 
 			Assert.That(factSchedules.Count(), Is.EqualTo(192));
 
-			step = new FactScheduleDayCountJobStep(jobParameters, true);
-			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+			
 		}
 
 		//[Test]

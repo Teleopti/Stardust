@@ -33,14 +33,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 
 		[Test]
-		public void TestIt()
+		public void ShouldWorkWithOverlappingShifts()
 		{
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 			AnalyticsRunner.RunSysSetupTestData();
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
             BasicShiftSetup.AddPerson(out person,"Ola H");
-            BasicShiftSetup.AddThreeShifts("Ola H");
+            BasicShiftSetup.AddOverlapping("Ola H");
 
 			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
@@ -52,14 +52,21 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			};
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
-			var result = StepRunner.RunNightly(jobParameters);
+			StepRunner.RunNightly(jobParameters);
 
 			// now it should have data on all three dates, 96 interval
 			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 
 			var factSchedules = from s in db.fact_schedule select s;
 
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules.Count(), Is.EqualTo(68));
+		    var time = DateTime.Today.AddHours(5);
+		    var last = from s in db.fact_schedule where s.shift_starttime == time select s;
+
+            Assert.That(last.Count(), Is.EqualTo(32));
+            time = DateTime.Today.AddDays(-1).AddHours(20);
+            var first = from s in db.fact_schedule where s.shift_starttime == time select s;
+            Assert.That(first.Count(), Is.EqualTo(32));
 		}
 		
 
