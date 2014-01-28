@@ -6,13 +6,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class Bug25715 : ScheduleRangePersisterBaseTest
+	public class Bug25715 : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
-			scheduleDataInDatabaseAtStart.Add(new OvertimeAvailability(Person, date, null, null));
+			return new[] {new OvertimeAvailability(Person, date, null, null)};
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)

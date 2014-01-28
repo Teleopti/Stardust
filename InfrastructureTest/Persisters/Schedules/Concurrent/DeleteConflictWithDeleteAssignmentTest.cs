@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
+namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 {
-	public class DeleteConflictWithUpdateTest : ScheduleRangeConflictTest
+	public class DeleteConflictWithDeleteAssignmentTest : ScheduleRangeConcurrentTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
@@ -17,11 +16,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return new[] { new PersonAssignment(Person, Scenario, date) };
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
+		protected override void WhenOtherIsChanging(IScheduleRange othersScheduleRange)
 		{
-			var start = new DateTime(2000, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 			var day = othersScheduleRange.ScheduledDay(date);
-			day.PersonAssignment().AddActivity(Activity, new DateTimePeriod(start, start.AddHours(3)));
+			day.Clear<IPersonAssignment>();
 			DoModify(day);
 		}
 
@@ -32,18 +30,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			DoModify(day);
 		}
 
-		protected override void Then(IEnumerable<PersistConflict> conflicts)
+		protected override void ThenOneRangeHadConflicts(IScheduleRange unsavedScheduleRangeWithConflicts,
+																										IEnumerable<PersistConflict> conflicts,
+																										bool myScheduleRangeWasTheOneWithConflicts)
 		{
+			unsavedScheduleRangeWithConflicts.ScheduledDay(date).PersonAssignment().Should().Be.Null();
+
 			var conflict = conflicts.Single();
-			conflict.DatabaseVersion.Should().Not.Be.Null();
+			conflict.DatabaseVersion.Should().Be.Null();
 			conflict.ClientVersion.CurrentItem.Should().Be.Null();
 			conflict.ClientVersion.OriginalItem.Should().Not.Be.Null();
-		}
-
-		protected override void Then(IScheduleRange myScheduleRange)
-		{
-			myScheduleRange.ScheduledDay(date).PersonAssignment()
-			               .Should().Be.Null();
 		}
 	}
 }

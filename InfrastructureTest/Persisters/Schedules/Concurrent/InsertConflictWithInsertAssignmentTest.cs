@@ -5,9 +5,9 @@ using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
+namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 {
-	public class InsertConflictWithInsertTest : ScheduleRangeConflictTest
+	public class InsertConflictWithInsertAssignmentTest : ScheduleRangeConcurrentTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
-		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
+		protected override void WhenOtherIsChanging(IScheduleRange othersScheduleRange)
 		{
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
 			var day = othersScheduleRange.ScheduledDay(date);
@@ -33,18 +33,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			DoModify(day);
 		}
 
-		protected override void Then(IEnumerable<PersistConflict> conflicts)
+		protected override void ThenOneRangeHadConflicts(IScheduleRange unsavedScheduleRangeWithConflicts, IEnumerable<PersistConflict> conflicts,
+			bool myScheduleRangeWasTheOneWithConflicts)
 		{
+			unsavedScheduleRangeWithConflicts.ScheduledDay(date).PersonAssignment().ShiftLayers.Count()
+				.Should().Be.EqualTo(myScheduleRangeWasTheOneWithConflicts ? 2 : 1);
+
 			var conflict = conflicts.Single();
 			conflict.DatabaseVersion.Should().Not.Be.Null();
 			conflict.ClientVersion.CurrentItem.Should().Not.Be.Null();
 			conflict.ClientVersion.OriginalItem.Should().Be.Null();
-		}
-
-		protected override void Then(IScheduleRange myScheduleRange)
-		{
-			myScheduleRange.ScheduledDay(date).PersonAssignment().ShiftLayers.Count()
-			               .Should().Be.EqualTo(2);
 		}
 	}
 }

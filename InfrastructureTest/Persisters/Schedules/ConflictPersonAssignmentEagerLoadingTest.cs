@@ -9,14 +9,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class ConflictPersonAssignmentEagerLoadingTest : ScheduleRangePersisterBaseTest
+	public class ConflictPersonAssignmentEagerLoadingTest : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
-			var ass = new PersonAssignment(Person, Scenario, date);
-			scheduleDataInDatabaseAtStart.Add(ass);
+			return new[] { new PersonAssignment(Person, Scenario, date) };
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)

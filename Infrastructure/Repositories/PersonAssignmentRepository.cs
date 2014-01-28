@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 											new[]
 												{
 													typeof(Guid),
-													typeof(DateOnly), 
+													typeof(DateTime), 
 													typeof(Guid), 
 													typeof(Guid),
 													typeof(int)
