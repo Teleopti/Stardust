@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class NoChangesTest : ScheduleRangePersisterBaseTest
+	public class NoChangesTest : ScheduleRangeConflictTest
 	{
 		protected override IEnumerable<IAggregateRoot> Given()
 		{

@@ -43,6 +43,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			makeTarget();
 		}
 
+		protected abstract IEnumerable<IAggregateRoot> Given();
+
 		private void makeTarget()
 		{
 			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
@@ -107,46 +109,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected abstract IEnumerable<IAggregateRoot> Given();
-		protected abstract void WhenOtherHasChanged(IScheduleRange othersScheduleRange);
-		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
-		protected abstract void Then(IEnumerable<PersistConflict> conflicts);
-		protected abstract void Then(IScheduleRange myScheduleRange);
-
-
-		[Test]
-		public void DoTheTest()
-		{
-			var otherDic = loadScheduleDictionary();
-			var otherRange = otherDic[Person];
-			WhenOtherHasChanged(otherRange);
-
-			var myDic = loadScheduleDictionary();
-			Target.Persist(otherRange);
-
-			var myRange = myDic[Person];
-			WhenImChanging(myRange);
-
-			if (ExpectOptimistLockException)
-			{
-				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange));
-			}
-			else
-			{
-				var conflicts = Target.Persist(myRange);
-				Then(conflicts);
-				Then(myRange);
-
-				var canLoadAfterChangeDicVerifier = loadScheduleDictionary()[Person];
-				if (!conflicts.Any())
-				{
-					//if no conflicts, db version should be same as users schedulerange
-					Then(canLoadAfterChangeDicVerifier);
-				}
-				generalAsserts(myRange, conflicts);
-			}
-		}
-
 		protected void DoModify(IScheduleDay scheduleDay)
 		{
 			scheduleDay.Owner.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(),
@@ -154,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 															 MockRepository.GenerateMock<IScheduleTagSetter>());
 		}
 
-		private static void generalAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
+		protected static void GeneralAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
 		{
 			var rangeDiff = range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>());
 
@@ -168,7 +130,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		private IScheduleDictionary loadScheduleDictionary()
+		protected IScheduleDictionary LoadScheduleDictionary()
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{

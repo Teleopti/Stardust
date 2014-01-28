@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	//OverwriteWhenHavingTwoNewAssignments
-	public class Bug25007 : ScheduleRangePersisterBaseTest
+	public class Bug25007 : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
