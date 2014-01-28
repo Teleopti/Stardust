@@ -36,21 +36,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules.Concurrent
 																										IEnumerable<PersistConflict> conflicts,
 																										bool myScheduleRangeWasTheOneWithConflicts)
 		{
+			var conflict = conflicts.Single();
 			if (myScheduleRangeWasTheOneWithConflicts)
 			{
 				unsavedScheduleRangeWithConflicts.ScheduledDay(date).PersonAssignment()
-								 .Should().Be.Null();				
+								 .Should().Be.Null();
+				conflict.DatabaseVersion.Should().Not.Be.Null();
+				conflict.ClientVersion.CurrentItem.Should().Be.Null();
+				conflict.ClientVersion.OriginalItem.Should().Not.Be.Null();
 			}
 			else
 			{
 				unsavedScheduleRangeWithConflicts.ScheduledDay(date).PersonAssignment().MainActivities().Single().Payload
 							.Should().Be.EqualTo(Activity);
+				conflict.DatabaseVersion.Should().Be.Null();
+				conflict.ClientVersion.CurrentItem.Should().Not.Be.Null();
+				conflict.ClientVersion.OriginalItem.Should().Not.Be.Null();
 			}
-
-			var conflict = conflicts.Single();
-			conflict.DatabaseVersion.Should().Not.Be.Null();
-			conflict.ClientVersion.CurrentItem.Should().Be.Null();
-			conflict.ClientVersion.OriginalItem.Should().Not.Be.Null();
 		}
 	}
 }
