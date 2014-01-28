@@ -6290,7 +6290,7 @@ Meeting</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
-    <value>No shifts that matches the contract time could be found</value>
+    <value>No shifts that match the contract time could be found</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="ShiftsInsideThePeriodColon" xml:space="preserve">
