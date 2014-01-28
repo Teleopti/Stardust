@@ -11910,4 +11910,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Yesterday</value>
     <comment>Link in My Report (web)</comment>
   </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Ready Time / Scheduled Ready Time (%)</value>
+    <comment>Label for value in MyReport in web</comment>
+  </data>
 </root>

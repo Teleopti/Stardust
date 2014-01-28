@@ -30,27 +30,27 @@
 	            <div class="myReportValues">@Resources.Value</div>
 	        </div>
 	        <div class="myReportTableRow">
-	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResAdherencePercent</div>
+	            <div class="myReportText">@Resources.KpiAdherence</div>
                 <div class="myReportValues adherenceValue" data-bind="text: Adherence()"></div>
 	        </div>
 	        <div class="myReportTableRow" style="background: #f0f0ff">
-	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResReadyTimePerScheduledReadyTimePercent</div>
-                <div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: Readiness()"></div>
+	            <div class="myReportText">@Resources.ReadyTimePerScheduledReadyTimePercent</div>
+                <div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: ReadyTimePerScheduledReadyTime()"></div>
 	        </div>
 	        <div class="myReportTableRow">
-	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResHandleTime</div>
+	            <div class="myReportText">@Resources.KpiAverageHandleTime</div>
 	            <div class="myReportValues handlingTimeValue" data-bind="text: AverageHandlingTime()"></div>
 	        </div>
 	        <div class="myReportTableRow" style="background: #f0f0ff">
-	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResTalkTime</div>
+	            <div class="myReportText">@Resources.KpiAverageTalkTime</div>
                 <div class="myReportValues talkTimeValue" data-bind="text: AverageTalkTime()"></div>
 	        </div>
 	        <div class="myReportTableRow">
-	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResKpiAverageAfterCallWork</div>
-                <div class="myReportValues afterWorkValue" data-bind="text: AverageAfterWork()"></div>
+	            <div class="myReportText">@Resources.KpiAverageAfterCallWork</div>
+                <div class="myReportValues afterWorkValue" data-bind="text: AverageAfterCallWork()"></div>
 	        </div>
 	        <div class="myReportTableRow" style="background: #f0f0ff">
-	            <div class="myReportText">@Teleopti.Analytics.ReportTexts.Resources.ResAnsweredCalls</div>
+	            <div class="myReportText">@Resources.AnsweredCalls</div>
                 <div class="myReportValues answeredCallsValue" data-bind="text: AnsweredCalls()"></div>
 	        </div>
 	    </div>
