@@ -12,7 +12,7 @@
         <table class="table-condensed">
             <tr>
                 <td>
-                    <div class="input-group">
+                    <div style="margin-bottom: 10px" class="input-group">
                         <span class="input-group-addon" data-bind="clickable: previousDateValid">
                             <i class="glyphicon glyphicon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
                         </span>
@@ -83,11 +83,11 @@
 		
         <p></p>
         <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small" style="width: 50%; overflow: hidden;">
-            <div>
-                <input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
+            <div class="form-group">
+                <input id="Request-add-shift-trade-subject-input" class="form-control" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" maxlength="80" />
             </div>
-            <div>
-                <textarea id="Request-add-shift-trade-message-input" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
+            <div class="form-group">
+                <textarea id="Request-add-shift-trade-message-input" class="form-control" data-bind="value: message, valueUpdate: 'afterkeydown', limitCharacters: 2000" rows="4" class="input-block-level" placeholder="@Resources.Message" />
             </div>
             <div class="pull-right">
                 <button class="btn btn-default cancel-button" data-bind="click: cancelRequest">@Resources.Cancel</button>
