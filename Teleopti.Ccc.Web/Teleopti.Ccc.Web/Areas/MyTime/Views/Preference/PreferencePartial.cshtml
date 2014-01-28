@@ -7,59 +7,70 @@
 }
 <div class="navbar navbar-default">
     <div class="col-xs-5">
-        <form class="navbar-form pull-left">
-            <div class="input-append input-prepend">
-                <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
-                <input data-bind="value: displayDate" type="text" class="span3 text-center" readonly="readonly"/>
-                <button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
-                <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
+        <form class="navbar-form navbar-left">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </button>
+                </span>
+                <input data-bind="value: displayDate" type="text" class="col-lg-3 form-control text-center" readonly="readonly"/>
+                <div class="input-group-btn">
+                    <button class="btn btn-default moment-datepicker">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                    <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                </div>
             </div>
         </form>
-        <ul class="nav">
-            <li class="divider-vertical"></li>
-            @if (Model.ExtendedPreferencesPermission)
-            {
-                <li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
-            }
-            else
-            {
-                <li>
-                    <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
-                                                                                                        {
-                                                                                                            if (optionGroup.Text != Resources.ShiftCategory)
-                                                                                                            {
-                                                                                                                @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
-                                                                                                            }
-                                                                                                            foreach (var option in optionGroup.Options)
-                                                                                                            {
-                                                                                                                @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
-                                                                                                            }
-                                                                                                        }]">
-                        <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
-                     
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
-                            <!-- ko if: Value != '-' -->
-                            <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
-                            <!-- /ko -->
-                            <!-- ko if: Value == '-' -->
-                            <li class="divider"></li>
-                            <!-- /ko -->
-                        </ul>
-                    </div>
-                </li>
-            }
-            <li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
-            <li class="divider-vertical"></li>
-            <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
-            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
-            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="glyphicon glyphicon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
-            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="glyphicon glyphicon-plus"></i></a></li>
-        </ul>
     </div>
+    <ul class="nav navbar-nav">
+        <li class="divider-vertical"></li>
+        @if (Model.ExtendedPreferencesPermission)
+        {
+            <li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
+        }
+        else
+        {
+            <li>
+                <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
+                                                                                                    {
+                                                                                                        if (optionGroup.Text != Resources.ShiftCategory)
+                                                                                                        {
+                                                                                                            @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
+                                                                                                        }
+                                                                                                        foreach (var option in optionGroup.Options)
+                                                                                                        {
+                                                                                                            @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
+                                                                                                        }
+                                                                                                    }]">
+                    <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
+                     
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
+                        <!-- ko if: Value != '-' -->
+                        <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
+                        <!-- /ko -->
+                        <!-- ko if: Value == '-' -->
+                        <li class="divider"></li>
+                        <!-- /ko -->
+                    </ul>
+                </div>
+            </li>
+        }
+        <li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
+        <li class="divider-vertical"></li>
+        <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
+        <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
+        <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="glyphicon glyphicon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
+        <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="glyphicon glyphicon-plus"></i></a></li>
+    </ul>
 </div>
+
 
 <div id="Preference-add-extended-form" class="well well-small clearfix" data-bind="visible: AddPreferenceFormVisible">
     @Html.Partial("AddPreferencesPartial")
