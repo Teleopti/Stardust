@@ -9274,7 +9274,7 @@ Teleopti R&amp;D</value>
     <value>偏好的满足</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>缺席申请 {0} 已被申请。</value>
+    <value>缺席申请 {0} 已被批准。</value>
   </data>
   <data name="Import" xml:space="preserve">
     <value>导入</value>
