@@ -5,7 +5,7 @@
         <span id="Request-add-loaded-ready"></span>
     </div>
     <span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
-    <div class="shift-trade-missing-wcs-message alert alert-block" data-bind="visible: missingWorkflowControlSet">
+    <div class="shift-trade-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">
         @Resources.MissingWorkflowControlSet
     </div>
     <div data-bind="if: !missingWorkflowControlSet()">
@@ -36,7 +36,7 @@
         </table>
     </div>
     <div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
-        <div class="shift-trade-missing-team-message alert alert-block" data-bind="visible: missingMyTeam">
+        <div class="shift-trade-missing-team-message alert alert-warning" data-bind="visible: missingMyTeam">
             @Resources.YouDoNotHaveAccessToAnyTeams
         </div>
         <div class="shift-trade-add-schedule" data-bind="visible: !missingMyTeam() && !missingWorkflowControlSet()">
