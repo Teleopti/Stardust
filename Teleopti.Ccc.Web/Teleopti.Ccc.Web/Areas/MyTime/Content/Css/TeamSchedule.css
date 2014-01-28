@@ -1,12 +1,4 @@
-﻿
-.body-teamschedule {
-	
-}
-.body-teamschedule-inner {
-	
-}
-
-.teamschedule ul 
+﻿.teamschedule ul 
 {
 	margin: 0; 
 	padding: 0;
@@ -14,15 +6,9 @@
 }
 .teamschedule 
 {
-	border: 1px solid #dfdfdf;
-	background: #f8f8f8;
 	width: 100%;
 	padding-top: 25px;
 	padding-bottom: 15px;
-}
-.rgba .teamschedule 
-{
-	border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 .teamschedule-timeline 
@@ -45,7 +31,6 @@
 .teamschedule-timeline-time {
 	height: 100%;
 	font-size: 8px;
-	border-left: 1px solid #dfdfdf;
 }
 .rgba .teamschedule-timeline-time {
 	border-left: 1px solid rgba(0, 0, 0, 0.15);
@@ -59,14 +44,11 @@
 }
 .teamschedule-timeline-label 
 {
-	padding: 1px;
-	padding-left: 4px;
-	padding-right: 5px;
-	border: 1px solid rgba(0, 0, 0, 0.15);
-	background: white;
+	font-size: xx-small;
+	height: 12px !important;
 	left: -17px;
 	position: relative;
-	width: 22px;
+	width: 26px;
 	text-align: center;
 	white-space: nowrap;
 }
@@ -91,6 +73,7 @@
 {
 	vertical-align: bottom;
 	padding-top: 8px;
+	padding-bottom: 8px;
 	height: 19px;
 	width: 100%;
 	border-bottom: 1px solid #dfdfdf;
@@ -108,10 +91,9 @@
 	overflow: hidden;
 	white-space: nowrap;
 	width: 119px;
-	height: 19px;
+	height: 22px;
 	padding-top: 5px;
-	padding-left: 5px;
-	background-color: #f8f8f8;
+	margin-right: 5px;
 }
 .teamschedule-agent-name-hover
 {
@@ -136,13 +118,9 @@
 .teamschedule .layer 
 {
 	vertical-align: bottom;
-	height: 19px;
+	height: 22px;
 	border-radius: 2px;
 }
-
-.teamschedule .gradient {
-	background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, .6) 100%);
-} 
 
 .teamschedule .dayoff 
 {

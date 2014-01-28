@@ -3738,7 +3738,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to With Add Activity you cannot create a second shift..
+        ///   Looks up a localized string similar to You cannot create a second shift with add activity..
         /// </summary>
         public static string CannotCreateSecondShiftWhenAddingActivity {
             get {
@@ -4125,6 +4125,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Chats {
             get {
                 return ResourceManager.GetString("Chats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chat time.
+        /// </summary>
+        public static string ChatTime {
+            get {
+                return ResourceManager.GetString("ChatTime", resourceCulture);
             }
         }
         
@@ -12715,6 +12724,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Metric.
+        /// </summary>
+        public static string Metric {
+            get {
+                return ResourceManager.GetString("Metric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Midnight break:.
         /// </summary>
         public static string MidnightBreakOffsetColon {
@@ -17923,6 +17941,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RangeOfRecurrence {
             get {
                 return ResourceManager.GetString("RangeOfRecurrence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Readiness.
+        /// </summary>
+        public static string Readiness {
+            get {
+                return ResourceManager.GetString("Readiness", resourceCulture);
             }
         }
         
@@ -23547,6 +23574,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Task time.
+        /// </summary>
+        public static string TaskTime {
+            get {
+                return ResourceManager.GetString("TaskTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team.
         /// </summary>
         public static string Team {
@@ -24629,6 +24665,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total task time.
+        /// </summary>
+        public static string TotalTaskTime {
+            get {
+                return ResourceManager.GetString("TotalTaskTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total time.
         /// </summary>
         public static string TotalTime {
@@ -25673,6 +25718,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string Value {
+            get {
+                return ResourceManager.GetString("Value", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Verifying permissions....
         /// </summary>
         public static string VerifyingPermissionsTreeDots {
@@ -26684,6 +26738,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Yesterday.
+        /// </summary>
+        public static string Yesterday {
+            get {
+                return ResourceManager.GetString("Yesterday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes To All.
         /// </summary>
         public static string YesToAll {
@@ -26725,6 +26788,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string YouCanOnlyEnterPreferencesFromDateAccordingToThePreferenceDate {
             get {
                 return ResourceManager.GetString("YouCanOnlyEnterPreferencesFromDateAccordingToThePreferenceDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have access to any teams..
+        /// </summary>
+        public static string YouDoNotHaveAccessToAnyTeams {
+            get {
+                return ResourceManager.GetString("YouDoNotHaveAccessToAnyTeams", resourceCulture);
             }
         }
         

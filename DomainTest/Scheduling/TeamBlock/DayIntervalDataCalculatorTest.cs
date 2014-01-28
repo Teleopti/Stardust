@@ -152,5 +152,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		}
 
+
+		[Test]
+		public void ShouldReturnEmptySkillIntervalIsConsideredForMedianCalculation()
+		{
+			IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+			list.Add(new DateOnly(2013, 10, 01), new List<ISkillIntervalData>());
+			list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData>());
+
+			var result = _target.Calculate(list);
+			Assert.That(result.Count, Is.EqualTo(0));
+		}
     }
 }

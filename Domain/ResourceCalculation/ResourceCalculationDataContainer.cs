@@ -153,38 +153,46 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						if (_skills.TryGetValue(pair.SkillKey, out skills))
 						{
 							AffectedSkills value;
+							double previousResource = 0;
+							double previousCount = 0;
+							var accumulatedEffiencies = pair.Effiencies;
 							if (result.TryGetValue(pair.SkillKey, out value))
 							{
-								foreach (var skill in value.SkillEffiencies)
-								{
-									double effiency;
-									if (pair.Effiencies.TryGetValue(skill.Key, out effiency))
-									{
-										pair.Effiencies[skill.Key] = effiency + skill.Value;
-									}
-									else
-									{
-										pair.Effiencies.Add(skill.Key, skill.Value);
-									}
-								}
-								value = new AffectedSkills
-									{
-										Skills = skills,
-										Resource = value.Resource + pair.Resource.Resource,
-										Count = value.Count + pair.Resource.Count,
-										SkillEffiencies = pair.Effiencies
-									};
+								previousResource = value.Resource;
+								previousCount = value.Count;
+								addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
 							}
-							else
+							value = new AffectedSkills
 							{
-								value = new AffectedSkills { Skills = skills, Resource = pair.Resource.Resource, Count = pair.Resource.Count, SkillEffiencies = pair.Effiencies };
-							}
+								Skills = skills,
+								Resource = previousResource + pair.Resource.Resource,
+								Count = previousCount + pair.Resource.Count,
+								SkillEffiencies = new Dictionary<Guid, double>(accumulatedEffiencies)
+							};
+							
 							result[pair.SkillKey] = value;
 						}
 					}
 				}
 			}
 			return result;
+		}
+
+		private static void addEfficienciesFromSkillCombination(IDictionary<Guid, double> skillEfficienciesForSkillCombination,
+		                                                        IDictionary<Guid, double> accumulatedEffiencies)
+		{
+			foreach (var skill in skillEfficienciesForSkillCombination)
+			{
+				double effiency;
+				if (accumulatedEffiencies.TryGetValue(skill.Key, out effiency))
+				{
+					accumulatedEffiencies[skill.Key] = effiency + skill.Value;
+				}
+				else
+				{
+					accumulatedEffiencies.Add(skill.Key, skill.Value);
+				}
+			}
 		}
 	}
 }

@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping
 
 			const string regex = "(\\:.*\\ )";
 			var output = Regex.Replace(hourString, regex, " ");
-			if (output.Contains(":"))
-				output = localTime.Hour.ToString();
+			//if (output.Contains(":"))
+			//	output = localTime.Hour.ToString();
 
 			return output;
 		}

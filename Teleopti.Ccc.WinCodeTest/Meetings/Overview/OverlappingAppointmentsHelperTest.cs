@@ -56,6 +56,26 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
 			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(40),Is.EqualTo(20));
 			Assert.That(OverlappingAppointmentsHelper.FindRemainsToEvenHalfHour(0),Is.EqualTo(0));
 		}
-	}
 
+		[Test]
+		public void ShoulConsiderMoreThanPreviousMeetingWhenReducingOverlappingToFive()
+		{
+			_target = new OverlappingAppointmentsHelper();
+
+			var simple1 = new SimpleAppointment { StartDateTime = new DateTime(2011, 9, 13, 9, 0, 0), EndDateTime = new DateTime(2011, 9, 13, 16, 0, 0) };
+			var simple2 = new SimpleAppointment { StartDateTime = new DateTime(2011, 9, 13, 9, 30, 0), EndDateTime = new DateTime(2011, 9, 13, 10, 0, 0), PreviousAppointment = simple1 };
+			var simple3 = new SimpleAppointment { StartDateTime = new DateTime(2011, 9, 13, 10, 0, 0), EndDateTime = new DateTime(2011, 9, 13, 11, 0, 0), PreviousAppointment = simple2 };
+			var simple4 = new SimpleAppointment { StartDateTime = new DateTime(2011, 9, 13, 10, 0, 0), EndDateTime = new DateTime(2011, 9, 13, 11, 0, 0), PreviousAppointment = simple3 };
+			var simple5 = new SimpleAppointment { StartDateTime = new DateTime(2011, 9, 13, 10, 0, 0), EndDateTime = new DateTime(2011, 9, 13, 11, 0, 0), PreviousAppointment = simple4 };
+			var simple6 = new SimpleAppointment { StartDateTime = new DateTime(2011, 9, 13, 10, 0, 0), EndDateTime = new DateTime(2011, 9, 13, 11, 0, 0), PreviousAppointment = simple5 };
+			var simple7 = new SimpleAppointment { StartDateTime = new DateTime(2011, 9, 13, 10, 0, 0), EndDateTime = new DateTime(2011, 9, 13, 11, 0, 0), PreviousAppointment = simple6 };
+			
+
+			_appointments = new List<ISimpleAppointment> { simple1, simple2, simple3, simple4, simple5, simple6, simple7};
+
+			var reduced = _target.ReduceOverlappingToFive(_appointments);
+			//five overlapping each other + one that only overlapps one appointment(9:30 - 10:00 only overlapp with 9:00 - 16:00)
+			Assert.AreEqual(6, reduced.Count());
+		}
+	}
 }

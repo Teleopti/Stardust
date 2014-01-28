@@ -3,7 +3,9 @@
 */
 define(function () {
 
-    var timestamp = (new Date()).getTime();
+	Date.prototype.getTeleoptiTime = function () { return new Date().getTime(); };
+
+    var timestamp = new Date().getTime();
     
 	//API
 	return {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.GroupPageCreator
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 //Creates a root Group object & add into GroupPage
                 string personGrpDesc = personGroup.Key.Length > 50 ? personGroup.Key.Substring(0, 48) + ".." : personGroup.Key;
                 IRootPersonGroup rootGroup = new RootPersonGroup(personGrpDesc);
-
+				if (!groupPage.IsUserDefined())
+					rootGroup.SetId(StringHelper.GenerateGuid(personGroup.Key));
                 foreach (var p in personGroup)
                 {
                     rootGroup.AddPerson(p);

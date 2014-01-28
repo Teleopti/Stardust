@@ -29,13 +29,13 @@
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
-									<!-- ko with: Shift -->
+									<!-- ko foreach: Shifts -->
 									<div class="shift" data-bind="
 										template: {
 											name: 'layerTemplate',
 											foreach: Layers
-										}
-									"></div>
+										}">
+									</div>
 									<!-- /ko -->
 
 									<!-- ko if: IsDayOff() -->
@@ -76,9 +76,9 @@
 												<span data-bind="text: ErrorMessage()"></span>
 											</div>
 											<!-- /ko -->
-											
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+											</div>
 										</form>
 										
 										<!-- /ko -->
@@ -106,9 +106,9 @@
 												<span data-bind="text: ErrorMessage()"></span>
 											</div>
 											<!-- /ko -->
-
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+											</div>
 										</form>
 														
 										<!-- /ko -->
@@ -139,22 +139,20 @@
 												<span data-bind="text: $root.Resources.InvalidEndDate"></span>
 											</div>
 											<!-- /ko -->
-
-											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
+											</div>
 										</form>
 										<!-- /ko -->
 										<!-- /ko -->
 									</div>
-									
-									
 								</div>
 							</td>
 						</tr>
 						
-
+						<!-- ko if: !Loading() -->
 						<!-- ko if: AddingActivity -->
-						<!-- ko foreach: Persons -->
+						<!-- ko foreach: SortedPersons -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
 								<div class="person-name nowrap" data-bind="text: Name"></div>
@@ -183,12 +181,10 @@
 						</tr>
 						<!-- /ko -->
 						<!-- /ko -->
-						
+						<!-- /ko -->
 					</tbody>
 				</table>
-				
 			</div>
-
 		</div>
 	</div>
 	

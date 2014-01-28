@@ -29,32 +29,34 @@ namespace Teleopti.Interfaces.Domain
 				while (startTime < layer.Period.EndDateTime)
 				{
 					var currentIntervalPeriod = new DateTimePeriod(startTime, startTime.AddMinutes(minutesSplit));
+					if (currentIntervalPeriod.Intersect(layer.Period))
+					{
+						DateTimePeriod? fractionPeriod = null;
+						if (fractionOfLayerShouldBeIncluded(currentIntervalPeriod, layer))
+						{
+							fractionPeriod = layer.Period.Intersection(currentIntervalPeriod);
+						}
 
-					DateTimePeriod? fractionPeriod = null;
-					if (fractionOfLayerShouldBeIncluded(currentIntervalPeriod, layer))
-					{
-						fractionPeriod = layer.Period.Intersection(currentIntervalPeriod);
-					}
-					
-					var payload = layer.Payload.UnderlyingPayload;
-					var requiresSeat = false;
-					var activity = payload as IActivity;
-					if (activity != null)
-					{
-						requiresSeat = activity.RequiresSeat;
-					}
-					yield return
-						new ResourceLayer
-							{
-								Resource = fractionPeriod.HasValue ? fractionPeriod.Value.ElapsedTime().TotalMinutes / minutesSplit : 1d,
-								PayloadId = payload.Id.GetValueOrDefault(),
-								RequiresSeat = requiresSeat,
-								Period = currentIntervalPeriod,
-								FractionPeriod = fractionPeriod
-							};
-					if (currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime)
-					{
-						break;
+						var payload = layer.Payload.UnderlyingPayload;
+						var requiresSeat = false;
+						var activity = payload as IActivity;
+						if (activity != null)
+						{
+							requiresSeat = activity.RequiresSeat;
+						}
+						yield return
+							new ResourceLayer
+								{
+									Resource = fractionPeriod.HasValue ? fractionPeriod.Value.ElapsedTime().TotalMinutes/minutesSplit : 1d,
+									PayloadId = payload.Id.GetValueOrDefault(),
+									RequiresSeat = requiresSeat,
+									Period = currentIntervalPeriod,
+									FractionPeriod = fractionPeriod
+								};
+						if (currentIntervalPeriod.EndDateTime > layer.Period.EndDateTime)
+						{
+							break;
+						}
 					}
 					startTime = currentIntervalPeriod.EndDateTime;
 				}
