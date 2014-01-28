@@ -78,9 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
 				new ScheduleTagRepository(unitOfWork).Add(ScheduleTag);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				var scheduleDatas = new List<IPersistableScheduleData>();
-				Given(scheduleDatas);
-				scheduleDatas.ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
+				Given().ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
 				unitOfWork.PersistAll();
 			}
 		}
@@ -109,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected abstract void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart);
+		protected abstract IEnumerable<IAggregateRoot> Given();
 		protected abstract void WhenOtherHasChanged(IScheduleRange othersScheduleRange);
 		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
 		protected abstract void Then(IEnumerable<PersistConflict> conflicts);

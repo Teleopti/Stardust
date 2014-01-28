@@ -12,16 +12,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2001, 1, 2);
 
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override IEnumerable<IAggregateRoot> Given()
 		{
 			var restriction = new StudentAvailabilityRestriction
-				{
-					StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(14)),
-					EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(14)),
-					WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(14))
-				};
-			var studAvail = new StudentAvailabilityDay(Person, date, new [] {restriction});
-			scheduleDataInDatabaseAtStart.Add(studAvail);
+			{
+				StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(14)),
+				EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(14)),
+				WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(14))
+			};
+			var studAvail = new StudentAvailabilityDay(Person, date, new[] { restriction });
+			return new[] { studAvail };
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)

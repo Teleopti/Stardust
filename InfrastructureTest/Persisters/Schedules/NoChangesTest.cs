@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Interfaces.Domain;
@@ -7,8 +8,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	public class NoChangesTest : ScheduleRangePersisterBaseTest
 	{
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override IEnumerable<IAggregateRoot> Given()
 		{
+			return Enumerable.Empty<IAggregateRoot>();
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)

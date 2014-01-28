@@ -12,16 +12,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override IEnumerable<IAggregateRoot> Given()
 		{
-			var restriction = new PreferenceRestriction {Absence = Absence};
+			var restriction = new PreferenceRestriction { Absence = Absence };
 			restriction.AddActivityRestriction(new ActivityRestriction(Activity));
 			restriction.DayOffTemplate = DayOffTemplate;
 			restriction.ShiftCategory = ShiftCategory;
 			restriction.StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(11));
 			restriction.EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(11));
 			var prefDay = new PreferenceDay(Person, date, restriction);
-			scheduleDataInDatabaseAtStart.Add(prefDay);
+			return new[] { prefDay };
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)
