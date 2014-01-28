@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
         {
 			//Browser.Interactions.AssertExists(".btn[disabled]>.initialize-shift-trade");
-			Browser.Interactions.AssertNotExists(".navbar-text", ".initialize-shift-trade");
+            Browser.Interactions.AssertNotExists(".navbar", ".initialize-shift-trade");
         }
 
 		private static void AssertAgentIsDisplayed(string name)
