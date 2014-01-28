@@ -176,6 +176,7 @@
     <Compile Include="Persisters\Schedules\Concurrent\DeleteConflictWithDeleteAssignmentTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\DeleteConflictWithDeleteScheduleDataTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\DeleteConflictWithUpdateAssignmentTest.cs" />
+    <Compile Include="Persisters\Schedules\Concurrent\DeleteConflictWithUpdateScheduleDataTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\InsertConflictWithInsertAssignmentTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\ScheduleRangeConcurrentTest.cs" />
     <Compile Include="Persisters\Schedules\Concurrent\UpdateConflictWithUpdateAssignmentTest.cs" />
