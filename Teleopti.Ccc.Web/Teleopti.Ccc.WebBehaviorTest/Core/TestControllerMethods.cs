@@ -23,10 +23,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Navigation.GoToWaitForCompleted("Test/NonExistingDatasourceCookie");
 		}
 
-		public static void SetCurrentTime(DateTime time)
-		{
-			WebRequestOutsideBrowser("Test/SetCurrentTime?dateSet=" + time);
-		}
 
 		public static void BeforeTestRun()
 		{
@@ -100,11 +96,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.AssertJavascriptResultContains("return (Teleopti != undefined) ? 'go' : 'no go';", "go");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Completely loaded");
 		}
-
-
-
-
-
 
 		public static void WebRequestOutsideBrowser(string pageUrl)
 		{

@@ -22,9 +22,12 @@ Scenario: Show team
 	When I view Real time adherence for site 'Paris'
 	Then I should see the team 'Green'
 
-@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each site
-	Given there is an activity named 'Phone'
+	Given I have a role with
+	| Field                                  | Value             |
+	| Name                                   | Real time analyst |
+	| Access to real time adherence overview | True              |
+	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a site named 'London'
@@ -63,8 +66,8 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Staffing effect | -1           |
 	 When the current time is '2014-01-21 13:00'
 	 And I view Real time adherence overview
-	 And Pierre Baldi sets his phone state to 'Pause'
-	 And Ashley Andeen sets her phone state to 'Ready'
+	 And 'Pierre Baldi' sets his phone state to 'Pause'
+	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 @ignore

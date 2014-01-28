@@ -252,6 +252,8 @@
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\SitesController.cs" />
+    <Compile Include="Areas\Anywhere\Core\SiteViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelMapper.cs" />
