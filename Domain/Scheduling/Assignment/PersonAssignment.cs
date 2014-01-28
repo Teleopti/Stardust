@@ -330,6 +330,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_shiftLayers.Insert(index,layer);
 		}
 
+		public void MoveLayerVertical(IMoveLayerVertical2 target, IShiftLayer layer)
+		{
+			target.Move(_shiftLayers, layer);
+		}
+
 		public virtual IDayOff DayOff()
 		{
 			if (_dayOffTemplate == null)

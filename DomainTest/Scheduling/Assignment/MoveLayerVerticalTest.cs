@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[TestFixture]
 	public class MoveLayerVerticalTest
 	{
+		#region old
 		[Test]
 		public void ShouldMoveUpMainshiftLayer()
 		{
@@ -189,5 +190,146 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
 										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
 		}
+
+		#endregion
+
+		#region new
+		[Test]
+		public void MoveUpPersonal_WhenThereAreMainAndPersonalLayers_ShowMoveLayerBeforeTheTargetLayer()
+		{
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer("activity1")
+											.AddMainShiftLayer()
+											.AddMainShiftLayer()
+											.AddPersonalLayer("activity2")
+											.AddMainShiftLayer()
+											.AddPersonalLayer("activity3")
+											.CreatePart();
+
+			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3");
+
+			var target = new MoveLayerUp();
+			scheduleDay.PersonAssignment().MoveLayerVertical(target,layerToMove);
+
+			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+		}
+
+		[Test]
+		public void MoveDownPersonal_WhenThereAreMainAndPersonalLayers_ShowMoveLayerAfterTheTargetLayer()
+		{
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer("activity1")
+											.AddMainShiftLayer()
+											.AddMainShiftLayer()
+											.AddPersonalLayer("activity2")
+											.AddMainShiftLayer()
+											.AddPersonalLayer("activity3")
+											.CreatePart();
+
+			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity1");
+			var target = new MoveLayerDown();
+
+			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+
+			scheduleDay.PersonAssignment().PersonalActivities().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity2", "activity1", "activity3");
+		}
+
+		[Test]
+		public void Move_MainShiftLayerUp_ShouldMoveTheTargetLayerAboveTheMainShiftLayerThatIsBeforeTheTargetLayer()
+		{
+			
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity1")
+											.AddMainShiftLayer("activity2")
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity3")
+											.AddPersonalLayer()
+											.CreatePart();
+
+			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3");
+			var target = new MoveLayerUp();
+
+			scheduleDay.PersonAssignment().MoveLayerVertical(target,layerToMove);
+
+			scheduleDay.PersonAssignment().MainActivities().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+		}
+
+		[Test]
+		public void Move_MainShiftLayerDown_ShouldMoveTheTargetLayerBelowTheMainShiftLayerThatIsAfterTheTargetLayer()
+		{
+
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime()
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity1")
+											.AddMainShiftLayer("activity2")
+											.AddPersonalLayer()
+											.AddMainShiftLayer("activity3")
+											.AddPersonalLayer()
+											.CreatePart();
+
+			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity2");
+			var target = new MoveLayerDown();
+
+			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+
+			scheduleDay.PersonAssignment().MainActivities().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+		}
+
+		[Test]
+		public void Move_OvertimeShiftLayerUp_ShouldMoveTheTargetLayerAboveTheOvertimeShiftLayerThatIsBeforeTheTargetLayer()
+		{
+
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddOvertime("activity1")
+											.AddPersonalLayer()
+											.AddOvertime("activity2")
+											.AddMainShiftLayer()
+											.AddPersonalLayer()
+											.AddOvertime("activity3")
+											.AddPersonalLayer()
+											.CreatePart();
+
+			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity3");
+			var target = new MoveLayerUp();
+
+			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+
+			scheduleDay.PersonAssignment().OvertimeActivities().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+		}
+
+		[Test]
+		public void Move_OvertimeShiftLayerDown_ShouldMoveTheTargetLayerBelowTheovertimeShiftLayerThatIsAfterTheTargetLayer()
+		{
+
+			var scheduleDay = new SchedulePartFactoryForDomain()
+											.AddMainShiftLayer()
+											.AddPersonalLayer()
+											.AddOvertime("activity1")
+											.AddOvertime("activity2")
+											.AddPersonalLayer()
+											.AddOvertime("activity3")
+											.AddPersonalLayer()
+											.CreatePart();
+
+			var layerToMove = scheduleDay.PersonAssignment().ShiftLayers.First(s => s.Payload.Description.Name == "activity2");
+			var target = new MoveLayerDown();
+
+			scheduleDay.PersonAssignment().MoveLayerVertical(target, layerToMove);
+
+			scheduleDay.PersonAssignment().OvertimeActivities().Select(l => l.Payload.Description.Name)
+										 .Should().Have.SameSequenceAs("activity1", "activity3", "activity2");
+		}
+
+		#endregion
 	}
 }

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			moveLayer(personAssignment, layer, 1);
 		}
-
+		
 		private static void moveLayer(IPersonAssignment personAssignment, ILayer<IActivity> layer, int positionMove)
 		{
 
@@ -64,6 +64,36 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			oldLayers.RemoveAt(index);
 			oldLayers.Insert(index + positionMove, layerToMove);
 			return oldLayers;
+		}
+	}
+
+
+	public class MoveLayerUp : IMoveLayerVertical2
+	{
+
+		public void Move(IList<IShiftLayer> layers, IShiftLayer layer)
+		{
+			var t = layer.GetType();
+			var currentIndex = layers.IndexOf(layer);
+			var toBeReplaced = layers.Take(currentIndex - 1).Last(l => l.GetType() == t);
+
+			var indexToInsert = layers.IndexOf(toBeReplaced);
+
+			layers.Remove(layer);
+			layers.Insert(indexToInsert, layer);
+		}
+	}
+
+	public class MoveLayerDown : IMoveLayerVertical2
+	{
+		public void Move(IList<IShiftLayer> layers, IShiftLayer layer)
+		{
+			var t = layer.GetType();
+			var currentIndex = layers.IndexOf(layer);
+			var toBeReplaced = layers.Skip(currentIndex + 1).First(l => l.GetType() == t);
+
+			layers.Remove(toBeReplaced);
+			layers.Insert(currentIndex, toBeReplaced);
 		}
 	}
 }
