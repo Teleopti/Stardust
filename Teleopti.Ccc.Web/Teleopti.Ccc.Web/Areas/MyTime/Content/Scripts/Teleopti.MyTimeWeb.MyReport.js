@@ -14,7 +14,8 @@
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
 		self.selectedDateInternal = ko.observable(yesterDayFromNow);
-	    self.weekStart = ko.observable(1);
+		self.weekStart = ko.observable(1);
+		self.dataAvailable = ko.observable();
 		self.selectedDate = ko.computed({
 		    read: function () {
 		        return self.selectedDateInternal();
@@ -38,6 +39,7 @@
 				vm.averageHandlingTime(data.AverageHandlingTime);
 				vm.averageTalkTime(data.AverageTalkTime);
 				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
+			    vm.dataAvailable(data.DataAvailable);
 			}
 		});
 	}

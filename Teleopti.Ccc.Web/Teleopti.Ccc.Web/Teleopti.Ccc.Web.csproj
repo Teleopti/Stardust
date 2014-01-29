@@ -1085,7 +1085,6 @@
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.map" />
     <Content Include="Areas\MyTime\Views\MyReport\MyReportPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\MonthPartial.cshtml" />
-    <Content Include="Areas\MyTime\Views\MyReport\NoReportPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
