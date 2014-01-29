@@ -2,7 +2,6 @@
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.WebReports;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
@@ -17,13 +16,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		public void ShouldReturnDailyMetricsViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IDailyMetricsMapper>();
-			var myReportDataProvider = MockRepository.GenerateMock<IMyReportDataProvider>();
-			var target = new MyReportViewModelFactory(myReportDataProvider, mapper);
+			var dailyMetricsForDayQuery = MockRepository.GenerateMock<IDailyMetricsForDayQuery>();
+			var target = new MyReportViewModelFactory(dailyMetricsForDayQuery, mapper);
 			var dataModel = new DailyMetricsForDayResult();
 			var viewModel = new DailyMetricsViewModel();
 			var date = DateOnly.Today;
 
-			myReportDataProvider.Stub(x => x.RetrieveDailyMetricsData(date)).Return(dataModel);
+			dailyMetricsForDayQuery.Stub(x => x.Execute(date)).Return(dataModel);
 			mapper.Stub(x => x.Map(dataModel)).Return(viewModel);
 
 			var result = target.CreateDailyMetricsViewModel(date);

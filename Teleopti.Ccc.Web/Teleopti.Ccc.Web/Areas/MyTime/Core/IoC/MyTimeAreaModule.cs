@@ -17,7 +17,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -187,7 +186,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 		private static void registerMyReportTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<DailyMetricsForDayQuery>().As<IDailyMetricsForDayQuery>();
-			builder.RegisterType<MyReportDataProvider>().As<IMyReportDataProvider>();
 			builder.RegisterType<DailyMetricsMapper>().As<IDailyMetricsMapper>();
 			builder.RegisterType<MyReportViewModelFactory>().As<IMyReportViewModelFactory>();
 		}

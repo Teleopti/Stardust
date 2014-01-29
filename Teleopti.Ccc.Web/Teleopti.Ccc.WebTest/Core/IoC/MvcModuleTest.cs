@@ -28,7 +28,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
@@ -37,7 +36,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -587,13 +585,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolveMyReportDailyMetricsMapper()
 		{
 			requestContainer.Resolve<IDailyMetricsMapper>()
-				.Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldResolveMyReportMyReportDataProvider()
-		{
-			requestContainer.Resolve<IMyReportDataProvider>()
 				.Should().Not.Be.Null();
 		}
 
