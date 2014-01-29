@@ -75,7 +75,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList);
 
 			var blocksToWorkWith = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
-			                                                  schedulingOptions);
+			                                                     schedulingOptions.UseTeamBlockPerOption,
+			                                                     schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+			                                                     schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 			blocksToWorkWith = _filterForEqualNumberOfCategoryFairness.Filter(blocksToWorkWith);
 			

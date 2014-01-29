@@ -47,18 +47,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, 
 							IOptimizationPreferences optimizationPreferences, IDictionary<DayOfWeek, int> weekDayPoints)
 		{
-			if (optimizationPreferences.Extra.UseTeamBlockOption && !optimizationPreferences.Extra.KeepSameDaysOffInTeam)
-				return;
-			
-			//Remove this as soon as possible
-			schedulingOptions.UseTeamBlockPerOption = true;
-			schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
-			//refact to take correct params
-			var allTeamBlocks = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+
+			var allTeamBlocks = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true,
+			                                                  BlockFinderType.SchedulePeriod,
+			                                                  schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 			var teamBlocksToWorkWith = _filterForTeamBlockInSelection.Filter(allTeamBlocks,
 																		  selectedPersons, selectedPeriod);
 
 			teamBlocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksToWorkWith, scheduleDictionary);
+			//this one does not work for now
 			var seniorityInfoDictionary = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith).ToDictionary(k => k.TeamBlockInfo, v => v.Points);
 
 			while (seniorityInfoDictionary.Count > 0)
@@ -123,17 +120,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		private static double calculateDaysOffSeniorityValue(ITeamBlockInfo teamBlockInfo, IDictionary<DayOfWeek, int> weekDayPoints)
 		{
-			//all days off is the same for all team members
-			var matrix = teamBlockInfo.MatrixesForGroupAndBlock().First();
 			double totalPoints = 0;
-			foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
+			foreach (var matrix in teamBlockInfo.MatrixesForGroupAndBlock())
 			{
-				if (scheduleDayPro.DaySchedulePart().SignificantPart() == SchedulePartView.DayOff)
+				foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
 				{
+					if (scheduleDayPro.DaySchedulePart().SignificantPart() != SchedulePartView.DayOff) 
+						continue;
+
 					var dayOfWeek = scheduleDayPro.Day.DayOfWeek;
 					totalPoints += weekDayPoints[dayOfWeek];
 				}
 			}
+
 			return totalPoints;
 		}
 

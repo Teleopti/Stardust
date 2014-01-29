@@ -58,7 +58,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             tempSchedulingOptions.UseBlockOptimizing = BlockFinderType.SingleDay ;
             var singleAgentGroupPage = new GroupPageLight {Key = "SingleAgentTeam", Name = "SingleAgentTeam"};
             tempSchedulingOptions.GroupOnGroupPageForTeamBlockPer = singleAgentGroupPage;
-            var listOfAllTeamBlock = _constructTeamBlock.Construct(modifiedMatrixList, selectedPeriod, selectedPersons, tempSchedulingOptions);
+			var listOfAllTeamBlock = _constructTeamBlock.Construct(modifiedMatrixList, selectedPeriod, selectedPersons, schedulingOptions.UseTeamBlockPerOption,
+																 schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 schedulingOptions.GroupOnGroupPageForTeamBlockPer);
             //var seniorityInfos = _seniorityExtractor.ExtractSeniority(listOfAllTeamBlock);
 
         }
