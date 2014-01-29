@@ -10,7 +10,7 @@
 			<form class="navbar-form pull-left">
 				<div class="input-append input-prepend">
 					<button id="report-view-date-nav-prev" class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.previousDay"><i class="icon-arrow-left"></i></button>
-                    <input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { format: datePickerFormat }" type="text" class="span3 text-center" readonly="readonly"/>
+					<input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { format: datePickerFormat }" type="text" class="span3 text-center" readonly="readonly" />
 					<button class="btn moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }"><i class="icon-th"></i></button>
 					<button id="report-view-date-nav-next" class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.nextDay"><i class="icon-arrow-right"></i></button>
 				</div>
@@ -23,38 +23,39 @@
 				@Teleopti.Analytics.ReportTexts.Resources.ResNoScorecardAvailable
 			</div>
 		</div>
-		<div class="myReportFigures" data-bind="if: dataAvailable">
-			<div class="myReportTable">
-				<div class="myReportHeader myReportTableRow">
-					<div class="myReportHeaderText">@Resources.Metric</div>
-					<div class="myReportValues">@Resources.Value</div>
-				</div>
-				<div class="myReportTableRow">
-					<div class="myReportText">@Resources.KpiAdherence</div>
-					<div class="myReportValues adherenceValue" data-bind="text: adherence"></div>
-				</div>
-				<div class="myReportTableRow" style="background: #f0f0ff">
-					<div class="myReportText">@Resources.ReadyTimePerScheduledReadyTimePercent</div>
-					<div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: readyTimePerScheduledReadyTime"></div>
-				</div>
-				<div class="myReportTableRow">
-					<div class="myReportText">@Resources.KpiAverageHandleTime</div>
-					<div class="myReportValues handlingTimeValue" data-bind="text: averageHandlingTime"></div>
-				</div>
-				<div class="myReportTableRow" style="background: #f0f0ff">
-					<div class="myReportText">@Resources.KpiAverageTalkTime</div>
-					<div class="myReportValues talkTimeValue" data-bind="text: averageTalkTime"></div>
-				</div>
-				<div class="myReportTableRow">
-					<div class="myReportText">@Resources.KpiAverageAfterCallWork</div>
-					<div class="myReportValues afterWorkValue" data-bind="text: averageAfterCallWork"></div>
-				</div>
-				<div class="myReportTableRow" style="background: #f0f0ff">
-					<div class="myReportText">@Resources.AnsweredCalls</div>
-					<div class="myReportValues answeredCallsValue" data-bind="text: answeredCalls"></div>
+		<div data-bind="if: dataAvailable">
+			<div class="myReportFigures">
+				<div class="myReportTable">
+					<div class="myReportHeader myReportTableRow">
+						<div class="myReportHeaderText">@Resources.Metric</div>
+						<div class="myReportValues">@Resources.Value</div>
+					</div>
+					<div class="myReportTableRow">
+						<div class="myReportText">@Resources.KpiAdherence</div>
+						<div class="myReportValues adherenceValue" data-bind="text: adherence"></div>
+					</div>
+					<div class="myReportTableRow" style="background: #f0f0ff">
+						<div class="myReportText">@Resources.ReadyTimePerScheduledReadyTimePercent</div>
+						<div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: readyTimePerScheduledReadyTime"></div>
+					</div>
+					<div class="myReportTableRow">
+						<div class="myReportText">@Resources.KpiAverageHandleTime</div>
+						<div class="myReportValues handlingTimeValue" data-bind="text: averageHandlingTime"></div>
+					</div>
+					<div class="myReportTableRow" style="background: #f0f0ff">
+						<div class="myReportText">@Resources.KpiAverageTalkTime</div>
+						<div class="myReportValues talkTimeValue" data-bind="text: averageTalkTime"></div>
+					</div>
+					<div class="myReportTableRow">
+						<div class="myReportText">@Resources.KpiAverageAfterCallWork</div>
+						<div class="myReportValues afterWorkValue" data-bind="text: averageAfterCallWork"></div>
+					</div>
+					<div class="myReportTableRow" style="background: #f0f0ff">
+						<div class="myReportText">@Resources.AnsweredCalls</div>
+						<div class="myReportValues answeredCallsValue" data-bind="text: answeredCalls"></div>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-	
 </div>
