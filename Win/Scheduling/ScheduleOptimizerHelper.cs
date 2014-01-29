@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -671,7 +672,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					if (optimizerPreferences.General.OptimizationStepFairness)
 					{
 						recalculateIfContinuedStep(continuedStep, selectedPeriod);
-						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod);
+						runFairness(tagSetter, selectedPersons, schedulingOptions, selectedPeriod, optimizerPreferences);
 					}
 					
 				}
@@ -693,7 +694,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		private void runFairness(IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
-			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizerPreferences)
 		{
 			var matrixListForFairness = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
@@ -713,9 +714,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if(!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod)) return;
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
 
-            //day off fairness
-		    var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationService>();
-            teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService);
+			//day off fairness
+			var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationService>();
+			teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService);
+
+			//day off seniority faines according to Micke
+			var seniorityTeamBlockSwapperService = _container.Resolve<ISeniorityTeamBlockSwapperService>();
+			seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
+			                                         _schedulerStateHolder.Schedules, rollbackService, optimizerPreferences,
+			                                         new WeekDayPoints().GetWeekDaysPoints());
 
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,schedulingOptions, _stateHolder.ShiftCategories.ToList(),_schedulerStateHolder.Schedules, rollbackService);
