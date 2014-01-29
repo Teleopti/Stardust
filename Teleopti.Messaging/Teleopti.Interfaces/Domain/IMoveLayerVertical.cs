@@ -2,14 +2,15 @@
 
 namespace Teleopti.Interfaces.Domain
 {
+	
 	public interface IMoveLayerVertical
 	{
-		void MoveUp(IPersonAssignment personAssignment, ILayer<IActivity> layer);
-		void MoveDown(IPersonAssignment personAssignment, ILayer<IActivity> layer);
+		void Move(IList<IShiftLayer> layers, IShiftLayer layer);
 	}
 
-	public interface IMoveLayerVertical2
+	public interface IMoveShiftLayerVertical
 	{
-		void Move(IList<IShiftLayer> layers, IShiftLayer layer);
+		IMoveLayerVertical MoveUp { get; }
+		IMoveLayerVertical MoveDown { get; }
 	}
 }
