@@ -71,5 +71,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             }
             return listOfAllTeamBlock;
         }
+        
     }
 }
