@@ -310,7 +310,18 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForTeamBlockInSelectionTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterPersonsForTotalDistributionTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\TeamBlockSwapperTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep1.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep2.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DescisionMakerToSwapTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapperService.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorTeamBlockLocator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffFairnessOptimizationService.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockLocatorWithHigestPoints.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\WeekDayPointCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\WeekDayPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocksTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractorTest.cs" />
@@ -1223,7 +1234,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
-    <Folder Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Forecasting\DayInMonthIndex\DayInMonthSeasonalityData.txt">
