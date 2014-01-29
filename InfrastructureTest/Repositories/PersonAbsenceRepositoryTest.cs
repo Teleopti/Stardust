@@ -195,7 +195,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(2, retList.Count);
         }
 
-        #region Henke
         [Test]
         public void VerifyCanReadAllPersonAbsencesForOnePersonAndAbsence()
         {
@@ -262,7 +261,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(2, retList.Count);
         }
 
-        #endregion //Henke
 
         /// <summary>
         /// Verifies find assignments based on dates and agents.

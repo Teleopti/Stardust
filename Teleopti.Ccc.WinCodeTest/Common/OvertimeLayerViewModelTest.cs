@@ -5,6 +5,7 @@ using System.Windows;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -60,13 +61,13 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void ShouldMoveUp()
 		{
 			var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
-			var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
 			var lastLayer = ass.OvertimeActivities().Last();
-			var target = new OvertimeLayerViewModel(observer, lastLayer, ass, stubbedEventAggregator(), moveupdown);
+			var expectedLastAfterMove = ass.OvertimeActivities().Last(l => l != lastLayer);
+			var target = new OvertimeLayerViewModel(observer, lastLayer, ass, stubbedEventAggregator(), new MoveShiftLayerVertical());
 			target.MoveUp();
 
-			moveupdown.AssertWasCalled(x => x.MoveUp(ass, lastLayer));
+			ass.OvertimeActivities().Last().Should().Be.EqualTo(expectedLastAfterMove);
 			observer.AssertWasCalled(x => x.LayerMovedVertically(target));
 		}
 
@@ -74,14 +75,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void ShouldMoveDown()
 		{
 			var observer = MockRepository.GenerateMock<ILayerViewModelObserver>();
-			var moveupdown = MockRepository.GenerateMock<IMoveLayerVertical>();
 			var ass = PersonAssignmentFactory.CreateAssignmentWithThreeOvertimeLayers();
 			var firstLayer = ass.OvertimeActivities().First();
-			var target = new OvertimeLayerViewModel(observer, firstLayer, ass, stubbedEventAggregator(), moveupdown);
+			var expectedFirstAfterMove = ass.OvertimeActivities().Skip(1).First();
+			var target = new OvertimeLayerViewModel(observer, firstLayer, ass, stubbedEventAggregator(), new MoveShiftLayerVertical());
 			target.MoveDown();
 
-			moveupdown.AssertWasCalled(x => x.MoveDown(ass, firstLayer));
 			observer.AssertWasCalled(x => x.LayerMovedVertically(target));
+			ass.OvertimeActivities().First().Should().Be.EqualTo(expectedFirstAfterMove);
 		}
 
 		private static IEventAggregator stubbedEventAggregator()

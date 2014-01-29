@@ -446,6 +446,8 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
     <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityAddedEvent.cs" />
+    <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
+    <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
