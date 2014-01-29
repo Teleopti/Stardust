@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -248,6 +249,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>();
 			builder.RegisterType<TeamBlockSwap>().As<ITeamBlockSwap>();
 	        builder.RegisterType<TeamBlockLockValidator>().As<ITeamBlockLockValidator>();
+			builder.RegisterType<SeniorityTeamBlockSwapperService>().As<ISeniorityTeamBlockSwapperService>();
+			//ISeniorityTeamBlockSwapperService
 
 			//common
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
