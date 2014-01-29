@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Globalization;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.WebReports;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -11,12 +13,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 	[TestFixture]
 	public class DailyMetricsMapperTest
 	{
+		private ILoggedOnUser _loggedOnUser;
+
+		[SetUp]
+		public void Setup()
+		{
+			_loggedOnUser = MockRepository.GenerateStrictMock<ILoggedOnUser>();
+			_loggedOnUser.Expect(u => u.CurrentUser()).Return(PersonFactory.CreatePersonWithBasicPermissionInfo("ja", "nej"));
+		}
 		[Test]
 		public void ShouldMapAnsweredCalls()
 		{
 			var target = new DailyMetricsMapper();
 			var dataModel = new DailyMetricsForDayResult {AnsweredCalls = 55};
-			var viewModel = target.Map(dataModel);
+			var viewModel = target.Map(dataModel, _loggedOnUser);
 
 			viewModel.AnsweredCalls.Should().Be.EqualTo(dataModel.AnsweredCalls);
 		}
@@ -26,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		{
 			var target = new DailyMetricsMapper();
 			var dataModel = new DailyMetricsForDayResult { AfterCallWorkTimeAverage = new TimeSpan(0,0,40) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = target.Map(dataModel, _loggedOnUser);
 
 			viewModel.AverageAfterCallWork.Should().Be.EqualTo(new TimeSpan(0,0,40).TotalSeconds.ToString(CultureInfo.InvariantCulture));
 		}
@@ -36,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		{
 			var target = new DailyMetricsMapper();
 			var dataModel = new DailyMetricsForDayResult { TalkTimeAverage = new TimeSpan(0, 0, 110) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = target.Map(dataModel, _loggedOnUser);
 
 			viewModel.AverageTalkTime.Should().Be.EqualTo(new TimeSpan(0, 0, 110).TotalSeconds.ToString(CultureInfo.InvariantCulture));
 		}
@@ -46,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		{
 			var target = new DailyMetricsMapper();
 			var dataModel = new DailyMetricsForDayResult { HandlingTimeAverage = new TimeSpan(0, 0, 120) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = target.Map(dataModel, _loggedOnUser);
 
 			viewModel.AverageHandlingTime.Should().Be.EqualTo(new TimeSpan(0, 0, 120).TotalSeconds.ToString(CultureInfo.InvariantCulture));
 		}
@@ -56,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		{
 			var target = new DailyMetricsMapper();
 			var dataModel = new DailyMetricsForDayResult { ReadyTimePerScheduledReadyTime = new Percent(0.75) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = target.Map(dataModel, _loggedOnUser);
 
 			viewModel.ReadyTimePerScheduledReadyTime.Should().Be.EqualTo(75.ToString(CultureInfo.InvariantCulture));
 		}
@@ -66,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		{
 			var target = new DailyMetricsMapper();
 			var dataModel = new DailyMetricsForDayResult { Adherence = new Percent(0.80) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = target.Map(dataModel, _loggedOnUser);
 
 			viewModel.Adherence.Should().Be.EqualTo(80.ToString(CultureInfo.InvariantCulture));
 		}
@@ -75,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		public void ShouldSetDataAvailableToFalseWhenDataIsUnavailable()
 		{
 			var target = new DailyMetricsMapper();
-			var viewModel = target.Map(null);
+			var viewModel = target.Map(null, null);
 
 			viewModel.DataAvailable.Should().Be.False();
 		}
@@ -84,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		public void ShouldSetDataAvailableToTrueWhenDataIsAvailable()
 		{
 			var target = new DailyMetricsMapper();
-			var viewModel = target.Map(new DailyMetricsForDayResult());
+			var viewModel = target.Map(new DailyMetricsForDayResult(), _loggedOnUser);
 
 			viewModel.DataAvailable.Should().Be.True();
 		}

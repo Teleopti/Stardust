@@ -9,10 +9,10 @@
 		<div class="navbar-inner">
 			<form class="navbar-form pull-left">
 				<div class="input-append input-prepend">
-					<button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.previousDay"><i class="icon-arrow-left"></i></button>
-                    <input name="sel-date" id="sel-date" data-bind="datepicker: selectedDate, datepickerOptions: { format: datePickerFormat }" type="text" class="span3 text-center" readonly="readonly"/>
+					<button id="report-view-date-nav-prev" class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.previousDay"><i class="icon-arrow-left"></i></button>
+                    <input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { format: datePickerFormat }" type="text" class="span3 text-center" readonly="readonly"/>
 					<button class="btn moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }"><i class="icon-th"></i></button>
-					<button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.nextDay"><i class="icon-arrow-right"></i></button>
+					<button id="report-view-date-nav-next" class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.nextDay"><i class="icon-arrow-right"></i></button>
 				</div>
 			</form>
 			<ul class="nav">
@@ -27,7 +27,7 @@
 			</div>
 		</div>
 		<div class="myReportFigures" data-bind="if: dataAvailable">
-			<div class=" myreporttable">
+			<div class="myReportTable">
 				<div class="myReportHeader myReportTableRow">
 					<div class="myReportHeaderText">@Resources.Metric</div>
 					<div class="myReportValues">@Resources.Value</div>
