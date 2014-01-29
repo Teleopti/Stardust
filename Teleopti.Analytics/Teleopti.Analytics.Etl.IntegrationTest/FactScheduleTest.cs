@@ -114,7 +114,15 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			Assert.That(sumReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(3240));
 			Assert.That(sumReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(3240));
+
+            Assert.That(sumDeviationSceduledTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(25560));
+            Assert.That(sumDeviationSceduledTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(27720));
 			
+            Assert.That(sumDeviationSceduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(23760));
+            Assert.That(sumDeviationSceduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(26640));
+			
+ 
+
 		}
 
 		private static int countIntervalsPerLocalDate(string connectionString, IPerson person, DateTime datelocal)
@@ -176,7 +184,47 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			}
 
 		}
-    	
+
+        private static int sumDeviationSceduledReadyTime(string connectionString, IPerson person, DateTime datelocal)
+        {
+            var sqlConnection = connectAndOpen(connectionString);
+
+            string sql = string.Format("select sum(f.deviation_schedule_ready_s) from mart.fact_schedule_deviation f " +
+    "inner join mart.dim_person p on f.person_id = p.person_id " +
+    "inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
+    "join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
+        "and f.shift_startdate_id = btz.date_id " +
+        "and f.shift_startinterval_id = btz.interval_id " +
+    "join mart.dim_date d " +
+    "on btz.local_date_id = d.date_id " +
+    "where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
+            using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+            {
+                return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+            }
+
+        }
+
+        private static int sumDeviationSceduledTime(string connectionString, IPerson person, DateTime datelocal)
+        {
+            var sqlConnection = connectAndOpen(connectionString);
+
+            string sql = string.Format("select sum(f.deviation_schedule_s) from mart.fact_schedule_deviation f " +
+    "inner join mart.dim_person p on f.person_id = p.person_id " +
+    "inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
+    "join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
+        "and f.shift_startdate_id = btz.date_id " +
+        "and f.shift_startinterval_id = btz.interval_id " +
+    "join mart.dim_date d " +
+    "on btz.local_date_id = d.date_id " +
+    "where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
+            using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+            {
+                return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+            }
+
+        }
+
     	private static SqlConnection connectAndOpen(string connectionString)
         {
             var sqlConnection = new SqlConnection(connectionString);
