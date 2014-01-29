@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             var sampleMatrixNumber = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(teamBlockInfo.TeamInfo.GroupMembers.First(),
                                                                                           teamBlockInfo.BlockInfo
-                                                                                                       .BlockPeriod);
+                                                                                                       .BlockPeriod).Count();
             foreach (var teamMember in teamBlockInfo.TeamInfo.GroupMembers)
             {
                 var numberOfMatrixNumber = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(teamMember,
                                                                                            teamBlockInfo.BlockInfo
-                                                                                                        .BlockPeriod);
+                                                                                                        .BlockPeriod).Count();
                 if (numberOfMatrixNumber != sampleMatrixNumber) return false;
             }
             return true;
