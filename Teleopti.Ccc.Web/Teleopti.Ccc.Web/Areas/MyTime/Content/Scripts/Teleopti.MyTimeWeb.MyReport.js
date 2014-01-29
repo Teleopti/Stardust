@@ -39,9 +39,9 @@
 				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
-				alert(xhr.status);
-				alert(xhr.responseText);
-				alert(thrownError);
+				//alert(xhr.status);
+				//alert(xhr.responseText);
+				//alert(thrownError);
 			}
 		});
 	}
