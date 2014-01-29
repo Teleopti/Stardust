@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var listOfAllTeamBlock = stepAConstructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
             listOfAllTeamBlock = stepBFilterOutUnwantedBlocks(listOfAllTeamBlock, selectedPersons, selectedPeriod);
 
-            var teamBlockPoints = _seniorityExtractor.ExtractSeniorityUsingTeamBlockPoints(listOfAllTeamBlock).ToList();
+            var teamBlockPoints = _seniorityExtractor.ExtractSeniority(listOfAllTeamBlock).ToList();
             foreach (var teamBlockPoint in teamBlockPoints.OrderByDescending(s => s.Points))
             {
                 var roleModelTeamBlock = teamBlockPoint.TeamBlockInfo;

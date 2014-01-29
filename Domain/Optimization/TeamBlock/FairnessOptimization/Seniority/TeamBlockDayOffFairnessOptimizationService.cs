@@ -52,15 +52,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         }
 
 
-        private void analyzeAndPerformPossibleSwaps(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions )
+        private void analyzeAndPerformPossibleSwaps(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> modifiedMatrixList, DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions )
         {
             //step 2 test code
             var tempSchedulingOptions = schedulingOptions;
             tempSchedulingOptions.UseBlockOptimizing = BlockFinderType.SingleDay ;
             var singleAgentGroupPage = new GroupPageLight {Key = "SingleAgentTeam", Name = "SingleAgentTeam"};
             tempSchedulingOptions.GroupOnGroupPageForTeamBlockPer = singleAgentGroupPage;
-            var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, tempSchedulingOptions);
-            var seniorityInfos = _seniorityExtractor.ExtractSeniority(listOfAllTeamBlock);
+            var listOfAllTeamBlock = _constructTeamBlock.Construct(modifiedMatrixList, selectedPeriod, selectedPersons, tempSchedulingOptions);
+            //var seniorityInfos = _seniorityExtractor.ExtractSeniority(listOfAllTeamBlock);
 
         }
 

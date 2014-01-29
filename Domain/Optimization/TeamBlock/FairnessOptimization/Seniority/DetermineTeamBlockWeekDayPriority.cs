@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
             public ITeamBlockWeekDaySeniorityCalculator PerformTeamBlockCalculation(IList<ITeamBlockInfo> teamBlockInfos)
             {
-                var seniorityInfos = _seniorityExtractor.ExtractSeniorityUsingTeamBlockPoints(teamBlockInfos).ToList();
+                var seniorityInfos = _seniorityExtractor.ExtractSeniority(teamBlockInfos).ToList();
 
                 var weekDaysInfo = _weekDayPointExtractor.ExtractWeekDayInfos(teamBlockInfos).ToList();
 

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IShiftCategoryPointExtractor
 	{
-        IDictionary<ITeamBlockInfo, ITeamBlockPoints> ExtractShiftCategoryInfos(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories);
+        IList<ITeamBlockPoints> ExtractShiftCategoryInfos(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories);
 	}
 
 
@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_shiftCategoryPointExtractor = shiftCategoryPoints;
 		}
 
-        public IDictionary<ITeamBlockInfo, ITeamBlockPoints> ExtractShiftCategoryInfos(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories)
+        public IList< ITeamBlockPoints> ExtractShiftCategoryInfos(IList<ITeamBlockInfo> teamBlockInfos, IList<IShiftCategory> shiftCategories)
 		{
 			var shiftCategoryPoints = _shiftCategoryPointExtractor.ExtractShiftCategoryPoints(shiftCategories);
-			var result = new Dictionary<ITeamBlockInfo, ITeamBlockPoints>();
+			var result = new List<ITeamBlockPoints>( );
 
 			foreach (var teamBlockInfo in teamBlockInfos)
 			{
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				}
 
 				var shiftCategoryPointInfo = new TeamBlockPoints(teamBlockInfo, points);
-				result.Add(teamBlockInfo, shiftCategoryPointInfo);
+				result.Add(shiftCategoryPointInfo);
 			}
 
 			return result;

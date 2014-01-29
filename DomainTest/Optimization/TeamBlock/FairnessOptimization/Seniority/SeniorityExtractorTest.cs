@@ -34,23 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_target = new SeniorityExtractor();
 		}
 
-		[Test]
-		public void ShouldExtractSeniority()
-		{
-			const int seniorityValue1 = 0;
-			const int seniorityValue2 = 1;
-			const double expectedSeniority = (seniorityValue1 + seniorityValue2) / (double)2;
-
-			using (_mock.Record())
-			{
-				Expect.Call(_teamInfo.GroupMembers).Return(_groupMembers).Repeat.AtLeastOnce();
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.ExtractSeniority(_teamInfos);
-				Assert.AreEqual(expectedSeniority, result[_teamInfo].Seniority);	
-			}
-		}
+		
 	}
 }
