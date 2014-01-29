@@ -39,14 +39,6 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 
 		public DailyMetricsForDayResult Execute(DateOnly date)
 		{
-			var setting = 1;
-			using (var annaUow = _currentDataSource.Current().Application.CreateAndOpenStatelessUnitOfWork())
-			{
-				setting =
-					(int)
-						_globalSettingDataRepository.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting())
-							.CalculationMethod;
-			}
 			using (var uow = _currentDataSource.Current().Statistic.CreateAndOpenStatelessUnitOfWork())
 			{
 				return uow.Session().CreateSQLQuery(tsql)
@@ -57,8 +49,8 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.AddScalar("ReadyTimePerScheduledReadyTime", NHibernateUtil.Double)
 					.AddScalar("Adherence", NHibernateUtil.Double)
 					.SetDateTime("date_from", date.Date)
-					.SetDateTime("date_to", date.Date.AddDays(1))
-					.SetInt32("adherence_id", setting)
+					.SetDateTime("date_to", date.Date)
+					.SetInt32("adherence_id", (int)_globalSettingDataRepository.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()).CalculationMethod)
 					.SetGuid("person_code", _loggedOnUser.CurrentUser().Id.Value)
 					.SetGuid("business_unit_code", _currentBusinessUnit.Current().Id.Value) 
 					.SetResultTransformer(new dailyMetricsForDayResultTransformer())
