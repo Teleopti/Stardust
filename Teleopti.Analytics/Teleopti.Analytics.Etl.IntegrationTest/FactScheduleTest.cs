@@ -71,7 +71,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 
 		[Test]
-		public void ShouldFindAdherenceBasisShifts()
+		public void ShouldFindAdherence()
 		{
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 			AnalyticsRunner.RunSysSetupTestData();
@@ -106,11 +106,15 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
 			StepRunner.RunNightly(jobParameters);
 
-			// now it should have data on all three dates, 96 interval
-			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-
 			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(34));
-			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(36));
+			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(38));
+
+			Assert.That(sumScheduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(25200));
+			Assert.That(sumScheduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(28800));
+
+			Assert.That(sumReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(3240));
+			Assert.That(sumReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(3240));
+			
 		}
 
 		private static int countIntervalsPerLocalDate(string connectionString, IPerson person, DateTime datelocal)
@@ -132,6 +136,47 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             }
 
 		}
+
+		private static int sumScheduledReadyTime(string connectionString, IPerson person, DateTime datelocal)
+		{
+			var sqlConnection = connectAndOpen(connectionString);
+
+			string sql = string.Format("select sum(f.scheduled_ready_time_s) from mart.fact_schedule_deviation f " +
+	"inner join mart.dim_person p on f.person_id = p.person_id " +
+	"inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
+	"join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
+		"and f.shift_startdate_id = btz.date_id " +
+		"and f.shift_startinterval_id = btz.interval_id " +
+	"join mart.dim_date d " +
+	"on btz.local_date_id = d.date_id " +
+	"where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
+			using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+			{
+				return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+			}
+
+		}
+
+		private static int sumReadyTime(string connectionString, IPerson person, DateTime datelocal)
+		{
+			var sqlConnection = connectAndOpen(connectionString);
+
+			string sql = string.Format("select sum(f.ready_time_s) from mart.fact_schedule_deviation f " +
+	"inner join mart.dim_person p on f.person_id = p.person_id " +
+	"inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
+	"join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
+		"and f.shift_startdate_id = btz.date_id " +
+		"and f.shift_startinterval_id = btz.interval_id " +
+	"join mart.dim_date d " +
+	"on btz.local_date_id = d.date_id " +
+	"where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
+			using (var sqlCommand = new SqlCommand(sql, sqlConnection))
+			{
+				return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
+			}
+
+		}
+    	
     	private static SqlConnection connectAndOpen(string connectionString)
         {
             var sqlConnection = new SqlConnection(connectionString);
