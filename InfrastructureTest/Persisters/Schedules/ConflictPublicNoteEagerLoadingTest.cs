@@ -8,13 +8,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
-	public class ConflictPublicNoteEagerLoadingTest : ScheduleRangePersisterBaseTest
+	public class ConflictPublicNoteEagerLoadingTest : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
-			scheduleDataInDatabaseAtStart.Add(new PublicNote(Person, date, Scenario, "en notering"));
+			return new[] { new PublicNote(Person, date, Scenario, "en notering") };
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -32,10 +30,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 		protected IShiftCategory ShiftCategory { get; private set; }
 		protected IAbsence Absence { get; private set; }
 		protected IMultiplicatorDefinitionSet DefinitionSet { get; private set; }
-		protected IScheduleRangePersister Target { get; set; }
-		protected IScheduleTag ScheduleTag { get; private set; }
+		protected IScheduleRangePersister Target { get; private set; }
 		protected IDayOffTemplate DayOffTemplate { get; private set; }
-		private IEnumerable<IPersistableScheduleData> _givenState;
 
 		protected override void SetupForRepositoryTestWithoutTransaction()
 		{
@@ -43,6 +39,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			setupDatabase();
 			makeTarget();
 		}
+
+		protected abstract IEnumerable<IPersistableScheduleData> Given();
 
 		private void makeTarget()
 		{
@@ -63,7 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			Scenario = new Scenario("scenario");
 			Absence = new Absence { Description = new Description("perist", "test") };
 			DefinitionSet = new MultiplicatorDefinitionSet("persist test", MultiplicatorType.Overtime);
-			ScheduleTag = new ScheduleTag { Description = "persist test" };
 			DayOffTemplate = new DayOffTemplate(new Description("persist test"));
 		}
 
@@ -77,12 +74,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				new ScenarioRepository(unitOfWork).Add(Scenario);
 				new AbsenceRepository(unitOfWork).Add(Absence);
 				new MultiplicatorDefinitionSetRepository(unitOfWork).Add(DefinitionSet);
-				new ScheduleTagRepository(unitOfWork).Add(ScheduleTag);
 				new DayOffTemplateRepository(unitOfWork).Add(DayOffTemplate);
-				var scheduleDatas = new List<IPersistableScheduleData>();
-				Given(scheduleDatas);
-				_givenState = scheduleDatas;
-				_givenState.ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
+				Given().ForEach(x => new ScheduleRepository(unitOfWork).Add(x));
 				unitOfWork.PersistAll();
 			}
 		}
@@ -100,7 +93,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 				unitOfWork.PersistAll();
 				unitOfWork.Clear();
 				repository.Remove(Person);
-				repository.Remove(ScheduleTag);
 				repository.Remove(DefinitionSet);
 				repository.Remove(Activity);
 				repository.Remove(ShiftCategory);
@@ -111,46 +103,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected abstract void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart);
-		protected abstract void WhenOtherHasChanged(IScheduleRange othersScheduleRange);
-		protected abstract void WhenImChanging(IScheduleRange myScheduleRange);
-		protected abstract void Then(IEnumerable<PersistConflict> conflicts);
-		protected abstract void Then(IScheduleRange myScheduleRange);
-
-
-		[Test]
-		public void DoTheTest()
-		{
-			var otherDic = loadScheduleDictionary();
-			var otherRange = otherDic[Person];
-			WhenOtherHasChanged(otherRange);
-
-			var myDic = loadScheduleDictionary();
-			Target.Persist(otherRange);
-
-			var myRange = myDic[Person];
-			WhenImChanging(myRange);
-
-			if (ExpectOptimistLockException)
-			{
-				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange));
-			}
-			else
-			{
-				var conflicts = Target.Persist(myRange);
-				Then(conflicts);
-				Then(myRange);
-
-				var canLoadAfterChangeDicVerifier = loadScheduleDictionary()[Person];
-				if (!conflicts.Any())
-				{
-					//if no conflicts, db version should be same as users schedulerange
-					Then(canLoadAfterChangeDicVerifier);
-				}
-				generalAsserts(myRange, conflicts);
-			}
-		}
-
 		protected void DoModify(IScheduleDay scheduleDay)
 		{
 			scheduleDay.Owner.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(),
@@ -158,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 															 MockRepository.GenerateMock<IScheduleTagSetter>());
 		}
 
-		private static void generalAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
+		protected static void GeneralAsserts(IScheduleRange range, IEnumerable<PersistConflict> conflicts)
 		{
 			var rangeDiff = range.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>());
 
@@ -172,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		private IScheduleDictionary loadScheduleDictionary()
+		protected IScheduleRange LoadScheduleRange()
 		{
 			using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -183,22 +135,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 																								 new PersonProvider(new[] { Person }),
 																								 new ScheduleDictionaryLoadOptions(true, true),
 																								 new List<IPerson> { Person });
-				return dictionary;
+				return dictionary[Person];
 			}
-		}
-
-		public void ReassociateDataForAllPeople()
-		{
-			throw new NotImplementedException();
-		}
-
-		public void ReassociateDataFor(IPerson person)
-		{
-			var uow = UnitOfWorkFactory.Current.CurrentUnitOfWork();
-			uow.Reassociate(person);
-			uow.Reassociate(Activity);
-			uow.Reassociate(ShiftCategory);
-			uow.Reassociate(Scenario);
 		}
 
 		protected virtual bool ExpectOptimistLockException
@@ -212,5 +150,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			var scheduleRep = new ScheduleRepository(currUnitOfWork);
 			return new ScheduleRangeConflictCollector(scheduleRep, new PersonAssignmentRepository(currUnitOfWork), this, new LazyLoadingManagerWrapper());
 		}
+
+		public abstract void ReassociateDataForAllPeople();
+		public abstract void ReassociateDataFor(IPerson person);
 	}
 }
