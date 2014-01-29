@@ -9,18 +9,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 	{
 		private readonly IMyReportDataProvider _myReportDataProvider;
 		private readonly IDailyMetricsMapper _mapper;
+		private readonly ILoggedOnUser _loggedOnUser;
 
-		public MyReportViewModelFactory(IMyReportDataProvider myReportDataProvider, IDailyMetricsMapper mapper)
+		public MyReportViewModelFactory(IMyReportDataProvider myReportDataProvider, IDailyMetricsMapper mapper, ILoggedOnUser loggedOnUser)
 		{
 			_myReportDataProvider = myReportDataProvider;
 			_mapper = mapper;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public DailyMetricsViewModel CreateDailyMetricsViewModel(DateOnly dateOnly)
 		{
 			var data = _myReportDataProvider.RetrieveDailyMetricsData(dateOnly);
 
-			return _mapper.Map(data);
+			return _mapper.Map(data, _loggedOnUser);
 		}
 	}
 }

@@ -109,7 +109,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
         self.requestedDate = ko.computed({
-            read: function() {
+        	read: function () {
                 return self.requestedDateInternal();
             },
             write: function (value) {

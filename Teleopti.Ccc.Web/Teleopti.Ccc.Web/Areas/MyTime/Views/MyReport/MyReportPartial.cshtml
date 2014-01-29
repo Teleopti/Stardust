@@ -5,13 +5,13 @@
 
 
 <div class="myreport-daily-metrics">
-    <h2>MyReportPartial</h2>
+	<h2>xxOverview or something</h2>
     <div class="navbar ">
         <div class="navbar-inner">
             <form class="navbar-form pull-left">
                 <div class="input-append input-prepend">
                     <button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.previousDay"><i class="icon-arrow-left"></i></button>
-                    <input data-bind="value: selectedDate" type="text" class="span3 text-center" readonly="readonly"/>
+                    <input name="sel-date" id="sel-date" data-bind="datepicker: selectedDate, datepickerOptions: { format: datePickerFormat }" type="text" class="span3 text-center" readonly="readonly"/>
                     <button class="btn moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }"><i class="icon-th" ></i></button>
                     <button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.nextDay"><i class="icon-arrow-right"></i></button>
                 </div>
@@ -21,42 +21,43 @@
             </ul>
         </div>
     </div>
-    <div class="container-fluid">
+	<div class="container-fluid">
 
-        <div class="myReportFigures">
-            <div class="myReportTable">
-                <div class="myReportHeader myReportTableRow">
-                    <div class="myReportHeaderText">@Resources.Metric</div>
-                    <div class="myReportValues">@Resources.Value</div>
-                </div>
-                <div class="myReportTableRow">
-                    <div class="myReportText">@Resources.KpiAdherence</div>
-                    <div class="myReportValues adherenceValue" data-bind="text: adherence"></div>
-                </div>
-                <div class="myReportTableRow" style="background: #f0f0ff">
-                    <div class="myReportText">@Resources.ReadyTimePerScheduledReadyTimePercent</div>
-                    <div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: readyTimePerScheduledReadyTime"></div>
-                </div>
-                <div class="myReportTableRow">
-                    <div class="myReportText">@Resources.KpiAverageHandleTime</div>
-                    <div class="myReportValues handlingTimeValue" data-bind="text: averageHandlingTime"></div>
-                </div>
-                <div class="myReportTableRow" style="background: #f0f0ff">
-                    <div class="myReportText">@Resources.KpiAverageTalkTime</div>
-                    <div class="myReportValues talkTimeValue" data-bind="text: averageTalkTime"></div>
-                </div>
-                <div class="myReportTableRow">
-                    <div class="myReportText">@Resources.KpiAverageAfterCallWork</div>
-                    <div class="myReportValues afterWorkValue" data-bind="text: averageAfterCallWork"></div>
-                </div>
-                <div class="myReportTableRow" style="background: #f0f0ff">
-                    <div class="myReportText">@Resources.AnsweredCalls</div>
-                    <div class="myReportValues answeredCallsValue" data-bind="text: answeredCalls"></div>
-                </div>
-            </div>
+		<div class="myReportFigures">
+			<div class="myReportTable">
+				<div class="myReportHeader myReportTableRow">
+					<div class="myReportHeaderText">@Resources.Metric</div>
+					<div class="myReportValues">@Resources.Value</div>
+				</div>
+				<div class="myReportTableRow">
+					<div class="myReportText">@Resources.KpiAdherence</div>
+					<div class="myReportValues adherenceValue" data-bind="text: adherence"></div>
+				</div>
+				<div class="myReportTableRow" style="background: #f0f0ff">
+					<div class="myReportText">@Resources.ReadyTimePerScheduledReadyTimePercent</div>
+					<div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: readyTimePerScheduledReadyTime"></div>
+				</div>
+				<div class="myReportTableRow">
+					<div class="myReportText">@Resources.KpiAverageHandleTime</div>
+					<div class="myReportValues handlingTimeValue" data-bind="text: averageHandlingTime"></div>
+				</div>
+				<div class="myReportTableRow" style="background: #f0f0ff">
+					<div class="myReportText">@Resources.KpiAverageTalkTime</div>
+					<div class="myReportValues talkTimeValue" data-bind="text: averageTalkTime"></div>
+				</div>
+				<div class="myReportTableRow">
+					<div class="myReportText">@Resources.KpiAverageAfterCallWork</div>
+					<div class="myReportValues afterWorkValue" data-bind="text: averageAfterCallWork"></div>
+				</div>
+				<div class="myReportTableRow" style="background: #f0f0ff">
+					<div class="myReportText">@Resources.AnsweredCalls</div>
+					<div class="myReportValues answeredCallsValue" data-bind="text: answeredCalls"></div>
+				</div>
+			</div>
 			
-        </div>
-    </div>
+		</div>
+	</div>
+	
 </div>
 
 			

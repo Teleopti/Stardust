@@ -1,12 +1,13 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 {
 	public class DailyMetricsMapper:IDailyMetricsMapper
 	{
-		public DailyMetricsViewModel Map(DailyMetricsForDayResult dataModel)
+		public DailyMetricsViewModel Map(DailyMetricsForDayResult dataModel, ILoggedOnUser loggedOnUser)
 		{
 			if (dataModel == null)
 			{
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 				AverageHandlingTime = dataModel.HandlingTimeAverage.TotalSeconds.ToString(CultureInfo.InvariantCulture),
 				ReadyTimePerScheduledReadyTime = dataModel.ReadyTimePerScheduledReadyTime.ValueAsPercent().ToString(CultureInfo.InvariantCulture),
 				Adherence = dataModel.Adherence.ValueAsPercent().ToString(CultureInfo.InvariantCulture),
-				DataAvailable = true
+				DataAvailable = true,
+				DatePickerFormat = loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern
 			};
 		}
 	}
