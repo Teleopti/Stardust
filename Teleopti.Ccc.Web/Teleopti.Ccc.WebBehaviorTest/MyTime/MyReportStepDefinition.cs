@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Given(@"I do not have any report data for date '(.*)'")]
 		public void GivenIDoNotHaveAnyReportDataForDate(DateTime date)
 		{
+			//don't persist anything
 		}
 
 		[Given(@"I have my report data for '(.*)'")]
