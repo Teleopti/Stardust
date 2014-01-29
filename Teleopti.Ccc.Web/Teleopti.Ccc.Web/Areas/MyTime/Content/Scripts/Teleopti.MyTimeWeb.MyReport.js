@@ -37,11 +37,6 @@
 				vm.averageHandlingTime(data.AverageHandlingTime);
 				vm.averageTalkTime(data.AverageTalkTime);
 				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				//alert(xhr.status);
-				//alert(xhr.responseText);
-				//alert(thrownError);
 			}
 		});
 	}
