@@ -8,8 +8,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[MyReportPermission]
-    public class MyReportController : Controller
-    {
+	public class MyReportController : Controller
+	{
 		private readonly IMyReportViewModelFactory _myReportViewModelFactory;
 
 		public MyReportController(IMyReportViewModelFactory myReportViewModelFactory)
@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[EnsureInPortal]
 		public ViewResult Index()
-        {
+		{
 			return View("MyReportPartial");
-        }
+		}
 
 		[HttpGet]
 		[UnitOfWorkAction]
@@ -29,5 +29,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(new DateOnly(date)), JsonRequestBehavior.AllowGet);
 		}
-    }	
+	}
 }
