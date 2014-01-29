@@ -4,6 +4,10 @@
 	float: left;
 	border: solid 1px gray;
 	width: 30%;
+	-moz-min-width: 250px;
+	-ms-min-width: 250px;
+	-o-min-width: 250px;
+	-webkit-min-width: 250px;
 	min-width: 250px;
 	margin-bottom: 20px;
 }
@@ -17,11 +21,15 @@
 .myReportTableRow {
 	display: table-row;
 }
-.myReportValues{
+.myReportValues {
 	padding: 5px 10px 5px 5px;
 	display: table-cell;
 	vertical-align: top;
 	width: 20%;
+	-moz-min-width: 50px;
+	-ms-min-width: 50px;
+	-o-min-width: 50px;
+	-webkit-min-width: 50px;
 	min-width: 50px;
 	/*if we want the vertical line*/
 	/*border-left: gray 1px solid;*/
@@ -32,8 +40,13 @@
 	float: left; 
 	display: table-cell;
 	width: 80%;
+	-moz-min-width: 150px;
+	-ms-min-width: 150px;
+	-o-min-width: 150px;
+	-webkit-min-width: 150px;
 	min-width: 150px;
 }
+
 .myReportText:hover  {
 	cursor: pointer;
 }
@@ -48,8 +61,13 @@
 	float: left; 
 	display: table-cell;
 	width: 80%;
+	-moz-min-width: 150px;
+	-ms-min-width: 150px;
+	-o-min-width: 150px;
+	-webkit-min-width: 150px;
 	min-width: 150px;
 }
+
 .fixed-non-responsive.container {
 	width: 99%;
 }
