@@ -16,6 +16,7 @@
 		self.selectedDateInternal = ko.observable(yesterDayFromNow);
 		self.weekStart = ko.observable(1);
 		self.datePickerFormat = '';
+		self.dataAvailable = ko.observable();
 		self.selectedDate = ko.computed({
 		    read: function () {
 		        return self.selectedDateInternal();
@@ -40,6 +41,7 @@
 				vm.averageTalkTime(data.AverageTalkTime);
 				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
 				vm.datePickerFormat = data.DatePickerFormat;
+			    vm.dataAvailable(data.DataAvailable);
 			}
 		});
 	}

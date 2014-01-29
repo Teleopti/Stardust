@@ -3,28 +3,31 @@
 	Layout = null;
 }
 
-
 <div class="myreport-daily-metrics">
 	<h2>xxOverview or something</h2>
-    <div class="navbar ">
-        <div class="navbar-inner">
-            <form class="navbar-form pull-left">
-                <div class="input-append input-prepend">
-                    <button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.previousDay"><i class="icon-arrow-left"></i></button>
+	<div class="navbar ">
+		<div class="navbar-inner">
+			<form class="navbar-form pull-left">
+				<div class="input-append input-prepend">
+					<button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.previousDay"><i class="icon-arrow-left"></i></button>
                     <input name="sel-date" id="sel-date" data-bind="datepicker: selectedDate, datepickerOptions: { format: datePickerFormat }" type="text" class="span3 text-center" readonly="readonly"/>
-                    <button class="btn moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }"><i class="icon-th" ></i></button>
-                    <button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.nextDay"><i class="icon-arrow-right"></i></button>
-                </div>
-            </form>
-            <ul class="nav">
-                <li><a class="yesterday" data-bind="click: Teleopti.MyTimeWeb.MyReport.yesterday">@Resources.Yesterday</a></li>
-            </ul>
-        </div>
-    </div>
+					<button class="btn moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }"><i class="icon-th"></i></button>
+					<button class="btn" data-bind="click: Teleopti.MyTimeWeb.MyReport.nextDay"><i class="icon-arrow-right"></i></button>
+				</div>
+			</form>
+			<ul class="nav">
+				<li><a class="yesterday" data-bind="click: Teleopti.MyTimeWeb.MyReport.yesterday">@Resources.Yesterday</a></li>
+			</ul>
+		</div>
+	</div>
 	<div class="container-fluid">
-
-		<div class="myReportFigures">
-			<div class="myReportTable">
+		<div data-bind="ifnot: dataAvailable">
+			<div id="friendly-message" class="alert-block alert">
+				@Teleopti.Analytics.ReportTexts.Resources.ResNoScorecardAvailable
+			</div>
+		</div>
+		<div class="myReportFigures" data-bind="if: dataAvailable">
+			<div class=" myreporttable">
 				<div class="myReportHeader myReportTableRow">
 					<div class="myReportHeaderText">@Resources.Metric</div>
 					<div class="myReportValues">@Resources.Value</div>
@@ -54,10 +57,7 @@
 					<div class="myReportValues answeredCallsValue" data-bind="text: answeredCalls"></div>
 				</div>
 			</div>
-			
 		</div>
 	</div>
 	
 </div>
-
-			
