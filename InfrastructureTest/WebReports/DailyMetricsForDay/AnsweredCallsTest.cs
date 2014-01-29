@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			const int answeredOne = 1;
 			const int answeredTwo = 2;
 			answeredCalls = answeredOne + answeredTwo;
-			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId, 1, AcdLoginId, 1, 1, answeredOne, 1));
-			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId, 2, AcdLoginId, 1, 1, answeredTwo, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId,1, 1, AcdLoginId, 1, 1, answeredOne, 1));
+			analyticsDataFactory.Setup(new FactAgentQueue(Today.DateId,1, 2, AcdLoginId, 1, 1, answeredTwo, 1));
 		}
 
 		[Test]

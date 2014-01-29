@@ -3,16 +3,17 @@
     
 	function MyReportViewModel(loadDataMethod) {
 	    var self = this;
+	    var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day');
 	    self.fillDataMethod = loadDataMethod;
 		self.adherence = ko.observable();
 		self.answeredCalls = ko.observable();
-		self.averageAfterWork = ko.observable();
+		self.averageAfterCallWork = ko.observable();
 		self.averageHandlingTime = ko.observable();
 		self.averageTalkTime = ko.observable();
 		self.readyTimePerScheduledReadyTime = ko.observable();
 		self.nextWeekDate = ko.observable(moment());
 		self.previousWeekDate = ko.observable(moment());
-		self.selectedDateInternal = ko.observable(moment().startOf('day').clone().add('days', -1));
+		self.selectedDateInternal = ko.observable(yesterDayFromNow);
 	    self.weekStart = ko.observable(1);
 		self.selectedDate = ko.computed({
 		    read: function () {
@@ -33,15 +34,10 @@
 			success: function(data) {
 			    vm.adherence(data.Adherence);
 				vm.answeredCalls(data.AnsweredCalls);
-				vm.averageAfterWork(data.AverageAfterCallWork);
+				vm.averageAfterCallWork(data.AverageAfterCallWork);
 				vm.averageHandlingTime(data.AverageHandlingTime);
 				vm.averageTalkTime(data.AverageTalkTime);
 				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert(xhr.status);
-				alert(xhr.responseText);
-				alert(thrownError);
 			}
 		});
 	}

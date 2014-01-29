@@ -33,7 +33,6 @@ Scenario: Open my report shows yesterdays figures
 	When I navigate to my report
 	Then I should see my report with data for '2013-10-02'
 	
-@ignore
 Scenario: Show friendly message when no report data
 	Given I am an agent
 	And I do not have any report data for date '2013-10-02'

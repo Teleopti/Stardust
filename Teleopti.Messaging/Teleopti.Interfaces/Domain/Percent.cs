@@ -41,6 +41,11 @@ namespace Teleopti.Interfaces.Domain
             get { return _value; }
         }
 
+	    public double ValueAsPercent()
+	    {
+		    return Value*100;
+	    }
+
         /// <summary>
         /// Returns the value in readable format
         /// </summary>
