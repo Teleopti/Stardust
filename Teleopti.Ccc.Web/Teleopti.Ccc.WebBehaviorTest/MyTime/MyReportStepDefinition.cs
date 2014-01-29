@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void GivenIHaveMyReportDataFor(DateTime date)
 		{
 			var timeZones = new UtcAndCetTimeZones();
-			var today = new SpecificDate { Date = new DateOnly(date) };
+			var theDay = new SpecificDate { Date = new DateOnly(date) };
 			var intervals = new QuarterOfAnHourInterval();
 			var datasource = new ExistingDatasources(timeZones);
 
@@ -67,16 +67,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			//common analytics data
 			DataMaker.Data().Analytics().Setup(new EternityAndNotDefinedDate());
 			DataMaker.Data().Analytics().Setup(timeZones);
-			DataMaker.Data().Analytics().Setup(today);
+			DataMaker.Data().Analytics().Setup(theDay);
 			DataMaker.Data().Analytics().Setup(intervals);
 			DataMaker.Data().Analytics().Setup(datasource);
-			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(today, intervals, timeZones, datasource));
+			DataMaker.Data().Analytics().Setup(new FillBridgeTimeZoneFromData(theDay, intervals, timeZones, datasource));
 			DataMaker.Data().Analytics().Setup(agent);
 			DataMaker.Data().Analytics().Setup(new FillBridgeAcdLoginPersonFromData(agent, acdLoginId));
 			DataMaker.Data().Analytics().Setup(scenario);
 
 			//some report data
-			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, today.DateId, 0, 22, 1, scenarioId));
+			const int intervalId = 32;
+			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, theDay.DateId, 0, 22, intervalId, scenarioId));
+			DataMaker.Data().Analytics().Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, theDay.DateId, intervalId - 8, 600, 900, 300, 55,0, 0, 7, 210, 60));
+			DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, 5, acdLoginId, 210, 60, 7, 0));
+			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
 		}
 
 		[Then(@"I should see my report with data for '(.*)'")]
