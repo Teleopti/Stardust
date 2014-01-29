@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the previous day button")]
 		public void WhenIClickPreviousVirtualSchedulePeriodButton()
 		{
-			Browser.Interactions.ClickUsingJQuery(".navbar-form button.done:has(i.chevronicon-chevron-left)");
+            Browser.Interactions.ClickUsingJQuery(".input-group-btn button.done:has(i.glyphicon-chevron-left)");
 		}
 
 		[Then(@"I should see an error message")]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see a user-friendly message explaining I dont have anything to view")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnythingToView()
 		{
-			Browser.Interactions.AssertExists(".alert.alert-block");
+			Browser.Interactions.AssertExists(".alert.alert-info");
 		}
 
 		[Then(@"I should see next virtual schedule period")]
