@@ -216,6 +216,13 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WeekDayPointExtractor>().As<IWeekDayPointExtractor>();
             builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
 			builder.RegisterType<TeamBlockDayOffSwap>().As<ITeamBlockDayOffSwap>();
+            builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
+            builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();
+            builder.RegisterType<SeniorTeamBlockLocator>().As<ISeniorTeamBlockLocator>();
+            builder.RegisterType<DescisionMakerToSwapTeamBlock>().As<IDescisionMakerToSwapTeamBlock>();
+            builder.RegisterType<SeniorityCalculatorForTeamBlock>().As<ISeniorityCalculatorForTeamBlock>();
+            builder.RegisterType<TeamBlockLocatorWithHighestPoints>().As<ITeamBlockLocatorWithHighestPoints>();
+            builder.RegisterType<WeekDayPointCalculatorForTeamBlock>().As<IWeekDayPointCalculatorForTeamBlock>();
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)

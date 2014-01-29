@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -23,13 +24,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     public class TeamBlockDayOffFairnessOptimizationService : ITeamBlockDayOffFairnessOptimizationService
     {
         private bool _cancelMe;
-        private readonly IConstructTeamBlock _constructTeamBlock;
-        private IDayOffStep1 _dayOffStep1;
-        private IDayOffStep2 _dayOffStep2;
+        private readonly IDayOffStep1 _dayOffStep1;
+        private readonly IDayOffStep2 _dayOffStep2;
 
-        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock)
+        public TeamBlockDayOffFairnessOptimizationService(IDayOffStep1 dayOffStep1, IDayOffStep2 dayOffStep2)
         {
-            _constructTeamBlock = constructTeamBlock;
+            _dayOffStep1 = dayOffStep1;
+            _dayOffStep2 = dayOffStep2;
         }
 
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -39,8 +40,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _cancelMe = false;
             var instance = PrincipalAuthorization.Instance();
             if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
-
-            _dayOffStep1.PerformStep1(schedulingOptions,allPersonMatrixList,selectedPeriod,selectedPersons );
+            var weekDayPoints = new WeekDayPoints();
+            _dayOffStep1.PerformStep1(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons,
+                                      rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints());
 
             _dayOffStep2.PerformStep2();
             rearrangeDayOffAmongAagents();
@@ -53,16 +55,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         private void analyzeAndPerformPossibleSwaps(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> modifiedMatrixList, DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions )
         {
-            //step 2 test code
-            var tempSchedulingOptions = schedulingOptions;
-            tempSchedulingOptions.UseBlockOptimizing = BlockFinderType.SingleDay ;
-            var singleAgentGroupPage = new GroupPageLight {Key = "SingleAgentTeam", Name = "SingleAgentTeam"};
-            tempSchedulingOptions.GroupOnGroupPageForTeamBlockPer = singleAgentGroupPage;
 			var listOfAllTeamBlock = _constructTeamBlock.Construct(modifiedMatrixList, selectedPeriod, selectedPersons, schedulingOptions.UseTeamBlockPerOption,
 																 schedulingOptions.BlockFinderTypeForAdvanceScheduling,
 																 schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-            //var seniorityInfos = _seniorityExtractor.ExtractSeniority(listOfAllTeamBlock);
-
+           
         }
 
         private void rearrangeDayOffAmongAagents()
