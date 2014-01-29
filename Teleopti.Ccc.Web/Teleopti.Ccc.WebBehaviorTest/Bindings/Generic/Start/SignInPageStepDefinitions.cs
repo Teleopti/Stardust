@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I select business unit '(.*)'")]
 		public void WhenISelectBusinessUnit(string businessUnit)
 		{
-			Browser.Interactions.ClickContaining("li a", businessUnit);
+			Browser.Interactions.ClickContaining("div a", businessUnit);
 		}
 
 		[When(@"I sign in again")]
