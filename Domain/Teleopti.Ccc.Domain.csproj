@@ -383,8 +383,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\FilterForSameTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseWeekDay.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractor.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityInfo.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfo.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockDayOffFairnessOptimizationService.cs" />
@@ -416,9 +414,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\DetermineTeamBlockPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationService.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSizeClassifier.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockWeight.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockWeightExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
