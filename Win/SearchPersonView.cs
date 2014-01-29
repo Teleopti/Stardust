@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.Win
         {
             if (e.KeyCode == Keys.Enter)
             {
-                IPerson person = (IPerson)gridListControl1.SelectedValue;
+	            if (gridListControl1.SelectedItem == null) return;
+                var person = (IPerson)gridListControl1.SelectedValue;
 
                 if (person != null)
                 {
@@ -70,7 +71,8 @@ namespace Teleopti.Ccc.Win
 
         private void Grid_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            IPerson person = (IPerson)gridListControl1.SelectedValue;
+	        if (gridListControl1.SelectedItem == null) return;
+            var person = (IPerson)gridListControl1.SelectedValue;
 
             if (person != null)
             {
