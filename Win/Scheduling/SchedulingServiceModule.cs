@@ -212,10 +212,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
         {
             builder.RegisterType<TeamBlockDayOffFairnessOptimizationService>().As<ITeamBlockDayOffFairnessOptimizationService >();
-            builder.RegisterType<DetermineTeamBlockWeekDayPriority>().As<IDetermineTeamBlockWeekDayPriority>();
-            builder.RegisterType<WeekDayPointExtractor>().As<IWeekDayPointExtractor>();
             builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
-			builder.RegisterType<TeamBlockDayOffSwap>().As<ITeamBlockDayOffSwap>();
             builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
             builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();
             builder.RegisterType<SeniorTeamBlockLocator>().As<ISeniorTeamBlockLocator>();
@@ -248,7 +245,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockSeniorityValidator>().As<ITeamBlockSeniorityValidator>();
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
             builder.RegisterType<TeamBlockSeniorityFairnessOptimizationService>().As<ITeamBlockSeniorityFairnessOptimizationService>();
-            builder.RegisterType<PrioritiseWeekDay>().As<IPrioritiseWeekDay>();
             builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>();
 	        builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>();
 	        builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>();

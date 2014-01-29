@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
     public  interface ITeamBlockDayOffFairnessOptimizationService
     {
@@ -55,9 +50,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         private void analyzeAndPerformPossibleSwaps(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> modifiedMatrixList, DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions )
         {
-			var listOfAllTeamBlock = _constructTeamBlock.Construct(modifiedMatrixList, selectedPeriod, selectedPersons, schedulingOptions.UseTeamBlockPerOption,
-																 schedulingOptions.BlockFinderTypeForAdvanceScheduling,
-																 schedulingOptions.GroupOnGroupPageForTeamBlockPer);
+            //var listOfAllTeamBlock = _constructTeamBlock.Construct(modifiedMatrixList, selectedPeriod, selectedPersons, schedulingOptions.UseTeamBlockPerOption,
+            //                                                     schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+            //                                                     schedulingOptions.GroupOnGroupPageForTeamBlockPer);
            
         }
 
