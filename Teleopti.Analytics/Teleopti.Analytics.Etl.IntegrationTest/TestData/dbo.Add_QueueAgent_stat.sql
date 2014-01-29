@@ -8,6 +8,9 @@ create proc dbo.Add_QueueAgent_stat
 @orig_agent_id int = 152,
 @agent_name nvarchar(50) = 'Ashley Andeen'
 --select * from mart.v_agent_logg
+--exec mart.etl_fact_agent_load '2014-01-01','2014-02-01',2
+--exec mart.etl_fact_schedule_deviation_load '2014-01-01','2014-02-01','80E3AABD-3329-4111-B647-A2C200A5A1BD'
+
 as
 
 set nocount on
@@ -31,8 +34,8 @@ declare @NewPersonPeriodId uniqueidentifier
 
 SELECT @todayMinus2 = DATEADD(dd, -2, DATEDIFF(dd, 0, @TestDay)) --day before yesterday
 SELECT @todayMinus1 = DATEADD(dd, -1, DATEDIFF(dd, 0, @TestDay)) --yesterday
-set @today = dateAdd(dd,1,@todayMinus1) --today (early this morning)
-set @todayPlus1 = dateAdd(dd,1,@today) --tomorrow
+SELECT @today = DATEADD(dd, 0, DATEDIFF(dd, 0, @TestDay)) --yesterday
+SELECT @todayPlus1 = DATEADD(dd, 1, DATEDIFF(dd, 0, @TestDay)) --tomorrow
 
 --add cti data
 truncate table dbo.agent_logg
@@ -70,93 +73,17 @@ insert into dbo.queues(queue,orig_desc,log_object_id,orig_queue_id,display_desc)
 select @queue_id,@orig_desc,@log_object_id,@orig_queue_id,@queue_display_desc
 SET IDENTITY_INSERT dbo.queues OFF
 
+--yesterday
+insert dbo.agent_logg values (@queue_id,@todayMinus1,38,@agent_id,@agent_name,@180Secs*1,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@todayMinus1,39,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@todayMinus1,48,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@todayMinus1,49,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@todayMinus1,58,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@todayMinus1,59,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
 
-insert dbo.agent_logg values (@queue_id,@todayMinus2,85,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,86,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,87,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,88,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,89,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,90,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,91,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,92,@agent_id,@agent_name,@180Secs*1,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,93,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,94,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,95,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus2,96,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,0,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,1,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,2,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,3,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,4,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,5,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,6,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,7,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,8,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,9,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,10,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,11,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,12,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,13,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,14,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,15,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,16,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,17,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,18,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,19,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,20,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,21,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,22,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,23,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,24,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,25,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,26,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,27,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,28,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-
-insert dbo.agent_logg values (@queue_id,@todayMinus1,55,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,56,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,57,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,58,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,59,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,60,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,61,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,62,@agent_id,@agent_name,@180Secs*1,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,63,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,64,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,65,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,66,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,67,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-
-insert dbo.agent_logg values (@queue_id,@todayMinus1,93,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,94,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,95,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@todayMinus1,96,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,0,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,1,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,2,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,3,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,4,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,5,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,6,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,7,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,8,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,9,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,10,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,11,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,12,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,13,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,14,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,15,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,16,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,17,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,18,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,19,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,20,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,21,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,22,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,23,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,24,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,25,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,26,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,27,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
-insert dbo.agent_logg values (@queue_id,@today,28,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@today,38,@agent_id,@agent_name,@180Secs*1,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@today,39,@agent_id,@agent_name,@180Secs*2,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@today,48,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@today,49,@agent_id,@agent_name,@180Secs*5,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@today,58,@agent_id,@agent_name,@180Secs*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@today,59,@agent_id,@agent_name,@180Secs*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
