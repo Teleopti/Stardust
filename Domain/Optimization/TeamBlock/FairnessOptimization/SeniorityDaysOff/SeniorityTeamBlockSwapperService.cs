@@ -26,13 +26,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ISeniorityExtractor _seniorityExtractor;
 		private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
 		private readonly ITeamBlockSwapper _teambBlockSwapper;
+		private readonly ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
 
 		public SeniorityTeamBlockSwapperService(IConstructTeamBlock constructTeamBlock,
 		                                        IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 		                                        IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
 		                                        ISeniorityExtractor seniorityExtractor,
 		                                        IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks,
-		                                        ITeamBlockSwapper teambBlockSwapper)
+		                                        ITeamBlockSwapper teambBlockSwapper,
+												ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_seniorityExtractor = seniorityExtractor;
 			_filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
 			_teambBlockSwapper = teambBlockSwapper;
+			_seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
 		}
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -55,19 +58,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 																		  selectedPersons, selectedPeriod);
 
 			teamBlocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksToWorkWith, scheduleDictionary);
-			//this one does not work for now
-			var seniorityInfoDictionary = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith).ToDictionary(k => k.TeamBlockInfo, v => v.Points);
+			var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith);
+			var seniorityInfoDictionary = teamBlockPoints.ToDictionary(teamBlockPoint => teamBlockPoint.TeamBlockInfo, teamBlockPoint => teamBlockPoint.Points);
 
 			while (seniorityInfoDictionary.Count > 0)
 			{
 				var mostSeniorTeamBlock = findMostSeniorTeamBlock(seniorityInfoDictionary);
-				trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary);
+				trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary, optimizationPreferences);
 				seniorityInfoDictionary.Remove(mostSeniorTeamBlock);
 			}
 			
 		}
 
-		private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints, IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary)
+		private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints, IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
 		{
 			var swappableTeamBlocks = _filterOnSwapableTeamBlocks.Filter(teamBlocksToWorkWith, mostSeniorTeamBlock);
 
@@ -80,8 +83,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				var blockToSwapWith = findBestTeamBlockToSwapWith(swappableTeamBlocks, seniorityValueDic);
 				if (seniorValue < seniorityValueDic[blockToSwapWith])
 				{
-					bool success = _teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
-					                                           scheduleDictionary);
+					if (!_teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary))
+						break;
+
+					if(! _seniorityTeamBlockSwapValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
+						break;
+
+					if (!_seniorityTeamBlockSwapValidator.Validate(blockToSwapWith, optimizationPreferences))
+						break;
+
 					swapSuccess = true;
 				}
 
