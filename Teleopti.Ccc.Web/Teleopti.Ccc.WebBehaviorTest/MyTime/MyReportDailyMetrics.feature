@@ -40,14 +40,6 @@ Scenario: Show friendly message when no report data
 	When I navigate to my report
 	Then I should see a user-friendly message explaining I dont have anything to view
 	
-@ignore
-Scenario: Select date in date-picker
-	Given I am an agent
-	When I navigate to my report
-	And I open the date-picker
-	And I click on any date
-	Then the date-picker should close
-	And I should see the selected date
 	
 @ignore
 Scenario: Navigate within my report view to previous day
@@ -67,17 +59,6 @@ Scenario: Navigate within my report view to next day
 	And I select date '2013-10-01'
 	And I click next date
 	Then I should see my report with data for '2013-10-02'
-		
-@ignore
-Scenario: Do not navigate to today
-	Given I am an agent
-	And I have my report data for '2013-10-02'
-	And the current time is '2013-10-03'
-	When I navigate to my report
-	Then I should not be able to click next date
-
-
-
 
 
 
