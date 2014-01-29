@@ -72,11 +72,6 @@ ELSE
 INSERT INTO #rights_agents
 EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code
 
-SELECT ra.right_id
-FROM #rights_agents ra
-INNER JOIN #selected_agents sa ON ra.right_id = sa.selected_id
-
-
 /*Get all teams that user has permission to see. */
 INSERT INTO #rights_teams 
 SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
