@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 																		  selectedPersons, selectedPeriod);
 
 			teamBlocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksToWorkWith, scheduleDictionary);
-			var seniorityInfoDictionary = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith);
+			var seniorityInfoDictionary = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith).ToDictionary(k => k.TeamBlockInfo, v => v.Points);
 
 			while (seniorityInfoDictionary.Count > 0)
 			{
@@ -137,15 +137,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			return totalPoints;
 		}
 
-		private static ITeamBlockInfo findMostSeniorTeamBlock(IDictionary<ITeamBlockInfo, ISeniorityInfo> seniorityInfoDictionary)
+		private static ITeamBlockInfo findMostSeniorTeamBlock(IDictionary<ITeamBlockInfo, double> seniorityInfoDictionary)
 		{
 			var maxValue = double.MinValue;
 			ITeamBlockInfo mostSeniorBlock = null;
 			foreach (var seniorityInfo in seniorityInfoDictionary)
 			{
-				if (seniorityInfo.Value.Seniority > maxValue)
+				if (seniorityInfo.Value > maxValue)
 				{
-					maxValue = seniorityInfo.Value.Seniority;
+					maxValue = seniorityInfo.Value;
 					mostSeniorBlock = seniorityInfo.Key;
 				}
 			}
