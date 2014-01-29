@@ -35,30 +35,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _cancelMe = false;
             var instance = PrincipalAuthorization.Instance();
             if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
+            
             var weekDayPoints = new WeekDayPoints();
+            
             _dayOffStep1.PerformStep1(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons,
                                       rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints());
 
-            _dayOffStep2.PerformStep2();
-            rearrangeDayOffAmongAagents();
+            if (!schedulingOptions.UseSameDayOffs)
+                _dayOffStep2.PerformStep2();
+            
 
-            if(!schedulingOptions.UseSameDayOffs )
-                analyzeAndPerformPossibleSwaps(selectedPersons, allPersonMatrixList, selectedPeriod, schedulingOptions);
-
-        }
-
-
-        private void analyzeAndPerformPossibleSwaps(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> modifiedMatrixList, DateOnlyPeriod selectedPeriod, ISchedulingOptions schedulingOptions )
-        {
-            //var listOfAllTeamBlock = _constructTeamBlock.Construct(modifiedMatrixList, selectedPeriod, selectedPersons, schedulingOptions.UseTeamBlockPerOption,
-            //                                                     schedulingOptions.BlockFinderTypeForAdvanceScheduling,
-            //                                                     schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-           
-        }
-
-        private void rearrangeDayOffAmongAagents()
-        {
-            throw new NotImplementedException();
         }
         
         public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
