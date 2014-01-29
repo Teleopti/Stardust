@@ -49,9 +49,9 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 		public static void AddThreeShifts(string onPerson)
 		{
-			var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
-			var act = new ActivityConfigurable { Name = "Phone" };
-			var act2 = new ActivityConfigurable { Name = "Lunch" };
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat",Color = "Green"};
+			var act = new ActivityConfigurable { Name = "Phone",Color = "LightGreen", InReadyTime = true};
+			var act2 = new ActivityConfigurable { Name = "Lunch", Color = "Red"};
 			Data.Apply(cat);
 			Data.Apply(act);
 			Data.Apply(act2);
@@ -70,8 +70,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 		public static void AddOverlapping(string onPerson)
 		{
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
-			var act = new ActivityConfigurable { Name = "Phone" };
-			var act2 = new ActivityConfigurable { Name = "Lunch" };
+			var act = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var act2 = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
 			Data.Apply(cat);
 			Data.Apply(act);
 			Data.Apply(act2);
