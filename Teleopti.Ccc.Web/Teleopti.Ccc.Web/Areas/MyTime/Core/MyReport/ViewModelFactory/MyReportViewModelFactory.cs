@@ -5,24 +5,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 {
-	public class MyReportViewModelFactory:IMyReportViewModelFactory
+	public class MyReportViewModelFactory : IMyReportViewModelFactory
 	{
 		private readonly IMyReportDataProvider _myReportDataProvider;
 		private readonly IDailyMetricsMapper _mapper;
-		private readonly ILoggedOnUser _loggedOnUser;
 
-		public MyReportViewModelFactory(IMyReportDataProvider myReportDataProvider, IDailyMetricsMapper mapper, ILoggedOnUser loggedOnUser)
+		public MyReportViewModelFactory(IMyReportDataProvider myReportDataProvider, IDailyMetricsMapper mapper)
 		{
 			_myReportDataProvider = myReportDataProvider;
 			_mapper = mapper;
-			_loggedOnUser = loggedOnUser;
 		}
 
 		public DailyMetricsViewModel CreateDailyMetricsViewModel(DateOnly dateOnly)
 		{
 			var data = _myReportDataProvider.RetrieveDailyMetricsData(dateOnly);
 
-			return _mapper.Map(data, _loggedOnUser);
+			return _mapper.Map(data);
 		}
 	}
 }

@@ -5,14 +5,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 {
-	public class DailyMetricsMapper:IDailyMetricsMapper
+	public class DailyMetricsMapper : IDailyMetricsMapper
 	{
-		public DailyMetricsViewModel Map(DailyMetricsForDayResult dataModel, ILoggedOnUser loggedOnUser)
+		private readonly IUserCulture _userCulture;
+
+		public DailyMetricsMapper(IUserCulture userCulture)
+		{
+			_userCulture = userCulture;
+		}
+
+		public DailyMetricsViewModel Map(DailyMetricsForDayResult dataModel)
 		{
 			if (dataModel == null)
 			{
 				return new DailyMetricsViewModel {DataAvailable = false};
 			}
+			var shortDatePattern = _userCulture == null ? 
+						string.Empty : 
+						_userCulture.GetCulture().DateTimeFormat.ShortDatePattern;
 			return new DailyMetricsViewModel
 			{
 				AnsweredCalls = dataModel.AnsweredCalls,
@@ -22,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 				ReadyTimePerScheduledReadyTime = dataModel.ReadyTimePerScheduledReadyTime.ValueAsPercent().ToString(CultureInfo.InvariantCulture),
 				Adherence = dataModel.Adherence.ValueAsPercent().ToString(CultureInfo.InvariantCulture),
 				DataAvailable = true,
-				DatePickerFormat = loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern
+				DatePickerFormat = shortDatePattern
 			};
 		}
 	}

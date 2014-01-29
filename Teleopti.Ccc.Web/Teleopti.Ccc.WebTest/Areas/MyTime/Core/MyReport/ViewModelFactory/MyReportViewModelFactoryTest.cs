@@ -18,14 +18,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IDailyMetricsMapper>();
 			var myReportDataProvider = MockRepository.GenerateMock<IMyReportDataProvider>();
-			var loggedOnUser = MockRepository.GenerateStrictMock<ILoggedOnUser>();
-			var target = new MyReportViewModelFactory(myReportDataProvider, mapper, loggedOnUser);
+			var target = new MyReportViewModelFactory(myReportDataProvider, mapper);
 			var dataModel = new DailyMetricsForDayResult();
 			var viewModel = new DailyMetricsViewModel();
 			var date = DateOnly.Today;
 
 			myReportDataProvider.Stub(x => x.RetrieveDailyMetricsData(date)).Return(dataModel);
-			mapper.Stub(x => x.Map(dataModel, loggedOnUser)).Return(viewModel);
+			mapper.Stub(x => x.Map(dataModel)).Return(viewModel);
 
 			var result = target.CreateDailyMetricsViewModel(date);
 
