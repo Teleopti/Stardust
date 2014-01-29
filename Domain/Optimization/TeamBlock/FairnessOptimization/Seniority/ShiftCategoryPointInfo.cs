@@ -1,23 +1,23 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+﻿//using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 
-namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
-{
-	public interface IShiftCategoryPointInfo
-	{
-		ITeamBlockInfo TeamBlockInfo { get; }
-		int Point { get; }
-	}
+//namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority
+//{
+//    public interface IShiftCategoryPointInfo
+//    {
+//        ITeamBlockInfo TeamBlockInfo { get; }
+//        int Point { get; }
+//    }
 
-    //delete this call
-	public class ShiftCategoryPointInfo : IShiftCategoryPointInfo
-	{
-		public ITeamBlockInfo TeamBlockInfo { get; private set; }
-		public int Point { get; private set; }
+//    //delete this call
+//    public class ShiftCategoryPointInfo : IShiftCategoryPointInfo
+//    {
+//        public ITeamBlockInfo TeamBlockInfo { get; private set; }
+//        public int Point { get; private set; }
 
-		public ShiftCategoryPointInfo(ITeamBlockInfo teamInfo, int point)
-		{
-			TeamBlockInfo = teamInfo;
-			Point = point;
-		}
-	}
-}
+//        public ShiftCategoryPointInfo(ITeamBlockInfo teamInfo, int point)
+//        {
+//            TeamBlockInfo = teamInfo;
+//            Point = point;
+//        }
+//    }
+//}

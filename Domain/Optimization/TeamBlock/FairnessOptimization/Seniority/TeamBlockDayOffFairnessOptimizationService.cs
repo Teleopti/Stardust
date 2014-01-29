@@ -24,14 +24,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         private bool _cancelMe;
         private readonly IConstructTeamBlock _constructTeamBlock;
-        private ISeniorityExtractor _seniorityExtractor;
         private IDayOffStep1 _dayOffStep1;
-        //private readonly ITeamBlockMatrixValidator _teamBlockMatrixValidator;
+        private IDayOffStep2 _dayOffStep2;
 
-        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock,  ISeniorityExtractor seniorityExtractor)
+        public TeamBlockDayOffFairnessOptimizationService(IConstructTeamBlock constructTeamBlock)
         {
             _constructTeamBlock = constructTeamBlock;
-            _seniorityExtractor = seniorityExtractor;
         }
 
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
@@ -44,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
             _dayOffStep1.PerformStep1(schedulingOptions,allPersonMatrixList,selectedPeriod,selectedPersons );
 
+            _dayOffStep2.PerformStep2();
             rearrangeDayOffAmongAagents();
 
             if(!schedulingOptions.UseSameDayOffs )
