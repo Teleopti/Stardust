@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ITeamBlockLocatorWithHighestPoints _teamBlockLocatorWithHighestPoints;
 		private readonly IWeekDayPointCalculatorForTeamBlock _weekDayPointCalculatorForTeamBlock;
 		private readonly ISeniorityTeamBlockSwapper _seniorityTeamBlockSwapper;
+		private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 		private bool _cancelMe;
 
 		public SeniorityTeamBlockSwapperService(IConstructTeamBlock constructTeamBlock,
@@ -38,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		                                        IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks,
 												ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints,
 												IWeekDayPointCalculatorForTeamBlock weekDayPointCalculatorForTeamBlock,
-												ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper)
+												ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper,
+												ITeamBlockSeniorityValidator teamBlockSeniorityValidator)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_teamBlockLocatorWithHighestPoints = teamBlockLocatorWithHighestPoints;
 			_weekDayPointCalculatorForTeamBlock = weekDayPointCalculatorForTeamBlock;
 			_seniorityTeamBlockSwapper = seniorityTeamBlockSwapper;
+			_teamBlockSeniorityValidator = teamBlockSeniorityValidator;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
@@ -59,12 +62,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		{
 			_cancelMe = false;
 
-			//TODO filter out incorrect wfcs
 			var allTeamBlocks = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true,
 			                                                  BlockFinderType.SchedulePeriod,
 			                                                  schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-			var teamBlocksToWorkWith = _filterForTeamBlockInSelection.Filter(allTeamBlocks,
-																		  selectedPersons, selectedPeriod);
+
+			var teamBlocksToWorkWith = _filterForTeamBlockInSelection.Filter(allTeamBlocks, selectedPersons, selectedPeriod);
+			teamBlocksToWorkWith = teamBlocksToWorkWith.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
 
 			teamBlocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksToWorkWith, scheduleDictionary);
 			var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith);
