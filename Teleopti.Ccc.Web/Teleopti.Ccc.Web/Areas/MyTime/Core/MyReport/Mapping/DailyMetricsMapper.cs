@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 			return new DailyMetricsViewModel
 			{
 				AnsweredCalls = dataModel.AnsweredCalls,
-				AverageAfterCallWork = dataModel.AfterCallWorkTimeAverage.TotalSeconds.ToString(CultureInfo.InvariantCulture),
-				AverageTalkTime = dataModel.TalkTimeAverage.TotalSeconds.ToString(CultureInfo.InvariantCulture),
-				AverageHandlingTime = dataModel.HandlingTimeAverage.TotalSeconds.ToString(CultureInfo.InvariantCulture),
+				AverageAfterCallWork = dataModel.AfterCallWorkTimeAverage.TotalSeconds.ToString(culture),
+				AverageTalkTime = dataModel.TalkTimeAverage.TotalSeconds.ToString(culture),
+				AverageHandlingTime = dataModel.HandlingTimeAverage.TotalSeconds.ToString(culture),
 				ReadyTimePerScheduledReadyTime = dataModel.ReadyTimePerScheduledReadyTime.ValueAsPercent().ToString(culture),
 				Adherence = dataModel.Adherence.ValueAsPercent().ToString(culture),
 				DataAvailable = true,
