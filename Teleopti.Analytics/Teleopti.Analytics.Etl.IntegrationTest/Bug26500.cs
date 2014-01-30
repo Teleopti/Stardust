@@ -8,14 +8,9 @@ using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
 using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
-using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
-using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -61,51 +56,28 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				};
 
 			//transfer site, team contract etc from app to analytics
-			var result = StepRunner.RunNightly(jobParameters);
+			StepRunner.RunNightly(jobParameters);
 
 			// now it should have data on all three dates on both persons 192 interval
 			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
 			var factSchedules = from s in db.fact_schedule select s;
 			Assert.That(factSchedules.Count(), Is.EqualTo(192));
 
-			var readModel = new ScheduleDayReadModel
-			{
-				PersonId = person.Id.GetValueOrDefault(),
-				ColorCode = 0,
-				ContractTimeTicks = 500,
-				Date = DateTime.Today,
-				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
-				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
-				Label = "LABEL",
-				NotScheduled = false,
-				Workday = true,
-				WorkTimeTicks = 600
-			};
+			//edit three shifts for Ola
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(0), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(1), person);
+			BasicShiftSetup.AddThreeShifts("Ola H");
 
-			// we must manipulate readmodel so it "knows" that the dates on the person are updated
-			// person has 3 days changed
-			var readM = new ScheduleDayReadModelSetup { Model = readModel };
-			Data.Apply(readM);
-			readModel.Date = DateTime.Today.AddDays(-1);
-			readM = new ScheduleDayReadModelSetup { Model = readModel };
-			Data.Apply(readM);
-			readModel.Date = DateTime.Today.AddDays(1);
-			readM = new ScheduleDayReadModelSetup { Model = readModel };
-			Data.Apply(readM);
+			//edit one shift for David
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "David J", DateTime.Today.AddDays(0), person2);
+			BasicShiftSetup.AddShift("David J", DateTime.Today.AddDays(0), 10, 8);
 
-			// person2 has only one day changed
-			readModel.PersonId = person2.Id.GetValueOrDefault();
-			readModel.Date = DateTime.Today;
-			readM = new ScheduleDayReadModelSetup { Model = readModel };
-			Data.Apply(readM);
-
-
-			result = StepRunner.RunIntraday(jobParameters);
+			StepRunner.RunIntraday(jobParameters);
 
 			factSchedules = from s in db.fact_schedule select s;
 
 			Assert.That(factSchedules.Count(), Is.EqualTo(192));
-			
 		}
 	}
 }
