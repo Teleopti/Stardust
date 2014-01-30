@@ -1,0 +1,33 @@
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+
+namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
+{
+	public class DeletePersonAssignment : IUserDataSetup
+	{
+		private readonly IScenario _scenario;
+		private readonly DateOnly _theDateOnly;
+
+		public DeletePersonAssignment(IScenario scenario, DateOnly theDateOnly)
+		{
+			_scenario = scenario;
+			_theDateOnly = theDateOnly;
+		}
+
+		public void Apply(IUnitOfWork uow, IPerson person, CultureInfo cultureInfo)
+		{
+			var assignmentRepository = new PersonAssignmentRepository(uow);
+			var assignment = assignmentRepository.Find(new List<IPerson> {person}, new DateOnlyPeriod(_theDateOnly, _theDateOnly), _scenario).First();
+			
+			assignmentRepository.Remove(assignment);
+		}
+
+
+	}
+}

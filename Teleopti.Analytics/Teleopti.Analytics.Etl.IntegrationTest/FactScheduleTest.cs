@@ -127,7 +127,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(23760), "ETL.Nightly " + column + " for Today");
 			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(26640), "ETL.Nightly " + column + " for Yesterday");
 
-			//move shift
+			//remove shift
+			var remove = new DeletePersonAssignment(BasicShiftSetup.Scenario.Scenario, new DateOnly(DateTime.Today.Date));
+			Data.Person("Ola H").Apply(remove);
+
 			//BasicShiftSetup.SeparateOverlapping("David J");
 
 			//StepRunner.RunIntraday(jobParameters);

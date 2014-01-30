@@ -382,6 +382,7 @@
     <Compile Include="FactScheduleTest.cs" />
     <Compile Include="TestData\AnalyticsRunner.cs" />
     <Compile Include="TestData\BasicShiftSetup.cs" />
+    <Compile Include="TestData\DeletePersonAssignment.cs" />
     <Compile Include="TestData\EtlReadModelSetup.cs" />
     <Compile Include="TestData\ScheduleDayReadModelSetup.cs" />
     <Compile Include="TestData\ShiftForDate.cs" />

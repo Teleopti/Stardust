@@ -149,6 +149,5 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 		public static ContractScheduleConfigurable ContractSchedule { get; set; }
 		public static PartTimePercentageConfigurable PartTimePercentage { get; set; }
 		public static ScenarioConfigurable Scenario { get; set; }
-		
 	}
 }
