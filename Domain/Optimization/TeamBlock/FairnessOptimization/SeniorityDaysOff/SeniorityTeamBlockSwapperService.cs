@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ISeniorityTeamBlockSwapperService
 	{
+		event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
 		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 		                             ISchedulingOptions schedulingOptions,
 		                             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, 
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ITeamBlockLocatorWithHighestPoints _teamBlockLocatorWithHighestPoints;
 		private readonly IWeekDayPointCalculatorForTeamBlock _weekDayPointCalculatorForTeamBlock;
 		private readonly ISeniorityTeamBlockSwapper _seniorityTeamBlockSwapper;
+		private bool _cancelMe;
 
 		public SeniorityTeamBlockSwapperService(IConstructTeamBlock constructTeamBlock,
 		                                        IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
@@ -48,12 +50,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_seniorityTeamBlockSwapper = seniorityTeamBlockSwapper;
 		}
 
+		public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
+
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
                             ISchedulingOptions schedulingOptions,
                             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, 
 							IOptimizationPreferences optimizationPreferences, IDictionary<DayOfWeek, int> weekDayPoints)
 		{
+			_cancelMe = false;
 
+			//filter out incorrect wfcs
 			var allTeamBlocks = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true,
 			                                                  BlockFinderType.SchedulePeriod,
 			                                                  schedulingOptions.GroupOnGroupPageForTeamBlockPer);
@@ -63,17 +69,24 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			teamBlocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksToWorkWith, scheduleDictionary);
 			var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith);
 			var seniorityInfoDictionary = teamBlockPoints.ToDictionary(teamBlockPoint => teamBlockPoint.TeamBlockInfo, teamBlockPoint => teamBlockPoint.Points);
-
-			while (seniorityInfoDictionary.Count > 0)
+			var originalBlocksCont = seniorityInfoDictionary.Count;
+			while (seniorityInfoDictionary.Count > 0 && !_cancelMe)
 			{
 				var mostSeniorTeamBlock = findMostSeniorTeamBlock(seniorityInfoDictionary);
-				trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary, optimizationPreferences);
+				teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
+				trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary,
+				                     optimizationPreferences, originalBlocksCont, seniorityInfoDictionary.Count);
 				seniorityInfoDictionary.Remove(mostSeniorTeamBlock);
 			}
 			
 		}
 
-		private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints, IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
+		private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints,
+		                                  IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock,
+		                                  ISchedulePartModifyAndRollbackService rollbackService,
+		                                  IScheduleDictionary scheduleDictionary,
+		                                  IOptimizationPreferences optimizationPreferences, int originalBlocksCount,
+		                                  int remainingBlocksCount)
 		{
 			var swappableTeamBlocks = _filterOnSwapableTeamBlocks.Filter(teamBlocksToWorkWith, mostSeniorTeamBlock);
 
@@ -81,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			var seniorValue = seniorityValueDic[mostSeniorTeamBlock];
 
 			var swapSuccess = false;
-			while (swappableTeamBlocks.Count > 0 && !swapSuccess)
+			while (swappableTeamBlocks.Count > 0 && !swapSuccess && !_cancelMe)
 			{
 				var blockToSwapWith = _teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(swappableTeamBlocks,
 				                                                                                     seniorityValueDic);
@@ -89,12 +102,29 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				{
 					swapSuccess = _seniorityTeamBlockSwapper.SwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
 					                                                         scheduleDictionary, optimizationPreferences);
-					if(!swapSuccess)
+					if (!swapSuccess)
 						rollbackService.Rollback();
 				}
 
 				swappableTeamBlocks.Remove(blockToSwapWith);
+
+				var message = "xxSwap successful";
+				if (!swapSuccess)
+					message = "xxSwap not sucessful";
+
+				double percentDone = 1 - (remainingBlocksCount/(double)originalBlocksCount);
+				OnBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1, message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " +new Percent(percentDone).ToString() +  " done "));
 			}
+		}
+
+		protected virtual void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs)
+		{
+			EventHandler<ResourceOptimizerProgressEventArgs> temp = BlockSwapped;
+			if (temp != null)
+			{
+				temp(this, eventArgs);
+			}
+			_cancelMe = eventArgs.Cancel;
 		}
 
 		private  IDictionary<ITeamBlockInfo, double> createSeniorityValueDictionary(IEnumerable<ITeamBlockInfo> teamBlocksToWorkWith, IDictionary<DayOfWeek, int> weekDayPoints)
