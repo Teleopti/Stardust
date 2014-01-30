@@ -12,18 +12,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 	[TestFixture]
 	public class DailyMetricsMapperTest
 	{
-		private CultureInfo _culture;
 		private DailyMetricsMapper _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_culture = CultureInfo.GetCultureInfo("sv-SE");
+			var culture = CultureInfo.GetCultureInfo("sv-SE");
 			var userCulture = MockRepository.GenerateMock<IUserCulture>();
-			userCulture.Expect(x => x.GetCulture()).Return(_culture);
+			userCulture.Expect(x => x.GetCulture()).Return(culture);
 
 			_target = new DailyMetricsMapper(userCulture);
 		}
+
 		[Test]
 		public void ShouldMapAnsweredCalls()
 		{
