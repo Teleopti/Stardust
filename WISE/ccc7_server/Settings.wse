@@ -270,19 +270,23 @@ item: Set Variable
 end
 item: End Block
 end
-item: Set Variable
-  Variable=WEB_BROKER_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
-end
 item: If/While Statement
   Variable=DMZ_TMP
   Value=YES
+end
+item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
 end
 item: Set Variable
   Variable=WEB_BROKER_BACKPLANE_TMP
   Value=%INSIDE_HOSTNAME_TMP%TeleoptiCCC/Broker.backplane/backplane
 end
 item: Else Statement
+end
+item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker/
 end
 item: Set Variable
   Variable=WEB_BROKER_BACKPLANE_TMP
