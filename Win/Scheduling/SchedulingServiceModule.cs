@@ -257,7 +257,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<SeniorityTeamBlockSwapperService>().As<ISeniorityTeamBlockSwapperService>();
 			builder.RegisterType<SeniorityTeamBlockSwapValidator>().As<ISeniorityTeamBlockSwapValidator>();
 			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>();
-			//IDayOffRulesValidator
+			builder.RegisterType<SeniorityTeamBlockSwapper>().As<ISeniorityTeamBlockSwapper>();
+			//ISeniorityTeamBlockSwapper
 
 			//common
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
