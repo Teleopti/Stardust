@@ -12,12 +12,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 	[TestFixture]
 	public class DailyMetricsMapperTest
 	{
+		private CultureInfo _culture;
+		private DailyMetricsMapper _target;
+
+		[SetUp]
+		public void Setup()
+		{
+			_culture = CultureInfo.GetCultureInfo("sv-SE");
+			var userCulture = MockRepository.GenerateMock<IUserCulture>();
+			userCulture.Expect(x => x.GetCulture()).Return(_culture);
+
+			_target = new DailyMetricsMapper(userCulture);
+		}
 		[Test]
 		public void ShouldMapAnsweredCalls()
 		{
-			var target = new DailyMetricsMapper(null);
 			var dataModel = new DailyMetricsForDayResult {AnsweredCalls = 55};
-			var viewModel = target.Map(dataModel);
+			var viewModel = _target.Map(dataModel);
 
 			viewModel.AnsweredCalls.Should().Be.EqualTo(dataModel.AnsweredCalls);
 		}
@@ -25,58 +36,52 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		[Test]
 		public void ShouldMapAfterCallWorkTimeAverage()
 		{
-			var target = new DailyMetricsMapper(null);
 			var dataModel = new DailyMetricsForDayResult { AfterCallWorkTimeAverage = new TimeSpan(0,0,40) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = _target.Map(dataModel);
 
-			viewModel.AverageAfterCallWork.Should().Be.EqualTo(new TimeSpan(0,0,40).TotalSeconds.ToString(CultureInfo.InvariantCulture));
+			viewModel.AverageAfterCallWork.Should().Be.EqualTo("40");
 		}
 
 		[Test]
 		public void ShouldMapTalkTimeAverage()
 		{
-			var target = new DailyMetricsMapper(null);
 			var dataModel = new DailyMetricsForDayResult { TalkTimeAverage = new TimeSpan(0, 0, 110) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = _target.Map(dataModel);
 
-			viewModel.AverageTalkTime.Should().Be.EqualTo(new TimeSpan(0, 0, 110).TotalSeconds.ToString(CultureInfo.InvariantCulture));
+			viewModel.AverageTalkTime.Should().Be.EqualTo("110");
 		}
 
 		[Test]
 		public void ShouldMapHandlingTimeAverage()
 		{
-			var target = new DailyMetricsMapper(null);
 			var dataModel = new DailyMetricsForDayResult { HandlingTimeAverage = new TimeSpan(0, 0, 120) };
-			var viewModel = target.Map(dataModel);
+			var viewModel = _target.Map(dataModel);
 
-			viewModel.AverageHandlingTime.Should().Be.EqualTo(new TimeSpan(0, 0, 120).TotalSeconds.ToString(CultureInfo.InvariantCulture));
+			viewModel.AverageHandlingTime.Should().Be.EqualTo("120");
 		}
 
 		[Test]
 		public void ShouldMapReadyTimePerScheduledReadyTime()
 		{
-			var target = new DailyMetricsMapper(null);
-			var dataModel = new DailyMetricsForDayResult { ReadyTimePerScheduledReadyTime = new Percent(0.75) };
-			var viewModel = target.Map(dataModel);
+			var dataModel = new DailyMetricsForDayResult { ReadyTimePerScheduledReadyTime = new Percent(0.754) };
+			var viewModel = _target.Map(dataModel);
 
-			viewModel.ReadyTimePerScheduledReadyTime.Should().Be.EqualTo(75.ToString(CultureInfo.InvariantCulture));
+			viewModel.ReadyTimePerScheduledReadyTime.Should().Be.EqualTo("75,4");
 		}
 
 		[Test]
 		public void ShouldMapAdherence()
 		{
-			var target = new DailyMetricsMapper(null);
-			var dataModel = new DailyMetricsForDayResult { Adherence = new Percent(0.80) };
-			var viewModel = target.Map(dataModel);
+			var dataModel = new DailyMetricsForDayResult { Adherence = new Percent(0.803) };
+			var viewModel = _target.Map(dataModel);
 
-			viewModel.Adherence.Should().Be.EqualTo(80.ToString(CultureInfo.InvariantCulture));
+			viewModel.Adherence.Should().Be.EqualTo("80,3");
 		}
 
 		[Test]
 		public void ShouldSetDataAvailableToFalseWhenDataIsUnavailable()
 		{
-			var target = new DailyMetricsMapper(null);
-			var viewModel = target.Map(null);
+			var viewModel = _target.Map(null);
 
 			viewModel.DataAvailable.Should().Be.False();
 		}
@@ -84,8 +89,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		[Test]
 		public void ShouldSetDataAvailableToTrueWhenDataIsAvailable()
 		{
-			var target = new DailyMetricsMapper(null);
-			var viewModel = target.Map(new DailyMetricsForDayResult());
+			var viewModel = _target.Map(new DailyMetricsForDayResult());
 
 			viewModel.DataAvailable.Should().Be.True();
 		}
@@ -93,11 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		[Test]
 		public void ShouldSetDatePickerFormatToCurrentCulturesShortDatePattern()
 		{
-			var userCulture = MockRepository.GenerateMock<IUserCulture>();
-			userCulture.Expect(x => x.GetCulture()).Return(CultureInfo.CurrentCulture);
-
-			var target = new DailyMetricsMapper(userCulture);
-			var viewModel = target.Map(new DailyMetricsForDayResult());
+			var viewModel = _target.Map(new DailyMetricsForDayResult());
 
 			viewModel.DatePickerFormat.Should().Be.EqualTo(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
 		}
