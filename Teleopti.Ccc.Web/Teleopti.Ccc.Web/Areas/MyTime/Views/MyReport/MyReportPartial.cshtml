@@ -17,45 +17,47 @@
 			</form>
 		</div>
 	</div>
-	<div class="container-fluid">
+	<div class="container">
 		<div data-bind="ifnot: dataAvailable">
 			<div id="friendly-message" class="alert-block alert">
 				@Teleopti.Analytics.ReportTexts.Resources.ResNoScorecardAvailable
 			</div>
 		</div>
-		<div data-bind="if: dataAvailable">
-			<div class="myReportFigures">
-				<div class="myReportTable">
-					<div class="myReportHeader myReportTableRow">
-						<div class="myReportHeaderText">@Resources.Metric</div>
-						<div class="myReportValues">@Resources.Value</div>
-					</div>
-					<div class="myReportTableRow">
-						<div class="myReportText">@Resources.KpiAdherence</div>
-						<div class="myReportValues adherenceValue" data-bind="text: adherence"></div>
-					</div>
-					<div class="myReportTableRow" style="background: #f0f0ff">
-						<div class="myReportText">@Resources.ReadyTimePerScheduledReadyTimePercent</div>
-						<div class="myReportValues readyTimePerScheduledReadyTimeValue" data-bind="text: readyTimePerScheduledReadyTime"></div>
-					</div>
-					<div class="myReportTableRow">
-						<div class="myReportText">@Resources.KpiAverageHandleTime</div>
-						<div class="myReportValues handlingTimeValue" data-bind="text: averageHandlingTime"></div>
-					</div>
-					<div class="myReportTableRow" style="background: #f0f0ff">
-						<div class="myReportText">@Resources.KpiAverageTalkTime</div>
-						<div class="myReportValues talkTimeValue" data-bind="text: averageTalkTime"></div>
-					</div>
-					<div class="myReportTableRow">
-						<div class="myReportText">@Resources.KpiAverageAfterCallWork</div>
-						<div class="myReportValues afterWorkValue" data-bind="text: averageAfterCallWork"></div>
-					</div>
-					<div class="myReportTableRow" style="background: #f0f0ff">
-						<div class="myReportText">@Resources.AnsweredCalls</div>
-						<div class="myReportValues answeredCallsValue" data-bind="text: answeredCalls"></div>
-					</div>
-				</div>
-			</div>
+		<div data-bind="if: dataAvailable" class="span6">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>@Resources.Metric</th>
+						<th class="right-align-cell">@Resources.Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>@Resources.KpiAdherence</td>
+						<td class="right-align-cell" data-bind="text: adherence"></td>
+					</tr>
+					<tr>
+						<td>@Resources.ReadyTimePerScheduledReadyTimePercent</td>
+						<td class="right-align-cell" data-bind="text: readyTimePerScheduledReadyTime"></td>
+					</tr>
+					<tr>
+						<td>@Resources.KpiAverageHandleTime</td>
+						<td class="right-align-cell" data-bind="text: averageHandlingTime"></td>
+					</tr>
+					<tr>
+						<td>@Resources.KpiAverageTalkTime</td>
+						<td class="right-align-cell" data-bind="text: averageTalkTime"></td>
+					</tr>
+					<tr>
+						<td>@Resources.KpiAverageAfterCallWork</td>
+						<td class="right-align-cell" data-bind="text: averageAfterCallWork"></td>
+					</tr>
+					<tr>
+						<td>@Resources.AnsweredCalls</td>
+						<td class="right-align-cell" data-bind="text: answeredCalls"></td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 </div>
