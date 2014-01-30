@@ -95,11 +95,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 		}
 
 		[Test]
-		public void ShouldSetDatePickerFormatToCurrentCulturesShortDatePattern()
+		public static void ShouldSetDatePickerFormatToCurrentCulturesShortDatePattern()
 		{
-			var viewModel = _target.Map(new DailyMetricsForDayResult());
+			var culture = CultureInfo.GetCultureInfo("en-US");
+			var userCulture = MockRepository.GenerateMock<IUserCulture>();
+			userCulture.Expect(x => x.GetCulture()).Return(culture);
 
-			viewModel.DatePickerFormat.Should().Be.EqualTo(CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern);
+			var target = new DailyMetricsMapper(userCulture);
+
+			var viewModel = target.Map(new DailyMetricsForDayResult());
+
+			viewModel.DatePickerFormat.Should().Be.EqualTo(culture.DateTimeFormat.ShortDatePattern);
 		}
 	}
 }
