@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
         private readonly ISeniorityCalculatorForTeamBlock _seniorityCalculatorForTeamBlock;
         private readonly ITeamBlockLocatorWithHighestPoints _teamBlockLocatorWithHighestPoints;
-        private readonly ITeamBlockSwapper _teambBlockSwapper;
+        private readonly ITeamBlockSwapper _teamBlockSwapper;
 
-        public DescisionMakerToSwapTeamBlock(IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ISeniorityCalculatorForTeamBlock seniorityCalculatorForTeamBlock, ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints, ITeamBlockSwapper teambBlockSwapper)
+        public DescisionMakerToSwapTeamBlock(IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ISeniorityCalculatorForTeamBlock seniorityCalculatorForTeamBlock, ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints, ITeamBlockSwapper teamBlockSwapper)
         {
             _filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
             _seniorityCalculatorForTeamBlock = seniorityCalculatorForTeamBlock;
             _teamBlockLocatorWithHighestPoints = teamBlockLocatorWithHighestPoints;
-            _teambBlockSwapper = teambBlockSwapper;
+            _teamBlockSwapper = teamBlockSwapper;
         }
 
         public  bool  TrySwapForMostSenior(IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints)
@@ -33,20 +33,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var swappableTeamBlocks = _filterOnSwapableTeamBlocks.Filter(teamBlocksToWorkWith, mostSeniorTeamBlock);
 
             var seniorityValueDic = _seniorityCalculatorForTeamBlock.CreateWeekDayValueDictionary(teamBlocksToWorkWith,weekDayPoints);
-            var seniorValue = seniorityValueDic[mostSeniorTeamBlock];
-
+            
             var swapSuccess = false;
-            while (swappableTeamBlocks.Count > 0 && !swapSuccess)
+            if (seniorityValueDic.Count > 0)
             {
-                var blockToSwapWith = _teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(swappableTeamBlocks, seniorityValueDic);
-                if (seniorValue < seniorityValueDic[blockToSwapWith])
+                var seniorValue = seniorityValueDic[mostSeniorTeamBlock];
+                while (swappableTeamBlocks.Count > 0 && !swapSuccess)
                 {
-                    bool success = _teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
-                                                               scheduleDictionary);
-                    swapSuccess = true;
-                }
+                    var blockToSwapWith = _teamBlockLocatorWithHighestPoints.FindBestTeamBlockToSwapWith(swappableTeamBlocks, seniorityValueDic);
+                    if (seniorValue < seniorityValueDic[blockToSwapWith])
+                    {
+                        bool success = _teamBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
+                                                                   scheduleDictionary);
+                        swapSuccess = success;
+                    }
 
-                swappableTeamBlocks.Remove(blockToSwapWith);
+                    swappableTeamBlocks.Remove(blockToSwapWith);
+                }
             }
 
             return swapSuccess;
