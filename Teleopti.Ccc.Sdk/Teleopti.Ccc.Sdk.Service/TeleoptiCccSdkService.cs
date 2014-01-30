@@ -899,7 +899,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
 				adherenceReportSetting = repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 			}
-			return (int)adherenceReportSetting.CalculationMethod;
+			return adherenceReportSetting.AdherenceIdForReport();
 		}
 
 		[SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.String)")]

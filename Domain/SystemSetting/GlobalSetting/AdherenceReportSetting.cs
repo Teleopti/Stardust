@@ -12,5 +12,22 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
 				CalculationMethod = AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime;
 	    }
 	    public AdherenceReportSettingCalculationMethod CalculationMethod { get; set; }
+
+	    public int AdherenceIdForReport()
+	    {
+					switch (CalculationMethod)
+					{
+					    case AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime:
+					        return 1;
+					
+					    case AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime:
+					        return 2;
+					
+					    case AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime:
+					        return 3;
+					
+					}
+		    throw new NotSupportedException("Illegal adherence report setting");
+	    }
     }
 }

@@ -1,4 +1,6 @@
+using System;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
@@ -24,11 +26,31 @@ namespace Teleopti.Ccc.DomainTest.SystemSetting.GlobalSetting
         }
 
         [Test]
-        public static void VerifyMapToMatrix()
+        public void VerifyMapToMatrixContract()
         {
-            Assert.AreEqual(1, (int)AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime);
-            Assert.AreEqual(2, (int)AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime);
-            Assert.AreEqual(3, (int)AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime);
+					_target.CalculationMethod = AdherenceReportSettingCalculationMethod.ReadyTimeVSContractScheduleTime;
+	        _target.AdherenceIdForReport().Should().Be.EqualTo(3);
         }
+
+	    [Test]
+	    public void VerifyMapToMatrixScheduleTime()
+	    {
+				_target.CalculationMethod = AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledTime;
+				_target.AdherenceIdForReport().Should().Be.EqualTo(2);
+	    }
+
+			[Test]
+			public void VerifyMapToMatrixReadyTime()
+			{
+				_target.CalculationMethod = AdherenceReportSettingCalculationMethod.ReadyTimeVSScheduledReadyTime;
+				_target.AdherenceIdForReport().Should().Be.EqualTo(1);
+			}
+
+			[Test]
+			public void VerifyMapToIllegal()
+			{
+				_target.CalculationMethod = (AdherenceReportSettingCalculationMethod) 47;
+				Assert.Throws<NotSupportedException>(() => _target.AdherenceIdForReport());
+			}
     }
 }
