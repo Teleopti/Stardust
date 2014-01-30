@@ -1,5 +1,7 @@
 ﻿
 
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -13,21 +15,65 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	public class SeniorityTeamBlockSwapValidator : ISeniorityTeamBlockSwapValidator
 	{
 		private readonly IDayOffRulesValidator _dayOffRulesValidator;
+		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private readonly IConstructTeamBlock _constructTeamBlock;
+		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
-		public SeniorityTeamBlockSwapValidator(IDayOffRulesValidator dayOffRulesValidator)
+		public SeniorityTeamBlockSwapValidator(IDayOffRulesValidator dayOffRulesValidator,
+		                                       ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
+		                                       IConstructTeamBlock constructTeamBlock, ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			_dayOffRulesValidator = dayOffRulesValidator;
+			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
+			_constructTeamBlock = constructTeamBlock;
+			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
 		{
-			foreach (var matrix in teamBlockInfo.MatrixesForGroupAndBlock())
+			var matrixesToCheck = teamBlockInfo.MatrixesForGroupAndBlock().ToList();
+
+			foreach (var matrix in matrixesToCheck)
 			{
 				bool valid = _dayOffRulesValidator.Validate(matrix, optimizationPreferences);
 				if (!valid)
 					return false;
 			}
+
+			var totalPeriod = calculateTotalPeriod(matrixesToCheck);
+			var teamBlocksToCheck = _constructTeamBlock.Construct(matrixesToCheck, totalPeriod,
+			                                                      teamBlockInfo.TeamInfo.GroupMembers.ToList(),
+			                                                      optimizationPreferences.Extra.UseTeamBlockOption,
+			                                                      optimizationPreferences.Extra
+			                                                                             .BlockFinderTypeForAdvanceOptimization,
+			                                                      optimizationPreferences.Extra.GroupPageOnTeamBlockPer);
+
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			foreach (var teamBlock in teamBlocksToCheck)
+			{
+				bool valid = _teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlock, schedulingOptions);
+				if (!valid)
+					return false;
+			}
+
 			return true;
+		}
+
+		private static DateOnlyPeriod calculateTotalPeriod(IEnumerable<IScheduleMatrixPro> matrixesToCheck)
+		{
+			var firstDate = DateOnly.MaxValue;
+			var lastDate = DateOnly.MinValue;
+			foreach (var matrix in matrixesToCheck)
+			{
+				var period = matrix.SchedulePeriod.DateOnlyPeriod;
+				if (period.StartDate < firstDate)
+					firstDate = period.StartDate;
+
+				if (period.EndDate > lastDate)
+					lastDate = period.EndDate;
+			}
+			var totalPeriod = new DateOnlyPeriod(firstDate, lastDate);
+			return totalPeriod;
 		}
 	}
 }
