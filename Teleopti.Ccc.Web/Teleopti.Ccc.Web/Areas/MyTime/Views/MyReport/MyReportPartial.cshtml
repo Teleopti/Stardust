@@ -4,7 +4,6 @@
 }
 
 <div class="myreport-daily-metrics">
-	<h2>xxOverview or something</h2>
 	<div class="navbar ">
 		<div class="navbar-inner">
 			<form class="navbar-form pull-left">
@@ -20,7 +19,7 @@
 	<div class="container">
 		<div data-bind="ifnot: dataAvailable">
 			<div id="friendly-message" class="alert-block alert">
-				@Teleopti.Analytics.ReportTexts.Resources.ResNoScorecardAvailable
+				@Resources.NoDataAvailable
 			</div>
 		</div>
 		<div data-bind="if: dataAvailable" class="span6">
