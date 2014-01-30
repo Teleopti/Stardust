@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		{
 			_cancelMe = false;
 
-			//filter out incorrect wfcs
+			//TODO filter out incorrect wfcs
 			var allTeamBlocks = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true,
 			                                                  BlockFinderType.SchedulePeriod,
 			                                                  schedulingOptions.GroupOnGroupPageForTeamBlockPer);
