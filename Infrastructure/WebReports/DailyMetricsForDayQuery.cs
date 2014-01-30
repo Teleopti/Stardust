@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.WebReports
 					.AddScalar("Adherence", NHibernateUtil.Double)
 					.SetDateTime("date_from", date.Date)
 					.SetDateTime("date_to", date.Date)
-					.SetInt32("adherence_id", (int)_globalSettingDataRepository.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()).CalculationMethod)
+					.SetInt32("adherence_id", (int)_globalSettingDataRepository.FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting()).AdherenceIdForReport())
 					.SetGuid("person_code", _loggedOnUser.CurrentUser().Id.Value)
 					.SetGuid("business_unit_code", _currentBusinessUnit.Current().Id.Value) 
 					.SetResultTransformer(new dailyMetricsForDayResultTransformer())
