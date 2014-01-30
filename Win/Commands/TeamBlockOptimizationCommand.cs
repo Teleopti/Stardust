@@ -170,17 +170,17 @@ namespace Teleopti.Ccc.Win.Commands
 				                                       teamBlockRestrictionOverLimitValidator, optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
-				//day off seniority faines according to Micke
-				_seniorityTeamBlockSwapperService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
-				                                          _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
-				                                          optimizationPreferences, new WeekDayPoints().GetWeekDaysPoints());
-
+                ////day off seniority faines according to Micke
+                //_seniorityTeamBlockSwapperService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
+                //                                          _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
+                //                                          optimizationPreferences, new WeekDayPoints().GetWeekDaysPoints());
+                //day off fairness
+                _teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
 
 				ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, allMatrixes);
 				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))
 					return;
-				//day off fairness
-				_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
+				
 				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
 			}
 				

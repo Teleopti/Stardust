@@ -25,7 +25,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly ISeniorTeamBlockLocator _seniorTeamBlockLocator;
         private readonly IDescisionMakerToSwapTeamBlock  _descisionMakerToSwapTeamBlock;
 
-        public DayOffStep1( IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, IFilterForTeamBlockInSelection filterForFullyScheduledBlocks, ISeniorityExtractor seniorityExtractor, ISeniorTeamBlockLocator seniorTeamBlockLocator, IDescisionMakerToSwapTeamBlock descisionMakerToSwapTeamBlock)
+        public DayOffStep1( IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, 
+                                IFilterForTeamBlockInSelection filterForFullyScheduledBlocks, ISeniorityExtractor seniorityExtractor, 
+                                    ISeniorTeamBlockLocator seniorTeamBlockLocator, IDescisionMakerToSwapTeamBlock descisionMakerToSwapTeamBlock)
         {
             _constructTeamBlock = constructTeamBlock;
             _filterForTeamBlockInSelection = filterForTeamBlockInSelection;
@@ -35,7 +37,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _descisionMakerToSwapTeamBlock = descisionMakerToSwapTeamBlock;
         }
 
-        public void PerformStep1(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints)
+        public void PerformStep1(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, 
+                                    IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, 
+                                        IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints)
         {
             var teamBlockList = stepAConstructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
             teamBlockList = stepBFilterOutUnwantedBlocks(teamBlockList, selectedPersons, selectedPeriod);
@@ -57,7 +61,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             return filteredList;
         }
 
-        private IList<ITeamBlockInfo> stepAConstructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+        private IList<ITeamBlockInfo> stepAConstructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, 
+                                                            DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
             return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true, BlockFinderType.SchedulePeriod,schedulingOptions.GroupOnGroupPageForTeamBlockPer);
         }

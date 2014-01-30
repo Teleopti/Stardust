@@ -737,11 +737,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationService>();
 			teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService);
 
-			//day off seniority faines according to Micke
-			var seniorityTeamBlockSwapperService = _container.Resolve<ISeniorityTeamBlockSwapperService>();
-			seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
-			                                         _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences,
-			                                         new WeekDayPoints().GetWeekDaysPoints());
+            ////day off seniority faines according to Micke
+            //var seniorityTeamBlockSwapperService = _container.Resolve<ISeniorityTeamBlockSwapperService>();
+            //seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
+            //                                         _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences,
+            //                                         new WeekDayPoints().GetWeekDaysPoints());
 
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,schedulingOptions, _stateHolder.ShiftCategories.ToList(),_schedulerStateHolder.Schedules, rollbackService);
