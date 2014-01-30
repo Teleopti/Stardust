@@ -3,6 +3,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 
@@ -94,5 +95,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("return $('.afterWorkValue').text().length > 0;", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.answeredCallsValue').text().length > 0;", "True");
 		}
+
+        [When(@"I click previous button")]
+        public void WhenIClickPreviousButton()
+        {
+            Browser.Interactions.Click("#report-view-date-nav-prev");
+        }
+
+        [When(@"I click next button")]
+        public void WhenIClickNextButton()
+        {
+            Browser.Interactions.Click("#report-view-date-nav-next");
+        }
 	}
 }

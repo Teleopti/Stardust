@@ -40,28 +40,18 @@ Scenario: Show friendly message when no report data
 	When I navigate to my report
 	Then I should see a user-friendly message explaining I dont have anything to view
 	
-	
-@ignore
 Scenario: Navigate within my report view to previous day
 	Given I am an agent
 	And I have my report data for '2013-10-02'
 	And the current time is '2013-10-04'
 	When I navigate to my report
-	And I click previous date
+	And I click previous button
 	Then I should see my report with data for '2013-10-02'
 	
-@ignore
 Scenario: Navigate within my report view to next day
 	Given I am an agent
 	And I have my report data for '2013-10-02'
-	And the current time is '2013-10-04'
+	And the current time is '2013-10-02'
 	When I navigate to my report
-	And I select date '2013-10-01'
-	And I click next date
+	And I click next button
 	Then I should see my report with data for '2013-10-02'
-
-
-
-
-
-
