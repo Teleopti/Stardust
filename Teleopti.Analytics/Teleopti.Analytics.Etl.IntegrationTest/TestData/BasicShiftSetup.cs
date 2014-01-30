@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
@@ -7,6 +11,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
 	public static class BasicShiftSetup
 	{
+
 		public static void SetupBasicForShifts()
 		{
 			Site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit.Name, Name = "Västerhaninge" };
@@ -84,6 +89,59 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Person(onPerson).Apply(shift2);
 			
 		}
+
+		public static void SeparateOverlapping(string person, DateOnly today)
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+
+			//var _rep = RepositoryFactory.CreatePersonAssignmentRepository(uow);
+			//var searchPeriod = new DateOnlyPeriod(today, today);
+			//IList<IPerson> persons = new List<IPerson> { person };
+			//ICollection<IPersonAssignment> retList = _rep.Find(persons, searchPeriod, Scenario.Scenario);
+
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
+			var act = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var act2 = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+			Data.Apply(cat);
+			Data.Apply(act);
+			Data.Apply(act2);
+
+			var shift = new ShiftForDate(DateTime.Today.AddDays(-1), TimeSpan.FromHours(17), TimeSpan.FromHours(30), Scenario.Scenario, cat.ShiftCategory, act.Activity,
+										 act2.Activity);
+			var shift2 = new ShiftForDate(DateTime.Today, 7, Scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
+
+			Data.Person(person).Apply(shift);
+			Data.Person(person).Apply(shift2);
+			}
+
+			// Handle readmodel
+			var readModel = new ScheduleDayReadModel
+			{
+				PersonId = Data.Person(person).Person.Id.GetValueOrDefault(),
+				ColorCode = 0,
+				ContractTimeTicks = 500,
+				Date = DateTime.Today,
+				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
+				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
+				Label = "LABEL",
+				NotScheduled = false,
+				Workday = true,
+				WorkTimeTicks = 600
+			};
+
+			var readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
+			readModel.Date = DateTime.Today.AddDays(-1);
+			readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
+			readModel.Date = DateTime.Today.AddDays(0);
+			readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
+
+		}
+
+
 
 		public static SiteConfigurable Site { get; set; }
 		public static TeamConfigurable Team { get; set; }

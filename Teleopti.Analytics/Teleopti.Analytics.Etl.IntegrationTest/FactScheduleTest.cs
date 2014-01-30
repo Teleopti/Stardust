@@ -106,23 +106,52 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
 			StepRunner.RunNightly(jobParameters);
 
+			//correct number of intervals per ScheduleDay (aka shift_startdate_id linked to local agent day)
 			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(34));
 			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(38));
 
-			Assert.That(sumScheduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(25200));
-			Assert.That(sumScheduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(28800));
+			//test the sum of each column value for today + yesterday
+			var column = "deviation_schedule_s";
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25560));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(27720));
 
-			Assert.That(sumReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(3240));
-			Assert.That(sumReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(3240));
+			column = "scheduled_ready_time_s";
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25200));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(28800));
 
-            Assert.That(sumDeviationSceduledTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(25560));
-            Assert.That(sumDeviationSceduledTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(27720));
-			
-            Assert.That(sumDeviationSceduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(23760));
-            Assert.That(sumDeviationSceduledReadyTime(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(26640));
-			
- 
+			column = "ready_time_s";
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(3240));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(3240));
 
+			column = "deviation_schedule_ready_s";
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(23760));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(26640));
+
+			//move shift
+			//BasicShiftSetup.SeparateOverlapping("David J");
+
+			//StepRunner.RunIntraday(jobParameters);
+
+			////correct number of intervals per ScheduleDay (aka shift_startdate_id linked to local agent day)
+			//Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(34));
+			//Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(38));
+
+			////test the sum of each column value for today + yesterday
+			//column = "deviation_schedule_s";
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25560));
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(27720));
+
+			//column = "scheduled_ready_time_s";
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25200));
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(28800));
+
+			//column = "ready_time_s";
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(3240));
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(3240));
+
+			//column = "deviation_schedule_ready_s";
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(23760));
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(26640));
 		}
 
 		private static int countIntervalsPerLocalDate(string connectionString, IPerson person, DateTime datelocal)
@@ -145,51 +174,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 		}
 
-		private static int sumScheduledReadyTime(string connectionString, IPerson person, DateTime datelocal)
-		{
-			var sqlConnection = connectAndOpen(connectionString);
-
-			string sql = string.Format("select sum(f.scheduled_ready_time_s) from mart.fact_schedule_deviation f " +
-	"inner join mart.dim_person p on f.person_id = p.person_id " +
-	"inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
-	"join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
-		"and f.shift_startdate_id = btz.date_id " +
-		"and f.shift_startinterval_id = btz.interval_id " +
-	"join mart.dim_date d " +
-	"on btz.local_date_id = d.date_id " +
-	"where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
-			using (var sqlCommand = new SqlCommand(sql, sqlConnection))
-			{
-				return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
-			}
-
-		}
-
-		private static int sumReadyTime(string connectionString, IPerson person, DateTime datelocal)
-		{
-			var sqlConnection = connectAndOpen(connectionString);
-
-			string sql = string.Format("select sum(f.ready_time_s) from mart.fact_schedule_deviation f " +
-	"inner join mart.dim_person p on f.person_id = p.person_id " +
-	"inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
-	"join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
-		"and f.shift_startdate_id = btz.date_id " +
-		"and f.shift_startinterval_id = btz.interval_id " +
-	"join mart.dim_date d " +
-	"on btz.local_date_id = d.date_id " +
-	"where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
-			using (var sqlCommand = new SqlCommand(sql, sqlConnection))
-			{
-				return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
-			}
-
-		}
-
-        private static int sumDeviationSceduledReadyTime(string connectionString, IPerson person, DateTime datelocal)
+        private static int sumFactScheduleDeviation(string connectionString, IPerson person, DateTime datelocal, string columnName)
         {
             var sqlConnection = connectAndOpen(connectionString);
 
-            string sql = string.Format("select sum(f.deviation_schedule_ready_s) from mart.fact_schedule_deviation f " +
+            string sql = string.Format("select sum(f.{2}) from mart.fact_schedule_deviation f " +
     "inner join mart.dim_person p on f.person_id = p.person_id " +
     "inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
     "join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
@@ -197,27 +186,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
         "and f.shift_startinterval_id = btz.interval_id " +
     "join mart.dim_date d " +
     "on btz.local_date_id = d.date_id " +
-    "where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
-            using (var sqlCommand = new SqlCommand(sql, sqlConnection))
-            {
-                return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
-            }
-
-        }
-
-        private static int sumDeviationSceduledTime(string connectionString, IPerson person, DateTime datelocal)
-        {
-            var sqlConnection = connectAndOpen(connectionString);
-
-            string sql = string.Format("select sum(f.deviation_schedule_s) from mart.fact_schedule_deviation f " +
-    "inner join mart.dim_person p on f.person_id = p.person_id " +
-    "inner join mart.dim_time_zone tz on p.time_zone_id = tz.time_zone_id " +
-    "join mart.bridge_time_zone btz on p.time_zone_id = btz.time_zone_id " +
-        "and f.shift_startdate_id = btz.date_id " +
-        "and f.shift_startinterval_id = btz.interval_id " +
-    "join mart.dim_date d " +
-    "on btz.local_date_id = d.date_id " +
-    "where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id);
+	"where d.date_date = '{0}' and p.person_code = '{1}'", datelocal.Date, person.Id, columnName);
             using (var sqlCommand = new SqlCommand(sql, sqlConnection))
             {
                 return Convert.ToInt32(sqlCommand.ExecuteScalar(), CultureInfo.CurrentCulture);
