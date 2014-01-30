@@ -20,17 +20,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 			{
 				return new DailyMetricsViewModel {DataAvailable = false};
 			}
-			var shortDatePattern = _userCulture == null ? 
-						string.Empty : 
-						_userCulture.GetCulture().DateTimeFormat.ShortDatePattern;
+			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
+
+			var shortDatePattern = culture.DateTimeFormat.ShortDatePattern;
 			return new DailyMetricsViewModel
 			{
 				AnsweredCalls = dataModel.AnsweredCalls,
-				AverageAfterCallWork = dataModel.AfterCallWorkTimeAverage.TotalSeconds.ToString(CultureInfo.InvariantCulture),
-				AverageTalkTime = dataModel.TalkTimeAverage.TotalSeconds.ToString(CultureInfo.InvariantCulture),
-				AverageHandlingTime = dataModel.HandlingTimeAverage.TotalSeconds.ToString(CultureInfo.InvariantCulture),
-				ReadyTimePerScheduledReadyTime = dataModel.ReadyTimePerScheduledReadyTime.ValueAsPercent().ToString(CultureInfo.InvariantCulture),
-				Adherence = dataModel.Adherence.ValueAsPercent().ToString(CultureInfo.InvariantCulture),
+				AverageAfterCallWork = dataModel.AfterCallWorkTimeAverage.TotalSeconds.ToString(culture),
+				AverageTalkTime = dataModel.TalkTimeAverage.TotalSeconds.ToString(culture),
+				AverageHandlingTime = dataModel.HandlingTimeAverage.TotalSeconds.ToString(culture),
+				ReadyTimePerScheduledReadyTime = dataModel.ReadyTimePerScheduledReadyTime.ValueAsPercent().ToString(culture),
+				Adherence = dataModel.Adherence.ValueAsPercent().ToString(culture),
 				DataAvailable = true,
 				DatePickerFormat = shortDatePattern
 			};

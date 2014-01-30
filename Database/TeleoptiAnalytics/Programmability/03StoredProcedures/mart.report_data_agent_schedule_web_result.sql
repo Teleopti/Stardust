@@ -23,19 +23,19 @@ CREATE TABLE #tmpResult
 	date smalldatetime,
 	person_code uniqueidentifier,
 	person_name nvarchar(200),
-	scheduled_ready_time decimal(20,2),
+	scheduled_ready_time decimal(20,3),
 	ready_time_s int,
-	ready_time_per_scheduled_ready_time decimal(20,2),
+	ready_time_per_scheduled_ready_time decimal(20,3),
 	answered_calls int DEFAULT 0,
-	avg_answered_calls decimal(20,2),
-	avg_answered_calls_ready_hour decimal(20,2),
-	occupancy decimal(20,2),
-	adherence_calc_s decimal(20,2),
-	adherence decimal(20,2),
-	deviation_s decimal(20,2),
-	handling_time_s decimal(20,2),
-	after_call_work_time_s decimal(20,2),
-	talk_time_s  decimal(20,2)
+	avg_answered_calls decimal(20,3),
+	avg_answered_calls_ready_hour decimal(20,3),
+	occupancy decimal(20,3),
+	adherence_calc_s decimal(20,3),
+	adherence decimal(20,3),
+	deviation_s decimal(20,3),
+	handling_time_s decimal(20,3),
+	after_call_work_time_s decimal(20,3),
+	talk_time_s  decimal(20,3)
 	)
 
 INSERT INTO  #tmpResult 
@@ -61,15 +61,15 @@ exec mart.report_data_agent_schedule_result
 select answered_calls as AnsweredCalls,
 	case
 		when answered_calls = 0 then 0
-		else after_call_work_time_s/answered_calls
+		else CAST(ROUND(after_call_work_time_s/answered_calls ,0) AS int)
 	end as AfterCallWorkTime,
 	case
 		when answered_calls = 0 then 0
-		else talk_time_s/answered_calls
+		else CAST(ROUND(talk_time_s/answered_calls ,0) AS int)
 	end as TalkTime,
 	case
 		when answered_calls = 0 then 0
-		else (after_call_work_time_s + talk_time_s) / answered_calls	
+		else  CAST(ROUND((after_call_work_time_s + talk_time_s) / answered_calls ,0) AS int)
 	end as HandlingTime,
 	ready_time_per_scheduled_ready_time as ReadyTimePerScheduledReadyTime,
 	adherence as Adherence
