@@ -37,6 +37,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
 				using (SchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder())
 				{
+					using (unitOfWork.DisableFilter(QueryFilter.Deleted))
+					{
+						repositoryFactory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
+						repositoryFactory.CreateActivityRepository(unitOfWork).LoadAll();
+						repositoryFactory.CreateAbsenceRepository(unitOfWork).LoadAll();
+					}
+					
+					var allPeople = personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true);
 					LoadSchedulingStateHolderForResourceCalculation loader =
 						new LoadSchedulingStateHolderForResourceCalculation(personRepository,
 																			repositoryFactory.
@@ -58,8 +66,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 																					CreateMultisiteDayRepository
 																					(
 																						unitOfWork)));
-					loader.Execute(requestedScenario, periodForResourceCalc,
-								   personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true));
+					loader.Execute(requestedScenario, periodForResourceCalc, allPeople);
 
 					var personSkillProvider = new PersonSkillProvider();
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
