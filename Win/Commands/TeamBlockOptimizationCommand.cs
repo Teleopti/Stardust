@@ -174,7 +174,8 @@ namespace Teleopti.Ccc.Win.Commands
 				_seniorityTeamBlockSwapperService.BlockSwapped += resourceOptimizerPersonOptimized;
 				_seniorityTeamBlockSwapperService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 														  _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
-														  optimizationPreferences, new WeekDayPoints().GetWeekDaysPoints());
+														  optimizationPreferences, new WeekDayPoints().GetWeekDaysPoints(),
+														  teamBlockRestrictionOverLimitValidator);
 				_seniorityTeamBlockSwapperService.BlockSwapped -= resourceOptimizerPersonOptimized;
 
 				////day off fairness

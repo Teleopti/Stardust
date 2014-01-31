@@ -742,7 +742,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			seniorityTeamBlockSwapperService.BlockSwapped += resourceOptimizerPersonOptimized;
 			seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
 													 _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences,
-													 new WeekDayPoints().GetWeekDaysPoints());
+													 new WeekDayPoints().GetWeekDaysPoints(),
+													 teamBlockRestrictionOverLimitValidator);
 			seniorityTeamBlockSwapperService.BlockSwapped -= resourceOptimizerPersonOptimized;
 
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;

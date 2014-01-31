@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
 		                     ISchedulePartModifyAndRollbackService rollbackService,
-		                     IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences);
+		                     IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
+		                     ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator);
 	}
 
 	public class SeniorityTeamBlockSwapper : ISeniorityTeamBlockSwapper
@@ -25,8 +26,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
 		}
 
-		public bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, ISchedulePartModifyAndRollbackService rollbackService,
-									IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
+		public bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
+		                            ISchedulePartModifyAndRollbackService rollbackService,
+		                            IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
+		                            ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			if (!_teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary))
 				return false;
@@ -35,6 +38,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				return false;
 
 			if (!_seniorityTeamBlockSwapValidator.Validate(blockToSwapWith, optimizationPreferences))
+				return false;
+
+			if (!teamBlockRestrictionOverLimitValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
+				return false;
+
+			if (!teamBlockRestrictionOverLimitValidator.Validate(blockToSwapWith, optimizationPreferences))
 				return false;
 
 			return true;
