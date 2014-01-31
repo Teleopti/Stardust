@@ -3,6 +3,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
+/// <reference path="~/Content/moment/moment.js" />
 
 Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability) {
 	var self = this;
@@ -32,7 +33,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		ajax.Ajax({
 			url: "Schedule/OvertimeAvailability",
 			dataType: "json",
-			data: { Date: self.DateFrom().format('YYYY-MM-DD'), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
+			data: { Date: self.DateFrom().format(self.DateFormat()), StartTime: self.StartTime(), EndTime: self.EndTime(), EndTimeNextDay: self.EndTimeNextDay() },
 			type: 'POST',
 			success: function (data, textStatus, jqXHR) {
 				displayOvertimeAvailability(data);
@@ -52,7 +53,7 @@ Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel = function OvertimeAva
 		ajax.Ajax({
 			url: "Schedule/DeleteOvertimeAvailability",
 			dataType: "json",
-			data: { Date: self.DateFrom().format('YYYY-MM-DD') },
+			data: { Date: self.DateFrom().format(self.DateFormat()) },
 			type: 'DELETE',
 			success: function (data, textStatus, jqXHR) {
 				displayOvertimeAvailability(data);
