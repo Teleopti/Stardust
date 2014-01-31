@@ -34,6 +34,8 @@ require.config({
 
 	// dependencies that requires loading order
 	shim: {
+		'knockout': ['jquery'],
+
 		'jquery': {
 			exports: 'jQuery'
 		},
