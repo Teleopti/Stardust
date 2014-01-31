@@ -514,6 +514,12 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
+		 //This only to be used in Test to avoid a load of too much data
+	    public void SetLoadBridgeTimeZonePeriod(DateTimePeriod period)
+	    {
+		    _bridgeTimeZonePeriod = period;
+	    }
+
         private class ScheduleCacheCollection
         {
             private readonly IDictionary<IScenario, ScheduleCacheItem> _scenarioCacheDictionary =

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public string Skill { get; set; }
 		public string BudgetGroup { get; set; }
 		public string WorkflowControlSet { get; set; }
+		public string ExternalLogon { get; set; }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -70,6 +71,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				var workflowControlSet = workflowControlSetRepository.LoadAll().Single(b => b.Name == WorkflowControlSet);
 				user.WorkflowControlSet = workflowControlSet;
 			}
+
+            if (!string.IsNullOrEmpty(ExternalLogon))
+            {
+                var externalLogonRepository = new ExternalLogOnRepository(uow);
+                var logon = externalLogonRepository.LoadAll().Single(b => b.AcdLogOnName == ExternalLogon);
+                user.AddExternalLogOn(logon, personPeriod);
+            }
 
 			user.AddPersonPeriod(personPeriod);
 		}	
