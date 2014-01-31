@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Expect.Call(_scheduleDayPro1.Day).Return(new DateOnly(2014, 1, 26));
                 Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
                 Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_scheduleDayPro2.Day).Return(new DateOnly(2014, 1, 25));
             }
             using (_mocks.Playback())
             {
