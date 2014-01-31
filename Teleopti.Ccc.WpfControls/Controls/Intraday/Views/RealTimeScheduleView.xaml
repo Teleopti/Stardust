@@ -80,10 +80,8 @@
 					   x:Name="RealTimeDataGrid"
 					   x:FieldModifier="private"
 					   ContextMenu="{StaticResource ContextMenuCopy}"
-					   Sorting="RealTimeDataGrid_OnSorting"
 					   ColumnHeaderHeight="53">
 			
-
 			<!--AgentName Column-->
 			<controls:DataGrid.Columns>
 				<controls:DataGridTextColumn HeaderStyle="{StaticResource SpecialLeftHeader}"
