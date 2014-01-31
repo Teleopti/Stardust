@@ -18,6 +18,8 @@ Background:
 	| Access To Absence Requests     | false                   |
 	| Access To Shift Trade Requests | false                   |
 	| Access To Text Requests        | false                   |
+	| Access To Extended Preferences | false                   |
+	| Access To Preferences          | false                   |
 	And there is a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
