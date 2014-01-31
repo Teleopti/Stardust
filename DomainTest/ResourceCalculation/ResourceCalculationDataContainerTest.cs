@@ -95,6 +95,35 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
+		public void ShouldGetCorrectEfficiencyForAffectedSkillsWhenCalledMoreThanOnce()
+		{
+			_target.AddResources(_person, _date,
+								 new ResourceLayer
+								 {
+									 PayloadId = _activity.Id.GetValueOrDefault(),
+									 Period = _period,
+									 RequiresSeat = false,
+									 Resource = 0.8
+								 });
+
+			_target.AddResources(_person, _date,
+											 new ResourceLayer
+											 {
+												 PayloadId = _activity.Id.GetValueOrDefault(),
+												 Period = _period.MovePeriod(TimeSpan.FromMinutes(15)),
+												 RequiresSeat = false,
+												 Resource = 0.8
+											 });
+
+			var result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
+			result = _target.AffectedResources(_activity, _period.ChangeEndTime(TimeSpan.FromMinutes(15)));
+			var affectedSkill = result.First().Value;
+			affectedSkill.Resource.Should().Be.EqualTo(1.6d);
+			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
+			affectedSkill.SkillEffiencies[_skill.Id.Value].Should().Be.EqualTo(2d);
+		}
+
+		[Test]
 		public void ShouldGetAffectedSkills()
 		{
 			_target.AddResources(_person, _date,
