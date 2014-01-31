@@ -325,6 +325,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoMobileReports();
 		}
 
+		[Given(@"I navigate to Anywhere")]
 		[When(@"I navigate to Anywhere")]
 		public void WhenINavigateToAnywhere()
 		{

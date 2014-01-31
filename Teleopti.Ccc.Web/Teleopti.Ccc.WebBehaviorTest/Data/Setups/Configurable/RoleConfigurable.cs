@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToOvertimeAvailability { get; set; }
 		public bool AccessToMyReport { get; set; }
         public bool AccessToUnderConstruction { get; set; }
+		public bool AccessToPreferences { get; set; }
+		public bool AccessToTeamSchedule { get; set; }
 
 	    public bool AccessToViewAllGroupPages { get; set; }
 
@@ -68,6 +70,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
 		    AccessToUnderConstruction = true;
+			AccessToPreferences = false;
+			AccessToTeamSchedule = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -179,6 +183,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if(!AccessToOvertimeAvailability)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb
+									   select f;
+			if (!AccessToPreferences)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StandardPreferences
+									   && f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb
+									   select f;
+			if (!AccessToTeamSchedule)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
 									   select f;
 			if (!AccessToMyReport)
 				applicationFunctions = from f in applicationFunctions
