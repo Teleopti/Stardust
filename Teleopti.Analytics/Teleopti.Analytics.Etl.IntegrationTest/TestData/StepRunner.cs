@@ -78,5 +78,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 			return result;
 		}
+
+        public static List<IJobResult> RunIntraday(JobParameters jobParameters)
+        {
+            var result = new List<IJobResult>();
+            var intra = new IntradayJobCollection(jobParameters);
+            foreach (var step in intra)
+            {
+                step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
+            }
+
+            return result;
+        }
 	}
 }
