@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
-			AccessToPreferences = false;
+			AccessToPreferences = true;
 			AccessToTeamSchedule = false;
 		}
 
@@ -183,7 +183,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToPreferences)
 				applicationFunctions = from f in applicationFunctions
 									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StandardPreferences
-									   && f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb
 									   select f;
 			if (!AccessToTeamSchedule)
 				applicationFunctions = from f in applicationFunctions
