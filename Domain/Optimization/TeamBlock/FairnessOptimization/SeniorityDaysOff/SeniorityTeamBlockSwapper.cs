@@ -31,6 +31,22 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		                            IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
 		                            ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
+			bool success = trySwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary,
+			                                  optimizationPreferences, teamBlockRestrictionOverLimitValidator);
+			if (!success)
+			{
+				rollbackService.Rollback();
+				return false;
+			}			
+
+			return true;
+		}
+
+		private bool trySwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
+		                                ISchedulePartModifyAndRollbackService rollbackService,
+		                                IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
+		                                ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+		{
 			if (!_teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary))
 				return false;
 

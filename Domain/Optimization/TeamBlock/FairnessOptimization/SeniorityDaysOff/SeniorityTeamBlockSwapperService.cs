@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		             IList<IPerson> selectedPersons,
-		             ISchedulingOptions schedulingOptions,
 		             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
 		             IOptimizationPreferences optimizationPreferences, IDictionary<DayOfWeek, int> weekDayPoints,
 		             ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator);
@@ -31,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly IWeekDayPointCalculatorForTeamBlock _weekDayPointCalculatorForTeamBlock;
 		private readonly ISeniorityTeamBlockSwapper _seniorityTeamBlockSwapper;
 		private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
+		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private bool _cancelMe;
 
 		public SeniorityTeamBlockSwapperService(IConstructTeamBlock constructTeamBlock,
@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 												ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints,
 												IWeekDayPointCalculatorForTeamBlock weekDayPointCalculatorForTeamBlock,
 												ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper,
-												ITeamBlockSeniorityValidator teamBlockSeniorityValidator)
+												ITeamBlockSeniorityValidator teamBlockSeniorityValidator,
+												ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
@@ -52,18 +53,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_weekDayPointCalculatorForTeamBlock = weekDayPointCalculatorForTeamBlock;
 			_seniorityTeamBlockSwapper = seniorityTeamBlockSwapper;
 			_teamBlockSeniorityValidator = teamBlockSeniorityValidator;
+			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-                            ISchedulingOptions schedulingOptions,
                             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, 
 							IOptimizationPreferences optimizationPreferences, IDictionary<DayOfWeek, int> weekDayPoints,
 							ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			_cancelMe = false;
 
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var allTeamBlocks = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true,
 			                                                  BlockFinderType.SchedulePeriod,
 			                                                  schedulingOptions.GroupOnGroupPageForTeamBlockPer);
@@ -110,8 +112,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 					swapSuccess = _seniorityTeamBlockSwapper.SwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
 					                                                         scheduleDictionary, optimizationPreferences,
 					                                                         teamBlockRestrictionOverLimitValidator);
-					if (!swapSuccess)
-						rollbackService.Rollback();
 				}
 
 				swappableTeamBlocks.Remove(blockToSwapWith);

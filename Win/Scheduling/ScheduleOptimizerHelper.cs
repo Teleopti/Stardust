@@ -740,7 +740,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//day off seniority faines according to Micke
 			var seniorityTeamBlockSwapperService = _container.Resolve<ISeniorityTeamBlockSwapperService>();
 			seniorityTeamBlockSwapperService.BlockSwapped += resourceOptimizerPersonOptimized;
-			seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
+			seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, 
 													 _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences,
 													 new WeekDayPoints().GetWeekDaysPoints(),
 													 teamBlockRestrictionOverLimitValidator);

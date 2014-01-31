@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(false);
+				Expect.Call(_rollbackService.Rollback);
 			}
 
 			using (_mocks.Playback())
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			{
 				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(false);
+				Expect.Call(_rollbackService.Rollback);
 			}
 
 			using (_mocks.Playback())
@@ -80,6 +82,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(false);
+				Expect.Call(_rollbackService.Rollback);
 			}
 
 			using (_mocks.Playback())
@@ -100,6 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
 				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
 				      .Return(false);
+				Expect.Call(_rollbackService.Rollback);
 			}
 
 			using (_mocks.Playback())
@@ -122,6 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 					  .Return(true);
 				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences))
 					  .Return(false);
+				Expect.Call(_rollbackService.Rollback);
 			}
 
 			using (_mocks.Playback())
@@ -152,6 +157,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 													 _optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
 				Assert.IsTrue(result);
 			}
+		}
+
+		[Test]
+		public void ShouldRollbackIfFailed()
+		{
+			Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(false);
+			Expect.Call(_rollbackService.Rollback);
 		}
 
 	}

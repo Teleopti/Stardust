@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private ITeamInfo _teamInfo;
 		private ISchedulingOptions _schedulingOptions;
 		private IVirtualSchedulePeriod _schedulePeriod;
+		private DateOnlyPeriod _period;
 
 		[SetUp]
 		public void Setup()
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamInfo = _mocks.StrictMock<ITeamInfo>();
 			_schedulingOptions = new SchedulingOptions();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			_period = new DateOnlyPeriod(2014,1,31,2014,2,1);
 		}
 
 		[Test]
@@ -74,10 +76,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_dayOffRulesValidator.Validate(_matrix, _optimizationPreferences)).Return(true);
 				
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new[] {_person});
-				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> {_matrix}, new DateOnlyPeriod(),
+				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> { _matrix }, _period,
 				                                          new List<IPerson> {_person},
 				                                          _optimizationPreferences.Extra.UseTeamBlockOption,
 				                                          _optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization,
@@ -104,10 +106,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_dayOffRulesValidator.Validate(_matrix, _optimizationPreferences)).Return(true);
 
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(_period);
 				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
 				Expect.Call(_teamInfo.GroupMembers).Return(new[] { _person });
-				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> { _matrix }, new DateOnlyPeriod(),
+				Expect.Call(_constructTeamBlock.Construct(new List<IScheduleMatrixPro> { _matrix }, _period,
 														  new List<IPerson> { _person },
 														  _optimizationPreferences.Extra.UseTeamBlockOption,
 														  _optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization,
