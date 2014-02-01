@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				{
 					foreach (var groupMember in teamBlock.TeamInfo.GroupMembers)
 					{
-						if (scheduleDictionary[groupMember].ScheduledDay(dateOnly).SignificantPart() != SchedulePartView.MainShift)
+						if (!scheduleDictionary[groupMember].ScheduledDay(dateOnly).IsScheduled())
 						{
 							unscheduledFound = true;
 							break;
