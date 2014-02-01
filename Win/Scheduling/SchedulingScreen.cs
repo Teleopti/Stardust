@@ -3702,9 +3702,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			 _container.Resolve<IWorkShiftSelector>(),
 																			 teamScheduling, 
 																			 _container.Resolve<ITeamBlockSchedulingOptions>(),
-																			 _container.Resolve<IDayIntervalDataCalculator>(),
-																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
-																			 _schedulerState.SchedulingResultState);
+																			 _schedulerState.SchedulingResultState,
+																			 _container.Resolve<IActivityIntervalDataCreator>());
 
 	                var sameShiftCategoryBlockScheduler =
 		                new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
@@ -4111,9 +4110,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						                                                         _container.Resolve<IWorkShiftSelector>(),
 																				 teamScheduling, 
 																				 _container.Resolve<ITeamBlockSchedulingOptions>(),
-																			 _container.Resolve<IDayIntervalDataCalculator>(),
-																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
-																			 _schedulerState.SchedulingResultState);
+																			 _schedulerState.SchedulingResultState,
+																			 _container.Resolve<IActivityIntervalDataCreator>());
 
 						var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
 						                                                                          singleDayScheduler,
