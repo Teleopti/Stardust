@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -37,9 +36,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private SchedulingOptions _schedulingOptions;
 		private List<IPerson> _selectedPersons;
 		private IShiftProjectionCache _shift;
-		private IDayIntervalDataCalculator _dayIntervalDataCalculator;
-		private ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private IActivityIntervalDataCreator _activityIntervalDataCreator;
 
 		[SetUp]
 		public void Setup()
@@ -48,13 +46,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
 			_teamBlockSchedulingCompletionChecker = _mocks.StrictMock<ITeamBlockSchedulingCompletionChecker>();
 			_proposedRestrictionAggregator = _mocks.StrictMock<IProposedRestrictionAggregator>();
-			_dayIntervalDataCalculator = _mocks.StrictMock<IDayIntervalDataCalculator>();
 			_workShiftFilterService = _mocks.StrictMock<IWorkShiftFilterService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_workShiftSelector = _mocks.StrictMock<IWorkShiftSelector>();
 			_teamScheduling = _mocks.StrictMock<ITeamScheduling>();
 			_teamBlockSchedulingOptions = _mocks.StrictMock<ITeamBlockSchedulingOptions>();
-			_createSkillIntervalDataPerDateAndActivity = _mocks.StrictMock<ICreateSkillIntervalDataPerDateAndActivity>();
+			_activityIntervalDataCreator = _mocks.StrictMock<IActivityIntervalDataCreator>();
 			_target = new TeamBlockSingleDayScheduler(
 				_teamBlockSchedulingCompletionChecker, 
 				_proposedRestrictionAggregator,                                        
@@ -62,9 +59,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_workShiftSelector, 
 				_teamScheduling, 
 				_teamBlockSchedulingOptions,
-				_dayIntervalDataCalculator,
-				_createSkillIntervalDataPerDateAndActivity,
-				_schedulingResultStateHolder);
+				_schedulingResultStateHolder,
+				_activityIntervalDataCreator);
 
 			_dateOnly = new DateOnly(2013, 11, 12);
 			_person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(PersonFactory.CreatePerson("bill"), _dateOnly);
@@ -181,8 +177,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				      .Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person2, _teamBlockInfo, restriction,
 				                                           _schedulingOptions, finderResult)).Return(shifts);
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
-					.Return(skillIntervalDataDic).Repeat.AtLeastOnce();
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder))
+					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
@@ -242,8 +238,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _person2, _teamBlockInfo, restriction,
 														   _schedulingOptions, finderResult)).Return(shifts);
-				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
-					.Return(skillIntervalDataDic).Repeat.AtLeastOnce();
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo, _dateOnly, _schedulingResultStateHolder))
+					.Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,

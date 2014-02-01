@@ -302,6 +302,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<CreateSkillIntervalDataPerDateAndActivity>().As<ICreateSkillIntervalDataPerDateAndActivity>();
 			builder.RegisterType<TeamBlockOpenHourService>().As<ITeamBlockOpenHourService>();
 			builder.RegisterType<OpenHourForDate>().As<IOpenHourForDate>();
+			builder.RegisterType<ActivityIntervalDataCreator>().As<IActivityIntervalDataCreator>();
+			//IActivityIntervalDataCreator
 		}
 
         private void registerTeamBlockOptimizationService(ContainerBuilder builder)
