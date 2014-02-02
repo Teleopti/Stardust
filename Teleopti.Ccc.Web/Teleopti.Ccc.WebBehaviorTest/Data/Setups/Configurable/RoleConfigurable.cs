@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToMyReport = true;
 			AccessToUnderConstruction = true;
 			AccessToPreferences = true;
-			AccessToTeamSchedule = false;
+			AccessToTeamSchedule = true;
 		}
 
 		public void Apply(IUnitOfWork uow)

@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
@@ -23,11 +24,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		public JsonResult Teams(DateOnly? date)	
+		public JsonResult TeamsForShiftTrade(DateOnly? date)
 		{
 			if (!date.HasValue)
 				date = DateOnly.Today;
-			return Json(_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value), JsonRequestBehavior.AllowGet);
+			return
+				Json(
+					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
+					JsonRequestBehavior.AllowGet);
 		}
 	}
 }
