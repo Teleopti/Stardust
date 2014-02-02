@@ -54,6 +54,7 @@ Scenario: No access to schedule page
 	And I navigate to Anywhere
 	And I select application logon data source
 	And I sign in
+	And I should see Anywhere
 	When I manually navigate to week schedule page
 	Then I should see an error message
 
