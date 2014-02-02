@@ -20,6 +20,7 @@ Background:
 	| Access To Text Requests        | false                   |
 	| Access To Extended Preferences | false                   |
 	| Access To Preferences          | false                   |
+	| Access To Team Schedule        | false                   |
 	And there is a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |

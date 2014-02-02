@@ -218,7 +218,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             var teamToSelect = self.selectedTeamInternal() ? self.selectedTeamInternal() : self.myTeamId();
 
             ajax.Ajax({
-                url: "Team/Teams",
+            	url: "Team/TeamsForShiftTrade",
                 dataType: "json",
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',

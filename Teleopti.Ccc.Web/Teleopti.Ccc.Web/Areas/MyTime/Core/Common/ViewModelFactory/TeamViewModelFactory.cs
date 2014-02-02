@@ -31,12 +31,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)
 		{
 			return _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages) ?
-					   createGroupPagesOptions(date) : CreateTeamOptionsViewModel(date);
+					   createGroupPagesOptions(date) : CreateTeamOptionsViewModel(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 		}
 
-		public IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date)
+		public IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
-			var teams = _teamProvider.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule).ToList();
+			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToList();
 			var sites = teams
 				.Select(t => t.Site)
 				.Distinct()
