@@ -56,7 +56,7 @@ ON
 INNER JOIN
 	mart.dim_date		dsd
 ON
-	f.schedule_date	= dsd.date_date
+	f.schedule_date_utc	= dsd.date_date
 	
 INNER JOIN
 	mart.dim_interval	di

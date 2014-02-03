@@ -329,3 +329,80 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agent_state' AND jobstep_id=86)
 INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(86,N'fact_agent_state')
 GO
+
+----------------  
+--Name: DJ
+--Date: 2014-02-03
+--Desc: #26422 - re-factor mart do match new PersonAssignment
+----------------
+DROP TABLE [stage].[stg_schedule]
+GO
+CREATE TABLE [stage].[stg_schedule](
+	[schedule_date_local] smalldatetime NOT NULL,
+	[schedule_date_utc] smalldatetime NOT NULL,
+	[person_code] uniqueidentifier NOT NULL,
+	[interval_id] int NOT NULL,
+	[activity_start] smalldatetime NOT NULL,
+	[scenario_code] uniqueidentifier NOT NULL,
+	[activity_code] uniqueidentifier NULL,
+	[absence_code] uniqueidentifier NULL,
+	[activity_end] smalldatetime NOT NULL,
+	[shift_start] smalldatetime NOT NULL,
+	[shift_end] smalldatetime NOT NULL,
+	[shift_startinterval_id] int NOT NULL,
+	[shift_category_code] uniqueidentifier NULL,
+	[shift_length_m] int NOT NULL,
+	[scheduled_time_m] int NULL,
+	[scheduled_time_absence_m] int NULL,
+	[scheduled_time_activity_m] int NULL,
+	[scheduled_contract_time_m] int NULL,
+	[scheduled_contract_time_activity_m] int NULL,
+	[scheduled_contract_time_absence_m] int NULL,
+	[scheduled_work_time_m] int NULL,
+	[scheduled_work_time_activity_m] int NULL,
+	[scheduled_work_time_absence_m] int NULL,
+	[scheduled_over_time_m] int NULL,
+	[scheduled_ready_time_m] int NULL,
+	[scheduled_paid_time_m] int NULL,
+	[scheduled_paid_time_activity_m] int NULL,
+	[scheduled_paid_time_absence_m] int NULL,
+	[last_publish] smalldatetime NOT NULL,
+	[business_unit_code] uniqueidentifier NOT NULL,
+	[business_unit_name] nvarchar(50) NOT NULL,
+	[datasource_id] smallint NOT NULL,
+	[insert_date] smalldatetime NOT NULL,
+	[update_date] smalldatetime NOT NULL,
+	[datasource_update_date] smalldatetime NOT NULL,
+	[overtime_code] uniqueidentifier NULL,
+ CONSTRAINT [PK_stg_schedule] PRIMARY KEY CLUSTERED 
+(
+	[schedule_date_local] ASC,
+	[schedule_date_utc] ASC,
+	[person_code] ASC,
+	[interval_id] ASC,
+	[activity_start] ASC,
+	[scenario_code] ASC,
+	[shift_start] ASC
+)
+) ON [STAGE]
+
+ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+DROP TABLE [stage].[stg_schedule_changed]
+GO
+CREATE TABLE [stage].[stg_schedule_changed](
+	[schedule_date_local] smalldatetime NOT NULL,
+	[person_code] uniqueidentifier NOT NULL,
+	[scenario_code] uniqueidentifier NOT NULL,
+	[business_unit_code] uniqueidentifier NOT NULL,
+	[datasource_id] smallint NOT NULL,
+	[datasource_update_date] smalldatetime NOT NULL,
+ CONSTRAINT [PK_stg_schedule_changed] PRIMARY KEY CLUSTERED 
+(
+	[schedule_date_local] ASC,
+	[person_code] ASC,
+	[scenario_code] ASC
+)
+) ON [STAGE]

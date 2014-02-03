@@ -8,12 +8,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.Models.Mapping
         public stg_schedule_changedMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.schedule_date, t.person_code, t.scenario_code });
+            this.HasKey(t => new { t.schedule_date_local, t.person_code, t.scenario_code });
 
             // Properties
             // Table & Column Mappings
             this.ToTable("stg_schedule_changed", "stage");
-            this.Property(t => t.schedule_date).HasColumnName("schedule_date");
+			this.Property(t => t.schedule_date_local).HasColumnName("schedule_date_local");
             this.Property(t => t.person_code).HasColumnName("person_code");
             this.Property(t => t.scenario_code).HasColumnName("scenario_code");
             this.Property(t => t.business_unit_code).HasColumnName("business_unit_code");

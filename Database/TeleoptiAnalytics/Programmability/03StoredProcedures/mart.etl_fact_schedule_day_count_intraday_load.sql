@@ -74,13 +74,13 @@ inner join mart.dim_date dd
 	on dd.date_id = btz.local_date_id
 inner join stage.stg_schedule_changed ch
 	on ch.person_code = p.person_code
-	and ch.schedule_date = dd.date_date
+	and ch.schedule_date_local = dd.date_date
 		AND --trim
 		(
-				(ch.schedule_date	>= p.valid_from_date_local)
+				(ch.schedule_date_local	>= p.valid_from_date_local)
 
 			AND
-				(ch.schedule_date <= p.valid_to_date_local)
+				(ch.schedule_date_local <= p.valid_to_date_local)
 		)
 
 -- special delete if something is left, a shift over midninght for example

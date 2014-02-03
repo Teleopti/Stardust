@@ -76,7 +76,7 @@ ON
 				(stg.shift_start < dp.valid_to_date)
 		)
 INNER JOIN mart.dim_date dd
-	ON dd.date_date = stg.schedule_date
+	ON dd.date_date = stg.schedule_date_utc
 	AND dd.date_id = @end_date_id + 1 --next day
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
@@ -101,7 +101,7 @@ ON
 				(stg.shift_start < dp.valid_to_date)
 		)
 INNER JOIN mart.dim_date dd
-	ON dd.date_date = stg.schedule_date
+	ON dd.date_date = stg.schedule_date_utc
 	AND dd.date_id = @start_date_id --startdate
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code

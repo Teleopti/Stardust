@@ -25,7 +25,8 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             IPayload payload = layer.Payload;
             DataRow row = dataTable.NewRow();
 
-            row["schedule_date"] = layer.Period.StartDateTime.Date;
+	        row["schedule_date_local"] = scheduleProjection.SchedulePart.DateOnlyAsPeriod.DateOnly.Date;
+            row["schedule_date_utc"] = layer.Period.StartDateTime.Date;
             row["person_code"] = scheduleProjection.SchedulePart.Person.Id; // person_code
             row["interval_id"] = interval.Id; // interval_id
             row["activity_start"] = layer.Period.StartDateTime; // activity_start

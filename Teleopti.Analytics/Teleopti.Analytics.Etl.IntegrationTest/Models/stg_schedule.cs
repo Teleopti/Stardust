@@ -5,7 +5,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.Models
 {
     public partial class stg_schedule
     {
-        public System.DateTime schedule_date { get; set; }
+		public System.DateTime schedule_date_local { get; set; }
+		public System.DateTime schedule_date_utc { get; set; }
         public System.Guid person_code { get; set; }
         public int interval_id { get; set; }
         public System.DateTime activity_start { get; set; }

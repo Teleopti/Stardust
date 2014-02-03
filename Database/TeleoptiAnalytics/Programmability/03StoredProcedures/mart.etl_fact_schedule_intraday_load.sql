@@ -112,13 +112,13 @@ inner join mart.dim_date dd
 	on dd.date_id = btz.local_date_id
 inner join stage.stg_schedule_changed ch
 	on ch.person_code = p.person_code
-	and ch.schedule_date = dd.date_date
+	and ch.schedule_date_local = dd.date_date
 		AND --trim
 		(
-				(ch.schedule_date	>= p.valid_from_date_local)
+				(ch.schedule_date_local	>= p.valid_from_date_local)
 
 			AND
-				(ch.schedule_date <= p.valid_to_date_local)
+				(ch.schedule_date_local <= p.valid_to_date_local)
 		)
 
 if @debug=1
@@ -146,7 +146,7 @@ ON
 				(stg.shift_start < dp.valid_to_date)
 		)
 INNER JOIN mart.dim_date AS dsd 
-ON stg.schedule_date = dsd.date_date
+ON stg.schedule_date_utc = dsd.date_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
 
