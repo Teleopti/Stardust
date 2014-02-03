@@ -30,6 +30,7 @@ namespace Teleopti.Messaging.SignalR
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalSender));
 		private bool _queueProcessed;
+		private bool disposed;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "0#")]
 		public SignalSender(string serverUrl)
@@ -60,9 +61,11 @@ namespace Teleopti.Messaging.SignalR
 
 		public void Dispose()
 		{
+			disposed = true;
 			cancelToken.Cancel();
 			workerThread.Join();
 			_wrapper.StopHub();
+			_queueProcessed = true;
 			_wrapper = null;
 		}
 
@@ -90,7 +93,7 @@ namespace Teleopti.Messaging.SignalR
 					BusinessUnitId = Subscription.IdToString(businessUnitId)
 				};
 			_queueProcessed = false;
-			_notificationQueue.Add(new Tuple<DateTime, Notification>(DateTime.UtcNow, notification));
+			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
 		}
 
 		private void processQueue(object state)
@@ -104,10 +107,12 @@ namespace Teleopti.Messaging.SignalR
 					                  .Where(t => t.Item1 > DateTime.UtcNow.AddMinutes(-2))
 									  .Select(t => t.Item2)
 									  .ToArray();
-				
+
 				if (!notifications.Any()) continue;
-				
+
 				var retryCount = 1;
+				if (disposed)
+					break;
 				while (retryCount<=3)
 				{
 					if (trySend(retryCount, notifications)) break;
@@ -119,12 +124,18 @@ namespace Teleopti.Messaging.SignalR
 				if (_notificationQueue.Count == 0)
 					_queueProcessed = true;
 			}
+			_queueProcessed = true;
 		}
 
 		public void WaitUntilQueueProcessed()
 		{
 			while (!_queueProcessed)
 			{
+				// ErikS 2014-02-03
+				// Not sure about sleep, doesnt feel right how to fix timings?
+				Thread.Sleep(1000);
+				if (!_notificationQueue.Any())
+					break;
 			}
 		}
 
@@ -209,6 +220,12 @@ namespace Teleopti.Messaging.SignalR
 			{
 				Logger.Error("The message broker seems to be down.", exception);
 			}
+		}
+
+		[CLSCompliant(false)]
+		protected virtual DateTime CurrentUtcTime()
+		{
+			return DateTime.UtcNow;
 		}
 
 		[CLSCompliant(false)]
