@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.IsFullyScheduled(_teamBlockInfos, _scheduleDictionary);
+				var result = _target.Filter(_teamBlockInfos, _scheduleDictionary);
 				Assert.That(result.Count == 0);
 			}
 		}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			using (_mocks.Playback())
 			{
-				var result = _target.IsFullyScheduled(_teamBlockInfos, _scheduleDictionary);
+				var result = _target.Filter(_teamBlockInfos, _scheduleDictionary);
 				Assert.IsTrue(result.Contains(_teamBlockInfo));
 			}
 		}

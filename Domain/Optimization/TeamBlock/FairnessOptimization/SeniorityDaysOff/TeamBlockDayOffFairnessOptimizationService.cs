@@ -11,9 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
-        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-                                     ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-                                     IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService);
+        void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences);
     }
 
     public class TeamBlockDayOffFairnessOptimizationService : ITeamBlockDayOffFairnessOptimizationService
@@ -28,19 +26,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _dayOffStep2 = dayOffStep2;
         }
 
-        public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-                            ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-                            IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService)
+        public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories, IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
         {
             _cancelMe = false;
             var instance = PrincipalAuthorization.Instance();
             if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
             var weekDayPoints = new WeekDayPoints();
             _dayOffStep1.PerformStep1(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons,
-                                      rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints());
+                                      rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(),optimizationPreferences );
             
-            if (!schedulingOptions.UseSameDayOffs)
-                _dayOffStep2.PerformStep2();
+            //if (!schedulingOptions.UseSameDayOffs)
+            //    _dayOffStep2.PerformStep2();
 
         }
 

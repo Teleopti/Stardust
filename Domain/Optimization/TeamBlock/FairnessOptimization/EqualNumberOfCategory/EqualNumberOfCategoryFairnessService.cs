@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			blocksToWorkWith = _filterForTeamBlockInSelection.Filter(blocksToWorkWith,
 			                                                              selectedPersons, selectedPeriod);
 
-			blocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(blocksToWorkWith, scheduleDictionary);
+			blocksToWorkWith = _filterForFullyScheduledBlocks.Filter(blocksToWorkWith, scheduleDictionary);
 
 			blocksToWorkWith = _filterForNoneLockedTeamBlocks.Filter(blocksToWorkWith);
 
