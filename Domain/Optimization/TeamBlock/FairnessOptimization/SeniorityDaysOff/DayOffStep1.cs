@@ -27,10 +27,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly ISeniorityCalculatorForTeamBlock  _seniorityCalculatorForTeamBlock;
         private readonly ITeamBlockLocatorWithHighestPoints _teamBlockLocatorWithHighestPoints;
         private readonly ISeniorityTeamBlockSwapper _seniorityTeamBlockSwapper;
+        private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 
         public DayOffStep1( IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
                                 IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks, ISeniorityExtractor seniorityExtractor, 
-                                    ISeniorTeamBlockLocator seniorTeamBlockLocator, IDescisionMakerToSwapTeamBlock descisionMakerToSwapTeamBlock, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ISeniorityCalculatorForTeamBlock seniorityCalculatorForTeamBlock, ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints, ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper)
+                                    ISeniorTeamBlockLocator seniorTeamBlockLocator, IDescisionMakerToSwapTeamBlock descisionMakerToSwapTeamBlock, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ISeniorityCalculatorForTeamBlock seniorityCalculatorForTeamBlock, ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints, ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
         {
             _constructTeamBlock = constructTeamBlock;
             _filterForTeamBlockInSelection = filterForTeamBlockInSelection;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _seniorityCalculatorForTeamBlock = seniorityCalculatorForTeamBlock;
             _teamBlockLocatorWithHighestPoints = teamBlockLocatorWithHighestPoints;
             _seniorityTeamBlockSwapper = seniorityTeamBlockSwapper;
+            _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
         }
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 if (seniorValue < dayOffPlacementPointsSenerioty[blockToSwapWith])
                 {
                     swapSuccess = _seniorityTeamBlockSwapper.SwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
-                                                                             scheduleDictionary, optimizationPreferences);
+                                                                             scheduleDictionary, optimizationPreferences,_teamBlockRestrictionOverLimitValidator);
                     if (!swapSuccess)
                         rollbackService.Rollback();
                 }

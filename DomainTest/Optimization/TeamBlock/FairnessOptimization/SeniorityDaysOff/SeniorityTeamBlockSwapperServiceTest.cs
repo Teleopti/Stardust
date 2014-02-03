@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			      .Return(_teamBlocksFirstLoop);
 			Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock)).Return(true);
 			Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_seniorTeamBlock)).Return(true);
-			Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(_teamBlocksFirstLoop, _scheduleDictionary));
+			Expect.Call(_filterForFullyScheduledBlocks.Filter(_teamBlocksFirstLoop, _scheduleDictionary));
 			Expect.Call(_seniorityExtractor.ExtractSeniority(_teamBlocksFirstLoop)).IgnoreArguments().Return(_teamBlockPointsList);
 		}
 	}
