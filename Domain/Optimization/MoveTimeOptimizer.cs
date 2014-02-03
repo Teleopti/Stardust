@@ -135,8 +135,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             // Step: Check that there are no white spots
 
             double newPeriodValue = calculatePeriodValue();
-            bool isPeriodWorse = newPeriodValue > oldPeriodValue;
-            if (isPeriodWorse)
+            bool isPeriodBetter = newPeriodValue < oldPeriodValue;
+			if (!isPeriodBetter)
             {
                 rollbackLockAndCalculate(firstDayDate, secondDayDate, originalFirstScheduleDay, originalSecondScheduleDay, resourceCalculateDelayer);
 				lockDays(firstDayDate, secondDayDate);
