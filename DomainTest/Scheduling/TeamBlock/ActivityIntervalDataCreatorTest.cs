@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IDictionary<IActivity, IList<ISkillIntervalData>> _skillIntervalDatasPerActivity;
 		private Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>> _skillIntervalDatasPerActivityAndDate;
 		private List<ISkillIntervalData> _skillIntevalDataList;
-		private new Dictionary<DateOnly, IList<ISkillIntervalData>> _skillIntervalDataListPerDate;
+		private Dictionary<DateOnly, IList<ISkillIntervalData>> _skillIntervalDataListPerDate;
 		private IActivity _activity;
 		private Dictionary<TimeSpan, ISkillIntervalData> _skillIntervalDataPerTimeSpan;
 		private ISkillIntervalData _skillIntervalData;
