@@ -45,7 +45,7 @@ namespace Teleopti.Interfaces.MessageBroker
 			var stringArray = new[] { excludeDatasourceForCertainTypes(), excludeBusinessUnitForCertainTypes(), DomainType };
 			var basicRoute = String.Join(Separator, stringArray);
 			
-			if (DateTime.UtcNow.AddDays(3) < UpperBoundaryAsDateTime() && LowerBoundaryAsDateTime() > DateTime.UtcNow.AddDays(-3))
+			if (DateTime.UtcNow.AddDays(3) > UpperBoundaryAsDateTime() && LowerBoundaryAsDateTime() > DateTime.UtcNow.AddDays(-3))
 			{
 				basicRoute = String.Join(Separator, new[] {basicRoute, ShortTerm});
 			}

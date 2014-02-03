@@ -10,8 +10,8 @@ BEGIN
 	SET NOCOUNT ON;
 
     TRUNCATE TABLE Stage.stg_schedule_changed
-	TRUNCATE TABLE Stage.stg_schedule_updated_personLocal
-	TRUNCATE TABLE Stage.stg_schedule_updated_ShiftStartDateUTC
+	--TRUNCATE TABLE Stage.stg_schedule_updated_personLocal
+	--TRUNCATE TABLE Stage.stg_schedule_updated_ShiftStartDateUTC
 END
 
 

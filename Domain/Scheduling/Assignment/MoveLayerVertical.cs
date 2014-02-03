@@ -1,69 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	//throw if layer not found?
-	public class MoveLayerVertical : IMoveLayerVertical
+	public class MoveShiftLayerVertical : IMoveShiftLayerVertical
 	{
-		public void MoveUp(IPersonAssignment personAssignment, ILayer<IActivity> layer)
+		private readonly IMoveLayerVertical _moveUp = new MoveShiftLayerUp();
+		private readonly IMoveLayerVertical _moveDown = new MoveShiftLayerDown();
+
+		public IMoveLayerVertical MoveUp
 		{
-			moveLayer(personAssignment, layer, -1);
+			get { return _moveUp; }
 		}
 
-		public void MoveDown(IPersonAssignment personAssignment, ILayer<IActivity> layer)
+		public IMoveLayerVertical MoveDown
 		{
-			moveLayer(personAssignment, layer, 1);
-		}
-
-		private static void moveLayer(IPersonAssignment personAssignment, ILayer<IActivity> layer, int positionMove)
-		{
-
-
-			if (layer is IMainShiftLayer)
-			{
-				var layers = createNewCollectionOfLayers(personAssignment.MainActivities(), layer, positionMove);
-				personAssignment.ClearMainActivities();
-				foreach (var newMainLayer in layers)
-				{
-					personAssignment.AddActivity(newMainLayer.Payload, newMainLayer.Period);
-				}
-				return;
-			}
-
-			if (layer is IPersonalShiftLayer)
-			{
-				var layers = createNewCollectionOfLayers(personAssignment.PersonalActivities(), layer, positionMove);
-				personAssignment.ClearPersonalActivities();
-				foreach (var newPersonalLayer in layers)
-				{
-					personAssignment.AddPersonalActivity(newPersonalLayer.Payload, newPersonalLayer.Period);
-				}
-				return;
-			}
-
-			if (layer is IOvertimeShiftLayer)
-			{
-				var layers = createNewCollectionOfLayers(personAssignment.OvertimeActivities(), layer, positionMove);
-				personAssignment.ClearOvertimeActivities();
-				foreach (IOvertimeShiftLayer newOvertimeShiftLayer in layers)
-				{
-					personAssignment.AddOvertimeActivity(newOvertimeShiftLayer.Payload, newOvertimeShiftLayer.Period,
-					                                  newOvertimeShiftLayer.DefinitionSet);
-				}
-			}
-		}
-
-		private static IEnumerable<ILayer<IActivity>> createNewCollectionOfLayers(IEnumerable<ILayer<IActivity>> oldCollection,
-		                                                                  ILayer<IActivity> layerToMove,
-																																			int positionMove)
-		{
-			var oldLayers = oldCollection.ToList();
-			var index = oldLayers.IndexOf(layerToMove);
-			oldLayers.RemoveAt(index);
-			oldLayers.Insert(index + positionMove, layerToMove);
-			return oldLayers;
+			get { return _moveDown; }
 		}
 	}
 }

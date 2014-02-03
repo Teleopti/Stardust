@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -22,25 +19,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly ISameOpenHoursInTeamBlockSpecification _sameOpenHoursInTeamBlockSpecification;
 		private readonly IWorkShiftSelector _workShiftSelector;
-		private readonly IDayIntervalDataCalculator _dayIntervalDataCalculator;
-		private readonly ICreateSkillIntervalDataPerDateAndActivity _createSkillIntervalDataPerDateAndActivity;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 
 		public TeamBlockRoleModelSelector(ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator,
 										  IWorkShiftFilterService workShiftFilterService,
 										  ISameOpenHoursInTeamBlockSpecification sameOpenHoursInTeamBlockSpecification,
 										  IWorkShiftSelector workShiftSelector,
-											IDayIntervalDataCalculator dayIntervalDataCalculator,
-											ICreateSkillIntervalDataPerDateAndActivity createSkillIntervalDataPerDateAndActivity,
-											ISchedulingResultStateHolder schedulingResultStateHolder)
+											ISchedulingResultStateHolder schedulingResultStateHolder,
+											IActivityIntervalDataCreator activityIntervalDataCreator)
 		{
 			_teamBlockRestrictionAggregator = teamBlockRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_sameOpenHoursInTeamBlockSpecification = sameOpenHoursInTeamBlockSpecification;
 			_workShiftSelector = workShiftSelector;
-			_dayIntervalDataCalculator = dayIntervalDataCalculator;
-			_createSkillIntervalDataPerDateAndActivity = createSkillIntervalDataPerDateAndActivity;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_activityIntervalDataCreator = activityIntervalDataCreator;
 		}
 
 		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person, ISchedulingOptions schedulingOptions)
@@ -61,36 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-
-			//transform
-			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
-			                                                                                               _schedulingResultStateHolder);
-			var activities = new HashSet<IActivity>();
-			foreach (var dicPerActivity in skillIntervalDataPerDateAndActivity.Values)
-			{
-				foreach (var activity in dicPerActivity.Keys)
-				{
-					activities.Add(activity);
-				}
-			}
-
-			var activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
-			foreach (var activity in activities)
-			{
-				var dateOnlyDicForActivity = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-				foreach (var dateOnly in skillIntervalDataPerDateAndActivity.Keys)
-				{
-					var dateDic = skillIntervalDataPerDateAndActivity[dateOnly];
-					if (!dateDic.ContainsKey(activity))
-						continue;
-
-					dateOnlyDicForActivity.Add(dateOnly, dateDic[activity]);
-				}
-
-				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
-				activityInternalData.Add(activity, dataForActivity);
-			}
-
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer, _schedulingResultStateHolder);
+			
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																		  schedulingOptions
 																			  .WorkShiftLengthHintOption,

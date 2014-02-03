@@ -149,7 +149,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				PersistAndRemoveFromUnitOfWork(noHit1);
 				var noHit2 = new PersonAssignment(_dummyAgent, wrongScenario, new DateOnly(1900, 1, 1));
 				PersistAndRemoveFromUnitOfWork(noHit2);
-				var loaded = new PersonAssignmentRepository(UnitOfWork).FetchDatabaseVersions(new DateOnlyPeriod(1880, 1, 1, 1910, 1, 1), _dummyScenario);
+				var noHit3 = new PersonAssignment(_dummyAgent2, _dummyScenario, new DateOnly(1900, 1, 1));
+				PersistAndRemoveFromUnitOfWork(noHit3);
+				var loaded = new PersonAssignmentRepository(UnitOfWork).FetchDatabaseVersions(new DateOnlyPeriod(1880, 1, 1, 1910, 1, 1), _dummyScenario, _dummyAgent);
 				var assLoaded = loaded.Single();
 				assLoaded.Id.Should().Be.EqualTo(ass.Id.Value);
 			}

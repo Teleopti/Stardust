@@ -8,12 +8,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
 	//OverwriteWhenHavingTwoNewAssignments
-	public class Bug25007 : ScheduleRangePersisterBaseTest
+	public class Bug25007 : ScheduleRangeConflictTest
 	{
 		private readonly DateOnly date = new DateOnly(2000, 1, 1);
 
-		protected override void Given(ICollection<IPersistableScheduleData> scheduleDataInDatabaseAtStart)
+		protected override IEnumerable<IPersistableScheduleData> Given()
 		{
+			return Enumerable.Empty<IPersistableScheduleData>();
 		}
 
 		protected override void WhenOtherHasChanged(IScheduleRange othersScheduleRange)

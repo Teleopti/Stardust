@@ -6290,7 +6290,7 @@ Meeting</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="NoShiftsThatMatchesTheContractTimeCouldBeFound" xml:space="preserve">
-    <value>No shifts that matches the contract time could be found</value>
+    <value>No shifts that match the contract time could be found</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="ShiftsInsideThePeriodColon" xml:space="preserve">
@@ -11887,8 +11887,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Please add intraday absence on existing shift</comment>
   </data>
   <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
-    <value>With Add Activity you cannot create a second shift.</value>
-    <comment>With Add Activity you cannot create a second shift.</comment>
+    <value>You cannot create a second shift with add activity.</value>
+    <comment>You cannot create a second shift with add activity.</comment>
   </data>
   <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
     <value>On this date you are no longer an employee</value>
@@ -11909,6 +11909,26 @@ Reduce the complexity to use these shifts.</value>
   <data name="Yesterday" xml:space="preserve">
     <value>Yesterday</value>
     <comment>Link in My Report (web)</comment>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Task time</value>
+    <comment>Task time is another name for handling time in forecast</comment>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Total task time</value>
+    <comment>Total task time is another name for total handling time in forecast</comment>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Chat time</value>
+    <comment>Another, more descriptive name for talk time in forecast</comment>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>You don't have access to any teams.</value>
+    <comment>Message when you don't have access to any teams and therefor you can not see any data.</comment>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Compare with teams from</value>
+    <comment>What teams to compare , used in Agent Info/Fairness Tab</comment>
   </data>
   <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
     <value>Ready Time / Scheduled Ready Time (%)</value>

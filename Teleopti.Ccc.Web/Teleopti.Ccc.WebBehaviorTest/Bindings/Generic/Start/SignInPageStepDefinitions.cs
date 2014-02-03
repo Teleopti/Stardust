@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Browser.Interactions.Click("#Login-button");
 		}
 
+		[Given(@"I sign in")]
 		[When(@"I sign in")]
 		[When(@"I sign in by user name")]
 		public void WhenISignIn()
@@ -59,6 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Browser.Interactions.Click("#Login-button");
 		}
 
+		[Given(@"I select application logon data source")]
 		[When(@"I select application logon data source")]
 		public void WhenISelectApplicationLogonDataSource()
 		{

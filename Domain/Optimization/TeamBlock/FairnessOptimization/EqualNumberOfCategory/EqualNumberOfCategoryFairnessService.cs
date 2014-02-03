@@ -9,8 +9,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 	public interface IEqualNumberOfCategoryFairnessService
 	{
 		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-		                             IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
-		                             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService);
+		             IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions,
+		             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
+		             ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+		             IOptimizationPreferences optimizationPreferences);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -27,6 +29,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IEqualCategoryDistributionWorstTeamBlockDecider _equalCategoryDistributionWorstTeamBlockDecider;
 		private readonly IFilterPersonsForTotalDistribution _filterPersonsForTotalDistribution;
 		private readonly IFilterForFullyScheduledBlocks _filterForFullyScheduledBlocks;
+		private readonly IEqualCategoryDistributionValue _equalCategoryDistributionValue;
+		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 		private bool _cancelMe;
 
 		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
@@ -41,7 +45,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		                                            IEqualCategoryDistributionWorstTeamBlockDecider
 			                                            equalCategoryDistributionWorstTeamBlockDecider,
 		                                            IFilterPersonsForTotalDistribution filterPersonsForTotalDistribution,
-													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks)
+													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
+													IEqualCategoryDistributionValue equalCategoryDistributionValue,
+													IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
@@ -53,55 +59,119 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_equalCategoryDistributionWorstTeamBlockDecider = equalCategoryDistributionWorstTeamBlockDecider;
 			_filterPersonsForTotalDistribution = filterPersonsForTotalDistribution;
 			_filterForFullyScheduledBlocks = filterForFullyScheduledBlocks;
+			_equalCategoryDistributionValue = equalCategoryDistributionValue;
+			_filterForNoneLockedTeamBlocks = filterForNoneLockedTeamBlocks;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		                    IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
-							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService)
+							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
+			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+			IOptimizationPreferences optimizationPreferences)
 		{
 			_cancelMe = false;
 			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList);
-			
-			var teamBlockListRaw = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
+
+			var blocksToWorkWith = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
 			                                                  schedulingOptions);
 
-			var teamBlockListWithCorrectWorkFlowControlSet = _filterForEqualNumberOfCategoryFairness.Filter(teamBlockListRaw);
+			blocksToWorkWith = _filterForEqualNumberOfCategoryFairness.Filter(blocksToWorkWith);
 			
 			var totalDistribution = _distributionForPersons.CreateSummary(personListForTotalDistribution, scheduleDictionary);
-			var teamBlocksInSelection = _filterForTeamBlockInSelection.Filter(teamBlockListWithCorrectWorkFlowControlSet,
+			blocksToWorkWith = _filterForTeamBlockInSelection.Filter(blocksToWorkWith,
 			                                                              selectedPersons, selectedPeriod);
 
-			var blocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksInSelection, scheduleDictionary);
-			
+			blocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(blocksToWorkWith, scheduleDictionary);
+
+			blocksToWorkWith = _filterForNoneLockedTeamBlocks.Filter(blocksToWorkWith);
+
 			double totalBlockCount = blocksToWorkWith.Count;
+			var originalBlocks = blocksToWorkWith;
+
+			bool moveFound = true;
+			while (moveFound)
+			{
+				var workingBlocks = new List<ITeamBlockInfo>(originalBlocks);
+				moveFound = runOneLoop(scheduleDictionary, rollbackService, teamBlockRestrictionOverLimitValidator,
+				                       optimizationPreferences, workingBlocks, totalDistribution, totalBlockCount);
+			}
+		}
+
+		
+
+		private bool runOneLoop(IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
+		                        ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+		                        IOptimizationPreferences optimizationPreferences, IList<ITeamBlockInfo> blocksToWorkWith,
+		                        IDistributionSummary totalDistribution, double totalBlockCount)
+		{
+			bool moveFound = false;
+			int successes = 0;
 			while (blocksToWorkWith.Count > 0 && !_cancelMe)
 			{
-				ITeamBlockInfo teamBlockInfoToWorkWith =
+				var teamBlockInfoToWorkWith =
 					_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(totalDistribution, blocksToWorkWith,
 					                                                                    scheduleDictionary);
 
-				if (teamBlockInfoToWorkWith == null) blocksToWorkWith.Clear();
-				else blocksToWorkWith.Remove(teamBlockInfoToWorkWith);
+				if (teamBlockInfoToWorkWith == null) 
+					break;
 
-				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(blocksToWorkWith, teamBlockInfoToWorkWith);
-				if(possibleTeamBlocksToSwapWith.Count == 0)
+				var teamBlockToWorkWith = teamBlockInfoToWorkWith;
+
+				blocksToWorkWith.Remove(teamBlockInfoToWorkWith);
+
+				var possibleTeamBlocksToSwapWith = _filterOnSwapableTeamBlocks.Filter(blocksToWorkWith, teamBlockToWorkWith);
+				if (possibleTeamBlocksToSwapWith.Count == 0)
 					continue;
 
 				ITeamBlockInfo selectedTeamBlock =
-					_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(teamBlockInfoToWorkWith, possibleTeamBlocksToSwapWith,
+					_equalCategoryDistributionBestTeamBlockDecider.FindBestSwap(teamBlockToWorkWith, possibleTeamBlocksToSwapWith,
 					                                                            totalDistribution, scheduleDictionary);
-				if(selectedTeamBlock == null)
+				if (selectedTeamBlock == null)
 					continue;
 
-				_teamBlockSwapper.TrySwap(teamBlockInfoToWorkWith, selectedTeamBlock, rollbackService, scheduleDictionary);
+				var valueBefore = _equalCategoryDistributionValue.CalculateValue(teamBlockToWorkWith, totalDistribution,
+				                                                                 scheduleDictionary);
+				valueBefore += _equalCategoryDistributionValue.CalculateValue(selectedTeamBlock, totalDistribution,
+																				 scheduleDictionary);
+				bool success = _teamBlockSwapper.TrySwap(teamBlockToWorkWith, selectedTeamBlock, rollbackService,
+				                                         scheduleDictionary);
+				if (success)
+				{
+					var firstBlockOk = teamBlockRestrictionOverLimitValidator.Validate(teamBlockToWorkWith, optimizationPreferences);
+					var secondBlockOk = teamBlockRestrictionOverLimitValidator.Validate(selectedTeamBlock, optimizationPreferences);
+					if (!(firstBlockOk && secondBlockOk))
+					{
+						rollbackService.Rollback();
+						success = false;
+					}
+				}
+
+				if (success)
+				{
+					var valueAfter = _equalCategoryDistributionValue.CalculateValue(teamBlockToWorkWith, totalDistribution,
+																				 scheduleDictionary);
+					valueAfter += _equalCategoryDistributionValue.CalculateValue(selectedTeamBlock, totalDistribution,
+																				 scheduleDictionary);
+					if (valueAfter<valueBefore)
+					{
+						successes++;
+						moveFound = true;
+					}
+					else
+					{
+						rollbackService.Rollback();
+					}
+				}
 
 				var message = Resources.FairnessOptimizationOn + " " + Resources.EqualOfEachShiftCategory + ": " +
-							  new Percent((totalBlockCount - blocksToWorkWith.Count) / totalBlockCount);
+							  new Percent((totalBlockCount - blocksToWorkWith.Count) / totalBlockCount) + " xxSucesses = " + successes;
 
 				OnReportProgress(message);
 			}
+
+			return moveFound;
 		}
 
 		public virtual void OnReportProgress(string message)

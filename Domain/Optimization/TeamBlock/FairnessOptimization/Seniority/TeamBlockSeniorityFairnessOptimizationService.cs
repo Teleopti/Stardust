@@ -46,52 +46,79 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                             ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService)
         {
+
+	        var notSwapped = 0;
+	        var loop = 1;
+
 			_cancelMe = false;
-			var instance = PrincipalAuthorization.Instance();
-	        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
-            var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
-
-			var filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
-			var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(filteredTeamBlocks, shiftCategories);
-	        var analyzedTeamBlocks = new List<ITeamBlockInfo>();
-			var priorityList = teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority();
-	        double totalBlockCount = priorityList.Count;
-
-	        foreach (var teamBlockInfoHighSeniority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo)
+	        while (!_cancelMe)
 	        {
-		        if (_cancelMe) break;
-		        var highSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoHighSeniority);
+				var unSuccessfulSwaps = new List<ITeamBlockInfo>();
+		        var instance = PrincipalAuthorization.Instance();
+		        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
+		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 
-		        foreach (var teamBlockInfoLowSeniority in priorityList)
+		        var filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
+		        var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(filteredTeamBlocks, shiftCategories);
+		        var analyzedTeamBlocks = new List<ITeamBlockInfo>();
+		        var priorityList = teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority();
+		        double totalBlockCount = priorityList.Count;
+
+		        foreach (var teamBlockInfoHighSeniority in teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo)
 		        {
-			        if (teamBlockInfoHighSeniority.Equals(teamBlockInfoLowSeniority))
+			        if (_cancelMe) break;
+			        var highSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoHighSeniority);
+
+			        foreach (var teamBlockInfoLowSeniority in priorityList)
 			        {
-						priorityList.Remove(teamBlockInfoHighSeniority);
+				        if (teamBlockInfoHighSeniority.Equals(teamBlockInfoLowSeniority))
+				        {
+					        priorityList.Remove(teamBlockInfoHighSeniority);
+					        break;
+				        }
+
+				        if (!_teamBlockPeriodValidator.ValidatePeriod(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority))
+					        continue;
+				        var lowSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoLowSeniority);
+				        if (analyzedTeamBlocks.Contains(teamBlockInfoLowSeniority)) continue;
+				        if (highSeniorityPoints >= lowSeniorityPoints)
+				        {
+					        priorityList.Remove(teamBlockInfoHighSeniority);
+					        break;
+				        }
+
+				        //if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,scheduleDictionary, selectedPeriod)) continue;
+
+				        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary, selectedPeriod))
+				        {
+					        unSuccessfulSwaps.Add(teamBlockInfoHighSeniority);
+					        continue;
+				        }
+
+				        unSuccessfulSwaps.Remove(teamBlockInfoHighSeniority);
+
+
+				        teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoLowSeniority, highSeniorityPoints);
+
+				        var highSeniorityIndex = priorityList.IndexOf(teamBlockInfoHighSeniority);
+				        priorityList.Remove(teamBlockInfoLowSeniority);
+				        priorityList[highSeniorityIndex - 1] = teamBlockInfoLowSeniority;
 				        break;
 			        }
-		       
-					if (!_teamBlockPeriodValidator.ValidatePeriod(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority)) continue;
-			        var lowSeniorityPoints = teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(teamBlockInfoLowSeniority);
-			        if (analyzedTeamBlocks.Contains(teamBlockInfoLowSeniority)) continue;
-			        if (highSeniorityPoints >= lowSeniorityPoints)
-			        {
-				        priorityList.Remove(teamBlockInfoHighSeniority);
-				        break;
-			        }
-			        
-			        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,scheduleDictionary, selectedPeriod)) continue;
 
-			        teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoLowSeniority, highSeniorityPoints);
+			        var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzedTeamBlocks.Count/totalBlockCount);
 
-			        var highSeniorityIndex = priorityList.IndexOf(teamBlockInfoHighSeniority);
-			        priorityList.Remove(teamBlockInfoLowSeniority);
-			        priorityList[highSeniorityIndex - 1] = teamBlockInfoLowSeniority;
-			        break;
+			        if (loop > 1) message += " (" + loop + ")";
+
+			        OnReportProgress(message);
+			        analyzedTeamBlocks.Add(teamBlockInfoHighSeniority);
 		        }
 
-				var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzedTeamBlocks.Count / totalBlockCount);
-				OnReportProgress(message);
-				analyzedTeamBlocks.Add(teamBlockInfoHighSeniority);
+		        if (unSuccessfulSwaps.Count >= notSwapped && notSwapped > 0) _cancelMe = true;
+		        if (unSuccessfulSwaps.Count == 0) _cancelMe = true;
+
+		        notSwapped = unSuccessfulSwaps.Count;
+				loop++;
 	        }
         }
 

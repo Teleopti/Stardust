@@ -270,6 +270,10 @@ item: Set Variable
 end
 item: End Block
 end
+item: Set Variable
+  Variable=WEB_BROKER_FOR_WEB_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
+end
 item: If/While Statement
   Variable=DMZ_TMP
   Value=YES
@@ -406,6 +410,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(PM_ASMX)|%DNS_ALIAS_TMP%%PM_VIRDIR_TMP%/services/Analyzer2005.asmx
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(WEB_BROKER_FOR_WEB)|%WEB_BROKER_FOR_WEB_TMP%
   Line Number=0
 end
 item: Insert Line into Text File

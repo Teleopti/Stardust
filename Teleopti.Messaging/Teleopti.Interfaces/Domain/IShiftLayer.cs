@@ -1,7 +1,7 @@
 ﻿namespace Teleopti.Interfaces.Domain
 {
-	public interface IShiftLayer : IAggregateEntity, ILayer<IActivity>, ICloneableEntity<IShiftLayer>
+	public interface IShiftLayer : IAggregateEntity, ILayer<IActivity>
 	{
-		 
+		IShiftLayer EntityClone();
 	}
 }

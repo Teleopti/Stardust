@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IScheduleProvider>());
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>());
 
 			var result = target.RetrieveUserWorkflowControlSet();
 
@@ -35,45 +35,101 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldGetMyScheduleForADay()
 		{
-			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
+			var scheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+
+			DateOnly date = DateOnly.Today;
+			var scheduleReadModel = new PersonScheduleDayReadModel();
 			var person = new Person();
-			var date = DateOnly.Today;
-			IScheduleDictionary scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
-																			new ScheduleDateTimePeriod(
-																				new DateTimePeriod(
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc),
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))));
-			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, person, date);
+			person.SetId(Guid.NewGuid());
 
-			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(date, date))).Return(new[] { scheduleDay });
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			scheduleDayReadModelFinder.Stub(x => x.ForPerson(date, person.Id.Value)).Return(scheduleReadModel);
 
-			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
+			var target = new ShiftTradeRequestProvider(loggedOnUser, scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>());
 
-			var result = target.RetrieveMyScheduledDay(date);
-
-			result.Should().Be.SameInstanceAs(scheduleDay);
+			target.RetrieveMySchedule(date).Should().Be.SameInstanceAs(scheduleReadModel);
 		}
 
 		[Test]
 		public void ShouldGetScheduleForPossibleTradePersons()
 		{
-			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var personList = new[] { new Person() };
-			var date = DateOnly.Today;
-			var scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
-																			new ScheduleDateTimePeriod(
-																				new DateTimePeriod(
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc),
-																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))));
-			var scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, personList[0], date);
-			scheduleProvider.Stub(x => x.GetScheduleForPersons(date, personList)).Return(new[] { scheduleDay });
+			var scheduleDayReadModelFinder = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
+			DateOnly date = DateOnly.Today;
+			var person1 = new Person();
+			var person2 = new Person();
+			person1.SetId(Guid.NewGuid());
+			person2.SetId(Guid.NewGuid());
+			var scheduleReadModels = new[] {new PersonScheduleDayReadModel(), new PersonScheduleDayReadModel()};
 
-			
-			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
+			scheduleDayReadModelFinder.Stub(x => x.ForPersons(date, new[] { person1.Id.Value, person2.Id.Value }, new Paging())).Return(scheduleReadModels);
 
-			var result = target.RetrievePossibleTradePersonsScheduleDay(date, personList);
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleDayReadModelFinder, MockRepository.GenerateMock<IPermissionProvider>());
 
-			result.FirstOrDefault().Should().Be.SameInstanceAs(scheduleDay);
+			var result = target.RetrievePossibleTradeSchedules(date, new[] { person1, person2 }, new Paging());
+
+			result.Should().Be.SameInstanceAs(scheduleReadModels);
+		}
+
+		[Test]
+		public void ShouldReturnMyTeamForGivenDate()
+		{
+			var theDate = DateOnly.Today;
+			var myTeam = new Team();
+			myTeam.SetId(Guid.NewGuid());
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.MyTeam(theDate)).Return(myTeam);
+			permissionProvider.Stub(
+				x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, myTeam)).Return(true);
+
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
+
+			var result = target.RetrieveMyTeamId(theDate);
+
+			result.Should().Be.EqualTo(myTeam.Id);
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNoTeamForGivenDate()
+		{
+			var theDate = DateOnly.Today;
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.MyTeam(theDate)).Return(null);
+
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IPermissionProvider>());
+
+			var result = target.RetrieveMyTeamId(theDate);
+
+			result.Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldReturnNullIfNoPermissionForMyTeam()
+		{
+			var theDate = DateOnly.Today;
+			var myTeam = new Team();
+			myTeam.SetId(Guid.NewGuid());
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var person = MockRepository.GenerateMock<IPerson>();
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
+			person.Stub(x => x.MyTeam(theDate)).Return(myTeam);
+			permissionProvider.Stub(
+				x => x.HasTeamPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, theDate, myTeam)).Return(false);
+
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), permissionProvider);
+
+			var result = target.RetrieveMyTeamId(theDate);
+
+			result.Should().Be.EqualTo(null);
 		}
 	}
 }

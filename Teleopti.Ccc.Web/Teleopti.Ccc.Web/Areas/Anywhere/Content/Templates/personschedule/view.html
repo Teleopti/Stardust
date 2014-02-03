@@ -29,13 +29,13 @@
 							</td>
 							<td class="schedule schedule-column">
 								<div class="relative time-line-for">
-									<!-- ko with: Shift -->
+									<!-- ko foreach: Shifts -->
 									<div class="shift" data-bind="
 										template: {
 											name: 'layerTemplate',
 											foreach: Layers
-										}
-									"></div>
+										}">
+									</div>
 									<!-- /ko -->
 
 									<!-- ko if: IsDayOff() -->
@@ -57,7 +57,7 @@
 										<!-- ko if: $root.AddingIntradayAbsence -->
 										<!-- ko with: $root.AddIntradayAbsenceForm -->
 										<form action="#" class="intraday-absence-form">
-											<select class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
+											<select class="absence-type" data-bind="disable: $root.Loading, options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: Absence">
 											</select>
 											<div class="input-append input-prepend bootstrap-timepicker">
 												<span class="add-on"><i class="icon-step-backward"></i></span>
@@ -71,14 +71,14 @@
 												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
 											
-											<!-- ko if: ErrorMessage() -->
+											<!-- ko if: ErrorMessage -->
 											<div class="alert">
-												<span data-bind="text: ErrorMessage()"></span>
+												<span data-bind="text: ErrorMessage"></span>
 											</div>
 											<!-- /ko -->
-											
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+											</div>
 										</form>
 										
 										<!-- /ko -->
@@ -87,7 +87,7 @@
 										<!-- ko if: $root.AddingActivity -->
 										<!-- ko with: $root.AddActivityForm -->
 										<form action="#" class="activity-form">
-											<select class="activity-type" data-bind="enable: !$root.Loading(), options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity">
+											<select class="activity-type" data-bind="disable: $root.Loading, options: ActivityTypes, optionsText: 'Name', optionsValue: 'Id', value: Activity">
 											</select>
 
 											<div class="input-append input-prepend bootstrap-timepicker">
@@ -101,14 +101,14 @@
 												<span class="add-on"><i class="icon-time"></i></span>
 											</div>
 											
-											<!-- ko if: ErrorMessage() -->
+											<!-- ko if: ErrorMessage -->
 											<div class="alert">
-												<span data-bind="text: ErrorMessage()"></span>
+												<span data-bind="text: ErrorMessage"></span>
 											</div>
 											<!-- /ko -->
-
-											<button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+											</div>
 										</form>
 														
 										<!-- /ko -->
@@ -119,7 +119,7 @@
 										<!-- ko with: $root.AddFullDayAbsenceForm -->
 										<form action="#" class="full-day-absence-form">
 					
-											<select id="absence-type" class="absence-type" data-bind="enable: !$root.Loading(), options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType">
+											<select id="absence-type" class="absence-type" data-bind="disable: $root.Loading, options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType">
 											</select>
 
 											<div class="input-prepend">
@@ -139,22 +139,20 @@
 												<span data-bind="text: $root.Resources.InvalidEndDate"></span>
 											</div>
 											<!-- /ko -->
-
-											<button class="btn btn-success apply" style="margin-top: 10px" data-bind="enable: !InvalidEndDate() && !$root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
-					
+											<div>
+												<button class="btn btn-success apply" style="margin-top: 10px" data-bind="disable: InvalidEndDate() || $root.Loading(), text: $root.Resources.AddFullDayAbsence, click: Apply"></button>
+											</div>
 										</form>
 										<!-- /ko -->
 										<!-- /ko -->
 									</div>
-									
-									
 								</div>
 							</td>
 						</tr>
 						
-
+						<!-- ko ifnot: Loading -->
 						<!-- ko if: AddingActivity -->
-						<!-- ko foreach: Persons -->
+						<!-- ko foreach: SortedPersons -->
 						<tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
 							<td class="person-name person-name-column">
 								<div class="person-name nowrap" data-bind="text: Name"></div>
@@ -183,31 +181,29 @@
 						</tr>
 						<!-- /ko -->
 						<!-- /ko -->
-						
+						<!-- /ko -->
 					</tbody>
 				</table>
-				
 			</div>
-
 		</div>
 	</div>
 	
-	<div class="row" data-bind="ifnot: DisplayForm()">
+	<div class="row" data-bind="ifnot: DisplayForm">
 		<div class="span8">
 			<table class="table absence-list">
 				<tbody data-bind="foreach: Absences">
 					<tr class="absence">
-						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor() }">
+						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
 						<td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
 						<td class="absence-item"><i class="icon-step-backward"></i><span data-bind="text: StartTime"></span></td>
 						<td class="absence-item"><i class="icon-minus"></i></td>
 						<td class="absence-item"><span data-bind="text: EndTime"></span><i class="icon-step-forward"></i></td>
 						<td class="absence-item">
-							<!-- ko if: !AboutToRemove() -->
+							<!-- ko ifnot: AboutToRemove -->
 							<button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
 							<!-- /ko -->
 							<!-- ko if: AboutToRemove -->
-							<button class="btn btn-danger confirm-removal" data-bind="enable: !Removing(), click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+							<button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
 							<!-- /ko -->
 						</td>
 					</tr>

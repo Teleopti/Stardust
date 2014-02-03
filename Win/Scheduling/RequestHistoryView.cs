@@ -67,6 +67,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public void FillPersonCombo(ICollection<IRequestPerson> persons, Guid preselectedPerson)
         {
+	        if (persons == null || persons.Count == 0)
+	        {
+		        comboBoxAdvPersons.Items.Clear();
+		        comboBoxAdvPersons.SelectedValue = null;
+		        return;
+	        }
+
             comboBoxAdvPersons.ValueMember = "Id";
             comboBoxAdvPersons.DisplayMember = "Name";
             comboBoxAdvPersons.DataSource = persons;

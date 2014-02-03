@@ -27,6 +27,7 @@ using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
@@ -338,9 +339,23 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldResolveTeamController()
+		{
+			requestContainer.Resolve<TeamController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldResolveTeamScheduleViewModelFactory()
 		{
 			requestContainer.Resolve<ITeamScheduleViewModelFactory>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveTeamViewModelFactory()
+		{
+			requestContainer.Resolve<ITeamViewModelFactory>()
 				.Should().Not.Be.Null();
 		}
 

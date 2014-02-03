@@ -231,9 +231,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
 			retobj._shiftLayers = new List<IShiftLayer>();
-			foreach (var newLayer in _shiftLayers.Select(layer => layer.NoneEntityClone()))
+			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
 				newLayer.SetParent(retobj);
+				newLayer.SetId(null);
 				retobj._shiftLayers.Add(newLayer);
 			}
 
@@ -327,6 +328,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Insert(index,layer);
+		}
+
+		public virtual void MoveLayerVertical(IMoveLayerVertical target, IShiftLayer layer)
+		{
+			target.Move(_shiftLayers, layer);
 		}
 
 		public virtual IDayOff DayOff()

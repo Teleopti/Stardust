@@ -71,5 +71,11 @@ namespace Teleopti.Ccc.DomainTest.Helper
 			StringHelper.DisplayString(input, 20)
 											 .Should().Be.EqualTo("                 ...");
 		}
+
+		[Test]
+		public void ShouldCreateGuidFromString()
+		{
+			StringHelper.GenerateGuid("hello").ToString().Should().Be.EqualTo("2a40415d-4bbc-762a-b971-9d911017c592");
+		}
     }
 }

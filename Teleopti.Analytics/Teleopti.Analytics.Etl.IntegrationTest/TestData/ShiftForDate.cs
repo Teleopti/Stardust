@@ -61,8 +61,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			assignment.SetShiftCategory(ShiftCategory);
 
 			assignmentRepository.Add(assignment);
+			PersonAssignment = assignment;
 		}
 
+		public IPersonAssignment PersonAssignment { get; set; }
+		
 		public TimeSpan GetContractTime()
 		{
 			// rolling my own contract time calculation.

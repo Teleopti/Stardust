@@ -156,6 +156,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					effiencies = new ConcurrentDictionary<Guid, double>();
 				}
+				else
+				{
+					effiencies = new ConcurrentDictionary<Guid, double>(effiencies);
+				}
 
 				var skillKey = pair.Key.Split('|')[1];
 				yield return new SkillKeyResource { SkillKey = skillKey, Resource = pair.Value, Effiencies = effiencies };
