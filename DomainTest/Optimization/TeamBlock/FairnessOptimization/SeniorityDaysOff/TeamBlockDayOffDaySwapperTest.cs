@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -11,10 +14,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
 	[TestFixture]
-	public class TeamBlockDayOffSwapTest
+	public class TeamBlockDayOffDaySwapperTest
 	{
 		private MockRepository _mocks;
-		private ITeamBlockDayOffSwapper _target;
+		private ITeamBlockDayOffDaySwapper _target;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IScheduleDictionary _scheduleDictionary;
 		private IScheduleRange _range1;
@@ -31,13 +34,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private TeamInfo _teamJunior;
 		private TeamBlockInfo _teamBlockInfoSenior;
 		private TeamBlockInfo _teamBlockInfoJunior;
+		private DateOnly _dateOnly;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_swapServiceNew = _mocks.StrictMock<ISwapServiceNew>();
-			_target = new TeamBlockDayOffSwapper(_swapServiceNew);
+			_target = new TeamBlockDayOffDaySwapper(_swapServiceNew);
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
@@ -52,7 +56,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			groupMatrixesJunior.Add(new List<IScheduleMatrixPro> { _matrixSenior });
 			_teamSenior = new TeamInfo(_groupSenior, groupMatrixesSenior);
 			_teamJunior = new TeamInfo(_groupJunior, groupMatrixesJunior);
-			var blockInfo = new BlockInfo(new DateOnlyPeriod(2014, 1, 27, 2014, 1, 27));
+			_dateOnly = new DateOnly(2014, 1, 27);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
 			_teamBlockInfoSenior = new TeamBlockInfo(_teamSenior, blockInfo);
 			_teamBlockInfoJunior = new TeamBlockInfo(_teamJunior, blockInfo);
 			_range1 = _mocks.StrictMock<IScheduleRange>();
@@ -67,9 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay1);
+				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay2);
+				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
 				Assert.IsTrue(result);
 			}
 		}
@@ -90,9 +95,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay1);
+				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay2);
+				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
@@ -102,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
 				Assert.IsTrue(result);
 			}
 		}
@@ -114,9 +119,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay1);
+				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay2);
+				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_swapServiceNew.Swap(swapList, _scheduleDictionary)).Return(swapList);
@@ -127,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
 				Assert.IsTrue(result);
 			}
 		}
@@ -142,9 +147,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay1);
+				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(new DateOnly(2014, 1, 27))).Return(_scheduleDay2);
+				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
 				Expect.Call(_swapServiceNew.Swap(swapList, _scheduleDictionary)).Return(swapList);
@@ -155,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
 				Assert.IsFalse(result);
 			}
 		}

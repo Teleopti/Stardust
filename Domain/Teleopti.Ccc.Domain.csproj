@@ -384,6 +384,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DescisionMakerToSwapTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapperService.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorTeamBlockLocator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffDaySwapper.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffSwapper.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockLocatorWithHigestPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep2.cs" />
