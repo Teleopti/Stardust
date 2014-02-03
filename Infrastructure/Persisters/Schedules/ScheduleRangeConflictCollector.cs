@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		{
 			_reassociateDataForSchedules.ReassociateDataFor(scheduleParameters.Person);
 			var dateOnlyPeriod = scheduleParameters.Period.ToDateOnlyPeriod(scheduleParameters.Person.PermissionInformation.DefaultTimeZone());
-			var personAssignmentsInDb = _personAssignmentRepository.FetchDatabaseVersions(dateOnlyPeriod, scheduleParameters.Scenario);
+			var personAssignmentsInDb = _personAssignmentRepository.FetchDatabaseVersions(dateOnlyPeriod, scheduleParameters.Scenario, scheduleParameters.Person);
 
 			var uow = _scheduleRepository.UnitOfWork;
 
