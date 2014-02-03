@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				  .Return(_totalDistributionSummary);
 			Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _selectedPersons, new DateOnlyPeriod()))
 				  .Return(_teamBlockInfos);
-			Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(_teamBlockInfos, _sceduleDictionary)).Return(_teamBlockInfos);
+			Expect.Call(_filterForFullyScheduledBlocks.Filter(_teamBlockInfos, _sceduleDictionary)).Return(_teamBlockInfos);
 			Expect.Call(_filterForNoneLockedTeamBlocks.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
 		}
 

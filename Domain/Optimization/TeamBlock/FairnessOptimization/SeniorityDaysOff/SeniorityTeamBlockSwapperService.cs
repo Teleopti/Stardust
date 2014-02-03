@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			var teamBlocksToWorkWith = _filterForTeamBlockInSelection.Filter(allTeamBlocks,
 																		  selectedPersons, selectedPeriod);
 
-			teamBlocksToWorkWith = _filterForFullyScheduledBlocks.IsFullyScheduled(teamBlocksToWorkWith, scheduleDictionary);
+			teamBlocksToWorkWith = _filterForFullyScheduledBlocks.Filter(teamBlocksToWorkWith, scheduleDictionary);
 			var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith);
 			var seniorityInfoDictionary = teamBlockPoints.ToDictionary(teamBlockPoint => teamBlockPoint.TeamBlockInfo, teamBlockPoint => teamBlockPoint.Points);
 			var originalBlocksCont = seniorityInfoDictionary.Count;
