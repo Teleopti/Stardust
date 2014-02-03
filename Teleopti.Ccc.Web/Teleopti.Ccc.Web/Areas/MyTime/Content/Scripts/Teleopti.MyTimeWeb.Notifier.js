@@ -46,7 +46,8 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 				if (webNotification() && !isShowing(notifyText)) {
 					var timeout = 5000;
 					var iconUrl = baseUrl + 'content/favicon.ico';
-					var notification = window.webkitNotifications.createNotification(iconUrl, header, notifyText);
+					var decodedText = $('<div />').html(notifyText).text();
+					var notification = window.webkitNotifications.createNotification(iconUrl, header, decodedText);
 					notification.show();
 					webNotifications.push({ notification: notification, text: notifyText });
 					setTimeout(function () {
