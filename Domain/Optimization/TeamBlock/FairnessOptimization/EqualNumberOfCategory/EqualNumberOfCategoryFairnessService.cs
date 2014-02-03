@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -72,7 +73,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			IOptimizationPreferences optimizationPreferences)
 		{
 			_cancelMe = false;
-			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList);
+			var personListForTotalDistribution = _filterPersonsForTotalDistribution.Filter(allPersonMatrixList).ToList();
+			if (!personListForTotalDistribution.Any())
+				return;
 
 			var blocksToWorkWith = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
 			                                                     schedulingOptions.UseTeamBlockPerOption,

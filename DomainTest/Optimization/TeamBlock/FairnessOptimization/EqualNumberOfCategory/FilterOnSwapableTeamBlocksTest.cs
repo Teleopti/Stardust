@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private ITeamBlockContractTimeValidator _teamBlockContractTimeValidator;
 		private ITeamBlockSameSkillValidator _teamBlockSameSkillValidator;
 		private ITeamBlockSameRuleSetBagValidator _teamBlockSameRuleSetBagValidator;
+		private ITeamBlockSameTimeZoneValidator _teamBlockSameTimeZoneValidator;
 
 		[SetUp]
 		public void Setup()
@@ -28,9 +29,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_teamBlockContractTimeValidator = _mocks.StrictMock<ITeamBlockContractTimeValidator>();
 			_teamBlockSameSkillValidator = _mocks.StrictMock<ITeamBlockSameSkillValidator>();
 			_teamBlockSameRuleSetBagValidator = _mocks.StrictMock<ITeamBlockSameRuleSetBagValidator>();
+			_teamBlockSameTimeZoneValidator = _mocks.StrictMock<ITeamBlockSameTimeZoneValidator>();
 			_target = new FilterOnSwapableTeamBlocks(_teamBlockPeriodValidator, _teamMemberCountValidator,
 			                                         _teamBlockContractTimeValidator, _teamBlockSameSkillValidator,
-			                                         _teamBlockSameRuleSetBagValidator);
+			                                         _teamBlockSameRuleSetBagValidator,
+													 _teamBlockSameTimeZoneValidator);
 		}
 
 		[Test]
@@ -46,12 +49,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_teamBlockContractTimeValidator.ValidateContractTime(teamBlock1, teamBlockToCompare)).Return(true);
 				Expect.Call(_teamBlockSameSkillValidator.ValidateSameSkill(teamBlock1, teamBlockToCompare)).Return(true);
 				Expect.Call(_teamBlockSameRuleSetBagValidator.ValidateSameRuleSetBag(teamBlock1, teamBlockToCompare)).Return(true);
+				Expect.Call(_teamBlockSameTimeZoneValidator.Validate(teamBlock1, teamBlockToCompare)).Return(true);
 
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(teamBlock2, teamBlockToCompare)).Return(true);
 				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(teamBlock2, teamBlockToCompare)).Return(true);
 				Expect.Call(_teamBlockContractTimeValidator.ValidateContractTime(teamBlock2, teamBlockToCompare)).Return(true);
 				Expect.Call(_teamBlockSameSkillValidator.ValidateSameSkill(teamBlock2, teamBlockToCompare)).Return(true);
 				Expect.Call(_teamBlockSameRuleSetBagValidator.ValidateSameRuleSetBag(teamBlock2, teamBlockToCompare)).Return(true);
+				Expect.Call(_teamBlockSameTimeZoneValidator.Validate(teamBlock2, teamBlockToCompare)).Return(true);
 			}
 
 			using (_mocks.Playback())
@@ -61,6 +66,29 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Assert.That(result[1].Equals(teamBlock2));
 			}
 		}
+
+		[Test]
+		public void ShouldRemoveNotSameTimeZone()
+		{
+			var teamBlock1 = _mocks.StrictMock<ITeamBlockInfo>();
+			var teamBlockToCompare = teamBlock1;
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(teamBlock1, teamBlockToCompare)).Return(true);
+				Expect.Call(_teamMemberCountValidator.ValidateMemberCount(teamBlock1, teamBlockToCompare)).Return(true);
+				Expect.Call(_teamBlockContractTimeValidator.ValidateContractTime(teamBlock1, teamBlockToCompare)).Return(true);
+				Expect.Call(_teamBlockSameSkillValidator.ValidateSameSkill(teamBlock1, teamBlockToCompare)).Return(true);
+				Expect.Call(_teamBlockSameRuleSetBagValidator.ValidateSameRuleSetBag(teamBlock1, teamBlockToCompare)).Return(true);
+				Expect.Call(_teamBlockSameTimeZoneValidator.Validate(teamBlock1, teamBlockToCompare)).Return(false);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Filter(new List<ITeamBlockInfo> { teamBlock1 }, teamBlockToCompare);
+				Assert.That(result.Count == 0);
+			}
+		}
+		
 
 		[Test]
 		public void ShouldRemoveIllegalRuleSetBags()

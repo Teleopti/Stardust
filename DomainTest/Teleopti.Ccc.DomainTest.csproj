@@ -335,6 +335,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameRuleSetBagValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameSkillValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameTimeZoneValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
