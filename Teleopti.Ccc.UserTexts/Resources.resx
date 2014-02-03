@@ -11878,4 +11878,8 @@ Reduce the complexity to use these shifts.</value>
     <value>On this date you are no longer an employee</value>
     <comment>On this date you are no longer an employee</comment>
   </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Compare with teams from</value>
+    <comment>What teams to compare , used in Agent Info/Fairness Tab</comment>
+  </data>
 </root>

@@ -4518,6 +4518,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Compare with teams from.
+        /// </summary>
+        public static string CompareWithTeamsFrom {
+            get {
+                return ResourceManager.GetString("CompareWithTeamsFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comp Time.
         /// </summary>
         public static string CompTime {
