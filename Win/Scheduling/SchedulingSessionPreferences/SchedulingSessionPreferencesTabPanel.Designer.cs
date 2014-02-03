@@ -468,7 +468,7 @@
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(81, 13);
 			this.label5.TabIndex = 21;
-			this.label5.Text = "xxCompareWith";
+			this.label5.Text = "xxCompareWithTeamsFrom";
 			// 
 			// comboBoxGroupingFairness
 			// 
