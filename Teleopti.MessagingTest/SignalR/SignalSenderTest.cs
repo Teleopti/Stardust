@@ -45,13 +45,48 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldRetryFailedNotification()
 		{
-			Assert.Ignore("Test describing existing functionality, implement in future feature");
+			var taskCompletionSource = new TaskCompletionSource<object>();
+			taskCompletionSource.SetException(new InvalidOperationException());
+			var failedTask = taskCompletionSource.Task;
+
+			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.Start()).Return(_doneTask);
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Repeat.Once().Return(failedTask);
+			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Repeat.Once().Return(_doneTask);
+			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			var target = new signalSenderForTest(hubConnection);
+			target.InstantiateBrokerService();
+			target.QueueRtaNotification(Guid.Empty, Guid.Empty, new ActualAgentState());
+			target.WaitUntilQueueProcessed();
+
+			hubProxy.AssertWasCalled(
+				h =>
+				h.Invoke(Arg<string>.Is.Equal("NotifyClientsMultiple"),
+				Arg<IEnumerable<Notification>>.List.Count(Rhino.Mocks.Constraints.Is.Equal(1))), a => a.Repeat.Twice());
 		}
 
 		[Test]
 		public void ShouldIgnoreAfterThreeRetries()
 		{
-			Assert.Ignore("Test describing existing functionality, implement in future feature");
+			var taskCompletionSource = new TaskCompletionSource<object>();
+			taskCompletionSource.SetException(new InvalidOperationException());
+			var failedTask = taskCompletionSource.Task;
+
+			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.Start()).Return(_doneTask);
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Repeat.Times(3).Return(failedTask);
+			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			var target = new signalSenderForTest(hubConnection);
+			target.InstantiateBrokerService();
+			target.QueueRtaNotification(Guid.Empty, Guid.Empty, new ActualAgentState());
+			target.WaitUntilQueueProcessed();
+
+			hubProxy.AssertWasCalled(
+				h =>
+				h.Invoke(Arg<string>.Is.Equal("NotifyClientsMultiple"),
+				Arg<IEnumerable<Notification>>.List.Count(Rhino.Mocks.Constraints.Is.Equal(1))), a => a.Repeat.Times(3));
 		}
 
 		[Test]
@@ -63,7 +98,20 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldDiscardNotificationsOlderThanTwoMinutes()
 		{
-			Assert.Ignore("Test describing existing functionality, implement in future feature");
+			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.Start()).Return(_doneTask);
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+			hubProxy.Expect(x => x.Invoke("", null)).IgnoreArguments().Repeat.Times(3).Return(_doneTask);
+			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			var target = new signalSenderForTest(hubConnection);
+			target.InstantiateBrokerService();
+			target.QueueRtaNotification(Guid.Empty, Guid.Empty, new ActualAgentState());
+			target.WaitUntilQueueProcessed();
+
+			hubProxy.AssertWasNotCalled(
+				h =>
+				h.Invoke(Arg<string>.Is.Equal("NotifyClientsMultiple"),
+				Arg<IEnumerable<Notification>>.List));
 		}
 
 		[Test]
