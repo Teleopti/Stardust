@@ -260,7 +260,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<SeniorityTeamBlockSwapValidator>().As<ISeniorityTeamBlockSwapValidator>();
 			builder.RegisterType<DayOffRulesValidator>().As<IDayOffRulesValidator>();
 			builder.RegisterType<SeniorityTeamBlockSwapper>().As<ISeniorityTeamBlockSwapper>();
-			//ISeniorityTeamBlockSwapper
+			
+			//ITeamBlockSameTimeZoneValidator
 
 			//common
 			builder.RegisterType<TeamBlockPeriodValidator>().As<ITeamBlockPeriodValidator>();
@@ -269,6 +270,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>();
 			builder.RegisterType<TeamBlockPersonsSkillChecker>().As<ITeamBlockPersonsSkillChecker>();
 			builder.RegisterType<TeamBlockSameRuleSetBagValidator>().As<ITeamBlockSameRuleSetBagValidator>();
+			builder.RegisterType<TeamBlockSameTimeZoneValidator>().As<ITeamBlockSameTimeZoneValidator>();
         }
 
         private static void registerTeamBlockCommon(ContainerBuilder builder)

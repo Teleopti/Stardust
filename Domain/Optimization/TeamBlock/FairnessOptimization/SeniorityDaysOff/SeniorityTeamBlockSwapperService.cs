@@ -113,6 +113,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 					                                                         scheduleDictionary, optimizationPreferences,
 					                                                         teamBlockRestrictionOverLimitValidator);
 				}
+				else
+				{
+					swappableTeamBlocks.Clear();
+				}
 
 				swappableTeamBlocks.Remove(blockToSwapWith);
 
