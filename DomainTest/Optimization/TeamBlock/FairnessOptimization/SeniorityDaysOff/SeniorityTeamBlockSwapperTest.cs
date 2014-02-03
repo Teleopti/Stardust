@@ -2,7 +2,6 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 	{
 		private MockRepository _mocks;
 		private ISeniorityTeamBlockSwapper _target;
-		private ITeamBlockSwapper _teamBlockSwapper;
+		private ITeamBlockDayOffSwapper _teamBlockDayOffSwapper;
 		private ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
 		private ITeamBlockInfo _teamBlockInfo1;
 		private ITeamBlockInfo _teamBlockInfo2;
@@ -28,9 +27,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_teamBlockSwapper = _mocks.StrictMock<ITeamBlockSwapper>();
+			_teamBlockDayOffSwapper = _mocks.StrictMock<ITeamBlockDayOffSwapper>();
 			_seniorityTeamBlockSwapValidator = _mocks.StrictMock<ISeniorityTeamBlockSwapValidator>();
-			_target = new SeniorityTeamBlockSwapper(_teamBlockSwapper, _seniorityTeamBlockSwapValidator);
+			_target = new SeniorityTeamBlockSwapper(_teamBlockDayOffSwapper, _seniorityTeamBlockSwapValidator);
 			_teamBlockInfo1 = _mocks.StrictMock<ITeamBlockInfo>();
 			_teamBlockInfo2 = _mocks.StrictMock<ITeamBlockInfo>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(false);
+				Expect.Call(_teamBlockDayOffSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(false);
 				Expect.Call(_rollbackService.Rollback);
 			}
 
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
+				Expect.Call(_teamBlockDayOffSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(false);
 				Expect.Call(_rollbackService.Rollback);
 			}
@@ -79,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
+				Expect.Call(_teamBlockDayOffSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(false);
 				Expect.Call(_rollbackService.Rollback);
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
+				Expect.Call(_teamBlockDayOffSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
 				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
@@ -119,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
+				Expect.Call(_teamBlockDayOffSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
 				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
@@ -142,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
+				Expect.Call(_teamBlockDayOffSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
 				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
 				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
@@ -162,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		[Test]
 		public void ShouldRollbackIfFailed()
 		{
-			Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(false);
+			Expect.Call(_teamBlockDayOffSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(false);
 			Expect.Call(_rollbackService.Rollback);
 		}
 

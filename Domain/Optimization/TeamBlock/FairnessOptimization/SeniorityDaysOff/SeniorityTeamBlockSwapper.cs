@@ -1,7 +1,4 @@
-﻿
-
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
@@ -16,13 +13,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 	public class SeniorityTeamBlockSwapper : ISeniorityTeamBlockSwapper
 	{
-		private readonly ITeamBlockSwapper _teambBlockSwapper;
+		private readonly ITeamBlockDayOffSwapper _teambBlockDayOffSwapper;
 		private readonly ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
 
-		public SeniorityTeamBlockSwapper(ITeamBlockSwapper teambBlockSwapper,
+		public SeniorityTeamBlockSwapper(ITeamBlockDayOffSwapper teamBlockDayOffDayOffSwapper,
 		                                 ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator)
 		{
-			_teambBlockSwapper = teambBlockSwapper;
+			_teambBlockDayOffSwapper = teamBlockDayOffDayOffSwapper;
 			_seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
 		}
 
@@ -47,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		                                IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
 		                                ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
-			if (!_teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary))
+			if (!_teambBlockDayOffSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary))
 				return false;
 
 			if (!_seniorityTeamBlockSwapValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))

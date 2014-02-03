@@ -220,6 +220,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<SeniorityCalculatorForTeamBlock>().As<ISeniorityCalculatorForTeamBlock>();
             builder.RegisterType<TeamBlockLocatorWithHighestPoints>().As<ITeamBlockLocatorWithHighestPoints>();
             builder.RegisterType<WeekDayPointCalculatorForTeamBlock>().As<IWeekDayPointCalculatorForTeamBlock>();
+			builder.RegisterType<TeamBlockDayOffSwapper>().As<ITeamBlockDayOffSwapper>();
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
