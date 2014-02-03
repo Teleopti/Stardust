@@ -311,12 +311,14 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterPersonsForTotalDistributionTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\TeamBlockSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DescisionMakerToSwapTeamBlockTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\JuniorTeamBlockExtractorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapperServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityCalculatorForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorTeamBlockLocatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffDaySwapperTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SuitableDayOffSpotDetectorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockLocatorWithHighestPointsTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\WeekDayPointCalculatorForTeamBlockTest.cs" />
