@@ -41,7 +41,7 @@
 </script>
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat"/>
 
-<div class="navbar">
+<div class="navbar navbar-weekview">
     <div class="navbar-inner">
         <form class="navbar-form pull-left">
             <div class="input-append input-prepend">
@@ -57,7 +57,7 @@
         </ul>
     </div>
 </div>
-<ul class="nav nav-pills" data-bind="visible: showAddRequestToolbar">
+<ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
 	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
 		<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="icon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
 	</li>

@@ -5,7 +5,7 @@
 @{
 	Layout = null;
 }
-<div class="navbar">
+<div class="navbar navbar-preference">
     <div class="navbar-inner">
         <form class="navbar-form pull-left">
             <div class="input-append input-prepend">
@@ -61,11 +61,11 @@
     </div>
 </div>
 
-<div id="Preference-add-extended-form" class="well well-small clearfix" data-bind="visible: AddPreferenceFormVisible">
+<div id="Preference-add-extended-form" class="well well-small clearfix form-preference" data-bind="visible: AddPreferenceFormVisible">
     @Html.Partial("AddPreferencesPartial")
 </div>
 
-<div class="alert" data-bind="css: PreferenceFeedbackClass" id="Preference-period-feedback-view">
+<div class="alert alert-preference" data-bind="css: PreferenceFeedbackClass" id="Preference-period-feedback-view">
     <div>
         <!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
         @Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))

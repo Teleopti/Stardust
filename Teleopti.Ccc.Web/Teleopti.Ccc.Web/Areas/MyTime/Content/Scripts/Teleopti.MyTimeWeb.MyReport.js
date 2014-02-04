@@ -43,6 +43,7 @@
 				vm.datePickerFormat = data.DatePickerFormat;
 				vm.dataAvailable(data.DataAvailable);
 			}
+
 		});
 	}
 
