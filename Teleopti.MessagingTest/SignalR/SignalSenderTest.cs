@@ -116,7 +116,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 		[Test]
 		// ErikS: 2014-02-03
-		// Unstable, not sure how to fix...
+		// TODO: Unstable, not sure how to fix...
 		public void ShouldStopSendingBatchOnDispose()
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
@@ -199,25 +199,25 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 		
 		[Test]
-		public void ShouldMakeNewConnectionOnSendExceptionWhileSending_Really()
+		public void Really_ShouldMakeNewConnectionOnSendExceptionWhileSending()
 		{
 			Assert.Ignore("Test describing existing functionality");
 		}
 
 		[Test]
-		public void ShouldIgnoreExceptionsWhenInvoking_Really()
+		public void Really_ShouldIgnoreExceptionsWhenInvoking()
 		{
 			Assert.Ignore("Test describing existing functionality");
 		}
 		
 		[Test]
-		public void ShouldForceRestartHubConnectionWhenNotConnected_Really()
+		public void Really_ShouldForceRestartHubConnectionWhenNotConnected()
 		{
 			Assert.Ignore("Test describing existing functionality");
 		}
 
 		[Test]
-		public void ShouldThrowBrokerNotInstanciatedWhenFailedForceReconnect_Really()
+		public void Really_ShouldThrowBrokerNotInstanciatedWhenFailedForceReconnect()
 		{
 			Assert.Ignore("Test describing existing functionality");
 		}
