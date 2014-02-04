@@ -80,20 +80,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                                 int remainingBlocksCount, ISchedulePartModifyAndRollbackService rollbackService)
         {
             var dayCollection = selectedPeriod.DayCollection();
-            while (dayCollection.Count > 0)
+            var successfullSwap = false;
+            while (dayCollection.Count > 0 && !_cancelMe && !successfullSwap)
             {
                 var mostValuableSpot = _suitableDayOffSpotDetector.DetectMostValuableSpot(dayCollection, weekDayPoints);
-                //need to think around this part how the swap and all the other stuff is posssible
-                trySwapForMostSenior(mostSeniorTeamBlock, mostJuniorTeamBlock, mostValuableSpot, originalBlocksCount, remainingBlocksCount, rollbackService);
+                successfullSwap = trySwapForMostSenior(mostSeniorTeamBlock, mostJuniorTeamBlock, mostValuableSpot, originalBlocksCount, remainingBlocksCount, rollbackService);
                 dayCollection.Remove(mostValuableSpot);
             }
         }
 
-        private void trySwapForMostSenior(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo mostJuniorTeamBlock, DateOnly mostValuableSpot, int originalBlocksCount, int remainingBlocksCount,
+        private bool  trySwapForMostSenior(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo mostJuniorTeamBlock, DateOnly mostValuableSpot, int originalBlocksCount, int remainingBlocksCount,
                                 ISchedulePartModifyAndRollbackService rollbackService)
         {
             //swapping code will come here
-            throw new NotImplementedException();
+            return true;
         }
 
         private IList<ITeamBlockInfo> stepAConstructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList,
@@ -107,6 +107,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var filteredList = _filterForTeamBlockInSelection.Filter(listOfAllTeamBlock, selectedPersons, selectedPeriod);
             filteredList = _filterForFullyScheduledBlocks.Filter(filteredList,scheduleDictionary);
             return filteredList;
+        }
+
+        protected virtual void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs)
+        {
+            EventHandler<ResourceOptimizerProgressEventArgs> temp = BlockSwapped;
+            if (temp != null)
+            {
+                temp(this, eventArgs);
+            }
+            _cancelMe = eventArgs.Cancel;
         }
     }
     
