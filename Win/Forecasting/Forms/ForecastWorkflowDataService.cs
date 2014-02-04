@@ -46,10 +46,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-	            var mergedWorkload = uow.Merge(workload);
                 var statHelper = new StatisticHelper(_repositoryFactory, uow);
                 var wr = new WorkloadDayTemplateCalculator(statHelper, new OutlierRepository(uow));
-                wr.LoadWorkloadDayTemplates(dates, mergedWorkload);
+                wr.LoadWorkloadDayTemplates(dates, workload);
             }
         }
 
