@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
-            ShowHelp(true);
+            ShowHelp(false);
         }
 
         private void setColor()
