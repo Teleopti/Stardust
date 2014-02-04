@@ -19,11 +19,11 @@ namespace Teleopti.Messaging.SignalR
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class SignalBroker : IMessageBroker
 	{
-		private const string HubClassName = "MessageBrokerHub";
+		private const string hubClassName = "MessageBrokerHub";
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private ISignalWrapper _wrapper;
 		private SignalSubscriber _subscriberWrapper;
-		private readonly object WrapperLock = new object();
+		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
@@ -40,11 +40,9 @@ namespace Teleopti.Messaging.SignalR
 
         private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            if (!e.Observed)
-            {
-                Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
-                e.SetObserved();
-            }
+	        if (e.Observed) return;
+	        Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+	        e.SetObserved();
         }
 
 		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -57,7 +55,7 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
-			lock (WrapperLock)
+			lock (_wrapperLock)
 			{
 				if (_wrapper == null) return;
 
@@ -66,7 +64,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-	    private IEnumerable<Notification> CreateNotifications(string dataSource, string businessUnitId,
+	    private IEnumerable<Notification> createNotifications(string dataSource, string businessUnitId,
 	                                                          DateTime eventStartDate, DateTime eventEndDate, Guid moduleId,
 	                                                          Guid referenceObjectId, Type referenceObjectType,
 	                                                          Guid domainObjectId, Type domainObjectType,
@@ -104,7 +102,7 @@ namespace Teleopti.Messaging.SignalR
 
 	    public void SendEventMessage(string dataSource, Guid businessUnitId, DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType, byte[] domainObject)
 		{
-			var notificationList = CreateNotifications(dataSource, Subscription.IdToString(businessUnitId), eventStartDate,
+			var notificationList = createNotifications(dataSource, Subscription.IdToString(businessUnitId), eventStartDate,
 			                                           eventEndDate, moduleId, referenceObjectId,
 			                                           referenceObjectType, domainObjectId, domainObjectType, updateType,
 			                                           domainObject);
@@ -114,7 +112,7 @@ namespace Teleopti.Messaging.SignalR
 
 		private void callProxy(IEnumerable<Notification> state)
 		{
-			lock (WrapperLock)
+			lock (_wrapperLock)
 			{
 				if (_wrapper == null) return;
 
@@ -144,7 +142,7 @@ namespace Teleopti.Messaging.SignalR
 			var businessUnitIdString = Subscription.IdToString(businessUnitId);
 			foreach (var eventMessage in eventMessages)
 			{
-				notificationList.AddRange(CreateNotifications(dataSource, businessUnitIdString, eventMessage.EventStartDate,
+				notificationList.AddRange(createNotifications(dataSource, businessUnitIdString, eventMessage.EventStartDate,
 				                                              eventMessage.EventEndDate, eventMessage.ModuleId,
 				                                              eventMessage.ReferenceObjectId, eventMessage.ReferenceObjectTypeCache,
 				                                              eventMessage.DomainObjectId,
@@ -211,7 +209,7 @@ namespace Teleopti.Messaging.SignalR
 				BusinessUnitId = Subscription.IdToString(businessUnitId),
 			};
 
-			lock (WrapperLock)
+			lock (_wrapperLock)
 			{
 				if (_wrapper == null) return;
 
@@ -229,7 +227,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			var handlersToRemove = new List<string>();
 
-			lock (WrapperLock)
+			lock (_wrapperLock)
 			{
 				if (_wrapper == null) return;
 
@@ -345,9 +343,9 @@ namespace Teleopti.Messaging.SignalR
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
 			var connection = new HubConnection(serverUrl.ToString());
-			var hubProxy = connection.CreateHubProxy(HubClassName);
+			var hubProxy = connection.CreateHubProxy(hubClassName);
 
-			lock (WrapperLock)
+			lock (_wrapperLock)
 			{
 				_subscriberWrapper = new SignalSubscriber(hubProxy);
 				_subscriberWrapper.OnNotification += onNotification;
@@ -360,16 +358,18 @@ namespace Teleopti.Messaging.SignalR
 
 		private void onNotification(Notification d)
 		{
-			var message = new EventMessage();
-			message.InterfaceType = Type.GetType(d.DomainQualifiedType, false, true);
-			message.DomainObjectType = d.DomainType;
-			message.DomainObjectId = d.DomainIdAsGuid();
-			message.ModuleId = d.ModuleIdAsGuid();
-			message.ReferenceObjectId = d.DomainReferenceIdAsGuid();
-			message.ReferenceObjectType = d.DomainReferenceType;
-			message.EventStartDate = d.StartDateAsDateTime();
-			message.EventEndDate = d.EndDateAsDateTime();
-			message.DomainUpdateType = d.DomainUpdateTypeAsDomainUpdateType();
+			var message = new EventMessage
+				{
+					InterfaceType = Type.GetType(d.DomainQualifiedType, false, true),
+					DomainObjectType = d.DomainType,
+					DomainObjectId = d.DomainIdAsGuid(),
+					ModuleId = d.ModuleIdAsGuid(),
+					ReferenceObjectId = d.DomainReferenceIdAsGuid(),
+					ReferenceObjectType = d.DomainReferenceType,
+					EventStartDate = d.StartDateAsDateTime(),
+					EventEndDate = d.EndDateAsDateTime(),
+					DomainUpdateType = d.DomainUpdateTypeAsDomainUpdateType()
+				};
 
 			var domainObject = d.BinaryData;
 			if (!string.IsNullOrEmpty(domainObject))
@@ -382,7 +382,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StopMessageBroker()
 		{
-			lock (WrapperLock)
+			lock (_wrapperLock)
 			{
 				if (_wrapper != null)
 				{
@@ -409,7 +409,7 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
-		private void InvokeEventHandlers(EventMessage eventMessage, string[] routes)
+		private void InvokeEventHandlers(EventMessage eventMessage, IEnumerable<string> routes)
 		{
 			foreach (var route in routes)
 			{
