@@ -1,8 +1,14 @@
-﻿using System.ComponentModel;
+﻿using System.Collections;
+using System.ComponentModel;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCode.Converters
 {
+	public interface ICustomSorter : IComparer
+	{
+		ListSortDirection SortDirection { get; set; }
+	}
+
 	public class CustomSorterBlankAlwaysLast : ICustomSorter
 	{
 		public string PropertyPath { get; set; }

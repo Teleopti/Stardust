@@ -29,9 +29,4 @@ namespace Teleopti.Ccc.WinCode.Converters
                 (_converter.Convert(object2, null, null, CultureInfo.CurrentUICulture) ?? "").ToString(), true, CultureInfo.CurrentUICulture);
         }
     }
-
-	public interface ICustomSorter : IComparer
-	{
-		ListSortDirection SortDirection { get; set; }
-	}
 }
