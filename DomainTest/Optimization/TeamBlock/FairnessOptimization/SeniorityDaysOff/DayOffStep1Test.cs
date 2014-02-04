@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                                         _filterOnSwapableTeamBlocks, _seniorityCalculatorForTeamBlock, _teamBlockLocatorWithHighestPoints, _seniorityTeamBlockSwapper);
             _juniorTeamBlock = _mocks.StrictMock<ITeamBlockInfo>();
             _seniorTeamBlock = _mocks.StrictMock<ITeamBlockInfo>();
-
+            _matrixList = new List<IScheduleMatrixPro>();
             _schedulingOptions = new SchedulingOptions();
             _scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             _rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         {
             Expect.Call(_constructTeamBlock.Construct(_matrixList, new DateOnlyPeriod(), _selectedPersons, true,
                                                       BlockFinderType.SchedulePeriod,
-                                                      _schedulingOptions.GroupOnGroupPageForTeamBlockPer))
+                                                      _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).IgnoreArguments() 
                   .Return(_teamBlocksFirstLoop);
             Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlocksFirstLoop, _selectedPersons, new DateOnlyPeriod()))
                   .Return(_teamBlocksFirstLoop);

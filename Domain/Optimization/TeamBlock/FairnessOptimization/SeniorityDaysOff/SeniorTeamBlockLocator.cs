@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ISeniorTeamBlockLocator
     {
-        ITeamBlockInfo FindMostSeniorTeamBlock(List<ITeamBlockPoints> seniorityInfoDictionary);
+        ITeamBlockInfo FindMostSeniorTeamBlock(IEnumerable<ITeamBlockPoints> seniorityInfoDictionary);
     }
 
     public class SeniorTeamBlockLocator : ISeniorTeamBlockLocator
     {
-        public ITeamBlockInfo FindMostSeniorTeamBlock(List<ITeamBlockPoints> seniorityInfoDictionary)
+        public ITeamBlockInfo FindMostSeniorTeamBlock(IEnumerable<ITeamBlockPoints> seniorityInfoDictionary)
         {
             var maxValue = double.MinValue;
             ITeamBlockInfo mostSeniorBlock = null;
