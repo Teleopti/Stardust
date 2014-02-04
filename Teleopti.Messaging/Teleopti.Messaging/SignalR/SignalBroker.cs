@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -16,17 +17,15 @@ using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 	public class SignalBroker : IMessageBroker
 	{
 		private const string hubClassName = "MessageBrokerHub";
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
 		private ISignalWrapper _wrapper;
-		private SignalSubscriber _subscriberWrapper;
+		private ISignalSubscriber _subscriberWrapper;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		public SignalBroker(IMessageFilterManager typeFilter)
 		{
 			FilterManager = typeFilter;
@@ -52,7 +51,6 @@ namespace Teleopti.Messaging.SignalR
 
 	    private IMessageFilterManager FilterManager { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1816:CallGCSuppressFinalizeCorrectly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1063:ImplementIDisposableCorrectly")]
 		public void Dispose()
 		{
 			lock (_wrapperLock)
@@ -116,7 +114,6 @@ namespace Teleopti.Messaging.SignalR
 			{
 				if (_wrapper == null) return;
 
-
 				var task = _wrapper.NotifyClients(state);
 				task.ContinueWith(t =>
 					{
@@ -134,8 +131,6 @@ namespace Teleopti.Messaging.SignalR
 			SendEventMessage(dataSource, businessUnitId, eventStartDate, eventEndDate, moduleId, Guid.Empty, null, domainObjectId, domainObjectType, updateType, domainObject);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-			MessageId = "2")]
 		public void SendEventMessages(string dataSource, Guid businessUnitId, IEventMessage[] eventMessages)
 		{
 			var notificationList = new List<Notification>();
@@ -189,7 +184,6 @@ namespace Teleopti.Messaging.SignalR
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, null, null, domainObjectId, domainObjectType, startDate, endDate);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		private void registerEventSubscription(string datasource, Guid businessUnitId, EventHandler<EventMessageArgs> eventMessageHandler, Guid? referenceObjectId, Type referenceObjectType, Guid? domainObjectId, Type domainObjectType, DateTime startDate, DateTime endDate)
 		{
 			//It is mad that this one is here! But it is "inherited" from the old broker. So it must be here to avoid bugs when running with the web broker only.
@@ -222,7 +216,7 @@ namespace Teleopti.Messaging.SignalR
 				});
 			}
 		}
-
+		
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
 			var handlersToRemove = new List<string>();
@@ -246,7 +240,9 @@ namespace Teleopti.Messaging.SignalR
 						if (target == eventMessageHandler)
 						{
 							subscriptionWithHandlersToRemove.Add(subscriptionWithHandler);
-							if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription!=null)
+							// BUG? If count == 0 we never get here!
+							// Before: if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription!=null)
+							if (subscriptionHandler.Any() && subscriptionWithHandler.Subscription!=null)
 							{
 								var route = subscriptionWithHandler.Subscription.Route();
 								_wrapper.RemoveSubscription(route);
@@ -274,7 +270,6 @@ namespace Teleopti.Messaging.SignalR
 			registerEventSubscription(dataSource, businessUnitId, eventMessageHandler, referenceObjectId, referenceObjectType, null, domainObjectType, startDate, endDate);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public IEventMessage CreateEventMessage(Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
 			return new EventMessage
@@ -288,7 +283,6 @@ namespace Teleopti.Messaging.SignalR
 			};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public IEventMessage CreateEventMessage(Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
 			return new EventMessage
@@ -304,7 +298,6 @@ namespace Teleopti.Messaging.SignalR
 			};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
 			return new EventMessage
@@ -318,7 +311,6 @@ namespace Teleopti.Messaging.SignalR
 			};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6")]
 		public IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType)
 		{
 			return new EventMessage
@@ -334,7 +326,6 @@ namespace Teleopti.Messaging.SignalR
 			};
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "SignalBroker")]
 		public void StartMessageBroker()
 		{
 			Uri serverUrl;
@@ -342,18 +333,28 @@ namespace Teleopti.Messaging.SignalR
 			{
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
-			var connection = new HubConnection(serverUrl.ToString());
+			var connection = MakeHubConnection(serverUrl);
 			var hubProxy = connection.CreateHubProxy(hubClassName);
 
 			lock (_wrapperLock)
 			{
-				_subscriberWrapper = new SignalSubscriber(hubProxy);
+				_subscriberWrapper = MakeSignalSubscriber(hubProxy);
 				_subscriberWrapper.OnNotification += onNotification;
 				_subscriberWrapper.Start();
 
-				_wrapper = new SignalWrapper(hubProxy, new HubConnectionWrapper(connection));
+				_wrapper = new SignalWrapper(hubProxy, connection);
 				_wrapper.StartHub();
 			}
+		}
+
+		protected virtual ISignalSubscriber MakeSignalSubscriber(IHubProxy hubProxy)
+		{
+			return new SignalSubscriber(hubProxy);
+		}
+
+		protected virtual IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
+		{
+			return new HubConnectionWrapper(new HubConnection(serverUrl.ToString()));
 		}
 
 		private void onNotification(Notification d)
@@ -408,7 +409,6 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		private void InvokeEventHandlers(EventMessage eventMessage, IEnumerable<string> routes)
 		{
 			foreach (var route in routes)

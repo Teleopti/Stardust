@@ -30,7 +30,6 @@ namespace Teleopti.Messaging.SignalR
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalSender));
 		private bool _queueProcessed;
-		private bool _disposed;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "0#")]
 		public SignalSender(string serverUrl)
@@ -61,7 +60,6 @@ namespace Teleopti.Messaging.SignalR
 
 		public void Dispose()
 		{
-			_disposed = true;
 			cancelToken.Cancel();
 			workerThread.Join();
 			_wrapper.StopHub();
@@ -111,8 +109,6 @@ namespace Teleopti.Messaging.SignalR
 				if (!notifications.Any()) continue;
 
 				var retryCount = 1;
-				if (_disposed)
-					break;
 				while (retryCount<=3)
 				{
 					if (trySend(retryCount, notifications)) break;
@@ -131,8 +127,8 @@ namespace Teleopti.Messaging.SignalR
 			while (!_queueProcessed)
 			{
 				// ErikS 2014-02-03
-				// Not sure about sleep, doesnt feel right how to fix timings?
-				Thread.Sleep(1000);
+				// TODO: Not sure about sleep, doesnt feel right how to fix timings?
+				Thread.Sleep(TimeSpan.FromMilliseconds(1000));
 				if (!_notificationQueue.Any())
 					break;
 			}

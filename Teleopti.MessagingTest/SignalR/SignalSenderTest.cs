@@ -115,8 +115,6 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		// ErikS: 2014-02-03
-		// TODO: Unstable, not sure how to fix...
 		public void ShouldStopSendingBatchOnDispose()
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
@@ -126,9 +124,8 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			var target = new signalSenderForTest(hubConnection, DateTime.UtcNow);
 			target.InstantiateBrokerService();
+			target.Dispose(); 
 			target.QueueRtaNotification(Guid.Empty, Guid.Empty, new ActualAgentState());
-			target.Dispose();
-			target.WaitUntilQueueProcessed();
 
 			hubProxy.AssertWasNotCalled(
 				h =>
