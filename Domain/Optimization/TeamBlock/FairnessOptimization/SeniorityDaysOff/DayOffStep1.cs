@@ -100,9 +100,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 {
                     swapSuccess = _seniorityTeamBlockSwapper.SwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService,
                                                                              scheduleDictionary, optimizationPreferences,teamBlockRestrictionOverLimitValidator);
-                    if (!swapSuccess)
-                        rollbackService.Rollback();
                 }
+				else
+				{
+					swappableTeamBlocks.Clear();
+				}
 
                 swappableTeamBlocks.Remove(blockToSwapWith);
 
