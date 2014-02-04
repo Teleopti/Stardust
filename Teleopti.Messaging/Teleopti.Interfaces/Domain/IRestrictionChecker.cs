@@ -64,66 +64,62 @@ namespace Teleopti.Interfaces.Domain
         /// Check availability
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckAvailability();
+        PermissionState CheckAvailability(IScheduleDay scheduleDay);
 
         /// <summary>
         /// Check rotations
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckRotations();
+		PermissionState CheckRotations(IScheduleDay scheduleDay);
 
         /// <summary>
         /// Check student availability
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckStudentAvailability();
+		PermissionState CheckStudentAvailability(IScheduleDay scheduleDay);
 
         /// <summary>
         /// Check preference
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckPreference();
+		PermissionState CheckPreference(IScheduleDay scheduleDay);
 
         /// <summary>
         /// Check preference must have
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckPreferenceMustHave();
+		PermissionState CheckPreferenceMustHave(IScheduleDay scheduleDay);
 
         /// <summary>
-        /// Check preference absence
+		/// Check preference absence
         /// </summary>
         /// <param name="permissionState"></param>
+        /// <param name="schedulePart"></param>
         /// <returns></returns>
-        PermissionState CheckPreferenceAbsence(PermissionState permissionState);
+		PermissionState CheckPreferenceAbsence(PermissionState permissionState, IScheduleDay schedulePart);
 
         /// <summary>
         /// Check preference Day Off
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckPreferenceDayOff();
+		PermissionState CheckPreferenceDayOff(IScheduleDay schedulePart);
 
         /// <summary>
         /// Check preference Shift
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckPreferenceShift();
+		PermissionState CheckPreferenceShift(IScheduleDay schedulePart);
 
         /// <summary>
         /// Check rotation Day Off
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckRotationDayOff();
+		PermissionState CheckRotationDayOff(IScheduleDay schedulePart);
 
         /// <summary>
         /// Check rotation Shift
         /// </summary>
         /// <returns></returns>
-        PermissionState CheckRotationShift();
-
-        /// <summary>
-        /// Get schedule day
-        /// </summary>
-        IScheduleDay ScheduleDay { get; set; }
+		PermissionState CheckRotationShift(IScheduleDay schedulePart);
     }
 }

@@ -117,46 +117,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         }
 
 
-        public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker)
+        public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckPreference() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+            return restrictionChecker.CheckPreference(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
 
 
-        public IScheduleDay RestrictionFulfilledAbsence(ICheckerRestriction restrictionChecker)
+		public IScheduleDay RestrictionFulfilledAbsence(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckPreferenceAbsence(PermissionState.Unspecified) == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+			return restrictionChecker.CheckPreferenceAbsence(PermissionState.Unspecified, scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
 
-        public IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker)
+		public IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckPreferenceDayOff() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+			return restrictionChecker.CheckPreferenceDayOff(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
 
 
-        public IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker)
+		public IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
            if(restrictionChecker == null)
                throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckPreferenceShift() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+		   return restrictionChecker.CheckPreferenceShift(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
 
-        public IScheduleDay RestrictionFulfilledMustHave(ICheckerRestriction restrictionChecker)
+        public IScheduleDay RestrictionFulfilledMustHave(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckPreferenceMustHave() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+            return restrictionChecker.CheckPreferenceMustHave(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
     }
 }

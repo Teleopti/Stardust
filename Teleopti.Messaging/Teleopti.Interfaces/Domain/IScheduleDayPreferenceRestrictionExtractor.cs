@@ -42,38 +42,43 @@ namespace Teleopti.Interfaces.Domain
         IList<IScheduleDay> AllRestrictedDaysMustHave(IList<IScheduleDay> scheduleDays);
 
         /// <summary>
-        /// Schedule day with fulfilled restrictions
+		/// Schedule day with fulfilled restrictions
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker);
+        IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
+
+       /// <summary>
+		/// Schedule day with fulfilled restriction absence
+       /// </summary>
+       /// <param name="restrictionChecker"></param>
+       /// <param name="scheduleDay"></param>
+       /// <returns></returns>
+		IScheduleDay RestrictionFulfilledAbsence(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
 
         /// <summary>
-        /// Schedule day with fulfilled restriction absence
+		/// Schedule day with fulfilled restriction day off
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilledAbsence(ICheckerRestriction restrictionChecker);
+		IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
 
         /// <summary>
-        /// Schedule day with fulfilled restriction day off
+		/// Schedule day with fulfilled restrction shift
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker);
+		IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
 
         /// <summary>
-        /// Schedule day with fulfilled restrction shift
+		/// Schedule day with fulfilled restriction must have
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker);
-
-        /// <summary>
-        /// Schedule day with fulfilled restriction must have
-        /// </summary>
-        /// <param name="restrictionChecker"></param>
-        /// <returns></returns>
-        IScheduleDay RestrictionFulfilledMustHave(ICheckerRestriction restrictionChecker);
+        IScheduleDay RestrictionFulfilledMustHave(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
     }
 }

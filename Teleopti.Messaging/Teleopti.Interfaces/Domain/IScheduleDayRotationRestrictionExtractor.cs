@@ -30,24 +30,27 @@ namespace Teleopti.Interfaces.Domain
         IList<IScheduleDay> AllRestrictedShifts(IList<IScheduleDay> scheduleDays);
 
         /// <summary>
-        /// Schedule day with fulfilled restrictions
+		/// Schedule day with fulfilled restrictions
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker);
+        IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
 
         /// <summary>
-        /// Schedule day with fulfilled restriction day off
+		/// Schedule day with fulfilled restriction day off
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker);
+		IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
 
         /// <summary>
-        /// Schedule day with fulfilled restriction shift
+		/// Schedule day with fulfilled restriction shift
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker);
+		IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
     }
 }

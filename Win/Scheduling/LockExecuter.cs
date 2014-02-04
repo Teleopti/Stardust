@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayPreferenceRestrictionExtractor scheduleDayPreferenceRestrictionExtractor = new ScheduleDayPreferenceRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllMustHaveFulfilledCommand = new GridlockAllPreferencesMustHaveFulfilledCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayPreferenceRestrictionExtractor, _lockManager);
 			gridlockAllMustHaveFulfilledCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayPreferenceRestrictionExtractor scheduleDayPreferenceRestrictionExtractor = new ScheduleDayPreferenceRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllPreferencesFulfilledCommand = new GridlockAllPreferencesFulfilledCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayPreferenceRestrictionExtractor, _lockManager);
 			gridlockAllPreferencesFulfilledCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayPreferenceRestrictionExtractor scheduleDayPreferenceRestrictionExtractor = new ScheduleDayPreferenceRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllPreferencesFulfilledAbsenceCommand = new GridlockAllPreferencesFulfilledAbsenceCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayPreferenceRestrictionExtractor, _lockManager);
 			gridlockAllPreferencesFulfilledAbsenceCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayPreferenceRestrictionExtractor scheduleDayPreferenceRestrictionExtractor = new ScheduleDayPreferenceRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllPreferencesFulfilledDaysOffCommand = new GridlockAllPreferencesFulfilledDayOffCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayPreferenceRestrictionExtractor, _lockManager);
 			gridlockAllPreferencesFulfilledDaysOffCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayPreferenceRestrictionExtractor scheduleDayPreferenceRestrictionExtractor = new ScheduleDayPreferenceRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllPreferencesFulfilledShiftCommand = new GridlockAllPreferencesFulfilledShiftCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayPreferenceRestrictionExtractor, _lockManager);
 			gridlockAllPreferencesFulfilledShiftCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayRotationRestrictionExtractor scheduleDayRotationRestrictionExtractor = new ScheduleDayRotationRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllRotationsFulfilledCommand = new GridlockAllRotationsFulfilledCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayRotationRestrictionExtractor, _lockManager);
 			gridlockAllRotationsFulfilledCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayRotationRestrictionExtractor scheduleDayRotationRestrictionExtractor = new ScheduleDayRotationRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllRotationsFulfilledDayOffCommand = new GridlockAllRotationsFulfilledDayOffCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayRotationRestrictionExtractor, _lockManager);
 			gridlockAllRotationsFulfilledDayOffCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayRotationRestrictionExtractor scheduleDayRotationRestrictionExtractor = new ScheduleDayRotationRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllRotationsFulfilledShiftCommand = new GridlockAllRotationsFulfilledShiftCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayRotationRestrictionExtractor, _lockManager);
 			gridlockAllRotationsFulfilledShiftCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -305,7 +305,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayStudentAvailabilityRestrictionExtractor scheduleDayStudentAvailabilityRestrictionExtractor = new ScheduleDayStudentAvailabilityRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllStudentAvailabilityFulfilledCommand = new GridlockAllStudentAvailabilityFulfilledCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayStudentAvailabilityRestrictionExtractor, _lockManager);
 			gridlockAllStudentAvailabilityFulfilledCommand.Execute();
 			_schedulingScreen.Refresh();
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IGridSchedulesExtractor gridSchedulesExtractor = new GridSchedulesExtractor(_grid);
 			IRestrictionExtractor restrictionExtractor = new RestrictionExtractor(_schedulerState.SchedulingResultState);
 			IScheduleDayAvailabilityRestrictionExtractor scheduleDayAvailabilityRestrictionExtractor = new ScheduleDayAvailabilityRestrictionExtractor(restrictionExtractor);
-			ICheckerRestriction restrictionChecker = new RestrictionChecker(null);
+			ICheckerRestriction restrictionChecker = new RestrictionChecker();
 			var gridlockAllAvailabilityFulfilledCommand = new GridlockAllAvailabilityFulfilledCommand(gridSchedulesExtractor, restrictionChecker, scheduleDayAvailabilityRestrictionExtractor, _lockManager);
 			gridlockAllAvailabilityFulfilledCommand.Execute();
 			_schedulingScreen.Refresh();
