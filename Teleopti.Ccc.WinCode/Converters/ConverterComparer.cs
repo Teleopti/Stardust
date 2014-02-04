@@ -30,5 +30,8 @@ namespace Teleopti.Ccc.WinCode.Converters
         }
     }
 
-
+	public interface ICustomSorter : IComparer
+	{
+		ListSortDirection SortDirection { get; set; }
+	}
 }

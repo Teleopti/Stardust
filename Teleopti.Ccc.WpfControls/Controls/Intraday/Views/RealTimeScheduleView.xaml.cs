@@ -226,4 +226,5 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 				e.Content = "";
 		}
 	}
+
 }
