@@ -74,7 +74,6 @@ namespace Teleopti.Ccc.Win.Commands
                                             ILockableBitArrayFactory lockableBitArrayFactory,
                                             ISchedulingOptionsCreator schedulingOptionsCreator,
                                             ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
-
                                             ITeamBlockInfoFactory teamBlockInfoFactory,
                                             ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
                                             ITeamDayOffModifier teamDayOffModifier,
@@ -179,7 +178,9 @@ namespace Teleopti.Ccc.Win.Commands
 				_seniorityTeamBlockSwapperService.BlockSwapped -= resourceOptimizerPersonOptimized;
 
 				////day off fairness
-				//_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
+                //_teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, 
+                //                                    _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, 
+                //                                    rollbackServiceWithoutResourceCalculation, optimizationPreferences, teamBlockRestrictionOverLimitValidator);
 
 				ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, allMatrixes);
 				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))

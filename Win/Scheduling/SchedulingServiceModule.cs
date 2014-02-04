@@ -222,6 +222,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WeekDayPointCalculatorForTeamBlock>().As<IWeekDayPointCalculatorForTeamBlock>();
 			builder.RegisterType<TeamBlockDayOffSwapper>().As<ITeamBlockDayOffSwapper>();
 			builder.RegisterType<TeamBlockDayOffDaySwapper>().As<ITeamBlockDayOffDaySwapper>();
+            builder.RegisterType<JuniorTeamBlockExtractor>().As<IJuniorTeamBlockExtractor>();
+            builder.RegisterType<SuitableDayOffSpotDetector>().As<ISuitableDayOffSpotDetector>();
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
@@ -250,7 +252,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ConstructTeamBlock>().As<IConstructTeamBlock>();
 	        builder.RegisterType<ShiftCategoryPoints>().As<IShiftCategoryPoints>();
 	        builder.RegisterType<ShiftCategoryPointExtractor>().As<IShiftCategoryPointExtractor>();
-	        builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>();
+            builder.RegisterType<SeniorityExtractor>().As<ISeniorityExtractor>();
             builder.RegisterType<DetermineTeamBlockPriority>().As<IDetermineTeamBlockPriority>();
 			builder.RegisterType<TeamBlockSwapValidator>().As<ITeamBlockSwapValidator>();
 			builder.RegisterType<TeamBlockSwapDayValidator>().As<ITeamBlockSwapDayValidator>();
@@ -281,7 +283,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
 			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>();
-			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
 			builder.RegisterType<TeamBlockSteadyStateValidator>().As<ITeamBlockSteadyStateValidator>();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
