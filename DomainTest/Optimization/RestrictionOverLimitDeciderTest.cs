@@ -101,16 +101,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay3)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay4)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay5)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay6)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay7)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay8)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro9.Day).Return(_dateOnly9);
 				Expect.Call(_scheduleDayPro10.Day).Return(_dateOnly10);
@@ -134,16 +134,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay3)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay4)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay5)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay6)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay7)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay8)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay9)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro10.Day).Return(_dateOnly10);
 
@@ -166,16 +166,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay3)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay4)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay5)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay6)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay7)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay8)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro6.Day).Return(_dateOnly6);
 				Expect.Call(_scheduleDayPro7.Day).Return(_dateOnly7);
@@ -202,16 +202,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay3)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay4)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay5)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay6)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay7)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay8)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro4.Day).Return(_dateOnly4);
 				Expect.Call(_scheduleDayPro5.Day).Return(_dateOnly5);
@@ -240,16 +240,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay2)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay3)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay4)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay5)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay6)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay7)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay8)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro2.Day).Return(_dateOnly2);
 				Expect.Call(_scheduleDayPro3.Day).Return(_dateOnly3);
@@ -280,16 +280,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckPreference()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay3)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay4)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay5)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay6)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay7)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay8)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckPreference(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro8.Day).Return(_dateOnly8);
 				Expect.Call(_scheduleDayPro9.Day).Return(_dateOnly9);
@@ -317,16 +317,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay1)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay3)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay4)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay5)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay6)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay7)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay8)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay9)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckPreferenceMustHave(_scheduleDay10)).Return(PermissionState.Satisfied);
 
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly1);
 
@@ -350,16 +350,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckRotations()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay3)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay4)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay5)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay6)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay7)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay8)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckRotations(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro5.Day).Return(_dateOnly5);
 				Expect.Call(_scheduleDayPro6.Day).Return(_dateOnly6);
@@ -393,16 +393,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Satisfied);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckAvailability()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay1)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay2)).Return(PermissionState.Satisfied);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay3)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay4)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay5)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay6)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay7)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay8)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckAvailability(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro3.Day).Return(_dateOnly3);
 				Expect.Call(_scheduleDayPro4.Day).Return(_dateOnly4);
@@ -440,16 +440,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				commonExpects();
 
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
-				Expect.Call(_checkerRestriction.CheckStudentAvailability()).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay1)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay2)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay3)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay4)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay5)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay6)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay7)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay8)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay9)).Return(PermissionState.Broken);
+				Expect.Call(_checkerRestriction.CheckStudentAvailability(_scheduleDay10)).Return(PermissionState.Broken);
 
 				Expect.Call(_scheduleDayPro1.Day).Return(_dateOnly1);
 				Expect.Call(_scheduleDayPro2.Day).Return(_dateOnly2);
@@ -494,18 +494,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_scheduleDayPro7.DaySchedulePart()).Return(_scheduleDay7);
 			Expect.Call(_scheduleDayPro8.DaySchedulePart()).Return(_scheduleDay8);
 			Expect.Call(_scheduleDayPro9.DaySchedulePart()).Return(_scheduleDay9);
-			Expect.Call(_scheduleDayPro10.DaySchedulePart()).Return(_scheduleDay10);
-
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay1);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay2);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay3);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay4);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay5);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay6);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay7);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay8);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay9);
-			Expect.Call(_checkerRestriction.ScheduleDay = _scheduleDay10);	
+			Expect.Call(_scheduleDayPro10.DaySchedulePart()).Return(_scheduleDay10);	
 		}
 	}
 }

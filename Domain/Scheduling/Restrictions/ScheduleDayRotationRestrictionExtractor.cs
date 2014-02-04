@@ -77,30 +77,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         }
 
 
-        public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker)
+        public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if (restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckRotations() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+            return restrictionChecker.CheckRotations(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
 
 
-        public IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker)
+		public IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckRotationDayOff() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+			return restrictionChecker.CheckRotationDayOff(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
 
 
-        public IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker)
+		public IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckRotationShift() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+			return restrictionChecker.CheckRotationShift(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
     }
 }

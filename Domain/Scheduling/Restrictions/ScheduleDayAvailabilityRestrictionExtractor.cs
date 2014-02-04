@@ -55,12 +55,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return restrictedDays;
         }
 
-        public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker)
+        public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if (restrictionChecker == null)
                 throw new ArgumentNullException("restrictionChecker");
 
-            return restrictionChecker.CheckAvailability() == PermissionState.Satisfied ? restrictionChecker.ScheduleDay : null;
+            return restrictionChecker.CheckAvailability(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
     }
 }

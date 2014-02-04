@@ -9,38 +9,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 {
     public class RestrictionChecker : ICheckerRestriction
     {
-        private IScheduleDay _schedulePart;
-
-        public RestrictionChecker()
-        { }
-
-        public RestrictionChecker(IScheduleDay schedulePart)
-        {
-            _schedulePart = schedulePart;
-        }
-
-        public IScheduleDay ScheduleDay
-        {
-            get { return _schedulePart; }
-            set { _schedulePart = value; }
-        }
-
     	public bool MustHavePreference
     	{
     		get; set; 
 		}
 
-        public PermissionState CheckAvailability()
+        public PermissionState CheckAvailability(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+            if (schedulePart == null)
                 return PermissionState.None;
 
-            var restriction = (IAvailabilityRestriction)_schedulePart.RestrictionCollection()
+			var restriction = (IAvailabilityRestriction)schedulePart.RestrictionCollection()
                                         .FilterBySpecification(RestrictionMustBe.Availability).FirstOrDefault();
 
             if (restriction == null)
                 return PermissionState.None;
-        	SchedulePartView significant = _schedulePart.SignificantPart();
+			SchedulePartView significant = schedulePart.SignificantPart();
 
             //If there is a day off and availability is set to false the restriction is considered Satisfied
             if (significant == SchedulePartView.DayOff || significant == SchedulePartView.FullDayAbsence || significant == SchedulePartView.ContractDayOff)
@@ -49,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             }
 
             PermissionState permissionState = PermissionState.Unspecified;
-            IVisualLayerCollection visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
+			IVisualLayerCollection visualLayerCollection = schedulePart.ProjectionService().CreateProjection();
 
             if (visualLayerCollection.HasLayers)
             {
@@ -57,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     return PermissionState.Broken;
                 permissionState = PermissionState.Satisfied;
                 DateTimePeriod schedulePeriod = visualLayerCollection.Period().GetValueOrDefault();
-                TimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+				TimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
             	var localTimePeriod = schedulePeriod.TimePeriod(timeZoneInfo);
 
                 bool withinStartTimeSpan = isWithinTimeSpan(restriction.StartTimeLimitation.StartTime, restriction.StartTimeLimitation.EndTime, localTimePeriod.StartTime);
@@ -77,12 +61,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        public PermissionState CheckRotationDayOff()
+		public PermissionState CheckRotationDayOff(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+			if (schedulePart == null)
                 return PermissionState.None;
 
-            var rotation = (IRotationRestriction)_schedulePart.RestrictionCollection()
+			var rotation = (IRotationRestriction)schedulePart.RestrictionCollection()
                            .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
 
             if (rotation == null)
@@ -90,12 +74,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
             PermissionState permissionState = PermissionState.Unspecified;
 
-            if (!_schedulePart.HasDayOff() && rotation.DayOffTemplate != null)
+			if (!schedulePart.HasDayOff() && rotation.DayOffTemplate != null)
             {
                 return PermissionState.Broken;
             }
 
-	        var ass = _schedulePart.PersonAssignment();
+			var ass = schedulePart.PersonAssignment();
 					if (ass != null)
 					{
 						if (rotation.DayOffTemplate != null)
@@ -113,12 +97,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        public PermissionState CheckRotationShift()
+		public PermissionState CheckRotationShift(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+			if (schedulePart == null)
                 return PermissionState.None;
 
-            var rotation = (IRotationRestriction)_schedulePart.RestrictionCollection()
+			var rotation = (IRotationRestriction)schedulePart.RestrictionCollection()
                            .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
 
             if (rotation == null)
@@ -126,21 +110,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 
             PermissionState permissionState = PermissionState.Unspecified;
-            
-            if(_schedulePart.HasDayOff())
+
+			if (schedulePart.HasDayOff())
             {
                 if(rotation.DayOffTemplate == null)
                     return PermissionState.Broken;
             }
 
-            var visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
+			var visualLayerCollection = schedulePart.ProjectionService().CreateProjection();
 
             if (visualLayerCollection.HasLayers && rotation.DayOffTemplate == null)
             {
                 permissionState = PermissionState.Satisfied;
 
                 var schedulePeriod = visualLayerCollection.Period().GetValueOrDefault();
-                TimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+                TimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
             	var localTimePeriod = schedulePeriod.TimePeriod(timeZoneInfo);
 
                 bool withinStartTimeSpan = isWithinTimeSpan(rotation.StartTimeLimitation.StartTime, rotation.StartTimeLimitation.EndTime, localTimePeriod.StartTime);
@@ -156,30 +140,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     permissionState = PermissionState.Broken;
                 }
 
-                permissionState = checkRotationShiftCategory(rotation, permissionState);
+				permissionState = checkRotationShiftCategory(rotation, permissionState, schedulePart);
             }
 
             return permissionState;
         }
 
-        public PermissionState CheckRotations()
+		public PermissionState CheckRotations(IScheduleDay schedulePart)
         {
 
-            if (_schedulePart == null)
+            if (schedulePart == null)
                 return PermissionState.None;
 
-            var rotation = (IRotationRestriction)_schedulePart.RestrictionCollection()
+			var rotation = (IRotationRestriction)schedulePart.RestrictionCollection()
                            .FilterBySpecification(RestrictionMustBe.Rotation).FirstOrDefault();
 
             if (rotation == null || !rotation.IsRestriction())
                 return PermissionState.None;
 
-            PermissionState permissionState = CheckRotationDayOff();
+			PermissionState permissionState = CheckRotationDayOff(schedulePart);
 
             if (permissionState == PermissionState.Unspecified
                 || permissionState == PermissionState.Satisfied)
             {
-                var permissionStateShift = CheckRotationShift();
+				var permissionStateShift = CheckRotationShift(schedulePart);
 
                 if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
                     permissionState = permissionStateShift;
@@ -189,15 +173,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        public PermissionState CheckStudentAvailability()
+		public PermissionState CheckStudentAvailability(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+			if (schedulePart == null)
                 return PermissionState.None;
 
             PermissionState permissionState = PermissionState.None;
 
             IEnumerable<IStudentAvailabilityDay> dataRestrictions =
-                (from r in _schedulePart.PersistableScheduleDataCollection() where r is IStudentAvailabilityDay select (IStudentAvailabilityDay)r);
+				(from r in schedulePart.PersistableScheduleDataCollection() where r is IStudentAvailabilityDay select (IStudentAvailabilityDay)r);
 
             IStudentAvailabilityDay studentAvailabilityDay = dataRestrictions.FirstOrDefault();
 
@@ -206,12 +190,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             {
                 IStudentAvailabilityRestriction restriction = studentAvailabilityDay.RestrictionCollection[0];
                 //If there is a day off and availability is set to false the restriction is considered Satisfied
-                if (_schedulePart.HasDayOff() && studentAvailabilityDay.NotAvailable)
+				if (schedulePart.HasDayOff() && studentAvailabilityDay.NotAvailable)
                 {
                     return PermissionState.Satisfied;
                 }
 
-                IVisualLayerCollection visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
+				IVisualLayerCollection visualLayerCollection = schedulePart.ProjectionService().CreateProjection();
 
                 if (visualLayerCollection.HasLayers)
                 {
@@ -219,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                         return PermissionState.Broken;
                     permissionState = PermissionState.Satisfied;
                     DateTimePeriod schedulePeriod = visualLayerCollection.Period().GetValueOrDefault();
-                    TimeZoneInfo timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+					TimeZoneInfo timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
 
                 	var localTimePeriod = schedulePeriod.TimePeriod(timeZoneInfo);
                     bool withinStartTimeSpan = isWithinTimeSpan(restriction.StartTimeLimitation.StartTime, restriction.StartTimeLimitation.EndTime, localTimePeriod.StartTime);
@@ -238,13 +222,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        public PermissionState CheckPreferenceDayOff()
+		public PermissionState CheckPreferenceDayOff(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+			if (schedulePart == null)
                 return PermissionState.None;
 
             var permissionState = PermissionState.Unspecified;
-            var dataRestrictions = (from r in _schedulePart.PersistableScheduleDataCollection()
+			var dataRestrictions = (from r in schedulePart.PersistableScheduleDataCollection()
                                     where r is IPreferenceDay
                                     select (IPreferenceDay)r);
 
@@ -255,13 +239,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             if (preference == null)
                 return PermissionState.None;
 
-			if (_schedulePart.SignificantPart() == SchedulePartView.MainShift && preference.DayOffTemplate != null)
+			if (schedulePart.SignificantPart() == SchedulePartView.MainShift && preference.DayOffTemplate != null)
 				return PermissionState.Broken;
 
-			if (!_schedulePart.IsScheduled() && preference.DayOffTemplate != null)
+			if (!schedulePart.IsScheduled() && preference.DayOffTemplate != null)
 				return PermissionState.Unspecified;
 
-	        var ass = _schedulePart.PersonAssignment();
+			var ass = schedulePart.PersonAssignment();
 					if (ass != null)
 					{
 						var dayOff = ass.DayOff();
@@ -284,9 +268,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
            return permissionState;
         }
 
-        private IPreferenceRestriction RestrictionPreference()
+		private IPreferenceRestriction RestrictionPreference(IScheduleDay schedulePart)
         {
-            var dataRestrictions = (from r in _schedulePart.PersistableScheduleDataCollection()
+			var dataRestrictions = (from r in schedulePart.PersistableScheduleDataCollection()
                                     where r is IPreferenceDay
                                     select (IPreferenceDay)r);
 
@@ -297,26 +281,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return preference;
         }
 
-        public PermissionState CheckPreferenceShift()
+		public PermissionState CheckPreferenceShift(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+			if (schedulePart == null)
                 return PermissionState.None;
 
             var permissionState = PermissionState.Unspecified;
 
-            var preference = RestrictionPreference();
+			var preference = RestrictionPreference(schedulePart);
 
             if (preference == null)
                 return PermissionState.None;
 
-            IVisualLayerCollection visualLayerCollection = _schedulePart.ProjectionService().CreateProjection();
+			IVisualLayerCollection visualLayerCollection = schedulePart.ProjectionService().CreateProjection();
 
             if (visualLayerCollection.HasLayers)
             {
                 permissionState = PermissionState.Satisfied;
 
                 var schedulePeriod = visualLayerCollection.Period().GetValueOrDefault();
-                var timeZoneInfo = _schedulePart.Person.PermissionInformation.DefaultTimeZone();
+				var timeZoneInfo = schedulePart.Person.PermissionInformation.DefaultTimeZone();
             	var localTimePeriod = schedulePeriod.TimePeriod(timeZoneInfo);
 
                 var withinStartTimeSpan = isWithinTimeSpan(preference.StartTimeLimitation.StartTime,
@@ -337,7 +321,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                     permissionState = PermissionState.Broken;
                 }
 
-                permissionState = checkPreferenceShiftCategory(preference, permissionState);
+				permissionState = checkPreferenceShiftCategory(preference, permissionState, schedulePart);
 
 
 				if (preference.ActivityRestrictionCollection.Count > 0)
@@ -370,28 +354,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        public PermissionState CheckPreference()
+		public PermissionState CheckPreference(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+			if (schedulePart == null)
                 return PermissionState.None;
 
-            var preference = RestrictionPreference();
+			var preference = RestrictionPreference(schedulePart);
 
             if (preference == null)
                 return PermissionState.None;
 
             MustHavePreference = preference.MustHave;
 
-            PermissionState permissionState = CheckPreferenceDayOff();
+			PermissionState permissionState = CheckPreferenceDayOff(schedulePart);
 
             if (permissionState != PermissionState.Broken)
             {
-                permissionState = CheckPreferenceAbsence(permissionState);
+				permissionState = CheckPreferenceAbsence(permissionState, schedulePart);
             }
 
             if (permissionState == PermissionState.Unspecified || permissionState == PermissionState.Satisfied)
             {
-                var permissionStateShift = CheckPreferenceShift();
+				var permissionStateShift = CheckPreferenceShift(schedulePart);
 
                 if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
                     permissionState = permissionStateShift;
@@ -401,27 +385,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        public PermissionState CheckPreferenceMustHave()
+		public PermissionState CheckPreferenceMustHave(IScheduleDay schedulePart)
         {
-            if (_schedulePart == null)
+			if (schedulePart == null)
                 return PermissionState.None;
 
             PermissionState permissionState;
 
-            var preference = RestrictionPreference();
+			var preference = RestrictionPreference(schedulePart);
 
             if (preference != null && preference.MustHave)
             {
-                permissionState = CheckPreferenceDayOff();
+				permissionState = CheckPreferenceDayOff(schedulePart);
 
                 if (permissionState != PermissionState.Broken)
                 {
-                    permissionState = CheckPreferenceAbsence(permissionState);
+					permissionState = CheckPreferenceAbsence(permissionState, schedulePart);
                 }
 
                 if (permissionState == PermissionState.Unspecified || permissionState == PermissionState.Satisfied)
                 {
-                    var permissionStateShift = CheckPreferenceShift();
+					var permissionStateShift = CheckPreferenceShift(schedulePart);
 
                     if (permissionStateShift == PermissionState.Broken || permissionStateShift == PermissionState.Satisfied)
                         permissionState = permissionStateShift;
@@ -435,15 +419,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             return permissionState;
         }
 
-        public PermissionState CheckPreferenceAbsence(PermissionState permissionState)
+		public PermissionState CheckPreferenceAbsence(PermissionState permissionState, IScheduleDay schedulePart)
         {
-            var preferenceAbsenceChecker = new PreferenceAbsenceChecker(_schedulePart);
-            return preferenceAbsenceChecker.CheckPreferenceAbsence(RestrictionPreference(), permissionState);
+			var preferenceAbsenceChecker = new PreferenceAbsenceChecker(schedulePart);
+			return preferenceAbsenceChecker.CheckPreferenceAbsence(RestrictionPreference(schedulePart), permissionState);
         }
 
-        private PermissionState checkPreferenceShiftCategory(IPreferenceRestriction preference, PermissionState permissionState)
+		private PermissionState checkPreferenceShiftCategory(IPreferenceRestriction preference, PermissionState permissionState, IScheduleDay schedulePart)
         {
-					var assignment = _schedulePart.PersonAssignment();
+					var assignment = schedulePart.PersonAssignment();
 					if (assignment != null)
 					{
 						IShiftCategory shiftCategory = assignment.ShiftCategory;
@@ -466,9 +450,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
           return permissionState;
         }
 
-        private PermissionState checkRotationShiftCategory(IRotationRestriction preference, PermissionState permissionState)
+		private PermissionState checkRotationShiftCategory(IRotationRestriction preference, PermissionState permissionState, IScheduleDay schedulePart)
         {
-	        var assignment = _schedulePart.PersonAssignment();
+			var assignment = schedulePart.PersonAssignment();
 					if (assignment != null)
 					{
 						IShiftCategory shiftCategory = assignment.ShiftCategory;

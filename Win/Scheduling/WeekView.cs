@@ -78,19 +78,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addWeekViewMarkersToCell(GridDrawCellEventArgs e, IScheduleDay schedulePart)
         {
-            var restrictionChecker = new RestrictionChecker(schedulePart);
+            var restrictionChecker = new RestrictionChecker();
 
-            PermissionState permissionState = restrictionChecker.CheckAvailability();
+            PermissionState permissionState = restrictionChecker.CheckAvailability(schedulePart);
             var drawRestrictionIcon = new DrawRestrictionIcon(e);
             drawRestrictionIcon.DrawAvailability(permissionState);
 
-            permissionState = restrictionChecker.CheckRotations();
+            permissionState = restrictionChecker.CheckRotations(schedulePart);
             drawRestrictionIcon.DrawRotation(permissionState);
 
-            permissionState = restrictionChecker.CheckPreference();
+            permissionState = restrictionChecker.CheckPreference(schedulePart);
             drawRestrictionIcon.DrawPreference(permissionState,restrictionChecker.MustHavePreference );
 
-            permissionState = restrictionChecker.CheckStudentAvailability();
+            permissionState = restrictionChecker.CheckStudentAvailability(schedulePart);
             drawRestrictionIcon.DrawStudentAvailability(permissionState);
 
         }

@@ -94,13 +94,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckRotations()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilled(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilled(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }
@@ -110,13 +109,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckRotationDayOff()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckRotationDayOff(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilledDayOff(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilledDayOff(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }
@@ -126,13 +124,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckRotationShift()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckRotationShift(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilledShift(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilledShift(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }

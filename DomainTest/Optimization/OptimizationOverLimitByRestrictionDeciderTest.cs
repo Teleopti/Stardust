@@ -159,9 +159,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 commonMocks();
 
-                Expect.Call(_restrictionChecker.CheckPreference())
-                    .Return(PermissionState.None)
-                    .Repeat.AtLeastOnce();
+                Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay1)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay2)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay3)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay4)).Return(PermissionState.None);
             }
             using (_mocks.Playback())
             {
@@ -277,9 +278,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 commonMocks();
 
-                Expect.Call(_restrictionChecker.CheckPreferenceMustHave())
-                    .Return(PermissionState.None)
-                    .Repeat.AtLeastOnce();
+                Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay1)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay2)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay3)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay4)).Return(PermissionState.None);
             }
             using (_mocks.Playback())
             {
@@ -401,9 +403,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 commonMocks();
 
-                Expect.Call(_restrictionChecker.CheckRotations())
-                    .Return(PermissionState.None)
-                    .Repeat.AtLeastOnce();
+                Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay1)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay2)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay3)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckRotations(_scheduleDay4)).Return(PermissionState.None);
             }
             using (_mocks.Playback())
             {
@@ -524,9 +527,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
                 commonMocks();
 
-                Expect.Call(_restrictionChecker.CheckAvailability())
-                    .Return(PermissionState.None)
-                    .Repeat.AtLeastOnce();
+                Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay1)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay2)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay3)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckAvailability(_scheduleDay4)).Return(PermissionState.None);
             }
             using (_mocks.Playback())
             {
@@ -646,9 +650,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
 
-                Expect.Call(_restrictionChecker.CheckStudentAvailability())
-                    .Return(PermissionState.None)
-                    .Repeat.AtLeastOnce();
+	            Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay1)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay2)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay3)).Return(PermissionState.None);
+				Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay4)).Return(PermissionState.None);
             }
             using (_mocks.Playback())
             {
@@ -762,28 +767,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.General.UseStudentAvailabilities = false;
         }
 
-        private void addMockExpectation(Func<PermissionState> checkMethod)
+        private void addMockExpectation(Func<IScheduleDay, PermissionState> checkMethod)
         {
 
             commonMocks();
 
-            Expect.Call(checkMethod())
-                .Return(PermissionState.None);
-            Expect.Call(checkMethod())
-                .Return(PermissionState.Unspecified);
-            Expect.Call(checkMethod())
-                .Return(PermissionState.Broken);
-            Expect.Call(checkMethod())
-                .Return(PermissionState.None);
+            Expect.Call(checkMethod(_scheduleDay1)).Return(PermissionState.None);
+            Expect.Call(checkMethod(_scheduleDay2)).Return(PermissionState.Unspecified);
+            Expect.Call(checkMethod(_scheduleDay3)).Return(PermissionState.Broken);
+            Expect.Call(checkMethod(_scheduleDay4)).Return(PermissionState.None);
         }
 
         private void commonMocks()
         {
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay1);
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay2);
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay3);
-            Expect.Call(() => _restrictionChecker.ScheduleDay = _scheduleDay4);
-
             Expect.Call(_matrix.EffectivePeriodDays).Return(
                 new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>
                                                             {
