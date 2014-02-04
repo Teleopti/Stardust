@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 	    private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
         private ITeamBlockDayOffFairnessOptimizationService _teamBlockDayOffFairnessOptimizationService;
-	    private readonly ISeniorityTeamBlockSwapperService _seniorityTeamBlockSwapperService;
 
 	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											IScheduleDayEquator scheduleDayEquator,
@@ -86,8 +85,7 @@ namespace Teleopti.Ccc.Win.Commands
 											IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
 											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService, 
-			ITeamBlockDayOffFairnessOptimizationService teamBlockDayOffFairnessOptimizationService,
-			ISeniorityTeamBlockSwapperService seniorityTeamBlockSwapperService)
+			ITeamBlockDayOffFairnessOptimizationService teamBlockDayOffFairnessOptimizationService)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayEquator = scheduleDayEquator;
@@ -114,7 +112,6 @@ namespace Teleopti.Ccc.Win.Commands
 			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
             _teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
-	        _seniorityTeamBlockSwapperService = seniorityTeamBlockSwapperService;
 	    }
 
         public void Execute(BackgroundWorker backgroundWorker, 
