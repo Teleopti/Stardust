@@ -83,6 +83,12 @@ FROM mart.fact_request AS fact
     ON fact.person_id = dim.person_id
 WHERE dim.to_be_deleted = 1
 
+DELETE FROM mart.fact_agent_skill
+FROM mart.fact_agent_skill AS fact
+   INNER JOIN mart.dim_person AS dim
+    ON fact.person_id = dim.person_id
+WHERE dim.to_be_deleted = 1
+
 -- dim_person
 DELETE FROM mart.dim_person
 WHERE to_be_deleted = 1
