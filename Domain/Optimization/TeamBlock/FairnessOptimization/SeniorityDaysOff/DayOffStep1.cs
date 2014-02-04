@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
                 teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
                 trySwapForMostSenior(weekDayPoints, teamBlocksToWorkWith, mostSeniorTeamBlock, rollbackService, scheduleDictionary,
-                                     optimizationPreferences, originalBlockCount, teamBlockPoints.Count, teamBlockRestrictionOverLimitValidator);
+                                     optimizationPreferences, originalBlockCount, seniorityInfoDictionary.Count, teamBlockRestrictionOverLimitValidator);
 
                 seniorityInfoDictionary.Remove(mostSeniorTeamBlock);
             }

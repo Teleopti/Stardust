@@ -49,16 +49,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             _cancelMe = false;
 
-            var teamBlockList = stepAConstructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
-            teamBlockList = stepBFilterOutUnwantedBlocks(teamBlockList, selectedPersons, selectedPeriod,scheduleDictionary);
+            var teamBlocksToWorkWith = stepAConstructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
+            teamBlocksToWorkWith = stepBFilterOutUnwantedBlocks(teamBlocksToWorkWith, selectedPersons, selectedPeriod, scheduleDictionary);
 
-            var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlockList).ToList();
+            var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith).ToList();
+            var seniorityInfoDictionary = teamBlockPoints.ToDictionary(teamBlockPoint => teamBlockPoint.TeamBlockInfo, teamBlockPoint => teamBlockPoint);
             var originalBlockCount = teamBlockPoints.Count;
             while (teamBlockPoints.Count > 0)
             {
-                var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(teamBlockPoints);
-                trySwapForTeamBlock(teamBlockList, mostSeniorTeamBlock, weekDayPoints,selectedPeriod,originalBlockCount ,teamBlockPoints.Count,rollbackService );
-                teamBlockPoints.Remove(teamBlockPoints.Find(s => s.TeamBlockInfo.Equals(mostSeniorTeamBlock)));
+                var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
+                teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
+                trySwapForTeamBlock(teamBlocksToWorkWith, mostSeniorTeamBlock, weekDayPoints, selectedPeriod, originalBlockCount, seniorityInfoDictionary.Count, rollbackService);
+                seniorityInfoDictionary.Remove(mostSeniorTeamBlock);
             }
 
         }
