@@ -8,3 +8,17 @@
 	width: 965px;
 	margin: 0 auto;
 }
+.navbar-student-availability {
+	max-width: 954px;
+	margin: 20px auto;
+}
+
+.alert-student-availability {
+	max-width: 954px;
+	margin: 20px auto;
+}
+
+.form-student-availability {
+	max-width: 954px;
+	margin: auto;
+}

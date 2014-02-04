@@ -18,7 +18,7 @@
 	</div>
 	<div class="container">
 		<div data-bind="ifnot: dataAvailable">
-			<div id="friendly-message" class="alert-block alert">
+			<div id="friendly-message" class="alert-block alert alert-myreport">
 				@Resources.NoDataAvailable
 			</div>
 		</div>
@@ -58,5 +58,6 @@
 				</tbody>
 			</table>
 		</div>
+		<div data-bind="if: dataAvailable" class="span6"></div>
 	</div>
 </div>

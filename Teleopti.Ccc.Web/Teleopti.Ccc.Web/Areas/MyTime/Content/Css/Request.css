@@ -6,6 +6,11 @@
 	margin: 0 auto;
 }
 
+.navbar-request {
+	max-width: 954px;
+	margin: 20px auto;
+}
+
 .request-body-inner ol
 {
 	list-style: none;

@@ -8,7 +8,7 @@
 	const int scheduleWidth = 835;
 	var left = Html.HtmlStyleLeft();
 }
-<div class="navbar">
+<div class="navbar navbar-teamschedule">
 	<div class="navbar-inner">
 		<form class="navbar-form pull-left">
 			<div class="input-append input-prepend">
@@ -50,7 +50,7 @@
 		</div>
 	</div>
 </div>
-<div id="TeamSchedule-body" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
+<div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<div>
 		
 		<div class="teamschedule relative ui-corner-all">
