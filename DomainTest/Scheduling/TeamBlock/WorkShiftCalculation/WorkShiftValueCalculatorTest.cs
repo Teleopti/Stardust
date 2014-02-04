@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldHandleClosedDay()
+		public void ShouldHandleClosedDayOnDifferentSkillActivity()
 		{
 			IActivity activity = new Activity("bo");
 			var visualLayerCollection = new MainShiftLayer(activity, _period1).CreateProjection();
@@ -54,6 +52,31 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 			double? result =_target.CalculateShiftValue(visualLayerCollection, new Activity("phone"),
 										new Dictionary<TimeSpan, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
 			                            false, false);
+			Assert.AreEqual(0, result);
+		}
+
+		[Test]
+		public void ShouldHandleClosedDayOnSameSkillActivity()
+		{
+			IActivity activity = new Activity("bo");
+			var visualLayerCollection = new MainShiftLayer(activity, _period1).CreateProjection();
+
+			double? result = _target.CalculateShiftValue(visualLayerCollection, activity,
+										new Dictionary<TimeSpan, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
+										false, false);
+			Assert.AreEqual(0, result);
+		}
+
+		[Test]
+		public void ShouldHandleClosedDayOnSameSkillActivityThatRequiresSkill()
+		{
+			IActivity activity = new Activity("bo");
+			activity.RequiresSkill = true;
+			var visualLayerCollection = new MainShiftLayer(activity, _period1).CreateProjection();
+
+			double? result = _target.CalculateShiftValue(visualLayerCollection, activity,
+										new Dictionary<TimeSpan, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
+										false, false);
 			Assert.IsNull(result);
 		}
 

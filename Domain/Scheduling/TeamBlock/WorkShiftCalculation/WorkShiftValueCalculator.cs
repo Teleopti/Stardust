@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		                                   bool useMaximumPersons)
 		{
 		    if (mainShiftLayers == null) throw new ArgumentNullException("mainShiftLayers");
-		    if (skillIntervalDataList != null && skillIntervalDataList.Count == 0)
+		    if (skillIntervalDataList == null)
 				return null;
 
 			double periodValue = 0;
@@ -65,13 +65,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				}
 
 				// IF the shift is outside opening hours and Activity needs skill dont't use it (otherwise it could be outside opening hours).
-				if (skillIntervalDataList != null)
-				{
+
 					ISkillIntervalData currentStaffPeriod;
 					if (!skillIntervalDataList.TryGetValue(timeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
 					{
 						if (activity.RequiresSkill)
 							return null;
+
+						return 0;
 					}
 
 					// only part of the period should count
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 						if (currentResourceInMinutes > 0 && currentStaffPeriod.Period.EndDateTime > layerEnd)
 							currentResourceInMinutes = currentResourceInMinutes - (currentStaffPeriod.Period.EndDateTime - layerEnd).Minutes;
 					}
-				}
+				
 			}
 
 			return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
