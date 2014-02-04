@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         private IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
         private ITeamBlockLocatorWithHighestPoints _teamBlockLocatorWithHighestPoints;
         private ISeniorityTeamBlockSwapper _seniorityTeamBlockSwapper;
+		private ISchedulingOptionsCreator _schedulingOptionsCreator;
+	    private ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
         private IDayOffStep1 _target;
         private ITeamBlockInfo _juniorTeamBlock;
         private ITeamBlockInfo _seniorTeamBlock;
@@ -64,8 +66,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _seniorityTeamBlockSwapper = _mocks.StrictMock<ISeniorityTeamBlockSwapper>();
             _seniorTeamBlockLocator = _mocks.StrictMock<ISeniorTeamBlockLocator>();
             _seniorityCalculatorForTeamBlock = _mocks.StrictMock<ISeniorityCalculatorForTeamBlock>();
-            _target = new DayOffStep1(_constructTeamBlock,_filterForTeamBlockInSelection,_filterForFullyScheduledBlocks,_seniorityExtractor,_seniorTeamBlockLocator,
-                                        _filterOnSwapableTeamBlocks, _seniorityCalculatorForTeamBlock, _teamBlockLocatorWithHighestPoints, _seniorityTeamBlockSwapper);
+	        _schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
+	        _teamBlockSeniorityValidator = _mocks.StrictMock<ITeamBlockSeniorityValidator>();
+	        _target = new DayOffStep1(_constructTeamBlock, _filterForTeamBlockInSelection, _filterForFullyScheduledBlocks,
+	                                  _seniorityExtractor, _seniorTeamBlockLocator, _filterOnSwapableTeamBlocks,
+	                                  _seniorityCalculatorForTeamBlock, _teamBlockLocatorWithHighestPoints,
+	                                  _seniorityTeamBlockSwapper, _schedulingOptionsCreator, _teamBlockSeniorityValidator);
             _juniorTeamBlock = _mocks.StrictMock<ITeamBlockInfo>();
             _seniorTeamBlock = _mocks.StrictMock<ITeamBlockInfo>();
             _matrixList = new List<IScheduleMatrixPro>();
@@ -137,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
             using (_mocks.Playback())
             {
-                _target.PerformStep1(_schedulingOptions, _matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, _scheduleDictionary,
+                _target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons, _rollbackService, _scheduleDictionary,
                                 _weekDayValueDic, _optimizationPreferences, _restrictionOverLimitValidator);
             }
         }
@@ -173,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             using (_mocks.Playback())
             {
                 _target.BlockSwapped += _target_BlockSwapped;
-                _target.PerformStep1(_schedulingOptions, _matrixList, new DateOnlyPeriod(), _selectedPersons,  _rollbackService,_scheduleDictionary ,
+                _target.PerformStep1(_matrixList, new DateOnlyPeriod(), _selectedPersons,  _rollbackService,_scheduleDictionary ,
                                 _weekDayValueDic,_optimizationPreferences, _restrictionOverLimitValidator);
                 _target.BlockSwapped -= _target_BlockSwapped;
             }
@@ -186,10 +192,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
         private void commonMocks()
         {
+	        Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences))
+	              .Return(_schedulingOptions);
             Expect.Call(_constructTeamBlock.Construct(_matrixList, new DateOnlyPeriod(), _selectedPersons, true,
                                                       BlockFinderType.SchedulePeriod,
                                                       _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).IgnoreArguments() 
                   .Return(_teamBlocksFirstLoop);
+	        Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_juniorTeamBlock)).Return(true);
+			Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_seniorTeamBlock)).Return(true);
             Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlocksFirstLoop, _selectedPersons, new DateOnlyPeriod()))
                   .Return(_teamBlocksFirstLoop);
             Expect.Call(_filterForFullyScheduledBlocks.Filter(_teamBlocksFirstLoop, _scheduleDictionary));

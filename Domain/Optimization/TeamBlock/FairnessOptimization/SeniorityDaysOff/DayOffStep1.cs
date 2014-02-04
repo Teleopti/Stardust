@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IDayOffStep1
     {
-        void PerformStep1(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+        void PerformStep1(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                             ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences, 
                                     ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator);
         event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
@@ -23,38 +23,50 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IFilterForFullyScheduledBlocks  _filterForFullyScheduledBlocks;
         private readonly ISeniorityExtractor  _seniorityExtractor;
         private readonly ISeniorTeamBlockLocator _seniorTeamBlockLocator;
-        private bool _cancelMe;
         private readonly IFilterOnSwapableTeamBlocks  _filterOnSwapableTeamBlocks;
         private readonly ISeniorityCalculatorForTeamBlock  _seniorityCalculatorForTeamBlock;
         private readonly ITeamBlockLocatorWithHighestPoints _teamBlockLocatorWithHighestPoints;
         private readonly ISeniorityTeamBlockSwapper _seniorityTeamBlockSwapper;
+	    private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
+		private bool _cancelMe;
 
-        public DayOffStep1( IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
-                                IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks, ISeniorityExtractor seniorityExtractor, 
-                                    ISeniorTeamBlockLocator seniorTeamBlockLocator, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ISeniorityCalculatorForTeamBlock seniorityCalculatorForTeamBlock, 
-                                    ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints, ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper)
-        {
-            _constructTeamBlock = constructTeamBlock;
-            _filterForTeamBlockInSelection = filterForTeamBlockInSelection;
-            _filterForFullyScheduledBlocks = filterForFullyScheduledBlocks;
-            _seniorityExtractor = seniorityExtractor;
-            _seniorTeamBlockLocator = seniorTeamBlockLocator;
-            _filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
-            _seniorityCalculatorForTeamBlock = seniorityCalculatorForTeamBlock;
-            _teamBlockLocatorWithHighestPoints = teamBlockLocatorWithHighestPoints;
-            _seniorityTeamBlockSwapper = seniorityTeamBlockSwapper;
-        }
+	    public DayOffStep1(IConstructTeamBlock constructTeamBlock,
+	                       IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
+	                       IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
+	                       ISeniorityExtractor seniorityExtractor,
+	                       ISeniorTeamBlockLocator seniorTeamBlockLocator,
+	                       IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks,
+	                       ISeniorityCalculatorForTeamBlock seniorityCalculatorForTeamBlock,
+	                       ITeamBlockLocatorWithHighestPoints teamBlockLocatorWithHighestPoints,
+	                       ISeniorityTeamBlockSwapper seniorityTeamBlockSwapper,
+							ISchedulingOptionsCreator schedulingOptionsCreator,
+							ITeamBlockSeniorityValidator teamBlockSeniorityValidator)
+	    {
+		    _constructTeamBlock = constructTeamBlock;
+		    _filterForTeamBlockInSelection = filterForTeamBlockInSelection;
+		    _filterForFullyScheduledBlocks = filterForFullyScheduledBlocks;
+		    _seniorityExtractor = seniorityExtractor;
+		    _seniorTeamBlockLocator = seniorTeamBlockLocator;
+		    _filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
+		    _seniorityCalculatorForTeamBlock = seniorityCalculatorForTeamBlock;
+		    _teamBlockLocatorWithHighestPoints = teamBlockLocatorWithHighestPoints;
+		    _seniorityTeamBlockSwapper = seniorityTeamBlockSwapper;
+		    _schedulingOptionsCreator = schedulingOptionsCreator;
+		    _teamBlockSeniorityValidator = teamBlockSeniorityValidator;
+	    }
 
-        public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
+	    public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
 
-        public void PerformStep1(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+        public void PerformStep1(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                                 ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences,
                                     ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
         {
             _cancelMe = false;
 
-            var teamBlocksToWorkWith = stepAConstructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
-            teamBlocksToWorkWith = stepBFilterOutUnwantedBlocks(teamBlocksToWorkWith, selectedPersons, selectedPeriod, scheduleDictionary);
+	        var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+            var teamBlocksToWorkWith = constructTeamBlock(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons);
+            teamBlocksToWorkWith = filterOutUnwantedBlocks(teamBlocksToWorkWith, selectedPersons, selectedPeriod, scheduleDictionary);
 
             var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith).ToList();
             var seniorityInfoDictionary = teamBlockPoints.ToDictionary(teamBlockPoint => teamBlockPoint.TeamBlockInfo, teamBlockPoint => teamBlockPoint);
@@ -117,14 +129,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
         }
 
-        private IList<ITeamBlockInfo> stepBFilterOutUnwantedBlocks(IList<ITeamBlockInfo> listOfAllTeamBlock, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, IScheduleDictionary scheduleDictionary)
+        private IList<ITeamBlockInfo> filterOutUnwantedBlocks(IEnumerable<ITeamBlockInfo> listOfAllTeamBlock, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, IScheduleDictionary scheduleDictionary)
         {
-            var filteredList =  _filterForTeamBlockInSelection.Filter(listOfAllTeamBlock, selectedPersons, selectedPeriod);
+			IList<ITeamBlockInfo> filteredList = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
+			filteredList = _filterForTeamBlockInSelection.Filter(filteredList, selectedPersons, selectedPeriod);
             filteredList = _filterForFullyScheduledBlocks.Filter(filteredList, scheduleDictionary );
+			
             return filteredList;
         }
 
-        private IList<ITeamBlockInfo> stepAConstructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, 
+        private IList<ITeamBlockInfo> constructTeamBlock(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, 
                                                             DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
             return _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, true, BlockFinderType.SchedulePeriod,schedulingOptions.GroupOnGroupPageForTeamBlockPer);
