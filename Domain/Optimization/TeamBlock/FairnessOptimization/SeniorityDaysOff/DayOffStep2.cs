@@ -71,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             while (swappableTeamBlocksPoints.Count > 0)
             {
                 var juniorTeamBlock = _juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(swappableTeamBlocksPoints);
-                handlePeriodForSelectedTeamBlocks(selectedPeriod, weekDayPoints, mostSeniorTeamBlock, juniorTeamBlock, originalBlocksCount, remainingBlocksCount, rollbackService);
+                if(!juniorTeamBlock.Equals(mostSeniorTeamBlock) )
+                    handlePeriodForSelectedTeamBlocks(selectedPeriod, weekDayPoints, mostSeniorTeamBlock, juniorTeamBlock, originalBlocksCount, remainingBlocksCount, rollbackService);
                 swappableTeamBlocksPoints.Remove(swappableTeamBlocksPoints.Find(s => s.TeamBlockInfo.Equals(juniorTeamBlock)));
             }
         }

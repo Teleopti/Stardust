@@ -729,18 +729,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
 			////day off fairness
-            //var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationService>();
-            //teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
-            //    _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService,optimizationPreferences,teamBlockRestrictionOverLimitValidator);
+            var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationService>();
+            teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
+                _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences, teamBlockRestrictionOverLimitValidator);
 
 			//day off seniority faines according to Micke
-			var seniorityTeamBlockSwapperService = _container.Resolve<ISeniorityTeamBlockSwapperService>();
-			seniorityTeamBlockSwapperService.BlockSwapped += resourceOptimizerPersonOptimized;
-			seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, 
-													 _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences,
-													 new WeekDayPoints().GetWeekDaysPoints(),
-													 teamBlockRestrictionOverLimitValidator);
-			seniorityTeamBlockSwapperService.BlockSwapped -= resourceOptimizerPersonOptimized;
+            //var seniorityTeamBlockSwapperService = _container.Resolve<ISeniorityTeamBlockSwapperService>();
+            //seniorityTeamBlockSwapperService.BlockSwapped += resourceOptimizerPersonOptimized;
+            //seniorityTeamBlockSwapperService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, 
+            //                                         _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences,
+            //                                         new WeekDayPoints().GetWeekDaysPoints(),
+            //                                         teamBlockRestrictionOverLimitValidator);
+            //seniorityTeamBlockSwapperService.BlockSwapped -= resourceOptimizerPersonOptimized;
 
 			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
 			if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))
