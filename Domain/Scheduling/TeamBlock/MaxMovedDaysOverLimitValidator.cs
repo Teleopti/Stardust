@@ -1,7 +1,4 @@
-﻿
-
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.Optimization;
+﻿using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -13,12 +10,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class MaxMovedDaysOverLimitValidator : IMaxMovedDaysOverLimitValidator
 	{
-		private readonly IDictionary<IPerson, IScheduleRange> _allSelectedScheduleRangeClones;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 
-		public MaxMovedDaysOverLimitValidator(IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones, IScheduleDayEquator scheduleDayEquator)
+		public MaxMovedDaysOverLimitValidator(IScheduleDayEquator scheduleDayEquator)
 		{
-			_allSelectedScheduleRangeClones = allSelectedScheduleRangeClones;
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
@@ -33,7 +28,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (!optimizationPreferences.Shifts.KeepShifts && !optimizationPreferences.DaysOff.UseKeepExistingDaysOff)
 				return true;
 
-			IScheduleRange rangeCloneForMatrix = _allSelectedScheduleRangeClones[matrix.Person];
+			var allSelectedScheduleRangeClones = optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones;
+			InParameter.ListCannotBeEmpty("optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones.Keys", optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones.Keys);
+				
+			IScheduleRange rangeCloneForMatrix = allSelectedScheduleRangeClones[matrix.Person];
 			foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
 			{
 				IScheduleDay currentScheduleDay = scheduleDayPro.DaySchedulePart();

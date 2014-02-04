@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>();
 	        builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>();
 	        builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>();
-			//ITeamBlockScheduleCommand
+			//RestrictionChecker : ICheckerRestriction
 
 			registerWorkShiftFilters(builder);
 			registerWorkShiftSelector(builder);

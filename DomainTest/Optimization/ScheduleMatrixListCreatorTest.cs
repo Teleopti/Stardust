@@ -52,19 +52,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(4, _target.CreateMatrixListFromScheduleParts(_scheduleDays).Count);
         }
 
-        [Test]
-        public void VerifyUniqueList2()
-        {
-            createSchedulePartList();
-
-            using (_mockRepository.Record())
-            {
-                mockExpectations();
-            }
-
-            Assert.AreEqual(4, _target.CreateMatrixListFromSchedulePartsAndAlternativeScheduleRanges(_scheduleDictionary, _scheduleDays).Count);
-        }
-
         private void createSchedulePartList()
         {
             for (var i = 0; i < 10; i++)

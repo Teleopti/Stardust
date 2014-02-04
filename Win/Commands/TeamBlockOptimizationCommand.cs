@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Win.Commands
             }
 
             IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
-                new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, _scheduleDayEquator);
+                new MaxMovedDaysOverLimitValidator(_scheduleDayEquator);
             ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator
                 (_restrictionOverLimitDecider, maxMovedDaysOverLimitValidator);
 

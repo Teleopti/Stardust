@@ -1142,14 +1142,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 
 				using (var optimizationPreferencesDialog =
-					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, _schedulerState.CommonStateHolder.ActiveActivities, SchedulerState.DefaultSegmentLength))
+					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider,
+					                                  _schedulerState.CommonStateHolder.ActiveScheduleTags,
+					                                  _schedulerState.CommonStateHolder.ActiveActivities,
+					                                  SchedulerState.DefaultSegmentLength, _schedulerState.Schedules,
+					                                  _scheduleView.AllSelectedPersons()))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
-						{
-							OptimizationMethod = OptimizationMethod.ReOptimize
-						};
+							{
+								OptimizationMethod = OptimizationMethod.ReOptimize
+							};
 
 						startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
 					}

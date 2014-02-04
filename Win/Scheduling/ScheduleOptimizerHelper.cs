@@ -712,7 +712,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				allSelectedScheduleRangeClones.Add(selectedPerson, _schedulerStateHolder.Schedules[selectedPerson]);
 			}
 			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
-			   new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, scheduleDayEquator);
+			   new MaxMovedDaysOverLimitValidator(scheduleDayEquator);
 			var restrictionOverLimitDecider = _container.Resolve<IRestrictionOverLimitDecider>();
 			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator
 				(restrictionOverLimitDecider, maxMovedDaysOverLimitValidator);
