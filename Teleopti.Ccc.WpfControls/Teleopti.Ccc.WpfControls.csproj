@@ -1113,6 +1113,7 @@
       <DependentUpon>TimeZoomView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\ColorConverterSoft.cs" />
+    <Compile Include="Converters\CustomSortBehaviour.cs" />
     <Compile Include="Converters\DateTimeResolutionConverter.cs" />
     <Compile Include="Converters\DateTimeToHourConverter.cs" />
     <Compile Include="Converters\DateTimeToLocalAndNotMinValueConverter.cs" />
