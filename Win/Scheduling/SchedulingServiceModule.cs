@@ -161,8 +161,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<GroupPersonBuilderForOptimization>().As<IGroupPersonBuilderForOptimization>().InstancePerLifetimeScope();
         	builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 	        builder.RegisterType<EditableShiftMapper>().As<IEditableShiftMapper>();
+			builder.RegisterType<MaxMovedDaysOverLimitValidator>().As<IMaxMovedDaysOverLimitValidator>();
 
-			//DaysOffSchedulingService
+			//IMaxMovedDaysOverLimitValidator
         	builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>().
         		InstancePerDependency();
         	builder.RegisterType<MatrixDataListInSteadyState>().As<IMatrixDataListInSteadyState>().InstancePerDependency();

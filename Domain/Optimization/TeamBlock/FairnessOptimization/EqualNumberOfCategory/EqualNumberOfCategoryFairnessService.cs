@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		             IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions,
 		             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
-		             ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
 		             IOptimizationPreferences optimizationPreferences);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -31,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IFilterForFullyScheduledBlocks _filterForFullyScheduledBlocks;
 		private readonly IEqualCategoryDistributionValue _equalCategoryDistributionValue;
 		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
+		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 		private bool _cancelMe;
 
 		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
@@ -47,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		                                            IFilterPersonsForTotalDistribution filterPersonsForTotalDistribution,
 													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
 													IEqualCategoryDistributionValue equalCategoryDistributionValue,
-													IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks)
+													IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks,
+													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_filterForFullyScheduledBlocks = filterForFullyScheduledBlocks;
 			_equalCategoryDistributionValue = equalCategoryDistributionValue;
 			_filterForNoneLockedTeamBlocks = filterForNoneLockedTeamBlocks;
+			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -68,7 +70,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 		                    IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
 							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService,
-			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
 			IOptimizationPreferences optimizationPreferences)
 		{
 			_cancelMe = false;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			while (moveFound)
 			{
 				var workingBlocks = new List<ITeamBlockInfo>(originalBlocks);
-				moveFound = runOneLoop(scheduleDictionary, rollbackService, teamBlockRestrictionOverLimitValidator,
+				moveFound = runOneLoop(scheduleDictionary, rollbackService, _teamBlockRestrictionOverLimitValidator,
 				                       optimizationPreferences, workingBlocks, totalDistribution, totalBlockCount);
 			}
 		}
