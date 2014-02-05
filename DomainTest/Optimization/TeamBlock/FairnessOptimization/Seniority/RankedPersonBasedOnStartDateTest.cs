@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         }
 
         [Test]
-        public void RankedPersonWith()
+        public void RankedPersonWithMultiplePersonPeriod()
         {
             var personList = new List<IPerson>() {_person1, _person2, _person3};
             var today = DateOnly.Today;
