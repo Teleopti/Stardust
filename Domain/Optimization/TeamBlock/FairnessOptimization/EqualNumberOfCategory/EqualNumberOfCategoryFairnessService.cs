@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				}
 
 				var message = Resources.FairnessOptimizationOn + " " + Resources.EqualOfEachShiftCategory + ": " +
-							  new Percent((totalBlockCount - blocksToWorkWith.Count) / totalBlockCount) + " xxSucesses = " + successes;
+							  new Percent((totalBlockCount - blocksToWorkWith.Count) / totalBlockCount) + " " + Resources.Success + " = " + successes;
 
 				OnReportProgress(message);
 			}
