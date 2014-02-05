@@ -7,6 +7,7 @@
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
+		<AzureDBNamePrefix>Bug26852_$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DBServerSQL2005>$(Computername)\SQL2005</DBServerSQL2005>
@@ -136,13 +137,13 @@
     </Target>
 
 	<Target Name="AzurePreDropDatabase">
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_analytics]&quot;"/>
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
 	<Target Name="AzurePostDropDatabase">
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_analytics]&quot;"/>
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
 	<Target Name="SetUpConfigFiles">
@@ -166,13 +167,13 @@
 	<Target Name="AzureCreateDatabase" DependsOnTargets="BuildDBManager">
 		<Message Text="Create Azure database ..." Importance="high" />
 
-		<Message Text="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" Importance="high" />
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
+		<Message Text="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" Importance="high" />
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 		
-		<Message Text ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" Importance="high" />
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
+		<Message Text ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" Importance="high" />
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 
