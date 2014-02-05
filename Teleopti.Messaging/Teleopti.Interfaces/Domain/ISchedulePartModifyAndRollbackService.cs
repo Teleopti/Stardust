@@ -93,5 +93,7 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="scheduleTagSetter">The schedule tag setter.</param>
 		/// <param name="newBusinessRuleCollection">business rules</param>
 	    void ModifyStrictly(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection);
+
+	    IEnumerable<IBusinessRuleResponse> Modify(IEnumerable<IScheduleDay> schedulePartList, IScheduleTagSetter scheduleTagSetter);
     }
 }

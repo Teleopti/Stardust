@@ -234,18 +234,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person = new Person();
 			var partToSave = _mocks.StrictMock<IScheduleDay>();
 			var partToSave2 = _mocks.StrictMock<IScheduleDay>();
-			var range = _mocks.StrictMock<IScheduleRange>();
 			var period = new DateTimePeriod(new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc), new DateTime(2008, 1, 1, 0, 0, 0, DateTimeKind.Utc));
 			IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
 			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
+			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
 
-			Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>()).Repeat.Twice();
+			Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>());
 			Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
-			Expect.Call(schedules[person]).Return(range).IgnoreArguments().Repeat.AtLeastOnce();
-			Expect.Call(range.ReFetch(schedulePart)).Return(partToSave);
-			Expect.Call(range.ReFetch(schedulePart2)).Return(partToSave2);
-			Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, schedulePart, _businessRuleCollection, _scheduleDayChangeCallback, _tagSetter)).IgnoreArguments().Return(validationList).Repeat.AtLeastOnce();
+			Expect.Call(schedulePart.ReFetch()).Return(partToSave);
+			Expect.Call(schedulePart2.ReFetch()).Return(partToSave2);
+			Expect.Call(schedules.Modify(ScheduleModifier.Scheduler, new List<IScheduleDay> { schedulePart, schedulePart2 }, _businessRuleCollection, _scheduleDayChangeCallback, _tagSetter)).IgnoreArguments().Return(validationList);
 			Expect.Call(schedulePart.Person).Return(person).Repeat.Any();
 			Expect.Call(schedulePart2.Person).Return(person).Repeat.Any();
 			Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();

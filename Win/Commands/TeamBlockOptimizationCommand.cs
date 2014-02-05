@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -147,9 +148,23 @@ namespace Teleopti.Ccc.Win.Commands
 				                                       optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
-				
+				//day off seniority faines according to Micke
+                //_seniorityTeamBlockSwapperService.BlockSwapped += resourceOptimizerPersonOptimized;
+                //_seniorityTeamBlockSwapperService.Execute(allMatrixes, selectedPeriod, selectedPersons, 
+                //                                          _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
+                //                                          optimizationPreferences, new WeekDayPoints().GetWeekDaysPoints(),
+                //                                          teamBlockRestrictionOverLimitValidator);
+                //_seniorityTeamBlockSwapperService.BlockSwapped -= resourceOptimizerPersonOptimized;
+
+				////day off fairness
+                _teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
+                                                    _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules,
+                                                    rollbackServiceWithoutResourceCalculation, optimizationPreferences, teamBlockRestrictionOverLimitValidator);
+
 				ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, allMatrixes);
-				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod)) return;
+				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))
+					return;
+				
 				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation);
 			}
 				
