@@ -76,11 +76,6 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Models
 		        };
         }
 
-		public void SetSortDescription(SortDescription sortDescription)
-		{
-			DayLayerViewModel.SetCurrentSortDescription(sortDescription);
-		}
-
 		private void notifyPropertyChanged(string property)
 		{
 			var handler = PropertyChanged;

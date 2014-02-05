@@ -361,6 +361,7 @@
     <Compile Include="Common\ServiceBus\DateOnlyPeriodSerializer.cs" />
     <Compile Include="Common\ServiceBus\LargeGuidCollectionSerializer.cs" />
     <Compile Include="Common\ServiceBus\ServiceBusSender.cs" />
+    <Compile Include="Converters\CustomSorterBlankAlwaysLast.cs" />
     <Compile Include="Converters\DateTimeConverter\TimeSpanToStringConverter.cs" />
     <Compile Include="Forecasting\CopyToSkillCommand.cs" />
     <Compile Include="Forecasting\CopyToSkillModel.cs" />

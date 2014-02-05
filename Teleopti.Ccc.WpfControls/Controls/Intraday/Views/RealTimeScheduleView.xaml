@@ -18,7 +18,13 @@
 				<ResourceDictionary Source="..\..\..\Resources\DateTimeConverters.xaml"/>
 			</ResourceDictionary.MergedDictionaries>
 
-			<!--Henrik 090601. These can be removed and put on the viewmodel instead-->
+			<converters:CustomSorterBlankAlwaysLast x:Key="NextActivityStartDateTimeComparer" PropertyPath="NextActivityStartDateTime"/>
+			<converters:CustomSorterBlankAlwaysLast x:Key="NextActivityDescriptionComparer" PropertyPath="NextActivityDescription"/>
+			<converters:CustomSorterBlankAlwaysLast x:Key="CurrentActivityDescriptionComparer" PropertyPath="CurrentActivityDescription"/>
+			<converters:CustomSorterBlankAlwaysLast x:Key="EnteredCurrentStateComparer" PropertyPath="TimeInCurrentState"/>
+			
+			
+			
 			<wpfConverters:DateTimeToLocalAndNotMinValueConverter x:Key="DateTimeToLocalAndNotMinValueConverter"/>
 			<converters:SimpleConverter x:Key="SimpleConverter"/>
 			<converters:ElapsedTimeConverter x:Key="ElapsedTimeConverter" />
@@ -80,10 +86,9 @@
 					   x:Name="RealTimeDataGrid"
 					   x:FieldModifier="private"
 					   ContextMenu="{StaticResource ContextMenuCopy}"
-					   Sorting="RealTimeDataGrid_OnSorting"
-					   ColumnHeaderHeight="53">
+					   ColumnHeaderHeight="53"
+					   wpfConverters:CustomSortBehaviour.AllowCustomSort="True">
 			
-
 			<!--AgentName Column-->
 			<controls:DataGrid.Columns>
 				<controls:DataGridTextColumn HeaderStyle="{StaticResource SpecialLeftHeader}"
@@ -117,9 +122,10 @@
                                              Header="{x:Static Member=userTexts:Resources.Scheduled}" 
                                              Width="Auto" 
                                              CanUserSort="True"
-                                             SortMemberPath="CurrentActivityDescription"
-                                         CanUserReorder="False"
-                                             Binding="{Binding Path=CurrentActivityDescription,Mode=OneWay, FallbackValue=''}"/>
+                                             
+											CanUserReorder="False"
+                                             Binding="{Binding Path=CurrentActivityDescription,Mode=OneWay, FallbackValue=''}"
+											  wpfConverters:CustomSortBehaviour.CustomSorter="{StaticResource CurrentActivityDescriptionComparer}"/>
 
 				<!--Next Activity Column-->
 				<controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
@@ -127,8 +133,9 @@
                                              Width="Auto" 
                                              CanUserSort="True"
                                              SortMemberPath="NextActivityDescription"
-                                         CanUserReorder="False"
-                                             Binding="{Binding Path=NextActivityDescription,Mode=OneWay, FallbackValue=''}"/>
+											CanUserReorder="False"
+                                             Binding="{Binding Path=NextActivityDescription,Mode=OneWay, FallbackValue=''}"
+											 wpfConverters:CustomSortBehaviour.CustomSorter="{StaticResource NextActivityDescriptionComparer}"/>
 
 				<!--Next Start Column-->
 				<controls:DataGridTemplateColumn HeaderStyle="{StaticResource HeaderWithHand}"
@@ -138,7 +145,8 @@
                                             SortMemberPath="NextActivityStartDateTime"
                                             CanUserReorder="False"
 											ClipboardContentBinding="{Binding NextActivityStartDateTime}"
-											CopyingCellClipboardContent="NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent">
+											CopyingCellClipboardContent="NextActivityStartDateTimeColumn_OnCopyingCellClipboardContent"
+											wpfConverters:CustomSortBehaviour.CustomSorter="{StaticResource NextActivityStartDateTimeComparer}">
 
 					<controls:DataGridTemplateColumn.CellTemplate>
 						<DataTemplate>
@@ -172,7 +180,9 @@
                                              Width="Auto"
 											 CanUserSort="True"
                                              SortMemberPath="EnteredCurrentState"
-                                             Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter}, Mode=OneWay}">
+                                             Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter}, Mode=OneWay}"
+											 wpfConverters:CustomSortBehaviour.CustomSorter="{StaticResource EnteredCurrentStateComparer}">
+					
 					<controls:DataGridTextColumn.ClipboardContentBinding>
 						<Binding Path="EnteredCurrentState" Converter="{StaticResource ElapsedTimeConverter}"/>
 					</controls:DataGridTextColumn.ClipboardContentBinding>
