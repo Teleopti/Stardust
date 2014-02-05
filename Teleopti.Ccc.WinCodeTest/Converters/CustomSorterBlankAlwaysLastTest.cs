@@ -99,11 +99,11 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
 		{
 			var sortlist = new List<SomethingThatIsSortable>()
 				               {
-					               new SomethingThatIsSortable {Number = 1, AnObject = new SomethingThatCanBeNull(){Sortvalue = "A"}},
+					               new SomethingThatIsSortable {Number = 1, AnObject = new SomethingThatCanBeNull(){Sortvalue = "D"}},
 					               new SomethingThatIsSortable {Number=2, AnObject = null },
-					               new SomethingThatIsSortable {Number = 3, AnObject = new SomethingThatCanBeNull(){Sortvalue = "B"}, },
-					               new SomethingThatIsSortable {Number = 4, AnObject = new SomethingThatCanBeNull(){Sortvalue = "C"}},
-					               new SomethingThatIsSortable {Number = 5, AnObject = new SomethingThatCanBeNull(){Sortvalue = "D"}},
+					               new SomethingThatIsSortable {Number = 3, AnObject = new SomethingThatCanBeNull(){Sortvalue = "C"}, },
+					               new SomethingThatIsSortable {Number = 4, AnObject = new SomethingThatCanBeNull(){Sortvalue = "B"}},
+					               new SomethingThatIsSortable {Number = 5, AnObject = new SomethingThatCanBeNull(){Sortvalue = "A"}},
 				               };
 
 			var target = new CustomSorterBlankAlwaysLast() { PropertyPath = "AnObject", SortDirection = ListSortDirection.Descending };
