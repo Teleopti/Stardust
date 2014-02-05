@@ -128,12 +128,12 @@ namespace Teleopti.Ccc.Win.Commands
 
 	        if (optimizationPreferences.General.OptimizationStepDaysOff)
 		        optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
-										 _teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackServiceWithResourceCalculation,
+										 allMatrixes, rollbackServiceWithResourceCalculation,
 		                                 schedulingOptions, teamBlockScheduler, teamInfoFactory);
 
             if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
                 optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences,
-										  _teamBlockRestrictionOverLimitValidator, allMatrixes, rollbackServiceWithResourceCalculation, schedulingOptions, teamBlockScheduler);
+										  allMatrixes, rollbackServiceWithResourceCalculation, schedulingOptions, teamBlockScheduler);
 
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.Win.Commands
 				_equalNumberOfCategoryFairness.ReportProgress += resourceOptimizerPersonOptimized;
 				_equalNumberOfCategoryFairness.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
 				                                       _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation,
-				                                       _teamBlockRestrictionOverLimitValidator, optimizationPreferences);
+				                                       optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				
@@ -158,7 +158,6 @@ namespace Teleopti.Ccc.Win.Commands
         private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, 
 											  IList<IPerson> selectedPersons,
                                               IOptimizationPreferences optimizationPreferences,
-                                              ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
                                               IList<IScheduleMatrixPro> allMatrixes,
 											  ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 											  ISchedulingOptions schedulingOptions,
@@ -199,7 +198,7 @@ namespace Teleopti.Ccc.Win.Commands
                     _teamDayOffModifier,
                     _teamBlockSteadyStateValidator,
                     _teamBlockCleaner,
-                    teamBlockRestrictionOverLimitValidator,
+                    _teamBlockRestrictionOverLimitValidator,
                     _teamBlockMaxSeatChecker,
                     teamBlockDaysOffMoveFinder, 
 					_teamBlockScheudlingOptions
@@ -225,7 +224,7 @@ namespace Teleopti.Ccc.Win.Commands
         [SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 												IOptimizationPreferences optimizationPreferences,
-												ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+
 												IList<IScheduleMatrixPro> allMatrixes, 
 												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 												ISchedulingOptions schedulingOptions,
@@ -243,7 +242,7 @@ namespace Teleopti.Ccc.Win.Commands
 			        _schedulingOptionsCreator,
 			        _safeRollbackAndResourceCalculation,
 			        _teamBlockIntradayDecisionMaker,
-			        teamBlockRestrictionOverLimitValidator,
+			        _teamBlockRestrictionOverLimitValidator,
 			        _teamBlockCleaner, 
 					_teamBlockMaxSeatChecker, 
 					_dailyTargetValueCalculatorForTeamBlock

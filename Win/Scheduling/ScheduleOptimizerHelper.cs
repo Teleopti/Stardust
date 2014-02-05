@@ -707,7 +707,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService,
-			                                             teamBlockRestrictionOverLimitValidator, optimizationPreferences);
+			                                             optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			var groupPersonBuilderForOptimizationFactory = _container.Resolve<IGroupPersonBuilderForOptimizationFactory>();
