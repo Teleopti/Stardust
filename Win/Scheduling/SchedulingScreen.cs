@@ -7260,7 +7260,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var selectedDay = _scheduleView.SelectedSchedules()[0];
 
-			using (var view = new AgentPreferenceView(selectedDay, WorkflowControlSets, _schedulerState.SchedulingResultState))
+			using (var view = new AgentPreferenceView(selectedDay, _schedulerState))
 			{
 				view.ShowDialog(this);
 				updateRestrictions(view.ScheduleDay);
