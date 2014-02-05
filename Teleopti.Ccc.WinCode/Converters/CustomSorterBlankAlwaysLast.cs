@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using Teleopti.Ccc.WinCode.Common;
 
@@ -17,29 +18,38 @@ namespace Teleopti.Ccc.WinCode.Converters
 
 		public int Compare(object x, object y)
 		{
-			var xVal = _reflector.GetValue(x,PropertyPath).ToString();
-			var yVal = _reflector.GetValue(y, PropertyPath).ToString();
+			var xStr = getValueAsString(x);
+			var yStr = getValueAsString(y);
 
-			if (string.IsNullOrEmpty(xVal) && string.IsNullOrEmpty(yVal))
+			if (string.IsNullOrEmpty(xStr) && string.IsNullOrEmpty(yStr))
 			{
 				return 0;
 			}
 
-			if (string.IsNullOrEmpty(xVal))
+			if (string.IsNullOrEmpty(xStr))
 			{
 				return 1;
 			}
 
-			if (string.IsNullOrEmpty(yVal))
+			if (string.IsNullOrEmpty(yStr))
 			{
 				return -1;
 			}
 
 			if (SortDirection == ListSortDirection.Descending)
 			{
-				return System.String.Compare(yVal, xVal, System.StringComparison.Ordinal);	
+				return String.Compare(yStr, xStr, StringComparison.Ordinal);	
 			}
-			return System.String.Compare(xVal, yVal, System.StringComparison.Ordinal);
+			return String.Compare(xStr, yStr, StringComparison.Ordinal);
+		}
+
+		private string getValueAsString(object target)
+		{
+			var val = _reflector.GetValue(target, PropertyPath);
+			return val != null ? val.ToString() : string.Empty;
 		}
 	}
+
+	
+
 }

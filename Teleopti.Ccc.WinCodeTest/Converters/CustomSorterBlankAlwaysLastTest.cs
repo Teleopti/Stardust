@@ -94,6 +94,49 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
 			CollectionAssert.AreEqual(actualSequence, expectedSequence);
 		}
 
+		[Test]
+		public void Sort_WhenAscending_ShouldSortDescendingAndPutNullLast()
+		{
+			var sortlist = new List<SomethingThatIsSortable>()
+				               {
+					               new SomethingThatIsSortable {Number = 1, AnObject = new SomethingThatCanBeNull(){Sortvalue = "A"}},
+					               new SomethingThatIsSortable {Number=2, AnObject = null },
+					               new SomethingThatIsSortable {Number = 3, AnObject = new SomethingThatCanBeNull(){Sortvalue = "B"}, },
+					               new SomethingThatIsSortable {Number = 4, AnObject = new SomethingThatCanBeNull(){Sortvalue = "C"}},
+					               new SomethingThatIsSortable {Number = 5, AnObject = new SomethingThatCanBeNull(){Sortvalue = "D"}},
+				               };
+
+			var target = new CustomSorterBlankAlwaysLast() { PropertyPath = "AnObject", SortDirection = ListSortDirection.Descending };
+			var view = (ListCollectionView)CollectionViewSource.GetDefaultView(sortlist);
+			view.CustomSort = target;
+
+			var expectedSequence = new List<int>() { 1, 3, 4, 5, 2 };
+
+			var actualSequence = getSequence(view);
+			CollectionAssert.AreEqual(actualSequence, expectedSequence);
+		}
+
+		[Test]
+		public void Sort_WhenAscending_ShouldSortAscendingAndPutNullLast()
+		{
+			var sortlist = new List<SomethingThatIsSortable>()
+				               {
+								    new SomethingThatIsSortable {Number = 1, AnObject = new SomethingThatCanBeNull(){Sortvalue = "A"}},
+					               new SomethingThatIsSortable {Number=2, AnObject = null },
+					               new SomethingThatIsSortable {Number = 3, AnObject = new SomethingThatCanBeNull(){Sortvalue = "B"}, },
+					               new SomethingThatIsSortable {Number = 4, AnObject = new SomethingThatCanBeNull(){Sortvalue = "C"}},
+					               new SomethingThatIsSortable {Number = 5, AnObject = new SomethingThatCanBeNull(){Sortvalue = "D"}},
+				               };
+
+			var target = new CustomSorterBlankAlwaysLast() { PropertyPath = "AnObject", SortDirection = ListSortDirection.Ascending };
+			var view = (ListCollectionView)CollectionViewSource.GetDefaultView(sortlist);
+			view.CustomSort = target;
+			var expectedSequence = new List<int>() { 1, 3, 4, 5, 2 };
+
+			var actualSequence = getSequence(view);
+			CollectionAssert.AreEqual(actualSequence, expectedSequence);
+		}
+
 
 		#region helpers
 		
@@ -117,6 +160,18 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
 
 			public string Name { get; set; }
 
+			public SomethingThatCanBeNull AnObject { get; set; }
+
+		}
+
+		public class SomethingThatCanBeNull
+		{
+			public string Sortvalue { get; set; }
+
+			public override string ToString()
+			{
+				return Sortvalue;
+			}
 		}
 		#endregion
 	}
