@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 	    private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 	    private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+	    private readonly ITeamBlockDayOffFairnessOptimizationService _teamBlockDayOffFairnessOptimizationService;
 
 	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											ITeamBlockClearer teamBlockCleaner,
@@ -81,7 +82,8 @@ namespace Teleopti.Ccc.Win.Commands
 											IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
 											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
 											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
-											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+											ITeamBlockDayOffFairnessOptimizationService teamBlockDayOffFairnessOptimizationService)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -106,6 +108,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_equalNumberOfCategoryFairness = equalNumberOfCategoryFairness;
 			_teamBlockSeniorityFairnessOptimizationService = teamBlockSeniorityFairnessOptimizationService;
 		    _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+		    _teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
 	    }
 
         public void Execute(BackgroundWorker backgroundWorker, 
@@ -159,7 +162,7 @@ namespace Teleopti.Ccc.Win.Commands
 				////day off fairness
                 _teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions,
                                                     _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules,
-                                                    rollbackServiceWithoutResourceCalculation, optimizationPreferences, teamBlockRestrictionOverLimitValidator);
+                                                    rollbackServiceWithoutResourceCalculation, optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
 
 				ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, allMatrixes);
 				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))
