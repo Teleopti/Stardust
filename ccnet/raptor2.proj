@@ -229,7 +229,7 @@
 
 	<Target Name="AzureAnalyticsReportTest" Condition="'$(AzureAnalyticsReportTest)' == 'true'">
 		<Message Importance="high" Text="Check all Analytics report controls and reports are working on Azure"/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(DBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AzureDBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
 		<Message Importance="high" Text="Analytics report controls. Finished"/>
 	</Target>
 	
