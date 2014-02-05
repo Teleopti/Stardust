@@ -7,8 +7,10 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
@@ -17,18 +19,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IAgentPreferenceDayCreator _dayCreator;
 		private readonly AgentPreferencePresenter _presenter;
 		private bool _isDirty;
-		private readonly IList<IWorkflowControlSet> _workflowControlSets;
 		private bool _isInitialized;
+		private readonly ISchedulerStateHolder _schedulerStateHolder;
 
-		public AgentPreferenceView(IScheduleDay scheduleDay, IList<IWorkflowControlSet> workflowControlSets, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public AgentPreferenceView(IScheduleDay scheduleDay, ISchedulerStateHolder schedulerStateHolder)
 		{
 			InitializeComponent();
 			SetTexts();
 			toolTip.SetToolTip(checkBoxAdvShiftCategoryNextDayMin, Resources.NextDay);
 			toolTip.SetToolTip(checkBoxAdvShiftCategoryNextDayMax, Resources.NextDay);
 			_dayCreator = new AgentPreferenceDayCreator();
-			_presenter = new AgentPreferencePresenter(this, scheduleDay, schedulingResultStateHolder);
-			_workflowControlSets = workflowControlSets;
+			_schedulerStateHolder = schedulerStateHolder;
+			_presenter = new AgentPreferencePresenter(this, scheduleDay, schedulerStateHolder.SchedulingResultState);
 		}
 
 		public IScheduleDay ScheduleDay
@@ -201,24 +203,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateShiftCategories()
 		{
-			
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
 			var comboCategories = new List<ComboBoxAdvShiftCategory>();
+			var shiftCategories = (from sc in _schedulerStateHolder.CommonStateHolder.ShiftCategories where !((IDeleteTag)sc).IsDeleted select sc).ToList();
 
-			foreach (var controlSet in _workflowControlSets)
-			{
-				if (controlSet.Id != workflowControlSet.Id) continue;
-				workflowControlSet = controlSet;
-				break;
-			}
-
-			foreach (var shiftCategory in workflowControlSet.AllowedPreferenceShiftCategories)
+			foreach (var shiftCategory in shiftCategories)
 			{
 				comboCategories.Add((new ComboBoxAdvShiftCategory(shiftCategory)));	
 			}
 
 			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
-			if (currentPreferenceRestriction != null && currentPreferenceRestriction.ShiftCategory != null && !workflowControlSet.AllowedPreferenceShiftCategories.Contains(currentPreferenceRestriction.ShiftCategory))
+			if (currentPreferenceRestriction != null && currentPreferenceRestriction.ShiftCategory != null && !shiftCategories.Contains(currentPreferenceRestriction.ShiftCategory))
 			{
 				comboCategories.Add(new ComboBoxAdvShiftCategory(currentPreferenceRestriction.ShiftCategory));	
 			}
@@ -234,23 +228,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateAbsences()
 		{
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
-			var absences = new List<IAbsence>();
-
-			foreach (var controlSet in _workflowControlSets)
-			{
-				if (controlSet.Id != workflowControlSet.Id) continue;
-				workflowControlSet = controlSet;
-				break;
-			}
-
-			foreach (var absence in workflowControlSet.AllowedPreferenceAbsences)
-			{
-				absences.Add(absence);
-			}
+			var absences = (from a in _schedulerStateHolder.CommonStateHolder.Absences where !((IDeleteTag)a).IsDeleted select a).ToList();
 
 			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
-			if (currentPreferenceRestriction != null && currentPreferenceRestriction.Absence != null && !workflowControlSet.AllowedPreferenceAbsences.Contains(currentPreferenceRestriction.Absence))
+			if (currentPreferenceRestriction != null && currentPreferenceRestriction.Absence != null && !absences.Contains(currentPreferenceRestriction.Absence))
 			{
 				absences.Add(currentPreferenceRestriction.Absence);
 			}
@@ -266,23 +247,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateDayOffs()
 		{
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
 			var comboDayOffs = new List<ComboBoxAdvDayOffTemplate>();
+			var dayOffs = (from d in _schedulerStateHolder.CommonStateHolder.DayOffs where !((IDeleteTag)d).IsDeleted select d).ToList();
 
-			foreach (var controlSet in _workflowControlSets)
-			{
-				if (controlSet.Id != workflowControlSet.Id) continue;
-				workflowControlSet = controlSet;
-				break;
-			}
-
-			foreach (var dayOff in workflowControlSet.AllowedPreferenceDayOffs)
+			foreach (var dayOff in dayOffs)
 			{
 				comboDayOffs.Add((new ComboBoxAdvDayOffTemplate(dayOff)));
 			}
 
 			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
-			if (currentPreferenceRestriction != null && currentPreferenceRestriction.DayOffTemplate != null && !workflowControlSet.AllowedPreferenceDayOffs.Contains(currentPreferenceRestriction.DayOffTemplate))
+			if (currentPreferenceRestriction != null && currentPreferenceRestriction.DayOffTemplate != null && !dayOffs.Contains(currentPreferenceRestriction.DayOffTemplate))
 			{
 				comboDayOffs.Add(new ComboBoxAdvDayOffTemplate(currentPreferenceRestriction.DayOffTemplate));
 			}
@@ -299,24 +273,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateActivities()
 		{
-			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
-			var activities = new List<IActivity>();
-
-			foreach (var controlSet in _workflowControlSets)
-			{
-				if (controlSet.Id != workflowControlSet.Id) continue;
-				workflowControlSet = controlSet;
-				break;
-			}
-
-			if(workflowControlSet.AllowedPreferenceActivity != null)
-				activities.Add(workflowControlSet.AllowedPreferenceActivity);
+			var activities = (from a in _schedulerStateHolder.CommonStateHolder.Activities where !(a).IsDeleted select a).ToList();
 
 			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
 			if (currentPreferenceRestriction != null)
 			{
 				var activityRestriction = currentPreferenceRestriction.ActivityRestrictionCollection.FirstOrDefault();
-				if (activityRestriction != null && workflowControlSet.AllowedPreferenceActivity != activityRestriction.Activity)
+				if (activityRestriction != null && !activities.Contains(activityRestriction.Activity))
 				{
 					activities.Add(activityRestriction.Activity);		
 				}
