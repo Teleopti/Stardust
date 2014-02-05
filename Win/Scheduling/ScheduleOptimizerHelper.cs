@@ -701,22 +701,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, restrictionExtractor, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
+			var teamBlockRestrictionOverLimitValidator =
+				_container.Resolve<ITeamBlockRestrictionOverLimitValidator>();
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
-
-			var scheduleDayEquator = _container.Resolve<IScheduleDayEquator>();
-			IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones =
-				new Dictionary<IPerson, IScheduleRange>();
-
-			foreach (IPerson selectedPerson in selectedPersons)
-			{
-				allSelectedScheduleRangeClones.Add(selectedPerson, _schedulerStateHolder.Schedules[selectedPerson]);
-			}
-			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
-			   new MaxMovedDaysOverLimitValidator(scheduleDayEquator);
-			var restrictionOverLimitDecider = _container.Resolve<IRestrictionOverLimitDecider>();
-			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator
-				(restrictionOverLimitDecider, maxMovedDaysOverLimitValidator);
-
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
 			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService,
@@ -730,8 +717,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
 			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
 			if(!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod)) return;
-			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
 
+			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,schedulingOptions, _stateHolder.ShiftCategories.ToList(),_schedulerStateHolder.Schedules, rollbackService);
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
@@ -759,8 +746,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 if (_backgroundWorker.CancellationPending)
                     return;
-
-                ISchedulingResultStateHolder stateHolder = _stateHolder;
 
                 IList<IScheduleMatrixPro> matrixList =
                     matrixContainerList.Select(container => container.ScheduleMatrix).ToList();
