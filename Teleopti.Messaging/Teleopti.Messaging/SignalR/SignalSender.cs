@@ -31,7 +31,6 @@ namespace Teleopti.Messaging.SignalR
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalSender));
 		private bool _queueProcessed;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1054:UriParametersShouldNotBeStrings", MessageId = "0#")]
 		public SignalSender(string serverUrl)
 		{
 			_serverUrl = serverUrl;
@@ -42,6 +41,28 @@ namespace Teleopti.Messaging.SignalR
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 			workerThread = new Thread(processQueue) {IsBackground = true};
 			workerThread.Start();
+		}
+
+		public void InstantiateBrokerService()
+		{
+			try
+			{
+				if (_wrapper != null) _wrapper.StopHub();
+
+				var connection = MakeHubConnection();
+				var proxy = connection.CreateHubProxy("MessageBrokerHub");
+
+				_wrapper = new SignalWrapper(proxy, connection);
+				_wrapper.StartHub();
+			}
+			catch (SocketException exception)
+			{
+				Logger.Error("The message broker seems to be down.", exception);
+			}
+			catch (BrokerNotInstantiatedException exception)
+			{
+				Logger.Error("The message broker seems to be down.", exception);
+			}
 		}
 
 	    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
@@ -72,24 +93,8 @@ namespace Teleopti.Messaging.SignalR
 			get { return _wrapper != null && _wrapper.IsInitialized(); }
 		}
 
-		public void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
+		public void SendNotificationAsync(Notification notification)
 		{
-			var domainObject = JsonConvert.SerializeObject(actualAgentState);
-			var type = typeof (IActualAgentState);
-
-			var notification = new Notification
-				{
-					StartDate =
-						Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
-					EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
-					DomainId = Subscription.IdToString(personId),
-					DomainType = type.Name,
-					DomainQualifiedType = type.AssemblyQualifiedName,
-					ModuleId = Subscription.IdToString(Guid.Empty),
-					DomainUpdateType = (int) DomainUpdateType.Insert,
-					BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject)),
-					BusinessUnitId = Subscription.IdToString(businessUnitId)
-				};
 			_queueProcessed = false;
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
 		}
@@ -102,7 +107,7 @@ namespace Teleopti.Messaging.SignalR
 					_notificationQueue.GetConsumingEnumerable(cancelToken.Token)
 					                  .Take(Math.Max(1,Math.Min(_notificationQueue.Count,20)))
 					                  .ToArray()
-					                  .Where(t => t.Item1 > DateTime.UtcNow.AddMinutes(-2))
+					                  .Where(t => t.Item1 > CurrentUtcTime().AddMinutes(-2))
 									  .Select(t => t.Item2)
 									  .ToArray();
 
@@ -122,7 +127,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public void WaitUntilQueueProcessed()
+		public void WaitUntilAllNotificationsAreSent()
 		{
 			while (!_queueProcessed)
 			{
@@ -162,61 +167,6 @@ namespace Teleopti.Messaging.SignalR
 			return false;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
-		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId)
-		{
-			var sendAttempt = 0;
-			while (sendAttempt < 3)
-			{
-				try
-				{
-					sendAttempt++;
-
-					var task = _wrapper.NotifyClients(new Notification
-					          	{
-					          		StartDate = Subscription.DateToString(floor),
-					          		EndDate = Subscription.DateToString(ceiling),
-					          		DomainId = Subscription.IdToString(domainObjectId),
-									DomainQualifiedType = domainInterfaceType.AssemblyQualifiedName,
-					          		DomainType = domainInterfaceType.Name,
-					          		ModuleId = Subscription.IdToString(moduleId),
-					          		DomainUpdateType = (int) DomainUpdateType.Insert,
-					          		DataSource = dataSource,
-					          		BusinessUnitId = Subscription.IdToString(businessUnitId),
-					          		BinaryData = null
-					          	});
-					task.Wait(TimeSpan.FromSeconds(20));
-					break;
-				}
-				catch (Exception)
-				{
-					InstantiateBrokerService();
-				}
-			}
-		}
-
-		public void InstantiateBrokerService()
-		{
-			try
-			{
-				if (_wrapper != null) _wrapper.StopHub();
-
-				var connection = MakeHubConnection();
-				var proxy = connection.CreateHubProxy("MessageBrokerHub");
-
-				_wrapper = new SignalWrapper(proxy, connection);
-				_wrapper.StartHub();
-			}
-			catch (SocketException exception)
-			{
-				Logger.Error("The message broker seems to be down.", exception);
-			}
-			catch (BrokerNotInstantiatedException exception)
-			{
-				Logger.Error("The message broker seems to be down.", exception);
-			}
-		}
-
 		[CLSCompliant(false)]
 		protected virtual DateTime CurrentUtcTime()
 		{
@@ -228,5 +178,72 @@ namespace Teleopti.Messaging.SignalR
 		{
 			return new HubConnectionWrapper(new HubConnection(_serverUrl));
 		}
+		
+		[CLSCompliant(false)]
+		protected virtual ILog GetLogger()
+		{
+			return Logger;
+		}
+
+
+
+
+
+
+
+
+		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId)
+		{
+			var sendAttempt = 0;
+			while (sendAttempt < 3)
+			{
+				try
+				{
+					sendAttempt++;
+
+					var task = _wrapper.NotifyClients(new Notification
+					{
+						StartDate = Subscription.DateToString(floor),
+						EndDate = Subscription.DateToString(ceiling),
+						DomainId = Subscription.IdToString(domainObjectId),
+						DomainQualifiedType = domainInterfaceType.AssemblyQualifiedName,
+						DomainType = domainInterfaceType.Name,
+						ModuleId = Subscription.IdToString(moduleId),
+						DomainUpdateType = (int)DomainUpdateType.Insert,
+						DataSource = dataSource,
+						BusinessUnitId = Subscription.IdToString(businessUnitId),
+						BinaryData = null
+					});
+					task.Wait(TimeSpan.FromSeconds(20));
+					break;
+				}
+				catch (Exception)
+				{
+					InstantiateBrokerService();
+				}
+			}
+		}
+
+		public void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
+		{
+			var domainObject = JsonConvert.SerializeObject(actualAgentState);
+			var type = typeof(IActualAgentState);
+
+			var notification = new Notification
+			{
+				StartDate =
+					Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
+				EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
+				DomainId = Subscription.IdToString(personId),
+				DomainType = type.Name,
+				DomainQualifiedType = type.AssemblyQualifiedName,
+				ModuleId = Subscription.IdToString(Guid.Empty),
+				DomainUpdateType = (int)DomainUpdateType.Insert,
+				BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject)),
+				BusinessUnitId = Subscription.IdToString(businessUnitId)
+			};
+			SendNotificationAsync(notification);
+		}
+
 	}
 }
