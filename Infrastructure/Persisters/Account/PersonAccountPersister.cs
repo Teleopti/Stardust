@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -26,16 +27,19 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 			_personAccountConflictResolver = personAccountConflictResolver;
 		}
 
-		public void Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
+		public bool Persist(ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
-			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork(TransactionIsolationLevel.Serializable))
+			bool hadConflicts;
+			using (var uow = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var conflictingPersonAccounts = _personAccountConflictCollector.GetConflicts(personAbsenceAccounts);
+				hadConflicts = conflictingPersonAccounts.Any();
 				_personAccountConflictResolver.Resolve(conflictingPersonAccounts);
 				_personAbsenceAccountRepository.AddRange(personAbsenceAccounts);
-				uow.PersistAll(_initiatorIdentifier);				
+				uow.PersistAll(_initiatorIdentifier);
 			}
 			personAbsenceAccounts.Clear();
+			return hadConflicts;
 		}
 	}
 }

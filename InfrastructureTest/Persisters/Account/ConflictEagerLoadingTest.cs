@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 {
-	public class ConflictEagerLoadingTest : PersonAccountPersisterBaseTest
+	public class ConflictEagerLoadingTest : PersonAccountConflictTest
 	{
 		protected override bool GivenOtherHasChanged(IPersonAbsenceAccount othersPersonAccount)
 		{
@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			((Domain.Scheduling.PersonalAccount.Account)myPersonAbsenceAccount.AccountCollection().Single()).LatestCalculatedBalance = new TimeSpan(20, 0, 0);
 		}
 
-		protected override void Then(IPersonAbsenceAccount myPersonAbsenceAccount)
+		protected override void Then(IPersonAbsenceAccount inMemoryAndDatabasePersonAbsenceAccount)
 		{
-			LazyLoadingManager.IsInitialized(myPersonAbsenceAccount.AccountCollection());
+			LazyLoadingManager.IsInitialized(inMemoryAndDatabasePersonAbsenceAccount.AccountCollection());
 		}
 	}
 }
