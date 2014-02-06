@@ -21,8 +21,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IPerson _person2;
 		private IList<IPerson> _groupMembers;
 		private IList<ITeamInfo> _teamInfos;
+	    private IRankedPersonBasedOnStartDate _rankedPersonBasedOnStartDate;
 
-		[SetUp]
+	    [SetUp]
 		public void SetUp()
 		{
 			_mock = new MockRepository();
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_person2 = PersonFactory.CreatePerson("B", "B");
 			_groupMembers = new List<IPerson> { _person1, _person2 };
 			_teamInfos = new List<ITeamInfo>{_teamInfo};
-			_target = new SeniorityExtractor();
+			_target = new SeniorityExtractor(_rankedPersonBasedOnStartDate);
 		}
 
 		
