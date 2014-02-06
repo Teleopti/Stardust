@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 using Teleopti.Support.Code.Tool;
 
@@ -30,7 +31,13 @@ namespace Teleopti.Support.Tool
 
         private void buttonRefreshThem_Click(object sender, EventArgs e)
         {
-            runRefresher("DEVELOP");
+	        var mode = "DEPLOY";
+#if (DEBUG)
+	        {
+		        mode = "DEVELOP";
+	        }
+#endif
+            runRefresher(mode);
         }
 
         private void runRefresher(string mode)
@@ -41,6 +48,21 @@ namespace Teleopti.Support.Tool
             var refreshRunner = new RefreshConfigsRunner(fileMan, new RefreshConfigFile(new ConfigFileTagReplacer(),
                                                                                        new MachineKeyChecker()));
             refreshRunner.RefreshThem(mode);
+
+	        if (mode.Equals("DEPLOY"))
+	        {
+				  string path = Directory.GetCurrentDirectory();
+
+				  using (var proc = new System.Diagnostics.Process())
+				  {
+					  proc.StartInfo.FileName = path + "\\StartStopSystem\\ResetSystem.bat";
+					  proc.StartInfo.Arguments = "ngt";
+					  proc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+					  proc.StartInfo.CreateNoWindow = false;
+					  proc.Start();
+					  proc.WaitForExit();
+				  }
+	        }
         }
     }
 }
