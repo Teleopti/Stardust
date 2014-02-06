@@ -1,108 +1,27 @@
-using System;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
-using AggregateException = System.AggregateException;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    /// <summary>
-    /// Layer class containing Absences
-    /// </summary>
 	public class AbsenceLayer : Layer<IAbsence>, IAbsenceLayer
-    {
-		private IEntity _parent;
-		private Guid? _id;
-        
-        protected AbsenceLayer()
-        {
-        }
-
-        public AbsenceLayer(IAbsence abs, DateTimePeriod period) : base(abs, period)
-        {
-            InParameter.EnsureNoSecondsInPeriod(period);
-        }
-
-        public override DateTimePeriod Period
-        {
-            get
-            {
-                return base.Period;
-            }
-            set
-            {
-                InParameter.EnsureNoSecondsInPeriod(value);
-                base.Period = value;
-            }
-        }
-
-		public virtual bool Equals(IEntity other)
+	{
+		protected AbsenceLayer()
 		{
-			if (other == null)
-				return false;
-			if (this == other)
-				return true;
-			if (!other.Id.HasValue || !Id.HasValue)
-				return false;
-
-			return (Id.Value == other.Id.Value);
 		}
 
-		public virtual Guid? Id
+		public AbsenceLayer(IAbsence abs, DateTimePeriod period) : base(abs, period)
 		{
-			get { return _id; }
+			InParameter.EnsureNoSecondsInPeriod(period);
 		}
 
-		public virtual void SetId(Guid? newId)
+		public override DateTimePeriod Period
 		{
-			if (newId.HasValue)
+			get { return base.Period; }
+			set
 			{
-				_id = newId;
-			}
-			else
-			{
-				ClearId();
+				InParameter.EnsureNoSecondsInPeriod(value);
+				base.Period = value;
 			}
 		}
-
-		public virtual void ClearId()
-		{
-			_id = null;
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IAggregateEntity")]
-		protected virtual IAggregateRoot Root()
-		{
-			var parent = Parent;
-			var root = parent as IAggregateRoot;
-
-			while (root == null)
-			{
-				var internalParent = parent as IAggregateEntity;
-				if (internalParent == null)
-				{
-					throw new AggregateException("[" + ToString() + "]:s parent is null or not of type IAggregateEntity");
-				}
-
-				parent = internalParent.Parent;
-				root = parent as IAggregateRoot;
-			}
-			return root;
-		}
-
-		IAggregateRoot IAggregateEntity.Root()
-		{
-			return Root();
-		}
-
-		public void SetParent(IEntity parent)
-		{
-			Parent = parent;
-		}
-
-		public virtual IEntity Parent
-		{
-			get { return _parent; }
-			private set { _parent = value; }
-		}
-    }
+	}
 }

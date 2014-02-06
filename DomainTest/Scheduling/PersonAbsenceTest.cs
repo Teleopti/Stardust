@@ -122,7 +122,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             DateTimePeriod dtp = new DateTimePeriod(new DateTime(2007, 1, 1, 7, 0, 0, DateTimeKind.Utc),
                                      new DateTime(2007, 1, 3, 7, 0, 0, DateTimeKind.Utc));
             AbsenceLayer layer = new AbsenceLayer(AbsenceFactory.CreateAbsence("Sjuk"), dtp);
-            ((IEntity)layer).SetId(Guid.NewGuid());
             target = new PersonAbsence(person, scenario, layer);
             target.SetId(Guid.NewGuid());
             target.Person.SetId(Guid.NewGuid());
@@ -132,19 +131,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreEqual(target.Id, clone.Id);
             Assert.AreEqual(target.Person.Id, clone.Person.Id);
             Assert.AreEqual(target.Scenario.Id, clone.Scenario.Id);
-            Assert.AreEqual(target.Layer.Id, clone.Layer.Id);
 
             clone = target.NoneEntityClone();
             Assert.AreEqual(target.Person.Id, clone.Person.Id);
             Assert.AreEqual(target.Scenario.Id, clone.Scenario.Id);
             Assert.IsNull(clone.Id);
-            Assert.IsNull(clone.Layer.Id);
 
             clone = (IPersonAbsence)target.CreateTransient();
             Assert.AreEqual(target.Person.Id, clone.Person.Id);
             Assert.AreEqual(target.Scenario.Id, clone.Scenario.Id);
             Assert.IsNull(clone.Id);
-            Assert.IsNull(clone.Layer.Id);
         }
 
         [Test]

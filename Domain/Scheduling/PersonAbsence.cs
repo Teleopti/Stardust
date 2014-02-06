@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _person = agent;
             _scenario = scenario;
             _layer = layer;
-			_layer.SetParent(this);
         }
 
 		/// <summary>

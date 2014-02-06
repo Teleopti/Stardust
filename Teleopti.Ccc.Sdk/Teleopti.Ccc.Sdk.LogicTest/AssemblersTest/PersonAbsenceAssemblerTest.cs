@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
                 Assert.AreEqual(dto.Version, entity.Version);
                 Assert.AreEqual(dto.Id, entity.Id);
-                Assert.AreEqual(dto.AbsenceLayer.Id, entity.Layer.Id);
                 Assert.AreSame(absence, entity.Layer.Payload);
                 Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.Layer.Period);
             }
@@ -85,7 +84,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             person.SetId(Guid.NewGuid());
             personAbsence.SetId(Guid.NewGuid());
-            personAbsence.Layer.SetId(Guid.NewGuid());
             personAbsence.Layer.Payload.SetId(Guid.NewGuid());
 
             Expect.Call(absenceAssembler.DomainEntityToDto(personAbsence.Layer.Payload)).Return(new AbsenceDto
@@ -97,7 +95,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             PersonAbsenceDto personAbsenceDto = target.DomainEntityToDto(personAbsence);
             Assert.AreEqual(person.Id.Value, personAbsence.Person.Id.Value);
             Assert.AreEqual(personAbsence.Id.Value, personAbsenceDto.Id.Value);
-            Assert.AreEqual(personAbsence.Layer.Id.Value,personAbsenceDto.AbsenceLayer.Id.Value);
             Assert.AreEqual(personAbsence.Layer.Payload.Id.Value, personAbsenceDto.AbsenceLayer.Absence.Id.Value);
             mocks.VerifyAll();
         }

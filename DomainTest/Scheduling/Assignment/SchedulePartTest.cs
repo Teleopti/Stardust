@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																						  assignmentPeriod);
 			_target.Add(personAssignment);
 			_target.CreateAndAddAbsence(absLayer);
-			Assert.That(absLayer.Id, Is.EqualTo(_target.PersonAbsenceCollection()[0].Id));
+			Assert.That(absLayer, Is.EqualTo(_target.PersonAbsenceCollection()[0].Layer));
 		}
 
 		[Test]
