@@ -406,3 +406,43 @@ CREATE TABLE [stage].[stg_schedule_changed](
 	[scenario_code] ASC
 )
 ) ON [STAGE]
+
+----------------  
+--Name: KJ
+--Date: 2014-02-04
+--Desc: New column fact_schedule for local date
+----------------
+--ADD NEW COLUMN
+ALTER TABLE [mart].[fact_schedule] ADD shift_startdate_local_id int 
+GO
+
+--UPDATE shift_startdate_local with values
+UPDATE [mart].[fact_schedule] 
+SET shift_startdate_local_id = btz.local_date_id	
+FROM mart.fact_schedule f
+INNER JOIN mart.bridge_time_zone btz 
+	ON f.shift_startdate_id=btz.date_id 
+	AND f.shift_startinterval_id=btz.interval_id
+INNER JOIN mart.dim_person dp
+	ON f.person_id=dp.person_id
+	AND btz.time_zone_id=dp.time_zone_id
+WHERE f.shift_startdate_local_id IS NULL
+
+--SET shift_startdate_local_id AS NOT NULL
+ALTER TABLE [mart].[fact_schedule] ALTER COLUMN shift_startdate_local_id int NOT NULL
+GO
+--remove old PK
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [PK_fact_schedule]
+GO
+
+--ADD NEW PK THAT ALLOWS OVERLAPPING SHIFTS
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [PK_fact_schedule] PRIMARY KEY CLUSTERED 
+(
+	[shift_startdate_local_id] ASC,
+	[scenario_id] ASC,
+	[schedule_date_id] ASC,
+	[person_id] ASC,
+	[interval_id] ASC,
+	[activity_starttime] ASC
+)
+GO

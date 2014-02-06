@@ -10,7 +10,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
     {
         public static void AddColumnsToDataTable(DataTable table)
         {
-            table.Columns.Add("schedule_date_local", typeof(DateOnly));
+            table.Columns.Add("schedule_date_local", typeof(DateTime));
             table.Columns.Add("person_code", typeof(Guid));
             table.Columns.Add("scenario_code", typeof(Guid));
 			table.Columns.Add("business_unit_code", typeof(Guid));
