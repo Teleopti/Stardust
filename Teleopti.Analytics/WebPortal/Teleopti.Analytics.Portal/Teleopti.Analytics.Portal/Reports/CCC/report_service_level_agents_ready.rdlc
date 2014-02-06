@@ -507,7 +507,7 @@
                   <GroupExpression>=Fields!period.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
-              <Label>=Code.ToFormat(Fields!period.Value,Fields!interval_type.Value)</Label>
+              <Label>=Code.ToPeriod(Fields!date.Value,Fields!period.Value,Fields!interval_type.Value)</Label>
               <DataElementOutput>Output</DataElementOutput>
             </ChartMember>
           </ChartMembers>
@@ -925,7 +925,7 @@
                   <GroupExpression>=Fields!period.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
-              <Label>=Code.ToFormat(Fields!period.Value,Fields!interval_type.Value)</Label>
+              <Label>=Code.ToPeriod(Fields!date.Value,Fields!period.Value,Fields!interval_type.Value)</Label>
               <DataElementOutput>Output</DataElementOutput>
             </ChartMember>
           </ChartMembers>
@@ -1987,7 +1987,7 @@ iif(
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Code.ToFormat(Fields!period.Value,Fields!interval_type.Value)</Value>
+                              <Value>=Code.ToPeriod(Fields!date.Value,Fields!period.Value,Fields!interval_type.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -2692,7 +2692,7 @@ iif(
                   <GroupExpression>=Fields!period.Value</GroupExpression>
                 </GroupExpressions>
               </Group>
-              <Label>=Code.ToFormat(Fields!period.Value,Fields!interval_type.Value)</Label>
+              <Label>=Code.ToPeriod(Fields!date.Value,Fields!period.Value,Fields!interval_type.Value)</Label>
               <DataElementOutput>Output</DataElementOutput>
             </ChartMember>
           </ChartMembers>
@@ -3227,6 +3227,10 @@ iif(
           <DataField>service_level_denominator</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
+        <Field Name="date">
+          <DataField>date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
       </Fields>
     </DataSet>
   </DataSets>
@@ -3482,12 +3486,15 @@ iif(
       <Prompt>ResTimeZoneColon</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <Code>Public Function ToFormat(var as String, a as integer) as String
-	if a=4 then
-		return Cstr(FormatDateTime(var,DateFormat.ShortDate))
-	else
-		return var
-	end if
+  <Code>Public Function ToPeriod(ByVal TheDate As DateTime, ByVal Period As String, ByVal PeriodType As Integer) as String
+	Select Case PeriodType
+		Case 4
+			return Cstr(FormatDateTime(TheDate, DateFormat.ShortDate))
+		Case 6
+			return Cstr(Year(TheDate)) + "-" + Cstr(Month(TheDate))
+		Case Else
+			return Period
+	End Select
 End Function
 
 Public Function CalcRatio(ByVal Numerator As Object, ByVal Denominator As object, ByVal DivZeroDefault As Object) As Object

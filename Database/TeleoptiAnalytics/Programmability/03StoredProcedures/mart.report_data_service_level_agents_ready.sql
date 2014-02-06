@@ -54,7 +54,8 @@ CREATE TABLE #result(
 	interval_type int,
 	service_level_numerator decimal(18,3), --täljare
 	service_level_denominator decimal(18,3), --nämnare
-	weekday_number int
+	weekday_number int,
+	[date] smalldatetime
 	)
 CREATE TABLE #ready_agents(
 	period nvarchar(30),
@@ -66,12 +67,14 @@ CREATE TABLE #bridge_time_zone(
 	local_date_id int NULL,
 	local_interval_id smallint NULL
 	)
-CREATE TABLE #scheduled_agents( period nvarchar(30),
+CREATE TABLE #scheduled_agents( 
+	period nvarchar(30),
 	scheduled_agents_ready decimal(18,3)
 	)
 CREATE TABLE #skills(id int)
 CREATE TABLE #workloads(id int)
-CREATE TABLE #queue( period nvarchar(30),
+CREATE TABLE #queue( 
+	period nvarchar(30),
 	calls_offered int,
 	calls_answered int,
 	calls_answ_after_sl int,
@@ -325,7 +328,7 @@ GROUP BY
 		WHEN 7 THEN d.weekday_resource_key
 	END
 
-INSERT #result(period,hide_time_zone,interval_type)
+INSERT #result(period,hide_time_zone,interval_type,[date])
 SELECT	CASE @interval_type 
 			WHEN 1 THEN i.interval_name
 			WHEN 2 THEN i.halfhour_name
@@ -336,7 +339,8 @@ SELECT	CASE @interval_type
 			WHEN 7 THEN d.weekday_resource_key
 		END AS 'period',
 		@hide_time_zone as hide_time_zone,
-		@interval_type as interval_type
+		@interval_type as interval_type,
+		min(d.date_date) as [date]
 FROM  #bridge_time_zone b 
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
@@ -403,8 +407,6 @@ BEGIN
 	FROM mart.language_translation l 
 	INNER JOIN #result r ON l.term_english=substring(r.period,13,len(r.period)) collate database_default
 	AND l.language_id=@language_id
-	
-
 END
 
 
@@ -426,7 +428,8 @@ SELECT
 	interval_type,
 	service_level_numerator, --täljare
 	service_level_denominator, --nämnare
-	weekday_number
+	weekday_number,
+	[date]
 FROM #result
 ORDER BY weekday_number,period
 

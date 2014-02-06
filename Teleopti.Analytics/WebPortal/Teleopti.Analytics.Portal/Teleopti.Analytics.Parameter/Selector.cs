@@ -416,7 +416,11 @@ namespace Teleopti.Analytics.Parameters
         /// <param name="name"> The Name of the control </param>
         static ParameterBase getControl(string name)
         {
-            if (name.IndexOf("cbo") >= 0)
+			if (name.IndexOf("cboIntervalType") >= 0)
+	        {
+		        return new ParameterComboPeriodType();
+	        }
+			if (name.IndexOf("cbo") >= 0)
             {
                 return new ParameterCombo();
             }
