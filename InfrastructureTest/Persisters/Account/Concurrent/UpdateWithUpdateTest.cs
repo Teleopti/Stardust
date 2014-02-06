@@ -3,15 +3,14 @@ using System.Linq;
 using SharpTestsEx;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
+namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account.Concurrent
 {
-	public class UpdateConflictWithUpdateTest : PersonAccountConflictTest
+	public class UpdateWithUpdateTest : PersonAccountConcurrentTest
 	{
-		protected override bool GivenOtherHasChanged(IPersonAbsenceAccount othersPersonAccount)
+		protected override void WhenOtherIsChanging(IPersonAbsenceAccount othersPersonAccount)
 		{
 			//in database 10 hours is used
 			((Domain.Scheduling.PersonalAccount.Account)othersPersonAccount.AccountCollection().Single()).LatestCalculatedBalance = new TimeSpan(10, 0, 0);
-			return true;
 		}
 
 		protected override void WhenImChanging(IPersonAbsenceAccount myPersonAbsenceAccount)
@@ -20,10 +19,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			((Domain.Scheduling.PersonalAccount.Account)myPersonAbsenceAccount.AccountCollection().Single()).LatestCalculatedBalance = new TimeSpan(20, 0, 0);
 		}
 
-		protected override void Then(IPersonAbsenceAccount inMemoryAndDatabasePersonAbsenceAccount)
+		protected override void ThenPersonAccountWithSolvedConflicts(IPersonAbsenceAccount personAccountWithSolvedConflicts)
 		{
-			//conflict! recalculate - no absence present -> 0
-			inMemoryAndDatabasePersonAbsenceAccount.AccountCollection().Single().LatestCalculatedBalance
+			personAccountWithSolvedConflicts.AccountCollection().Single().LatestCalculatedBalance
 				.Should().Be.EqualTo(TimeSpan.Zero);
 		}
 	}

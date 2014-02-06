@@ -163,7 +163,10 @@
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="Helper\FakeLogon.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
+    <Compile Include="Persisters\Account\Concurrent\PersonAccountConcurrentTest.cs" />
+    <Compile Include="Persisters\Account\Concurrent\UpdateWithUpdateTest.cs" />
     <Compile Include="Persisters\Account\ConflictEagerLoadingTest.cs" />
+    <Compile Include="Persisters\Account\PersonAccountConflictTest.cs" />
     <Compile Include="Persisters\Account\UpdateConflictWithDeleteAccountTest.cs" />
     <Compile Include="Persisters\Account\UpdateConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Account\UpdateNoConflictTest.cs" />

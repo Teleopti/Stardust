@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 		{
 			var unitOfWork = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork();
 			return (from e in personAbsenceAccounts
-							let databaseVersion = unitOfWork.DatabaseVersion(e)
+							let databaseVersion = unitOfWork.DatabaseVersion(e, true)
 							where e.Version != databaseVersion
 							select e);
 		}

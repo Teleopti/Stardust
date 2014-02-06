@@ -32,6 +32,25 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             removeFromDb(p);
         }
 
+				[Test]
+				public void VerifyDatabaseVersionOnExistingRootUsingPessimisticLock()
+				{
+					//does not verify that a pess lock is created, just that the method works logically
+					//the lock itself will be tested in the use cases where needed
+					SkipRollback();
+					var p = PersonFactory.CreatePerson();
+					PersistAndRemoveFromUnitOfWork(p);
+					UnitOfWork.PersistAll();
+
+					using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+					{
+						Assert.Greater(uow.DatabaseVersion(p, true), 0);
+					}
+
+					removeFromDb(p);
+				}
+
+
         [Test]
         public void VerifyDatabaseVersionOnNonDatabaseExistingRoot()
         {

@@ -2,7 +2,6 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -23,30 +22,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 	public abstract class PersonAccountPersisterBaseTest : DatabaseTestWithoutTransaction
 	{
 		private IPersonAbsenceAccount personAbsenceAccount;
-		private IPersonAccountPersister target;
+		protected IPersonAccountPersister Target { get; private set; }
 
-		[Test]
-		public void DoTheTest()
-		{
-			var theirAccounts = fetchPersonAccount();
-			var myAccounts = fetchPersonAccount();
-
-			if(GivenOtherHasChanged(theirAccounts.Single()))
-			{
-				target.Persist(theirAccounts);
-				theirAccounts.Should().Be.Empty();				
-			}
-
-			var myAccount = myAccounts.Single();
-			WhenImChanging(myAccount);
-			target.Persist(myAccounts);
-			myAccounts.Should().Be.Empty();
-
-			Then(myAccount);
-			Then(fetchPersonAccount().Single());
-		}
-
-		private IList<IPersonAbsenceAccount> fetchPersonAccount()
+		protected IList<IPersonAbsenceAccount> FetchPersonAccount()
 		{
 			using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -73,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			var currUnitOfWork = new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()));
 			var uowFactory = new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
 			var rep = new PersonAbsenceAccountRepository(currUnitOfWork);
-			target = new PersonAccountPersister(uowFactory, 
+			Target = new PersonAccountPersister(uowFactory, 
 																	rep, 
 																	MockRepository.GenerateMock<IInitiatorIdentifier>(),
 																	new PersonAccountConflictCollector(uowFactory),
@@ -83,10 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 																		new ScheduleRepository(currUnitOfWork)), 
 																		new PersonAbsenceAccountRepository(currUnitOfWork)));
 		}
-
-		protected abstract bool GivenOtherHasChanged(IPersonAbsenceAccount othersPersonAccount);
-		protected abstract void WhenImChanging(IPersonAbsenceAccount myPersonAbsenceAccount);
-		protected abstract void Then(IPersonAbsenceAccount myPersonAbsenceAccount);
 
 		private void setupEntities()
 		{
