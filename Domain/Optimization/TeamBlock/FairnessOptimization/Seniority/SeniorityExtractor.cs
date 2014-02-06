@@ -12,7 +12,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 	public class SeniorityExtractor : ISeniorityExtractor
 	{
-		public IList<ITeamBlockPoints> ExtractSeniority(IList<ITeamBlockInfo> teamBlockInfos)
+	    private readonly IRankedPersonBasedOnStartDate  _rankedPersonBasedOnStartDate;
+
+	    public SeniorityExtractor(IRankedPersonBasedOnStartDate rankedPersonBasedOnStartDate)
+	    {
+	        _rankedPersonBasedOnStartDate = rankedPersonBasedOnStartDate;
+	    }
+
+	    public IList<ITeamBlockPoints> ExtractSeniority(IList<ITeamBlockInfo> teamBlockInfos)
         {
             var seniorityInfos = new List<ITeamBlockPoints>();
 
@@ -23,14 +30,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 var teamInfo = teamBlockInfo.TeamInfo;
                 foreach (var groupMember in teamInfo.GroupMembers)
                 {
-                    selectedPersons.Add(groupMember);
+                    if(!selectedPersons.Contains(groupMember ))
+                        selectedPersons.Add(groupMember);
                 }
             }
 
             //Extract seniority on person last name in PROTOTYPE
             var result = new Dictionary<IPerson, int>();
             var seniorityPoint = 0;
-            foreach (var person in selectedPersons.OrderByDescending(s => s.Name.LastName).Distinct())
+            foreach (var person in _rankedPersonBasedOnStartDate.GetRankedPerson(selectedPersons ))
             {
                 result.Add(person, seniorityPoint);
                 seniorityPoint++;
