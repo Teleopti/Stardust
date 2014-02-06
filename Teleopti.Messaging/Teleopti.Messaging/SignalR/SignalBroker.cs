@@ -342,7 +342,7 @@ namespace Teleopti.Messaging.SignalR
 				_subscriberWrapper.OnNotification += onNotification;
 				_subscriberWrapper.Start();
 
-				_wrapper = new SignalWrapper(hubProxy, connection);
+				_wrapper = new SignalWrapper(hubProxy, connection, null);
 				_wrapper.StartHub();
 			}
 		}

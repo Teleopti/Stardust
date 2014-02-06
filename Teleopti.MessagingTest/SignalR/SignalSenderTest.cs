@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using NUnit.Framework;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
@@ -15,10 +17,11 @@ using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.SignalR;
 using log4net;
+using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
 namespace Teleopti.MessagingTest.SignalR
 {
-	[TestFixture, Ignore]
+	[TestFixture]
 	public class SignalSenderTest
 	{
 		private static Task<object> makeFailedTask(Exception ex)
@@ -69,11 +72,9 @@ namespace Teleopti.MessagingTest.SignalR
 			return signalSender;
 		}
 
-		private IHubProxy stubProxy()
+		private hubProxyFake stubProxy()
 		{
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(makeDoneTask());
-			return hubProxy;
+			return new hubProxyFake();
 		}
 
 		private IHubConnectionWrapper stubHubConnection(IHubProxy hubProxy)
@@ -82,6 +83,36 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.Stub(x => x.Start()).Return(makeDoneTask());
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			return hubConnection;
+		}
+
+		private class hubProxyFake : IHubProxy
+		{
+			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith = new List<IEnumerable<Notification>>(); 
+
+			public Task Invoke(string method, params object[] args)
+			{
+				if (method == "NotifyClientsMultiple")
+					NotifyClientsMultipleInvokedWith.Add(args.First() as IEnumerable<Notification>);
+				return makeDoneTask();
+			}
+
+			public Task<T> Invoke<T>(string method, params object[] args)
+			{
+				throw new NotImplementedException();
+			}
+
+			public Subscription Subscribe(string eventName)
+			{
+				throw new NotImplementedException();
+			}
+
+			public JToken this[string name]
+			{
+				get { throw new NotImplementedException(); }
+				set { throw new NotImplementedException(); }
+			}
+
+			public JsonSerializer JsonSerializer { get; private set; }
 		}
 
 		[Test]
@@ -95,14 +126,10 @@ namespace Teleopti.MessagingTest.SignalR
 
 			target.SendNotificationAsync(notification1);
 			target.SendNotificationAsync(notification2);
-			target.WaitUntilAllNotificationsAreSent();
+			target.ProcessTheQueue();
 
-			hubProxy.AssertWasCalled(
-				h =>
-				h.Invoke(Arg<string>.Is.Equal("NotifyClientsMultiple"),
-				         Arg<IEnumerable<Notification>>.List.ContainsAll(new[] {notification1, notification2})));
+			hubProxy.NotifyClientsMultipleInvokedWith.First().Should().Have.SameValuesAs(new[] {notification1, notification2});
 		}
-
 
 		[Test]
 		public void ShouldBatchTwentyNotificationsAtATime()
@@ -114,10 +141,12 @@ namespace Teleopti.MessagingTest.SignalR
 			var notifications2 = Enumerable.Range(1, 10).Select(i => new Notification()).ToArray();
 			notifications1.ForEach(target.SendNotificationAsync);
 			notifications2.ForEach(target.SendNotificationAsync);
-			target.WaitUntilAllNotificationsAreSent();
 
-			hubProxy.AssertWasCalled(h => h.Invoke("NotifyClientsMultiple", new object[]{notifications1}));
-			hubProxy.AssertWasCalled(h => h.Invoke("NotifyClientsMultiple", new object[]{notifications2}));
+			target.ProcessTheQueue();
+			target.ProcessTheQueue();
+
+			hubProxy.NotifyClientsMultipleInvokedWith[0].Should().Have.SameValuesAs(notifications1);
+			hubProxy.NotifyClientsMultipleInvokedWith[1].Should().Have.SameValuesAs(notifications2);
 		}
 
 		[Test]
@@ -127,47 +156,47 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = stubProxy();
 			var target = makeSignalSender(hubProxy, now);
 
-			
 			now.Mutate(DateTime.UtcNow.AddMinutes(-2));
 			var oldNotification = new Notification();
 			target.SendNotificationAsync(oldNotification);
 			now.Mutate(DateTime.UtcNow);
 			var newNotification = new Notification();
 			target.SendNotificationAsync(newNotification);
-			target.WaitUntilAllNotificationsAreSent();
+			target.ProcessTheQueue();
 
-			hubProxy.AssertWasNotCalled(h => h.Invoke("NotifyClientsMultiple", new object[] { oldNotification }));
-			hubProxy.AssertWasCalled(h => h.Invoke("NotifyClientsMultiple", new object[] {newNotification}));
+			hubProxy.NotifyClientsMultipleInvokedWith.Single().Should().Have.SameValuesAs(new[] {newNotification});
 		}
 
 		[Test]
 		public void ShouldLogAndIgnoreOnExceptionInvokingProxy()
 		{
-			var hubProxy = stubProxy();
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
 			var log = MockRepository.GenerateMock<ILog>();
 			var target = makeSignalSender(hubProxy, log);
 
-			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", new Notification())).Throw(new Exception());
+			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Throw(new InvalidOperationException());
 
 			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
-			log.AssertWasCalled(t => t.ErrorFormat(""), a => a.IgnoreArguments());
+			target.ProcessTheQueue();
+			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldLogAndIgnoreOnExceptionSendingNotification()
 		{
 			var failedTask = makeFailedTask(new Exception());
-			var hubProxy = stubProxy();
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
 			var log = MockRepository.GenerateMock<ILog>();
 			var target = makeSignalSender(hubProxy, log);
 
-			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", new Notification())).Return(failedTask);
+			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
 
 			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
-			log.AssertWasCalled(t => t.ErrorFormat(""), a => a.IgnoreArguments());
+			target.ProcessTheQueue();
+			log.AssertWasCalled(t => t.Error("",null), a => a.IgnoreArguments());
 		}
 		
-		[Test]
+		[Test, Ignore]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
 			var hubProxy = stubProxy();
@@ -179,73 +208,16 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Twice());
 		}
 
-		
-
-		[Test]
-		public void ShouldThrowBrokerNotInstanciatedExceptionOnAggregateExceptionWhenStarting()
+		[Test, Ignore]
+		public void ShouldRstartHubConnectionWhenStartFails()
 		{
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new AggregateException()));
-			var target = makeNotStartedSignalSender(hubConnection);
-
-			Assert.Throws<BrokerNotInstantiatedException>(target.InstantiateBrokerService);
-		}
-
-		[Test]
-		public void ShouldThrowBrokerNotInstanciatedExceptionOnAggregateExceptionWhenInvokingStart()
-		{
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Throw(new AggregateException());
-			var target = makeNotStartedSignalSender(hubConnection);
-
-			Assert.Throws<BrokerNotInstantiatedException>(target.InstantiateBrokerService);
-		}
-
-		[Test]
-		public void ShouldThrowBrokerNotInstanciatedExceptionOnSocketExceptionWhenStarting()
-		{
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new SocketException()));
-			var target = makeNotStartedSignalSender(hubConnection);
-
-			Assert.Throws<BrokerNotInstantiatedException>(target.InstantiateBrokerService);
-		}
-
-		[Test]
-		public void ShouldThrowBrokerNotInstanciatedExceptionOnSocketExceptionWhenInvokingStart()
-		{
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Throw(new SocketException());
-			var target = makeNotStartedSignalSender(hubConnection);
-
-			Assert.Throws<BrokerNotInstantiatedException>(target.InstantiateBrokerService);
-		}
-
-		[Test]
-		public void ShouldThrowBrokerNotInstanciatedExceptionOnInvalidOperationExceptionWhenStarting()
-		{
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new InvalidOperationException()));
-			var target = makeNotStartedSignalSender(hubConnection);
-
-			Assert.Throws<BrokerNotInstantiatedException>(target.InstantiateBrokerService);
-		}
-
-		[Test]
-		public void ShouldThrowBrokerNotInstanciatedExceptionOnInvalidOperationExceptionWhenInvokingStart()
-		{
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Throw(new InvalidOperationException());
-			var target = makeNotStartedSignalSender(hubConnection);
-
-			Assert.Throws<BrokerNotInstantiatedException>(target.InstantiateBrokerService);
+				
 		}
 
 		private class signalSenderForTest : SignalSender
 		{
 			private readonly IHubConnectionWrapper _hubConnection;
 			private readonly INow _now;
-			private readonly ILog _logger;
 
 			public signalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger) : this(hubConnection, now)
 			{
@@ -272,6 +244,15 @@ namespace Teleopti.MessagingTest.SignalR
 			protected override DateTime CurrentUtcTime()
 			{
 				return _now.UtcDateTime();
+			}
+
+			protected override void StartWorkerThread()
+			{
+			}
+
+			public void ProcessTheQueue()
+			{
+				base.ProcessTheQueue();
 			}
 
 		}

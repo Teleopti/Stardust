@@ -23,14 +23,12 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalSender : IMessageSender
 	{
-		private readonly string _serverUrl;
+		private string _serverUrl;
 		private ISignalWrapper _wrapper;
 		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
-		private readonly Thread workerThread;
+		private Thread workerThread;
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
-		private readonly ILog _logger;
-
-		private bool _queueProcessed;
+		protected ILog _logger;
 
 		public SignalSender(string serverUrl)
 		{
@@ -41,10 +39,9 @@ namespace Teleopti.Messaging.SignalR
 			ServicePointManager.DefaultConnectionLimit = 50;
 
             TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
-			workerThread = new Thread(processQueue) {IsBackground = true};
-			workerThread.Start();
+			StartWorkerThread();
 		}
-		
+
 		public void InstantiateBrokerService()
 		{
 			try
@@ -54,7 +51,7 @@ namespace Teleopti.Messaging.SignalR
 				var connection = MakeHubConnection();
 				var proxy = connection.CreateHubProxy("MessageBrokerHub");
 
-				_wrapper = new SignalWrapper(proxy, connection);
+				_wrapper = new SignalWrapper(proxy, connection, _logger);
 				_wrapper.StartHub();
 			}
 			catch (SocketException exception)
@@ -67,7 +64,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-	    private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+		private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 	    {
 	        if (!e.Observed)
             {
@@ -86,7 +83,6 @@ namespace Teleopti.Messaging.SignalR
 			cancelToken.Cancel();
 			workerThread.Join();
 			_wrapper.StopHub();
-			_queueProcessed = true;
 			_wrapper = null;
 		}
 
@@ -97,7 +93,6 @@ namespace Teleopti.Messaging.SignalR
 
 		public void SendNotificationAsync(Notification notification)
 		{
-			_queueProcessed = false;
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
 		}
 
@@ -105,40 +100,30 @@ namespace Teleopti.Messaging.SignalR
 		{
 			while (!cancelToken.IsCancellationRequested)
 			{
-				var notifications =
-					_notificationQueue.GetConsumingEnumerable(cancelToken.Token)
-					                  .Take(Math.Max(1,Math.Min(_notificationQueue.Count,20)))
-					                  .ToArray()
-					                  .Where(t => t.Item1 > CurrentUtcTime().AddMinutes(-2))
-									  .Select(t => t.Item2)
-									  .ToArray();
-
-				if (!notifications.Any()) continue;
-
-				var retryCount = 1;
-				while (retryCount<=3)
-				{
-					if (trySend(retryCount, notifications)) break;
-					retryCount++;
-				}
-				if (retryCount > 3)
-					_logger.Error("Could not send batch messages.");
-
-				if (_notificationQueue.Count == 0)
-					_queueProcessed = true;
+				ProcessTheQueue();
 			}
 		}
 
-		public void WaitUntilAllNotificationsAreSent()
+		protected virtual void ProcessTheQueue()
 		{
-			while (!_queueProcessed)
+			var notifications =
+				_notificationQueue.GetConsumingEnumerable(cancelToken.Token)
+				                  .Take(Math.Max(1, Math.Min(_notificationQueue.Count, 20)))
+				                  .ToArray()
+				                  .Where(t => t.Item1 > CurrentUtcTime().AddMinutes(-2))
+				                  .Select(t => t.Item2)
+				                  .ToArray();
+
+			if (!notifications.Any()) return;
+
+			var retryCount = 1;
+			while (retryCount <= 3)
 			{
-				// ErikS 2014-02-03
-				// TODO: Not sure about sleep, doesnt feel right how to fix timings?
-				Thread.Sleep(TimeSpan.FromMilliseconds(1000));
-				if (!_notificationQueue.Any())
-					break;
+				if (trySend(retryCount, notifications)) break;
+				retryCount++;
 			}
+			if (retryCount > 3)
+				_logger.Error("Could not send batch messages.");
 		}
 
 		private bool trySend(int attemptNumber, IEnumerable<Notification> notifications)
@@ -161,7 +146,7 @@ namespace Teleopti.Messaging.SignalR
 
 				return waitResult;
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 				Thread.Sleep(250 * attemptNumber);
 				InstantiateBrokerService();
@@ -180,17 +165,19 @@ namespace Teleopti.Messaging.SignalR
 		{
 			return new HubConnectionWrapper(new HubConnection(_serverUrl));
 		}
-		
+
 		[CLSCompliant(false)]
 		protected virtual ILog MakeLogger()
 		{
 			return LogManager.GetLogger(typeof(SignalSender));
 		}
 
-
-
-
-
+		[CLSCompliant(false)]
+		protected virtual void StartWorkerThread()
+		{
+			workerThread = new Thread(processQueue) { IsBackground = true };
+			workerThread.Start();
+		}
 
 
 
