@@ -57,10 +57,6 @@ namespace Teleopti.Support.Tool
 				  {
 					  proc.StartInfo.FileName = path + "\\StartStopSystem\\ResetSystem.bat";
 					  proc.StartInfo.Arguments = "ngt";
-					  //proc.StartInfo.RedirectStandardError = true;
-					  //proc.StartInfo.RedirectStandardOutput = true;
-					  //proc.StartInfo.UseShellExecute = false;
-
 					  proc.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
 					  proc.StartInfo.CreateNoWindow = false;
 					  proc.Start();
