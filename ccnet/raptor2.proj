@@ -6,7 +6,7 @@
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
-		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
+		<DBNamePrefix>$(CCNetProject)</DBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DBServerSQL2005>$(Computername)\SQL2005</DBServerSQL2005>
