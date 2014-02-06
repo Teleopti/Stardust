@@ -72,10 +72,11 @@ CREATE TABLE #result(period nvarchar(30),
 					longest_delay_abnd_calls decimal(19,3),
 					hide_time_zone bit,
 					interval_type int,
-					weekday_number int
+					weekday_number int,
+					[date] smalldatetime
 )
 
-INSERT #result(period,calls_offered,calls_answ,calls_abnd,short_calls_abnd,sum_answer_time,sum_abnd_time,answer_rate,abnd_rate,abnd_rate_excl_short_calls,average_speed_answer,average_time_to_Abnd,longest_delay_answered_calls,longest_delay_abnd_calls,hide_time_zone,interval_type)
+INSERT #result(period,calls_offered,calls_answ,calls_abnd,short_calls_abnd,sum_answer_time,sum_abnd_time,answer_rate,abnd_rate,abnd_rate_excl_short_calls,average_speed_answer,average_time_to_Abnd,longest_delay_answered_calls,longest_delay_abnd_calls,hide_time_zone,interval_type,[date])
 SELECT CASE @interval_type 
 		WHEN 1 THEN i.interval_name
 		WHEN 2 THEN i.halfhour_name
@@ -114,7 +115,8 @@ SELECT CASE @interval_type
 		convert(decimal(19,3),max(fq.longest_delay_in_queue_answered_s)) 'longest_delay_answered_calls',
 		convert(decimal(19,3),max(fq.longest_delay_in_queue_abandoned_s)) 'longest_delay_abnd_calls',
 		@hide_time_zone as hide_time_zone,
-		@interval_type as interval_type
+		@interval_type as interval_type,
+		min(d.date_date) as [date]
 FROM 
 	mart.fact_queue fq
 INNER JOIN 
@@ -151,7 +153,6 @@ GROUP BY
 		WHEN 6 THEN convert(varchar(10),left(d.year_month,4) + '-' + right(d.year_month,2))
 		WHEN 7 THEN d.weekday_resource_key
 	END
-
 ORDER BY 
 		CASE @interval_type 
 		WHEN 1 THEN i.interval_name
