@@ -55,3 +55,11 @@ Scenario: Navigate within my report view to next day
 	When I navigate to my report
 	And I click next button
 	Then I should see my report with data for '2013-10-02'
+
+Scenario: Navigate to my report view for a certain date by url
+	Given I am an agent
+	And I have my report data for '2013-10-02'
+	And the current time is '2013-11-01'
+	When I navigate to my report for '2013-10-02 '
+	And I click next button
+	Then I should see my report with data for '2013-10-02'
