@@ -28,11 +28,13 @@ namespace Teleopti.Messaging.SignalR
 		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
 		private readonly Thread workerThread;
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
-		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalSender));
+		private readonly ILog _logger;
+
 		private bool _queueProcessed;
 
 		public SignalSender(string serverUrl)
 		{
+			_logger = MakeLogger();
 			_serverUrl = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
@@ -42,7 +44,7 @@ namespace Teleopti.Messaging.SignalR
 			workerThread = new Thread(processQueue) {IsBackground = true};
 			workerThread.Start();
 		}
-
+		
 		public void InstantiateBrokerService()
 		{
 			try
@@ -57,11 +59,11 @@ namespace Teleopti.Messaging.SignalR
 			}
 			catch (SocketException exception)
 			{
-				Logger.Error("The message broker seems to be down.", exception);
+				_logger.Error("The message broker seems to be down.", exception);
 			}
 			catch (BrokerNotInstantiatedException exception)
 			{
-				Logger.Error("The message broker seems to be down.", exception);
+				_logger.Error("The message broker seems to be down.", exception);
 			}
 		}
 
@@ -69,7 +71,7 @@ namespace Teleopti.Messaging.SignalR
 	    {
 	        if (!e.Observed)
             {
-                Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+                _logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
                 e.SetObserved();
             }
 	    }
@@ -120,7 +122,7 @@ namespace Teleopti.Messaging.SignalR
 					retryCount++;
 				}
 				if (retryCount > 3)
-					Logger.Error("Could not send batch messages.");
+					_logger.Error("Could not send batch messages.");
 
 				if (_notificationQueue.Count == 0)
 					_queueProcessed = true;
@@ -150,7 +152,7 @@ namespace Teleopti.Messaging.SignalR
 						if (t.IsFaulted && t.Exception != null)
 						{
 							exception = t.Exception.GetBaseException();
-							Logger.Error("An error happened when notifying multiple.", exception);
+							_logger.Error("An error happened when notifying multiple.", exception);
 						}
 					}, TaskContinuationOptions.OnlyOnFaulted);
 				var waitResult = task.Wait(1000, cancelToken.Token);
@@ -180,9 +182,9 @@ namespace Teleopti.Messaging.SignalR
 		}
 		
 		[CLSCompliant(false)]
-		protected virtual ILog GetLogger()
+		protected virtual ILog MakeLogger()
 		{
-			return Logger;
+			return LogManager.GetLogger(typeof(SignalSender));
 		}
 
 
