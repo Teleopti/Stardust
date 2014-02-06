@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Account
 				}
 				uow.Remove(foundAccount);
 				uow.Refresh(paa);
-				uow.Refresh(paa);
 				paa.AccountCollection().ForEach(_traceableRefreshService.Refresh);
 			});
 		}
