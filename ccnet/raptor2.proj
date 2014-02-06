@@ -293,32 +293,26 @@
 		<Message Importance="high" Text="Fixing config files..." />	
 
 		<PropertyGroup>
-			<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>		
-			<WEB_BROKER>$(AgentPortalWebURL)</WEB_BROKER>
+			<WEB_BROKER>http://localhost:52858/</WEB_BROKER>
 			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
-			<SQL_LOGIN>sa</SQL_LOGIN>
-			<SQL_PASSWORD>cadadi</SQL_PASSWORD>
 			<InfraTestIni>$(CCNetWorkingDirectory)\ccnet\InfraTest.ini</InfraTestIni>
-			<!-- <SitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</SitePath> -->
 			<SitePath>$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web</SitePath>		
 		</PropertyGroup>		
 
 		<ItemGroup>
 			<!-- MSBuild escape sequence is "% + ASCIIVALUE". e.g [$] = "%24"  -->
 			<InfraTestIniLines Include="[TestDatabase]" />
-			<InfraTestIniLines Include="DB_CCC7=%22$(DBNamePrefix)_ccc7%22" />
 			<InfraTestIniLines Include="SQL_SERVER_NAME=%22$(DBServer)%22" />
-			<InfraTestIniLines Include="SQL_LOGIN=%22$(SQL_LOGIN)%22" />			
-			<InfraTestIniLines Include="SQL_PASSWORD=%22$(SQL_PASSWORD)%22" />
+			<InfraTestIniLines Include="DB_CCC7=%22$(DBNamePrefix)_ccc7%22" />
 			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=%22bin%22" />
 			<InfraTestIniLines Include="DB_ANALYTICS=%22$(DBNamePrefix)_analytics%22" />
 			<InfraTestIniLines Include="WEB_BROKER=%22$(WEB_BROKER)%22" />
 			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=%22$(WEB_BROKER_BACKPLANE)%22" />	
 			<InfraTestIniLines Include="SitePath=%22$(SitePath)%22" />
-			<InfraTestIniLines Include="url=%22$(AgentPortalWebURL)%22" />
+			<InfraTestIniLines Include="url=%22$(WEB_BROKER)%22" />
 			<InfraTestIniLines Include="servicebus=%22false%22" />
 			<InfraTestIniLines Include="create=%22true%22" />
-			<InfraTestIniLines Include="IISExpress=%22true%22" />
+			<InfraTestIniLines Include="sqloutput=%22false%22" />
 			<InfraTestIniLines Include="dbFile=%22$(InfraTestIni)%22" />
 		</ItemGroup> 
 		
