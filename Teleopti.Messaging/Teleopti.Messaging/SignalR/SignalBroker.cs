@@ -242,7 +242,7 @@ namespace Teleopti.Messaging.SignalR
 							subscriptionWithHandlersToRemove.Add(subscriptionWithHandler);
 							// BUG? If count == 0 we never get here!
 							// Before: if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription!=null)
-							if (subscriptionHandler.Any() && subscriptionWithHandler.Subscription!=null)
+							if (subscriptionWithHandler.Subscription!=null)
 							{
 								var route = subscriptionWithHandler.Subscription.Route();
 								_wrapper.RemoveSubscription(route);
