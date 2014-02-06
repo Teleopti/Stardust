@@ -226,6 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockDayOffDaySwapper>().As<ITeamBlockDayOffDaySwapper>();
             builder.RegisterType<JuniorTeamBlockExtractor>().As<IJuniorTeamBlockExtractor>();
             builder.RegisterType<SuitableDayOffSpotDetector>().As<ISuitableDayOffSpotDetector>();
+			builder.RegisterType<TeamBlockDayOffDaySwapDecisionMaker>().As<ITeamBlockDayOffDaySwapDecisionMaker>();
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)

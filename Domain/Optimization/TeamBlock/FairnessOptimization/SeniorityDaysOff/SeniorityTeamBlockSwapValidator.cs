@@ -18,15 +18,18 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly IConstructTeamBlock _constructTeamBlock;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+		private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 
 		public SeniorityTeamBlockSwapValidator(IDayOffRulesValidator dayOffRulesValidator,
 		                                       ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
-		                                       IConstructTeamBlock constructTeamBlock, ISchedulingOptionsCreator schedulingOptionsCreator)
+		                                       IConstructTeamBlock constructTeamBlock, ISchedulingOptionsCreator schedulingOptionsCreator,
+			IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
 		{
 			_dayOffRulesValidator = dayOffRulesValidator;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_constructTeamBlock = constructTeamBlock;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
+			_matrixConverter = matrixConverter;
 		}
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
@@ -35,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 			foreach (var matrix in matrixesToCheck)
 			{
-				bool valid = _dayOffRulesValidator.Validate(matrix, optimizationPreferences);
+				var array = _matrixConverter.Convert(matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore, optimizationPreferences.DaysOff.ConsiderWeekBefore);
+				bool valid = _dayOffRulesValidator.Validate(array, optimizationPreferences);
 				if (!valid)
 					return false;
 			}

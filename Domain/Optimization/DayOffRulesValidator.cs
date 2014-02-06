@@ -6,24 +6,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IDayOffRulesValidator
 	{
-		bool Validate(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences);
+		bool Validate(ILockableBitArray bitArray, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class DayOffRulesValidator : IDayOffRulesValidator
 	{
 		private readonly IDaysOffLegalStateValidatorsFactory _daysOffLegalStateValidatorsFactory;
-		private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
-
-		public DayOffRulesValidator(IDaysOffLegalStateValidatorsFactory daysOffLegalStateValidatorsFactory,
-			IScheduleMatrixLockableBitArrayConverterEx matrixConverter)
+		
+		public DayOffRulesValidator(IDaysOffLegalStateValidatorsFactory daysOffLegalStateValidatorsFactory)
 		{
 			_daysOffLegalStateValidatorsFactory = daysOffLegalStateValidatorsFactory;
-			_matrixConverter = matrixConverter;
 		}
 
-		public bool Validate(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences)
+		public bool Validate(ILockableBitArray array, IOptimizationPreferences optimizationPreferences)
 		{
-			var array = _matrixConverter.Convert(matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore, optimizationPreferences.DaysOff.ConsiderWeekBefore);
 			var validatorList = _daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, optimizationPreferences);
 			BitArray longBitArray = array.ToLongBitArray();
 			int offset = 0;

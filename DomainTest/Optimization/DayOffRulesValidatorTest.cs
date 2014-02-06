@@ -15,8 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		private MockRepository _mocks;
 		private IDayOffRulesValidator _target;
 		private IDaysOffLegalStateValidatorsFactory _daysOffLegalStateValidatorsFactory;
-		private IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
-		private IScheduleMatrixPro _matrix;
 		private IOptimizationPreferences _optimizationPreferences;
 		private IDayOffLegalStateValidator _dayOffLegalStateValidator;
 		private IList<IDayOffLegalStateValidator> _dayOffLegalStateValidators;
@@ -26,9 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_mocks = new MockRepository();
 			_daysOffLegalStateValidatorsFactory = _mocks.StrictMock<IDaysOffLegalStateValidatorsFactory>();
-			_scheduleMatrixLockableBitArrayConverterEx = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
-			_target = new DayOffRulesValidator(_daysOffLegalStateValidatorsFactory, _scheduleMatrixLockableBitArrayConverterEx);
-			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+			_target = new DayOffRulesValidator(_daysOffLegalStateValidatorsFactory);
 			_optimizationPreferences = new OptimizationPreferences();
 			_dayOffLegalStateValidator = _mocks.StrictMock<IDayOffLegalStateValidator>();
 			_dayOffLegalStateValidators = new List<IDayOffLegalStateValidator>{_dayOffLegalStateValidator};
@@ -42,10 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			BitArray longBitArray = array.ToLongBitArray();
 			using (_mocks.Record())
 			{
-				Expect.Call(_scheduleMatrixLockableBitArrayConverterEx.Convert(_matrix,
-				                                                               _optimizationPreferences.DaysOff.ConsiderWeekBefore,
-				                                                               _optimizationPreferences.DaysOff.ConsiderWeekAfter))
-				      .Return(array);
 				Expect.Call(_daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, _optimizationPreferences))
 				      .Return(_dayOffLegalStateValidators);
 				Expect.Call(_dayOffLegalStateValidator.IsValid(longBitArray, 14)).Return(true);
@@ -53,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_matrix, _optimizationPreferences);
+				var result = _target.Validate(array, _optimizationPreferences);
 				Assert.IsTrue(result);
 			}
 		}
@@ -66,10 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			BitArray longBitArray = array.ToLongBitArray();
 			using (_mocks.Record())
 			{
-				Expect.Call(_scheduleMatrixLockableBitArrayConverterEx.Convert(_matrix,
-																			   _optimizationPreferences.DaysOff.ConsiderWeekBefore,
-																			   _optimizationPreferences.DaysOff.ConsiderWeekAfter))
-					  .Return(array);
 				Expect.Call(_daysOffLegalStateValidatorsFactory.CreateLegalStateValidators(array, _optimizationPreferences))
 					  .Return(_dayOffLegalStateValidators);
 				Expect.Call(_dayOffLegalStateValidator.IsValid(longBitArray, 14)).Return(false);
@@ -77,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(_matrix, _optimizationPreferences);
+				var result = _target.Validate(array, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}

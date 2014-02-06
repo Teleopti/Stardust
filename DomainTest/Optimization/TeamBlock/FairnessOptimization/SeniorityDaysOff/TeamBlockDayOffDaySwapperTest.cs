@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
@@ -23,8 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IScheduleRange _range1;
 		private IScheduleRange _range2;
 		private ISwapServiceNew _swapServiceNew;
-		private IScheduleDay _scheduleDay1;
-		private IScheduleDay _scheduleDay2;
 		private IPerson _personSenior;
 		private IPerson _personJunior;
 		private Group _groupSenior;
@@ -35,16 +30,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private TeamBlockInfo _teamBlockInfoSenior;
 		private TeamBlockInfo _teamBlockInfoJunior;
 		private DateOnly _dateOnly;
+		private ITeamBlockDayOffDaySwapDecisionMaker _decisionMaker;
+		private List<DateOnly> _dayOffsToGiveAway;
+		private IOptimizationPreferences _optimizationPreferences;
+		private DateOnly _dateBefore;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_swapServiceNew = _mocks.StrictMock<ISwapServiceNew>();
-			_target = new TeamBlockDayOffDaySwapper(_swapServiceNew);
+			_decisionMaker = _mocks.StrictMock<ITeamBlockDayOffDaySwapDecisionMaker>();
+			_target = new TeamBlockDayOffDaySwapper(_swapServiceNew, _decisionMaker);
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			_optimizationPreferences = _mocks.StrictMock<IOptimizationPreferences>();
 			_personSenior = PersonFactory.CreatePerson();
 			_personJunior = PersonFactory.CreatePerson();
 			_groupSenior = new Group(new List<IPerson> { _personSenior }, "Senior");
@@ -57,110 +58,117 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamSenior = new TeamInfo(_groupSenior, groupMatrixesSenior);
 			_teamJunior = new TeamInfo(_groupJunior, groupMatrixesJunior);
 			_dateOnly = new DateOnly(2014, 1, 27);
-			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
+			_dateBefore = _dateOnly.AddDays(-1);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateBefore, _dateOnly));
 			_teamBlockInfoSenior = new TeamBlockInfo(_teamSenior, blockInfo);
 			_teamBlockInfoJunior = new TeamBlockInfo(_teamJunior, blockInfo);
 			_range1 = _mocks.StrictMock<IScheduleRange>();
 			_range2 = _mocks.StrictMock<IScheduleRange>();
-			_scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
-			_scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+
+			_dayOffsToGiveAway = new List<DateOnly>{_dateBefore};
 		}
 
 		[Test]
-		public void ShouldNotSwapIfNeitherIsDayOff()
+		public void ShouldFailIfNoPossibleIndividualDaySwaps()
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
-				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
-				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_rollbackService.ModifyParts(new List<IScheduleDay>())).Return(new List<IBusinessRuleResponse>());
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
+												  _optimizationPreferences, _dayOffsToGiveAway)).Return(null);
 			}
-
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
-				Assert.IsTrue(result);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
+											 _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				Assert.IsFalse(result);
 			}
 		}
 
 		[Test]
-		public void ShouldNotSwapIfBothAreDayOff()
+		public void ShouldSwapAccordingToDecisionMaker()
 		{
+			var daysToSwap = new PossibleSwappableDays
+				{
+					DateForSeniorDayOff = _dateOnly,
+					DateForRemovingSeniorDayOff = _dateBefore
+				};
+			var seniorToHaveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>(); 
+			var juniorToRemoveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var seniorGiveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>(); 
+			var juniorAcceptDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var swapList1 = new List<IScheduleDay> { seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay };
+			var swapList2 = new List<IScheduleDay> { seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay };
+			var swapList = new List<IScheduleDay>();
+			swapList.AddRange(swapList1);
+			swapList.AddRange(swapList2);
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
-				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
-				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
-				Expect.Call(_rollbackService.ModifyParts(new List<IScheduleDay>())).Return(new List<IBusinessRuleResponse>());
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
-			}
-
-			using (_mocks.Playback())
-			{
-				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
-				Assert.IsTrue(result);
-			}
-		}
-
-		[Test]
-		public void ShouldSwapIfOneOfThemIsDayOff()
-		{
-			var swapList = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
-			using (_mocks.Record())
-			{
-				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
-				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
-				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
-				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_swapServiceNew.Swap(swapList, _scheduleDictionary)).Return(swapList);
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
+				                                  _optimizationPreferences, _dayOffsToGiveAway)).Return(daysToSwap);
+				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(seniorToHaveDayOffScheduleDay);
+				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(juniorToRemoveDayOffScheduleDay);
+				Expect.Call(_range1.ScheduledDay(_dateBefore)).Return(seniorGiveDayOffScheduleDay);
+				Expect.Call(_range2.ScheduledDay(_dateBefore)).Return(juniorAcceptDayOffScheduleDay);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay},
+					                     _scheduleDictionary)).Return(swapList1);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay},
+					                     _scheduleDictionary)).Return(swapList2);
+				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse>());
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
-
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
+				                             _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
 				Assert.IsTrue(result);
 			}
 		}
 
 		[Test]
-		public void ShouldNotSwapIfAnyBusinessRuleResponse()
+		public void ShouldRollbackIfBusinessRulesViolated()
 		{
-			var swapList = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
+			var daysToSwap = new PossibleSwappableDays
+				{
+					DateForSeniorDayOff = _dateOnly,
+					DateForRemovingSeniorDayOff = _dateBefore
+				};
+			var seniorToHaveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>(); 
+			var juniorToRemoveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var seniorGiveDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>(); 
+			var juniorAcceptDayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var swapList1 = new List<IScheduleDay> { seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay };
+			var swapList2 = new List<IScheduleDay> { seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay };
+			var swapList = new List<IScheduleDay>();
+			swapList.AddRange(swapList1);
+			swapList.AddRange(swapList2);
 			IBusinessRuleResponse response = new BusinessRuleResponse(typeof(NewDayOffRule), "", true, false,
 																	  new DateTimePeriod(), _personSenior,
 																	  new DateOnlyPeriod());
+			
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);
-				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(_scheduleDay1);
 				Expect.Call(_scheduleDictionary[_personJunior]).Return(_range2);
-				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
-				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
-				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-				Expect.Call(_swapServiceNew.Swap(swapList, _scheduleDictionary)).Return(swapList);
+				Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
+				                                  _optimizationPreferences, _dayOffsToGiveAway)).Return(daysToSwap);
+				Expect.Call(_range1.ScheduledDay(_dateOnly)).Return(seniorToHaveDayOffScheduleDay);
+				Expect.Call(_range2.ScheduledDay(_dateOnly)).Return(juniorToRemoveDayOffScheduleDay);
+				Expect.Call(_range1.ScheduledDay(_dateBefore)).Return(seniorGiveDayOffScheduleDay);
+				Expect.Call(_range2.ScheduledDay(_dateBefore)).Return(juniorAcceptDayOffScheduleDay);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay},
+					                     _scheduleDictionary)).Return(swapList1);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay},
+					                     _scheduleDictionary)).Return(swapList2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse> { response });
-				Expect.Call(() => _rollbackService.Rollback());
+				Expect.Call(()=>_rollbackService.Rollback());
 			}
-
 			using (_mocks.Playback())
 			{
-				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService, _scheduleDictionary);
+				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
+				                             _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
 				Assert.IsFalse(result);
 			}
 		}
