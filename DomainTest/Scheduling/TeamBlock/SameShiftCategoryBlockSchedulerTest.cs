@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-					                                      _blockPeriod)).Return(false);
+					                                      _blockPeriod, _rollbackService)).Return(false);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_shift.TheWorkShift).Return(workShift);
 				Expect.Call(workShift.ShiftCategory).Return(cat);
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-					                                      _blockPeriod)).Return(false);
+					                                      _blockPeriod, _rollbackService)).Return(false);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_shift.TheWorkShift).Return(workShift);
 				Expect.Call(workShift.ShiftCategory).Return(cat);

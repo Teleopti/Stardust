@@ -51,11 +51,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return successful;
 			}
 
-			return scheduleSelectedDays(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons);
+			return scheduleSelectedDays(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons, rollbackService);
 		}
 
 		private bool scheduleSelectedDays(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
-								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupMembers.Intersect(selectedPersons).ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 
 				_singleDayScheduler.DayScheduled += OnDayScheduled;
-				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod);
+				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod, schedulePartModifyAndRollbackService);
 				_singleDayScheduler.DayScheduled -= OnDayScheduled;
 				if (!successful)
 				{

@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly,
-				                                                  _shift, _blockPeriod)).Return(true);
+				                                                  _shift, _blockPeriod, _schedulePartModifyAndRollbackService)).Return(true);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 			}
 			using (_mocks.Playback())
