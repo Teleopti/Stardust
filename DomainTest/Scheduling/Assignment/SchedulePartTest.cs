@@ -898,6 +898,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 		}
 
+		[Test]
+		public void ShouldSetLastChangeWhenMergeFullDayAbsence()
+		{
+			setupForMergeTests();
+
+			personAbsenceSource.LastChange = DateTime.UtcNow - TimeSpan.FromHours(1);
+			personAbsenceDest.LastChange = personAbsenceSource.LastChange;
+
+			source.Add(personAbsenceSource);
+			destination.Add(personAbsenceDest);
+
+			((ExtractedSchedule)destination).MergeAbsences(source, true);
+
+			Assert.IsTrue(destination.PersonAbsenceCollection()[1].LastChange > destination.PersonAbsenceCollection()[0].LastChange);
+
+		}
+
         [Test]
         public void ShouldPasteAbsenceFromSourceWithContractDayOff()
         {
