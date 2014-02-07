@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _dayOffStep1.PerformStep1(allPersonMatrixList, selectedPeriod, selectedPersons,rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(),
                                       optimizationPreferences,teamBlockRestrictionOverLimitValidator );
 
-            if (schedulingOptions.UseSameDayOffs)
+            if (!schedulingOptions.UseSameDayOffs)
                 _dayOffStep2.PerformStep2(schedulingOptions, allPersonMatrixList, selectedPeriod, selectedPersons,rollbackService, scheduleDictionary, weekDayPoints.GetWeekDaysPoints(),
                                           optimizationPreferences);
         }
