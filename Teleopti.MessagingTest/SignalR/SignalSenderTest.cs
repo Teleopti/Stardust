@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using NUnit.Framework;
@@ -14,7 +12,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
-using Teleopti.Messaging.Exceptions;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
@@ -36,13 +33,6 @@ namespace Teleopti.MessagingTest.SignalR
 			var taskCompletionSource = new TaskCompletionSource<object>();
 			taskCompletionSource.SetResult(null);
 			return taskCompletionSource.Task;
-		}
-
-		private signalSenderForTest makeNotStartedSignalSender(IHubConnectionWrapper hubConnection)
-		{
-			var hubProxy = stubProxy();
-			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
-			return new signalSenderForTest(hubConnection, new Now());
 		}
 
 		private signalSenderForTest makeSignalSender(IHubConnectionWrapper hubConnection)
@@ -83,36 +73,6 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.Stub(x => x.Start()).Return(makeDoneTask());
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			return hubConnection;
-		}
-
-		private class hubProxyFake : IHubProxy
-		{
-			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith = new List<IEnumerable<Notification>>(); 
-
-			public Task Invoke(string method, params object[] args)
-			{
-				if (method == "NotifyClientsMultiple")
-					NotifyClientsMultipleInvokedWith.Add(args.First() as IEnumerable<Notification>);
-				return makeDoneTask();
-			}
-
-			public Task<T> Invoke<T>(string method, params object[] args)
-			{
-				throw new NotImplementedException();
-			}
-
-			public Subscription Subscribe(string eventName)
-			{
-				throw new NotImplementedException();
-			}
-
-			public JToken this[string name]
-			{
-				get { throw new NotImplementedException(); }
-				set { throw new NotImplementedException(); }
-			}
-
-			public JsonSerializer JsonSerializer { get; private set; }
 		}
 
 		[Test]
@@ -196,22 +156,60 @@ namespace Teleopti.MessagingTest.SignalR
 			log.AssertWasCalled(t => t.Error("",null), a => a.IgnoreArguments());
 		}
 		
-		[Test, Ignore]
+		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
+			target.InstantiateBrokerService();
 
-			hubConnection.Raise(x => x.Closed += null, hubConnection, EventArgs.Empty);
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
 			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Twice());
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldRstartHubConnectionWhenStartFails()
 		{
-				
+			var hubProxy = stubProxy();
+			var hubConnection = stubHubConnection(hubProxy);
+			var target = makeSignalSender(hubConnection);
+			target.InstantiateBrokerService();
+
+			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new Exception())).Repeat.Once();
+
+			hubConnection.AssertWasCalled(x => x.Start());
+		}
+
+		private class hubProxyFake : IHubProxy
+		{
+			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith = new List<IEnumerable<Notification>>();
+
+			public Task Invoke(string method, params object[] args)
+			{
+				if (method == "NotifyClientsMultiple")
+					NotifyClientsMultipleInvokedWith.Add(args.First() as IEnumerable<Notification>);
+				return makeDoneTask();
+			}
+
+			public Task<T> Invoke<T>(string method, params object[] args)
+			{
+				throw new NotImplementedException();
+			}
+
+			public Subscription Subscribe(string eventName)
+			{
+				throw new NotImplementedException();
+			}
+
+			public JToken this[string name]
+			{
+				get { throw new NotImplementedException(); }
+				set { throw new NotImplementedException(); }
+			}
+
+			public JsonSerializer JsonSerializer { get; private set; }
 		}
 
 		private class signalSenderForTest : SignalSender
