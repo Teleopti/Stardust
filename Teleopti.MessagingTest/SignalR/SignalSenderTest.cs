@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using NUnit.Framework;
 using Newtonsoft.Json;
@@ -70,6 +71,7 @@ namespace Teleopti.MessagingTest.SignalR
 		private IHubConnectionWrapper stubHubConnection(IHubProxy hubProxy)
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
 			hubConnection.Stub(x => x.Start()).Return(makeDoneTask());
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			return hubConnection;

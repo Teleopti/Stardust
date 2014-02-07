@@ -154,24 +154,7 @@ namespace Teleopti.Messaging.SignalR
 
 		private bool verifyStillConnected()
 		{
-			lock (LockObject)
-			{
-				if ( _hubConnection.State != ConnectionState.Connected)
-				{
-					try
-					{
-						startHubConnection();
-						return true;
-					}
-					catch (Exception ex)
-					{
-						//Suppress! Already logged upon startup for general failures.
-						Logger.Error("An error happened when verifying that we still are connected.", ex);
-						return false;
-					}
-				}
-			}
-			return true;
+			return _hubConnection.State == ConnectionState.Connected;
 		}
 
 		private static Task emptyTask()
