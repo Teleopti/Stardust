@@ -26,14 +26,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IFilterForFullyScheduledBlocks _filterForFullyScheduledBlocks;
         private readonly IFilterOnSwapableTeamBlocks _filterOnSwapableTeamBlocks;
         private readonly IJuniorTeamBlockExtractor _juniorTeamBlockExtractor;
-        private ITeamBlockDayOffDaySwapper _teamBlockDayOffDaySwapper;
-        private ISuitableDayOffsToGiveAway  _suitableDayOffsToGiveAway;
+        private readonly ITeamBlockDayOffDaySwapper _teamBlockDayOffDaySwapper;
+        private readonly ISuitableDayOffsToGiveAway  _suitableDayOffsToGiveAway;
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
 
         public DayOffStep2(ISeniorityExtractor seniorityExtractor, ISeniorTeamBlockLocator seniorTeamBlockLocator, IJuniorTeamBlockExtractor juniorTeamBlockExtractor, 
                         ISuitableDayOffSpotDetector suitableDayOffSpotDetector, IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, 
-                                IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockDayOffDaySwapper teamBlockDayOffDaySwapper, ISuitableDayOffsToGiveAway suitableDayOffsToGiveAway)
+                                IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockDayOffDaySwapper teamBlockDayOffDaySwapper,
+                            ISuitableDayOffsToGiveAway suitableDayOffsToGiveAway)
         {
             _seniorityExtractor = seniorityExtractor;
             _seniorTeamBlockLocator = seniorTeamBlockLocator;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             var teamBlockPoints = _seniorityExtractor.ExtractSeniority(teamBlocksToWorkWith).ToList();
             var seniorityInfoDictionary = teamBlockPoints.ToDictionary(teamBlockPoint => teamBlockPoint.TeamBlockInfo, teamBlockPoint => teamBlockPoint);
             var originalBlockCount = teamBlockPoints.Count;
-            while (teamBlockPoints.Count > 0)
+            while (seniorityInfoDictionary.Count > 0 && !_cancelMe)
             {
                 var mostSeniorTeamBlock = _seniorTeamBlockLocator.FindMostSeniorTeamBlock(seniorityInfoDictionary.Values);
                 teamBlocksToWorkWith = new List<ITeamBlockInfo>(seniorityInfoDictionary.Keys);
@@ -69,11 +70,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         }
         
-        private void trySwapForTeamBlock(IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock, IDictionary<DayOfWeek, int> weekDayPoints, DateOnlyPeriod selectedPeriod, int originalBlocksCount, int remainingBlocksCount, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
+        private void trySwapForTeamBlock(IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock, IDictionary<DayOfWeek, int> weekDayPoints, DateOnlyPeriod selectedPeriod, int originalBlocksCount, 
+                                    int remainingBlocksCount, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
         {
             var swappableTeamBlocks = _filterOnSwapableTeamBlocks.Filter(teamBlocksToWorkWith, mostSeniorTeamBlock);
             var swappableTeamBlocksPoints = _seniorityExtractor.ExtractSeniority(swappableTeamBlocks).ToList();
-            while (swappableTeamBlocksPoints.Count > 0)
+            while (swappableTeamBlocksPoints.Count > 0 && !_cancelMe)
             {
                 var juniorTeamBlock = _juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(swappableTeamBlocksPoints);
                 if(!juniorTeamBlock.Equals(mostSeniorTeamBlock) )
@@ -82,7 +84,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
         }
 
-       private void handlePeriodForSelectedTeamBlocks(DateOnlyPeriod selectedPeriod, IDictionary<DayOfWeek, int> weekDayPoints, ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo mostJuniorTeamBlock, int originalBlocksCount, int remainingBlocksCount, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
+       private void handlePeriodForSelectedTeamBlocks(DateOnlyPeriod selectedPeriod, IDictionary<DayOfWeek, int> weekDayPoints, ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo mostJuniorTeamBlock, int originalBlocksCount, 
+                                int remainingBlocksCount, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
         {
             var dayCollection = selectedPeriod.DayCollection();
             var successfullSwap = false;
@@ -103,7 +106,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
         }
 
-        private bool  trySwapForMostSenior(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo mostJuniorTeamBlock, DateOnly mostValuableSpot, ISchedulePartModifyAndRollbackService rollbackService, IList<DateOnly> daysToGiveAway, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
+        private bool  trySwapForMostSenior(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo mostJuniorTeamBlock, DateOnly mostValuableSpot, ISchedulePartModifyAndRollbackService rollbackService, IList<DateOnly> daysToGiveAway, 
+                                                IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
         {
             return _teamBlockDayOffDaySwapper.TrySwap(mostValuableSpot, mostSeniorTeamBlock, mostJuniorTeamBlock,
                                                rollbackService, scheduleDictionary, optimizationPreferences,
