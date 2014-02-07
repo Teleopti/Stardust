@@ -36,36 +36,36 @@ namespace Teleopti.MessagingTest.SignalR
 			return taskCompletionSource.Task;
 		}
 
-		private signalSenderForTest makeSignalSender(IHubConnectionWrapper hubConnection)
+		private asyncSignalSenderForTest makeSignalSender(IHubConnectionWrapper hubConnection)
 		{
-			return new signalSenderForTest(hubConnection, new Now());
+			return new asyncSignalSenderForTest(hubConnection, new Now());
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy)
 		{
 			return makeSignalSender(hubProxy, new Now());
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, ILog logger)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy, ILog logger)
 		{
 			return makeSignalSender(hubProxy, new Now(), logger);
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now)
 		{
 			return makeSignalSender(hubProxy, now, null);
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now, ILog logger)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now, ILog logger)
 		{
-			var signalSender = new signalSenderForTest(stubHubConnection(hubProxy), now, logger);
+			var signalSender = new asyncSignalSenderForTest(stubHubConnection(hubProxy), now, logger);
 			signalSender.StartBrokerService();
 			return signalSender;
 		}
 
-		private SignalSingleSender makeSingleSignalSender(hubProxyFake proxy)
+		private SignalSender makeSingleSignalSender(hubProxyFake proxy)
 		{
-			var signalSingleSender = new signalSingleSenderForTest(stubHubConnection(proxy), null);
+			var signalSingleSender = new signalSenderForTest(stubHubConnection(proxy), null);
 			signalSingleSender.StartBrokerService();
 			return signalSingleSender;
 		}
@@ -238,11 +238,11 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 
-		private class signalSingleSenderForTest : SignalSingleSender
+		private class signalSenderForTest : SignalSender
 		{
 			private readonly IHubConnectionWrapper _hubConnection;
 
-			public signalSingleSenderForTest(IHubConnectionWrapper hubConnection, ILog logger):base(null)
+			public signalSenderForTest(IHubConnectionWrapper hubConnection, ILog logger):base(null)
 			{
 				_hubConnection = hubConnection;
 				Logger = logger;
@@ -260,17 +260,17 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 
-		private class signalSenderForTest : SignalSender
+		private class asyncSignalSenderForTest : AsyncSignalSender
 		{
 			private readonly IHubConnectionWrapper _hubConnection;
 			private readonly INow _now;
 
-			public signalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger) : this(hubConnection, now)
+			public asyncSignalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger) : this(hubConnection, now)
 			{
 				Logger = logger;
 			}
 
-			public signalSenderForTest(IHubConnectionWrapper hubConnection, INow now)
+			public asyncSignalSenderForTest(IHubConnectionWrapper hubConnection, INow now)
 				: base(null)
 			{
 				_hubConnection = hubConnection;

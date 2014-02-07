@@ -20,13 +20,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 	[TestFixture]
 	public class StatisticsUpdateNotificationJobStepTest
 	{
-		private ISingleMessageSender _messageSender;
+		private IMessageSender _messageSender;
 		private IJobParameters _jobParameters;
 
 		[SetUp]
 		public void Setup()
 		{
-			_messageSender = MockRepository.GenerateMock<ISingleMessageSender>();
+			_messageSender = MockRepository.GenerateMock<IMessageSender>();
 
 			_jobParameters = JobParametersFactory.SimpleParameters(false);
 			_jobParameters.Helper = new JobHelper(new RaptorRepositoryForTest(), _messageSender, null);
