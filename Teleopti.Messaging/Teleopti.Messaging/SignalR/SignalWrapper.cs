@@ -33,42 +33,15 @@ namespace Teleopti.Messaging.SignalR
 			_logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
 		}
 
-		public Task NotifyClients(Notification notification)
+		public Task NotifyClients(params object[] notifications)
 		{
-			if (verifyStillConnected())
+			try
 			{
-				try
-				{
-					var startTask = _hubProxy.Invoke("NotifyClients", notification);
-					startTask.ContinueWith(t =>
-					{
-						if (t.IsFaulted && t.Exception != null)
-						{
-							_logger.Error("An error happened when notifying.", t.Exception.GetBaseException());
-						}
-					}, TaskContinuationOptions.OnlyOnFaulted);
-					return startTask;
-				}
-				catch (InvalidOperationException exception)
-				{
-					_logger.Error("An error happened when notifying.", exception);
-				}
+				return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
 			}
-			return emptyTask();
-		}
-
-		public Task NotifyClients(IEnumerable<Notification> notifications)
-		{
-			if (verifyStillConnected())
+			catch (InvalidOperationException exception)
 			{
-				try
-				{
-					return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
-				}
-				catch (InvalidOperationException exception)
-				{
-					_logger.Error("An error happened when notifying multiple.", exception);
-				}
+				_logger.Error("An error happened when notifying multiple.", exception);
 			}
 			return emptyTask();
 		}

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			try
 			{
-				_messageSender.InstantiateBrokerService();
+				_messageSender.StartBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{

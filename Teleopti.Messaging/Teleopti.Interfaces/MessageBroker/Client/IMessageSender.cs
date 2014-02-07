@@ -57,6 +57,6 @@ namespace Teleopti.Interfaces.MessageBroker.Client
         /// Created by: ankarlp
         /// Created date: 09/06/2010
         /// </remarks>
-        void InstantiateBrokerService();
+        void StartBrokerService();
     }
 }

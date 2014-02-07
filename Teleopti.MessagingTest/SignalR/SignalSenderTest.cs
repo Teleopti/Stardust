@@ -58,7 +58,7 @@ namespace Teleopti.MessagingTest.SignalR
 		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now, ILog logger)
 		{
 			var signalSender = new signalSenderForTest(stubHubConnection(hubProxy), now, logger);
-			signalSender.InstantiateBrokerService();
+			signalSender.StartBrokerService();
 			return signalSender;
 		}
 
@@ -162,7 +162,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.InstantiateBrokerService();
+			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
@@ -175,7 +175,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.InstantiateBrokerService();
+			target.StartBrokerService();
 
 			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new Exception())).Repeat.Once();
 

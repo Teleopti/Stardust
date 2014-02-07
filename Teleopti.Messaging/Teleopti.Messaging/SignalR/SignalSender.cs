@@ -44,7 +44,7 @@ namespace Teleopti.Messaging.SignalR
 			StartWorkerThread();
 		}
 
-		public void InstantiateBrokerService()
+		public void StartBrokerService()
 		{
 			try
 			{
@@ -117,43 +117,20 @@ namespace Teleopti.Messaging.SignalR
 				                  .ToArray();
 
 			if (!notifications.Any()) return;
-
-			var retryCount = 1;
-			while (retryCount <= 3)
-			{
-				if (trySend(retryCount, notifications)) break;
-				retryCount++;
-			}
-			if (retryCount > 3)
-				_logger.Error("Could not send batch messages.");
+			trySend(notifications);
 		}
 
-		private bool trySend(int attemptNumber, IEnumerable<Notification> notifications)
+		private void trySend(IEnumerable<Notification> notifications)
 		{
 			try
 			{
-				Exception exception = null;
 				var task = _wrapper.NotifyClients(notifications);
-				task.ContinueWith(t =>
-					{
-						if (t.IsFaulted && t.Exception != null)
-						{
-							exception = t.Exception.GetBaseException();
-							_logger.Error("An error happened when notifying multiple.", exception);
-						}
-					}, TaskContinuationOptions.OnlyOnFaulted);
-				var waitResult = task.Wait(1000, cancelToken.Token);
-				if (exception != null)
-					throw exception;
-
-				return waitResult;
+				task.Wait(1000, cancelToken.Token);
 			}
-			catch (Exception)
+			catch (AggregateException e)
 			{
-				Thread.Sleep(250 * attemptNumber);
-				InstantiateBrokerService();
+				_logger.Error("Could not send notifications, ", e);
 			}
-			return false;
 		}
 
 		[CLSCompliant(false)]
@@ -180,6 +157,8 @@ namespace Teleopti.Messaging.SignalR
 			workerThread = new Thread(processQueue) { IsBackground = true };
 			workerThread.Start();
 		}
+
+
 
 
 
@@ -210,7 +189,7 @@ namespace Teleopti.Messaging.SignalR
 				}
 				catch (Exception)
 				{
-					InstantiateBrokerService();
+					StartBrokerService();
 				}
 			}
 		}

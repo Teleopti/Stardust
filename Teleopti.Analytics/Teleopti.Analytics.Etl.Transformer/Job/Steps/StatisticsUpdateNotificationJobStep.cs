@@ -28,7 +28,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			try
 			{
 				if (!messageSender.IsAlive)
-					messageSender.InstantiateBrokerService();
+					messageSender.StartBrokerService();
 				if (messageSender.IsAlive)
 				{
 					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
