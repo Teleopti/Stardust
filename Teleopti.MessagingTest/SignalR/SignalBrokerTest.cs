@@ -213,26 +213,26 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var wasEventHandlerCalled = false;
 
-			//var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			//hubConnection.Stub(x => x.Start()).Return(_doneTask);
+			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.Start()).Return(_doneTask);
 
-			//var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			//hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
 
-			//hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			//hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
-			//var signalSubscriber = MockRepository.GenerateMock<ISignalSubscriber>();
-			//var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, signalSubscriber)
-			//	{
-			//		ConnectionString = @"http://localhost:8080"ö
-			//	};
+			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
+			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			var signalSubscriber = MockRepository.GenerateMock<ISignalSubscriber>();
+			var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, signalSubscriber)
+				{
+					ConnectionString = @"http://localhost:8080"
+				};
 
-			//target.StartMessageBroker();
+			target.StartMessageBroker();
 			
 			// TODO Not sure :S
-			var holder = makeProxyAndBroker();
-			var target = holder.SignalBroker;
-			target.SignalSubscriber = MockRepository.GenerateMock<ISignalSubscriber>();
+			//var holder = makeProxyAndBroker();
+			//var target = holder.SignalBroker;
+			target.SignalSubscriber = signalSubscriber;
 
 
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
