@@ -194,6 +194,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			}
 		}
 
+		[Test]
+		public void ShouldBeAbleToCancelBeforeOptimizingANewDay()
+		{
+			_target.Cancel();
+			var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
+			                            _optimizationPreferences, _dayOffsToGiveAway);
+			Assert.IsNull(result);
+		}
+
 		private void commonMocks()
 		{
 			Expect.Call(_scheduleDictionary[_personSenior]).Return(_range1);

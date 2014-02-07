@@ -5,7 +5,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
-	public interface ITeamBlockDayOffDaySwapper
+	public interface ICancellable
+	{
+		void Cancel();
+	}
+	public interface ITeamBlockDayOffDaySwapper : ICancellable
 	{
 		bool TrySwap(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
 					 ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAwa);
@@ -15,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		private readonly ISwapServiceNew _swapServiceNew;
 		private readonly ITeamBlockDayOffDaySwapDecisionMaker _teamBlockDayOffDaySwapDecisionMaker;
+		private bool _cancel;
 
 		public TeamBlockDayOffDaySwapper(ISwapServiceNew swapServiceNew, ITeamBlockDayOffDaySwapDecisionMaker teamBlockDayOffDaySwapDecisionMaker)
 		{
@@ -34,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			var teamBlockJuniorGroupMembers = teamBlockJunior.TeamInfo.GroupMembers.ToList();
 			for (int i = 0; i < teamBlockSeniorGroupMembers.Count(); i++)
 			{
+				if (_cancel) return false;
 				var personSenior = teamBlockSeniorGroupMembers[i];
 				var personJunior = teamBlockJuniorGroupMembers[i];
 				var scheduleRangeSenior = scheduleDictionary[personSenior];
@@ -58,6 +64,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			rollbackService.ClearModificationCollection();
 
 			return true;
+		}
+
+		public void Cancel()
+		{
+			_cancel = true;
 		}
 	}
 }
