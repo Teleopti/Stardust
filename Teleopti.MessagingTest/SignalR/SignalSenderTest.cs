@@ -63,6 +63,13 @@ namespace Teleopti.MessagingTest.SignalR
 			return signalSender;
 		}
 
+		private SignalSingleSender makeSingleSignalSender(hubProxyFake proxy)
+		{
+			var signalSingleSender = new signalSingleSenderForTest(stubHubConnection(proxy), null);
+			signalSingleSender.StartBrokerService();
+			return signalSingleSender;
+		}
+
 		private hubProxyFake stubProxy()
 		{
 			return new hubProxyFake();
@@ -91,6 +98,19 @@ namespace Teleopti.MessagingTest.SignalR
 			target.ProcessTheQueue();
 
 			hubProxy.NotifyClientsMultipleInvokedWith.First().Should().Have.SameValuesAs(new[] {notification1, notification2});
+		}
+	
+		[Test]
+		public void ShouldSendSingleNotification()
+		{
+			var hubProxy = stubProxy();
+			var target = makeSingleSignalSender(hubProxy);
+
+			var notification1 = new Notification();
+
+			target.SendNotification(notification1);
+
+			hubProxy.NotifyClientsInvokedWith.First().Should().Be(notification1);
 		}
 
 		[Test]
@@ -187,11 +207,14 @@ namespace Teleopti.MessagingTest.SignalR
 		private class hubProxyFake : IHubProxy
 		{
 			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith = new List<IEnumerable<Notification>>();
+			public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
 
 			public Task Invoke(string method, params object[] args)
 			{
 				if (method == "NotifyClientsMultiple")
 					NotifyClientsMultipleInvokedWith.Add(args.First() as IEnumerable<Notification>);
+				if (method == "NotifyClients")
+					NotifyClientsInvokedWith.Add(args.First() as Notification);
 				return makeDoneTask();
 			}
 
@@ -213,6 +236,29 @@ namespace Teleopti.MessagingTest.SignalR
 
 			public JsonSerializer JsonSerializer { get; private set; }
 		}
+
+
+		private class signalSingleSenderForTest : SignalSingleSender
+		{
+			private readonly IHubConnectionWrapper _hubConnection;
+
+			public signalSingleSenderForTest(IHubConnectionWrapper hubConnection, ILog logger):base(null)
+			{
+				_hubConnection = hubConnection;
+				Logger = logger;
+			}
+
+			protected override ILog MakeLogger()
+			{
+				return Logger ?? base.MakeLogger();
+			}
+
+			protected override IHubConnectionWrapper MakeHubConnection()
+			{
+				return _hubConnection;
+			}
+		}
+
 
 		private class signalSenderForTest : SignalSender
 		{

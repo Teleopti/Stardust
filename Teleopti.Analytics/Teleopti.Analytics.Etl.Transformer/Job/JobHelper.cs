@@ -16,9 +16,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
     {
         private IRaptorRepository _repository;
         private ILogOnHelper _logHelp;
-        private IMessageSender _messageSender;
+        private ISingleMessageSender _messageSender;
 
-        protected JobHelper(ILogOnHelper logOnHelper, IMessageSender messageSender)
+        protected JobHelper(ILogOnHelper logOnHelper, ISingleMessageSender messageSender)
         {
             _logHelp = logOnHelper;
             _messageSender = messageSender;
@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
             _messageSender = MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]);
         }
 
-        public JobHelper(IRaptorRepository repository, IMessageSender messageSender, ILogOnHelper logOnHelper) : this(logOnHelper, messageSender)
+        public JobHelper(IRaptorRepository repository, ISingleMessageSender messageSender, ILogOnHelper logOnHelper) : this(logOnHelper, messageSender)
         {
             _repository = repository;
         }
@@ -45,7 +45,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job
             get { return _repository; }
         }
 
-        public IMessageSender MessageSender
+        public ISingleMessageSender MessageSender
         {
             get { return _messageSender; }
         }

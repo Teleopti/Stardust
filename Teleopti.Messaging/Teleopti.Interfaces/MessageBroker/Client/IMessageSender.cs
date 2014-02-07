@@ -3,6 +3,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.MessageBroker.Client
 {
+	public interface ISingleMessageSender
+	{
+		bool IsAlive { get; }
+		void StartBrokerService();
+		void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId);
+	}
+
     /// <summary>
     /// The MessageSender send messages only from the same machine as the Broker Service.
     /// </summary>
@@ -33,23 +40,7 @@ namespace Teleopti.Interfaces.MessageBroker.Client
     	/// Created date: 10/06/2010
     	/// </remarks>
     	void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState);
-
-        /// <summary>
-        /// Sends schedule data.
-        /// </summary>
-        /// <param name="floor">The floor.</param>
-        /// <param name="ceiling">The ceiling.</param>
-        /// <param name="moduleId">The module id.</param>
-        /// <param name="domainObjectId">The domain object id.</param>
-        /// <param name="domainInterfaceType">Type of the domain interface.</param>
-        /// <param name="dataSource">Data source.</param>
-        /// <param name="businessUnitId">Business unit id.</param>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 12/06/2010
-        /// </remarks>
-        void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId);
-
+		
         /// <summary>
         /// Instantiates the broker service.
         /// </summary>

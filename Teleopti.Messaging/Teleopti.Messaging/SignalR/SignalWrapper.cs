@@ -172,7 +172,7 @@ namespace Teleopti.Messaging.SignalR
 			try
 			{
 				if (_hubConnection.State == ConnectionState.Connected)
-					return _hubProxy.Invoke(notifyclientsmultiple, notifications);
+					return _hubProxy.Invoke(notify, notifications);
 			}
 			catch (InvalidOperationException exception)
 			{

@@ -91,6 +91,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
+		
 		public void SendNotificationAsync(Notification notification)
 		{
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
@@ -170,30 +171,6 @@ namespace Teleopti.Messaging.SignalR
 			workerThread = new Thread(processQueue) { IsBackground = true };
 			workerThread.Start();
 		}
-
-
-
-
-
-		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId)
-		{
-			var notification = new Notification
-				{
-					StartDate = Subscription.DateToString(floor),
-					EndDate = Subscription.DateToString(ceiling),
-					DomainId = Subscription.IdToString(domainObjectId),
-					DomainQualifiedType = domainInterfaceType.AssemblyQualifiedName,
-					DomainType = domainInterfaceType.Name,
-					ModuleId = Subscription.IdToString(moduleId),
-					DomainUpdateType = (int) DomainUpdateType.Insert,
-					DataSource = dataSource,
-					BusinessUnitId = Subscription.IdToString(businessUnitId),
-					BinaryData = null
-				};
-
-			SendNotification(notification);
-		}
-
 
 		public void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
 		{
