@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 			foreach (var matrix in matrixesToCheck)
 			{
-				var array = _matrixConverter.Convert(matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore, optimizationPreferences.DaysOff.ConsiderWeekBefore);
+				var array = _matrixConverter.Convert(matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore, optimizationPreferences.DaysOff.ConsiderWeekAfter);
 				bool valid = _dayOffRulesValidator.Validate(array, optimizationPreferences);
 				if (!valid)
 					return false;
