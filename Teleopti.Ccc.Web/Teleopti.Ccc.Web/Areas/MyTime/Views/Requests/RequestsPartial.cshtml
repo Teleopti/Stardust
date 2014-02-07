@@ -44,7 +44,7 @@
 <input id="Request-detail-datepicker-format" type="hidden" value="@Model.DatePickerFormat"/>
 
 <div class="navbar navbar-default">
-    <div class="container">
+    <div class="container" style="margin-left: 0">
         <ul class="nav navbar-nav">
             @if (Model.RequestPermission.TextRequestPermission)
             {
@@ -90,7 +90,7 @@
 		
         <div class="request-list" data-bind="foreach: ColumnRequests">
             <div class="row" data-bind="foreach: Items">
-                <div class="request col-md-6">
+                <div class="request col-xs-6">
                     <div class="well well-small">
                         <div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
                             <div data-bind="if: CanDelete">

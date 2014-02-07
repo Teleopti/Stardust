@@ -7,8 +7,8 @@
 }
 
 <div class="navbar navbar-default">
-    <div class="col-lg-5">
-        <form class="navbar-form pull-left">
+    <div class="col-xs-5">
+        <form class="navbar-form pull-left fixed-navbar-form">
             <div class="input-group">
                 <span class="input-group-btn">
                     <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'">
@@ -27,18 +27,18 @@
             </div>
         </form>
     </div>
-    <ul class="nav navbar-nav">
-        <li>
-            <a href="#" id="Availability-edit-button">
-                <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability
-            </a>
-        </li>
-        <li>
-            <a href="#" id="Availability-delete-button">
-                <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
-            </a>
-        </li>
-    </ul>
+        <ul class="list-inline" style="padding-top: 15px">
+            <li>
+                <a href="#" id="Availability-edit-button">
+                    <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability
+                </a>
+            </li>
+            <li>
+                <a href="#" id="Availability-delete-button">
+                    <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
+                </a>
+            </li>
+        </ul>
 </div>
 <div id="Student-availability-edit-form" class="well well-sm clearfix" data-bind="visible: AddAvailabilityFormVisible">
     @Html.Partial("AddStudentAvailabilityPartial")

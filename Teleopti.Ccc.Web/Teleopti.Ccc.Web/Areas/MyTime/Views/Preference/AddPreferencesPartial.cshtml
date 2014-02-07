@@ -44,13 +44,13 @@
 
 <table class="table-condensed preference-input-container">
     <tr>
-        <td  class="col-md-5">
+        <td  class="col-xs-5">
             <table class="table-condensed preference-input-container " data-bind="visible: IsPreferenceInputVisible">
                 <tr>
-                    <td class="preference-input-icon-cell col-md-1">
+                    <td class="preference-input-icon-cell col-xs-1">
                         <i class="glyphicon glyphicon-edit" title="@Resources.Preference"></i>
                     </td>
-                    <td colspan="3" class="col-md-10">
+                    <td colspan="3" class="col-xs-10">
                         <span title="@Resources.Preference">
                             <select id="Preference-Picker" data-bind="select2: { value: PreferenceId, formatResult: FormatPreferencesOption, formatSelection: FormatPreferencesOption }">
                                 <option value="" data-preference-extended="true">&nbsp;</option>
@@ -74,7 +74,7 @@
                     </td>
                     <td>
                         <div class="row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-xs-12">
                                 <div class="input-group bootstrap-timepicker " title="@Resources.EarliestStartTime">
                                     <input type="text" class="preference-start-time-min input-sm form-control" data-bind="timepicker: EarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -85,7 +85,7 @@
                     <td></td>
                     <td>
                         <div class="row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-xs-12">
                                 <div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
                                     <input type="text" class="preference-start-time-max input-sm form-control" data-bind="timepicker: LatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -101,7 +101,7 @@
                         </td>
                         <td>
                             <div class="row">
-                                <div class="form-group col-md-12">
+                                <div class="form-group col-xs-12">
                                     <div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
                                         <input type="text" class="preference-end-time-min input-sm form-control" data-bind="timepicker: EarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -117,7 +117,7 @@
                         </td>
                     <td>
                         <div class="row">
-                            <div class="form-group col-md-12">
+                            <div class="form-group col-xs-12">
                                 <div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
                                     <input type="text" class="preference-end-time-max input-sm form-control" data-bind="timepicker: LatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -164,7 +164,7 @@
 <td style="vertical-align: top;" data-bind="if: IsTimeInputVisible">
     <table class="preference-activity-section table-condensed" data-bind="visible: IsPreferenceInputVisible">
         <tr>
-            <td class="col-md-1">
+            <td class="col-xs-1">
                 <i class="glyphicon glyphicon-tasks" title="@Resources.Activity"></i>
             </td>
             <td colspan="2">
@@ -182,16 +182,16 @@
             </td>
         </tr>
         <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
-            <td class="col-md-1">
+            <td class="col-xs-1">
                 <i class="glyphicon glyphicon-step-backward" title="@Resources.StartTime"></i>
             </td>
-            <td class="col-md-1">
+            <td class="col-xs-1">
                     <div class="input-group bootstrap-timepicker " title="@Resources.EarliestStartTime">
                         <input type="text" class="preference-activity-start-time-min form-control input-sm" data-bind="timepicker: ActivityEarliestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                         <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
                     </div>
             </td>
-            <td class="col-md-3">
+            <td class="col-xs-3">
                 <div class="input-group bootstrap-timepicker" title="@Resources.LatestStartTime">
                     <input type="text" class="preference-activity-start-time-max form-control input-sm" data-bind="timepicker: ActivityLatestStartTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                     <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -199,16 +199,16 @@
             </td>
         </tr>
         <tr class="form-inline" data-bind="visible: EnableActivityTimeEditing">
-            <td class="col-md-1">
+            <td class="col-xs-1">
                 <i class="glyphicon glyphicon-step-forward" title="@Resources.EndTime"></i>
             </td>
-    <td class="col-md-3">
+    <td class="col-xs-3">
         <div class="input-group bootstrap-timepicker" title="@Resources.EarliestEndTime">
             <input type="text" class="preference-activity-end-time-min form-control input-sm" data-bind="timepicker: ActivityEarliestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
             <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
         </div>
     </td>
-            <td class="col-md-3">
+            <td class="col-xs-3">
                     <div class="input-group bootstrap-timepicker" title="@Resources.LatestEndTime">
                         <input type="text" class="preference-activity-end-time-max form-control input-sm" data-bind="timepicker: ActivityLatestEndTime, timepickerOptions: { showMeridian: ShowMeridian(), allowEmpty: true }" />
                         <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
@@ -216,7 +216,7 @@
             </td>
         </tr>
         <tr data-bind="visible: EnableActivityTimeEditing">
-            <td class="col-md-1">
+            <td class="col-xs-1">
                 <i class="glyphicon glyphicon-resize-horizontal" title="@Resources.WorkTime"></i>
             </td>
             <td>
@@ -240,7 +240,7 @@
         </tr>
     </table>
 </td>
-<td style="vertical-align: bottom" class="col-md-2">
+<td style="vertical-align: bottom" class="col-xs-2">
     <div class="pull-right" style="padding-bottom: 4px">
         <button id="Preference-extended-reset" class="btn btn-default" data-bind="click: Reset">@Resources.Reset</button>
         <button id="Preference-extended-apply" class="btn btn-primary" data-bind="click: SavePreferences">@Resources.Apply</button>

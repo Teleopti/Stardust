@@ -6,15 +6,15 @@
 }
 <div id="settings" class="well well-sm">
     <div class="clearfix">
-        <label for="CultureUi-Picker" class="col-lg-12 control-label">@Resources.Language</label>
-        <select id="CultureUi-Picker" class="col-lg-4" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
+        <label for="CultureUi-Picker" class="col-xs-12 control-label">@Resources.Language</label>
+        <select id="CultureUi-Picker" class="col-xs-4" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
             <option data-bind="text: text, value: id"></option>
         </select>
     </div>
     <br />
     <div class="clearfix">
-        <label for="Culture-Picker" class="col-lg-12 control-label">@Resources.DateFormat</label>
-        <select id="Culture-Picker" class="col-lg-4" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
+        <label for="Culture-Picker" class="col-xs-12 control-label">@Resources.DateFormat</label>
+        <select id="Culture-Picker" class="col-xs-4" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
             <option data-bind="text: text, value: id"></option>
         </select>
     </div>

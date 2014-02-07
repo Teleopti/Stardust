@@ -756,6 +756,14 @@ End personal drop down menu
 	width: 965px;
 }
 
+.fixed-navbar-form {
+    padding: 0 15px;
+    border: none;
+}
+.fixed-navbar {
+    margin-top: 0;
+    margin-bottom: 0;
+}
 .visibility {
 	overflow: visible !important;
 }
