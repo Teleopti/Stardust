@@ -50,7 +50,7 @@ namespace Teleopti.Messaging.SignalR
 			try
 			{
 				if (verifyStillConnected())
-				return _hubProxy.Invoke(notifyclientsmultiple, notifications);
+					return _hubProxy.Invoke(notifyclientsmultiple, notifications);
 			}
 			catch (InvalidOperationException exception)
 			{
@@ -61,26 +61,19 @@ namespace Teleopti.Messaging.SignalR
 
 		private bool verifyStillConnected()
 		{
-			if (_retryCount > 3)
-			{
-				return false;
-			}
-
 			lock (LockObject)
 			{
-				if (_hubConnection.State != ConnectionState.Connected)
+				if ( _hubConnection.State != ConnectionState.Connected)
 				{
 					try
 					{
 						startHubConnection();
-						_retryCount = 0;
 						return true;
 					}
 					catch (Exception ex)
 					{
 						//Suppress! Already logged upon startup for general failures.
-						_logger.Error("An error happened when verifying that we still are connected.", ex);
-						_retryCount++;
+						Logger.Error("An error happened when verifying that we still are connected.", ex);
 						return false;
 					}
 				}
