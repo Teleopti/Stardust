@@ -4,6 +4,8 @@ using System.Net.Sockets;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -32,13 +34,22 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 				if (messageSender.IsAlive)
 				{
 					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-					messageSender.SendData(DateTime.Now.Date,
-										   DateTime.Now.Date,
-										   Guid.NewGuid(),
-										   Guid.Empty,
-										   typeof(IStatisticTask),
-										   identity.DataSource.DataSourceName,
-										   Guid.Empty);
+					
+					var notification = new Notification
+					{
+						StartDate = Subscription.DateToString(DateTime.Now.Date),
+						EndDate = Subscription.DateToString(DateTime.Now.Date),
+						DomainId = Subscription.IdToString(Guid.Empty),
+						DomainQualifiedType = typeof(IStatisticTask).AssemblyQualifiedName,
+						DomainType = typeof(IStatisticTask).Name,
+						ModuleId = Subscription.IdToString(Guid.NewGuid()),
+						DomainUpdateType = (int)DomainUpdateType.Insert,
+						DataSource = identity.DataSource.DataSourceName,
+						BusinessUnitId = Subscription.IdToString(Guid.Empty),
+						BinaryData = null
+					};
+
+					messageSender.SendNotification(notification);
 				}
 			}
 			catch (BrokerNotInstantiatedException exception)

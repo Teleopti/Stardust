@@ -3,14 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.MessageBroker.Client
 {
-	public interface ISingleMessageSender
-	{
-		bool IsAlive { get; }
-		void StartBrokerService();
-		void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId);
-	}
-
-    /// <summary>
+	/// <summary>
     /// The MessageSender send messages only from the same machine as the Broker Service.
     /// </summary>
     /// <remarks>
