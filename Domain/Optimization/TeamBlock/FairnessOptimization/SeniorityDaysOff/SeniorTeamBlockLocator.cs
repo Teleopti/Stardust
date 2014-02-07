@@ -16,13 +16,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         public ITeamBlockInfo FindMostSeniorTeamBlock(IEnumerable<ITeamBlockPoints> seniorityInfoDictionary)
         {
-            var maxValue = double.MinValue;
+            // so now the lowest is the higest rank
+            var highestRank = double.MaxValue;
             ITeamBlockInfo mostSeniorBlock = null;
             foreach (var seniorityInfo in seniorityInfoDictionary)
             {
-                if (seniorityInfo.Points > maxValue)
+                if (seniorityInfo.Points < highestRank)
                 {
-                    maxValue = seniorityInfo.Points;
+                    highestRank = seniorityInfo.Points;
                     mostSeniorBlock = seniorityInfo.TeamBlockInfo;
                 }
             }

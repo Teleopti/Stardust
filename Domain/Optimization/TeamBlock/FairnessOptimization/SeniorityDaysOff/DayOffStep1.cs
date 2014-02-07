@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 		private bool _cancelMe;
 
-	    public DayOffStep1(IConstructTeamBlock constructTeamBlock,
+        public DayOffStep1(IConstructTeamBlock constructTeamBlock,
 	                       IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 	                       IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
 	                       ISeniorityExtractor seniorityExtractor,

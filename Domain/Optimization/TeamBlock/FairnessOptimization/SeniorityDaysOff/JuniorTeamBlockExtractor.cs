@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         public  ITeamBlockInfo GetJuniorTeamBlockInfo(List<ITeamBlockPoints> swappableTeamBlocksPoints)
         {
-            var value = double.MaxValue;
+            var value = double.MinValue;
             ITeamBlockInfo juniorTeamBlock = null;
             foreach (var teamBlockPoint in swappableTeamBlocksPoints)
             {
-                if (teamBlockPoint.Points < value)
+                if (teamBlockPoint.Points > value)
                 {
                     value = teamBlockPoint.Points;
                     juniorTeamBlock = teamBlockPoint.TeamBlockInfo;
