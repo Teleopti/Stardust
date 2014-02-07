@@ -9,9 +9,8 @@ namespace Teleopti.Messaging.SignalR
 		void StartHub();
 		void StopHub();
 		bool IsInitialized();
-		//Task NotifyClients(Notification notification);
-		//Task NotifyClients(IEnumerable<Notification> notification);
-		Task NotifyClients(params object[] notification);
+		Task NotifyClients(Notification notification);
+		Task NotifyClients(IEnumerable<Notification> notification);
 		Task AddSubscription(Subscription subscription);
 		Task RemoveSubscription(string route);
 	}

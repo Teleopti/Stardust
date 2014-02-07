@@ -18,19 +18,6 @@ namespace Teleopti.MessagingTest.SignalR
 	[TestFixture, Ignore]
 	public class SignalBrokerTest
 	{
-		private class proxyAndBrokerHolder
-		{
-			public IHubProxy HubProxy { get; private set; }
-			public signalBrokerForTest SignalBroker { get; private set; }
-			public SignalSubscriber SignalSubscriber { get; set; }
-
-			public proxyAndBrokerHolder(IHubProxy hubProxy, signalBrokerForTest signalBroker)
-			{
-				HubProxy = hubProxy;
-				SignalBroker = signalBroker;
-			}
-		}
-		
 		private Task _doneTask;
 		
 		[SetUp]
@@ -395,5 +382,18 @@ namespace Teleopti.MessagingTest.SignalR
 				return _hubConnection;
 			}
 		}
+
+
+		private class proxyAndBrokerHolder
+		{
+			public IHubProxy HubProxy { get; private set; }
+			public signalBrokerForTest SignalBroker { get; private set; }
+
+			public proxyAndBrokerHolder(IHubProxy hubProxy, signalBrokerForTest signalBroker)
+			{
+				HubProxy = hubProxy;
+				SignalBroker = signalBroker;
+	}
+}
 	}
 }

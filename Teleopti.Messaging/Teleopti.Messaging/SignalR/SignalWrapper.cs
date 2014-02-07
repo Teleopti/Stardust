@@ -15,6 +15,9 @@ namespace Teleopti.Messaging.SignalR
 	[CLSCompliant(false)]
 	public class SignalWrapper : ISignalWrapper
 	{
+		private const string _notifyclients = "NotifyClients";
+		private const string notifyclientsmultiple = "NotifyClientsMultiple";
+
 		private readonly IHubProxy _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
 		private int _retryCount;
@@ -33,11 +36,21 @@ namespace Teleopti.Messaging.SignalR
 			_logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
 		}
 
-		public Task NotifyClients(params object[] notifications)
+		public Task NotifyClients(Notification notification)
+		{
+			return notify(_notifyclients, notification);
+		}
+
+		public Task NotifyClients(IEnumerable<Notification> notifications)
+		{
+			return notify(notifyclientsmultiple, notifications);
+		}
+
+		private Task notify(string notify, params object[] notifications)
 		{
 			try
 			{
-				return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
+				return _hubProxy.Invoke(notifyclientsmultiple, notifications);
 			}
 			catch (InvalidOperationException exception)
 			{

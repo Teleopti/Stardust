@@ -48,12 +48,10 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				if (_wrapper != null) _wrapper.StopHub();
-
 				var connection = MakeHubConnection();
 				var proxy = connection.CreateHubProxy("MessageBrokerHub");
 
-				_wrapper = new SignalWrapper(proxy, connection, _logger);
+				_wrapper = _wrapper ?? new SignalWrapper(proxy, connection, _logger);
 				_wrapper.StartHub();
 			}
 			catch (SocketException exception)
