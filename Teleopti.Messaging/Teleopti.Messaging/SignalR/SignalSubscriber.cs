@@ -23,6 +23,8 @@ namespace Teleopti.Messaging.SignalR
 
 		public event Action<Notification> OnNotification;
 
+
+		[CLSCompliant(false)]
 		public SignalSubscriber(IHubProxy hubProxy)
 		{
 			_hubProxy = hubProxy;
