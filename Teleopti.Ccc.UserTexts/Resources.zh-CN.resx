@@ -9523,7 +9523,7 @@ Teleopti R&amp;D</value>
     <value>日期格式</value>
   </data>
   <data name="Block" xml:space="preserve">
-    <value>阻止</value>
+    <value>批次</value>
   </data>
   <data name="Updated" xml:space="preserve">
     <value>已更新</value>
