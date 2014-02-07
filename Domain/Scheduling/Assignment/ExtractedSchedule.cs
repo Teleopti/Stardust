@@ -458,7 +458,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	            var newLayer = new AbsenceLayer(oldLayer.Payload, oldLayer.Period.MovePeriod(diff));
 				var newAbsence = new PersonAbsence(Person, Scenario, newLayer)
 	                {
-		                LastChange = personAbsence.LastChange
+		                LastChange = DateTime.UtcNow
 	                };
 	            Add(newAbsence);
             }   
