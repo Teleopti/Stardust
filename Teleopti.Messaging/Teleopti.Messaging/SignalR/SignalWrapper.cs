@@ -28,7 +28,7 @@ namespace Teleopti.Messaging.SignalR
 			_isRunning = false;
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
-			_hubConnection.Closed += () => _hubConnection.Start();
+			//_hubConnection.Closed += () => _hubConnection.Start();
 
 			_logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
 		}
