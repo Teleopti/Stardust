@@ -157,7 +157,6 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 
-
 		public Task NotifyClients(Notification notification)
 		{
 			return notify(notifyclients, notification);
@@ -184,17 +183,16 @@ namespace Teleopti.Messaging.SignalR
 		
 		public void StopHub()
 		{
-			if (_hubConnection != null && _hubConnection.State==ConnectionState.Connected)
+			if (_hubConnection == null || _hubConnection.State != ConnectionState.Connected) return;
+			
+			try
 			{
-				try
-				{
-					_hubConnection.Closed -= restartConnection();
-					_hubConnection.Stop();
-				}
-				catch (Exception ex)
-				{
-					Logger.Error("An error happened when stopping connection.", ex);
-				}
+				_hubConnection.Closed -= restartConnection();
+				_hubConnection.Stop();
+			}
+			catch (Exception ex)
+			{
+				Logger.Error("An error happened when stopping connection.", ex);
 			}
 		}
 

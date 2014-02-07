@@ -46,18 +46,16 @@ namespace Teleopti.Messaging.SignalR
 			// ReSharper restore DoNotCallOverridableMethodsInConstructor
 		}
 
-		private void taskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-		{
-			if (!e.Observed)
-			{
-				Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
-				e.SetObserved();
-			}
-		}
-
 		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
+		}
+
+		private void taskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+		{
+			if (e.Observed) return;
+			Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+			e.SetObserved();
 		}
 
 		public void StartBrokerService()
@@ -80,15 +78,24 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public bool IsAlive
+		public void SendNotification(Notification notification)
 		{
-			get { return _wrapper != null && _wrapper.IsInitialized(); }
+			try
+			{
+				var task = _wrapper.NotifyClients(notification);
+				task.Wait(1000);
+			}
+			catch (AggregateException e)
+			{
+				Logger.Error("Could not send notifications, ", e);
+			}
 		}
 
 		public void SendNotificationAsync(Notification notification)
 		{
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
 		}
+
 
 		private void processQueue(object state)
 		{
@@ -125,6 +132,11 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
+		public bool IsAlive
+		{
+			get { return _wrapper != null && _wrapper.IsInitialized(); }
+		}
+
 		public void Dispose()
 		{
 			cancelToken.Cancel();
@@ -132,6 +144,7 @@ namespace Teleopti.Messaging.SignalR
 			_wrapper.StopHub();
 			_wrapper = null;
 		}
+
 
 		[CLSCompliant(false)]
 		protected virtual DateTime CurrentUtcTime()
@@ -164,35 +177,23 @@ namespace Teleopti.Messaging.SignalR
 
 		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, string dataSource, Guid businessUnitId)
 		{
-			var sendAttempt = 0;
-			while (sendAttempt < 3)
-			{
-				try
+			var notification = new Notification
 				{
-					sendAttempt++;
+					StartDate = Subscription.DateToString(floor),
+					EndDate = Subscription.DateToString(ceiling),
+					DomainId = Subscription.IdToString(domainObjectId),
+					DomainQualifiedType = domainInterfaceType.AssemblyQualifiedName,
+					DomainType = domainInterfaceType.Name,
+					ModuleId = Subscription.IdToString(moduleId),
+					DomainUpdateType = (int) DomainUpdateType.Insert,
+					DataSource = dataSource,
+					BusinessUnitId = Subscription.IdToString(businessUnitId),
+					BinaryData = null
+				};
 
-					var task = _wrapper.NotifyClients(new Notification
-					{
-						StartDate = Subscription.DateToString(floor),
-						EndDate = Subscription.DateToString(ceiling),
-						DomainId = Subscription.IdToString(domainObjectId),
-						DomainQualifiedType = domainInterfaceType.AssemblyQualifiedName,
-						DomainType = domainInterfaceType.Name,
-						ModuleId = Subscription.IdToString(moduleId),
-						DomainUpdateType = (int)DomainUpdateType.Insert,
-						DataSource = dataSource,
-						BusinessUnitId = Subscription.IdToString(businessUnitId),
-						BinaryData = null
-					});
-					task.Wait(TimeSpan.FromSeconds(20));
-					break;
-				}
-				catch (Exception)
-				{
-					StartBrokerService();
-				}
-			}
+			SendNotification(notification);
 		}
+
 
 		public void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
 		{
