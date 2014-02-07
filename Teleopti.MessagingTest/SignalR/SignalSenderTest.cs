@@ -248,7 +248,7 @@ namespace Teleopti.MessagingTest.SignalR
 			{
 			}
 
-			public void ProcessTheQueue()
+			public new void ProcessTheQueue()
 			{
 				base.ProcessTheQueue();
 			}

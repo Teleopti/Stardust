@@ -28,6 +28,8 @@ namespace Teleopti.Messaging.SignalR
 		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
 		private Thread workerThread;
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
+
+		[CLSCompliant(false)]
 		protected ILog _logger;
 
 		public SignalSender(string serverUrl)
@@ -146,7 +148,7 @@ namespace Teleopti.Messaging.SignalR
 
 				return waitResult;
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
 				Thread.Sleep(250 * attemptNumber);
 				InstantiateBrokerService();

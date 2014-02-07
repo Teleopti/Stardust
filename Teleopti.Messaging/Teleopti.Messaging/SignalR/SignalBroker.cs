@@ -347,11 +347,13 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
+		[CLSCompliant(false)]
 		protected virtual ISignalSubscriber MakeSignalSubscriber(IHubProxy hubProxy)
 		{
 			return new SignalSubscriber(hubProxy);
 		}
 
+		[CLSCompliant(false)]
 		protected virtual IHubConnectionWrapper MakeHubConnection(Uri serverUrl)
 		{
 			return new HubConnectionWrapper(new HubConnection(serverUrl.ToString()));
