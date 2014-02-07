@@ -970,7 +970,7 @@
     <comment>Full day absence</comment>
   </data>
   <data name="IsIn" xml:space="preserve">
-    <value>Oli</value>
+    <value>Olla</value>
   </data>
   <data name="ItemsSelectedParameter" xml:space="preserve">
     <value>{0} kohdetta valittuna.</value>
@@ -1337,7 +1337,7 @@
     <comment>Open hours</comment>
   </data>
   <data name="OpenPersonAdminPage" xml:space="preserve">
-    <value>Henkilö</value>
+    <value>Henkilöt </value>
     <comment>People</comment>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
@@ -2846,7 +2846,7 @@ n rajaus</value>
   </data>
   <data name="IncludeExclude" xml:space="preserve">
     <value>Sisällytä
- Älä sisällytä</value>
+Älä sisällytä</value>
     <comment>Include Exclude</comment>
   </data>
   <data name="FromDate" xml:space="preserve">
@@ -2886,7 +2886,7 @@ n rajaus</value>
     <comment>Nightly Rest Time</comment>
   </data>
   <data name="Colon" xml:space="preserve">
-    <value>  : </value>
+    <value>: </value>
     <comment>  :  </comment>
   </data>
   <data name="ContractColon" xml:space="preserve">
@@ -3902,7 +3902,7 @@ korvaa</value>
     <comment>GapExists</comment>
   </data>
   <data name="PeopleInsertScreen" xml:space="preserve">
-    <value>Henkilöiden lisäyksen näyttö</value>
+    <value>Lisää henkilöitä ikkuna</value>
     <comment>People Insert Screen</comment>
   </data>
   <data name="SelectPeopleToAddToRole" xml:space="preserve">
@@ -4885,7 +4885,7 @@ työmäärää</value>
     <comment>AP:Queue grid columns (My Report)</comment>
   </data>
   <data name="Availability" xml:space="preserve">
-    <value>Saatavuus</value>
+    <value>Käytettävyys</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="AvailableTime" xml:space="preserve">
@@ -5081,8 +5081,7 @@ työmäärää</value>
     <comment>No duplicate dates are allowed in Person Availability For</comment>
   </data>
   <data name="PersonAvailability" xml:space="preserve">
-    <value>Henkilön
- käytettävyys</value>
+    <value>Henkilön käytettävyys</value>
     <comment>Person Availability </comment>
   </data>
   <data name="PersonAvailabilityError" xml:space="preserve">
@@ -5210,7 +5209,7 @@ työmäärää</value>
     <comment>PersonalSkillView</comment>
   </data>
   <data name="PersonAvailabilityView" xml:space="preserve">
-    <value>Henkilösaatavuusnäkymä</value>
+    <value>Henkilön käytettävyys näkymä</value>
     <comment>PersonAvailabilityView</comment>
   </data>
   <data name="PersonRotationView" xml:space="preserve">
@@ -5544,7 +5543,7 @@ työmäärää</value>
     <comment>Person Period couldn't load error</comment>
   </data>
   <data name="People" xml:space="preserve">
-    <value>Henkilö</value>
+    <value>henkilö</value>
     <comment>people</comment>
   </data>
   <data name="SwapCannotBePerformed" xml:space="preserve">
@@ -8595,7 +8594,7 @@ Jakso: {3}</value>
     <value>Valitse  mahdollistaaksesi automaattisen hyväksymisen.</value>
   </data>
   <data name="HColonMM" xml:space="preserve">
-    <value>t:min</value>
+    <value>tt:min</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
     <value>Avoinna vuoronvaihtopyynnöille</value>
@@ -8949,7 +8948,7 @@ Jakso: {3}</value>
     <value>Enustettu henkilöstö</value>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
-    <value>FTE h/päivä</value>
+    <value>FTE t/päivä</value>
   </data>
   <data name="GrossStaff" xml:space="preserve">
     <value>Brutto henkilöstö</value>
@@ -9264,7 +9263,7 @@ Jakso: {3}</value>
     <value>Tavoite taito:</value>
   </data>
   <data name="AvailabilityColon" xml:space="preserve">
-    <value>Saatavuus:</value>
+    <value>Käytettävyys:</value>
   </data>
   <data name="NextDayColon" xml:space="preserve">
     <value>Seuraava päivä:</value>
@@ -9333,7 +9332,7 @@ Jakso: {3}</value>
     <value>Kaikki pakolliset toiveet</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
-    <value>Aktiviteetti / Agentti</value>
+    <value>Aktiviteetti aika / Agentti</value>
   </data>
   <data name="ProficiencyPercent" xml:space="preserve">
     <value>Tehokkuus (%)</value>
@@ -9579,7 +9578,7 @@ Jakso: {3}</value>
     <value>Voi muokata ja tallentaa</value>
   </data>
   <data name="ViewAllowance" xml:space="preserve">
-    <value>Näytä saatavuus</value>
+    <value>Näytä käytettävyys</value>
   </data>
   <data name="TeamSchedule" xml:space="preserve">
     <value>Tiimin työvuorot</value>
@@ -9864,7 +9863,7 @@ Seuraavat moduulit sisältyvät lisenssiin:
     <value>Vuoroluokka ja koko päivän poissaolo per päivä</value>
   </data>
   <data name="ManageMasterActivities" xml:space="preserve">
-    <value>Hallinnoin yleisaktiviteettia</value>
+    <value>Hallinnoi yleisaktiviteettia</value>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
     <value>Sisältyy poissaolopyyntöihin</value>
@@ -10194,7 +10193,7 @@ Seuraavat moduulit sisältyvät lisenssiin:
     <value>Pitkänaikavälin ennuste</value>
   </data>
   <data name="ManageRuleSets" xml:space="preserve">
-    <value>Hallinnoin asetuksia. </value>
+    <value>Hallinnoi asetuksia </value>
   </data>
   <data name="ManualAgents" xml:space="preserve">
     <value>Agentti (Käsiohjaus)</value>
@@ -10209,7 +10208,7 @@ Seuraavat moduulit sisältyvät lisenssiin:
     <value>Tämän hetkiset työntekijät</value>
   </data>
   <data name="ManageSmsSettings" xml:space="preserve">
-    <value>Hallinnoin SMS asetuksia</value>
+    <value>Hallinnoi SMS asetuksia</value>
   </data>
   <data name="ExportToBU" xml:space="preserve">
     <value>Vie toissen liiketoimintayksikköön</value>
@@ -11049,5 +11048,56 @@ Vähennä rajoituksia tässä sääntösarjassa.</value>
   </data>
   <data name="RepViewerOf" xml:space="preserve">
     <value>ja</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Aktiivinen agentti</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Chat aika</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Yksityiskohtainen noudattaminen</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>MyReport</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Virheellinen päättymisaika.</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Ole ystävällinen ja lisää päivänsisäinen kutistuma olemassa olevaan työvuoroon. </value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Metriikka</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Valmiusaste</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Arvo</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Eilinen</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Tehtävän aika</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Tehtävien aika yhteensä</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Sinulla ei ole oikeutta nähdä tiimejä. </value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Aika per status per agentti</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>Ei jaksoa saatavilla</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Et voi luoda toista työvuoroa lisäämällä aktiviteettia. </value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>Et ole enää työsuhteessa tänä päivänä. </value>
   </data>
 </root>

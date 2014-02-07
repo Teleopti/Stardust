@@ -5793,9 +5793,6 @@
   <data name="StartColon" xml:space="preserve">
     <value>Début:</value>
   </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Nouvelle disponibilté étudiant</value>
-  </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Début Absolu</value>
   </data>
@@ -7958,7 +7955,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Tolérance + Jours libres</value>
   </data>
   <data name="DayOffTolerancMinus" xml:space="preserve">
-    <value>Tolérence - Jours libres</value>
+    <value>Tolérance - Jours libres</value>
   </data>
   <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
     <value>Extension et Réduction des jours libres pour les agents flexibles</value>
@@ -9131,5 +9128,14 @@ Réduisez la complexité pour utiliser ces horaires.</value>
   </data>
   <data name="ModifyAvailabilities" xml:space="preserve">
     <value>Modifier les disponibilités dans le planificateur</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>Le bloc par équipe n'est pas en statut légal.</value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Merci de sélectionner au moins une des options "Catégorie d'Horaire", "Heure de début" ou "Même Horaire" dans la planification par Blocs.</value>
   </data>
 </root>
