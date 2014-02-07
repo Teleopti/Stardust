@@ -23,11 +23,11 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalSender : IMessageSender
 	{
-		private string _serverUrl;
-		private ISignalWrapper _wrapper;
+		private readonly string _serverUrl;
 		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
-		private Thread workerThread;
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
+		private ISignalWrapper _wrapper;
+		private Thread workerThread;
 
 		[CLSCompliant(false)]
 		protected ILog _logger;
@@ -40,8 +40,22 @@ namespace Teleopti.Messaging.SignalR
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+            TaskScheduler.UnobservedTaskException += taskSchedulerOnUnobservedTaskException;
 			StartWorkerThread();
+		}
+
+		private void taskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+		{
+			if (!e.Observed)
+			{
+				_logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+				e.SetObserved();
+			}
+		}
+
+		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
 		}
 
 		public void StartBrokerService()
@@ -62,28 +76,6 @@ namespace Teleopti.Messaging.SignalR
 			{
 				_logger.Error("The message broker seems to be down.", exception);
 			}
-		}
-
-		private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-	    {
-	        if (!e.Observed)
-            {
-                _logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
-                e.SetObserved();
-            }
-	    }
-
-	    private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-		{
-			return true;
-		}
-
-		public void Dispose()
-		{
-			cancelToken.Cancel();
-			workerThread.Join();
-			_wrapper.StopHub();
-			_wrapper = null;
 		}
 
 		public bool IsAlive
@@ -129,6 +121,14 @@ namespace Teleopti.Messaging.SignalR
 			{
 				_logger.Error("Could not send notifications, ", e);
 			}
+		}
+
+		public void Dispose()
+		{
+			cancelToken.Cancel();
+			workerThread.Join();
+			_wrapper.StopHub();
+			_wrapper = null;
 		}
 
 		[CLSCompliant(false)]

@@ -170,7 +170,7 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test, Ignore]
-		public void ShouldRstartHubConnectionWhenStartFails()
+		public void ShouldRestartHubConnectionWhenStartFails()
 		{
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);

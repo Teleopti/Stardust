@@ -35,52 +35,6 @@ namespace Teleopti.Messaging.SignalR
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
 		}
 
-		public Task NotifyClients(Notification notification)
-		{
-			return notify(notifyclients, notification);
-		}
-
-		public Task NotifyClients(IEnumerable<Notification> notifications)
-		{
-			return notify(notifyclientsmultiple, notifications);
-		}
-
-		private Task notify(string notify, params object[] notifications)
-		{
-			try
-			{
-				if (verifyStillConnected())
-					return _hubProxy.Invoke(notifyclientsmultiple, notifications);
-			}
-			catch (InvalidOperationException exception)
-			{
-				Logger.Error("An error happened when notifying multiple.", exception);
-			}
-			return emptyTask();
-		}
-
-		private bool verifyStillConnected()
-		{
-			lock (LockObject)
-			{
-				if ( _hubConnection.State != ConnectionState.Connected)
-				{
-					try
-					{
-						startHubConnection();
-						return true;
-					}
-					catch (Exception ex)
-					{
-						//Suppress! Already logged upon startup for general failures.
-						Logger.Error("An error happened when verifying that we still are connected.", ex);
-						return false;
-					}
-				}
-			}
-			return true;
-		}
-
 		public void StartHub()
 		{
 			startHubConnection();
@@ -94,19 +48,19 @@ namespace Teleopti.Messaging.SignalR
 				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
 				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
-				                       	{
-				                       		if (t.IsFaulted && t.Exception != null)
-				                       		{
-												exception = t.Exception.GetBaseException();
-												Logger.Error("An error happened when starting hub connection.", exception);
-				                       		}
-				                       	}, TaskContinuationOptions.OnlyOnFaulted);
-				
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						exception = t.Exception.GetBaseException();
+						Logger.Error("An error happened when starting hub connection.", exception);
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+
 				if (!startTask.Wait(TimeSpan.FromSeconds(30)))
 				{
 					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
 				}
-				if (exception!=null)
+				if (exception != null)
 				{
 					throw exception;
 				}
@@ -157,13 +111,6 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
-		private static Task emptyTask()
-		{
-			var tcs = new TaskCompletionSource<object>();
-			tcs.SetResult(null);
-			return tcs.Task;
-		}
-
 		public Task RemoveSubscription(string route)
 		{
 			if (verifyStillConnected())
@@ -181,9 +128,62 @@ namespace Teleopti.Messaging.SignalR
 			return emptyTask();
 		}
 
+		public Task NotifyClients(Notification notification)
+		{
+			return notify(notifyclients, notification);
+		}
+
+		public Task NotifyClients(IEnumerable<Notification> notifications)
+		{
+			return notify(notifyclientsmultiple, notifications);
+		}
+
+		private Task notify(string notify, params object[] notifications)
+		{
+			try
+			{
+				if (verifyStillConnected())
+					return _hubProxy.Invoke(notifyclientsmultiple, notifications);
+			}
+			catch (InvalidOperationException exception)
+			{
+				Logger.Error("An error happened when notifying multiple.", exception);
+			}
+			return emptyTask();
+		}
+
+		private bool verifyStillConnected()
+		{
+			lock (LockObject)
+			{
+				if ( _hubConnection.State != ConnectionState.Connected)
+				{
+					try
+					{
+						startHubConnection();
+						return true;
+					}
+					catch (Exception ex)
+					{
+						//Suppress! Already logged upon startup for general failures.
+						Logger.Error("An error happened when verifying that we still are connected.", ex);
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+
+		private static Task emptyTask()
+		{
+			var tcs = new TaskCompletionSource<object>();
+			tcs.SetResult(null);
+			return tcs.Task;
+		}
+
 		public void StopHub()
 		{
-			if (_hubConnection != null && _hubConnection.State==ConnectionState.Connected)
+			if (_hubConnection != null && _hubConnection.State == ConnectionState.Connected)
 			{
 				try
 				{
