@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
-	public interface ITeamBlockDayOffDaySwapDecisionMaker
+	public interface ITeamBlockDayOffDaySwapDecisionMaker : ICancellable
 	{
 		IPossibleSwappableDays Decide(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
 		                                                   IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAway);
@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly IDayOffRulesValidator _dayOffRulesValidator;
+		private bool _cancel;
 
 		public TeamBlockDayOffDaySwapDecisionMaker(ILockableBitArrayFactory lockableBitArrayFactory, IDayOffRulesValidator dayOffRulesValidator)
 		{
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			bool considerWeekAfter = optimizationPreferences.DaysOff.ConsiderWeekAfter;
 			for (int i = 0; i < teamBlockSeniorGroupMembers.Count(); i++)
 			{
+				if (_cancel) return null;
 				var personSenior = teamBlockSeniorGroupMembers[i];
 				var personJunior = teamBlockJuniorGroupMembers[i];
 				var seniorMatrix = teamBlockSenior.TeamInfo.MatrixForMemberAndDate(personSenior, dateOnly);
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 					foreach (var dayOffDay in dayOffsToGiveAway)
 					{
+						if (_cancel) return null;
 						var candidateDaySenior = seniorScheduleRange.ScheduledDay(dayOffDay);
 						var candidateDayJunior = juniorScheduleRange.ScheduledDay(dayOffDay);
 
@@ -110,6 +113,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				return matrix.WeekAfterOuterPeriodDays.ToList().FindIndex(x => x.Day == dateOnly);
 
 			return matrix.OuterWeeksPeriodDays.ToList().FindIndex(x => x.Day == dateOnly);
+		}
+
+		public void Cancel()
+		{
+			_cancel = true;
 		}
 	}
 }
