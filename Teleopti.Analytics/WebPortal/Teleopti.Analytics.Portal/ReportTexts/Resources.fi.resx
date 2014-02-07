@@ -1298,4 +1298,10 @@
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Suurenna</value>
   </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Tilaryhmät:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Aika per status per agentti</value>
+  </data>
 </root>
