@@ -1347,7 +1347,7 @@ Date</value>
   </data>
   <data name="OpenPersonAdminPage" xml:space="preserve">
     <value>People</value>
-    <comment>People</comment>
+    <comment>Name of People module</comment>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
     <value>Schedules</value>
