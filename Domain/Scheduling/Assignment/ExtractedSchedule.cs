@@ -493,7 +493,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 personAbsence.Layer.MoveLayer(diff);
                 IPersonAbsence newAbsence = new PersonAbsence(Person,Scenario,personAbsence.Layer);
-                newAbsence.LastChange = personAbsence.LastChange;
+                newAbsence.LastChange = DateTime.UtcNow;
                 Add(newAbsence);
             }   
         }
