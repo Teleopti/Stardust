@@ -158,7 +158,7 @@ namespace Teleopti.MessagingTest.SignalR
 			log.AssertWasCalled(t => t.Error("",null), a => a.IgnoreArguments());
 		}
 		
-		[Test, Ignore]
+		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
 			var hubProxy = stubProxy();
@@ -171,7 +171,7 @@ namespace Teleopti.MessagingTest.SignalR
 			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Twice());
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldRestartHubConnectionWhenStartFails()
 		{
 			var hubProxy = stubProxy();
@@ -221,7 +221,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			public signalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger) : this(hubConnection, now)
 			{
-				_logger = logger;
+				Logger = logger;
 			}
 
 			public signalSenderForTest(IHubConnectionWrapper hubConnection, INow now)
@@ -233,7 +233,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			protected override ILog MakeLogger()
 			{
-				return _logger ?? base.MakeLogger();
+				return Logger ?? base.MakeLogger();
 			}
 
 			protected override IHubConnectionWrapper MakeHubConnection()
