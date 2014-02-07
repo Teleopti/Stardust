@@ -3699,7 +3699,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
 		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
-					var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+					var teamScheduling = new TeamScheduling(resourceCalculateDelayer);
 					var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 																			 _container.Resolve<IProposedRestrictionAggregator>(),
 																			 _container.Resolve<IWorkShiftFilterService>(),
@@ -4106,7 +4106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
 																					   tagSetter);
 
-						var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+						var teamScheduling = new TeamScheduling(resourceCalculateDelayer);
 
 						var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 						                                                         _container.Resolve<IProposedRestrictionAggregator>(),

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						return false;
 					}
 					_singleDayScheduler.DayScheduled += OnDayScheduled;
-					_singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod);
+					_singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod, rollbackService);
 					_singleDayScheduler.DayScheduled -= OnDayScheduled;
 				}
 
