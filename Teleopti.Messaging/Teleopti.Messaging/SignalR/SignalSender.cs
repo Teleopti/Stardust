@@ -30,11 +30,12 @@ namespace Teleopti.Messaging.SignalR
 		private Thread workerThread;
 
 		[CLSCompliant(false)]
-		protected ILog _logger;
+		protected ILog Logger;
 
 		public SignalSender(string serverUrl)
 		{
-			_logger = MakeLogger();
+			// ReSharper disable DoNotCallOverridableMethodsInConstructor
+			Logger = MakeLogger();
 			_serverUrl = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
@@ -42,13 +43,14 @@ namespace Teleopti.Messaging.SignalR
 
             TaskScheduler.UnobservedTaskException += taskSchedulerOnUnobservedTaskException;
 			StartWorkerThread();
+			// ReSharper restore DoNotCallOverridableMethodsInConstructor
 		}
 
 		private void taskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 		{
 			if (!e.Observed)
 			{
-				_logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
+				Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
 				e.SetObserved();
 			}
 		}
@@ -65,16 +67,16 @@ namespace Teleopti.Messaging.SignalR
 				var connection = MakeHubConnection();
 				var proxy = connection.CreateHubProxy("MessageBrokerHub");
 
-				_wrapper = _wrapper ?? new SignalWrapper(proxy, connection, _logger);
+				_wrapper = _wrapper ?? new SignalWrapper(proxy, connection, Logger);
 				_wrapper.StartHub();
 			}
 			catch (SocketException exception)
 			{
-				_logger.Error("The message broker seems to be down.", exception);
+				Logger.Error("The message broker seems to be down.", exception);
 			}
 			catch (BrokerNotInstantiatedException exception)
 			{
-				_logger.Error("The message broker seems to be down.", exception);
+				Logger.Error("The message broker seems to be down.", exception);
 			}
 		}
 
@@ -119,7 +121,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 			catch (AggregateException e)
 			{
-				_logger.Error("Could not send notifications, ", e);
+				Logger.Error("Could not send notifications, ", e);
 			}
 		}
 
