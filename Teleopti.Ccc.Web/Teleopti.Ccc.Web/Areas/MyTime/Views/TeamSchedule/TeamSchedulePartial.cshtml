@@ -9,8 +9,7 @@
 	var left = Html.HtmlStyleLeft();
 }
 <div class="navbar navbar-default">
-    <div class="col-xs-4">
-        <form class="navbar-form pull-left fixed-navbar-form">
+    <div class="col-xs-4" style="margin-top: 8px">
             <div class="input-group">
                 <span class="input-group-btn">
 			<button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
@@ -21,13 +20,12 @@
 		    <button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
                 </div>
             </div>
-        </form>
     
-        <ul class="nav navbar-nav" data-bind="if: showTeamPicker">
+        <ul class="nav" data-bind="if: showTeamPicker">
             <li class="divider-vertical"></li>
         </ul>
         </div>
-        <div id="s2id_Team-Picker_Padding" class="navbar-nav col-xs-6 fixed-navbar" data-bind="if: showTeamPicker">
+        <div class="navbar-nav col-xs-6" style="margin-top: 10px" data-bind="if: showTeamPicker">
         
             <span data-bind="if: showGroupings">
                 <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
