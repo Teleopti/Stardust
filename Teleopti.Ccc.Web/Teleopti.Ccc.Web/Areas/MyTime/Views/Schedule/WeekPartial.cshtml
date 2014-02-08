@@ -42,31 +42,29 @@
 <input id="Request-detail-datepicker-format" type="hidden" data-bind="value: datePickerFormat"/>
 
 <div class="navbar navbar-default">
-    <div class="col-xs-5">
-        <form class="navbar-form navbar-left fixed-navbar-form">
-            <div class="input-group">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                    </button>
-                </span>
-                <input class="form-control text-center" data-bind="value: displayDate" type="text" readonly="readonly" />
-                <div class="input-group-btn">
-                    <button class="btn btn-default moment-datepicker" type="button">
-                        <i class="glyphicon glyphicon-th"></i>
-                    </button>
-                    <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </button>
-                </div>
-            </div>
+    <div class="col-xs-5" style="margin-top: 8px">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <button class="btn btn-default" data-bind="click: previousWeek, css: 'done'" type="button">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                </button>
+            </span>
+            <input class="form-control text-center" data-bind="value: displayDate" type="text" readonly="readonly" />
+            <span class="input-group-btn">
+                <button class="btn btn-default moment-datepicker" type="button">
+                    <i class="glyphicon glyphicon-th"></i>
+                </button>
+                <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </button>
+            </span>
+        </div>
 
-        </form>
     </div>
-    <ul class="nav navbar-nav">
-        <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-        <li data-bind="if: underConstructionPermission"><a href="#" id="week-schedule-month" data-bind="    click: month">@Resources.MonthView</a></li>
-    </ul>
+        <ul class="list-inline" style="margin-top: 15px">
+            <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+            <li data-bind="if: underConstructionPermission"><a href="#" id="week-schedule-month" data-bind="    click: month">@Resources.MonthView</a></li>
+        </ul>
 </div>
 <ul class="nav nav-pills" data-bind="visible: showAddRequestToolbar">
 	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
