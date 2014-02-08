@@ -3,42 +3,43 @@
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 @model PreferenceViewModel
 @{
-	Layout = null;
+    Layout = null;
 }
 <div class="navbar navbar-default">
-    <div class="col-xs-5">
-        <form class="navbar-form navbar-left fixed-navbar-form">
-            <div class="input-group">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                    </button>
-                </span>
-                <input data-bind="value: displayDate" type="text" class="col-xs-3 form-control text-center" readonly="readonly"/>
-                <div class="input-group-btn">
-                    <button class="btn btn-default moment-datepicker">
-                        <i class="glyphicon glyphicon-calendar"></i>
-                    </button>
-                    <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </button>
-                </div>
+    <div class="col-xs-5" style="margin-top: 8px">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                </button>
+            </span>
+            <input data-bind="value: displayDate" type="text" class="col-xs-3 form-control text-center" readonly="readonly" />
+            <div class="input-group-btn">
+                <button class="btn btn-default moment-datepicker">
+                    <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+                <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </button>
             </div>
-        </form>
+        </div>
     </div>
-        <ul class="nav navbar-nav">
-            <li class="divider-vertical"></li>
-            @if (Model.ExtendedPreferencesPermission)
-            {
-                <li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
+    <ul class="list-inline" style="padding-top: 15px">
+        @if (Model.ExtendedPreferencesPermission)
+        {
+            <li>
+                <a href="#" id="Preference-add-extended-button">
+                    <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference
+                </a>
+            </li>
             }
-            else
-            {
-                <li>
-                    <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
+        else
+        {
+            <li>
+                <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
+                                                                                                    {
+                                                                                                        if (optionGroup.Text != Resources.ShiftCategory)
                                                                                                         {
-                                                                                                            if (optionGroup.Text != Resources.ShiftCategory)
-                                                                                                            {
                                                                                                                 @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
                                                                                                             }
                                                                                                             foreach (var option in optionGroup.Options)
@@ -46,29 +47,41 @@
                                                                                                                 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
                                                                                                             }
                                                                                                         }]">
-                        <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
-                     
-                        <button class="btn dropdown-toggle" data-toggle="dropdown">
-                            <span class="caret"></span>
-                        </button>
-                        <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
-                            <!-- ko if: Value != '-' -->
-                            <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
-                            <!-- /ko -->
-                            <!-- ko if: Value == '-' -->
-                            <li class="divider"></li>
-                            <!-- /ko -->
-                        </ul>
-                    </div>
-                </li>
+                    <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
+
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
+                        <!-- ko if: Value != '-' -->
+                        <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
+                        <!-- /ko -->
+                        <!-- ko if: Value == '-' -->
+                        <li class="divider"></li>
+                        <!-- /ko -->
+                    </ul>
+                </div>
+            </li>
             }
-            <li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
-            <li class="divider-vertical"></li>
-            <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
-            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="glyphicon glyphicon-minus"></i></a></li>
-            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="glyphicon glyphicon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
-            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave"><i class="glyphicon glyphicon-plus"></i></a></li>
-        </ul>
+
+        <li>
+            <a href="#" data-bind="click: deletePreference">
+                <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
+            </a>
+        </li>
+
+        <li data-bind="if: mustHaveEnabled">
+            <i class="glyphicon glyphicon-heart"></i>
+            <span>@Resources.MustHave</span>
+            <span data-bind="text: currentMustHaves" class="musthave-current"></span>(<span data-bind="    text: maxMustHave" class="musthave-max"></span>)
+                <a href="#" data-bind="click: removeMustHave">
+                    <i class="glyphicon glyphicon-minus"></i>
+                </a>
+            <a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled" class="add-musthave">
+                <i class="glyphicon glyphicon-plus"></i>
+            </a>
+        </li>
+    </ul>
 </div>
 
 
