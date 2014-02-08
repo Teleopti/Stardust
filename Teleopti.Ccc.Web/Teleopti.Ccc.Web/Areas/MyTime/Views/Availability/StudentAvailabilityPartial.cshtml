@@ -7,38 +7,36 @@
 }
 
 <div class="navbar navbar-default">
-    <div class="col-xs-5">
-        <form class="navbar-form pull-left fixed-navbar-form">
-            <div class="input-group">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'">
-                        <i class="glyphicon glyphicon-chevron-left"></i>
-                    </button>
-                </span>
-                <input data-bind="value: displayDate" type="text" class="form-control text-center" readonly="readonly" />
-                <span class="input-group-btn">
-                    <button class="btn btn-default moment-datepicker">
-                        <i class="glyphicon glyphicon-th"></i>
-                    </button>
-                    <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'">
-                        <i class="glyphicon glyphicon-chevron-right"></i>
-                    </button>
-                </span>
-            </div>
-        </form>
+    <div class="col-xs-5" style="margin-top: 8px">
+        <div class="input-group">
+            <span class="input-group-btn">
+                <button class="btn btn-default" data-bind="click: previousPeriod, css: 'done'">
+                    <i class="glyphicon glyphicon-chevron-left"></i>
+                </button>
+            </span>
+            <input data-bind="value: displayDate" type="text" class="form-control text-center" readonly="readonly" />
+            <span class="input-group-btn">
+                <button class="btn btn-default moment-datepicker">
+                    <i class="glyphicon glyphicon-th"></i>
+                </button>
+                <button class="btn btn-default" data-bind="click: nextPeriod, css: 'done'">
+                    <i class="glyphicon glyphicon-chevron-right"></i>
+                </button>
+            </span>
+        </div>
     </div>
-        <ul class="list-inline" style="padding-top: 15px">
-            <li>
-                <a href="#" id="Availability-edit-button">
-                    <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability
-                </a>
-            </li>
-            <li>
-                <a href="#" id="Availability-delete-button">
-                    <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
-                </a>
-            </li>
-        </ul>
+    <ul class="list-inline" style="padding-top: 15px">
+        <li>
+            <a href="#" id="Availability-edit-button">
+                <i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Availability
+            </a>
+        </li>
+        <li>
+            <a href="#" id="Availability-delete-button">
+                <i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove
+            </a>
+        </li>
+    </ul>
 </div>
 <div id="Student-availability-edit-form" class="well well-sm clearfix" data-bind="visible: AddAvailabilityFormVisible">
     @Html.Partial("AddStudentAvailabilityPartial")
