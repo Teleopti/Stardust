@@ -25,43 +25,39 @@
     </table>
 
     <div class="row">
-        <div class="col-md-12">
-            <form>
-                <div class="form-group">
-                    <select id="group-picker" class="col-md-4" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
-                        <optgroup data-bind="attr: { label: Name }, foreach: Groups" label="Missing">
-                            <option data-bind="text: Name, value: Id"></option>
-                        </optgroup>
-                    </select>
-                    <div class="btn-toolbar pull-right">
-                        <div class="btn-group">
-                            <div class="input-group date" id="date-picker">
-                                <span class="input-group-btn">
-                                    <button class="btn btn-default" data-bind="attr: { title: Resources.Previous }, click: PreviousDay">
-                                        <i class="glyphicon glyphicon-chevron-left"></i>
-                                    </button>
-                                </span>
-                                <input class="form-control date-input text-center" size="16" type="text" readonly="readonly" data-bind="value: DateFormatted"/>
-                                <div class="input-group-btn">
-                                    <button type="button" class="btn btn-default" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
-                                        <i class="glyphicon glyphicon-calendar"></i>
-                                    </button>
-                                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>-->
-                                    <button class="btn btn-default" data-bind="attr: { title: Resources.Next }, click: NextDay">
-                                        <i class="glyphicon glyphicon-chevron-right"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="btn-group">
-                            <button class="btn btn-default toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions">
-                                <i class="glyphicon glyphicon-question-sign"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+        <div class="col-xs-4">
+            <select id="group-picker" class="col-xs-12" style="height: 30px" data-bind="enable: !Loading(), foreach: GroupPages, select2: { value: GroupId } ">
+                <optgroup data-bind="attr: { label: Name }, foreach: Groups" label="Missing">
+                    <option data-bind="text: Name, value: Id"></option>
+                </optgroup>
+            </select>
         </div>
+    <div class="col-xs-4 pull-right">
+        <div class="btn-group">
+            <div class="input-group date" id="date-picker">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" data-bind="attr: { title: Resources.Previous }, click: PreviousDay">
+                        <i class="glyphicon glyphicon-chevron-left"></i>
+                    </button>
+                </span>
+                <input class="form-control date-input text-center" size="16" type="text" readonly="readonly" data-bind="value: DateFormatted" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" data-bind="datepicker: Date, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+                        <i class="glyphicon glyphicon-calendar"></i>
+                    </button>
+                    <!--<span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>-->
+                    <button class="btn btn-default" data-bind="attr: { title: Resources.Next }, click: NextDay">
+                        <i class="glyphicon glyphicon-chevron-right"></i>
+                    </button>
+                    <button class="btn btn-default toggle-descriptions" data-toggle="button" disabled data-bind="enable: !Loading(), click: ToggleDisplayDescriptions">
+                        <i class="glyphicon glyphicon-question-sign"></i>
+                    </button>
+                </span>
+
+
+            </div>
+        </div>
+    </div>
     </div>
 
     <div class="row">
