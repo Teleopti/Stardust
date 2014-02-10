@@ -1,6 +1,3 @@
-using System;
-using Teleopti.Interfaces.Domain;
-
 namespace Teleopti.Interfaces.MessageBroker.Client
 {
 	/// <summary>

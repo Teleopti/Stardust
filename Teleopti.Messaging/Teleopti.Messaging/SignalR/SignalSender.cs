@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Threading.Tasks;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using log4net;
@@ -9,28 +7,18 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalSender : SignalSenderBase, IMessageSender
 	{
-		[CLSCompliant(false)]
-		protected ILog Logger;
-
-		public SignalSender(string serverUrl)
+		public SignalSender(string serverUrl) : base(serverUrl)
 		{
 			// ReSharper disable DoNotCallOverridableMethodsInConstructor
 			Logger = MakeLogger();
 			// ReSharper restore DoNotCallOverridableMethodsInConstructor
-			_serverUrl = serverUrl;
-
-			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
-			ServicePointManager.DefaultConnectionLimit = 50;
-
-			TaskScheduler.UnobservedTaskException += taskSchedulerOnUnobservedTaskException;
-
 		}
 
 		public void SendNotification(Notification notification)
 		{
 			try
 			{
-				var task = _wrapper.NotifyClients(notification);
+				var task = Wrapper.NotifyClients(notification);
 				task.Wait(1000);
 			}
 			catch (AggregateException e)
@@ -39,11 +27,10 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-
 		public void Dispose()
 		{
-			_wrapper.StopHub();
-			_wrapper = null;
+			Wrapper.StopHub();
+			Wrapper = null;
 		}
 
 		[CLSCompliant(false)]
