@@ -1,16 +1,16 @@
 
 <nav class="navbar navbar-inverse navbar-static-top">
 		<div class="container">
-			<ul class="nav navbar-nav">  
-				<li class="dropdown">  
-					<a href="#" class="nowrap navbar-brand">Teleopti</a>
-				</li>  
-			</ul>
-		    <ul class="nav navbar-nav">
-		        <li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
-		    </ul>
-            
-		    <ul class="nav navbar-right">
+		    <div class="navbar-header">  
+		        <a class="navbar-brand" href="#">Teleopti</a>
+		        
+		    </div>
+            <div>
+                <ul class="nav navbar-nav">
+                    <li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
+                </ul>
+            </div>
+		    <ul class="nav navbar-nav navbar-right">
 		        <li class="dropdown">
 		            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="css: { active: ActiveView() == 'settings' }">
 		                <i class="glyphicon glyphicon-user"></i>
