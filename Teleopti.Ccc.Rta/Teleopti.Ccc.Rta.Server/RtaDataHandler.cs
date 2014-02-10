@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -164,7 +165,10 @@ namespace Teleopti.Ccc.Rta.Server
 			try
 			{
 				LoggingSvc.InfoFormat("Adding message to message broker queue AgentState: {0} ", agentState);
-				_asyncMessageSender.QueueRtaNotification(agentState.PersonId, agentState.BusinessUnit, agentState);
+
+				var notification = NotificationFactory.CreateNotification(agentState);
+
+				_asyncMessageSender.SendNotificationAsync(notification);
 			}
 			catch (Exception exception)
 			{

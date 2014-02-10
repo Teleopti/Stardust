@@ -7,6 +7,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
+using Teleopti.Messaging.SignalR;
 using log4net;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
@@ -34,20 +35,14 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 				if (messageSender.IsAlive)
 				{
 					var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-					
-					var notification = new Notification
-					{
-						StartDate = Subscription.DateToString(DateTime.Now.Date),
-						EndDate = Subscription.DateToString(DateTime.Now.Date),
-						DomainId = Subscription.IdToString(Guid.Empty),
-						DomainQualifiedType = typeof(IStatisticTask).AssemblyQualifiedName,
-						DomainType = typeof(IStatisticTask).Name,
-						ModuleId = Subscription.IdToString(Guid.NewGuid()),
-						DomainUpdateType = (int)DomainUpdateType.Insert,
-						DataSource = identity.DataSource.DataSourceName,
-						BusinessUnitId = Subscription.IdToString(Guid.Empty),
-						BinaryData = null
-					};
+
+					var notification = NotificationFactory.CreateNotification(DateTime.Now.Date,
+					                                                          DateTime.Now.Date,
+					                                                          Guid.NewGuid(),
+					                                                          Guid.Empty,
+					                                                          typeof (IStatisticTask),
+					                                                          identity.DataSource.DataSourceName,
+					                                                          Guid.Empty);
 
 					messageSender.SendNotification(notification);
 				}

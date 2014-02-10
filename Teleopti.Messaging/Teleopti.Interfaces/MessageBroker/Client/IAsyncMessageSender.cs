@@ -22,17 +22,15 @@ namespace Teleopti.Interfaces.MessageBroker.Client
         /// </remarks>
         bool IsAlive { get; }
 
-    	/// <summary>
-    	/// Sends the RTA data.
-    	/// </summary>
-    	/// <param name="personId">The person id.</param>
-    	/// <param name="businessUnitId">The business unit id.</param>
-    	/// <param name="actualAgentState"> </param>
-    	/// <remarks>
-    	/// Created by: ankarlp
-    	/// Created date: 10/06/2010
-    	/// </remarks>
-    	void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState);
+		/// <summary>
+		/// Sends the RTA data.
+		/// </summary>
+		/// <param name="notification"></param>
+		/// <remarks>
+		/// Created by: ankarlp
+		/// Created date: 10/06/2010
+		/// </remarks>
+		void SendNotificationAsync(Notification notification);
 		
         /// <summary>
         /// Instantiates the broker service.

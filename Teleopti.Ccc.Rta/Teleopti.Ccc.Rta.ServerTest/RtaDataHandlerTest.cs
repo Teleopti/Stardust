@@ -4,6 +4,7 @@ using System.Data.SqlTypes;
 using System.Net.Sockets;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
 using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId, _isSnapshot);
 
 			_stateCache.AssertWasCalled(a => a.AddAgentStateToCache(agentState));
-			_asyncMessageSender.AssertWasNotCalled(a => a.QueueRtaNotification(agentState.PersonId, agentState.BusinessUnit, agentState));
+			_asyncMessageSender.AssertWasNotCalled(a => a.SendNotificationAsync(null), a => a.IgnoreArguments());
 			_mocks.VerifyAll();
 
 		}
@@ -258,7 +259,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState));
+			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments();
 			
 			_mocks.ReplayAll();
 
@@ -292,7 +293,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState)).Throw(new SocketException());			
+			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments().Throw(new SocketException());			
 
 			_mocks.ReplayAll();
 			assignTargetAndRun();
@@ -322,7 +323,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState)).Throw(new BrokerNotInstantiatedException());
+			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments().Throw(new BrokerNotInstantiatedException());
 			
 
 			_mocks.ReplayAll();
@@ -346,7 +347,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				agentState);
 			var copyState = agentState;
 			_stateCache.Expect(s => s.AddAgentStateToCache(copyState));
-			_asyncMessageSender.Expect(m => m.QueueRtaNotification(_personId, _businessUnitId, agentState));
+			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments();
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandler(_asyncMessageSender, _dataSourceResolver, _personResolver, _agentAssembler, _stateCache);
@@ -397,7 +398,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_agentAssembler.Expect(a => a.GetAgentStatesForMissingAgents(_batchId, _sourceId))
 			               .Return(new List<IActualAgentState> {agentState, null});
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.QueueRtaNotification(Guid.Empty, Guid.Empty, agentState));
+			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments();
 			_mocks.ReplayAll();
 			
 			assignTargetAndRun();
