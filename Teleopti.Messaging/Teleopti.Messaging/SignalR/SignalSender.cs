@@ -1,24 +1,14 @@
 ﻿using System;
 using System.Net;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Exceptions;
 using log4net;
-using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalSender : IMessageSender
+	public class SignalSender : SignalSenderBase, IMessageSender
 	{
-		private readonly string _serverUrl;
-		private ISignalWrapper _wrapper;
-
 		[CLSCompliant(false)]
 		protected ILog Logger;
 
@@ -36,38 +26,6 @@ namespace Teleopti.Messaging.SignalR
 
 		}
 
-		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
-		{
-			return true;
-		}
-
-		private void taskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
-		{
-			if (e.Observed) return;
-			Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
-			e.SetObserved();
-		}
-
-		public void StartBrokerService()
-		{
-			try
-			{
-				var connection = MakeHubConnection();
-				var proxy = connection.CreateHubProxy("MessageBrokerHub");
-
-				_wrapper = _wrapper ?? new SignalWrapper(proxy, connection, Logger);
-				_wrapper.StartHub();
-			}
-			catch (SocketException exception)
-			{
-				Logger.Error("The message broker seems to be down.", exception);
-			}
-			catch (BrokerNotInstantiatedException exception)
-			{
-				Logger.Error("The message broker seems to be down.", exception);
-			}
-		}
-
 		public void SendNotification(Notification notification)
 		{
 			try
@@ -80,11 +38,7 @@ namespace Teleopti.Messaging.SignalR
 				Logger.Error("Could not send notifications, ", e);
 			}
 		}
-		
-		public bool IsAlive
-		{
-			get { return _wrapper != null && _wrapper.IsInitialized(); }
-		}
+
 
 		public void Dispose()
 		{
@@ -92,17 +46,10 @@ namespace Teleopti.Messaging.SignalR
 			_wrapper = null;
 		}
 
-
-		[CLSCompliant(false)]
-		protected virtual IHubConnectionWrapper MakeHubConnection()
-		{
-			return new HubConnectionWrapper(new HubConnection(_serverUrl));
-		}
-
 		[CLSCompliant(false)]
 		protected virtual ILog MakeLogger()
 		{
-			return LogManager.GetLogger(typeof(AsyncSignalSender));
+			return LogManager.GetLogger(typeof(SignalSender));
 		}
 	}
 }

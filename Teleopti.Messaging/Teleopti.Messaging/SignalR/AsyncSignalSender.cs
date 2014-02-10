@@ -5,53 +5,46 @@ using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Security.Cryptography.X509Certificates;
-using Newtonsoft.Json;
 using Microsoft.AspNet.SignalR.Client.Hubs;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Exceptions;
 using log4net;
-using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class AsyncSignalSender : IAsyncMessageSender
+	public class SignalSenderBase
 	{
-		private readonly string _serverUrl;
-		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
-		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
-		private ISignalWrapper _wrapper;
-		private Thread workerThread;
+		protected string _serverUrl;
+		protected ISignalWrapper _wrapper;
 
 		[CLSCompliant(false)]
 		protected ILog Logger;
 
-		public AsyncSignalSender(string serverUrl)
+		public SignalSenderBase(string serverUrl)
 		{
-			// ReSharper disable DoNotCallOverridableMethodsInConstructor
-			Logger = MakeLogger();
 			_serverUrl = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = ignoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
 
-            TaskScheduler.UnobservedTaskException += taskSchedulerOnUnobservedTaskException;
-			StartWorkerThread();
-			// ReSharper restore DoNotCallOverridableMethodsInConstructor
+			TaskScheduler.UnobservedTaskException += taskSchedulerOnUnobservedTaskException;
 		}
 
-		private static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		public bool IsAlive
+		{
+			get { return _wrapper != null && _wrapper.IsInitialized(); }
+		}
+
+		protected static bool ignoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
 		{
 			return true;
 		}
 
-		private void taskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+		protected void taskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 		{
 			if (e.Observed) return;
 			Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
@@ -77,7 +70,29 @@ namespace Teleopti.Messaging.SignalR
 				Logger.Error("The message broker seems to be down.", exception);
 			}
 		}
-		
+
+		[CLSCompliant(false)]
+		protected virtual IHubConnectionWrapper MakeHubConnection()
+		{
+			return new HubConnectionWrapper(new HubConnection(_serverUrl));
+		}
+	}
+
+	public class AsyncSignalSender : SignalSenderBase, IAsyncMessageSender
+	{
+		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
+		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
+		private Thread workerThread;
+
+		public AsyncSignalSender(string serverUrl)
+			: base(serverUrl)
+		{
+			// ReSharper disable DoNotCallOverridableMethodsInConstructor
+			Logger = MakeLogger();
+			StartWorkerThread();
+			// ReSharper restore DoNotCallOverridableMethodsInConstructor
+		}
+
 		public void SendNotificationAsync(Notification notification)
 		{
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
@@ -119,11 +134,6 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public bool IsAlive
-		{
-			get { return _wrapper != null && _wrapper.IsInitialized(); }
-		}
-
 		public void Dispose()
 		{
 			cancelToken.Cancel();
@@ -140,9 +150,10 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		[CLSCompliant(false)]
-		protected virtual IHubConnectionWrapper MakeHubConnection()
+		protected virtual void StartWorkerThread()
 		{
-			return new HubConnectionWrapper(new HubConnection(_serverUrl));
+			workerThread = new Thread(processQueue) { IsBackground = true };
+			workerThread.Start();
 		}
 
 		[CLSCompliant(false)]
@@ -150,34 +161,5 @@ namespace Teleopti.Messaging.SignalR
 		{
 			return LogManager.GetLogger(typeof(AsyncSignalSender));
 		}
-
-		[CLSCompliant(false)]
-		protected virtual void StartWorkerThread()
-		{
-			workerThread = new Thread(processQueue) { IsBackground = true };
-			workerThread.Start();
-		}
-
-		public void QueueRtaNotification(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
-		{
-			var domainObject = JsonConvert.SerializeObject(actualAgentState);
-			var type = typeof(IActualAgentState);
-
-			var notification = new Notification
-			{
-				StartDate =
-					Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
-				EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
-				DomainId = Subscription.IdToString(personId),
-				DomainType = type.Name,
-				DomainQualifiedType = type.AssemblyQualifiedName,
-				ModuleId = Subscription.IdToString(Guid.Empty),
-				DomainUpdateType = (int)DomainUpdateType.Insert,
-				BinaryData = Convert.ToBase64String(Encoding.UTF8.GetBytes(domainObject)),
-				BusinessUnitId = Subscription.IdToString(businessUnitId)
-			};
-			SendNotificationAsync(notification);
-		}
-
 	}
 }

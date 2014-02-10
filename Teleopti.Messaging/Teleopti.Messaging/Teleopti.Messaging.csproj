@@ -145,6 +145,7 @@
     <Compile Include="SignalR\HubConnectionWrapper.cs" />
     <Compile Include="SignalR\IHubConnectionWrapper.cs" />
     <Compile Include="SignalR\ISignalWrapper.cs" />
+    <Compile Include="SignalR\NotificationFactory.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />
     <Compile Include="SignalR\AsyncSignalSender.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
