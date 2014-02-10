@@ -1695,5 +1695,33 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsTrue(_target.ModifySchedulePart(new List<IScheduleDay> { schedulePart },true ));
             _mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldCompareContractTime()
+		{
+			var comparer = new ContractTimeComparer(TeleoptiPrincipal.Current.Regional.Culture);
+			Assert.AreEqual(0, comparer.Compare(null, null));
+			Assert.AreEqual(-1, comparer.Compare(null, "2"));
+			Assert.AreEqual(1, comparer.Compare("1", null));
+			
+			Assert.AreEqual(1, comparer.Compare(1, TimeSpan.FromHours(2)));
+			Assert.AreEqual(-1, comparer.Compare(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
+			Assert.AreEqual(1, comparer.Compare(TimeSpan.FromHours(2), TimeSpan.FromHours(1)));
+			Assert.AreEqual(0, comparer.Compare(TimeSpan.FromHours(1), TimeSpan.FromHours(1)));
+		}
+
+		[Test]
+		public void ShouldCompareDayOffCount()
+		{
+			var comparer = new ContractTimeComparer(TeleoptiPrincipal.Current.Regional.Culture);
+			Assert.AreEqual(0, comparer.Compare(null, null));
+			Assert.AreEqual(-1, comparer.Compare(null, "2"));
+			Assert.AreEqual(1, comparer.Compare("1", null));
+
+			Assert.AreEqual(-1, comparer.Compare("1", 2));
+			Assert.AreEqual(-1, comparer.Compare(1, 2));
+			Assert.AreEqual(1, comparer.Compare(2, 1));
+			Assert.AreEqual(0, comparer.Compare(1, 1));
+		}
     }
 }
