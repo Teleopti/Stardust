@@ -187,7 +187,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
-                    selectedDate: self.requestedDateInternal().toDate().toJSON()
+                	selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase())
                 },
                 beforeSend: function () {
                     //self.IsLoading(true);
@@ -223,7 +223,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
-                    date: self.requestedDateInternal().toDate().toJSON()
+                	date: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase())
                 },
                 beforeSend: function () {
                     //self.IsLoading(true);

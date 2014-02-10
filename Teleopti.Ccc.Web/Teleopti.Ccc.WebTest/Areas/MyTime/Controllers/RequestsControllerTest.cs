@@ -247,11 +247,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldGetIdOfTeamIBelongTo()
 		{
-			var givenDate = DateTime.Now;
+			var givenDate = DateOnly.Today;
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var myTeamId = Guid.NewGuid().ToString();
 
-			modelFactory.Stub(x => x.CreateShiftTradeMyTeamSimpleViewModel(new DateOnly(givenDate))).Return(myTeamId);
+			modelFactory.Stub(x => x.CreateShiftTradeMyTeamSimpleViewModel(givenDate)).Return(myTeamId);
 
 			var target = new RequestsController(modelFactory, null, null, null, null);
 			var result = target.ShiftTradeRequestMyTeam(givenDate);
