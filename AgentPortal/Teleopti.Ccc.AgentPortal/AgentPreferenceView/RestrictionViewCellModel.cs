@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
                 CellPainters = new List<IPreferenceCellPainter>
                                    {
                                        new AbsencePainter(grid),
-                                       new ScheduledDayOffPainter(grid),
                                        new ExtendedTemplatePainter(grid),
+                                       new ScheduledDayOffPainter(grid),
 									   new ScheduledShiftPainter(grid),
                                        new PreferredDayOffPainter(grid),
                                        new PreferredShiftCategoryPainter(grid),
