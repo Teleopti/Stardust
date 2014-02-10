@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[HttpGet]
 		[UnitOfWorkAction]
-		public JsonResult OnDates(DateTime date)
+		public JsonResult OnDates(DateOnly date)
 		{
-			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(new DateOnly(date)), JsonRequestBehavior.AllowGet);
+			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(date), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

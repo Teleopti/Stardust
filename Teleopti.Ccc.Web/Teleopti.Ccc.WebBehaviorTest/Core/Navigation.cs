@@ -327,6 +327,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             GoToWaitForCompleted("MyTime#Schedule/Month",
                 new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
         }
+
+		public static void GoToMyReport(DateTime date)
+		{
+			GoToWaitForCompleted(string.Format("MyTime#MyReport/Index/{0}/{1}/{2}",
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new ApplicationStartupTimeout());
+		}
 	}
 
 	public class GotoArgs

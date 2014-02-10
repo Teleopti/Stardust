@@ -103,7 +103,26 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 		var actionRegex = '[a-z]+';
 		var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
 		var dateRegex = '\\d{8}';
+		var yearsRegex = '\\d{4}';
+		var monthRegex = '\\d{2}';
+		var dayRegex = '\\d{2}';
 		
+
+		crossroads.addRoute(new RegExp('^(MyReport)/(' + actionRegex + ')/(' + yearsRegex + ')/(' + monthRegex + ')/(' + dayRegex+ ')$', 'i'),
+	        function (view, action, year, month, day) {
+		        var viewAction = view + '/' + action;
+		        var hashInfo = _parseHash('#' + viewAction);
+		        if (viewAction == currentViewId) {
+			        var parsedDate = new Date(year, month - 1, day);
+			        Teleopti.MyTimeWeb.MyReport.ForDay(moment(parsedDate));
+			        return;
+		        }
+		        _invokeDisposeCallback(currentViewId);
+	        	_adjustTabs(hashInfo);
+	        	_loadContent(hashInfo);
+	        });
+
+
 		crossroads.addRoute(new RegExp('^(' + viewRegex + ')/(' + actionRegex + ')/(ShiftTrade)/(' + dateRegex + ')$', 'i'),
 	        function (view, action, secondAction, date) {
 	        	var hashInfo = _parseHash('#' + view + '/' + action);

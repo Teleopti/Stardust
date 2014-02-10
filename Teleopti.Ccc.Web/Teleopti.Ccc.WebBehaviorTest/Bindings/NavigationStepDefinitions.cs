@@ -337,5 +337,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRequestsShiftTrade(date);
 		}
 
+		[Given(@"I view my report for '(.*)'")]
+		[When(@"I navigate to my report for '(.*)'")]
+		public void WhenINavigateToMyReportFor(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToMyReport(date);
+		}
 	}
 }

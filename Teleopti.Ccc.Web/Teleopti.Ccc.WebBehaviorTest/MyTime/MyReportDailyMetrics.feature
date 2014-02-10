@@ -36,22 +36,23 @@ Scenario: Open my report shows yesterdays figures
 Scenario: Show friendly message when no report data
 	Given I am an agent
 	And I do not have any report data for date '2013-10-02'
-	And the current time is '2013-10-03'
-	When I navigate to my report
+	When I navigate to my report for '2013-10-02'
 	Then I should see a user-friendly message explaining I dont have anything to view
 	
 Scenario: Navigate within my report view to previous day
 	Given I am an agent
-	And I have my report data for '2013-10-02'
-	And the current time is '2013-10-04'
-	When I navigate to my report
-	And I click previous button
-	Then I should see my report with data for '2013-10-02'
+	And I view my report for '2013-10-04'
+	When I click previous button
+	Then I should end up in my report for '2013-10-03'
 	
 Scenario: Navigate within my report view to next day
 	Given I am an agent
-	And I have my report data for '2013-10-02'
-	And the current time is '2013-10-02'
-	When I navigate to my report
-	And I click next button
-	Then I should see my report with data for '2013-10-02'
+	And I view my report for '2013-10-04'
+	When I click next button
+	Then I should end up in my report for '2013-10-05'
+
+Scenario: Navigate within my report using date picker
+	Given I am an agent
+	And I view my report for '2013-10-04'
+	When I select the date '2013-10-10'
+	Then I should end up in my report for '2013-10-10'

@@ -2,6 +2,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MyReport
 {
 	public class DailyMetricsViewModel
 	{
+
 		public string Adherence { get; set; }
 		public string ReadyTimePerScheduledReadyTime { get; set; }
 		public string AverageHandlingTime { get; set; }

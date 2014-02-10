@@ -3,6 +3,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
@@ -107,5 +108,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         {
             Browser.Interactions.Click("#report-view-date-nav-next");
         }
+
+		[Then(@"I should end up in my report for '(.*)'")]
+		public void ThenIShouldEndUpInMyReportFor(DateTime date)
+		{
+
+			Browser.Interactions.AssertUrlContains(string.Format("Index/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
+		}
+
+		[When(@"I select the date '(.*)'")]
+		public void WhenISelectTheDate(DateTime date)
+		{
+			Browser.Interactions.Click(".icon-th");
+			string selector = string.Format(".datepicker-days .day:contains('{0}')", date.Day);
+			Browser.Interactions.AssertVisibleUsingJQuery(selector);
+			Browser.Interactions.ClickUsingJQuery(selector);
+		}
+
+
 	}
 }
