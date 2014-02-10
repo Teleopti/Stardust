@@ -11882,4 +11882,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Compare with teams from</value>
     <comment>What teams to compare , used in Agent Info/Fairness Tab</comment>
   </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Schedule must be reloaded</value>
+    <comment>Message in shifteditor if the user ha a schedule thats not up to date</comment>
+  </data>
 </root>

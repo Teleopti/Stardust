@@ -6,6 +6,7 @@
     xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views"
     xmlns:Editor="clr-namespace:Teleopti.Ccc.WinCode.Scheduling.Editor;assembly=Teleopti.Ccc.WinCode"
     xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
+             xmlns:converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
              GuiHelpers:HelpProvider.HelpString="SchedulingScreen+shiftEditor"
 	HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
 	WpfControls:LayerView.LayerChanged="LayerChanged"
@@ -21,10 +22,11 @@
             <DataTemplate  DataType="{x:Type Editor:ShiftEditorViewModel}" x:Key="categoryView">
                 <Views:ShiftCategoryView DataContext="{Binding}"/>
             </DataTemplate>
+			<converters:ReversedVisibilityConverter x:Key="reversedVisibilityConverter"/>
         </ResourceDictionary>
 
     </UserControl.Resources>
-    <Grid>
+	<Grid IsEnabled="{Binding Path=Enabled}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -37,7 +39,7 @@
         </Grid.RowDefinitions>
 
         <!-- Settings for editor (intervals etc) -->
-        <ContentControl Content="{Binding Path=Settings}" Grid.Row="0" Grid.Column="0"/>
+        <ContentControl Content="{Binding Path=Settings}" Grid.Row="0" Grid.Column="0" />
 
         <!--Settings for the complete part (shiftcategory etc-->
         <ContentControl ContentTemplate="{StaticResource categoryView}" Content="{Binding}" Grid.Row="0" Grid.Column="1"/>
@@ -46,9 +48,14 @@
         <!--LayerEditor, settings for the selected layer (start time etc-->
         <ContentControl Content="{Binding Path=EditLayer}" Grid.Row="0" Grid.Column="2"/>
 
-
         <!-- Shifteditor, presenting the layers visually and the timeline -->
         <ContentControl Content="{Binding}" Grid.Row="1" Grid.ColumnSpan="4"/>
-    </Grid>
+
+		<Grid  Grid.RowSpan="2" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding Path=Enabled, Converter={StaticResource reversedVisibilityConverter}}">
+			<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightBlue" Opacity="0.4"></Grid>
+			<TextBlock Text="xxScheduleMustBeReloaded" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+		</Grid>
+   
+	</Grid>
 
 </UserControl>

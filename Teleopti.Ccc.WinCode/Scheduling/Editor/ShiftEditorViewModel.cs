@@ -116,6 +116,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             EditLayer.LayerUpdated += EditLayer_LayerUpdated;
             Settings=new ShiftEditorSettings(this);
             SetUpCommandModels();
+			disableWhenScheduleIsChanged();
         }
 
 
@@ -390,6 +391,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 				handler(this, new PropertyChangedEventArgs(property));
 			}
         }
+
+		private void disableWhenScheduleIsChanged()
+		{
+			_eventAggregator.GetEvent<GenericEvent<TriggerShiftEditorUpdate>>().Subscribe(e =>
+				                                                                              {
+					                                                                              Enabled = false;
+				                                                                              });
+		}
     }
 }
 
