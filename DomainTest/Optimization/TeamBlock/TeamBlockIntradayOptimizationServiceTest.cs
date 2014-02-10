@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 	    private IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
 	    [SetUp]
 		public void Setup()
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_teamBlockMaxSeatChecker = _mocks.StrictMock<ITeamBlockMaxSeatChecker>();
 	        _dailyTargetValueCalculatorForTeamBlock = _mocks.StrictMock<IDailyTargetValueCalculatorForTeamBlock>();
+			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_target = new TeamBlockIntradayOptimizationService(_teamBlockGenerator, _teamBlockScheduler,
 			                                                   _schedulingOptionsCreator, 
 			                                                   _safeRollbackAndResourceCalculation,
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-																	 persons, _schedulePartModifyAndRollbackService))
+																	 persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer))
 				      .Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
@@ -90,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-				                 _schedulePartModifyAndRollbackService);
+				                 _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
 			}
 		}
 
@@ -123,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-																	 persons, _schedulePartModifyAndRollbackService))
+																	 persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer))
 				      .Return(false);
                 Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced))
                       .Return(5.0);
@@ -132,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-				                 _schedulePartModifyAndRollbackService);
+				                 _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
 			}
 		}
 		
@@ -165,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(
 					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
-																	 persons, _schedulePartModifyAndRollbackService))
+																	 persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer))
 					  .Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 					  .Return(false);
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-								 _schedulePartModifyAndRollbackService);
+								 _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
 			}
 		}
 
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
-								 _schedulePartModifyAndRollbackService);
+								 _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
 				_target.ReportProgress -= targetReportProgress;
 			}
 		}

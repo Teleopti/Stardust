@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
 		[SetUp]
 		public void Setup()
@@ -78,13 +79,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingOptions = new SchedulingOptions();
 			_selectedPersons = new List<IPerson> {_person1, _person2};
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 		}
 
 		[Test]
 		public void ShouldBeFalseIfNoRoleModel()
 		{
 			var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, null,
-									  _blockPeriod, _rollbackService);
+									  _blockPeriod, _rollbackService, _resourceCalculateDelayer);
 			Assert.That(result, Is.False);
 		}
 
@@ -101,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-				                          _blockPeriod, _rollbackService);
+				                          _blockPeriod, _rollbackService, _resourceCalculateDelayer);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -125,10 +127,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(true).Repeat.Twice();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(()=>_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService));
+				Expect.Call(()=>_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService, _resourceCalculateDelayer));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(()=>_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService));
+				Expect.Call(()=>_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService, _resourceCalculateDelayer));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
@@ -138,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-				                                       _blockPeriod, _rollbackService);
+				                                       _blockPeriod, _rollbackService, _resourceCalculateDelayer);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -186,10 +188,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		  _schedulingOptions.UseMinimumPersons,
 																		  _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService, _resourceCalculateDelayer));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod,_rollbackService));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod,_rollbackService, _resourceCalculateDelayer));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
@@ -199,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-													   _blockPeriod, _rollbackService);
+													   _blockPeriod, _rollbackService, _resourceCalculateDelayer);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -247,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 																		  _schedulingOptions.UseMinimumPersons,
 																		  _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod, _rollbackService, _resourceCalculateDelayer));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(_teamBlockInfo,
 																											  _dateOnly,
@@ -257,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-													   _blockPeriod, _rollbackService);
+													   _blockPeriod, _rollbackService, _resourceCalculateDelayer);
 				Assert.That(result, Is.True);
 			}
 		}

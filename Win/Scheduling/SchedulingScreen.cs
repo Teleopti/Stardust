@@ -3699,7 +3699,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
 		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
-					var teamScheduling = new TeamScheduling(resourceCalculateDelayer);
+					var teamScheduling = new TeamScheduling();
 					var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 																			 _container.Resolve<IProposedRestrictionAggregator>(),
 																			 _container.Resolve<IWorkShiftFilterService>(),
@@ -3723,7 +3723,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					var teamBlockScheduleCommand = _container.Resolve<ITeamBlockScheduleCommand>();
 					teamBlockScheduleCommand.Execute(schedulingOptions, _backgroundWorkerScheduling, selectedPersons, scheduleDays,
-	                                                 teamBlockScheduler, rollbackService);
+	                                                 teamBlockScheduler, rollbackService, resourceCalculateDelayer);
 
 
                 }
@@ -4106,7 +4106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
 																					   tagSetter);
 
-						var teamScheduling = new TeamScheduling(resourceCalculateDelayer);
+						var teamScheduling = new TeamScheduling();
 
 						var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 						                                                         _container.Resolve<IProposedRestrictionAggregator>(),
@@ -4130,7 +4130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						_container.Resolve<ITeamBlockOptimizationCommand>()
 						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
-						                   rollbackService, tagSetter, schedulingOptions, teamBlockScheduler);
+						                   rollbackService, tagSetter, schedulingOptions, teamBlockScheduler, resourceCalculateDelayer);
 
 						break;
 					}

@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 		private ITeamBlockDaysOffMoveFinder _teamBlockDaysOffMoveFinder;
 	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -86,6 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                   new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1))));
 			_selectedPersons = new List<IPerson> {_person};
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 
 			_target = new TeamBlockDayOffOptimizerService(_teamInfoFactory, _lockableBitArrayFactory, _lockableBitArrayChangesTracker,
 			                                              _teamBlockScheduler, _teamBlockInfoFactory,
@@ -127,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList, 
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), 
 					_selectedPersons, _optimizationPreferences, _rollbackService, 
-					_schedulingOptions);
+					_schedulingOptions, _resourceCalculateDelayer);
 			}
 		}
 
@@ -154,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList, 
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), 
 					_selectedPersons, _optimizationPreferences, _rollbackService, 
-					_schedulingOptions);
+					_schedulingOptions,_resourceCalculateDelayer);
 				_target.ReportProgress -= _target_ReportProgress;
 			}
 		}
@@ -195,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_schedulingOptions);
+					_schedulingOptions, _resourceCalculateDelayer);
 			}
 		}
 
@@ -228,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_schedulingOptions);
+					_schedulingOptions, _resourceCalculateDelayer);
 			}
 		}
 
@@ -255,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_schedulingOptions);
+					_schedulingOptions, _resourceCalculateDelayer);
 			}
 		}
 
@@ -282,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_schedulingOptions);
+					_schedulingOptions, _resourceCalculateDelayer);
 			}
 		}
 
@@ -309,7 +311,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.OptimizeDaysOff(_matrixList,
 					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)),
 					_selectedPersons, _optimizationPreferences, _rollbackService,
-					_schedulingOptions);
+					_schedulingOptions, _resourceCalculateDelayer);
 			}
 		}
 
@@ -360,7 +362,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
 			                                                     new DateOnlyPeriod(DateOnly.MinValue,
 			                                                                        DateOnly.MinValue.AddDays(1)),
-																 _selectedPersons, _rollbackService)).Return(!failOnRescheduling);
+																 _selectedPersons, _rollbackService, _resourceCalculateDelayer)).Return(!failOnRescheduling);
 			if (failOnRescheduling)
 				return;
 

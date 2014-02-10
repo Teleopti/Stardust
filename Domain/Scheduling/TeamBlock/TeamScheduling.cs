@@ -7,21 +7,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamScheduling
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+		void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
     }
 
     public  class TeamScheduling : ITeamScheduling
     {
-        private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
-       
-        public TeamScheduling(IResourceCalculateDelayer resourceCalculateDelayer)
-        {
-            _resourceCalculateDelayer = resourceCalculateDelayer;
-        }
-
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 		    
             
@@ -41,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
 			assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly, schedulePartModifyAndRollbackService);
 			OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
-			_resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+			resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 			                                            shiftProjectionCache.WorkShiftProjectionPeriod);
 		}
 

@@ -197,7 +197,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
             builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
-            builder.RegisterType<ResourceCalculateDelayer>().As<IResourceCalculateDelayer>();
             builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
             builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>();
             builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();

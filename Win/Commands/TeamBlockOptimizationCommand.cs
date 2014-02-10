@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Win.Commands
 							ISchedulePartModifyAndRollbackService rollbackService,
 							IScheduleTagSetter tagSetter,
 							ISchedulingOptions schedulingOptions,
-							ITeamBlockScheduler teamBlockScheduler);
+							ITeamBlockScheduler teamBlockScheduler,
+							IResourceCalculateDelayer resourceCalculateDelayer);
     }
 
     public class TeamBlockOptimizationCommand : ITeamBlockOptimizationCommand
@@ -114,7 +115,8 @@ namespace Teleopti.Ccc.Win.Commands
 							ISchedulePartModifyAndRollbackService rollbackServiceWithResourceCalculation,
 							IScheduleTagSetter tagSetter,
 							ISchedulingOptions schedulingOptions,
-							ITeamBlockScheduler teamBlockScheduler)
+							ITeamBlockScheduler teamBlockScheduler,
+							IResourceCalculateDelayer resourceCalculateDelayer)
         {
 
 			_backgroundWorker = backgroundWorker;
@@ -129,11 +131,11 @@ namespace Teleopti.Ccc.Win.Commands
 	        if (optimizationPreferences.General.OptimizationStepDaysOff)
 		        optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences,
 										 allMatrixes, rollbackServiceWithResourceCalculation,
-		                                 schedulingOptions, teamBlockScheduler, teamInfoFactory);
+		                                 schedulingOptions, teamBlockScheduler, teamInfoFactory, resourceCalculateDelayer);
 
             if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
                 optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences,
-										  allMatrixes, rollbackServiceWithResourceCalculation, schedulingOptions, teamBlockScheduler);
+										  allMatrixes, rollbackServiceWithResourceCalculation, schedulingOptions, teamBlockScheduler, resourceCalculateDelayer);
 
 			if (optimizationPreferences.General.OptimizationStepFairness)
 			{
@@ -162,7 +164,8 @@ namespace Teleopti.Ccc.Win.Commands
 											  ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 											  ISchedulingOptions schedulingOptions,
 											  ITeamBlockScheduler teamBlockScheduler, 
-												ITeamInfoFactory teamInfoFactory)
+												ITeamInfoFactory teamInfoFactory,
+												IResourceCalculateDelayer resourceCalculateDelayer)
         {
 
             OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _restrictionExtractor,
@@ -217,7 +220,7 @@ namespace Teleopti.Ccc.Win.Commands
                 selectedPeriod,
                 selectedPersons,
                 optimizationPreferences,
-                schedulePartModifyAndRollbackService,schedulingOptions);
+                schedulePartModifyAndRollbackService,schedulingOptions, resourceCalculateDelayer);
             teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
@@ -228,7 +231,8 @@ namespace Teleopti.Ccc.Win.Commands
 												IList<IScheduleMatrixPro> allMatrixes, 
 												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 												ISchedulingOptions schedulingOptions,
-												ITeamBlockScheduler teamBlockScheduler)
+												ITeamBlockScheduler teamBlockScheduler,
+												IResourceCalculateDelayer resourceCalculateDelayer)
         {
 	        var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
@@ -254,7 +258,7 @@ namespace Teleopti.Ccc.Win.Commands
                 selectedPeriod,
                 selectedPersons,
                 optimizationPreferences,
-                schedulePartModifyAndRollbackService
+                schedulePartModifyAndRollbackService, resourceCalculateDelayer
                 );
             teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
