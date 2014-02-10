@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
 			var target = new MyReportController(viewModelFactory);
 			var model = new DailyMetricsViewModel();
-			var date = DateTime.Now.Date;
+			var date = DateOnly.Today;
 
-			viewModelFactory.Stub(x => x.CreateDailyMetricsViewModel(new DateOnly(date))).Return(model);
+			viewModelFactory.Stub(x => x.CreateDailyMetricsViewModel(date)).Return(model);
 
 			var result = target.OnDates(date);
 				

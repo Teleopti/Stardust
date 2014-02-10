@@ -1,39 +1,48 @@
 ﻿Teleopti.MyTimeWeb.MyReport = (function () {
 	var vm;
 
-	function MyReportViewModel(loadDataMethod) {
+	function MyReportViewModel(loadDataMethod, date) {
 		var self = this;
-		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day');
-		self.fillDataMethod = loadDataMethod;
+
 		self.adherence = ko.observable();
 		self.answeredCalls = ko.observable();
 		self.averageAfterCallWork = ko.observable();
 		self.averageHandlingTime = ko.observable();
 		self.averageTalkTime = ko.observable();
 		self.readyTimePerScheduledReadyTime = ko.observable();
-		self.nextWeekDate = ko.observable(moment());
-		self.previousWeekDate = ko.observable(moment());
-		self.selectedDateInternal = ko.observable(yesterDayFromNow);
+		self.selectedDateInternal = ko.observable(date);
 		self.weekStart = ko.observable(1);
 		self.datePickerFormat = '';
 		self.dataAvailable = ko.observable();
+		self.goToAnotherDay = function (toDate) {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
+		};
 		self.selectedDate = ko.computed({
 			read: function () {
 				return self.selectedDateInternal();
 			},
 			write: function (value) {
-				self.selectedDateInternal(value);
-				self.fillDataMethod(self.selectedDateInternal());
+				if (value.format('YYYYMMDD') == date.format('YYYYMMDD')) return;
+				self.goToAnotherDay(value);
 			}
 		});
+		self.nextDay = function () {
+			self.goToAnotherDay(self.selectedDate().clone().add('days', 1));
+		};
+		self.previousDay = function() {
+			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
+		};
+
+		loadDataMethod(date);
 	}
 
 	function fillData(date) {
 		$.ajax({
 			url: 'MyTime/MyReport/OnDates',
 			dataType: 'json',
-			data: { date: date.toDate().toJSON() },
+			data: { date: date.clone().utc().toDate().toJSON() },
 			success: function (data) {
+				vm.selectedDateInternal(date);
 				vm.adherence(data.Adherence);
 				vm.answeredCalls(data.AnsweredCalls);
 				vm.averageAfterCallWork(data.AverageAfterCallWork);
@@ -59,9 +68,18 @@
 	};
 
 	function bindData() {
-		vm = new MyReportViewModel(fillData);
+		vm = new MyReportViewModel(fillData, getDate());
 		var elementToBind = $('.myreport-daily-metrics')[0];
 		ko.applyBindings(vm, elementToBind);
+	}
+	
+	function getDate() {
+		var date = Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
+		if (date != '') {
+			return moment(date, "YYYYMMDD");
+		} else {
+			return moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day');
+		}
 	}
 
 	return {
@@ -77,11 +95,9 @@
 			bindData();
 			setWeekStart();
 		},
-		nextDay: function () {
-			vm.selectedDateInternal(vm.selectedDate().clone().add('days', 1));
-		},
-		previousDay: function () {
-			vm.selectedDateInternal(vm.selectedDate().clone().add('days', -1));
-		}
+		
+		ForDay: function(date) {
+			fillData(date);
+		}		
 	};
 })(jQuery);
