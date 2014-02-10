@@ -18,17 +18,14 @@ namespace Teleopti.Messaging.SignalR
 		public AsyncSignalSender(string serverUrl)
 			: base(serverUrl)
 		{
-			// ReSharper disable DoNotCallOverridableMethodsInConstructor
 			Logger = MakeLogger();
 			StartWorkerThread();
-			// ReSharper restore DoNotCallOverridableMethodsInConstructor
 		}
 
 		public void SendNotificationAsync(Notification notification)
 		{
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
 		}
-
 
 		private void processQueue(object state)
 		{
@@ -65,12 +62,11 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		public void Dispose()
+		public override void Dispose()
 		{
 			cancelToken.Cancel();
 			workerThread.Join();
-			Wrapper.StopHub();
-			Wrapper = null;
+			base.Dispose();
 		}
 
 

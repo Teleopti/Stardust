@@ -9,9 +9,7 @@ namespace Teleopti.Messaging.SignalR
 	{
 		public SignalSender(string serverUrl) : base(serverUrl)
 		{
-			// ReSharper disable DoNotCallOverridableMethodsInConstructor
 			Logger = MakeLogger();
-			// ReSharper restore DoNotCallOverridableMethodsInConstructor
 		}
 
 		public void SendNotification(Notification notification)
@@ -25,12 +23,6 @@ namespace Teleopti.Messaging.SignalR
 			{
 				Logger.Error("Could not send notifications, ", e);
 			}
-		}
-
-		public void Dispose()
-		{
-			Wrapper.StopHub();
-			Wrapper = null;
 		}
 
 		[CLSCompliant(false)]

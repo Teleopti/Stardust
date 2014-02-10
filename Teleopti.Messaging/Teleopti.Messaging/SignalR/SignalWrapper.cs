@@ -167,12 +167,12 @@ namespace Teleopti.Messaging.SignalR
 			return notify(notifyclientsmultiple, notifications);
 		}
 
-		private Task notify(string notify, params object[] notifications)
+		private Task notify(string methodName, params object[] notifications)
 		{
 			try
 			{
 				if (_hubConnection.State == ConnectionState.Connected)
-					return _hubProxy.Invoke(notify, notifications);
+					return _hubProxy.Invoke(methodName, notifications);
 			}
 			catch (InvalidOperationException exception)
 			{

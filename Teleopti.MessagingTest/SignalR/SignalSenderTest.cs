@@ -259,7 +259,6 @@ namespace Teleopti.MessagingTest.SignalR
 			}
 		}
 
-
 		private class asyncSignalSenderForTest : AsyncSignalSender
 		{
 			private readonly IHubConnectionWrapper _hubConnection;

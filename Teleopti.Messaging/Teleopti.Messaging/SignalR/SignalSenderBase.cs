@@ -10,7 +10,7 @@ using log4net;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalSenderBase
+	public class SignalSenderBase : IDisposable
 	{
 		[CLSCompliant(false)]
 		protected string ServerUrl;
@@ -70,6 +70,12 @@ namespace Teleopti.Messaging.SignalR
 		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
 			return new HubConnectionWrapper(new HubConnection(ServerUrl));
+		}
+
+		public virtual void Dispose()
+		{
+			Wrapper.StopHub();
+			Wrapper = null;
 		}
 	}
 }
