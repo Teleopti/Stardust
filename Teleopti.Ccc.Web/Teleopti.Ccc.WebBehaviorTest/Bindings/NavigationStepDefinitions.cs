@@ -239,14 +239,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToMyReport();
 		}
 
-		[When(@"I navigate to my report for '(.*)'")]
-		public void WhenINavigateToMyReportFor(string date)
-		{
-			TestControllerMethods.Logon();
-			Navigation.GoToMyReport();
-		}
-
-
 		[Given(@"I am viewing team schedule for tomorrow")]
 		[Given(@"I am viewing group schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()

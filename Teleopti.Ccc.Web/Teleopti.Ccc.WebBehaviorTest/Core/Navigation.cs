@@ -315,14 +315,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted("MyTime#MyReport/Index", new ApplicationStartupTimeout());
 		}
 
-		public static void GoToMyReport(DateTime date)
-		{
-			//Henke: vet inte om vi skall använda index????
-			GoToWaitForCompleted(string.Format("MyTime#MyReport/Index/{0}/{1}/{2}",
-				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
-		}
-
 	    public static void GotoMonthSchedulePage(DateTime date)
 	    {
             GoToWaitForCompleted(string.Format("MyTime#Schedule/Month/{0}/{1}/{2}",
