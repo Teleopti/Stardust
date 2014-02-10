@@ -212,37 +212,34 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <returns>Returns true if the rows are reordered</returns>
         public bool SortColumn(int column)
         {
-            // Resort _schedulerState.FilteredPersonDictionary
             List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
 
             if (CurrentSortColumn != column || !IsAscendingSort)
             {
-                // removed as bugfix: 15718
-                //sortedFilteredPersonDictionary = (from p in SchedulerState.FilteredPersonDictionary
-                //                                  orderby ColumnTextFromPerson(p.Value, (ColumnType)column) ascending
-                //                                  select p).ToList();
-
-                // added as bugfix: 15718
-                CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+                var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
 
-				sortedFilteredPersonDictionary =
-					SchedulerState.FilteredAgentsDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
+				if ((ColumnType)column == ColumnType.CurrentContractTimeColumn || (ColumnType)column == ColumnType.TargetContractTimeColumn)
+					comparer = new ContractTimeComparer(loggedOnCulture);
 
+				if ((ColumnType)column == ColumnType.CurrentDayOffColumn || (ColumnType)column == ColumnType.TargetDayOffColumn)
+					comparer = new DayOffCountComparer(loggedOnCulture);
+
+                sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
 		 
                 IsAscendingSort = true;
             }
             else
             {
-                // removed as bugfix: 15718
-                //sortedFilteredPersonDictionary = (from p in SchedulerState.FilteredPersonDictionary
-                //                                  orderby ColumnTextFromPerson(p.Value, (ColumnType)column) descending
-                //                                  select p).ToList();
-
-                // added as bugfix: 15718
-                CultureInfo loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+                var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
                 IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
-		
+
+				if ((ColumnType)column == ColumnType.CurrentContractTimeColumn || (ColumnType)column == ColumnType.TargetContractTimeColumn)
+					comparer = new ContractTimeComparer(loggedOnCulture);
+
+				if ((ColumnType)column == ColumnType.CurrentDayOffColumn || (ColumnType)column == ColumnType.TargetDayOffColumn)
+					comparer = new DayOffCountComparer(loggedOnCulture);
+
 				sortedFilteredPersonDictionary =
 					SchedulerState.FilteredAgentsDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)column), comparer).ToList();
 
@@ -852,4 +849,72 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         #endregion
     }
+
+	public sealed class ContractTimeComparer : IComparer<object>
+	{
+		private readonly CultureInfo _cultureInfo;
+
+		public ContractTimeComparer(CultureInfo cultureInfo)
+        {
+            _cultureInfo = cultureInfo;
+        }
+
+		public int Compare(object x, object y)
+		{
+			if (x == null && y == null)
+				return 0;
+
+			if (x == null)
+				return -1;
+
+			if (y == null)
+				return 1;
+
+			if (x is TimeSpan && y is TimeSpan)
+			{
+				var timeSpanX = (TimeSpan) x;
+				var timeSpanY = (TimeSpan) y;
+				return TimeSpan.Compare(timeSpanX, timeSpanY);
+			}
+			
+			var stringX = x.ToString();
+			var stringY = y.ToString();
+			return string.Compare(stringX, stringY, true, _cultureInfo);	
+			
+		}
+	}
+
+	public sealed class DayOffCountComparer : IComparer<object>
+	{
+		private readonly CultureInfo _cultureInfo;
+
+		public DayOffCountComparer(CultureInfo cultureInfo)
+		{
+			_cultureInfo = cultureInfo;
+		}
+
+		public int Compare(object x, object y)
+		{
+			if (x == null && y == null)
+				return 0;
+
+			if (x == null)
+				return -1;
+
+			if (y == null)
+				return 1;
+
+			if (x is int && y is int)
+			{
+				var intX = (int)x;
+				var intY = (int)y;
+				return intX.CompareTo(intY);
+			}
+
+			var stringX = x.ToString();
+			var stringY = y.ToString();
+			return string.Compare(stringX, stringY, true, _cultureInfo);
+
+		}
+	}
 }
