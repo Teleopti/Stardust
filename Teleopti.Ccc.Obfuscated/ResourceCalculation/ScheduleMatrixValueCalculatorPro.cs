@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -76,6 +77,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
             IList<double> intradayDifferences =
                 SkillStaffPeriodHelper.SkillStaffPeriodsRelativeDifferenceHours(skillStaffPeriods, useMinPersonnel, useMaxPersonnel);
+
+	        var nonNaNList = intradayDifferences.Select(v => v).Where(v => !double.IsNaN(v));
+	        if (!nonNaNList.Any())
+		        intradayDifferences = SkillStaffPeriodHelper.SkillStaffPeriodsAbsoluteDifferenceHours(skillStaffPeriods,
+		                                                                                              useMinPersonnel,
+		                                                                                              useMaxPersonnel);
 
             return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences, highestIntraIntervalDeviation);
         }
