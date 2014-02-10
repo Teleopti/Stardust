@@ -64,3 +64,12 @@ GO
 if not exists (select 1 from PurgeSetting where [Key] = 'MonthsToKeepRequests')
 	insert into PurgeSetting ([Key], [Value]) values('MonthsToKeepRequests', 120)
 GO
+
+
+--drop old persondayoff tables
+IF OBJECT_ID('[Auditing].[PersonDayOff_AUD]', 'U') IS NOT NULL
+	DROP TABLE [Auditing].[PersonDayOff_AUD]
+GO
+IF OBJECT_ID('[dbo].[PersonDayOff]', 'U') IS NOT NULL
+	DROP TABLE [dbo].[PersonDayOff]
+GO
