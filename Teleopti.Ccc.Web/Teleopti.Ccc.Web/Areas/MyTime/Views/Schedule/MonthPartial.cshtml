@@ -4,26 +4,24 @@
 
 <div class="container">
     <div class="navbar navbar-default">
-        <div class="container">
-            <form class="navbar-form pull-left">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-bind="click: previousMonth">
-                            <i class="glyphicon glyphicon-arrow-left"></i>
-                        </button>
-                    </span>
-                    <input class="form-control col-md-2 text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
-                    <div class="input-group-btn">
-                        <button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
-                            <i class="glyphicon glyphicon-th"></i>
-                        </button>
-                        <button class="btn btn-default" type="button" data-bind="click: nextMonth">
-                            <i class="glyphicon glyphicon-arrow-right"></i>
-                        </button>
-                    </div>
+            <div class="col-xs-3" style="margin-top: 5px">
+            <div class="input-group">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="click: previousMonth">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                    </button>
+                </span>
+                <input class="form-control col-md-2 text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
+                <div class="input-group-btn">
+                    <button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
+                        <i class="glyphicon glyphicon-th"></i>
+                    </button>
+                    <button class="btn btn-default" type="button" data-bind="click: nextMonth">
+                        <i class="glyphicon glyphicon-arrow-right"></i>
+                    </button>
                 </div>
-            </form>
-        </div>
+            </div>
+            </div>
     </div>
 
     <div id="calendar" style="width: 100%;">
