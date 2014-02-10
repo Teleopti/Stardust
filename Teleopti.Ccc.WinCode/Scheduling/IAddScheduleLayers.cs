@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         IAddLayerViewModel<IActivity> CreateAddPersonalActivityViewModel(IEnumerable<IActivity> activities, DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
-        IAddOvertimeViewModel CreateAddOvertimeViewModel(IScheduleDay selectedSchedule,IEnumerable<IActivity> activities,
+        IAddOvertimeViewModel CreateAddOvertimeViewModel(IEnumerable<IActivity> activities,
                                                          IList<IMultiplicatorDefinitionSet> definitionSets,
                                                          IActivity defaultActivity, DateTimePeriod period, TimeZoneInfo timeZoneInfo);
 
