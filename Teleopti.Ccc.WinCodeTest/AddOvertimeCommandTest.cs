@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCodeTest
 				Expect.Call(_contract.MultiplicatorDefinitionSetCollection).Return(new ReadOnlyCollection<IMultiplicatorDefinitionSet>(_multiplicatorDefinitionSets));
 				Expect.Call(_schedulerStateHolder.CommonStateHolder).Return(new CommonStateHolder());
 				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(null);
-				Expect.Call(_scheduleViewBase.CreateAddOvertimeViewModel(_scheduleDay, new List<IActivity>(),
+				Expect.Call(_scheduleViewBase.CreateAddOvertimeViewModel( new List<IActivity>(),
 				                                                         _multiplicatorDefinitionSets, null, dateTimePeriod,
 				                                                         null))
 																		 .Return(_addOvertimeViewModel)
