@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			Browser.Interactions.AssertNotExists(".navbar-form", "#Team-Picker");
+			Browser.Interactions.AssertNotExists(".navbar-nav", "#Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker")]
