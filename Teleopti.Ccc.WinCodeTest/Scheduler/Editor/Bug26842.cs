@@ -46,33 +46,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Editor
 			moveLayer(_target.Layers.First(), 37);
 		}
 
-		[Test]
-		public void Enabled_WhenALayerIsMoved_ShouldbeFalse()
-		{
-			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
-
-			_eventAggregator.GetEvent<GenericEvent<TriggerShiftEditorUpdate>>().Subscribe(e =>
-			{
-				//No schedule is reloaded after a layer is edited, something went wrong in the scheduler
-			});
-
-			_target.LoadSchedulePart(scheduleDay);
-			moveLayer(_target.Layers.First(),10);
-
-			_target.Enabled.Should().Be(false);
-		}
-
-		[Test]
-		public void Enabled_WhenAScheduleIsLoaded_ShouldbeTrue()
-		{
-			var scheduleDay = new SchedulePartFactoryForDomain().CreatePartWithMainShift();
-
-			_target.LoadSchedulePart(scheduleDay);
-
-			_target.Enabled.Should().Be(true);
-		}
-		
-	
 		private void moveLayer(ILayerViewModel layer, double pixels)
 		{
 			var panel = new DateTimePeriodPanel();
