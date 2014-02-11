@@ -1,23 +1,21 @@
-AGENT_SERVICE="https://$(BASEURL)/SDK/TeleoptiCCCSDKService.svc"
-AS_DATABASE="NotImplemented"
-AS_SERVER_NAME="NotImplemented"
-DB_ANALYTICS="Demo_TeleoptiAnalytics"
-DB_CCC7="Demo_TeleoptiCCC7"
-ETL_INTERVALL="15"
-IIS_AUTH="Forms"
-MATRIX_WEB_SITE_URL="https://$(BASEURL)/Analytics"
-PM_ASMX="NotImplemented"
-PM_INSTALL="False"
-RTA_SERVICE="https://$(BASEURL)/RTA/TeleoptiRtaService.svc"
-SDK_CRED_PROT="None"
-SQL_AUTH_STRING="Data Source=s8v4m110k9.database.windows.net;Encrypt=True;trustServerCertificate=false;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2"
-PM_SERVICE="NotImplemented"
-DB_MESSAGING="Demo_TeleoptiAnalytics"
-ETL_TIMEZONE="W. Europe Standard Time"
-SITEPATH=" "
-SERVICEBUSENABLED="true"
-SDK_SSL_SECURITY_MODE="Transport"
-SDK_SSL_MEX_BINDING="mexHttpsBinding"
-HTTPGETENABLED="false"
-HTTPSGETENABLED="true"
-WEB_BROKER="https://$(BASEURL)/Broker/"
+$(SQL_AUTH_STRING)|Data Source=s8v4m110k9.database.windows.net;Encrypt=True;trustServerCertificate=false;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2
+$(SDK_CRED_PROT)|None
+$(DB_ANALYTICS)|Demo_TeleoptiAnalytics
+$(DB_CCC7)|Demo_TeleoptiCCC7
+$(MATRIX_WEB_SITE_URL)|https://$(BASEURL)/Analytics
+$(SDK_SSL_SECURITY_MODE)|Transport
+$(AGENT_SERVICE)|https://$(BASEURL)/SDK/TeleoptiCCCSdkService.svc
+$(PM_INSTALL)|False
+$(PM_AUTH_MODE)|Windows
+$(PM_ANONYMOUS_DOMAINUSER)|
+$(PM_ANONYMOUS_PWD)|
+$(IIS_AUTH)|Forms
+$(HTTPGETENABLED)|false
+$(HTTPSGETENABLED)|true
+$(SDK_SSL_MEX_BINDING)|mexHttpsBinding
+$(WEB_BROKER)|https://$(BASEURL)/Broker/
+$(RTA_SERVICE)|https://$(BASEURL)/RTA/TeleoptiRtaService.svc
+$(ETL_SERVICE_nhibConfPath)|
+$(ETL_TOOL_nhibConfPath)|
+$(SDK_nhibConfPath)| 
+$(AGENTPORTALWEB_nhibConfPath)| 

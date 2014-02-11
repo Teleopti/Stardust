@@ -25,47 +25,24 @@ SET baseurl=%DataSourceName%.teleopticloud.com
 ECHO customerFile is: %customerFile%
 ECHO DataSourceName is: %DataSourceName%
 
-
-::Replace tempoprary txt-file for Msi configuration
-COPY Customer\%customerFile% MSIInput.txt /Y
+::Get customer config settings.txt
+COPY Customer\%customerFile% "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt" /Y
 
 ::Replace Baseurl accoring to settings
-cscript replace.vbs $(BASEURL) %baseurl% MSIInput.txt
+cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 
-::Uninstall customer config
-MSIExec /uninstall "%msi%" /passive
+::get Demo RTA settings into settings.txt
+ECHO $^(RTA_STATE_CODE^)^|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(RTA_QUEUE_ID^)^|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003 >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 
-::Get all input on one string
-for /f "tokens=* delims= " %%a in (MSIInput.txt) do (
-set S=!S!%%a 
-)
-::set S=!S:~0,-1!
-set S=MSIExec /i "%msi%" INSTALLDIR="%ConfigPath%" !S! /passive
-> installConfig.bat echo.!S!
-
-::Install customer config files
-CALL installConfig.bat
-IF %ERRORLEVEL% NEQ 0 (
-SET ERRORLEV=201
-GOTO Error
-)
-
-::AzureConfig is added by WISE
-SET ConfigPath=%ConfigPath%\AzureConfig
-IF NOT EXIST "%ConfigPath%\DummyFolder" mkdir "%ConfigPath%\DummyFolder"
-
-::ETL nhibConfigPaths are wrong at this stage, replace with emtpy string
-cscript replace.vbs "%ConfigPath%\ETL\Tools" "" "%ConfigPath%\ETL\Tool\Teleopti.Analytics.Etl.ConfigTool.exe.config"
-cscript replace.vbs "%ConfigPath%\ETL\Service" "" "%ConfigPath%\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+ECHO "%ContentDest%\TeleoptiCCC\Tools\SupportTools\Teleopti.Support.Tool.exe" -MOAzure
+"%ContentDest%\TeleoptiCCC\Tools\SupportTools\Teleopti.Support.Tool.exe" -MOAzure
 
 ::Replace dataSouceName in nhib
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\SDK\TeleoptiCCC7.nhib.xml"
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Tool\TeleoptiCCC7.nhib.xml"
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Service\TeleoptiCCC7.nhib.xml"
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\Web\TeleoptiCCC7.nhib.xml"
-
-::Copy Config (3) to Content foler (2)
-for /f "tokens=2,3 delims=," %%g in (contentMapping.txt) do xcopy /e /d /y "%ConfigPath%\%%h" "%ContentDest%\%%g\" 
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\SDK\TeleoptiCCC7.nhib.xml"
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\TeleoptiCCC\Services\ETL\Tool\TeleoptiCCC7.nhib.xml"
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\TeleoptiCCC\Services\ETL\Service\TeleoptiCCC7.nhib.xml"
+cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\Web\TeleoptiCCC7.nhib.xml"
 
 ::Sign ClickOnce
 SET ClickOnceSignPath=%ContentDest%\TeleoptiCCC\Tools\ClickOnceSign
