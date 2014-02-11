@@ -22,13 +22,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private bool _cancel;
 	    private readonly ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
 	    private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
 
-        public TeamBlockDayOffDaySwapper(ISwapServiceNew swapServiceNew, ITeamBlockDayOffDaySwapDecisionMaker teamBlockDayOffDaySwapDecisionMaker, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator)
+	    public TeamBlockDayOffDaySwapper(ISwapServiceNew swapServiceNew, ITeamBlockDayOffDaySwapDecisionMaker teamBlockDayOffDaySwapDecisionMaker, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator, IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock)
 		{
 			_swapServiceNew = swapServiceNew;
 			_teamBlockDayOffDaySwapDecisionMaker = teamBlockDayOffDaySwapDecisionMaker;
 	        _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 	        _seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
+	        _postSwapValidationForTeamBlock = postSwapValidationForTeamBlock;
 		}
 
 		public bool TrySwap(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
@@ -87,17 +89,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         private bool validate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, IOptimizationPreferences optimizationPreferences)
         {
-            
-            if (!_seniorityTeamBlockSwapValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
+
+            if (!_postSwapValidationForTeamBlock.Validate(mostSeniorTeamBlock, optimizationPreferences))
                 return false;
 
-            if (!_seniorityTeamBlockSwapValidator.Validate(blockToSwapWith, optimizationPreferences))
-                return false;
-
-            if (!_teamBlockRestrictionOverLimitValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
-                return false;
-
-            if (!_teamBlockRestrictionOverLimitValidator.Validate(blockToSwapWith, optimizationPreferences))
+            if (!_postSwapValidationForTeamBlock.Validate(blockToSwapWith, optimizationPreferences))
                 return false;
 
             return true;

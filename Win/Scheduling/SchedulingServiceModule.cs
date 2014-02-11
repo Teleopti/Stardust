@@ -230,6 +230,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<RankedPersonBasedOnStartDate >().As<IRankedPersonBasedOnStartDate >();
             builder.RegisterType<PersonStartDateFromPersonPeriod>().As<IPersonStartDateFromPersonPeriod>();
             builder.RegisterType<SuitableDayOffsToGiveAway>().As<ISuitableDayOffsToGiveAway>();
+            builder.RegisterType<PostSwapValidationForTeamBlock>().As<IPostSwapValidationForTeamBlock>();
         }
 
         private void registerEqualNumberOfCategoryFairnessService(ContainerBuilder builder)
