@@ -31,7 +31,25 @@ COPY Customer\%customerFile% "%ContentDest%\TeleoptiCCC\Tools\SupportTools\setti
 ::Replace Baseurl accoring to settings
 cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 
-::get Demo RTA settings into settings.txt
+::get static settings into settings.txt
+ECHO $^(SDK_CRED_PROT^)^|None>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(MATRIX_WEB_SITE_URL^)^|https://$(BASEURL)/Analytics>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(SDK_SSL_SECURITY_MODE^)^|Transport>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(AGENT_SERVICE^)^|https://$(BASEURL)/SDK/TeleoptiCCCSdkService.svc>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(PM_INSTALL^)^|False>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(PM_AUTH_MODE^)^|Windows>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(PM_ANONYMOUS_DOMAINUSER^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(PM_ANONYMOUS_PWD^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(IIS_AUTH^)^|Forms>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(HTTPGETENABLED^)^|false>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(HTTPSGETENABLED^)^|true>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(SDK_SSL_MEX_BINDING^)^|mexHttpsBinding>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(WEB_BROKER^)^|https://$(BASEURL)/Broker/>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(RTA_SERVICE^)^|https://$(BASEURL)/RTA/TeleoptiRtaService.svc>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(ETL_SERVICE_nhibConfPath^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(ETL_TOOL_nhibConfPath^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(SDK_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(AGENTPORTALWEB_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(RTA_STATE_CODE^)^|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(RTA_QUEUE_ID^)^|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003 >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 

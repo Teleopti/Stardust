@@ -23,7 +23,6 @@ SET AzureWork=%AZUREDIR%\Temp
 SET ConfigPath=%AzureWork%
 SET ContentDest=%AzureWork%\AzureContent
 SET ContentSource=%AZUREDIR%\..
-SET msi=K:\Src\Wise\ccc7_azure\ccc7_azure.msi
 SET output=%AZUREOUTDIR%\%version%
 SET Dependencies=\\hebe\Installation\Dependencies\ccc7_server
 SET AzureDependencies=\\hebe\Installation\Dependencies\ccc7_azure
@@ -80,7 +79,6 @@ COLOR C
 ECHO.
 ECHO --------
 IF %ERRORLEV% NEQ 0 ECHO Errors found!
-IF %ERRORLEV% EQU 101 ECHO I could not find Azure msi to create Dynamic content
 IF %ERRORLEV% EQU 102 ECHO No version parameter given as input for batchfile: %~nx0 
 IF %ERRORLEV% EQU 103 ECHO Error calling DeployConfig.bat
 
