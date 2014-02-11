@@ -58,7 +58,7 @@
 		<TabItem DataContext="{Binding Path=SendPushMessageModel}" 
 				 GotFocus="YesNo_GotFocus"
 				 Header="xxYesNo"
-				  ToolTip="xxCreateYesNoMessage">
+				 ToolTip="xxCreateYesNoMessage">
 			
 			<Grid>
 				<Grid.RowDefinitions>

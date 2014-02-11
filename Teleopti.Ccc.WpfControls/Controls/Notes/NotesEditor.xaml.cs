@@ -12,6 +12,15 @@ namespace Teleopti.Ccc.WpfControls.Controls.Notes
     /// </summary>
     public partial class NotesEditor : UserControl
     {
+		public bool Enabled
+		{
+			get { return (bool)GetValue(EnabledProperty); }
+			set { SetValue(EnabledProperty, value); }
+		}
+
+		public static readonly DependencyProperty EnabledProperty =
+			DependencyProperty.Register("Enabled", typeof(bool), typeof(NotesEditor), new PropertyMetadata(false));
+
         readonly NotesEditorViewModel _model;
 
         public static readonly RoutedEvent NotesChangedEvent = EventManager.RegisterRoutedEvent(
@@ -48,7 +57,6 @@ namespace Teleopti.Ccc.WpfControls.Controls.Notes
             DataContext = _model;
         }
 
-
         public NotesEditor()
         {
         }
@@ -60,16 +68,20 @@ namespace Teleopti.Ccc.WpfControls.Controls.Notes
 
         public void LoadNote(IScheduleDay schedulePart)
         {
-            _model.Load(schedulePart);    
+            _model.Load(schedulePart);
+			Enabled = true;
         }
 
         private void model_NotesChanged(object sender, EventArgs e)
         {
+			Enabled = false;
             RaiseEvent(new RoutedEventArgs(NotesChangedEvent));
+
         }
 
         private void _model_PublicNotesChanged(object sender, EventArgs e)
         {
+	        Enabled = false;
             RaiseEvent(new RoutedEventArgs(PublicNotesChangedEvent));
         }
 
