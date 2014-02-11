@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         {
             var dayCollection = selectedPeriod.DayCollection();
             var successfullSwap = false;
-            while (dayCollection.Count > 0 && !_cancelMe && !successfullSwap)
+            while (dayCollection.Count > 0 && !_cancelMe )
             {
                 var mostValuableSpot = _suitableDayOffSpotDetector.DetectMostValuableSpot(dayCollection, weekDayPoints);
                 var daysToGiveAway = _suitableDayOffsToGiveAway.DetectMostValuableSpot(dayCollection, weekDayPoints);
