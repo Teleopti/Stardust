@@ -156,7 +156,6 @@ namespace Teleopti.Messaging.SignalR
 			return true;
 		}
 
-
 		public Task NotifyClients(Notification notification)
 		{
 			return notify(notifyclients, notification);

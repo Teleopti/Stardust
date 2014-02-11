@@ -1,24 +1,76 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Net;
+using System.Net.Security;
+using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Messaging.Exceptions;
 using log4net;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class AsyncSignalSender : SignalSenderBase, IAsyncMessageSender
+	public class AsyncSignalSender : IAsyncMessageSender
 	{
 		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
 		private Thread workerThread;
 
+		protected string ServerUrl;
+		protected ISignalWrapper Wrapper;
+		protected ILog Logger;
+
 		public AsyncSignalSender(string serverUrl)
-			: base(serverUrl)
 		{
+			ServerUrl = serverUrl;
+
+			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
+			ServicePointManager.DefaultConnectionLimit = 50;
+
+			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 			Logger = MakeLogger();
 			StartWorkerThread();
+		}
+
+		protected static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
+		{
+			return true;
+		}
+
+		protected void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
+		{
+			if (e.Observed) return;
+			e.SetObserved();
+		}
+
+		public void StartBrokerService()
+		{
+			try
+			{
+				var connection = MakeHubConnection();
+				var proxy = connection.CreateHubProxy("MessageBrokerHub");
+
+				Wrapper = Wrapper ?? new SignalWrapper(proxy, connection, Logger);
+				Wrapper.StartHub();
+			}
+			catch (SocketException exception)
+			{
+				Logger.Error("The message broker seems to be down.", exception);
+			}
+			catch (BrokerNotInstantiatedException exception)
+			{
+				Logger.Error("The message broker seems to be down.", exception);
+			}
+		}
+
+		public bool IsAlive
+		{
+			get { return Wrapper != null && Wrapper.IsInitialized(); }
 		}
 
 		public void SendNotificationAsync(Notification notification)
@@ -48,21 +100,24 @@ namespace Teleopti.Messaging.SignalR
 			Wrapper.NotifyClients(notifications);
 		}
 
-		public override void Dispose()
+		public void Dispose()
 		{
 			cancelToken.Cancel();
 			workerThread.Join();
-			base.Dispose();
+			Wrapper.StopHub();
+			Wrapper = null;
 		}
 
+		protected virtual ILog MakeLogger()
+		{
+			return LogManager.GetLogger(typeof(AsyncSignalSender));
+		}
 
-		[CLSCompliant(false)]
 		protected virtual DateTime CurrentUtcTime()
 		{
 			return DateTime.UtcNow;
 		}
 
-		[CLSCompliant(false)]
 		protected virtual void StartWorkerThread()
 		{
 			workerThread = new Thread(processQueue) { IsBackground = true };
@@ -70,9 +125,10 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		[CLSCompliant(false)]
-		protected virtual ILog MakeLogger()
+		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
-			return LogManager.GetLogger(typeof(AsyncSignalSender));
+			return new HubConnectionWrapper(new HubConnection(ServerUrl));
 		}
+
 	}
 }
