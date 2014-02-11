@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_meetingImpactView.IntervalStartValue()).Return(TimeSpan.FromHours(8));
             Expect.Call(_meetingImpactView.SelectedSkill()).Return(_skill);
             Expect.Call(_meetingImpactView.GridColCount).Return(24).Repeat.Times(1);
-            Expect.Call(_skill.DefaultResolution).Return(15).Repeat.Times(3);
+            Expect.Call(_skill.DefaultResolution).Return(15).Repeat.Times(4);
             Expect.Call(_meetingImpactView.ClientRectangleLeft).Return(0);
             Expect.Call(_meetingImpactView.ColsHeaderWidth).Return(15).Repeat.Times(3);
             Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Expect.Call(_meetingImpactView.IntervalStartValue()).Return(TimeSpan.FromHours(8));
             Expect.Call(_meetingImpactView.SelectedSkill()).Return(_skill);
             Expect.Call(_meetingImpactView.GridColCount).Return(24).Repeat.Times(1);
-            Expect.Call(_skill.DefaultResolution).Return(15).Repeat.Times(3);
+            Expect.Call(_skill.DefaultResolution).Return(15).Repeat.Times(4);
             Expect.Call(_meetingImpactView.ClientRectangleLeft).Return(0);
             Expect.Call(_meetingImpactView.ColsHeaderWidth).Return(15).Repeat.Times(2);
             Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
