@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -45,7 +46,7 @@ namespace Teleopti.Support.Tool.Controls
 		{
 			smoothLabelCurrentVersion.Text = _currentVersion.ToString();
 			_teleoptiCccBaseInstallFolder = (string)Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings", "INSTALLDIR", @"C:\");
-			textBoxNHibFolder.Text = _teleoptiCccBaseInstallFolder + @"..\TeleoptiCCC\SDK\";
+			textBoxNHibFolder.Text = Directory.GetCurrentDirectory() + @"\..\TeleoptiCCC\SDK\";
 			RefreshDatabaseList();
 		}
 
