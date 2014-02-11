@@ -29,30 +29,31 @@ Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
     this.dayViewModels = ko.observableArray();
 };
 
-Teleopti.MyTimeWeb.Schedule.MonthViewModel = function (monthData, selectedDate) {
+Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
     var self = this;
     this.weekViewModels = ko.observableArray();
-    this.weekDayNames = monthData.DayHeaders;
-    this.selectedDate = ko.computed({
-        read: function () {
-            return selectedDate.clone();
-        },
-        write: function (date) {
-            if (date.format('YYYY-MM-DD') == selectedDate.format('YYYY-MM-DD')) return;
-            date.startOf('month');
-            Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
-        }
-    });
-    this.formattedSelectedDate = selectedDate.format('MMMM YYYY');
+    this.weekDayNames = ko.observableArray();
 
+    this.selectedDate = ko.observable(moment());
+
+    this.selectedDate.subscribe(function () {
+        var date = self.selectedDate();
+        date.startOf('month');
+        Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+    });
+
+    this.formattedSelectedDate = ko.computed(function() {
+        return self.selectedDate().format('MMMM YYYY');
+    });
+    
     this.nextMonth = function() {
-        var date = selectedDate.clone();
+        var date = self.selectedDate().clone();
         date.add('months', 1);
         self.selectedDate(date);
     };
 
     this.previousMonth = function () {
-        var date = selectedDate.clone();
+        var date = self.selectedDate().clone();
         date.add('months', -1);
         self.selectedDate(date);
     };
@@ -61,6 +62,21 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function (monthData, selectedDate) 
         var d = day.currentDate;
         Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
     };
+
+    this.readData = function (data) {
+        self.weekDayNames(data.DayHeaders);
+        self.selectedDate(moment(data.FixedDate, 'YYYY-MM-DD'));
+        var newWeek;
+        for (var i = 0; i < data.ScheduleDays.length; i++) {
+            if (i % 7 == 0) {
+                if (newWeek)
+                    self.weekViewModels.push(newWeek);
+                newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
+            }
+
+            var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], self.selectedDate());
+            newWeek.dayViewModels.push(newDay);
+        }
+        self.weekViewModels.push(newWeek);
+    };
 };
-
-
