@@ -63,6 +63,9 @@
     <Compile Include="Tool\SettingsReader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ConfigFiles\AzureConfigFiles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ConfigFiles\BuildServerConfigFiles.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

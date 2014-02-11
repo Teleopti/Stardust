@@ -28,11 +28,6 @@ SET output=%AZUREOUTDIR%\%version%
 SET Dependencies=\\hebe\Installation\Dependencies\ccc7_server
 SET AzureDependencies=\\hebe\Installation\Dependencies\ccc7_azure
 
-IF NOT EXIST "%msi%" (
-SET ERRORLEV=101
-GOTO error
-)
-
 ::Get us to correct reletive location
 %DriveLetter%
 CD "%AZUREDIR%"
