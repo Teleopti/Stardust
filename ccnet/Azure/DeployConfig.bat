@@ -25,65 +25,6 @@ SET baseurl=%DataSourceName%.teleopticloud.com
 ECHO customerFile is: %customerFile%
 ECHO DataSourceName is: %DataSourceName%
 
-::Get customer config settings.txt
-COPY Customer\%customerFile% "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt" /Y
-
-::get static settings into settings.txt
-ECHO $^(SDK_CRED_PROT^)^|None>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(MATRIX_WEB_SITE_URL^)^|https://$(BASEURL)/Analytics>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(SDK_SSL_SECURITY_MODE^)^|Transport>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(AGENT_SERVICE^)^|https://$(BASEURL)/SDK/TeleoptiCCCSdkService.svc>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(PM_INSTALL^)^|False>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(PM_AUTH_MODE^)^|Windows>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(PM_ANONYMOUS_DOMAINUSER^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(PM_ANONYMOUS_PWD^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(IIS_AUTH^)^|Forms>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(HTTPGETENABLED^)^|false>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(HTTPSGETENABLED^)^|true>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(SDK_SSL_MEX_BINDING^)^|mexHttpsBinding>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(WEB_BROKER^)^|https://$(BASEURL)/Broker/>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(RTA_SERVICE^)^|https://$(BASEURL)/RTA/TeleoptiRtaService.svc>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(ETL_SERVICE_nhibConfPath^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(ETL_TOOL_nhibConfPath^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(SDK_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(AGENTPORTALWEB_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(RTA_STATE_CODE^)^|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(RTA_QUEUE_ID^)^|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003 >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(WEB_BROKER_FOR_WEB^)^|https://$(BASEURL)/Web>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-ECHO $^(WEB_BROKER_BACKPLANE^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-
-::Replace Baseurl accoring to settings
-cscript replace.vbs "$(BASEURL)" "%baseurl%" "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-
-ECHO "%ContentDest%\TeleoptiCCC\Tools\SupportTools\Teleopti.Support.Tool.exe" -MOAzure
-"%ContentDest%\TeleoptiCCC\Tools\SupportTools\Teleopti.Support.Tool.exe" -MOAzure
-
-::Replace dataSouceName in nhib
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\SDK\TeleoptiCCC7.nhib.xml"
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\TeleoptiCCC\Services\ETL\Tool\TeleoptiCCC7.nhib.xml"
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\TeleoptiCCC\Services\ETL\Service\TeleoptiCCC7.nhib.xml"
-cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ContentDest%\Web\TeleoptiCCC7.nhib.xml"
-
-::Sign ClickOnce
-SET ClickOnceSignPath=%ContentDest%\TeleoptiCCC\Tools\ClickOnceSign
-ECHO ClickOnceSignPath: %ClickOnceSignPath%
-SET ClientPath=%ContentDest%\Client
-SET MyTimePath=%ContentDest%\MyTime
-
-CD "%ClickOnceSignPath%"
-ECHO ClickOnceSign.exe -s -a Teleopti.Ccc.SmartClientPortal.Shell.application -m "Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest" -u "https://%baseurl%/Client/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%ClientPath%"
-ClickOnceSign.exe -s -a Teleopti.Ccc.SmartClientPortal.Shell.application -m "Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest" -u "https://%baseurl%/Client/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%ClientPath%"
-if %errorlevel% NEQ 0 (
-SET /A ERRORLEV=203
-GOTO :Error
-)
-
-ECHO ClickOnceSign.exe -s -a Teleopti.Ccc.AgentPortal.application -m "Teleopti.Ccc.AgentPortal.exe.manifest" -u "https://%baseurl%/MyTime/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%MyTimePath%"
-ClickOnceSign.exe -s -a Teleopti.Ccc.AgentPortal.application -m "Teleopti.Ccc.AgentPortal.exe.manifest" -u "https://%baseurl%/MyTime/" -c "%ClickOnceSignPath%\TemporaryKey.pfx" -p "" -dir "%MyTimePath%"
-if %errorlevel% NEQ 0 (
-SET /A ERRORLEV=204
-GOTO :Error
-)
 CD "%AZUREDIR%"
 
 ::copy and update ServiceDefinition.csdef.BuildTemplate
