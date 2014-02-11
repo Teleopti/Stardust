@@ -89,12 +89,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                                 int remainingBlocksCount, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
         {
             var dayCollection = selectedPeriod.DayCollection();
-            var successfullSwap = false;
-            while (dayCollection.Count > 0 && !_cancelMe )
+           while (dayCollection.Count > 0 && !_cancelMe )
             {
                 var mostValuableSpot = _suitableDayOffSpotDetector.DetectMostValuableSpot(dayCollection, weekDayPoints);
                 var daysToGiveAway = _suitableDayOffsToGiveAway.DetectMostValuableSpot(dayCollection, weekDayPoints);
-                successfullSwap = trySwapForMostSenior(mostSeniorTeamBlock, mostJuniorTeamBlock, mostValuableSpot, rollbackService, daysToGiveAway,scheduleDictionary,optimizationPreferences);
+                var successfullSwap = trySwapForMostSenior(mostSeniorTeamBlock, mostJuniorTeamBlock, mostValuableSpot, rollbackService, daysToGiveAway,scheduleDictionary,optimizationPreferences);
 
                 var message = "xxSwap successful";
                 if (!successfullSwap)

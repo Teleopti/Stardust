@@ -10,29 +10,29 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
 		                     ISchedulePartModifyAndRollbackService rollbackService,
-		                     IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
-		                     ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator);
+		                     IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class SeniorityTeamBlockSwapper : ISeniorityTeamBlockSwapper
 	{
 		private readonly ITeamBlockSwapper _teambBlockSwapper;
 		private readonly ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
+        private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 
-		public SeniorityTeamBlockSwapper(ITeamBlockSwapper teambBlockSwapper,
-		                                 ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator)
+	    public SeniorityTeamBlockSwapper(ITeamBlockSwapper teambBlockSwapper,
+		                                 ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			_teambBlockSwapper = teambBlockSwapper;
 			_seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
+	        _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 		}
 
 		public bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
 		                            ISchedulePartModifyAndRollbackService rollbackService,
-		                            IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
-		                            ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+		                            IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
 		{
 			bool success = trySwapAndValidate(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary,
-			                                  optimizationPreferences, teamBlockRestrictionOverLimitValidator);
+			                                  optimizationPreferences);
 			if (!success)
 			{
 				rollbackService.Rollback();
@@ -44,25 +44,30 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 		private bool trySwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
 		                                ISchedulePartModifyAndRollbackService rollbackService,
-		                                IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences,
-		                                ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+		                                IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences)
 		{
 			if (!_teambBlockSwapper.TrySwap(mostSeniorTeamBlock, blockToSwapWith, rollbackService, scheduleDictionary))
 				return false;
 
-			if (!_seniorityTeamBlockSwapValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
-				return false;
-
-			if (!_seniorityTeamBlockSwapValidator.Validate(blockToSwapWith, optimizationPreferences))
-				return false;
-
-			if (!teamBlockRestrictionOverLimitValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
-				return false;
-
-			if (!teamBlockRestrictionOverLimitValidator.Validate(blockToSwapWith, optimizationPreferences))
-				return false;
-
-			return true;
+		    return validate(mostSeniorTeamBlock,blockToSwapWith,optimizationPreferences );
 		}
+
+        private bool validate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith, IOptimizationPreferences optimizationPreferences)
+        {
+
+            if (!_seniorityTeamBlockSwapValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
+                return false;
+
+            if (!_seniorityTeamBlockSwapValidator.Validate(blockToSwapWith, optimizationPreferences))
+                return false;
+
+            if (!_teamBlockRestrictionOverLimitValidator.Validate(mostSeniorTeamBlock, optimizationPreferences))
+                return false;
+
+            if (!_teamBlockRestrictionOverLimitValidator.Validate(blockToSwapWith, optimizationPreferences))
+                return false;
+
+            return true;
+        }
 	}
 }

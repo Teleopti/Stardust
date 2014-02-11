@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_mocks = new MockRepository();
 			_teamBlockSwapper = _mocks.StrictMock<ITeamBlockSwapper>();
 			_seniorityTeamBlockSwapValidator = _mocks.StrictMock<ISeniorityTeamBlockSwapValidator>();
-			_target = new SeniorityTeamBlockSwapper(_teamBlockSwapper, _seniorityTeamBlockSwapValidator);
+		    _target = new SeniorityTeamBlockSwapper(_teamBlockSwapper, _seniorityTeamBlockSwapValidator,
+		                                            _teamBlockRestrictionOverLimitValidator);
 			_teamBlockInfo1 = _mocks.StrictMock<ITeamBlockInfo>();
 			_teamBlockInfo2 = _mocks.StrictMock<ITeamBlockInfo>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-				                                     _optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
+				                                     _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-													 _optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
+													 _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-													 _optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
+													 _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-													 _optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
+													 _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-													 _optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
+													 _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Playback())
 			{
 				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-													 _optimizationPreferences, _teamBlockRestrictionOverLimitValidator);
+													 _optimizationPreferences);
 				Assert.IsTrue(result);
 			}
 		}
