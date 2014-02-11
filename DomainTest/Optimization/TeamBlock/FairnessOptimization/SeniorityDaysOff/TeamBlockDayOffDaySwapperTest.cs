@@ -35,14 +35,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IOptimizationPreferences _optimizationPreferences;
 		private DateOnly _dateBefore;
 		private PossibleSwappableDays _daysToSwap;
+	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_swapServiceNew = _mocks.StrictMock<ISwapServiceNew>();
 			_decisionMaker = _mocks.StrictMock<ITeamBlockDayOffDaySwapDecisionMaker>();
-			_target = new TeamBlockDayOffDaySwapper(_swapServiceNew,_decisionMaker ,null,null);
+	        _postSwapValidationForTeamBlock = _mocks.StrictMock<IPostSwapValidationForTeamBlock>();
+            _target = new TeamBlockDayOffDaySwapper(_swapServiceNew, _decisionMaker, _postSwapValidationForTeamBlock);
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();

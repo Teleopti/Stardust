@@ -16,16 +16,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	public class SeniorityTeamBlockSwapper : ISeniorityTeamBlockSwapper
 	{
 		private readonly ITeamBlockSwapper _teambBlockSwapper;
-		private readonly ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
-        private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
-	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
+	    private readonly IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
 
-	    public SeniorityTeamBlockSwapper(ITeamBlockSwapper teambBlockSwapper,
-		                                 ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock)
+	    public SeniorityTeamBlockSwapper(ITeamBlockSwapper teambBlockSwapper, IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock)
 		{
 			_teambBlockSwapper = teambBlockSwapper;
-			_seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
-	        _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 	        _postSwapValidationForTeamBlock = postSwapValidationForTeamBlock;
 		}
 

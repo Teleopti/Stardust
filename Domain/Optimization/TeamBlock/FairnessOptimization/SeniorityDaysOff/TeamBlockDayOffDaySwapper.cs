@@ -20,16 +20,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ISwapServiceNew _swapServiceNew;
 		private readonly ITeamBlockDayOffDaySwapDecisionMaker _teamBlockDayOffDaySwapDecisionMaker;
 		private bool _cancel;
-	    private readonly ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
-	    private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
-	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
+	    private readonly IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
 
-	    public TeamBlockDayOffDaySwapper(ISwapServiceNew swapServiceNew, ITeamBlockDayOffDaySwapDecisionMaker teamBlockDayOffDaySwapDecisionMaker, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, ISeniorityTeamBlockSwapValidator seniorityTeamBlockSwapValidator, IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock)
+	    public TeamBlockDayOffDaySwapper(ISwapServiceNew swapServiceNew, ITeamBlockDayOffDaySwapDecisionMaker teamBlockDayOffDaySwapDecisionMaker, IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock)
 		{
 			_swapServiceNew = swapServiceNew;
 			_teamBlockDayOffDaySwapDecisionMaker = teamBlockDayOffDaySwapDecisionMaker;
-	        _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
-	        _seniorityTeamBlockSwapValidator = seniorityTeamBlockSwapValidator;
 	        _postSwapValidationForTeamBlock = postSwapValidationForTeamBlock;
 		}
 
