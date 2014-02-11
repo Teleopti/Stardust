@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             IList<double> intradayDifferences =
                 SkillStaffPeriodHelper.SkillStaffPeriodsRelativeDifferenceHours(skillStaffPeriods, useMinPersonnel, useMaxPersonnel);
 
-	        var nonNaNList = intradayDifferences.Select(v => v).Where(v => !double.IsNaN(v));
+			var nonNaNList = intradayDifferences.Where(v => !double.IsNaN(v));
 	        if (!nonNaNList.Any())
 		        intradayDifferences = SkillStaffPeriodHelper.SkillStaffPeriodsAbsoluteDifferenceHours(skillStaffPeriods,
 		                                                                                              useMinPersonnel,
