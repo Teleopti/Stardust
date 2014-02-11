@@ -114,13 +114,36 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
-        // don't know how to test this
-        //[Test]
-        //public void ShouldRaiseEventWhenTransparentControlChanges()
-        //{
+		[Test]
+		public void ShouldReturnSuppliedSkillResolutionIfMinNotFound()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.Skills).Return(new List<ISkill>());
+			}
 
-            
-        //}
+			using (_mocks.Playback())
+			{
+				var resolution = _target.LowestResolution(30);
+				Assert.AreEqual(30, resolution);
+			}
+		}
+
+	    [Test]
+	    public void ShouldReturnLowestResolution()
+	    {
+		    using (_mocks.Record())
+		    {
+			    Expect.Call(_schedulingResultStateHolder.Skills).Return(_skills);
+			    Expect.Call(_skill.DefaultResolution).Return(15);
+		    }
+
+		    using (_mocks.Playback())
+		    {
+			    var resolution = _target.LowestResolution(30);
+			    Assert.AreEqual(15, resolution);
+		    }
+	    }
 
     }
 
