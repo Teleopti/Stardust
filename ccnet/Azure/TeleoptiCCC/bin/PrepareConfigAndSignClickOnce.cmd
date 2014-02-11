@@ -5,5 +5,5 @@ SET DIRECTORY=%DIRECTORY:~0,-1%
 ::allow un-signed
 powershell set-executionpolicy unrestricted
 ::execute
-powershell ". %DIRECTORY%\GetInstanceConfigFromBlobStorage.ps1; main -directory \"%DIRECTORY%\""
+powershell ". %DIRECTORY%\PrepareConfigAndSignClickOnce.ps1; main -directory \"%DIRECTORY%\""
 exit %ERRORLEVEL%
