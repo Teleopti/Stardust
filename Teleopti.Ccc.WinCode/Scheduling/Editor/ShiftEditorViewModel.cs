@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
 		private IEventAggregator _eventAggregator;
 		private readonly IEditableShiftMapper _editableShiftMapper;
-		private bool _enabled;
 
         #region properties
 		public TimeSpan SurroundingTime { get; private set; }
@@ -35,20 +34,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         public EditLayerViewModel EditLayer { get; private set; }
         public IScheduleDay SchedulePart { get; private set; }
         public ShiftEditorSettings Settings { get; private set; }
-
-		public bool Enabled
-		{
-			get
-			{
-				return _enabled;
-			}
-			private set
-			{
-				if (value == _enabled) return;
-				_enabled = value;
-				NotifyPropertyChanged("Enabled");
-			}
-		}
 
 	    public ILayerViewModel SelectedLayer
         {
@@ -117,7 +102,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             Settings=new ShiftEditorSettings(this);
             SetUpCommandModels();
         }
-
 
 		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu, IEditableShiftMapper editableShiftMapper)
 			: this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService, new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule()), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu, editableShiftMapper)
@@ -300,18 +284,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 
         public void LoadSchedulePart(IScheduleDay schedule)
         {
-
-            Enabled = false;
             if (schedule != null)
             {
                 SchedulePart = schedule;
 
-
                 if (SelectedLayer != null) 
                     Layers.CreateViewModels(new LayerViewModelSelector(SelectedLayer), schedule); 
                 else Layers.CreateViewModels(schedule);
-                
-                
                 
                 ZoomToPeriod(Layers.TotalDateTimePeriod());
                 var assignement = SchedulePart.PersonAssignment();
@@ -319,14 +298,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 {
                     _category = assignement.ShiftCategory;
                     CollectionViewSource.GetDefaultView(Categories).MoveCurrentTo(_category);
-                    Enabled = true;
+                   
                     NotifyPropertyChanged("Category"); 
                 }
                 
                 //henrik 20100701 todo, change this to something that can handle in gui....
                 SelectLayer(Layers.FirstOrDefault(l => l.IsSelected));
-                
             }
+
         }
 
        
@@ -390,6 +369,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
 				handler(this, new PropertyChangedEventArgs(property));
 			}
         }
+
+	
     }
 }
 
