@@ -84,14 +84,20 @@ Given I have the role 'Full access to mytime'
 When I view my month schedule for date '2014-01-07'
 Then I should see an indication implying I should not work on '2014-01-16'
 
-Scenario: View when you have full day absence 
+@ignore
+Scenario: View when you have full day absence
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
-	And I have a full-day absence today with
-	| Field         | Value      |
-	| Date          | 2014-01-07 |
+	And I have an absence with
+	| Field		| Value            |
+	| Name      | Illness          |
+	| StartTime | 2014-01-07 00:00 |
+	| EndTime   | 2014-01-07 23:59 |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-07'
+Then I should see the absence with 
+    | Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-01-07       |
 
 Scenario: Distinguish day out of current month 
 Given I have the role 'Full access to mytime'

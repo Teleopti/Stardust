@@ -1,5 +1,6 @@
 ﻿using System;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
@@ -52,6 +53,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldSeeAnIndicationImplyingIShouldNotWorkOn(DateTime date)
         {
             Browser.Interactions.AssertExists(string.Format(".not-working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+        }
+
+        [Then(@"I should see the absence with")]
+        public void ThenIShouldSeeTheAbsenceWith(Table table)
+        {
+            var absence = table.CreateInstance<AbsenceListItem>();
+            Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0:yyyy-MM-dd}'] .absence", absence.Date), absence.Name);
+        }
+
+        public class AbsenceListItem
+        {
+            public string Name;
+            public DateTime Date;
         }
 
         [Then(@"I should not see any indication for day '(.*)'")]
