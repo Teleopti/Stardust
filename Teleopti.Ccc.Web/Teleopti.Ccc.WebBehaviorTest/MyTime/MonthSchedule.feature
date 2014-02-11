@@ -133,17 +133,7 @@ And I am american
 When I view my month schedule for date '2014-01-07'
 Then I should see '2013-12-29' as the first day
 And I should see '2014-02-01' as the last day
-And I should see 'Sunday' as the first day of week label for wide screen
-
-Scenario: First day of week in narrow view
-Given I have the role 'Full access to mytime'
-    And I have the workflow control set 'Published schedule'
-And I am american
-And I am using a device with narrow view
-When I view my month schedule for date '2014-01-07'
-Then I should see '2013-12-29' as the first day
-And I should see '2014-02-01' as the last day
-And I should see 'Sun' as the first day of week label
+And I should see 'Sunday' as the first day of week label
 
 Scenario: Can switch to monthly schedule when showing weekly schedule 
 Given I have the role 'Full access to mytime'
