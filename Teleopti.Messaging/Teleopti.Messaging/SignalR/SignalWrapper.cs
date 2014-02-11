@@ -29,7 +29,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
-			_hubConnection.Closed += restartConnection();
+			_hubConnection.Closed += reconnect();
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
 			
@@ -38,7 +38,7 @@ namespace Teleopti.Messaging.SignalR
 			emptyTask = tcs.Task;
 		}
 
-		private Action restartConnection()
+		private Action reconnect()
 		{
 			return () => _hubConnection.Start();
 		}
@@ -194,7 +194,7 @@ namespace Teleopti.Messaging.SignalR
 			
 			try
 			{
-				_hubConnection.Closed -= restartConnection();
+				_hubConnection.Closed -= reconnect();
 				_hubConnection.Stop();
 			}
 			catch (Exception ex)
@@ -205,7 +205,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsInitialized()
 		{
-			return _hubProxy != null;
+			return _hubProxy != null && _hubConnection.State == ConnectionState.Connected;
 		}
 	}
 }
