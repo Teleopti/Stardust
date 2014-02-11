@@ -478,9 +478,11 @@ INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
 GO
-
---DROP OLD FACT_SCHEDULE
-DROP TABLE  [mart].[fact_schedule]
+--RENAME old TABLE
+EXEC sp_rename 'mart.fact_schedule', 'fact_schedule_old'
+GO
+--RENAME TMP KEY
+EXEC sp_rename 'mart.PK_fact_schedule', 'PK_fact_schedule_old'
 GO
 --RENAME TMP TABLE
 EXEC sp_rename 'mart.fact_schedule_tmp', 'fact_schedule'
@@ -587,25 +589,4 @@ ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedu
 REFERENCES [mart].[dim_scenario] ([scenario_id])
 GO
 ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_scenario]
-GO
-CREATE NONCLUSTERED INDEX [IX_fact_schedule_Shift_startdate_id] ON [mart].[fact_schedule]
-(
-	[shift_startdate_id] ASC
-)
-INCLUDE ( 	[schedule_date_id],
-	[person_id],
-	[interval_id],
-	[activity_starttime],
-	[scenario_id],
-	[business_unit_id]) ON [MART]
-GO
-
-CREATE NONCLUSTERED INDEX [IX_person_scenario_schdate_interval] ON [mart].[fact_schedule]
-(
-	[person_id] ASC,
-	[scenario_id] ASC,
-	[schedule_date_id] ASC,
-	[interval_id] ASC
-)
-INCLUDE ( 	[scheduled_ready_time_m]) ON [MART]
 GO
