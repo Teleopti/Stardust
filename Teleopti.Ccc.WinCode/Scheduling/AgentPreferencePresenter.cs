@@ -133,7 +133,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public int MaxMustHaves()
 		{
 			var schedulePeriod = _scheduleDay.Person.VirtualSchedulePeriod(_scheduleDay.DateOnlyAsPeriod.DateOnly);
-			return schedulePeriod.MustHavePreference;
+			if(schedulePeriod.IsValid) return schedulePeriod.MustHavePreference;
+			return 0;
 		}
 
 		public int CurrentMustHaves()
