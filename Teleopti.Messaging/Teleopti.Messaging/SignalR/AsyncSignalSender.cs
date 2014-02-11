@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Teleopti.Interfaces.MessageBroker;
@@ -46,20 +45,7 @@ namespace Teleopti.Messaging.SignalR
 				                  .ToArray();
 
 			if (!notifications.Any()) return;
-			trySend(notifications);
-		}
-
-		private void trySend(IEnumerable<Notification> notifications)
-		{
-			try
-			{
-				var task = Wrapper.NotifyClients(notifications);
-				task.Wait(1000, cancelToken.Token);
-			}
-			catch (AggregateException e)
-			{
-				Logger.Error("Could not send notifications, ", e);
-			}
+			Wrapper.NotifyClients(notifications);
 		}
 
 		public override void Dispose()

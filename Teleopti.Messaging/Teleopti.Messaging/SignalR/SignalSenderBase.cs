@@ -42,7 +42,6 @@ namespace Teleopti.Messaging.SignalR
 		protected void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 		{
 			if (e.Observed) return;
-			Logger.Error("An error occured, please review the error and take actions necessary.", e.Exception);
 			e.SetObserved();
 		}
 
