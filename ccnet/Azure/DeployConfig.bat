@@ -28,9 +28,6 @@ ECHO DataSourceName is: %DataSourceName%
 ::Get customer config settings.txt
 COPY Customer\%customerFile% "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt" /Y
 
-::Replace Baseurl accoring to settings
-cscript replace.vbs $(BASEURL) %baseurl% "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
-
 ::get static settings into settings.txt
 ECHO $^(SDK_CRED_PROT^)^|None>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(MATRIX_WEB_SITE_URL^)^|https://$(BASEURL)/Analytics>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
@@ -52,6 +49,9 @@ ECHO $^(SDK_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\se
 ECHO $^(AGENTPORTALWEB_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(RTA_STATE_CODE^)^|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(RTA_QUEUE_ID^)^|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003 >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+
+::Replace Baseurl accoring to settings
+cscript replace.vbs "$(BASEURL)" "%baseurl%" "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 
 ECHO "%ContentDest%\TeleoptiCCC\Tools\SupportTools\Teleopti.Support.Tool.exe" -MOAzure
 "%ContentDest%\TeleoptiCCC\Tools\SupportTools\Teleopti.Support.Tool.exe" -MOAzure
