@@ -49,6 +49,7 @@ ECHO $^(SDK_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\se
 ECHO $^(AGENTPORTALWEB_nhibConfPath^)^| >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(RTA_STATE_CODE^)^|ACW,ADMIN,EMAIL,IDLE,InCall,LOGGED ON,OFF,Ready,WEB >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(RTA_QUEUE_ID^)^|2001,2002,0063,2000,0019,0068,0085,0202,0238,2003 >> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
+ECHO $^(WEB_BROKER_FOR_WEB^)^|https://$(BASEURL)/Web>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 ECHO $^(WEB_BROKER_BACKPLANE^)^|>> "%ContentDest%\TeleoptiCCC\Tools\SupportTools\settings.txt"
 
 ::Replace Baseurl accoring to settings
