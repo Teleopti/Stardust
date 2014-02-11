@@ -52,7 +52,7 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 		    completelyLoaded = completelyLoadedCallback;
-		    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel(Teleopti.MyTimeWeb.Portal.NavigateTo);
 		    ko.applyBindings(vm, $('#page')[0]);
 		    _fetchMonthData();
 		    readyForInteractionCallback();

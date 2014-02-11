@@ -29,7 +29,7 @@ Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {
     this.dayViewModels = ko.observableArray();
 };
 
-Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
+Teleopti.MyTimeWeb.Schedule.MonthViewModel = function (navigateTo) {
     var self = this;
     this.weekViewModels = ko.observableArray();
     this.weekDayNames = ko.observableArray();
@@ -39,7 +39,8 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
     this.selectedDate.subscribe(function () {
         var date = self.selectedDate();
         date.startOf('month');
-        Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+        if (navigateTo)
+            navigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
     });
 
     this.formattedSelectedDate = ko.computed(function() {
