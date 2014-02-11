@@ -478,6 +478,74 @@ INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
 GO
+--drop all constraints
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_scenario]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_person]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_interval1]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_interval]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date4]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date3]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date2]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date1]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_activity]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_absence]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF__fact_sche__overt__1D9B5BB6]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_update_date]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_insert_date]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_datasource_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_last_publish]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_length_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_category_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_startinterval_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_endtime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_enddate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_starttime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_startdate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_endtime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_enddate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_startdate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_absence_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_scenario_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_starttime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_interval_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_person_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_schedule_date_id]
+GO
+
 --RENAME old TABLE
 EXEC sp_rename 'mart.fact_schedule', 'fact_schedule_old'
 GO
