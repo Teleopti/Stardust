@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				@"Date.prototype.getTeleoptiTime = function () {{ return new Date({0}, {1}, {2}, {3}, {4}, {5}).getTime(); }};";
 			var setJsDate = string.Format(setJsDateTemplate, time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
 
-			Browser.Current.Eval(setJsDate);
+			Browser.Interactions.Javascript(setJsDate);
 			//need to set on js date object on popup as well
 			var popupConstraint = Find.ByUrl(new Uri(TestSiteConfigurationSetup.Url, "MyTime/Asm"));
 			if (WatiN.Core.Browser.Exists<IE>(popupConstraint))
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var setJsTimeIndicatorMovement =
 			    string.Format(@"Teleopti.MyTimeWeb.Schedule.SetTimeIndicator(new Date({0}, {1}, {2}, {3}, {4}, {5}));",
 			                  time.Year, time.Month - 1, time.Day, time.Hour, time.Minute, time.Second);
-			Browser.Current.Eval(setJsTimeIndicatorMovement);
+			Browser.Interactions.Javascript(setJsTimeIndicatorMovement);
 		}
 	}
 }
