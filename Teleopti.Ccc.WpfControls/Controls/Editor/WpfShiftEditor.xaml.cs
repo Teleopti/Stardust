@@ -41,7 +41,18 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         private ShiftEditorViewModel _model;
         private GenericEvent<TriggerShiftEditorUpdate> _triggerShiftEditoEvent;
         private SubscriptionToken _subscriptionToken;
-       
+
+
+
+		public bool Enabled
+		{
+			get { return (bool)GetValue(EnabledProperty); }
+			set { SetValue(EnabledProperty, value); }
+		}
+
+		public static readonly DependencyProperty EnabledProperty =
+			DependencyProperty.Register("Enabled", typeof(bool), typeof(WpfShiftEditor), new PropertyMetadata(false));
+
 
         public WpfShiftEditor(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
         {
@@ -60,11 +71,13 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 		
         }
 
-	
-
         private void TriggerUpdate(EventParameters<TriggerShiftEditorUpdate> obj)
         {
-            if (ShiftUpdated != null) ShiftUpdated(this, new ShiftEditorEventArgs(_model.SchedulePart));
+	        Enabled = false;
+            if (ShiftUpdated != null)
+            {
+	            ShiftUpdated(this, new ShiftEditorEventArgs(_model.SchedulePart));
+            }
             commitChanges(_model.SchedulePart);
         }
 
@@ -82,8 +95,8 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
 
         public void LoadSchedulePart(IScheduleDay schedule)
         {
-            
             _model.LoadSchedulePart(schedule);
+	        Enabled = true;
         }
 
         public IScheduleDay SchedulePart
