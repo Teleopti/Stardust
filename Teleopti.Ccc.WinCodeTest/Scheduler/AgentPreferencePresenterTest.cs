@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
 				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
@@ -115,6 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
 				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
@@ -155,6 +157,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
 				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
@@ -195,6 +198,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
 				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
@@ -235,6 +239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
 				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
@@ -271,6 +276,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.IsValid).Return(true);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
 				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 			}
@@ -386,6 +392,25 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var restriction = _presenter.PreferenceRestriction();
 				Assert.AreEqual(_preferenceRestriction, restriction);
+			}
+		}
+
+		[Test]
+		public void ShouldHandleNoSchedulePeriodOnMaxMustHave()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.Person).Return(_person);
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly);
+				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod);
+				Expect.Call(_virtualSchedulePeriod.IsValid).Return(false);
+			}
+			
+			using (_mock.Playback())
+			{
+				var result = _presenter.MaxMustHaves();
+				Assert.AreEqual(0, result);
 			}
 		}
 	}
