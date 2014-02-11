@@ -2,7 +2,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Mart].[etl_
 DROP PROCEDURE [mart].[etl_fact_requested_days_intraday_load]
 GO
 
---exec [mart].[etl_fact_requested_days_load] '2012-02-08','2012-02-11'
+--exec [mart].[etl_fact_requested_days_intraday_load] '27766456-9DD5-45F0-911E-9D430116B318'
 CREATE PROCEDURE [mart].[etl_fact_requested_days_intraday_load]
 @business_unit_code uniqueidentifier	
 	
@@ -47,7 +47,7 @@ ON
 				(stg.request_date	>= dp.valid_from_date)
 
 			AND
-				(stg.request_date <= dp.valid_to_date)
+				(stg.request_date < dp.valid_to_date)
 		)
 INNER JOIN mart.dim_request_type rt
 	ON rt.request_type_id = stg.request_type_code
