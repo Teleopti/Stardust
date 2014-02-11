@@ -123,12 +123,15 @@ namespace Teleopti.Ccc.WinCode.Meetings
             var minMaxTime = new MinMax<TimeSpan>(startValue, endValue);
             var minMaxTimePos = new MinMax<int>(minTimePos, maxTimePos);
 
-            return new TransparentControlMeetingHelper(minMaxBorders, minMaxTime, minMaxTimePos, LowestResolution()) { IsRightToLeft = rightToLeft, ScrollAdjust = scrollAdjust };
+            return new TransparentControlMeetingHelper(minMaxBorders, minMaxTime, minMaxTimePos, LowestResolution(skill.DefaultResolution)) { IsRightToLeft = rightToLeft, ScrollAdjust = scrollAdjust };
         }
 
-        private int LowestResolution()
+        public int LowestResolution(int selectedSkillResolution)
         {
-            var min = (from r in _schedulingResultStateHolder.Skills
+	        var skills = _schedulingResultStateHolder.Skills;
+	        if (!skills.Any()) return selectedSkillResolution;
+
+            var min = (from r in skills
                        select r.DefaultResolution).Min();
 
             return min;
