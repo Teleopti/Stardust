@@ -173,12 +173,11 @@ namespace Teleopti.Messaging.SignalR
 				if (_hubConnection.State == ConnectionState.Connected)
 				{
 					var task = _hubProxy.Invoke(methodName, notifications);
-					task.ContinueWith(t =>
+					return task.ContinueWith(t =>
 						{
 							if (t.IsFaulted && t.Exception != null)
 								Logger.Error("An error happened on notification task", t.Exception);
 						}, TaskContinuationOptions.OnlyOnFaulted);
-					return task;
 				}
 			}
 			catch (InvalidOperationException exception)

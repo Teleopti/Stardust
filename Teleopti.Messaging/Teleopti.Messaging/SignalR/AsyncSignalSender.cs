@@ -90,7 +90,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		protected virtual void ProcessTheQueue()
+		protected Task ProcessTheQueue()
 		{
 			var notifications =
 				_notificationQueue.GetConsumingEnumerable(cancelToken.Token)
@@ -100,8 +100,9 @@ namespace Teleopti.Messaging.SignalR
 				                  .Select(t => t.Item2)
 				                  .ToArray();
 
-			if (!notifications.Any()) return;
-			_wrapper.NotifyClients(notifications);
+			if (!notifications.Any()) return null;
+			
+			return _wrapper.NotifyClients(notifications);
 		}
 
 		public void Dispose()
