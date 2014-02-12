@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -9,7 +10,9 @@ using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
+using Teleopti.Interfaces.MessageBroker.Events;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
@@ -33,18 +36,20 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		public void ShouldSendMessageBrokerEvent()
 		{
 			_messageSender.Expect(x => x.IsAlive).Return(false).Repeat.Once();
-			_messageSender.Expect(x => x.InstantiateBrokerService());
+			_messageSender.Expect(x => x.StartBrokerService());
 			_messageSender.Expect(x => x.IsAlive).Return(true).Repeat.Once();
-			_messageSender.Expect(
-				x =>
-				x.SendData(Arg<DateTime>.Is.Anything, Arg<DateTime>.Is.Anything, Arg<Guid>.Is.Anything,
-						   Arg<Guid>.Matches(g2 => g2 == Guid.Empty), Arg<Type>.Matches(t => t == typeof(IStatisticTask)), Arg<string>.Is.Anything,
-				           Arg<Guid>.Is.Anything));
 
 			var target = new StatisticsUpdateNotificationJobStep(_jobParameters);
 			IJobStepResult jobStepResult = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
+			var arguments = _messageSender.GetArgumentsForCallsMadeOn(x => x.SendNotification(null), a => a.IgnoreArguments());
 
 			jobStepResult.Status.Should().Be.EqualTo("Done");
+
+			var firstCall = arguments.Single();
+			var notification = (Notification)firstCall.Single();
+			notification.DomainId.Should().Be(Guid.Empty.ToString());
+			notification.DomainType.Should().Be(typeof(IStatisticTask).Name);
+			
 			_messageSender.VerifyAllExpectations();
 		}
 	}

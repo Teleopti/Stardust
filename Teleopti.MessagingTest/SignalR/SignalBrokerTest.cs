@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -18,19 +19,6 @@ namespace Teleopti.MessagingTest.SignalR
 	[TestFixture, Ignore]
 	public class SignalBrokerTest
 	{
-		private class proxyAndBrokerHolder
-		{
-			public IHubProxy HubProxy { get; private set; }
-			public signalBrokerForTest SignalBroker { get; private set; }
-			public SignalSubscriber SignalSubscriber { get; set; }
-
-			public proxyAndBrokerHolder(IHubProxy hubProxy, signalBrokerForTest signalBroker)
-			{
-				HubProxy = hubProxy;
-				SignalBroker = signalBroker;
-			}
-		}
-		
 		private Task _doneTask;
 		
 		[SetUp]
@@ -45,6 +33,7 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
 			hubConnection.Stub(x => x.Start()).Return(_doneTask);
+			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
 			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
 			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
 			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
@@ -395,5 +384,18 @@ namespace Teleopti.MessagingTest.SignalR
 				return _hubConnection;
 			}
 		}
+
+
+		private class proxyAndBrokerHolder
+		{
+			public IHubProxy HubProxy { get; private set; }
+			public signalBrokerForTest SignalBroker { get; private set; }
+
+			public proxyAndBrokerHolder(IHubProxy hubProxy, signalBrokerForTest signalBroker)
+			{
+				HubProxy = hubProxy;
+				SignalBroker = signalBroker;
+	}
+}
 	}
 }

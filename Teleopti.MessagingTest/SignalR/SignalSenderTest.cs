@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using NUnit.Framework;
 using Newtonsoft.Json;
@@ -35,31 +36,38 @@ namespace Teleopti.MessagingTest.SignalR
 			return taskCompletionSource.Task;
 		}
 
-		private signalSenderForTest makeSignalSender(IHubConnectionWrapper hubConnection)
+		private asyncSignalSenderForTest makeSignalSender(IHubConnectionWrapper hubConnection)
 		{
-			return new signalSenderForTest(hubConnection, new Now());
+			return new asyncSignalSenderForTest(hubConnection, new Now());
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy)
 		{
 			return makeSignalSender(hubProxy, new Now());
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, ILog logger)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy, ILog logger)
 		{
 			return makeSignalSender(hubProxy, new Now(), logger);
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now)
 		{
 			return makeSignalSender(hubProxy, now, null);
 		}
 
-		private signalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now, ILog logger)
+		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy, INow now, ILog logger)
 		{
-			var signalSender = new signalSenderForTest(stubHubConnection(hubProxy), now, logger);
-			signalSender.InstantiateBrokerService();
+			var signalSender = new asyncSignalSenderForTest(stubHubConnection(hubProxy), now, logger);
+			signalSender.StartBrokerService();
 			return signalSender;
+		}
+
+		private SignalSender makeSingleSignalSender(hubProxyFake proxy)
+		{
+			var signalSingleSender = new signalSenderForTest(stubHubConnection(proxy), null);
+			signalSingleSender.StartBrokerService();
+			return signalSingleSender;
 		}
 
 		private hubProxyFake stubProxy()
@@ -70,6 +78,7 @@ namespace Teleopti.MessagingTest.SignalR
 		private IHubConnectionWrapper stubHubConnection(IHubProxy hubProxy)
 		{
 			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
 			hubConnection.Stub(x => x.Start()).Return(makeDoneTask());
 			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
 			return hubConnection;
@@ -89,6 +98,19 @@ namespace Teleopti.MessagingTest.SignalR
 			target.ProcessTheQueue();
 
 			hubProxy.NotifyClientsMultipleInvokedWith.First().Should().Have.SameValuesAs(new[] {notification1, notification2});
+		}
+	
+		[Test]
+		public void ShouldSendSingleNotification()
+		{
+			var hubProxy = stubProxy();
+			var target = makeSingleSignalSender(hubProxy);
+
+			var notification1 = new Notification();
+
+			target.SendNotification(notification1);
+
+			hubProxy.NotifyClientsInvokedWith.First().Should().Be(notification1);
 		}
 
 		[Test]
@@ -156,26 +178,26 @@ namespace Teleopti.MessagingTest.SignalR
 			log.AssertWasCalled(t => t.Error("",null), a => a.IgnoreArguments());
 		}
 		
-		[Test, Ignore]
+		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.InstantiateBrokerService();
+			target.StartBrokerService();
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
 			hubConnection.AssertWasCalled(x => x.Start(), a => a.Repeat.Twice());
 		}
 
-		[Test, Ignore]
-		public void ShouldRstartHubConnectionWhenStartFails()
+		[Test]
+		public void ShouldRestartHubConnectionWhenStartFails()
 		{
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.InstantiateBrokerService();
+			target.StartBrokerService();
 
 			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new Exception())).Repeat.Once();
 
@@ -185,11 +207,14 @@ namespace Teleopti.MessagingTest.SignalR
 		private class hubProxyFake : IHubProxy
 		{
 			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith = new List<IEnumerable<Notification>>();
+			public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
 
 			public Task Invoke(string method, params object[] args)
 			{
 				if (method == "NotifyClientsMultiple")
 					NotifyClientsMultipleInvokedWith.Add(args.First() as IEnumerable<Notification>);
+				if (method == "NotifyClients")
+					NotifyClientsInvokedWith.Add(args.First() as Notification);
 				return makeDoneTask();
 			}
 
@@ -212,17 +237,39 @@ namespace Teleopti.MessagingTest.SignalR
 			public JsonSerializer JsonSerializer { get; private set; }
 		}
 
+
 		private class signalSenderForTest : SignalSender
+		{
+			private readonly IHubConnectionWrapper _hubConnection;
+
+			public signalSenderForTest(IHubConnectionWrapper hubConnection, ILog logger):base(null)
+			{
+				_hubConnection = hubConnection;
+				Logger = logger;
+			}
+
+			protected override ILog MakeLogger()
+			{
+				return Logger ?? base.MakeLogger();
+			}
+
+			protected override IHubConnectionWrapper MakeHubConnection()
+			{
+				return _hubConnection;
+			}
+		}
+
+		private class asyncSignalSenderForTest : AsyncSignalSender
 		{
 			private readonly IHubConnectionWrapper _hubConnection;
 			private readonly INow _now;
 
-			public signalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger) : this(hubConnection, now)
+			public asyncSignalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger) : this(hubConnection, now)
 			{
-				_logger = logger;
+				Logger = logger;
 			}
 
-			public signalSenderForTest(IHubConnectionWrapper hubConnection, INow now)
+			public asyncSignalSenderForTest(IHubConnectionWrapper hubConnection, INow now)
 				: base(null)
 			{
 				_hubConnection = hubConnection;
@@ -231,7 +278,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			protected override ILog MakeLogger()
 			{
-				return _logger ?? base.MakeLogger();
+				return Logger ?? base.MakeLogger();
 			}
 
 			protected override IHubConnectionWrapper MakeHubConnection()

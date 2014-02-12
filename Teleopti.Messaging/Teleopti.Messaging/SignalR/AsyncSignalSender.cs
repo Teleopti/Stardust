@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
@@ -12,13 +15,17 @@ using log4net;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class SignalSender : IMessageSender
+	public class AsyncSignalSender : IAsyncMessageSender
 	{
+		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
+		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
+		private Thread workerThread;
+
 		private readonly string _serverUrl;
 		private ISignalWrapper _wrapper;
 		protected ILog Logger;
 
-		public SignalSender(string serverUrl)
+		public AsyncSignalSender(string serverUrl)
 		{
 			_serverUrl = serverUrl;
 
@@ -27,6 +34,7 @@ namespace Teleopti.Messaging.SignalR
 
 			TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
 			Logger = MakeLogger();
+			StartWorkerThread();
 		}
 
 		protected static bool IgnoreInvalidCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslpolicyerrors)
@@ -40,6 +48,7 @@ namespace Teleopti.Messaging.SignalR
 			Logger.Debug("An unobserved task failed.", e.Exception);
 			e.SetObserved();
 		}
+
 		public void StartBrokerService()
 		{
 			try
@@ -50,7 +59,7 @@ namespace Teleopti.Messaging.SignalR
 					var proxy = connection.CreateHubProxy("MessageBrokerHub");
 					_wrapper = new SignalWrapper(proxy, connection, Logger);
 				}
-
+				
 				_wrapper.StartHub();
 			}
 			catch (SocketException exception)
@@ -68,20 +77,55 @@ namespace Teleopti.Messaging.SignalR
 			get { return _wrapper != null && _wrapper.IsInitialized(); }
 		}
 
-		public void SendNotification(Notification notification)
+		public void SendNotificationAsync(Notification notification)
 		{
-			_wrapper.NotifyClients(notification);
+			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
 		}
 
-		public virtual void Dispose()
+		private void processQueue(object state)
 		{
+			while (!cancelToken.IsCancellationRequested)
+			{
+				ProcessTheQueue();
+			}
+		}
+
+		protected virtual void ProcessTheQueue()
+		{
+			var notifications =
+				_notificationQueue.GetConsumingEnumerable(cancelToken.Token)
+				                  .Take(Math.Max(1, Math.Min(_notificationQueue.Count, 20)))
+				                  .ToArray()
+				                  .Where(t => t.Item1 > CurrentUtcTime().AddMinutes(-2))
+				                  .Select(t => t.Item2)
+				                  .ToArray();
+
+			if (!notifications.Any()) return;
+			_wrapper.NotifyClients(notifications);
+		}
+
+		public void Dispose()
+		{
+			cancelToken.Cancel();
+			workerThread.Join();
 			_wrapper.StopHub();
 			_wrapper = null;
 		}
 
 		protected virtual ILog MakeLogger()
 		{
-			return LogManager.GetLogger(typeof(SignalSender));
+			return LogManager.GetLogger(typeof(AsyncSignalSender));
+		}
+
+		protected virtual DateTime CurrentUtcTime()
+		{
+			return DateTime.UtcNow;
+		}
+
+		protected virtual void StartWorkerThread()
+		{
+			workerThread = new Thread(processQueue) { IsBackground = true };
+			workerThread.Start();
 		}
 
 		[CLSCompliant(false)]
