@@ -311,8 +311,10 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterPersonsForTotalDistributionTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\TeamBlockSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep1Test.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep2Test.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DescisionMakerToSwapTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\JuniorTeamBlockExtractorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PostSwapValidationForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityCalculatorForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapValidatorTest.cs" />
@@ -321,6 +323,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffDaySwapDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffDaySwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SuitableDayOffSpotDetectorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffFairnessOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockLocatorWithHighestPointsTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\WeekDayPointCalculatorForTeamBlockTest.cs" />

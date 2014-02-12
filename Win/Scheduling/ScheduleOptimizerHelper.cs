@@ -702,8 +702,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, restrictionExtractor, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
-			var teamBlockRestrictionOverLimitValidator =
-				_container.Resolve<ITeamBlockRestrictionOverLimitValidator>();
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
@@ -718,7 +716,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			////day off fairness
             var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationService>();
             teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
-                _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences);
+                _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences);
 
 			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
 			if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))
