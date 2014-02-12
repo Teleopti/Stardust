@@ -58,10 +58,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
                     {
                         var absenceCollection = s.ScheduleDay.PersonAbsenceCollection();
                         return absenceCollection.Any()
-                                   ? s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.Description.Name
-                                   : "";
+                                   ? s.ScheduleDay.PersonAbsenceCollection().First()
+                                   : null;
                     }))
                 ;
+            CreateMap<IPersonAbsence, AbsenceViewModel>()
+                .ForMember(d => d.Name, c => c.ResolveUsing(
+                    s => s.Layer.Payload.Description.Name));
         }
     }
 }

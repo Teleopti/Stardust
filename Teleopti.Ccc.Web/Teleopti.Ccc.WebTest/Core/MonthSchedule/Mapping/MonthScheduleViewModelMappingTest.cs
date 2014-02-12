@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
             var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { new MonthScheduleDayDomainData() { ScheduleDay=scheduleDay }}, CurrentDate = DateOnly.Today };
             var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
-            result.ScheduleDays.Single().Absence.Should().Be.EqualTo("Illness");
+            result.ScheduleDays.Single().Absence.Name.Should().Be.EqualTo("Illness");
         }
 	}
 }

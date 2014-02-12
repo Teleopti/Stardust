@@ -84,7 +84,6 @@ Given I have the role 'Full access to mytime'
 When I view my month schedule for date '2014-01-07'
 Then I should see an indication implying I should not work on '2014-01-16'
 
-@ignore
 Scenario: View when you have full day absence
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'

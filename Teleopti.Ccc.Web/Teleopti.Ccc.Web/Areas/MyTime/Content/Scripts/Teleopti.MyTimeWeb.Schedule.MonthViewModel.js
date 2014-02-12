@@ -21,7 +21,7 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.isWorkingDay = scheduleDate.IsWorkingDay;
     this.isNotWorkingDay = scheduleDate.IsNotWorkingDay;
     this.displayColor = scheduleDate.DisplayColor;
-    this.absence = scheduleDate.Absence;
+    this.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : '';
     
     this.isOutsideMonth = (selectedDate.month() != currentDate.month());
 };

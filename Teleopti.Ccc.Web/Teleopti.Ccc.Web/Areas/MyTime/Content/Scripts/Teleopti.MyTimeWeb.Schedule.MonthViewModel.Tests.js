@@ -8,11 +8,25 @@ $(document).ready(function () {
 		var viewModelMonth = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
 
 		viewModelMonth.readData({
-		    Date: "2014-02-11",
-		    ScheduleDays: [{ Date: "2014-02-11",Absence:"Illness" }]
+		    ScheduleDays: [{
+                Absence: {
+                    Name: "Illness"
+                }
+		    }]
 		});
 
-		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].absence, "Illness");
+		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].absenceName, "Illness");
 	});
+    
+	test("should read scheduled days", function () {
 
+	    var viewModelMonth = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+
+	    viewModelMonth.readData({
+	        ScheduleDays: [{
+	        }]
+	    });
+
+	    equal(viewModelMonth.weekViewModels()[0].dayViewModels().length, 1);
+	});
 });
