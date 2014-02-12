@@ -5,6 +5,7 @@ using AutoMapper;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
@@ -155,6 +156,19 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
             var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
             result.DayHeaders.First().Name.Should().Be.EqualTo("Montag");
             result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
+        }
+        
+        [Test]
+        public void ShouldMapAbsenceName()
+        {
+            var stubs = new StubFactory();
+            var personAbsence =
+                new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence(){Description = new Description("Illness")}, new DateTimePeriod()) );
+            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
+
+            var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { new MonthScheduleDayDomainData() { ScheduleDay=scheduleDay }}, CurrentDate = DateOnly.Today };
+            var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+            result.ScheduleDays.Single().Absence.Should().Be.EqualTo("Illness");
         }
 	}
 }

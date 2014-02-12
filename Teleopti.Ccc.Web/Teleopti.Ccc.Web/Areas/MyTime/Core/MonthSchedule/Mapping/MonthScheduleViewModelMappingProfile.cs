@@ -53,7 +53,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
                                     return s.ScheduleDay.PersonAssignment().ShiftCategory.DisplayColor.ToHtml();
                                 }
                             return string.Empty;
-                        }));
+                        }))
+                .ForMember(d => d.Absence, c=>c.ResolveUsing(s =>
+                    {
+                        var absenceCollection = s.ScheduleDay.PersonAbsenceCollection();
+                        return absenceCollection.Any()
+                                   ? s.ScheduleDay.PersonAbsenceCollection().First().Layer.Payload.Description.Name
+                                   : "";
+                    }))
+                ;
         }
     }
 }

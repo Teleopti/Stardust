@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
         public bool IsWorkingDay { get; set; }
         public string DisplayColor { get; set; }
         public bool IsNotWorkingDay { get; set; }
+        public string Absence { get; set; }
     }
 }

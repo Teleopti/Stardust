@@ -59,13 +59,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldSeeTheAbsenceWith(Table table)
         {
             var absence = table.CreateInstance<AbsenceListItem>();
-            Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0:yyyy-MM-dd}'] .absence", absence.Date), absence.Name);
+            Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .absence", absence.Date), absence.Name);
         }
 
         public class AbsenceListItem
         {
-            public string Name;
-            public DateTime Date;
+            public string Name { get; set; }
+            public string Date { get; set; }
         }
 
         [Then(@"I should not see any indication for day '(.*)'")]
