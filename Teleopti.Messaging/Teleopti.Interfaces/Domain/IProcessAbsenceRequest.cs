@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -54,18 +55,20 @@ namespace Teleopti.Interfaces.Domain
         private readonly IUndoRedoContainer _undoRedoContainer;
         private readonly IRequestApprovalService _requestApprovalService;
         private readonly IPersonRequestCheckAuthorization _authorization;
+	    private readonly Action _afterUndoCallback;
 
-        /// <summary>
+	    /// <summary>
         /// 
         /// </summary>
         /// <param name="undoRedoContainer"></param>
         /// <param name="requestApprovalService"></param>
         /// <param name="authorization"></param>
-        public RequiredForProcessingAbsenceRequest(IUndoRedoContainer undoRedoContainer, IRequestApprovalService requestApprovalService, IPersonRequestCheckAuthorization authorization)
+        public RequiredForProcessingAbsenceRequest(IUndoRedoContainer undoRedoContainer, IRequestApprovalService requestApprovalService, IPersonRequestCheckAuthorization authorization, Action afterUndoCallback = null)
         {
             _undoRedoContainer = undoRedoContainer;
             _requestApprovalService = requestApprovalService;
             _authorization = authorization;
+	        _afterUndoCallback = afterUndoCallback ?? (()=>{});
         }
 
         /// <summary>
@@ -91,5 +94,10 @@ namespace Teleopti.Interfaces.Domain
         {
             get { return _authorization; }
         }
+
+	    public Action AfterUndoCallback
+	    {
+		    get { return _afterUndoCallback; }
+	    }
     }
 }

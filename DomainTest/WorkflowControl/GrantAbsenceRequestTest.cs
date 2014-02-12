@@ -173,6 +173,41 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void VerifyCallback()
+		{
+			var handling = new RequiredForHandlingAbsenceRequest();
+			IUndoRedoContainer undoRedoContainer = _mocks.DynamicMock<IUndoRedoContainer>();
+			_validatedRequest.IsValid = true;
+			_validatedRequest.ValidationErrors = "";
+
+			var person = new Person();
+			var start = new DateTime(2007, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var dateOnly = new DateOnly(2007, 1, 1);
+			var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var businessRuleResponse = new BusinessRuleResponse(typeof(string), "An error has occurred!", true, false, new DateTimePeriod(start, start), person, dateOnlyPeriod);
+
+
+			using (_mocks.Ordered())
+			{
+				Expect.Call(_validator.Validate(_absenceRequest, handling)).Return(_validatedRequest);
+				undoRedoContainer.UndoAll();
+				_authorization.VerifyEditRequestPermission(_personRequest);
+				Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person)).Return(
+					new List<IBusinessRuleResponse> { businessRuleResponse });
+			}
+
+			_mocks.ReplayAll();
+
+			var afterCallback = false;
+			_target.Process(null, _absenceRequest, new RequiredForProcessingAbsenceRequest(undoRedoContainer, _requestApprovalService, _authorization,
+			                                                                               () =>
+				                                                                               { afterCallback = true; }), handling, _validators);
+
+			Assert.IsTrue(afterCallback);
+			_mocks.VerifyAll();
+		}		
+
         [Test]
         public void VerifyCanCreateInstance()
         {

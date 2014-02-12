@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
@@ -642,6 +643,70 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 _target.Consume(_message);
             }
         }
+
+		[Test]
+		public void ShouldTrackAbsenceTwoTimes()
+		{
+			SetupAuthorizationAndDataSource();
+
+			var processAbsenceRequest = _mockRepository.DynamicMock<IProcessAbsenceRequest>();
+			var absenceRequestValidator = _mockRepository.DynamicMock<IAbsenceRequestValidator>();
+			var personAccountCollection = _mockRepository.DynamicMock<IPersonAccountCollection>();
+			var tracker = _mockRepository.StrictMock<ITracker>();
+			_absence.Tracker = tracker;
+
+			_loaderWithoutResourceCalculation.Execute(_scenario, _period.ChangeStartTime(TimeSpan.FromDays(-1)), new List<IPerson> { _person });
+			var validatorList = new List<IAbsenceRequestValidator> { absenceRequestValidator };
+
+			var absenceRequestOpenDatePeriod = _mockRepository.DynamicMock<IAbsenceRequestOpenPeriod>();
+			var openAbsenceRequestPeriodExtractor = _mockRepository.DynamicMock<IOpenAbsenceRequestPeriodExtractor>();
+			var openAbsenceRequestPeriodProjection = _mockRepository.DynamicMock<IOpenAbsenceRequestPeriodProjection>();
+			var periodList = new List<IAbsenceRequestOpenPeriod> { absenceRequestOpenDatePeriod };
+			IPersonAbsenceAccount personAbsenceAccount = new PersonAbsenceAccount(_person, _absence);
+			personAbsenceAccount.Add(new AccountTime(_dateOnlyPeriod.StartDate));
+			var personAbsenceAccountList = new List<IPersonAbsenceAccount>
+                                               {
+                                                   personAbsenceAccount
+                                               };
+
+			using (_mockRepository.Record())
+			{
+				PrepareUnitOfWork(true);
+				PrepareAbsenceRequest();
+				Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _person)).Return(
+					new List<IBusinessRuleResponse>());
+				Expect.Call(_personAbsenceAccountProvider.Find(_person)).Return(personAccountCollection);
+				Expect.Call(personAccountCollection.GetEnumerator()).Return(personAbsenceAccountList.GetEnumerator()).
+					Repeat.Any();
+				Expect.Call(personAccountCollection.Find(_absence)).Return(personAbsenceAccount);
+				Expect.Call(_merger.Merge(periodList)).Return(absenceRequestOpenDatePeriod);
+				Expect.Call(_workflowControlSet.GetExtractorForAbsence(_absence)).Return(
+					openAbsenceRequestPeriodExtractor);
+				openAbsenceRequestPeriodExtractor.ViewpointDate = DateOnly.Today;
+				Expect.Call(openAbsenceRequestPeriodExtractor.Projection).Return(openAbsenceRequestPeriodProjection);
+				Expect.Call(openAbsenceRequestPeriodProjection.GetProjectedPeriods(new DateOnlyPeriod(), _person.PermissionInformation.Culture())).
+					IgnoreArguments().
+					Return(periodList);
+				Expect.Call(absenceRequestOpenDatePeriod.AbsenceRequestProcess).Return(processAbsenceRequest);
+				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList()).Return(validatorList);
+
+				Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
+					_requestApprovalService);
+				Expect.Call(_unitOfWork.Merge(personAbsenceAccount)).Return(null);
+				Expect.Call(_personRequest.IsApproved).Return(true).Repeat.Twice();
+				Expect.Call(_alreadyAbsentSpecification.IsSatisfiedBy(_absenceRequest)).Return(false);
+				ExpectLoadOfSchedules();
+				ExpectPersistOfDictionary();
+				Expect.Call(() => _updateScheduleProjectionReadModel.Execute(_scheduleRange, _dateOnlyPeriod));
+				Expect.Call(_unitOfWork.PersistAll()).Return(null);
+
+				Expect.Call(() => tracker.Track(personAbsenceAccount.AccountCollection().First(), _absence, new List<IScheduleDay>())).Repeat.Twice();
+			}
+			using (_mockRepository.Playback())
+			{
+				_target.Consume(_message);
+			}
+		}
 
         [Test]
         public void VerifyAbsenceRequestGetsDeniedWhenNoWorkflowControlSet()
