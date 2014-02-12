@@ -11429,4 +11429,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="TotalTaskTime" xml:space="preserve">
     <value>Total uppgiftstid</value>
   </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Schemat måste laddas om</value>
+  </data>
 </root>
