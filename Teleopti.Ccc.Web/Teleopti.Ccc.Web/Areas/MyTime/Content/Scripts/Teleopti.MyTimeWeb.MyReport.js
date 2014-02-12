@@ -12,7 +12,9 @@
 		self.readyTimePerScheduledReadyTime = ko.observable();
 		self.selectedDateInternal = ko.observable(date);
 		self.weekStart = ko.observable(1);
-		self.datePickerFormat = '';
+		self.datePickerFormat = ko.observable('YYYYMMDD');
+		var format = $('#my-report-datepicker-format').val().toUpperCase();
+		self.datePickerFormat(format);
 		self.dataAvailable = ko.observable();
 		self.goToAnotherDay = function (toDate) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
@@ -32,7 +34,9 @@
 		self.previousDay = function() {
 			self.goToAnotherDay(self.selectedDate().clone().add('days', -1));
 		};
-
+		self.dateFormat = function() {
+			return self.datePickerFormat;
+		};
 		loadDataMethod(date);
 	}
 
@@ -49,12 +53,13 @@
 				vm.averageHandlingTime(data.AverageHandlingTime);
 				vm.averageTalkTime(data.AverageTalkTime);
 				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
-				vm.datePickerFormat = data.DatePickerFormat;
 				vm.dataAvailable(data.DataAvailable);
 			}
 
 		});
 	}
+
+	
 
 	function setWeekStart() {
 		$.ajax({

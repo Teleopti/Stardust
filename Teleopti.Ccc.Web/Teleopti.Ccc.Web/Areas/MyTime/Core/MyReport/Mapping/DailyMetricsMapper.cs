@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 			}
 			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
 
-			var shortDatePattern = culture.DateTimeFormat.ShortDatePattern;
 			return new DailyMetricsViewModel
 			{
 				AnsweredCalls = dataModel.AnsweredCalls,
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 				ReadyTimePerScheduledReadyTime = dataModel.ReadyTimePerScheduledReadyTime.ValueAsPercent().ToString(culture),
 				Adherence = dataModel.Adherence.ValueAsPercent().ToString(culture),
 				DataAvailable = true,
-				DatePickerFormat = shortDatePattern
 			};
 		}
 	}
