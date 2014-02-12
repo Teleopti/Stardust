@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Index_WhenUserHasPermissionForMyReport_ShouldReturnPartialView()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IMyReportViewModelFactory>();
-			var target = new MyReportController(viewModelFactory);
+			var target = new MyReportController(viewModelFactory, null);
 			var model = new DailyMetricsViewModel();
 			var date = DateOnly.Today;
 

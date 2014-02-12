@@ -2,20 +2,21 @@
 @{
 	Layout = null;
 }
-
+<input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat"/>
 <div class="myreport-daily-metrics">
 	<div class="navbar ">
 		<div class="navbar-inner">
 			<form class="navbar-form pull-left">
 				<div class="input-append input-prepend">
 					<button id="report-view-date-nav-prev" class="btn" data-bind="click: previousDay"><i class="icon-arrow-left"></i></button>
-					<input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { format: datePickerFormat }" type="text" class="span3 text-center" readonly="readonly" />
+					<input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat(), weekStart: weekStart() }" type="text" class="span3 text-center" readonly="readonly" />
 					<button class="btn moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: weekStart() }"><i class="icon-th"></i></button>
 					<button id="report-view-date-nav-next" class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
 				</div>
 			</form>
 		</div>
 	</div>
+	
 	<div class="container">
 		<div data-bind="ifnot: dataAvailable">
 			<div id="friendly-message" class="alert-block alert alert-myreport">

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
@@ -11,15 +12,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	public class MyReportController : Controller
 	{
 		private readonly IMyReportViewModelFactory _myReportViewModelFactory;
+		private readonly IUserCulture _userCulture;
 
-		public MyReportController(IMyReportViewModelFactory myReportViewModelFactory)
+		public MyReportController(IMyReportViewModelFactory myReportViewModelFactory, IUserCulture userCulture)
 		{
 			_myReportViewModelFactory = myReportViewModelFactory;
+			_userCulture = userCulture;
 		}
 
 		[EnsureInPortal]
 		public ViewResult Index()
 		{
+			var culture = _userCulture == null ? CultureInfo.InvariantCulture : _userCulture.GetCulture();
+			ViewBag.DatePickerFormat = culture.DateTimeFormat.ShortDatePattern.ToUpper();
 			return View("MyReportPartial");
 		}
 

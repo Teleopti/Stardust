@@ -16,9 +16,9 @@
                         <span class="add-on" data-bind="clickable: previousDateValid">
                             <i class="icon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
                         </span>
-                        <input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+                        <input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
                         <span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
-                            <i class="icon-calendar" ></i>
+                            <i class="icon-th" ></i>
                         </span>
                         <span class="add-on" data-bind="clickable: nextDateValid, enable: nextDateValid">
                             <i class="icon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
