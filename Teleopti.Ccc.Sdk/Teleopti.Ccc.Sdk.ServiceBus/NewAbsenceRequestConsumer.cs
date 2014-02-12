@@ -228,10 +228,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     Logger.InfoFormat("The following process will be used for request {0}: {1}", message.PersonRequestId,
                                       _process.GetType());
                 }
-
+	            
                 _process.Process(null, _absenceRequest,
                                  new RequiredForProcessingAbsenceRequest(undoRedoContainer,
-                                                                         requestApprovalServiceScheduler, _authorization),
+                                                                         requestApprovalServiceScheduler, _authorization, ()
+                                                                                                                          =>
+	                                                                         {
+		                                                                         if (personAccount != null)
+			                                                                         TrackAccounts(personAccount, dateOnlyPeriod);
+	                                                                         }),
                                  new RequiredForHandlingAbsenceRequest(_schedulingResultStateHolder,
                                                                        personAccountBalanceCalculator,
                                                                        _resourceOptimizationHelper,
@@ -257,8 +262,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     //Ugly fix to get the number updated for person account. Don't try this at home!
                     if (personAccount != null)
                     {
-                        var result = unitOfWork.Merge(personAccount);
-                        TrackAccounts(result, dateOnlyPeriod);
+						TrackAccounts(personAccount, dateOnlyPeriod);
+						unitOfWork.Merge(personAccount);
                     }
                 }
                 using (new MessageBrokerSendEnabler())
