@@ -63,9 +63,19 @@ XCOPY /d /y "%Dependencies%\RegisterEventLogSource.exe" "%ContentDest%\TeleoptiC
 ::Get Azure stuff
 robocopy %AzureDependencies% "%ContentDest%\TeleoptiCCC\bin\ccc7_azure" /mir
 
-::update config and run scpack
+::update config
 FOR /F %%G IN ('DIR /B Customer\*.txt') DO CALL :FuncDeployConfig %%G 
 IF %ERRORLEV% NEQ 0 SET ERRORLEV=103 & GOTO error
+
+::run cxpack
+echo building cspack ...
+ECHO "c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef.BuildTemplate" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
+"c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef.BuildTemplate" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
+if %errorlevel% NEQ 0 (
+SET /A ERRORLEV=202
+GOTO :Error
+)
+echo building cspack. done!
 
 GOTO :eof
 
@@ -81,6 +91,7 @@ ECHO --------
 IF %ERRORLEV% NEQ 0 ECHO Errors found!
 IF %ERRORLEV% EQU 102 ECHO No version parameter given as input for batchfile: %~nx0 
 IF %ERRORLEV% EQU 103 ECHO Error calling DeployConfig.bat
+IF %ERRORLEV% EQU 202 ECHO Could not build using SCPACK.exe & exit /b 202
 
 ECHO.
 ECHO --------

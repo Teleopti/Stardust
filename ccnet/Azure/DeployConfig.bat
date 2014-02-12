@@ -44,17 +44,6 @@ for /f "tokens=1,2 delims=," %%g in (Customer\%customerBlobStorageConfig%) do cs
 ECHO COPY "ServiceConfig.cscfg" "%output%\%customer%.cscfg" /Y
 COPY "ServiceConfig.cscfg" "%output%\%customer%.cscfg" /Y
 
-::cxpack
-echo building cspack ...
-if not exist "%output%" MKDIR "%output%"
-ECHO "c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\%customer%.cspkg"
-"c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\%customer%.cspkg"
-if %errorlevel% NEQ 0 (
-SET /A ERRORLEV=202
-GOTO :Error
-)
-echo building cspack. done!
-
 GOTO :EOF
 :SetDataSource
 ::Get base url into variable
@@ -67,7 +56,6 @@ ECHO.
 ECHO --------
 IF %ERRORLEV% NEQ 0 ECHO Errors found!
 IF %ERRORLEV% EQU 201 ECHO Could not install temporary msi-file & exit /b 201
-IF %ERRORLEV% EQU 202 ECHO Could not build using SCPACK.exe install temporary msi-file & exit /b 202
 IF %ERRORLEV% EQU 203 ECHO Could not sign Clickonce for SmartClientPortal & exit /b 203
 IF %ERRORLEV% EQU 204 ECHO Could not sign Clickonce for AgentPortal & exit /b 204
 
