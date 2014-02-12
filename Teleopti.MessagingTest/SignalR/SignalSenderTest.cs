@@ -163,7 +163,7 @@ namespace Teleopti.MessagingTest.SignalR
 			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
 		}
 
-		[Test]
+		[Test, Ignore]
 		public void ShouldLogAndIgnoreOnExceptionSendingNotification()
 		{
 			var failedTask = makeFailedTask(new Exception());
