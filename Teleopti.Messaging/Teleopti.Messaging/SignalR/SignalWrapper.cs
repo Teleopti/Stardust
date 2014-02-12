@@ -29,7 +29,6 @@ namespace Teleopti.Messaging.SignalR
 		{
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
-			_hubConnection.Closed += reconnect();
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
 			
@@ -38,9 +37,9 @@ namespace Teleopti.Messaging.SignalR
 			emptyTask = tcs.Task;
 		}
 
-		private Action reconnect()
+		private void reconnect()
 		{
-			return () => _hubConnection.Start();
+			_hubConnection.Start();
 		}
 
 		public void StartHub()
@@ -68,6 +67,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
 				}
+				_hubConnection.Closed += reconnect;
 				if (exception != null)
 				{
 					throw exception;
@@ -194,7 +194,7 @@ namespace Teleopti.Messaging.SignalR
 			
 			try
 			{
-				_hubConnection.Closed -= reconnect();
+				_hubConnection.Closed -= reconnect;
 				_hubConnection.Stop();
 			}
 			catch (Exception ex)
