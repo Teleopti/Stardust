@@ -25,7 +25,7 @@ namespace Teleopti.MessagingTest.SignalR
 		private static Task<object> makeFailedTask(Exception ex)
 		{
 			var taskCompletionSource = new TaskCompletionSource<object>();
-			taskCompletionSource.SetException(ex);
+			taskCompletionSource.SetException(ex);			
 			return taskCompletionSource.Task;
 		}
 
@@ -99,7 +99,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubProxy.NotifyClientsMultipleInvokedWith.First().Should().Have.SameValuesAs(new[] {notification1, notification2});
 		}
-	
+
 		[Test]
 		public void ShouldSendSingleNotification()
 		{
@@ -163,21 +163,23 @@ namespace Teleopti.MessagingTest.SignalR
 			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void ShouldLogAndIgnoreOnExceptionSendingNotification()
 		{
 			var failedTask = makeFailedTask(new Exception());
 			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+
 			var log = MockRepository.GenerateMock<ILog>();
 			var target = makeSignalSender(hubProxy, log);
 
 			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
 
 			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
-			target.ProcessTheQueue();
-			log.AssertWasCalled(t => t.Error("",null), a => a.IgnoreArguments());
+			var loggingTask = target.ProcessTheQueue();
+			loggingTask.Wait(500);
+			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
 		}
-		
+
 		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
@@ -206,7 +208,9 @@ namespace Teleopti.MessagingTest.SignalR
 
 		private class hubProxyFake : IHubProxy
 		{
-			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith = new List<IEnumerable<Notification>>();
+			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith =
+				new List<IEnumerable<Notification>>();
+
 			public readonly IList<Notification> NotifyClientsInvokedWith = new List<Notification>();
 
 			public Task Invoke(string method, params object[] args)
@@ -242,7 +246,8 @@ namespace Teleopti.MessagingTest.SignalR
 		{
 			private readonly IHubConnectionWrapper _hubConnection;
 
-			public signalSenderForTest(IHubConnectionWrapper hubConnection, ILog logger):base(null)
+			public signalSenderForTest(IHubConnectionWrapper hubConnection, ILog logger)
+				: base(null)
 			{
 				_hubConnection = hubConnection;
 				Logger = logger;
@@ -264,7 +269,8 @@ namespace Teleopti.MessagingTest.SignalR
 			private readonly IHubConnectionWrapper _hubConnection;
 			private readonly INow _now;
 
-			public asyncSignalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger) : this(hubConnection, now)
+			public asyncSignalSenderForTest(IHubConnectionWrapper hubConnection, INow now, ILog logger)
+				: this(hubConnection, now)
 			{
 				Logger = logger;
 			}
@@ -295,9 +301,9 @@ namespace Teleopti.MessagingTest.SignalR
 			{
 			}
 
-			public new void ProcessTheQueue()
+			public new Task	ProcessTheQueue()
 			{
-				base.ProcessTheQueue();
+				return base.ProcessTheQueue();
 			}
 
 		}
