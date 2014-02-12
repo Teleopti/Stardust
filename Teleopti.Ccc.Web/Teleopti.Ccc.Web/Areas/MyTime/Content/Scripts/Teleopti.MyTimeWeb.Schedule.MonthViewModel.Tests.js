@@ -3,8 +3,6 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Schedule.MonthViewModel");
 
-	return;
-    
 	test("should read absence data", function () {
 	    
 		var viewModelMonth = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
