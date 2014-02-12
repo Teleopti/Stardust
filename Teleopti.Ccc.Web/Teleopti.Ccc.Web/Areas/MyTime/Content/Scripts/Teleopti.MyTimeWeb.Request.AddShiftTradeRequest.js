@@ -42,6 +42,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.errorMessage = ko.observable();
 		self.isReadyLoaded = ko.observable(false);
 		self.requestedDateInternal = ko.observable(moment().startOf('day'));
+		self.DatePickerFormat = ko.observable();
+		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
+		self.DatePickerFormat(datePickerFormat);
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
