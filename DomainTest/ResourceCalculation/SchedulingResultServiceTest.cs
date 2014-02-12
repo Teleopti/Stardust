@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_personAssignmentListContainer.ContainedSkills);
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(_personSkillProvider);
+			_resources = new ResourceCalculationDataContainer(_personSkillProvider, 15);
 			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			_target = new SchedulingResultService(_skillStaffPeriods,
 												  _personAssignmentListContainer.AllSkills,
-												  new ResourceCalculationDataContainer(_personSkillProvider), 
+												  new ResourceCalculationDataContainer(_personSkillProvider, 15), 
 												  false,
 												  _personSkillProvider);
 			Assert.IsNotNull(_target);

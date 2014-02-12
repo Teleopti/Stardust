@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_skill.SetId(Guid.NewGuid());
 			_activity.SetId(Guid.NewGuid());
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] { _skill });
-            _target = new ResourceCalculationDataContainer(new PersonSkillProvider());
+            _target = new ResourceCalculationDataContainer(new PersonSkillProvider(), 15);
         }
 
 		[Test]

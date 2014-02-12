@@ -75,12 +75,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 		private ResourceCalculationDataContainer createRelevantProjectionList(IScheduleDictionary scheduleDictionary)
 		{
-			var resources = new ResourceCalculationDataContainer(_personSkillProvider);
-			
-			if (_allSkills.Count.Equals(0)) 
-				return resources;
+			if (_allSkills.Count.Equals(0))
+				return new ResourceCalculationDataContainer(_personSkillProvider, 60);
 
 			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
+			var resources = new ResourceCalculationDataContainer(_personSkillProvider, minutesSplit);
 
 			var tasks = new List<Task>();
 			foreach (var person in scheduleDictionary.Keys)
