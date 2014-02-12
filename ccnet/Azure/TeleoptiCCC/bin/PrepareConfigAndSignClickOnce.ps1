@@ -7,6 +7,7 @@ function FindAndReplace {
       [string]$replaceString,
       [string]$fullPath
       )
+
 (Get-Content "$fullPath") | 
 Foreach-Object {$_ -replace "$findString", "$replaceString"} | 
 Set-Content "$fullPath"
@@ -77,7 +78,14 @@ function TeleoptiDriveMapProperty-get {
         }
      }
     else {
-	$TeleoptiDriveMapProperty = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap."+$name)
+		switch ($name){
+		BlobPath		{$TeleoptiDriveMapProperty = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.BlobPath"); break}
+        ContainerName	{$TeleoptiDriveMapProperty="teleopticcc/Settings"; break}        
+		AccountKey		{$TeleoptiDriveMapProperty = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.AccountKey"); break}
+		DataSourceName	{$TeleoptiDriveMapProperty = [Microsoft.WindowsAzure.ServiceRuntime.RoleEnvironment]::GetConfigurationSettingValue("TeleoptiDriveMap.DataSourceName"); break}
+		default			{$TeleoptiDriveMapProperty="Unknown Value"; break}
+        }
+           
     }
 	return $TeleoptiDriveMapProperty
 }
@@ -135,6 +143,8 @@ $JOB = "Teleopti.Ccc.BlobStorageCopy"
 
 Try
 {
+    [Reflection.Assembly]::LoadWithPartialName("Microsoft.WindowsAzure.ServiceRuntime")
+
 	##test if admin
 	If (!(Test-Administrator($myWindowsID=[System.Security.Principal.WindowsIdentity]::GetCurrent()))) {
 		throw "User is not Admin!"
@@ -143,15 +153,16 @@ Try
     #create event log source
     EventlogSource-Create "$JOB"
 
-    $destFolder = $directory + "\SupportTools"
+    $SupportToolFolder = $directory + "\..\Tools\SupportTools"
     $settingsFile = "settings.txt"
-    $fullPath =  "$destFolder" + "\" + "$settingsFile"
+    $fullPath =  $SupportToolFolder + "\" + $settingsFile
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
-
+    
     Remove-Item "$fullPath"
+
     #Get customer specific config from BlobStorage
-    CopyFileFromBlobStorage -destinationFolder "$destFolder" -filename "$settingsFile"
+    CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
 
     #Set static config for all other params
     Add-Content "$fullPath" "`$(SDK_CRED_PROT)|None"
@@ -180,9 +191,7 @@ Try
     Add-Content "$fullPath" "`$(PM_SERVICE|NotImplemented"
     Add-Content "$fullPath" "`$(AS_DATABASE)|NotImplemented"
     Add-Content "$fullPath" "`$(AS_SERVER_NAME)|NotImplemented"
-    
 
-    $SupportToolFolder = $directory + "\SupportTools"
     $SupportTool = $SupportToolFolder + "\Teleopti.Support.Tool.exe"
     Set-Location $SupportToolFolder
 
@@ -202,18 +211,24 @@ Try
 
     #Sign ClickOnce
     $ClickOnceSignPath="$directory\..\Tools\ClickOnceSign"
+    CD e:
     Set-Location $ClickOnceSignPath
     $ClickOnceTool = $ClickOnceSignPath + "\ClickOnceSign.exe"
 
     $ClientPath="$directory\..\..\sitesroot\5"
     $MyTimePath="$directory\..\..\sitesroot\4"
+    $pwd ="`"`""
 
-    $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application","-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $ClickOnceSignPath\TemporaryKey.pfx","-p ","-dir $ClientPath")
-	& $ClickOnceTool @cmdArgs
-
-    $cmdArgs = @("-s","-a Teleopti.Ccc.AgentPortal.application","-m Teleopti.Ccc.AgentPortal.exe.manifest","-u https://$DataSourceName.teleopticloud.com/MyTime/","-c $ClickOnceSignPath\TemporaryKey.pfx","-p ","-dir $MyTimePath")
-	& $ClickOnceTool @cmdArgs
+    $cmdArgs = @("-s","-a Teleopti.Ccc.SmartClientPortal.Shell.application", "-m Teleopti.Ccc.SmartClientPortal.Shell.exe.manifest","-u https://$DataSourceName.teleopticloud.com/Client/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $ClientPath","-p $pwd")
+    Remove-Item "$ClickOnceSignPath\SignAdminClient.bat"
+    Add-Content "$ClickOnceSignPath\SignAdminClient.bat" "$ClickOnceTool $cmdArgs"
+    &"$ClickOnceSignPath\SignAdminClient.bat"
     
+    $cmdArgs = @("-s","-a Teleopti.Ccc.AgentPortal.application","-m Teleopti.Ccc.AgentPortal.exe.manifest","-u https://$DataSourceName.teleopticloud.com/MyTime/","-c $ClickOnceSignPath\TemporaryKey.pfx","-dir $MyTimePath","-p $pwd")
+    Remove-Item "$ClickOnceSignPath\SignMyTime.bat"
+    Add-Content "$ClickOnceSignPath\SignMyTime.bat" "$ClickOnceTool $cmdArgs"
+    &"$ClickOnceSignPath\SignMyTime.bat"
+ 
 }
 Catch [Exception]
 {
