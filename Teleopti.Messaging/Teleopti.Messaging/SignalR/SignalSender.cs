@@ -14,13 +14,13 @@ namespace Teleopti.Messaging.SignalR
 {
 	public class SignalSender : IMessageSender
 	{
-		protected string ServerUrl;
-		protected ISignalWrapper Wrapper;
+		private readonly string _serverUrl;
+		private ISignalWrapper _wrapper;
 		protected ILog Logger;
 
 		public SignalSender(string serverUrl)
 		{
-			ServerUrl = serverUrl;
+			_serverUrl = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
@@ -37,17 +37,21 @@ namespace Teleopti.Messaging.SignalR
 		protected void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 		{
 			if (e.Observed) return;
+			Logger.Debug("An unobserved task failed.", e.Exception);
 			e.SetObserved();
 		}
 		public void StartBrokerService()
 		{
 			try
 			{
-				var connection = MakeHubConnection();
-				var proxy = connection.CreateHubProxy("MessageBrokerHub");
+				if (_wrapper == null)
+				{
+					var connection = MakeHubConnection();
+					var proxy = connection.CreateHubProxy("MessageBrokerHub");
+					_wrapper = new SignalWrapper(proxy, connection, Logger);
+				}
 
-				Wrapper = Wrapper ?? new SignalWrapper(proxy, connection, Logger);
-				Wrapper.StartHub();
+				_wrapper.StartHub();
 			}
 			catch (SocketException exception)
 			{
@@ -61,18 +65,18 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsAlive
 		{
-			get { return Wrapper != null && Wrapper.IsInitialized(); }
+			get { return _wrapper != null && _wrapper.IsInitialized(); }
 		}
 
 		public void SendNotification(Notification notification)
 		{
-			Wrapper.NotifyClients(notification);
+			_wrapper.NotifyClients(notification);
 		}
 
 		public virtual void Dispose()
 		{
-			Wrapper.StopHub();
-			Wrapper = null;
+			_wrapper.StopHub();
+			_wrapper = null;
 		}
 
 		protected virtual ILog MakeLogger()
@@ -83,7 +87,7 @@ namespace Teleopti.Messaging.SignalR
 		[CLSCompliant(false)]
 		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
-			return new HubConnectionWrapper(new HubConnection(ServerUrl));
+			return new HubConnectionWrapper(new HubConnection(_serverUrl));
 		}
 
 	}

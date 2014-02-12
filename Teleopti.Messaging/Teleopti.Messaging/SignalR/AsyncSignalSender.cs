@@ -21,13 +21,13 @@ namespace Teleopti.Messaging.SignalR
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
 		private Thread workerThread;
 
-		protected string ServerUrl;
-		protected ISignalWrapper Wrapper;
+		private readonly string _serverUrl;
+		private ISignalWrapper _wrapper;
 		protected ILog Logger;
 
 		public AsyncSignalSender(string serverUrl)
 		{
-			ServerUrl = serverUrl;
+			_serverUrl = serverUrl;
 
 			ServicePointManager.ServerCertificateValidationCallback = IgnoreInvalidCertificate;
 			ServicePointManager.DefaultConnectionLimit = 50;
@@ -45,6 +45,7 @@ namespace Teleopti.Messaging.SignalR
 		protected void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
 		{
 			if (e.Observed) return;
+			Logger.Debug("An unobserved task failed.", e.Exception);
 			e.SetObserved();
 		}
 
@@ -52,11 +53,14 @@ namespace Teleopti.Messaging.SignalR
 		{
 			try
 			{
-				var connection = MakeHubConnection();
-				var proxy = connection.CreateHubProxy("MessageBrokerHub");
-
-				Wrapper = Wrapper ?? new SignalWrapper(proxy, connection, Logger);
-				Wrapper.StartHub();
+				if (_wrapper == null)
+				{
+					var connection = MakeHubConnection();
+					var proxy = connection.CreateHubProxy("MessageBrokerHub");
+					_wrapper = new SignalWrapper(proxy, connection, Logger);
+				}
+				
+				_wrapper.StartHub();
 			}
 			catch (SocketException exception)
 			{
@@ -70,7 +74,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsAlive
 		{
-			get { return Wrapper != null && Wrapper.IsInitialized(); }
+			get { return _wrapper != null && _wrapper.IsInitialized(); }
 		}
 
 		public void SendNotificationAsync(Notification notification)
@@ -97,15 +101,15 @@ namespace Teleopti.Messaging.SignalR
 				                  .ToArray();
 
 			if (!notifications.Any()) return;
-			Wrapper.NotifyClients(notifications);
+			_wrapper.NotifyClients(notifications);
 		}
 
 		public void Dispose()
 		{
 			cancelToken.Cancel();
 			workerThread.Join();
-			Wrapper.StopHub();
-			Wrapper = null;
+			_wrapper.StopHub();
+			_wrapper = null;
 		}
 
 		protected virtual ILog MakeLogger()
@@ -127,7 +131,7 @@ namespace Teleopti.Messaging.SignalR
 		[CLSCompliant(false)]
 		protected virtual IHubConnectionWrapper MakeHubConnection()
 		{
-			return new HubConnectionWrapper(new HubConnection(ServerUrl));
+			return new HubConnectionWrapper(new HubConnection(_serverUrl));
 		}
 
 	}

@@ -39,7 +39,8 @@ namespace Teleopti.Messaging.SignalR
 
         private void TaskSchedulerOnUnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-	        if (e.Observed) return;
+			if (e.Observed) return;
+			Logger.Debug("An unobserved task failed.", e.Exception);
 	        e.SetObserved();
         }
 
