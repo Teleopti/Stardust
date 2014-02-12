@@ -647,8 +647,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[Test]
 		public void ShouldTrackAbsenceTwoTimes()
 		{
-			SetupAuthorizationAndDataSource();
-
 			var processAbsenceRequest = _mockRepository.DynamicMock<IProcessAbsenceRequest>();
 			var absenceRequestValidator = _mockRepository.DynamicMock<IAbsenceRequestValidator>();
 			var personAccountCollection = _mockRepository.DynamicMock<IPersonAccountCollection>();
