@@ -1,16 +1,9 @@
 ﻿.hoverBorder {
 	outline: solid 1px rgba(0, 0, 0, 0.15);
 }
-.request-body-inner {
-	width: 965px;
-	margin: 0 auto;
+.request {
+	width: 460px;
 }
-
-.navbar-request {
-	max-width: 954px;
-	margin: 20px auto;
-}
-
 .request-body-inner ol
 {
 	list-style: none;
