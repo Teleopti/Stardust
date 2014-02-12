@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
     {
 		public JobHistoryDetailedView()
         {
-            InitializeComponent();  
+            InitializeComponent();
+				if (!DesignMode)
+					SetTexts();
         }
 
         private void setColors()
@@ -32,8 +34,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 			initializeJobHistoryDetailGrid();
 			
 			setColors();
-			SetTexts();
-            Presenter.Initialize();
+			Presenter.Initialize();
 			resizeColumns();
         }
 
