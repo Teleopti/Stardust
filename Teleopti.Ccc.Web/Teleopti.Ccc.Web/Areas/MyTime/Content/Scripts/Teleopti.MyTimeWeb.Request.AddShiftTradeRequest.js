@@ -50,6 +50,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.DatePickerFormat = ko.observable();
 		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
 		self.DatePickerFormat(datePickerFormat);
+		self.DatePickerFormat = ko.observable();
+		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
+		self.DatePickerFormat(datePickerFormat);
 	    self.IsLastPage = false;
 	    self.availableTeams = ko.observableArray();
 	    self.selectedTeamInternal = ko.observable();
