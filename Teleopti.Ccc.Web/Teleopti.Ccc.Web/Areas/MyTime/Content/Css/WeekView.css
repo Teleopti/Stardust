@@ -11,13 +11,8 @@
 	font-size: 0;
 	display: none;
 	position: relative;
-	width: 965px;
-	margin: 0 auto;
 }
-.navbar-weekview {
-	max-width: 954px;
-	margin: 20px auto;
-}
+
 .weekview-day
 {
 	margin: 0;
@@ -123,8 +118,4 @@
 .week-schedule-ASM-permission-granted, .week-schedule-current-week
 {
 	display: none;
-}
-#body-bottom {
-	max-width: 954px;
-	margin: 0 auto;
 }
