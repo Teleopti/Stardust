@@ -13,11 +13,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ConcurrentDictionary<string, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<string, IEnumerable<ISkill>>();
 		private readonly ConcurrentDictionary<Guid, bool> _activityRequiresSeat = new ConcurrentDictionary<Guid,bool>();
 		
-		private int _minSkillResolution = 60;
+		private readonly int _minSkillResolution;
 
-		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider)
+		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider, int minSkillResolution)
 		{
 			_personSkillProvider = personSkillProvider;
+			_minSkillResolution = minSkillResolution;
 		}
 
 		public int MinSkillResolution
@@ -43,14 +44,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills).GenerateKey();
 			if (!_skills.ContainsKey(skills.Key))
 			{
-				if (skills.Skills.Any())
-				{
-					int minResolution = skills.Skills.Min(s => s.DefaultResolution);
-					if (minResolution < MinSkillResolution)
-					{
-						_minSkillResolution = minResolution;
-					}
-				}
 				_skills.TryAdd(skills.Key,skills.Skills);
 			}
 			if (resourceLayer.RequiresSeat)
