@@ -16,7 +16,7 @@
                         <button class="btn" data-bind="clickable: previousDateValid, enable: previousDateValid">
                             <i class="icon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
                         </button>
-                        <input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+                        <input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: false" />
                         <button class="btn" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
                             <i class="icon-th" ></i>
                         </button>
