@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I select the date '(.*)'")]
 		public void WhenISelectTheDate(DateTime date)
 		{
-			Browser.Interactions.Click(".icon-th");
+            Browser.Interactions.Click(".glyphicon.glyphicon-th");
 			string selector = string.Format(".datepicker-days .day:contains('{0}')", date.Day);
 			Browser.Interactions.AssertVisibleUsingJQuery(selector);
 			Browser.Interactions.ClickUsingJQuery(selector);
