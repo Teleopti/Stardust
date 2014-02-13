@@ -120,9 +120,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         }
 
         private static IEnumerable<IWorkloadDayBase> getOnlyDaysOfGivenWeekDay(DayOfWeek dayOfWeek, IEnumerable<IWorkloadDayBase> workloadDays)
-				double statTaskAverageHandleTimeSeconds = 0;
-					 statTaskAverageHandleTimeSeconds  += statisticTask.StatAnsweredTasks * statisticTask.StatAverageHandleTimeSeconds;
-                newStatisticTask.StatAverageHandleTimeSeconds = (int)(statTaskAverageHandleTimeSeconds / statAnsweredTasks);
         {
             return workloadDays.Where(w => w.CurrentDate.DayOfWeek == dayOfWeek);
         }

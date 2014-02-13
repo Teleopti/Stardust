@@ -503,7 +503,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 				StatAverageTaskTimeSeconds = 8,
 				StatAverageHandleTimeSeconds = 12
 			});
-			var stat = Statistic.MergeStatisticTasks(tasks);
+			var stat = tasks.MergeStatisticTasks();
 			Assert.That(stat.StatAverageHandleTimeSeconds, Is.EqualTo((3 * 4 + 6 * 8 + 12 * 12) / (4 + 8 + 12)));
 		}
 	 }
