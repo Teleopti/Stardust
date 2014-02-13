@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
@@ -13,7 +12,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 	public class PublishedScheduleSpecificationTest
 	{
 		private PublishedScheduleSpecification _target;
-		private Guid _teamId;
 		private DateOnly _date;
 		private IPersonScheduleDayReadModel _personSchedule;
 		private IPerson _person1;
@@ -27,7 +25,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_teamId = Guid.NewGuid();
 			_date = new DateOnly(2013, 02, 01);
 			_personSchedule = _mock.Stub<IPersonScheduleDayReadModel>();
 			_person1 = _mock.Stub<IPerson>();
@@ -105,6 +102,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 
 				bool result = _target.IsSatisfiedBy(_personSchedule);
 				result.Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfScheduleIsNotPublished()
+		{
+			var personId = Guid.NewGuid();
+
+			using (_mock.Record())
+			{
+				_person1.Stub(x => x.Id)
+					.Return(personId);
+				_personSchedule.PersonId = personId;
+				_person1.WorkflowControlSet = _workflowControlSet;
+				_workflowControlSet.SchedulePublishedToDate = _date;
+			}
+			using (_mock.Playback())
+			{
+				_target = new PublishedScheduleSpecification(_persons, _date.AddDays(1));
+
+				bool result = _target.IsSatisfiedBy(_personSchedule);
+				result.Should().Be.False();
 			}
 		}
 	}

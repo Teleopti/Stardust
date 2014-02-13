@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PublishedScheduleSpecification : Specification<IPersonScheduleDayReadModel>
 	{
 		private readonly IEnumerable<IPerson> _permittedPersons;
-		private readonly DateTime _date;
+		private readonly DateOnly _date;
 
-		public PublishedScheduleSpecification(IEnumerable<IPerson> permittedPersons, DateTime date)
+		public PublishedScheduleSpecification(IEnumerable<IPerson> permittedPersons, DateOnly date)
 		{
 			_permittedPersons = permittedPersons;
 			_date = date;
@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			return false;
 		}
 
-		private static bool isSchedulePublished(DateTime date, IPerson person)
+		private static bool isSchedulePublished(DateOnly date, IPerson person)
 		{
 			var workflowControlSet = person.WorkflowControlSet;
 			if (workflowControlSet == null)
 				return false;
 			return workflowControlSet.SchedulePublishedToDate.HasValue &&
-			       workflowControlSet.SchedulePublishedToDate.Value.AddDays(1) > date;
+			       workflowControlSet.SchedulePublishedToDate.Value >= date;
 		}
 	}
 }
