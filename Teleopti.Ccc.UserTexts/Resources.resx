@@ -1347,7 +1347,7 @@ Date</value>
   </data>
   <data name="OpenPersonAdminPage" xml:space="preserve">
     <value>People</value>
-    <comment>People</comment>
+    <comment>Name of People module</comment>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">
     <value>Schedules</value>
@@ -11925,5 +11925,17 @@ Reduce the complexity to use these shifts.</value>
   <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
     <value>You don't have access to any teams.</value>
     <comment>Message when you don't have access to any teams and therefor you can not see any data.</comment>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Compare with teams from</value>
+    <comment>What teams to compare , used in Agent Info/Fairness Tab</comment>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Ready Time / Scheduled Ready Time (%)</value>
+    <comment>Label for value in MyReport in web</comment>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Schedule must be reloaded</value>
+    <comment>Message in shifteditor if the user ha a schedule thats not up to date</comment>
   </data>
 </root>

@@ -15,88 +15,31 @@ namespace Teleopti.Messaging.SignalR
 	[CLSCompliant(false)]
 	public class SignalWrapper : ISignalWrapper
 	{
+		private const string notifyclients = "NotifyClients";
+		private const string notifyclientsmultiple = "NotifyClientsMultiple";
+
 		private readonly IHubProxy _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
-		private int _retryCount;
-		private bool _isRunning;
 
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(SignalWrapper));
+		protected ILog Logger ;
 		private static readonly object LockObject = new object();
+		private readonly Task emptyTask;
 		
-		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection)
+		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger)
 		{
-			_isRunning = false;
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
+
+			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
+			
+			var tcs = new TaskCompletionSource<object>();
+			tcs.SetResult(null);
+			emptyTask = tcs.Task;
 		}
 
-		public Task NotifyClients(Notification notification)
+		private void reconnect()
 		{
-			if (verifyStillConnected())
-			{
-				try
-				{
-					var startTask = _hubProxy.Invoke("NotifyClients", notification);
-					startTask.ContinueWith(t =>
-					{
-						if (t.IsFaulted && t.Exception != null)
-						{
-							Logger.Error("An error happened when notifying.", t.Exception.GetBaseException());
-						}
-					}, TaskContinuationOptions.OnlyOnFaulted);
-					return startTask;
-				}
-				catch (InvalidOperationException exception)
-				{
-					Logger.Error("An error happened when notifying.", exception);
-				}
-			}
-			return emptyTask();
-		}
-
-		public Task NotifyClients(IEnumerable<Notification> notifications)
-		{
-			if (verifyStillConnected())
-			{
-				try
-				{
-					return _hubProxy.Invoke("NotifyClientsMultiple", notifications);
-				}
-				catch (InvalidOperationException exception)
-				{
-					Logger.Error("An error happened when notifying multiple.", exception);
-				}
-			}
-			return emptyTask();
-		}
-
-		private bool verifyStillConnected()
-		{
-			if (_retryCount > 3)
-			{
-				return false;
-			}
-
-			lock (LockObject)
-			{
-				if (_hubConnection.State != ConnectionState.Connected)
-				{
-					try
-					{
-						startHubConnection();
-						_retryCount = 0;
-						return true;
-					}
-					catch (Exception ex)
-					{
-						//Suppress! Already logged upon startup for general failures.
-						Logger.Error("An error happened when verifying that we still are connected.", ex);
-						_retryCount++;
-						return false;
-					}
-				}
-			}
-			return true;
+			_hubConnection.Start();
 		}
 
 		public void StartHub()
@@ -106,34 +49,29 @@ namespace Teleopti.Messaging.SignalR
 
 		private void startHubConnection()
 		{
-			// lås
 			try
 			{
 				Exception exception = null;
 				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
 				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
-				                       	{
-				                       		if (t.IsFaulted && t.Exception != null)
-				                       		{
-												exception = t.Exception.GetBaseException();
-												Logger.Error("An error happened when starting hub connection.", exception);
-				                       		}
-				                       	}, TaskContinuationOptions.OnlyOnFaulted);
-				
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						exception = t.Exception.GetBaseException();
+						Logger.Error("An error happened when starting hub connection.", exception);
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+
 				if (!startTask.Wait(TimeSpan.FromSeconds(30)))
 				{
 					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
 				}
-				if (exception!=null)
+				_hubConnection.Closed += reconnect;
+				if (exception != null)
 				{
 					throw exception;
 				}
-
-				_isRunning = true;
-				_hubConnection.Closed += () => { _isRunning = false; };
-				_hubConnection.Reconnected += () => { _isRunning = true; };
-				_hubConnection.Error += e => { _isRunning = false; };
 			}
 			catch (AggregateException aggregateException)
 			{
@@ -173,14 +111,7 @@ namespace Teleopti.Messaging.SignalR
 					Logger.Error("An error happened when adding subscriptions.", exception);
 				}
 			}
-			return emptyTask();
-		}
-
-		private static Task emptyTask()
-		{
-			var tcs = new TaskCompletionSource<object>();
-			tcs.SetResult(null);
-			return tcs.Task;
+			return emptyTask;
 		}
 
 		public Task RemoveSubscription(string route)
@@ -197,88 +128,83 @@ namespace Teleopti.Messaging.SignalR
 				}, TaskContinuationOptions.OnlyOnFaulted);
 				return startTask;
 			}
-			return emptyTask();
+			return emptyTask;
 		}
 
+		private bool verifyStillConnected()
+		{
+			if (_hubConnection.State != ConnectionState.Connected)
+			{
+				lock (LockObject)
+				{
+					if (_hubConnection.State != ConnectionState.Connected)
+					{
+						try
+						{
+							startHubConnection();
+							return true;
+						}
+						catch (Exception ex)
+						{
+							//Suppress! Already logged upon startup for general failures.
+							Logger.Error("An error happened when verifying that we still are connected.", ex);
+							return false;
+						}
+					}
+				}
+			}
+			return true;
+		}
+
+		public Task NotifyClients(Notification notification)
+		{
+			return notify(notifyclients, notification);
+		}
+
+		public Task NotifyClients(IEnumerable<Notification> notifications)
+		{
+			return notify(notifyclientsmultiple, notifications);
+		}
+
+		private Task notify(string methodName, params object[] notifications)
+		{
+			try
+			{
+				if (_hubConnection.State == ConnectionState.Connected)
+				{
+					var task = _hubProxy.Invoke(methodName, notifications);
+					return task.ContinueWith(t =>
+						{
+							if (t.IsFaulted && t.Exception != null)
+								Logger.Error("An error happened on notification task", t.Exception);
+						}, TaskContinuationOptions.OnlyOnFaulted);
+				}
+			}
+			catch (InvalidOperationException exception)
+			{
+				Logger.Error("An error happened when notifying multiple.", exception);
+			}
+			return emptyTask;
+		}
+		
 		public void StopHub()
 		{
-			if (_hubConnection != null && _hubConnection.State==ConnectionState.Connected)
+			if (_hubConnection == null || _hubConnection.State != ConnectionState.Connected) return;
+			
+			try
 			{
-				try
-				{
-					_hubConnection.Stop();
-					_isRunning = false;
-				}
-				catch (Exception ex)
-				{
-					Logger.Error("An error happened when stopping connection.", ex);
-				}
+				_hubConnection.Closed -= reconnect;
+				_hubConnection.Stop();
+			}
+			catch (Exception ex)
+			{
+				Logger.Error("An error happened when stopping connection.", ex);
 			}
 		}
 
 		public bool IsInitialized()
 		{
-			return _hubProxy != null && _isRunning;
-		}
-	}
-
-	[CLSCompliant(false)]
-	public interface IHubConnectionWrapper
-	{
-		ConnectionState State { get; }
-		ICredentials Credentials { get; set; }
-		Task Start();
-		void Stop();
-		event Action Closed;
-		event Action Reconnected;
-		event Action<Exception> Error;
-		IHubProxy CreateHubProxy(string hubName);
-	}
-
-	[CLSCompliant(false)]
-	public class HubConnectionWrapper : IHubConnectionWrapper
-	{
-		private readonly HubConnection _hubConnection;
-
-		public HubConnectionWrapper(HubConnection hubConnection)
-		{
-			_hubConnection = hubConnection;
-		}
-
-		public ConnectionState State { get { return _hubConnection.State; } }
-		public ICredentials Credentials { get { return _hubConnection.Credentials; } set { _hubConnection.Credentials = value; } }
-
-		public Task Start()
-		{
-			return _hubConnection.Start();
-		}
-
-		public void Stop()
-		{
-			_hubConnection.Stop();
-		}
-
-		public event Action Closed
-		{
-			add { _hubConnection.Closed += value; }
-			remove { _hubConnection.Closed -= value; }
-		}
-
-		public event Action Reconnected
-		{
-			add { _hubConnection.Reconnected += value; }
-			remove { _hubConnection.Reconnected -= value; }
-		}
-
-		public event Action<Exception> Error
-		{
-			add { _hubConnection.Error += value; }
-			remove { _hubConnection.Error -= value; }
-		}
-
-		public IHubProxy CreateHubProxy(string hubName)
-		{
-			return _hubConnection.CreateHubProxy(hubName);
+			return _hubProxy != null && _hubConnection.State == ConnectionState.Connected;
 		}
 	}
 }

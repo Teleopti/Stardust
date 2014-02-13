@@ -7,7 +7,9 @@
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
     GuiHelpers:HelpProvider.HelpString="SchedulingScreen+NotesEditor" 
     HorizontalAlignment="Stretch"
-    mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" d:DesignWidth="1090">
+    mc:Ignorable="d" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters" d:DesignWidth="1090"
+			 x:Name="notesEditor">
     <UserControl.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -18,11 +20,13 @@
             <DataTemplate x:Key="notesEditorTemplate">
                 <Notes:NotesEditor DataContext="{Binding}"/>
             </DataTemplate>
-        </ResourceDictionary>
+
+			<converters:ReversedVisibilityConverter x:Key="ReversedVisibilityConverter"/>
+		</ResourceDictionary>
           
     </UserControl.Resources>
    
-    <Grid Height="Auto" Width="Auto">
+    <Grid Height="Auto" Width="Auto" IsEnabled="{Binding Path=Enabled, ElementName=notesEditor}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
             <ColumnDefinition Width="Auto" />
@@ -107,5 +111,10 @@
             VerticalAlignment="Top" 
             Width="25" 
             Margin="0,5,5,5" />
-    </Grid>
+
+		<Grid  Grid.RowSpan="2" Grid.ColumnSpan="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Visibility="{Binding Path=Enabled, Converter={StaticResource ReversedVisibilityConverter}, ElementName=notesEditor}">
+			<Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="LightBlue" Opacity="0.4"></Grid>
+			<TextBlock Text="{x:Static UserTexts:Resources.ScheduleMustBeReloaded}" HorizontalAlignment="Center" VerticalAlignment="Center" ></TextBlock>
+		</Grid>
+	</Grid>
 </UserControl>

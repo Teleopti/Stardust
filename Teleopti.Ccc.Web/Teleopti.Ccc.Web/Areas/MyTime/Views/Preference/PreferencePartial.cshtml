@@ -85,11 +85,11 @@
 </div>
 
 
-<div id="Preference-add-extended-form" class="well well-small clearfix" data-bind="visible: AddPreferenceFormVisible">
+<div id="Preference-add-extended-form" class="well well-small clearfix form-preference" data-bind="visible: AddPreferenceFormVisible">
     @Html.Partial("AddPreferencesPartial")
 </div>
 
-<div class="alert" data-bind="css: PreferenceFeedbackClass" id="Preference-period-feedback-view">
+<div class="alert alert-preference" data-bind="css: PreferenceFeedbackClass" id="Preference-period-feedback-view">
     <div>
         <!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
         @Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
@@ -136,7 +136,7 @@
 
 <div id="Preference-body" class="clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">
 		
-    <div id="Preference-body-inner" class="well clearfix pd0">
+    <div id="Preference-body-inner" class="well clearfix pd0 body-inner">
         <ul class="weekdays">
             @foreach (WeekDayHeader weekDayName in Model.WeekDayHeaders)
             {

@@ -7,23 +7,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamScheduling
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod);
+		void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
     }
 
     public  class TeamScheduling : ITeamScheduling
     {
-        private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
-        private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-
-        public TeamScheduling(IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
-        {
-            _resourceCalculateDelayer = resourceCalculateDelayer;
-            _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
-        }
-
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod)
+		public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, DateOnlyPeriod selectedPeriod, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 		    
             
@@ -41,9 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return;
 
             var agentTimeZone = person.PermissionInformation.DefaultTimeZone();
-			assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly);
+			assignShiftProjection(shiftProjectionCache, agentTimeZone, scheduleDay, dateOnly, schedulePartModifyAndRollbackService);
 			OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
-			_resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
+			resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
 			                                            shiftProjectionCache.WorkShiftProjectionPeriod);
 		}
 
@@ -57,12 +48,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-        private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day)
+		private void assignShiftProjection(IShiftProjectionCache shiftProjectionCache, TimeZoneInfo agentTimeZone, IScheduleDay destinationScheduleDay, DateOnly day, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
 			shiftProjectionCache.SetDate(day, agentTimeZone);
 			destinationScheduleDay.AddMainShift(shiftProjectionCache.TheMainShift);
 
-            _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
+            schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
         }
     }
 }

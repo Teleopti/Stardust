@@ -46,7 +46,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         });
 
             }
-            _busSender.Publish(message);
+	        
+				 _busSender.PublishWithoutInitiatorInfo(message);
+	        
+           
 			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };
 		}
 	}

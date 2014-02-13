@@ -24,10 +24,11 @@ namespace Teleopti.Interfaces.Domain
         IList<IScheduleDay> AllAvailable(IList<IScheduleDay> scheduleDays);
 
         /// <summary>
-        /// All fulfilled student availability restrictions
+		/// All fulfilled student availability restrictions
         /// </summary>
         /// <param name="restrictionChecker"></param>
+        /// <param name="scheduleDay"></param>
         /// <returns></returns>
-        IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker);
+        IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay);
     }
 }

@@ -14,6 +14,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
+	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)]
 	public class ScheduleController : Controller
 	{
 		private readonly IScheduleViewModelFactory _scheduleViewModelFactory;

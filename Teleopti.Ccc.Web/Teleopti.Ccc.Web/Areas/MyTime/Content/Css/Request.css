@@ -1,6 +1,9 @@
 ﻿.hoverBorder {
 	outline: solid 1px rgba(0, 0, 0, 0.15);
 }
+.request {
+	width: 460px;
+}
 .request-body-inner ol
 {
 	list-style: none;

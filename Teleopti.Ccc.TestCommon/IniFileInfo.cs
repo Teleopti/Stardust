@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static string SQL_AUTH_STRING { get; private set; }
 		public static string DB_ANALYTICS { get; private set; }
 		public static string WEB_BROKER_BACKPLANE { get; private set; }
-		public static string WEB_BROKER { get; private set; }
+		public static string WEB_BROKER_FOR_WEB { get; private set; }
 		public static string ConnectionString { get; private set; }
 		public static string ConnectionStringMatrix { get; private set; }
 		public static string SitePath { get; private set; }
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon
 			SQL_LOGIN = iniFileHelper.ReadIniValue(testDatabaseSection, "SQL_LOGIN");
 			SQL_PASSWORD = iniFileHelper.ReadIniValue(testDatabaseSection, "SQL_PASSWORD");
 			WEB_BROKER_BACKPLANE = iniFileHelper.ReadIniValue(testDatabaseSection, "WEB_BROKER_BACKPLANE");
-			WEB_BROKER = iniFileHelper.ReadIniValue(testDatabaseSection, "WEB_BROKER");
+			WEB_BROKER_FOR_WEB = iniFileHelper.ReadIniValue(testDatabaseSection, "WEB_BROKER");
 			Create = iniFileHelper.ReadIniValue(testDatabaseSection, "create") != "false";
 			CreateByNHib = iniFileHelper.ReadIniValue(testDatabaseSection, "createmode") == "nhib";
 			SqlOutput = iniFileHelper.ReadIniValue(testDatabaseSection, "sqloutput") == "true";

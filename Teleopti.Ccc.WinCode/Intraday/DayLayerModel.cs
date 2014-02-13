@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Windows;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Converters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Intraday
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private readonly ITeam _team;
         private readonly LayerViewModelCollection _layerViewModelCollection;
         private readonly ICommonNameDescriptionSetting _commonNameDescriptionSetting;
+	    private readonly ElapsedTimeConverter _elapsedTimeConverter = new ElapsedTimeConverter();
 
         private DateTime _scheduleStartDateTime = DateTime.MaxValue;
         private bool _isPinned;
@@ -166,6 +168,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             {
                 _enteredCurrentState = value;
                 notifyPropertyChanged("EnteredCurrentState");
+				notifyPropertyChanged("TimeInCurrentState");
             }
         }
 
@@ -255,5 +258,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		{
 			IsInEditMode = false;
 		}
-    }
+
+	    public object TimeInCurrentState
+	    {
+			get { return _elapsedTimeConverter.Convert(EnteredCurrentState,typeof(TimeSpan),null,null); }
+	    }
+	}
 }

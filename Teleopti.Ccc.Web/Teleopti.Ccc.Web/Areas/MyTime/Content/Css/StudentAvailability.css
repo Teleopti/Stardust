@@ -4,3 +4,13 @@
 	padding: 0 0 0 0;
 	vertical-align: baseline;
 }
+
+.alert-student-availability {
+	max-width: 954px;
+	margin: 20px auto;
+}
+
+.form-student-availability {
+	max-width: 954px;
+	margin: auto;
+}

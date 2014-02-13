@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																						  assignmentPeriod);
 			_target.Add(personAssignment);
 			_target.CreateAndAddAbsence(absLayer);
-			Assert.That(absLayer.Id, Is.EqualTo(_target.PersonAbsenceCollection()[0].Id));
+			Assert.That(absLayer, Is.EqualTo(_target.PersonAbsenceCollection()[0].Layer));
 		}
 
 		[Test]
@@ -896,6 +896,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				Assert.AreEqual(3, destination.PersonAbsenceCollection().Count);
 				Assert.IsNotNull(destination.PersonAssignment());
 			}
+		}
+
+		[Test]
+		public void ShouldSetLastChangeWhenMergeFullDayAbsence()
+		{
+			setupForMergeTests();
+
+			personAbsenceSource.LastChange = DateTime.UtcNow - TimeSpan.FromHours(1);
+			personAbsenceDest.LastChange = personAbsenceSource.LastChange;
+
+			source.Add(personAbsenceSource);
+			destination.Add(personAbsenceDest);
+
+			((ExtractedSchedule)destination).MergeAbsences(source, true);
+
+			Assert.IsTrue(destination.PersonAbsenceCollection()[1].LastChange > destination.PersonAbsenceCollection()[0].LastChange);
+
 		}
 
         [Test]

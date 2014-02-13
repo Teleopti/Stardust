@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_schedulePartModifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_target = new TeamScheduling(_resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
+			_target = new TeamScheduling();
 			_group = new Group(new List<IPerson>{ _person }, "hej");
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
 				//_target.DayScheduled += targetDayScheduledCanceled;
-				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
+				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue), _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
 				//_target.DayScheduled += targetDayScheduledCanceled;
             }
 
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
+				_target.ExecutePerDayPerPerson(_person, DateOnly.MinValue, _teamBlockInfo, _shiftProjectionCache, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue),_schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
             }
 
         }

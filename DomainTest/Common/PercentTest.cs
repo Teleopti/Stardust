@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using System.Globalization;
 using System.Threading;
+using SharpTestsEx;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -30,6 +31,13 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             Assert.AreEqual("76 %", target.ToString());
         }
+
+	    [Test]
+	    public void ShouldReturnValueAsPercent()
+	    {
+		    target.ValueAsPercent()
+			    .Should().Be.EqualTo(76.4);
+	    }
 
         [Test]
         public void VerifyEqualsWorks()

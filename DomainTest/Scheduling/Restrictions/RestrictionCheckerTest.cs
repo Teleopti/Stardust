@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mockRepository.Playback())
 			{
-				_target = new RestrictionChecker(_schedulePartMock);
-				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+				_target = new RestrictionChecker();
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability(_schedulePartMock));
 			}
 		}
 
@@ -87,8 +87,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mockRepository.Playback())
 			{
-				_target = new RestrictionChecker(_schedulePartMock);
-				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+				_target = new RestrictionChecker();
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability(_schedulePartMock));
 			}
 		}
 
@@ -107,8 +107,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mockRepository.Playback())
 			{
-				_target = new RestrictionChecker(_schedulePartMock);
-				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+				_target = new RestrictionChecker();
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability(_schedulePartMock));
 			}
 		}
 
@@ -127,8 +127,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability(_schedulePartMock));
             }
         }
         
@@ -148,8 +148,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -169,8 +169,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -190,8 +190,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -210,8 +210,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -243,8 +243,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Unspecified, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Unspecified, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -269,8 +269,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -282,8 +282,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.None, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.None, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -311,8 +311,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -339,8 +339,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckAvailability(_schedulePartMock));
             }
         }
 
@@ -363,8 +363,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -383,8 +383,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -403,8 +403,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -436,8 +436,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -472,8 +472,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -504,8 +504,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -536,8 +536,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -572,8 +572,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -608,8 +608,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -642,8 +642,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -654,7 +654,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             RotationRestriction rotationRestriction = new RotationRestriction();
             rotationRestriction.ShiftCategory = _shiftCategory;
             var personDayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(_scenario, _person, new DateOnly(),new DayOffTemplate());
-            _target = new RestrictionChecker(scheduleDay);
+            _target = new RestrictionChecker();
 
             using(_mockRepository.Record())
             {
@@ -665,7 +665,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using(_mockRepository.Playback())
             {
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(scheduleDay));
             }
         }
 
@@ -691,8 +691,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -709,8 +709,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.None, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.None, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -747,8 +747,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckRotations(_schedulePartMock));
             }
         }
 
@@ -789,8 +789,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -825,8 +825,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -861,8 +861,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -901,8 +901,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -940,8 +940,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -977,8 +977,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1014,8 +1014,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1047,8 +1047,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreferenceMustHave());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreferenceMustHave(_schedulePartMock));
             }
         }
 
@@ -1099,8 +1099,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1137,8 +1137,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1182,8 +1182,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using(_mockRepository.Playback())
 			{
-				_target = new RestrictionChecker(scheduleDay);
-				var result = _target.CheckPreference();
+				_target = new RestrictionChecker();
+				var result = _target.CheckPreference(scheduleDay);
 				Assert.AreEqual(PermissionState.Satisfied, result);
 			}
 		}
@@ -1228,8 +1228,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mockRepository.Playback())
 			{
-				_target = new RestrictionChecker(scheduleDay);
-				var result = _target.CheckPreference();
+				_target = new RestrictionChecker();
+				var result = _target.CheckPreference(scheduleDay);
 				Assert.AreEqual(PermissionState.Broken, result);
 			}
 
@@ -1268,8 +1268,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mockRepository.Playback())
 			{
-				_target = new RestrictionChecker(scheduleDay);
-				var result = _target.CheckPreference();
+				_target = new RestrictionChecker();
+				var result = _target.CheckPreference(scheduleDay);
 				Assert.AreEqual(PermissionState.Broken, result);
 			}
 		}
@@ -1312,8 +1312,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1321,7 +1321,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		public void ShouldGetUnspecifiedIfPreferenceIsDayOffAndNotScheduled()
 		{
 
-			_target = new RestrictionChecker(_schedulePartMock);
+			_target = new RestrictionChecker();
 			IDayOffTemplate dayOffTemplate = DayOffFactory.CreateDayOff(new Description("DayOffTemplate"));
 			var dayRestriction = new PreferenceRestriction
 			{
@@ -1339,7 +1339,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mockRepository.Playback())
 			{
-				PermissionState result = _target.CheckPreferenceDayOff();
+				PermissionState result = _target.CheckPreferenceDayOff(_schedulePartMock);
 				Assert.AreEqual(PermissionState.Unspecified, result);
 			}
 		}
@@ -1382,8 +1382,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1424,8 +1424,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1441,8 +1441,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.None, _target.CheckPreference());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.None, _target.CheckPreference(_schedulePartMock));
             }
         }
 
@@ -1474,8 +1474,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability(_schedulePartMock));
             }
         }
 
@@ -1509,8 +1509,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckStudentAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckStudentAvailability(_schedulePartMock));
             }
         }
 
@@ -1546,8 +1546,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Broken, _target.CheckStudentAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Broken, _target.CheckStudentAvailability(_schedulePartMock));
             }
         }
 
@@ -1583,8 +1583,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability(_schedulePartMock));
             }
         }
 
@@ -1616,8 +1616,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             }
             using (_mockRepository.Playback())
             {
-                _target = new RestrictionChecker(_schedulePartMock);
-                Assert.AreEqual(PermissionState.Unspecified, _target.CheckStudentAvailability());
+                _target = new RestrictionChecker();
+                Assert.AreEqual(PermissionState.Unspecified, _target.CheckStudentAvailability(_schedulePartMock));
             }
         }
 
@@ -1655,8 +1655,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 			using (_mockRepository.Playback())
 			{
-				_target = new RestrictionChecker(_schedulePartMock);
-				Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability());
+				_target = new RestrictionChecker();
+				Assert.AreEqual(PermissionState.Satisfied, _target.CheckStudentAvailability(_schedulePartMock));
 			}
 		}
 

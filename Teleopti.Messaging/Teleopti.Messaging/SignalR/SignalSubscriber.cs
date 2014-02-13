@@ -7,7 +7,14 @@ using log4net;
 
 namespace Teleopti.Messaging.SignalR
 {
-	internal class SignalSubscriber
+	public interface ISignalSubscriber
+	{
+		event Action<Notification> OnNotification;
+		void Start();
+		void Stop();
+	}
+
+	public class SignalSubscriber : ISignalSubscriber
 	{
 		private readonly IHubProxy _hubProxy;
 		private const string eventName = "OnEventMessage";
@@ -16,6 +23,8 @@ namespace Teleopti.Messaging.SignalR
 
 		public event Action<Notification> OnNotification;
 
+
+		[CLSCompliant(false)]
 		public SignalSubscriber(IHubProxy hubProxy)
 		{
 			_hubProxy = hubProxy;

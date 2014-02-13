@@ -94,19 +94,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		}
 
 		[Test]
-		public void ShouldSkipWhenNotPossibleToSwap()
+		public void ShouldSkipAndRetryWhenNotPossibleToSwap()
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos);
-				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
-				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
-				Expect.Call(_determineTeamBlockPriority.CalculatePriority(_teamBlockInfos, _shiftCategories)).Return(_teamBlockPriorityDefinitionInfo);
-				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo).Return(_teamBlockInfos);
-				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority()).Return(_highToLowShiftCategoryPrioryList);
-				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo1)).Return(1);
+				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos).Repeat.Twice();
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true).Repeat.Twice();
+				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true).Repeat.Twice();
+				Expect.Call(_determineTeamBlockPriority.CalculatePriority(_teamBlockInfos, _shiftCategories)).Return(_teamBlockPriorityDefinitionInfo).Repeat.Twice();
+				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo).Return(_teamBlockInfos).Repeat.Twice();
+				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority()).Return(_highToLowShiftCategoryPrioryList).Repeat.Twice();
+
+				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo1)).Return(1).Repeat.Twice();
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(2);
+				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(1);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(1);
 				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod)).Return(false);
 			}

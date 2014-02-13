@@ -160,5 +160,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public bool ConsiderShortBreaks { get; set; }
 		public bool OnlyShiftsWhenUnderstaffed { get; set; }
+		public IDictionary<IPerson, IScheduleRange> AllSelectedScheduleRangeClones { get; set; }
 	}
 }

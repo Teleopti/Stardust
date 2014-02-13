@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.Win.Optimization
 		private readonly IEnumerable<IActivity> _availableActivity;
 
 		private readonly int _resolution;
+		private readonly IScheduleDictionary _scheduleDictionary;
+		private readonly IEnumerable<IPerson> _selectedPersons;
 		private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -44,7 +46,9 @@ namespace Teleopti.Ccc.Win.Optimization
 			ISchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			IEnumerable<IActivity> availableActivity, 
-			int resolution)
+			int resolution,
+			IScheduleDictionary scheduleDictionary,
+			IEnumerable<IPerson> selectedPersons)
 			: this()
 		{
 			Preferences = preferences;
@@ -58,6 +62,8 @@ namespace Teleopti.Ccc.Win.Optimization
 			_scheduleTags = scheduleTags;
 			_availableActivity = availableActivity;
 			_resolution = resolution;
+			_scheduleDictionary = scheduleDictionary;
+			_selectedPersons = selectedPersons;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -213,6 +219,18 @@ namespace Teleopti.Ccc.Win.Optimization
 			{
 				ExchangeData(ExchangeDataOption.ControlsToDataSource);
 				SavePersonalSettings();
+				if (Preferences.Shifts.KeepShifts || Preferences.DaysOff.UseKeepExistingDaysOff)
+				{
+					var clonedRanges = new Dictionary<IPerson, IScheduleRange>();
+					foreach (var selectedPerson in _selectedPersons)
+					{
+						var cloneRange = (IScheduleRange)_scheduleDictionary[selectedPerson].Clone();
+						clonedRanges.Add(selectedPerson, cloneRange);
+					}
+
+					Preferences.Rescheduling.AllSelectedScheduleRangeClones = clonedRanges;
+				}
+
 				DialogResult = DialogResult.OK;
 				Close();
 			}

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 _defaultSegmentSetting = new GlobalSettingDataRepository(uow).FindValueByKey("DefaultSegment", new DefaultSegment());
-                _adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey("AdherenceReportSetting", new AdherenceReportSetting());
+                _adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
                 _supportEmailSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
             }
             var calculatorTypeCollection = LanguageResourceHelper.TranslateEnumToList<AdherenceReportSettingCalculationMethod>();

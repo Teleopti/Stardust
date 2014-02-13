@@ -75,13 +75,13 @@
                                                 </div>
                                             </div>
 
-                                            <!-- ko if: ErrorMessage() -->
+											<!-- ko if: ErrorMessage -->
                                             <div class="alert">
-                                                <span data-bind="text: ErrorMessage()"></span>
+												<span data-bind="text: ErrorMessage"></span>
                                             </div>
                                             <!-- /ko -->
                                             <div>
-                                                <button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
+												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddIntradayAbsence, click: Apply"></button>
                                             </div>
                                         </form>
 
@@ -109,13 +109,13 @@
                                                 </div>
                                             </div>
 
-                                            <!-- ko if: ErrorMessage() -->
+											<!-- ko if: ErrorMessage -->
                                             <div class="alert">
-                                                <span data-bind="text: ErrorMessage()"></span>
+												<span data-bind="text: ErrorMessage"></span>
                                             </div>
                                             <!-- /ko -->
                                             <div>
-                                                <button class="btn btn-success apply" data-bind="enable: !$root.Loading() && !ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
+												<button class="btn btn-success apply" data-bind="disable: $root.Loading() || ErrorMessage(), text: $root.Resources.AddActivity, click: Apply"></button>
                                             </div>
                                         </form>
 
@@ -165,7 +165,7 @@
                             </td>
                         </tr>
 
-                        <!-- ko if: !Loading() -->
+						<!-- ko ifnot: Loading -->
                         <!-- ko if: AddingActivity -->
                         <!-- ko foreach: SortedPersons -->
                         <tr class="person" data-bind="attr: { 'data-person-id': Id }, if: $parent.PersonId() != Id">
@@ -204,22 +204,22 @@
         </div>
     </div>
 
-    <div class="row" data-bind="ifnot: DisplayForm()">
+	<div class="row" data-bind="ifnot: DisplayForm">
         <div class="col-md-8">
             <table class="table absence-list">
                 <tbody data-bind="foreach: Absences">
                     <tr class="absence">
-                        <td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor() }">
+						<td class="absence-item" data-bind="style: { backgroundColor: BackgroundColor }">
                         <td class="absence-item"><span class="absence-name" data-bind="text: Name"></span></td>
                         <td class="absence-item"><i class="glyphicon glyphicon-step-backward"></i><span data-bind="text: StartTime"></span></td>
                         <td class="absence-item"><i class="glyphicon glyphicon-minus"></i></td>
                         <td class="absence-item"><span data-bind="text: EndTime"></span><i class="glyphicon glyphicon-step-forward"></i></td>
                         <td class="absence-item">
-                            <!-- ko if: !AboutToRemove() -->
+							<!-- ko ifnot: AboutToRemove -->
                             <button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
                             <!-- /ko -->
                             <!-- ko if: AboutToRemove -->
-                            <button class="btn btn-danger confirm-removal" data-bind="enable: !Removing(), click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+							<button class="btn btn-danger confirm-removal" data-bind="disable: Removing, click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
                             <!-- /ko -->
                         </td>
                     </tr>

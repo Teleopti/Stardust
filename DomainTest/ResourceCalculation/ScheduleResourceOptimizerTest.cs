@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _activityDivider = _mocks.StrictMock<IActivityDivider>();
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(_personSkillProvider);
+			_resources = new ResourceCalculationDataContainer(_personSkillProvider, 15);
 			var layers = _personAssignmentListContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{

@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyExecuteWithSamePeriodValue()
+        public void ShouldRollbackIfSamePeriodValue()
         {
             using (_mockRepository.Record())
             {
@@ -205,9 +205,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				tryScheduleFirstDate(true, false);
 				tryScheduleSecondDate(true);
 				Expect.Call(_periodValueCalculator.PeriodValue(IterationOperationOption.WorkShiftOptimization)).Return(2);
-                //do not lock days
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
-				//_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
+				Expect.Call(() => _rollbackService.Rollback());
+				resourceCalculation();
+				Expect.Call(_mostUnderStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_mostOverStaffSchedulePart.ProjectionService()).Return(_projectionService);
+				Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection).Repeat.Twice();
+				Expect.Call(_visualLayerCollection.Period()).Return(new DateTimePeriod()).Repeat.Twice();
+				// lock days
+				_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostUnderStaffDate, _mostUnderStaffDate));
+				_scheduleMatrix.LockPeriod(new DateOnlyPeriod(_mostOverStaffDate, _mostOverStaffDate));
             }
 
             using (_mockRepository.Playback())

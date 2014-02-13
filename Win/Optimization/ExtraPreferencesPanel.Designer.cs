@@ -349,7 +349,7 @@
             this.labelCompareWith.Name = "labelCompareWith";
             this.labelCompareWith.Size = new System.Drawing.Size(81, 13);
             this.labelCompareWith.TabIndex = 23;
-            this.labelCompareWith.Text = "xxCompareWith";
+			this.labelCompareWith.Text = "xxCompareWithTeamsFrom";
             // 
             // labelFairness
             // 

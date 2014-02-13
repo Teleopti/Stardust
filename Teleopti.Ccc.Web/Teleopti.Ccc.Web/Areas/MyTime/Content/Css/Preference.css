@@ -1,4 +1,15 @@
 ﻿
+.alert-preference {
+	max-width: 954px;
+	margin: 20px auto;
+}
+
+.form-preference {
+	max-width: 954px;
+	margin: auto;
+}
+
+
 .preference 
 {
     height: 20px;

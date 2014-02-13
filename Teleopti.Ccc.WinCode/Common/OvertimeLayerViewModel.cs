@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
     {
 	    private readonly IOvertimeShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
-	    private readonly IMoveLayerVertical _moveLayerVertical;
+	    private readonly IMoveShiftLayerVertical _moveShiftLayerVertical;
 
 	    public OvertimeLayerViewModel(IVisualLayer layer)
             : base(layer)
@@ -18,24 +18,24 @@ namespace Teleopti.Ccc.WinCode.Common
         }
 
      
-        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayerVertical)
-            : base(observer, layer, assignment, eventAggregator, moveLayerVertical)
+        public OvertimeLayerViewModel(ILayerViewModelObserver observer, IOvertimeShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveShiftLayerVertical moveShiftLayerVertical)
+            : base(observer, layer, assignment, eventAggregator, moveShiftLayerVertical)
         {
 	        _layer = layer;
 	        _assignment = assignment;
-	        _moveLayerVertical = moveLayerVertical;
+	        _moveShiftLayerVertical = moveShiftLayerVertical;
         }
 
 	    public override bool CanMoveUp
 	    {
-				get { return _moveLayerVertical != null && _assignment != null && _assignment.OvertimeActivities().ToList().IndexOf(_layer) > 0; ; }
+				get { return _moveShiftLayerVertical != null && _assignment != null && _assignment.OvertimeActivities().ToList().IndexOf(_layer) > 0; ; }
 	    }
 
 	    public override bool CanMoveDown
 	    {
 		    get
 		    {
-			    return _moveLayerVertical != null && !isLayerLast();
+			    return _moveShiftLayerVertical != null && !isLayerLast();
 		    }
 	    }
 

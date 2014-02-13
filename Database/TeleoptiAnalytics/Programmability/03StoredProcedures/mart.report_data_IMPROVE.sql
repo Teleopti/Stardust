@@ -108,7 +108,8 @@ CREATE TABLE #result(
            adherence decimal(18,3),
            hide_time_zone bit,
            interval_type int,
-           weekday_number int
+           weekday_number int,
+           [date] smalldatetime
            )
                                             
 CREATE TABLE #bridge_time_zone
@@ -319,7 +320,7 @@ OR date_date > @date_to
 OR date_date IS NULL
 
 --Arrange the #result table, Local datetime table
-INSERT INTO #result(period,scheduled_paid_time_s,handling_time_s,handling_time_per_scheduled_paid_time,calls_offered,calls_answered,calls_answ_within_sl,calls_abnd_within_sl,service_level,service_level_numerator,service_level_denominator,adherence_calc_s,deviation_s,adherence,hide_time_zone,interval_type,weekday_number)
+INSERT INTO #result(period,scheduled_paid_time_s,handling_time_s,handling_time_per_scheduled_paid_time,calls_offered,calls_answered,calls_answ_within_sl,calls_abnd_within_sl,service_level,service_level_numerator,service_level_denominator,adherence_calc_s,deviation_s,adherence,hide_time_zone,interval_type,weekday_number,[date])
 SELECT	CASE @interval_type 
 			WHEN 1 THEN i.interval_name
 			WHEN 2 THEN i.halfhour_name
@@ -350,7 +351,8 @@ SELECT	CASE @interval_type
 		END as 'adherence',
 		@hide_time_zone as hide_time_zone,
 		@interval_type as interval_type,
-		0
+		0,
+		min(d.date_date) as [date]
 FROM #pre_result pr
 INNER JOIN mart.dim_date d 
 	ON pr.date_id = d.date_id

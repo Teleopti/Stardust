@@ -41,5 +41,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 	    void SetThisTime(ILastChangedReadModel lastTime, string step);
 	    void UpdateThisTime(string step, IBusinessUnit businessUnit);
 	    bool PermissionsMustRun();
+		 void SetLoadBridgeTimeZonePeriod(DateTimePeriod period);
     }
 }

@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Parameters
 	class ParameterCombo : ParameterBase
 	{
 		private Label _label;
-		private DropDownList _dropDown;
+		protected DropDownList _dropDown;
 		private RequiredFieldValidator _validator;
 		
 		public override ControlCollection Controls
@@ -121,10 +121,8 @@ namespace Teleopti.Analytics.Parameters
 					}
 				}
 			}
-			{
-            	
-            }
-		    foreach( ListItem myItem in _dropDown.Items)
+		    
+			foreach( ListItem myItem in _dropDown.Items)
 			{
 				if (myItem.Value ==  DefaultValue)
 				{

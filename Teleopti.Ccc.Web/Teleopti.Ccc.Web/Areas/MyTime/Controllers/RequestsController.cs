@@ -166,9 +166,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestMyTeam(DateTime selectedDate)
+		public JsonResult ShiftTradeRequestMyTeam(DateOnly selectedDate)
 		{
-			return Json(_requestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(new DateOnly(selectedDate)), JsonRequestBehavior.AllowGet);
+			return Json(_requestsViewModelFactory.CreateShiftTradeMyTeamSimpleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

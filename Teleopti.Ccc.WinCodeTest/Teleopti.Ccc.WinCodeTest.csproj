@@ -335,6 +335,7 @@
     <Compile Include="Configuration\WorkflowControlSetModelTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetPresenterTest.cs" />
     <Compile Include="Configuration\WorkflowControlSetPresenterUnitTest.cs" />
+    <Compile Include="Converters\CustomSorterBlankAlwaysLastTest.cs" />
     <Compile Include="Converters\DateTimeConverter\DateTimeBaseConverterTest.cs" />
     <Compile Include="Converters\DateTimeConverter\DateTimeParserTest.cs" />
     <Compile Include="Converters\DateTimeConverter\DateTimeToLocalConverterTest.cs" />
@@ -559,6 +560,7 @@
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
     <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
+    <Compile Include="Scheduler\Editor\Bug26842.cs" />
     <Compile Include="Scheduler\FilterHourlyAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\FilterOvertimeAvailabilityPresenterTest.cs" />
     <Compile Include="Scheduler\DaysOnlyHelperTest.cs" />

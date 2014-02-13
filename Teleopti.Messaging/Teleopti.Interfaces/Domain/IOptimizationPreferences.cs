@@ -556,6 +556,8 @@ namespace Teleopti.Interfaces.Domain
         /// 	<c>true</c> if use only shifts when understaffed; otherwise, <c>false</c>.
         /// </value>
         bool OnlyShiftsWhenUnderstaffed { get; set; }
+
+	    IDictionary<IPerson, IScheduleRange> AllSelectedScheduleRangeClones { get; set; }
     }
 
 }

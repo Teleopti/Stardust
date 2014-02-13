@@ -66,7 +66,7 @@
             <li data-bind="if: underConstructionPermission"><a href="#" id="week-schedule-month" data-bind="    click: month">@Resources.MonthView</a></li>
         </ul>
 </div>
-<ul class="nav nav-pills" data-bind="visible: showAddRequestToolbar">
+<ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
 	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
 		<a class="overtime-availability-add" href="#" data-bind="click: function () { overtimeAvailabilityActivate() }"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
 	</li>

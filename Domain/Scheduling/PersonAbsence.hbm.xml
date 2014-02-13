@@ -33,7 +33,6 @@
 					 not-null="true" foreign-key="FK_PersonAbsence_Scenario"/>
     
     <component name="Layer" class="AbsenceLayer">
-      <parent name="Parent"/>
       <many-to-one class="Absence"
                  name="Payload"
                    foreign-key="FK_PersonAbsence_Absence"

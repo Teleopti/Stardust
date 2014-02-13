@@ -105,13 +105,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckStudentAvailability()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckStudentAvailability(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilled(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilled(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }

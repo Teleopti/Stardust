@@ -132,13 +132,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckPreference()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckPreference(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilled(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilled(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }
@@ -148,13 +147,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckPreferenceDayOff()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckPreferenceDayOff(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilledDayOff(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilledDayOff(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }
@@ -164,13 +162,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckPreferenceAbsence(PermissionState.Unspecified)).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckPreferenceAbsence(PermissionState.Unspecified, _scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilledAbsence(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilledAbsence(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }
@@ -180,13 +177,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using(_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckPreferenceShift()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckPreferenceShift(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using(_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilledShift(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilledShift(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }
@@ -196,13 +192,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         {
             using (_mock.Record())
             {
-                Expect.Call(_restrictionChecker.CheckPreferenceMustHave()).Return(PermissionState.Satisfied);
-                Expect.Call(_restrictionChecker.ScheduleDay).Return(_scheduleDay);
+                Expect.Call(_restrictionChecker.CheckPreferenceMustHave(_scheduleDay)).Return(PermissionState.Satisfied);
             }
 
             using (_mock.Playback())
             {
-                var scheduleDay = _target.RestrictionFulfilledMustHave(_restrictionChecker);
+                var scheduleDay = _target.RestrictionFulfilledMustHave(_restrictionChecker, _scheduleDay);
                 Assert.AreEqual(_scheduleDay, scheduleDay);
             }
         }

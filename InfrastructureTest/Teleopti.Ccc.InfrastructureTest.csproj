@@ -163,7 +163,10 @@
     <Compile Include="NHibernateConfiguration\CompressedStringTest.cs" />
     <Compile Include="Helper\FakeLogon.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
+    <Compile Include="Persisters\Account\Concurrent\PersonAccountConcurrentTest.cs" />
+    <Compile Include="Persisters\Account\Concurrent\UpdateWithUpdateTest.cs" />
     <Compile Include="Persisters\Account\ConflictEagerLoadingTest.cs" />
+    <Compile Include="Persisters\Account\PersonAccountConflictTest.cs" />
     <Compile Include="Persisters\Account\UpdateConflictWithDeleteAccountTest.cs" />
     <Compile Include="Persisters\Account\UpdateConflictWithUpdateTest.cs" />
     <Compile Include="Persisters\Account\UpdateNoConflictTest.cs" />
@@ -426,6 +429,16 @@
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkInitiatorIdentifierHandlingTest.cs" />
     <Compile Include="Util\CompressionExtensionsTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AnsweredCallsTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AverageAfterCallWorkTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AverageTalkTimeTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AverageHandlingTimeTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AdherenceForTypeReadyTimeVSScheduledTimeTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AdherenceForReadyTimeVSContractScheduleTimeTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\NoDataAvailableTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\AdherenceForReadyTimeVSScheduledReadyTimeTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\ReadyTimePerScheduledReadyTimeTest.cs" />
+    <Compile Include="WebReports\DailyMetricsForDay\WebReportTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

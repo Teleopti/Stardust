@@ -61,8 +61,9 @@ namespace Teleopti.Ccc.WinCode.Common
             InParameter.NotNull("scheduleDay", scheduleDay);
             IList<ILayerViewModel> layerViewModels = new List<ILayerViewModel>();
             IPersonAssignment assignment = scheduleDay.PersonAssignment();
-	        var moveUpDown = new MoveLayerVertical();
-            if (assignment != null)
+	        //var moveUpDown = new MoveLayerVertical();
+	        var moveUpDown = new MoveShiftLayerVertical();
+			if (assignment != null)
             {
 	            foreach (var layer in assignment.MainActivities())
 	            {

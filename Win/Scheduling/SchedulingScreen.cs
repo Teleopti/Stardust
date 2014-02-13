@@ -1142,14 +1142,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 					return;
 
 				using (var optimizationPreferencesDialog =
-					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, _schedulerState.CommonStateHolder.ActiveActivities, SchedulerState.DefaultSegmentLength))
+					new OptimizationPreferencesDialog(_optimizationPreferences, _groupPagesProvider,
+					                                  _schedulerState.CommonStateHolder.ActiveScheduleTags,
+					                                  _schedulerState.CommonStateHolder.ActiveActivities,
+					                                  SchedulerState.DefaultSegmentLength, _schedulerState.Schedules,
+					                                  _scheduleView.AllSelectedPersons()))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
 						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
-						{
-							OptimizationMethod = OptimizationMethod.ReOptimize
-						};
+							{
+								OptimizationMethod = OptimizationMethod.ReOptimize
+							};
 
 						startBackgroundScheduleWork(_backgroundWorkerOptimization, optimizationPreferences, false);
 					}
@@ -3695,16 +3699,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
 		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
-					var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+					var teamScheduling = new TeamScheduling();
 					var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 																			 _container.Resolve<IProposedRestrictionAggregator>(),
 																			 _container.Resolve<IWorkShiftFilterService>(),
 																			 _container.Resolve<IWorkShiftSelector>(),
 																			 teamScheduling, 
 																			 _container.Resolve<ITeamBlockSchedulingOptions>(),
-																			 _container.Resolve<IDayIntervalDataCalculator>(),
-																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
-																			 _schedulerState.SchedulingResultState);
+																			 _schedulerState.SchedulingResultState,
+																			 _container.Resolve<IActivityIntervalDataCreator>());
 
 	                var sameShiftCategoryBlockScheduler =
 		                new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
@@ -3720,7 +3723,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					var teamBlockScheduleCommand = _container.Resolve<ITeamBlockScheduleCommand>();
 					teamBlockScheduleCommand.Execute(schedulingOptions, _backgroundWorkerScheduling, selectedPersons, scheduleDays,
-	                                                 teamBlockScheduler, rollbackService);
+	                                                 teamBlockScheduler, rollbackService, resourceCalculateDelayer);
 
 
                 }
@@ -4103,7 +4106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
 																					   tagSetter);
 
-						var teamScheduling = new TeamScheduling(resourceCalculateDelayer, rollbackService);
+						var teamScheduling = new TeamScheduling();
 
 						var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 						                                                         _container.Resolve<IProposedRestrictionAggregator>(),
@@ -4111,9 +4114,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 						                                                         _container.Resolve<IWorkShiftSelector>(),
 																				 teamScheduling, 
 																				 _container.Resolve<ITeamBlockSchedulingOptions>(),
-																			 _container.Resolve<IDayIntervalDataCalculator>(),
-																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
-																			 _schedulerState.SchedulingResultState);
+																			 _schedulerState.SchedulingResultState,
+																			 _container.Resolve<IActivityIntervalDataCreator>());
 
 						var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
 						                                                                          singleDayScheduler,
@@ -4128,7 +4130,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 						_container.Resolve<ITeamBlockOptimizationCommand>()
 						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
-						                   rollbackService, tagSetter, schedulingOptions, teamBlockScheduler);
+						                   rollbackService, tagSetter, schedulingOptions, teamBlockScheduler, resourceCalculateDelayer);
 
 						break;
 					}
@@ -6973,7 +6975,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IScheduleDay selectedDay;
 			if (!tryGetFirstSelectedSchedule(out selectedDay)) return;
 
-			using (var view = new AgentPreferenceView(selectedDay, WorkflowControlSets, _schedulerState.SchedulingResultState))
+			using (var view = new AgentPreferenceView(selectedDay, _schedulerState))
 			{
 				view.ShowDialog(this);
                 updateRestrictions(_scheduleView.SelectedSchedules()[0]);

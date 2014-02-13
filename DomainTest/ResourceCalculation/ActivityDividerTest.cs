@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _skillStaffPeriods = SkillDayFactory.CreateSkillDaysForActivityDividerTest(_testContainer.ContainedSkills);
 			_personSkillProvider = new PersonSkillProvider();
 
-			_resources = new ResourceCalculationDataContainer(_personSkillProvider);
+			_resources = new ResourceCalculationDataContainer(_personSkillProvider, 15);
 			var layers = _testContainer.TestVisualLayerCollection();
 			foreach (var layer in layers)
 			{
@@ -199,9 +199,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    IDictionary<string, double> personResources = dividedActivity.PersonResources;
 		    Assert.IsNotNull(personResources);
 		    Assert.AreEqual(3, personResources.Count);
-		    Assert.AreEqual(5, personResources[person1]);
+		    Assert.AreEqual(5d, personResources[person1], 0.0001);
 		    Assert.AreEqual(15, personResources[person2]);
-            Assert.AreEqual(10, personResources[person4]);
+            Assert.AreEqual(10d, personResources[person4], 0.0001);
         }
 
         private void VerifyRelativePersonResourcesData(IDividedActivityData dividedActivity)

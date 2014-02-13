@@ -46,9 +46,9 @@
 	</div>
 	<div class="asm-info-canvas ui-corner-all">
 		<div class="relative">
-			<div class="asm-info-canvas-column asm-info-canvas-column-current" data-bind="text: currentLayerString, nonEncodedTitle: '@Resources.CurrentActivity'">
+			<div class="asm-info-canvas-column asm-info-canvas-column-current" data-bind="text: currentLayerString, nonEncodedTitle: '@Html.AttributeEncode(Resources.CurrentActivity)'">
 			</div>
-			<div class="asm-info-canvas-column asm-info-canvas-column-next" data-bind="text: nextLayerString, nonEncodedTitle: '@Resources.ActivityNextStart'">
+			<div class="asm-info-canvas-column asm-info-canvas-column-next" data-bind="text: nextLayerString, nonEncodedTitle: '@Html.AttributeEncode(Resources.ActivityNextStart)'">
 			</div>	
 			<div class="asm-info-canvas-column asm-info-canvas-column-messages" data-bind="visible: unreadMessages, click : openMessages">
 				<span class="glyphicon glyphicon-envelope" style="margin-right: 13px; position: relative; margin-top: 0">

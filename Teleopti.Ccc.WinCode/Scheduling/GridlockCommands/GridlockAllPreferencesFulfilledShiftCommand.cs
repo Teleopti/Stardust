@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.GridlockCommands
 
             foreach (var scheduleDay in scheduleDays)
             {
-                _restrictionChecker.ScheduleDay = scheduleDay;
-                var restrictedDay = _scheduleDayPreferenceRestrictionExtractor.RestrictionFulfilledShift(_restrictionChecker);
+               var restrictedDay = _scheduleDayPreferenceRestrictionExtractor.RestrictionFulfilledShift(_restrictionChecker, scheduleDay);
 
                 if (restrictedDay != null)
                     restrictedDays.Add(scheduleDay);

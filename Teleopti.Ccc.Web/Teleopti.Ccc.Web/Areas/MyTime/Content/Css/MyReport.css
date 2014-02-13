@@ -1,0 +1,27 @@
+﻿.fixed-non-responsive.container {
+	width: 99%;
+}
+
+table th.right-align-cell,
+table td.right-align-cell
+{
+	text-align: right;
+}
+
+.container {
+	width: 100%;
+}
+
+/*.span6 {
+	width: 49%;
+	-moz-min-width: 350px;
+	-ms-min-width: 350px;
+	-o-min-width: 350px;
+	-webkit-min-width: 350px;
+	min-width: 350px;
+	margin-left: 0;
+}*/
+
+.alert-myreport{
+	max-width: 100% !important;
+}

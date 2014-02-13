@@ -145,8 +145,9 @@
     <Reference Include="Rhino.ServiceBus.Autofac">
       <HintPath>..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues">
-      <HintPath>..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.8\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.9, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.9\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Chart.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Chart.Win.10.2.80\lib\4.0\Syncfusion.Chart.Base.dll</HintPath>

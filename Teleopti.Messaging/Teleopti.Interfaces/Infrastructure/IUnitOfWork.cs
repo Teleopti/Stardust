@@ -117,12 +117,13 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// Gets current db version 
 		/// </summary>
 		/// <param name="root">The root.</param>
+		/// <param name="usePessimisticLock">If <code>true</code>, this db row will be locked for updates during the transaction.</param>
 		/// <returns></returns>
 		/// <remarks>
 		/// Created by: rogerkr
 		/// Created date: 2009-11-17
 		/// </remarks>
-		int? DatabaseVersion(IAggregateRoot root);
+		int? DatabaseVersion(IAggregateRoot root, bool usePessimisticLock=false);
 
 		/// <summary>
 		/// Disables the filter.

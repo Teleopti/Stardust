@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual IActivity Payload { get; protected set; }
 		public virtual DateTimePeriod Period { get; protected set; }
+		
 		public virtual int OrderIndex
 		{
 			get

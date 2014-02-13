@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Win.Commands
 	{
 		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons,
 		             IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler,
-		             ISchedulePartModifyAndRollbackService rollbackService);
+					 ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
 	}
 
 	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.Win.Commands
 
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService)
+		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules,
+			ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
@@ -100,7 +101,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 				advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 				advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
-												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(), rollbackService);
+												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(), rollbackService, resourceCalculateDelayer);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 			}
 		}
