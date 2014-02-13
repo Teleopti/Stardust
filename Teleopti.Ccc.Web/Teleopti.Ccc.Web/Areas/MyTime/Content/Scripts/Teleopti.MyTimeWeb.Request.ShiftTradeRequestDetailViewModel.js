@@ -160,6 +160,19 @@ Teleopti.MyTimeWeb.Request.TimeLineHourAddShiftTradeViewModel = function (hour, 
         }
         return 0;
     });
+	
+    var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
+	
+    self.rulerStyleJson = ko.computed(function () {
+    	if (isRtl)
+    		return { 'right': self.leftPos() + 'px' };
+	    return { 'left': self.leftPos() + 'px' };
+    });
+    self.labelStyleJson = ko.computed(function () {
+	    if (isRtl)
+	    	return { 'right': self.leftPos() - 16 + 'px' };
+    	return { 'left': self.leftPos() - 16 + 'px' };
+    });
 
     self.showHourLine = ko.computed(function () {
         return self.hourText.length > 0;
@@ -180,6 +193,12 @@ Teleopti.MyTimeWeb.Request.LayerEditShiftTradeViewModel = function (layer, minut
 	self.title = ko.computed(function () {
 	    return self.payload ? layer.TitleTime + ' ' + self.payload : '';
 	});
+	var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
+	self.styleJson = ko.computed(function () {
+		if (isRtl)
+			return { 'right': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingRight': self.widthPx() };
+		return { 'left': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingLeft': self.widthPx() };
+	});
 };
 
 Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minutesSinceTimeLineStart, pixelPerMinute) {
@@ -194,6 +213,12 @@ Teleopti.MyTimeWeb.Request.LayerAddShiftTradeViewModel = function (layer, minute
     });
     self.tooltipText = ko.computed(function () {
         return "<div>{0}</div>{1}".format(layer.TitleHeader, layer.TitleTime);
+    });
+    var isRtl = Teleopti.MyTimeWeb.Common.IsRtl();
+    self.styleJson = ko.computed(function () {
+    	if (isRtl)
+    		return { 'right': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingRight': self.widthPx() };
+    	return { 'left': self.leftPx(), 'backgroundColor': self.backgroundColor, 'paddingLeft': self.widthPx() };
     });
 };
 

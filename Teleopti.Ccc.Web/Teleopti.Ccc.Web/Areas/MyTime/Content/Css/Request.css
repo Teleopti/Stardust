@@ -180,6 +180,10 @@
 	position: absolute;
 	left: 166px; /* 150 + 8 + 8 , padding in first column*/
 }
+.rtl .shift-trade-timeline
+{
+	right: 166px;
+}
 
 .shift-trade-timeline-line 
 {
@@ -205,6 +209,11 @@
 	white-space: nowrap;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	background: white;
+}
+.rtl .shift-trade-timeline-number {
+	float: right;
+	padding-left: 3px;
+	padding-right: 2px;
 }
 .shift-trade-add-datepicker
 {

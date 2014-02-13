@@ -83,6 +83,9 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		},
 		GetTextColorBasedOnBackgroundColor: function (backgroundColor) {
 			return _getTextColorBasedOnBackgroundColor(backgroundColor);
+		},
+		IsRtl: function () {
+			return $("html").attr("dir") == "rtl";
 		}
 	};
 

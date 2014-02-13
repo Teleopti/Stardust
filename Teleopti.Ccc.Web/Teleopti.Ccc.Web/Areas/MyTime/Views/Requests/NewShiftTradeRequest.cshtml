@@ -43,8 +43,8 @@
             <div class="shift-trade-timeline">
                 <div class="relative">
                     <div data-bind="foreach: hours">
-                        <div class="shift-trade-ruler absolute" data-bind="style: { left: leftPos() + 'px' }, visible: showHourLine"></div>
-                        <div class="shift-trade-label label label-info absolute" data-bind="style: { left: leftPos() - 16 + 'px' }, text: hourText"></div>
+                        <div class="shift-trade-ruler absolute" data-bind="style: rulerStyleJson, visible: showHourLine"></div>
+                        <div class="shift-trade-label label label-info absolute" data-bind="style: labelStyleJson, text: hourText"></div>
                     </div>
                 </div>
             </div>
@@ -60,7 +60,7 @@
                         <td class="shift-trade-agent-name">@Resources.MySchedule</td>
                         <td class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
                             <div class="shift-trade-layer-container floatleft">
-                                <div class="shift-trade-layer add" data-bind="style: { left: leftPx, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>                                
+                                <div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>                                
                             </div>
                         </td>
                     </tr>
@@ -71,7 +71,7 @@
                         <td class="shift-trade-possible-trade-schedule">
                             <div style="height: 22px;width: 100%;" data-bind="foreach: $data.layers">
                                 <div class="shift-trade-layer-container floatleft">
-                                    <div class="shift-trade-layer add" data-bind="style: { left: leftPx, width: widthPx, backgroundColor: backgroundColor }, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>
+                                    <div class="shift-trade-layer add" data-bind="style: styleJson, tooltip: { title: tooltipText, html: true, container: '.tooltipContainer' }, attr: { 'scheduleinfo': tooltipText() }"></div>
                                 </div>
                             </div>
                         </td>
