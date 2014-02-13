@@ -67,7 +67,6 @@ namespace Teleopti.Messaging.SignalR
 				{
 					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
 				}
-				_hubConnection.Closed += reconnect;
 				if (exception != null)
 				{
 					throw exception;
@@ -88,6 +87,7 @@ namespace Teleopti.Messaging.SignalR
 				Logger.Error("An error happened when starting hub connection.", exception);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
+			_hubConnection.Closed += reconnect;
 		}
 
 		public Task AddSubscription(Subscription subscription)
