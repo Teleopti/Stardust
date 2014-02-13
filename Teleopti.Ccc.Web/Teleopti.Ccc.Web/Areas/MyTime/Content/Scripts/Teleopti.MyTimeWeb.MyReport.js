@@ -11,7 +11,6 @@
 		self.averageTalkTime = ko.observable();
 		self.readyTimePerScheduledReadyTime = ko.observable();
 		self.selectedDateInternal = ko.observable(date);
-		self.weekStart = ko.observable(1);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
 		var format = $('#my-report-datepicker-format').val().toUpperCase();
 		self.datePickerFormat(format);
@@ -67,7 +66,8 @@
 			dataType: "json",
 			type: 'GET',
 			success: function (data) {
-				vm.weekStart(data.WeekStart);
+				$('.moment-datepicker').attr('data-bind', 'datepicker: selectedDate, datepickerOptions: { autoHide: true, weekStart: ' + data.WeekStart + ' }');
+				ko.applyBindings(vm, $('div.navbar')[1]);
 			}
 		});
 	};
