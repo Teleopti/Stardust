@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IEqualNumberOfCategoryFairnessService _equalNumberOfCategoryFairness;
 	    private readonly ITeamBlockSeniorityFairnessOptimizationService _teamBlockSeniorityFairnessOptimizationService;
 	    private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
-	    private readonly ITeamBlockDayOffFairnessOptimizationService _teamBlockDayOffFairnessOptimizationService;
+	    private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
 
 	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											ITeamBlockClearer teamBlockCleaner,
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Win.Commands
 											IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
 											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
-											ITeamBlockDayOffFairnessOptimizationService teamBlockDayOffFairnessOptimizationService)
+											ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;

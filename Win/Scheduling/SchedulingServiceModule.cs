@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void registerDayOffFairnessOptimizationService(ContainerBuilder builder)
         {
-            builder.RegisterType<TeamBlockDayOffFairnessOptimizationService>().As<ITeamBlockDayOffFairnessOptimizationService >();
+            builder.RegisterType<TeamBlockDayOffFairnessOptimizationServiceFacade>().As<ITeamBlockDayOffFairnessOptimizationServiceFacade >();
             builder.RegisterType<WeekDayPoints>().As<IWeekDayPoints>();
             builder.RegisterType<DayOffStep1>().As<IDayOffStep1>();
             builder.RegisterType<DayOffStep2>().As<IDayOffStep2>();

@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface IJuniorTeamBlockExtractor
     {
-        ITeamBlockInfo GetJuniorTeamBlockInfo(List<ITeamBlockPoints> swappableTeamBlocksPoints);
+        ITeamBlockInfo GetJuniorTeamBlockInfo(IEnumerable<ITeamBlockPoints> swappableTeamBlocksPoints);
     }
 
     public class JuniorTeamBlockExtractor : IJuniorTeamBlockExtractor
     {
-        public  ITeamBlockInfo GetJuniorTeamBlockInfo(List<ITeamBlockPoints> swappableTeamBlocksPoints)
+        public  ITeamBlockInfo GetJuniorTeamBlockInfo(IEnumerable<ITeamBlockPoints> swappableTeamBlocksPoints)
         {
             var value = double.MinValue;
             ITeamBlockInfo juniorTeamBlock = null;

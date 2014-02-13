@@ -6,19 +6,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
-    public interface ITeamBlockDayOffFairnessOptimizationService
+    public interface ITeamBlockDayOffFairnessOptimizationServiceFacade
     {
         void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions, 
             IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences);
     }
 
-    public class TeamBlockDayOffFairnessOptimizationService : ITeamBlockDayOffFairnessOptimizationService
+    public class TeamBlockDayOffFairnessOptimizationServiceFacade : ITeamBlockDayOffFairnessOptimizationServiceFacade
     {
         private readonly IDayOffStep1 _dayOffStep1;
         private readonly IDayOffStep2 _dayOffStep2;
         private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 
-        public TeamBlockDayOffFairnessOptimizationService(IDayOffStep1 dayOffStep1, IDayOffStep2 dayOffStep2, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
+        public TeamBlockDayOffFairnessOptimizationServiceFacade(IDayOffStep1 dayOffStep1, IDayOffStep2 dayOffStep2, ITeamBlockSchedulingOptions teamBlockSchedulingOptions)
         {
             _dayOffStep1 = dayOffStep1;
             _dayOffStep2 = dayOffStep2;

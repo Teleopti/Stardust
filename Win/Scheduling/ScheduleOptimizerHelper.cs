@@ -714,7 +714,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
 			////day off fairness
-            var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationService>();
+            var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
             teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
                 _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences);
 

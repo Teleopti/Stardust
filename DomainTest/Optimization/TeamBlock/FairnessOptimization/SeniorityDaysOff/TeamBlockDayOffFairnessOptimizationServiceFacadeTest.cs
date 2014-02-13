@@ -12,10 +12,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff
 {
     [TestFixture]
-    public class TeamBlockDayOffFairnessOptimizationServiceTest
+    public class TeamBlockDayOffFairnessOptimizationServiceFacadeTest
     {
         private MockRepository _mock;
-        private ITeamBlockDayOffFairnessOptimizationService _target;
+        private ITeamBlockDayOffFairnessOptimizationServiceFacade _target;
         private IDayOffStep1 _dayOffStep1;
         private IDayOffStep2 _dayOffStep2;
         private ITeamBlockSchedulingOptions _teamBlockSchedulingOption;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
             _weekDayPoints = new Dictionary<DayOfWeek, int>();
             _optimizationPreferences = _mock.StrictMock<IOptimizationPreferences>();
-            _target = new TeamBlockDayOffFairnessOptimizationService(_dayOffStep1,_dayOffStep2,_teamBlockSchedulingOption);
+            _target = new TeamBlockDayOffFairnessOptimizationServiceFacade(_dayOffStep1,_dayOffStep2,_teamBlockSchedulingOption);
         }
 
         [Test]

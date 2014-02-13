@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                       .IgnoreArguments()
                       .Return(teamBlockList );
                 Expect.Call(_seniorityExtractor.ExtractSeniority(teamBlockList)).IgnoreArguments().Return(teamBlockPointList);
-                Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList() )).IgnoreArguments()
+                Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList)).IgnoreArguments()
                       .Return(_seniorTeamBlock);
 
             }
