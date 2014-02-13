@@ -161,6 +161,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             double statTaskAverageAfterTaskTimeSeconds = 0;
             double statTaskAverageTaskTimeSeconds = 0;
             double statTaskAverageQueueTimeSeconds = 0;
+				double statTaskAverageHandleTimeSeconds = 0;
 
             double statOverflowInTasks = 0;
             double statOverflowOutTasks = 0;
@@ -177,6 +178,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 statTaskAverageAfterTaskTimeSeconds += statisticTask.StatAnsweredTasks * statisticTask.StatAverageAfterTaskTimeSeconds;
                 statTaskAverageTaskTimeSeconds += statisticTask.StatAnsweredTasks * statisticTask.StatAverageTaskTimeSeconds;
                 statTaskAverageQueueTimeSeconds += statisticTask.StatAnsweredTasks * statisticTask.StatAverageQueueTimeSeconds;
+					 statTaskAverageHandleTimeSeconds  += statisticTask.StatAnsweredTasks * statisticTask.StatAverageHandleTimeSeconds;
 
                 statOverflowInTasks += statisticTask.StatOverflowInTasks;
                 statOverflowOutTasks += statisticTask.StatOverflowOutTasks;
@@ -201,6 +203,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     (int)(statTaskAverageAfterTaskTimeSeconds / statAnsweredTasks);
                 newStatisticTask.StatAverageTaskTimeSeconds = (int)(statTaskAverageTaskTimeSeconds / statAnsweredTasks);
                 newStatisticTask.StatAverageQueueTimeSeconds = (int)(statTaskAverageQueueTimeSeconds / statAnsweredTasks);
+                newStatisticTask.StatAverageHandleTimeSeconds = (int)(statTaskAverageHandleTimeSeconds / statAnsweredTasks);
             }
             else
             {
