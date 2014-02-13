@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			{
 				Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
 												  _optimizationPreferences, _dayOffsToGiveAway)).Return(null);
+			    Expect.Call(()=> _rollbackService.ClearModificationCollection());
 			}
 			using (_mocks.Playback())
 			{
@@ -109,6 +110,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				commonMocks(seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay, seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay, swapList1, swapList2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.Twice();
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse>());
+                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoSenior, _optimizationPreferences))
+                      .IgnoreArguments()
+                      .Return(true);
+                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoJunior, _optimizationPreferences))
+                          .IgnoreArguments()
+                          .Return(true);
 			}
 			using (_mocks.Playback())
 			{
@@ -138,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				commonMocks(seniorToHaveDayOffScheduleDay, juniorToRemoveDayOffScheduleDay, seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay, swapList1, swapList2);
-				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_rollbackService.ModifyParts(swapList)).Return(new List<IBusinessRuleResponse> { response });
 				Expect.Call(()=>_rollbackService.Rollback());
 			}
@@ -157,6 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			{
 				Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
 											  _optimizationPreferences, _dayOffsToGiveAway)).Return(_daysToSwap);
+			    Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 			using (_mocks.Playback())
 			{
@@ -184,6 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				                     _scheduleDictionary)).Return(swapList1);
 			Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {seniorGiveDayOffScheduleDay, juniorAcceptDayOffScheduleDay},
 			                                 _scheduleDictionary)).Return(swapList2);
+            
 		}
 	}
 }

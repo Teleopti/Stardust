@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 return false;
             }
             rollbackService.ClearModificationCollection();
-		    return true;
+            return swapResult;
 		}
 
         private bool trySwapAndValidate(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,

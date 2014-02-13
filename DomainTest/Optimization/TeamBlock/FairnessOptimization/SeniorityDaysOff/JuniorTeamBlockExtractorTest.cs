@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             _target = new JuniorTeamBlockExtractor();
             _teamBlockInfo1 = _mock.StrictMock<ITeamBlockInfo>();
             _teamBlockInfo2 = _mock.StrictMock<ITeamBlockInfo>();
+            //the higest number has the lowest rank
             _teamBlockPoint1 = new TeamBlockPoints(_teamBlockInfo1,20);
             _teamBlockPoint2 = new TeamBlockPoints(_teamBlockInfo2,10);
         }
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             var teamBlockList = new List<ITeamBlockPoints>(){_teamBlockPoint1,_teamBlockPoint2};
 
             var result = _target.GetJuniorTeamBlockInfo(teamBlockList);
-            Assert.AreEqual( result , _teamBlockInfo2 );
+            Assert.AreEqual( result , _teamBlockInfo1 );
         }
     }
 }

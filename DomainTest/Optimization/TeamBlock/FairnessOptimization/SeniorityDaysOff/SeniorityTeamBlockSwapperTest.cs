@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(false);
+				Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(false);
 				Expect.Call(_rollbackService.Rollback);
 			}
 
@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(false);
+                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
+                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(false);
 				Expect.Call(_rollbackService.Rollback);
 			}
 
@@ -94,63 +94,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Assert.IsFalse(result);
 			}
 		}
-
-		[Test]
-		public void ShouldReturnFalseFirstRestictionValidatorFails()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
-				      .Return(false);
-				Expect.Call(_rollbackService.Rollback);
-			}
-
-			using (_mocks.Playback())
-			{
-				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-													 _optimizationPreferences);
-				Assert.IsFalse(result);
-			}
-		}
-
-		[Test]
-		public void ShouldReturnFalseSecondRestictionValidatorFails()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
-					  .Return(true);
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences))
-					  .Return(false);
-				Expect.Call(_rollbackService.Rollback);
-			}
-
-			using (_mocks.Playback())
-			{
-				var result = _target.SwapAndValidate(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary,
-													 _optimizationPreferences);
-				Assert.IsFalse(result);
-			}
-		}
-
+        
 		[Test]
 		public void ShouldReturnTrueIfAllSuccess()
 		{
 			using (_mocks.Record())
 			{
 				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
-				Expect.Call(_seniorityTeamBlockSwapValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences))
-					  .Return(true);
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences))
-					  .Return(true);
+				Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
+                Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mocks.Playback())
