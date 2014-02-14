@@ -10,12 +10,14 @@ $(document).ready(function () {
 		viewModelMonth.readData({
 		    ScheduleDays: [{
                 Absence: {
-                    Name: "Illness"
+                    Name: "Illness",
+                    ShortName: "IL"
                 }
 		    }]
 		});
 
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].absenceName, "Illness");
+		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].absenceShortName, "IL");
 	});
     
 	test("should read scheduled days", function () {
