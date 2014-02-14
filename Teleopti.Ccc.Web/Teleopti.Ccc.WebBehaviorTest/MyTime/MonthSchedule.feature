@@ -82,8 +82,11 @@ Given I have the role 'Full access to mytime'
 	| Name      | Illness          |
 	| StartTime | 2014-01-16 00:00 |
 	| EndTime   | 2014-01-16 23:59 |
-When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-16'
+When I view my month schedule for date '2014-01-01'
+Then I should see the absence with 
+    | Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-01-16       |
 
 Scenario: View when you have full day absence
 Given I have the role 'Full access to mytime'
