@@ -89,22 +89,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		/// <summary>
-		/// Finds the specified AgentAbsences by the given Period param.
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <returns></returns>
-		public ICollection<IPersonAbsence> Find(DateTimePeriod period)
-		{
-			ICollection<IPersonAbsence> retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
-						    .SetFetchMode("LayerCollection", FetchMode.Join)
-						    .Add(Subqueries.Exists(GetAgentAbsencesInPeriod(period)))
-						    .SetResultTransformer(Transformers.DistinctRootEntity)
-						    .List<IPersonAbsence>();
-			initializeAbsences(retList);
-			return retList;
-		}
-
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
 		{
 			const string q = @"select pa.Layer.Period

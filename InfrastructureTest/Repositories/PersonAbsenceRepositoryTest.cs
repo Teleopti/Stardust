@@ -146,55 +146,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 
-        /// <summary>
-        /// Verifies find assignments based on dates.
-        /// </summary>
-        [Test]
-        public void CanFindAssignmentsByDates()
-        {
-            ////////////setup////////////////////////////////////////////////////////////////
-            DateTimePeriod period1 =
-                new DateTimePeriod(new DateTime(2007, 8, 1, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 1, 17, 15, 0, DateTimeKind.Utc));
-            DateTimePeriod period2 =
-                new DateTimePeriod(new DateTime(2007, 8, 2, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 2, 17, 15, 0, DateTimeKind.Utc));
-            DateTimePeriod period3 =
-                new DateTimePeriod(new DateTime(2007, 8, 20, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 21, 17, 15, 0, DateTimeKind.Utc));
-            IAbsence abs1 = AbsenceFactory.CreateAbsence("Semester");
-            IAbsence abs2 = AbsenceFactory.CreateAbsence("Sjuk");
-            IAbsence abs3 = AbsenceFactory.CreateAbsence("Läkare");
-            PersistAndRemoveFromUnitOfWork(abs1);
-            PersistAndRemoveFromUnitOfWork(abs2);
-            PersistAndRemoveFromUnitOfWork(abs3);
-            AbsenceLayer layer1 = new AbsenceLayer(abs1, period1);
-            AbsenceLayer layer2 = new AbsenceLayer(abs2, period2);
-            AbsenceLayer layer3 = new AbsenceLayer(abs3, period3);
-
-            PersonAbsence agAbsValid1 = new PersonAbsence(dummyAgent, dummyScenario, layer1);
-            PersonAbsence agAbsValid2 = new PersonAbsence(dummyAgent, dummyScenario, layer2);
-            PersonAbsence agAbsInValid3 = new PersonAbsence(dummyAgent, dummyScenario, layer3);
-
-            PersistAndRemoveFromUnitOfWork(agAbsValid1);
-            PersistAndRemoveFromUnitOfWork(agAbsValid2);
-            PersistAndRemoveFromUnitOfWork(agAbsInValid3);
-
-            DateTimePeriod searchPeriod =
-                new DateTimePeriod(new DateTime(2007, 8, 1, 9, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 2, 10, 30, 0, DateTimeKind.Utc));
-
-            /////////////////////////////////////////////////////////////////////////////////
-
-            ICollection<IPersonAbsence> retList = rep.Find(searchPeriod);
-
-            verifyRelatedObjectsAreEagerlyLoaded(retList);
-            Assert.IsTrue(retList.Contains(agAbsValid1));
-            Assert.IsTrue(retList.Contains(agAbsValid2));
-            Assert.IsFalse(retList.Contains(agAbsInValid3));
-            Assert.AreEqual(2, retList.Count);
-        }
-
         [Test]
         public void VerifyCanReadAllPersonAbsencesForOnePersonAndAbsence()
         {

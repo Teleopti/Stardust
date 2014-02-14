@@ -41,12 +41,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario);
 
-		/// <summary>
-		/// Finds the specified Assignments by the given Period param.
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <returns></returns>
-		ICollection<IPersonAbsence> Find(DateTimePeriod period);
 
 		/// <summary>
 		/// </summary>
