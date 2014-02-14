@@ -120,11 +120,11 @@
 	height: 13px;
 	padding-left: 5px;
 	margin-left: 5px;
-	text-indent: 12px;
 	font-size: 11px;
 	height: 13px;
 	font-variant: small-caps;
 	white-space: nowrap;
+	text-align: left;
 }
 
 .feedback-detail 

@@ -63,7 +63,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	    var text = '';
 	    if (self.Extended()) {
 	        
-	        text = '<div class="glyphicon glyphicon-white time-limitation arrow-icon icon-step-backward">{0}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon icon-step-forward">{1}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon icon-resize-horizontal">{2}</div><div class="extended-part-title">{3}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon icon-step-backward">{4}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon icon-step-forward">{5}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon icon-resize-horizontal">{6}</div>'
+	    	text = '<div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-backward">{0}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-forward">{1}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-resize-horizontal">{2}</div><div class="extended-part-title">{3}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-backward">{4}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-forward">{5}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-resize-horizontal">{6}</div>'
 	            .format($('<div/>').text(self.StartTimeLimitation()).html(),
 	                $('<div/>').text(self.EndTimeLimitation()).html(),
 	                $('<div/>').text(self.WorkTimeLimitation()).html(),
