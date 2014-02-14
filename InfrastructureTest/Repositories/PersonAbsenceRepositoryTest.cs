@@ -399,37 +399,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, retList.Count);
         }
 
-		[Test]
-		public void CanFindAgentAbsencesWithCorrectPeriodAndAbsence()
-		{
-			var okScenario = new Scenario("Low");
-			var abs1 = AbsenceFactory.CreateAbsence("Semester");
-			var abs2 = AbsenceFactory.CreateAbsence("Sick");
-			dummyAgent = PersonFactory.CreatePerson("k");
-			dummyAgent2 = PersonFactory.CreatePerson("l");
-			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-								   new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc));
-
-			PersistAndRemoveFromUnitOfWork(abs1);
-			PersistAndRemoveFromUnitOfWork(abs2);
-			PersistAndRemoveFromUnitOfWork(dummyAgent);
-			PersistAndRemoveFromUnitOfWork(dummyAgent2);
-			PersistAndRemoveFromUnitOfWork(okScenario);
-			
-			var layer1 = new AbsenceLayer(abs1, period);
-			var layer2 = new AbsenceLayer(abs2, period);
-			var personAbsence1 = new PersonAbsence(dummyAgent, okScenario, layer1);
-			var personAbsence2 = new PersonAbsence(dummyAgent2, okScenario, layer2);
-			//personAbsence1.Layer.Payload
-			PersistAndRemoveFromUnitOfWork(personAbsence1);
-			PersistAndRemoveFromUnitOfWork(personAbsence2);
-
-			IList<IPerson> persons = new List<IPerson> { dummyAgent , dummyAgent2};
-			
-			var retList = rep.Find(persons, new DateTimePeriod(2000, 1, 1, 2007, 1, 3), okScenario, abs1);
-			verifyRelatedObjectsAreEagerlyLoaded(retList);
-			Assert.AreEqual(1, retList.Count());
-		}
 
 		[Test]
 		public void ShouldNotFetchIfScenarioIsNotLoggedOnBusinessUnit()

@@ -126,24 +126,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return periods;
 		}
 
-		public IEnumerable<IPersonAbsence> Find(IList<IPerson> persons, DateTimePeriod optimizedPeriod, IScenario scenario, IAbsence absence)
-		{
-			var retList = new List<IPersonAbsence>();
-
-			foreach (var personList in persons.Batch(400))
-			{
-
-				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
-					.Add(Subqueries.Exists(GetAgentAbsencesInPeriod(optimizedPeriod, scenario)
-											   .Add(Restrictions.In("Person", personList.ToArray()))
-											   .Add(Restrictions.Eq("Layer.Payload", absence))))
-					.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPersonAbsence>());
-			}
-
-			initializeAbsences(retList);
-			return retList;
-		}
 
 		/// <summary>
 		/// Finds the specified period.
