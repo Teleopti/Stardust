@@ -1405,7 +1405,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsViewBaseOnVerifyAddOvertimeTheNewWay(DateTimePeriod period)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { _day1 });
-			Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, _multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(_overtimeDialog);
+			Expect.Call(_viewBase.CreateAddOvertimeViewModel( null, _multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(_overtimeDialog);
 
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period));
             Expect.Call(_viewBase.TheGrid).Return(_grid);
@@ -1464,7 +1464,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dialog = _mocks.StrictMock<IAddOvertimeViewModel>();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
-			Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
+			Expect.Call(_viewBase.CreateAddOvertimeViewModel( null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(schedulePart.PersonAssignment()).Return(ass);
             //Expect.Call(ass.Period).Return(period);
 			Expect.Call(ass.MainActivities()).Return(new List<IMainShiftLayer>());
@@ -1694,6 +1694,34 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_target.SortCommand = sortCommand;
 				_target.SortOnTime(dateOnly);	
 			}	
+		}
+
+		[Test]
+		public void ShouldCompareContractTime()
+		{
+			var comparer = new ContractTimeComparer(TeleoptiPrincipal.Current.Regional.Culture);
+			Assert.AreEqual(0, comparer.Compare(null, null));
+			Assert.AreEqual(-1, comparer.Compare(null, "2"));
+			Assert.AreEqual(1, comparer.Compare("1", null));
+			
+			Assert.AreEqual(1, comparer.Compare(1, TimeSpan.FromHours(2)));
+			Assert.AreEqual(-1, comparer.Compare(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
+			Assert.AreEqual(1, comparer.Compare(TimeSpan.FromHours(2), TimeSpan.FromHours(1)));
+			Assert.AreEqual(0, comparer.Compare(TimeSpan.FromHours(1), TimeSpan.FromHours(1)));
+		}
+
+		[Test]
+		public void ShouldCompareDayOffCount()
+		{
+			var comparer = new ContractTimeComparer(TeleoptiPrincipal.Current.Regional.Culture);
+			Assert.AreEqual(0, comparer.Compare(null, null));
+			Assert.AreEqual(-1, comparer.Compare(null, "2"));
+			Assert.AreEqual(1, comparer.Compare("1", null));
+
+			Assert.AreEqual(-1, comparer.Compare("1", 2));
+			Assert.AreEqual(-1, comparer.Compare(1, 2));
+			Assert.AreEqual(1, comparer.Compare(2, 1));
+			Assert.AreEqual(0, comparer.Compare(1, 1));
 		}
     }
 }

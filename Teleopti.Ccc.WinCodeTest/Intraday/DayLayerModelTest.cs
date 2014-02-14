@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Intraday;
+using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Intraday
@@ -21,8 +22,10 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         private IPerson _person;
         private ITeam _team;
         private DayLayerModel _target;
+	    private LayerViewModelCollection _layerViewModelCollection;
+	    private CommonNameDescriptionSetting _commonNameDescriptionSetting;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -31,9 +34,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             _person = PersonFactory.CreatePerson("Kalle", "Kula");
             _person.EmploymentNumber = "10";
             _team = _mocks.StrictMock<ITeam>();
-			var layerCollection = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
-            var commonAgentName = new CommonNameDescriptionSetting { AliasFormat = CommonNameDescriptionSetting.LastName };
-            _target = new DayLayerModel(_person, _period, _team, layerCollection, commonAgentName);
+			_layerViewModelCollection = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(), new RemoveLayerFromSchedule(), null);
+            _commonNameDescriptionSetting = new CommonNameDescriptionSetting { AliasFormat = CommonNameDescriptionSetting.LastName };
+            _target = new DayLayerModel(_person, _period, _team, _layerViewModelCollection, _commonNameDescriptionSetting);
         }
 
         [Test]
@@ -193,6 +196,29 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_target.NextActivityDescription = "NewValue";
 			_target.CancelEdit();
 			_target.IsInEditMode.Should().Be.False();
+		}
+
+		[Test]
+		public void TimeInCurrentState_WhenCompared_ShouldBeOrderedByEnteredCurrentState()
+		{
+			var target1 = new DayLayerModel(_person, _period, _team, _layerViewModelCollection, _commonNameDescriptionSetting);
+			var target2 = new DayLayerModel(_person, _period, _team, _layerViewModelCollection, _commonNameDescriptionSetting);
+
+			target1.EnteredCurrentState = DateTime.UtcNow.AddHours(1);
+			target2.EnteredCurrentState = target1.EnteredCurrentState.AddHours(1);
+
+			Assert.That((TimeSpan)target1.TimeInCurrentState > (TimeSpan)target2.TimeInCurrentState);
+		}
+
+		[Test]
+		public void TimeInCurrentState_WhenEnterCurrentStateChange_ShouldNotifypropertyChanged()
+		{
+			var propertyChangedListener = new PropertyChangedListener();
+			propertyChangedListener.ListenTo(_target);
+
+			_target.EnteredCurrentState = new DateTime();
+
+			Assert.That(propertyChangedListener.HasFired("TimeInCurrentState"));
 		}
 	}
 }

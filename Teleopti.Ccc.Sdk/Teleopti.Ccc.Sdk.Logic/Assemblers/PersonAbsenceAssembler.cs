@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         {
             var absenceLayer = new AbsenceLayerDto
                                    {
-                                       Id = layer.Id,
+                                       Id = null, //cannot remove because of backward compability
                                        Period = _dateTimePeriodAssembler.DomainEntityToDto(layer.Period),
                                        Absence = _absenceAssembler.DomainEntityToDto(layer.Payload)
                                    };
@@ -56,7 +56,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             DateTimePeriod period = _dateTimePeriodAssembler.DtoToDomainEntity(dtoLayer.Period);
 
             IAbsenceLayer layer = new AbsenceLayer(absence, period);
-            layer.SetId(dtoLayer.Id);
             return layer;
         }
     }

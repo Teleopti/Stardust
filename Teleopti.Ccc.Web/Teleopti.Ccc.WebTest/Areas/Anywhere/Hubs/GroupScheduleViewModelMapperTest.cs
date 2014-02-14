@@ -97,9 +97,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
-
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new[]
 						{
@@ -128,9 +129,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var person = PersonFactory.CreatePersonWithId();
 			person.Name = new Name("f", "l");
 			var target = new GroupScheduleViewModelMapper();
-
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new[]
 						{
@@ -157,9 +159,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var personPermitted = PersonFactory.CreatePersonWithId();
 			var personNotPermitted = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
-
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { personPermitted },
 				Schedules = new[]
 						{
@@ -184,8 +187,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				UserTimeZone = userTimeZone,
 				CanSeePersons = new[] { person },
 				Schedules = new PersonScheduleDayReadModel[] { }
 			};
@@ -200,8 +205,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
 			{
+				UserTimeZone = userTimeZone,
 				CanSeeUnpublishedSchedules = false,
 				CanSeePersons = new[] { person },
 				CanSeeConfidentialAbsencesFor = new IPerson[] { },
@@ -225,8 +232,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			var target = new GroupScheduleViewModelMapper();
+			var userTimeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			var data = new GroupScheduleData
-				{
+			{
+				UserTimeZone = userTimeZone,
 					CanSeePersons = new[] {person},
 					Schedules = new PersonScheduleDayReadModel[]
 						{

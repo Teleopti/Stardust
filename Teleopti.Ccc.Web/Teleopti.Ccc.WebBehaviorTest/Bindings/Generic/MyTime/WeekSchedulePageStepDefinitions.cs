@@ -1,5 +1,6 @@
 using System;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
@@ -24,5 +25,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.Click(".overtime-availability-bar");
 		}
+
+		[Then(@"I should not be able to see schedule link")]
+		public void ThenIShouldNotBeAbleToSeeScheduleLink()
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery(".bdd-mytime-top-menu", "a[href='#ScheduleTab']");
+		}
+
 	}
 }

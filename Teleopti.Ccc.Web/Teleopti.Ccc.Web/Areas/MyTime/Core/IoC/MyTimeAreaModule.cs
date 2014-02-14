@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
@@ -17,6 +18,8 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			registerSettingsTypes(builder);
 			registerAsmTypes(builder);
 			registerMessageBrokerTypes(builder);
+			registerMyReportTypes(builder);
 		}
 
 		private static void registerMessageBrokerTypes(ContainerBuilder builder)
@@ -182,6 +186,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
 			builder.RegisterType<PortalViewModelFactory>().As<IPortalViewModelFactory>();
 			builder.RegisterType<DatePickerGlobalizationViewModelFactory>().As<IDatePickerGlobalizationViewModelFactory>();
+		}
+
+		private static void registerMyReportTypes(ContainerBuilder builder)
+		{
+			builder.RegisterType<DailyMetricsForDayQuery>().As<IDailyMetricsForDayQuery>();
+			builder.RegisterType<DailyMetricsMapper>().As<IDailyMetricsMapper>();
+			builder.RegisterType<MyReportViewModelFactory>().As<IMyReportViewModelFactory>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)

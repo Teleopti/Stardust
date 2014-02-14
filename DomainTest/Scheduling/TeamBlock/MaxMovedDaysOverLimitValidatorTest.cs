@@ -37,12 +37,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_range = _mocks.StrictMock<IScheduleRange>();
 			_person = PersonFactory.CreatePerson();
 			_allSelectedScheduleRangeClones.Add(_person, _range);
+			_optimizationPreferences.Rescheduling.AllSelectedScheduleRangeClones = _allSelectedScheduleRangeClones;
 			_scheduleDayEquator = _mocks.StrictMock<IScheduleDayEquator>();
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_currentScheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_originalScheduleDay = _mocks.StrictMock<IScheduleDay>();
 
-			_target = new MaxMovedDaysOverLimitValidator(_allSelectedScheduleRangeClones, _scheduleDayEquator);
+			_target = new MaxMovedDaysOverLimitValidator(_scheduleDayEquator);
 			
 		}
 

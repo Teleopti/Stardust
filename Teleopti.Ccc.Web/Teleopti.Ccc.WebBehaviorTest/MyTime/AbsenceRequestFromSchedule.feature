@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Absence request from schedule
+﻿Feature: Absence request from schedule
 	In order to make requests to my superior
 	As an agent
 	I want to be able to submit absence requests
@@ -12,7 +11,12 @@ Background:
 	| Field						 | Value						 |
 	| Name						 | No access to absence requests |
 	| Access to absence requests | False					     |
-	
+	And there is an absence with
+	| Field       | Value    |
+	| Name        | Vacation |
+	| Color       | Red      |
+	| Requestable | True     |
+
 Scenario: Open add absence request form from day summary
 	Given I have the role 'Full access to mytime'
 	And I view my week schedule for date '2013-10-03'
@@ -22,7 +26,6 @@ Scenario: Open add absence request form from day summary
 
 Scenario: Add absence request from week schedule view
 	Given I have the role 'Full access to mytime'
-	And I have a requestable absence called Vacation
 	And I view my week schedule for date '2013-10-03'
 	When I click on the day symbol area for date '2013-10-03'
 	And I click to add a new absence request

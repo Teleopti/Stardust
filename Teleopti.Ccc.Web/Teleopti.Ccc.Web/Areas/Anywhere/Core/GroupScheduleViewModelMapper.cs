@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var personsAndSchedules = schedulesWithPersons.Concat(personsWithoutSchedules).ToArray();
 
 			var canSeeConfidentialAbsencesFor = data.CanSeeConfidentialAbsencesFor ?? new IPerson[] { };
-			var published = new PublishedScheduleSpecification(canSeePersons, data.Date);
+			var published = new PublishedScheduleSpecification(canSeePersons,
+			                                                   new DateOnly(TimeZoneHelper.ConvertFromUtc(data.Date, data.UserTimeZone)));
 
 			return (from item in personsAndSchedules
 				let displaySchedule = data.CanSeeUnpublishedSchedules ||

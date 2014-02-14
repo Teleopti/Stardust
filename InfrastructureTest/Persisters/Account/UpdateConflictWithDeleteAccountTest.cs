@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 {
-	public class UpdateConflictWithDeleteAccountTest : PersonAccountPersisterBaseTest
+	public class UpdateConflictWithDeleteAccountTest : PersonAccountConflictTest
 	{
 		protected override bool GivenOtherHasChanged(IPersonAbsenceAccount othersPersonAccount)
 		{
@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Account
 			((Domain.Scheduling.PersonalAccount.Account)myPersonAbsenceAccount.AccountCollection().Single()).LatestCalculatedBalance = new TimeSpan(20, 0, 0);
 		}
 
-		protected override void Then(IPersonAbsenceAccount myPersonAbsenceAccount)
+		protected override void Then(IPersonAbsenceAccount inMemoryAndDatabasePersonAbsenceAccount)
 		{
-			myPersonAbsenceAccount.AccountCollection().Should().Be.Empty();
+			inMemoryAndDatabasePersonAbsenceAccount.AccountCollection().Should().Be.Empty();
 		}
 	}
 }

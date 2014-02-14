@@ -271,7 +271,7 @@ end
 item: End Block
 end
 item: Set Variable
-  Variable=WEB_BROKER_TMP
+  Variable=WEB_BROKER_FOR_WEB_TMP
   Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
 end
 item: If/While Statement
@@ -279,10 +279,18 @@ item: If/While Statement
   Value=YES
 end
 item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
+end
+item: Set Variable
   Variable=WEB_BROKER_BACKPLANE_TMP
   Value=%INSIDE_HOSTNAME_TMP%TeleoptiCCC/Broker.backplane/backplane
 end
 item: Else Statement
+end
+item: Set Variable
+  Variable=WEB_BROKER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Broker/
 end
 item: Set Variable
   Variable=WEB_BROKER_BACKPLANE_TMP
@@ -402,6 +410,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(PM_ASMX)|%DNS_ALIAS_TMP%%PM_VIRDIR_TMP%/services/Analyzer2005.asmx
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(WEB_BROKER_FOR_WEB)|%WEB_BROKER_FOR_WEB_TMP%
   Line Number=0
 end
 item: Insert Line into Text File

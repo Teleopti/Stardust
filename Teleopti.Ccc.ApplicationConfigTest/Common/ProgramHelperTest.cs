@@ -53,14 +53,12 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Common
 
         private void logonForTest()
         {
-            string[] strings = new string[6];
+            string[] strings = new string[5];
 			strings[0] = "-DS" + IniFileInfo.SQL_SERVER_NAME;
-			strings[1] = "-DU" + IniFileInfo.SQL_LOGIN;
-			strings[2] = "-DP" + IniFileInfo.SQL_PASSWORD;
-            strings[3] = "-DD" + IniFileInfo.DB_CCC7;
-            strings[4] = "-BUTestBU";
-            strings[5] = "-CUkn-IN";
-
+	        strings[1] = "-EE";
+            strings[2] = "-DD" + IniFileInfo.DB_CCC7;
+            strings[3] = "-BUTestBU";
+            strings[4] = "-CUkn-IN";
             _commandLineArgument = new CommandLineArgument(strings);
 
             ISessionFactory factory = SetupFixtureForAssembly.SessionFactory;

@@ -32,6 +32,25 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             removeFromDb(p);
         }
 
+				[Test]
+				public void VerifyDatabaseVersionOnExistingRootUsingPessimisticLock()
+				{
+					//does not verify that a pess lock is created, just that the method works logically
+					//the lock itself will be tested in the use cases where needed
+					SkipRollback();
+					var p = PersonFactory.CreatePerson();
+					PersistAndRemoveFromUnitOfWork(p);
+					UnitOfWork.PersistAll();
+
+					using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+					{
+						Assert.Greater(uow.DatabaseVersion(p, true), 0);
+					}
+
+					removeFromDb(p);
+				}
+
+
         [Test]
         public void VerifyDatabaseVersionOnNonDatabaseExistingRoot()
         {
@@ -111,9 +130,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 cantBePersisted = PersonFactory.CreatePerson();
                 repository.Add(cantBePersisted);
                 cantBePersisted.Email = null;
-                var loggedOnP = SetupFixtureForAssembly.loggedOnPerson;
-                loggedOnP.Name = new Name(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-                repository.Add(loggedOnP);
                 try
                 {
                     uow1.PersistAll();

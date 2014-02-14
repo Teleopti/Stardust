@@ -39,10 +39,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.GridlockCommands
             using (_mock.Record())
             {
                 Expect.Call(_gridScheduleExtractor.Extract()).Return(_scheduleDays);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _day1);
-                Expect.Call(() => _restrictionChecker.ScheduleDay = _day2);
-                Expect.Call(_scheduleDayPreferenceRestrictionExtractor.RestrictionFulfilledAbsence(_restrictionChecker)).Return(_day1);
-                Expect.Call(_scheduleDayPreferenceRestrictionExtractor.RestrictionFulfilledAbsence(_restrictionChecker)).Return(null);
+				Expect.Call(_scheduleDayPreferenceRestrictionExtractor.RestrictionFulfilledAbsence(_restrictionChecker, _day1)).Return(_day1);
+                Expect.Call(_scheduleDayPreferenceRestrictionExtractor.RestrictionFulfilledAbsence(_restrictionChecker, _day2)).Return(null);
                 Expect.Call(() => _gridlockManager.AddLock(new List<IScheduleDay> { _day1 }, LockType.Normal));
             }
 

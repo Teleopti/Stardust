@@ -17,10 +17,10 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
       </Site>
     </Sites>
     <Certificates>
-      <Certificate name="$(SSLCERTNAME)" storeLocation="LocalMachine" storeName="My"/>
+      <Certificate name="teleopti.cloudapp.net" storeLocation="LocalMachine" storeName="My"/>
     </Certificates>
     <Endpoints>
-  		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="$(SSLCERTNAME)" />
+  		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="teleopti.cloudapp.net" />
     </Endpoints>
     <Imports>
 		<Import moduleName="Diagnostics" />
@@ -28,6 +28,7 @@ xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 		<Import moduleName="RemoteForwarder" />
     </Imports>
     <Startup>
+	  <Task commandLine="PrepareConfigAndSignClickOnce.cmd" executionContext="elevated" taskType="background" />
       <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
       <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="background" />
 	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="background" />

@@ -1,4 +1,6 @@
+using System;
 using System.Globalization;
+using System.Windows.Forms;
 using Microsoft.Win32;
 
 namespace Teleopti.Support.Tool
@@ -69,9 +71,16 @@ namespace Teleopti.Support.Tool
         {
             if (_sqlServerName == null) { _sqlServerName = string.Empty; }
             if (_sqlUserName == null) { _sqlUserName= string.Empty; }
-            Registry.SetValue(_keyName, SqlServerNameValueName, _sqlServerName);
-            Registry.SetValue(_keyName, SqlUserNameValueName, _sqlUserName);
-            Registry.SetValue(_keyName, UseWindowsAuthenticationValueName, _useWindowsAuthentication.ToString(CultureInfo.InvariantCulture));
+			  try
+           {
+				  Registry.SetValue(_keyName, SqlServerNameValueName, _sqlServerName);
+				  Registry.SetValue(_keyName, SqlUserNameValueName, _sqlUserName);
+				  Registry.SetValue(_keyName, UseWindowsAuthenticationValueName, _useWindowsAuthentication.ToString(CultureInfo.InvariantCulture));
+	        }
+	        catch (Exception exception)
+	        {
+		        MessageBox.Show(exception.Message);
+	        }
         }
     }
 }

@@ -105,7 +105,7 @@
 			this.buttonAdvClose.Name = "buttonAdvClose";
 			this.buttonAdvClose.Size = new System.Drawing.Size(87, 23);
 			this.buttonAdvClose.TabIndex = 4;
-			this.buttonAdvClose.Text = "xxClose";
+			this.buttonAdvClose.Text = "xxHide";
 			this.buttonAdvClose.UseVisualStyle = true;
 			this.buttonAdvClose.Click += new System.EventHandler(this.buttonAdvClose_Click);
 			// 

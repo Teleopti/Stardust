@@ -6,7 +6,8 @@
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
-		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
+		<DBNamePrefix>$(CCNetProject)</DBNamePrefix>
+		<AzureDBNamePrefix>Bug26852_$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DBServerSQL2005>$(Computername)\SQL2005</DBServerSQL2005>
@@ -136,13 +137,13 @@
     </Target>
 
 	<Target Name="AzurePreDropDatabase">
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_analytics]&quot;"/>
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
 	<Target Name="AzurePostDropDatabase">
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_analytics]&quot;"/>
-		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_analytics]&quot;"/>
+		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(AzureDBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
 	<Target Name="SetUpConfigFiles">
@@ -166,13 +167,13 @@
 	<Target Name="AzureCreateDatabase" DependsOnTargets="BuildDBManager">
 		<Message Text="Create Azure database ..." Importance="high" />
 
-		<Message Text="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" Importance="high" />
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
+		<Message Text="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" Importance="high" />
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 		
-		<Message Text ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" Importance="high" />
-		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
+		<Message Text ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" Importance="high" />
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(AzureDBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 
@@ -228,7 +229,7 @@
 
 	<Target Name="AzureAnalyticsReportTest" Condition="'$(AzureAnalyticsReportTest)' == 'true'">
 		<Message Importance="high" Text="Check all Analytics report controls and reports are working on Azure"/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(DBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
+		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" CommandTimeout="60" Files="@(AnalyticsReportsTest)" ConnectionString="Data Source=$(AzureServer);Initial Catalog=$(AzureDBNamePrefix)_analytics;User Id=$(AzureDbLogin);Password=$(AzureDbPwd)"/>
 		<Message Importance="high" Text="Analytics report controls. Finished"/>
 	</Target>
 	
@@ -293,32 +294,26 @@
 		<Message Importance="high" Text="Fixing config files..." />	
 
 		<PropertyGroup>
-			<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>		
-			<WEB_BROKER>$(AgentPortalWebURL)</WEB_BROKER>
+			<WEB_BROKER>http://localhost:52858/</WEB_BROKER>
 			<WEB_BROKER_BACKPLANE></WEB_BROKER_BACKPLANE>
-			<SQL_LOGIN>sa</SQL_LOGIN>
-			<SQL_PASSWORD>cadadi</SQL_PASSWORD>
 			<InfraTestIni>$(CCNetWorkingDirectory)\ccnet\InfraTest.ini</InfraTestIni>
-			<!-- <SitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</SitePath> -->
 			<SitePath>$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.Web</SitePath>		
 		</PropertyGroup>		
 
 		<ItemGroup>
 			<!-- MSBuild escape sequence is "% + ASCIIVALUE". e.g [$] = "%24"  -->
 			<InfraTestIniLines Include="[TestDatabase]" />
-			<InfraTestIniLines Include="DB_CCC7=%22$(DBNamePrefix)_ccc7%22" />
 			<InfraTestIniLines Include="SQL_SERVER_NAME=%22$(DBServer)%22" />
-			<InfraTestIniLines Include="SQL_LOGIN=%22$(SQL_LOGIN)%22" />			
-			<InfraTestIniLines Include="SQL_PASSWORD=%22$(SQL_PASSWORD)%22" />
+			<InfraTestIniLines Include="DB_CCC7=%22$(DBNamePrefix)_ccc7%22" />
 			<InfraTestIniLines Include="AGENTPORTALWEB_nhibConfPath=%22bin%22" />
 			<InfraTestIniLines Include="DB_ANALYTICS=%22$(DBNamePrefix)_analytics%22" />
 			<InfraTestIniLines Include="WEB_BROKER=%22$(WEB_BROKER)%22" />
 			<InfraTestIniLines Include="WEB_BROKER_BACKPLANE=%22$(WEB_BROKER_BACKPLANE)%22" />	
 			<InfraTestIniLines Include="SitePath=%22$(SitePath)%22" />
-			<InfraTestIniLines Include="url=%22$(AgentPortalWebURL)%22" />
+			<InfraTestIniLines Include="url=%22$(WEB_BROKER)%22" />
 			<InfraTestIniLines Include="servicebus=%22false%22" />
 			<InfraTestIniLines Include="create=%22true%22" />
-			<InfraTestIniLines Include="IISExpress=%22true%22" />
+			<InfraTestIniLines Include="sqloutput=%22false%22" />
 			<InfraTestIniLines Include="dbFile=%22$(InfraTestIni)%22" />
 		</ItemGroup> 
 		
@@ -336,7 +331,7 @@
 		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Ccc.WebBehaviorTest.App.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config" />
 			
-		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\CruiseControl.config" OverwriteReadOnlyFiles="true"
+		<Copy SourceFiles="$(CCNetWorkingDirectory)\ccnet\Teleopti.Analytics.Etl.IntegrationTest.App.config" OverwriteReadOnlyFiles="true"
 			DestinationFiles="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.config" />
 		
 		<FileUpdate Files="$(CCNetWorkingDirectory)\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\App.config"

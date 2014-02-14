@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyCannotOkIfNoMultiplicatorDefinitionsAreAvailable()
         {
-            _target = new AddOvertimeViewModel(_acticvities, new List<IMultiplicatorDefinitionSet>(), _defaultActivity, new SetupDateTimePeriodToDefaultLocalHours(TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_period.LocalStartDateTime.Add(TimeSpan.FromHours(1)), _period.LocalStartDateTime.Add(TimeSpan.FromHours(2))), null, _timeZoneInfo), TimeSpan.FromMinutes(20));
+            _target = new AddOvertimeViewModel(_acticvities, new List<IMultiplicatorDefinitionSet>(), _defaultActivity, new SetupDateTimePeriodToDefaultPeriod(_period), TimeSpan.FromMinutes(20));
             Assert.IsFalse(_target.CanOk, "Cannot press ok if there arent any multiplicator definitionsets");
         }
 
@@ -87,6 +87,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 Assert.AreEqual(setupDateTimePeriod.Period.EndDateTime,_target.PeriodViewModel.End);
             }
 
+        }
+
+        [Test]
+        public void VerifyThatCorrectDefaultTimeIsPopulated()
+        {
+            var period = new DateTimePeriod(2014, 02, 10, 10, 2014, 02, 10, 11);
+            _target = new AddOvertimeViewModel(_acticvities, new List<IMultiplicatorDefinitionSet>(), _defaultActivity, new SetupDateTimePeriodToDefaultPeriod(period), TimeSpan.FromMinutes(20));
+            Assert.AreEqual(_target.PeriodViewModel.Start,period.StartDateTime  );
+            Assert.AreEqual(_target.PeriodViewModel.End ,period.EndDateTime  );
         }
 
 

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("note", typeof(String));
 			table.Columns.Add("employment_start_date", typeof(DateTime));
 			table.Columns.Add("employment_end_date", typeof(DateTime));
-			table.Columns.Add("time_zone_id", typeof(String));
+			table.Columns.Add("time_zone_id", typeof(int));
 			table.Columns.Add("is_agent", typeof(bool));
 			table.Columns.Add("is_user", typeof(bool));
 			table.Columns.Add("datasource_id", typeof(int));
@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			Guid businessUnitCode,
 			string businessUnitName,
 			int datasourceId,
-			bool toBeDeleted)
+			bool toBeDeleted,
+			int timeZoneId)
 		{
 			var row = dataTable.NewRow();
 
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["valid_to_date_id_local"]= validToDateId;
 			row["valid_from_date_local"]= validFrom;
 			row["valid_to_date_local"]  = validTo;
-
+			row["time_zone_id"] = timeZoneId;
 
 			dataTable.Rows.Add(row);
 		}

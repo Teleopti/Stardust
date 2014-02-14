@@ -130,8 +130,8 @@ namespace Teleopti.Analytics.Etl.Transformer
 			else
 				dataRow["absence_code"] = DBNull.Value;
 
-			var restrictionChecker = new RestrictionChecker(schedulePart);
-			var permissionState = restrictionChecker.CheckPreference();
+			var restrictionChecker = new RestrictionChecker();
+			var permissionState = restrictionChecker.CheckPreference(schedulePart);
 			if (permissionState == PermissionState.Satisfied)
 			{
 				dataRow["preference_fulfilled"] = 1;

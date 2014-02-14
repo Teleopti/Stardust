@@ -94,9 +94,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MbCache.2.4\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.1.4\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    <Reference Include="Microsoft.AspNet.SignalR.Core">
+      <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -160,6 +159,8 @@
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapperTest.cs" />
+    <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactoryTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapperTest.cs" />

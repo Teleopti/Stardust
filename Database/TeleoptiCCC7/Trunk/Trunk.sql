@@ -64,3 +64,26 @@ GO
 if not exists (select 1 from PurgeSetting where [Key] = 'MonthsToKeepRequests')
 	insert into PurgeSetting ([Key], [Value]) values('MonthsToKeepRequests', 120)
 GO
+
+
+--drop old persondayoff tables
+IF OBJECT_ID('[Auditing].[PersonDayOff_AUD]', 'U') IS NOT NULL
+	DROP TABLE [Auditing].[PersonDayOff_AUD]
+GO
+IF OBJECT_ID('[dbo].[PersonDayOff]', 'U') IS NOT NULL
+	DROP TABLE [dbo].[PersonDayOff]
+GO
+
+----------------  
+--Name: David Jonsson
+--Date: 2014-02-10
+--Desc: bug #26903 - make a more simple version of PersenPeriodWithEndDate for RTA
+---------------- 
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonPeriod]') AND name = N'IX_PersonPeriod_Parent_StartDate_Id')
+CREATE NONCLUSTERED INDEX [IX_PersonPeriod_Parent_StartDate_Id] ON [dbo].[PersonPeriod]
+(
+	[Parent] ASC,
+	[StartDate] ASC
+)
+INCLUDE ([Id])
+GO

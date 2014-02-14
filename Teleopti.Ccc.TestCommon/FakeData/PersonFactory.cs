@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -216,8 +217,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                          ApplicationLogOnName = logOnName,
                                          Password = password
                                      };
+			 
             IPerson ret = CreatePerson("created by", "object mother");
             ret.ApplicationAuthenticationInfo = applicationPer;
+			  
+			  ret.PermissionInformation.SetCulture(new CultureInfo("sv-SE"));
             return ret;
         }
 

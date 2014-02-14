@@ -11411,4 +11411,41 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Igår</value>
     <comment>Link in My Report (web)</comment>
   </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Mått</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Tillgänglighet</value>
+    <comment>caption in My Report (web)</comment>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Värde</value>
+    <comment>Caption in My Report (web)</comment>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Igår</value>
+    <comment>Link in My Report (web)</comment>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Chattid</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Du har inte åtkomst till några team.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Jämför med team från</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Redotid / Schemalagd redotid (%)</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Uppgiftstid</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Total uppgiftstid</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Schemat måste laddas om</value>
+  </data>
 </root>

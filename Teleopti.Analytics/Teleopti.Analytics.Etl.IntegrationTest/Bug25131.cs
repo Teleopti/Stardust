@@ -26,9 +26,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWork()
 		{
+			var timeZones = new UtcAndCetTimeZones();
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var dates = new CurrentWeekDates();
-			var datasource = new  ExistingDatasources(new UtcAndCetTimeZones());
+			var datasource = new ExistingDatasources(timeZones);
 			var businessUnit = new BusinessUnit(TestState.BusinessUnit, datasource);
 			var person = TestState.TestDataFactory.Person("Ashley Andeen").Person;
 
@@ -37,10 +38,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			analyticsDataFactory.Setup(businessUnit);
 			analyticsDataFactory.Setup(new Person(person, datasource, 0, new DateTime(2010, 1, 1),
 									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
-									   false));
+									   false, timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Setup(new Person(person, datasource, 1, new DateTime(2011, 1, 1),
 									   new DateTime(2059, 12, 31), 0, -2, 0, TestState.BusinessUnit.Id.GetValueOrDefault(),
-									   true));
+										 true, timeZones.UtcTimeZoneId));
 			analyticsDataFactory.Setup(new StageRequest(Guid.NewGuid(),person.Id.GetValueOrDefault(),DateTime.Now,1,0, 
 											Guid.NewGuid(),TestState.BusinessUnit.Id.GetValueOrDefault(),datasource));
 			analyticsDataFactory.Persist();

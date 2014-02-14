@@ -11,7 +11,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
-	public class QuarterOfAnHourInterval : IAnalyticsDataSetup, IIntervalData
+	public class QuarterOfAnHourInterval : IIntervalData
 	{
 		public IEnumerable<DataRow> Rows { get; set; }
 

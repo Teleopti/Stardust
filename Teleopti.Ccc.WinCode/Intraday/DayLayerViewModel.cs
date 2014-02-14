@@ -74,15 +74,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _rtaStateHolder.SchedulingResultStateHolder.Schedules.PartModified += OnScheduleModified;
         }
 
-	    public void SetCurrentSortDescription(SortDescription sortDescription)
-	    {
-		    if (_customComparer.SortDescriptions.Any(s => s.PropertyName == sortDescription.PropertyName))
-			    sortDescription.Direction = sortDescription.Direction == ListSortDirection.Ascending
-				    ? ListSortDirection.Descending
-				    : ListSortDirection.Ascending;
-		    _customComparer.SortDescriptions = new List<SortDescription> {sortDescription};
-	    }
-
 	    public void OnScheduleModified(object sender, ModifyEventArgs e)
         {
             var model = Models.FirstOrDefault(m => m.Person.Equals(e.ModifiedPerson));

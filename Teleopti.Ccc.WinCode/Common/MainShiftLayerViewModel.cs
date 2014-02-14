@@ -10,19 +10,19 @@ namespace Teleopti.Ccc.WinCode.Common
     {
 	    private readonly IMainShiftLayer _layer;
 	    private readonly IPersonAssignment _assignment;
-	    private readonly IMoveLayerVertical _moveLayer;
+	    private readonly IMoveShiftLayerVertical _moveShiftLayer;
 
 	    public MainShiftLayerViewModel(IVisualLayer layer)
             : base(layer)
         {
         }
 
-        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveLayerVertical moveLayer)
-				: base(observer, layer, assignment, eventAggregator, moveLayer)
+        public MainShiftLayerViewModel(ILayerViewModelObserver observer, IMainShiftLayer layer, IPersonAssignment assignment, IEventAggregator eventAggregator, IMoveShiftLayerVertical moveShiftLayer)
+				: base(observer, layer, assignment, eventAggregator, moveShiftLayer)
         {
 	        _layer = layer;
 	        _assignment = assignment;
-	        _moveLayer = moveLayer;
+	        _moveShiftLayer = moveShiftLayer;
         }
 
 
@@ -48,14 +48,14 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public override bool CanMoveUp
 	    {
-				get { return _moveLayer!=null && _assignment.MainActivities().ToList().IndexOf(_layer) > 0; }
+				get { return _moveShiftLayer!=null && _assignment.MainActivities().ToList().IndexOf(_layer) > 0; }
 	    }
 
 	    public override bool CanMoveDown
 	    {
 		    get
 		    {
-			    return _moveLayer != null && !isLayerLast();
+			    return _moveShiftLayer != null && !isLayerLast();
 		    }
 	    }
 

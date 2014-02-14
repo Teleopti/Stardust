@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast
 
         public void ShowStatusDialog(Guid jobId)
         {
-            var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = jobId });
+            var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = jobId, ProgressMax = 100});
             statusDialog.ShowDialog();
         }
 

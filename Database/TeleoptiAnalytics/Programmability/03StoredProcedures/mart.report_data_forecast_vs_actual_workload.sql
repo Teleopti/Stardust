@@ -78,7 +78,8 @@ CREATE TABLE #result(
 	avg_actual_acw decimal(18,3),
 	hide_time_zone bit,
 	interval_type int,
-	weekday_number int)
+	weekday_number int,
+	[date] smalldatetime)
  
 /*Split string of skill id:s*/
 INSERT INTO #skills
@@ -217,7 +218,8 @@ INSERT INTO #result (period,
 				avg_forecasted_acw,
 				avg_actual_acw,
 				hide_time_zone,
-				interval_type)
+				interval_type,
+				[date])
 SELECT CASE @interval_type 
 		WHEN 1 THEN interval_name
 		WHEN 2 THEN halfhour_name
@@ -252,7 +254,8 @@ SELECT CASE @interval_type
 		convert(decimal(19,2),sum(acw_s)/sum(answered_calls) )
 		END AS 'avg_actual_acw',
 		@hide_time_zone as hide_time_zone,
-		@interval_type
+		@interval_type,
+		min([date]) as [date]
 FROM #pre_result
 GROUP BY
 	CASE @interval_type 

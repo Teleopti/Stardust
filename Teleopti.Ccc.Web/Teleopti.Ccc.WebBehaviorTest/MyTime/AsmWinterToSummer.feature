@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: ASM Winter to Summer
+﻿Feature: ASM Winter to Summer
 	In order to improve adherence
 	As an agent
 	I want to see my current activities

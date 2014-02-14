@@ -178,7 +178,6 @@
 
 html.full-height, html.full-height body, html.full-height form.aspnetform{ height: 100%; }
 
-#page, #page-signin{ margin: 0 auto; text-align: left; }
 #page{padding-top: 17px;}
 html.full-height #page, html.full-height #page-signin{ 
 	 min-height: 100%;

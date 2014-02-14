@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Messaging.Client

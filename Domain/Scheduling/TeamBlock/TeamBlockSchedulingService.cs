@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamBlockSchedulingService
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+								ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
     }
 
     public class TeamBlockSchedulingService : ITeamBlockSchedulingService
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+        public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+									IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
         {
             _teamBlockScheduler.DayScheduled += dayScheduled;
             if (schedulePartModifyAndRollbackService == null) return false;
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
                 runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService,
-                                                       allTeamInfoListOnStartDate, datePointer, dateOnlySkipList);
+                                                       allTeamInfoListOnStartDate, datePointer, dateOnlySkipList, resourceCalculateDelayer);
             }
 
             _teamBlockScheduler.DayScheduled -= dayScheduled;
@@ -62,7 +64,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                     HashSet<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList)
+                                     HashSet<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
+										IResourceCalculateDelayer resourceCalculateDelayer)
         {
             foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
             {
@@ -70,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
-				if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService))
+				if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService, resourceCalculateDelayer))
                     verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer, dateOnlySkipList, teamBlockInfo);
 				else
 				{

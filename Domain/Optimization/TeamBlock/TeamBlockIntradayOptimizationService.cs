@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		              DateOnlyPeriod selectedPeriod,
 		              IList<IPerson> selectedPersons,
 		              IOptimizationPreferences optimizationPreferences,
-		              ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+		              ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+						IResourceCalculateDelayer resourceCalculateDelayer);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							 DateOnlyPeriod selectedPeriod,
 							 IList<IPerson> selectedPersons,
 							 IOptimizationPreferences optimizationPreferences,
-							 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+							 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+							IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData);
 			
@@ -72,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					break;
 				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, selectedPersons, optimizationPreferences,
 														  schedulingOptions, remainingInfoList, 
-				                                          schedulePartModifyAndRollbackService);
+				                                          schedulePartModifyAndRollbackService,
+														  resourceCalculateDelayer);
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					remainingInfoList.Remove(teamBlock);
@@ -96,7 +99,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
 							 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 									  ISchedulingOptions schedulingOptions, IList<ITeamBlockInfo> allTeamBlockInfos,
-										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+										IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 			
@@ -118,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService);
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService, resourceCalculateDelayer);
 				if (!success)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);

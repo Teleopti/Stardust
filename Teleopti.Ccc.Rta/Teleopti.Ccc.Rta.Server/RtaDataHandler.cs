@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -18,27 +19,27 @@ namespace Teleopti.Ccc.Rta.Server
 		private static IActualAgentStateCache _stateCache;
 		
 		private readonly IActualAgentAssembler _agentAssembler;
-		private readonly IMessageSender _messageSender;
+		private readonly IAsyncMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
 
-		public RtaDataHandler(IMessageSender messageSender,
+		public RtaDataHandler(IAsyncMessageSender asyncMessageSender,
 		                      IDataSourceResolver dataSourceResolver,
 		                      IPersonResolver personResolver,
 		                      IActualAgentAssembler agentAssembler,
 		                      IActualAgentStateCache stateCache)
 		{
-			_messageSender = messageSender;
+			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
 			_stateCache = stateCache;
 
-			if (_messageSender == null) return;
+			if (_asyncMessageSender == null) return;
 
 			try
 			{
-				_messageSender.InstantiateBrokerService();
+				_asyncMessageSender.StartBrokerService();
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public bool IsAlive
 		{
-			get { return _messageSender.IsAlive; }
+			get { return _asyncMessageSender.IsAlive; }
 		}
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
@@ -164,7 +165,10 @@ namespace Teleopti.Ccc.Rta.Server
 			try
 			{
 				LoggingSvc.InfoFormat("Adding message to message broker queue AgentState: {0} ", agentState);
-				_messageSender.QueueRtaNotification(agentState.PersonId, agentState.BusinessUnit, agentState);
+
+				var notification = NotificationFactory.CreateNotification(agentState);
+
+				_asyncMessageSender.SendNotificationAsync(notification);
 			}
 			catch (Exception exception)
 			{

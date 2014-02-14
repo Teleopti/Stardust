@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 	public interface ITeamViewModelFactory
 	{
 		IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date);
-		IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date);
+		IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath);
 	}
 }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
 using Teleopti.Interfaces.Domain;
@@ -10,6 +8,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
 	public static class BasicShiftSetup
 	{
+
 		public static void SetupBasicForShifts()
 		{
 			Site = new SiteConfigurable { BusinessUnit = TestState.BusinessUnit.Name, Name = "Västerhaninge" };
@@ -17,6 +16,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Contract = new ContractConfigurable { Name = "Kontrakt" };
 			ContractSchedule = new ContractScheduleConfigurable { Name = "Kontraktsschema" };
 			PartTimePercentage = new PartTimePercentageConfigurable { Name = "ppp" };
+
 			Scenario = new ScenarioConfigurable
 			{
 				EnableReporting = true,
@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Apply(Scenario);
 		}
 
-		public static void AddPerson(out IPerson person, string name)
+		public static void AddPerson(out IPerson person, string name, string externalLogon)
 		{
 			person = TestState.TestDataFactory.Person(name).Person;
 			var pp = new PersonPeriodConfigurable
@@ -42,7 +42,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				ContractSchedule = ContractSchedule.ContractSchedule.Description.Name,
 				PartTimePercentage = PartTimePercentage.Name,
 				Team = Team.Name,
-				StartDate = DateTime.Today.AddDays(-6)
+				StartDate = DateTime.Today.AddDays(-6),
+                ExternalLogon = externalLogon
 			};
 			Data.Person(name).Apply(pp);
 			Data.Person(name).Apply(new StockholmTimeZone());
@@ -50,22 +51,47 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 
 		public static void AddThreeShifts(string onPerson)
 		{
-			var cat = new ShiftCategoryConfigurable { Name = "Kattegat" };
-			var act = new ActivityConfigurable { Name = "Phone" };
-			var act2 = new ActivityConfigurable { Name = "Lunch" };
+			AddShift(onPerson, DateTime.Today.AddDays(-1), 9, 8);
+			AddShift(onPerson, DateTime.Today.AddDays(0), 9, 8);
+			AddShift(onPerson, DateTime.Today.AddDays(1), 9, 8);
+		}
+
+		public static void AddShift(string onPerson, DateTime dayLocal, int startHour, int lenghtHour)
+		{
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var act = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var act2 = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
 			Data.Apply(cat);
 			Data.Apply(act);
 			Data.Apply(act2);
 
-			var shift = new ShiftForDate(DateTime.Today.AddDays(-1), 9, Scenario.Scenario, cat.ShiftCategory, act.Activity,
-										 act2.Activity);
-			var shift2 = new ShiftForDate(DateTime.Today, 9, Scenario.Scenario, cat.ShiftCategory, act.Activity, act2.Activity);
-			var shift3 = new ShiftForDate(DateTime.Today.AddDays(1), 9, Scenario.Scenario, cat.ShiftCategory, act.Activity,
-										  act2.Activity);
+			var shift = new ShiftForDate(dayLocal, TimeSpan.FromHours(startHour), TimeSpan.FromHours(startHour+lenghtHour), Scenario.Scenario, cat.ShiftCategory, act.Activity,
+							 act2.Activity);
 
 			Data.Person(onPerson).Apply(shift);
-			Data.Person(onPerson).Apply(shift2);
-			Data.Person(onPerson).Apply(shift3);
+
+			var readModel = new ScheduleDayReadModel
+			{
+				PersonId = Data.Person(onPerson).Person.Id.GetValueOrDefault(),
+				ColorCode = 0,
+				ContractTimeTicks = 500,
+				Date = dayLocal,
+				StartDateTime = dayLocal.AddHours(startHour),
+				EndDateTime = dayLocal.AddHours(startHour + lenghtHour),
+				Label = "LABEL",
+				NotScheduled = false,
+				Workday = true,
+				WorkTimeTicks = 600
+			};
+			var readM = new ScheduleDayReadModelSetup { Model = readModel };
+			Data.Apply(readM);
+		}
+
+
+		public static void AddOverlapping(string onPerson)
+		{
+			AddShift(onPerson, DateTime.Today.AddDays(-1), 21, 11);
+			AddShift(onPerson, DateTime.Today.AddDays(0), 6, 8);
 		}
 
 		public static SiteConfigurable Site { get; set; }
@@ -74,6 +100,5 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 		public static ContractScheduleConfigurable ContractSchedule { get; set; }
 		public static PartTimePercentageConfigurable PartTimePercentage { get; set; }
 		public static ScenarioConfigurable Scenario { get; set; }
-		
 	}
 }

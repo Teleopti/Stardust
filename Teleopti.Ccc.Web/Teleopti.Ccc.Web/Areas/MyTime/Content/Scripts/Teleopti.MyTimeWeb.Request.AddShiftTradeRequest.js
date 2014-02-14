@@ -47,6 +47,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.myTeamFilter = ko.observable(false);
 		self.timeLineStartTime = ko.observable();
 	    self.timeLineLengthInMinutes = ko.observable();
+		self.DatePickerFormat = ko.observable();
+		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
+		self.DatePickerFormat(datePickerFormat);
+		self.DatePickerFormat = ko.observable();
+		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
+		self.DatePickerFormat(datePickerFormat);
 	    self.IsLastPage = false;
 	    self.availableTeams = ko.observableArray();
 	    self.selectedTeamInternal = ko.observable();
@@ -132,7 +138,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
         self.requestedDate = ko.computed({
-            read: function() {
+        	read: function () {
                 return self.requestedDateInternal();
             },
             write: function (value) {
@@ -187,7 +193,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
-                    selectedDate: self.requestedDateInternal().toDate().toJSON()
+                	selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase())
                 },
                 beforeSend: function () {
                     //self.IsLoading(true);
@@ -218,12 +224,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
             var teamToSelect = self.selectedTeamInternal() ? self.selectedTeamInternal() : self.myTeamId();
 
             ajax.Ajax({
-                url: "Team/Teams",
+            	url: "Team/TeamsForShiftTrade",
                 dataType: "json",
                 type: 'GET',
                 contentType: 'application/json; charset=utf-8',
                 data: {
-                    date: self.requestedDateInternal().toDate().toJSON()
+                	date: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase())
                 },
                 beforeSend: function () {
                     //self.IsLoading(true);
@@ -249,22 +255,24 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				dataType: "json",
 				type: 'GET',
 				success: function (data, textStatus, jqXHR) {
+					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
 					if (data.HasWorkflowControlSet) {
 					    self.now = moment(new Date(data.NowYear, data.NowMonth-1, data.NowDay));
 						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
-						self.requestedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
 						if (date && Object.prototype.toString.call(date) === '[object Date]') {
 							var md = moment(date);
 							if (self.isRequestedDateValid(md)) {
 								self.requestedDate(md);
+								return;
 							}
 						}
+						self.requestedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
 					}
 					else {
 					    self.setScheduleLoadedReady();
 					    self.isReadyLoaded(true);
 					}
-					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
+					
 				}
 			});
 		};

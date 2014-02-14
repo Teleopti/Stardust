@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
                 dateTimePickerAdv.Calendar) as YearNumericUpDown;
             if (yearNumericUpDown != null)
             {
-                yearNumericUpDown.Minimum = dateTimePickerAdv.CurrentCalendar.GetYear(dateTimePair.StartDate.Date);
-                yearNumericUpDown.Maximum = dateTimePickerAdv.CurrentCalendar.GetYear(dateTimePair.EndDate.Date);
+					yearNumericUpDown.Minimum = System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetYear(dateTimePair.StartDate.Date);
+					yearNumericUpDown.Maximum = System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetYear(dateTimePair.EndDate.Date);
             }
         }
 
@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
                 monthCalendarAdv) as YearNumericUpDown;
             if (yearNumericUpDown != null)
             {
-                yearNumericUpDown.Minimum = monthCalendarAdv.CurrentCalendar.GetYear(dateTimePair.StartDate.Date);
-                yearNumericUpDown.Maximum = monthCalendarAdv.CurrentCalendar.GetYear(dateTimePair.EndDate.Date);
+					yearNumericUpDown.Minimum = System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetYear(dateTimePair.StartDate.Date);
+					yearNumericUpDown.Maximum = System.Threading.Thread.CurrentThread.CurrentCulture.Calendar.GetYear(dateTimePair.EndDate.Date);
             }
         }
 

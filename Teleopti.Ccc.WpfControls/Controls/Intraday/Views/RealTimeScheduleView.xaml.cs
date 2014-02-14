@@ -184,24 +184,6 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 			e.Handled = true;
 		}
 
-		private void RealTimeDataGrid_OnSorting(object sender, DataGridSortingEventArgs e)
-		{
-			var column = e.Column;
-			ListSortDirection sortDirection;
-			if (column.SortDirection.HasValue)
-				sortDirection = column.SortDirection == ListSortDirection.Ascending
-									 ? ListSortDirection.Descending
-									 : ListSortDirection.Ascending;
-			else
-				sortDirection = ListSortDirection.Ascending;
-
-			var sortDescription = new SortDescription(column.SortMemberPath, sortDirection);
-			column.SortDirection = sortDirection;
-			Model.SetSortDescription(sortDescription);
-			e.Handled = true;
-		}
-
-
 		private void ContextMenu_OnClick(object sender, RoutedEventArgs e)
 		{
 			var selectedRow = RealTimeDataGrid.SelectedIndex;
@@ -244,4 +226,5 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 				e.Content = "";
 		}
 	}
+
 }

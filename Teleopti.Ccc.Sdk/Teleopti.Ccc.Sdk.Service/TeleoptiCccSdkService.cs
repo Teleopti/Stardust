@@ -897,9 +897,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				IRepositoryFactory repositoryFactory = new RepositoryFactory();
-				adherenceReportSetting = repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey("AdherenceReportSetting", new AdherenceReportSetting());
+				adherenceReportSetting = repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
 			}
-			return AdherenceReportSetting.MapToMatrix(adherenceReportSetting.CalculationMethod);
+			return adherenceReportSetting.AdherenceIdForReport();
 		}
 
 		[SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.String)")]

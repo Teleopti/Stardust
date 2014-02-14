@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			               	};
 			var message = new RecalculateForecastOnSkillMessageCollection();
 			Expect.Call(_busSender.EnsureBus()).Return(true);
-			Expect.Call(() =>_busSender.Publish(message)).IgnoreArguments();
+			Expect.Call(() =>_busSender.PublishWithoutInitiatorInfo(message)).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.Handle(commands);
 			_mocks.VerifyAll();

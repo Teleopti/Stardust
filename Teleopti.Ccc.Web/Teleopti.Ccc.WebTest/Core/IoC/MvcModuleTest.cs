@@ -20,6 +20,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -28,6 +29,8 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
@@ -583,6 +586,27 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldResolveGroupController()
 		{
 			requestContainer.Resolve<GroupPageController>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveMyReportViewModelFactory()
+		{
+			requestContainer.Resolve<IMyReportViewModelFactory>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveMyReportDailyMetricsMapper()
+		{
+			requestContainer.Resolve<IDailyMetricsMapper>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveMyReportDailyMetricsForDayQuery()
+		{
+			requestContainer.Resolve<IDailyMetricsForDayQuery>()
 				.Should().Not.Be.Null();
 		}
 	}

@@ -241,12 +241,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			rtaStateHolder.Expect(r => r.ActualAgentStates.TryGetValue(guid, out actualAgentState)).Return(false);
 			target.InitializeRows();
 		}
-
-		[Test]
-		public void ShouldSetSortDirection()
-		{
-			target.SetCurrentSortDescription(new SortDescription("propertyName", ListSortDirection.Ascending));
-		}
     }
 
     public class TestDispatcher : IDispatcherWrapper

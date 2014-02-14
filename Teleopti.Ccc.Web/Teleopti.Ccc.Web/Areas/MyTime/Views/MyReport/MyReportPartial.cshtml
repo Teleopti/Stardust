@@ -1,4 +1,67 @@
-﻿@{
+﻿@using Teleopti.Ccc.UserTexts
+@{
 	Layout = null;
 }
-<h2>MyReportPartial</h2>
+<input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat"/>
+<div class="myreport-daily-metrics">
+	<div class="navbar ">
+		<div class="navbar-inner">
+			<form class="navbar-form pull-left">
+				<div class="input-append input-prepend">
+					<button id="report-view-date-nav-prev" class="btn" data-bind="click: previousDay"><i class="icon-arrow-left"></i></button>
+					<input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="text" class="span3 text-center" readonly="readonly" />
+					<button class="btn moment-datepicker"><i class="icon-th"></i></button>
+					<button id="report-view-date-nav-next" class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<div class="container">
+		<div data-bind="ifnot: dataAvailable">
+			<div id="friendly-message" class="alert-block alert alert-myreport">
+				@Resources.NoDataAvailable
+			</div>
+		</div>
+		<div class="row">
+			<div data-bind="if: dataAvailable" class="span6">
+			<table class="table table-striped table-bordered">
+				<thead>
+					<tr>
+						<th>@Resources.Metric</th>
+						<th class="right-align-cell">@Resources.Value</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td class="adherenceValue">@Resources.KpiAdherence</td>
+						<td class="right-align-cell" data-bind="text: adherence"></td>
+					</tr>
+					<tr>
+						<td class="readyTimePerScheduledReadyTimeValue" >@Resources.ReadyTimePerScheduledReadyTimePercent</td>
+						<td class="right-align-cell" data-bind="text: readyTimePerScheduledReadyTime"></td>
+					</tr>
+					<tr>
+						<td class="handlingTimeValue">@Resources.KpiAverageHandleTime</td>
+						<td class="right-align-cell" data-bind="text: averageHandlingTime"></td>
+					</tr>
+					<tr>
+						<td class="talkTimeValue">@Resources.KpiAverageTalkTime</td>
+						<td class="right-align-cell" data-bind="text: averageTalkTime"></td>
+					</tr>
+					<tr>
+						<td class="afterWorkValue">@Resources.KpiAverageAfterCallWork</td>
+						<td class="right-align-cell" data-bind="text: averageAfterCallWork"></td>
+					</tr>
+					<tr>
+						<td class="answeredCallsValue">@Resources.AnsweredCalls</td>
+						<td class="right-align-cell" data-bind="text: answeredCalls"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div data-bind="if: dataAvailable" class="span6"></div>
+		</div>
+		
+	</div>
+</div>

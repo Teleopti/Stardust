@@ -225,16 +225,30 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			Session.Evict(root);
 		}
 
-		public int? DatabaseVersion(IAggregateRoot root)
+		public int? DatabaseVersion(IAggregateRoot root, bool usePessimisticLock=false)
 		{
 			if (!root.Id.HasValue)
 				throwIncorrectDbVersionParameter(root);
+			int result;
+			
 			var proxy = root as INHibernateProxy;
 			var type = proxy == null ? root.GetType() : proxy.HibernateLazyInitializer.PersistentClass;
-			var result = Session.CreateCriteria(type)
-				.Add(Restrictions.Eq("Id", root.Id))
-				.SetProjection(Projections.Property("Version"))
-				.UniqueResult<int>();
+			if (usePessimisticLock)
+			{
+				// use hql query here when SetLockMode works on non entities. Seems to be a problem currently
+				//possible sql injection here but that's pretty långsökt so never mind...
+				var sql = "select Version from " + type.Name + " with(updlock, holdlock) where Id =:id";
+				result = Session.CreateSQLQuery(sql)
+					.SetGuid("id", root.Id.Value)
+					.UniqueResult<int>();
+			}
+			else
+			{
+				result = Session.CreateCriteria(type)
+					.Add(Restrictions.Eq("Id", root.Id))
+					.SetProjection(Projections.Property("Version"))
+					.UniqueResult<int>();				
+			}
 			if (result == 0)
 				return null;
 			return result;

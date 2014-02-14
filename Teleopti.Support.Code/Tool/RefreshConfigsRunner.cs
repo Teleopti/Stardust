@@ -26,6 +26,8 @@ namespace Teleopti.Support.Code.Tool
                 file = "DeployConfigFiles.txt";
             if (mode.ToUpper(CultureInfo.InvariantCulture).Equals("TEST"))
                 file = "BuildServerConfigFiles.txt";
+            if (mode.ToUpper(CultureInfo.InvariantCulture).Equals("AZURE"))
+                file = "AzureConfigFiles.txt";
             
             var settings = _manager.GetReplaceList();
             

@@ -39,23 +39,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             _activeScheduleRange = stateHolder.Schedules[_person];
             createScheduleDays(periodCreator);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ScheduleMatrixPro"/> class.
-        /// Use this constructor when working with cloned ScheduleRanges, as in BusinessRule validators.
-        /// </summary>
-        /// <param name="stateHolder">The state holder.</param>
-        /// <param name="periodCreator">The period creator.</param>
-        /// <param name="schedulePeriod">The schedule period.</param>
-        /// <param name="alternativeScheduleRange">The alternative schedule range.</param>
-        public ScheduleMatrixPro(ISchedulingResultStateHolder stateHolder,
-            IFullWeekOuterWeekPeriodCreator periodCreator, 
-            IVirtualSchedulePeriod schedulePeriod,
-            IScheduleRange alternativeScheduleRange): this(stateHolder, periodCreator, schedulePeriod)
-        {
-            _activeScheduleRange = alternativeScheduleRange;
-        }
-
         #endregion
 
         #region Interface

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -39,29 +40,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldReturnTeamOptionsAsJson()
-		{
-			var teams = new[] { new SelectGroup() };
-			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
-			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today)).Return(teams);
-
-			var target = new TeamController(viewModelFactory);
-
-			var result = target.Teams(DateOnly.Today);
-
-			var data = result.Data as IEnumerable<SelectGroup>;
-			data.Should().Have.SameValuesAs(teams);
-		}
-
-		[Test]
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
 			var target = new TeamController(viewModelFactory);
 
-			target.Teams(null);
+			target.TeamsForShiftTrade(null);
 
-			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(DateOnly.Today));
+			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb));
+		}
+
+		[Test]
+		public void ShouldReturnTeamOptionsAsJsonForShiftTrade()
+		{
+			var teams = new[] { new SelectGroup() };
+			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
+			viewModelFactory.Stub(
+				x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
+			                .Return(teams);
+
+			var target = new TeamController(viewModelFactory);
+
+			var result = target.TeamsForShiftTrade(DateOnly.Today);
+
+			var data = result.Data as IEnumerable<SelectGroup>;
+			data.Should().Have.SameValuesAs(teams);
 		}
 	}
 }

@@ -20,17 +20,37 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 	public class TeamViewModelFactoryTest
 	{
 		[Test]
-		public void ShouldCreateTeamOptionsViewModel()
+		public void ShouldCreateTeamOptionsViewModelForTeamSchedule()
 		{
 			var teams = new[] { new Team() };
 			teams[0].SetId(Guid.NewGuid());
 			teams[0].Description = new Description("team");
 			teams[0].Site = new Site("site");
 			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
+
 			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(teams);
+
 			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator());
 
-			var result = target.CreateTeamOptionsViewModel(DateOnly.Today);
+			var result = target.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+
+			result.Select(t => t.text).Should().Have.SameSequenceAs("site/team");
+		}
+
+		[Test]
+		public void ShouldCreateTeamOptionsViewModelForShiftTrade()
+		{
+			var teams = new[] { new Team() };
+			teams[0].SetId(Guid.NewGuid());
+			teams[0].Description = new Description("team");
+			teams[0].Site = new Site("site");
+			var teamProvider = MockRepository.GenerateMock<ITeamProvider>();
+
+			teamProvider.Stub(x => x.GetPermittedTeams(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(teams);
+
+			var target = new TeamViewModelFactory(teamProvider, MockRepository.GenerateMock<IPermissionProvider>(), null, new UserTextTranslator());
+
+			var result = target.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 
 			result.Select(t => t.text).Should().Have.SameSequenceAs("site/team");
 		}

@@ -50,9 +50,11 @@ BEGIN
 	TRUNCATE TABLE mart.fact_request
 	TRUNCATE TABLE mart.fact_requested_days
 	TRUNCATE TABLE mart.fact_quality
-	
+	TRUNCATE TABLE mart.fact_agent_state
+	TRUNCATE TABLE mart.fact_agent_skill
 	
 	-- Delete data from dim tables
+	DELETE FROM mart.dim_state_group
 	DELETE FROM mart.dim_day_off
 	DELETE FROM mart.dim_shift_length
 	DELETE FROM mart.dim_shift_category
