@@ -16,6 +16,7 @@ GO
 --	2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- 2013-07-10 backed out of #23621
 -- 2013-07-10 Fix #24119, same as #23621
+-- 2014-02-14 Fix #26978 Incorrect handling/paid time when duplicate acd logins
 -- Description:	<IMPROVE report>
 -- =============================================
 -- Todo: remove scenario from input??
@@ -236,11 +237,9 @@ SELECT fs.schedule_date_id,
 		fs.scheduled_contract_time_m,
 		fs.scheduled_paid_time_m
 FROM mart.fact_schedule fs
-INNER JOIN #person_acd_subSP a
-	ON fs.person_id = a.person_id
 WHERE fs.schedule_date_id between @date_from_id and @date_to_id	
 AND fs.scenario_id=@scenario_id
-
+AND fs.person_id in (SELECT DISTINCT person_id from #person_acd_subSP)
 
 --This SP will insert Adherence data into table: #pre_result_subSP
 EXEC [mart].[report_data_schedule_result_subSP]
