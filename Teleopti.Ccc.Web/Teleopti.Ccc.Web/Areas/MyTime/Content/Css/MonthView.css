@@ -113,7 +113,11 @@ span[data-cal-date] {
 .cal-day-outmonth {
     opacity: 0.3;
 }
-.not-working-day {
+
+.absence-day {
+	background-image: url(../Images/stripe.png);
+}
+.absence-day.day-off-day {
     background-color: beige;
     background-image: url(../Images/stripe.png);
 }

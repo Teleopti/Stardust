@@ -183,5 +183,41 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
             
 			result.ScheduleDays.Single().Absence.ShortName.Should().Be.EqualTo("IL");
         }
+
+		[Test]
+		public void ShouldMapIsDayOff()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.DayOff, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.IsDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapIsNotDayOffForWorkingDay()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.IsDayOff.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapIsDayOffForContractDayOff()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.ContractDayOff, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.IsDayOff.Should().Be.True();
+		}
 	}
 }
