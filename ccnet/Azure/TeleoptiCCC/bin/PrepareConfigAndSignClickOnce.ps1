@@ -165,6 +165,7 @@ Try
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
 
     #Set static config for all other params
+    Add-Content "$fullPath" ""
     Add-Content "$fullPath" "`$(SDK_CRED_PROT)|None"
     Add-Content "$fullPath" "`$(MATRIX_WEB_SITE_URL)|https://$DataSourceName.teleopticloud.com/Analytics"
     Add-Content "$fullPath" "`$(SDK_SSL_SECURITY_MODE)|Transport"

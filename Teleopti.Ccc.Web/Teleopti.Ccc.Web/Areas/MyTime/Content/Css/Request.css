@@ -180,6 +180,11 @@
 	position: absolute;
 	left: 166px; /* 150 + 8 + 8 , padding in first column*/
 }
+.rtl .shift-trade-timeline
+{
+	left: 0;
+	right: 166px;
+}
 
 .shift-trade-timeline-line 
 {
@@ -205,6 +210,11 @@
 	white-space: nowrap;
 	border: 1px solid rgba(0, 0, 0, 0.15);
 	background: white;
+}
+.rtl .shift-trade-timeline-number {
+	float: right;
+	padding-left: 3px;
+	padding-right: 2px;
 }
 .shift-trade-add-datepicker
 {
@@ -274,7 +284,7 @@
 
 .shift-trade-swap-detail-schedule-row {
 	height: 22px;
-	position: relative;
+	position: absolute;
 }
 
 .shift-trade-swap-detail-timeline 
@@ -306,6 +316,11 @@
 	height: 100%;
 	float: left;
 	border-left: 1px solid rgb(216, 216, 216);
+}
+.rtl .shift-trade-swap-detail-timeline-line {
+	float: right;
+	border-left: none;
+	border-right: 1px solid rgb(216, 216, 216);
 }
 
 .shift-trade-add-schedule .shift-trade-timeline,

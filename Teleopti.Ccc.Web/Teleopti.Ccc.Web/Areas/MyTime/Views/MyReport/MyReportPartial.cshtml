@@ -10,8 +10,8 @@
 			<div class="input-group">
                 <span class="input-group-btn">
                     <button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay">
-                        <i class="glyphicon glyphicon-arrow-left"></i>
-                    </button>
+					<input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="text" class="span3 text-center" readonly="readonly" />
+					<button class="btn moment-datepicker"><i class="icon-th"></i></button>
                 </span>
 				<input id="report-view-date-nav-current" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat(), weekStart: weekStart() }" type="text" class="col-xs-3 form-control text-center" readonly="readonly" />
                 <span class="input-group-btn">
