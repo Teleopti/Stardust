@@ -170,10 +170,10 @@
 	text-align: left;
 }
 .select2-container .select2-choice {
-	height: 20px;
+	height: 25px;
 }
 .select2-container .select2-choice span {
-	line-height: 20px;
+	line-height: 25px;
 }
 .select2-container .select2-choice div b {
 	background: url('../../../../Content/select2/select2.png') no-repeat 0 -2px;
