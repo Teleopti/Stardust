@@ -537,7 +537,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						return;
 
 					var periodOffsetCalculator = new PeriodOffsetCalculator();
-					var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, source.Period);
+					var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAssignment.Period);
 
 					var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
 					workingCopyOfAssignment.Clear();
