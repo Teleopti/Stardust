@@ -19,9 +19,10 @@ Given there is a role with
 	| Field | Value  |
 	| Name  | DayOff |
 	And there is an absence with
-	| Field | Value    |
-	| Name  | Illness  |
-	| Color | Red      |
+	| Field      | Value   |
+	| Name       | Illness |
+	| Short name | IL      |
+	| Color      | Red     |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
@@ -88,10 +89,10 @@ Scenario: View when you have full day absence
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
 	And I have an absence with
-	| Field		| Value            |
-	| Name      | Illness          |
-	| StartTime | 2014-01-07 00:00 |
-	| EndTime   | 2014-01-07 23:59 |
+	| Field      | Value            |
+	| Name       | Illness          |
+	| Start time | 2014-01-07 00:00 |
+	| End time   | 2014-01-07 23:59 |
 When I view my month schedule for date '2014-01-07'
 Then I should see the absence with 
     | Field		| Value            |

@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
     public class AbsenceViewModel
     {
         public string Name { get; set; }
+        public string ShortName { get; set; }
     }
 }

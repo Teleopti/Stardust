@@ -64,7 +64,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
                 ;
             CreateMap<IPersonAbsence, AbsenceViewModel>()
                 .ForMember(d => d.Name, c => c.ResolveUsing(
-                    s => s.Layer.Payload.Description.Name));
+                    s => s.Layer.Payload.Description.Name))
+                .ForMember(d => d.ShortName, c => c.ResolveUsing(
+                    s => s.Layer.Payload.Description.ShortName));
         }
     }
 }

@@ -166,9 +166,22 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
                 new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence(){Description = new Description("Illness")}, new DateTimePeriod()) );
             var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
 
-            var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { new MonthScheduleDayDomainData() { ScheduleDay=scheduleDay }}, CurrentDate = DateOnly.Today };
+            var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay=scheduleDay }}, CurrentDate = DateOnly.Today };
             var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
             result.ScheduleDays.Single().Absence.Name.Should().Be.EqualTo("Illness");
+        }
+
+        [Test]
+        public void ShouldMapAbsenceShortName()
+        {
+            var stubs = new StubFactory();
+            var personAbsence =
+                new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence() { Description = new Description(" ", "IL") }, new DateTimePeriod()));
+            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
+
+            var monthDomainData = new MonthScheduleDomainData { Days = new [] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
+            var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+            result.ScheduleDays.Single().Absence.ShortName.Should().Be.EqualTo("IL");
         }
 	}
 }
