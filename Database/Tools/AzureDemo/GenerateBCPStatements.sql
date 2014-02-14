@@ -159,8 +159,9 @@ INSERT INTO #BCPIn
 SELECT ' '
 
 INSERT INTO #BCPIn
-SELECT 'bcp [' + t.SchemaName + '].[' + t.TableName + '] in "' + @Path +'\BCPData\' + t.SchemaName + '.' +  
+SELECT 'bcp ' + t.SchemaName + '.' + t.TableName + ' in "' + @Path +'\BCPData\' + t.SchemaName + '.' +  
 t.TableName + '.dat" -E -N -b 10000 -S ' + @DestServer + ' -U ' + @DestUser + ' -P ' + @DestPwd + ' -d ' + @DestDB +  
+' -q' +
 ' -o "' + @Path +'\Logs\' + t.SchemaName + '.' + t.TableName + '.log"' + CHAR(13) + CHAR(10) + 'IF %errorlevel% EQU 0 Del "' + @Path +'\Logs\' + t.SchemaName + '.' +  t.TableName + '.log"'
 FROM #TableList t
 order by t.SchemaName,t.[Level],t.TableName;
