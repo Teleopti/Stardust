@@ -150,21 +150,7 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		public void ShouldLogAndIgnoreOnExceptionInvokingProxy()
-		{
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			var log = MockRepository.GenerateMock<ILog>();
-			var target = makeSignalSender(hubProxy, log);
-
-			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Throw(new InvalidOperationException());
-
-			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
-			target.ProcessTheQueue();
-			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
-		}
-
-		[Test]
-		public void ShouldLogAndIgnoreOnExceptionSendingNotification()
+		public void SendNotification_WhenExceptionOccursInTask_ShouldLogToDebug()
 		{
 			var failedTask = makeFailedTask(new Exception());
 			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
@@ -177,7 +163,7 @@ namespace Teleopti.MessagingTest.SignalR
 			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
 			var loggingTask = target.ProcessTheQueue();
 			loggingTask.Wait(500);
-			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
+			log.AssertWasCalled(t => t.Debug("", null), a => a.IgnoreArguments());
 		}
 
 		[Test]

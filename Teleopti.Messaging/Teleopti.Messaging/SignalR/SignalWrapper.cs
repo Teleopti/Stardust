@@ -168,21 +168,15 @@ namespace Teleopti.Messaging.SignalR
 
 		private Task notify(string methodName, params object[] notifications)
 		{
-			try
+			if (_hubConnection.State == ConnectionState.Connected)
 			{
-				if (_hubConnection.State == ConnectionState.Connected)
-				{
-					var task = _hubProxy.Invoke(methodName, notifications);
-					return task.ContinueWith(t =>
-						{
-							if (t.IsFaulted && t.Exception != null)
-								Logger.Error("An error happened on notification task", t.Exception);
-						}, TaskContinuationOptions.OnlyOnFaulted);
-				}
-			}
-			catch (InvalidOperationException exception)
-			{
-				Logger.Error("An error happened when notifying multiple.", exception);
+				var task = _hubProxy.Invoke(methodName, notifications);
+
+				return task.ContinueWith(t =>
+					{
+						if (t.IsFaulted && t.Exception != null)
+							Logger.Debug("An error happened on notification task", t.Exception);
+					}, TaskContinuationOptions.OnlyOnFaulted);
 			}
 			return emptyTask;
 		}
