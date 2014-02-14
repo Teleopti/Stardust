@@ -57,6 +57,7 @@ declare @interval_length_minutes int
 SET @date_min='1900-01-01'
 
 CREATE TABLE #fact_schedule_deviation(
+	shift_startdate_local_id int,
 	date_id int,
 	shift_startdate_id int ,
 	interval_id smallint,
@@ -72,6 +73,7 @@ CREATE TABLE #fact_schedule_deviation(
 )
 
 CREATE TABLE #fact_schedule (
+	[shift_startdate_local_id] [int] NOT NULL,
 	[schedule_date_id] [int] NOT NULL,
 	[shift_startdate_id] [int] NOT NULL,
 	[shift_startinterval_id] smallint, 
@@ -86,6 +88,7 @@ CREATE TABLE #fact_schedule (
 
 CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
 (
+	[shift_startdate_local_id] ASC,
 	[schedule_date_id] ASC,
 	[interval_id] ASC
 )
@@ -137,6 +140,7 @@ if (@isIntraday=0)
 BEGIN
 	INSERT INTO #fact_schedule
 	SELECT
+		 fs.shift_startdate_local_id,
 		 fs.schedule_date_id, 
 		 fs.shift_startdate_id,
 		 fs.shift_startinterval_id,
@@ -153,6 +157,7 @@ BEGIN
 		AND fs.business_unit_id = @business_unit_id
 		AND fs.scenario_id = @scenario_id
 	GROUP BY 
+		fs.shift_startdate_local_id,
 		fs.schedule_date_id, 
 		fs.shift_startdate_id,
 		fs.shift_startinterval_id,
@@ -207,7 +212,6 @@ END
 
 if (@isIntraday=1)
 BEGIN
-
 	INSERT INTO #stg_schedule_changed
 	select DISTINCT
 		f.person_id,
@@ -233,6 +237,7 @@ BEGIN
 			)
 	where ch.scenario_code = @scenario_code
 
+	
 	--if in Intraday-mode, we have get the dates based on Agent stat job which is of no use.
 	--Instead use min/max date from changed table
 	SELECT
@@ -242,6 +247,7 @@ BEGIN
 
 	INSERT INTO #fact_schedule
 	SELECT
+		 fs.shift_startdate_local_id,
 		 fs.schedule_date_id, 
 		 fs.shift_startdate_id,
 		 fs.shift_startinterval_id,
@@ -259,6 +265,7 @@ BEGIN
 	WHERE fs.business_unit_id = @business_unit_id
 	AND fs.scenario_id = @scenario_id
 	GROUP BY 
+		fs.shift_startdate_local_id,
 		fs.schedule_date_id, 
 		fs.shift_startdate_id,
 		fs.shift_startinterval_id,
@@ -321,6 +328,7 @@ WHERE DATEPART(HOUR,shift_endtime)=0 AND DATEPART(MINUTE,shift_endtime)=0
 /* b) Gather agent schedule time */
 INSERT INTO #fact_schedule_deviation
 	(
+	shift_startdate_local_id,
 	date_id, 
 	shift_startdate_id,
 	shift_startinterval_id,
@@ -333,6 +341,7 @@ INSERT INTO #fact_schedule_deviation
 	business_unit_id
 	)
 SELECT
+	shift_startdate_local_id =fs.shift_startdate_local_id,
 	date_id					= fs.schedule_date_id, 
 	shift_startdate_id		= fs.shift_startdate_id,
 	shift_startinterval_id	= fs.shift_startinterval_id,
@@ -346,7 +355,7 @@ SELECT
 FROM 
 	#fact_schedule fs
 INNER JOIN 
-	mart.DimPersonAdapted() p
+	mart.DimPersonAdapted() p  ---Keep?
 ON
 	p.person_id = fs.person_id
 	AND
@@ -363,6 +372,7 @@ ON
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.business_unit_id = @business_unit_id
+
 
 
 /*#26421 Update schedule data with acd_login_id to handle nights shifts and person_period change*/
@@ -395,9 +405,18 @@ INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
 WHERE shifts.shift_startdate_id IS NOT NULL
 
+--UPDATE ALL SHIFT ROWS WITH STATISTICS TO BE ABLE TO HANDLE OVERLAPPING SHIFTS
+UPDATE shifts
+SET ready_time_s=stat.ready_time_s,is_logged_in=stat.is_logged_in
+FROM #fact_schedule_deviation stat
+INNER JOIN #fact_schedule_deviation shifts
+ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
+WHERE shifts.shift_startdate_local_id IS NOT NULL 
+AND stat.shift_startdate_local_id IS NULL
+
 --ALL ROWS BEFORE SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
-SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
+SET shift_startdate_local_id=shifts.shift_startdate_local_id,shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shifts.shift_startinterval_id
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
@@ -410,7 +429,7 @@ AND stat.interval_id <= shifts.interval_id
 
 --ALL ROWS AFTER SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
-SET shift_startdate_id = shifts.shift_startdate_id,shift_startinterval_id=shifts.shift_startinterval_id
+SET shift_startdate_local_id=shifts.shift_startdate_local_id,shift_startdate_id = shifts.shift_startdate_id,shift_startinterval_id=shifts.shift_startinterval_id
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.person_id=shifts.person_id
@@ -422,12 +441,13 @@ AND stat.date_id >= shifts.date_id --make sure the stat intervals are after shif
 AND stat.interval_id >= shifts.interval_id
 
 
-DELETE FROM #fact_schedule_deviation WHERE shift_startdate_id IS NULL
+DELETE FROM #fact_schedule_deviation WHERE shift_startdate_local_id IS NULL
 
 
 /* Insert of new data */
 INSERT INTO mart.fact_schedule_deviation
 	(
+	shift_startdate_local_id,
 	date_id, 
 	shift_startdate_id,
 	shift_startinterval_id,
@@ -443,6 +463,7 @@ INSERT INTO mart.fact_schedule_deviation
 	update_date
 	)
 SELECT
+	shift_stardate_local_id	= shift_startdate_local_id,
 	date_id					= date_id, 
 	shift_startdate_id		= MAX(shift_startdate_id),
 	shift_startinterval_id	= max(shift_startinterval_id),
@@ -459,6 +480,7 @@ SELECT
 FROM 
 	#fact_schedule_deviation
 GROUP BY 
+	shift_startdate_local_id,
 	date_id, 
 	interval_id,
 	person_id,

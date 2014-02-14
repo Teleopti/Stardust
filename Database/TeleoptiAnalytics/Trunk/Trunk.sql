@@ -501,8 +501,6 @@ ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_activit
 GO
 ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_absence]
 GO
-ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF__fact_sche__overt__1D9B5BB6]
-GO
 ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_update_date]
 GO
 ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_insert_date]
@@ -657,4 +655,113 @@ ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedu
 REFERENCES [mart].[dim_scenario] ([scenario_id])
 GO
 ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_scenario]
+GO
+
+----------------  
+--Name: KJ
+--Date: 2014-02-04
+--Desc: New column fact_schedule_deviation for local date
+----------------
+--NEW COLUMN IN FACT_SCHEDULE_DEVIATION
+
+CREATE TABLE [mart].[fact_schedule_deviation_tmp](
+	[shift_startdate_local_id] [int] NOT NULL,
+	[date_id] [int] NOT NULL,
+	[interval_id] [smallint] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[scheduled_ready_time_s] [int] NULL,
+	[ready_time_s] [int] NULL,
+	[contract_time_s] [int] NULL,
+	[deviation_schedule_s] [decimal](18, 4) NULL,
+	[deviation_schedule_ready_s] [decimal](18, 4) NULL,
+	[deviation_contract_s] [decimal](18, 4) NULL,
+	[business_unit_id] [int] NULL,
+	[datasource_id] [smallint] NULL,
+	[insert_date] [smalldatetime] NULL,
+	[update_date] [smalldatetime] NULL,
+	[is_logged_in] [bit] NOT NULL,
+	[shift_startdate_id] [int] NULL,
+	[shift_startinterval_id] [smallint] NULL,
+ CONSTRAINT [PK_fact_schedule_deviation_tmp] PRIMARY KEY CLUSTERED 
+(
+	[shift_startdate_local_id] ASC,
+	[date_id] ASC,
+	[interval_id] ASC,
+	[person_id] ASC
+)ON [MART]
+) ON [MART]
+GO
+--move data
+--INSERT DATA FROM OLD FACT_SCHEDULE_DEVIATION
+INSERT [mart].[fact_schedule_deviation_tmp](shift_startdate_local_id,date_id, interval_id, person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, business_unit_id, datasource_id, insert_date, update_date, is_logged_in, shift_startdate_id, shift_startinterval_id )
+SELECT btz.local_date_id,f.date_id, f.interval_id,f.person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, is_logged_in, shift_startdate_id, shift_startinterval_id
+FROM [mart].[fact_schedule_deviation] f
+INNER JOIN mart.bridge_time_zone btz 
+	ON f.shift_startdate_id=btz.date_id 
+	AND f.shift_startinterval_id=btz.interval_id
+INNER JOIN mart.dim_person dp
+	ON f.person_id=dp.person_id
+	AND btz.time_zone_id=dp.time_zone_id
+GO
+--drop constraints
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [FK_fact_schedule_deviation_dim_person]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [FK_fact_schedule_deviation_dim_interval]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [FK_fact_schedule_deviation_dim_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [DF_fact_schedule_deviation_update_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [DF_fact_schedule_deviation_insert_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [DF_fact_schedule_deviation_datasource_id]
+GO
+
+--RENAME old TABLE
+EXEC sp_rename 'mart.fact_schedule_deviation', 'fact_schedule_deviation_old'
+GO
+--RENAME TMP KEY
+EXEC sp_rename 'mart.PK_fact_schedule_deviation', 'PK_fact_schedule_deviation_old'
+GO
+--RENAME TMP TABLE
+EXEC sp_rename 'mart.fact_schedule_deviation_tmp', 'fact_schedule_deviation'
+GO
+--RENAME TMP KEY
+EXEC sp_rename 'mart.PK_fact_schedule_deviation_tmp', 'PK_fact_schedule_deviation'
+GO
+--add constraints
+ALTER TABLE [mart].[fact_schedule_deviation] ADD  CONSTRAINT [DF_fact_schedule_deviation_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] ADD  CONSTRAINT [DF_fact_schedule_deviation_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] ADD  CONSTRAINT [DF_fact_schedule_deviation_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_deviation_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] CHECK CONSTRAINT [FK_fact_schedule_deviation_dim_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_deviation_dim_interval] FOREIGN KEY([interval_id])
+REFERENCES [mart].[dim_interval] ([interval_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] CHECK CONSTRAINT [FK_fact_schedule_deviation_dim_interval]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_deviation_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] CHECK CONSTRAINT [FK_fact_schedule_deviation_dim_person]
 GO
