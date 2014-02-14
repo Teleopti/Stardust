@@ -51,7 +51,7 @@
     <nav class="navbar navbar-inverse navbar-static-top">
         <div class="navbar-inner">
             <div class="container">
-                <ul class="nav">  
+                <ul class="nav navbar-nav">  
                     <li class="dropdown">  
                         <a href="#"  
                            class="dropdown-toggle nowrap navbar-brand"  

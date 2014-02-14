@@ -59,12 +59,11 @@
                 </button>
             </span>
         </div>
-
     </div>
-        <ul class="list-inline" style="margin-top: 15px">
-            <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-            <li data-bind="if: underConstructionPermission"><a href="#" id="week-schedule-month" data-bind="    click: month">@Resources.MonthView</a></li>
-        </ul>
+    <ul class="list-inline navbar-nav" style="margin-top: 15px">
+        <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+        <li data-bind="if: underConstructionPermission"><a href="#" id="week-schedule-month" data-bind="    click: month">@Resources.MonthView</a></li>
+    </ul>
 </div>
 <ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
 	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">
