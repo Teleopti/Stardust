@@ -247,9 +247,18 @@
                                     <div class="feedback-error truncate" data-bind="text: FeedbackError"></div>
                                     <!-- /ko -->
                                     <!-- ko if: DisplayFeedback -->
-                                    <div class="possible-start-times time-limitation glyphicon glyphicon-step-backward" data-bind="text: PossibleStartTimes"></div>
-                                    <div class="possible-end-times time-limitation glyphicon glyphicon-step-forward" data-bind="text: PossibleEndTimes"></div>
-                                    <div class="possible-contract-times time-limitation glyphicon glyphicon-resize-horizontal" data-bind="text: PossibleContractTimes"></div>
+                                    <div class="possible-start-times time-limitation clearleftfloat">
+                                        <span class="glyphicon glyphicon-step-backward"></span>
+                                        <span data-bind="text: PossibleStartTimes"></span>
+                                    </div>
+                                    <div class="possible-end-times time-limitation clearleftfloat">
+                                        <span class="glyphicon glyphicon-step-forward"></span>
+                                        <span data-bind="text: PossibleEndTimes"></span>
+                                    </div>
+                                    <div class="possible-contract-times time-limitation clearleftfloat">
+                                        <span class="glyphicon glyphicon-resize-horizontal"></span>
+                                        <span data-bind="text: PossibleContractTimes"></span>
+                                    </div>
                                     <!-- /ko -->
                                     <!-- /ko -->
                                 }
