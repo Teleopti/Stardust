@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			published.BusinessUnitId.Should().Be(@event.BusinessUnitId);
 			published.PersonId.Should().Be(@event.PersonId);
 			published.ScenarioId.Should().Be(@event.ScenarioId);
-			published.StartDateTime.Should().Be(@event.StartDateTime.AddHours(-24));
+			published.StartDateTime.Should().Be(@event.StartDateTime);
 			published.EndDateTime.Should().Be(@event.EndDateTime);
 		}
 	}
