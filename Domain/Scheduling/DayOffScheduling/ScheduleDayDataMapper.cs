@@ -29,8 +29,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			toAdd.IsContractDayOff = _hasContractDayOffDefinition.IsDayOff(scheduleDay);
 			IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay,
 			                                                                                                  schedulingOptions);
-			if (effectiveRestriction != null)
-				toAdd.HaveRestriction = effectiveRestriction.IsRestriction;
+			if (effectiveRestriction == null)
+				return toAdd;
+
+			if(effectiveRestriction.IsAvailabilityDay && !schedulingOptions.AvailabilityDaysOnly)
+				return toAdd;
+				
+			toAdd.HaveRestriction = effectiveRestriction.IsRestriction;
 
 			return toAdd;
 		}
