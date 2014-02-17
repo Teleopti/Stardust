@@ -196,6 +196,7 @@ namespace Teleopti.Messaging.SignalR
 			
 			try
 			{
+				_hubConnection.Reconnected -= hubConnectionOnReconnected;
 				_hubConnection.Closed -= reconnect;
 				_hubConnection.Stop();
 			}
