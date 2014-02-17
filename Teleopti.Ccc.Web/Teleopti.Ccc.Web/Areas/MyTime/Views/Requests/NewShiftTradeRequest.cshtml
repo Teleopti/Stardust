@@ -11,20 +11,22 @@
     <div data-bind="if: !missingWorkflowControlSet()">
         <table class="table-condensed">
             <tr>
-                <td>
-	                <div style="margin-bottom: 10px" class="input-group">
-		                <span class="input-group-btn">
-		                <button class="btn btn-default" data-bind="clickable: previousDateValid, enable: previousDateValid">
-			                <i class="glyphicon glyphicon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
-		                </button></span>
-		                <input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+				<td>
+					<div style="margin-bottom: 10px" class="input-group">
 						<span class="input-group-btn">
-		                <button class="btn btn-default" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
-			                <i class="glyphicon glyphicon-calendar" ></i>
-		                </button>
-		                <button class="btn btn-default" data-bind="clickable: nextDateValid, enable: nextDateValid">
-			                <i class="glyphicon glyphicon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
-		                </button></span>
+							<button class="btn btn-default" data-bind="clickable: previousDateValid, enable: previousDateValid">
+								<i class="glyphicon glyphicon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
+							</button>
+						</span>
+						<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+						<span class="input-group-btn">
+							<button class="btn btn-default" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button class="btn btn-default" data-bind="clickable: nextDateValid, enable: nextDateValid">
+								<i class="glyphicon glyphicon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
+							</button>
+						</span>
 	                </div>
                 </td>
                 <td>
