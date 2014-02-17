@@ -62,15 +62,21 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	self.tooltipText = ko.computed(function () {
 	    var text = '';
 	    if (self.Extended()) {
-	        
-	    	text = '<div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-backward">{0}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-forward">{1}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-resize-horizontal">{2}</div><div class="extended-part-title">{3}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-backward">{4}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-step-forward">{5}</div><div class="glyphicon glyphicon-white time-limitation arrow-icon glyphicon glyphicon-resize-horizontal">{6}</div>'
-	            .format($('<div/>').text(self.StartTimeLimitation()).html(),
-	                $('<div/>').text(self.EndTimeLimitation()).html(),
-	                $('<div/>').text(self.WorkTimeLimitation()).html(),
-	                $('<div/>').text(self.Activity()).html(),
-	                $('<div/>').text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-').html(),
-	                $('<div/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
-	                $('<div/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
+
+	    	text = ('<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{0}</div>' +
+					'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{1}</div>'+
+					'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{2}</div>' +
+					'<div class="extended-part-title">{3}</div>' +
+					'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{4}</div>' +
+					'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{5}</div>' +
+					'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{6}</div>')
+	            .format($('<span/>').text(self.StartTimeLimitation()).html(),
+	                $('<span/>').text(self.EndTimeLimitation()).html(),
+	                $('<span/>').text(self.WorkTimeLimitation()).html(),
+	                $('<span/>').text(self.Activity()).html(),
+	                $('<span/>').text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-').html(),
+	                $('<span/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
+	                $('<span/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
 	        
 	    } else {
 	        text = self.StartTimeLimitation();
