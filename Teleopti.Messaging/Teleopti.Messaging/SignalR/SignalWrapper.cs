@@ -17,42 +17,38 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private const string notifyclients = "NotifyClients";
 		private const string notifyclientsmultiple = "NotifyClientsMultiple";
+		private const string addsubscription = "AddSubscription";
+		private const string removesubscription = "RemoveSubscription";
 
 		private readonly IHubProxy _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
+		private readonly TimeSpan _reconnectDelay;
 
 		protected ILog Logger ;
-		private static readonly object LockObject = new object();
 		private readonly Task emptyTask;
-		
-		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger)
+
+		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
+		public const string ConnectionReconnected = "Connection reconnected successfully";
+
+		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger, TimeSpan reconnectDelay)
 		{
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
+			_reconnectDelay = reconnectDelay;
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
-			
-			var tcs = new TaskCompletionSource<object>();
-			tcs.SetResult(null);
-			emptyTask = tcs.Task;
-		}
 
-		private void reconnect()
-		{
-			_hubConnection.Start();
+			emptyTask = TaskHelper.MakeEmptyTask();
 		}
-
+		
 		public void StartHub()
-		{
-			startHubConnection();
-		}
-
-		private void startHubConnection()
 		{
 			try
 			{
 				Exception exception = null;
 				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
+				_hubConnection.Closed += reconnect;
+				_hubConnection.Reconnected += hubConnectionOnReconnected;
 				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				{
@@ -87,73 +83,31 @@ namespace Teleopti.Messaging.SignalR
 				Logger.Error("An error happened when starting hub connection.", exception);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
-			_hubConnection.Closed += reconnect;
+		}
+
+		private void reconnect()
+		{
+			// ErikS: 2014-02-17
+			// To handle lots of MyTime and MyTimeWeb clients we dont want to flood with reconnect attempts
+			// Closed event triggers when the broker is actually down, IE the server died not from recycles
+			TaskHelper.Delay(_reconnectDelay).Wait();
+			Logger.Error(ConnectionRestartedErrorMessage);
+			_hubConnection.Start();
+		}
+
+		private void hubConnectionOnReconnected()
+		{
+			Logger.Info(ConnectionReconnected);
 		}
 
 		public Task AddSubscription(Subscription subscription)
 		{
-			if (verifyStillConnected())
-			{
-				try
-				{
-					var startTask = _hubProxy.Invoke("AddSubscription", subscription);
-					startTask.ContinueWith(t =>
-					{
-						if (t.IsFaulted && t.Exception != null)
-						{
-							Logger.Error("An error happened when adding subscription.", t.Exception.GetBaseException());
-						}
-					}, TaskContinuationOptions.OnlyOnFaulted);
-					return startTask;
-				}
-				catch (InvalidOperationException exception)
-				{
-					Logger.Error("An error happened when adding subscriptions.", exception);
-				}
-			}
-			return emptyTask;
+			return notify(addsubscription, subscription);
 		}
 
 		public Task RemoveSubscription(string route)
 		{
-			if (verifyStillConnected())
-			{
-				var startTask = _hubProxy.Invoke("RemoveSubscription", route);
-				startTask.ContinueWith(t =>
-				{
-					if (t.IsFaulted && t.Exception != null)
-					{
-						Logger.Error("An error happened when removing subscription.", t.Exception.GetBaseException());
-					}
-				}, TaskContinuationOptions.OnlyOnFaulted);
-				return startTask;
-			}
-			return emptyTask;
-		}
-
-		private bool verifyStillConnected()
-		{
-			if (_hubConnection.State != ConnectionState.Connected)
-			{
-				lock (LockObject)
-				{
-					if (_hubConnection.State != ConnectionState.Connected)
-					{
-						try
-						{
-							startHubConnection();
-							return true;
-						}
-						catch (Exception ex)
-						{
-							//Suppress! Already logged upon startup for general failures.
-							Logger.Error("An error happened when verifying that we still are connected.", ex);
-							return false;
-						}
-					}
-				}
-			}
-			return true;
+			return notify(removesubscription, route);
 		}
 
 		public Task NotifyClients(Notification notification)
@@ -168,33 +122,29 @@ namespace Teleopti.Messaging.SignalR
 
 		private Task notify(string methodName, params object[] notifications)
 		{
-			try
+			if (_hubConnection.State == ConnectionState.Connected)
 			{
-				if (_hubConnection.State == ConnectionState.Connected)
-				{
-					var task = _hubProxy.Invoke(methodName, notifications);
-					return task.ContinueWith(t =>
-						{
-							if (t.IsFaulted && t.Exception != null)
-								Logger.Error("An error happened on notification task", t.Exception);
-						}, TaskContinuationOptions.OnlyOnFaulted);
-				}
-			}
-			catch (InvalidOperationException exception)
-			{
-				Logger.Error("An error happened when notifying multiple.", exception);
+				var task = _hubProxy.Invoke(methodName, notifications);
+
+				return task.ContinueWith(t =>
+					{
+						if (t.IsFaulted && t.Exception != null)
+							Logger.Debug("An error happened on notification task", t.Exception);
+					}, TaskContinuationOptions.OnlyOnFaulted);
 			}
 			return emptyTask;
 		}
-		
+
 		public void StopHub()
 		{
-			if (_hubConnection == null || _hubConnection.State != ConnectionState.Connected) return;
-			
+			if (_hubConnection == null) return;
+
 			try
 			{
+				_hubConnection.Reconnected -= hubConnectionOnReconnected;
 				_hubConnection.Closed -= reconnect;
-				_hubConnection.Stop();
+				if (_hubConnection.State == ConnectionState.Connected)
+					_hubConnection.Stop();
 			}
 			catch (Exception ex)
 			{

@@ -40,7 +40,13 @@ namespace Teleopti.Messaging.SignalR
 			Logger.Debug("An unobserved task failed.", e.Exception);
 			e.SetObserved();
 		}
+
 		public void StartBrokerService()
+		{
+			StartBrokerService(TimeSpan.FromSeconds(240));
+		}
+
+		public void StartBrokerService(TimeSpan reconnectDelay)
 		{
 			try
 			{
@@ -48,7 +54,7 @@ namespace Teleopti.Messaging.SignalR
 				{
 					var connection = MakeHubConnection();
 					var proxy = connection.CreateHubProxy("MessageBrokerHub");
-					_wrapper = new SignalWrapper(proxy, connection, Logger);
+					_wrapper = new SignalWrapper(proxy, connection, Logger, reconnectDelay);
 				}
 
 				_wrapper.StartHub();
