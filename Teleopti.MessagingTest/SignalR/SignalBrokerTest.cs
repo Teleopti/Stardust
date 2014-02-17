@@ -16,7 +16,7 @@ using Subscription = Microsoft.AspNet.SignalR.Client.Hubs.Subscription;
 
 namespace Teleopti.MessagingTest.SignalR
 {
-	[TestFixture, Ignore]
+	[TestFixture]
 	public class SignalBrokerTest
 	{
 		private Task _doneTask;
@@ -45,26 +45,59 @@ namespace Teleopti.MessagingTest.SignalR
 			target.StartMessageBroker();
 			return new proxyAndBrokerHolder(hubProxy, target);
 		}
-		
+
+		private IHubProxy stubProxy()
+		{
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
+			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
+			return hubProxy;
+		}
+
+		private signalBrokerForTest makeTarget(IHubProxy hubProxy)
+		{
+			var signalBroker = new signalBrokerForTest(new messageFilterManagerFake(), stubHubConnection(hubProxy),
+													   new SignalSubscriber(hubProxy))
+				{
+					ConnectionString = @"http://localhost:8080"
+				};
+			signalBroker.StartMessageBroker();
+			return signalBroker;
+		}
+
+		private signalBrokerForTest makeTarget(IHubProxy hubProxy, ISignalSubscriber signalSubscriber)
+		{
+			var signalBroker = new signalBrokerForTest(new messageFilterManagerFake(), stubHubConnection(hubProxy),
+														  signalSubscriber)
+			{
+				ConnectionString = @"http://localhost:8080"
+			};
+			signalBroker.StartMessageBroker();
+			return signalBroker;
+		}
+
+		private IHubConnectionWrapper stubHubConnection(IHubProxy hubProxy)
+		{
+			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
+			hubConnection.Stub(x => x.State).Return(ConnectionState.Connected);
+			hubConnection.Stub(x => x.Start()).Return(makeDoneTask());
+			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			return hubConnection;
+		}
+
+		private static Task<object> makeDoneTask()
+		{
+			var taskCompletionSource = new TaskCompletionSource<object>();
+			taskCompletionSource.SetResult(null);
+			return taskCompletionSource.Task;
+		}
+
 		[Test]
 		public void ShouldSendEventMessage()
 		{
-			//var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			//hubConnection.Stub(x => x.Start()).Return(_doneTask);
-			//var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			//hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-			//hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			//hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
-			//var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, new SignalSubscriber(hubProxy))
-			//	{
-			//		ConnectionString = @"http://localhost:8080"
-			//	};
-			//target.StartMessageBroker();
-
-			var holder = makeProxyAndBroker();
-			var target = holder.SignalBroker;
-			var hubProxy = holder.HubProxy;
-
+			var hubProxy = stubProxy();
+			var target = makeTarget(hubProxy);
+			
 			target.SendEventMessage(string.Empty, Guid.Empty, DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
 			                        typeof (string), DomainUpdateType.Update, new byte[] {});
 
@@ -74,24 +107,14 @@ namespace Teleopti.MessagingTest.SignalR
 				         Arg<IEnumerable<Notification>>.Is.Anything));
 		}
 
+		
+
+
 		[Test]
 		public void ShouldSendBatchEventMessages()
 		{
-			//var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			//hubConnection.Stub(x => x.Start()).Return(_doneTask);
-			//var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			//hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-			//hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			//hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
-			//var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, new SignalSubscriber(hubProxy))
-			//	{
-			//		ConnectionString = @"http://localhost:8080"
-			//	};
-			//target.StartMessageBroker();
-
-			var holder = makeProxyAndBroker();
-			var target = holder.SignalBroker;
-			var hubProxy = holder.HubProxy;
+			var hubProxy = stubProxy();
+			var target = makeTarget(hubProxy);
 
 			target.SendEventMessages(string.Empty, Guid.Empty,
 			                         new IEventMessage[]
@@ -109,20 +132,8 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldRegisterEventSubscriptions()
 		{
-			//var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			//hubConnection.Stub(x => x.Start()).Return(_doneTask);
-			//var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			//hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-			//hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			//hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
-			//var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, new SignalSubscriber(hubProxy))
-			//	{
-			//		ConnectionString = @"http://localhost:8080"
-			//	};
-
-			var holder = makeProxyAndBroker();
-			var target = holder.SignalBroker;
-			var hubProxy = holder.HubProxy;
+			var hubProxy = stubProxy();
+			var target = makeTarget(hubProxy);
 
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => { }, typeof (IInterfaceForTest));
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => { }, Guid.Empty, typeof (string),
@@ -144,21 +155,8 @@ namespace Teleopti.MessagingTest.SignalR
 		[Test]
 		public void ShouldUnregisterEventSubscriptions()
 		{
-			//var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			//hubConnection.Stub(x => x.Start()).Return(_doneTask);
-			//var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			//hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-			//hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			//hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
-			//var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, new SignalSubscriber(hubProxy))
-			//	{
-			//		ConnectionString = @"http://localhost:8080"
-			//	};
-			//target.StartMessageBroker();
-
-			var holder = makeProxyAndBroker();
-			var target = holder.SignalBroker;
-			var hubProxy = holder.HubProxy;
+			var hubProxy = stubProxy();
+			var target = makeTarget(hubProxy);
 			
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, EventMessageHandler, typeof (IInterfaceForTest));
 			// TODO: UGLY, how to solve cleaner?
@@ -201,33 +199,12 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldInvokeEventHandlers()
 		{
 			var wasEventHandlerCalled = false;
-
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Return(_doneTask);
-
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-
-			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			var hubProxy = stubProxy();
 			var signalSubscriber = MockRepository.GenerateMock<ISignalSubscriber>();
-			var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, signalSubscriber)
-				{
-					ConnectionString = @"http://localhost:8080"
-				};
-
-			target.StartMessageBroker();
-			
-			// TODO Not sure :S
-			//var holder = makeProxyAndBroker();
-			//var target = holder.SignalBroker;
-			target.SignalSubscriber = signalSubscriber;
-
+			var target = makeTarget(hubProxy, signalSubscriber);
 
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 			                                 typeof (IInterfaceForTest));
-			
-			// TODO: How can we raise this without "cheating"
 			target.SignalSubscriber.GetEventRaiser(x => x.OnNotification += null)
 			                .Raise(new object[]
 				                {
@@ -249,25 +226,13 @@ namespace Teleopti.MessagingTest.SignalR
 		public void ShouldIgnoreInvokeForOldSubscriptions()
 		{
 			var wasEventHandlerCalled = false;
-
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Return(_doneTask);
-
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-
-			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			var hubProxy = stubProxy();
 			var signalSubscriber = MockRepository.GenerateMock<ISignalSubscriber>();
-			var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, signalSubscriber)
-			{
-				ConnectionString = @"http://localhost:8080"
-			};
+			var target = makeTarget(hubProxy, signalSubscriber);
 
-			target.StartMessageBroker();
-			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true, typeof(IInterfaceForTest), DateTime.UtcNow.AddHours(-3), DateTime.UtcNow.AddHours(-1));
-
-			// TODO: How can we raise this without "cheating"
+			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
+			                                 typeof (IInterfaceForTest), DateTime.UtcNow.AddHours(-3),
+			                                 DateTime.UtcNow.AddHours(-1));
 			signalSubscriber.GetEventRaiser(x => x.OnNotification += null)
 							.Raise(new object[]
 				                {
@@ -286,31 +251,17 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		// TODO: Ehhh future?
 		public void ShouldIgnoreInvokeForFutureSubscriptions()
 		{
 			var wasEventHandlerCalled = false;
-
-			var hubConnection = MockRepository.GenerateMock<IHubConnectionWrapper>();
-			hubConnection.Stub(x => x.Start()).Return(_doneTask);
-
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			hubProxy.Stub(x => x.Invoke("", null)).IgnoreArguments().Return(_doneTask);
-
-			hubProxy.Stub(x => x.Subscribe("")).IgnoreArguments().Return(new Subscription());
-			hubConnection.Stub(x => x.CreateHubProxy("MessageBrokerHub")).Return(hubProxy);
+			var hubProxy = stubProxy();
 			var signalSubscriber = MockRepository.GenerateMock<ISignalSubscriber>();
-			var target = new signalBrokerForTest(new messageFilterManagerFake(), hubConnection, signalSubscriber)
-			{
-				ConnectionString = @"http://localhost:8080"
-			};
+			var target = makeTarget(hubProxy, signalSubscriber);
 
-			target.StartMessageBroker();
 			target.RegisterEventSubscription(string.Empty, Guid.Empty, (sender, args) => wasEventHandlerCalled = true,
 			                                 typeof (IInterfaceForTest), DateTime.UtcNow.AddHours(1),
 			                                 DateTime.UtcNow.AddHours(3));
 
-			// TODO: How can we raise this without "cheating"
 			signalSubscriber.GetEventRaiser(x => x.OnNotification += null)
 							.Raise(new object[]
 				                {
