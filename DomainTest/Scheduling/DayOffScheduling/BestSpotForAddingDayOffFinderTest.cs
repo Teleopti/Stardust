@@ -19,40 +19,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void ShouldFindFirstFreeSpotBeforeContractDayOff()
+		public void ShouldFindFirstFreeSpotBeforeBlockedContractDayOff()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
 			dataList[new DateOnly(2013, 1, 3)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 3)].HaveRestriction = true;
 
 			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 2), result.Value);
 		}
 
 		[Test]
-		public void IfContractDayOffOnFirstDayContinueSearch()
-		{
-			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
-
-			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
-			Assert.AreEqual(new DateOnly(2013, 1, 4), result.Value);
-		}
-
-		[Test]
 		public void NewerSearchOutsideTheList()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 2)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 3)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 4)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 6)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 7)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 8)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 9)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 10)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 1)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 2)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 3)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 4)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 5)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 6)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 7)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 8)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 9)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 10)].IsScheduled = true;
 
 			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.IsFalse(result.HasValue);
@@ -67,26 +57,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		}
 
 		[Test]
-		public void IfFindingContractDayOffBeforeContinueSearch()
-		{
-			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 2)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
-
-			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
-			Assert.AreEqual(new DateOnly(2013, 1, 4), result.Value);
-		}
-
-		[Test]
 		public void IfDayBeforeIsScheduledContinueSearch()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 2)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 1)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 2)].IsScheduled = true;
 			dataList[new DateOnly(2013, 1, 4)].IsScheduled = true;
 			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 5)].IsScheduled = true;
 			dataList[new DateOnly(2013, 1, 7)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 7)].IsScheduled = true;
 
 			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 6), result.Value);
@@ -96,29 +76,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		public void IfDayBeforeHasRestrictionContinueSearch()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 2)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 1)].IsScheduled = true;
+			dataList[new DateOnly(2013, 1, 2)].IsScheduled = true;
 			dataList[new DateOnly(2013, 1, 4)].HaveRestriction = true;
-			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 6)].HaveRestriction = true;
 			dataList[new DateOnly(2013, 1, 7)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 7)].IsScheduled = true;
 
 			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
-			Assert.AreEqual(new DateOnly(2013, 1, 6), result.Value);
+			Assert.AreEqual(new DateOnly(2013, 1, 5), result.Value);
 		}
 
 		[Test]
 		public void IfAllDaysBeforeIsBlockedWeeShouldTryTwoDaysBefore()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
-			dataList[new DateOnly(2013, 1, 1)].IsContractDayOff = true;
-			dataList[new DateOnly(2013, 1, 2)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 1)].HaveRestriction = true;
+			dataList[new DateOnly(2013, 1, 2)].HaveRestriction = true;
+			//3:rd is free
 			dataList[new DateOnly(2013, 1, 4)].HaveRestriction = true;
 			dataList[new DateOnly(2013, 1, 5)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 5)].HaveRestriction = true;
 			dataList[new DateOnly(2013, 1, 7)].HaveRestriction = true;
 			dataList[new DateOnly(2013, 1, 8)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 8)].IsDayOff = true;
 
 			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
 			Assert.AreEqual(new DateOnly(2013, 1, 3), result.Value);
+		}
+
+		[Test]
+		public void ReturnDayIfIsContractDayOffAndNotBlocked()
+		{
+			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
+			dataList[new DateOnly(2013, 1, 6)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 7)].IsContractDayOff = true;
+			dataList[new DateOnly(2013, 1, 7)].IsDayOff = true;
+
+			DateOnly? result = _target.Find(new List<IScheduleDayData>(dataList.Values));
+			Assert.AreEqual(new DateOnly(2013, 1, 6), result.Value);
 		}
 
 		private static IDictionary<DateOnly, IScheduleDayData> createList()
