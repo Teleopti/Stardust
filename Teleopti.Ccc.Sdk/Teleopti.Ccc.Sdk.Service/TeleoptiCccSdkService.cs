@@ -1758,14 +1758,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		public ICollection<SkillDto> GetSkills()
 		{
 			var returnList = new List<SkillDto>();
-			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IRepositoryFactory repositoryFactory = new RepositoryFactory();
-				ISkillRepository repository = repositoryFactory.CreateSkillRepository(unitOfWork);
-			    var skillAssembler = new SkillAssembler(repository,
-			                                            new ActivityAssembler(
-			                                                repositoryFactory.CreateActivityRepository(unitOfWork)));
-                returnList.AddRange(skillAssembler.DomainEntitiesToDtos(repository.LoadAll()));
+				using (var inner = _lifetimeScope.BeginLifetimeScope())
+				{
+					var repository = inner.Resolve<ISkillRepository>();
+					var skillAssembler = inner.Resolve<IAssembler<ISkill,SkillDto>>();
+					returnList.AddRange(skillAssembler.DomainEntitiesToDtos(repository.LoadAll()));
+				}
 			}
 			return returnList;
 		}
@@ -1779,7 +1779,10 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public ICollection<SkillDayDto> GetSkillData(DateOnlyDto dateOnlyDto, string timeZoneId)
 		{
-			return SkillDataFactory.GetSkillData(dateOnlyDto, timeZoneId);
+			using (var inner = _lifetimeScope.BeginLifetimeScope())
+			{
+				return inner.Resolve<SkillDataFactory>().GetSkillData(dateOnlyDto, timeZoneId);
+			}
 		}
 
 		/// <summary>

@@ -9,12 +9,14 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -26,14 +28,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
     [TestFixture]
     public class ShiftTradeRequestSagaTest
     {
-        private readonly MockRepository mocker = new MockRepository();
         private ShiftTradeRequestSaga target;
         private IShiftTradeValidator validator;
         private IUnitOfWork unitOfWork;
         private IPersonRequestRepository personRequestRepository;
         private IPersonRepository personRepository;
         private IPersonRequest personRequest;
-				private ICurrentUnitOfWorkFactory unitOfWorkFactory;
+	    private ICurrentUnitOfWorkFactory unitOfWorkFactory;
         private Person fromPerson;
         private Person toPerson;
         private ICurrentScenario scenarioRepository;
@@ -41,39 +42,45 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private ISchedulingResultStateHolder schedulingResultState;
         private IScenario scenario;
         private IRequestFactory requestFactory;
-				private IScheduleDifferenceSaver scheduleDictionarySaver;
+	    private IScheduleDifferenceSaver scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization personRequestCheckAuthorization;
     	private ILoadSchedulesForRequestWithoutResourceCalculation loader;
 		private IDifferenceCollectionService<IPersistableScheduleData> differenceCollectionService;
 
-			[SetUp]
-			public void Setup()
-			{
-				CreatePersonAndScenario();
-				CreateRequest();
-				CreateRepositories();
+	    [SetUp]
+	    public void Setup()
+	    {
+		    CreatePersonAndScenario();
+		    CreateRequest();
+		    CreateRepositories();
 
-				scheduleDictionarySaver = mocker.StrictMock<IScheduleDifferenceSaver>();
-				differenceCollectionService = mocker.DynamicMock<IDifferenceCollectionService<IPersistableScheduleData>>();
-				unitOfWorkFactory = mocker.StrictMock<ICurrentUnitOfWorkFactory>();
-				requestFactory = mocker.StrictMock<IRequestFactory>();
-				personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerForTest();
-				schedulingResultState = new SchedulingResultStateHolder();
-				schedulingResultState.Schedules = mocker.DynamicMock<IScheduleDictionary>();
-				Expect.Call(schedulingResultState.Schedules.Values).Return(new List<IScheduleRange> {mocker.DynamicMultiMock<IScheduleRange>(typeof(IUnvalidatedScheduleRangeUpdate))}).Repeat.Any();
-				unitOfWork = mocker.StrictMock<IUnitOfWork>();
-				loader = mocker.DynamicMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
+		    scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
+		    differenceCollectionService = MockRepository.GenerateMock<IDifferenceCollectionService<IPersistableScheduleData>>();
+		    unitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+		    requestFactory = MockRepository.GenerateMock<IRequestFactory>();
+		    personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerForTest();
+		    schedulingResultState = new SchedulingResultStateHolder();
+		    var scheduleRanges = new Dictionary<IPerson, IScheduleRange>();
+		    schedulingResultState.Schedules = new ScheduleDictionaryForTest(scenario,new ScheduleDateTimePeriod(new DateTimePeriod()),scheduleRanges);
+			scheduleRanges.Add(fromPerson,new ScheduleRange(schedulingResultState.Schedules,new ScheduleParameters(scenario,fromPerson,new DateTimePeriod())));
+			scheduleRanges.Add(toPerson,new ScheduleRange(schedulingResultState.Schedules,new ScheduleParameters(scenario,toPerson,new DateTimePeriod())));
+		    unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+		    loader = MockRepository.GenerateMock<ILoadSchedulesForRequestWithoutResourceCalculation>();
 
-				target = new ShiftTradeRequestSaga(unitOfWorkFactory, schedulingResultState, validator, requestFactory, scenarioRepository, personRequestRepository, scheduleRepository, personRepository, personRequestCheckAuthorization, scheduleDictionarySaver, loader, differenceCollectionService);
-			}
+		    target = new ShiftTradeRequestSaga(unitOfWorkFactory, schedulingResultState, validator, requestFactory,
+		                                       scenarioRepository, personRequestRepository, scheduleRepository,
+		                                       personRepository, personRequestCheckAuthorization, scheduleDictionarySaver,
+		                                       loader, differenceCollectionService);
+		    prepareUnitOfWork();
+	    }
 
-        private void CreateRepositories()
+	    private void CreateRepositories()
         {
-            validator = mocker.StrictMock<IShiftTradeValidator>();
-            personRequestRepository = mocker.StrictMock<IPersonRequestRepository>();
-            personRepository = mocker.StrictMock<IPersonRepository>();
-            scenarioRepository = mocker.StrictMock<ICurrentScenario>();
-            scheduleRepository = mocker.StrictMock<IScheduleRepository>();
+            validator = MockRepository.GenerateMock<IShiftTradeValidator>();
+            personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+            personRepository = MockRepository.GenerateMock<IPersonRepository>();
+            scenarioRepository = MockRepository.GenerateMock<ICurrentScenario>();
+            scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
         }
 
         private void CreateRequest()
@@ -96,238 +103,174 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             scenario = new Scenario("Default");
         }
 
-        [Test]
-        public void CanConsumeNewValidateIsTrue()
+	    [Test]
+	    public void CanConsumeNewValidateIsTrue()
+	    {
+		    var created = getNewShiftTradeRequestCreated();
+		    var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+
+		    validator.Stub(x=> x.Validate((IShiftTradeRequest) personRequest.Request)).Return(new ShiftTradeRequestValidationResult(true));
+		    personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
+		    scenarioRepository.Stub(x => x.Current()).Return(scenario);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			
+		    target.Consume(created);
+		    Assert.AreEqual(false, personRequest.IsNew);
+		    Assert.AreEqual(true, personRequest.IsPending);
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
+	    }
+
+	    [Test]
+	    public void CanConsumeNewValidateIsFalse()
+	    {
+		    var created = getNewShiftTradeRequestCreated();
+		    var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+
+			validator.Stub(x => x.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(false));
+			personRequestRepository.Stub(x => x.Get(created.PersonRequestId)).Return(personRequest);
+			scenarioRepository.Stub(x => x.Current()).Return(scenario);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			
+		    target.Consume(created);
+		    Assert.AreEqual(true, personRequest.IsDenied);
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
+	    }
+
+	    [Test]
+	    public void CanConsumeAcceptValidIsTrue()
+	    {
+		    var accept = getAcceptShiftTrade();
+
+		    var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
+		    var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+		    var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
+		    INewBusinessRuleCollection ruleCollection = null;
+
+			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
+			scenarioRepository.Stub(x => x.Current()).Return(scenario);
+		    validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
+		    personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
+
+		    requestFactory.Stub(x => x.GetRequestApprovalService(null, null)).Constraints(new[]
+			    {
+				    Is.Matching<NewBusinessRuleCollection>(
+					    b =>
+						    {
+							    ruleCollection = b;
+							    return true;
+						    }),
+				    Is.Equal(scenario)
+			    }).Return(approvalService);
+		    approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
+		    requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+
+		    target.Consume(accept);
+		    Assert.AreEqual(false, personRequest.IsNew);
+		    Assert.AreEqual(false, personRequest.IsPending);
+		    Assert.AreEqual(true, personRequest.IsApproved);
+		    Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+		    Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
+		    ruleCollection.Item(typeof (NewPersonAccountRule)).HaltModify.Should().Be.False();
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
+			statusChecker.AssertWasCalled(x => x.Check(shiftTradeRequest), o => o.Repeat.Twice());
+			scheduleDictionarySaver.AssertWasCalled(x => x.SaveChanges(null, null), o => o.IgnoreArguments());
+			loader.AssertWasCalled(x => x.Execute(scenario, new DateTimePeriod(), null), o => o.IgnoreArguments());
+	    }
+
+	    [Test]
+	    public void CanConsumeAcceptValidIsTrueAndShutdownNiceUponValidationExceptionWhenSavingSchedules()
+	    {
+		    var accept = getAcceptShiftTrade();
+
+		    var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
+		    var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+		    var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
+
+			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
+			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
+			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(approvalService);
+			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
+			scenarioRepository.Stub(x => x.Current()).Return(scenario);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			scheduleDictionarySaver.Stub(x => x.SaveChanges(null, null)).IgnoreArguments().Throw(new ValidationException());
+
+		    target.Consume(accept);
+		    Assert.AreEqual(false, personRequest.IsNew);
+		    Assert.AreEqual(false, personRequest.IsPending);
+		    Assert.AreEqual(true, personRequest.IsApproved);
+		    Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
+		                    shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+			Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
+			scheduleDictionarySaver.AssertWasCalled(x => x.SaveChanges(null, null), o => o.IgnoreArguments());
+			unitOfWork.AssertWasNotCalled(x => x.PersistAll());
+	    }
+
+	    [Test]
+	    public void ShouldKeepAsPendingWhenBusinessRulesFail()
+	    {
+		    var accept = getAcceptShiftTrade();
+
+		    var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
+		    var statusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
+		    var rule = MockRepository.GenerateMock<IBusinessRuleResponse>();
+		    var shiftTradeRequest = (IShiftTradeRequest) personRequest.Request;
+
+		    validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
+			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
+		    approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
+		                   .Return(new List<IBusinessRuleResponse> {rule, rule});
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(approvalService);
+			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
+			scenarioRepository.Stub(x => x.Current()).Return(scenario);
+			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker()).Return(statusChecker);
+			rule.Stub(x => x.Message).Return("aja baja!");
+
+			target.Consume(accept);
+		    Assert.AreEqual(false, personRequest.IsNew);
+		    Assert.AreEqual(true, personRequest.IsPending);
+		    Assert.AreEqual(false, personRequest.IsApproved);
+		    Assert.AreEqual(ShiftTradeStatus.OkByBothParts,
+		                    shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+		    personRequest.GetMessage(new NoFormatting())
+		                 .Should()
+		                 .Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\naja baja!\r\n");
+			unitOfWork.AssertWasCalled(x => x.PersistAll());
+	    }
+
+	    [Test]
+	    public void DoNotProcessAlreadyHandledAcceptMessages()
+	    {
+		    var accept = getAcceptShiftTrade();
+
+		    personRequest.Pending();
+		    personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
+			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
+
+		    target.Consume(accept);
+
+			unitOfWork.AssertWasNotCalled(x => x.PersistAll());
+	    }
+
+	    [Test]
+	    public void DoNotProcessAlreadyHandledCreatedMessages()
+	    {
+		    var shiftTradeRequestCreated = getNewShiftTradeRequestCreated();
+
+		    personRequest.Pending();
+		    personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
+		    personRequestRepository.Stub(x => x.Get(shiftTradeRequestCreated.PersonRequestId)).Return(personRequest);
+
+		    target.Consume(shiftTradeRequestCreated);
+
+			unitOfWork.AssertWasNotCalled(x => x.PersistAll());
+	    }
+
+	    private void prepareUnitOfWork()
         {
-            var created = getNewShiftTradeRequestCreated();
-            prepareUnitOfWork(1, true);
-            var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
-
-            using (mocker.Record())
-            {
-                Expect.Call(validator.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(true));
-                Expect.Call(personRequestRepository.Get(created.PersonRequestId)).Return(personRequest);
-                Expect.Call(scenarioRepository.Current()).Return(scenario).Repeat.AtLeastOnce();
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
-                          statusChecker);
-                Expect.Call(() => statusChecker.Check((IShiftTradeRequest)personRequest.Request));
-            }
-
-            using (mocker.Playback())
-            {
-                target.Consume(created);
-                Assert.AreEqual(false, personRequest.IsNew);
-                Assert.AreEqual(true, personRequest.IsPending);
-            }
-        }
-
-        [Test]
-        public void CanConsumeNewValidateIsFalse()
-        {
-            var created = getNewShiftTradeRequestCreated();
-            prepareUnitOfWork(1, true);
-            var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
-
-            using (mocker.Record())
-            {
-                ExpectCreationOfCommonRepositories(created.PersonRequestId);
-                Expect.Call(validator.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(false));
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
-                    statusChecker);
-                Expect.Call(() => statusChecker.Check((IShiftTradeRequest)personRequest.Request));
-            }
-
-            using (mocker.Playback())
-            {
-                target.Consume(created);
-                Assert.AreEqual(true, personRequest.IsDenied);
-            }
-        }
-
-        private void ExpectCreationOfCommonRepositories(Guid requestId)
-        {
-            Expect.Call(personRequestRepository.Get(requestId)).Return(personRequest);
-            Expect.Call(scenarioRepository.Current()).Return(scenario).Repeat.AtLeastOnce();
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void CanConsumeAcceptValidIsTrue()
-        {
-            var accept = getAcceptShiftTrade();
-
-            var approvalService = mocker.StrictMock<IRequestApprovalService>();
-            var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
-            var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
-            INewBusinessRuleCollection ruleCollection = null;
-
-            using (mocker.Record())
-            {
-                prepareUnitOfWork(1, true);
-
-                ExpectCreationOfCommonRepositories(accept.PersonRequestId);
-                Expect.Call(validator.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
-                Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
-                
-                ////Argh can't beleve this mocking!!! This is so anoying, have to set up all this crap to make the Swap work
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetRequestApprovalService(null, null)).Constraints(new[]{Is.Matching<NewBusinessRuleCollection>(
-                    b =>
-                        { ruleCollection = b;
-                            return true;
-                        }),Is.Equal(scenario)}).Return(approvalService);
-                Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
-                    new List<IBusinessRuleResponse>());
-	            Expect.Call(() => scheduleDictionarySaver.SaveChanges(null, null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
-                    statusChecker);
-                Expect.Call(() => statusChecker.Check(shiftTradeRequest)).Repeat.Twice();
-            }
-
-            using (mocker.Playback())
-            {
-                target.Consume(accept);
-                Assert.AreEqual(false, personRequest.IsNew);
-                Assert.AreEqual(false, personRequest.IsPending);
-                Assert.AreEqual(true, personRequest.IsApproved);
-                Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-				Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
-                ruleCollection.Item(typeof (NewPersonAccountRule)).HaltModify.Should().Be.False();
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void CanConsumeAcceptValidIsTrueAndShutdownNiceUponValidationExceptionWhenSavingSchedules()
-        {
-            var accept = getAcceptShiftTrade();
-
-            var approvalService = mocker.StrictMock<IRequestApprovalService>();
-            var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
-            var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
-
-            using (mocker.Record())
-            {
-                prepareUnitOfWork(1, false);
-
-                ExpectCreationOfCommonRepositories(accept.PersonRequestId);
-                Expect.Call(validator.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
-                Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
-
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(
-                    approvalService);
-                Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
-                    new List<IBusinessRuleResponse>());
-					            Expect.Call(() => scheduleDictionarySaver.SaveChanges(null, null)).IgnoreArguments().Throw(new ValidationException());
-                Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
-                    statusChecker);
-                Expect.Call(() => statusChecker.Check(shiftTradeRequest));
-            }
-
-            using (mocker.Playback())
-            {
-                target.Consume(accept);
-                Assert.AreEqual(false, personRequest.IsNew);
-                Assert.AreEqual(false, personRequest.IsPending);
-                Assert.AreEqual(true, personRequest.IsApproved);
-                Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-				Assert.AreEqual(accept.Message, personRequest.GetMessage(new NoFormatting()));
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldKeepAsPendingWhenBusinessRulesFail()
-        {
-            var accept = getAcceptShiftTrade();
-
-            var approvalService = mocker.StrictMock<IRequestApprovalService>();
-            var statusChecker = mocker.StrictMock<IShiftTradeRequestStatusChecker>();
-            var rule = mocker.StrictMock<IBusinessRuleResponse>();
-            var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
-
-            using (mocker.Record())
-            {
-                prepareUnitOfWork(1, true);
-
-                Expect.Call(validator.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
-                ExpectCreationOfCommonRepositories(accept.PersonRequestId);
-                Expect.Call(personRepository.Get(accept.AcceptingPersonId)).Return(toPerson);
-                
-                ////Argh can't beleve this mocking!!! This is so anoying, have to set up all this crap to make the Swap work
-                Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
-                Expect.Call(requestFactory.GetRequestApprovalService(null, scenario)).IgnoreArguments().Return(
-                    approvalService);
-                Expect.Call(approvalService.ApproveShiftTrade(shiftTradeRequest)).Return(
-                    new List<IBusinessRuleResponse>{rule,rule});
-								Expect.Call(() => scheduleDictionarySaver.SaveChanges(null, null)).IgnoreArguments(); 
-							Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
-                    statusChecker);
-                Expect.Call(() => statusChecker.Check(shiftTradeRequest)).Repeat.Twice();
-                Expect.Call(rule.Message).Return("aja baja!").Repeat.AtLeastOnce();
-            }
-
-            using (mocker.Playback())
-            {
-                target.Consume(accept);
-                Assert.AreEqual(false, personRequest.IsNew);
-                Assert.AreEqual(true, personRequest.IsPending);
-                Assert.AreEqual(false, personRequest.IsApproved);
-                Assert.AreEqual(ShiftTradeStatus.OkByBothParts, shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
-				personRequest.GetMessage(new NoFormatting()).Should().Be.EqualTo("I want to trade!\r\nViolation of a Business Rule:\r\naja baja!\r\n");
-            }
-        }
-
-        [Test]
-        public void DoNotProcessAlreadyHandledAcceptMessages()
-        {
-            var accept = getAcceptShiftTrade();
-
-            personRequest.Pending();
-            personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
-
-            using (mocker.Record())
-            {
-                prepareUnitOfWork(1, false);
-                Expect.Call(personRequestRepository.Get(accept.PersonRequestId)).Return(personRequest);
-            }
-
-            using (mocker.Playback())
-            {
-                target.Consume(accept);
-            }
-        }
-
-        [Test]
-        public void DoNotProcessAlreadyHandledCreatedMessages()
-        {
-            var shiftTradeRequestCreated = getNewShiftTradeRequestCreated();
-            
-            personRequest.Pending();
-            personRequest.Deny(null, "DenyReason", new PersonRequestAuthorizationCheckerForTest());
-
-            using (mocker.Record())
-            {
-                prepareUnitOfWork(1, false);
-                Expect.Call(personRequestRepository.Get(shiftTradeRequestCreated.PersonRequestId)).Return(personRequest);
-            }
-
-            using (mocker.Playback())
-            {
-                target.Consume(shiftTradeRequestCreated);
-            }
-        }
-
-        private void prepareUnitOfWork(int times, bool persistAll)
-        {
-	        var uowFactory = mocker.DynamicMock<IUnitOfWorkFactory>();
-	        Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-					Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(times);
-            Expect.Call(unitOfWork.Dispose).Repeat.Times(times);
-            if (persistAll)
-            {
-                Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>()).Repeat.Times(times);
-            }
+	        var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+	        unitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+		    uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
         }
 
         private static NewShiftTradeRequestCreated getNewShiftTradeRequestCreated()

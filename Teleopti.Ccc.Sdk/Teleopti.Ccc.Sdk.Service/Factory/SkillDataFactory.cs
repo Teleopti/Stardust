@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -17,61 +18,59 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
-	internal static class SkillDataFactory
+	public class SkillDataFactory
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		internal static ICollection<SkillDayDto> GetSkillData(DateOnlyDto dateOnlyDto, string timeZoneId)
+		private readonly ICurrentScenario _scenarioRepository;
+		private readonly IPersonRepository _personRepository;
+		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
+		private readonly ISkillRepository _skillRepository;
+		private readonly IWorkloadRepository _workloadRepository;
+		private readonly IScheduleRepository _scheduleRepository;
+		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly IPeopleAndSkillLoaderDecider _peopleAndSkillLoaderDecider;
+		private readonly ResourceCalculationPrerequisitesLoader _resourceCalculationPrerequisitesLoader;
+
+		public SkillDataFactory(ICurrentScenario scenarioRepository, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ISkillRepository skillRepository, IWorkloadRepository workloadRepository, IScheduleRepository scheduleRepository, ISkillDayLoadHelper skillDayLoadHelper, IPeopleAndSkillLoaderDecider peopleAndSkillLoaderDecider, ResourceCalculationPrerequisitesLoader resourceCalculationPrerequisitesLoader)
 		{
-			IRepositoryFactory repositoryFactory = new RepositoryFactory();
+			_scenarioRepository = scenarioRepository;
+			_personRepository = personRepository;
+			_personAbsenceAccountRepository = personAbsenceAccountRepository;
+			_skillRepository = skillRepository;
+			_workloadRepository = workloadRepository;
+			_scheduleRepository = scheduleRepository;
+			_skillDayLoadHelper = skillDayLoadHelper;
+			_peopleAndSkillLoaderDecider = peopleAndSkillLoaderDecider;
+			_resourceCalculationPrerequisitesLoader = resourceCalculationPrerequisitesLoader;
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public ICollection<SkillDayDto> GetSkillData(DateOnlyDto dateOnlyDto, string timeZoneId)
+		{
 			ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
 			TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
-				var requestedScenario = scenarioRepository.LoadDefaultScenario();
+				var requestedScenario = _scenarioRepository.Current();
 
 				var period = PreparePeriod(timeZoneInfo, dateOnlyDto);
 				var periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
 				var dateOnlyPeriodForResourceCalc = periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo);
 					
-				IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-				using (SchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder())
+				using (var schedulingResultStateHolder = new SchedulingResultStateHolder())
 				{
-					using (unitOfWork.DisableFilter(QueryFilter.Deleted))
-					{
-						repositoryFactory.CreateContractScheduleRepository(unitOfWork).LoadAllAggregate();
-						repositoryFactory.CreateActivityRepository(unitOfWork).LoadAll();
-						repositoryFactory.CreateAbsenceRepository(unitOfWork).LoadAll();
-					}
-					
-					var allPeople = personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true);
-					LoadSchedulingStateHolderForResourceCalculation loader =
-						new LoadSchedulingStateHolderForResourceCalculation(personRepository,
-																			repositoryFactory.
-																				CreatePersonAbsenceAccountRepository(
-																					unitOfWork),
-																			repositoryFactory.CreateSkillRepository(
-																				unitOfWork),
-																			repositoryFactory.CreateWorkloadRepository(
-																				unitOfWork),
-																			repositoryFactory.CreateScheduleRepository(
-																				unitOfWork), schedulingResultStateHolder,
-																			new PeopleAndSkillLoaderDecider(
-																				personRepository),
-																			new SkillDayLoadHelper(
-																				repositoryFactory.
-																					CreateSkillDayRepository
-																					(unitOfWork),
-																				repositoryFactory.
-																					CreateMultisiteDayRepository
-																					(
-																						unitOfWork)));
+					_resourceCalculationPrerequisitesLoader.Execute();
+	
+					var allPeople = _personRepository.FindPeopleInOrganization(dateOnlyPeriodForResourceCalc, true);
+					var loader = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository,
+					                                                                 _skillRepository, _workloadRepository,
+					                                                                 _scheduleRepository, schedulingResultStateHolder,
+					                                                                 _peopleAndSkillLoaderDecider, _skillDayLoadHelper);
 					loader.Execute(requestedScenario, periodForResourceCalc, allPeople);
 
 					var personSkillProvider = new PersonSkillProvider();
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
-																					new OccupiedSeatCalculator(),
-																					new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), 
+					                                                                new OccupiedSeatCalculator(),
+					                                                                new NonBlendSkillCalculator(), personSkillProvider, new PeriodDistributionService(), 
 					                                                                new CurrentTeleoptiPrincipal());
 					foreach (DateOnly dateTime in dateOnlyPeriodForResourceCalc.DayCollection())
 					{
