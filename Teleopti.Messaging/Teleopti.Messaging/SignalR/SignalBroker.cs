@@ -320,6 +320,11 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartMessageBroker()
 		{
+			StartMessageBroker(TimeSpan.FromSeconds(240));
+		}
+		
+		public void StartMessageBroker(TimeSpan reconnectDelay)
+		{
 			Uri serverUrl;
 			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
 			{
@@ -334,7 +339,7 @@ namespace Teleopti.Messaging.SignalR
 				_subscriberWrapper.OnNotification += onNotification;
 				_subscriberWrapper.Start();
 
-				_wrapper = new SignalWrapper(hubProxy, connection, null);
+				_wrapper = new SignalWrapper(hubProxy, connection, null, reconnectDelay);
 				_wrapper.StartHub();
 			}
 		}

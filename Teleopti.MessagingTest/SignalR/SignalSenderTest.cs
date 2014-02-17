@@ -177,7 +177,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.StartBrokerService();
+			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
@@ -190,7 +190,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.StartBrokerService();
+			target.StartBrokerService(reconnectDelay: TimeSpan.FromSeconds(0));
 
 			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new Exception())).Repeat.Once();
 			
@@ -205,7 +205,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var log = MockRepository.GenerateMock<ILog>();
 
 			var target = makeSignalSender(hubConnection, log);
-			target.StartBrokerService();
+			target.StartBrokerService(reconnectDelay: TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
@@ -220,7 +220,7 @@ namespace Teleopti.MessagingTest.SignalR
 			var log = MockRepository.GenerateMock<ILog>();
 
 			var target = makeSignalSender(hubConnection, log);
-			target.StartBrokerService();
+			target.StartBrokerService(reconnectDelay: TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(x => x.Reconnected += null).Raise();
 

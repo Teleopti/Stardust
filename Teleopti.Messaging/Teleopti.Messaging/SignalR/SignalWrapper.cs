@@ -20,6 +20,7 @@ namespace Teleopti.Messaging.SignalR
 
 		private readonly IHubProxy _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
+		private readonly TimeSpan _reconnectDelay;
 
 		protected ILog Logger ;
 		private static readonly object LockObject = new object();
@@ -28,10 +29,11 @@ namespace Teleopti.Messaging.SignalR
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
 		public const string ConnectionReconnected = "Connection reconnected";
 			
-		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger)
+		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger, TimeSpan reconnectDelay)
 		{
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
+			_reconnectDelay = reconnectDelay;
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
 
@@ -89,8 +91,11 @@ namespace Teleopti.Messaging.SignalR
 
 		private void reconnect()
 		{
+			// ErikS: 2014-02-17
+			// To handle lots of MyTime and MyTimeWeb clients we dont want to flood with reconnect attempts
+			// Closed event triggers when the broker is actually down, IE the server died not from recycles
+			TaskHelper.Delay(_reconnectDelay).Wait();
 			Logger.Error(ConnectionRestartedErrorMessage);
-			TaskHelper.Delay(TimeSpan.FromSeconds(15)).Wait();
 			_hubConnection.Start();
 		}
 
