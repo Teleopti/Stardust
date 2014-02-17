@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -21,7 +22,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 {
     public class ShiftTradeRequestSaga : ConsumerOf<NewShiftTradeRequestCreated>, ConsumerOf<AcceptShiftTrade>
     {
-	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
+
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IShiftTradeValidator _validator;
         private readonly IRequestFactory _requestFactory;
@@ -32,7 +35,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 				private readonly IScheduleDifferenceSaver _scheduleDictionarySaver;
     	private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
-	    private readonly static ILog Logger = LogManager.GetLogger(typeof(ShiftTradeRequestSaga));
         private IPersonRequest _personRequest;
         private ShiftTradeRequestValidationResult _validationResult;
         private IShiftTradeRequest _shiftTradeRequest;
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
     	    _loadSchedulingDataForRequestWithoutResourceCalculation = loadSchedulingDataForRequestWithoutResourceCalculation;
 				_differenceService = differenceService;
 
-				Logger.Info("New instance of Shift Trade saga was created");
+			Logger.Info("New instance of Shift Trade saga was created");
         }
 
         public void Consume(NewShiftTradeRequestCreated message)

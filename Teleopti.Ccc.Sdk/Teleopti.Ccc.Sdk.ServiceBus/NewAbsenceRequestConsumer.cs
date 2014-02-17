@@ -4,6 +4,7 @@ using System.Globalization;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     public class NewAbsenceRequestConsumer : ConsumerOf<NewAbsenceRequestCreated>
     {
         private readonly static ILog Logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
+
 	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
         private readonly ICurrentScenario _scenarioRepository;
@@ -51,14 +53,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulesForRequestWithoutResourceCalculation;
         private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
         private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
-        private IProcessAbsenceRequest _process;
+	    private readonly IResourceCalculationPrerequisitesLoader _prereqLoader;
+	    private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
 		public NewAbsenceRequestConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonAbsenceAccountProvider personAbsenceAccountProvider, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
 																				 IScheduleDifferenceSaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, 
                                          IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
-                                         ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
+                                         ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification, IResourceCalculationPrerequisitesLoader prereqLoader)
         {
 	        _unitOfWorkFactory = unitOfWorkFactory;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
@@ -77,8 +80,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	    _loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
     	    _alreadyAbsentSpecification = alreadyAbsentSpecification;
     	    _budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
+			_prereqLoader = prereqLoader;
 
-    	    _loadDataActions = new List<LoadDataAction>
+			_loadDataActions = new List<LoadDataAction>
                                    {
                                        LoadAndCheckPersonRequest,
                                        GetAndCheckAbsenceRequest,
@@ -351,6 +355,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             if (shouldLoadDataForResourceCalculation)
             {
                 DateTimePeriod periodForResourceCalc = _absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
+				_prereqLoader.Execute();
                 _loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
                                                                          periodForResourceCalc,
                                                                          new List<IPerson> {_absenceRequest.Person});
