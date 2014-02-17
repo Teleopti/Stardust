@@ -178,7 +178,6 @@
 
 html.full-height, html.full-height body, html.full-height form.aspnetform{ height: 100%; }
 
-#page{padding-top: 17px;}
 html.full-height #page, html.full-height #page-signin{ 
 	 min-height: 100%;
 	height: auto !important;
@@ -762,7 +761,6 @@ End personal drop down menu
 /* Large desktop */
 @media (min-width: 993px) {
     body {
-        padding-top: 60px;
     }
 }
 
@@ -786,7 +784,6 @@ End personal drop down menu
         padding-top: 60px;
     }
 }
-
   .select2-drop{
     z-index: 9999999999999 !important;
 }
