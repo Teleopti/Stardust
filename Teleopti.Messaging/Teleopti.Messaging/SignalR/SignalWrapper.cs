@@ -26,8 +26,8 @@ namespace Teleopti.Messaging.SignalR
 		private readonly Task emptyTask;
 
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
+		public const string ConnectionReconnected = "Connection reconnected";
 			
-		
 		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger)
 		{
 			_hubProxy = hubProxy;
@@ -37,14 +37,7 @@ namespace Teleopti.Messaging.SignalR
 
 			emptyTask = TaskHelper.MakeEmptyTask();
 		}
-
-		private void reconnect()
-		{
-			Logger.Error(ConnectionRestartedErrorMessage);
-			TaskHelper.Delay(TimeSpan.FromSeconds(15)).Wait();
-			_hubConnection.Start();
-		}
-
+		
 		public void StartHub()
 		{
 			startHubConnection();
@@ -57,6 +50,7 @@ namespace Teleopti.Messaging.SignalR
 				Exception exception = null;
 				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
 				_hubConnection.Closed += reconnect;
+				_hubConnection.Reconnected += hubConnectionOnReconnected;
 				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				{
@@ -91,6 +85,18 @@ namespace Teleopti.Messaging.SignalR
 				Logger.Error("An error happened when starting hub connection.", exception);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
+		}
+
+		private void reconnect()
+		{
+			Logger.Error(ConnectionRestartedErrorMessage);
+			TaskHelper.Delay(TimeSpan.FromSeconds(15)).Wait();
+			_hubConnection.Start();
+		}
+
+		private void hubConnectionOnReconnected()
+		{
+			Logger.Info(ConnectionReconnected);
 		}
 
 		public Task AddSubscription(Subscription subscription)

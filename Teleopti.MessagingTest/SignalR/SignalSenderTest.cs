@@ -212,6 +212,22 @@ namespace Teleopti.MessagingTest.SignalR
 			log.AssertWasCalled(x => x.Error(SignalWrapper.ConnectionRestartedErrorMessage));
 		}
 
+		[Test]
+		public void ShouldLogWhenReconnected()
+		{
+			var hubProxy = stubProxy();
+			var hubConnection = stubHubConnection(hubProxy);
+			var log = MockRepository.GenerateMock<ILog>();
+
+			var target = makeSignalSender(hubConnection, log);
+			target.StartBrokerService();
+
+			hubConnection.GetEventRaiser(x => x.Reconnected += null).Raise();
+
+			log.AssertWasCalled(x => x.Info(SignalWrapper.ConnectionReconnected));
+			
+		}
+
 		private class hubProxyFake : IHubProxy
 		{
 			public readonly IList<IEnumerable<Notification>> NotifyClientsMultipleInvokedWith =
