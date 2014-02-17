@@ -9,7 +9,7 @@
     var left = Html.HtmlStyleLeft();
 }
 <div class="navbar navbar-default" >
-	<div class="navbar-nav" data-bind="if: showTeamPicker">
+	<div class="navbar-nav">
 		<form class="navbar-form navbar-left">
 			<div class="form-group" style="width: 294px">
 				<div class="input-group">
@@ -23,7 +23,8 @@
 					</div>
 				</div>
 			</div>
-
+			
+			<!-- ko if: showTeamPicker -->
 			<div class="form-group" data-bind="if: showGroupings">
 				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
 					<optgroup data-bind="attr: { label: text }, foreach: children">
@@ -36,6 +37,7 @@
 					<option data-bind="text: text, value: id"></option>
 				</select>
 			</div>
+			<!-- /ko -->
 		</form>
 		<ul class="nav navbar-nav">
 			@if (Model.ShiftTradePermisssion)
