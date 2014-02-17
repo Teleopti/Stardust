@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			{
 				if (messageBrokerIsRunning())
 				{
-				    var firstDate = message.ScheduleDays.Min(d => d.Date);
+				    var firstDate = message.ScheduleDays.Min(d => d.Date).AddDays(1);
 				    var lastDate = message.ScheduleDays.Max(d => d.Date);
                     _messageBroker.SendEventMessage(message.Datasource, message.BusinessUnitId, firstDate, lastDate, Guid.Empty, message.PersonId, typeof(Person), Guid.Empty, typeof(IScheduleChangedInDefaultScenario), DomainUpdateType.NotApplicable, null);
 				}
