@@ -50,10 +50,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.DatePickerFormat = ko.observable();
 		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
 		self.DatePickerFormat(datePickerFormat);
-		self.DatePickerFormat = ko.observable();
-		var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
-		self.DatePickerFormat(datePickerFormat);
-	    self.IsLastPage = false;
+		self.IsLastPage = false;
 	    self.availableTeams = ko.observableArray();
 	    self.selectedTeamInternal = ko.observable();
 	    self.missingMyTeam = ko.observable();
@@ -255,7 +252,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				dataType: "json",
 				type: 'GET',
 				success: function (data, textStatus, jqXHR) {
-					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
 					if (data.HasWorkflowControlSet) {
 					    self.now = moment(new Date(data.NowYear, data.NowMonth-1, data.NowDay));
 						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
@@ -263,7 +259,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 							var md = moment(date);
 							if (self.isRequestedDateValid(md)) {
 								self.requestedDate(md);
-								return;
 							}
 						}
 						self.requestedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
@@ -272,7 +267,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					    self.setScheduleLoadedReady();
 					    self.isReadyLoaded(true);
 					}
-					
+					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
 				}
 			});
 		};

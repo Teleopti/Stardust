@@ -146,55 +146,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
 
-        /// <summary>
-        /// Verifies find assignments based on dates.
-        /// </summary>
-        [Test]
-        public void CanFindAssignmentsByDates()
-        {
-            ////////////setup////////////////////////////////////////////////////////////////
-            DateTimePeriod period1 =
-                new DateTimePeriod(new DateTime(2007, 8, 1, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 1, 17, 15, 0, DateTimeKind.Utc));
-            DateTimePeriod period2 =
-                new DateTimePeriod(new DateTime(2007, 8, 2, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 2, 17, 15, 0, DateTimeKind.Utc));
-            DateTimePeriod period3 =
-                new DateTimePeriod(new DateTime(2007, 8, 20, 10, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 21, 17, 15, 0, DateTimeKind.Utc));
-            IAbsence abs1 = AbsenceFactory.CreateAbsence("Semester");
-            IAbsence abs2 = AbsenceFactory.CreateAbsence("Sjuk");
-            IAbsence abs3 = AbsenceFactory.CreateAbsence("Läkare");
-            PersistAndRemoveFromUnitOfWork(abs1);
-            PersistAndRemoveFromUnitOfWork(abs2);
-            PersistAndRemoveFromUnitOfWork(abs3);
-            AbsenceLayer layer1 = new AbsenceLayer(abs1, period1);
-            AbsenceLayer layer2 = new AbsenceLayer(abs2, period2);
-            AbsenceLayer layer3 = new AbsenceLayer(abs3, period3);
-
-            PersonAbsence agAbsValid1 = new PersonAbsence(dummyAgent, dummyScenario, layer1);
-            PersonAbsence agAbsValid2 = new PersonAbsence(dummyAgent, dummyScenario, layer2);
-            PersonAbsence agAbsInValid3 = new PersonAbsence(dummyAgent, dummyScenario, layer3);
-
-            PersistAndRemoveFromUnitOfWork(agAbsValid1);
-            PersistAndRemoveFromUnitOfWork(agAbsValid2);
-            PersistAndRemoveFromUnitOfWork(agAbsInValid3);
-
-            DateTimePeriod searchPeriod =
-                new DateTimePeriod(new DateTime(2007, 8, 1, 9, 15, 0, DateTimeKind.Utc),
-                                   new DateTime(2007, 8, 2, 10, 30, 0, DateTimeKind.Utc));
-
-            /////////////////////////////////////////////////////////////////////////////////
-
-            ICollection<IPersonAbsence> retList = rep.Find(searchPeriod);
-
-            verifyRelatedObjectsAreEagerlyLoaded(retList);
-            Assert.IsTrue(retList.Contains(agAbsValid1));
-            Assert.IsTrue(retList.Contains(agAbsValid2));
-            Assert.IsFalse(retList.Contains(agAbsInValid3));
-            Assert.AreEqual(2, retList.Count);
-        }
-
         [Test]
         public void VerifyCanReadAllPersonAbsencesForOnePersonAndAbsence()
         {
@@ -399,37 +350,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, retList.Count);
         }
 
-		[Test]
-		public void CanFindAgentAbsencesWithCorrectPeriodAndAbsence()
-		{
-			var okScenario = new Scenario("Low");
-			var abs1 = AbsenceFactory.CreateAbsence("Semester");
-			var abs2 = AbsenceFactory.CreateAbsence("Sick");
-			dummyAgent = PersonFactory.CreatePerson("k");
-			dummyAgent2 = PersonFactory.CreatePerson("l");
-			var period = new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
-								   new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc));
-
-			PersistAndRemoveFromUnitOfWork(abs1);
-			PersistAndRemoveFromUnitOfWork(abs2);
-			PersistAndRemoveFromUnitOfWork(dummyAgent);
-			PersistAndRemoveFromUnitOfWork(dummyAgent2);
-			PersistAndRemoveFromUnitOfWork(okScenario);
-			
-			var layer1 = new AbsenceLayer(abs1, period);
-			var layer2 = new AbsenceLayer(abs2, period);
-			var personAbsence1 = new PersonAbsence(dummyAgent, okScenario, layer1);
-			var personAbsence2 = new PersonAbsence(dummyAgent2, okScenario, layer2);
-			//personAbsence1.Layer.Payload
-			PersistAndRemoveFromUnitOfWork(personAbsence1);
-			PersistAndRemoveFromUnitOfWork(personAbsence2);
-
-			IList<IPerson> persons = new List<IPerson> { dummyAgent , dummyAgent2};
-			
-			var retList = rep.Find(persons, new DateTimePeriod(2000, 1, 1, 2007, 1, 3), okScenario, abs1);
-			verifyRelatedObjectsAreEagerlyLoaded(retList);
-			Assert.AreEqual(1, retList.Count());
-		}
 
 		[Test]
 		public void ShouldNotFetchIfScenarioIsNotLoggedOnBusinessUnit()

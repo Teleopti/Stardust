@@ -1523,5 +1523,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(dateTimePeriod1, _target.PersonAssignment().PersonalActivities().First().Period);
 			Assert.AreEqual(dateTimePeriod2, _target.PersonAssignment().PersonalActivities().Last().Period);
 		}
+
+		[Test]
+		public void ShouldMergeMainShiftDaylightSavingsDay()
+		{
+			IActivity activity = ActivityFactory.CreateActivity("activity");
+			var start = new DateTime(2014, 3, 27, 8, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2014, 3, 27, 10, 0, 0, DateTimeKind.Utc);
+			var expectedPeriod = new DateTimePeriod(2014, 3, 30, 8, 2014, 3, 30, 10);
+			var shiftCategory = new ShiftCategory("shiftCategory");
+
+			var dateTimePeriod1 = new DateTimePeriod(start, end);
+
+			var sourceDay = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2014, 3, 27));
+			var targetDay = ExtractedSchedule.CreateScheduleDay(dic, parameters.Person, new DateOnly(2014, 3, 30));
+			sourceDay.CreateAndAddActivity(activity, dateTimePeriod1, shiftCategory);
+			
+			targetDay.Merge(sourceDay, false);
+			Assert.AreEqual(expectedPeriod, targetDay.PersonAssignment().Period);		
+		}
 	}
 }

@@ -13,20 +13,20 @@
             <tr>
                 <td>
                     <div style="margin-bottom: 10px" class="input-group">
-                        <span class="input-group-addon" data-bind="clickable: previousDateValid">
+                        <span class="input-group-addon" data-bind="clickable: previousDateValid, enable: previousDateValid">
                             <i class="glyphicon glyphicon-chevron-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
-                        </span>
+                        </button>
                         <input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
                         <span class="input-group-addon" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
                             <i class="glyphicon glyphicon-calendar" ></i>
-                        </span>
+                        </button>
                         <span class="input-group-addon" data-bind="clickable: nextDateValid, enable: nextDateValid">
                             <i class="glyphicon glyphicon-chevron-right" data-bind="click: nextDate, enable: !IsLoading()"></i>
-                        </span>
+                        </button>
                     </div>
                 </td>
                 <td>
-                    <div style="margin-bottom: 10px" data-bind="if: !missingMyTeam()">
+                    <div style="margin-bottom: 9px" data-bind="if: !missingMyTeam()">
                         <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
                             <option data-bind="text: text, value: id"></option>
                         </select>

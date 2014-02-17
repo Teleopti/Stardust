@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
@@ -42,12 +41,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </remarks>
 		ICollection<IPersonAbsence> Find(DateTimePeriod period, IScenario scenario);
 
-		/// <summary>
-		/// Finds the specified Assignments by the given Period param.
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <returns></returns>
-		ICollection<IPersonAbsence> Find(DateTimePeriod period);
 
 		/// <summary>
 		/// </summary>
@@ -61,15 +54,5 @@ namespace Teleopti.Interfaces.Domain
 		/// Created date: 2009-02-12
 		/// </remarks>
 		ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="persons"></param>
-		/// <param name="optimizedPeriod"></param>
-		/// <param name="scenario"></param>
-		/// <param name="absence"></param>
-		/// <returns></returns>
-		IEnumerable<IPersonAbsence> Find(IList<IPerson> persons, DateTimePeriod optimizedPeriod, IScenario scenario, IAbsence absence);
 	}
 }

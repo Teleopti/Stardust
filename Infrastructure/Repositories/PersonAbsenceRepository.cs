@@ -89,22 +89,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		/// <summary>
-		/// Finds the specified AgentAbsences by the given Period param.
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <returns></returns>
-		public ICollection<IPersonAbsence> Find(DateTimePeriod period)
-		{
-			ICollection<IPersonAbsence> retList = Session.CreateCriteria(typeof(PersonAbsence), "abs")
-						    .SetFetchMode("LayerCollection", FetchMode.Join)
-						    .Add(Subqueries.Exists(GetAgentAbsencesInPeriod(period)))
-						    .SetResultTransformer(Transformers.DistinctRootEntity)
-						    .List<IPersonAbsence>();
-			initializeAbsences(retList);
-			return retList;
-		}
-
 		public ICollection<DateTimePeriod> AffectedPeriods(IPerson person, IScenario scenario, DateTimePeriod period, IAbsence absence)
 		{
 			const string q = @"select pa.Layer.Period
@@ -126,24 +110,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return periods;
 		}
 
-		public IEnumerable<IPersonAbsence> Find(IList<IPerson> persons, DateTimePeriod optimizedPeriod, IScenario scenario, IAbsence absence)
-		{
-			var retList = new List<IPersonAbsence>();
-
-			foreach (var personList in persons.Batch(400))
-			{
-
-				retList.AddRange(Session.CreateCriteria(typeof(PersonAbsence), "abs")
-					.Add(Subqueries.Exists(GetAgentAbsencesInPeriod(optimizedPeriod, scenario)
-											   .Add(Restrictions.In("Person", personList.ToArray()))
-											   .Add(Restrictions.Eq("Layer.Payload", absence))))
-					.SetResultTransformer(Transformers.DistinctRootEntity)
-					.List<IPersonAbsence>());
-			}
-
-			initializeAbsences(retList);
-			return retList;
-		}
 
 		/// <summary>
 		/// Finds the specified period.
