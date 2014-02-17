@@ -24,6 +24,9 @@ namespace Teleopti.Messaging.SignalR
 		protected ILog Logger ;
 		private static readonly object LockObject = new object();
 		private readonly Task emptyTask;
+
+		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
+			
 		
 		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger)
 		{
@@ -31,14 +34,14 @@ namespace Teleopti.Messaging.SignalR
 			_hubConnection = hubConnection;
 
 			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
-			
-			var tcs = new TaskCompletionSource<object>();
-			tcs.SetResult(null);
-			emptyTask = tcs.Task;
+
+			emptyTask = TaskHelper.MakeEmptyTask();
 		}
 
 		private void reconnect()
 		{
+			Logger.Error(ConnectionRestartedErrorMessage);
+			TaskHelper.Delay(TimeSpan.FromSeconds(15)).Wait();
 			_hubConnection.Start();
 		}
 

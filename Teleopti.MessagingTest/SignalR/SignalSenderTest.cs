@@ -41,6 +41,11 @@ namespace Teleopti.MessagingTest.SignalR
 			return new asyncSignalSenderForTest(hubConnection, new Now());
 		}
 
+		private asyncSignalSenderForTest makeSignalSender(IHubConnectionWrapper hubConnection, ILog log)
+		{
+			return new asyncSignalSenderForTest(hubConnection, new Now(), log);
+		}
+
 		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy)
 		{
 			return makeSignalSender(hubProxy, new Now());
@@ -188,8 +193,23 @@ namespace Teleopti.MessagingTest.SignalR
 			target.StartBrokerService();
 
 			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new Exception())).Repeat.Once();
-
+			
 			hubConnection.AssertWasCalled(x => x.Start());
+		}
+
+		[Test]
+		public void ShouldLogWhenTryingToReconnect()
+		{
+			var hubProxy = stubProxy();
+			var hubConnection = stubHubConnection(hubProxy);
+			var log = MockRepository.GenerateMock<ILog>();
+
+			var target = makeSignalSender(hubConnection, log);
+			target.StartBrokerService();
+
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+
+			log.AssertWasCalled(x => x.Error(SignalWrapper.ConnectionRestartedErrorMessage));
 		}
 
 		private class hubProxyFake : IHubProxy
