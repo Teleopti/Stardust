@@ -17,18 +17,19 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private const string notifyclients = "NotifyClients";
 		private const string notifyclientsmultiple = "NotifyClientsMultiple";
+		private const string addsubscription = "AddSubscription";
+		private const string removesubscription = "RemoveSubscription";
 
 		private readonly IHubProxy _hubProxy;
 		private readonly IHubConnectionWrapper _hubConnection;
 		private readonly TimeSpan _reconnectDelay;
 
 		protected ILog Logger ;
-		private static readonly object LockObject = new object();
 		private readonly Task emptyTask;
 
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
-		public const string ConnectionReconnected = "Connection reconnected";
-			
+		public const string ConnectionReconnected = "Connection reconnected successfully";
+
 		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger, TimeSpan reconnectDelay)
 		{
 			_hubProxy = hubProxy;
@@ -41,11 +42,6 @@ namespace Teleopti.Messaging.SignalR
 		}
 		
 		public void StartHub()
-		{
-			startHubConnection();
-		}
-
-		private void startHubConnection()
 		{
 			try
 			{
@@ -106,68 +102,12 @@ namespace Teleopti.Messaging.SignalR
 
 		public Task AddSubscription(Subscription subscription)
 		{
-			if (verifyStillConnected())
-			{
-				try
-				{
-					var startTask = _hubProxy.Invoke("AddSubscription", subscription);
-					startTask.ContinueWith(t =>
-					{
-						if (t.IsFaulted && t.Exception != null)
-						{
-							Logger.Error("An error happened when adding subscription.", t.Exception.GetBaseException());
-						}
-					}, TaskContinuationOptions.OnlyOnFaulted);
-					return startTask;
-				}
-				catch (InvalidOperationException exception)
-				{
-					Logger.Error("An error happened when adding subscriptions.", exception);
-				}
-			}
-			return emptyTask;
+			return notify(addsubscription, subscription);
 		}
 
 		public Task RemoveSubscription(string route)
 		{
-			if (verifyStillConnected())
-			{
-				var startTask = _hubProxy.Invoke("RemoveSubscription", route);
-				startTask.ContinueWith(t =>
-				{
-					if (t.IsFaulted && t.Exception != null)
-					{
-						Logger.Error("An error happened when removing subscription.", t.Exception.GetBaseException());
-					}
-				}, TaskContinuationOptions.OnlyOnFaulted);
-				return startTask;
-			}
-			return emptyTask;
-		}
-
-		private bool verifyStillConnected()
-		{
-			if (_hubConnection.State != ConnectionState.Connected)
-			{
-				lock (LockObject)
-				{
-					if (_hubConnection.State != ConnectionState.Connected)
-					{
-						try
-						{
-							startHubConnection();
-							return true;
-						}
-						catch (Exception ex)
-						{
-							//Suppress! Already logged upon startup for general failures.
-							Logger.Error("An error happened when verifying that we still are connected.", ex);
-							return false;
-						}
-					}
-				}
-			}
-			return true;
+			return notify(removesubscription, route);
 		}
 
 		public Task NotifyClients(Notification notification)
@@ -194,16 +134,17 @@ namespace Teleopti.Messaging.SignalR
 			}
 			return emptyTask;
 		}
-		
+
 		public void StopHub()
 		{
 			if (_hubConnection == null) return;
-			
+
 			try
 			{
 				_hubConnection.Reconnected -= hubConnectionOnReconnected;
 				_hubConnection.Closed -= reconnect;
-				_hubConnection.Stop();
+				if (_hubConnection.State == ConnectionState.Connected)
+					_hubConnection.Stop();
 			}
 			catch (Exception ex)
 			{
