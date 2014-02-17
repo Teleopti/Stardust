@@ -56,6 +56,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				Exception exception = null;
 				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
+				_hubConnection.Closed += reconnect;
 				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				{
@@ -90,7 +91,6 @@ namespace Teleopti.Messaging.SignalR
 				Logger.Error("An error happened when starting hub connection.", exception);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}
-			_hubConnection.Closed += reconnect;
 		}
 
 		public Task AddSubscription(Subscription subscription)
@@ -186,7 +186,7 @@ namespace Teleopti.Messaging.SignalR
 		
 		public void StopHub()
 		{
-			if (_hubConnection == null || _hubConnection.State != ConnectionState.Connected) return;
+			if (_hubConnection == null) return;
 			
 			try
 			{
