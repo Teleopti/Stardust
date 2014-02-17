@@ -8,51 +8,44 @@
     const int scheduleWidth = 803;
     var left = Html.HtmlStyleLeft();
 }
-<div class="navbar navbar-default">
-    <div class="col-xs-4" style="margin-top: 8px">
-        <div class="input-group">
-            <span class="input-group-btn">
-                <button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
-            </span>
-            <input data-bind="value: displayDate" type="text" class="col-xs-2 text-center form-control" readonly="readonly" />
-            <div class="input-group-btn">
-                <button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
-                <button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
-            </div>
-        </div>
+<div class="navbar navbar-default nowrap" >
+	<div class="navbar-nav nowrap" data-bind="if: showTeamPicker" style="width: 1800px">
+		<form class="navbar-form navbar-left">
+			<div class="form-group" style="width: 294px">
+				<div class="input-group">
+					<span class="input-group-btn">
+						<button class="btn btn-default" data-bind="click: previousDay, css: 'done'"><i class="glyphicon glyphicon-chevron-left"></i></button>
+					</span>
+					<input data-bind="value: displayDate" type="text" class="text-center form-control" readonly="readonly" />
+					<div class="input-group-btn">
+						<button class="btn btn-default moment-datepicker"><i class="glyphicon glyphicon-th"></i></button>
+						<button class="btn btn-default" data-bind="click: nextDay, css: 'done'"><i class="glyphicon glyphicon-chevron-right"></i></button>
+					</div>
+				</div>
+			</div>
 
-        <ul class="nav" data-bind="if: showTeamPicker">
-            <li class="divider-vertical"></li>
-        </ul>
-    </div>
-    <div class="navbar-nav col-xs-6" style="margin-top: 10px" data-bind="if: showTeamPicker">
-
-        <span data-bind="if: showGroupings">
-            <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                <optgroup data-bind="attr: { label: text }, foreach: children">
-                    <option data-bind="text: text, value: id"></option>
-                </optgroup>
-            </select>
-        </span>
-        <span data-bind="if: !showGroupings()">
-            <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
-                <option data-bind="text: text, value: id"></option>
-            </select>
-        </span>
-        @if (Model.ShiftTradePermisssion)
-        {
-            <div style="float: right">
-                <ul class="nav navbar-nav" data-bind="if: showTeamPicker">
-                    <li class="divider-vertical"></li>
-                </ul>
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
-                    </li>
-                </ul>
-            </div>
-        }
-    </div>
+			<div class="form-group" data-bind="if: showGroupings">
+				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+					<optgroup data-bind="attr: { label: text }, foreach: children">
+						<option data-bind="text: text, value: id"></option>
+					</optgroup>
+				</select>
+			</div>
+			<div class="form-group" data-bind="if: !showGroupings()">
+				<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
+					<option data-bind="text: text, value: id"></option>
+				</select>
+			</div>
+		</form>
+		<ul class="nav navbar-nav">
+			@if (Model.ShiftTradePermisssion)
+			{
+				<li data-bind="if: showTeamPicker">
+					<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
+				</li>
+			}
+		</ul>
+	</div>
 </div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
     <div>
