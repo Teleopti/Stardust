@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyEvaluateIterationsTillStabilization()
         {
             _target.Evaluate(1, 100);
-            Assert.AreEqual(13, _target.InnerIteration);
+            Assert.AreEqual(43, _target.InnerIteration);
         }
 
         private static void DebugWriteMatrix(double[,] a)
