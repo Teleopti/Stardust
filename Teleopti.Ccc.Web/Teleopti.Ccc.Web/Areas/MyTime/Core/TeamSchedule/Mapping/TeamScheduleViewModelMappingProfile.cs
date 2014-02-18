@@ -65,30 +65,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				;
 
 			CreateMap<TimeLineMappingData, TimeLineViewModel>()
-				.ForMember(d => d.ShortTime, o => o.ResolveUsing(s =>
-					{
-						var localTime = TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone());
-						return _createHourText.CreateText(s.Time);
-
-						var timeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
-						timeFormat = timeFormat.Replace(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator, string.Empty);
-						timeFormat = timeFormat.Replace("m", string.Empty);
-						if (timeFormat == "h")
-							timeFormat = "hh";
-						else if (timeFormat == "H")
-							timeFormat = "HH";
-						return localTime.ToString(timeFormat);
-					}))
+				.ForMember(d => d.ShortTime, o => o.ResolveUsing(s => _createHourText.CreateText(s.Time)))
 				.ForMember(d => d.PositionPercent, o => o.ResolveUsing(s =>
 																					{
 																						var displayedTicks = (decimal)s.DisplayTimePeriod.EndDateTime.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;
 																						var positionTicks = (decimal)s.Time.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;
 																						return positionTicks / displayedTicks;
 																					}))
-				.ForMember(d => d.IsFullHour, o => o.ResolveUsing( s =>
-					{
-						return TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay.Minutes == 0;
-					}))
+				.ForMember(d => d.IsFullHour, o => o.ResolveUsing( s => TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay.Minutes == 0))
 				;
 
 			CreateMap<TeamScheduleDayDomainData, AgentScheduleViewModel>()
