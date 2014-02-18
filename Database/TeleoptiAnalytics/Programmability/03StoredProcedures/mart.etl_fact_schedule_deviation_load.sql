@@ -555,36 +555,41 @@ END
 
 /* Insert of new data */
 INSERT INTO mart.fact_schedule_deviation
-	(
-	shift_startdate_local_id,
+	(shift_startdate_local_id, 
 	date_id, 
-	shift_startdate_id,
-	shift_startinterval_id,
-	interval_id,
+	interval_id, 
 	person_id, 
-	scheduled_ready_time_s,
-	ready_time_s,
-	is_logged_in,
-	contract_time_s,
-	business_unit_id,
+	scheduled_ready_time_s, 
+	ready_time_s, 
+	contract_time_s, 
+	deviation_schedule_s, 
+	deviation_schedule_ready_s, 
+	deviation_contract_s, 
+	business_unit_id, 
 	datasource_id, 
 	insert_date, 
-	update_date
+	update_date, 
+	is_logged_in, 
+	shift_startdate_id, 
+	shift_startinterval_id
 	)
 SELECT
-	shift_stardate_local_id	= shift_startdate_local_id,
-	date_id					= date_id, 
-	shift_startdate_id		= shift_startdate_id,
-	shift_startinterval_id	= shift_startinterval_id,
-	interval_id				= interval_id,
-	person_id				= person_id, 
-	scheduled_ready_time_s	= scheduled_ready_time_s,
-	ready_time_s			= ready_time_s,
-	is_logged_in			= is_logged_in, --Calculated bit value
-	contract_time_s			= contract_time_s,
-	business_unit_id		= business_unit_id,
-	datasource_id			= -1, 
-	insert_date				= getdate(), 
-	update_date				= getdate()
+	shift_startdate_local_id	= shift_startdate_local_id, 
+	date_id						= date_id, 
+	interval_id					= interval_id, 
+	person_id					= person_id, 
+	scheduled_ready_time_s		= scheduled_ready_time_s, 
+	ready_time_s				= ready_time_s, 
+	contract_time_s				= contract_time_s, 
+	deviation_schedule_s		= deviation_schedule_s, 
+	deviation_schedule_ready_s	= deviation_schedule_ready_s, 
+	deviation_contract_s		= deviation_contract_s, 
+	business_unit_id			= business_unit_id, 
+	datasource_id				= -1, 
+	insert_date					= getdate(), 
+	update_date					= getdate(),
+	is_logged_in				= is_logged_in, 
+	shift_startdate_id			= shift_startdate_id, 
+	shift_startinterval_id		= shift_startinterval_id
 FROM 
 	#fact_schedule_deviation_merge
