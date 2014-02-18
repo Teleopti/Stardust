@@ -1575,11 +1575,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private bool IsWithinOpenHours(ITemplateTaskPeriod periodized)
         {
             DateTime localDate = CurrentDate.Date;
-
+				var timeZone = Workload.Skill.TimeZone;
             TemplateTaskPeriod taskPeriod = (TemplateTaskPeriod)periodized;
             if (taskPeriod.LocalPeriodCache == null)
             {
-                TimeZoneInfo timeZone = Workload.Skill.TimeZone;
                 DateTime localStart = periodized.Period.StartDateTimeLocal(timeZone);
                 DateTime localEnd = periodized.Period.EndDateTimeLocal(timeZone);
                 if (timeZone.IsAmbiguousTime(localStart) &&
@@ -1596,8 +1595,11 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
                 taskPeriod.LocalPeriodCache = new LocalPeriodCache(localStart, localEnd);
             }
-            return OpenHourList.Any(o => taskPeriod.LocalPeriodCache.LocalStart >= localDate.Add(o.StartTime) &&
-                                         taskPeriod.LocalPeriodCache.LocalEnd <= localDate.Add(o.EndTime));
+				var openHours = OpenHourList.First();
+				var startTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.StartTime),timeZone),timeZone);
+				var endTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.EndTime), timeZone), timeZone);
+				return taskPeriod.LocalPeriodCache.LocalStart >= startTimeLocal &&
+						taskPeriod.LocalPeriodCache.LocalEnd <= endTimeLocal;
         }
 
         public virtual void SetWorkloadInstance(IWorkload workload)
