@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Broker.Backplane
         {
             if (!unobservedTaskExceptionEventArgs.Observed)
             {
-                Logger.Error("An error occured, please review the error and take actions necessary.",
+                Logger.Debug("An error occured, please review the error and take actions necessary.",
                              unobservedTaskExceptionEventArgs.Exception);
                 unobservedTaskExceptionEventArgs.SetObserved();
             }
