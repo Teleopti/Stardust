@@ -1595,11 +1595,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
                 taskPeriod.LocalPeriodCache = new LocalPeriodCache(localStart, localEnd);
             }
-				var openHours = OpenHourList.First();
-				var startTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.StartTime),timeZone),timeZone);
-				var endTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.EndTime), timeZone), timeZone);
-				return taskPeriod.LocalPeriodCache.LocalStart >= startTimeLocal &&
-						taskPeriod.LocalPeriodCache.LocalEnd <= endTimeLocal;
+				return OpenHourList.Any(o => taskPeriod.LocalPeriodCache.LocalStart >= localDate.Add(o.StartTime) &&
+	taskPeriod.LocalPeriodCache.LocalEnd <= localDate.Add(o.EndTime));
+
+				//var openHours = OpenHourList.First();
+				//var startTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.StartTime),timeZone),timeZone);
+				//var endTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.EndTime), timeZone), timeZone);
+				//return taskPeriod.LocalPeriodCache.LocalStart >= startTimeLocal &&
+				//		taskPeriod.LocalPeriodCache.LocalEnd <= endTimeLocal;
         }
 
         public virtual void SetWorkloadInstance(IWorkload workload)
