@@ -114,8 +114,10 @@
 		public const string ShareCalendar = "Raptor/MyTimeWeb/ShareCalendar";
 		public const string OvertimeAvailabilityWeb = "Raptor/MyTimeWeb/OvertimeAvailabilityWeb";
 		public const string MyReportWeb = "Raptor/MyTimeWeb/MyReportWeb";
+        public const string MonthSchedule = "Raptor/MyTimeWeb/MonthSchedule";
 
 		// Anywhere
 		public const string SchedulesAnywhere = "Raptor/Anywhere/Schedules";
+
     }
 }
