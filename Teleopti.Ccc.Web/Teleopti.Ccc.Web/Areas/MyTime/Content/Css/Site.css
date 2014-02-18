@@ -178,6 +178,7 @@
 
 html.full-height, html.full-height body, html.full-height form.aspnetform{ height: 100%; }
 
+#page{padding-top: 17px;}
 html.full-height #page, html.full-height #page-signin{ 
 	 min-height: 100%;
 	height: auto !important;
@@ -761,6 +762,7 @@ End personal drop down menu
 /* Large desktop */
 @media (min-width: 993px) {
     body {
+        padding-top: 60px;
     }
 }
 
@@ -816,36 +818,36 @@ End personal drop down menu
 	color: #AAA !important;
 }
 
-
+/* TO MAKE BOOTSTRAP 3 NAVBAR NON RESPONSIVE */
+/* REMOVE WHEN MAKING IT RESPONSIVE */
 
 /* TO MAKE BOOTSTRAP 3 NAVBAR NON RESPONSIVE */
 /* REMOVE WHEN MAKING IT RESPONSIVE */
-.navbar-left {
-float: left !important;
+
+#autocollapse.custom-collapsed .navbar-header {
+  float: none;
 }
-.navbar-form {
-width: auto;
-border: 0;
-margin-left: 0;
-margin-right: 0;
-padding-top: 0;
-padding-bottom: 0;
--webkit-box-shadow: none;
-box-shadow: none;
+#autocollapse.custom-collapsed .navbar-toggle {
+  display: block;
 }
-.navbar-form .form-group {
-display: inline-block;
-vertical-align: middle;
+#autocollapse.custom-collapsed .navbar-collapse {
+  border-top: 1px solid transparent;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
 }
-.navbar-nav > li {
-float: left;
+#autocollapse.custom-collapsed .navbar-collapse.collapse {
+  display: none!important;
 }
-.navbar-nav {
-float: left;
-margin: 0;
+#autocollapse.custom-collapsed .navbar-collapse.collapse.in {
+  display: block!important;
 }
-.navbar-nav > li > a {
-padding: 15px;
+#autocollapse.custom-collapsed .navbar-nav {
+  float: none!important;
+  margin: 7.5px -15px;
 }
-/* TO MAKE BOOTSTRAP 3 NAVBAR NON RESPONSIVE */
-/* REMOVE WHEN MAKING IT RESPONSIVE */
+#autocollapse.custom-collapsed .navbar-nav>li {
+  float: none;
+}
+#autocollapse.custom-collapsed .navbar-nav>li>a {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

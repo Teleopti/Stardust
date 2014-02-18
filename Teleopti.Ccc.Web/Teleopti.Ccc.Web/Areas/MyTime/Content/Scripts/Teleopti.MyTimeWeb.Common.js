@@ -96,8 +96,21 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		ActivatePlaceHolder: function() {
 			$('textarea, :text, :password').placeholder();
 		},
-		
-		//Activating tooltip where available
+
+		Init: function() {
+		    function autocollapse() {
+		        var navbar = $('#autocollapse');
+		        var button = $('ul.navbar-nav li');
+		        navbar.removeClass('custom-collapsed'); // set standart view
+		        if (Math.floor(navbar.innerHeight()) > button.height()) // check if we've got 2 lines
+		            navbar.addClass('custom-collapsed'); // force collapse mode
+		    }
+
+		    $(document).on('ready', autocollapse);
+		    $(window).on('resize', autocollapse);
+		},
+		            
+        //Activating tooltip where available
 		ActivateTooltip: function () {
 			$('.qtip-tooltip')
 				.each(function () {
