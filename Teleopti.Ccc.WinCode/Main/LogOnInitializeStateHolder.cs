@@ -94,9 +94,9 @@ namespace Teleopti.Ccc.WinCode.Main
         			new DataSourcesFactory(new EnversConfiguration(),
 												  new List<IMessageSender>
 												      {
-														  new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-												          new ScheduleMessageSender(eventPublisher), 
-                                                          new MeetingMessageSender(eventPublisher),
+														  new ScheduleMessageSender(eventPublisher, new ClearEvents()), 
+                                                          new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+												          new MeetingMessageSender(eventPublisher),
                                                           new GroupPageChangedMessageSender(eventPublisher),
                                                           new TeamOrSiteChangedMessageSender(eventPublisher),
                                                           new PersonChangedMessageSender(eventPublisher),
