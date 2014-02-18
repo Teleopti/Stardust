@@ -1,0 +1,15 @@
+﻿.rtl .col-xs-2,
+.rtl .col-xs-4 {
+	float: right;
+}
+
+.rtl .checkbox input[type="checkbox"]{
+	float: right;
+	margin-left: 0;
+	margin-right: -20px;
+}
+
+.rtl .checkbox {
+	padding-right: 20px;
+	padding-left: 0;
+}
