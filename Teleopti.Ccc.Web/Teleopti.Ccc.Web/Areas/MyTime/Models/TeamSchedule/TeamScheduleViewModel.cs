@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 	{
 		public string ShortTime { get; set; }
 		public decimal PositionPercent { get; set; }
+		public bool IsFullHour { get; set; }
 	}
 
 	public class AgentScheduleViewModel
