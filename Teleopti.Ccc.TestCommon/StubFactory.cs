@@ -113,11 +113,17 @@ namespace Teleopti.Ccc.TestCommon
 					scheduleDay.Stub(x => x.HasDayOff()).Return(true);
 				}
 			}
+
 			if (personAbsences != null)
 			{
 				var personAbsencesCollection = new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>(personAbsences));
 				scheduleDay.Stub(x => x.PersonAbsenceCollection()).Return(personAbsencesCollection);
 			}
+			else
+			{
+			    scheduleDay.Stub(x => x.PersonAbsenceCollection()).Return(new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>())) ;
+			}
+
 			if (meetings != null)
 			{
 				var personMeetingCollection = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>(meetings));

@@ -5,6 +5,7 @@ using AutoMapper;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
@@ -103,15 +104,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
         public void ShouldMapIsNotWorkingDayForFullDayAbsenceOnDayOff()
         {
             var stubs = new StubFactory();
-            var personAssignment =
-                stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
-                                                              new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
+            var personAssignment = stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc), new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
             personAssignment.Clear();
             personAssignment.SetDayOff(DayOffFactory.CreateDayOff());
-
-            var personAbsence =
-                stubs.PersonAbsenceStub(new DateTimePeriod(new DateTime(2011, 5, 18, 0, 0, 0, DateTimeKind.Utc),
-                    new DateTime(2011, 5, 18, 23, 59, 0, DateTimeKind.Utc)));
+            var personAbsence = stubs.PersonAbsenceStub(new DateTimePeriod(new DateTime(2011, 5, 18, 0, 0, 0, DateTimeKind.Utc), new DateTime(2011, 5, 18, 23, 59, 0, DateTimeKind.Utc)));
             var scheduleDayForDayoff = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.ContractDayOff, personAssignment, new[] {personAbsence}, null);
 
             var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDayForDayoff });
@@ -123,10 +119,10 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
         public void ShouldMapDaysOfMonth()
         {
             var stub = new StubFactory();
-
             var domainData = new MonthScheduleDayDomainData {ScheduleDay = stub.ScheduleDayStub(DateTime.Today)};
             var monthDomainData = new MonthScheduleDomainData {Days = new[]{domainData}};
-            var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+            
+			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
 
             result.ScheduleDays.Count().Should().Be.EqualTo(1);
         }
@@ -152,9 +148,76 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 	    public void ShouldMapDayHeaderOfWeek()
 	    {
             var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
-            var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
-            result.DayHeaders.First().Name.Should().Be.EqualTo("Montag");
+            
+			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+            
+			result.DayHeaders.First().Name.Should().Be.EqualTo("Montag");
             result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
         }
+        
+        [Test]
+        public void ShouldMapAbsenceName()
+        {
+			//arrange
+            var stubs = new StubFactory();
+            var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence(){Description = new Description("Illness")}, new DateTimePeriod()) );
+            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
+            var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay=scheduleDay }}, CurrentDate = DateOnly.Today };
+            
+			//act
+			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+            
+			//assert
+			result.ScheduleDays.Single().Absence.Name.Should().Be.EqualTo("Illness");
+        }
+
+        [Test]
+        public void ShouldMapAbsenceShortName()
+        {
+            var stubs = new StubFactory();
+            var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence() { Description = new Description(" ", "IL") }, new DateTimePeriod()));
+            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
+            var monthDomainData = new MonthScheduleDomainData { Days = new [] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
+            
+			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+            
+			result.ScheduleDays.Single().Absence.ShortName.Should().Be.EqualTo("IL");
+        }
+
+		[Test]
+		public void ShouldMapIsDayOff()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.DayOff, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.IsDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapIsNotDayOffForWorkingDay()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.IsDayOff.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMapIsDayOffForContractDayOff()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.ContractDayOff, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.IsDayOff.Should().Be.True();
+		}
 	}
 }

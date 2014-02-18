@@ -62,9 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						{
 							if ((s.SignificantPartForDisplay() == SchedulePartView.ContractDayOff))
 							{
-								if (s.PersonAbsenceCollection() != null)
+								if (s.PersonAbsenceCollection().Any())
 									return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();
-
 							}
 							if (s.SignificantPartForDisplay() == SchedulePartView.FullDayAbsence)
 								return s.PersonAbsenceCollection().First().Layer.Payload.DisplayColor.ToHtml();

@@ -19,9 +19,10 @@ Given there is a role with
 	| Field | Value  |
 	| Name  | DayOff |
 	And there is an absence with
-	| Field | Value    |
-	| Name  | Illness  |
-	| Color | Red      |
+	| Field      | Value   |
+	| Name       | Illness |
+	| Short name | IL      |
+	| Color      | Red     |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
@@ -59,7 +60,7 @@ And I have a shift with
 When I view my month schedule for date '2014-01-07'
 Then I should see an indication implying I should work on '2014-01-07'
 
-Scenario: View when you are not working
+Scenario: View when you have a day off
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
 	And I have a day off with
@@ -67,7 +68,7 @@ Given I have the role 'Full access to mytime'
 	| Name  | DayOff     |
 	| Date  | 2014-01-07 |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-07'
+Then I should see the day off on '2014-01-07'
 
 Scenario: View when you are in absence on day off
 Given I have the role 'Full access to mytime'
@@ -81,17 +82,25 @@ Given I have the role 'Full access to mytime'
 	| Name      | Illness          |
 	| StartTime | 2014-01-16 00:00 |
 	| EndTime   | 2014-01-16 23:59 |
-When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-16'
+When I view my month schedule for date '2014-01-01'
+Then I should see the absence with 
+    | Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-01-16       |
 
-Scenario: View when you have full day absence 
+Scenario: View when you have full day absence
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
-	And I have a full-day absence today with
-	| Field         | Value      |
-	| Date          | 2014-01-07 |
+	And I have an absence with
+	| Field      | Value            |
+	| Name       | Illness          |
+	| Start time | 2014-01-07 00:00 |
+	| End time   | 2014-01-07 23:59 |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-07'
+Then I should see the absence with 
+    | Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-01-07       |
 
 Scenario: Distinguish day out of current month 
 Given I have the role 'Full access to mytime'

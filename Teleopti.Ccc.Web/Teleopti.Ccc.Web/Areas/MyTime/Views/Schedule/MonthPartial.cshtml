@@ -35,9 +35,20 @@
 
         <div class="cal-month-box" data-bind="foreach: weekViewModels">
             <div class="cal-row-fluid" data-bind="foreach: dayViewModels">
-                <div class="cal-cell">
-                    <div class="cal-month-day" data-bind="click: $root.week, css: { 'cal-day-outmonth': isOutsideMonth, 'working-day': isWorkingDay, 'not-working-day': isNotWorkingDay }, style: { backgroundColor: displayColor }">
-                        <h6><span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="pull-right label label-default"></span></h6>
+                    <div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
+	                    <div class="cal-month-day" data-bind="
+	click: $root.week,
+	css: {
+		'cal-day-outmonth': isOutsideMonth,
+		'working-day': isWorkingDay,
+		'not-working-day': isNotWorkingDay,
+		'absence-day': absenceName != '',
+		'day-off-day': isDayOff
+	},
+	style: { backgroundColor: displayColor }">
+                            <strong class="absence visible-desktop" data-bind="text: absenceName"/>
+                            <strong class="absence hidden-desktop" data-bind="text: absenceShortName"/>
+                            <span data-bind="text: dayOfMonth, attr:{'data-cal-date': date}" class="date-number label label-inverse"></span>
                     </div>
                 </div>
             </div>
