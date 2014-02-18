@@ -152,8 +152,10 @@ namespace Teleopti.Ccc.Win.Commands
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				////day off fairness
+			    _teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
                 _teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules,
                                                     rollbackServiceWithoutResourceCalculation, optimizationPreferences);
+                _teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 				ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, allMatrixes);
 				if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))

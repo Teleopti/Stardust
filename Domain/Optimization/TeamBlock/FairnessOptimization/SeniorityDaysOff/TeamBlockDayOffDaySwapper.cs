@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		public bool TrySwap(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
 							ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IOptimizationPreferences optimizationPreferences, IList<DateOnly> dayOffsToGiveAway)
 		{
-		    var swapResult = trySwapAndValidate(dateOnly, teamBlockSenior, teamBlockJunior, rollbackService,
+            _cancel = false;
+            var swapResult = trySwapAndValidate(dateOnly, teamBlockSenior, teamBlockJunior, rollbackService,
 		                                        scheduleDictionary, optimizationPreferences, dayOffsToGiveAway);
             if (swapResult && !validate(teamBlockSenior,teamBlockJunior,optimizationPreferences ))
             {

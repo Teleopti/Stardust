@@ -135,6 +135,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 temp(this, eventArgs);
             }
             _cancelMe = eventArgs.Cancel;
+            if(_cancelMe )
+                _teamBlockDayOffDaySwapper.Cancel();
         }
     }
     

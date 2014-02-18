@@ -715,8 +715,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			////day off fairness
             var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
+            teamBlockDayOffFairnessOptimizationService.ReportProgress  += resourceOptimizerPersonOptimized;
             teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
                 _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences);
+            teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 
 			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
 			if (!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod))

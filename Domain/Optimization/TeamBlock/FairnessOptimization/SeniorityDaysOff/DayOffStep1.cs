@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         void PerformStep1(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                             ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, IDictionary<DayOfWeek, int> weekDayPoints, IOptimizationPreferences optimizationPreferences);
         event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
+        void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs);
     }
 
     public class DayOffStep1 : IDayOffStep1
@@ -80,14 +81,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             }
             
         }
-        protected virtual void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs)
+
+        public virtual void OnBlockSwapped(ResourceOptimizerProgressEventArgs eventArgs)
         {
             EventHandler<ResourceOptimizerProgressEventArgs> temp = BlockSwapped;
             if (temp != null)
             {
                 temp(this, eventArgs);
             }
-            _cancelMe = eventArgs.Cancel;
+            if(eventArgs.Cancel )
+                _cancelMe = true;
         }
         private void trySwapForMostSenior(IDictionary<DayOfWeek, int> weekDayPoints,
                                           IList<ITeamBlockInfo> teamBlocksToWorkWith, ITeamBlockInfo mostSeniorTeamBlock,
