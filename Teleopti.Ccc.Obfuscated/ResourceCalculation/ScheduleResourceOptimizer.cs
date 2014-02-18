@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly IList<IActivity> _distinctActivities;
 
         private const double _quotient = 1d; // the outer quotient: default = 1
-        private const int _maximumIteration = 50; // the maximum number of iterations
+        private const int _maximumIteration = 100; // the maximum number of iterations
         
         public ScheduleResourceOptimizer(IResourceCalculationDataContainer relevantProjections, 
             ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, 
