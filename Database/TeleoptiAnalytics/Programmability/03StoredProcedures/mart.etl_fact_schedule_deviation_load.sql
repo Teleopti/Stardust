@@ -102,7 +102,7 @@ CREATE TABLE #intervals
 
 CREATE TABLE #stg_schedule_changed(
 	[person_id] [int] NOT NULL,
-	[shift_startdate_id] [int] NOT NULL
+	[shift_startdate_local_id] [int] NOT NULL
 )
 
 INSERT #intervals(interval_id,interval_start,interval_end)
@@ -192,42 +192,32 @@ BEGIN
 	ON
 		b.acd_login_id = fa.acd_login_id
 	INNER JOIN 
-		mart.DimPersonAdapted() p
+		mart.dim_person p
 	ON 
 		p.person_id = b.person_id
 		AND
 			(
-				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id)
+				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
 					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
-					OR (fa.date_id = p.valid_to_date_id AND fa.interval_id <= p.valid_to_interval_id)
+					OR (fa.date_id = p.valid_to_date_id_maxdate AND fa.interval_id <= p.valid_to_interval_id_maxdate)
 			)
 	WHERE
-		fa.date_id BETWEEN @start_date_id AND @end_date_id
+		fa.date_id BETWEEN @start_date_id-1 AND @end_date_id+1 --extend stat to cover local date
 		AND b.business_unit_id = @business_unit_id
 
 	DELETE FROM mart.fact_schedule_deviation
-	WHERE date_id between @start_date_id AND @end_date_id
+	WHERE shift_startdate_local_id between @start_date_id AND @end_date_id
 		AND business_unit_id = @business_unit_id
 END
 
 if (@isIntraday=1)
 BEGIN
 	INSERT INTO #stg_schedule_changed
-	select DISTINCT
-		f.person_id,
-		f.shift_startdate_id
-	from mart.fact_schedule_deviation f
-	inner join mart.dim_person p
-		on p.person_id = f.person_id
-	inner join mart.bridge_time_zone btz
-		on f.shift_startdate_id = btz.date_id
-		and f.shift_startinterval_id = btz.interval_id
-		and p.time_zone_id = btz.time_zone_id
-	inner join mart.dim_date dd
-		on dd.date_id = btz.local_date_id
-	inner join stage.stg_schedule_changed ch
-		on ch.person_code = p.person_code
-		and ch.schedule_date_local = dd.date_date
+	SELECT  p.person_id,
+			dd.date_id
+	FROM stage.stg_schedule_changed ch
+	INNER JOIN mart.dim_person p
+		ON p.person_code = ch.person_code
 			AND --trim
 			(
 					(ch.schedule_date_local	>= p.valid_from_date_local)
@@ -235,14 +225,41 @@ BEGIN
 				AND
 					(ch.schedule_date_local <= p.valid_to_date_local)
 			)
-	where ch.scenario_code = @scenario_code
+	INNER JOIN mart.dim_date dd
+		ON dd.date_date = ch.schedule_date_local
+	WHERE ch.scenario_code = @scenario_code
+
+	--INSERT INTO #stg_schedule_changed
+	--select DISTINCT
+	--	f.person_id,
+	--	f.shift_startdate_id
+	--from mart.fact_schedule_deviation f
+	--inner join mart.dim_person p
+	--	on p.person_id = f.person_id
+	--inner join mart.bridge_time_zone btz
+	--	on f.shift_startdate_id = btz.date_id
+	--	and f.shift_startinterval_id = btz.interval_id
+	--	and p.time_zone_id = btz.time_zone_id
+	--inner join mart.dim_date dd
+	--	on dd.date_id = btz.local_date_id
+	--inner join stage.stg_schedule_changed ch
+	--	on ch.person_code = p.person_code
+	--	and ch.schedule_date_local = dd.date_date
+	--		AND --trim
+	--		(
+	--				(ch.schedule_date_local	>= p.valid_from_date_local)
+
+	--			AND
+	--				(ch.schedule_date_local <= p.valid_to_date_local)
+	--		)
+	--where ch.scenario_code = @scenario_code
 
 	
 	--if in Intraday-mode, we have get the dates based on Agent stat job which is of no use.
 	--Instead use min/max date from changed table
 	SELECT
-		@start_date_id	= min(shift_startdate_id),
-		@end_date_id	= max(shift_startdate_id)
+		@start_date_id	= min(shift_startdate_local_id),
+		@end_date_id	= max(shift_startdate_local_id)
 	FROM #stg_schedule_changed
 
 	INSERT INTO #fact_schedule
@@ -260,7 +277,7 @@ BEGIN
 		fs.business_unit_id
 	FROM mart.fact_schedule fs
 	INNER JOIN #stg_schedule_changed ch
-		ON ch.shift_startdate_id = fs.shift_startdate_id 
+		ON ch.shift_startdate_local_id = fs.shift_startdate_local_id 
 		AND ch.person_id = fs.person_id
 	WHERE fs.business_unit_id = @business_unit_id
 	AND fs.scenario_id = @scenario_id
@@ -296,26 +313,25 @@ BEGIN
 	FROM mart.bridge_acd_login_person b
 	INNER JOIN mart.fact_agent fa
 		ON b.acd_login_id = fa.acd_login_id
-	INNER JOIN mart.DimPersonAdapted() p
+	INNER JOIN mart.dim_person p
 		ON p.person_id = b.person_id
 		AND
 			(
-				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id)
+				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
 					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
-					OR (fa.date_id = p.valid_to_date_id AND fa.interval_id <= p.valid_to_interval_id)
+					OR (fa.date_id = p.valid_to_date_id_maxDate AND fa.interval_id <= p.valid_to_interval_id_maxDate)
 			)
 	INNER JOIN #stg_schedule_changed ch
-		ON  ch.shift_startdate_id	= fa.date_id
+		ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 		AND ch.person_id			= b.person_id
 		AND b.acd_login_id			= fa.acd_login_id
-		AND ch.shift_startdate_id	= fa.date_id
 	WHERE b.business_unit_id = @business_unit_id
 
 	DELETE fs
 	FROM #stg_schedule_changed ch
 	INNER JOIN mart.fact_schedule_deviation fs
 		ON ch.person_id = fs.person_id
-		AND ch.shift_startdate_id = fs.shift_startdate_id 
+		AND ch.shift_startdate_local_id = fs.shift_startdate_local_id 
 	WHERE fs.business_unit_id = @business_unit_id
 
 END
