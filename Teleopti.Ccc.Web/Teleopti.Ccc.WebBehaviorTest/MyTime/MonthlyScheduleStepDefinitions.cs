@@ -55,6 +55,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertExists(string.Format(".not-working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
         }
 
+        [Then(@"I should see the day off on '(.*)'")]
+        public void ThenIShouldSeeTheDayOffOn(DateTime date)
+        {
+            Browser.Interactions.AssertExists(string.Format("[data-cal-date='{0:yyyy-MM-dd}'] .day-off-day", date));
+        }
+
         [Then(@"I should see the absence with")]
         public void ThenIShouldSeeTheAbsenceWith(Table table)
         {

@@ -60,7 +60,7 @@ And I have a shift with
 When I view my month schedule for date '2014-01-07'
 Then I should see an indication implying I should work on '2014-01-07'
 
-Scenario: View when you are not working
+Scenario: View when you have a day off
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
 	And I have a day off with
@@ -68,7 +68,7 @@ Given I have the role 'Full access to mytime'
 	| Name  | DayOff     |
 	| Date  | 2014-01-07 |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-07'
+Then I should see the day off on '2014-01-07'
 
 Scenario: View when you are in absence on day off
 Given I have the role 'Full access to mytime'
