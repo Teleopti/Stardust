@@ -121,9 +121,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
                 swappableTeamBlocks.Remove(blockToSwapWith);
 
-                var message = "xxSwap successful";
+                var message = "Day off fainess Step1: xxSwap successful";
                 if (!swapSuccess)
-                    message = "xxSwap not sucessful";
+                    message = "Day off fainess Step1: xxSwap not sucessful";
 
                 double percentDone = 1 - (remainingBlocksCount / (double)originalBlocksCount);
                 OnBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1, message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone).ToString() + " done "));

@@ -30,9 +30,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			_teamBlockShiftCategoryPriority.Add(teamBlockInfo, priority);
 		}
 
+        /// <summary>
+        /// The seniority is based on ranking. The lowest the rank is the higest the priority is.
+        /// In this case the higest rank is 0
+        /// </summary>
 		public IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo
 		{
-			get { return (_teamBlockInfoPriorityList.OrderByDescending(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
+			get { return (_teamBlockInfoPriorityList.OrderBy(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
 		}
 
 		public IList<ITeamBlockInfo> HighToLowShiftCategoryPriority()
