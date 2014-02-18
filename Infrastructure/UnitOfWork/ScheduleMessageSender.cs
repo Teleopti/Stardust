@@ -11,11 +11,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class ScheduleMessageSender : IMessageSender
 	{
 		private readonly IEventPublisher _eventPublisher;
+		private readonly IBeforeSendEvents _clearEvents;
 		private static readonly Type[] IncludedTypes = new[] { typeof(IPersonAbsence), typeof(IPersonAssignment) };
 
-		public ScheduleMessageSender(IEventPublisher eventPublisher)
+		public ScheduleMessageSender(IEventPublisher eventPublisher, IBeforeSendEvents clearEvents)
 		{
 			_eventPublisher = eventPublisher;
+			_clearEvents = clearEvents;
 		}
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
@@ -32,9 +34,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					if (scenario==null) continue;
 
-					var matchedItems = scheduleData.Where(s => s.Scenario!=null && s.Scenario.Equals(scenario) && s.Person.Equals(person));
+					var matchedItems = scheduleData.Where(s => s.Scenario!=null && s.Scenario.Equals(scenario) && s.Person.Equals(person)).ToArray();
 					if (!matchedItems.Any()) continue;
 
+					_clearEvents.Execute(matchedItems);
 					var startDateTime = matchedItems.Min(s => s.Period.StartDateTime);
 					var endDateTime = matchedItems.Max(s => s.Period.EndDateTime);
 
