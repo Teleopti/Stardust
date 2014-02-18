@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Interfaces.Domain;
+using TimePeriod = Teleopti.Interfaces.Domain.TimePeriod;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
@@ -1595,14 +1597,17 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
                 taskPeriod.LocalPeriodCache = new LocalPeriodCache(localStart, localEnd);
             }
-				return OpenHourList.Any(o => taskPeriod.LocalPeriodCache.LocalStart >= localDate.Add(o.StartTime) &&
-	taskPeriod.LocalPeriodCache.LocalEnd <= localDate.Add(o.EndTime));
 
-				//var openHours = OpenHourList.First();
-				//var startTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.StartTime),timeZone),timeZone);
-				//var endTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(openHours.EndTime), timeZone), timeZone);
-				//return taskPeriod.LocalPeriodCache.LocalStart >= startTimeLocal &&
-				//		taskPeriod.LocalPeriodCache.LocalEnd <= endTimeLocal;
+				var openHoursLocal = new List<MinMax<DateTime>>();
+				foreach (var timePeriod in OpenHourList)
+				{
+					var startTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(timePeriod.StartTime), timeZone), timeZone);
+					var endTimeLocal = TimeZoneHelper.ConvertFromUtc(TimeZoneHelper.ConvertToUtc(localDate.Add(timePeriod.EndTime), timeZone), timeZone);
+					openHoursLocal.Add(new MinMax<DateTime>(startTimeLocal, endTimeLocal));
+				}
+				
+				return openHoursLocal.Any(o => taskPeriod.LocalPeriodCache.LocalStart >= o.Minimum &&
+						taskPeriod.LocalPeriodCache.LocalEnd <= o.Maximum);
         }
 
         public virtual void SetWorkloadInstance(IWorkload workload)

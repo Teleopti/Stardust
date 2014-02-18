@@ -1255,7 +1255,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
 		  //jan 1 2011 the timezone was changed in russia, if the openhours was 00 - 00 (+1) and calling ChangeOpenHours
  		 //on 2010-12-31 it creates an period that is from 00 - 01 (+1) and it raises an error
-	    [Test, Ignore("for now")]
+	    [Test]
 	    public void Bug26815()
 	    {
 			 IList<TimePeriod> openHours = new List<TimePeriod>();
