@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -12,10 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 	public class TeamScheduleViewModelMappingProfile : Profile
 	{
 		private readonly Func<IUserTimeZone> _userTimeZone;
+		private readonly ICreateHourText _createHourText;
 
-		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone)
+		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText)
 		{
 			_userTimeZone = userTimeZone;
+			_createHourText = createHourText;
 		}
 
 		private class TimeLineMappingData
@@ -65,8 +68,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				.ForMember(d => d.ShortTime, o => o.ResolveUsing(s =>
 					{
 						var localTime = TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone());
-						if (localTime.TimeOfDay.Minutes != 0)
-							return localTime.ToString("HH:mm");
+						return _createHourText.CreateText(s.Time);
 
 						var timeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
 						timeFormat = timeFormat.Replace(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator, string.Empty);
@@ -83,6 +85,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 																						var positionTicks = (decimal)s.Time.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;
 																						return positionTicks / displayedTicks;
 																					}))
+				.ForMember(d => d.IsFullHour, o => o.ResolveUsing( s =>
+					{
+						return TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay.Minutes == 0;
+					}))
 				;
 
 			CreateMap<TeamScheduleDayDomainData, AgentScheduleViewModel>()
