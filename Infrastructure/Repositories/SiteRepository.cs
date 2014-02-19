@@ -27,11 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    
 	    }
 
-        public ISite CreateInstance(string name)
-        {
-            return new Site(name);
-        }
-
         public ICollection<ISite> FindSiteByDescriptionName(string name)
         {
             ICollection<ISite> retList = Session.CreateCriteria<Site>()
