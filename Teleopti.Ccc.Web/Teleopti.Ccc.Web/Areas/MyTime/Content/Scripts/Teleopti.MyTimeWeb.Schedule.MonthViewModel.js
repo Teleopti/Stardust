@@ -29,6 +29,14 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : '';
     
     this.isOutsideMonth = (selectedDate.month() != currentDate.month());
+
+	var self = this;
+	this.heightExperiment = ko.computed(function() {
+		if (self.absenceName != '')
+			return "80px";
+		return "100px";
+	});
+	
 };
 
 Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {

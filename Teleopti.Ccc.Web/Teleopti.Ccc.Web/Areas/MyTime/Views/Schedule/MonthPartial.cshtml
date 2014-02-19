@@ -43,18 +43,21 @@
 		'working-day': isWorkingDay,
 		'absence-day': absenceName != '',
 		'day-off-day': isDayOff
-	},
-	style: { backgroundColor: shiftColor }">
+	}
+	">
 		                    
-							<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
-							
 							<!-- ko if: absenceName != '' -->
 		                    <strong class="absence visible-lg" data-bind="text: absenceName"/>
 		                    <strong class="absence visible-md" data-bind="text: absenceName"/>
 		                    <strong class="absence hidden-md hidden-lg" data-bind="text: absenceShortName"/>
 		                    <!-- /ko -->
 
-		                    <div class="shift">
+		                    <div class="shift" data-bind="style: {
+	backgroundColor: shiftColor
+},
+	css: {
+		'part-time': absenceName != '',
+	}">
 			                    <div>
 				                    <strong class="visible-lg" data-bind="text: shiftName"></strong>
 				                    <strong class="visible-md" data-bind="text: shiftName"></strong>
@@ -66,6 +69,7 @@
 			                    <div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
 		                    </div>
 
+							<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
 	                    </div>
                 </div>
             </div>

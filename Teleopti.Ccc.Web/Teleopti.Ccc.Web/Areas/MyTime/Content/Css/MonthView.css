@@ -60,7 +60,6 @@
     width: 100%;
     height: 100px;
     text-align: center;
-    padding-top: 20px;
 }
 
 .cal-month-day .date-number {
@@ -127,4 +126,15 @@ span[data-cal-date] {
 .day-off-day {
     background-color: beige;
     background-image: url(../Images/stripe.png);
+}
+
+.shift {
+	height: 100px;
+	padding-top: 20px;
+}
+
+.shift.part-time {
+	height: 80px;
+	padding-top: 10px;
+
 }

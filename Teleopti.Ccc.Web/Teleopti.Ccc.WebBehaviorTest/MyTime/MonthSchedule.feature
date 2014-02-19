@@ -85,18 +85,28 @@ And I have a shift with
 	| StartTime      | 2014-01-16 09:00 |
 	| EndTime        | 2014-01-16 18:00 |
 	| Shift category | Early            |
+And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2014-01-17 09:00 |
+	| EndTime        | 2014-01-17 18:00 |
+	| Shift category | Early            |
 And I have an absence with
 	| Field		| Value            |
 	| Name      | Illness          |
 	| StartTime | 2014-01-16 09:00 |
 	| EndTime   | 2014-01-16 12:00 |
+And I have an absence with
+	| Field		| Value            |
+	| Name      | Illness          |
+	| StartTime | 2014-01-18 09:00 |
+	| EndTime   | 2014-01-18 12:00 |
 When I view my month schedule for date '2014-01-16'
 Then I should see the shift with
 	| Field          | Value         |
 	| Date           | 2014-01-16    |
-	| Time span      | 09:00 - 18:00 |
+	| Time span      | 12:00 - 18:00 |
 	| Shift category | Early         |
-	| Working hours  | 9:00          |
+	| Working hours  | 6:00          |
 And I should see the absence on date '2014-01-16'
 
 Scenario: View when you are in absence on day off
