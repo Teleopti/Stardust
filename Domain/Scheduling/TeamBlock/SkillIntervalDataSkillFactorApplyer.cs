@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				//Change sign because of demand is positive in teamblock
 				double currentDemand = tweakedDemand/intervalLength*-1;
 
+				return skillIntervalData;
 				return new SkillIntervalData(skillIntervalData.Period, skillIntervalData.ForecastedDemand, currentDemand,
 				                             skillIntervalData.CurrentHeads, skillIntervalData.MinimumHeads,
 				                             skillIntervalData.MaximumHeads);

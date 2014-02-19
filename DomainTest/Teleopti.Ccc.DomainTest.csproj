@@ -480,7 +480,6 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCounterCreatorTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessCreatorTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessFactorsTest.cs" />
-    <Compile Include="Scheduling\BestWorkShiftFinderTest.cs" />
     <Compile Include="Scheduling\Meetings\BestSlotForMeetingFinderTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingSlotFinderServiceTest.cs" />
     <Compile Include="Scheduling\Meetings\MeetingSlotImpactCalculatorTest.cs" />
@@ -661,7 +660,6 @@
     <Compile Include="Scheduling\Assignment\SignificantPartServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\TurnoffPermissionScopeTest.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodTest.cs" />
-    <Compile Include="Scheduling\BlockSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\LoadSchedulingStateHolderForResourceCalculationTest.cs" />
     <Compile Include="Scheduling\DayOffTest.cs" />
     <Compile Include="Scheduling\FairnessValueCalculatorTest.cs" />

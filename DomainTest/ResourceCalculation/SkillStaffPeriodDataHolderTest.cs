@@ -102,13 +102,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void VerifyCalculateWeightedRelativeDemand()
-        {
-            double res = SkillStaffPeriodDataHolder.CalculateWeightedRelativeDemand(0, 50);
-            Assert.AreEqual(-2500, res);
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyTweakedCurrentDemand()
         {
             DateTime date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
