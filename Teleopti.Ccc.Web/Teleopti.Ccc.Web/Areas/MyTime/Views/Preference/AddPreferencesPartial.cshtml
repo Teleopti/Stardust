@@ -59,7 +59,7 @@
 									<optgroup label="@optionGroup.Text">
 										@foreach (var option in optionGroup.Options)
 										{
-											<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
+                                        <option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@Html.Encode(option.Text)</option>
 										}
 									</optgroup>
 								}
@@ -174,7 +174,7 @@
 								<optgroup label="@Model.Options.ActivityOptions.Text">
 									@foreach (var option in Model.Options.ActivityOptions.Options)
 									{
-										<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+                                    <option value="@option.Value" data-color="@option.Color">@Html.Encode(option.Text)</option>
 									}
 								</optgroup>
 							</select>
