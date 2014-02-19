@@ -170,18 +170,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequests.List<IPersonRequest>();
 		}
 
-		public IEnumerable<IPersonRequest> FindTextAndAbsenceRequestsForAgent(IPerson person, Paging paging)
-		{
-			var personRequests = Session.GetNamedQuery("findTextAndAbsenceRequestsForAgent")
-				.SetEntity("person", person);
-			if (paging != null)
-			{
-				personRequests.SetMaxResults(paging.Take);
-				personRequests.SetFirstResult(paging.Skip);
-			}
-			return personRequests.List<IPersonRequest>();
-		}
-
 		/// <summary>
 		/// Finds all request within period or pending.
 		/// </summary>
