@@ -28,16 +28,14 @@ $(document).ready(function () {
 			ScheduleDays: [{
 				Shift: {
 					Name: "Early",
-					StartTime: "09:00",
-					EndTime: "18:00",
+					TimeSpan: "09:00-18:00",
 					WorkingHours: "8:00"
 				}
 			}]
 		});
 
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftName, "Early");
-		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftStartTime, "09:00");
-		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftEndTime, "18:00");
+		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftTimeSpan, "09:00-18:00");
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftWorkingHours, "8:00");
 	});
 

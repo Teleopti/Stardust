@@ -24,8 +24,7 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : '';
     this.isDayOff = scheduleDate.IsDayOff;
     this.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : '';
-    this.shiftStartTime = scheduleDate.Shift ? scheduleDate.Shift.StartTime: '';
-    this.shiftEndTime = scheduleDate.Shift ? scheduleDate.Shift.EndTime : '';
+    this.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan: '';
     this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : '';
     
     this.isOutsideMonth = (selectedDate.month() != currentDate.month());
