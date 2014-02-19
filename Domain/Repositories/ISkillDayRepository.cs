@@ -33,20 +33,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <param name="skillDays">The skill days.</param>
         /// <param name="skill">The skill.</param>
         /// <param name="scenario">The scenario.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-25
-        /// </remarks>
-        ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario);
-
-        /// <summary>
-        /// Gets all skill days.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="skillDays">The skill days.</param>
-        /// <param name="skill">The skill.</param>
-        /// <param name="scenario">The scenario.</param>
         /// <param name="addToRepository">if set to <c>true</c> [add to repository].</param>
         /// <returns></returns>
         /// <remarks>

@@ -41,6 +41,11 @@ namespace Teleopti.MessagingTest.SignalR
 			return new asyncSignalSenderForTest(hubConnection, new Now());
 		}
 
+		private asyncSignalSenderForTest makeSignalSender(IHubConnectionWrapper hubConnection, ILog log)
+		{
+			return new asyncSignalSenderForTest(hubConnection, new Now(), log);
+		}
+
 		private asyncSignalSenderForTest makeSignalSender(IHubProxy hubProxy)
 		{
 			return makeSignalSender(hubProxy, new Now());
@@ -150,43 +155,12 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		public void ShouldLogAndIgnoreOnExceptionInvokingProxy()
-		{
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-			var log = MockRepository.GenerateMock<ILog>();
-			var target = makeSignalSender(hubProxy, log);
-
-			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Throw(new InvalidOperationException());
-
-			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
-			target.ProcessTheQueue();
-			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
-		}
-
-		[Test]
-		public void ShouldLogAndIgnoreOnExceptionSendingNotification()
-		{
-			var failedTask = makeFailedTask(new Exception());
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-
-			var log = MockRepository.GenerateMock<ILog>();
-			var target = makeSignalSender(hubProxy, log);
-
-			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
-
-			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
-			var loggingTask = target.ProcessTheQueue();
-			loggingTask.Wait(500);
-			log.AssertWasCalled(t => t.Error("", null), a => a.IgnoreArguments());
-		}
-
-		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.StartBrokerService();
+			target.StartBrokerService(TimeSpan.FromSeconds(0));
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
@@ -199,11 +173,59 @@ namespace Teleopti.MessagingTest.SignalR
 			var hubProxy = stubProxy();
 			var hubConnection = stubHubConnection(hubProxy);
 			var target = makeSignalSender(hubConnection);
-			target.StartBrokerService();
+			target.StartBrokerService(reconnectDelay: TimeSpan.FromSeconds(0));
 
 			hubConnection.Stub(x => x.Start()).Return(makeFailedTask(new Exception())).Repeat.Once();
-
+			
 			hubConnection.AssertWasCalled(x => x.Start());
+		}
+
+		[Test]
+		public void ShouldLogWhenNotificationTasksFails()
+		{
+			var failedTask = makeFailedTask(new Exception());
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+
+			var log = MockRepository.GenerateMock<ILog>();
+			var target = makeSignalSender(hubProxy, log);
+
+			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
+
+			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
+			var loggingTask = target.ProcessTheQueue();
+			loggingTask.Wait(500);
+			log.AssertWasCalled(t => t.Debug("", null), a => a.IgnoreArguments());
+		}
+
+		[Test]
+		public void ShouldLogWhenTryingToReconnect()
+		{
+			var hubProxy = stubProxy();
+			var hubConnection = stubHubConnection(hubProxy);
+			var log = MockRepository.GenerateMock<ILog>();
+
+			var target = makeSignalSender(hubConnection, log);
+			target.StartBrokerService(reconnectDelay: TimeSpan.FromSeconds(0));
+
+			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
+
+			log.AssertWasCalled(x => x.Error(SignalConnectionHandler.ConnectionRestartedErrorMessage));
+		}
+
+		[Test]
+		public void ShouldLogWhenReconnected()
+		{
+			var hubProxy = stubProxy();
+			var hubConnection = stubHubConnection(hubProxy);
+			var log = MockRepository.GenerateMock<ILog>();
+
+			var target = makeSignalSender(hubConnection, log);
+			target.StartBrokerService(reconnectDelay: TimeSpan.FromSeconds(0));
+
+			hubConnection.GetEventRaiser(x => x.Reconnected += null).Raise();
+
+			log.AssertWasCalled(x => x.Info(SignalConnectionHandler.ConnectionReconnected));
+			
 		}
 
 		private class hubProxyFake : IHubProxy

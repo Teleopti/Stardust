@@ -8,13 +8,6 @@ namespace Teleopti.Ccc.Domain.Repositories
     /// </summary>
     public interface IScenarioRepository : IRepository<IScenario>
 	{
-
-        /// <summary>
-        /// Sets the default scenario.
-        /// </summary>
-        /// <param name="myScenario">My scenario.</param>
-        void SetDefault(IScenario myScenario);
-
         /// <summary>
         /// Finds all scenarios.
         /// Default first, then sorted by name

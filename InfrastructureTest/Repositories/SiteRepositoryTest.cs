@@ -1,5 +1,6 @@
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         public void ShouldFindSiteByName()
         {
             var name = "test";
-            ISite site = new SiteRepository(UnitOfWork).CreateInstance(name);
+            ISite site = new Site(name);
             PersistAndRemoveFromUnitOfWork(site);
 
             var sites = new SiteRepository(UnitOfWork).FindSiteByDescriptionName(name).ToList();
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyCreateInstance()
         {
-            ISite site = new SiteRepository(UnitOfWork).CreateInstance("test");
+            ISite site = new Site("test");
             Assert.AreEqual("test",site.Description.Name);
         }
     }

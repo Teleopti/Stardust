@@ -48,15 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        public IAgentDayScheduleTag Find(DateOnly dateOnly, IPerson person, IScenario scenario)
-        {
-            return Session.CreateCriteria(typeof (AgentDayScheduleTag))
-                .Add(Restrictions.Eq("TagDate", dateOnly))
-                .Add(Restrictions.Eq("Person", person))
-                .Add(Restrictions.Eq("Scenario", scenario))
-                .UniqueResult<IAgentDayScheduleTag>();
-        }
-
         public IAgentDayScheduleTag LoadAggregate(Guid id)
         {
             return Get(id);

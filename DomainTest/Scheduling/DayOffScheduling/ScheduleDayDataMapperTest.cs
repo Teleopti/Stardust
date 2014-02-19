@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -44,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay1)).Return(false);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).Return(
 					_effectiveRestriction);
+				Expect.Call(_effectiveRestriction.IsAvailabilityDay).Return(false);
 				Expect.Call(_effectiveRestriction.IsRestriction).Return(true);
 			}
 
@@ -70,6 +70,34 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay1)).Return(false);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				IScheduleDayData result = _target.Map(_scheduleDayPro1, _schedulingOptions);
+				Assert.AreEqual(DateOnly.MinValue, result.DateOnly);
+				Assert.IsFalse(result.HaveRestriction);
+				Assert.IsFalse(result.IsContractDayOff);
+				Assert.IsTrue(result.IsDayOff);
+				Assert.IsTrue(result.IsScheduled);
+			}
+		}
+
+		[Test]
+		public void AvailabilityDayIsNotARestrictionIfNotScheduleOnlyAvailabilityDays()
+		{
+			_schedulingOptions.AvailabilityDaysOnly = false;
+			_schedulingOptions.UseAvailability = true;
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDayPro1.Day).Return(DateOnly.MinValue);
+				Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
+				Expect.Call(_scheduleDay1.IsScheduled()).Return(true);
+				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.DayOff);
+				Expect.Call(_hasContractDayOffDefinition.IsDayOff(_scheduleDay1)).Return(false);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay1, _schedulingOptions)).Return(_effectiveRestriction);
+				Expect.Call(_effectiveRestriction.IsAvailabilityDay).Return(true);
 			}
 
 			using (_mocks.Playback())

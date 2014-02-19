@@ -9,9 +9,9 @@ set DESTSERVER=s8v4m110k9.database.windows.net
 set DESTSERVERPREFIX=s8v4m110k9
 set DESTUSER=TeleoptiDemoUser
 set DESTPWD=TeleoptiDemoPwd2
-set DESTANALYTICS=Demo_TeleoptiAnalytics
+set DESTANALYTICS=Dev_TeleoptiAnalytics
 set SRCANALYTICS=TeleoptiAnalytics_Demo
-set DESTCCC7=Demo_TeleoptiCCC7
+set DESTCCC7=Dev_TeleoptiCCC7
 set SRCCCC7=TeleoptiCCC7_Demo
 set SRCAGG=TeleoptiCCC7Agg_Demo
 set AZUREADMINUSER=teleopti
@@ -114,7 +114,11 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=22 & GOTO :error
 ECHO Dropping Circular FKs, Delete All Azure data. Working ...
 SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\DropCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=23 & GOTO :error
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -Q"DROP VIEW [dbo].[v_ExternalLogon]"
 SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\DeleteAllData.sql"
+
+SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%workingdir%\DatabaseInstaller\TeleoptiCCC7\Programmability\01Views\dbo.v_ExternalLogon.sql"
+
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=24 & GOTO :error
 SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTCCC7% -i"%ROOTDIR%\CreateCircularFKs.sql"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=25 & GOTO :error
@@ -139,10 +143,8 @@ if exist "%workingdir%\%SRCCCC7%\Logs\*log" SET /A ERRORLEV=28 & GOTO :error
 ECHO Running BcpIn on Azure ccc7. Done!
 
 ::Re-add Agg-views in Azure
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -Q"update mart.sys_crossdatabaseview_target set confirmed = 1"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=29 & GOTO :error
-SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -Q"exec mart.sys_crossDatabaseView_load"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=29 & GOTO :error
+"%workingdir%\DatabaseInstaller\Enrypted\Teleopti.Support.Security.exe" -DS%DESTSERVER% -DU%AZUREADMINUSER% -DP%AZUREADMINPWD% -DD%DESTANALYTICS% -CD%DESTANALYTICS% 
+IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
 ::Add ETL schedules and extra statistics
 SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -b -d%DESTANALYTICS% -i"%ROOTDIR%\EtlScheduleAndExtraStats.sql"

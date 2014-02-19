@@ -21,15 +21,5 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <param name="scenario">The scenario</param>
         /// <returns></returns>
         ICollection<IAgentDayScheduleTag> Find(DateOnlyPeriod dateOnlyPeriod, IEnumerable<IPerson> personCollection, IScenario scenario);
-
-
-        /// <summary>
-        /// Finds the agent schedule day tag by date, person and scenario.
-        /// </summary>
-        /// <param name="dateOnly">The date only.</param>
-        /// <param name="person">The person.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns></returns>
-        IAgentDayScheduleTag Find(DateOnly dateOnly, IPerson person, IScenario scenario);
     }
 }

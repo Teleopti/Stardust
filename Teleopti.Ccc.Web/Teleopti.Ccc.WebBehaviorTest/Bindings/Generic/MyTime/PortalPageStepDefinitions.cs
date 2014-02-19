@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I sign out")]
 		public void WhenISignOut()
 		{
+			Browser.Interactions.Click(".navbar-toggle");
 			Browser.Interactions.Click(".user-name-link");
 			Browser.Interactions.Click("#signout");
 			Browser.Interactions.AssertUrlContains("Authentication");

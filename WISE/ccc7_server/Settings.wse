@@ -176,7 +176,7 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=DMZ
+  Variable Value1=IS_DMZ
   Variable Name2=_PROP_VAR_
   Variable Value2=DMZ_TMP
   Variable Name3=HELPFILE

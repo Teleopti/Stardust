@@ -41,20 +41,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// <param name="workload">The workload.</param>
         /// <param name="taskOwnerList">The task owner list.</param>
         /// <param name="existingValidatedVolumeDays">The existing validated volume days.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-02
-        /// </remarks>
-        IList<ITaskOwner> MatchDays(IWorkload workload, IEnumerable<ITaskOwner> taskOwnerList,
-                                    IEnumerable<IValidatedVolumeDay> existingValidatedVolumeDays);
-
-        /// <summary>
-        /// Matches the days.
-        /// </summary>
-        /// <param name="workload">The workload.</param>
-        /// <param name="taskOwnerList">The task owner list.</param>
-        /// <param name="existingValidatedVolumeDays">The existing validated volume days.</param>
         /// <param name="addToRepository">if set to <c>true</c> [add to repository].</param>
         /// <returns></returns>
         /// <remarks>

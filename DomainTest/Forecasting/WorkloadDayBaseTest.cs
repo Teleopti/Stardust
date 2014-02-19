@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             _taskPeriods.Add(p1);
 
-            _openHours.Add(new TimePeriod(new TimeSpan(13, 0, 0), new TimeSpan(1, 2, 0, 0)));
-            _openHours.Add(new TimePeriod(new TimeSpan(7, 0, 0), new TimeSpan(11, 0, 0)));
+            _openHours.Add(new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(1, 2, 0, 0)));
+            
             _workloadDayBase.Create(new DateOnly(SkillDayTemplate.BaseDate), _workload, _openHours);
 
             _workloadDayBase.Tasks = 999;
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifySetOpenHourList()
         {
-            Assert.AreEqual(2, _workloadDayBase.OpenHourList.Count);
+            Assert.AreEqual(1, _workloadDayBase.OpenHourList.Count);
             Assert.IsInstanceOf<ReadOnlyCollection<TimePeriod>>(_workloadDayBase.OpenHourList);
         }
 
@@ -175,8 +175,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             _workloadDayBase.SetTaskPeriodCollection(new List<ITemplateTaskPeriod>());
             IList<TimePeriod> timePeriods = new List<TimePeriod>();
-            timePeriods.Add(new TimePeriod(new TimeSpan(4, 0, 0), new TimeSpan(5, 0, 0)));
-            timePeriods.Add(new TimePeriod(new TimeSpan(6, 0, 0), new TimeSpan(7, 0, 0)));
+            timePeriods.Add(new TimePeriod(new TimeSpan(4, 0, 0), new TimeSpan(6, 0, 0)));
             _workloadDayBase.ChangeOpenHours(timePeriods);
             // (18 + 1) * 4 = 76
             Assert.AreEqual(8, _workloadDayBase.TaskPeriodList.Count);
@@ -187,8 +186,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             _workloadDayBase.SetTaskPeriodCollection(new List<ITemplateTaskPeriod>());
             IList<TimePeriod> timePeriods = new List<TimePeriod>();
-            timePeriods.Add(new TimePeriod(new TimeSpan(4, 0, 0), new TimeSpan(5, 0, 0)));
-            timePeriods.Add(new TimePeriod(new TimeSpan(6, 0, 0), new TimeSpan(7, 0, 0)));
+            timePeriods.Add(new TimePeriod(new TimeSpan(4, 0, 0), new TimeSpan(7, 0, 0)));
+            
             _workloadDayBase.ChangeOpenHours(timePeriods);
             // (18 + 1) * 4 = 76
             Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[0].Period.StartDateTime, new DateTime(1800, 1, 1, 4, 0, 0));
@@ -196,10 +195,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[2].Period.StartDateTime, new DateTime(1800, 1, 1, 4, 30, 0));
             Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[3].Period.StartDateTime, new DateTime(1800, 1, 1, 4, 45, 0));
 
-            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[4].Period.StartDateTime, new DateTime(1800, 1, 1, 6, 0, 0));
-            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[5].Period.StartDateTime, new DateTime(1800, 1, 1, 6, 15, 0));
-            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[6].Period.StartDateTime, new DateTime(1800, 1, 1, 6, 30, 0));
-            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[7].Period.StartDateTime, new DateTime(1800, 1, 1, 6, 45, 0));
+            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[4].Period.StartDateTime, new DateTime(1800, 1, 1, 5, 0, 0));
+            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[5].Period.StartDateTime, new DateTime(1800, 1, 1, 5, 15, 0));
+            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[6].Period.StartDateTime, new DateTime(1800, 1, 1, 5, 30, 0));
+            Assert.AreEqual(_workloadDayBase.SortedTaskPeriodList[7].Period.StartDateTime, new DateTime(1800, 1, 1, 5, 45, 0));
         }
 
         [Test]
@@ -210,19 +209,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             _workloadDayBase.SetTaskPeriodCollection(new List<ITemplateTaskPeriod>());
             IList<TimePeriod> timePeriods = new List<TimePeriod>();
-            timePeriods.Add(new TimePeriod(new TimeSpan(4, 0, 0), new TimeSpan(5, 0, 0)));
-            timePeriods.Add(new TimePeriod(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0)));
+            timePeriods.Add(new TimePeriod(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)));
             _workloadDayBase.ChangeOpenHours(timePeriods);
             // (18 + 1) * 4 = 76
-            Assert.AreEqual(new DateTime(1800, 1, 1, 4, 0, 0), _workloadDayBase.SortedTaskPeriodList[0].Period.StartDateTime);
-            Assert.AreEqual(new DateTime(1800, 1, 1, 4, 15, 0), _workloadDayBase.SortedTaskPeriodList[1].Period.StartDateTime);
-            Assert.AreEqual(new DateTime(1800, 1, 1, 4, 30, 0), _workloadDayBase.SortedTaskPeriodList[2].Period.StartDateTime);
-            Assert.AreEqual(new DateTime(1800, 1, 1, 4, 45, 0), _workloadDayBase.SortedTaskPeriodList[3].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 8, 0, 0), _workloadDayBase.SortedTaskPeriodList[0].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 8, 15, 0), _workloadDayBase.SortedTaskPeriodList[1].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 8, 30, 0), _workloadDayBase.SortedTaskPeriodList[2].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 8, 45, 0), _workloadDayBase.SortedTaskPeriodList[3].Period.StartDateTime);
 
-            Assert.AreEqual(new DateTime(1800, 1, 1, 7, 0, 0), _workloadDayBase.SortedTaskPeriodList[4].Period.StartDateTime);
-            Assert.AreEqual(new DateTime(1800, 1, 1, 7, 15, 0), _workloadDayBase.SortedTaskPeriodList[5].Period.StartDateTime);
-            Assert.AreEqual(new DateTime(1800, 1, 1, 7, 30, 0), _workloadDayBase.SortedTaskPeriodList[6].Period.StartDateTime);
-            Assert.AreEqual(new DateTime(1800, 1, 1, 7, 45, 0), _workloadDayBase.SortedTaskPeriodList[7].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 9, 0, 0), _workloadDayBase.SortedTaskPeriodList[4].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 9, 15, 0), _workloadDayBase.SortedTaskPeriodList[5].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 9, 30, 0), _workloadDayBase.SortedTaskPeriodList[6].Period.StartDateTime);
+            Assert.AreEqual(new DateTime(1800, 1, 1, 9, 45, 0), _workloadDayBase.SortedTaskPeriodList[7].Period.StartDateTime);
 
             Assert.AreEqual(8, _workloadDayBase.TaskPeriodList.Count);
             templateTaskPeriod = _workloadDayBase.SortedTaskPeriodList[4];
@@ -238,8 +236,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsTrue(templateTaskPeriod.TotalTasks > 0);
 
             IList<TimePeriod> timePeriods = new List<TimePeriod>();
-            timePeriods.Add(new TimePeriod(new TimeSpan(6, 30, 0), new TimeSpan(9, 0, 0)));
-            timePeriods.Add(new TimePeriod(new TimeSpan(12, 0, 0), new TimeSpan(1, 3, 0, 0)));
+            timePeriods.Add(new TimePeriod(new TimeSpan(6, 30, 0), new TimeSpan(1,0, 0, 0)));
             _workloadDayBase.ChangeOpenHours(timePeriods);
 
             //10+60
@@ -743,7 +740,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 Assert.AreEqual(200, _workloadDayBase.TaskPeriodList[0].StatisticTask.StatCalculatedTasks);
                 Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
                 _workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workloadDayBase.TaskPeriodList));
-                Assert.AreEqual(2, _workloadDayBase.TaskPeriodList.Count);
+                Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
                 _workloadDayBase.TaskPeriodList[0].Tasks = 104d;
                 _workloadDayBase.TaskPeriodList[0].AverageTaskTime = TimeSpan.FromSeconds(10);
                 _workloadDayBase.TaskPeriodList[0].AverageAfterTaskTime = TimeSpan.FromSeconds(20);
@@ -756,20 +753,20 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                         {
                             _workloadDayBase.TaskPeriodList[0]
                         });
-                Assert.AreEqual(53, _workloadDayBase.TaskPeriodList.Count); //1 merged + 52 unmerged
-                Assert.AreEqual(2, _workloadDayBase.TaskPeriodList[1].Tasks);
+                Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
+                Assert.AreEqual(1.529d, Math.Round(_workloadDayBase.TaskPeriodList[1].Tasks),3);
                 Assert.AreEqual(TimeSpan.FromSeconds(10), _workloadDayBase.TaskPeriodList[1].AverageTaskTime);
                 Assert.AreEqual(TimeSpan.FromSeconds(20), _workloadDayBase.TaskPeriodList[1].AverageAfterTaskTime);
                 Assert.AreEqual(0.1d, _workloadDayBase.TaskPeriodList[1].CampaignTasks.Value);
                 Assert.AreEqual(0.2d, _workloadDayBase.TaskPeriodList[1].CampaignTaskTime.Value);
                 Assert.AreEqual(0.3d, _workloadDayBase.TaskPeriodList[1].CampaignAfterTaskTime.Value);
-                Assert.AreEqual(2, _workloadDayBase.TaskPeriodList[52].Tasks);
+					 Assert.AreEqual(1.529d,  Math.Round(_workloadDayBase.TaskPeriodList[52].Tasks),3);
                 Assert.AreEqual(TimeSpan.FromSeconds(10), _workloadDayBase.TaskPeriodList[52].AverageTaskTime);
                 Assert.AreEqual(TimeSpan.FromSeconds(20), _workloadDayBase.TaskPeriodList[52].AverageAfterTaskTime);
                 Assert.AreEqual(0.1d, _workloadDayBase.TaskPeriodList[52].CampaignTasks.Value);
                 Assert.AreEqual(0.2d, _workloadDayBase.TaskPeriodList[52].CampaignTaskTime.Value);
                 Assert.AreEqual(0.3d, _workloadDayBase.TaskPeriodList[52].CampaignAfterTaskTime.Value);
-                Assert.AreEqual(200, _workloadDayBase.TaskPeriodList[1].StatisticTask.StatCalculatedTasks);
+                Assert.AreEqual(200, _workloadDayBase.TaskPeriodList[0].StatisticTask.StatCalculatedTasks);
             }
         }
 
@@ -778,7 +775,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         {
             Assert.AreEqual(68, _workloadDayBase.TaskPeriodList.Count);
             _workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workloadDayBase.TaskPeriodList));
-            Assert.AreEqual(2, _workloadDayBase.TaskPeriodList.Count);
+            Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
         }
 
         [Test, ExpectedException(typeof(ArgumentException))]
@@ -853,7 +850,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 _workloadDayBase.TaskPeriodList[i].Tasks = 100;
                 _workloadDayBase.TaskPeriodList[i].AverageTaskTime = TimeSpan.FromSeconds(100);
                 _workloadDayBase.TaskPeriodList[i].AverageAfterTaskTime = TimeSpan.FromSeconds(10);
-                if (i < 26)
+                if (i < 34)
                 {
                     _workloadDayBase.TaskPeriodList[i].CampaignTasks = new Percent(0.1d);
                     _workloadDayBase.TaskPeriodList[i].CampaignTaskTime = new Percent(0.2d);
@@ -862,13 +859,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             }
             _workloadDayBase.Release();
             _workloadDayBase.MergeTemplateTaskPeriods(new List<ITemplateTaskPeriod>(_workloadDayBase.TaskPeriodList));
-            Assert.AreEqual(2, _workloadDayBase.TaskPeriodList.Count);
+            Assert.AreEqual(1, _workloadDayBase.TaskPeriodList.Count);
             Assert.AreEqual(0.05d, Math.Round(_workloadDayBase.TaskPeriodList[0].CampaignTasks.Value, 2));
             Assert.AreEqual(0.1d, Math.Round(_workloadDayBase.TaskPeriodList[0].CampaignTaskTime.Value, 2));
             Assert.AreEqual(0.21d, Math.Round(_workloadDayBase.TaskPeriodList[0].CampaignAfterTaskTime.Value, 2));
-            Assert.AreEqual(0.0d, Math.Round(_workloadDayBase.TaskPeriodList[1].CampaignTasks.Value, 2));
-            Assert.AreEqual(0.0d, Math.Round(_workloadDayBase.TaskPeriodList[1].CampaignTaskTime.Value, 2));
-            Assert.AreEqual(0.0d, Math.Round(_workloadDayBase.TaskPeriodList[1].CampaignAfterTaskTime.Value, 2));
+            
         }
 
         [Test]
@@ -1257,6 +1252,27 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _workloadDayBase.Tasks = 0d;
             _workloadDayBase.AverageTaskTime = TimeSpan.FromSeconds(1);
         }
+
+		  //jan 1 2011 the timezone was changed in russia, if the openhours was 00 - 00 (+1) and calling ChangeOpenHours
+ 		 //on 2010-12-31 it creates an period that is from 00 - 01 (+1) and it raises an error
+	    [Test]
+	    public void Bug26815()
+	    {
+			 IList<TimePeriod> openHours = new List<TimePeriod>();
+			 
+		    _skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("Russian Standard Time");
+			 _skill.MidnightBreakOffset = TimeSpan.FromHours(0);
+			 _workloadDayBase.Create(new DateOnly(2010,12,31),_workload,openHours ); 
+			 _workload.Skill.DefaultResolution = 15;
+			 _workloadDayBase.Close();
+			 var timePeriod = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(24));
+			 openHours.Add(timePeriod);
+
+			 _workloadDayBase.ChangeOpenHours(openHours);
+
+			 Assert.AreEqual(96, _workloadDayBase.TaskPeriodList.Count);
+
+	    }
     }
 
     public class TestWorkloadDayBase : WorkloadDayBase

@@ -21,7 +21,7 @@ namespace Teleopti.Messaging.SignalR
 	{
 		private const string hubClassName = "MessageBrokerHub";
 		private readonly ConcurrentDictionary<string, IList<SubscriptionWithHandler>> _subscriptionHandlers = new ConcurrentDictionary<string, IList<SubscriptionWithHandler>>();
-		private ISignalWrapper _wrapper;
+		private ISignalConnectionHandler _connectionHandler;
 		private ISignalSubscriber _subscriberWrapper;
 		private readonly object _wrapperLock = new object();
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (SignalBroker));
@@ -55,10 +55,10 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (_wrapperLock)
 			{
-				if (_wrapper == null) return;
+				if (_connectionHandler == null) return;
 
-				_wrapper.StopHub();
-				_wrapper = null;
+				_connectionHandler.CloseConnection();
+				_connectionHandler = null;
 			}
 		}
 
@@ -112,9 +112,9 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (_wrapperLock)
 			{
-				if (_wrapper == null) return;
+				if (_connectionHandler == null) return;
 
-				_wrapper.NotifyClients(state);
+				_connectionHandler.NotifyClients(state);
 			}
 		}
 
@@ -197,9 +197,9 @@ namespace Teleopti.Messaging.SignalR
 
 			lock (_wrapperLock)
 			{
-				if (_wrapper == null) return;
+				if (_connectionHandler == null) return;
 
-				_wrapper.AddSubscription(subscription).ContinueWith(_ =>
+				_connectionHandler.AddSubscription(subscription).ContinueWith(_ =>
 				{
 					var route = subscription.Route();
 
@@ -215,7 +215,7 @@ namespace Teleopti.Messaging.SignalR
 
 			lock (_wrapperLock)
 			{
-				if (_wrapper == null) return;
+				if (_connectionHandler == null) return;
 
 				var subscriptionWithHandlersToRemove = new List<SubscriptionWithHandler>();
 				var subscriptionValues = new List<IList<SubscriptionWithHandler>>(_subscriptionHandlers.Values);
@@ -237,7 +237,7 @@ namespace Teleopti.Messaging.SignalR
 							if (subscriptionWithHandler.Subscription!=null)
 							{
 								var route = subscriptionWithHandler.Subscription.Route();
-								_wrapper.RemoveSubscription(route);
+								_connectionHandler.RemoveSubscription(route);
 								handlersToRemove.Add(route);
 							}
 						}
@@ -320,6 +320,11 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartMessageBroker()
 		{
+			StartMessageBroker(TimeSpan.FromSeconds(240));
+		}
+		
+		public void StartMessageBroker(TimeSpan reconnectDelay)
+		{
 			Uri serverUrl;
 			if (!Uri.TryCreate(ConnectionString, UriKind.Absolute, out serverUrl))
 			{
@@ -334,8 +339,8 @@ namespace Teleopti.Messaging.SignalR
 				_subscriberWrapper.OnNotification += onNotification;
 				_subscriberWrapper.Start();
 
-				_wrapper = new SignalWrapper(hubProxy, connection, null);
-				_wrapper.StartHub();
+				_connectionHandler = new SignalConnectionHandler(hubProxy, connection, null, reconnectDelay);
+				_connectionHandler.StartConnection();
 			}
 		}
 
@@ -379,9 +384,9 @@ namespace Teleopti.Messaging.SignalR
 		{
 			lock (_wrapperLock)
 			{
-				if (_wrapper != null)
+				if (_connectionHandler != null)
 				{
-					_wrapper.StopHub();
+					_connectionHandler.CloseConnection();
 				}
 				if (_subscriberWrapper != null)
 				{
@@ -399,7 +404,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			get
 			{
-				return _wrapper!=null && _wrapper.IsInitialized();
+				return _connectionHandler!=null && _connectionHandler.IsInitialized();
 			}
 		}
 

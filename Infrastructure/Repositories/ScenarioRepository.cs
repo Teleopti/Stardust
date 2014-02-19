@@ -37,15 +37,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		    
 	    }
 
-        /// <param name="myScenario">SetDefault</param>
-        public void SetDefault(IScenario myScenario)
-        {
-            ICollection<IScenario> Scenarios = LoadAll();
-            foreach (IScenario s in Scenarios)
-                s.DefaultScenario = false;
-            myScenario.DefaultScenario = true;
-        }
-
         /// <summary>
         /// Finds all scenarios.
         /// Default first, then sorted by name

@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 									.Key;
             
             // Iteration
-            Assert.AreEqual(5, _furnessEvaluator.InnerIteration);
+            Assert.AreEqual(8, _furnessEvaluator.InnerIteration);
 
             // WeightedRelativeKeyedSkillResourceResources
             KeyedSkillResourceDictionary resourceMatrix = _optimizedDivideActivity.WeightedRelativeKeyedSkillResourceResources;

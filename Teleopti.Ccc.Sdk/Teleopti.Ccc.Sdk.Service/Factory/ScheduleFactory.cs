@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,21 +13,19 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     public class ScheduleFactory
     {
         private readonly IScheduleRepository _scheduleRepository;
-    	private readonly ISaveSchedulePartService _saveSchedulePartService;
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+	    private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly ICurrentScenario _scenarioRepository;
 		
-	    public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService,
+	    public ScheduleFactory(IScheduleRepository scheduleRepository,
 			  ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, 
 			  SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler,
 			  ICurrentScenario scenarioRepository)
         {
             _scheduleRepository = scheduleRepository;
-        	_saveSchedulePartService = saveSchedulePartService;
-        	_unitOfWorkFactory = unitOfWorkFactory;
+		    _unitOfWorkFactory = unitOfWorkFactory;
         	_personAssembler = personAssembler;
             _scheduleDayAssembler = scheduleDayAssembler;
             _dateTimePeriodAssembler = dateTimePeriodAssembler;

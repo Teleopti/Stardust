@@ -10,9 +10,11 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
+using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			Mapper.Reset();
 			Mapper.Initialize(
-				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone)));
+				c => c.AddProfile(new TeamScheduleViewModelMappingProfile(() => userTimeZone, new CreateHourText(new CurrentThreadUserCulture(), userTimeZone))));
 		}
 		
 		[Test]
@@ -304,7 +306,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var expected = new[] {"08:45", "09", "10", "11", "11:15"};
+			var expected = new[] {"08:45", "09:00", "10:00", "11:00", "11:15"};
 			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
 
@@ -317,8 +319,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var expected = new[] { "08:45", "9 AM", "10 AM", "11 AM", "12 PM", "12:15" };
-			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
+			var expected = new[] { "9 AM", "10 AM", "11 AM", "12 PM" };
+			var actual = result.TimeLine.Select(t => t.ShortTime);
+
+			CollectionAssert.IsSubsetOf(expected, actual);
 		}
 
 		[Test, SetCulture("sv-SE")]
@@ -331,9 +335,34 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			var expected = new[] { "09:45", "10", "11", "12", "12:15" };
+			var expected = new[] { "09:45", "10:00", "11:00", "12:00", "12:15" };
 			result.TimeLine.Select(t => t.ShortTime).Should().Have.SameSequenceAs(expected);
 		}
+
+		[Test]
+		public void ShowLabel_WhenFullHour_ShouldBeTrue()
+		{
+			var start = new DateTime(2012, 1, 3, 8, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2012, 1, 3, 9, 15, 0, DateTimeKind.Utc);
+			data.DisplayTimePeriod = new DateTimePeriod(start, end);
+
+			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
+
+			result.TimeLine.First().IsFullHour.Should().Be(true);
+		}
+
+		[Test]
+		public void ShowLabel_WhenNotFullHour_ShouldBeFalse()
+		{
+			var start = new DateTime(2012, 1, 3, 8, 45, 0, DateTimeKind.Utc);
+			var end = new DateTime(2012, 1, 3, 9, 15, 0, DateTimeKind.Utc);
+			data.DisplayTimePeriod = new DateTimePeriod(start, end);
+
+			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
+
+			result.TimeLine.First().IsFullHour.Should().Be(false);
+		}
+
 
 		[Test]
 		public void ShouldMapTimeLinePositionPercent()
@@ -347,7 +376,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var assertTime = new DateTime(2012, 1, 3, 10, 0, 0);
 			var timeRange = (decimal)data.DisplayTimePeriod.EndDateTime.Ticks - data.DisplayTimePeriod.StartDateTime.Ticks;
 			var timePosition = (decimal)assertTime.Ticks - data.DisplayTimePeriod.StartDateTime.Ticks;
-			result.TimeLine.Single(t => t.ShortTime == "10").PositionPercent.Should().Be(timePosition / timeRange);
+			result.TimeLine.Single(t => t.ShortTime == "10:00").PositionPercent.Should().Be(timePosition / timeRange);
 		}
 
 		[Test]

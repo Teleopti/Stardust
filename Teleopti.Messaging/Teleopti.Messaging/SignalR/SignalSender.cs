@@ -15,7 +15,7 @@ namespace Teleopti.Messaging.SignalR
 	public class SignalSender : IMessageSender
 	{
 		private readonly string _serverUrl;
-		private ISignalWrapper _wrapper;
+		private ISignalConnectionHandler _connectionHandler;
 		protected ILog Logger;
 
 		public SignalSender(string serverUrl)
@@ -40,18 +40,24 @@ namespace Teleopti.Messaging.SignalR
 			Logger.Debug("An unobserved task failed.", e.Exception);
 			e.SetObserved();
 		}
+
 		public void StartBrokerService()
+		{
+			StartBrokerService(TimeSpan.FromSeconds(240));
+		}
+
+		public void StartBrokerService(TimeSpan reconnectDelay)
 		{
 			try
 			{
-				if (_wrapper == null)
+				if (_connectionHandler == null)
 				{
 					var connection = MakeHubConnection();
 					var proxy = connection.CreateHubProxy("MessageBrokerHub");
-					_wrapper = new SignalWrapper(proxy, connection, Logger);
+					_connectionHandler = new SignalConnectionHandler(proxy, connection, Logger, reconnectDelay);
 				}
 
-				_wrapper.StartHub();
+				_connectionHandler.StartConnection();
 			}
 			catch (SocketException exception)
 			{
@@ -65,18 +71,18 @@ namespace Teleopti.Messaging.SignalR
 
 		public bool IsAlive
 		{
-			get { return _wrapper != null && _wrapper.IsInitialized(); }
+			get { return _connectionHandler != null && _connectionHandler.IsInitialized(); }
 		}
 
 		public void SendNotification(Notification notification)
 		{
-			_wrapper.NotifyClients(notification);
+			_connectionHandler.NotifyClients(notification);
 		}
 
 		public virtual void Dispose()
 		{
-			_wrapper.StopHub();
-			_wrapper = null;
+			_connectionHandler.CloseConnection();
+			_connectionHandler = null;
 		}
 
 		protected virtual ILog MakeLogger()

@@ -7,11 +7,13 @@ using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
@@ -68,22 +70,21 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			var busSender = new ServiceBusSender();
 	        var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
-        	var initializeApplication =
-        		new InitializeApplication(
-        			new DataSourcesFactory(new EnversConfiguration(),
-        			                       new List<IMessageSender>
-        			                       	{
-												new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-                                                new ScheduleMessageSender(eventPublisher),
-                                                new MeetingMessageSender(eventPublisher),
-                                                new GroupPageChangedMessageSender(eventPublisher),
-                                                new TeamOrSiteChangedMessageSender(eventPublisher),
-                                                new PersonChangedMessageSender(eventPublisher),
-                                                new PersonPeriodChangedMessageSender(eventPublisher)
-                                            },
-													DataSourceConfigurationSetter.ForSdk()),
-        			new SignalBroker(MessageFilterManager.Instance))
-        			{MessageBrokerDisabled = messageBrokerDisabled()};
+	        var initializeApplication =
+		        new InitializeApplication(
+			        new DataSourcesFactory(new EnversConfiguration(),
+			                               new List<IMessageSender>
+				                               {
+					                               new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+					                               new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+					                               new MeetingMessageSender(eventPublisher),
+					                               new GroupPageChangedMessageSender(eventPublisher),
+					                               new TeamOrSiteChangedMessageSender(eventPublisher),
+					                               new PersonChangedMessageSender(eventPublisher),
+					                               new PersonPeriodChangedMessageSender(eventPublisher)
+				                               },
+			                               DataSourceConfigurationSetter.ForSdk()),
+			        new SignalBroker(MessageFilterManager.Instance)) {MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
             initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
             var messageBroker = initializeApplication.MessageBroker;
@@ -200,6 +201,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<AuthenticationFactory>().InstancePerLifetimeScope();
             builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();
+            builder.RegisterType<SkillDataFactory>().InstancePerLifetimeScope();
             builder.RegisterType<TeleoptiPayrollExportFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleMailFactory>().InstancePerLifetimeScope();
         	builder.RegisterType<PublicNoteTypeFactory>().InstancePerLifetimeScope();
@@ -208,6 +210,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<PayrollResultFactory>().As<IPayrollResultFactory>().SingleInstance();
             builder.RegisterType<PlanningTimeBankFactory>().InstancePerLifetimeScope();
             builder.RegisterType<WriteProtectionFactory>().InstancePerLifetimeScope();
+
+            builder.RegisterType<ResourceCalculationPrerequisitesLoader>().As<IResourceCalculationPrerequisitesLoader>().InstancePerLifetimeScope();
+            builder.RegisterType<SkillDayLoadHelper>().As<ISkillDayLoadHelper>().InstancePerLifetimeScope();
+            builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().InstancePerLifetimeScope();
         }
     }
 

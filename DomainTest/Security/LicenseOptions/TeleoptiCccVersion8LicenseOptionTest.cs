@@ -27,11 +27,12 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
             _target.EnableApplicationFunctions(inputList);
             IList<IApplicationFunction> resultList = _target.EnabledApplicationFunctions;
 			var functions = resultList.Select(r => r.FunctionPath);
-
+                
 			functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
         	functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.Anywhere);
         	functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.IntradayReForecasting);
-	        functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+            functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities);
+            functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.MonthSchedule);
         }
     }
 }

@@ -1,11 +1,5 @@
-using System;
-using System.Linq;
 using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Transform;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -101,50 +95,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             sqlQuery = Session.CreateSQLQuery(hql);
             sqlQuery.SetGuid("workloadId", workload.Id.Value);
             sqlQuery.ExecuteUpdate();
-        }
-
-        public IWorkload LoadWorkload(IWorkload workload)
-        {
-            var queues = DetachedCriteria.For<Workload>()
-                .Add(Restrictions.Eq("Id", workload.Id.GetValueOrDefault()))
-                .SetFetchMode("QueueSourceCollection", FetchMode.Join);
-            var templates = DetachedCriteria.For<Workload>()
-                .Add(Restrictions.Eq("Id", workload.Id.GetValueOrDefault()))
-                .SetFetchMode("TemplateWeekCollection", FetchMode.Join);
-            var templateIds = DetachedCriteria.For<WorkloadDayTemplate>()
-                .Add(Restrictions.Eq("Parent", workload))
-                .SetProjection(Projections.Property("Id")).SetResultTransformer(Transformers.DistinctRootEntity);
-            var openhours = DetachedCriteria.For<WorkloadDayBase>()
-                .Add(Subqueries.PropertyIn("Id", templateIds))
-                .SetFetchMode("OpenHourList", FetchMode.Join).SetResultTransformer(Transformers.DistinctRootEntity);
-            var taskPeriods = DetachedCriteria.For<WorkloadDayBase>()
-                 .Add(Subqueries.PropertyIn("Id", templateIds))
-                 .SetFetchMode("TaskPeriodList", FetchMode.Join)
-                 .SetResultTransformer(Transformers.DistinctRootEntity);
-            var skill = DetachedCriteria.For<Skill>()
-              .Add(Restrictions.Eq("Id", workload.Skill.Id.GetValueOrDefault()))
-              .SetFetchMode("SkillType", FetchMode.Join)
-              .SetFetchMode("TemplateWeekCollection", FetchMode.Join)
-              .SetFetchMode("TemplateWeekCollection.TemplateSkillDataPeriodCollection", FetchMode.Join);
-
-            var multiCriteria =
-                Session.CreateMultiCriteria().Add(queues).Add(skill).Add(templates).Add(openhours).Add(taskPeriods);
-            var fetchedWorkload =
-                CollectionHelper.ToDistinctGenericCollection<IWorkload>(wrapMultiCriteria(multiCriteria)).FirstOrDefault();
-            return fetchedWorkload;
-        }
-
-        private static object wrapMultiCriteria(IMultiCriteria multi)
-        {
-            try
-            {
-                return multi.List()[0];
-            }
-            catch (Exception ex)
-            {
-                //temp fix until NH is upgraded - hack just for this very branch
-                throw new DataSourceException(ex.Message, ex);
-            }
         }
     }
 }
