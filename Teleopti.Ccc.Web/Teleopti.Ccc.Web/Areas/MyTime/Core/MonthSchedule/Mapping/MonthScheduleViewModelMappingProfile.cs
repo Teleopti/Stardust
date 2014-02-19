@@ -62,12 +62,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 					{
 						var personAssignment = s.ScheduleDay.PersonAssignment();
 						var projection = _projectionProvider.Projection(s.ScheduleDay);
-						var name = personAssignment.ShiftCategory == null ? null : personAssignment.ShiftCategory.Description.Name;
-						var color = personAssignment.ShiftCategory == null ? null : personAssignment.ShiftCategory.DisplayColor.ToHtml();
+						var isNullShiftCategory = personAssignment.ShiftCategory == null;
+						var name = isNullShiftCategory ? null : personAssignment.ShiftCategory.Description.Name;
+						var shortName = isNullShiftCategory ? null : personAssignment.ShiftCategory.Description.ShortName;
+						var color = isNullShiftCategory ? null : personAssignment.ShiftCategory.DisplayColor.ToHtml();
 						var contractTime = projection == null ? TimeSpan.Zero : projection.ContractTime();
 						return new ShiftViewModel
 									{
 										Name = name,
+										ShortName = shortName,
 										Color = color,
 										TimeSpan = personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString(),
 										WorkingHours = TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture)

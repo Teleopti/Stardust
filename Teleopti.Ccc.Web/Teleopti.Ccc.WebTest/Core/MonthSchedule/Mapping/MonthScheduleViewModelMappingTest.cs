@@ -196,6 +196,20 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapShiftCategoryShortNameForWorkingDay()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity(" "), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.SetShiftCategory(new ShiftCategory(" ") {Description = new Description(" ", "PM")});
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.Shift.ShortName.Should().Be.EqualTo("PM");
+		}
+
+		[Test]
 		public void ShouldMapShiftColorForWorkingDay()
 		{
 			var stubs = new StubFactory();

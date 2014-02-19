@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
 	public class ShiftViewModel
 	{
 		public string Name { get; set; }
+		public string ShortName { get; set; }
 		public string Color { get; set; }
 		public string TimeSpan { get; set; }
 		public string WorkingHours { get; set; }
