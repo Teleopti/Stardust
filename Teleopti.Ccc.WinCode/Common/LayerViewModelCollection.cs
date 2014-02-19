@@ -161,6 +161,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
                 Add(CreateViewModelFromVisualLayer(visualLayer));
             }
+			_layersThatShouldBeUpdated.Clear();
         }
 
         public virtual void CreateViewModels(ILayerViewModelSelector selector, IScheduleDay scheduleDay)
@@ -175,6 +176,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
                 Add(CreateViewModelFromVisualLayer(visualLayer));
             }
+			_layersThatShouldBeUpdated.Clear();
         }
 
         public void CreateProjectionViewModels(IProjectionSource projectionSource)

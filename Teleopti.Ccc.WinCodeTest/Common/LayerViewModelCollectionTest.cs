@@ -636,7 +636,34 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			replaceService.VerifyAllExpectations();
 		}
 
-        private IScheduleDay createPart(IPerson person, DateOnly dateOnly)
+		[Test]
+		public void ShouldClearLayersThatShouldBeUpdatedWhenANewSchedulePartIsLoaded()
+		{
+			var layerViewModel = MockRepository.GenerateMock<ILayerViewModel>();
+			target.ShouldBeUpdated(layerViewModel);
+
+			target.CreateViewModels(new SchedulePartFactoryForDomain().CreatePart());
+
+			target.UpdateAllMovedLayers();
+
+			layerViewModel.AssertWasNotCalled(x => x.UpdateModel());
+		}
+
+		[Test]
+		public void ShouldClearLayersThatShouldBeUpdatedWhenANewSchedulePartIsLoaded_DontKnowWhyNeededThisExtraCreateViewModels()
+		{
+			var layerViewModel = MockRepository.GenerateMock<ILayerViewModel>();
+			layerViewModel.Expect(x => x.SchedulePart).Return(new SchedulePartFactoryForDomain().CreatePart());
+			target.ShouldBeUpdated(layerViewModel);
+
+			target.CreateViewModels(new LayerViewModelSelector(layerViewModel), new SchedulePartFactoryForDomain().CreatePart());
+
+			target.UpdateAllMovedLayers();
+
+			layerViewModel.AssertWasNotCalled(x => x.UpdateModel());
+		}
+
+		private IScheduleDay createPart(IPerson person, DateOnly dateOnly)
         {
             IScheduleDictionary dictionaryNotUsed = new ScheduleDictionaryForTest(ScenarioFactory.CreateScenarioAggregate(),
                                                                                   new ScheduleDateTimePeriod(period),
@@ -651,4 +678,5 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             mocks.VerifyAll();
         }
     }
+
 }
