@@ -32,6 +32,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			result.Single().Should().Be(shiftCategory);
 		}
 
+        [Test]
+        public void ShouldOnlyRetrieveUnDeletedShiftCategoriesFromWorkflowControlSet()
+        {
+            var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+            var shiftCategory = new ShiftCategory(" ");
+            var deletedShiftCategory = new ShiftCategory(" ");
+            deletedShiftCategory.SetDeleted();
+            var person = new Person
+            {
+                WorkflowControlSet = new WorkflowControlSet
+                {
+                    AllowedPreferenceShiftCategories = new[] { shiftCategory, deletedShiftCategory }
+                }
+            };
+            var target = new PreferenceOptionsProvider(loggedOnUser);
+
+            loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
+
+            var result = target.RetrieveShiftCategoryOptions();
+
+            result.Count().Should().Be(1);
+        }
+
 		[Test]
 		public void ShouldRetrieveDayOffTemplatesFromWorkflowControlSet()
 		{
@@ -53,6 +76,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			result.Single().Should().Be(dayOff);
 		}
 
+        [Test]
+        public void ShouldOnlyRetrieveUnDeletedDayOffTemplatesFromWorkflowControlSet()
+        {
+            var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+            var dayOff = new DayOffTemplate(new Description());
+            var deletedDayOff = new DayOffTemplate(new Description());
+            deletedDayOff.SetDeleted();
+
+            var person = new Person
+            {
+                WorkflowControlSet = new WorkflowControlSet
+                {
+                    AllowedPreferenceDayOffs = new[] { dayOff, deletedDayOff }
+                }
+            };
+            var target = new PreferenceOptionsProvider(loggedOnUser);
+
+            loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
+
+            var result = target.RetrieveDayOffOptions();
+
+            result.Count().Should().Be(1);
+        }
 
 		[Test]
 		public void ShouldRetrieveAbsencesFromWorkflowControlSet()
@@ -74,6 +120,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 
 			result.Single().Should().Be(absence);
 		}
+
+        [Test]
+        public void ShouldOnlyRetrieveUnDeletedAbsencesFromWorkflowControlSet()
+        {
+            var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+            var absence = new Absence();
+            var deletedAbsence = new Absence();
+            deletedAbsence.SetDeleted();
+
+            var person = new Person
+            {
+                WorkflowControlSet = new WorkflowControlSet
+                {
+                    AllowedPreferenceAbsences = new[] { absence, deletedAbsence }
+                }
+            };
+            var target = new PreferenceOptionsProvider(loggedOnUser);
+
+            loggedOnUser.Stub(u => u.CurrentUser()).Return(person);
+
+            var result = target.RetrieveAbsenceOptions();
+
+            result.Count().Should().Be(1);
+        }
 
 		[Test]
 		public void ShouldReturnEmptyShiftCategoriesIfNotWorkflowControlSet()
