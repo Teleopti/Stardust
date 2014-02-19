@@ -50,8 +50,9 @@
 							<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
 							
 							<!-- ko if: absenceName != '' -->
+		                    <strong class="absence visible-lg" data-bind="text: absenceName"/>
 		                    <strong class="absence visible-md" data-bind="text: absenceName"/>
-		                    <strong class="absence hidden-md" data-bind="text: absenceShortName"/>
+		                    <strong class="absence hidden-md hidden-lg" data-bind="text: absenceShortName"/>
 		                    <!-- /ko -->
 
 		                    <div>
