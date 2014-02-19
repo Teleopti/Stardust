@@ -441,28 +441,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        /// <summary>
-        /// Loads the permission data without reassociate.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 2008-07-30
-        /// </remarks>
-        public IPerson LoadPermissionDataWithoutReassociate(IPerson person)
-        {
-            LazyLoadingManager.Initialize(person.PermissionInformation);
-            LazyLoadingManager.Initialize(person.PermissionInformation.ApplicationRoleCollection);
-
-            foreach (IApplicationRole role in person.PermissionInformation.ApplicationRoleCollection)
-            {
-                LazyLoadingManager.Initialize(role.ApplicationFunctionCollection);
-            }
-
-            return person;
-        }
-
 		public ICollection<IPerson> FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(DateOnlyPeriod period)
 		{
 			var multiCrit = Session.CreateMultiCriteria()
