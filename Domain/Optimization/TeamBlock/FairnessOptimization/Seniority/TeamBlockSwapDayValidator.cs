@@ -6,8 +6,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		bool ValidateSwapDays(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2);
 	}
-
-
+    
 	public class TeamBlockSwapDayValidator : ITeamBlockSwapDayValidator
 	{
 		private readonly ITeamBlockPersonsSkillChecker _teamBlockPersonsSkillChecker;
