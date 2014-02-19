@@ -23,6 +23,7 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : '';
     this.isDayOff = scheduleDate.IsDayOff;
     this.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : '';
+    this.shiftShortName = scheduleDate.Shift ? scheduleDate.Shift.ShortName : '';
     this.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan: '';
     this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : '';
     this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : '';
