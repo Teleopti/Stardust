@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I select the month '(.*)' in the calendar")]
         public void WhenISelectTheMonthInTheCalendar(string monthName)
         {
-            Browser.Interactions.Click(".glyphicon-th");
+            Browser.Interactions.Click(".glyphicon-calendar");
             string selector = string.Format(".datepicker-months .month:contains('{0}')",monthName);
             Browser.Interactions.AssertVisibleUsingJQuery(selector);
             Browser.Interactions.ClickUsingJQuery(selector);
