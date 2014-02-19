@@ -56,13 +56,16 @@
 
 		                    <div>
 			                    <div>
-									<strong class="visible-lg" data-bind="text: shiftName"></strong>
-									<strong class="visible-md" data-bind="text: shiftName"></strong>
-									<strong class="hidden-md hidden-lg" data-bind="text: shiftShortName"></strong>
+				                    <strong class="visible-lg" data-bind="text: shiftName"></strong>
+				                    <strong class="visible-md" data-bind="text: shiftName"></strong>
+				                    <div class="hidden-md hidden-lg" style="padding-top: 20px">
+					                    <strong data-bind="text: shiftShortName"></strong>
+				                    </div>
 			                    </div>
-			                    <div data-bind="text: shiftTimeSpan"></div>
-			                    <div data-bind="text: shiftWorkingHours"></div>
+			                    <div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
+			                    <div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
 		                    </div>
+
 	                    </div>
                 </div>
             </div>
