@@ -4,10 +4,10 @@ using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public interface ISignalWrapper
+	public interface ISignalConnectionHandler
 	{
-		void StartHub();
-		void StopHub();
+		void StartConnection();
+		void CloseConnection();
 		bool IsInitialized();
 		Task NotifyClients(Notification notification);
 		Task NotifyClients(IEnumerable<Notification> notification);
