@@ -1,9 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Refresh;
+using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
@@ -39,6 +43,48 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			target.Refresh(scheduleDictionary, messages, null, null, _ => true);
 
 			scheduleDictionary[person].ScheduledDay(new DateOnly(2013, 9, 4)).PersonAssignment().Should().Be.EqualTo(personAssignment);
+		}
+
+		[Test]
+		public void ShouldNotRaiseConflictWhenSameVersionInMemoryAsFromMessage()
+		{
+			var period = new DateTimePeriod(2013, 9, 4, 2013, 9, 5);
+			var person = PersonFactory.CreatePersonWithId();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person, new DateOnly(2013, 9, 4));
+			var updateScheduleDataFromMessages = MockRepository.GenerateMock<IUpdateScheduleDataFromMessages>();
+			var target = new ScheduleRefresher(
+				new FakePersonRepository(person),
+				updateScheduleDataFromMessages,
+				new FakePersonAssignmentRepository(personAssignment),
+				MockRepository.GenerateMock<IPersonAbsenceRepository>(),
+				MockRepository.GenerateMock<IMessageQueueRemoval>()
+				);
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var scheduleRange = new ScheduleRange(scheduleDictionary, new ScheduleParameters(personAssignment.Scenario, person, period));
+			scheduleRange.Add(personAssignment);
+
+			scheduleDictionary.Stub(x => x.Scenario).Return(personAssignment.Scenario);
+			scheduleDictionary.Stub(x => x[person]).Return(scheduleRange);
+			scheduleDictionary.Stub(x => x.DifferenceSinceSnapshot())
+			                  .Return(new DifferenceCollection<IPersistableScheduleData>
+				                  {
+					                  new DifferenceCollectionItem<IPersistableScheduleData>(personAssignment, personAssignment)
+				                  });
+
+			var messages = new[] {new EventMessage
+				{
+					InterfaceType = typeof (IScheduleChangedEvent), 
+					DomainObjectId = person.Id.GetValueOrDefault(), 
+					EventStartDate = period.StartDateTime, 
+					EventEndDate = period.EndDateTime
+				}};
+
+			var conflictsBuffer = new Collection<PersistConflict>();
+
+			target.Refresh(scheduleDictionary, messages, null, conflictsBuffer, _ => true);
+
+			conflictsBuffer.Should().Be.Empty();
+			updateScheduleDataFromMessages.AssertWasNotCalled(x => x.FillReloadedScheduleData(personAssignment));
 		}
 
 		[Test]
