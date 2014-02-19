@@ -11,9 +11,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
         public string DisplayColor { get; set; }
         public AbsenceViewModel Absence { get; set; }
 	    public bool IsDayOff { get; set; }
+
+	    public ShiftViewModel Shift { get; set; }
     }
 
-    public class AbsenceViewModel
+	public class ShiftViewModel
+	{
+		public string Name { get; set; }
+		public string Color { get; set; }
+		public string TimeSpan { get; set; }
+		public string WorkingHours { get; set; }
+	}
+
+	public class AbsenceViewModel
     {
         public string Name { get; set; }
         public string ShortName { get; set; }

@@ -49,6 +49,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertExists(string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
         }
 
+		[Then(@"I should see the shift with")]
+		public void ThenIShouldSeeTheShiftWith(Table table)
+		{
+			var shift = table.CreateInstance<ShiftListItem>();
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.Name);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.StartTime);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.EndTime);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.WorkingHours);
+		}
+
+		public class ShiftListItem
+		{
+			public string Date { get; set; }
+			public string Name { get; set; }
+			public string StartTime { get; set; }
+			public string EndTime { get; set; }
+			public string WorkingHours { get; set; }
+		}
+		
         [Then(@"I should see the day off on '(.*)'")]
         public void ThenIShouldSeeTheDayOffOn(string date)
         {
@@ -136,10 +155,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.ClickUsingJQuery(selector);
         }
 
-        [Then(@"I should not be able to access month view")]
-        public void ThenIShouldNotBeAbleToAccessMonthView()
-        {
-            Browser.Interactions.AssertNotExists("#week-schedule-today", "#week-schedule-month");
-        }
+	    [Then(@"I should not be able to access month view")]
+	    public void ThenIShouldNotBeAbleToAccessMonthView()
+	    {
+		    Browser.Interactions.AssertNotExists("#week-schedule-today", "#week-schedule-month");
+	    }
     }
 }

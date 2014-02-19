@@ -1,9 +1,11 @@
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -14,6 +16,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
@@ -21,11 +24,14 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 	[TestFixture]
 	public class MonthScheduleViewModelMappingTest
 	{
+		private IProjectionProvider _projectionProvider;
+
 		[SetUp]
 		public void Setup()
 		{
+			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new MonthScheduleViewModelMappingProfile()));
+			Mapper.Initialize(c => c.AddProfile(new MonthScheduleViewModelMappingProfile(_projectionProvider)));
 		}
 
 		[Test]
@@ -175,6 +181,67 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
 
 			result.IsDayOff.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapShiftCategoryForWorkingDay()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity(" "), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.SetShiftCategory(new ShiftCategory("Late"));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.Shift.Name.Should().Be.EqualTo("Late");
+		}
+
+		[Test]
+		public void ShouldMapShiftColorForWorkingDay()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity(" "), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.SetShiftCategory(new ShiftCategory(" ") { DisplayColor = Color.Green });
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.Shift.Should().Not.Be.Null();
+			result.Shift.Color.Should().Be.EqualTo(Color.Green.ToHtml());
+		}
+
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldMapTimeSpanForWorkingDay()
+		{
+			var stubs = new StubFactory();
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			personAssignment.AddActivity(new Activity(" ") { InWorkTime = true }, new DateTimePeriod(2011, 5, 18, 7, 2011, 5, 18, 16));
+			personAssignment.SetShiftCategory(new ShiftCategory(" "));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.Shift.Should().Not.Be.Null();
+			result.Shift.TimeSpan.Should().Be.EqualTo(personAssignment.Period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
+		}
+
+		[Test]
+		[SetCulture("en-US")]
+		public void ShouldMapWorkingHoursForWorkingDay()
+		{
+			var contractTime = TimeSpan.FromHours(8);
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
+			var scheduleDay = new StubFactory().ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
+			projection.Stub(x => x.ContractTime()).Return(contractTime);
+			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+
+			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime,CultureInfo.CurrentUICulture));
 		}
 	}
 }

@@ -49,6 +49,7 @@ When I view my month schedule for date '2014-01-07'
 Then I should see '2013-12-30' as the first day 
 And I should see '2014-02-02' as the last day
 
+@ignore
 Scenario: View when you are working
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
@@ -58,7 +59,13 @@ And I have a shift with
 	| EndTime        | 2014-01-07 18:00 |
 	| Shift category | Early            |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should work on '2014-01-07'
+Then I should see the shift with
+	| Field          | Value      |
+	| Date           | 2014-01-07 |
+	| StartTime      | 09:00      |
+	| EndTime        | 18:00      |
+	| Shift category | Early      |
+	| Working hours  | 8:00       |
 
 Scenario: View when you have a day off
 Given I have the role 'Full access to mytime'
