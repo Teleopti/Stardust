@@ -76,6 +76,29 @@ Given I have the role 'Full access to mytime'
 When I view my month schedule for date '2014-01-07'
 Then I should see the day off on '2014-01-07'
 
+@ignore
+Scenario: View when you have a part time absence on working day
+Given I have the role 'Full access to mytime'
+And I have the workflow control set 'Published schedule'
+And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2014-01-16 09:00 |
+	| EndTime        | 2014-01-16 18:00 |
+	| Shift category | Early            |
+And I have an absence with
+	| Field		| Value            |
+	| Name      | Illness          |
+	| StartTime | 2014-01-16 09:00 |
+	| EndTime   | 2014-01-16 12:00 |
+When I view my month schedule for date '2014-01-16'
+Then I should see the shift with
+	| Field          | Value         |
+	| Date           | 2014-01-16    |
+	| Time span      | 09:00 - 18:00 |
+	| Shift category | Early         |
+	| Working hours  | 9:00          |
+And I should see the absence on date '2014-01-16'
+
 Scenario: View when you are in absence on day off
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'

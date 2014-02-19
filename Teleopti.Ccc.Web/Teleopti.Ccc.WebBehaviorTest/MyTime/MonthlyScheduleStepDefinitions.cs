@@ -158,5 +158,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	    {
 		    Browser.Interactions.AssertNotExists("#week-schedule-today", "#week-schedule-month");
 	    }
+
+		[Then(@"I should see the absence on date '(.*)'")]
+        public void ThenIShouldSeeTheAbsenceOnDate(string p0)
+        {
+			//TODO: need the solution finally
+        }
+
     }
 }
