@@ -87,28 +87,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return returnPersonRequest;
 		}
 
-		public IList<IPersonRequest> FindAllExceptUnapprovedShiftTrades(ICollection<IPerson> persons)
-		{
-			if (persons.Count == 0) return new List<IPersonRequest>();
-
-			var retList = Session.GetNamedQuery("findAllExceptUnapprovedShiftTrades")
-				.SetEnum("ShiftTradeStatus", ShiftTradeStatus.OkByBothParts)
-				.SetParameterList("people", persons.ToArray())
-				.List<IPersonRequest>();
-			fetchAbsences(retList);
-			return retList;
-		}
-
-		private static void fetchAbsences(IEnumerable<IPersonRequest> personRequests)
-		{
-			foreach (var pRequest in personRequests)
-			{
-				var absReq = pRequest.Request as IAbsenceRequest;
-				if (absReq != null && !LazyLoadingManager.IsInitialized(absReq.Absence))
-					LazyLoadingManager.Initialize(absReq.Absence);
-			}
-		}
-
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person) { return findAllRequestsForAgent(person, null); }
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, Paging paging)
 		{

@@ -203,67 +203,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyAbsenceAreReadWhenFindAllExceptUnapprovedShiftTradesIsCalled()
-        {
-            IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(requestAbsence);
-
-            UnitOfWork.Clear();
-            var requests = new PersonRequestRepository(UnitOfWork).FindAllExceptUnapprovedShiftTrades(new List<IPerson> {_person});
-            Assert.AreEqual(1, requests.Count);
-            var req = (IAbsenceRequest)requests[0].Request;
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(req.Absence));
-        }
-
-        [Test]
-        public void VerifyCanFindAllRequestsExceptUnapprovedShiftTrades()
-        {
-            IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
-            //IPersonRequest requestAcceptedWillBeReferred = CreateShiftTradeRequest("Trade with me");
-            IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
-            IPersonRequest requestDenied = CreateShiftTradeRequest("Don't want to trade");
-            IPersonRequest requestPending = CreateShiftTradeRequest("Have not decided");
-
-            IShiftTradeRequest shiftTradeRequest = (IShiftTradeRequest)requestAccepted.Request;
-            shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, new PersonRequestAuthorizationCheckerForTest());
-            foreach (var shiftTradeSwapDetail in shiftTradeRequest.ShiftTradeSwapDetails)
-            {
-                shiftTradeSwapDetail.ChecksumFrom = -1;
-                shiftTradeSwapDetail.ChecksumTo = -1;
-            }
-
-            ((IShiftTradeRequest)requestAccepted.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, new PersonRequestAuthorizationCheckerForTest());
-            //((IShiftTradeRequest)requestAcceptedWillBeReferred.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts);
-            ((IShiftTradeRequest)requestDenied.Request).SetShiftTradeStatus(ShiftTradeStatus.NotValid, new PersonRequestAuthorizationCheckerForTest());
-            ((IShiftTradeRequest)requestPending.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByMe, new PersonRequestAuthorizationCheckerForTest());
-
-            PersistAndRemoveFromUnitOfWork(requestAccepted);
-            //PersistAndRemoveFromUnitOfWork(requestAcceptedWillBeReferred);
-            PersistAndRemoveFromUnitOfWork(requestAbsence);
-            PersistAndRemoveFromUnitOfWork(requestDenied);
-            PersistAndRemoveFromUnitOfWork(requestPending);
-
-            IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllExceptUnapprovedShiftTrades(new List<IPerson> { _person });
-
-            Assert.AreEqual(2, foundRequests.Count);
-            Assert.IsTrue(foundRequests.Contains(requestAccepted));
-            Assert.IsTrue(foundRequests.Contains(requestAbsence));
-            Assert.IsFalse(foundRequests.Contains(requestDenied));
-            Assert.IsFalse(foundRequests.Contains(requestPending));
-        }
-
-        [Test]
-        public void VerifyFindAllRequestsExceptUnapprovedShiftTradesWorksFineIfParameterListIsEmpty()
-        {
-            IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
-            //((IShiftTradeRequest)requestAccepted.AllRequestParts[0]).ShiftTradeStatus = RequestStatus.Approved;
-            ((IShiftTradeRequest)requestAccepted.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts, new PersonRequestAuthorizationCheckerForTest());
-            PersistAndRemoveFromUnitOfWork(requestAccepted);
-            IList<IPersonRequest> foundRequests = new PersonRequestRepository(UnitOfWork).FindAllExceptUnapprovedShiftTrades(new List<IPerson>());
-            Assert.AreEqual(0, foundRequests.Count);
-        }
-
-        [Test]
         public void ShouldFindAllRequestsForAgent()
         {
             IPersonRequest personRequestWithAbsenceRequest = CreateAggregateWithCorrectBusinessUnit();

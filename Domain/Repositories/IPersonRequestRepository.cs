@@ -19,17 +19,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<IPersonRequest> Find(IPerson person, DateTimePeriod period);
 
 		/// <summary>
-		/// Finds all requests except those that are shift trades and have not been approved with the agent to trade with.
-		/// </summary>
-		/// <param name="persons">The list of agents to whom the shift trades belong (not the one trading with).</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: Klas
-		/// Created date: 2008-11-03
-		/// </remarks>
-		IList<IPersonRequest> FindAllExceptUnapprovedShiftTrades(ICollection<IPerson> persons);
-
-		/// <summary>
 		/// Finds all requests from and to a person
 		/// </summary>
 		/// <param name="person">The person.</param>
