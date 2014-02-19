@@ -12,9 +12,10 @@ Given there is a role with
 	| Field                    | Value                            |
 	| Name                     | No permission for month schedule |
 	| Access to month schedule | false                            |  
-	And there are shift categories 
-	| Name  |
-	| Early |
+	And there is a shift category with 
+	| Field | Value |
+	| Name  | Early |
+	| Color | Green |
 	And there is a dayoff with
 	| Field | Value  |
 	| Name  | DayOff |
@@ -49,7 +50,6 @@ When I view my month schedule for date '2014-01-07'
 Then I should see '2013-12-30' as the first day 
 And I should see '2014-02-02' as the last day
 
-@ignore
 Scenario: View when you are working
 Given I have the role 'Full access to mytime'
 And I have the workflow control set 'Published schedule'
