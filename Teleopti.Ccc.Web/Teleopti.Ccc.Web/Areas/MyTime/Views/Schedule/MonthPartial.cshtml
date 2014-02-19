@@ -42,8 +42,7 @@
 		'cal-day-outmonth': isOutsideMonth,
 		'working-day': isWorkingDay,
 		'absence-day': absenceName != '',
-		'day-off-day': isDayOff,
-		'shift': true
+		'day-off-day': isDayOff
 	},
 	style: { backgroundColor: shiftColor }">
 		                    
@@ -55,7 +54,7 @@
 		                    <strong class="absence hidden-md hidden-lg" data-bind="text: absenceShortName"/>
 		                    <!-- /ko -->
 
-		                    <div>
+		                    <div class="shift">
 			                    <div>
 				                    <strong class="visible-lg" data-bind="text: shiftName"></strong>
 				                    <strong class="visible-md" data-bind="text: shiftName"></strong>
