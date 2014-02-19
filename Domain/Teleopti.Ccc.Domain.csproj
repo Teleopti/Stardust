@@ -380,6 +380,8 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocks.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep1.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\JuniorTeamBlockExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PersonDayOffPointsCalculator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PersonShiftCategoryPointCalculator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PossibleSwappableBitArrays.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PostSwapValidationForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapper.cs" />

@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Expect.Call(_seniorityExtractor.ExtractSeniority(teamBlockList)).IgnoreArguments().Return(teamBlockPointList);
                 Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList)).IgnoreArguments()
                       .Return(_seniorTeamBlock);
+                Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo);
+                Expect.Call(_teamInfo.Name).Return("senior team");
 
             }
 
@@ -147,14 +149,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Expect.Call(_filterOnSwapableTeamBlocks.Filter(teamBlockList, _seniorTeamBlock)).IgnoreArguments().Return(teamBlockList);
                 Expect.Call(_seniorityExtractor.ExtractSeniority(teamBlockList)).IgnoreArguments().Return(teamBlockPointList);
                 Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList())).IgnoreArguments().Return(_juniorTeamBlock );
+                Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo).Repeat.AtLeastOnce()  ;
+                Expect.Call(_juniorTeamBlock.TeamInfo).Return(_teamInfo).Repeat.AtLeastOnce();
+                Expect.Call(_teamInfo.Name).Return("senior team").Repeat.AtLeastOnce() ;
 
                 //third level
                 Expect.Call(_suitableDayOffSpotDetector.DetectMostValuableSpot(_selectedPeriod.DayCollection(),_weekDayPoints.GetWeekDaysPoints())).IgnoreArguments().Return(new DateOnly(2014, 02, 11));
                 Expect.Call(_suitableDayOffsToGiveAway.DetectMostValuableSpot(_selectedPeriod.DayCollection(),_weekDayPoints.GetWeekDaysPoints())).Return(_selectedPeriod.DayCollection());
                 Expect.Call(_teamBlockDayOffSwapper.TrySwap(DateOnly.Today, _seniorTeamBlock, _juniorTeamBlock,_rollbackService, _schedulingDictionary,
                                                             _optimizationPreferences, _selectedPeriod.DayCollection())).IgnoreArguments().Return(true);
-                Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.Name).Return("Senior Team").Repeat.AtLeastOnce() ;
+                //Expect.Call(_seniorTeamBlock.TeamInfo).Return(_teamInfo);
+                //Expect.Call(_teamInfo.Name).Return("Senior Team").Repeat.AtLeastOnce() ;
                 
 
                 Expect.Call(_juniorTeamBlockExtractor.GetJuniorTeamBlockInfo(teamBlockPointList.ToList()))

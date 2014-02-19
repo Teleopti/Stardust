@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -15,6 +16,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 
-    	public AgentInfoControl()
+        public AgentInfoControl()
         {
             InitializeComponent();
             if (!DesignMode)
@@ -114,9 +116,30 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 updatePersonInfo(_selectedPerson);
             }
 	        if (tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
-		        updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+	        {
+                updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+                updateFairnessOptimizationData(_stateHolder.Schedules[_selectedPerson], _stateHolder.ShiftCategories);
+	        }
+		        
+             
 
+        }
 
+        private void updateFairnessOptimizationData(IScheduleRange scheduleRange, IEnumerable<IShiftCategory> shiftCategories)
+        {
+            labelDayOffPointValue.Text = "";
+            labelSeniorityPointsValue.Text = "";
+            labelShiftCategoryPointValue.Text = "";
+
+            var personDayOffPointsCalculator = _container.Resolve<IPersonDayOffPointsCalculator>();
+            var personShiftCategoryPointCalculator = _container.Resolve<IPersonShiftCategoryPointCalculator>();
+            var dayOffPoints =  personDayOffPointsCalculator.CalculateDaysOffSeniorityValue(scheduleRange, _requestedPeriod);
+            var shiftCategoryPoints =
+                 personShiftCategoryPointCalculator.CalculateShiftCategorySeniorityValue(scheduleRange, _requestedPeriod,
+                                                                                              shiftCategories.ToList());
+            labelDayOffPointValue.Text = dayOffPoints.ToString(CultureInfo.CurrentCulture);
+            labelShiftCategoryPointValue.Text = shiftCategoryPoints.ToString(CultureInfo.CurrentCulture);
+            labelSeniorityPointsValue.Text = (dayOffPoints + shiftCategoryPoints).ToString(CultureInfo.CurrentCulture);
         }
 
         private void initializeFairnessTab()

@@ -157,23 +157,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			}
 		}
 
-		[Test]
-		public void ShouldBeAbleToCancel()
-		{
-			using (_mocks.Record())
-			{
-				Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
-											  _optimizationPreferences, _dayOffsToGiveAway)).Return(_daysToSwap);
-			    Expect.Call(() => _rollbackService.ClearModificationCollection());
-			}
-			using (_mocks.Playback())
-			{
-				_target.Cancel();
-				var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
-											 _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
-				Assert.IsFalse(result);
-			}
-		}
+        //[Test]
+        //public void ShouldBeAbleToCancel()
+        //{
+        //    using (_mocks.Record())
+        //    {
+        //        Expect.Call(_decisionMaker.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary,
+        //                                      _optimizationPreferences, _dayOffsToGiveAway)).Return(_daysToSwap);
+        //        Expect.Call(() => _rollbackService.ClearModificationCollection());
+        //    }
+        //    using (_mocks.Playback())
+        //    {
+        //        _target.Cancel();
+        //        var result = _target.TrySwap(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _rollbackService,
+        //                                     _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+        //        Assert.IsFalse(result);
+        //    }
+        //}
 
 		private void commonMocks(IScheduleDay seniorToHaveDayOffScheduleDay,
 		                         IScheduleDay juniorToRemoveDayOffScheduleDay, IScheduleDay seniorGiveDayOffScheduleDay,

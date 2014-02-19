@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		public IDictionary<IShiftCategory, int> ExtractShiftCategoryPoints(IList<IShiftCategory> shiftCategories)
 		{
 			var result = new Dictionary<IShiftCategory, int>();
-			var shiftCategoryPoint = 0;
+			var shiftCategoryPoint = 1;
 			foreach (var shiftCategory in shiftCategories.OrderByDescending(s => s.Description.ShortName))
 			{
 				result.Add(shiftCategory, shiftCategoryPoint);

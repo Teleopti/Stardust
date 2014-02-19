@@ -5791,6 +5791,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Day Off Points:.
+        /// </summary>
+        public static string DayOffPoints {
+            get {
+                return ResourceManager.GetString("DayOffPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Day Off Optimizer Options.
         /// </summary>
         public static string DayOffReoptimizerOptions {
@@ -21267,6 +21276,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seniority Points:.
+        /// </summary>
+        public static string SeniorityPoints {
+            get {
+                return ResourceManager.GetString("SeniorityPoints", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sent.
         /// </summary>
         public static string Sent {
@@ -21641,6 +21659,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftCategoryLimitations {
             get {
                 return ResourceManager.GetString("ShiftCategoryLimitations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift Category Points:.
+        /// </summary>
+        public static string ShiftCategoryPoints {
+            get {
+                return ResourceManager.GetString("ShiftCategoryPoints", resourceCulture);
             }
         }
         
@@ -26689,42 +26716,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string XRequests {
             get {
                 return ResourceManager.GetString("XRequests", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Day Off Points:.
-        /// </summary>
-        public static string xxDayOffPoints {
-            get {
-                return ResourceManager.GetString("xxDayOffPoints", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Seniority.
-        /// </summary>
-        public static string xxSeniority {
-            get {
-                return ResourceManager.GetString("xxSeniority", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Seniority Points:.
-        /// </summary>
-        public static string xxSeniorityPoints {
-            get {
-                return ResourceManager.GetString("xxSeniorityPoints", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Shift Category Points:.
-        /// </summary>
-        public static string xxShiftCategoryPoints {
-            get {
-                return ResourceManager.GetString("xxShiftCategoryPoints", resourceCulture);
             }
         }
         

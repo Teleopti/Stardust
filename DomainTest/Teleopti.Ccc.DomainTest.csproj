@@ -314,6 +314,8 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep2Test.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DescisionMakerToSwapTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\JuniorTeamBlockExtractorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PersonDayOffPointsCalculatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PersonShiftCategoryPointCalculatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PostSwapValidationForTeamBlockTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapperTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityCalculatorForTeamBlockTest.cs" />

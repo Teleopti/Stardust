@@ -90,8 +90,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 					        break;
 				        }
 
-				        //if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,scheduleDictionary, selectedPeriod)) continue;
-
 				        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary, selectedPeriod))
 				        {
 					        unSuccessfulSwaps.Add(teamBlockInfoHighSeniority);
@@ -99,7 +97,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				        }
 
 				        unSuccessfulSwaps.Remove(teamBlockInfoHighSeniority);
-
 
 				        teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoLowSeniority, highSeniorityPoints);
 
