@@ -55,13 +55,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindAllSortByName();
 
 		/// <summary>
-		/// Loads the permission data to the person.
-		/// </summary>
-		/// <param name="person">The person.</param>
-		/// <returns></returns>
-		IPerson LoadPermissionData(IPerson person);
-
-		/// <summary>
 		/// Loads the permission data without reassociate the person to the base UOW.
 		/// </summary>
 		/// <param name="person">The person.</param>

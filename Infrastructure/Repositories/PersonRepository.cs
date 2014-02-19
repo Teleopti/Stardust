@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 if (foundPerson != null)
                 {
-                    foundPerson = LoadPermissionData(foundPerson);
+                    foundPerson = loadPermissionData(foundPerson);
                 }
                 return foundPerson;
             }
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 if (foundPerson == null) return false;
 
-                foundPerson = LoadPermissionData(foundPerson);
+                foundPerson = loadPermissionData(foundPerson);
                 return true;
             }
         }
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         /// <param name="person">The person.</param>
         /// <returns></returns>
-        public IPerson LoadPermissionData(IPerson person)
+        private IPerson loadPermissionData(IPerson person)
         {
             var personPeriods = DetachedCriteria.For<Person>()
                 .Add(Restrictions.Eq("Id", person.Id))
