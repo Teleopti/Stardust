@@ -53,18 +53,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheShiftWith(Table table)
 		{
 			var shift = table.CreateInstance<ShiftListItem>();
-			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.Name);
-			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.StartTime);
-			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.EndTime);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.ShiftCategory);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.TimeSpan);
 			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.WorkingHours);
 		}
 
 		public class ShiftListItem
 		{
 			public string Date { get; set; }
-			public string Name { get; set; }
-			public string StartTime { get; set; }
-			public string EndTime { get; set; }
+			public string ShiftCategory { get; set; }
+			public string TimeSpan { get; set; }
 			public string WorkingHours { get; set; }
 		}
 		
