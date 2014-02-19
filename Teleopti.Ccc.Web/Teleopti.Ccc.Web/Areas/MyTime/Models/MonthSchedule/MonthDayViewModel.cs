@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
         public DateTime Date { get; set; }
         public string FixedDate { get; set; }
         public bool IsWorkingDay { get; set; }
-        public string DisplayColor { get; set; }
         public AbsenceViewModel Absence { get; set; }
 	    public bool IsDayOff { get; set; }
 

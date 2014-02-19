@@ -45,10 +45,10 @@
 		'day-off-day': isDayOff,
 		'shift': true
 	},
-	style: { backgroundColor: displayColor }">
+	style: { backgroundColor: shiftColor }">
 		                    <strong class="absence visible-desktop" data-bind="text: absenceName"/>
 		                    <strong class="absence hidden-desktop" data-bind="text: absenceShortName"/>
-							<span data-bind="text: shiftName"></span>
+							<strong data-bind="text: shiftName"></strong>
 							<span data-bind="text: shiftTimeSpan"></span>
 							<span data-bind="text: shiftWorkingHours"></span>
 		                    <span data-bind="text: dayOfMonth, attr:{'data-cal-date': date}" class="date-number label label-inverse"></span>

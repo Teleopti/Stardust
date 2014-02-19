@@ -69,13 +69,11 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 				stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
 				                                              new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
-		    scheduleDay.PersonAssignment().ShiftCategory.DisplayColor = Color.DarkGreen;
 
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData{ScheduleDay = scheduleDay});
 
 			result.IsWorkingDay.Should().Be.True();			
-            result.DisplayColor.Should().Be.EqualTo(scheduleDay.PersonAssignment().ShiftCategory.DisplayColor.ToHtml());
 		}
 
         [Test]

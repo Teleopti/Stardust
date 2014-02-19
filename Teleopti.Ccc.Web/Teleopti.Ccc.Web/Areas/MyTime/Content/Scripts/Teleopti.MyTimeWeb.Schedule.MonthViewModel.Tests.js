@@ -29,7 +29,8 @@ $(document).ready(function () {
 				Shift: {
 					Name: "Early",
 					TimeSpan: "09:00-18:00",
-					WorkingHours: "8:00"
+					WorkingHours: "8:00",
+					Color: "green"
 				}
 			}]
 		});
@@ -37,6 +38,7 @@ $(document).ready(function () {
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftName, "Early");
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftTimeSpan, "09:00-18:00");
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftWorkingHours, "8:00");
+		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftColor, "green");
 	});
 
 	test("should read dayoff data", function () {

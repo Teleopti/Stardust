@@ -19,13 +19,13 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.date = scheduleDate.FixedDate;
     this.dayOfMonth = currentDate.date();
     this.isWorkingDay = scheduleDate.IsWorkingDay;
-    this.displayColor = scheduleDate.DisplayColor;
     this.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : '';
     this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : '';
     this.isDayOff = scheduleDate.IsDayOff;
     this.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : '';
     this.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan: '';
     this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : '';
+    this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : '';
     
     this.isOutsideMonth = (selectedDate.month() != currentDate.month());
 };
