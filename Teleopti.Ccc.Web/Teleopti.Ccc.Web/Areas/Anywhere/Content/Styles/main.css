@@ -3,10 +3,6 @@ body {
     padding-bottom: 40px;
 }
 
-body > nav {
-    padding-bottom: 15px;
-}
-
 select {
     margin-bottom: 10px;
 }

@@ -668,36 +668,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             //IPerson retPerson = personList[0];
         }
 
-		[Test]
-		public void VerifyLoadPermissionDataWithoutReassociate()
-		{
-			//setup
-			IApplicationFunction func1 = new ApplicationFunction("APP1");
-			PersistAndRemoveFromUnitOfWork(func1);
-			IApplicationFunction func2 = new ApplicationFunction("APP2");
-			PersistAndRemoveFromUnitOfWork(func2);
-			IApplicationRole role1 = ApplicationRoleFactory.CreateRole("ROLE1", "ROLEDESC1");
-			role1.AddApplicationFunction(func1);
-			role1.AddApplicationFunction(func2);
-			PersistAndRemoveFromUnitOfWork(role1);
-			IPerson per = PersonFactory.CreatePerson("Test", "Testorson");
-			per.PermissionInformation.AddApplicationRole(role1);
-			PersistAndRemoveFromUnitOfWork(per);
-			//load
-			IPersonRepository repository = new PersonRepository(UnitOfWork);
-            IList<IPerson> personList = new List<IPerson>(repository.LoadAllPeopleWithHierarchyDataSortByName(new DateOnly(1800, 1, 1)));
-			//verify
-			personList.Remove(LoggedOnPerson);
-			Assert.AreEqual(1, personList.Count);
-			IPerson retPerson = personList[0];
-
-			verifyPermissionInfoIsLazy(false, retPerson);
-
-			retPerson = repository.LoadPermissionDataWithoutReassociate(retPerson);
-
-			verifyPermissionInfoIsLazy(true, retPerson);
-		}
-
 		/// <summary>
 		/// Can create a user repository without being logged on.
 		/// </summary>

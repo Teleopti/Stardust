@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 if (foundPerson != null)
                 {
-                    foundPerson = LoadPermissionData(foundPerson);
+                    foundPerson = loadPermissionData(foundPerson);
                 }
                 return foundPerson;
             }
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 if (foundPerson == null) return false;
 
-                foundPerson = LoadPermissionData(foundPerson);
+                foundPerson = loadPermissionData(foundPerson);
                 return true;
             }
         }
@@ -396,7 +396,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         /// </summary>
         /// <param name="person">The person.</param>
         /// <returns></returns>
-        public IPerson LoadPermissionData(IPerson person)
+        private IPerson loadPermissionData(IPerson person)
         {
             var personPeriods = DetachedCriteria.For<Person>()
                 .Add(Restrictions.Eq("Id", person.Id))
@@ -439,28 +439,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 return foundPerson;
             }
-        }
-
-        /// <summary>
-        /// Loads the permission data without reassociate.
-        /// </summary>
-        /// <param name="person">The person.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Muhamad Risath
-        /// Created date: 2008-07-30
-        /// </remarks>
-        public IPerson LoadPermissionDataWithoutReassociate(IPerson person)
-        {
-            LazyLoadingManager.Initialize(person.PermissionInformation);
-            LazyLoadingManager.Initialize(person.PermissionInformation.ApplicationRoleCollection);
-
-            foreach (IApplicationRole role in person.PermissionInformation.ApplicationRoleCollection)
-            {
-                LazyLoadingManager.Initialize(role.ApplicationFunctionCollection);
-            }
-
-            return person;
         }
 
 		public ICollection<IPerson> FindPeopleTeamSiteSchedulePeriodWorkflowControlSet(DateOnlyPeriod period)

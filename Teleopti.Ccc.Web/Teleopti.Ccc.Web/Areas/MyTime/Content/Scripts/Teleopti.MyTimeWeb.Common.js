@@ -105,10 +105,15 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		        if (Math.floor(navbar.innerHeight()) > button.height()) // check if we've got 2 lines
 		            navbar.addClass('custom-collapsed'); // force collapse mode
 		    }
-
+		    
+		    $('.navbar-collapse li:not(.dropdown)').click(function () {
+		        $('.navbar-collapse').collapse('hide');
+		    });
+		    
 		    $(document).on('ready', autocollapse);
 		    $(window).on('resize', autocollapse);
 		},
+		
 		            
         //Activating tooltip where available
 		ActivateTooltip: function () {

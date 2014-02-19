@@ -840,6 +840,10 @@ End personal drop down menu
 #autocollapse.custom-collapsed .navbar-collapse.collapse.in {
   display: block!important;
 }
+#autocollapse.custom-collapsed .navbar-collapse.in {
+  overflow-y: auto!important;
+  overflow-x: hidden!important;
+}
 #autocollapse.custom-collapsed .navbar-nav {
   float: none!important;
   margin: 7.5px -15px;
@@ -851,3 +855,47 @@ End personal drop down menu
   padding-top: 10px;
   padding-bottom: 10px;
 }
+#autocollapse.custom-collapsed .navbar-right {
+  float: none !important
+}
+#autocollapse.custom-collapsed .navbar-nav .open .dropdown-menu {
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent !important;
+    border: 0;
+    box-shadow: none;
+  }
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a,
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu .dropdown-header {
+    padding: 5px 15px 5px 25px;
+  }
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a {
+    line-height: 20px;
+  }
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a:hover,
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a:focus {
+    background-image: none;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #777777 !important;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #333333 !important;
+    background-color: transparent!important;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #555555;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: #cccccc;
+    background-color: transparent;
+  }
+
+  

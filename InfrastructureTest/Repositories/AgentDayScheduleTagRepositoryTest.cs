@@ -78,24 +78,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyFindByDatePersonAndScenario()
-        {
-            IAgentDayScheduleTag tag = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(tag);
-            _repository = new AgentDayScheduleTagRepository(UnitOfWork);
-            Assert.IsNotNull(_repository.Find(tag.TagDate, tag.Person, tag.Scenario));
-        }
-
-        [Test]
-        public void VerifyDoNotFindByDatePersonAndScenario()
-        {
-            IAgentDayScheduleTag tag = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(tag);
-            _repository = new AgentDayScheduleTagRepository(UnitOfWork);
-            Assert.IsNull(_repository.Find(new DateOnly(2011, 1, 1), tag.Person, tag.Scenario));
-        }
-
-        [Test]
         public void VerifyLoadAggregate()
         {
             IAgentDayScheduleTag tag = CreateAggregateWithCorrectBusinessUnit();

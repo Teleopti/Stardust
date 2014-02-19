@@ -141,14 +141,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var unique = new HashSet<ISkill>(skills);
             return new List<ISkill>(unique);
         }
-        
-        public ICollection<ISkill> FindAllWithActivities(IEnumerable<IActivity> activities)
-        {
-            return Session.CreateCriteria(typeof(Skill))
-                .Add(Restrictions.In("Activity", activities.ToArray()))
-                .AddOrder(Order.Asc("Name"))
-                .List<ISkill>();
-        }
 
         public ISkill LoadSkill(ISkill skill)
         {
