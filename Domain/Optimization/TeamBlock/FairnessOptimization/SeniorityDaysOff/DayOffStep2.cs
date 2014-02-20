@@ -83,9 +83,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
                 if(!juniorTeamBlock.Equals(mostSeniorTeamBlock) )
                     successfullSwap = handlePeriodForSelectedTeamBlocks(selectedPeriod, weekDayPoints, mostSeniorTeamBlock, juniorTeamBlock, rollbackService,scheduleDictionary,optimizationPreferences);
                 swappableTeamBlocksPoints.Remove(swappableTeamBlocksPoints.Find(s => s.TeamBlockInfo.Equals(juniorTeamBlock)));
-                var message = "Day off fainess Step2: xxSwap not sucessful";
+                var message = "Day off fainess Step2: Swap not sucessful";
                 if (successfullSwap)
-                    message = "Day off fainess Step2: xxSwap sucessful";
+                    message = "Day off fainess Step2: Swap sucessful";
 
                 double percentDone = 1 - (remainingBlocksCount / (double)originalBlocksCount);
                 OnBlockSwapped(new ResourceOptimizerProgressEventArgs(1, 1, message + " for " + mostSeniorTeamBlock.TeamInfo.Name + " " + new Percent(percentDone).ToString() + " done "));

@@ -16,13 +16,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private MockRepository _mocks;
 		private ISeniorityTeamBlockSwapper _target;
 		private ITeamBlockSwapper _teamBlockSwapper;
-		private ISeniorityTeamBlockSwapValidator _seniorityTeamBlockSwapValidator;
 		private ITeamBlockInfo _teamBlockInfo1;
 		private ITeamBlockInfo _teamBlockInfo2;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
 		private IScheduleDictionary _scheduleDictionary;
 		private IOptimizationPreferences _optimizationPreferences;
-		private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
 
 	    [SetUp]
@@ -30,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			_mocks = new MockRepository();
 			_teamBlockSwapper = _mocks.StrictMock<ITeamBlockSwapper>();
-			_seniorityTeamBlockSwapValidator = _mocks.StrictMock<ISeniorityTeamBlockSwapValidator>();
 	        _postSwapValidationForTeamBlock = _mocks.StrictMock<IPostSwapValidationForTeamBlock>();
 		    _target = new SeniorityTeamBlockSwapper(_teamBlockSwapper,_postSwapValidationForTeamBlock);
 			_teamBlockInfo1 = _mocks.StrictMock<ITeamBlockInfo>();
@@ -38,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_optimizationPreferences = new OptimizationPreferences();
-			_teamBlockRestrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 		}
 
 		[Test]
