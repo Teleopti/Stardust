@@ -663,6 +663,34 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			layerViewModel.AssertWasNotCalled(x => x.UpdateModel());
 		}
 
+		[Test]
+		public void UpdateAllLayers_IfALayerIsMarkedForUpdateButNotPresent_ShouldNotUpdateThatLayer()
+		{
+			var schedule =
+				new SchedulePartFactoryForDomain().CreatePartWithMainShiftWithDifferentActivities();
+			target = new LayerViewModelCollection(new EventAggregator(), new CreateLayerViewModelService(),
+													  new RemoveLayerFromSchedule(), new ReplaceLayerInSchedule());
+			target.CreateViewModels(schedule);
+			var first = target.First(l => !l.IsProjectionLayer);
+			target.ShouldBeUpdated(first);
+			first.Delete();
+
+			Assert.DoesNotThrow(target.UpdateAllMovedLayers);
+		}
+
+		[Test]
+		public void UpdateAllLayers_Always_ShouldUnmarkLayersForUpdate()
+		{
+			var vm = MockRepository.GenerateMock<ILayerViewModel>();
+			target.Add(vm);
+			target.ShouldBeUpdated(vm);
+
+			target.UpdateAllMovedLayers();
+			target.UpdateAllMovedLayers();
+
+			vm.AssertWasCalled(l => l.UpdateModel(), l => l.Repeat.Once());
+		}
+
 		private IScheduleDay createPart(IPerson person, DateOnly dateOnly)
         {
             IScheduleDictionary dictionaryNotUsed = new ScheduleDictionaryForTest(ScenarioFactory.CreateScenarioAggregate(),

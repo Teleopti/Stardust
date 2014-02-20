@@ -290,6 +290,7 @@ namespace Teleopti.Ccc.WinCode.Common
 		    {
 			    layerViewModel.UpdateModel();
 		    }
+			_layersThatShouldBeUpdated.Clear();
 	    }
     }
 }
