@@ -40,24 +40,21 @@
 						click: $root.week,
 						css: {
 							'cal-day-outmonth': isOutsideMonth,
-							'working-day': isWorkingDay,
-							'absence-day': absenceName != '',
-							'day-off-day': isDayOff
 						}
 							">
 
-						<!-- ko if: absenceName != '' -->
-						<strong class="absence visible-lg" data-bind="text: absenceName" />
-						<strong class="absence visible-md" data-bind="text: absenceName" />
-						<strong class="absence hidden-md hidden-lg" data-bind="text: absenceShortName" />
+						<!-- ko if: hasAbsence -->
+						<div class="absence" data-bind="css: {'part-time': hasShift, 'dayoff': isDayOff}">
+							<!-- ko if: !hasShift -->
+							<strong class="visible-lg" data-bind="text: absenceName" />
+							<strong class="visible-md" data-bind="text: absenceName" />
+							<strong class="hidden-md hidden-lg" data-bind="text: absenceShortName" />
+							<!-- /ko -->
+						</div>
 						<!-- /ko -->
-
-						<div class="shift" data-bind="style: {
-									backgroundColor: shiftColor
-								},
-								css: {
-									'part-time': absenceName != '',
-								}">
+						
+						<!-- ko if: hasShift -->
+						<div class="shift" data-bind="style: { backgroundColor: shiftColor }, css: { 'part-time': hasAbsence }">
 							<div>
 								<strong class="visible-lg" data-bind="text: shiftName"></strong>
 								<strong class="visible-md" data-bind="text: shiftName"></strong>
@@ -68,6 +65,12 @@
 							<div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
 							<div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
 						</div>
+						<!-- /ko -->
+
+						<!-- ko if: isDayOff && !hasAbsence -->
+						<div class="dayoff">
+						</div>
+						<!-- /ko -->
 
 						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
 					</div>

@@ -115,17 +115,20 @@ span[data-cal-date] {
     opacity: 0.3;
 }
 
-.absence-day {
+.absence {
 	background-image: url(../Images/stripe.png);
+	height: 100px;
+	padding-top: 20px;
 }
-.absence-day.day-off-day {
+.absence-.dayoff {
     background-color: beige;
     background-image: url(../Images/stripe.png);
 }
 
-.day-off-day {
+.dayoff {
     background-color: beige;
     background-image: url(../Images/stripe.png);
+	height: 100px;
 }
 
 .shift {
@@ -134,7 +137,11 @@ span[data-cal-date] {
 }
 
 .shift.part-time {
-	height: 80px;
-	padding-top: 10px;
+	height: 70px;
+	padding-top: 5px;
 
+}
+
+.absence.part-time {
+	height: 30px;
 }

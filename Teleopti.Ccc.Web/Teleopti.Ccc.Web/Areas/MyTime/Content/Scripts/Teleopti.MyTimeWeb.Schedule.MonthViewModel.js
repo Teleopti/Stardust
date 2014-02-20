@@ -19,24 +19,22 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.date = scheduleDate.FixedDate;
     this.dayOfMonth = currentDate.date();
     this.isWorkingDay = scheduleDate.IsWorkingDay;
-    this.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : '';
-    this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : '';
+	
+    this.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : null;
+    this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : null;
+    this.hasAbsence = this.absenceName != null;
+	
     this.isDayOff = scheduleDate.IsDayOff;
-    this.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : '';
-    this.shiftShortName = scheduleDate.Shift ? scheduleDate.Shift.ShortName : '';
-    this.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan: '';
-    this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : '';
-    this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : '';
+	
+    this.shiftName = scheduleDate.Shift ? scheduleDate.Shift.Name : null;
+    this.shiftShortName = scheduleDate.Shift ? scheduleDate.Shift.ShortName : null;
+	this.shiftTimeSpan = scheduleDate.Shift ? scheduleDate.Shift.TimeSpan : null;
+    this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : null;
+    this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
+	this.hasShift = this.shiftName != null;
     
     this.isOutsideMonth = (selectedDate.month() != currentDate.month());
 
-	var self = this;
-	this.heightExperiment = ko.computed(function() {
-		if (self.absenceName != '')
-			return "80px";
-		return "100px";
-	});
-	
 };
 
 Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {

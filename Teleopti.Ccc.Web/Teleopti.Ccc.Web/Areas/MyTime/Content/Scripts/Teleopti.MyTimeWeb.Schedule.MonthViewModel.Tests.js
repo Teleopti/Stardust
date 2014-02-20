@@ -55,6 +55,34 @@ $(document).ready(function () {
 
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].isDayOff, true);
 	});
+	
+	test("should indicate absence", function () {
+		var vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({
+			ScheduleDays: [{}]
+		});
+		equal(vm.weekViewModels()[0].dayViewModels()[0].hasAbsence, false);
+
+		vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({
+			ScheduleDays: [{ Absence: { Name: "Illness" } }]
+		});
+		equal(vm.weekViewModels()[0].dayViewModels()[0].hasAbsence, true);
+	});
+
+	test("should indicate shift", function () {
+		var vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({
+			ScheduleDays: [{}]
+		});
+		equal(vm.weekViewModels()[0].dayViewModels()[0].hasShift, false);
+
+		vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({
+			ScheduleDays: [{ Shift: { Name: "Late" } }]
+		});
+		equal(vm.weekViewModels()[0].dayViewModels()[0].hasShift, true);
+	});
 
 	test("should read scheduled days", function () {
 
