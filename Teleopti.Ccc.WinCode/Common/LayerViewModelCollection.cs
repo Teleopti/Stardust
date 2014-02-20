@@ -241,10 +241,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public void ShouldBeUpdated(ILayerViewModel layerViewModel)
 		{
-			//if (!_layersThatShouldBeUpdated.Contains(layerViewModel))
-			//{
 				_layersThatShouldBeUpdated.Add(layerViewModel);
-			//}
 		}
 
         public void LayerMovedVertically(ILayerViewModel sender)
@@ -289,11 +286,10 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public void UpdateAllMovedLayers()
 	    {
-		    foreach (var layerViewModel in _layersThatShouldBeUpdated)
+		    foreach (var layerViewModel in this.Intersect(_layersThatShouldBeUpdated))
 		    {
 			    layerViewModel.UpdateModel();
 		    }
-			_layersThatShouldBeUpdated.Clear();
 	    }
     }
 }
