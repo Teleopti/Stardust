@@ -894,6 +894,10 @@ End personal drop down menu
     background-color: transparent;
   }
 
+.navbar-collapse {
+    max-height: none!important;
+}
+
 /* for fix ie11 bug: http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=27041 */
 .transition-fix {
   -webkit-transition: height 0.001s;
