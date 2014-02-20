@@ -25,6 +25,7 @@ GO
 --
 -- =============================================
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-02-04 00:00:00',@end_date='2013-02-06 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=0
+--exec mart.etl_fact_schedule_deviation_load @start_date='2014-02-17 00:00:00',@end_date='2014-02-23 00:00:00',@business_unit_code='9D812B66-A7BD-4FFF-A2D8-A2D90001CAF1',@isIntraday=1
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -90,6 +91,7 @@ CREATE TABLE #fact_schedule (
 	[schedule_date_id] [int] NOT NULL,
 	[shift_startdate_id] [int] NOT NULL,
 	[shift_startinterval_id] smallint, 
+	shift_endinterval_id smallint, 
 	[shift_endtime] smalldatetime,
 	[interval_id] [smallint] NOT NULL,
 	[person_id] [int] NOT NULL,
@@ -138,6 +140,7 @@ BEGIN
 		 fs.schedule_date_id, 
 		 fs.shift_startdate_id,
 		 fs.shift_startinterval_id,
+		 fs.shift_endinterval_id,
 		 fs.shift_endtime,
 		 fs.interval_id,
 		 fs.person_id, 
@@ -155,6 +158,7 @@ BEGIN
 		fs.schedule_date_id, 
 		fs.shift_startdate_id,
 		fs.shift_startinterval_id,
+		fs.shift_endinterval_id,
 		fs.shift_endtime,
 		fs.interval_id,
 		fs.person_id,
@@ -231,6 +235,7 @@ BEGIN
 		 fs.schedule_date_id, 
 		 fs.shift_startdate_id,
 		 fs.shift_startinterval_id,
+		 fs.shift_endinterval_id,
 		 fs.shift_endtime,
 		 fs.interval_id,
 		 fs.person_id, 
@@ -249,6 +254,7 @@ BEGIN
 		fs.schedule_date_id, 
 		fs.shift_startdate_id,
 		fs.shift_startinterval_id,
+		fs.shift_endinterval_id,
 		fs.shift_endtime,
 		fs.interval_id,
 		fs.person_id,
@@ -268,8 +274,8 @@ BEGIN
 	SELECT DISTINCT
 		date_id					= fa.date_id, 
 		interval_id				= fa.interval_id,
+		person_id				= b.person_id,
 		acd_login_id			= fa.acd_login_id, --new 20131128
-		person_id				= b.person_id, 
 		ready_time_s			= fa.ready_time_s,
 		is_logged_in			= 1, --marks that we do have logged in time
 		business_unit_id		= b.business_unit_id
@@ -282,11 +288,6 @@ BEGIN
 		AND b.acd_login_id			= fa.acd_login_id
 	WHERE b.business_unit_id = @business_unit_id
 END
-
---remove one minute from shifts ending at UTC midnight(00:00)
-UPDATE #fact_schedule
-SET shift_endtime= DATEADD(MINUTE,-1,shift_endtime)
-WHERE DATEPART(HOUR,shift_endtime)=0 AND DATEPART(MINUTE,shift_endtime)=0 
 
 /* b) Gather agent schedule time */
 INSERT INTO #fact_schedule_deviation
@@ -315,8 +316,7 @@ SELECT
 	scheduled_ready_time_s	= fs.scheduled_ready_time_m*60,
 	contract_time_s			= fs.scheduled_contract_time_m*60,
 	business_unit_id		= fs.business_unit_id
-FROM 
-	#fact_schedule fs
+FROM #fact_schedule fs
 
 /*#26421 Update schedule data with acd_login_id to handle nights shifts and person_period change*/
 UPDATE #fact_schedule_deviation
@@ -328,7 +328,6 @@ WHERE shifts.shift_startdate_local_id IS NOT NULL --only schedule data
 AND shifts.acd_login_id IS NULL 
 AND b.acd_login_id in (select acd_login_id from #fact_schedule_deviation stat where stat.shift_startdate_local_id IS NULL and stat.acd_login_id is not null)--pick only when acd_login exists
 
-
 /*#25900:20131128 Handle night shifts and person_period change, must update person_id in stat from correct shift*/
 UPDATE stat
 SET person_id=shifts.person_id--update agent stat data
@@ -338,7 +337,6 @@ ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND shift
 WHERE stat.person_id<>shifts.person_id AND shifts.acd_login_id IS NOT NULL --where diff on person but same acd_login
 AND shifts.shift_startdate_local_id IS NOT NULL  --get from schedule data
 AND stat.shift_startdate_local_id IS NULL
-
 
 --UPDATE ALL STATISTICS ROWS WITH KNOWN SHIFT_STARTDATE_ID, (KEEP shift_startdate_local_id AS NULL FOR NEXT UPDATE)
 UPDATE stat
@@ -544,3 +542,4 @@ SELECT
 	shift_startinterval_id		= shift_startinterval_id
 FROM 
 	#fact_schedule_deviation_merge
+GO
