@@ -49,10 +49,8 @@ DECLARE @min_date_id int
 DECLARE @business_unit_id int
 DECLARE @scenario_id int
 DECLARE @scenario_code uniqueidentifier
-DECLARE @date_min smalldatetime
 DECLARE @intervals_outside_shift int
 declare @interval_length_minutes int 
-SET @date_min='1900-01-01'
 
 CREATE TABLE #fact_schedule_deviation(
 	shift_startdate_local_id int,
@@ -108,29 +106,10 @@ CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
 	[interval_id] ASC
 )
 
-CREATE TABLE #intervals
-(
-	interval_id smallint not null,
-	interval_start smalldatetime null,
-	interval_end smalldatetime null
-)
-
 CREATE TABLE #stg_schedule_changed(
 	[person_id] [int] NOT NULL,
 	[shift_startdate_local_id] [int] NOT NULL
 )
-
-INSERT #intervals(interval_id,interval_start,interval_end)
-SELECT interval_id= interval_id,
-	interval_start= interval_start,
-	interval_end = interval_end
-FROM mart.dim_interval
-ORDER BY interval_id
-
---remove one minute from last interval to be able to join shifts ending at UTC midnight
-update #intervals 
-set interval_end=dateadd(minute,-1,interval_end) 
-where interval_end='1900-01-02 00:00:00'
 
 --get the number of intervals outside shift to consider for adherence calc
 SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
@@ -232,7 +211,6 @@ BEGIN
 			AND --trim
 			(
 					(ch.schedule_date_local	>= p.valid_from_date_local)
-
 				AND
 					(ch.schedule_date_local <= p.valid_to_date_local)
 			)
@@ -298,21 +276,11 @@ BEGIN
 	FROM mart.bridge_acd_login_person b
 	INNER JOIN mart.fact_agent fa
 		ON b.acd_login_id = fa.acd_login_id
-	INNER JOIN mart.dim_person p
-		ON p.person_id = b.person_id
-		AND
-			(
-				(fa.date_id > p.valid_from_date_id AND fa.date_id < p.valid_to_date_id_maxDate)
-					OR (fa.date_id = p.valid_from_date_id AND fa.interval_id >= p.valid_from_interval_id)
-					OR (fa.date_id = p.valid_to_date_id_maxDate AND fa.interval_id <= p.valid_to_interval_id_maxDate)
-			)
 	INNER JOIN #stg_schedule_changed ch
 		ON fa.date_id BETWEEN ch.shift_startdate_local_id-1 AND ch.shift_startdate_local_id+1 --extend stat to cover local date
 		AND ch.person_id			= b.person_id
 		AND b.acd_login_id			= fa.acd_login_id
 	WHERE b.business_unit_id = @business_unit_id
-	--AND fa.date_id BETWEEN @start_date_id-1 AND @end_date_id+1 --extend stat to cover local date
-
 END
 
 --remove one minute from shifts ending at UTC midnight(00:00)
@@ -340,7 +308,7 @@ SELECT
 	date_id					= fs.schedule_date_id, 
 	shift_startdate_id		= fs.shift_startdate_id,
 	shift_startinterval_id	= fs.shift_startinterval_id,
-	shift_endinterval_id	= di.interval_id,
+	shift_endinterval_id	= fs.shift_endinterval_id,
 	interval_id				= fs.interval_id,
 	person_id				= fs.person_id,
 	is_logged_in			= 0, --Mark schedule rows as Not loggged in 
@@ -349,24 +317,6 @@ SELECT
 	business_unit_id		= fs.business_unit_id
 FROM 
 	#fact_schedule fs
-INNER JOIN 
-	mart.dim_person p  
-ON
-	p.person_id = fs.person_id
-	AND
-		(
-				(fs.shift_startdate_id > p.valid_from_date_id AND fs.shift_startdate_id < p.valid_to_date_id_maxDate)
-				OR (fs.shift_startdate_id = p.valid_from_date_id AND fs.shift_startinterval_id >= p.valid_from_interval_id)
-				OR (fs.shift_startdate_id = p.valid_to_date_id_maxDate AND fs.shift_startinterval_id <= p.valid_to_interval_id_maxDate)
-		)
-INNER JOIN 
-	#intervals di
-ON 
-	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) > di.interval_start
-	and dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) <= di.interval_end
-WHERE
-	fs.shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
-	AND fs.business_unit_id = @business_unit_id
 
 /*#26421 Update schedule data with acd_login_id to handle nights shifts and person_period change*/
 UPDATE #fact_schedule_deviation

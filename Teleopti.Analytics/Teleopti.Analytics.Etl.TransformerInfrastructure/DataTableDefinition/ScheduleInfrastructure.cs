@@ -34,6 +34,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("shift_start", typeof(DateTime));
             table.Columns.Add("shift_end", typeof(DateTime));
             table.Columns.Add("shift_startinterval_id", typeof(int));
+			table.Columns.Add("shift_endinterval_id", typeof(int));
             table.Columns.Add("shift_category_code", typeof(Guid));
             table.Columns.Add("shift_length_m", typeof(int));
             table.Columns.Add("scheduled_time_m", typeof(int));

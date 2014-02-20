@@ -156,6 +156,7 @@ INSERT INTO mart.fact_schedule
 	shift_enddate_id, 
 	shift_endtime, 
 	shift_startinterval_id, 
+	shift_endinterval_id, 
 	shift_category_id, 
 	shift_length_id, 
 	scheduled_time_m, 
