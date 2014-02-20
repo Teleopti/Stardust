@@ -17,7 +17,7 @@
             <a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
         </div>
         
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <div class="collapse navbar-collapse transition-fix" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 @foreach (var navSection in Model.NavigationItems)
                 {
