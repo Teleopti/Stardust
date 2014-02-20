@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		public void ShouldExtractShiftCategoryPoints()
 		{
 			var result = _target.ExtractShiftCategoryPoints(_shiftCategories);
-			Assert.AreEqual(0, result[_shiftCategory1]);
-			Assert.AreEqual(1, result[_shiftCategory2]);
+			Assert.AreEqual(1, result[_shiftCategory1]);
+			Assert.AreEqual(2, result[_shiftCategory2]);
 		}
 	}
 }
