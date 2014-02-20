@@ -3,6 +3,21 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Schedule.MonthViewModel");
 	
+	test("should give white color for text when background is dark", function () {
+
+		var viewModelMonth = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+
+		viewModelMonth.readData({
+			ScheduleDays: [{
+				Shift: {
+					StyleColor: "rgb(0,0,0)"
+				}
+			}]
+		});
+
+		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftTextColor, "white");
+	});
+	
 	test("should read absence data", function () {
 
 		var viewModelMonth = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
