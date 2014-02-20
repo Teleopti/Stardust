@@ -87,13 +87,6 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Apply(readM);
 		}
 
-
-		public static void AddOverlapping(string onPerson)
-		{
-			AddShift(onPerson, DateTime.Today.AddDays(-1), 21, 11);
-			AddShift(onPerson, DateTime.Today.AddDays(0), 6, 8);
-		}
-
 		public static SiteConfigurable Site { get; set; }
 		public static TeamConfigurable Team { get; set; }
 		public static ContractConfigurable Contract { get; set; }

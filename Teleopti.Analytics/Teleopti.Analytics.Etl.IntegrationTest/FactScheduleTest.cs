@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Data.SqlClient;
@@ -41,7 +42,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person,"Ola H", "");
-			BasicShiftSetup.AddOverlapping("Ola H");
+
+			//Add overlapping
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
 
 			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
@@ -60,19 +64,20 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			var factSchedules = from s in db.fact_schedule select s;
 
-			Assert.That(factSchedules.Count(), Is.EqualTo(68));
-			var time = DateTime.Today.AddHours(5);
+			Assert.That(factSchedules.Count(), Is.EqualTo(76));
+			var time = DateTime.Today.AddDays(-1).AddHours(5);
 			var last = from s in db.fact_schedule where s.shift_starttime == time select s;
 
 			Assert.That(last.Count(), Is.EqualTo(32));
-			time = DateTime.Today.AddDays(-1).AddHours(20);
+			time = DateTime.Today.AddDays(-2).AddHours(20);
 			var first = from s in db.fact_schedule where s.shift_starttime == time select s;
-			Assert.That(first.Count(), Is.EqualTo(36));
+			Assert.That(first.Count(), Is.EqualTo(44));
 		}
 
 		[Test]
 		public void ShouldFindAdherence()
 		{
+			const string timeZoneId = "W. Europe Standard Time";
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 			AnalyticsRunner.RunSysSetupTestData();
 
@@ -88,7 +93,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "Ola H");
-			BasicShiftSetup.AddOverlapping("Ola H");
+
+			//Add overlapping
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
 
 			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
@@ -104,48 +112,49 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			};
 
 			jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
-			StepRunner.RunNightly(jobParameters);
 
-			//Assert on Nightly
-			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(34), "ETL.Nightly count intervals for Today");
-			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(38), "ETL.Nightly count intervals for Yesterday");
-			var column = "deviation_schedule_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25560), "ETL.Nightly " + column + " for Today");
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(27720), "ETL.Nightly " + column + " for Yesterday");
-			column = "scheduled_ready_time_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25200), "ETL.Nightly " + column + " for Today");
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(28800), "ETL.Nightly " + column + " for Yesterday");
-			column = "ready_time_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(3240), "ETL.Nightly " + column + " for Today");
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(3240), "ETL.Nightly " + column + " for Yesterday");
-			column = "deviation_schedule_ready_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(23760), "ETL.Nightly " + column + " for Today");
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(26640), "ETL.Nightly " + column + " for Yesterday");
-
-			//Edit shifts
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(0), person);
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 17,8);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(0), 6, 8);
-
-			//Re-run ETL, Intraday this time
+			//Run ETL.Intraday first time just to set "LastUpdatedPerStep"
 			StepRunner.RunIntraday(jobParameters);
 
-			//Assert on Intraday=Nightly
-			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today), Is.EqualTo(34));
-			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(38));
-			column = "deviation_schedule_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25560));
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(27720));
+			//Nightly
+			StepRunner.RunNightly(jobParameters);
+			assertOverlapping(person, timeZoneId, "Nightly");
+
+			//Re-Add overlapping
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-2), person);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
+
+			//Intraday
+			StepRunner.RunIntraday(jobParameters);
+			assertOverlapping(person, timeZoneId, "Intraday");
+
+			//Edit shifts and remove Overlapping
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-2), person);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 17,8);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
+
+			//Intraday
+			StepRunner.RunIntraday(jobParameters);
+			assertOverlapping(person, timeZoneId, "Intraday");
+
+			//Assert on Intraday, shifts back to normal
+			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(34));
+			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2)), Is.EqualTo(32));
+			var column = "deviation_schedule_s";
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(25560));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(27720));
 			column = "scheduled_ready_time_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(25200));
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(28800));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(25200));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(28800));
 			column = "ready_time_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(3240));
 			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(3240));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(3240));
 			column = "deviation_schedule_ready_s";
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today, column), Is.EqualTo(23760));
-			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(26640));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(23760));
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(26640));
 		}
 
 		private static int countIntervalsPerLocalDate(string connectionString, IPerson person, DateTime datelocal)
@@ -188,12 +197,133 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
         }
 
-    	private static SqlConnection connectAndOpen(string connectionString)
+
+		private static DataTable reportDataAgentScheduleAdherence(string connectionString, DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
+		{
+			var sqlConnection = connectAndOpen(connectionString);
+
+			var dtResult = new DataSet();
+			SqlCommand command = sqlConnection.CreateCommand();
+			SqlDataAdapter sqlAdapter = new SqlDataAdapter(command);
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "mart.report_data_agent_schedule_adherence_for_test";
+			command.Parameters.AddWithValue("@date_from", date_from);
+			command.Parameters.AddWithValue("@date_to", date_to);
+			command.Parameters.AddWithValue("@adherence_id", adherence_id);
+			command.Parameters.AddWithValue("@person_code", person.Id);
+			command.Parameters.AddWithValue("@time_zone_code", timeZoneId);
+			sqlAdapter.Fill(dtResult);
+			return dtResult.Tables[0];
+		}
+
+
+		private static SqlConnection connectAndOpen(string connectionString)
         {
             var sqlConnection = new SqlConnection(connectionString);
             sqlConnection.Open();
             return sqlConnection;
         }
+
+		public void assertOverlapping(IPerson person, string timeZoneId, string ETLType)
+		{
+			//Tests for "Ready Time vs. Schedule Ready Time"
+			var adheranceId = 1;
+			var adherance = reportDataAgentScheduleAdherence(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today, adheranceId, person, timeZoneId);
+			
+			Assert.That(adherance.Rows.Count, Is.EqualTo(46));
+			foreach (DataRow row in adherance.Rows)
+			{
+				var rownumber = (int)row["date_interval_counter"];
+				switch (rownumber)
+				{
+					case 1:
+						{
+							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)));
+							Assert.That((row["interval_id"]), Is.EqualTo(78));
+							Assert.That((row["interval_name"]), Is.EqualTo("19:30-19:45"));
+							Assert.That((row["deviation_tot_m"]), Is.EqualTo(543));
+							break;
+						}
+					case 7:
+						{
+							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)), "60% interval");
+							Assert.That((row["interval_id"]), Is.EqualTo(88), "60% interval");
+							Assert.That((row["interval_name"]), Is.EqualTo("22:00-22:15"), "60% interval");
+							Assert.That((row["adherence"]), Is.EqualTo(0.6), "60% interval");
+							Assert.That((row["deviation_m"]), Is.EqualTo(6), "60% interval");
+							Assert.That((row["adherence_calc_s"]), Is.EqualTo(900), "60% interval");
+							Assert.That((row["ready_time_m"]), Is.EqualTo(9), "60% interval");
+							break;
+						}
+					case 8:
+						{
+							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)), "100% interval");
+							Assert.That((row["interval_id"]), Is.EqualTo(89), "100% interval");
+							Assert.That((row["interval_name"]), Is.EqualTo("22:15-22:30"), "100% interval");
+							Assert.That((row["adherence"]), Is.EqualTo(1), "100% interval");
+							Assert.That((row["deviation_m"]), Is.EqualTo(0), "100% interval");
+							Assert.That((row["adherence_calc_s"]), Is.EqualTo(900), "100% interval");
+							Assert.That((row["ready_time_m"]), Is.EqualTo(15), "100% interval");
+							break;
+						}
+
+					case 46:
+						{
+							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-1)));
+							Assert.That((row["interval_id"]), Is.EqualTo(31));
+							Assert.That((row["interval_name"]), Is.EqualTo("07:45-08:00"));
+							break;
+						}
+				}
+			}
+
+			//Tests for "Ready Time vs. Schedule Time", e.g. the punish if over performing agent
+			adheranceId = 2;
+			adherance = reportDataAgentScheduleAdherence(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today, adheranceId, person, timeZoneId);
+
+			Assert.That(adherance.Rows.Count, Is.EqualTo(46));
+			foreach (DataRow row in adherance.Rows)
+			{
+				var rownumber = (int)row["date_interval_counter"];
+				switch (rownumber)
+				{
+					case 1:
+						{
+							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)));
+							Assert.That((row["interval_id"]), Is.EqualTo(78), "First interval_id yesterday");
+							Assert.That((row["interval_name"]), Is.EqualTo("19:30-19:45"), "First interval_name yesterday");
+							break;
+						}
+					case 46:
+						{
+							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-1)));
+							Assert.That((row["interval_id"]), Is.EqualTo(31), "First interval_id today");
+							Assert.That((row["interval_name"]), Is.EqualTo("07:45-08:00"), "First interval_name today");
+							break;
+						}
+				}
+			}
+
+
+			//Asserts on fact_schedule_deviation
+			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1)), Is.EqualTo(34), "ETL."+ ETLType + " count intervals for Today");
+			Assert.That(countIntervalsPerLocalDate(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2)), Is.EqualTo(46), "ETL." +ETLType + " count intervals for Yesterday");
+			var column = "deviation_schedule_s";
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(24300), "ETL." + ETLType + " " + column + " for Today");
+			Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(33660), "ETL." + ETLType + " " + column + " for Yesterday");
+			//column = "scheduled_ready_time_s";
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(25200), "ETL.Nightly " + column + " for Today");
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(36000), "ETL.Nightly " + column + " for Yesterday");
+			//column = "ready_time_s";
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(4500), "ETL.Nightly " + column + " for Today");
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(4500), "ETL.Nightly " + column + " for Yesterday");
+			//column = "deviation_schedule_ready_s";
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-1), column), Is.EqualTo(22500), "ETL.Nightly " + column + " for Today");
+			//Assert.That(sumFactScheduleDeviation(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, person, DateTime.Today.AddDays(-2), column), Is.EqualTo(32580), "ETL.Nightly " + column + " for Yesterday");
+
+			
+		}
+
 
 	}
 }

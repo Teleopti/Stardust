@@ -51,7 +51,8 @@ CREATE PROCEDURE [mart].[report_data_agent_schedule_result]
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@from_matrix bit=1
 AS
 SET NOCOUNT ON
 
@@ -143,21 +144,38 @@ WHERE	d.date_date	between @date_from AND @date_to
 INSERT INTO #rights_agents
 EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code
 
-IF mart.GroupPageCodeIsBusinessHierarchy(@group_page_code) = 0
-	BEGIN
-		-- Some Group Page was picked
-		-- Split the person codes
-		INSERT INTO #agents
-		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@group_page_agent_set, @date_from, @date_to, @site_id, @team_set)
+if(@from_matrix=1)
+begin
+	--Get all agents/persons that user has permission to see in given period
+	INSERT INTO #rights_agents
+	EXEC mart.report_get_AgentsMultipleTeams @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_person_code, @person_code, @report_id, @business_unit_code
 
-	END
-ELSE
-	BEGIN
-		-- Business Hierarchy picked
-		-- Split the person codes
-		INSERT INTO #agents
-		SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@agent_set, @date_from, @date_to, @site_id, @team_set)
-	END
+	IF mart.GroupPageCodeIsBusinessHierarchy(@group_page_code) = 0
+		BEGIN
+			-- Some Group Page was picked
+			-- Split the person codes
+			INSERT INTO #agents
+			SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@group_page_agent_set, @date_from, @date_to, @site_id, @team_set)
+
+		END
+	ELSE
+		BEGIN
+			-- Business Hierarchy picked
+			-- Split the person codes
+			INSERT INTO #agents
+			SELECT * FROM mart.TwolistPersonCodeToIdMultipleTeams(@agent_set, @date_from, @date_to, @site_id, @team_set)
+		END
+end
+else
+begin
+	declare @me_as_id int
+	select @me_as_id=id from mart.PersonCodeToId(@person_code, @date_from, @date_to, null, null)
+	INSERT INTO #rights_agents  --Insert the current agent
+	SELECT @me_as_id
+	INSERT INTO #agents --Insert the current agent
+	SELECT @me_as_id
+end
+
 
 --Join the ResultSets above as:
 --a) allowed to see = #rights_agents
