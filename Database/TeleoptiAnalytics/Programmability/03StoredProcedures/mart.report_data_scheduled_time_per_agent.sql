@@ -49,7 +49,6 @@ CREATE TABLE #fact_schedule(
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
-	[activity_starttime] [smalldatetime] NOT NULL,
 	[scenario_id] [smallint] NOT NULL,
 	[activity_id] [int] NULL,
 	[absence_id] [int] NULL,
@@ -103,7 +102,7 @@ SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_i
 
 /*Snabba upp fraga mot fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT schedule_date_id, person_id, interval_id, activity_starttime, scenario_id, activity_id, absence_id, scheduled_time_m, scheduled_contract_time_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_over_time_m, scheduled_paid_time_m
+SELECT schedule_date_id, person_id, interval_id, scenario_id, activity_id, absence_id, scheduled_time_m, scheduled_contract_time_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_over_time_m, scheduled_paid_time_m
 FROM mart.fact_schedule fs
 WHERE schedule_date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	
 							ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
