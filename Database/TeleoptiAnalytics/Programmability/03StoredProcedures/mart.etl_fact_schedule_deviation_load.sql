@@ -287,7 +287,7 @@ BEGIN
 		is_logged_in,
 		business_unit_id
 		)
-	SELECT
+	SELECT DISTINCT
 		date_id					= fa.date_id, 
 		interval_id				= fa.interval_id,
 		acd_login_id			= fa.acd_login_id, --new 20131128
@@ -311,6 +311,7 @@ BEGIN
 		AND ch.person_id			= b.person_id
 		AND b.acd_login_id			= fa.acd_login_id
 	WHERE b.business_unit_id = @business_unit_id
+	--AND fa.date_id BETWEEN @start_date_id-1 AND @end_date_id+1 --extend stat to cover local date
 
 END
 
