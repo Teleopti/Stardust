@@ -1,78 +1,78 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
 
 <div class="container">
-    <div class="navbar navbar-default">
-            <div class="col-xs-3" style="margin-top: 5px">
-            <div class="input-group">
-                <span class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="click: previousMonth">
-                        <i class="glyphicon glyphicon-arrow-left"></i>
-                    </button>
-                </span>
-                <input class="form-control col-md-2 text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
-                <div class="input-group-btn">
-                    <button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
-                        <i class="glyphicon glyphicon-th"></i>
-                    </button>
-                    <button class="btn btn-default" type="button" data-bind="click: nextMonth">
-                        <i class="glyphicon glyphicon-arrow-right"></i>
-                    </button>
-                </div>
-            </div>
-            </div>
-    </div>
+	<div class="navbar navbar-default">
+			<div class="col-xs-3" style="margin-top: 5px">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button class="btn btn-default" type="button" data-bind="click: previousMonth">
+						<i class="glyphicon glyphicon-arrow-left"></i>
+					</button>
+				</span>
+				<input class="form-control col-md-2 text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
+						<i class="glyphicon glyphicon-th"></i>
+					</button>
+					<button class="btn btn-default" type="button" data-bind="click: nextMonth">
+						<i class="glyphicon glyphicon-arrow-right"></i>
+					</button>
+				</div>
+			</div>
+			</div>
+	</div>
 
-    <div id="calendar" style="width: 100%;">
-        <div class="cal-row-fluid cal-row-head visible-lg visible-md" data-bind="foreach: weekDayNames">
-            <div class="cal-cell weekday-name" data-bind="text: Name"></div>
-        </div>
+	<div id="calendar" style="width: 100%;">
+		<div class="cal-row-fluid cal-row-head visible-lg visible-md" data-bind="foreach: weekDayNames">
+			<div class="cal-cell weekday-name" data-bind="text: Name"></div>
+		</div>
 
-        <div class="cal-row-fluid cal-row-head hidden-lg hidden-md" data-bind="foreach: weekDayNames">
-                <div class="cal-cell weekday-shortname" data-bind="text: ShortName" ></div>
-        </div>
+		<div class="cal-row-fluid cal-row-head hidden-lg hidden-md" data-bind="foreach: weekDayNames">
+				<div class="cal-cell weekday-shortname" data-bind="text: ShortName" ></div>
+		</div>
 
-        <div class="cal-month-box" data-bind="foreach: weekViewModels">
-            <div class="cal-row-fluid" data-bind="foreach: dayViewModels">
-                    <div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
-	                    <div class="cal-month-day" data-bind="
-	click: $root.week,
-	css: {
-		'cal-day-outmonth': isOutsideMonth,
-		'working-day': isWorkingDay,
-		'absence-day': absenceName != '',
-		'day-off-day': isDayOff
-	}
-	">
-		                    
-							<!-- ko if: absenceName != '' -->
-		                    <strong class="absence visible-lg" data-bind="text: absenceName"/>
-		                    <strong class="absence visible-md" data-bind="text: absenceName"/>
-		                    <strong class="absence hidden-md hidden-lg" data-bind="text: absenceShortName"/>
-		                    <!-- /ko -->
+		<div class="cal-month-box" data-bind="foreach: weekViewModels">
+			<div class="cal-row-fluid" data-bind="foreach: dayViewModels">
+				<div class="cal-cell" data-bind="attr: { 'data-cal-date': date }">
+					<div class="cal-month-day" data-bind="
+						click: $root.week,
+						css: {
+							'cal-day-outmonth': isOutsideMonth,
+							'working-day': isWorkingDay,
+							'absence-day': absenceName != '',
+							'day-off-day': isDayOff
+						}
+							">
 
-		                    <div class="shift" data-bind="style: {
-	backgroundColor: shiftColor
-},
-	css: {
-		'part-time': absenceName != '',
-	}">
-			                    <div>
-				                    <strong class="visible-lg" data-bind="text: shiftName"></strong>
-				                    <strong class="visible-md" data-bind="text: shiftName"></strong>
-				                    <div class="hidden-md hidden-lg" style="padding-top: 20px">
-					                    <strong data-bind="text: shiftShortName"></strong>
-				                    </div>
-			                    </div>
-			                    <div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
-			                    <div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
-		                    </div>
+						<!-- ko if: absenceName != '' -->
+						<strong class="absence visible-lg" data-bind="text: absenceName" />
+						<strong class="absence visible-md" data-bind="text: absenceName" />
+						<strong class="absence hidden-md hidden-lg" data-bind="text: absenceShortName" />
+						<!-- /ko -->
 
-							<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
-	                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+						<div class="shift" data-bind="style: {
+									backgroundColor: shiftColor
+								},
+								css: {
+									'part-time': absenceName != '',
+								}">
+							<div>
+								<strong class="visible-lg" data-bind="text: shiftName"></strong>
+								<strong class="visible-md" data-bind="text: shiftName"></strong>
+								<div class="hidden-md hidden-lg" style="padding-top: 20px">
+									<strong data-bind="text: shiftShortName"></strong>
+								</div>
+							</div>
+							<div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>
+							<div class="hidden-xs hidden-sm" data-bind="text: shiftWorkingHours"></div>
+						</div>
+
+						<span data-bind="text: dayOfMonth, attr: { 'data-cal-date': date }" class="date-number label label-default"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
