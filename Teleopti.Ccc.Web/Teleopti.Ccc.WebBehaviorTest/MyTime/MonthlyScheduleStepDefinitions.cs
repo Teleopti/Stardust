@@ -97,13 +97,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I choose to go to next month")]
         public void WhenIChooseToGoToNextMonth()
         {
-            Browser.Interactions.Click(".glyphicon-arrow-right");
+            Browser.Interactions.Click(".glyphicon-chevron-right");
         }
 
         [When(@"I choose to go to previous month")]
         public void WhenIChooseToGoToPreviousMonth()
         {
-            Browser.Interactions.Click(".glyphicon-arrow-left");
+            Browser.Interactions.Click(".glyphicon-chevron-left");
         }
 
 
