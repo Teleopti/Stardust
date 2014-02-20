@@ -227,7 +227,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		{
 			//Tests for "Ready Time vs. Schedule Ready Time"
 			var adheranceId = 1;
-			var adherance = reportDataAgentScheduleAdherence(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today, adheranceId, person, timeZoneId);
+			var adherance = reportDataAgentScheduleAdherence(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1), adheranceId, person, timeZoneId);
 			
 			Assert.That(adherance.Rows.Count, Is.EqualTo(46));
 			foreach (DataRow row in adherance.Rows)
@@ -278,7 +278,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//Tests for "Ready Time vs. Schedule Time", e.g. the punish if over performing agent
 			adheranceId = 2;
-			adherance = reportDataAgentScheduleAdherence(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today, adheranceId, person, timeZoneId);
+			adherance = reportDataAgentScheduleAdherence(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1), adheranceId, person, timeZoneId);
 
 			Assert.That(adherance.Rows.Count, Is.EqualTo(46));
 			foreach (DataRow row in adherance.Rows)
