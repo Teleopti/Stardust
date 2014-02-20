@@ -1,10 +1,4 @@
-﻿@media (max-width: 979px) {
-	body {
-		padding-top: 40px;
-		padding-left: 0;
-	}
-}
-.asm-sliding-schedules
+﻿.asm-sliding-schedules
 {
 	border: 1px solid rgb(216, 216, 216);	
 	position: relative;

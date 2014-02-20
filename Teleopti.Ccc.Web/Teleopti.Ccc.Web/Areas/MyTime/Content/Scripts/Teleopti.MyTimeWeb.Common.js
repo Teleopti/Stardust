@@ -103,7 +103,17 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		        var button = $('ul.navbar-nav li');
 		        navbar.removeClass('custom-collapsed'); // set standart view
 		        if (Math.floor(navbar.innerHeight()) > button.height() + 1) // check if we've got 2 lines
+		        {
 		            navbar.addClass('custom-collapsed'); // force collapse mode
+		        }
+		        
+		        if ($('.navbar-toggle').visible()) {
+		            $('body').css('padding-top: 0px;');
+		            navbar.removeClass('navbar-fixed-top');
+		        } else {
+		            $('body').css('padding-top: 60px;');
+		            navbar.addClass('navbar-fixed-top');
+		        }
 		    }
 		    
 		    $('.navbar-collapse li:not(.dropdown)').click(function () {
