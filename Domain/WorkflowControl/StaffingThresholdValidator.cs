@@ -180,7 +180,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             var isWithinUnderStaffingLimit = (1 - exceededRate) >= skill.StaffingThresholds.UnderstaffingFor.Value;
 
             validatedRequest.IsValid = isWithinUnderStaffingLimit;
-            exceededUnderstaffingList.Select(s => s.Period.TimePeriod(timeZone)).ForEach(result.AddUnderstaffingTime);
+            if (!isWithinUnderStaffingLimit)
+                exceededUnderstaffingList.Select(s => s.Period.TimePeriod(timeZone)).ForEach(result.AddUnderstaffingTime);
 
 		    return validatedRequest;
     	}
