@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				//Change sign because of demand is positive in teamblock
 				double currentDemand = tweakedDemand/intervalLength*-1;
 
-				return skillIntervalData;
 				return new SkillIntervalData(skillIntervalData.Period, skillIntervalData.ForecastedDemand, currentDemand,
 				                             skillIntervalData.CurrentHeads, skillIntervalData.MinimumHeads,
 				                             skillIntervalData.MaximumHeads);
@@ -39,9 +38,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private double getTweakedCurrentDemand(double originalDemandInMinutes, double assignedResourceInMinutes, double priorityValue, Percent overstaffingFactor)
 		{
 			double currentDemandInMinutes = assignedResourceInMinutes - originalDemandInMinutes;
-			double overUnderStaffFaktor = overstaffingFactor.Value;
+			double overUnderStaffFaktor = 1;
 			if (currentDemandInMinutes < 0)
-				overUnderStaffFaktor = 1 - overstaffingFactor.Value;
+				overUnderStaffFaktor = 2 - (overstaffingFactor.Value * 2);
 			return priorityValue * overUnderStaffFaktor * currentDemandInMinutes;
 		}
 	}
