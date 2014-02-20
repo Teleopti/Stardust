@@ -102,7 +102,7 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 		        var navbar = $('#autocollapse');
 		        var button = $('ul.navbar-nav li');
 		        navbar.removeClass('custom-collapsed'); // set standart view
-		        if (Math.floor(navbar.innerHeight()) > button.height()) // check if we've got 2 lines
+		        if (Math.floor(navbar.innerHeight()) > button.height() + 1) // check if we've got 2 lines
 		            navbar.addClass('custom-collapsed'); // force collapse mode
 		    }
 		    
