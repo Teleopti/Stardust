@@ -85,21 +85,11 @@ And I have a shift with
 	| StartTime      | 2014-01-16 09:00 |
 	| EndTime        | 2014-01-16 18:00 |
 	| Shift category | Early            |
-And I have a shift with
-	| Field          | Value            |
-	| StartTime      | 2014-01-17 09:00 |
-	| EndTime        | 2014-01-17 18:00 |
-	| Shift category | Early            |
 And I have an absence with
 	| Field		| Value            |
 	| Name      | Illness          |
 	| StartTime | 2014-01-16 09:00 |
 	| EndTime   | 2014-01-16 12:00 |
-And I have an absence with
-	| Field		| Value            |
-	| Name      | Illness          |
-	| StartTime | 2014-01-18 09:00 |
-	| EndTime   | 2014-01-18 12:00 |
 When I view my month schedule for date '2014-01-16'
 Then I should see the shift with
 	| Field          | Value         |
