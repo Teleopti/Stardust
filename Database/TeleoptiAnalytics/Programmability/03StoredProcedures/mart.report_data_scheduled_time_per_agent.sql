@@ -53,7 +53,6 @@ CREATE TABLE #fact_schedule(
 	[scenario_id] [smallint] NOT NULL,
 	[activity_id] [int] NULL,
 	[absence_id] [int] NULL,
-	[activity_startdate_id] [int] NULL,
 	[scheduled_time_m] [int] NULL,
 	[scheduled_contract_time_m] [int] NULL,
 	[scheduled_contract_time_absence_m] [int] NULL,
