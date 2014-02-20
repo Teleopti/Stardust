@@ -149,8 +149,8 @@
                                         </div>
                                         <div class="label preference-text" data-bind="text: Preference, attr: { title: Preference }, style: {color: TextColor(), backgroundColor: Color(), opacity: Editable() ? 1 : 0.2 }, css: { hide: !HasPreferenceCategory() }"/>
                                         <div class="preference-indicator">
-				                            <!-- ko if: tooltipText -->
-                                            <div class="extended-indication" data-bind="tooltip: { title: tooltipText, html: true }">&raquo;</div>
+				                            <!-- ko if: Extended -->
+                                            <div class="extended-indication" style="display: none" data-bind="visible: Extended, tooltip: { title: tooltipText, html: true }">&raquo;</div>
                                             <!-- /ko -->
                                         </div>
                                         <div class="preference-indicator">

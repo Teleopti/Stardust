@@ -59,10 +59,11 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
         return self.Preference() != undefined && self.Preference() != '';
     });
 
-    self.tooltipText = ko.computed(function () {
-    	if (!self.Extended())
-    		return undefined;
-	    var text = '<div class="icon-white time-limitation arrow-icon icon-step-backward">{0}</div><div class="icon-white time-limitation arrow-icon icon-step-forward">{1}</div><div class="icon-white time-limitation arrow-icon icon-resize-horizontal">{2}</div><div class="extended-part-title">{3}</div><div class="icon-white time-limitation arrow-icon icon-step-backward">{4}</div><div class="icon-white time-limitation arrow-icon icon-step-forward">{5}</div><div class="icon-white time-limitation arrow-icon icon-resize-horizontal">{6}</div>'
+	self.tooltipText = ko.computed(function () {
+	    var text = '';
+	    if (self.Extended()) {
+	        
+	        text = '<div class="icon-white time-limitation arrow-icon icon-step-backward">{0}</div><div class="icon-white time-limitation arrow-icon icon-step-forward">{1}</div><div class="icon-white time-limitation arrow-icon icon-resize-horizontal">{2}</div><div class="extended-part-title">{3}</div><div class="icon-white time-limitation arrow-icon icon-step-backward">{4}</div><div class="icon-white time-limitation arrow-icon icon-step-forward">{5}</div><div class="icon-white time-limitation arrow-icon icon-resize-horizontal">{6}</div>'
 	            .format($('<div/>').text(self.StartTimeLimitation()).html(),
 	                $('<div/>').text(self.EndTimeLimitation()).html(),
 	                $('<div/>').text(self.WorkTimeLimitation()).html(),
@@ -70,8 +71,14 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	                $('<div/>').text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-').html(),
 	                $('<div/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
 	                $('<div/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
+	        
+	    } else {
+	        text = self.StartTimeLimitation();
+	    }
+
 	    return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(self.ExtendedTitle(), text);
-    });
+	    
+	});
 
     this.HasDayOff = ko.computed(function() {
         return self.DayOff() != '';
@@ -135,6 +142,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 		if (data.Color)
 			self.Color('rgb(' + data.Color + ')');
 		self.Preference(data.Preference);
+		self.Extended(data.Extended);
 		self.MustHave(data.MustHave);
 		self.ExtendedTitle(data.ExtendedTitle);
 		self.StartTimeLimitation(data.StartTimeLimitation);
@@ -144,7 +152,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 		self.ActivityStartTimeLimitation(data.ActivityStartTimeLimitation);
 		self.ActivityEndTimeLimitation(data.ActivityEndTimeLimitation);
 		self.ActivityTimeLimitation(data.ActivityTimeLimitation);
-		self.Extended(data.Extended);
+		
 	};
 
 	this.ReadDayOff = function (data) {
