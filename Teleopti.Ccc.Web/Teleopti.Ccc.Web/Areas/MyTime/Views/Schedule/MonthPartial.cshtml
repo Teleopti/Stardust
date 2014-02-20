@@ -44,12 +44,14 @@
 							">
 
 						<!-- ko if: hasAbsence -->
-						<div class="absence" data-bind="css: {'part-time': hasShift, 'dayoff': isDayOff}">
+						<div class="absence" data-bind="css: { 'part-time': hasShift, 'dayoff': isDayOff }">
 							<!-- ko if: !hasShift -->
 							<strong class="visible-lg" data-bind="text: absenceName" />
 							<strong class="visible-md" data-bind="text: absenceName" />
-							<strong class="hidden-md hidden-lg" data-bind="text: absenceShortName" />
-							<!-- /ko -->
+							<div class="hidden-md hidden-lg">
+								<strong dataq-bind="text: absenceShortName">IL</strong>
+							</div>
+						<!-- /ko -->
 						</div>
 						<!-- /ko -->
 						
@@ -58,8 +60,9 @@
 							<div>
 								<strong class="visible-lg" data-bind="text: shiftName"></strong>
 								<strong class="visible-md" data-bind="text: shiftName"></strong>
-								<div class="hidden-md hidden-lg" style="padding-top: 20px">
+								<div class="hidden-md hidden-lg">
 									<strong data-bind="text: shiftShortName"></strong>
+									<strong data-fbind="text: shiftShortName">AM</strong>
 								</div>
 							</div>
 							<div class="hidden-xs hidden-sm" data-bind="text: shiftTimeSpan"></div>

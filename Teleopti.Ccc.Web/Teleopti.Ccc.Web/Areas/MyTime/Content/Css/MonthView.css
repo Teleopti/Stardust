@@ -145,3 +145,8 @@ span[data-cal-date] {
 .absence.part-time {
 	height: 30px;
 }
+
+.absence .hidden-md,
+.shift .hidden-md {
+	padding-top: 20px
+}
