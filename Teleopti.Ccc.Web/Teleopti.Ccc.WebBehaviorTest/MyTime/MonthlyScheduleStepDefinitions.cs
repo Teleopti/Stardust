@@ -6,6 +6,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
+	 [Scope(Feature = "21211 View Monthly schedule")]
     [Binding]
     public class MonthlyScheduleStepDefinitions
     {
@@ -98,7 +99,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string dayOfWeek)
         {
             Browser.Interactions.AssertFirstContainsUsingJQuery(".weekday-name", dayOfWeek);
-            //Browser.Interactions.AssertFirstContains(".weekday-name", dayOfWeek);
         }
 
         [When(@"I choose the day '(.*)'")]
@@ -148,10 +148,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	    }
 
 		[Then(@"I should see the absence on date '(.*)'")]
-        public void ThenIShouldSeeTheAbsenceOnDate(string p0)
+        public void ThenIShouldSeeTheAbsenceOnDate(string date)
         {
-			//TODO: need the solution finally
-        }
+			  Browser.Interactions.AssertExists(string.Format("[data-cal-date='{0}'] .absence", date));
+		  }
 
-    }
+		[Then(@"I should not see a shift on date '(.*)'")]
+		public void ThenIShouldNotSeeAShiftOnDate(string date)
+		{
+			Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0}']", date), string.Format("[data-cal-date='{0}'] .shift", date));
+		}
+
+	 }
 }

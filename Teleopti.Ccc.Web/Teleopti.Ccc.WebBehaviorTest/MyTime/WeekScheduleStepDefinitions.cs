@@ -174,6 +174,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click("#week-schedule-today");
 		}
 		
+		[Scope(Feature = "View week schedule")]
 		[Then(@"I should not see a shift on date '(.*)'")]
 		public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
 		{
