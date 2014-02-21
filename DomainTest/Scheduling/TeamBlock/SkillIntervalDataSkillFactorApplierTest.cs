@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skill.OverstaffingFactor = new Percent(0);
 			ISkillIntervalData result = _target.ApplyFactors(_skillIntervalData, _skill);
 			Assert.AreEqual(result.ForecastedDemand, _skillIntervalData.ForecastedDemand);
-			Assert.AreEqual(0, result.CurrentDemand);
+			Assert.AreEqual(-10, result.CurrentDemand);
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skill.Priority = 4;
 			ISkillIntervalData result = _target.ApplyFactors(_skillIntervalData, _skill);
 			Assert.AreEqual(14, result.ForecastedDemand);
-			Assert.AreEqual(5, result.CurrentDemand);
+			Assert.AreEqual(10, result.CurrentDemand);
 		}
 
 		[Test]
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skill.Priority = 5;
 			ISkillIntervalData result = _target.ApplyFactors(_skillIntervalData, _skill);
 			Assert.AreEqual(14, result.ForecastedDemand);
-			Assert.AreEqual(20, result.CurrentDemand);
+			Assert.AreEqual(40, result.CurrentDemand);
 		}
 
 		[Test]
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skill.Priority = 3;
 			ISkillIntervalData result = _target.ApplyFactors(_skillIntervalData, _skill);
 			Assert.AreEqual(14, result.ForecastedDemand);
-			Assert.AreEqual(3.2, result.CurrentDemand);
+			Assert.AreEqual(6.4, result.CurrentDemand);
 		}
 
 		[Test]
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skill.Priority = 4;
 			ISkillIntervalData result = _target.ApplyFactors(_skillIntervalData, _skill);
 			Assert.AreEqual(14, result.ForecastedDemand);
-			Assert.AreEqual(-8, result.CurrentDemand);
+			Assert.AreEqual(-16, result.CurrentDemand);
 		}
 
 		[Test]
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skill.Priority = 5;
 			ISkillIntervalData result = _target.ApplyFactors(_skillIntervalData, _skill);
 			Assert.AreEqual(14, result.ForecastedDemand);
-			Assert.AreEqual(-32, result.CurrentDemand);
+			Assert.AreEqual(-64, result.CurrentDemand);
 		}
 
 		[Test]
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skill.Priority = 3;
 			ISkillIntervalData result = _target.ApplyFactors(_skillIntervalData, _skill);
 			Assert.AreEqual(14, result.ForecastedDemand);
-			Assert.AreEqual(-5.12, result.CurrentDemand);
+			Assert.AreEqual(-10.24, result.CurrentDemand);
 		}
 	}
 }
