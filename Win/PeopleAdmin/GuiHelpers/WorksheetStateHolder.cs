@@ -51,10 +51,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 	    private readonly TypedBindingCollection<IWorkflowControlSet> _workflowControlSetCollection = new TypedBindingCollection<IWorkflowControlSet>();
 
-		public WorksheetStateHolder(ITraceableRefreshService cacheServiceForPersonAccount)
-        {
-        }
-
         public TypedBindingCollection<IContract> ContractCollection
         {
             get { return _contractBindingCollection; }

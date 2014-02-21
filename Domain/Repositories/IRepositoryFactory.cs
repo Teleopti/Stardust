@@ -224,28 +224,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         IShiftCategoryRepository CreateShiftCategoryRepository(IUnitOfWork unitOfWork);
 
         /// <summary>
-        /// Creates the state group activity alarm repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-11-18
-        /// </remarks>
-        IStateGroupActivityAlarmRepository CreateStateGroupActivityAlarmRepository(IUnitOfWork unitOfWork);
-
-        /// <summary>
-        /// Creates the rta state group repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-11-18
-        /// </remarks>
-        IRtaStateGroupRepository CreateRtaStateGroupRepository(IUnitOfWork unitOfWork);
-
-        /// <summary>
         /// Creates the day off repository.
         /// </summary>
         /// <param name="unitOfWork">The unit of work.</param>
@@ -449,16 +427,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         IUserDetailRepository CreateUserDetailRepository(IUnitOfWork unitOfWork);
 
-        /// <summary>
-        /// Creates the payroll result repository.
-        /// </summary>
-        /// <param name="unitOfWork">The unit of work.</param>
-        /// <remarks>
-        /// Created by: peterwe
-        /// Created date: 2010-11-24
-        /// </remarks>
-        IPayrollResultRepository CreatePayrollResultRepository(IUnitOfWork unitOfWork);
-
         IExtendedPreferenceTemplateRepository CreateExtendedPreferenceTemplateRepository(IUnitOfWork unitOfWork);
         IRepository<IBudgetGroup> CreateBudgetGroupRepository(IUnitOfWork unitOfWork);
 
@@ -467,7 +435,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         IPublicNoteRepository CreatePublicNoteRepository(IUnitOfWork unitOfWork);
         IAgentDayScheduleTagRepository CreateAgentDayScheduleTagRepository(IUnitOfWork unitOfWork);
         IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork);
-        IPersonSelectorReadOnlyRepository CreatePersonSelectorReadOnlyRepository(IStatelessUnitOfWork unitOfWork);
         IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork);
         ILicenseStatusRepository CreateLicenseStatusRepository(IUnitOfWork unitOfWork);
         ILicenseRepository CreateLicenseRepository(IUnitOfWork unitOfWork);

@@ -18,37 +18,32 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
     {
         private readonly PersonSelectorField _loadType;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
         private readonly IPersonSelectorView _personSelectorView;
         private readonly string _rootNodeName;
         private readonly ICommonNameDescriptionSetting _commonAgentNameSettings;
         private readonly IApplicationFunction _applicationFunction;
-        // ola: leaving it here if we want to use it later
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private readonly bool _showPersons;
 
         public LoadBuiltInTabsCommand(PersonSelectorField loadType, IUnitOfWorkFactory unitOfWorkFactory, 
-            IRepositoryFactory repositoryFactory, IPersonSelectorView personSelectorView, string rootNodeName,
-            ICommonNameDescriptionSetting commonAgentNameSettings, IApplicationFunction applicationFunction, bool showPersons)
+            IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, IPersonSelectorView personSelectorView, string rootNodeName,
+            ICommonNameDescriptionSetting commonAgentNameSettings, IApplicationFunction applicationFunction)
         {
             _loadType = loadType;
             _unitOfWorkFactory = unitOfWorkFactory;
-            _repositoryFactory = repositoryFactory;
+            _personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
             _personSelectorView = personSelectorView;
             _rootNodeName = rootNodeName;
             _commonAgentNameSettings = commonAgentNameSettings;
             _applicationFunction = applicationFunction;
-            _showPersons = showPersons;
         }
 
         public void Execute()
         {
             var selectedPeriod = _personSelectorView.SelectedPeriod;
             IList<IPersonSelectorBuiltIn> toNodes;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                IPersonSelectorReadOnlyRepository rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
-                toNodes = rep.GetBuiltIn(selectedPeriod, _loadType);    
+	            toNodes = _personSelectorReadOnlyRepository.GetBuiltIn(selectedPeriod, _loadType);    
             }
             
             // rättigheter
@@ -94,8 +89,6 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                     currNode = new TreeNodeAdv(personSelectorBuiltin.Node) { LeftImageIndices = new[] { 2 }, Tag = new List<Guid>() };
                     root.Nodes.Add(currNode);
                 }
-                //if (_showPersons)
-                //{
                     // and here have a list with one guid
                     var personNode = new TreeNodeAdv(_commonAgentNameSettings.BuildCommonNameDescription(personSelectorBuiltin)) { Tag = new List<Guid> { personSelectorBuiltin.PersonId }, LeftImageIndices = new[] { 3 } };
                     // how should we display and how should we sort ?? 
@@ -107,7 +100,6 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
 						if (_personSelectorView.ExpandSelected)
 							currNode.Expanded = true;
                     }
-               // }
                 
                 ((IList<Guid>)currNode.Tag).Add(personSelectorBuiltin.PersonId);
             }

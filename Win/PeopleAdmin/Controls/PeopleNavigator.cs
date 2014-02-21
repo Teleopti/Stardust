@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         	                                                                             					GetUnitOfWork = uow
         	                                                                             				};
 
-        	                                                                             		var state = new WorksheetStateHolder(service);
+        	                                                                             		var state = new WorksheetStateHolder();
 
         	                                                                             		loadPeopleGeneralViewAndInitialReferences(state, uow);
 
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
                 IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
                 var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
                 ITraceableRefreshService cacheServiceForPersonAccounts = new TraceableRefreshService(_currentScenario, new ScheduleRepository(uow));
-                var state = new WorksheetStateHolder(cacheServiceForPersonAccounts);
+                var state = new WorksheetStateHolder();
                 var filteredPeopleHolder = new FilteredPeopleHolder(cacheServiceForPersonAccounts, accounts)
                 {
                     SelectedDate = DateOnly.Today,

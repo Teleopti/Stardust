@@ -195,20 +195,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         [Test]
-        public void VerifyCreateRtaStateGroupRepository()
-        {
-            mocks.ReplayAll();
-            Assert.IsNotNull(new RepositoryFactory().CreateRtaStateGroupRepository(uow));
-        }
-
-        [Test]
-        public void VerifyCreateStateGroupActivityAlarmRepository()
-        {
-            mocks.ReplayAll();
-            Assert.IsNotNull(new RepositoryFactory().CreateStateGroupActivityAlarmRepository(uow));
-        }
-
-        [Test]
         public void VerifyCreateApplicationRoleRepository()
         {
             mocks.ReplayAll();
@@ -396,13 +382,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             mocks.ReplayAll();
             Assert.IsNotNull(new RepositoryFactory().CreatePreferenceDayRepository(uow));
-        }
-
-        [Test]
-        public void VerifyCreatePayrollResultRepository()
-        {
-            mocks.ReplayAll();
-            Assert.IsNotNull(new RepositoryFactory().CreatePayrollResultRepository(uow));
         }
 
         [Test]
