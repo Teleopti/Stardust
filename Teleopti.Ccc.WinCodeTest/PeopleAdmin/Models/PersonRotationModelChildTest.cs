@@ -123,13 +123,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         {
             //might wanna change this test case a bit later depending on the value you have for FromDate
             //when PR is null
-            PersonRotationModelChild modelChild =
-                           new PersonRotationModelChild(person1, null);
+            PersonRotationModelChild modelChild = new PersonRotationModelChild(person1, null);
 
             modelChild.PersonRotation = personRotation1;
             modelChild.FromDate = DateOnly.MinValue;
 
-            Assert.AreEqual(new DateOnly(DateTime.MinValue.Date.AddDays(10)), modelChild.FromDate);
+            Assert.AreEqual(DateOnly.MinValue, modelChild.FromDate);
         }
 
         [Test]
