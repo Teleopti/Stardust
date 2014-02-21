@@ -47,7 +47,16 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			IPerson person;
             BasicShiftSetup.SetupBasicForShifts();
             BasicShiftSetup.AddPerson(out person, "Ola H","");
-            BasicShiftSetup.AddThreeShifts("Ola H");
+
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
+            BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			var readModel = new ScheduleDayReadModel
 			{
@@ -128,10 +137,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var brasilTimeZone = new BrasilTimeZone {TimeZoneId = 2};
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>{brasilTimeZone});
 
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
 			IPerson person;
             BasicShiftSetup.SetupBasicForShifts();
             BasicShiftSetup.AddPerson(out person, "Ola H","");
-            BasicShiftSetup.AddThreeShifts("Ola H");
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			Data.Person("Ola H").Apply(new BrasilianTimeZone());
 

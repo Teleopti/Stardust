@@ -43,10 +43,19 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             BasicShiftSetup.SetupBasicForShifts();
             BasicShiftSetup.AddPerson(out person, "Ola H", "");
 
+
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
             //Add overlapping
-            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
-            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
-            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(0), 9, 8);
+            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(0), 9, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
             var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
             var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
@@ -92,9 +101,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person,"Ola H", "");
 
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
+
 			//Add overlapping
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
@@ -143,9 +161,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "Ola H");
 
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
+
 			//Add overlapping
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
@@ -172,8 +199,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//Re-Add overlapping
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-2), person);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			//Intraday
 			StepRunner.RunIntraday(jobParameters);
@@ -182,8 +209,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			//Edit shifts and remove Overlapping
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-2), person);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 17,8);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 17, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			//Intraday
 			StepRunner.RunIntraday(jobParameters);
