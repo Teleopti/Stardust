@@ -32,12 +32,10 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.shiftWorkingHours = scheduleDate.Shift ? scheduleDate.Shift.WorkingHours : null;
     this.shiftColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
     this.hasShift = this.shiftName != null;
-    this.styleColor = scheduleDate.Shift ? scheduleDate.Shift.StyleColor : null;
-	var backgroundColor = this.styleColor ? this.styleColor : null;
-	this.shiftTextColor = backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(backgroundColor) : 'black';
+    this.backgroundColor = scheduleDate.Shift ? scheduleDate.Shift.Color : null;
+    this.shiftTextColor = this.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(this.backgroundColor) : 'black';
     
     this.isOutsideMonth = (selectedDate.month() != currentDate.month());
-
 };
 
 Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel = function () {

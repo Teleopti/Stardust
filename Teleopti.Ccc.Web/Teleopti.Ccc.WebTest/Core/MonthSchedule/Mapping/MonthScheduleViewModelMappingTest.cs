@@ -220,8 +220,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
 
-			result.Shift.Should().Not.Be.Null();
-			result.Shift.Color.Should().Be.EqualTo(Color.Green.ToHtml());
+			result.Shift.Color.Should().Be.EqualTo("rgb(0,128,0)");
 		}
 
 		[Test]

@@ -1,4 +1,5 @@
 using System;
+using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 						var isNullShiftCategory = personAssignment.ShiftCategory == null;
 						var name = isNullShiftCategory ? null : personAssignment.ShiftCategory.Description.Name;
 						var shortName = isNullShiftCategory ? null : personAssignment.ShiftCategory.Description.ShortName;
-						var color = isNullShiftCategory ? null : personAssignment.ShiftCategory.DisplayColor.ToHtml();
+						var color = isNullShiftCategory ? null : formatRgbColor(personAssignment.ShiftCategory.DisplayColor);
 						var contractTime = projection == null ? TimeSpan.Zero : projection.ContractTime();
 						return new ShiftViewModel
 									{
@@ -82,6 +83,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 					s => s.Layer.Payload.Description.Name))
 				.ForMember(d => d.ShortName, c => c.ResolveUsing(
 					s => s.Layer.Payload.Description.ShortName));
+		}
+
+		private static string formatRgbColor(Color color)
+		{
+			return string.Format("rgb({0},{1},{2})", color.R, color.G, color.B);
 		}
 	}
 }

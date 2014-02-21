@@ -3,19 +3,18 @@ $(document).ready(function () {
 
 	module("Teleopti.MyTimeWeb.Schedule.MonthViewModel");
 	
-	test("should give white color for text when background is dark", function () {
+	test("should change text color based on background color", function () {
+		var vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({ScheduleDays: [{Shift: {Color: "rgb(0,0,0)"}}]});
+		equal(vm.weekViewModels()[0].dayViewModels()[0].shiftTextColor, "white");
+		
+		vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({ ScheduleDays: [{ Shift: { Color: "rgb(255,255,255)" } }] });
+		equal(vm.weekViewModels()[0].dayViewModels()[0].shiftTextColor, "black");
 
-		var viewModelMonth = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
-
-		viewModelMonth.readData({
-			ScheduleDays: [{
-				Shift: {
-					StyleColor: "rgb(0,0,0)"
-				}
-			}]
-		});
-
-		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].shiftTextColor, "white");
+		vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel();
+		vm.readData({ ScheduleDays: [{ Shift: { Color: "rgb(0,128,0)" } }] });
+		equal(vm.weekViewModels()[0].dayViewModels()[0].shiftTextColor, "white");
 	});
 	
 	test("should read absence data", function () {
