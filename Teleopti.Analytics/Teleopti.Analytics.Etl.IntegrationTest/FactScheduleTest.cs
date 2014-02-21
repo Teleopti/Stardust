@@ -33,6 +33,55 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			SetupFixtureForAssembly.EndTest();
 		}
 
+        [Test]
+        public void ShouldHaveCorrectScheduleInReports()
+        {
+            AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
+            AnalyticsRunner.RunSysSetupTestData();
+            const string timeZoneId = "W. Europe Standard Time";
+            IPerson person;
+            BasicShiftSetup.SetupBasicForShifts();
+            BasicShiftSetup.AddPerson(out person, "Ola H", "");
+
+            //Add overlapping
+            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11);
+            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8);
+            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(0), 9, 8);
+
+            var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
+            var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+            dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
+            var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
+            {
+                Helper =
+                    new JobHelper(new RaptorRepository(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, ""), null, null),
+                DataSource = 2
+            };
+
+            jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
+            StepRunner.RunNightly(jobParameters);
+            
+            var schedule = reportDataScheduledTimePerAgent(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today, 1, person, timeZoneId);
+            
+            Assert.That(schedule.Rows.Count, Is.EqualTo(2));
+            foreach (DataRow row in schedule.Rows)
+            {
+                var rownumber = (int)row["date_id"];
+                switch (rownumber)
+                {
+                    case 1:
+                        {
+                            Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)));
+                            Assert.That((row["activity_absence_name"]), Is.EqualTo("Phone"));
+                            Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(420));
+                            break;
+                        }
+                    
+                }
+            }
+          
+            
+        }
 		[Test]
 		public void ShouldWorkWithOverlappingShifts()
 		{
@@ -197,10 +246,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
         }
 
 
-		private static DataTable reportDataAgentScheduleAdherence(string connectionString, DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
+        private static DataTable reportDataAgentScheduleAdherence(string connectionString, DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
 		{
 			var sqlConnection = connectAndOpen(connectionString);
-
+            var reportResourceKey = "ResReportAdherencePerDay";
 			var dtResult = new DataSet();
 			SqlCommand command = sqlConnection.CreateCommand();
 			SqlDataAdapter sqlAdapter = new SqlDataAdapter(command);
@@ -211,9 +260,30 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			command.Parameters.AddWithValue("@adherence_id", adherence_id);
 			command.Parameters.AddWithValue("@person_code", person.Id);
 			command.Parameters.AddWithValue("@time_zone_code", timeZoneId);
+            command.Parameters.AddWithValue("@report_resource_key", reportResourceKey);
 			sqlAdapter.Fill(dtResult);
 			return dtResult.Tables[0];
 		}
+
+        private static DataTable reportDataScheduledTimePerAgent(string connectionString, DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
+        {
+            var sqlConnection = connectAndOpen(connectionString);
+
+            var dtResult = new DataSet();
+            var reportResourceKey = "ResReportScheduledTimePerAgent";
+            SqlCommand command = sqlConnection.CreateCommand();
+            SqlDataAdapter sqlAdapter = new SqlDataAdapter(command);
+            command.CommandType = System.Data.CommandType.StoredProcedure;
+            command.CommandText = "mart.report_data_agent_schedule_adherence_for_test";
+            command.Parameters.AddWithValue("@date_from", date_from);
+            command.Parameters.AddWithValue("@date_to", date_to);
+            command.Parameters.AddWithValue("@adherence_id", adherence_id);
+            command.Parameters.AddWithValue("@person_code", person.Id);
+            command.Parameters.AddWithValue("@time_zone_code", timeZoneId);
+            command.Parameters.AddWithValue("@report_resource_key", reportResourceKey);
+            sqlAdapter.Fill(dtResult);
+            return dtResult.Tables[0];
+        }
 
 
 		private static SqlConnection connectAndOpen(string connectionString)
