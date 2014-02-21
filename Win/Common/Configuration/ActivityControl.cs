@@ -11,7 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     {
         private SFGridColumnGridHelper<IActivity> _gridColumnHelper;
         private readonly IDictionary<GridType, object> _sourceList;
-        private IUnitOfWork _unitOfWork;
+       // private IUnitOfWork _unitOfWork;
         private readonly string _newActivityName = string.Empty;
         private const string NewActivityNameFormat = "<{0} {1}>";
         private const string LessThanChar = "<";
@@ -57,9 +56,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             SetSelectedCellWhenNoSourceAvailable<IActivity>(GridType.Activity);
 
             // Adds tehe new source entity to repository
-            var activityRepository = new ActivityRepository(_unitOfWork);
-            _gridColumnHelper.Add(activityRepository);
-
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                var activityRepository = new ActivityRepository(uow);
+                _gridColumnHelper.Add(activityRepository);
+            }
+            
             gridControlActivities.Invalidate();
 
             Cursor.Current = Cursors.Default;
@@ -260,14 +262,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             return nextId;
         }
 
-        private void LoadSourceList()
+        private void LoadSourceList(IUnitOfWork uow)
         {
             _sourceList.Clear();
-            var groupingActivityRepository = new GroupingActivityRepository(_unitOfWork);
-            var activityRepository = new ActivityRepository(_unitOfWork);
+            var groupingActivityRepository = new GroupingActivityRepository(uow);
+            var activityRepository = new ActivityRepository(uow);
 			_sourceList.Add(GridType.GroupingActivity, groupingActivityRepository.LoadAll());
 			_sourceList.Add(GridType.Activity, activityRepository.LoadAll());
-
+            gridControlActivities.Refresh();
         }
 
         private List<T> GetSource<T>(GridType gridType)
@@ -350,9 +352,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		public void LoadControl()
         {
             GridHelper.GridStyle(gridControlGroupingActivities);
-            LoadSourceList();
-
-            ReadOnlyCollection<SFGridColumnBase<IActivity>> activityColumns = ConfigureActivityGrid();
+		    using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		    {
+		        LoadSourceList(uow);
+		    }
+		    ReadOnlyCollection<SFGridColumnBase<IActivity>> activityColumns = ConfigureActivityGrid();
             _gridColumnHelper = new SFGridColumnGridHelper<IActivity>(gridControlActivities,
                                 activityColumns,
                                 GetSource<IActivity>(GridType.Activity).OrderBy(a => a.Description.Name).ToList()) {AllowExtendedCopyPaste = true};
@@ -367,20 +371,24 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         }
         public void Persist()
         {
-            var activityRepository = new ActivityRepository(_unitOfWork);
-
-            foreach (var activity in _activitiesToBeDeleted)
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                activityRepository.Remove(activity);
-            }
-            foreach (var activity in _activitiesToAdd)
-            {
-                activityRepository.Add(activity );
-            }
+                var activityRepository = new ActivityRepository(uow);
 
-            _unitOfWork.PersistAll();
-
-            LoadSourceList();
+                foreach (var activity in _activitiesToBeDeleted)
+                {
+                    activityRepository.Remove(activity);
+                }
+                foreach (var activity in _activitiesToAdd)
+                {
+                    activityRepository.Add(activity);
+                }
+                uow.PersistAll();
+                _activitiesToBeDeleted.Clear();
+                _activitiesToAdd.Clear();
+                LoadSourceList(uow);
+            }
+            
         }
 
         public void Unload()
@@ -403,7 +411,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public void SetUnitOfWork(IUnitOfWork value)
         {
-            _unitOfWork = value;
         }
 
         
@@ -421,7 +428,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void ToolStripMenuItemAddFromClipboardClick(object sender, EventArgs e)
         {
-            _gridColumnHelper.AddFromClipboard(new ActivityRepository(_unitOfWork));
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                _gridColumnHelper.AddFromClipboard(new ActivityRepository(uow));
+            }
             gridControlActivities.Invalidate();
         }
 
