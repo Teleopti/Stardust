@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -11,12 +10,9 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
@@ -36,13 +32,13 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 		[Test]
 		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
-        
+
 		[Test]
 		public void ShouldMapDate()
 		{
-		    var stub = new StubFactory();
+			var stub = new StubFactory();
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
 
-            var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(domainData);
 
 			result.Date.Should().Be.EqualTo(DateTime.Today);
@@ -51,99 +47,82 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		[Test]
 		public void ShouldMapFixedDate()
 		{
-            var stub = new StubFactory();
+			var stub = new StubFactory();
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
 
-
-            var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(domainData);
 
 			result.FixedDate.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
 		}
 
-
 		[Test]
-		public void ShouldMapIsWorkingDayForMainShift()
+		public void ShouldMapDaysOfMonth()
 		{
-			var stubs = new StubFactory();
-			var personAssignment =
-				stubs.PersonAssignmentStub(new DateTimePeriod(new DateTime(2011, 5, 18, 6, 0, 0, DateTimeKind.Utc),
-				                                              new DateTime(2011, 5, 18, 15, 0, 0, DateTimeKind.Utc)));
-			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+			var stub = new StubFactory();
+			var domainData = new MonthScheduleDayDomainData { ScheduleDay = stub.ScheduleDayStub(DateTime.Today) };
+			var monthDomainData = new MonthScheduleDomainData { Days = new[] { domainData } };
 
+			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
 
-			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData{ScheduleDay = scheduleDay});
-
-			result.IsWorkingDay.Should().Be.True();			
+			result.ScheduleDays.Count().Should().Be.EqualTo(1);
 		}
 
-        [Test]
-        public void ShouldMapDaysOfMonth()
-        {
-            var stub = new StubFactory();
-            var domainData = new MonthScheduleDayDomainData {ScheduleDay = stub.ScheduleDayStub(DateTime.Today)};
-            var monthDomainData = new MonthScheduleDomainData {Days = new[]{domainData}};
-            
+		[Test]
+		public void ShouldMapCurrentDate()
+		{
+			var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
+			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			result.CurrentDate.Should().Be.EqualTo(DateTime.Today);
+		}
+
+		[Test]
+		public void ShouldMapFixedCurrentDate()
+		{
+			var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
+			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
+			result.FixedDate.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
+		}
+
+		[Test]
+		[SetCulture("de-DE")]
+		public void ShouldMapDayHeaderOfWeek()
+		{
+			var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
+
 			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
 
-            result.ScheduleDays.Count().Should().Be.EqualTo(1);
-        }
-
-        [Test]
-        public void ShouldMapCurrentDate()
-        {
-            var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] {},CurrentDate = DateOnly.Today};
-            var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
-            result.CurrentDate.Should().Be.EqualTo(DateTime.Today);
-        }
-
-        [Test]
-        public void ShouldMapFixedCurrentDate()
-        {
-            var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
-            var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
-            result.FixedDate.Should().Be.EqualTo(DateOnly.Today.ToFixedClientDateOnlyFormat());
-        }
-
-	    [Test]
-        [SetCulture("de-DE")]
-	    public void ShouldMapDayHeaderOfWeek()
-	    {
-            var monthDomainData = new MonthScheduleDomainData { Days = new MonthScheduleDayDomainData[] { }, CurrentDate = DateOnly.Today };
-            
-			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
-            
 			result.DayHeaders.First().Name.Should().Be.EqualTo("Montag");
-            result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
-        }
-        
-        [Test]
-        public void ShouldMapAbsenceName()
-        {
+			result.DayHeaders.First().ShortName.Should().Be.EqualTo("Mo");
+		}
+
+		[Test]
+		public void ShouldMapAbsenceName()
+		{
 			//arrange
-            var stubs = new StubFactory();
-            var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence(){Description = new Description("Illness")}, new DateTimePeriod()) );
-            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
-            var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay=scheduleDay }}, CurrentDate = DateOnly.Today };
-            
+			var stubs = new StubFactory();
+			var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence { Description = new Description("Illness") }, new DateTimePeriod()));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
+			var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
+
 			//act
 			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
-            
+
 			//assert
 			result.ScheduleDays.Single().Absence.Name.Should().Be.EqualTo("Illness");
-        }
+		}
 
-        [Test]
-        public void ShouldMapAbsenceShortName()
-        {
-            var stubs = new StubFactory();
-            var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence() { Description = new Description(" ", "IL") }, new DateTimePeriod()));
-            var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
-            var monthDomainData = new MonthScheduleDomainData { Days = new [] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
-            
+		[Test]
+		public void ShouldMapAbsenceShortName()
+		{
+			var stubs = new StubFactory();
+			var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence { Description = new Description(" ", "IL") }, new DateTimePeriod()));
+			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
+			var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
+
 			var result = Mapper.Map<MonthScheduleDomainData, MonthScheduleViewModel>(monthDomainData);
-            
+
 			result.ScheduleDays.Single().Absence.ShortName.Should().Be.EqualTo("IL");
-        }
+		}
 
 		[Test]
 		public void ShouldMapIsDayOff()
@@ -201,7 +180,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 			var stubs = new StubFactory();
 			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2011, 5, 18));
 			personAssignment.AddActivity(new Activity(" "), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
-			personAssignment.SetShiftCategory(new ShiftCategory(" ") {Description = new Description(" ", "PM")});
+			personAssignment.SetShiftCategory(new ShiftCategory(" ") { Description = new Description(" ", "PM") });
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
@@ -252,7 +231,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
 
-			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime,CultureInfo.CurrentUICulture));
+			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
 		}
 	}
 }

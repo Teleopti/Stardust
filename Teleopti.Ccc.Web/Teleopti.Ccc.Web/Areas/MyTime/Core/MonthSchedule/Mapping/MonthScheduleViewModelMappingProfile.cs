@@ -2,7 +2,6 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Interfaces.Domain;
@@ -40,12 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly))
 				.ForMember(d => d.FixedDate,
 				           c => c.MapFrom(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly.ToFixedClientDateOnlyFormat()))
-				.ForMember(d => d.IsWorkingDay, c => c.ResolveUsing(
-					s =>
-						{
-							var significantPart = s.ScheduleDay.SignificantPartForDisplay();
-							return (significantPart == SchedulePartView.MainShift);
-						}))
 				.ForMember(d => d.Absence, c => c.ResolveUsing(s =>
 					{
 						var absenceCollection = s.ScheduleDay.PersonAbsenceCollection();

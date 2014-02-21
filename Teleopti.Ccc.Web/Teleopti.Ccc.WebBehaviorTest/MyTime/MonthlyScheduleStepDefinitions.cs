@@ -43,12 +43,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertExists(string.Format(".cal-day-outmonth span[data-cal-date='{0:yyyy-MM-dd}']", date));
         }
 
-        [Then(@"I should see an indication implying I should work on '(.*)'")]
-        public void ThenIShouldSeeAnIndicationImplyingIShouldWorkOn(DateTime date)
-        {
-            Browser.Interactions.AssertExists(string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
-        }
-
 		[Then(@"I should see the shift with")]
 		public void ThenIShouldSeeTheShiftWith(Table table)
 		{
@@ -88,10 +82,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [Then(@"I should not see any indication for day '(.*)'")]
         public void ThenIShouldNotSeeAnyIndicationForDay(DateTime date)
         {
-            Browser.Interactions.AssertNotExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", date),
-                string.Format(".not-working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
-            Browser.Interactions.AssertNotExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", date), 
-                string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+            Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0:yyyy-MM-dd}']", date),
+                string.Format("[data-cal-date='{0:yyyy-MM-dd}'] .absence", date));
+            Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0:yyyy-MM-dd}']", date), 
+                string.Format("[data-cal-date='{0:yyyy-MM-dd}'] .shift", date));
         }
 
         [Then(@"I should end up in month view for current month")]

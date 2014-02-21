@@ -18,7 +18,6 @@ Teleopti.MyTimeWeb.Schedule.MonthDayViewModel = function (scheduleDate, selected
     this.currentDate = currentDate;
     this.date = scheduleDate.FixedDate;
     this.dayOfMonth = currentDate.date();
-    this.isWorkingDay = scheduleDate.IsWorkingDay;
 	
     this.absenceName = scheduleDate.Absence ? scheduleDate.Absence.Name : null;
     this.absenceShortName = scheduleDate.Absence ? scheduleDate.Absence.ShortName : null;
