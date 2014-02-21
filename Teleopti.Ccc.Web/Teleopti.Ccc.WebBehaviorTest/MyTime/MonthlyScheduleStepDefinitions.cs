@@ -107,12 +107,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             //Browser.Interactions.AssertFirstContains(".weekday-name", dayOfWeek);
         }
 
-        [Given(@"I am using a device with narrow view")]
-        public void GivenIAmUsingADeviceWithNarrowView()
-        {
-            Browser.Interactions.SetWidth(480);
-        }
-
         [When(@"I choose the day '(.*)'")]
         public void WhenIChooseTheDay(DateTime date)
         {
