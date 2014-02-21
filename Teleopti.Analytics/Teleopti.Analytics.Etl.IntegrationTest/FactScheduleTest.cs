@@ -69,28 +69,31 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             jobParameters.StateHolder.SetLoadBridgeTimeZonePeriod(period);
             StepRunner.RunNightly(jobParameters);
+
+	        const string phone = "Phone";
+			var schedule = reportDataScheduledTimePerAgent(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today.AddDays(0), 1, person, timeZoneId, phone);
             
-            var schedule = reportDataScheduledTimePerAgent(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix, DateTime.Today.AddDays(-2), DateTime.Today, 1, person, timeZoneId);
-            
-            Assert.That(schedule.Rows.Count, Is.EqualTo(2));
-            foreach (DataRow row in schedule.Rows)
-            {
-                var rownumber = (int)row["date_id"];
-                switch (rownumber)
-                {
-                    case 1:
-                        {
-                            Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)));
-                            Assert.That((row["activity_absence_name"]), Is.EqualTo("Phone"));
-                            Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(420));
-                            break;
-                        }
-                    
-                }
-            }
-          
-            
-        }
+            Assert.That(schedule.Rows.Count, Is.EqualTo(3));
+	        foreach (DataRow row in schedule.Rows)
+	        {
+		        if ((row["date"]).Equals(DateTime.Today.AddDays(-2)))
+		        {
+			        Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
+			        Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(180));
+		        }
+				if ((row["date"]).Equals(DateTime.Today.AddDays(-1)))
+				{
+					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
+					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(840));
+				}
+				if ((row["date"]).Equals(DateTime.Today.AddDays(0)))
+				{
+					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
+					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(420));
+				}
+	        }
+		}
+
 		[Test]
 		public void ShouldWorkWithOverlappingShifts()
 		{
@@ -285,14 +288,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			command.Parameters.AddWithValue("@date_from", date_from);
 			command.Parameters.AddWithValue("@date_to", date_to);
 			command.Parameters.AddWithValue("@adherence_id", adherence_id);
-			command.Parameters.AddWithValue("@person_code", person.Id);
+			command.Parameters.AddWithValue("@agent_code", person.Id);
 			command.Parameters.AddWithValue("@time_zone_code", timeZoneId);
             command.Parameters.AddWithValue("@report_resource_key", reportResourceKey);
 			sqlAdapter.Fill(dtResult);
 			return dtResult.Tables[0];
 		}
 
-        private static DataTable reportDataScheduledTimePerAgent(string connectionString, DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId)
+        private static DataTable reportDataScheduledTimePerAgent(string connectionString, DateTime date_from, DateTime date_to, int adherence_id, IPerson person, string timeZoneId, string activity)
         {
             var sqlConnection = connectAndOpen(connectionString);
 
@@ -305,9 +308,10 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             command.Parameters.AddWithValue("@date_from", date_from);
             command.Parameters.AddWithValue("@date_to", date_to);
             command.Parameters.AddWithValue("@adherence_id", adherence_id);
-            command.Parameters.AddWithValue("@person_code", person.Id);
+			command.Parameters.AddWithValue("@agent_code", person.Id);
             command.Parameters.AddWithValue("@time_zone_code", timeZoneId);
             command.Parameters.AddWithValue("@report_resource_key", reportResourceKey);
+	        command.Parameters.AddWithValue("@activity_set", activity);
             sqlAdapter.Fill(dtResult);
             return dtResult.Tables[0];
         }
