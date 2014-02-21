@@ -54,18 +54,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         {
             _target = new SkillStaffPeriodDataHolder(150, 120, _period, 0, 0, 0, null);
             var result = _target.PeriodValue(10, false, false);
-            Assert.AreEqual(1, result);
+            Assert.AreEqual(3, result);
 
             result = _target.PeriodValue(5, false, false);
-            Assert.AreEqual(.5, result);
-
-            result = _target.PeriodValue(10, false, false);
-            Assert.AreEqual(1, result);
+            Assert.AreEqual(1.5, result);
 
             _target.OriginalDemandInMinutes = 10;
             _target.AssignedResourceInMinutes = 100;
             result = _target.PeriodValue(10, false, false);
-            Assert.AreEqual(15, result, 0.1);
+            Assert.AreEqual(45, result, 0.1);
 
         }
 
