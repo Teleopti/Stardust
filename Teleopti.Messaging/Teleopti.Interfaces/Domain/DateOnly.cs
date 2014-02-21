@@ -156,7 +156,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateOnly MaxValue
         {
-            get { return new DateOnly(DateTime.MaxValue.AddDays(-10)); }
+            get { return new DateOnly(DateHelper.MaxSmallDateTime); }
         }
 
         /// <summary>
@@ -169,7 +169,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         public static DateOnly MinValue
         {
-            get { return new DateOnly(DateTime.MinValue.AddDays(10)); }
+            get { return new DateOnly(DateHelper.MinSmallDateTime); }
         }
 
         /// <summary>

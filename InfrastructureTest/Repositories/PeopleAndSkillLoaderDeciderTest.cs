@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 : base(personRepository)
             {
                 _matrixService = matrixService;
-	            Period = new DateTimePeriod(1, 1, 12, 1, 1, 13);
+	            Period = new DateTimePeriod(1950, 1, 12, 1950, 1, 13);
             }
 
             public override IPairMatrixService<Guid> MatrixService
