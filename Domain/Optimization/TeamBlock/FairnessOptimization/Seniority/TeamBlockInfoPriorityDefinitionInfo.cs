@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
     public interface ITeamBlockPriorityDefinitionInfo
     {
-        int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
-	    void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, int priority);
-	    void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority);
+        double GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo);
+        void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, double priority);
+        void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, double shiftCategoryPriority);
 	    IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo { get; }
 	    IList<ITeamBlockInfo> HighToLowShiftCategoryPriority();
     }
@@ -16,23 +16,27 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	public class TeamBlockPriorityDefinitionInfo : ITeamBlockPriorityDefinitionInfo
 	{
 		private readonly IList<ITeamBlockInfoPriority> _teamBlockInfoPriorityList;
-		private readonly IDictionary<ITeamBlockInfo, int> _teamBlockShiftCategoryPriority;
+        private readonly IDictionary<ITeamBlockInfo, double> _teamBlockShiftCategoryPriority;
 
 		public TeamBlockPriorityDefinitionInfo()
 		{
 			_teamBlockInfoPriorityList = new List<ITeamBlockInfoPriority>();
-			_teamBlockShiftCategoryPriority = new Dictionary<ITeamBlockInfo, int>();
+			_teamBlockShiftCategoryPriority = new Dictionary<ITeamBlockInfo, double>();
 		}
 
-		public void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, int priority)
+        public void AddItem(ITeamBlockInfoPriority teamBlockInfoPriority, ITeamBlockInfo teamBlockInfo, double priority)
 		{
 			_teamBlockInfoPriorityList.Add(teamBlockInfoPriority);
 			_teamBlockShiftCategoryPriority.Add(teamBlockInfo, priority);
 		}
 
+        /// <summary>
+        /// The seniority is based on ranking. The lowest the rank is the higest the priority is.
+        /// In this case the higest rank is 0
+        /// </summary>
 		public IList<ITeamBlockInfo> HighToLowSeniorityListBlockInfo
 		{
-			get { return (_teamBlockInfoPriorityList.OrderByDescending(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
+			get { return (_teamBlockInfoPriorityList.OrderBy(s => s.Seniority).Select(s => s.TeamBlockInfo).ToList()); }
 		}
 
 		public IList<ITeamBlockInfo> HighToLowShiftCategoryPriority()
@@ -41,12 +45,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 			return result;
 		}
 
-		public int GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
+        public double GetShiftCategoryPriorityOfBlock(ITeamBlockInfo teamBlockInfo)
 		{
 			return _teamBlockShiftCategoryPriority[teamBlockInfo];
 		}
 
-		public void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, int shiftCategoryPriority)
+        public void SetShiftCategoryPoint(ITeamBlockInfo teamBlockInfo, double shiftCategoryPriority)
 		{
 			_teamBlockShiftCategoryPriority[teamBlockInfo] = shiftCategoryPriority;
 		}

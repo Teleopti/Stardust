@@ -423,7 +423,6 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 24F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(453, 102);
             this.tableLayoutPanel3.TabIndex = 1;
-            this.tableLayoutPanel3.Visible = false;
             // 
             // labelSeniorityPoints
             // 
