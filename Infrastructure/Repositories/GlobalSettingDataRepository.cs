@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class GlobalSettingDataRepository : SettingDataRepository, ISettingDataRepository
+    public class GlobalSettingDataRepository : SettingDataRepository, IGlobalSettingDataRepository
     {
         public GlobalSettingDataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
