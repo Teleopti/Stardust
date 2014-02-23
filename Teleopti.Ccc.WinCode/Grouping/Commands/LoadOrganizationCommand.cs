@@ -22,18 +22,18 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
     public class LoadOrganizationCommand : ILoadOrganizationCommand
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
         private readonly IPersonSelectorView _view;
         private readonly ICommonNameDescriptionSetting _commonAgentNameSettings;
         private readonly IApplicationFunction _applicationFunction;
         private readonly bool _showPersons;
         private readonly bool _loadUsers;
 
-        public LoadOrganizationCommand(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, 
+        public LoadOrganizationCommand(IUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, 
             IPersonSelectorView view, ICommonNameDescriptionSetting commonAgentNameSettings, IApplicationFunction applicationFunction, bool showPersons, bool loadUsers)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
-            _repositoryFactory = repositoryFactory;
+            _personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
             _view = view;
             _commonAgentNameSettings = commonAgentNameSettings;
             _applicationFunction = applicationFunction;
@@ -49,10 +49,9 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
                 loadUser = false;
             var dateOnlyPeriod = _view.SelectedPeriod;
             IList<IPersonSelectorOrganization> toNodes;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                IPersonSelectorReadOnlyRepository rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
-                toNodes = rep.GetOrganization(dateOnlyPeriod, loadUser);    
+                toNodes = _personSelectorReadOnlyRepository.GetOrganization(dateOnlyPeriod, loadUser);    
             }
             
 			
