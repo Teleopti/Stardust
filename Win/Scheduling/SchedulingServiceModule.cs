@@ -221,7 +221,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<EqualCategoryDistributionValue>().As<IEqualCategoryDistributionValue>();
 			builder.RegisterType<FilterForFullyScheduledBlocks>().As<IFilterForFullyScheduledBlocks>();
 			builder.RegisterType<FilterForNoneLockedTeamBlocks>().As<IFilterForNoneLockedTeamBlocks>();
-			//IFilterForNoneLockedTeamBlocks
+			builder.RegisterType<TeamBlockShiftCategoryLimitationValidator>().As<ITeamBlockShiftCategoryLimitationValidator>();
+			//ITeamBlockShiftCategoryLimitationValidator
         }
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)
