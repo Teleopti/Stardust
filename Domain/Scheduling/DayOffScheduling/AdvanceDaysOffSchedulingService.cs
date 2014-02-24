@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     {
         private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
 	    private readonly ITeamDayOffScheduler _teamDayOffScheduler;
-	    private readonly IMissingDaysOffScheduler _missingDaysOffScheduler;
+        private readonly ITeamBlockMissingDaysOffScheduler _missingDaysOffScheduler;
         private bool _cancelMe;
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
         public AdvanceDaysOffSchedulingService(IAbsencePreferenceScheduler absencePreferenceScheduler,
 			ITeamDayOffScheduler teamDayOffScheduler, 
-            IMissingDaysOffScheduler missingDaysOffScheduler)
+            ITeamBlockMissingDaysOffScheduler missingDaysOffScheduler)
         {
             _absencePreferenceScheduler = absencePreferenceScheduler;
 	        _teamDayOffScheduler = teamDayOffScheduler;
