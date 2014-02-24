@@ -44,8 +44,8 @@
 							">
 
 						<!-- ko if: hasAbsence -->
-						<div class="absence" data-bind="css: { 'part-time': hasShift, 'dayoff': isDayOff }">
-							<!-- ko if: !hasShift -->
+						<div class="absence" data-bind="css: { 'part-time': hasShift && !isFullDayAbsence, 'dayoff': isDayOff }">
+							<!-- ko if: !hasShift || isFullDayAbsence -->
 							<strong class="visible-lg" data-bind="text: absenceName" />
 							<strong class="visible-md" data-bind="text: absenceName" />
 							<div class="hidden-md hidden-lg">
@@ -55,7 +55,7 @@
 						</div>
 						<!-- /ko -->
 						
-						<!-- ko if: hasShift -->
+						<!-- ko if: hasShift && !isFullDayAbsence -->
 						<div class="shift" data-bind="style: { backgroundColor: shiftColor, color: shiftTextColor }, css: { 'part-time': hasAbsence }">
 							<div>
 								<strong class="visible-lg" data-bind="text: shiftName"></strong>

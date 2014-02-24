@@ -41,10 +41,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 				           c => c.MapFrom(s => s.ScheduleDay.DateOnlyAsPeriod.DateOnly.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.Absence, c => c.ResolveUsing(s =>
 					{
+						var significantPart = s.ScheduleDay.SignificantPartForDisplay();
 						var absenceCollection = s.ScheduleDay.PersonAbsenceCollection();
-						return absenceCollection.Any()
-							       ? s.ScheduleDay.PersonAbsenceCollection().First()
-							       : null;
+						if (absenceCollection.Any())
+						{
+							var name = absenceCollection.First().Layer.Payload.Description.Name;
+							var shortName = absenceCollection.First().Layer.Payload.Description.ShortName;
+							return new AbsenceViewModel
+								{
+									Name = name,
+									ShortName = shortName,
+									IsFullDayAbsence = (significantPart == SchedulePartView.FullDayAbsence)
+								};
+						}
+						return null;
 					}))
 				.ForMember(d => d.IsDayOff, c => c.ResolveUsing(s =>
 					{
@@ -70,12 +80,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 										WorkingHours = TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture)
 									};
 					}));
-
-			CreateMap<IPersonAbsence, AbsenceViewModel>()
-				.ForMember(d => d.Name, c => c.ResolveUsing(
-					s => s.Layer.Payload.Description.Name))
-				.ForMember(d => d.ShortName, c => c.ResolveUsing(
-					s => s.Layer.Payload.Description.ShortName));
 		}
 
 		private static string formatRgbColor(Color color)

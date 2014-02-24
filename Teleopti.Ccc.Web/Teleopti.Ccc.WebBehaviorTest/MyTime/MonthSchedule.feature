@@ -98,7 +98,6 @@ Then I should see the shift with
 	| Working hours  | 6:00          |
 And I should see the absence on date '2014-01-16'
 
-@ignore
 Scenario: View when you have a full day absence on working day
 Given I have the role 'Full access to mytime'
 And I have the workflow control set 'Published schedule'

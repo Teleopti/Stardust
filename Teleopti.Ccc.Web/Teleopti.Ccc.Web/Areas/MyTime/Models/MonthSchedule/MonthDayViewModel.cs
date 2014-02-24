@@ -26,5 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule
     {
         public string Name { get; set; }
         public string ShortName { get; set; }
+		public bool IsFullDayAbsence { get; set; }
     }
 }

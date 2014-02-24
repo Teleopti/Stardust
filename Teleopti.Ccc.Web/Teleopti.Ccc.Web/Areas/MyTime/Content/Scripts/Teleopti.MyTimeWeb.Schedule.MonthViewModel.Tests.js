@@ -25,13 +25,15 @@ $(document).ready(function () {
 			ScheduleDays: [{
 				Absence: {
 					Name: "Illness",
-					ShortName: "IL"
+					ShortName: "IL",
+					IsFullDayAbsence: true
 				}
 			}]
 		});
 
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].absenceName, "Illness");
 		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].absenceShortName, "IL");
+		equal(viewModelMonth.weekViewModels()[0].dayViewModels()[0].isFullDayAbsence, true);
 	});
 	
 	test("should read shift data", function () {
