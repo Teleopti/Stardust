@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 			foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 			{
 				var teamInfo = teamBlock.TeamInfo;
-				foreach (var groupMember in teamInfo.GroupPerson.GroupMembers)
+				foreach (var groupMember in teamInfo.GroupMembers)
 				{
 					var scheduleRange = teamInfo.MatrixForMemberAndDate(groupMember, dateOnly).ActiveScheduleRange;
 					if (!checkPerson(groupMember, dateOnly, scheduleRange))

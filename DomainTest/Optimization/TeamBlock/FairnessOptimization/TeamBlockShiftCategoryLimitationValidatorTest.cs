@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 		private IBlockInfo _blockInfo2;
 		private ITeamInfo _teamInfo1;
 		private ITeamInfo _teamInfo2;
-		private IGroupPerson _groupPerson1;
-		private IGroupPerson _groupPerson2;
 		private IPerson _person1;
 		private IPerson _person2;
 		private IScheduleMatrixPro _matrix1;
@@ -52,8 +50,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			_blockInfo2 = _mocks.StrictMock<IBlockInfo>();
 			_teamInfo1 = _mocks.StrictMock<ITeamInfo>();
 			_teamInfo2 = _mocks.StrictMock<ITeamInfo>();
-			_groupPerson1 = _mocks.StrictMock<IGroupPerson>();
-			_groupPerson2 = _mocks.StrictMock<IGroupPerson>();
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_range1 = _mocks.StrictMock<IScheduleRange>();
@@ -189,16 +185,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 			Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
 			Expect.Call(_blockInfo1.BlockPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
 			Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
-			Expect.Call(_teamInfo1.GroupPerson).Return(_groupPerson1);
-			Expect.Call(_groupPerson1.GroupMembers).Return(new[] { _person1 });
+			Expect.Call(_teamInfo1.GroupMembers).Return(new[] { _person1 });
 			Expect.Call(_teamInfo1.MatrixForMemberAndDate(_person1, DateOnly.MinValue)).Return(_matrix1);
 			Expect.Call(_matrix1.ActiveScheduleRange).Return(_range1);
 
 			Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
 			Expect.Call(_blockInfo2.BlockPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
 			Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
-			Expect.Call(_teamInfo2.GroupPerson).Return(_groupPerson2);
-			Expect.Call(_groupPerson2.GroupMembers).Return(new[] { _person2 });
+			Expect.Call(_teamInfo2.GroupMembers).Return(new[] { _person2 });
 			Expect.Call(_teamInfo2.MatrixForMemberAndDate(_person2, DateOnly.MinValue)).Return(_matrix2);
 			Expect.Call(_matrix2.ActiveScheduleRange).Return(_range2);
 		}
