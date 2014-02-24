@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 		get
 		{
 			var ret = new List<DayOfWeekDisplay>();
-			IList<DayOfWeek> dayOfWeekCollection = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture);
+			IList<DayOfWeek> dayOfWeekCollection = DateHelper.GetDaysOfWeek(CultureInfo.CurrentUICulture);
 
 			foreach (var dayOfWeek in dayOfWeekCollection)
 			{
-				ret.Add(new DayOfWeekDisplay(dayOfWeek, CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(dayOfWeek)));
+				ret.Add(new DayOfWeekDisplay(dayOfWeek, CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(dayOfWeek)));
 			}
 
 			return ret;
