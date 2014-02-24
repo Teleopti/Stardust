@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	public interface IScheduleOvertimeCommand
 	{
 		void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
-                                                IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer);
+												IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager);
 	}
 
 	public class ScheduleOvertimeCommand : IScheduleOvertimeCommand
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
-		                    IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer)
+							IList<IScheduleDay> selectedSchedules, IResourceCalculateDelayer resourceCalculateDelayer, IGridlockManager gridlockManager)
 		{
 			_backgroundWorker = backgroundWorker;
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
@@ -58,6 +59,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (checkIfCancelPressed())
 						return;
+
+					var locks = gridlockManager.Gridlocks(person, dateOnly);
+					if (locks != null && locks.Count != 0) continue;
 
 					var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
 					var scheduleEndTime = _projectionProvider.Projection(scheduleDay).Period().GetValueOrDefault().EndDateTime;

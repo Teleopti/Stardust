@@ -1,5 +1,7 @@
 ﻿@using Teleopti.Ccc.UserTexts
-
+<div data-bind="if: ShowError">
+    <div class="availability-error-panel alert alert-danger" data-bind="html: ValidationError" />   
+</div>
 <table class="table-condensed" data-bind="visible: IsAvailabilityInputVisible">
     <tr>
         <td>
@@ -42,10 +44,7 @@
         </td>
     </tr>
 </table>
-<div data-bind="if: ShowError">
-    <div class="availability-error-panel alert alert-danger" data-bind="html: ValidationError" />
-</div>
 <div class="pull-right">
     <button id="Student-availability-reset" class="btn btn-default" data-bind="click: reset">@Resources.Reset</button>
-    <button id="Student-availability-apply" class="btn btn-primary" data-bind="click: Teleopti.MyTimeWeb.StudentAvailability.SetStudentAvailability">@Resources.Apply</button>
+	<button id="Student-availability-apply" class="btn btn-primary" data-bind="enable: EnableApply, click: Teleopti.MyTimeWeb.StudentAvailability.SetStudentAvailability">@Resources.Apply</button>
 </div>

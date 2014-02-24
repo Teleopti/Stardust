@@ -13,7 +13,7 @@ using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 namespace Teleopti.Messaging.SignalR
 {
 	[CLSCompliant(false)]
-	public class SignalWrapper : ISignalWrapper
+	public class SignalConnectionHandler : ISignalConnectionHandler
 	{
 		private const string notifyclients = "NotifyClients";
 		private const string notifyclientsmultiple = "NotifyClientsMultiple";
@@ -30,43 +30,26 @@ namespace Teleopti.Messaging.SignalR
 		public const string ConnectionRestartedErrorMessage = "Connection closed. Trying to reconnect...";
 		public const string ConnectionReconnected = "Connection reconnected successfully";
 
-		public SignalWrapper(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger, TimeSpan reconnectDelay)
+		public SignalConnectionHandler(IHubProxy hubProxy, IHubConnectionWrapper hubConnection, ILog logger, TimeSpan reconnectDelay)
 		{
 			_hubProxy = hubProxy;
 			_hubConnection = hubConnection;
 			_reconnectDelay = reconnectDelay;
 
-			Logger = logger ?? LogManager.GetLogger(typeof(SignalWrapper));
+			Logger = logger ?? LogManager.GetLogger(typeof(SignalConnectionHandler));
 
 			emptyTask = TaskHelper.MakeEmptyTask();
 		}
 		
-		public void StartHub()
+		public void StartConnection()
 		{
+			_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
+			_hubConnection.Closed += reconnect;
+			_hubConnection.Reconnected += hubConnectionOnReconnected;
+
 			try
 			{
-				Exception exception = null;
-				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
-				_hubConnection.Closed += reconnect;
-				_hubConnection.Reconnected += hubConnectionOnReconnected;
-				var startTask = _hubConnection.Start();
-				startTask.ContinueWith(t =>
-				{
-					if (t.IsFaulted && t.Exception != null)
-					{
-						exception = t.Exception.GetBaseException();
-						Logger.Error("An error happened when starting hub connection.", exception);
-					}
-				}, TaskContinuationOptions.OnlyOnFaulted);
-
-				if (!startTask.Wait(TimeSpan.FromSeconds(30)))
-				{
-					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
-				}
-				if (exception != null)
-				{
-					throw exception;
-				}
+				tryStartConnection();
 			}
 			catch (AggregateException aggregateException)
 			{
@@ -85,6 +68,29 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
+		private void tryStartConnection()
+		{
+			Exception exception = null;
+			var startTask = _hubConnection.Start();
+			startTask.ContinueWith(t =>
+				{
+					if (t.IsFaulted && t.Exception != null)
+					{
+						exception = t.Exception.GetBaseException();
+						Logger.Error("An error happened when starting hub connection.", exception);
+					}
+				}, TaskContinuationOptions.OnlyOnFaulted);
+
+			if (!startTask.Wait(TimeSpan.FromSeconds(30)))
+			{
+				exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
+			}
+			if (exception != null)
+			{
+				throw exception;
+			}
+		}
+
 		private void reconnect()
 		{
 			// ErikS: 2014-02-17
@@ -98,6 +104,24 @@ namespace Teleopti.Messaging.SignalR
 		private void hubConnectionOnReconnected()
 		{
 			Logger.Info(ConnectionReconnected);
+		}
+
+		public void CloseConnection()
+		{
+			if (_hubConnection == null) return;
+
+			_hubConnection.Reconnected -= hubConnectionOnReconnected;
+			_hubConnection.Closed -= reconnect;
+
+			try
+			{
+				if (_hubConnection.State == ConnectionState.Connected)
+					_hubConnection.Stop();
+			}
+			catch (Exception ex)
+			{
+				Logger.Error("An error happened when stopping connection.", ex);
+			}
 		}
 
 		public Task AddSubscription(Subscription subscription)
@@ -133,23 +157,6 @@ namespace Teleopti.Messaging.SignalR
 					}, TaskContinuationOptions.OnlyOnFaulted);
 			}
 			return emptyTask;
-		}
-
-		public void StopHub()
-		{
-			if (_hubConnection == null) return;
-
-			try
-			{
-				_hubConnection.Reconnected -= hubConnectionOnReconnected;
-				_hubConnection.Closed -= reconnect;
-				if (_hubConnection.State == ConnectionState.Connected)
-					_hubConnection.Stop();
-			}
-			catch (Exception ex)
-			{
-				Logger.Error("An error happened when stopping connection.", ex);
-			}
 		}
 
 		public bool IsInitialized()

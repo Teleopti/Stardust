@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private DateOnly _dateBefore;
 		private PossibleSwappableDays _daysToSwap;
 	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 	    [SetUp]
 		public void Setup()
@@ -44,7 +46,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_swapServiceNew = _mocks.StrictMock<ISwapServiceNew>();
 			_decisionMaker = _mocks.StrictMock<ITeamBlockDayOffDaySwapDecisionMaker>();
 	        _postSwapValidationForTeamBlock = _mocks.StrictMock<IPostSwapValidationForTeamBlock>();
-            _target = new TeamBlockDayOffDaySwapper(_swapServiceNew, _decisionMaker, _postSwapValidationForTeamBlock);
+		    _teamBlockShiftCategoryLimitationValidator = _mocks.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
+		    _target = new TeamBlockDayOffDaySwapper(_swapServiceNew, _decisionMaker, _postSwapValidationForTeamBlock,
+		                                            _teamBlockShiftCategoryLimitationValidator);
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
@@ -116,6 +120,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
                 Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfoJunior, _optimizationPreferences))
                           .IgnoreArguments()
                           .Return(true);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfoSenior, _teamBlockInfoJunior,
+																				_optimizationPreferences)).Return(true);
 			}
 			using (_mocks.Playback())
 			{

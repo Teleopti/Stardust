@@ -249,16 +249,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new ShiftCategoryRepository(unitOfWork);
         }
 
-        public IStateGroupActivityAlarmRepository CreateStateGroupActivityAlarmRepository(IUnitOfWork unitOfWork)
-        {
-            return new StateGroupActivityAlarmRepository(unitOfWork);
-        }
-
-        public IRtaStateGroupRepository CreateRtaStateGroupRepository(IUnitOfWork unitOfWork)
-        {
-            return new RtaStateGroupRepository(unitOfWork);
-        }
-
         public IDayOffTemplateRepository CreateDayOffRepository(IUnitOfWork unitOfWork)
         {
             return new DayOffTemplateRepository(unitOfWork);
@@ -339,11 +329,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return new UserDetailRepository(unitOfWork);
         }
 
-        public IPayrollResultRepository CreatePayrollResultRepository(IUnitOfWork unitOfWork)
-        {
-            return new PayrollResultRepository(unitOfWork);
-        }
-
         public IExtendedPreferenceTemplateRepository CreateExtendedPreferenceTemplateRepository(IUnitOfWork unitOfWork)
         {
             return new ExtendedPreferenceTemplateRepository(unitOfWork);
@@ -372,11 +357,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IScheduleTagRepository CreateScheduleTagRepository(IUnitOfWork unitOfWork)
         {
             return new ScheduleTagRepository(unitOfWork);
-        }
-
-        public IPersonSelectorReadOnlyRepository CreatePersonSelectorReadOnlyRepository(IStatelessUnitOfWork unitOfWork)
-        {
-            return new PersonSelectorReadOnlyRepository(unitOfWork);
         }
 
         public IApplicationRolePersonRepository CreateApplicationRolePersonRepository(IStatelessUnitOfWork unitOfWork)

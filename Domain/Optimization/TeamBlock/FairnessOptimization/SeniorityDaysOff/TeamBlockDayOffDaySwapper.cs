@@ -21,12 +21,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ITeamBlockDayOffDaySwapDecisionMaker _teamBlockDayOffDaySwapDecisionMaker;
 		private bool _cancel;
 	    private readonly IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
-	    public TeamBlockDayOffDaySwapper(ISwapServiceNew swapServiceNew, ITeamBlockDayOffDaySwapDecisionMaker teamBlockDayOffDaySwapDecisionMaker, IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock)
+		public TeamBlockDayOffDaySwapper(ISwapServiceNew swapServiceNew,
+		                                 ITeamBlockDayOffDaySwapDecisionMaker teamBlockDayOffDaySwapDecisionMaker,
+		                                 IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock,
+		                                 ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_swapServiceNew = swapServiceNew;
 			_teamBlockDayOffDaySwapDecisionMaker = teamBlockDayOffDaySwapDecisionMaker;
-	        _postSwapValidationForTeamBlock = postSwapValidationForTeamBlock;
+			_postSwapValidationForTeamBlock = postSwapValidationForTeamBlock;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		public bool TrySwap(DateOnly dateOnly, ITeamBlockInfo teamBlockSenior, ITeamBlockInfo teamBlockJunior,
@@ -92,6 +97,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
             if (!_postSwapValidationForTeamBlock.Validate(blockToSwapWith, optimizationPreferences))
                 return false;
+
+			if (!_teamBlockShiftCategoryLimitationValidator.Validate(mostSeniorTeamBlock, blockToSwapWith,
+																	 optimizationPreferences))
+				return false;
 
             return true;
         }

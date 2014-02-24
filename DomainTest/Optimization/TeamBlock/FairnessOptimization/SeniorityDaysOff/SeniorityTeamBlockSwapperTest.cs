@@ -2,6 +2,7 @@
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IScheduleDictionary _scheduleDictionary;
 		private IOptimizationPreferences _optimizationPreferences;
 	    private IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 	    [SetUp]
 		public void Setup()
@@ -29,7 +31,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_mocks = new MockRepository();
 			_teamBlockSwapper = _mocks.StrictMock<ITeamBlockSwapper>();
 	        _postSwapValidationForTeamBlock = _mocks.StrictMock<IPostSwapValidationForTeamBlock>();
-		    _target = new SeniorityTeamBlockSwapper(_teamBlockSwapper,_postSwapValidationForTeamBlock);
+		    _teamBlockShiftCategoryLimitationValidator = _mocks.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
+		    _target = new SeniorityTeamBlockSwapper(_teamBlockSwapper,_postSwapValidationForTeamBlock, _teamBlockShiftCategoryLimitationValidator);
 			_teamBlockInfo1 = _mocks.StrictMock<ITeamBlockInfo>();
 			_teamBlockInfo2 = _mocks.StrictMock<ITeamBlockInfo>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -99,6 +102,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockSwapper.TrySwap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary)).Return(true);
 				Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
                 Expect.Call(_postSwapValidationForTeamBlock.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo1, _teamBlockInfo2,
+				                                                                _optimizationPreferences)).Return(true);
 			}
 
 			using (_mocks.Playback())

@@ -20,25 +20,25 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
     {
         private MockRepository _mocks;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IRepositoryFactory _repositoryFactory;
+        private IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
         private IPersonSelectorView _personSelectorView;
         private LoadOrganizationCommand _target;
         private ICommonNameDescriptionSetting _commonNameSetting;
         private readonly IApplicationFunction _myApplicationFunction =
             ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
                                            DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
-        private IStatelessUnitOfWork _unitOfWork;
+        private IUnitOfWork _unitOfWork;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _unitOfWork = _mocks.DynamicMock<IStatelessUnitOfWork>();
-            _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
+            _unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
+			_personSelectorReadOnlyRepository = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
             _personSelectorView = _mocks.StrictMock<IPersonSelectorView>();
             _commonNameSetting = _mocks.DynamicMock<ICommonNameDescriptionSetting>();
-            _target = new LoadOrganizationCommand(_unitOfWorkFactory, _repositoryFactory, _personSelectorView, _commonNameSetting, _myApplicationFunction, true, true);
+            _target = new LoadOrganizationCommand(_unitOfWorkFactory, _personSelectorReadOnlyRepository, _personSelectorView, _commonNameSetting, _myApplicationFunction, true, true);
 
         }
 
@@ -52,11 +52,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			var robinPersonId = Guid.NewGuid();
             var date = new DateOnly(2012, 1, 19);
             var dateOnlyPeriod = new DateOnlyPeriod(date, date);
-            var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-            Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
-            Expect.Call(rep.GetOrganization(dateOnlyPeriod, true)).Return(new List<IPersonSelectorOrganization>
+            Expect.Call(_personSelectorReadOnlyRepository.GetOrganization(dateOnlyPeriod, true)).Return(new List<IPersonSelectorOrganization>
                                                                     {
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = olaPersonId},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Site = "STO",Team = "Blue", TeamId = teamId, PersonId = mickePersonId},
@@ -82,11 +80,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                 var buId = Guid.NewGuid();
                 var date = new DateOnly(2012, 1, 19);
                 var dateOnlyPeriod = new DateOnlyPeriod(date, date);
-                var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-                Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
-                Expect.Call(rep.GetOrganization(dateOnlyPeriod, false)).Return(new List<IPersonSelectorOrganization>
+                Expect.Call(_personSelectorReadOnlyRepository.GetOrganization(dateOnlyPeriod, false)).Return(new List<IPersonSelectorOrganization>
                                                                     {
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Site = "STO",Team = "Blue", PersonId = Guid.NewGuid()},
                                                                         new PersonSelectorOrganization { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Site = "STO",Team = "Blue", PersonId = Guid.NewGuid()},
@@ -111,11 +107,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			var siteId = Guid.NewGuid();
 			var date = new DateOnly(2012, 1, 19);
 			var dateOnlyPeriod = new DateOnlyPeriod(date.AddDays(-730), date);
-			var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-			Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_personSelectorView.SelectedPeriod).Return(dateOnlyPeriod);
-			Expect.Call(rep.GetOrganization(dateOnlyPeriod, true)).Return(new List<IPersonSelectorOrganization>
+			Expect.Call(_personSelectorReadOnlyRepository.GetOrganization(dateOnlyPeriod, true)).Return(new List<IPersonSelectorOrganization>
 			                                                               	{
 			                                                               		new PersonSelectorOrganization
 			                                                               			{

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
         private readonly IPersonSelectorView _personSelectorView;
         private readonly ICommandProvider _commandProvider;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IRepositoryFactory _repositoryFactory;
+        private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
         private readonly IEventAggregator _eventAggregator;
         private readonly IAddGroupPageCommand _addGroupPageCommand;
         private readonly IDeleteGroupPageCommand _deleteGroupPageCommand;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "10"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
         public PersonSelectorPresenter(IPersonSelectorView personSelectorView, ICommandProvider commandProvider,
-            IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IEventAggregator eventAggregator,
+            IUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository, IEventAggregator eventAggregator,
             IAddGroupPageCommand addGroupPageCommand, IDeleteGroupPageCommand deleteGroupPageCommand, 
             IModifyGroupPageCommand modifyGroupPageCommand, IRenameGroupPageCommand renameGroupPageCommand, IOpenModuleCommand openModuleCommand,
             IEventAggregatorLocator eventAggregatorLocator)
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
             _personSelectorView = personSelectorView;
             _commandProvider = commandProvider;
             _unitOfWorkFactory = unitOfWorkFactory;
-            _repositoryFactory = repositoryFactory;
+            _personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
             _eventAggregator = eventAggregator;
             _globalEventAggregator = eventAggregatorLocator.GlobalAggregator();
             _addGroupPageCommand = addGroupPageCommand;
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 
             var tab = new TabPageAdv(eventGroupPage.Name)
             {
-                Tag = _commandProvider.GetLoadUserDefinedTabsCommand(_personSelectorView, eventGroupPage.Id, ApplicationFunction, ShowPersons)
+                Tag = _commandProvider.GetLoadUserDefinedTabsCommand(_personSelectorView, eventGroupPage.Id, ApplicationFunction)
             };
 
             _personSelectorView.AddNewPageTab(tab);
@@ -201,54 +201,53 @@ namespace Teleopti.Ccc.WinCode.Grouping
                                        Tag =
                                            _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Contract,
                                                                                       _personSelectorView,
-                                                                                      Resources.Contract,ApplicationFunction, ShowPersons),
+                                                                                      Resources.Contract,ApplicationFunction),
                                    },
                                new TabPageAdv(Resources.ContractSchedule)
                                    {
                                        Tag =
                                            _commandProvider.GetLoadBuiltInTabsCommand(
                                                PersonSelectorField.ContractSchedule, _personSelectorView,
-                                               Resources.ContractSchedule,ApplicationFunction, ShowPersons)
+                                               Resources.ContractSchedule,ApplicationFunction)
                                    },
                                new TabPageAdv(Resources.PartTimePercentageHeader)
                                    {
                                        Tag =
                                            _commandProvider.GetLoadBuiltInTabsCommand(
                                                PersonSelectorField.PartTimePercentage, _personSelectorView,
-                                               Resources.PartTimePercentageHeader,ApplicationFunction, ShowPersons)
+                                               Resources.PartTimePercentageHeader,ApplicationFunction)
                                    },
                                new TabPageAdv(Resources.Note)
                                    {
                                        Tag =
                                            _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Note,
                                                                                       _personSelectorView,
-                                                                                      Resources.Note,ApplicationFunction, ShowPersons)
+                                                                                      Resources.Note,ApplicationFunction)
                                    },
                                new TabPageAdv(Resources.RuleSetBag)
                                    {
                                        Tag =
                                            _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.ShiftBag,
                                                                                       _personSelectorView,
-                                                                                      Resources.RuleSetBag,ApplicationFunction, ShowPersons)
+                                                                                      Resources.RuleSetBag,ApplicationFunction)
                                    },
                                new TabPageAdv(Resources.Skill)
                                    {
                                        Tag =
                                            _commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Skill,
                                                                                       _personSelectorView,
-                                                                                      Resources.Skill,ApplicationFunction, ShowPersons)
+                                                                                      Resources.Skill,ApplicationFunction)
                                    }
                            };
 
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
-                var userTabs = rep.GetUserDefinedTabs();
+                var userTabs = _personSelectorReadOnlyRepository.GetUserDefinedTabs();
                 foreach (var userDefinedTabLight in userTabs.OrderBy(u => u.Name))
                 {
                     tabs.Add(new TabPageAdv(userDefinedTabLight.Name)
                                  {
-                                     Tag = _commandProvider.GetLoadUserDefinedTabsCommand(_personSelectorView, userDefinedTabLight.Id, ApplicationFunction, ShowPersons)
+                                     Tag = _commandProvider.GetLoadUserDefinedTabsCommand(_personSelectorView, userDefinedTabLight.Id, ApplicationFunction)
                                  });        
                 }
             }

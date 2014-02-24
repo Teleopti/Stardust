@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -16,17 +18,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public IEnumerable<IShiftCategory> RetrieveShiftCategoryOptions()
 		{
-			return GetWorkflowControlSetData(w => w.AllowedPreferenceShiftCategories);
+            return GetWorkflowControlSetData(w => w.AllowedPreferenceShiftCategories).Where(a => ((ShiftCategory)a).IsDeleted == false);
 		}
 
 		public IEnumerable<IDayOffTemplate> RetrieveDayOffOptions()
 		{
-			return GetWorkflowControlSetData(w => w.AllowedPreferenceDayOffs);
+            return GetWorkflowControlSetData(w => w.AllowedPreferenceDayOffs).Where(a => ((DayOffTemplate)a).IsDeleted == false);
 		}
 
 		public IEnumerable<IAbsence> RetrieveAbsenceOptions()
 		{
-			return GetWorkflowControlSetData(w => w.AllowedPreferenceAbsences);
+            return GetWorkflowControlSetData(w => w.AllowedPreferenceAbsences).Where(a => ((Absence)a).IsDeleted == false);
 		}
 
 		public IEnumerable<IActivity> RetrieveActivityOptions()

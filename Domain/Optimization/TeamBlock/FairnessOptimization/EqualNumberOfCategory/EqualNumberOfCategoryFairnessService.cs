@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly IEqualCategoryDistributionValue _equalCategoryDistributionValue;
 		private readonly IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private bool _cancelMe;
 
 		public EqualNumberOfCategoryFairnessService(IConstructTeamBlock constructTeamBlock,
@@ -49,7 +50,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
 													IEqualCategoryDistributionValue equalCategoryDistributionValue,
 													IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks,
-													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+													ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_constructTeamBlock = constructTeamBlock;
 			_distributionForPersons = distributionForPersons;
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 			_equalCategoryDistributionValue = equalCategoryDistributionValue;
 			_filterForNoneLockedTeamBlocks = filterForNoneLockedTeamBlocks;
 			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -148,6 +151,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					var firstBlockOk = teamBlockRestrictionOverLimitValidator.Validate(teamBlockToWorkWith, optimizationPreferences);
 					var secondBlockOk = teamBlockRestrictionOverLimitValidator.Validate(selectedTeamBlock, optimizationPreferences);
 					if (!(firstBlockOk && secondBlockOk))
+					{
+						rollbackService.Rollback();
+						success = false;
+					}
+				}
+
+				if (success)
+				{
+					if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockToWorkWith, selectedTeamBlock, optimizationPreferences))
 					{
 						rollbackService.Rollback();
 						success = false;

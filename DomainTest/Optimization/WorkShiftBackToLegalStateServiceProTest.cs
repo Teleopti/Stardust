@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -24,8 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
     	private IScheduleDay _scheduleDay;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
     	private ISchedulePartModifyAndRollbackService _rollbackService;
+	    private readonly DateOnly _dateMinValue = DateOnly.MinValue.AddDays(1);
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -94,20 +93,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var personContract = _mocks.StrictMock<IPersonContract>();
 
 			Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(fullWekPeriodDays));
-			Expect.Call(scheduleDayPro.Day).Return(DateOnly.MinValue);
+			Expect.Call(scheduleDayPro.Day).Return(_dateMinValue);
 			Expect.Call(_matrix.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
 			Expect.Call(schedulePeriod.Contract).Return(contract);
 			Expect.Call(_matrix.Person).Return(person).Repeat.Times(4);
 			Expect.Call(person.FirstDayOfWeek).Return(DayOfWeek.Monday);
 			Expect.Call(schedulePeriod.DateOnlyPeriod)
-			      .Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(6))).Repeat.AtLeastOnce();
-			Expect.Call(person.Period(DateOnly.MinValue)).Return(personPeriod);
-			//Expect.Call(schedulePeriod.DateOnlyPeriod)
-			//	  .Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(6)));
+			      .Return(new DateOnlyPeriod(_dateMinValue, _dateMinValue.AddDays(6))).Repeat.AtLeastOnce();
+			Expect.Call(person.Period(_dateMinValue)).Return(personPeriod);
 			Expect.Call(person.PreviousPeriod(personPeriod)).Return(personPeriod);
 			Expect.Call(personPeriod.PersonContract).Return(personContract);
 			Expect.Call(personContract.Contract).Return(contract);
-			Expect.Call(person.VirtualSchedulePeriod(DateOnly.MinValue)).Return(schedulePeriod).IgnoreArguments();
+			Expect.Call(person.VirtualSchedulePeriod(_dateMinValue)).Return(schedulePeriod).IgnoreArguments();
 			Expect.Call(schedulePeriod.IsValid).Return(true);
 		}
 

@@ -762,28 +762,24 @@ End personal drop down menu
 /* Large desktop */
 @media (min-width: 993px) {
     body {
-        padding-top: 60px;
     }
 }
 
 /* Portrait tablet to landscape and desktop */
 @media (min-width: 768px) and (max-width: 992px) {
     body {
-        padding-top: 60px;
     }
 }
 
 /* Landscape phone to portrait tablet */
 @media (max-width: 767px) {
     body {
-        padding-top: 60px;
     }
 }
 
 /* Landscape phones and down */
 @media (max-width: 480px) {
     body {
-        padding-top: 60px;
     }
 }
   .select2-drop{
@@ -840,6 +836,10 @@ End personal drop down menu
 #autocollapse.custom-collapsed .navbar-collapse.collapse.in {
   display: block!important;
 }
+#autocollapse.custom-collapsed .navbar-collapse.in {
+  overflow-y: auto!important;
+  overflow-x: hidden!important;
+}
 #autocollapse.custom-collapsed .navbar-nav {
   float: none!important;
   margin: 7.5px -15px;
@@ -850,4 +850,59 @@ End personal drop down menu
 #autocollapse.custom-collapsed .navbar-nav>li>a {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+#autocollapse.custom-collapsed .navbar-right {
+  float: none !important
+}
+#autocollapse.custom-collapsed .navbar-nav .open .dropdown-menu {
+    position: static;
+    float: none;
+    width: auto;
+    margin-top: 0;
+    background-color: transparent !important;
+    border: 0;
+    box-shadow: none;
+  }
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a,
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu .dropdown-header {
+    padding: 5px 15px 5px 25px;
+  }
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a {
+    line-height: 20px;
+  }
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a:hover,
+#autocollapse.custom-collapsed  .navbar-nav .open .dropdown-menu > li > a:focus {
+    background-image: none;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #777777 !important;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #333333 !important;
+    background-color: transparent!important;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #555555;
+  }
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .disabled > a,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:hover,
+#autocollapse.custom-collapsed.navbar-default .navbar-nav .open .dropdown-menu > .disabled > a:focus {
+    color: #cccccc;
+    background-color: transparent;
+  }
+
+.navbar-collapse {
+    max-height: none!important;
+}
+
+/* for fix ie11 bug: http://challenger:8080/tfs/web/UI/Pages/WorkItems/WorkItemEdit.aspx?id=27041 */
+.transition-fix {
+  -webkit-transition: height 0.001s;
+  -moz-transition: height 0.001s;
+  -ms-transition: height 0.001s;
+  -o-transition: height 0.001s;
+  transition: height 0.001s;
 }

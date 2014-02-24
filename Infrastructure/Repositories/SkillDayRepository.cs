@@ -183,26 +183,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	            .SetProjection(Projections.Property("skillDay.Id"));
 	    }
 
-        
-
-	    /// <summary>
-		/// Gets all skill days.
-		/// Temprorary function! GUI should use skill days from now on...
-		/// </summary>
-		/// <param name="period">The period.</param>
-		/// <param name="skillDays">The skill days.</param>
-		/// <param name="skill">The skill.</param>
-		/// <param name="scenario">The scenario.</param>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-01-25
-		/// </remarks>
-		public ICollection<ISkillDay> GetAllSkillDays(DateOnlyPeriod period, ICollection<ISkillDay> skillDays, ISkill skill, IScenario scenario)
-		{
-			return GetAllSkillDays(period, skillDays, skill, scenario, AddRange);
-		}
-
 		/// <summary>
 		/// Gets all skill days.
 		/// Temprorary function! GUI should use skill days from now on...

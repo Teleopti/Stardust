@@ -52,7 +52,7 @@
             <input class="form-control text-center" data-bind="value: displayDate" type="text" readonly="readonly" />
             <span class="input-group-btn">
                 <button class="btn btn-default moment-datepicker" type="button">
-                    <i class="glyphicon glyphicon-th"></i>
+                    <i class="glyphicon glyphicon-calendar"></i>
                 </button>
                 <button class="btn btn-default" data-bind="click: nextWeek, css: 'done'" type="button">
                     <i class="glyphicon glyphicon-chevron-right"></i>
@@ -140,17 +140,19 @@
 				</div>
 				<!-- /ko -->
 				<!-- ko ifnot: isOvertimeAvailability() -->
-				<div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }">
-                    <!-- ko if: hasMeeting -->
-                    <div class="meeting floatright">
-                        <i class="meeting-icon icon-user mr10">
-                            <i class="glyphicon glyphicon-user ml10"></i>
-                        </i>
-                    </div>
-                    <!-- /ko -->
-                    <strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title, visible: showTitle"></strong>
-                    <span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
-                </div>
+	            <div class="weekview-day-schedule-layer absolute" data-bind="tooltip: { title: tooltipText, html: true }, style: { backgroundColor: color, color: textColor, 'height': heightPx, top: topPx, 'width': widthPx }">
+		            <div data-bind="visible: showTitle">
+			            <strong class="weekview-day-schedule-layer-activity truncate" data-bind="text: title"></strong>
+			            <!-- ko if: hasMeeting -->
+			            <div class="meeting floatright">
+				            <i class="meeting-icon icon-user mr10">
+					            <i class="glyphicon glyphicon-user ml10"></i>
+				            </i>
+			            </div>
+			            <!-- /ko -->
+			            <span class="weekview-day-schedule-layer-time fullwidth displayblock" data-bind="visible: showDetail, text: timeSpan"></span>
+		            </div>
+	            </div>
 				<!-- /ko -->
                 <!-- /ko -->
             </div>

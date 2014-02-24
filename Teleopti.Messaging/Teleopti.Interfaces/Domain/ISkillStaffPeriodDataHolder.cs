@@ -20,7 +20,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-11-17    
         /// /// </remarks>
-        int OriginalDemandInMinutes { get; set; }
+        double OriginalDemandInMinutes { get; set; }
         /// <summary>
         /// Gets or sets the assigned resource in minutes.
         /// </summary>
@@ -30,7 +30,7 @@ namespace Teleopti.Interfaces.Domain
         ///  Created by: Ola
         ///  Created date: 2008-11-17    
         /// /// </remarks>
-        int AssignedResourceInMinutes { get; set; }
+        double AssignedResourceInMinutes { get; set; }
         /// <summary>
         /// Gets the period.
         /// </summary>

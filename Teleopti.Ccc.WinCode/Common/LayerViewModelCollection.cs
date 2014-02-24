@@ -161,6 +161,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
                 Add(CreateViewModelFromVisualLayer(visualLayer));
             }
+			_layersThatShouldBeUpdated.Clear();
         }
 
         public virtual void CreateViewModels(ILayerViewModelSelector selector, IScheduleDay scheduleDay)
@@ -175,6 +176,7 @@ namespace Teleopti.Ccc.WinCode.Common
             {
                 Add(CreateViewModelFromVisualLayer(visualLayer));
             }
+			_layersThatShouldBeUpdated.Clear();
         }
 
         public void CreateProjectionViewModels(IProjectionSource projectionSource)
@@ -239,10 +241,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 		public void ShouldBeUpdated(ILayerViewModel layerViewModel)
 		{
-			//if (!_layersThatShouldBeUpdated.Contains(layerViewModel))
-			//{
 				_layersThatShouldBeUpdated.Add(layerViewModel);
-			//}
 		}
 
         public void LayerMovedVertically(ILayerViewModel sender)
@@ -287,7 +286,7 @@ namespace Teleopti.Ccc.WinCode.Common
 
 	    public void UpdateAllMovedLayers()
 	    {
-		    foreach (var layerViewModel in _layersThatShouldBeUpdated)
+		    foreach (var layerViewModel in this.Intersect(_layersThatShouldBeUpdated))
 		    {
 			    layerViewModel.UpdateModel();
 		    }

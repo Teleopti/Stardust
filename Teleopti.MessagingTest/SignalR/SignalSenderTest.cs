@@ -155,23 +155,6 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
-		public void SendNotification_WhenExceptionOccursInTask_ShouldLogToDebug()
-		{
-			var failedTask = makeFailedTask(new Exception());
-			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
-
-			var log = MockRepository.GenerateMock<ILog>();
-			var target = makeSignalSender(hubProxy, log);
-
-			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
-
-			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
-			var loggingTask = target.ProcessTheQueue();
-			loggingTask.Wait(500);
-			log.AssertWasCalled(t => t.Debug("", null), a => a.IgnoreArguments());
-		}
-
-		[Test]
 		public void ShouldRestartHubConnectionWhenConnectionClosed()
 		{
 			var hubProxy = stubProxy();
@@ -198,6 +181,23 @@ namespace Teleopti.MessagingTest.SignalR
 		}
 
 		[Test]
+		public void ShouldLogWhenNotificationTasksFails()
+		{
+			var failedTask = makeFailedTask(new Exception());
+			var hubProxy = MockRepository.GenerateMock<IHubProxy>();
+
+			var log = MockRepository.GenerateMock<ILog>();
+			var target = makeSignalSender(hubProxy, log);
+
+			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
+
+			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
+			var loggingTask = target.ProcessTheQueue();
+			loggingTask.Wait(500);
+			log.AssertWasCalled(t => t.Debug("", null), a => a.IgnoreArguments());
+		}
+
+		[Test]
 		public void ShouldLogWhenTryingToReconnect()
 		{
 			var hubProxy = stubProxy();
@@ -209,7 +209,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubConnection.GetEventRaiser(x => x.Closed += null).Raise();
 
-			log.AssertWasCalled(x => x.Error(SignalWrapper.ConnectionRestartedErrorMessage));
+			log.AssertWasCalled(x => x.Error(SignalConnectionHandler.ConnectionRestartedErrorMessage));
 		}
 
 		[Test]
@@ -224,7 +224,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubConnection.GetEventRaiser(x => x.Reconnected += null).Raise();
 
-			log.AssertWasCalled(x => x.Info(SignalWrapper.ConnectionReconnected));
+			log.AssertWasCalled(x => x.Info(SignalConnectionHandler.ConnectionReconnected));
 			
 		}
 

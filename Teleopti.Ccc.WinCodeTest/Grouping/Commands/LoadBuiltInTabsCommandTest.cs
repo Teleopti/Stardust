@@ -20,25 +20,25 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
     {
         private MockRepository _mocks;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IRepositoryFactory _repositoryFactory;
+        private IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
         private IPersonSelectorView _personSelectorView;
         private LoadBuiltInTabsCommand _target;
         private ICommonNameDescriptionSetting _commonNameSetting;
         private readonly IApplicationFunction _myApplicationFunction =
             ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
                                            DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
-        private IStatelessUnitOfWork _unitOfWork;
+        private IUnitOfWork _unitOfWork;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _unitOfWork = _mocks.StrictMock<IStatelessUnitOfWork>();
-            _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
+            _unitOfWork = _mocks.StrictMock<IUnitOfWork>();
+			_personSelectorReadOnlyRepository = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
             _personSelectorView = _mocks.StrictMock<IPersonSelectorView>();
             _commonNameSetting = _mocks.StrictMock<ICommonNameDescriptionSetting>();
-            _target = new LoadBuiltInTabsCommand(PersonSelectorField.Contract, _unitOfWorkFactory, _repositoryFactory, _personSelectorView, "Contract", _commonNameSetting, _myApplicationFunction, true);
+            _target = new LoadBuiltInTabsCommand(PersonSelectorField.Contract, _unitOfWorkFactory, _personSelectorReadOnlyRepository, _personSelectorView, "Contract", _commonNameSetting, _myApplicationFunction);
         }
 
         [Test]
@@ -51,11 +51,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
             var date = new DateOnly(2012, 1, 19);
             var datePeriod = new DateOnlyPeriod(date, date);
             var lightPerson = _mocks.StrictMock<ILightPerson>();
-            var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-            Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_personSelectorView.SelectedPeriod).Return(datePeriod);
-            Expect.Call(rep.GetBuiltIn(datePeriod, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
+            Expect.Call(_personSelectorReadOnlyRepository.GetBuiltIn(datePeriod, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
                                                                     {
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", PersonId = olaPersonId},
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO" , PersonId = mickePersonId},
@@ -82,11 +80,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                 var buId = Guid.NewGuid();
                 var date = new DateOnly(2012, 1, 19);
                 var datePeriod = new DateOnlyPeriod(date, date);
-                var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-                Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_personSelectorView.SelectedPeriod).Return(datePeriod);
-                Expect.Call(rep.GetBuiltIn(datePeriod, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
+                Expect.Call(_personSelectorReadOnlyRepository.GetBuiltIn(datePeriod, PersonSelectorField.Contract)).Return(new List<IPersonSelectorBuiltIn>
                                                                     {
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", PersonId = Guid.NewGuid()},
                                                                         new PersonSelectorBuiltIn { BusinessUnitId = buId ,FirstName = "Micke", LastName = "D", Node = "STO", PersonId = Guid.NewGuid()},

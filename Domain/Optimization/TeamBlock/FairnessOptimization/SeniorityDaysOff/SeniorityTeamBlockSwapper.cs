@@ -17,11 +17,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	{
 		private readonly ITeamBlockSwapper _teambBlockSwapper;
 	    private readonly IPostSwapValidationForTeamBlock _postSwapValidationForTeamBlock;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
-	    public SeniorityTeamBlockSwapper(ITeamBlockSwapper teambBlockSwapper, IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock)
+		public SeniorityTeamBlockSwapper(ITeamBlockSwapper teambBlockSwapper, 
+										IPostSwapValidationForTeamBlock postSwapValidationForTeamBlock,
+										ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_teambBlockSwapper = teambBlockSwapper;
 	        _postSwapValidationForTeamBlock = postSwapValidationForTeamBlock;
+		    _teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
 		public bool SwapAndValidate(ITeamBlockInfo mostSeniorTeamBlock, ITeamBlockInfo blockToSwapWith,
@@ -57,6 +61,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
             if (!_postSwapValidationForTeamBlock.Validate(blockToSwapWith, optimizationPreferences))
                 return false;
+
+	        if (!_teamBlockShiftCategoryLimitationValidator.Validate(mostSeniorTeamBlock, blockToSwapWith,
+		                                                             optimizationPreferences))
+		        return false;
 
             return true;
         }
