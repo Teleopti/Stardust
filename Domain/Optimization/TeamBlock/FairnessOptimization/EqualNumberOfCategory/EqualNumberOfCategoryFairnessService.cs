@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 													IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks,
 													IEqualCategoryDistributionValue equalCategoryDistributionValue,
 													IFilterForNoneLockedTeamBlocks filterForNoneLockedTeamBlocks,
-													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
 													ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_constructTeamBlock = constructTeamBlock;

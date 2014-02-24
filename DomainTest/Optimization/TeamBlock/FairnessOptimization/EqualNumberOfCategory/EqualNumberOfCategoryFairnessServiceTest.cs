@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 															   _filterForFullyScheduledBlocks,
 															   _equalCategoryDistributionValue,
 															   _filterForNoneLockedTeamBlocks,
-															   _teamBlockRestrictionOverLimitValidator);
+															   _teamBlockRestrictionOverLimitValidator,
 															   _teamBlockShiftCategoryLimitationValidator);
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_sceduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Playback())
 			{
 				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
-								_rollbackService, _teamBlockRestrictionOverLimitValidator, _optimizationPreferences);
+								_rollbackService, _optimizationPreferences);
 			}
 		}
 
