@@ -28,13 +28,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
         private readonly IJuniorTeamBlockExtractor _juniorTeamBlockExtractor;
         private readonly ITeamBlockDayOffDaySwapper _teamBlockDayOffDaySwapper;
         private readonly ISuitableDayOffsToGiveAway  _suitableDayOffsToGiveAway;
+        private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 
         public event EventHandler<ResourceOptimizerProgressEventArgs> BlockSwapped;
 
         public DayOffStep2(ISeniorityExtractor seniorityExtractor, ISeniorTeamBlockLocator seniorTeamBlockLocator, IJuniorTeamBlockExtractor juniorTeamBlockExtractor, 
                         ISuitableDayOffSpotDetector suitableDayOffSpotDetector, IConstructTeamBlock constructTeamBlock, IFilterForTeamBlockInSelection filterForTeamBlockInSelection, 
                                 IFilterForFullyScheduledBlocks filterForFullyScheduledBlocks, IFilterOnSwapableTeamBlocks filterOnSwapableTeamBlocks, ITeamBlockDayOffDaySwapper teamBlockDayOffDaySwapper,
-                            ISuitableDayOffsToGiveAway suitableDayOffsToGiveAway)
+                            ISuitableDayOffsToGiveAway suitableDayOffsToGiveAway, ITeamBlockSeniorityValidator teamBlockSeniorityValidator)
         {
             _seniorityExtractor = seniorityExtractor;
             _seniorTeamBlockLocator = seniorTeamBlockLocator;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
             _filterOnSwapableTeamBlocks = filterOnSwapableTeamBlocks;
             _teamBlockDayOffDaySwapper = teamBlockDayOffDaySwapper;
             _suitableDayOffsToGiveAway = suitableDayOffsToGiveAway;
+            _teamBlockSeniorityValidator = teamBlockSeniorityValidator;
         }
 
         public void PerformStep2(ISchedulingOptions schedulingOptions, IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, 
@@ -124,7 +126,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
         private IList<ITeamBlockInfo> stepBFilterOutUnwantedBlocks(IList<ITeamBlockInfo> listOfAllTeamBlock, IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, IScheduleDictionary scheduleDictionary)
         {
-            var filteredList = _filterForTeamBlockInSelection.Filter(listOfAllTeamBlock, selectedPersons, selectedPeriod);
+            IList<ITeamBlockInfo> filteredList = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
+            filteredList = _filterForTeamBlockInSelection.Filter(filteredList, selectedPersons, selectedPeriod);
             filteredList = _filterForFullyScheduledBlocks.Filter(filteredList,scheduleDictionary);
             return filteredList;
         }
