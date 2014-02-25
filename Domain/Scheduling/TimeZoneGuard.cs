@@ -10,9 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	public sealed class TimeZoneGuard : ITimeZoneGuard
 	{
-		private static volatile TimeZoneGuard _guard;
-		private static readonly object Locker = new Object();
-
+		private static readonly Lazy<TimeZoneGuard> _guard = new Lazy<TimeZoneGuard>(()=>new TimeZoneGuard());
+		
 		private TimeZoneGuard()
 		{
 			TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
@@ -22,16 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			get
 			{
-				if (_guard == null)
-				{
-					lock (Locker)
-					{
-						if (_guard == null)
-							_guard = new TimeZoneGuard();
-					}
-				}
-
-				return _guard;
+				return _guard.Value;
 			}
 		}
 

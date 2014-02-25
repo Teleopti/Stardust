@@ -266,13 +266,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		[Test]
 		public void ShouldReloadIfTabNotUserDefinedAndPeopleSaved()
 		{
-			var tabControl = new TabControlAdv();
 			var command = _mocks.StrictMock<ILoadOrganizationCommand>();
-			tabControl.TabPages.Add(new TabPageAdv("första") { Tag = command });
-			tabControl.TabPages.Add(new TabPageAdv("andra"));
-			tabControl.TabPages.Add(new TabPageAdv("tredje") );
-			tabControl.SelectedIndex = 0;
-			Expect.Call(_view.TabControl).Return(tabControl);
+			var selectedTab = new TabPageAdv("första") { Tag = command };
+			Expect.Call(_view.SelectedTab).Return(selectedTab);
 			Expect.Call(command.Execute);
 			_mocks.ReplayAll();
 			_globalEventAggregator.GetEvent<PeopleSaved>().Publish("");
