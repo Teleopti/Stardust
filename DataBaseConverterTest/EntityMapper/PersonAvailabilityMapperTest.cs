@@ -3,6 +3,7 @@ using System.Data;
 using System.Globalization;
 using Domain;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.DatabaseConverter;
 using Teleopti.Ccc.DatabaseConverter.EntityMapper;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -76,6 +77,25 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
 
             _personAvailabilityMapper = new PersonAvailabilityMapper(_mappedObjectPair);
         }
+
+	    [Test]
+	    public void ShouldNotMapIfPersonNotPresent()
+	    {
+		    const int notExistingEmpId = 123;
+				var t3 = new DataTable("table2") {Locale = CultureInfo.CurrentCulture};
+		    t3.Columns.Add("core_id", typeof(int));
+				t3.Columns.Add("emp_id", typeof(int));
+				t3.Columns.Add("date_from", typeof(DateTime));
+
+				oldRow = t3.NewRow();
+
+				oldRow["core_id"] = 10;
+				oldRow["emp_id"] = notExistingEmpId;
+				oldRow["date_from"] = new DateTime(2008, 1, 1);
+
+		    _personAvailabilityMapper.Map(oldRow)
+			    .Should().Be.Null();
+	    }
 
         [Test]
         public void VerifyGetObjectPairCollection()
