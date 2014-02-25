@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
         }
 
-        private static PersonAssignmentRestrictionSet _personAssignmentRestrictionSet;
+        private static readonly Lazy<PersonAssignmentRestrictionSet> _personAssignmentRestrictionSet = new Lazy<PersonAssignmentRestrictionSet>(()=>new PersonAssignmentRestrictionSet());
 
         /// <summary>
         /// Gets the current person assignment restriction set.
@@ -40,12 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// </remarks>
         public static PersonAssignmentRestrictionSet CurrentPersonAssignmentRestrictionSet
         {
-            get
-            {
-                if (_personAssignmentRestrictionSet == null)
-                    _personAssignmentRestrictionSet = new PersonAssignmentRestrictionSet();
-                return _personAssignmentRestrictionSet;
-            }
+            get { return _personAssignmentRestrictionSet.Value; }
         }
     }
 }

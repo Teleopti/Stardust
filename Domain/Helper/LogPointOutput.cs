@@ -1,3 +1,4 @@
+using System;
 using System.Data.SqlClient;
 using log4net;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -6,33 +7,30 @@ namespace Teleopti.Ccc.Domain.Helper
 {
     public static class LogPointOutput
     {
-        private static ILog _log;
+        private static readonly Lazy<ILog> _log = new Lazy<ILog>(getLog);
 
         public static void LogInfo(string info, string eventType)
         {
-            if (getLog().IsInfoEnabled)
+            if (_log.Value.IsInfoEnabled)
             {
                 GlobalContext.Properties["EventType"] = eventType;
-                getLog().Info(info);
+                _log.Value.Info(info);
             }
         }
 
-        private static ILog getLog()
-        {
-            if (_log == null)
-            {
-                var identity = TeleoptiPrincipal.Current.Identity as ITeleoptiIdentity;
-	            var appConnString = new SqlConnectionStringBuilder(identity.DataSource.Application.ConnectionString);
-                if (identity != null)
-                {
-                    GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
-                    GlobalContext.Properties["DataSource"] = appConnString.DataSource;
-										GlobalContext.Properties["InitialCatalog"] = appConnString.InitialCatalog;
-                }
-                _log = LogManager.GetLogger("Teleopti.LogPointOutput");
-            }
+	    private static ILog getLog()
+	    {
+		    var identity = TeleoptiPrincipal.Current.Identity as ITeleoptiIdentity;
+		    var appConnString = new SqlConnectionStringBuilder(identity.DataSource.Application.ConnectionString);
+		    if (identity != null)
+		    {
+			    GlobalContext.Properties["BU"] = identity.BusinessUnit.Name;
+			    GlobalContext.Properties["DataSource"] = appConnString.DataSource;
+			    GlobalContext.Properties["InitialCatalog"] = appConnString.InitialCatalog;
+		    }
+		    var log = LogManager.GetLogger("Teleopti.LogPointOutput");
 
-            return _log;
-        }
+		    return log;
+	    }
     }
 }

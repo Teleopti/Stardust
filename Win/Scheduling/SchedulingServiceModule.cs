@@ -221,7 +221,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<EqualCategoryDistributionValue>().As<IEqualCategoryDistributionValue>();
 			builder.RegisterType<FilterForFullyScheduledBlocks>().As<IFilterForFullyScheduledBlocks>();
 			builder.RegisterType<FilterForNoneLockedTeamBlocks>().As<IFilterForNoneLockedTeamBlocks>();
-			//IFilterForNoneLockedTeamBlocks
+			builder.RegisterType<TeamBlockShiftCategoryLimitationValidator>().As<ITeamBlockShiftCategoryLimitationValidator>();
+			//ITeamBlockShiftCategoryLimitationValidator
         }
 
         private void registerFairnessOptimizationService(ContainerBuilder builder)
@@ -292,6 +293,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
 			builder.RegisterType<SameShiftCategoryBlockScheduler>().As<ISameShiftCategoryBlockScheduler>();
+            builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)

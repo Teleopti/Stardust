@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 {
 	public class MessageFilterManager : IMessageFilterManager
 	{
-		private static readonly object _lockObject = new object();
-		private static MessageFilterManager _messageFilterManager;
+		private static readonly Lazy<MessageFilterManager> _messageFilterManager = new Lazy<MessageFilterManager>(() => new MessageFilterManager(Initialise()));
 		private readonly IDictionary<Type, IList<Type>> _aggregateRoots;
 		private readonly ReaderWriterLock _readerWriterLock = new ReaderWriterLock();
 		private int _timeOut = 20;
@@ -40,14 +39,7 @@ namespace Teleopti.Ccc.Domain.Infrastructure
 		{
 			get
 			{
-				lock (_lockObject)
-				{
-					if (_messageFilterManager == null)
-					{
-						_messageFilterManager = new MessageFilterManager(Initialise());
-					}
-				}
-				return _messageFilterManager;
+				return _messageFilterManager.Value;
 			}
 		}
 

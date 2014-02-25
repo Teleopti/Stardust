@@ -38,10 +38,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 		private IFilterForNoneLockedTeamBlocks _filterForNoneLockedTeamBlocks;
 		private ISchedulingOptions _schedulingOptions;
-		List<IScheduleMatrixPro> _allMatrixes;
-		List<IPerson> _selectedPersons;
-		List<ITeamBlockInfo> _teamBlockInfos;
-		DistributionSummary _totalDistributionSummary;
+		private List<IScheduleMatrixPro> _allMatrixes;
+		private List<IPerson> _selectedPersons;
+		private List<ITeamBlockInfo> _teamBlockInfos;
+		private DistributionSummary _totalDistributionSummary;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
 		[SetUp]
 		public void Setup()
@@ -62,6 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			_teamBlockRestrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_optimizationPreferences = new OptimizationPreferences();
 			_filterForNoneLockedTeamBlocks = _mocks.StrictMock<IFilterForNoneLockedTeamBlocks>();
+			_teamBlockShiftCategoryLimitationValidator = _mocks.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
 			_target = new EqualNumberOfCategoryFairnessService(_constructTeamBlock, _distributionForPersons,
 			                                                   _filterForEqualNumberOfCategoryFairness,
 			                                                   _filterForTeamBlockInSelection, _filterOnSwapableTeamBlocks,
@@ -71,7 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 															   _filterForFullyScheduledBlocks,
 															   _equalCategoryDistributionValue,
 															   _filterForNoneLockedTeamBlocks,
-															   _teamBlockRestrictionOverLimitValidator);
+															   _teamBlockRestrictionOverLimitValidator,
+															   _teamBlockShiftCategoryLimitationValidator);
 			_matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			_sceduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
@@ -113,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			using (_mocks.Record())
 			{
 				commonMocks();
-				firstInnerLoop(false, false);
+				firstInnerLoop(false, false, false);
 			}
 
 			using (_mocks.Playback())
@@ -176,6 +179,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 			}
 		}
 
+		[Test]
+		public void ShouldRollBackIfBreakingCategoryLimitation()
+		{
+			using (_mocks.Record())
+			{
+				commonMocks();
+				failOnCategoryLimitation();
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.Execute(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions, _sceduleDictionary,
+								_rollbackService, _optimizationPreferences);
+			}
+		}
+
 		void _targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
@@ -184,7 +203,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private void failOnRestriction()
 		{
 			//first loop
-			firstInnerLoop(false, true);
+			firstInnerLoop(false, true, false);
+
+			//second loop
+			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
+																							_teamBlockInfos, _sceduleDictionary))
+				  .IgnoreArguments().Return(null);
+		}
+
+		private void failOnCategoryLimitation()
+		{
+			//first loop
+			firstInnerLoop(false, false, true);
 
 			//second loop
 			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
@@ -195,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private void failOnValue()
 		{
 			//first loop
-			firstInnerLoop(true, false);
+			firstInnerLoop(true, false, false);
 
 			//second loop
 			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
@@ -206,7 +236,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		private void successfulMove()
 		{
 			//first loop
-			firstInnerLoop(false, false);
+			firstInnerLoop(false, false, false);
 
 			//second loop
 			Expect.Call(_equalCategoryDistributionWorstTeamBlockDecider.FindBlockToWorkWith(_totalDistributionSummary,
@@ -214,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				  .IgnoreArguments().Return(null);
 		}
 
-		private void firstInnerLoop(bool failOnValue, bool failOnRestriction)
+		private void firstInnerLoop(bool failOnValue, bool failOnRestriction, bool failOnCategoryLimitation)
 		{
 			var valueAfter = 4;
 			if (failOnValue)
@@ -242,13 +272,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 
 			if (!failOnRestriction)
 			{
-				Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo1, _totalDistributionSummary,
-														   _sceduleDictionary)).Return(valueAfter);
-				Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo2, _totalDistributionSummary,
-																		   _sceduleDictionary)).Return(valueAfter);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo1, _teamBlockInfo2,
+				                                                                _optimizationPreferences))
+				      .Return(!failOnCategoryLimitation);
+
+				if (!failOnCategoryLimitation)
+				{
+					Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo1, _totalDistributionSummary,
+					                                                           _sceduleDictionary)).Return(valueAfter);
+					Expect.Call(_equalCategoryDistributionValue.CalculateValue(_teamBlockInfo2, _totalDistributionSummary,
+					                                                           _sceduleDictionary)).Return(valueAfter);
+				}
 			}
 
-			if (failOnValue || failOnRestriction)
+			if (failOnValue || failOnRestriction || failOnCategoryLimitation)
 			{
 				Expect.Call(() => _rollbackService.Rollback());
 			}
