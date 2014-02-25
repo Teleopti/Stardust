@@ -129,6 +129,7 @@ span[data-cal-date] {
     background-color: beige;
     background-image: url(../Images/stripe.png);
 	height: 100px;
+	padding-top: 40px;
 }
 
 .shift {
