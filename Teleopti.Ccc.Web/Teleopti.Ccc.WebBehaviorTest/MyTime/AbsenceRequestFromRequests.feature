@@ -3,6 +3,62 @@
 	As an agent
 	I want to be able to submit requests as absence
 
+
+@ignore
+Scenario: When requesting absence tracked as days view remaining time and used time
+	Given I am an agent
+	And I have a requestable absence called Vacation
+	And I am viewing requests
+	And I have a personal account for period including today's date
+	| Field     | Value      |
+	| Absence   | Vacation   |
+	| Type      | Days       |
+	| Used      | 7          |
+	| Remaining | 18         |
+	When I click to add a new absence request
+	Then I should see the remaining time is '18 days'
+	And I should see the used time is '7 days'
+
+@ignore
+Scenario: When requesting absence tracked by hours view remaining time and used time
+	Given I am an agent
+	And I have a requestable absence called Illness
+	And I am viewing requests
+	And I have a personal account for period including today's date
+	| Field     | Value   |
+	| Absence   | Illness |
+	| Type      | Hours   |
+	| Used      | 70:00   |
+	| Remaining | 180:00  |
+	When I click to add a new absence request
+	Then I should see the used time is '70:00 hours'
+	And I should see the remaining time is '180:00 hours'
+
+@ignore
+Scenario: When changing absence type update remaining time and used time 
+	Given I am an agent
+	And I have a requestable absence called Vacation
+	And I have a requestable absence called Illness
+	And I am viewing requests
+	And I have a personal account for period including today's date
+	| Field     | Value   |
+	| Absence   | Illness |
+	| Type      | Hours   |
+	| Used      | 70:00   |
+	| Remaining | 180:00  |
+	And I have a personal account for period including today's date
+	| Field     | Value      |
+	| Absence   | Vacation   |
+	| Type      | Days       |
+	| Used      | 7          |
+	| Remaining | 18         |
+	And I click to add a new absence request
+	And I see the remaining time is '180:00 hours'
+	And I see the used time is '70:00 hours'
+	When I change absence to 'Vacation'
+	Then I should see the used time is '7 days'
+	And I should see the remaining time is '18 days'
+
 Scenario: Add absence request
 	Given I am an agent
 	And I have a requestable absence called Vacation
