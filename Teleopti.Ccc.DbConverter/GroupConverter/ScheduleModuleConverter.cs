@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
         }
         private void ConvertPreferences()
         {
-            DateTime currentDateTime = Period.LocalStartDateTime;
+					DateTime currentDateTime = Period.LocalStartDateTime(TimeZoneInfo);
             const int daysToAdd = 14;
-            while (currentDateTime < Period.LocalEndDateTime)
+						while (currentDateTime < Period.LocalEndDateTime(TimeZoneInfo))
             {
                 DatePeriod currentPeriod = new DatePeriod(currentDateTime, calcEndTime(currentDateTime, daysToAdd));
                 Logger.InfoFormat("Converting agent preferences {0} ", currentPeriod);
@@ -86,9 +86,9 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
         {
             IList<global::Domain.Agent> agentList = new List<global::Domain.Agent>();
 
-            DateTime currentDateTime = Period.LocalStartDateTime;
+            DateTime currentDateTime = Period.LocalStartDateTime(TimeZoneInfo);
             const int daysToAdd = 14;
-            while (currentDateTime < Period.LocalEndDateTime)
+						while (currentDateTime < Period.LocalEndDateTime(TimeZoneInfo))
             {
                 var currentPeriod = new DatePeriod(currentDateTime, calcEndTime(currentDateTime,daysToAdd));
                 Logger.InfoFormat("Converting agent days in scenario {0} {1}", scenario.Name, currentPeriod);
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
 
         private void ConvertAgentAbsences(IList<global::Domain.Agent> agentList, Scenario scenario)
         {
-            var period = new DatePeriod(Period.LocalStartDateTime, Period.LocalEndDateTime);
+					var period = new DatePeriod(Period.LocalStartDateTime(TimeZoneInfo), Period.LocalEndDateTime(TimeZoneInfo));
             IDictionary<global::Domain.Agent, IList<global::Domain.AgentDay>> agentDayDic = new Dictionary<global::Domain.Agent, IList<global::Domain.AgentDay>>();
 
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

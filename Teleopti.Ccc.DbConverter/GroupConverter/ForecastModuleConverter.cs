@@ -456,9 +456,9 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
         private void convertSkillDaysForSkill(Scenario scenario, Skill skill, ISkillDayReader skillDayReader)
         {
             IDictionary<IntegerDateKey, SkillDay> skillDayDict;
-            DateTime currentDateTime = Period.LocalStartDateTime;
+						DateTime currentDateTime = Period.LocalStartDateTime(TimeZoneInfo);
             const int daysToAdd = 10;
-            while (currentDateTime < Period.LocalEndDateTime)
+						while (currentDateTime < Period.LocalEndDateTime(TimeZoneInfo))
             {
                 DatePeriod currentPeriod = new DatePeriod(currentDateTime, calcEndTime(currentDateTime, daysToAdd));
                 Logger.InfoFormat("Converting skill days in {0} for skill {1} {2}", scenario.Name, skill.Name, currentPeriod);
