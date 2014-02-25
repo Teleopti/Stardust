@@ -93,6 +93,34 @@ Scenario: When changing request date update remaining time and used time
 	Then I should see the remaining time is '25 days'
 	And I should see the used time is '0 days'
 
+@ignore
+Scenario: When requesting absence over multiple account periods show remaining time and used time according to end date period
+Given I am an agent
+And I have a requestable absence called Vacation
+And I am viewing requests
+And I have a personal account with
+| Field     | Value      |
+| Absence   | Vacation   |
+| From      | 2014-01-01 |
+| To        | 2014-12-31 |
+| Type      | Days       |
+| Used      | 7          |
+| Remaining | 18         |
+And I have a personal account with
+| Field     | Value      |
+| Absence   | Vacation   |
+| From      | 2015-01-01 |
+| To        | 2015-12-31 |
+| Type      | Days       |
+| Used      | 0          |
+| Remaining | 25         |
+When I click to add a new absence request with
+| Field | Value      |
+| From  | 2014-12-28 |
+| To    | 2015-01-02 |
+Then I should see the remaining time is '25 days'
+And I should see the used time is '0 days'
+
 Scenario: Add absence request
 	Given I am an agent
 	And I have a requestable absence called Vacation
