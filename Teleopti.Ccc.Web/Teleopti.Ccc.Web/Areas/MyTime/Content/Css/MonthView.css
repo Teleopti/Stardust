@@ -115,17 +115,18 @@ span[data-cal-date] {
     opacity: 0.3;
 }
 
-.absence {
+.cal-month-day .absence {
 	background-image: url(../Images/stripe.png);
 	height: 100px;
-	padding-top: 20px;
+	padding-top: 40px;
 }
+
 .absence-.dayoff {
     background-color: beige;
     background-image: url(../Images/stripe.png);
 }
 
-.dayoff {
+.cal-month-day .dayoff {
     background-color: beige;
     background-image: url(../Images/stripe.png);
 	height: 100px;
