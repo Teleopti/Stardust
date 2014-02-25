@@ -59,6 +59,40 @@ Scenario: When changing absence type update remaining time and used time
 	Then I should see the used time is '7 days'
 	And I should see the remaining time is '18 days'
 
+@ignore
+Scenario: When changing request date update remaining time and used time
+	Given I am an agent
+	And I have a requestable absence called Vacation
+	And I am viewing requests
+	And I have a personal account with
+	| Field     | Value      |
+	| Absence   | Vacation   |
+	| From      | 2014-01-01 |
+	| To        | 2014-12-31 |
+	| Type      | Days       |
+	| Used      | 7          |
+	| Remaining | 18         |
+	And I have a personal account with
+	| Field     | Value      |
+	| Absence   | Vacation   |
+	| From      | 2015-01-01 |
+	| To        | 2015-12-31 |
+	| Type      | Days       |
+	| Used      | 0          |
+	| Remaining | 25         |
+	And I click to add a new absence request with
+	| Field | Value      |
+	| From  | 2014-03-03 |
+	| To    | 2014-03-05 |
+	And I see the remaining time is '18 days'
+	And I see the used time is '7 days'
+	When I change absence request dates to
+	| Field | Value      |
+	| From  | 2015-03-03 |
+	| To    | 2015-03-05 |
+	Then I should see the remaining time is '25 days'
+	And I should see the used time is '0 days'
+
 Scenario: Add absence request
 	Given I am an agent
 	And I have a requestable absence called Vacation
