@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	    private readonly ITeamBlockPeriodValidator _teamBlockPeriodValidator;
 	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 	    private readonly ITeamBlockSwap _teamBlockSwap;
+		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		private bool _cancelMe;
 
@@ -32,13 +34,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 															IDetermineTeamBlockPriority determineTeamBlockPriority,
 															ITeamBlockPeriodValidator teamBlockPeriodValidator,
 															ITeamBlockSeniorityValidator teamBlockSeniorityValidator,
-															ITeamBlockSwap teamBlockSwap)
+															ITeamBlockSwap teamBlockSwap,
+															IFilterForTeamBlockInSelection filterForTeamBlockInSelection)
         {
             _constructTeamBlock = constructTeamBlock;
 	        _determineTeamBlockPriority = determineTeamBlockPriority;
 	        _teamBlockPeriodValidator = teamBlockPeriodValidator;
 	        _teamBlockSeniorityValidator = teamBlockSeniorityValidator;
 	        _teamBlockSwap = teamBlockSwap;
+	        _filterForTeamBlockInSelection = filterForTeamBlockInSelection;
         }
 
 	
@@ -58,7 +62,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
 		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 
-		        var filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
+		        IList<ITeamBlockInfo> filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
+				filteredTeamBlocks = _filterForTeamBlockInSelection.Filter(filteredTeamBlocks, selectedPersons, selectedPeriod);
+
 		        var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(filteredTeamBlocks, shiftCategories);
 		        var analyzedTeamBlocks = new List<ITeamBlockInfo>();
 		        var priorityList = teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority();
@@ -86,8 +92,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 					        priorityList.Remove(teamBlockInfoHighSeniority);
 					        break;
 				        }
-
-				        //if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,scheduleDictionary, selectedPeriod)) continue;
 
 				        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary, selectedPeriod))
 				        {
