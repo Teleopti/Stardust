@@ -150,7 +150,7 @@ BEGIN
 		fs.business_unit_id
 	FROM 
 		mart.fact_schedule fs
-	WHERE fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
+	WHERE fs.shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
 		AND fs.business_unit_id = @business_unit_id
 		AND fs.scenario_id = @scenario_id
 	GROUP BY 
