@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var eventPublisher = new ServiceBusEventPublisher(sender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
 			return new List<IMessageSender>
 				{
+					new ScheduleMessageSender(eventPublisher, new ClearEvents()),
 					new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-					new ScheduleMessageSender(eventPublisher),
 					new MeetingMessageSender(eventPublisher),
 					new GroupPageChangedMessageSender(eventPublisher),
 					new TeamOrSiteChangedMessageSender(eventPublisher),

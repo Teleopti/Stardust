@@ -17,26 +17,22 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
     public class LoadUserDefinedTabsCommand : ILoadUserDefinedTabsCommand
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IRepositoryFactory _repositoryFactory;
+	    private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
         private readonly IPersonSelectorView _personSelectorView;
         private readonly Guid _value;
         private readonly ICommonNameDescriptionSetting _commonAgentNameSettings;
         private readonly IApplicationFunction _applicationFunction;
-        // ola: leaving it here if we want to use it later
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-        private readonly bool _showPersons;
-
-        public LoadUserDefinedTabsCommand(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory,
+        
+        public LoadUserDefinedTabsCommand(IUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository,
             IPersonSelectorView personSelectorView, Guid value, ICommonNameDescriptionSetting commonAgentNameSettings, 
-            IApplicationFunction applicationFunction, bool showPersons)
+            IApplicationFunction applicationFunction)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
-            _repositoryFactory = repositoryFactory;
+	        _personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
             _personSelectorView = personSelectorView;
             _value = value;
             _commonAgentNameSettings = commonAgentNameSettings;
             _applicationFunction = applicationFunction;
-            _showPersons = showPersons;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -44,10 +40,9 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
         {
             var date = _personSelectorView.SelectedDate;
             IList<IPersonSelectorUserDefined> toNodes;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                IPersonSelectorReadOnlyRepository rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);    
-                toNodes = rep.GetUserDefinedTab(date, _value);
+                toNodes = _personSelectorReadOnlyRepository.GetUserDefinedTab(date, _value);
             }
             
             // rättigheter
@@ -81,13 +76,12 @@ namespace Teleopti.Ccc.WinCode.Grouping.Commands
             {
                 toNodes.Remove(personSelectorOrganization);
             }
-            //skapa treeviewnoder av det vi fått kvar
-            var nodes = new List<TreeNodeAdv>();
+
+			var nodes = new List<TreeNodeAdv>();
             var root = new TreeNodeAdv("") { LeftImageIndices = new[] { 1 }, Expanded = true ,Tag = new List<Guid>()};
             nodes.Add(root);
             var currNode = new TreeNodeAdv("") { TagObject = new Guid()};
-            //var notGroupedNode = new TreeNodeAdv("xxNotGrouped") { TagObject = new Guid(), Tag = new List<Guid>() };
-            //root.Nodes.Add(notGroupedNode);
+
             var nodeDictionary = new Dictionary<Guid, TreeNodeAdv>();
             foreach (var personSelectorUserDefined in toNodes)
             {

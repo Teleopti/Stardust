@@ -272,8 +272,10 @@
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
+    <Compile Include="UnitOfWork\ClearEvents.cs" />
     <Compile Include="UnitOfWork\CurrentInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\EmptyInitiatorIdentifier.cs" />
+    <Compile Include="UnitOfWork\IBeforeSendEvents.cs" />
     <Compile Include="UnitOfWork\ICurrentInitiatorIdentifier.cs" />
     <Compile Include="UnitOfWork\EventContextPopulator.cs" />
     <Compile Include="UnitOfWork\IEventContextPopulator.cs" />

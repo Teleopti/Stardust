@@ -444,55 +444,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(1, skillDay.TemplateSkillDataPeriodCollection.Count);
         }
 
-
-        [Test]
-        public void VerifyGettingSkillsThatHaveCertainActivities()
-        {
-					var blueActivity = new Activity("Blue Activity") { DisplayColor = Color.Blue };
-					var redActivity = new Activity("Red Activity") { DisplayColor = Color.Red };
-					var greenActivity = new Activity("Green Activity") { DisplayColor = Color.Green };
-
-            blueActivity.GroupingActivity = _groupingActivity;
-            redActivity.GroupingActivity = _groupingActivity;
-            greenActivity.GroupingActivity = _groupingActivity;
-
-            PersistAndRemoveFromUnitOfWork(blueActivity);
-            PersistAndRemoveFromUnitOfWork(redActivity);
-            PersistAndRemoveFromUnitOfWork(greenActivity);
-
-            IList<IActivity> activities = new List<IActivity> { blueActivity, redActivity, greenActivity };
-
-            CreateAndPersistSkillWithCertainActivity("Skill Blue 1", blueActivity);
-            CreateAndPersistSkillWithCertainActivity("Skill Blue 2", blueActivity);
-            CreateAndPersistSkillWithCertainActivity("Skill Red 1", redActivity);
-            CreateAndPersistSkillWithCertainActivity("Skill Red 2", redActivity);
-            CreateAndPersistSkillWithCertainActivity("Skill Red 3", redActivity);
-            CreateAndPersistSkillWithCertainActivity("Skill Green 1", greenActivity);
-
-            SkillRepository rep = new SkillRepository(UnitOfWork);
-            IList<ISkill> skills = new List<ISkill>(rep.FindAllWithActivities(activities));
-            Assert.AreEqual(6, skills.Count);
-
-            activities = new List<IActivity> { redActivity, greenActivity };
-            skills = new List<ISkill>(rep.FindAllWithActivities(activities));
-            Assert.AreEqual(4, skills.Count);
-
-            activities = new List<IActivity> { blueActivity };
-            skills = new List<ISkill>(rep.FindAllWithActivities(activities));
-            Assert.AreEqual(2, skills.Count);
-
-        }
-
-        private void CreateAndPersistSkillWithCertainActivity(string name, IActivity activity)
-        {
-            ISkill skill = SkillFactory.CreateSkill(name, _skillType, 15);
-            skill.Activity = activity;
-            skill.StaffingThresholds = _staffingThresholds;
-            skill.MidnightBreakOffset = _midnightBreakOffset;
-            PersistAndRemoveFromUnitOfWork(skill);
-            return;
-        }
-
         [Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()
         {

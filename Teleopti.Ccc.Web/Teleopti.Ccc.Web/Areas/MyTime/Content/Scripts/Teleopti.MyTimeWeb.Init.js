@@ -24,6 +24,7 @@ $(function () {
 	Teleopti.MyTimeWeb.Settings.Init();
 	Teleopti.MyTimeWeb.Password.Init();
 	Teleopti.MyTimeWeb.MyReport.Init();
+	Teleopti.MyTimeWeb.Common.Layout.Init();
 
 	_initMomentLanguageWithFallback();
 });

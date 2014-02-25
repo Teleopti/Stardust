@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic;
@@ -17,13 +15,19 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 	public class PayrollResultFactory : IPayrollResultFactory
     {
 		private readonly IServiceBusEventPublisher _serviceBusSender;
+		private readonly IPayrollResultRepository _payrollResultRepository;
+		private readonly IPersonRepository _personRepository;
+		private readonly IPayrollExportRepository _payrollExportRepository;
 
-		public PayrollResultFactory(IServiceBusEventPublisher serviceBusSender)
-        {
-            _serviceBusSender = serviceBusSender;
-        }
+		public PayrollResultFactory(IServiceBusEventPublisher serviceBusSender, IPayrollResultRepository payrollResultRepository, IPersonRepository personRepository, IPayrollExportRepository payrollExportRepository)
+		{
+			_serviceBusSender = serviceBusSender;
+			_payrollResultRepository = payrollResultRepository;
+			_personRepository = personRepository;
+			_payrollExportRepository = payrollExportRepository;
+		}
 
-        public Guid RunPayrollOnBus(PayrollExportDto payrollExport)
+		public Guid RunPayrollOnBus(PayrollExportDto payrollExport)
         {
             if (payrollExport == null) throw new ArgumentNullException("payrollExport");
 
@@ -55,23 +59,17 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             return payrollResultId;
         }
 
-        private static Guid SavePayrollResult(PayrollExportDto payrollExport)
+        private Guid SavePayrollResult(PayrollExportDto payrollExport)
         {
             using (var unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                IRepositoryFactory repositoryFactory = new RepositoryFactory();
-                var personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-                var exportingPersonDomain = TeleoptiPrincipal.Current.GetPerson(personRepository);
-  
-                var rep = repositoryFactory.CreatePayrollExportRepository(unitOfWork);
-                var payrollExportDomain = rep.Get(payrollExport.Id.GetValueOrDefault(Guid.Empty));
+                var exportingPersonDomain = TeleoptiPrincipal.Current.GetPerson(_personRepository);
+                var payrollExportDomain = _payrollExportRepository.Get(payrollExport.Id.GetValueOrDefault(Guid.Empty));
 
                 var payrollResult = GetPayrollResult(payrollExportDomain, exportingPersonDomain, DateTime.UtcNow);
 
-                var payrollResultRepository = repositoryFactory.CreatePayrollResultRepository(unitOfWork);
-
                 payrollResult.PayrollExport = payrollExportDomain;
-                payrollResultRepository.Add(payrollResult);
+                _payrollResultRepository.Add(payrollResult);
 
                 using (new MessageBrokerSendEnabler())
                 {

@@ -275,24 +275,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         /// <summary>
-        /// Verifies the get all skill days work.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-01-28
-        /// </remarks>
-        [Test]
-        public void VerifyGetAllSkillDaysWork()
-        {
-            SkillDayRepository skillDayRepository = new SkillDayRepository(UnitOfWork);
-            var dateOnly = new DateOnly(_date);
-            ICollection<ISkillDay> skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), new List<ISkillDay>(), _skill, _scenario);
-            Assert.AreEqual(2, skillDays.Count);
-            Assert.IsNotNull(skillDays.ElementAt(0).Id);
-            Assert.IsNotNull(skillDays.ElementAt(1).Id);
-        }
-
-        /// <summary>
         /// Verifies the get all skill days work without adding to repository.
         /// </summary>
         /// <remarks>

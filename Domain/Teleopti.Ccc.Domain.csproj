@@ -394,6 +394,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSwapValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameRuleSetBagValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameSkillValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockShiftCategoryLimitationValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>
@@ -599,6 +600,7 @@
     <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHour.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockMissingDaysOffScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelector.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameEndTimeTeamSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameShiftCategoryBlockSpecification.cs" />

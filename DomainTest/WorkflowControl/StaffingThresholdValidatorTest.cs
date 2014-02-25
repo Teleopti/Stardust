@@ -452,6 +452,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var updatedValues2 = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod2 });
 		    skillDay2.SetCalculatedStaffCollection(updatedValues2);
             updatedValues2.BatchCompleted();
+		    var detail = new UnderstaffingDetails();
 
 		    var validatedUnderStaffing = StaffingThresholdValidator.ValidateUnderstaffing(_skill,
 		                                                                                  new List<ISkillStaffPeriod>
@@ -461,9 +462,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		                                                                                          skillDay2
 		                                                                                      .SkillStaffPeriodCollection[0]
 		                                                                                      },
-		                                                                                  _timeZone, new UnderstaffingDetails());
+		                                                                                  _timeZone, detail);
 
 			Assert.IsTrue(validatedUnderStaffing.IsValid);
+            Assert.That(detail.IsNotUnderstaffed(), Is.True);
 		}
 
         [Test]

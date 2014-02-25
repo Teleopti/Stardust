@@ -90,30 +90,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldSaveAndLoadReadModelForTeam()
-		{
-			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());
-			var personId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-			var businessUnitId = Guid.NewGuid();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				createAndSaveReadModel(personId, teamId, businessUnitId, new DateTime(2012, 8, 29), 10);
-				uow.PersistAll();
-			}
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				var ret = _target.ForTeam(new DateTimePeriod(new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc), new DateTime(2012, 8, 29, 12, 0, 0, DateTimeKind.Utc)), teamId);
-				Assert.That(ret.Count(), Is.EqualTo(1));
-			}
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				clearReadModel(personId, businessUnitId, new DateTime(2012, 8, 29));
-				uow.PersistAll();
-			}
-		}
-
-		[Test]
 		public void ShouldSaveAndLoadReadModelForPeople()
 		{
 			_target = new PersonScheduleDayReadModelFinder(CurrentUnitOfWork.Make());

@@ -13,11 +13,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 				public GlobalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+		    : base(currentUnitOfWork)
 	    {
 	    }
 
-        public override ISettingData FindByKey(string key)
+		public GlobalSettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
+			: base(unitOfWorkFactory)
+		{
+		}
+
+	    public override ISettingData FindByKey(string key)
         {
             return Session.CreateCriteria(typeof(GlobalSettingData))
                         .Add(Restrictions.Eq("Key", key))

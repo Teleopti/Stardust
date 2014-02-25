@@ -9,9 +9,7 @@ namespace Teleopti.Ccc.Domain.Repositories
     /// Created by: robink
     /// Created date: 2008-09-24
     /// </remarks>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
     public interface IWorkloadRepository : IRepository<IWorkload>
     {
-        IWorkload LoadWorkload(IWorkload workload);
     }
 }

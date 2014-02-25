@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var editableDate = DataMaker.Data().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var cell = CalendarCells.DateSelector(editableDate);
-			Browser.Interactions.ClickUsingJQuery(cell);
+			Browser.Interactions.Click(cell);
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format("{0}.{1}",cell,"ui-selected"));
 		}
 

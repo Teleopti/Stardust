@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
@@ -12,10 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 	public class TeamScheduleViewModelMappingProfile : Profile
 	{
 		private readonly Func<IUserTimeZone> _userTimeZone;
+		private readonly ICreateHourText _createHourText;
 
-		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone)
+		public TeamScheduleViewModelMappingProfile(Func<IUserTimeZone> userTimeZone, ICreateHourText createHourText)
 		{
 			_userTimeZone = userTimeZone;
+			_createHourText = createHourText;
 		}
 
 		private class TimeLineMappingData
@@ -62,27 +65,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				;
 
 			CreateMap<TimeLineMappingData, TimeLineViewModel>()
-				.ForMember(d => d.ShortTime, o => o.ResolveUsing(s =>
-					{
-						var localTime = TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone());
-						if (localTime.TimeOfDay.Minutes != 0)
-							return localTime.ToString("HH:mm");
-
-						var timeFormat = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
-						timeFormat = timeFormat.Replace(CultureInfo.CurrentCulture.DateTimeFormat.TimeSeparator, string.Empty);
-						timeFormat = timeFormat.Replace("m", string.Empty);
-						if (timeFormat == "h")
-							timeFormat = "hh";
-						else if (timeFormat == "H")
-							timeFormat = "HH";
-						return localTime.ToString(timeFormat);
-					}))
+				.ForMember(d => d.ShortTime, o => o.ResolveUsing(s => _createHourText.CreateText(s.Time)))
 				.ForMember(d => d.PositionPercent, o => o.ResolveUsing(s =>
 																					{
 																						var displayedTicks = (decimal)s.DisplayTimePeriod.EndDateTime.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;
 																						var positionTicks = (decimal)s.Time.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;
 																						return positionTicks / displayedTicks;
 																					}))
+				.ForMember(d => d.IsFullHour, o => o.ResolveUsing( s => TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay.Minutes == 0))
 				;
 
 			CreateMap<TeamScheduleDayDomainData, AgentScheduleViewModel>()

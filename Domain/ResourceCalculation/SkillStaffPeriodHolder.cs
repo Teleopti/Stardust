@@ -59,11 +59,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 							//skill.SkillType.ForecastSource
                             double absoluteDifferenceScheduledHeadsAndMinMaxHeads = skillStaffPeriod.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads(true);
                             //int origDemand = (int) Math.Round(skillStaffPeriod.ForecastedIncomingDemand().TotalMinutes);
-                            var origDemand = (int)Math.Round(skillStaffPeriod.FStaffTime().TotalMinutes);
-                            var assignedResource =
-                                (int)
-                                Math.Round(skillStaffPeriod.Payload.CalculatedResource*
-                                           skillStaffPeriod.Period.ElapsedTime().TotalMinutes);
+                            var origDemand = skillStaffPeriod.FStaffTime().TotalMinutes;
+                            var assignedResource =skillStaffPeriod.Payload.CalculatedResource*
+                                           skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
                             ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataHolder(origDemand,
                                                                                                     assignedResource,
                                                                                                     skillStaffPeriod.

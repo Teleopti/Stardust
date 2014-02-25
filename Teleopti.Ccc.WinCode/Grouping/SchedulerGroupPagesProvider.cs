@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.WinCode.Grouping
 	public class SchedulerGroupPagesProvider : ISchedulerGroupPagesProvider
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IRepositoryFactory _repositoryFactory;
 		private IList<IUserDefinedTabLight> _userDefined;
+		private IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
 
-		public SchedulerGroupPagesProvider(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+		public SchedulerGroupPagesProvider(IUnitOfWorkFactory unitOfWorkFactory, IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_repositoryFactory = repositoryFactory;
+			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
 		}
 
 		public IList<IGroupPageLight> GetGroups(bool includeSkills)
@@ -36,10 +36,9 @@ namespace Teleopti.Ccc.WinCode.Grouping
 
 			if (_userDefined == null)
 			{
-				using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+				using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 				{
-					var rep = _repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow);
-					_userDefined = rep.GetUserDefinedTabs();
+					_userDefined = _personSelectorReadOnlyRepository.GetUserDefinedTabs();
 				}
 			}
 			if(_userDefined != null)

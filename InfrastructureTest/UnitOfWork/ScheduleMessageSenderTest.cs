@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -24,31 +19,49 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class ScheduleMessageSenderTest
 	{
-		
 		[Test]
 		public void ShouldSendNotificationForPersistableScheduleData()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()));
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()), beforeSendEvents);
+			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
+
+			target.Execute(new[] { rootChangeInfo });
+
+			serviceBusSender.AssertWasCalled(x => x.Send(null), o => o.IgnoreArguments());
+		}
+
+		[Test]
+		public void ShouldCallHookBeforeSendNotificationForPersistableScheduleData()
+		{
+			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
+			var person = PersonFactory.CreatePerson();
+			var scenario = ScenarioFactory.CreateScenarioAggregate();
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
+			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()), beforeSendEvents);
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
 			target.Execute(new[] {rootChangeInfo});
 
-			serviceBusSender.AssertWasCalled(x => x.Send(null), o => o.IgnoreArguments());
+			beforeSendEvents.AssertWasCalled(x => x.Execute(null), o => o.IgnoreArguments());
 		}
 
 		[Test]
 		public void ShouldNotSendNotificationForNullScenario()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, null);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()));
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()), beforeSendEvents);
 
             serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
@@ -61,9 +74,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldNotSendNotificationForOtherType()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(person, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()));
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()), beforeSendEvents);
 
             serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
@@ -76,11 +90,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldNotSendNotificationForInternalNote()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var note = new Note(person, DateOnly.Today, scenario, "my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()));
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()), beforeSendEvents);
 
             serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
@@ -93,11 +108,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldNotSendNotificationForPublicNote()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var note = new PublicNote(person, DateOnly.Today, scenario, "my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()));
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()), beforeSendEvents);
 
             serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
@@ -110,11 +126,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         public void ShouldNotSendNotificationForScheduleDayTag()
         {
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
             var scenario = ScenarioFactory.CreateScenarioAggregate();
             var agentDayScheduleTag = new AgentDayScheduleTag(person, DateOnly.Today, scenario, new ScheduleTag());
             IRootChangeInfo rootChangeInfo = new RootChangeInfo(agentDayScheduleTag, DomainUpdateType.Insert);
-			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()));
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new DummyContextPopulator()), beforeSendEvents);
 
             serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 
@@ -127,13 +144,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldSendMessageBrokerIdentifierWithEvent()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 			var initiatorIdentifier = new FakeInitiatorIdentifier { InitiatorId = Guid.NewGuid() };
-			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new EventContextPopulator(null, new FakeCurrentInitiatorIdentifier(initiatorIdentifier))));
+			var target = new ScheduleMessageSender(new ServiceBusEventPublisher(serviceBusSender, new EventContextPopulator(null, new FakeCurrentInitiatorIdentifier(initiatorIdentifier))), beforeSendEvents);
 
 			target.Execute(new[] { rootChangeInfo });
 
@@ -146,13 +164,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void Execute_WhenTheSchedulesHasChanged_ShouldSetTheStartDateTimeForTheMessageToTheStartTimeOfTheChangedSchedule()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			var beforeSendEvents = MockRepository.GenerateMock<IBeforeSendEvents>();
 			var person = PersonFactory.CreatePerson();
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Update);
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
 			var publisher = new eventPublisherProbe();
-			var target = new ScheduleMessageSender(publisher);
+			var target = new ScheduleMessageSender(publisher, beforeSendEvents);
 			target.Execute(new[] { rootChangeInfo });
 
 			Assert.That(publisher.PublishedEvent.StartDateTime, Is.EqualTo(personAssignment.Period.StartDateTime));
@@ -168,7 +187,5 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 
 		}
-		
-
 	}
 }

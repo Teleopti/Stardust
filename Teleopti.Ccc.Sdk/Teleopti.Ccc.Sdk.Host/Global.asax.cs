@@ -70,22 +70,21 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 
 			var busSender = new ServiceBusSender();
 	        var eventPublisher = new ServiceBusEventPublisher(busSender, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make())));
-        	var initializeApplication =
-        		new InitializeApplication(
-        			new DataSourcesFactory(new EnversConfiguration(),
-        			                       new List<IMessageSender>
-        			                       	{
-												new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
-                                                new ScheduleMessageSender(eventPublisher),
-                                                new MeetingMessageSender(eventPublisher),
-                                                new GroupPageChangedMessageSender(eventPublisher),
-                                                new TeamOrSiteChangedMessageSender(eventPublisher),
-                                                new PersonChangedMessageSender(eventPublisher),
-                                                new PersonPeriodChangedMessageSender(eventPublisher)
-                                            },
-													DataSourceConfigurationSetter.ForSdk()),
-        			new SignalBroker(MessageFilterManager.Instance))
-        			{MessageBrokerDisabled = messageBrokerDisabled()};
+	        var initializeApplication =
+		        new InitializeApplication(
+			        new DataSourcesFactory(new EnversConfiguration(),
+			                               new List<IMessageSender>
+				                               {
+					                               new ScheduleMessageSender(eventPublisher, new ClearEvents()),
+					                               new EventsMessageSender(new SyncEventsPublisher(eventPublisher)),
+					                               new MeetingMessageSender(eventPublisher),
+					                               new GroupPageChangedMessageSender(eventPublisher),
+					                               new TeamOrSiteChangedMessageSender(eventPublisher),
+					                               new PersonChangedMessageSender(eventPublisher),
+					                               new PersonPeriodChangedMessageSender(eventPublisher)
+				                               },
+			                               DataSourceConfigurationSetter.ForSdk()),
+			        new SignalBroker(MessageFilterManager.Instance)) {MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
             initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
             var messageBroker = initializeApplication.MessageBroker;

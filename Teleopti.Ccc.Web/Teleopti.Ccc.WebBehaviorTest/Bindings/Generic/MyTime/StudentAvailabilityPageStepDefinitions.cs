@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I select day '(.*)' in student availability")]
 		public void WhenISelectDayInStudentAvailability(DateTime date)
 		{
-			Browser.Interactions.ClickUsingJQuery(CalendarCells.DateSelector(date));
+			Browser.Interactions.Click(CalendarCells.DateSelector(date));
 		}
 
 		[When(@"I select following days in student availability")]

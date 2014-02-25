@@ -1,5 +1,6 @@
 
 
+using System;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
@@ -38,9 +39,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private double getTweakedCurrentDemand(double originalDemandInMinutes, double assignedResourceInMinutes, double priorityValue, Percent overstaffingFactor)
 		{
 			double currentDemandInMinutes = assignedResourceInMinutes - originalDemandInMinutes;
-			double overUnderStaffFaktor = overstaffingFactor.Value;
+			if (Math.Abs(overstaffingFactor.Value - 0.5) < 0.05)
+				return priorityValue * currentDemandInMinutes;
+
+			double overUnderStaffFaktor = 1;
 			if (currentDemandInMinutes < 0)
-				overUnderStaffFaktor = 1 - overstaffingFactor.Value;
+				overUnderStaffFaktor = 1 - (overstaffingFactor.Value);
 			return priorityValue * overUnderStaffFaktor * currentDemandInMinutes;
 		}
 	}

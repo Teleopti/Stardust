@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldLoadGroupPages()
 		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target = new PersonSelectorReadOnlyRepository(uow);
+				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				_target.GetUserDefinedTabs();
 			}
 		}
@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			UnitOfWork.PersistAll();
 			SkipRollback();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target = new PersonSelectorReadOnlyRepository(uow);
+				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				var date = new DateOnly(2012, 1, 27);
 				_target.GetOrganization(new DateOnlyPeriod(date,date), true );
 			}
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			UnitOfWork.PersistAll();
 			SkipRollback();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target = new PersonSelectorReadOnlyRepository(uow);
+				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				var date = new DateOnly(2012, 1, 27);
 				_target.GetBuiltIn(new DateOnlyPeriod(date,date), PersonSelectorField.Contract);
 			}
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			UnitOfWork.PersistAll();
 			SkipRollback();
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target = new PersonSelectorReadOnlyRepository(uow);
+				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				_target.GetUserDefinedTab(new DateOnly(2012, 1, 27), Guid.NewGuid());
 			}
 		}

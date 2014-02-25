@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
 		PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId);
 
-		IEnumerable<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId);
 		IEnumerable<PersonScheduleDayReadModel> ForPeople(DateTimePeriod period, IEnumerable<Guid> personIds);
 		IEnumerable<PersonScheduleDayReadModel> ForPersons(DateOnly date, IEnumerable<Guid> personIdList, Paging paging);
 	}

@@ -34,11 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-		public IPersonAssignment Load(Guid personId, DateOnly date)
-		{
-			throw new NotImplementedException();
-		}
-
 		/// <summary>
 		/// Finds the specified persons.
 		/// </summary>

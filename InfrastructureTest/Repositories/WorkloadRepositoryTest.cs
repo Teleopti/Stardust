@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -237,37 +236,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(originalWorkload);
 
             Assert.AreEqual(1,template.TaskPeriodList.Count);
-        }
-
-        [Test]
-        public void ShouldLoadWorkload()
-        {
-            var skill = SkillFactory.CreateSkill("TestSkill", _skillType, 15);
-            skill.Activity = _activity;
-            PersistAndRemoveFromUnitOfWork(skill);
-
-            var q = new QueueSource("Queue 1", "Phone queue 1", 1);
-            PersistAndRemoveFromUnitOfWork(q);
-
-            var wl = new Workload(skill);
-            wl.AddQueueSource(q);
-            PersistAndRemoveFromUnitOfWork(wl);
-
-            var wl2 = new Workload(skill);
-
-            PersistAndRemoveFromUnitOfWork(wl2);
-
-            var rep = new WorkloadRepository(UnitOfWork);
-            var workloadToTest = rep.LoadWorkload(wl);
-
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(workloadToTest.Skill));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(workloadToTest.Skill.SkillType));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(workloadToTest.Skill.WorkloadCollection.First()));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(workloadToTest.Skill.TemplateWeekCollection.First().Value.TemplateSkillDataPeriodCollection));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(workloadToTest.TemplateWeekCollection.First().Value.OpenHourList));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(workloadToTest.TemplateWeekCollection.First().Value.TaskPeriodList));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(workloadToTest.QueueSourceCollection));
-
         }
 
         protected override Repository<IWorkload> TestRepository(IUnitOfWork unitOfWork)

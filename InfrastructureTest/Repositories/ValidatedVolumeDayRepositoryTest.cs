@@ -105,51 +105,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         }
 
         /// <summary>
-        /// Determines whether this instance [can match task owner days with validated volume days].
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-28
-        /// </remarks>
-        [Test]
-        public void CanMatchTaskOwnerDaysWithValidatedVolumeDays()
-        {
-            IValidatedVolumeDay validatedVolumeDay1 = CreateAggregateWithCorrectBusinessUnit();
-            PersistAndRemoveFromUnitOfWork(validatedVolumeDay1);
-            IValidatedVolumeDay validatedVolumeDay2 = new ValidatedVolumeDay(
-                validatedVolumeDay1.Workload,
-                validatedVolumeDay1.VolumeDayDate.AddDays(1));
-            PersistAndRemoveFromUnitOfWork(validatedVolumeDay2);
-
-            DateOnlyPeriod period = new DateOnlyPeriod(validatedVolumeDay1.VolumeDayDate, validatedVolumeDay1.VolumeDayDate.AddDays(3));
-
-            ITaskOwner taskOwnerDay1 = Mocks.StrictMock<ITaskOwner>();
-            ITaskOwner taskOwnerDay2 = Mocks.StrictMock<ITaskOwner>();
-            ITaskOwner taskOwnerDay3 = Mocks.StrictMock<ITaskOwner>();
-
-            Expect.Call(taskOwnerDay1.CurrentDate).Return(validatedVolumeDay1.VolumeDayDate).Repeat.AtLeastOnce();
-            Expect.Call(taskOwnerDay2.CurrentDate).Return(validatedVolumeDay2.VolumeDayDate).Repeat.AtLeastOnce();
-            Expect.Call(taskOwnerDay3.CurrentDate).Return(validatedVolumeDay2.VolumeDayDate.AddDays(1)).Repeat.AtLeastOnce();
-            IList<ITaskOwner> taskOwnerList = new List<ITaskOwner> { taskOwnerDay1, taskOwnerDay2, taskOwnerDay3 };
-
-            Mocks.ReplayAll();
-
-            IValidatedVolumeDayRepository repository = new ValidatedVolumeDayRepository(UnitOfWork);
-            ICollection<IValidatedVolumeDay> existingValidatedVolumeDays = repository.FindRange(period, validatedVolumeDay1.Workload);
-            Assert.AreEqual(2, existingValidatedVolumeDays.Count);
-            ICollection<ITaskOwner> validatedVolumeDays = repository.MatchDays(validatedVolumeDay1.Workload, taskOwnerList, existingValidatedVolumeDays);
-            Assert.AreEqual(3, validatedVolumeDays.Count);
-            Assert.AreEqual(taskOwnerDay1, ((ValidatedVolumeDay)validatedVolumeDays.ElementAt(0)).TaskOwner);
-            Assert.AreEqual(taskOwnerDay2, ((ValidatedVolumeDay)validatedVolumeDays.ElementAt(1)).TaskOwner);
-            Assert.AreEqual(taskOwnerDay3, ((ValidatedVolumeDay)validatedVolumeDays.ElementAt(2)).TaskOwner);
-            Assert.IsNotNull(((ValidatedVolumeDay)validatedVolumeDays.ElementAt(0)).Id);
-            Assert.IsNotNull(((ValidatedVolumeDay)validatedVolumeDays.ElementAt(1)).Id);
-            Assert.IsNotNull(((ValidatedVolumeDay)validatedVolumeDays.ElementAt(2)).Id);
-
-            Mocks.VerifyAll();
-        }
-
-        /// <summary>
         /// Determines whether this instance [can match task owner days with validated volume days without adding to repository].
         /// </summary>
         /// <remarks>

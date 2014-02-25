@@ -13,18 +13,7 @@ namespace Teleopti.Ccc.Domain.Repositories
     /// </summary>
     public interface ISiteRepository : IRepository<ISite>
     {
-
-        #region Properties - Instance Member
-
-        #endregion
-
-        #region Methods - Instance Member
-
-        ISite CreateInstance(string name);
         ICollection<ISite> FindSiteByDescriptionName(string name);
-
-        #endregion
-
     }
 
 }

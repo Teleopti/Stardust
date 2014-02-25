@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
@@ -294,21 +295,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var tooltip = ExtendedTooltip(fields.Date);
 			Browser.Interactions.AssertExistsUsingJQuery(tooltip);
 
-			if (fields.Preference != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.Preference);
-			if (fields.StartTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.StartTimeMinimum);
-			if (fields.StartTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.StartTimeMaximum);
-			if (fields.EndTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.EndTimeMinimum);
-			if (fields.EndTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.EndTimeMaximum);
-			if (fields.WorkTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.WorkTimeMinimum);
-			if (fields.WorkTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.WorkTimeMaximum);
+			var resultHtml = Browser.Interactions.Javascript("return $(\"" + tooltip + "\").html()") as string;
 
-			if (fields.Activity != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.Activity);
-			if (fields.ActivityStartTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityStartTimeMinimum);
-			if (fields.ActivityStartTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.StartTimeMaximum);
-			if (fields.ActivityEndTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityEndTimeMinimum);
-			if (fields.ActivityEndTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityEndTimeMaximum);
-			if (fields.ActivityTimeMinimum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityTimeMinimum);
-			if (fields.ActivityTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.ActivityTimeMaximum);
+			if (fields.Preference != null) Assert.IsTrue(resultHtml.Contains(fields.Preference));
+			if (fields.StartTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMinimum)); 
+			if (fields.StartTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMaximum));
+			if (fields.EndTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.EndTimeMinimum));
+			if (fields.EndTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.EndTimeMaximum));
+			if (fields.WorkTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.WorkTimeMinimum));
+			if (fields.WorkTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.WorkTimeMaximum));
+
+			if (fields.Activity != null) Assert.IsTrue(resultHtml.Contains(fields.Activity));
+			if (fields.ActivityStartTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityStartTimeMinimum));
+			if (fields.ActivityStartTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityStartTimeMaximum));
+			if (fields.ActivityEndTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityEndTimeMinimum));
+			if (fields.ActivityEndTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityEndTimeMaximum));
+			if (fields.ActivityTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityTimeMinimum));
+			if (fields.ActivityTimeMaximum != null) Assert.IsTrue(resultHtml.Contains(fields.ActivityTimeMaximum));
 		}
 
 		private static void OpenExtendedTooltip(DateTime date)

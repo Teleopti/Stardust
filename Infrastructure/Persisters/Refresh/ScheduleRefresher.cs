@@ -114,6 +114,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Refresh
 				}
 				if (myVersionOfEntity.HasValue)
 				{
+					if (versionKeyValuePair.Value.HasSameVersion()) continue;
+
 					_scheduleDataUpdater.FillReloadedScheduleData(versionKeyValuePair.Value.Item2);
 					var state = new PersistConflict(myVersionOfEntity.Value, versionKeyValuePair.Value.Item2);
 					conflictsBuffer.Add(state);
