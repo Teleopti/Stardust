@@ -11954,6 +11954,14 @@ Reduce the complexity to use these shifts.</value>
     <value>Shift Category Points:</value>
     <comment>Shift category points for the selected agent. Under fairness tab in agent info</comment>
   </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Detailed Adherence</value>
+    <comment>Text on adherence tab on web my report</comment>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Summary</value>
+    <comment>Text on summary tab on web my report</comment>
+  </data>
   <data name="MonthSchedule" xml:space="preserve">
     <value>Month Schedule</value>
     <comment>Month schedule in permission tree</comment>

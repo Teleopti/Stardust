@@ -11411,22 +11411,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Igår</value>
     <comment>Link in My Report (web)</comment>
   </data>
-  <data name="Metric" xml:space="preserve">
-    <value>Mått</value>
-    <comment>Caption in My Report (web)</comment>
-  </data>
-  <data name="Readiness" xml:space="preserve">
-    <value>Tillgänglighet</value>
-    <comment>caption in My Report (web)</comment>
-  </data>
-  <data name="Value" xml:space="preserve">
-    <value>Värde</value>
-    <comment>Caption in My Report (web)</comment>
-  </data>
-  <data name="Yesterday" xml:space="preserve">
-    <value>Igår</value>
-    <comment>Link in My Report (web)</comment>
-  </data>
   <data name="ChatTime" xml:space="preserve">
     <value>Chattid</value>
   </data>
@@ -11447,5 +11431,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Schemat måste laddas om</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Detaljerad schemauppföljning</value>
+    <comment>Text on adherence tab on web my report</comment>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Summering</value>
+    <comment>Text on summary tab on web my report</comment>
   </data>
 </root>
