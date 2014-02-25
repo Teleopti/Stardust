@@ -121,6 +121,19 @@ When I click to add a new absence request with
 Then I should see the remaining time is '25 days'
 And I should see the used time is '0 days'
 
+@ignore
+Scenario: Don't show personal account when you do not have permission
+	Given I am an agent without permission for personal account
+	And I have a personal account for period including today's date
+	| Field     | Value      |
+	| Absence   | Vacation   |
+	| Type      | Days       |
+	| Used      | 7          |
+	| Remaining | 18         |
+	When I am viewing requests
+	And I click to add a new absence request
+	Then I should not see the remaining and used time
+
 Scenario: Add absence request
 	Given I am an agent
 	And I have a requestable absence called Vacation
