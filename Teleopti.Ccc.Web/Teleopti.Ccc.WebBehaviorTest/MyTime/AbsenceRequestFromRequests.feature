@@ -5,7 +5,7 @@
 
 
 @ignore
-Scenario: When requesting absence tracked as days view remaining time and used time
+Scenario: When requesting absence tracked as days view UI account values
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
@@ -20,7 +20,7 @@ Scenario: When requesting absence tracked as days view remaining time and used t
 	And I should see the used time is '7 days'
 
 @ignore
-Scenario: When requesting absence tracked by hours view remaining time and used time
+Scenario: When requesting absence tracked by hours view UI account values
 	Given I am an agent
 	And I have a requestable absence called Illness
 	And I am viewing requests
@@ -35,7 +35,7 @@ Scenario: When requesting absence tracked by hours view remaining time and used 
 	And I should see the remaining time is '180:00 hours'
 
 @ignore
-Scenario: When changing absence type update remaining time and used time 
+Scenario: When changing absence type update UI account values
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I have a requestable absence called Illness
@@ -60,7 +60,7 @@ Scenario: When changing absence type update remaining time and used time
 	And I should see the remaining time is '18 days'
 
 @ignore
-Scenario: When changing request date update remaining time and used time
+Scenario: When changing request date update UI account values
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
@@ -94,7 +94,7 @@ Scenario: When changing request date update remaining time and used time
 	And I should see the used time is '0 days'
 
 @ignore
-Scenario: When requesting absence over multiple account periods show remaining time and used time according to end date period
+Scenario: When requesting absence over multiple account periods show UI account values according to end date period
 Given I am an agent
 And I have a requestable absence called Vacation
 And I am viewing requests
@@ -122,8 +122,8 @@ Then I should see the remaining time is '25 days'
 And I should see the used time is '0 days'
 
 @ignore
-Scenario: Don't show personal account when you do not have permission
-	Given I am an agent without permission for personal account
+Scenario: Don't show UI account values when you do not have permission
+	Given I am an agent without permission for UI account values
 	And I have a personal account for period including today's date
 	| Field     | Value      |
 	| Absence   | Vacation   |
