@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
@@ -112,6 +113,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 						try
 						{
 							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
+
+							var personAssignment = bestScheduleDay.PersonAssignment();
+							var authorization = PrincipalAuthorization.Instance();
+							if (!(authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person))) continue;
+
 							rollbackService.Modify(bestScheduleDay);
 							foundSpot = true;
 						}
