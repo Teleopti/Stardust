@@ -3,12 +3,12 @@
 ::hard coded for each environment
 ::=====================
 SET INSTALLDIR=C:\Program Files (x86)\Teleopti\
-SET DBServerInstance=tcp:ARES\PSTECH
+SET DBServerInstance=ATLANTIS
 SET AppServer=ATLANTIS
 SET DB_ANALYTICS=ATLANTIS_TeleoptiAnalytics
 SET DB_CCC7=ATLANTIS_TeleoptiCCC7
 SET DB_CCCAGG=ATLANTIS_TeleoptiCCCAgg
-SET DB_WINGROUP=TOPTINET\#secDevelopCCC
+SET DB_WINGROUP=ATLANTIS\TeleoptiCCC_Users
 SET /A SSL=0
 SET ADDLOCAL=Database,AgentPortalWeb,Analytics,ClickOnce,AgentPortal,AdminClient,SDK,ServiceBus,ETL,Service,Tool,RTA,MessageBroker,RestoreDemo
 SET /A SQLSSL=0
