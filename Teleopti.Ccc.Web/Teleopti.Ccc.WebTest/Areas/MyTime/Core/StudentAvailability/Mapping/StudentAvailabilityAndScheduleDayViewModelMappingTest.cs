@@ -61,5 +61,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			result.StudentAvailability.Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldAllowMultipleStudentAvailabilityDayLoaded()
+		{
+			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today);
+			var studentAvailabilityRestriction = new StudentAvailabilityRestriction();
+			var studentAvailabilityDay1 = new StudentAvailabilityDay(new Person(), DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
+			var studentAvailabilityDay2 = new StudentAvailabilityDay(new Person(), DateOnly.Today, new List<IStudentAvailabilityRestriction> { studentAvailabilityRestriction });
+			var personRestrictionCollection =
+				new ReadOnlyObservableCollection<IScheduleData>(new ObservableCollection<IScheduleData>(new[] { studentAvailabilityDay1, studentAvailabilityDay2 }));
+
+			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(personRestrictionCollection);
+
+			var result = Mapper.Map<IScheduleDay, StudentAvailabilityAndScheduleDayViewModel>(scheduleDay);
+
+			result.StudentAvailability.Should().Not.Be.Null();
+		}
 	}
 }

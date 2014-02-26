@@ -62,6 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             ICriteria crit = Session.CreateCriteria(typeof(StudentAvailabilityDay))
                 .Add(Restrictions.Eq("RestrictionDate", dateOnly))
                 .Add(Restrictions.Eq("Person", person))
+				.AddOrder(Order.Desc("UpdatedOn"))
                 .SetResultTransformer(Transformers.DistinctRootEntity)
                 .SetFetchMode("Restriction", FetchMode.Join);
             IList<IStudentAvailabilityDay> retList = crit.List<IStudentAvailabilityDay>();
@@ -87,7 +88,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
                 .Add(Restrictions.Between("RestrictionDate", period.StartDate, period.EndDate))
                 .AddOrder(Order.Asc("Person"))
-                .AddOrder(Order.Asc("RestrictionDate"));
+                .AddOrder(Order.Asc("RestrictionDate"))
+				.AddOrder(Order.Desc("UpdatedOn"));
         }
 
         private static void InitializeStudentDays(IEnumerable<IStudentAvailabilityDay> studentDays)
