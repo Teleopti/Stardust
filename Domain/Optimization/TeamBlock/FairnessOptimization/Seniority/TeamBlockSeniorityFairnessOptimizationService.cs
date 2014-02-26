@@ -60,7 +60,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				var unSuccessfulSwaps = new List<ITeamBlockInfo>();
 		        var instance = PrincipalAuthorization.Instance();
 		        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
-		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
+		                                                               schedulingOptions.UseTeamBlockPerOption,
+		                                                               schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+		                                                               schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 		        IList<ITeamBlockInfo> filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
 				filteredTeamBlocks = _filterForTeamBlockInSelection.Filter(filteredTeamBlocks, selectedPersons, selectedPeriod);
@@ -100,7 +103,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				        }
 
 				        unSuccessfulSwaps.Remove(teamBlockInfoHighSeniority);
-
 
 				        teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoLowSeniority, highSeniorityPoints);
 

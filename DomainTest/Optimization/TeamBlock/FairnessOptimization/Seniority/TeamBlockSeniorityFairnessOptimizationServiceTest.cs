@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_person1 = PersonFactory.CreatePerson("PersonA");
 			_person2 = PersonFactory.CreatePerson("PersonB");
 			_persons = new List<IPerson> { _person1, _person2 };
-			_schedulingOptions = _mock.StrictMock<ISchedulingOptions>();
+			_schedulingOptions = new SchedulingOptions();
 			_shiftCategoryA = ShiftCategoryFactory.CreateShiftCategory("AA");
 			_shiftCategoryB = ShiftCategoryFactory.CreateShiftCategory("BB");
 			_shiftCategories = new List<IShiftCategory> { _shiftCategoryA, _shiftCategoryB };
@@ -76,7 +77,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos);
+				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions.UseTeamBlockPerOption,
+																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos);
@@ -102,7 +105,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos).Repeat.Twice();
+				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions.UseTeamBlockPerOption,
+																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).Return(_teamBlockInfos).Repeat.Twice();
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true).Repeat.Twice();
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true).Repeat.Twice();
 				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos).Repeat.Twice();
@@ -129,7 +134,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos);
+				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions.UseTeamBlockPerOption,
+																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos);
@@ -152,7 +159,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		{
 			using (_mock.Record())
 			{
-				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos);
+				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions.UseTeamBlockPerOption,
+																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer)).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos);
