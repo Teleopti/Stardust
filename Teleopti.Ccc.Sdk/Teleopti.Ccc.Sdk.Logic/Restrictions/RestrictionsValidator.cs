@@ -145,10 +145,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			    dto.TargetTimeNegativeToleranceInMinutes = periodNegativeTolerance;
 			    dto.TargetTimePositiveToleranceInMinutes = periodPositiveTolerance;
 
-			    IWorkTimeMinMax minMaxLength = _minMaxWorkTimeChecker.MinMaxWorkTime(scheduleDay, ruleSetBag,
-			                                                                         effectiveRestriction);
+			    IWorkTimeMinMax minMaxLength = _minMaxWorkTimeChecker.MinMaxWorkTime(scheduleDay, ruleSetBag, effectiveRestriction, false);
+				IWorkTimeMinMax minMaxContractLength = _minMaxWorkTimeChecker.MinMaxWorkTime(scheduleDay, ruleSetBag, effectiveRestriction, true);
 
-			    AddMinMaxToDto(dto, minMaxLength);
+			    AddMinMaxToDto(dto, minMaxLength, minMaxContractLength);
 
 				if ((personMeetingCollection.Count > 0 || (assignment!=null && assignment.PersonalActivities().Any())) 
 					&& !(dto.HasShift || dto.HasDayOff || dto.HasAbsence))
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 		    return result;
 	    }
 
-	    private static void AddMinMaxToDto(ValidatedSchedulePartDto dto, IWorkTimeMinMax minMaxLength)
+	    private static void AddMinMaxToDto(ValidatedSchedulePartDto dto, IWorkTimeMinMax minMaxLength, IWorkTimeMinMax minMaxContractLength)
         {
             if (minMaxLength != null)
             {
@@ -179,6 +179,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                     dto.MaxWorkTimeInMinutes = (int)minMaxLength.WorkTimeLimitation.EndTime.Value.TotalMinutes;
                 if (minMaxLength.WorkTimeLimitation.StartTime != null)
                     dto.MinWorkTimeInMinutes = (int)minMaxLength.WorkTimeLimitation.StartTime.Value.TotalMinutes;
+
+				if (minMaxContractLength.WorkTimeLimitation.EndTime.HasValue)
+					dto.MaxContractTimeInMinutes = (int)minMaxContractLength.WorkTimeLimitation.EndTime.Value.TotalMinutes;
+				if (minMaxContractLength.WorkTimeLimitation.StartTime != null)
+					dto.MinContractTimeInMinutes = (int)minMaxContractLength.WorkTimeLimitation.StartTime.Value.TotalMinutes;
                 
                 if (minMaxLength.StartTimeLimitation.EndTime.HasValue)
                     dto.MaxStartTimeMinute = (int)minMaxLength.StartTimeLimitation.EndTime.Value.TotalMinutes;
