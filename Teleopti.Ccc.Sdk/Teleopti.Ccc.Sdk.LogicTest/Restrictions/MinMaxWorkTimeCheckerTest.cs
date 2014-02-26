@@ -54,13 +54,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowIfScheduleDayIsNull()
         {
-            _target.MinMaxWorkTime(null, _ruleSetBag, _restriction);
+            _target.MinMaxWorkTime(null, _ruleSetBag, _restriction, false);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowIfRuleSetBagIsNull()
         {
-            _target.MinMaxWorkTime(_scheduleDay, null, _restriction);
+            _target.MinMaxWorkTime(_scheduleDay, null, _restriction, false);
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
             _mocks.ReplayAll();
 
-            var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction);
+            var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction, false);
             Assert.That(result.EndTimeLimitation.StartTime, Is.Null);
             Assert.That(result.EndTimeLimitation.EndTime, Is.Null);
             Assert.That(result.StartTimeLimitation.StartTime, Is.Null);
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             Expect.Call(_scheduleDay.ProjectionService()).Return(projectionService);
             Expect.Call(projectionService.CreateProjection()).Return(projection);
             _mocks.ReplayAll();
-            var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction);
+            var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction, false);
             Assert.That(result, Is.Not.Null);
 	        result.EndTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(18));
 	        result.EndTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(18));
@@ -119,6 +119,40 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 			result.WorkTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(9));
             _mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldGetMinMaxWorkTimeFromContractTimeIfUseConctractTimeOnMainShift()
+		{
+			var dateTime = new DateTime(2010, 12, 16, 8, 0, 0, DateTimeKind.Utc);
+			var projectionService = _mocks.StrictMock<IProjectionService>();
+			var payload1 = ActivityFactory.CreateActivity("Phone");
+			payload1.InWorkTime = true;
+			payload1.InContractTime = true;
+			var payload2 = ActivityFactory.CreateActivity("Extra");
+			payload2.InWorkTime = false;
+			payload2.InContractTime = true;
+			var layerCollection = new List<IVisualLayer>
+		        {
+			        new VisualLayer(payload1, new DateTimePeriod(dateTime, dateTime.AddHours(9)), payload1, _person),
+			        new VisualLayer(payload2, new DateTimePeriod(dateTime.AddHours(9), dateTime.AddHours(10)), payload2, _person)
+		        };
+			var projection = new VisualLayerCollection(_person, layerCollection, new ProjectionPayloadMerger());
+
+			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+			Expect.Call(_scheduleDay.TimeZone).Return(_person.PermissionInformation.DefaultTimeZone());
+			Expect.Call(_scheduleDay.ProjectionService()).Return(projectionService);
+			Expect.Call(projectionService.CreateProjection()).Return(projection);
+			_mocks.ReplayAll();
+			var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction, true);
+			Assert.That(result, Is.Not.Null);
+			result.EndTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(18));
+			result.EndTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(18));
+			result.StartTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(9));
+			result.StartTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(9));
+			result.WorkTimeLimitation.StartTime.Should().Be.EqualTo(TimeSpan.FromHours(10));
+			result.WorkTimeLimitation.EndTime.Should().Be.EqualTo(TimeSpan.FromHours(10));
+			_mocks.VerifyAll();
+		}
 
 		[Test]
 		public void ShouldGetMinMaxWorkTimeFromAverageWorkTimeOnNotAvailableDay()
@@ -133,7 +167,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
 			using (_mocks.Playback())
 			{
-				var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction);
+				var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction, false);
 				Assert.That(result.WorkTimeLimitation.StartTime, Is.Null);
 			}
 		}
@@ -161,7 +195,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using(_mocks.Playback())
             {
-                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction);
+                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction, false);
                 Assert.That(result.WorkTimeLimitation.StartTime, Is.EqualTo(TimeSpan.FromHours(8)));
             }
         }
@@ -189,7 +223,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using (_mocks.Playback())
             {
-                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction);
+                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction, false);
                 Assert.That(result.WorkTimeLimitation.StartTime, Is.EqualTo(TimeSpan.Zero));
             }
         }
@@ -225,7 +259,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using (_mocks.Playback())
             {
-                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction);
+                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction, false);
                 Assert.That(result.WorkTimeLimitation.StartTime, Is.EqualTo(TimeSpan.FromHours(8)));
             }
         }
@@ -251,7 +285,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
 
             using (_mocks.Playback())
             {
-                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction);
+                var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, effectiveRestriction, false);
                 Assert.That(result.WorkTimeLimitation.StartTime, Is.EqualTo(TimeSpan.Zero));
             }    
         }
@@ -272,7 +306,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             Expect.Call(_ruleSetBag.MinMaxWorkTime(_workShiftWorkTime, onDate, _restriction)).Return(new WorkTimeMinMax());
             _mocks.ReplayAll();
 
-            var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction);
+            var result = _target.MinMaxWorkTime(_scheduleDay, _ruleSetBag, _restriction, false);
             Assert.That(result, Is.Not.Null);
             _mocks.VerifyAll();
         }

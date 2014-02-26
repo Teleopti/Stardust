@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 {
     public interface IMinMaxWorkTimeChecker
     {
-        IWorkTimeMinMax MinMaxWorkTime(IScheduleDay scheduleDay, IRuleSetBag ruleSetBag, IEffectiveRestriction effectiveRestriction);
+        IWorkTimeMinMax MinMaxWorkTime(IScheduleDay scheduleDay, IRuleSetBag ruleSetBag, IEffectiveRestriction effectiveRestriction, bool useContractTimeOnMainShift);
     }
 
     public class MinMaxWorkTimeChecker : IMinMaxWorkTimeChecker
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 			_workShiftWorkTime = workShiftWorkTime;
         }
 
-    	public IWorkTimeMinMax MinMaxWorkTime(IScheduleDay scheduleDay, IRuleSetBag ruleSetBag, IEffectiveRestriction effectiveRestriction)
+		public IWorkTimeMinMax MinMaxWorkTime(IScheduleDay scheduleDay, IRuleSetBag ruleSetBag, IEffectiveRestriction effectiveRestriction, bool useContractTimeOnMainShift)
         {
             if (scheduleDay == null)
                 throw new ArgumentNullException("scheduleDay");
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
             if (significant == SchedulePartView.MainShift)
             {
-                return GetWorkTime(scheduleDay);
+				return useContractTimeOnMainShift ? GetContractTime(scheduleDay) : GetWorkTime(scheduleDay);
             }
 
-			if (significant == SchedulePartView.FullDayAbsence)
+    		if (significant == SchedulePartView.FullDayAbsence)
 			{
 				return GetContractTime(scheduleDay);
 			}
