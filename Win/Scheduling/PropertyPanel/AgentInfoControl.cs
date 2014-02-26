@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             createAndAddItem(listViewRestrictions, Resources.Rotations, "", 1);
             handleRotations(extractor.RotationList);
             createAndAddItem(listViewRestrictions, Resources.StudentAvailability, "", 1);
-            handleStudentAvailabilities(extractor.StudentAvailabilityList);
+            handleStudentAvailability(extractor.StudentAvailabilityList.FirstOrDefault());
 
 	        if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities))
 	        {
@@ -352,21 +352,18 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
         }
 
-        private void handleStudentAvailabilities(IEnumerable<IStudentAvailabilityDay> studentAvailabilityList)
-        {
-            foreach (var studentAvailabilityDay in studentAvailabilityList)
-            {
-                foreach (StudentAvailabilityRestriction availRestriction in studentAvailabilityDay.RestrictionCollection)
-                {
-                    if (((IStudentAvailabilityDay)availRestriction.Parent).NotAvailable)
-                        createAndAddItem(listViewRestrictions, Resources.Available, (!((IStudentAvailabilityDay)availRestriction.Parent).NotAvailable).ToString(CultureInfo.CurrentCulture), 2);
-                    addTimeRestriction(availRestriction, 2);
-                }
-            }
+	    private void handleStudentAvailability(IStudentAvailabilityDay studentAvailabilityDay)
+	    {
+		    if (studentAvailabilityDay == null) return;
+		    foreach (StudentAvailabilityRestriction availRestriction in studentAvailabilityDay.RestrictionCollection)
+		    {
+			    if (((IStudentAvailabilityDay) availRestriction.Parent).NotAvailable)
+				    createAndAddItem(listViewRestrictions, Resources.Available, (!((IStudentAvailabilityDay) availRestriction.Parent).NotAvailable).ToString(CultureInfo.CurrentCulture), 2);
+			    addTimeRestriction(availRestriction, 2);
+		    }
+	    }
 
-        }
-
-		private IScheduleDay getScheduleDay(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+	    private IScheduleDay getScheduleDay(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
 		{
 			IScheduleDay schedulePart = null;
 			var scheduleRange = state.Schedules[person];
