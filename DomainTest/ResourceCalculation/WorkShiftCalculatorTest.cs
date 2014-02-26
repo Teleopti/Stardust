@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var result2 = calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
 
-            Assert.AreEqual(-1890, result);
+            Assert.AreEqual(-3240, result);
             Assert.AreEqual(result, result2);
         }
 

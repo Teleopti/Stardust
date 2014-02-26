@@ -15,26 +15,24 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		private MockRepository _mocks;
 		private SchedulerGroupPagesProvider _target;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
-		private IRepositoryFactory _repositoryFactory;
+		private IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-			_repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
+			_personSelectorReadOnlyRepository = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
 
-			_target = new SchedulerGroupPagesProvider(_unitOfWorkFactory,_repositoryFactory);
+			_target = new SchedulerGroupPagesProvider(_unitOfWorkFactory,_personSelectorReadOnlyRepository);
 		}
 
 		[Test]
 		public void ShouldProvideBuiltInWithoutSkill()
 		{
-			var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
-			var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
-			Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow)).Return(rep);
-			Expect.Call(rep.GetUserDefinedTabs()).Return(new List<IUserDefinedTabLight>());
+			var uow = _mocks.StrictMock<IUnitOfWork>();
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(_personSelectorReadOnlyRepository.GetUserDefinedTabs()).Return(new List<IUserDefinedTabLight>());
 			Expect.Call(uow.Dispose);
 			_mocks.ReplayAll();
 			var groups = _target.GetGroups(false);
@@ -45,11 +43,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		[Test]
 		public void ShouldProvideBuiltInWithSkill()
 		{
-			var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
-			var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
-			Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow)).Return(rep);
-			Expect.Call(rep.GetUserDefinedTabs()).Return(new List<IUserDefinedTabLight>());
+			var uow = _mocks.StrictMock<IUnitOfWork>();
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(_personSelectorReadOnlyRepository.GetUserDefinedTabs()).Return(new List<IUserDefinedTabLight>());
 			Expect.Call(uow.Dispose);
 			_mocks.ReplayAll();
 			var groups = _target.GetGroups(true);
@@ -60,12 +56,10 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		[Test]
 		public void ShouldProvideBuiltInAndUserDefined()
 		{
-			var uow = _mocks.StrictMock<IStatelessUnitOfWork>();
-			var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
+			var uow = _mocks.StrictMock<IUnitOfWork>();
 			IList<IUserDefinedTabLight> lst = new List<IUserDefinedTabLight> { new UserDefinedTabLight { Id = Guid.NewGuid(), Name = "UserDefined" } };
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(uow);
-			Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(uow)).Return(rep);
-			Expect.Call(rep.GetUserDefinedTabs()).Return(lst);
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(_personSelectorReadOnlyRepository.GetUserDefinedTabs()).Return(lst);
 			Expect.Call(uow.Dispose);
 			_mocks.ReplayAll();
 			var groups = _target.GetGroups(false);

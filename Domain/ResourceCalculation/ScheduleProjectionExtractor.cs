@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				scheduleDictionary.ExtractAllScheduleData(this);
 
 				Task.WaitAll(_extractionTasks.ToArray());
+				_extractionTasks.Clear();
+
 				return retList;
 
 #pragma warning restore 618
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		        scheduleDictionary.ExtractAllScheduleData(this, period);
 
 		        Task.WaitAll(_extractionTasks.ToArray());
+				_extractionTasks.Clear();
 
 		        return retList;
 	        }

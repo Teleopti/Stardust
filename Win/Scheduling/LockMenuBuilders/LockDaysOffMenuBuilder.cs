@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling.LockMenuBuilders
 				toolStripMenuItemDayOffLockRm.Text = dayOff.Description.ToString();
 				toolStripMenuItemDayOffLockRibbon.Tag = dayOff;
 				toolStripMenuItemDayOffLockRm.Tag = dayOff;
-				toolStripMenuItemDayOffLockRibbon.Click += clickEvent;
+				toolStripMenuItemDayOffLockRibbon.Click += otherClickEvent;
 				toolStripMenuItemDayOffLockRm.Click += otherClickEvent;
 				toolStripMenuItemLockDayOff.DropDownItems.Add(toolStripMenuItemDayOffLockRibbon);
 				toolStripMenuItemLockFreeDaysRm.DropDownItems.Add(toolStripMenuItemDayOffLockRm);

@@ -7,8 +7,8 @@
 Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel = function (ajax, showMeridian) {
 	var self = this;
 
-	this.StartTime = ko.observable('');
-	this.EndTime = ko.observable('');
+	this.StartTime = ko.observable(undefined);
+	this.EndTime = ko.observable(undefined);
 	this.NextDay = ko.observable(false);
     
 	this.AddAvailabilityFormVisible = ko.observable(false);
@@ -34,9 +34,13 @@ Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel = function (ajax, showM
 	    return self.ValidationError() !== undefined && self.ValidationError() !== '';
 	});
 
+	this.EnableApply = ko.computed(function () {
+		return self.StartTime() && self.EndTime();
+	});
+
 	this.reset = function () {
-		self.StartTime('');
-		self.EndTime('');
+		self.StartTime(undefined);
+		self.EndTime(undefined);
 		self.NextDay(false);
 		self.ValidationError(undefined);
 	};

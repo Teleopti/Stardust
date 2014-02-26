@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		private readonly IMeetingImpactView _meetingImpactView;
 		private readonly IBestSlotForMeetingFinder _bestSlotForMeetingFinder;
 		private readonly IMeetingViewModel _meetingViewModel;
-		private TimeZoneInfo _timeZone;
+		private Lazy<TimeZoneInfo> _timeZone;
 		private DateTimePeriod _currentPeriod;
 		private IList<BestMeetingSlotResult> _pickBestResult = new List<BestMeetingSlotResult>();
 		private BestMeetingSlotResult _currentResult;
@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 	        _unitOfWorkFactory = unitOfWorkFactory;
 	        _transparentWindowHandler.TransparentWindowMoved += TransparentWindowMoved;
             _meetingStateHolderLoaderHelper.FinishedReloading += MeetingStateHolderLoaderHelperFinishedReloading;
+			_timeZone = new Lazy<TimeZoneInfo>(() => _meetingViewModel.TimeZone);
 	    }
 
         void TransparentWindowMoved(object sender, EventArgs e)
@@ -59,11 +60,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
              UpdateMeetingDatesTimesInViewFromModel();
              _meetingImpactCalculator.RecalculateResources(_meetingImpactView.StartDate);
             _meetingImpactView.RefreshMeetingControl();
-        }
-
-        private TimeZoneInfo TimeZone()
-        {
-            return _timeZone ?? (_timeZone = _meetingViewModel.TimeZone);
         }
 
 	    private void InitSearchDates()
@@ -143,7 +139,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		public void SetPeriodAndLoadSchedulesWhenNeeded(DateOnly dateOnly, int daysForward)
 		{
 			var endDate = new DateOnly(dateOnly.AddDays(daysForward));
-			_currentPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateOnly, endDate, TimeZone());
+			_currentPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(dateOnly, endDate, _timeZone.Value);
 			SetPeriodAndLoadSchedulesWhenNeeded(_currentPeriod);
 		}
 
@@ -166,8 +162,8 @@ namespace Teleopti.Ccc.WinCode.Meetings
 		{
             _meetingImpactCalculator.RemoveAndRecalculateResources(_meetingViewModel.Meeting, _meetingImpactView.StartDate);
 
-			var startSearch = TimeZoneHelper.ConvertToUtc(_meetingImpactView.BestSlotSearchPeriodStart, TimeZone());
-			var endSearch = TimeZoneHelper.ConvertToUtc(_meetingImpactView.BestSlotSearchPeriodEnd, TimeZone());
+			var startSearch = TimeZoneHelper.ConvertToUtc(_meetingImpactView.BestSlotSearchPeriodStart, _timeZone.Value);
+			var endSearch = TimeZoneHelper.ConvertToUtc(_meetingImpactView.BestSlotSearchPeriodEnd, _timeZone.Value);
 
 			var daysForward = (int)endSearch.Subtract(startSearch).TotalDays + 1;
 			if (daysForward > 14 || daysForward < 1)
@@ -270,7 +266,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
 
 		private void UpdateModelFromResult(BestMeetingSlotResult result)
 		{
-			var startTimeInMeetingTimeZone = TimeZoneHelper.ConvertFromUtc(result.SlotPeriod.StartDateTime, TimeZone());
+			var startTimeInMeetingTimeZone = TimeZoneHelper.ConvertFromUtc(result.SlotPeriod.StartDateTime, _timeZone.Value);
 			var startDate = new DateOnly(startTimeInMeetingTimeZone);
 			//if (!_meetingViewModel.IsRecurring)
 			//{

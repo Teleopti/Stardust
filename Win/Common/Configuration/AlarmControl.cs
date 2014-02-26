@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         void ViewWarnOfThis(object sender, CustomEventArgs<string> e)
         {
            Warn(e.Value );
+            teleoptiGridControl1.Focus();
         }
 
         void ViewPresentThisItem(object sender, CustomEventArgs<int> e)

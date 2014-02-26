@@ -28,9 +28,8 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		private ICommandProvider _commandProvider;
 		private PersonSelectorPresenter _target;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
-		private IRepositoryFactory _repositoryFactory;
+		private IPersonSelectorReadOnlyRepository _repositoryFactory;
 		private ICommonNameDescriptionSetting _commonNameSetting;
-		private IStatelessUnitOfWork _unitOfWork;
 		private readonly IApplicationFunction _myApplicationFunction =
 			ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
 										   DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
@@ -51,7 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			_view = _mocks.StrictMock<IPersonSelectorView>();
 			_commandProvider = _mocks.StrictMock<ICommandProvider>();
 			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-			_repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
+			_repositoryFactory = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
 			_commonNameSetting = _mocks.StrictMock<ICommonNameDescriptionSetting>();
 			_eventAggregatorLocator = _mocks.StrictMock<IEventAggregatorLocator>();
 			_eventAggregator = new EventAggregator();
@@ -66,31 +65,31 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			_mocks.ReplayAll();
 			_target = new PersonSelectorPresenter(_view, _commandProvider, _unitOfWorkFactory, _repositoryFactory, _eventAggregator,
 				_addGroupPageCommand, _deleteGroupPageCommand, _modifyGroupPageCommand, _renameGroupPageCommand, _openCommand, _eventAggregatorLocator) { ShowPersons = true, ApplicationFunction = _myApplicationFunction };
-			_unitOfWork = _mocks.StrictMock<IStatelessUnitOfWork>();
 			_mocks.BackToRecordAll();
 		}
 
 		[Test]
 		public void ShouldSetTabsInView()
 		{
-			var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-		    _target.ShowUsers = true;
+			var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
 			var rootGuid = Guid.NewGuid();
-            Expect.Call(_commandProvider.GetLoadOrganizationCommand(_myApplicationFunction, true, true)).Return(new LoadOrganizationCommand(_unitOfWorkFactory, _repositoryFactory, _view, _commonNameSetting, _myApplicationFunction, true, true));
-            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Contract, _view, Resources.Contract, _myApplicationFunction, true)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.Contract, _unitOfWorkFactory, _repositoryFactory, _view, Resources.Contract, _commonNameSetting, _myApplicationFunction, true));
-            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.ContractSchedule, _view, Resources.ContractSchedule, _myApplicationFunction, true)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.ContractSchedule, _unitOfWorkFactory, _repositoryFactory, _view, Resources.ContractSchedule, _commonNameSetting, _myApplicationFunction, true));
-			Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.PartTimePercentage, _view, Resources.PartTimePercentageHeader, _myApplicationFunction, true)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.PartTimePercentage, _unitOfWorkFactory, _repositoryFactory, _view, Resources.PartTimePercentage, _commonNameSetting, _myApplicationFunction, true));
-            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Note, _view, Resources.Note, _myApplicationFunction, true)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.Note, _unitOfWorkFactory, _repositoryFactory, _view, Resources.Note, _commonNameSetting, _myApplicationFunction, true));
-            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.ShiftBag, _view, Resources.RuleSetBag, _myApplicationFunction, true)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.ShiftBag, _unitOfWorkFactory, _repositoryFactory, _view, Resources.RuleSetBag, _commonNameSetting, _myApplicationFunction, true));
-            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Skill, _view, Resources.Skill, _myApplicationFunction, true)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.Skill, _unitOfWorkFactory, _repositoryFactory, _view, Resources.Skill, _commonNameSetting, _myApplicationFunction, true));
+			
+			_target.ShowUsers = true;
+			
+			Expect.Call(_commandProvider.GetLoadOrganizationCommand(_myApplicationFunction, true, true)).Return(new LoadOrganizationCommand(_unitOfWorkFactory, _repositoryFactory, _view, _commonNameSetting, _myApplicationFunction, true, true));
+            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Contract, _view, Resources.Contract, _myApplicationFunction)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.Contract, _unitOfWorkFactory, _repositoryFactory, _view, Resources.Contract, _commonNameSetting, _myApplicationFunction));
+            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.ContractSchedule, _view, Resources.ContractSchedule, _myApplicationFunction)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.ContractSchedule, _unitOfWorkFactory, _repositoryFactory, _view, Resources.ContractSchedule, _commonNameSetting, _myApplicationFunction));
+			Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.PartTimePercentage, _view, Resources.PartTimePercentageHeader, _myApplicationFunction)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.PartTimePercentage, _unitOfWorkFactory, _repositoryFactory, _view, Resources.PartTimePercentage, _commonNameSetting, _myApplicationFunction));
+            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Note, _view, Resources.Note, _myApplicationFunction)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.Note, _unitOfWorkFactory, _repositoryFactory, _view, Resources.Note, _commonNameSetting, _myApplicationFunction));
+            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.ShiftBag, _view, Resources.RuleSetBag, _myApplicationFunction)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.ShiftBag, _unitOfWorkFactory, _repositoryFactory, _view, Resources.RuleSetBag, _commonNameSetting, _myApplicationFunction));
+            Expect.Call(_commandProvider.GetLoadBuiltInTabsCommand(PersonSelectorField.Skill, _view, Resources.Skill, _myApplicationFunction)).Return(new LoadBuiltInTabsCommand(PersonSelectorField.Skill, _unitOfWorkFactory, _repositoryFactory, _view, Resources.Skill, _commonNameSetting, _myApplicationFunction));
 
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-			Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
-			Expect.Call(rep.GetUserDefinedTabs()).Return(new List<IUserDefinedTabLight> { new UserDefinedTabLight { Id = rootGuid, Name = "Tabbe" } });
-			Expect.Call(_commandProvider.GetLoadUserDefinedTabsCommand(_view, rootGuid, _myApplicationFunction, true)).Return(
-				new LoadUserDefinedTabsCommand(_unitOfWorkFactory, _repositoryFactory, _view, rootGuid, _commonNameSetting, _myApplicationFunction, true))
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			Expect.Call(_repositoryFactory.GetUserDefinedTabs()).Return(new List<IUserDefinedTabLight> { new UserDefinedTabLight { Id = rootGuid, Name = "Tabbe" } });
+			Expect.Call(_commandProvider.GetLoadUserDefinedTabsCommand(_view, rootGuid, _myApplicationFunction)).Return(
+				new LoadUserDefinedTabsCommand(_unitOfWorkFactory, _repositoryFactory, _view, rootGuid, _commonNameSetting, _myApplicationFunction))
 				.IgnoreArguments();
-			Expect.Call(() => _unitOfWork.Dispose());
+			Expect.Call(unitOfWork.Dispose);
 			Expect.Call(() => _view.ResetTabs(new TabPageAdv[0], null)).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.LoadTabs();
@@ -124,7 +123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 			var tabControl = new TabControlAdv();
 			var newPage = new EventGroupPage {Id = id, Name = "test"};
 			Expect.Call(_view.TabControl).Return(tabControl);
-			Expect.Call(_commandProvider.GetLoadUserDefinedTabsCommand(_view, id, _myApplicationFunction, true));
+			Expect.Call(_commandProvider.GetLoadUserDefinedTabsCommand(_view, id, _myApplicationFunction));
 			Expect.Call(() =>_view.AddNewPageTab(null)).IgnoreArguments();
 			_mocks.ReplayAll();
 			_globalEventAggregator.GetEvent<GroupPageAdded>().Publish(newPage);
@@ -267,13 +266,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping
 		[Test]
 		public void ShouldReloadIfTabNotUserDefinedAndPeopleSaved()
 		{
-			var tabControl = new TabControlAdv();
 			var command = _mocks.StrictMock<ILoadOrganizationCommand>();
-			tabControl.TabPages.Add(new TabPageAdv("första") { Tag = command });
-			tabControl.TabPages.Add(new TabPageAdv("andra"));
-			tabControl.TabPages.Add(new TabPageAdv("tredje") );
-			tabControl.SelectedIndex = 0;
-			Expect.Call(_view.TabControl).Return(tabControl);
+			var selectedTab = new TabPageAdv("första") { Tag = command };
+			Expect.Call(_view.SelectedTab).Return(selectedTab);
 			Expect.Call(command.Execute);
 			_mocks.ReplayAll();
 			_globalEventAggregator.GetEvent<PeopleSaved>().Publish("");

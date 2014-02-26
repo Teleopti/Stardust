@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(new DateOnly(2010, 1, 1)).Repeat.Twice();
                 Expect.Call(scheduleDay9.Day)
                     .Return(new DateOnly(2010, 1, 2)).Repeat.Twice();
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(1,1,11), true, true)).Repeat.AtLeastOnce();
+				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true, true)).Repeat.AtLeastOnce();
 				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010,1,2), true, true)).Repeat.AtLeastOnce();
                 expectsBreakingDayOffRule(part, bitArrayAfterMove);
                 Expect.Call(_dayOffOptimizerConflictHandler.HandleConflict(schedulingOptions, new DateOnly()))

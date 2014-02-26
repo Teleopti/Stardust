@@ -2,9 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-    //RK - right now seperate interfaces for global and personal is not needed.
-    //Feel free to add them it you need this
-    public interface ISettingDataRepository
+	public interface ISettingDataRepository
     {
         T FindValueByKey<T>(string key, T defaultValue) where T : class, ISettingValue;
 

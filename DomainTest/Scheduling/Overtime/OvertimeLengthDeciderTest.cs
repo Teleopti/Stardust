@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_date = DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date, DateTimeKind.Utc);
+			_date = DateTime.SpecifyKind(DateOnly.MinValue.Date, DateTimeKind.Utc);
 			_skillResolutionProvider = _mocks.StrictMock<ISkillResolutionProvider>();
 			_overtimeSkillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
 			_overtimeSkillIntervalDataDivider = _mocks.StrictMock<IOvertimeSkillIntervalDataDivider>();

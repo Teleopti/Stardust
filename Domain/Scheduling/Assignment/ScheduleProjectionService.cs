@@ -8,8 +8,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ScheduleProjectionService : IProjectionService
 	{
-		private IActivity _fakeActivity;
-		private IActivity _fakeActivityNotInContractTime;
+		private readonly Lazy<IActivity> _fakeActivity = new Lazy<IActivity>(() => new Activity("Fake activity")
+			{
+				InWorkTime = true,
+				InPaidTime = true,
+				InContractTime = true
+			});
+
+		private readonly Lazy<IActivity> _fakeActivityNotInContractTime =
+			new Lazy<IActivity>(() => new Activity("Fake not in contract activity")
+				{
+					InWorkTime = false,
+					InPaidTime = false,
+					InContractTime = false
+				});
+
 		private readonly TimeSpan fakeLayerStart = new TimeSpan(8, 0, 0);
 
 		/// <summary>
@@ -29,36 +42,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IActivity FakeActivity
 		{
-			get
-			{
-				if (_fakeActivity == null)
-				{
-					_fakeActivity = new Activity("Fake activity")
-					{
-						InWorkTime = true,
-						InPaidTime = true,
-						InContractTime = true
-					};
-				}
-				return _fakeActivity;
-			}
+			get { return _fakeActivity.Value; }
 		}
 
 		public IActivity FakeActivityNotInContractTime
 		{
-			get
-			{
-				if (_fakeActivityNotInContractTime == null)
-				{
-					_fakeActivityNotInContractTime = new Activity("Fake not in contract activity")
-																	{
-																		InWorkTime = false,
-																		InPaidTime = false,
-																		InContractTime = false
-																	};
-				}
-				return _fakeActivityNotInContractTime;
-			}
+			get { return _fakeActivityNotInContractTime.Value; }
 		}
 
 		public IVisualLayerCollection CreateProjection()

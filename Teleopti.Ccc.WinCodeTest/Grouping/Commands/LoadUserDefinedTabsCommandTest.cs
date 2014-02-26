@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
     {
         private MockRepository _mocks;
         private IUnitOfWorkFactory _unitOfWorkFactory;
-        private IRepositoryFactory _repositoryFactory;
+        private IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
         private IPersonSelectorView _personSelectorView;
         private LoadUserDefinedTabsCommand _target;
         private ICommonNameDescriptionSetting _commonNameSetting;
@@ -28,19 +28,19 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
         private readonly IApplicationFunction _myApplicationFunction =
             ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
                                            DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
-        private IStatelessUnitOfWork _unitOfWork;
+        private IUnitOfWork _unitOfWork;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
-            _unitOfWork = _mocks.StrictMock<IStatelessUnitOfWork>();
-            _repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
+            _unitOfWork = _mocks.StrictMock<IUnitOfWork>();
+			_personSelectorReadOnlyRepository = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
             _personSelectorView = _mocks.StrictMock<IPersonSelectorView>();
             _commonNameSetting = _mocks.StrictMock<ICommonNameDescriptionSetting>();
             _guid = Guid.NewGuid();
-            _target = new LoadUserDefinedTabsCommand(_unitOfWorkFactory, _repositoryFactory, _personSelectorView, _guid, _commonNameSetting, _myApplicationFunction, true);
+            _target = new LoadUserDefinedTabsCommand(_unitOfWorkFactory, _personSelectorReadOnlyRepository, _personSelectorView, _guid, _commonNameSetting, _myApplicationFunction);
         }
 
         [Test]
@@ -54,11 +54,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
 			var robinPersonId = Guid.NewGuid();
             var lightPerson = _mocks.StrictMock<ILightPerson>();
             var date = new DateOnly(2012, 1, 19);
-            var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-            Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
             Expect.Call(_personSelectorView.SelectedDate).Return(date);
-            Expect.Call(rep.GetUserDefinedTab(date, _guid)).Return(new List<IPersonSelectorUserDefined>
+            Expect.Call(_personSelectorReadOnlyRepository.GetUserDefinedTab(date, _guid)).Return(new List<IPersonSelectorUserDefined>
                                                                     {
                                                                         new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "", LastName = "", Node = "Root", ParentId = null, NodeId = _guid},
                                                                         new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", ParentId = _guid,NodeId = stoGuid, PersonId = olaPersonId, Show = true},
@@ -87,11 +85,9 @@ namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands
                 var stoGuid = Guid.NewGuid();
                 var strId = Guid.NewGuid();
                 var date = new DateOnly(2012, 1, 19);
-                var rep = _mocks.StrictMock<IPersonSelectorReadOnlyRepository>();
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork()).Return(_unitOfWork);
-                Expect.Call(_repositoryFactory.CreatePersonSelectorReadOnlyRepository(_unitOfWork)).Return(rep);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_personSelectorView.SelectedDate).Return(date);
-                Expect.Call(rep.GetUserDefinedTab(date, _guid)).Return(new List<IPersonSelectorUserDefined>
+                Expect.Call(_personSelectorReadOnlyRepository.GetUserDefinedTab(date, _guid)).Return(new List<IPersonSelectorUserDefined>
                                                                     {
                                                                         new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "", LastName = "", Node = "Root", ParentId = null, NodeId = _guid},
                                                                         new PersonSelectorUserDefined { BusinessUnitId = buId ,FirstName = "Ola", LastName = "H", Node = "STO", ParentId = _guid,NodeId = stoGuid, PersonId = Guid.NewGuid()},

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,7 +10,7 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public class PeopleLoaderForTeamLeaderMode : IPeopleLoader
     {
-        private ICollection<IPerson> _peopleInOrg;
+        private readonly Lazy<ICollection<IPerson>> _peopleInOrg;
         private readonly IUnitOfWork _unitOfWork;
     	private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly ISelectedEntitiesForPeriod _selectedEntitiesForPeriod;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WinCode.Common
         	_schedulerStateHolder = schedulerStateHolder;
             _selectedEntitiesForPeriod = selectedEntitiesForPeriod;
         	_repositoryFactory = repositoryFactory;
+			_peopleInOrg = new Lazy<ICollection<IPerson>>(loadPeople);
         }
 
         public ISchedulerStateHolder Initialize()
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Common
             	_repositoryFactory.CreateTeamRepository(_unitOfWork).LoadAll();
             }
 
-            foreach (IPerson person in peopleInOrg())
+            foreach (IPerson person in _peopleInOrg.Value)
             {
                 if (person.TerminalDate == null || person.TerminalDate >= _selectedEntitiesForPeriod.SelectedPeriod.StartDate)
                 _schedulerStateHolder.AllPermittedPersons.Add(person);
@@ -49,14 +51,9 @@ namespace Teleopti.Ccc.WinCode.Common
             return _schedulerStateHolder;
         }
 
-        private IEnumerable<IPerson> peopleInOrg()
-        {
-            return _peopleInOrg ?? loadPeople();
-        }
-
         private ICollection<IPerson> loadPeople()
         {
-            _peopleInOrg = new List<IPerson>();
+            var peopleInOrg = new List<IPerson>();
 
             bool isTeam = false;
             bool isPerson = false;
@@ -80,27 +77,22 @@ namespace Teleopti.Ccc.WinCode.Common
 
                     foreach (var teamMember in teamMembers)
                     {
-						if (!_peopleInOrg.Contains(teamMember)) 
-							_peopleInOrg.Add(teamMember);
+						if (!peopleInOrg.Contains(teamMember)) 
+							peopleInOrg.Add(teamMember);
                     }
                 }
             }
 
             if(isPerson)
             {
-                IList<IPerson> personList = new List<IPerson>();
-                foreach (var entity in selectedEntities)
-                {
-                    var person = (IPerson) entity;
-                    personList.Add(person);
-                }
+                IList<IPerson> personList = selectedEntities.OfType<IPerson>().ToList();
 
-				_peopleInOrg =
-                    _repositoryFactory.CreatePersonRepository(_unitOfWork)
-                    .FindPeople(personList);
+	            peopleInOrg =
+		            _repositoryFactory.CreatePersonRepository(_unitOfWork)
+		                              .FindPeople(personList).ToList();
             }
 
-            return _peopleInOrg;
+            return peopleInOrg;
         }
     }
 }

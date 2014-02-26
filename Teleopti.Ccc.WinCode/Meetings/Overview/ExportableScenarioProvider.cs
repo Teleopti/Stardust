@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -17,20 +19,21 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
         private readonly IMeetingOverviewViewModel _model;
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private IEnumerable<IScenario> _allScenarios;
+        private readonly Lazy<IEnumerable<IScenario>> _allScenarios;
 
         public ExportableScenarioProvider(IMeetingOverviewViewModel model, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _model = model;
             _scenarioRepository = scenarioRepository;
             _unitOfWorkFactory = unitOfWorkFactory;
+			_allScenarios = new Lazy<IEnumerable<IScenario>>(() => _scenarioRepository.FindAllSorted());
         }
 
         public IList<IScenario>  AllowedScenarios()
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var tempScenarios = new List<IScenario>(allScenarios());
+                var tempScenarios = _allScenarios.Value.ToList();
                 
                 unitOfWork.Reassociate(tempScenarios);
                 
@@ -48,11 +51,6 @@ namespace Teleopti.Ccc.WinCode.Meetings.Overview
                 tempScenarios.Remove(_model.CurrentScenario);
                 return tempScenarios;
             }
-        }
-
-        private IEnumerable<IScenario> allScenarios()
-        {
-            return _allScenarios ?? (_allScenarios = _scenarioRepository.FindAllSorted());
         }
     }
 }

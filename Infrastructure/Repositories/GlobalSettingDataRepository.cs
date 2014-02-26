@@ -6,18 +6,23 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public class GlobalSettingDataRepository : SettingDataRepository, ISettingDataRepository
+    public class GlobalSettingDataRepository : SettingDataRepository, IGlobalSettingDataRepository
     {
         public GlobalSettingDataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-				protected GlobalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+	    public GlobalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
+		    : base(currentUnitOfWork)
 	    {
 	    }
 
-        public override ISettingData FindByKey(string key)
+		public GlobalSettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
+			: base(unitOfWorkFactory)
+		{
+		}
+
+	    public override ISettingData FindByKey(string key)
         {
             return Session.CreateCriteria(typeof(GlobalSettingData))
                         .Add(Restrictions.Eq("Key", key))

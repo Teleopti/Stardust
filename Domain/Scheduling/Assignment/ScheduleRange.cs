@@ -19,13 +19,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private TimeSpan? _calculatedTargettTimeHolder;
         private int? _calculatedTargetScheduleDaysOff;
         private int? _calculatedScheduleDaysOff;
-        private IEnumerable<DateOnlyPeriod> _availablePeriods;
+		private readonly Lazy<IEnumerable<DateOnlyPeriod>> _availablePeriods;
         private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 
         public ScheduleRange(IScheduleDictionary owner, IScheduleParameters parameters)
             : base(owner, parameters)
         {
             _scheduleObjectsWithNoPermissions = new List<IScheduleData>();
+	        _availablePeriods = new Lazy<IEnumerable<DateOnlyPeriod>>(() =>
+		        {
+			        var timeZone = Person.PermissionInformation.DefaultTimeZone();
+			        var dop = Period.ToDateOnlyPeriod(timeZone);
+			        return PrincipalAuthorization.Instance()
+			                                     .PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop,
+			                                                       Person);
+		        });
         }
 
         public ScheduleRange Snapshot
@@ -40,13 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         public IEnumerable<DateOnlyPeriod> AvailablePeriods()
         {
-            if(_availablePeriods == null)
-            {
-                var timeZone = Person.PermissionInformation.DefaultTimeZone();
-                var dop = Period.ToDateOnlyPeriod(timeZone);
-				_availablePeriods = PrincipalAuthorization.Instance().PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop, Person);
-            }
-            return _availablePeriods;
+            return _availablePeriods.Value;
         }
 
 		public bool Contains(IScheduleData scheduleData, bool includeNonPermitted)

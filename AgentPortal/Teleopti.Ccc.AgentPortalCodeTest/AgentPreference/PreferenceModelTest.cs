@@ -336,6 +336,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             validatedSchedulePartDto.MaxEndTimeMinute = 1020;
             validatedSchedulePartDto.MinWorkTimeInMinutes = 480;
             validatedSchedulePartDto.MaxWorkTimeInMinutes = 480;
+	        validatedSchedulePartDto.MinContractTimeInMinutes = 480;
+	        validatedSchedulePartDto.MaxContractTimeInMinutes = 480;
             validatedSchedulePartDto.WeekMaxInMinutes = 2400;
             validatedSchedulePartDto.PeriodTargetInMinutes = 9600;
             validatedSchedulePartDto.MustHave = 3;

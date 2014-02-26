@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Time
         public void VerifyMinMaxValues()
         {
             target = DateOnly.MaxValue;
-            Assert.AreEqual(DateTime.MaxValue.Date.AddDays(-10), target.Date);
+            Assert.AreEqual(DateHelper.MaxSmallDateTime, target.Date);
             target = DateOnly.MinValue;
-            Assert.AreEqual(DateTime.MinValue.Date.AddDays(10), target.Date);
+            Assert.AreEqual(DateHelper.MinSmallDateTime, target.Date);
         }
 
         [Test]

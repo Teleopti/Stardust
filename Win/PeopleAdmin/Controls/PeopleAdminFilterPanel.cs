@@ -36,13 +36,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             if (!DesignMode)
             {
                 _parentControl = peopleWorksheet;
-                _parentControl.PeopleWorksheetSaved += parentControlPeopleWorksheetSaved;
-                _parentControl.PeopleWorksheetForceClose += _parentControl_PeopleWorksheetForceClose;
                 _worksheetStateHolder = worksheetStateHolder;
                 SetTexts();
                 _filteredPeopleHolder = filteredPeopleHolder;
-                //groupPagePanelPeopleFilter.ApplicationFunction = _myApplicationFunction;
-                //groupPagePanelPeopleFilter.SelectedPeriod = new DateOnlyPeriod(filteredPeopleHolder.SelectedDate, filteredPeopleHolder.SelectedDate);
                 _personSelectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
             }
         }
@@ -58,19 +54,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
             var selectorView = _personSelectorPresenter.View;
             selectorView.HideMenu = true;
-            //selectorView.ShowDateSelection = false;
+
             _personSelectorPresenter.LoadTabs();
-        }
-
-        private void _parentControl_PeopleWorksheetForceClose(object sender, EventArgs e)
-        {
-            //groupPagePanelPeopleFilter.ForceClose();
-            _parentControl.PeopleWorksheetSaved -= parentControlPeopleWorksheetSaved;
-        }
-
-        void parentControlPeopleWorksheetSaved(object sender, EventArgs e)
-        {
-            //groupPagePanelPeopleFilter.LoadGroupPageTree(_filteredPeopleHolder.SelectedDate, true, true);
         }
 
         void ReloadPeople()
@@ -118,31 +103,5 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
         {
             Hide();
         }
-
-        //private void backgroundWorkerRebindToTabPages_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
-        //{
-
-        //}
-
-        //private void backgroundWorkerRebindToTabPages_RunWorkerCompleted(object sender, System.ComponentModel.RunWorkerCompletedEventArgs e)
-        //{
-
-        //}
-
-        //public override void Refresh()
-        //{
-        //    //groupPagePanelPeopleFilter.SelectedPeriod = new DateOnlyPeriod(_filteredPeopleHolder.SelectedDate, _filteredPeopleHolder.SelectedDate);
-        //    base.Refresh();
-        //}
-
-        //private void groupPagePanelPeopleFilter_DataSourceExceptionOccurred(object sender, CustomEventArgs<DataSourceException> e)
-        //{
-        //    Hide();
-        //    DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(e.Value);
-        //    _parentControl.FormKill();
-        //    _parentControl.FormKill();
-        //}
-
-        
     }
 }

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void CreateFromTemplate(DateOnly workloadDate, IWorkload workload, IWorkloadDayTemplate workloadDayTemplate)
         {
-            var templateGuid = workloadDayTemplate.Id ?? Guid.Empty;
+            var templateGuid = workloadDayTemplate.Id.GetValueOrDefault();
             _templateReference = new WorkloadDayTemplateReference(templateGuid, workloadDayTemplate.VersionNumber, workloadDayTemplate.Name, workloadDayTemplate.DayOfWeek, workload) { UpdatedDate = workloadDayTemplate.UpdatedDate };
             Create(workloadDate, workload, workloadDayTemplate.OpenHourList);
 
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             }
 
             releaseAction(this);
-            Guid templateGuid = workloadDayTemplate.Id ?? Guid.Empty;
+            Guid templateGuid = workloadDayTemplate.Id.GetValueOrDefault();
             _templateReference = new WorkloadDayTemplateReference(templateGuid, workloadDayTemplate.VersionNumber, workloadDayTemplate.Name, workloadDayTemplate.DayOfWeek,
                 workloadDayTemplate.Workload) { UpdatedDate = workloadDayTemplate.UpdatedDate };
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 }
             }
             releaseAction(this);
-            Guid templateGuid = workloadDayTemplate.Id ?? Guid.Empty;
+            Guid templateGuid = workloadDayTemplate.Id.GetValueOrDefault();
             _templateReference = new WorkloadDayTemplateReference(templateGuid, workloadDayTemplate.VersionNumber, workloadDayTemplate.Name, workloadDayTemplate.DayOfWeek,
                 workloadDayTemplate.Workload) { UpdatedDate = workloadDayTemplate.UpdatedDate };
 
