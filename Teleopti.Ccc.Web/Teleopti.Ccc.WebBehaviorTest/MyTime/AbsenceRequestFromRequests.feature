@@ -5,7 +5,7 @@
 
 
 @ignore
-Scenario: When requesting absence tracked as days view UI account values
+Scenario: When requesting absence tracked as days view remaining and used time
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
@@ -20,7 +20,7 @@ Scenario: When requesting absence tracked as days view UI account values
 	And I should see the used time is '7 days'
 
 @ignore
-Scenario: When requesting absence tracked by hours view UI account values
+Scenario: When requesting absence tracked by hours view remaining and used time
 	Given I am an agent
 	And I have a requestable absence called Illness
 	And I am viewing requests
@@ -31,11 +31,11 @@ Scenario: When requesting absence tracked by hours view UI account values
 	| Used      | 70:00   |
 	| Remaining | 180:00  |
 	When I click to add a new absence request
-	Then I should see the used time is '70:00 hours'
-	And I should see the remaining time is '180:00 hours'
+	Then I should see the used time is '70:00'
+	And I should see the remaining time is '180:00'
 
 @ignore
-Scenario: When changing absence type update UI account values
+Scenario: When changing absence type update remaining and used time
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I have a requestable absence called Illness
@@ -53,14 +53,14 @@ Scenario: When changing absence type update UI account values
 	| Used      | 7          |
 	| Remaining | 18         |
 	And I click to add a new absence request
-	And I see the remaining time is '180:00 hours'
-	And I see the used time is '70:00 hours'
+	And I see the remaining time is '180:00'
+	And I see the used time is '70:00'
 	When I change absence to 'Vacation'
 	Then I should see the used time is '7 days'
 	And I should see the remaining time is '18 days'
 
 @ignore
-Scenario: When changing request date update UI account values
+Scenario: When changing request date change remaining and used time
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
@@ -94,7 +94,7 @@ Scenario: When changing request date update UI account values
 	And I should see the used time is '0 days'
 
 @ignore
-Scenario: When requesting absence over multiple account periods show UI account values according to end date period
+Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
 Given I am an agent
 And I have a requestable absence called Vacation
 And I am viewing requests
@@ -122,8 +122,8 @@ Then I should see the remaining time is '25 days'
 And I should see the used time is '0 days'
 
 @ignore
-Scenario: Don't show UI account values when you do not have permission
-	Given I am an agent without permission for UI account values
+Scenario: Don't show personal account when you do not have permission
+	Given I am an agent without permission for personal account
 	And I have a personal account for period including today's date
 	| Field     | Value      |
 	| Absence   | Vacation   |
