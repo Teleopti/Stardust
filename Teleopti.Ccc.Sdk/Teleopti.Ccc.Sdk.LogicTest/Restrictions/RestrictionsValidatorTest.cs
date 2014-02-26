@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_part.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
                 Expect.Call(_part.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction)).Repeat.AtLeastOnce().IgnoreArguments();
+                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Repeat.AtLeastOnce().IgnoreArguments();
 
                 Expect.Call(_preferenceDayAssembler.DomainEntityToDto(preferenceDay)).Return(
                     new PreferenceRestrictionDto()).Repeat.AtLeastOnce();
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                Expect.Call(partWithDayOff.SignificantPartForDisplay()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
                Expect.Call(partWithDayOff.PersonDayOffCollection()).Return(
                    new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> {personDayOff})).Repeat.AtLeastOnce();
-               Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction)).Repeat.AtLeastOnce().IgnoreArguments();
+               Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Repeat.AtLeastOnce().IgnoreArguments();
               Expect.Call(personDayOff.DayOff).Return(dayOff).Repeat.AtLeastOnce();
 			  Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(new List<ValidatedSchedulePartDto>())).
 				   IgnoreArguments();
@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(partWithFullDayAbcence.SignificantPartForDisplay()).Return(SchedulePartView.FullDayAbsence).Repeat.AtLeastOnce();
                 Expect.Call(partWithFullDayAbcence.ProjectionService()).Return(projService).Repeat.AtLeastOnce();
                 Expect.Call(projService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
-                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction)).Repeat.AtLeastOnce().IgnoreArguments();
+                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Repeat.AtLeastOnce().IgnoreArguments();
 				Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(new List<ValidatedSchedulePartDto>())).
 					IgnoreArguments();
             }
@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_part.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings)).Repeat.AtLeastOnce();
                 Expect.Call(_part.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction)).Repeat.AtLeastOnce().IgnoreArguments();
+                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Repeat.AtLeastOnce().IgnoreArguments();
                 Expect.Call(_preferenceDayAssembler.DomainEntityToDto(preferenceDay)).Return(
                     new PreferenceRestrictionDto()).Repeat.AtLeastOnce();
 				Expect.Call(() => _preferenceNightRestChecker.CheckNightlyRest(new List<ValidatedSchedulePartDto>())).
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(_part.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>())).Repeat.AtLeastOnce();
                 Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(meetings)).Repeat.AtLeastOnce();
                 
-                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction)).Return(minMax).
+                Expect.Call(_minMaxChecker.MinMaxWorkTime(_part, ruleSetBag, effectiveRestriction, false)).Return(minMax).
                     Repeat.AtLeastOnce().IgnoreArguments();
                 Expect.Call(_part.SignificantPartForDisplay()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
                 Expect.Call(_preferenceDayAssembler.DomainEntityToDto(preferenceDay)).Return(

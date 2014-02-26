@@ -468,8 +468,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 
             var workTimeLimitation = new TimeLimitation(TimeLengthValidator)
                                          {
-                                             MinTime = TimeSpan.FromMinutes(validatedSchedulePartDto.MinWorkTimeInMinutes),
-                                             MaxTime = TimeSpan.FromMinutes(validatedSchedulePartDto.MaxWorkTimeInMinutes)
+											 MinTime = TimeSpan.FromMinutes(validatedSchedulePartDto.MinContractTimeInMinutes),
+                                             MaxTime = TimeSpan.FromMinutes(validatedSchedulePartDto.MaxContractTimeInMinutes)
                                          };
 
             var startTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime)
