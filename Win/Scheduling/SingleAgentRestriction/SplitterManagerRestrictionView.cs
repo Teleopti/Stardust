@@ -41,6 +41,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction
             }
         }
 
+		public void DisableShiftEditor()
+		{
+			GridEditorSplitter.Panel2.Enabled = false;
+		}
+
+		public void EnableShiftEditor()
+		{
+			GridEditorSplitter.Panel2.Enabled = true;
+		}
+
         public bool ShowEditor
         {
             set
