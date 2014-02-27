@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.DateOnlyAsPeriod.DateOnly.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.StudentAvailability, o => o.MapFrom(
 					s => s.PersonRestrictionCollection() == null ? null
-							 : s.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().SingleOrDefault()))
+							 : s.PersonRestrictionCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault()))
 				;
 		}
 	}

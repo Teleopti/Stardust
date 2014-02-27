@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
                     if (model.ExportType.Equals(TypeOfExport.Calls) ||
                         model.ExportType.Equals(TypeOfExport.AgentsAndCalls))
                     {
-                        row.Append((int)skillStaffPeriod.Payload.TaskData.Tasks);
+	                    row.Append(Math.Round((decimal) skillStaffPeriod.Payload.TaskData.Tasks, 0));
                         row.Append(Seperator);
                         row.Append(skillStaffPeriod.Payload.TaskData.AverageTaskTime.TotalSeconds.ToString("F",
                                                                                                            CultureInfo.InvariantCulture));

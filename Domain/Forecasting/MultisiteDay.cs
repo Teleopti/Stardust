@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             _multisitePeriodCollection.Clear();
             VerifyAndAttachMultisitePeriods(multisitePeriods);
 
-            Guid templateGuid = templateDay.Id ?? Guid.Empty;
+            Guid templateGuid = templateDay.Id.GetValueOrDefault();
             _templateReference = new MultisiteDayTemplateReference(templateGuid, templateDay.VersionNumber, templateDay.Name, templateDay.DayOfWeek, _skill)
                                  	{UpdatedDate = templateDay.UpdatedDate};
 
