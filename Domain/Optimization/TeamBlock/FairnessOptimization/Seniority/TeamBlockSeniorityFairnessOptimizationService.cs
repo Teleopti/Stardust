@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                                      ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-									 IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService);
+									 IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
     }
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                             ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService)
+							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
         {
 
 	        var notSwapped = 0;
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 					        break;
 				        }
 
-				        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary, selectedPeriod))
+						if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary, selectedPeriod, optimizationPreferences))
 				        {
 					        unSuccessfulSwaps.Add(teamBlockInfoHighSeniority);
 					        continue;

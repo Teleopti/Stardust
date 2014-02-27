@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -36,6 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IScheduleRange _scheduleRange1;
 		private IScheduleRange _scheduleRange2;
 		private IBusinessRuleResponse _businessRuleResponse;
+		private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
+		private IOptimizationPreferences _optimizationPreferences;
 
 		[SetUp]
 		public void SetUp()
@@ -62,7 +65,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_scheduleRange1 = _mock.StrictMock<IScheduleRange>();
 			_scheduleRange2 = _mock.StrictMock<IScheduleRange>();
 			_businessRuleResponse = _mock.StrictMock<IBusinessRuleResponse>();
-			_target = new TeamBlockSwap(_swapServiceNew, _teamBlockSwapValidator, _teamBlockSwapDayValidator);
+			_teamBlockRestrictionOverLimitValidator = _mock.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
+			_teamBlockShiftCategoryLimitationValidator = _mock.StrictMock<ITeamBlockShiftCategoryLimitationValidator>();
+			_optimizationPreferences = _mock.StrictMock<IOptimizationPreferences>();
+			_target = new TeamBlockSwap(_swapServiceNew, _teamBlockSwapValidator, _teamBlockSwapDayValidator, _teamBlockRestrictionOverLimitValidator, _teamBlockShiftCategoryLimitationValidator);
 		}
 
 		[Test]
@@ -89,11 +95,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> {_scheduleDay1, _scheduleDay2}, _scheduleDictionary)).Return(swappedList);
 				Expect.Call(()=>_modifyAndRollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_modifyAndRollbackService.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse>());
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences);
 				Assert.IsTrue(result);
 			}
 		}
@@ -127,9 +136,82 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}	
+		}
+
+		[Test]
+		public void ShouldRollBackIfRestrictionsOverLimit()
+		{
+			var swappedList = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSwapValidator.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
+				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
+				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
+				Expect.Call(_teamInfo1.GroupMembers).Return(_persons1);
+				Expect.Call(_teamInfo2.GroupMembers).Return(_persons2);
+				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
+				Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
+				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay1);
+				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay2);
+				Expect.Call(_teamBlockSwapDayValidator.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).Return(true);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 }, _scheduleDictionary)).Return(swappedList);
+				Expect.Call(() => _modifyAndRollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
+				Expect.Call(_modifyAndRollbackService.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse>());
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(false);
+				Expect.Call(() => _modifyAndRollbackService.Rollback());
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences);
+				Assert.IsFalse(result);
+			}
+		}
+
+		[Test]
+		public void ShouldRollBackIfShiftCategoryOverLimit()
+		{
+			var swappedList = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
+
+			using (_mock.Record())
+			{
+				Expect.Call(_teamBlockSwapValidator.ValidateCanSwap(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
+				Expect.Call(_teamBlockInfo1.TeamInfo).Return(_teamInfo1);
+				Expect.Call(_teamBlockInfo2.TeamInfo).Return(_teamInfo2);
+				Expect.Call(_teamInfo1.GroupMembers).Return(_persons1);
+				Expect.Call(_teamInfo2.GroupMembers).Return(_persons2);
+				Expect.Call(_teamBlockInfo1.BlockInfo).Return(_blockInfo1);
+				Expect.Call(_teamBlockInfo2.BlockInfo).Return(_blockInfo2);
+				Expect.Call(_blockInfo1.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRange1);
+				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
+				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay1);
+				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnlyPeriod.StartDate)).Return(_scheduleDay2);
+				Expect.Call(_teamBlockSwapDayValidator.ValidateSwapDays(_scheduleDay1, _scheduleDay2)).Return(true);
+				Expect.Call(_swapServiceNew.Swap(new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 }, _scheduleDictionary)).Return(swappedList);
+				Expect.Call(() => _modifyAndRollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
+				Expect.Call(_modifyAndRollbackService.ModifyParts(swappedList)).Return(new List<IBusinessRuleResponse>());
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(false);
+				Expect.Call(() => _modifyAndRollbackService.Rollback());
+			}
+
+			using (_mock.Playback())
+			{
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences);
+				Assert.IsFalse(result);
+			}
 		}
 
 		[Test]
@@ -142,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences);
 				Assert.IsFalse(result);	
 			}
 		}
@@ -170,13 +252,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}	
 		}
 
 		[Test]
-		public void ShouldNotSwapDaysOutsideSelectedPeriod()
+		public void ShouldNotModifyPartsOutsideSelectedPeriod()
 		{
 			var selectedPeriod = new DateOnlyPeriod(_dateOnlyPeriod.EndDate.AddDays(1), _dateOnlyPeriod.EndDate.AddDays(1));
 			
@@ -193,11 +275,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_blockInfo2.BlockPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(() => _modifyAndRollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_modifyAndRollbackService.ModifyParts(new List<IScheduleDay>())).Return(new List<IBusinessRuleResponse>());
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo1, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_teamBlockInfo2, _optimizationPreferences)).Return(true);
+				Expect.Call(_teamBlockShiftCategoryLimitationValidator.Validate(_teamBlockInfo1, _teamBlockInfo2, _optimizationPreferences)).Return(true);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, selectedPeriod);
+				var result = _target.Swap(_teamBlockInfo1, _teamBlockInfo2, _modifyAndRollbackService, _scheduleDictionary, selectedPeriod, _optimizationPreferences);
 				Assert.IsTrue(result);
 			}		
 		}
