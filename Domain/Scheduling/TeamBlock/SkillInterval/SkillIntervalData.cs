@@ -75,13 +75,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			return Period.EndDateTime.Subtract(Period.StartDateTime);
 		}
 
-	    public double RelativeDifference
-	    {
-	        get
-	        {
-                return AbsoluteDifference / ForecastedDemand;
-	        }
-	    }
-        public double AbsoluteDifference { get { return CurrentHeads - ForecastedDemand; } }
+        public double RelativeDifference
+        {
+            get
+            {
+                return CurrentDemand / ForecastedDemand;
+            }
+        }
+        public double AbsoluteDifference { get { return CurrentDemand - ForecastedDemand; } }
 	}
 }
