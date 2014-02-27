@@ -16,7 +16,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.WinCode.Common;
@@ -43,6 +42,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         private ISchedulerGroupPagesProvider _groupPagesProvider;
 	    private readonly ILifetimeScope _container;
 	    private readonly DateOnlyPeriod _dateOnlyPeriod;
+	    private readonly DateOnlyPeriod _requestedPeriod;
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 
@@ -56,16 +56,18 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider, ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod)
-			: this()
-		{
-			_workShiftWorkTime = workShiftWorkTime;
+	    public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider,
+	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod)
+		    : this()
+	    {
+		    _workShiftWorkTime = workShiftWorkTime;
 		    _groupPagesProvider = groupPagesProvider;
-			_container = container;
-			_dateOnlyPeriod = dateOnlyPeriod;
-		}
+		    _container = container;
+		    _dateOnlyPeriod = dateOnlyPeriod;
+		    _requestedPeriod = requestedPeriod;
+	    }
 
-    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
             ICollection<DateOnly> dateOnlyList, ISchedulingResultStateHolder stateHolder,
             IDictionary<IPerson, IPersonAccountCollection> allAccounts)
@@ -117,15 +119,22 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             }
 	        if (tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
 	        {
-                updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
-                updateFairnessOptimizationData(_stateHolder.Schedules[_selectedPerson], _stateHolder.ShiftCategories);
+				if(_selectedPerson.WorkflowControlSet.UseShiftCategoryFairness)
+				{
+					tableLayoutPanelRanking.Visible = false;
+					tableLayoutPanelFairness.Visible = true;
+					updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+				}
+				else if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+				{
+					tableLayoutPanelRanking.Visible = true;
+					tableLayoutPanelFairness.Visible = false;
+					updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.ShiftCategories);
+				}
 	        }
-		        
-             
-
         }
 
-        private void updateFairnessOptimizationData(IScheduleRange scheduleRange, IEnumerable<IShiftCategory> shiftCategories)
+        private void updateRankingData(IScheduleRange scheduleRange, IEnumerable<IShiftCategory> shiftCategories)
         {
             labelDayOffPointValue.Text = "";
             labelSeniorityPointsValue.Text = "";

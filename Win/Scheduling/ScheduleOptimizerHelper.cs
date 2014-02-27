@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
@@ -708,6 +709,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                             schedulingOptions, _schedulerStateHolder.Schedules, rollbackService,
 			                                             optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
+
+			var instance = PrincipalAuthorization.Instance();
+			if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+				return;
 
 			////day off fairness
             var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();

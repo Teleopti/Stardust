@@ -12,6 +12,8 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityD
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces;
@@ -153,6 +155,10 @@ namespace Teleopti.Ccc.Win.Commands
 				                                       optimizationPreferences);
 				_equalNumberOfCategoryFairness.ReportProgress -= resourceOptimizerPersonOptimized;
 
+				var instance = PrincipalAuthorization.Instance();
+				if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+					return;
+
 			    _teamBlockDayOffFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
                 _teamBlockDayOffFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.Schedules,
                                                     rollbackServiceWithoutResourceCalculation, optimizationPreferences);
@@ -160,7 +166,7 @@ namespace Teleopti.Ccc.Win.Commands
 
 			
 			    _teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences);
+				_teamBlockSeniorityFairnessOptimizationService.Execute(allMatrixes, selectedPeriod, selectedPersons, schedulingOptions, _schedulerStateHolder.CommonStateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackServiceWithoutResourceCalculation, optimizationPreferences);
 
                 _teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 			}
