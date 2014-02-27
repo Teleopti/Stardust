@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
+using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -50,6 +53,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var lst = from a in retList orderby a.Name select a;
             return new List<IActivity>(lst);
             
+        }
+
+        public IList<IActivity> LoadAllWithUpdatedBy()
+        {
+            return Session.CreateCriteria(typeof(Activity))
+               .SetFetchMode("UpdatedBy", FetchMode.Join)
+               .SetResultTransformer(Transformers.DistinctRootEntity)
+               .List<IActivity>();
         }
     }
 }
