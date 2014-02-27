@@ -2655,15 +2655,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (scheduleDay == null)
 				{
-					SplitterManager.ShowEditor = false;
+					SplitterManager.DisableShiftEditor();
 					return;
 				}
+				
+				SplitterManager.EnableShiftEditor();
 
 				scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
 
 				if (_showEditor)
 				{
-					if (!SplitterManager.ShowEditor) SplitterManager.ShowEditor = true;
 					schedulePartToEditor(scheduleDay);
 				}
 
