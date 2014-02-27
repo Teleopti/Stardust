@@ -446,7 +446,11 @@
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
+    <Compile Include="Scheduling\Overtime\CalculateBestOvertime.cs" />
+    <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePeriodValue.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimePeriodValueMapper.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferences.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePreferencesGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGenerator.cs" />
@@ -561,9 +565,9 @@
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
-    <Compile Include="Scheduling\Overtime\SkillIntervalData.cs" />
-    <Compile Include="Scheduling\Overtime\SkillIntervalDataDivider.cs" />
-    <Compile Include="Scheduling\Overtime\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalData.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDivider.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapper.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillInterval.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlock.cs" />
