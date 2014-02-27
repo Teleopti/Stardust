@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 {
 	public interface IFilterForFullyScheduledBlocks
 	{
-		IList<ITeamBlockInfo> IsFullyScheduled(IList<ITeamBlockInfo> teamBlockList, IScheduleDictionary scheduleDictionary);
+		IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockList, IScheduleDictionary scheduleDictionary);
 	}
 
 	public class FilterForFullyScheduledBlocks : IFilterForFullyScheduledBlocks
 	{
-		public IList<ITeamBlockInfo> IsFullyScheduled(IList<ITeamBlockInfo> teamBlockList,
+		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockList,
 		                                              IScheduleDictionary scheduleDictionary)
 		{
 			var returnList = new List<ITeamBlockInfo>();
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				{
 					foreach (var groupMember in teamBlock.TeamInfo.GroupMembers)
 					{
-						if (scheduleDictionary[groupMember].ScheduledDay(dateOnly).SignificantPart() != SchedulePartView.MainShift)
+						if (!scheduleDictionary[groupMember].ScheduledDay(dateOnly).IsScheduled())
 						{
 							unscheduledFound = true;
 							break;

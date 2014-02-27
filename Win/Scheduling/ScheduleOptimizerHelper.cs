@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -701,8 +702,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			OptimizerHelperHelper.LockDaysForDayOffOptimization(matrixListForFairness, restrictionExtractor, optimizationPreferences, selectedPeriod);
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new DoNothingScheduleDayChangeCallBack(), tagSetter);
 
-			var teamBlockRestrictionOverLimitValidator =
-				_container.Resolve<ITeamBlockRestrictionOverLimitValidator>();
 			var equalNumberOfCategoryFairnessService = _container.Resolve<IEqualNumberOfCategoryFairnessService>();
 			equalNumberOfCategoryFairnessService.ReportProgress += resourceOptimizerPersonOptimized;
 			equalNumberOfCategoryFairnessService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,
@@ -710,6 +709,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                             optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
+			////day off fairness
+            var teamBlockDayOffFairnessOptimizationService = _container.Resolve<ITeamBlockDayOffFairnessOptimizationServiceFacade>();
+            teamBlockDayOffFairnessOptimizationService.ReportProgress  += resourceOptimizerPersonOptimized;
+            teamBlockDayOffFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions,
+                _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences);
+            teamBlockDayOffFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 			
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
