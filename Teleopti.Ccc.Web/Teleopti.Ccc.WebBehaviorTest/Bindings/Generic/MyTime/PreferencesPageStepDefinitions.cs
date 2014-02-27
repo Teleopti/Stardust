@@ -1,7 +1,6 @@
 using System;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -292,9 +291,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var fields = table.CreateInstance<ExtendedPreferenceFields>();
 
 			OpenExtendedTooltip(fields.Date);
-
-			// TODO: This line is for debug the build server only, should be removed -- by Xinfeng
-			Thread.Sleep(5000);
 
 			var tooltip = ExtendedTooltip(fields.Date);
 			Console.WriteLine(@"tooltip: {0}", tooltip);
