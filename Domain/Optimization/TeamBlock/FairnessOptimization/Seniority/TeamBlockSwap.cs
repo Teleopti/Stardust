@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 {
 	public interface ITeamBlockSwap
 	{
-		bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod);
+		bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class TeamBlockSwap : ITeamBlockSwap
@@ -15,15 +15,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		private readonly ITeamBlockSwapDayValidator _teamBlockSwapDayValidator;
 		private readonly ISwapServiceNew _swapServiceNew;
 		private readonly ITeamBlockSwapValidator _teamBlockSwapValidator;
+		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 
-		public TeamBlockSwap(ISwapServiceNew swapServiceNew, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockSwapDayValidator teamBlockSwapDayValidator)
+		public TeamBlockSwap(ISwapServiceNew swapServiceNew, ITeamBlockSwapValidator teamBlockSwapValidator, ITeamBlockSwapDayValidator teamBlockSwapDayValidator, 
+													ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
+													ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator)
 		{
 			_teamBlockSwapDayValidator = teamBlockSwapDayValidator;
 			_swapServiceNew = swapServiceNew;
 			_teamBlockSwapValidator = teamBlockSwapValidator;
+			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_teamBlockShiftCategoryLimitationValidator = teamBlockShiftCategoryLimitationValidator;
 		}
 
-		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod)
+		public bool Swap(ITeamBlockInfo teamBlockInfo1, ITeamBlockInfo teamBlockInfo2, ISchedulePartModifyAndRollbackService rollbackService, IScheduleDictionary scheduleDictionary, DateOnlyPeriod selectedPeriod, IOptimizationPreferences optimizationPreferences)
 		{
 			if (!_teamBlockSwapValidator.ValidateCanSwap(teamBlockInfo1, teamBlockInfo2)) return false;
 			var scheduleDays1 = extractScheduleDays(teamBlockInfo1, scheduleDictionary, selectedPeriod).ToList();
@@ -55,6 +61,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				rollbackService.Rollback();
 				return false;
 			}
+
+			var firstBlockOk = _teamBlockRestrictionOverLimitValidator.Validate(teamBlockInfo1, optimizationPreferences);
+			var secondBlockOk = _teamBlockRestrictionOverLimitValidator.Validate(teamBlockInfo2, optimizationPreferences);
+			if (!(firstBlockOk && secondBlockOk))
+			{
+				rollbackService.Rollback();
+				return false;
+			}
+
+			if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo1, teamBlockInfo2, optimizationPreferences))
+			{
+				rollbackService.Rollback();
+				return false;
+			}
+
 			rollbackService.ClearModificationCollection();
 
 			return true;
