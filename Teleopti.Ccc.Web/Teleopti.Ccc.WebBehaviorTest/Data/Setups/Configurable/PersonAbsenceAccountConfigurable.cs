@@ -32,10 +32,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		{
 			Absence = config.Absence;
 			FromDate = config.FromDate;
-			Accrued = config.Accrued;
-			BalanceIn = config.BalanceIn;
-			BalanceOut = config.BalanceOut;
-			Extra = config.Extra;
+			Accrued = !string.IsNullOrEmpty(config.Accrued) ? config.Accrued : "0";
+			BalanceIn = !string.IsNullOrEmpty(config.BalanceIn) ? config.BalanceIn : "0";
+			BalanceOut = !string.IsNullOrEmpty(config.BalanceOut) ? config.BalanceOut : "0";
+			Extra = !string.IsNullOrEmpty(config.Extra) ? config.Extra : "0";
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
@@ -58,15 +58,47 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			{
 				personAbsenceAccount.Add(new AccountTime(FromDate)
 					{
-						Accrued = TimeSpan.Parse(Accrued),
-						BalanceIn = TimeSpan.Parse(BalanceIn),
-						BalanceOut = TimeSpan.Parse(BalanceOut),
-						Extra = TimeSpan.Parse(Extra)
+						Accrued = getTimeSpanInMinute(Accrued),
+						BalanceIn = getTimeSpanInMinute(BalanceIn),
+						BalanceOut = getTimeSpanInMinute(BalanceOut),
+						Extra = getTimeSpanInMinute(Extra)
 					});
 			}
 
 			var repository = new PersonAbsenceAccountRepository(uow);
 			repository.Add(personAbsenceAccount);
+		}
+
+		private static TimeSpan getTimeSpanInMinute(string ts)
+		{
+			var timeInMinutes = 0;
+			var formatIsCorrect = false;
+
+			if (ts == "0")
+			{
+				formatIsCorrect = true;
+				timeInMinutes = 0;
+			}
+			else if (ts.Contains(':'))
+			{
+				var values = ts.Split(':');
+				if (values.Length == 2)
+				{
+					int hourCount, minuteCount;
+					if (int.TryParse(values[0], out hourCount) && int.TryParse(values[1], out minuteCount) && (minuteCount >= 0 && minuteCount < 60))
+					{
+						formatIsCorrect = true;
+						timeInMinutes = hourCount * 60 + minuteCount;
+					}
+				}
+			}
+
+			if (!formatIsCorrect)
+			{
+				throw new ArgumentException(string.Format("TimeSpan value {0} should match \"HH:mm\" format.", ts));
+			}
+
+			return new TimeSpan(timeInMinutes, 0, 0);
 		}
 	}
 }
