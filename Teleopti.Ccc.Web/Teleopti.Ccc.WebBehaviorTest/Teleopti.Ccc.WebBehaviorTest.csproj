@@ -112,6 +112,7 @@
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
+    <Compile Include="Data\Setups\Configurable\PersonAbsenceAccountConfigurable.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduledAgentsForShiftTrade.cs" />
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>

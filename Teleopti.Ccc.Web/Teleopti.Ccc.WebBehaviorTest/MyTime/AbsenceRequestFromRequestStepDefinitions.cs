@@ -1,10 +1,23 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using System.Globalization;
+using System.Linq;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -115,5 +128,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
+
+		[Given(@"I have a personal account with")]
+		public void GivenIHaveAPersonalAccount(Table table)
+		{
+			var personAbsenceAccount = table.CreateInstance<PersonAbsenceAccountConfigurable>();
+			DataMaker.Data().Apply(personAbsenceAccount);
+		}
+
+		[Then(@"I should see the remaining time is '(.*)'")]
+		public void ThenIShouldSeeTheRemainingTimeIs(string p0)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see the used time is '(.*)'")]
+		public void ThenIShouldSeeTheUsedTimeIs(string p0)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
 	}
+
 }
