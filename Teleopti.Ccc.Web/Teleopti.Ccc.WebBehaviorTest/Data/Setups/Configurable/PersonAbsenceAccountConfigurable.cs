@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -42,8 +43,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var absence = new AbsenceRepository(uow).LoadAll().Single(x => x.Description.Name == Absence);
 			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
 
-			var trackerName = absence.Tracker.Description.Name;
-			if (string.Compare(trackerName, UserTexts.Resources.HolidayDays, StringComparison.CurrentCulture) == 0)
+			var trackerType = absence.Tracker.GetType();
+			if (trackerType == Tracker.CreateDayTracker().GetType())
 			{
 				personAbsenceAccount.Add(new AccountDay(FromDate)
 					{
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 						Extra = TimeSpan.Parse(Extra)
 					});
 			}
-			else if (string.Compare(trackerName, UserTexts.Resources.HolidayTime, StringComparison.CurrentCulture) == 0)
+			else if (trackerType == Tracker.CreateTimeTracker().GetType())
 			{
 				personAbsenceAccount.Add(new AccountTime(FromDate)
 					{
