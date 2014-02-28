@@ -1,36 +1,34 @@
 ﻿namespace Teleopti.Ccc.Win.Main
 {
-    partial class About
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class About
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed();
-			this.buttonAdvApplyLicense = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.textBoxAbout = new System.Windows.Forms.TextBox();
 			this.gradientPanel1 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -45,7 +43,10 @@
 			this.labelActiveAgentsInUse = new System.Windows.Forms.Label();
 			this.labelActiveAgentsOrSeats = new System.Windows.Forms.Label();
 			this.gradientPanel2 = new Syncfusion.Windows.Forms.Tools.GradientPanel();
+			this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
 			this.buttonAdvLegalNotice = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAdvApplyLicense = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel1)).BeginInit();
 			this.gradientPanel1.SuspendLayout();
@@ -53,6 +54,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel2)).BeginInit();
 			this.gradientPanel2.SuspendLayout();
+			this.tableLayoutPanel2.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// ribbonControlAdv1
@@ -76,40 +78,11 @@
 			this.ribbonControlAdv1.TabIndex = 0;
 			this.ribbonControlAdv1.Text = "xxAbout";
 			// 
-			// buttonAdvApplyLicense
-			// 
-			this.buttonAdvApplyLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvApplyLicense.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvApplyLicense.AutoSize = true;
-			this.buttonAdvApplyLicense.Location = new System.Drawing.Point(207, 264);
-			this.buttonAdvApplyLicense.Name = "buttonAdvApplyLicense";
-			this.buttonAdvApplyLicense.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvApplyLicense.Size = new System.Drawing.Size(94, 23);
-			this.buttonAdvApplyLicense.TabIndex = 3;
-			this.buttonAdvApplyLicense.Text = "xxApplyLicense";
-			this.buttonAdvApplyLicense.UseVisualStyle = true;
-			this.buttonAdvApplyLicense.UseVisualStyleBackColor = true;
-			this.buttonAdvApplyLicense.Click += new System.EventHandler(this.buttonAdvApplyLicenseClick);
-			// 
-			// buttonAdvOk
-			// 
-			this.buttonAdvOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonAdvOk.Location = new System.Drawing.Point(307, 264);
-			this.buttonAdvOk.Name = "buttonAdvOk";
-			this.buttonAdvOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvOk.Size = new System.Drawing.Size(75, 23);
-			this.buttonAdvOk.TabIndex = 2;
-			this.buttonAdvOk.Text = "xxOk";
-			this.buttonAdvOk.UseVisualStyle = true;
-			this.buttonAdvOk.UseVisualStyleBackColor = true;
-			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
-			// 
 			// textBoxAbout
 			// 
 			this.textBoxAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.textBoxAbout.Location = new System.Drawing.Point(10, 16);
 			this.textBoxAbout.Multiline = true;
 			this.textBoxAbout.Name = "textBoxAbout";
@@ -278,10 +251,8 @@
 			this.gradientPanel2.Border3DStyle = System.Windows.Forms.Border3DStyle.Flat;
 			this.gradientPanel2.BorderSingle = System.Windows.Forms.ButtonBorderStyle.None;
 			this.gradientPanel2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-			this.gradientPanel2.Controls.Add(this.buttonAdvLegalNotice);
+			this.gradientPanel2.Controls.Add(this.tableLayoutPanel2);
 			this.gradientPanel2.Controls.Add(this.textBoxAbout);
-			this.gradientPanel2.Controls.Add(this.buttonAdvApplyLicense);
-			this.gradientPanel2.Controls.Add(this.buttonAdvOk);
 			this.gradientPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gradientPanel2.Location = new System.Drawing.Point(0, 105);
 			this.gradientPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -289,20 +260,68 @@
 			this.gradientPanel2.Size = new System.Drawing.Size(393, 297);
 			this.gradientPanel2.TabIndex = 6;
 			// 
+			// tableLayoutPanel2
+			// 
+			this.tableLayoutPanel2.ColumnCount = 4;
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+			this.tableLayoutPanel2.Controls.Add(this.buttonAdvLegalNotice, 1, 0);
+			this.tableLayoutPanel2.Controls.Add(this.buttonAdvApplyLicense, 2, 0);
+			this.tableLayoutPanel2.Controls.Add(this.buttonAdvOk, 3, 0);
+			this.tableLayoutPanel2.Location = new System.Drawing.Point(10, 258);
+			this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
+			this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+			this.tableLayoutPanel2.RowCount = 1;
+			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(372, 33);
+			this.tableLayoutPanel2.TabIndex = 6;
+			// 
 			// buttonAdvLegalNotice
 			// 
 			this.buttonAdvLegalNotice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.buttonAdvLegalNotice.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonAdvLegalNotice.AutoSize = true;
-			this.buttonAdvLegalNotice.Location = new System.Drawing.Point(107, 264);
+			this.buttonAdvLegalNotice.Location = new System.Drawing.Point(108, 7);
 			this.buttonAdvLegalNotice.Name = "buttonAdvLegalNotice";
 			this.buttonAdvLegalNotice.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
-			this.buttonAdvLegalNotice.Size = new System.Drawing.Size(94, 23);
-			this.buttonAdvLegalNotice.TabIndex = 5;
+			this.buttonAdvLegalNotice.Size = new System.Drawing.Size(84, 23);
+			this.buttonAdvLegalNotice.TabIndex = 6;
 			this.buttonAdvLegalNotice.Text = "xxLegalNotice";
 			this.buttonAdvLegalNotice.UseVisualStyle = true;
 			this.buttonAdvLegalNotice.UseVisualStyleBackColor = true;
 			this.buttonAdvLegalNotice.Click += new System.EventHandler(this.buttonAdvLegalNoticeClick);
+			// 
+			// buttonAdvApplyLicense
+			// 
+			this.buttonAdvApplyLicense.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvApplyLicense.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvApplyLicense.AutoSize = true;
+			this.buttonAdvApplyLicense.Location = new System.Drawing.Point(198, 7);
+			this.buttonAdvApplyLicense.Name = "buttonAdvApplyLicense";
+			this.buttonAdvApplyLicense.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvApplyLicense.Size = new System.Drawing.Size(90, 23);
+			this.buttonAdvApplyLicense.TabIndex = 4;
+			this.buttonAdvApplyLicense.Text = "xxApplyLicense";
+			this.buttonAdvApplyLicense.UseVisualStyle = true;
+			this.buttonAdvApplyLicense.UseVisualStyleBackColor = true;
+			this.buttonAdvApplyLicense.Click += new System.EventHandler(this.buttonAdvApplyLicenseClick);
+			// 
+			// buttonAdvOk
+			// 
+			this.buttonAdvOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+			this.buttonAdvOk.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
+			this.buttonAdvOk.Location = new System.Drawing.Point(294, 7);
+			this.buttonAdvOk.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
+			this.buttonAdvOk.Name = "buttonAdvOk";
+			this.buttonAdvOk.Office2007ColorScheme = Syncfusion.Windows.Forms.Office2007Theme.Managed;
+			this.buttonAdvOk.Size = new System.Drawing.Size(75, 23);
+			this.buttonAdvOk.TabIndex = 3;
+			this.buttonAdvOk.Text = "xxOk";
+			this.buttonAdvOk.UseVisualStyle = true;
+			this.buttonAdvOk.UseVisualStyleBackColor = true;
+			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
 			// 
 			// About
 			// 
@@ -330,29 +349,32 @@
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanel2)).EndInit();
 			this.gradientPanel2.ResumeLayout(false);
 			this.gradientPanel2.PerformLayout();
+			this.tableLayoutPanel2.ResumeLayout(false);
+			this.tableLayoutPanel2.PerformLayout();
 			this.ResumeLayout(false);
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvApplyLicense;
-        private System.Windows.Forms.TextBox textBoxAbout;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
-        private System.Windows.Forms.Label labelProductVersion;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label labelProductName;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label labelCopyright;
-        private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel2;
-        private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Label labelActiveAgentsInUse;
-        private System.Windows.Forms.Label labelActiveAgentsOrSeats;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvLegalNotice;
+		private Syncfusion.Windows.Forms.Tools.RibbonControlAdvFixed ribbonControlAdv1;
+		private System.Windows.Forms.TextBox textBoxAbout;
+		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel1;
+		private System.Windows.Forms.Label labelProductVersion;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label labelProductName;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.Label labelCopyright;
+		private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanel2;
+		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.Label labelActiveAgentsInUse;
+		private System.Windows.Forms.Label labelActiveAgentsOrSeats;
 		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvViewActive;
-    }
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvApplyLicense;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvOk;
+		private Syncfusion.Windows.Forms.ButtonAdv buttonAdvLegalNotice;
+	}
 }
