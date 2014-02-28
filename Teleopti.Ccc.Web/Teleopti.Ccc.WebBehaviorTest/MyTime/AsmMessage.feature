@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: ASM Message
+﻿Feature: ASM Message
 	In order to communicate with supervisors
 	As an agent
 	I want to receive and send information
@@ -34,9 +33,8 @@ Scenario: Indicate another new message while logged on
 	And I have an unread message with
 	| Field         | Value        |
 	| Title         | New message	 |
-	And I am viewing week schedule
-	And I should be notified that I have '1' unread message(s)
-	When I receive message number '2' while not viewing message page
+	When I am viewing week schedule
+	And I receive message number '2' while not viewing message page
 	Then I should be notified that I have '2' unread message(s)
 
 Scenario: Indicate new message at logon
@@ -70,10 +68,8 @@ Scenario: Open unread message
 	| Title		| New message		|
 	| Message	| Text in message	|	
 	When I am viewing messages
-	And I click on the message at position '1' in the list
-	Then I should see the message details form with on the message at position '1' in the list
-	| Field		| Value				|
-	| Message	| Text in message	|	
+	And I click on the message with the title 'New message'
+	Then I should see the message detail form with the message 'Text in message'
 
 Scenario: Confirm message is read
 	Given I have the role 'Full access to mytime'
@@ -81,8 +77,8 @@ Scenario: Confirm message is read
 	| Field         | Value          |
 	| Title         | New message	 |
 	When I am viewing messages
-	And I click on the message at position '1' in the list
-	When I click the confirm button on the message at position '1' in the list
+	And I click on the message with the title 'New message'
+	When I confirm reading the message with the title 'New message'
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
@@ -94,12 +90,13 @@ Scenario: Confirm message is read after entering a textreply
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
+	When I click on the message with the title 'New message'
 	And I enter the text reply 'some text....'
-	And I click the confirm button on the message at position '1' in the list
+	And I confirm reading the message with the title 'New message'
 	Then I should not see any messages
 	And I should see a user-friendly message explaining I dont have any messages
 
+	@broker
 Scenario: Reduce number of unread messages in message tab title
 	Given I have the role 'Full access to mytime'
 	And I have an unread message with
@@ -111,7 +108,8 @@ Scenario: Reduce number of unread messages in message tab title
 	And I am viewing week schedule
 	And I should be notified that I have '2' unread message(s)
 	When I navigate to messages
-	And I confirm reading the message at position '1' of '2' in the list
+	And I click on the message with the title 'New message'
+	And I confirm reading the message with the title 'New message'
 	Then I should be notified that I have '1' unread message(s)
 
 Scenario: Receive a new message when viewing message page
@@ -128,8 +126,8 @@ Scenario: Open unread message where text reply is allowed
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	Then I should see the message details form with an editable text box on the message at position '1' in the list
+	When I click on the message with the title 'New message'
+	Then I should be able to write a text reply for the message with the title 'New message'
 
 Scenario: See reply dialogue in message text
 	Given I have the role 'Full access to mytime'
@@ -141,8 +139,8 @@ Scenario: See reply dialogue in message text
 	| My reply				| Ok if you buy me dinner?  |
 	| Senders reply			| It´s a deal!				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	Then I should see this conversation on the message at position '1' in the list
+	When I click on the message with the title 'Work late'
+	Then I can see a conversation for the message with the title 'Work late' with
 	| Messages					|
 	| Ok if you buy me dinner?  |
 	| It´s a deal!				|
@@ -155,10 +153,10 @@ Scenario: Do not allow empty reply
 	| Message				| Text in message	|
 	| Text reply allowed	| True				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	Then the send button should be disabled on the message at position '1' in the list
+	When I click on the message with the title 'New message'
+	Then I should not be able to send response for the message with the title 'New message'
  
-Scenario: Show replyoptions for message with multiple options
+Scenario: Show reply options for message with multiple options
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field					| Value					|
@@ -169,14 +167,14 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2			| No					|
 	| ReplyOption3			| A longer replyoption	|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	Then I should see radiobuttons on the message at position '1' in the list with 
+	When I click on the message with the title 'New message'
+	Then I should be able to select one of the following options for the message with the title 'New message'
 	| Captions				|
 	| Yes					|
 	| No					|
 	| A longer replyoption	|
-
-Scenario: Confirm message with multiple replyoptions
+	
+Scenario: Confirm message with multiple reply options
 Given I have the role 'Full access to mytime'
 	And I have an unread message with
 	| Field        | Value					|
@@ -186,9 +184,9 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2 | Probably not			|
 	| ReplyOption3 | Defenitly not			|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'Probably not' on the message at position '1' in the list
-	And I click the confirm button on the message at position '1' in the list
+	When I click on the message with the title 'Ashley is ill'
+	And I choose reply option 'Probably not' for the message with the title 'Ashley is ill'
+	And I confirm reading the message with the title 'Ashley is ill'
 	Then I should not see any messages
 
 Scenario: Enable confirmbutton when user has selected a replyoption
@@ -201,9 +199,9 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption1			| Yes				|
 	| ReplyOption2			| No				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'No' on the message at position '1' in the list
-	Then the send button should be enabled on the message at position '1' in the list
+	When I click on the message with the title 'New message'
+	And I choose reply option 'No' for the message with the title 'New message'
+	Then I should be able to send response for the message with the title 'New message'
  
 Scenario: Confirmbutton should be disabled when user hasnt selected a replyoption
 Given I have the role 'Full access to mytime'
@@ -215,8 +213,8 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption1			| Yes				|
 	| ReplyOption2			| No				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	Then the send button should be disabled on the message at position '1' in the list
+	When I click on the message with the title 'New message'
+	Then I should not be able to send response for the message with the title 'New message'
 
 Scenario: User can only select one replyoption
 Given I have the role 'Full access to mytime'
@@ -228,10 +226,10 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption1			| Yes				|
 	| ReplyOption2			| No				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'No' on the message at position '1' in the list
-	And I click the radiobutton with caption 'Yes' on the message at position '1' in the list
-	Then the radiobutton with caption 'No' should not be checked on the message at position '1' in the list
+	When I click on the message with the title 'New message'
+	And I choose reply option 'No' for the message with the title 'New message'
+	And I choose reply option 'Yes' for the message with the title 'New message'
+	Then the reply option 'No' should not be selected for the message with the title 'New message'
 
 Scenario: Do not show replyoptions if there is only one option
 Given I have the role 'Full access to mytime'
@@ -242,9 +240,9 @@ Given I have the role 'Full access to mytime'
 	| Text reply allowed	| False				|
 	| ReplyOption1			| Ok					|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	Then I should not see any options on the message at position '1' in the list
-	And the send button should be enabled on the message at position '1' in the list
+	When I click on the message with the title 'New message'
+	Then I should not see any options for the message with the title 'New message'
+	And I should be able to send response for the message with the title 'New message'
 
 Scenario: User do not have to write textreply if she selects one of the replyoptions
 Given I have the role 'Full access to mytime'
@@ -257,9 +255,9 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2			| Second			|
 	| ReplyOption3			| Third				|
 	And I am viewing messages
-	When I click on the message at position '1' in the list
-	And I click the radiobutton with caption 'Second' on the message at position '1' in the list
-	Then the send button should be enabled on the message at position '1' in the list
+	When I click on the message with the title 'New message'
+	And I choose reply option 'Second' for the message with the title 'New message'
+	Then I should be able to send response for the message with the title 'New message'
 
 Scenario: Message should be removed from message list when deleted by sender
 	Given I have the role 'Full access to mytime'

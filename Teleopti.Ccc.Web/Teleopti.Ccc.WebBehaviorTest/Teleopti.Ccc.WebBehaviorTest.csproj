@@ -395,7 +395,6 @@
     <Compile Include="Data\Setups\Legacy\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
     <Compile Include="Pages\Common\IMessageReplyPage.cs" />
-    <Compile Include="Pages\MessagePage.cs" />
     <Compile Include="Pages\GlobalMenuPage.cs" />
     <Compile Include="MyTime\PreferencesFeedbackBlacklisting.feature.cs">
       <AutoGen>True</AutoGen>
@@ -651,7 +650,6 @@
     <Compile Include="Core\SystemLevelLock.cs" />
     <Compile Include="Data\TestSiteConfigurationSetup.cs" />
     <Compile Include="Core\Browser.cs" />
-    <Compile Include="Pages\WeekSchedulePage.cs" />
     <Compile Include="Core\Extensions\FuncExtensions.cs" />
     <Compile Include="Core\Navigation.cs" />
     <Compile Include="Core\BrowserDriver\TimeoutScope.cs" />

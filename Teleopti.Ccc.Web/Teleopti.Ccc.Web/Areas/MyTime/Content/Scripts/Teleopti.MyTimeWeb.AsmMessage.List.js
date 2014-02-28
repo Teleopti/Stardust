@@ -176,7 +176,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 	function _initScrollPaging() {
 		vm = new asmMessageListViewModel();
-		ko.applyBindings(vm, document.getElementById('AsmMessage-body-inner'));
+		ko.applyBindings(vm, document.getElementById('.asm-messages'));
 		_loadAPage();
 		$(window).scroll(_loadAPageIfRequired);
 	}
@@ -209,7 +209,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 	}
 
 	function _loadAPage() {
-		var skip = $('#AsmMessages-list .col-xs-6').length;
+		var skip = $('.message-list .col-xs-6').length;
 		var take = 20;
 		ajax.Ajax({
 			url: "Message/Messages",

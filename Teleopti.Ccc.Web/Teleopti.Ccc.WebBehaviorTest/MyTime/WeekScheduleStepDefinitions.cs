@@ -18,9 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class WeekScheduleStepDefinitions
 	{
-
-		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
-
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
@@ -53,14 +50,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var activityNameScript =
 				string.Format(
-					"return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-activity:contains(\"{1}\")').length > 0",
-					date.ToString("yyyy-MM-dd"), TestData.ActivityPhone.Description.Name);
+					".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-activity:contains('{1}')",
+					date.ToString("yyyy-MM-dd"), 
+					TestData.ActivityPhone.Description.Name);
 			var endTimeScript =
 				string.Format(
-					"return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains(\"{1}\")').length > 0",
-					date.ToString("yyyy-MM-dd"), time);
-			Browser.Interactions.AssertJavascriptResultContains(activityNameScript, "true");
-			Browser.Interactions.AssertJavascriptResultContains(endTimeScript, "true");
+					".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains('{1}')",
+					date.ToString("yyyy-MM-dd"), 
+					time);
+			Browser.Interactions.AssertExistsUsingJQuery(activityNameScript);
+			Browser.Interactions.AssertExistsUsingJQuery(endTimeScript);
 		}
 
 		[Then(@"I should see a shift on date '(.*)'")]
@@ -157,15 +156,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see activities on date '(.*)'")]
 		public void ThenIShouldSeeActivitiesOnDate(DateTime date)
 		{
-			Browser.Interactions.AssertJavascriptResultContains(
-				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer\").length > 0;",
-				              date.ToString("yyyy-MM-dd")), "true");
+			Browser.Interactions.AssertExistsUsingJQuery(
+				string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",date.ToString("yyyy-MM-dd")));
 		}
 
 		[Then(@"I should see request page")]
 		public void ThenIShouldSeeRequestPage()
 		{
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("Request"));
+			Browser.Interactions.AssertUrlContains("Request");
 		}
 
 		[When(@"I click the current week button")]
@@ -177,7 +175,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see a shift on date '(.*)'")]
 		public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
 		{
-			_page.DayLayers(date).Count.Should().Be.EqualTo(0);
+			Browser.Interactions.AssertNotExists(string.Format(".weekview-day[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd")),
+												 string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",
+			                                                   date.ToString("yyyy-MM-dd")));
 		}
 		
 		[When(@"My schedule between '(.*)' to '(.*)' reloads")]

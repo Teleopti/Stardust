@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _gridConstructor.BuildGridView(ViewType.EmptyView);
 
             //initialize filter popup
-            _peopleAdminFilterPanel = new PeopleAdminFilterPanel(_filteredPeopleHolder, state, this, _container) { Location = new Point(229, 130) };
+            _peopleAdminFilterPanel = new PeopleAdminFilterPanel(_filteredPeopleHolder, this, _container) { Location = new Point(229, 130) };
             _peopleAdminFilterPanel.BringToFront();
             _peopleAdminFilterPanel.Leave += peopleAdminFilterPanel_Leave;
             Controls.Add(_peopleAdminFilterPanel);
@@ -610,7 +610,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
 
                 ShowErrorMessage(explanation, UserTexts.Resources.ErrorMessage);
-                CleanUpAfterException();
+                FormKill();
             }
             catch (OptimisticLockException)
             {
@@ -630,32 +630,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                                        UserTexts.Resources.ErrorMessage);
                 FormKill();
             }
-        }
-
-
-        private void CleanUpAfterException()
-        {
-            Cursor.Current = Cursors.WaitCursor;
-            //Dispose all child grids
-            DisposeAllChildGrids();
-
-            //Create new UoW.
-            _filteredPeopleHolder.GetUnitOfWork.Dispose();
-            IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
-            _filteredPeopleHolder.GetUnitOfWork = uow;
-
-            _filteredPeopleHolder.GetUnitOfWork.Reassociate(_filteredPeopleHolder.RuleSetBagCollection);
-            _filteredPeopleHolder.LoadIt();
-            //Copy filtered people collection.
-            IList<IPerson> filteredPeopleCollection =
-                new List<IPerson>(_filteredPeopleHolder.FilteredPersonCollection);
-
-            //Set filtered people & corresponding periods.
-            _filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(filteredPeopleCollection);
-
-            _gridConstructor.View.Invalidate();
-
-            Cursor.Current = Cursors.Default;
         }
 
         private void gridWorksheet_CellButtonClicked(object sender, GridCellButtonClickedEventArgs e)
