@@ -51,7 +51,6 @@ And I should see the remaining time is '130:00'
 @ignore
 Scenario: When changing absence type update remaining and used time
 Given I am an agent
-And I have a person period that starts on '2014-01-01'
 And I have a requestable absence called Vacation
 And I have a requestable absence called Illness
 And I have a personal account with
