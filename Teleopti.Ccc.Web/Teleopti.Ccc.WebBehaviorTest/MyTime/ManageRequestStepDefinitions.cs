@@ -9,9 +9,9 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 using Teleopti.Interfaces.Domain;
-using PersonalAccountConfigurable = Teleopti.Ccc.TestCommon.TestData.Setups.Configurable.PersonalAccountConfigurable;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
@@ -78,8 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Given(@"I have a personal account for period including today's date")]
 		public void GivenIHaveAPersonalAccountForPeriodIncludingTodaySDate(Table table)
 		{
-			DataMaker.ApplyFromTable<PersonalAccountConfigurable>(table);
+			DataMaker.ApplyFromTable<PersonAbsenceAccountConfigurable>(table);
 		}
-
 	}
 }
