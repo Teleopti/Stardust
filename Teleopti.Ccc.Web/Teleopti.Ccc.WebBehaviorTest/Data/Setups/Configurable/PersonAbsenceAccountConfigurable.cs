@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	{
 		public string Absence { get; set; }
 		public string FromDate { get; set; }
-		public string Type { get; set; }
+		public string TrackerType { get; set; }
 
 		public string Accrued { get; set; }
 		public string BalanceIn { get; set; }
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			Extra = "0";
 			BalanceIn = "0";
 			BalanceOut = "0";
-			Type = "Days";
+			TrackerType = "Days";
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
@@ -34,25 +34,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 			var repository = new PersonAbsenceAccountRepository(uow);
 			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
-			if (Type == "Day")
+			switch (TrackerType.ToLower())
 			{
-				personAbsenceAccount.Add(new AccountDay(FromDate)
-				{
-					Accrued = TimeSpan.Parse(Accrued),
-					BalanceIn = TimeSpan.Parse(BalanceIn),
-					BalanceOut = TimeSpan.Parse(BalanceOut),
-					Extra = TimeSpan.Parse(Extra)
-				});
-			}
-			else if (Type == "Hours")
-			{
-				personAbsenceAccount.Add(new AccountTime(FromDate)
-				{
-					Accrued = TimeSpan.Parse(Accrued),
-					BalanceIn = TimeSpan.Parse(BalanceIn),
-					BalanceOut = TimeSpan.Parse(BalanceOut),
-					Extra = TimeSpan.Parse(Extra)
-				});
+				case "days":
+					personAbsenceAccount.Add(new AccountDay(FromDate)
+						{
+							Accrued = TimeSpan.Parse(Accrued),
+							BalanceIn = TimeSpan.Parse(BalanceIn),
+							BalanceOut = TimeSpan.Parse(BalanceOut),
+							Extra = TimeSpan.Parse(Extra)
+						});
+					break;
+				case "hours":
+					personAbsenceAccount.Add(new AccountTime(FromDate)
+						{
+							Accrued = TimeSpan.Parse(Accrued),
+							BalanceIn = TimeSpan.Parse(BalanceIn),
+							BalanceOut = TimeSpan.Parse(BalanceOut),
+							Extra = TimeSpan.Parse(Extra)
+						});
+					break;
 			}
 			repository.Add(personAbsenceAccount);
 		}
