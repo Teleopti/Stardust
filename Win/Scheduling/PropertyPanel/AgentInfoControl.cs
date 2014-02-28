@@ -494,7 +494,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			createAndAddItem(listViewPersonPeriod, Resources.EmploymentType, _employmentTypeList[personPeriod.PersonContract.Contract.EmploymentType], 2);
 			if (personPeriod.RuleSetBag != null)
 				createAndAddItem(listViewPersonPeriod, Resources.RuleSetBag, personPeriod.RuleSetBag.Description.Name, 2);
-            
+            listViewPersonPeriod.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listViewPersonPeriod.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
@@ -707,7 +708,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                     view.ShowDialog();
                 }
             }
-            
+            listViewPerson.Columns[0].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
+            listViewPerson.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
         private void AgentInfo_FromLoad(object sender, EventArgs e)
