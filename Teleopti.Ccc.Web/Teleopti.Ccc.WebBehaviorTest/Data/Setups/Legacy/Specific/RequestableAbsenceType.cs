@@ -21,27 +21,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public RequestableAbsenceType(RequestableAbsenceFields requestableAbsenceFields)
 		{
 			_name = requestableAbsenceFields.Name;
-			_tracker = requestableAbsenceFields.Tracker;
+			_tracker = requestableAbsenceFields.TrackerType;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			ITracker tracker = null;
-			switch (_tracker.ToLower())
+			if (!string.IsNullOrEmpty(_tracker))
 			{
-				case "day":
-					tracker = Tracker.CreateDayTracker();
-					break;
-				case "time":
-					tracker = Tracker.CreateTimeTracker();
-					break;
-				case "overtime":
-					tracker = Tracker.CreateOvertimeTracker();
-					break;
-				case "comp":
-					tracker = Tracker.CreateCompTracker();
-					break;
+				switch (_tracker.ToLower())
+				{
+					case "day":
+						tracker = Tracker.CreateDayTracker();
+						break;
+					case "time":
+						tracker = Tracker.CreateTimeTracker();
+						break;
+					case "overtime":
+						tracker = Tracker.CreateOvertimeTracker();
+						break;
+					case "comp":
+						tracker = Tracker.CreateCompTracker();
+						break;
+				}
 			}
+
 			new AbsenceRepository(uow).Add(new Absence
 			                               	{
 			                               		Description = new Description(_name),
@@ -54,6 +58,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 	public class RequestableAbsenceFields
 	{
 		public string Name { get; set; }
-		public string Tracker { get; set; }
+		public string TrackerType { get; set; }
 	}
 }
