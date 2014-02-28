@@ -710,17 +710,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                             optimizationPreferences);
 			equalNumberOfCategoryFairnessService.ReportProgress -= resourceOptimizerPersonOptimized;
 
-			var groupPersonBuilderForOptimizationFactory = _container.Resolve<IGroupPersonBuilderForOptimizationFactory>();
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
-			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-
 			
-			ITeamSelectionValidator teamSelectionValidator = new TeamSelectionValidator(teamInfoFactory, matrixListForFairness);
-			if(!teamSelectionValidator.ValidateSelection(selectedPersons, selectedPeriod)) return;
-
 			var teamBlockSeniorityFairnessOptimizationService = _container.Resolve<ITeamBlockSeniorityFairnessOptimizationService>();
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons,schedulingOptions, _stateHolder.ShiftCategories.ToList(),_schedulerStateHolder.Schedules, rollbackService);
+			teamBlockSeniorityFairnessOptimizationService.Execute(matrixListForFairness, selectedPeriod, selectedPersons, schedulingOptions, _stateHolder.ShiftCategories.ToList(), _schedulerStateHolder.Schedules, rollbackService, optimizationPreferences);
 			teamBlockSeniorityFairnessOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 

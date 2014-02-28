@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -37,6 +38,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		private IList<ITeamBlockInfo> _teamBlockInfos;
 		private ITeamBlockPriorityDefinitionInfo _teamBlockPriorityDefinitionInfo;
 		private IList<ITeamBlockInfo> _highToLowShiftCategoryPrioryList;
+		private IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
+		private IOptimizationPreferences _optimizationPreferences;
 
 		[SetUp]
 		public void SetUp()
@@ -65,7 +68,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			_teamBlockInfos = new List<ITeamBlockInfo> { _teamBlockInfo1, _teamBlockInfo2 };
 			_highToLowShiftCategoryPrioryList = new List<ITeamBlockInfo>{_teamBlockInfo2, _teamBlockInfo1};
 			_teamBlockPriorityDefinitionInfo = _mock.StrictMock<ITeamBlockPriorityDefinitionInfo>();
-			_target = new TeamBlockSeniorityFairnessOptimizationService(_constructTeamBlock, _determineTeamBlockPriority, _teamBlockPeriodValidator, _teamBlockSeniorityValidator, _teamBlockSwap);
+			_filterForTeamBlockInSelection = _mock.StrictMock<IFilterForTeamBlockInSelection>();
+			_optimizationPreferences = _mock.StrictMock<IOptimizationPreferences>();
+			_target = new TeamBlockSeniorityFairnessOptimizationService(_constructTeamBlock, _determineTeamBlockPriority, _teamBlockPeriodValidator, _teamBlockSeniorityValidator, _teamBlockSwap, _filterForTeamBlockInSelection);
 		}
 
 		[Test]
@@ -76,6 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
+				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos);
 				Expect.Call(_determineTeamBlockPriority.CalculatePriority(_teamBlockInfos, _shiftCategories)).Return(_teamBlockPriorityDefinitionInfo);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority()).Return(_highToLowShiftCategoryPrioryList);
@@ -83,13 +89,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(2);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(1);
-				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod)).Return(true);
+				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences)).Return(true);
 				Expect.Call(() => _teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(_teamBlockInfo2, 1));
 			}
 
 			using (_mock.Playback())
 			{
-				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService);
+				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService, _optimizationPreferences);
 			}
 		}
 
@@ -101,6 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos).Repeat.Twice();
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true).Repeat.Twice();
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true).Repeat.Twice();
+				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos).Repeat.Twice();
 				Expect.Call(_determineTeamBlockPriority.CalculatePriority(_teamBlockInfos, _shiftCategories)).Return(_teamBlockPriorityDefinitionInfo).Repeat.Twice();
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo).Return(_teamBlockInfos).Repeat.Twice();
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority()).Return(_highToLowShiftCategoryPrioryList).Repeat.Twice();
@@ -110,12 +117,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(2);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(1);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(1);
-				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod)).Return(false);
+				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences)).Return(false);
 			}
 
 			using (_mock.Playback())
 			{
-				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService);
+				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService, _optimizationPreferences);
 			}	
 		}
 
@@ -127,6 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
+				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos);
 				Expect.Call(_determineTeamBlockPriority.CalculatePriority(_teamBlockInfos, _shiftCategories)).Return(_teamBlockPriorityDefinitionInfo);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority()).Return(_highToLowShiftCategoryPrioryList);
@@ -137,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 
 			using (_mock.Playback())
 			{
-				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService);
+				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService, _optimizationPreferences);
 			}	
 		}
 
@@ -149,21 +157,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 				Expect.Call(_constructTeamBlock.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions)).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo1)).Return(true);
 				Expect.Call(_teamBlockSeniorityValidator.ValidateSeniority(_teamBlockInfo2)).Return(true);
+				Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _persons, _dateOnlyPeriod)).Return(_teamBlockInfos);
 				Expect.Call(_determineTeamBlockPriority.CalculatePriority(_teamBlockInfos, _shiftCategories)).Return(_teamBlockPriorityDefinitionInfo);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowSeniorityListBlockInfo).Return(_teamBlockInfos);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority()).Return(_highToLowShiftCategoryPrioryList);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo1)).Return(1);
 				Expect.Call(_teamBlockPeriodValidator.ValidatePeriod(_teamBlockInfo1, _teamBlockInfo2)).Return(true);
 				Expect.Call(_teamBlockPriorityDefinitionInfo.GetShiftCategoryPriorityOfBlock(_teamBlockInfo2)).Return(2);
-				
-				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod)).Return(true);
+
+				Expect.Call(_teamBlockSwap.Swap(_teamBlockInfo1, _teamBlockInfo2, _rollbackService, _scheduleDictionary, _dateOnlyPeriod, _optimizationPreferences)).Return(true);
 				Expect.Call(() => _teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(_teamBlockInfo2, 1));
 			}
 
 			using (_mock.Playback())
 			{
 				_target.ReportProgress += reportProgress;
-				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService);
+				_target.Execute(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions, _shiftCategories, _scheduleDictionary, _rollbackService, _optimizationPreferences);
 				_target.ReportProgress -= reportProgress;
 			}		
 		}

@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             verifyAndAttachWorkloadDays(new List<IWorkloadDay>());
 
-            Guid templateGuid = skillDayTemplate.Id ?? Guid.Empty;
+            Guid templateGuid = skillDayTemplate.Id.GetValueOrDefault();
             _templateReference = new SkillDayTemplateReference(templateGuid, skillDayTemplate.VersionNumber, skillDayTemplate.Name, skillDayTemplate.DayOfWeek, _skill)
                                  	{UpdatedDate = skillDayTemplate.UpdatedDate};
 			initialize();

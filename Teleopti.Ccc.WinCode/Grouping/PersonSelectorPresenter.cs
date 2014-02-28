@@ -98,25 +98,7 @@ namespace Teleopti.Ccc.WinCode.Grouping
 
         private void peopleSaved(string obj)
         {
-            var tabControl = _personSelectorView.TabControl;
-            TabPageAdv tab = tabControl.SelectedTab;
-            if (tab != null)
-            {
-                var command = getCommand(tab.Tag);
-                if (command != null)
-                {
-                    command.Execute();
-                }
-            }
-            
-        }
-
-        private static IExecutableCommand getCommand(object tag)
-        {
-            IExecutableCommand command = tag as ILoadBuiltInTabsCommand ??
-                                         (IExecutableCommand) (tag as ILoadOrganizationCommand);
-
-            return command;
+            refreshGroupPage(obj);
         }
 
         private void selectedNodesChanged(string obj)

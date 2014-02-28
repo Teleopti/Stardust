@@ -50,11 +50,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			_browser.Visit(uri);
 		}
 
-	    public void SetWidth(int width, int height = 400)
-	    {
-	        _browser.ResizeTo(width,height);
-	    }
-
 		public void Click(string selector)
 		{
 			_browser.FindCss(selector, options()).Click(options());

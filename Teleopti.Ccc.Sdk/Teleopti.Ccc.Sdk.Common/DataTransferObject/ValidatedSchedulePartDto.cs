@@ -232,6 +232,18 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         public bool IsWorkday { get; set; }
 
 		/// <summary>
+		/// Gets or sets the minimum contract time in minutes for this schedule period.
+		/// </summary>
+		[DataMember(IsRequired = false, Order = 6)]
+		public int MinContractTimeInMinutes { get; set; }
+
+		/// <summary>
+		/// /// Gets or sets the maximum contract time in minutes for this schedule period.
+		/// </summary>
+		[DataMember(IsRequired = false, Order = 6)]
+		public int MaxContractTimeInMinutes { get; set; }
+
+		/// <summary>
 		/// Internal data for version compatibility.
 		/// </summary>
         public ExtensionDataObject ExtensionData

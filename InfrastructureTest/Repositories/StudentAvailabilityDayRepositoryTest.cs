@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -89,6 +91,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.IsTrue(days[0].NotAvailable);
         }
+
+		[Test]
+		public void CanFindStudentDaysOnDayAndPersonOrderByUpdatedOn()
+		{
+			DateOnly date = new DateOnly(2009, 2, 1);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			var firstStudentAvailability = CreateStudentAvailabilityDay(date, _person, true);
+			var lastStudentAvailability = CreateStudentAvailabilityDay(date, _person, true);
+			PersistAndRemoveFromUnitOfWork(firstStudentAvailability);
+			Thread.Sleep(1000);
+			PersistAndRemoveFromUnitOfWork(lastStudentAvailability);
+
+			IList<IStudentAvailabilityDay> days = new StudentAvailabilityDayRepository(UnitOfWork).Find(date, _person);
+			Assert.AreEqual(2, days.Count);
+
+			Assert.That(days.FirstOrDefault(), Is.EqualTo(lastStudentAvailability));
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldCreateRepositoryWithUnitOfWorkFactory()

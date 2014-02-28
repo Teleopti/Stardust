@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
         }
 
-        private static ISkillRestrictionSet _currentRestrictionSet;
+        private static readonly Lazy<ISkillRestrictionSet> _currentRestrictionSet = new Lazy<ISkillRestrictionSet>(()=> new SkillRestrictionSet());
 
         /// <summary>
         /// Gets the current restriction set.
@@ -38,12 +39,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public static ISkillRestrictionSet CurrentRestrictionSet
         {
-            get
-            {
-                if (_currentRestrictionSet == null)
-                    _currentRestrictionSet = new SkillRestrictionSet();
-                return _currentRestrictionSet;
-            }
+            get { return _currentRestrictionSet.Value; }
         }
     }
 }

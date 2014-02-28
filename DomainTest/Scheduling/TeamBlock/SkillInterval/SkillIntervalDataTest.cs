@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
@@ -109,14 +110,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
         public void CalculateRelativeDifference()
         {
             var skillIntervalData = new SkillIntervalData(_dtp, 3.63, 2, 3, 0, 0);
-            Assert.AreEqual( skillIntervalData.RelativeDifference, -0.17,0.01 );
+            Assert.AreEqual(0.551, Math.Round(skillIntervalData.RelativeDifference, 3));
         }
 
         [Test]
         public void CalculateAbsoluteDifference()
         {
             var skillIntervalData = new SkillIntervalData(_dtp, 3.63, 2, 3, 0, 0);
-            Assert.AreEqual(skillIntervalData.AbsoluteDifference, -0.63,0.01);
+            Assert.AreEqual(-1.63, Math.Round(skillIntervalData.AbsoluteDifference, 2));
         }
 	}
 }

@@ -211,6 +211,10 @@ namespace Teleopti.Messaging.SignalR
 		
 		public void UnregisterEventSubscription(EventHandler<EventMessageArgs> eventMessageHandler)
 		{
+			//currently does nothing due
+			//if(subscriptionHandler.Count == 0 ...) below. Only second last foreach does anything. What? Don't know...
+			//needs to be rewritten
+
 			var handlersToRemove = new List<string>();
 
 			lock (_wrapperLock)
@@ -233,8 +237,8 @@ namespace Teleopti.Messaging.SignalR
 						{
 							subscriptionWithHandlersToRemove.Add(subscriptionWithHandler);
 							// BUG? If count == 0 we never get here!
-							// Before: if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription!=null)
-							if (subscriptionWithHandler.Subscription!=null)
+							//this is really, really wrong. Same as "if(false)" but we want that for now - otherwise bug 27055
+							if (subscriptionHandler.Count == 0 && subscriptionWithHandler.Subscription != null)
 							{
 								var route = subscriptionWithHandler.Subscription.Route();
 								_connectionHandler.RemoveSubscription(route);
