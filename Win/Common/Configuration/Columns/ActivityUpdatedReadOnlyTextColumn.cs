@@ -32,8 +32,10 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             if(inf == null) return;
             if (BindingProperty == "UpdatedTimeInUserPerspective")
                 e.Style.CellValue = _localizer.UpdatedTimeInUserPerspective(inf);
-            else
+            else if (inf.UpdatedBy != null)
                 e.Style.CellValue = inf.UpdatedBy.Name;
+            else
+                e.Style.CellValue = "";
             e.Style.ReadOnly = true;
         }
 
