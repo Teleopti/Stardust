@@ -118,5 +118,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
 	}
-
 }

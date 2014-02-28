@@ -9,12 +9,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class PersonAccountStepDefinition
 	{
-
 		[Given(@"I have a personal account with")]
 		public void GivenIHaveAPersonalAccount(Table table)
 		{
-			var personAbsenceAccount = table.CreateInstance<PersonAbsenceAccountConfigurable>();
-			DataMaker.Data().Apply(personAbsenceAccount);
+			var personAbsenceAccountConfig = table.CreateInstance<PersonAbsenceAccountConfigurable>();
+			DataMaker.Data().Apply(new PersonAbsenceAccountConfigurable(personAbsenceAccountConfig));
 		}
 
 		[When(@"I see the remaining time is '(.*)'")]

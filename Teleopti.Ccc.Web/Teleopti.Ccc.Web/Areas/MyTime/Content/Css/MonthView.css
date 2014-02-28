@@ -59,6 +59,15 @@
     display: block;
     width: 100%;
     height: 100px;
+    text-align: center;
+}
+
+.cal-month-day .date-number {
+    position: absolute;
+    right: 0;
+    top: 0;
+	margin-right: 5px;
+	margin-top: 5px;
 }
 
 .cal-month-box [class*="cal-cell"] {
@@ -105,7 +114,41 @@ span[data-cal-date] {
 .cal-day-outmonth {
     opacity: 0.3;
 }
-.not-working-day {
+
+.cal-month-day .absence {
+	background-image: url(../Images/stripe.png);
+	height: 100px;
+	padding-top: 40px;
+}
+
+.absence-.dayoff {
     background-color: beige;
     background-image: url(../Images/stripe.png);
+}
+
+.cal-month-day .dayoff {
+    background-color: beige;
+    background-image: url(../Images/stripe.png);
+	height: 100px;
+	padding-top: 40px;
+}
+
+.shift {
+	height: 100px;
+	padding-top: 20px;
+}
+
+.shift.part-time {
+	height: 70px;
+	padding-top: 5px;
+
+}
+
+.absence.part-time {
+	height: 30px;
+}
+
+.absence .hidden-md,
+.shift .hidden-md {
+	padding-top: 20px
 }

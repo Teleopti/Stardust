@@ -152,7 +152,7 @@ namespace Teleopti.MessagingTest.SignalR
 				         Arg<Subscription>.Is.Anything), a => a.Repeat.Times(5));
 		}
 
-		[Test]
+		[Test, Ignore("Unsubscribing isn't enabled, because it created bug 27055")]
 		public void ShouldUnregisterEventSubscriptions()
 		{
 			var hubProxy = stubProxy();

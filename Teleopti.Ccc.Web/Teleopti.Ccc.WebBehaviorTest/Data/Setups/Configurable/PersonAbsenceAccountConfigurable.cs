@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -13,7 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	{
 		public string Absence { get; set; }
 		public string FromDate { get; set; }
-		public string TrackerType { get; set; }
 
 		public string Accrued { get; set; }
 		public string BalanceIn { get; set; }
@@ -25,36 +25,47 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			Extra = "0";
 			BalanceIn = "0";
 			BalanceOut = "0";
-			TrackerType = "Days";
+			Extra = "0";
+		}
+
+		public PersonAbsenceAccountConfigurable(PersonAbsenceAccountConfigurable config)
+		{
+			Absence = config.Absence;
+			FromDate = config.FromDate;
+			Accrued = config.Accrued;
+			BalanceIn = config.BalanceIn;
+			BalanceOut = config.BalanceOut;
+			Extra = config.Extra;
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var absence = new AbsenceRepository(uow).LoadAll().Single(x => x.Description.Name == Absence);
+			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
+
+			var trackerType = absence.Tracker.GetType();
+			if (trackerType == Tracker.CreateDayTracker().GetType())
+			{
+				personAbsenceAccount.Add(new AccountDay(FromDate)
+					{
+						Accrued = TimeSpan.Parse(Accrued),
+						BalanceIn = TimeSpan.Parse(BalanceIn),
+						BalanceOut = TimeSpan.Parse(BalanceOut),
+						Extra = TimeSpan.Parse(Extra)
+					});
+			}
+			else if (trackerType == Tracker.CreateTimeTracker().GetType())
+			{
+				personAbsenceAccount.Add(new AccountTime(FromDate)
+					{
+						Accrued = TimeSpan.Parse(Accrued),
+						BalanceIn = TimeSpan.Parse(BalanceIn),
+						BalanceOut = TimeSpan.Parse(BalanceOut),
+						Extra = TimeSpan.Parse(Extra)
+					});
+			}
 
 			var repository = new PersonAbsenceAccountRepository(uow);
-			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
-			switch (TrackerType.ToLower())
-			{
-				case "Days":
-					personAbsenceAccount.Add(new AccountDay(FromDate)
-						{
-							Accrued = TimeSpan.Parse(Accrued),
-							BalanceIn = TimeSpan.Parse(BalanceIn),
-							BalanceOut = TimeSpan.Parse(BalanceOut),
-							Extra = TimeSpan.Parse(Extra)
-						});
-					break;
-				case "Hours":
-					personAbsenceAccount.Add(new AccountTime(FromDate)
-						{
-							Accrued = TimeSpan.Parse(Accrued),
-							BalanceIn = TimeSpan.Parse(BalanceIn),
-							BalanceOut = TimeSpan.Parse(BalanceOut),
-							Extra = TimeSpan.Parse(Extra)
-						});
-					break;
-			}
 			repository.Add(personAbsenceAccount);
 		}
 	}

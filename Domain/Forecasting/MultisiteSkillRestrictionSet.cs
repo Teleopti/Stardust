@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
         }
 
-        private static MultisiteSkillRestrictionSet _currentRestrictionSet;
+        private static readonly Lazy<MultisiteSkillRestrictionSet> _currentRestrictionSet = new Lazy<MultisiteSkillRestrictionSet>(()=>new MultisiteSkillRestrictionSet());
 
         /// <summary>
         /// Gets the current restriction set.
@@ -36,12 +37,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public static MultisiteSkillRestrictionSet CurrentRestrictionSet
         {
-            get
-            {
-                if (_currentRestrictionSet == null)
-                    _currentRestrictionSet = new MultisiteSkillRestrictionSet();
-                return _currentRestrictionSet;
-            }
+            get { return _currentRestrictionSet.Value; }
         }
     }
 }

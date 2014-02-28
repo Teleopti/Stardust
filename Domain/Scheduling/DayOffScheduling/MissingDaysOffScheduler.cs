@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
@@ -84,6 +85,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             if (!matrixData.Matrix.UnlockedDays.Contains(scheduleDayPro)) return false;
             IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
             scheduleDay.CreateAndAddDayOff(dayOffTemplate);
+
+			var personAssignment = scheduleDay.PersonAssignment();
+			var authorization = PrincipalAuthorization.Instance();
+			if (!(authorization.IsPermitted(personAssignment.FunctionPath, scheduleDay.DateOnlyAsPeriod.DateOnly, scheduleDay.Person))) return false;
+
 			rollbackService.Modify(scheduleDay); var eventArgs = new SchedulingServiceSuccessfulEventArgs(scheduleDay);
             OnDayScheduled(eventArgs);
             if (eventArgs.Cancel)

@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
             IAvailabilityRotation availability = FindAvailability(availabilityId);
             IPerson person = FindPerson(empId);
-
-            IPersonAvailability ret = new PersonAvailability(person, availability, new DateOnly(startDate));
-            return ret;
+	        return person == null ? 
+							null : 
+							new PersonAvailability(person, availability, new DateOnly(startDate));
         }
 
         private IPerson FindPerson(int oldIdOnPerson)

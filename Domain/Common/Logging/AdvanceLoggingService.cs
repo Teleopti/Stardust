@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -12,17 +9,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
 {
     public class AdvanceLoggingService
     {
-        private static ILog _log;
-
-        private static ILog getLog()
-        {
-            if (_log == null)
-            {
-                _log = LogManager.GetLogger("Teleopti.AdvanceLoggingService");
-                
-            }
-            return _log;
-        }
+		private static Lazy<ILog> _log = new Lazy<ILog>(() => LogManager.GetLogger("Teleopti.AdvanceLoggingService"));
 
         public static void LogSchedulingInfo(ISchedulingOptions schedulingOptions, int noOfAgent, int noOfSkillDays, Action callbackAction)
         {
@@ -31,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             callbackAction.Invoke();
             stop.Stop();
 
-            if (getLog().IsInfoEnabled)
+            if (_log.Value.IsInfoEnabled)
             {
 				clearGlobalContext();
                 
@@ -41,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 //log the agent and skill days
                 populateAgentAndSkillDays(noOfAgent, noOfSkillDays,stop.ElapsedMilliseconds );
 
-                getLog().Info("Scheduling");
+                _log.Value.Info("Scheduling");
             }
         }
 
@@ -106,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
             callbackAction.Invoke();
             stopwatch.Stop(); 
             
-            if (getLog().IsInfoEnabled)
+            if (_log.Value.IsInfoEnabled)
             {
                 clearGlobalContext();
 
@@ -116,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Common.Logging
                 //log the agent and skill days
                 populateAgentAndSkillDays(noOfAgent, noOfSkillDays, stopwatch.ElapsedMilliseconds);
 
-                getLog().Info("Optimization");
+                _log.Value.Info("Optimization");
             }
         }
 

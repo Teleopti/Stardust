@@ -2655,15 +2655,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (scheduleDay == null)
 				{
-					SplitterManager.ShowEditor = false;
+					SplitterManager.DisableShiftEditor();
 					return;
 				}
+				
+				SplitterManager.EnableShiftEditor();
 
 				scheduleDay = _schedulerState.Schedules[scheduleDay.Person].ReFetch(scheduleDay);
 
 				if (_showEditor)
 				{
-					if (!SplitterManager.ShowEditor) SplitterManager.ShowEditor = true;
 					schedulePartToEditor(scheduleDay);
 				}
 
@@ -4927,7 +4928,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setupInfoTabs()
 		{
-			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, _schedulerState.RequestedPeriod.DateOnlyPeriod);
+			var requestedPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
+			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
+
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
 
 			//container can fix this to one row

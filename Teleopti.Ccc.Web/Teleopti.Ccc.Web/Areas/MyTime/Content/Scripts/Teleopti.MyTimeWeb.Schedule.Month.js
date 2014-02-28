@@ -20,7 +20,7 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	var vm;
 	var completelyLoaded;
-	
+
 	function _fetchMonthData() {
 	    ajax.Ajax({
 	        url: 'Schedule/FetchMonthData',
@@ -30,29 +30,17 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 	            date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
 	        },
 	        success: function (data) {
-	            _bindData(data);
+	            vm.readData(data);
+
+	            vm.selectedDate.subscribe(function () {
+	                var date = vm.selectedDate();
+	                date.startOf('month');
+	                Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+	            });
+	            
+	            completelyLoaded();
 	        }
 	    });
-	}
-    
-	function _bindData(data) {
-	    var selectedDate = moment(data.FixedDate, 'YYYY-MM-DD');
-	    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel(data, selectedDate);
-
-	    var newWeek;
-	    for (var i = 0; i < data.ScheduleDays.length; i++) {
-	        if (i % 7 == 0) {
-	            if (newWeek)
-	                vm.weekViewModels.push(newWeek);
-	            newWeek = new Teleopti.MyTimeWeb.Schedule.MonthWeekViewModel();
-	        }
-
-	        var newDay = new Teleopti.MyTimeWeb.Schedule.MonthDayViewModel(data.ScheduleDays[i], selectedDate);
-	        newWeek.dayViewModels.push(newDay);
-	    }
-	    vm.weekViewModels.push(newWeek);
-	    ko.applyBindings(vm, $('#page')[0]);
-	    completelyLoaded();
 	}
     
 	function _cleanBindings() {
@@ -71,6 +59,8 @@ Teleopti.MyTimeWeb.Schedule.Month = (function ($) {
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 		    completelyLoaded = completelyLoadedCallback;
+		    vm = new Teleopti.MyTimeWeb.Schedule.MonthViewModel(Teleopti.MyTimeWeb.Portal.NavigateTo);
+		    ko.applyBindings(vm, $('#page')[0]);
 		    _fetchMonthData();
 		    readyForInteractionCallback();
 		},

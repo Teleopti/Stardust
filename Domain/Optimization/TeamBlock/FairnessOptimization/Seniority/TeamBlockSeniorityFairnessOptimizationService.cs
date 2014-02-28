@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
     {
         void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                                      ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-									 IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService);
+									 IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences);
 
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
     }
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	    private readonly ITeamBlockPeriodValidator _teamBlockPeriodValidator;
 	    private readonly ITeamBlockSeniorityValidator _teamBlockSeniorityValidator;
 	    private readonly ITeamBlockSwap _teamBlockSwap;
+		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 		private bool _cancelMe;
 
@@ -32,19 +34,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 															IDetermineTeamBlockPriority determineTeamBlockPriority,
 															ITeamBlockPeriodValidator teamBlockPeriodValidator,
 															ITeamBlockSeniorityValidator teamBlockSeniorityValidator,
-															ITeamBlockSwap teamBlockSwap)
+															ITeamBlockSwap teamBlockSwap,
+															IFilterForTeamBlockInSelection filterForTeamBlockInSelection)
         {
             _constructTeamBlock = constructTeamBlock;
 	        _determineTeamBlockPriority = determineTeamBlockPriority;
 	        _teamBlockPeriodValidator = teamBlockPeriodValidator;
 	        _teamBlockSeniorityValidator = teamBlockSeniorityValidator;
 	        _teamBlockSwap = teamBlockSwap;
+	        _filterForTeamBlockInSelection = filterForTeamBlockInSelection;
         }
 
 	
         public void Execute(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
                             ISchedulingOptions schedulingOptions, IList<IShiftCategory> shiftCategories,
-							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService)
+							IScheduleDictionary scheduleDictionary, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)
         {
 
 	        var notSwapped = 0;
@@ -58,7 +62,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 		        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
 		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 
-		        var filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
+		        IList<ITeamBlockInfo> filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
+				filteredTeamBlocks = _filterForTeamBlockInSelection.Filter(filteredTeamBlocks, selectedPersons, selectedPeriod);
+
 		        var teamBlockPriorityDefinitionInfo = _determineTeamBlockPriority.CalculatePriority(filteredTeamBlocks, shiftCategories);
 		        var analyzedTeamBlocks = new List<ITeamBlockInfo>();
 		        var priorityList = teamBlockPriorityDefinitionInfo.HighToLowShiftCategoryPriority();
@@ -87,9 +93,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 					        break;
 				        }
 
-				        //if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService,scheduleDictionary, selectedPeriod)) continue;
-
-				        if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary, selectedPeriod))
+						if (!_teamBlockSwap.Swap(teamBlockInfoHighSeniority, teamBlockInfoLowSeniority, rollbackService, scheduleDictionary, selectedPeriod, optimizationPreferences))
 				        {
 					        unSuccessfulSwaps.Add(teamBlockInfoHighSeniority);
 					        continue;

@@ -293,9 +293,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			OpenExtendedTooltip(fields.Date);
 
 			var tooltip = ExtendedTooltip(fields.Date);
+			Console.WriteLine(@"tooltip: {0}", tooltip);
 			Browser.Interactions.AssertExistsUsingJQuery(tooltip);
 
 			var resultHtml = Browser.Interactions.Javascript("return $(\"" + tooltip + "\").html()") as string;
+			Console.WriteLine(@"resultHtml: {0}", resultHtml);
 
 			if (fields.Preference != null) Assert.IsTrue(resultHtml.Contains(fields.Preference));
 			if (fields.StartTimeMinimum != null) Assert.IsTrue(resultHtml.Contains(fields.StartTimeMinimum)); 
