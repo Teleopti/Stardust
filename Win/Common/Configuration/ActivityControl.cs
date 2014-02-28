@@ -103,7 +103,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				var payrollColumn = new SFGridEditableTextColumn<IActivity>("PayrollCode", 20, Resources.PayrollCode) { AllowEmptyValue = true };
 				gridColumns.Add(payrollColumn);
 			}
-            gridColumns.AppendAuditColumns();
+            gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedBy", Resources.UpdatedBy));
+            gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
             gridControlGroupingActivities.RowCount = GridRowCount(GridType.Activity);
             gridControlGroupingActivities.ColCount = gridColumns.Count - 1;  //col index starts on 0
 
@@ -268,7 +269,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             var groupingActivityRepository = new GroupingActivityRepository(uow);
             var activityRepository = new ActivityRepository(uow);
 			_sourceList.Add(GridType.GroupingActivity, groupingActivityRepository.LoadAll());
-			_sourceList.Add(GridType.Activity, activityRepository.LoadAll());
+            _sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy());
             gridControlActivities.Refresh();
         }
 
@@ -449,6 +450,11 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             gridControlActivities.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
             gridControlGroupingActivities.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
+        }
+
+        private void gridControlActivities_CellClick(object sender, GridCellClickEventArgs e)
+        {
+            var col = e.ColIndex;
         }
     }
 }

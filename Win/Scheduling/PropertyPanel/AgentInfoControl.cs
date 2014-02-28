@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
         private ISchedulerGroupPagesProvider _groupPagesProvider;
 	    private readonly ILifetimeScope _container;
-	    private readonly DateOnlyPeriod _requestedPeriod;
+	    private readonly DateOnlyPeriod _dateOnlyPeriod;
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 
@@ -54,13 +54,13 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider, ILifetimeScope container, DateOnlyPeriod requestedPeriod)
+		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider, ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod)
 			: this()
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 		    _groupPagesProvider = groupPagesProvider;
 			_container = container;
-			_requestedPeriod = requestedPeriod;
+			_dateOnlyPeriod = dateOnlyPeriod;
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void resetGroupPageData()
 		{
-			_groupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(_requestedPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), (IGroupPageLight)comboBoxAgentGrouping.SelectedItem);
+			_groupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(_dateOnlyPeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), (IGroupPageLight)comboBoxAgentGrouping.SelectedItem);
 		}
 
 		private void updateFairnessData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
