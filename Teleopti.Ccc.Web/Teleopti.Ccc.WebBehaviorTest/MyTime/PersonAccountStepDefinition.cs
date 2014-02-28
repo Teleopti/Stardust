@@ -16,12 +16,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new PersonAbsenceAccountConfigurable(personAbsenceAccountConfig));
 		}
 
+		[When(@"I see the remaining time is '(.*)'")]
 		[Then(@"I should see the remaining time is '(.*)'")]
 		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
 		{
 			Browser.Interactions.AssertExists(string.Format("#remaining{0}", remainingTime));
 		}
 
+		[When(@"I see the used time is '(.*)'")]
 		[Then(@"I should see the used time is '(.*)'")]
 		public void ThenIShouldSeeTheUsedTimeIs(string usedTime)
 		{
