@@ -30,7 +30,6 @@ And I should see the used time is '4 days'
 @ignore
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
-And I have a person period that starts on '2014-01-01'
 And I have a requestable absence with
 | Field       | Value   |
 | Name        | Illness |
@@ -82,6 +81,7 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining time is '25 days'
 And I should see the used time is '0 days'
 
+@ignore
 Scenario: When changing request date change remaining and used time
 Given I am an agent
 And I have a person period that starts on '2014-01-01'
