@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void addAbsenceMarkers(GridDrawCellEventArgs e, IScheduleDay scheduleRange, SchedulePartView significantPart)
         {
-            if (significantPart != SchedulePartView.FullDayAbsence)
+            if (significantPart != SchedulePartView.FullDayAbsence && significantPart != SchedulePartView.ContractDayOff)
             {
                 var abs = (from l in scheduleRange.ProjectionService().CreateProjection()
                            where l.Payload is IAbsence
