@@ -21,6 +21,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new RequestableAbsenceType(name));
 		}
 
+		[Given(@"I have a requestable absence with")]
+		public void GivenIHaveARequestableAbsenceWith(Table table)
+		{
+			var requestableAbsenceFields = table.CreateInstance<RequestableAbsenceFields>();
+			DataMaker.Data().Apply(new RequestableAbsenceType(requestableAbsenceFields));
+		}
+
 		[When(@"I input absence request values with (\S*)")]
 		public void WhenIInputAbsenceRequestValuesWith(string name)
 		{
