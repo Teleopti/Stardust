@@ -6,92 +6,107 @@
 
 @ignore
 Scenario: When requesting absence tracked as days view remaining and used time
-	Given I am an agent
-	And I have a requestable absence called Vacation
-	And I am viewing requests
-	And I have a personal account for period including today's date
-	| Field     | Value      |
-	| Absence   | Vacation   |
-	| Type      | Days       |
-	| Used      | 7          |
-	| Remaining | 18         |
-	When I click to add a new absence request
-	Then I should see the remaining time is '18 days'
-	And I should see the used time is '7 days'
+Given I am an agent
+And I have a requestable absence called Vacation
+And I am viewing requests
+And I have a personal account with
+| Field    | Value      |
+| Absence  | Vacation   |
+| FromDate | 2014-01-01 |
+| To       | 2014-12-31 |
+| Type     | Days       |
+| Accrued  | 25         |
+And I have an absence with
+| Field   | Value      |
+| Absence | Vacation   |
+| StartTime | 2014-01-01 00:00 |
+| EndTime   | 2014-01-04 23:59 |
+When I click to add a new absence request
+And I input absence request values with 'Vacation' for date '2014-10-03'
+Then I should see the remaining time is '21 days'
+And I should see the used time is '4 days'
 
 @ignore
 Scenario: When requesting absence tracked by hours view remaining and used time
-	Given I am an agent
-	And I have a requestable absence called Illness
-	And I am viewing requests
-	And I have a personal account for period including today's date
-	| Field     | Value   |
-	| Absence   | Illness |
-	| Type      | Hours   |
-	| Used      | 70:00   |
-	| Remaining | 180:00  |
-	When I click to add a new absence request
-	Then I should see the used time is '70:00'
-	And I should see the remaining time is '180:00'
+Given I am an agent
+And I have a requestable absence called Illness
+And I am viewing requests
+And I have a personal account with
+| Field    | Value      |
+| Absence  | Illness    |
+| FromDate | 2014-01-01 |
+| To       | 2014-12-31 |
+| Type     | Hours      |
+| Accrued  | 250:00      |
+And I have an absence with
+| Field   | Value      |
+| Absence | Illness   |
+| StartTime | 2014-01-01 00:00 |
+| EndTime   | 2014-01-05 23:59 |
+When I click to add a new absence request
+And I input absence request values with 'Illness' for date '2014-10-03'
+Then I should see the used time is '120:00'
+And I should see the remaining time is '130:00'
 
 @ignore
 Scenario: When changing absence type update remaining and used time
-	Given I am an agent
-	And I have a requestable absence called Vacation
-	And I have a requestable absence called Illness
-	And I am viewing requests
-	And I have a personal account for period including today's date
-	| Field     | Value   |
-	| Absence   | Illness |
-	| Type      | Hours   |
-	| Used      | 70:00   |
-	| Remaining | 180:00  |
-	And I have a personal account for period including today's date
-	| Field     | Value      |
-	| Absence   | Vacation   |
-	| Type      | Days       |
-	| Used      | 7          |
-	| Remaining | 18         |
-	And I click to add a new absence request
-	And I see the remaining time is '180:00'
-	And I see the used time is '70:00'
-	When I change absence to 'Vacation'
-	Then I should see the used time is '7 days'
-	And I should see the remaining time is '18 days'
+Given I am an agent
+And I have a requestable absence called Vacation
+And I have a requestable absence called Illness
+And I am viewing requests
+And I have a personal account with
+| Field    | Value      |
+| Absence  | Illness    |
+| FromDate | 2014-01-01 |
+| To       | 2014-12-31 |
+| Type     | Hours      |
+| Accrued  | 250:00      |
+And I have a personal account with
+| Field    | Value      |
+| Absence  | Vacation   |
+| FromDate | 2014-01-01 |
+| To       | 2014-12-31 |
+| Type     | Days       |
+| Accrued  | 25         |
+When I click to add a new absence request
+And I input absence request values with 'Illness' for date '2014-10-03'
+And I see the remaining time is '250:00'
+And I see the used time is '00:00'
+And I input absence request values with 'Vacation' for date '2014-10-03'
+Then I should see the remaining time is '25 days'
+And I should see the used time is '0 days'
 
 @ignore
 Scenario: When changing request date change remaining and used time
-	Given I am an agent
-	And I have a requestable absence called Vacation
-	And I am viewing requests
-	And I have a personal account with
-	| Field     | Value      |
-	| Absence   | Vacation   |
-	| From      | 2014-01-01 |
-	| To        | 2014-12-31 |
-	| Type      | Days       |
-	| Used      | 7          |
-	| Remaining | 18         |
-	And I have a personal account with
-	| Field     | Value      |
-	| Absence   | Vacation   |
-	| From      | 2015-01-01 |
-	| To        | 2015-12-31 |
-	| Type      | Days       |
-	| Used      | 0          |
-	| Remaining | 25         |
-	And I click to add a new absence request with
-	| Field | Value      |
-	| From  | 2014-03-03 |
-	| To    | 2014-03-05 |
-	And I see the remaining time is '18 days'
-	And I see the used time is '7 days'
-	When I change absence request dates to
-	| Field | Value      |
-	| From  | 2015-03-03 |
-	| To    | 2015-03-05 |
-	Then I should see the remaining time is '25 days'
-	And I should see the used time is '0 days'
+Given I am an agent
+And I have a requestable absence called Vacation
+And I am viewing requests
+And I have a personal account with
+| Field    | Value      |
+| Absence  | Vacation   |
+| FromDate | 2014-01-01 |
+| To       | 2014-12-31 |
+| Type     | Days       |
+| Accrued  | 25         |
+And I have an absence with
+| Field   | Value      |
+| Absence | Vacation   |
+| StartTime | 2014-01-01 00:00 |
+| EndTime   | 2014-01-04 23:59 |
+And I have a personal account with
+| Field    | Value      |
+| Absence  | Vacation   |
+| FromDate | 2015-01-01 |
+| To       | 2015-12-31 |
+| Type     | Days       |
+| Accrued  | 25         |
+When I click to add a new absence request
+And I input absence request values with 'Vacation' for date '2014-10-03'
+And I see the remaining time is '21 days'
+And I see the used time is '4 days'
+And I input absence request values with 'Vacation' for date '2015-10-03'
+Then I should see the remaining time is '25 days'
+And I should see the used time is '0 days'
 
 @ignore
 Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
@@ -99,22 +114,26 @@ Given I am an agent
 And I have a requestable absence called Vacation
 And I am viewing requests
 And I have a personal account with
-| Field     | Value      |
-| Absence   | Vacation   |
-| From      | 2014-01-01 |
-| To        | 2014-12-31 |
-| Type      | Days       |
-| Used      | 7          |
-| Remaining | 18         |
+| Field   | Value      |
+| Absence | Vacation   |
+| From    | 2014-01-01 |
+| To      | 2014-12-31 |
+| Type    | Days       |
+| Accrued | 25         |  
 And I have a personal account with
-| Field     | Value      |
-| Absence   | Vacation   |
-| From      | 2015-01-01 |
-| To        | 2015-12-31 |
-| Type      | Days       |
-| Used      | 0          |
-| Remaining | 25         |
-When I click to add a new absence request with
+| Field   | Value      |
+| Absence | Vacation   |
+| From    | 2015-01-01 |
+| To      | 2015-12-31 |
+| Type    | Days       |
+| Accrued | 25         |
+And I have an absence with
+| Field   | Value      |
+| Absence | Vacation   |
+| StartTime | 2014-01-01 00:00 |
+| EndTime   | 2014-01-04 23:59 |
+When I click to add a new absence request
+And I input absence request values with 'Vacation' for
 | Field | Value      |
 | From  | 2014-12-28 |
 | To    | 2015-01-02 |
@@ -123,16 +142,18 @@ And I should see the used time is '0 days'
 
 @ignore
 Scenario: Don't show personal account when you do not have permission
-	Given I am an agent without permission for personal account
-	And I have a personal account for period including today's date
-	| Field     | Value      |
-	| Absence   | Vacation   |
-	| Type      | Days       |
-	| Used      | 7          |
-	| Remaining | 18         |
-	When I am viewing requests
-	And I click to add a new absence request
-	Then I should not see the remaining and used time
+Given I am an agent without permission for personal account
+And I have a requestable absence called Vacation
+And I am viewing requests
+And I have a personal account with
+| Field   | Value      |
+| Absence | Vacation   |
+| From    | 2014-01-01 |
+| To      | 2014-12-31 |
+| Type    | Days       |
+| Accrued | 25         | 
+When I click to add a new absence request
+Then I should not see the remaining and used time
 
 Scenario: Add absence request
 	Given I am an agent
