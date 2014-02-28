@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 		public RequestableAbsenceType(string name)
 		{
 			_name = name;
-			_tracker = "Day";
 		}
 
 		public RequestableAbsenceType(RequestableAbsenceFields requestableAbsenceFields)

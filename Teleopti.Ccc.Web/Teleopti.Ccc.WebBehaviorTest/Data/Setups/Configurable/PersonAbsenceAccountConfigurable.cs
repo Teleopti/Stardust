@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var absence = new AbsenceRepository(uow).LoadAll().Single(x => x.Description.Name == Absence);
 			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
 
-			var trackerType = absence.Tracker.GetType();
+			var trackerType = absence.Tracker != null ? absence.Tracker.GetType() : null; 
 			if (trackerType == Tracker.CreateDayTracker().GetType())
 			{
 				personAbsenceAccount.Add(new AccountDay(FromDate)
