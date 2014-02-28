@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             get { return new Collection<IPersonAvailability>(_allPersonAvailabilityCollection); }
         }
 
-        public Collection<IPersonAccountModel> PersonAccountGridViewAdaptorCollection
+        public Collection<IPersonAccountModel> PersonAccountModelCollection
         {
             get { return new Collection<IPersonAccountModel>(_personAccountGridViewAdaptorCollection); }
         }
@@ -315,57 +315,51 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Uow")]
-        public void ReassociateSelectedPeopleWithNewUow(IEnumerable<Guid> peopleId)
-        {
-            InParameter.NotNull("peopleId", peopleId);
+	  [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly",
+		  MessageId = "Uow")]
+	  public void ReassociateSelectedPeopleWithNewUow(IEnumerable<Guid> peopleId)
+	  {
+		  InParameter.NotNull("peopleId", peopleId);
 
-            int length = peopleId.Count();
+		  var rep = new PersonRepository(GetUnitOfWork);
+		  var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
+		  var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
 
-            if (length > 0)
-            {
-                var rep = new PersonRepository(GetUnitOfWork);
-                var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
-                var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
+		  clearCollections();
 
-                clearCollections();
+		  var foundPeople = rep.FindPeople(peopleId).ToList();
 
-                var foundPeople = rep.FindPeople(peopleId).ToList();
+		  _filteredPersonCollection.AddRange(foundPeople);
+		  var today = DateOnly.Today;
 
-                _filteredPersonCollection.AddRange(foundPeople);
-                var today = DateOnly.Today;
+		  LoadPersonRotations(foundPeople, today, personRotationRep);
+		  LoadPersonAvailabilities(foundPeople, personAvailRep);
 
-                LoadPersonRotations(foundPeople, today, personRotationRep);
-                LoadPersonAvailabilities(foundPeople, personAvailRep);
+		  var repositoryFactory = new RepositoryFactory();
+		  var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
+		  var userDetails = repository.FindByUsers(foundPeople);
 
-                var repositoryFactory = new RepositoryFactory();
-                var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
-                //var userDetails = repository.FindAllUsers();
+		  foreach (var person in _filteredPersonCollection)
+		  {
+			  IUserDetail ud;
+			  if (userDetails.ContainsKey(person))
+			  {
+				  ud = userDetails[person];
+			  }
+			  else
+			  {
+				  ud = new UserDetail(person);
+				  repository.Add(ud);
+			  }
 
-                var userDetails = repository.FindByUsers(foundPeople);
+			  loadFilteredPeopleGridData(person, ud);
+			  getParentPersonPeriods(person, today);
+			  GetParentSchedulePeriods(person, today);
+			  GetParentPersonAccounts(person, today);
+		  }
+	  }
 
-                foreach (var person in _filteredPersonCollection)
-                {
-                    IUserDetail ud;
-                    if (userDetails.ContainsKey(person))
-                    {
-                        ud = userDetails[person];
-                    }
-                    else
-                    {
-                        ud = new UserDetail(person);
-                        repository.Add(ud);
-                    }
-
-                    loadFilteredPeopleGridData(person, ud);
-                    getParentPersonPeriods(person, today);
-                    GetParentSchedulePeriods(person, today);
-                    GetParentPersonAccounts(person, today);
-                }
-            }
-        }
-
-        public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people)
+	  public void ReassociateSelectedPeopleWithNewUowOpenPeople(IList<IPerson> people)
         {
             InParameter.NotNull("peopleId", people);
 
@@ -373,15 +367,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
             if (length > 0)
             {
-                //var rep = new PersonRepository(UnitOfWork);
                 var personRotationRep = new PersonRotationRepository(GetUnitOfWork);
                 var personAvailRep = new PersonAvailabilityRepository(GetUnitOfWork);
 
                 clearCollections();
 
-                //var foundPeople = rep.FindPeople(peopleId).ToList();
-
                 _filteredPersonCollection.AddRange(people);
+				_personCollection.AddRange(people);
                 var today = DateOnly.Today;
 
                 LoadPersonRotations(people, today, personRotationRep);
@@ -389,8 +381,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
                 var repositoryFactory = new RepositoryFactory();
                 var repository = repositoryFactory.CreateUserDetailRepository(GetUnitOfWork);
-                //var userDetails = repository.FindAllUsers();
-
                 var userDetails = repository.FindByUsers(people);
 
                 foreach (var person in _filteredPersonCollection)

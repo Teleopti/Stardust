@@ -707,10 +707,17 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 			else
 			{
-				int parentColIndex = Grid.CurrentCell.ColIndex;
+				int parentColIndex = gridColumnIndex();
 				columnIndex = (parentColIndex < 2) ? (3) : parentColIndex; // TODO: Use constants instead.
 			}
 			return columnIndex;
+		}
+
+		private int gridColumnIndex()
+		{
+			if (Grid.CurrentCell.ColIndex == -1)
+				Grid.CurrentCell.MoveTo(0, 0);
+			return Grid.CurrentCell.ColIndex;
 		}
 
 		private void Init()
@@ -1046,9 +1053,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		{
 			if (rowIndex == 0)
 				return;
-
-			//// Set out of focus form current cell.This helps  to fire save cell info in child grid.
-			//SetOutOfFocusFromCurrentCell();
 
 			PeopleWorksheet.StateHolder.RotationStateHolder.AddPersonRotation(rowIndex - 1);
 
