@@ -1,6 +1,5 @@
 using System;
 using Autofac;
-using Autofac.Builder;
 using MbCache.Configuration;
 using MbCache.Core;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -30,31 +29,34 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftCreatorService>()
 				.As<IShiftCreatorService>()
 				.SingleInstance();
+			builder.RegisterType<RuleSetProjectionService>().AsSelf();
+			builder.RegisterType<RuleSetProjectionEntityService>().AsSelf();
+			builder.RegisterType<WorkShiftWorkTime>().AsSelf();
 
 			if (_perLifetimeScope)
 			{
-				builder
-					.RegisterRuleSetProjectionService()
-					.OnRelease(s => ((ICachingComponent) s).Invalidate())
-					.InstancePerLifetimeScope();
-				builder
-					.RegisterRuleSetProjectionEntityService()
-					.OnRelease(s => ((ICachingComponent) s).Invalidate())
-					.InstancePerLifetimeScope();
-				builder
-					.RegisterWorkShiftWorkTime()
+				builder.Register<IRuleSetProjectionService>(c => c.Resolve<RuleSetProjectionService>())
+					.InstancePerLifetimeScope()
+					.IntegrateWithMbCache()
+					.OnRelease(s => ((ICachingComponent)s).Invalidate());
+				builder.Register<IRuleSetProjectionEntityService>(c => c.Resolve<RuleSetProjectionEntityService>())
+					.InstancePerLifetimeScope()
+					.IntegrateWithMbCache()
 					.OnRelease(s => ((ICachingComponent) s).Invalidate());
+				builder.Register<IWorkShiftWorkTime>(c => c.Resolve<WorkShiftWorkTime>())
+					.IntegrateWithMbCache()
+					.OnRelease(s => ((ICachingComponent)s).Invalidate());
 			}
 			else
 			{
-				builder
-					.RegisterRuleSetProjectionService()
+				builder.Register<IRuleSetProjectionService>(c => c.Resolve<RuleSetProjectionService>())
+					.IntegrateWithMbCache<IRuleSetProjectionService>()
 					.SingleInstance();
-				builder
-					.RegisterRuleSetProjectionEntityService()
+				builder.Register<IRuleSetProjectionEntityService>(c => c.Resolve<RuleSetProjectionEntityService>())
+					.IntegrateWithMbCache<IRuleSetProjectionEntityService>()
 					.SingleInstance();
-				builder
-					.RegisterWorkShiftWorkTime()
+				builder.Register<IWorkShiftWorkTime>(c => c.Resolve<WorkShiftWorkTime>())
+					.IntegrateWithMbCache<IWorkShiftWorkTime>()
 					.SingleInstance();
 			}
 			_cacheBuilder
@@ -72,49 +74,4 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IWorkShiftWorkTime>();
 		}
 	}
-
-	public static class Extensions
-	{
-		public static IRegistrationBuilder<IRuleSetProjectionService, SimpleActivatorData, SingleRegistrationStyle> RegisterRuleSetProjectionService(this ContainerBuilder builder)
-		{
-			return builder.Register(c =>
-			                        	{
-			                        		var shiftCreatorService = c.Resolve<IShiftCreatorService>();
-			                        		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-			                        		var instance = cacheProxyFactory.Create<IRuleSetProjectionService>(shiftCreatorService);
-			                        		return instance;
-			                        	})
-				.As<IRuleSetProjectionService>()
-				;
-		}
-
-
-		public static IRegistrationBuilder<IRuleSetProjectionEntityService, SimpleActivatorData, SingleRegistrationStyle> RegisterRuleSetProjectionEntityService(this ContainerBuilder builder)
-		{
-			return builder.Register(c =>
-			                        	{
-			                        		var shiftCreatorService = c.Resolve<IShiftCreatorService>();
-			                        		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-			                        		var instance = cacheProxyFactory.Create<IRuleSetProjectionEntityService>(shiftCreatorService);
-			                        		return instance;
-			                        	}
-				)
-				.As<IRuleSetProjectionEntityService>();
-		}
-
-		public static IRegistrationBuilder<IWorkShiftWorkTime, SimpleActivatorData, SingleRegistrationStyle> RegisterWorkShiftWorkTime(this ContainerBuilder builder)
-		{
-			return builder.Register(c =>
-			                        	{
-			                        		var ruleSetProjectionService = c.Resolve<IRuleSetProjectionService>();
-			                        		var cacheProxyFactory = c.Resolve<IMbCacheFactory>();
-			                        		var instance = cacheProxyFactory.Create<IWorkShiftWorkTime>(ruleSetProjectionService);
-			                        		return instance;
-			                        	}
-				).As<IWorkShiftWorkTime>();
-
-		}
-	}
-
-
 }
