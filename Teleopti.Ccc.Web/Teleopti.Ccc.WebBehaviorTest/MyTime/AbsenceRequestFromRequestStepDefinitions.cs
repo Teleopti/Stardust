@@ -117,26 +117,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest("RequestDenyReasonNoWorkflow"));
 		}
-
-		[Given(@"I have a personal account with")]
-		public void GivenIHaveAPersonalAccount(Table table)
-		{
-			var personAbsenceAccount = table.CreateInstance<PersonAbsenceAccountConfigurable>();
-			DataMaker.Data().Apply(personAbsenceAccount);
-		}
-
-		[Then(@"I should see the remaining time is '(.*)'")]
-		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
-		{
-			Browser.Interactions.AssertExists(string.Format("#remaining{0}", remainingTime));
-		}
-
-		[Then(@"I should see the used time is '(.*)'")]
-		public void ThenIShouldSeeTheUsedTimeIs(string usedTime)
-		{
-			Browser.Interactions.AssertExists(string.Format("#used{0}", usedTime));
-		}
-
 	}
 
 }
