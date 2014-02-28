@@ -20,14 +20,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the remaining time is '(.*)'")]
 		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
 		{
-			Browser.Interactions.AssertExists(string.Format("#remaining{0}", remainingTime));
+			Browser.Interactions.AssertExists(string.Format(".remainingTime :contains('{0}']", remainingTime));
 		}
 
 		[When(@"I see the used time is '(.*)'")]
 		[Then(@"I should see the used time is '(.*)'")]
 		public void ThenIShouldSeeTheUsedTimeIs(string usedTime)
 		{
-			Browser.Interactions.AssertExists(string.Format("#used{0}", usedTime));
+			Browser.Interactions.AssertExists(string.Format(".remainingTime :contains('{0}']", usedTime));
 		}
 	}
 }
