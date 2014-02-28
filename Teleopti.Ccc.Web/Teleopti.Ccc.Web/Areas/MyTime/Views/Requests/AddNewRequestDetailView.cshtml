@@ -15,14 +15,21 @@
         @Resources.AbsenceType
     </label>
     <div class ="row">
-        <div class="col-xs-4">
-            <select class="request-new-absence input-sm form-control" data-bind="value: AbsenceId">
-                @foreach (var absenceType in Model.AbsenceTypes)
-                {
-                    <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-                }
-            </select>
-        </div>
+	    <div class="col-xs-4">
+		    <select class="request-new-absence input-sm form-control" data-bind="value: AbsenceId">
+			    @foreach (var absenceType in Model.AbsenceTypes)
+			    {
+				    <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+			    }
+		    </select>
+	    </div>
+	    <div class="absence-personal-account">
+		    <span>Remaining:</span>
+		    <span>18 days</span>
+			<span>/</span>
+			<span>Used:</span>
+			<span>7 days</span>
+	    </div>
     </div>
 </div>
 <div class="row form-group">
