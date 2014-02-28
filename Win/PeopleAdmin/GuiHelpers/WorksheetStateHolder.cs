@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             filteredPeopleHolder.PersonRotationParentAdapterCollection.Add(parentRotationItem);
 
             // Add person account acdopter for the newly added item
-            filteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Add(new PersonAccountModel(filteredPeopleHolder.RefreshService,filteredPeopleHolder.AllAccounts[newPerson], null,filteredPeopleHolder.CommonNameDescription));
+            filteredPeopleHolder.PersonAccountModelCollection.Add(new PersonAccountModel(filteredPeopleHolder.RefreshService,filteredPeopleHolder.AllAccounts[newPerson], null,filteredPeopleHolder.CommonNameDescription));
 
             if (AllAvailabilities.Count > 0)
             {
@@ -970,7 +970,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
 
 			Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection =
-				filteredPeopleHolder.PersonAccountGridViewAdaptorCollection;
+				filteredPeopleHolder.PersonAccountModelCollection;
             IPerson personFiltered = personAccountGridViewAdaptorCollection[index].Parent.Person;
 
 			IDictionary<IPerson, IPersonAccountCollection> allAccounts = filteredPeopleHolder.AllAccounts;
@@ -1006,7 +1006,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
 
 			Collection<IPersonAccountModel> personAccountGridViewAdaptorCollection =
-				filteredPeopleHolder.PersonAccountGridViewAdaptorCollection;
+				filteredPeopleHolder.PersonAccountModelCollection;
             IPerson personFiltered = personAccountGridViewAdaptorCollection[index].Parent.Person;
 
 			IDictionary<IPerson, IPersonAccountCollection> allAccounts = filteredPeopleHolder.AllAccounts;

@@ -15,7 +15,6 @@ using Teleopti.Ccc.WinCode.PeopleAdmin.Comparers;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 {
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         private const int DefaultWidth = 20;
         private const int DefaultHeight = 20;
 
-        Rectangle _rect;
+        private Rectangle _rect;
 
         private GridControl _currentChildGrid;
         private int _currentParentRowIndex;
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             if (ValidCell(e.ColIndex, e.RowIndex))
             {
                 _gridColumns[e.ColIndex].SaveCellInfo(e, new ReadOnlyCollection<IPersonAccountModel>(
-                                                             FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection));
+                                                             FilteredPeopleHolder.PersonAccountModelCollection));
             }
         }
 
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 //Solusion to session close isse
                 //PeopleWorksheet.StateHolder.UnitOfWork.Reassociate(FilteredPeople);
                 _gridColumns[e.ColIndex].GetCellInfo(e, new ReadOnlyCollection<IPersonAccountModel>(
-                                                        FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection));
+                                                        FilteredPeopleHolder.PersonAccountModelCollection));
             }
             base.QueryCellInfo(e);
         }
@@ -143,15 +142,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 var gridInfo =
                     GridRangeInfo.Cells(actualRowIndex, GridInCellColumnIndex, actualRowIndex, ParentGridLastColumnIndex);
 
-                if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState)
+                if (FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState)
                 {
-                    FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState = false;
+                    FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState = false;
                     // Get child grid and dispose it
                     var gridControl = Grid[actualRowIndex, GridInCellColumnIndex].Control as GridControl;
 
                     if (gridControl != null)
                     {
-                        FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].GridControl = null;
+                        FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].GridControl = null;
 
                         gridCreatorDispose(gridControl, gridInfo);
                         Grid.RowHeights[actualRowIndex] = Grid.DefaultRowHeight;
@@ -179,11 +178,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             // Gets the actual item index
             rowIndex -= 1;
 
-            if (!FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState)
+            if (!FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState)
             {
                 CanCopyRow = true;
                 var accounts =
-                    FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].Parent;
+                    FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].Parent;
 
                 foreach (IAccount account in accounts.AllPersonAccounts())
                 {
@@ -240,7 +239,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 SetIfAnyRowInSelectionExpanded(rangeInfo);
 
                 if ((rangeInfo.RangeType != GridRangeInfoType.Rows) ||
-                    !FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rangeInfo.Top - 1].ExpandState)
+                    !FilteredPeopleHolder.PersonAccountModelCollection[rangeInfo.Top - 1].ExpandState)
                 {
                     if (top > 0)
                     {
@@ -248,7 +247,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                         {
                             accountList.Add(FilteredPeopleHolder.AllAccounts[FilteredPeopleHolder.FilteredPersonCollection[index]]
                                 .Find(FilteredPeopleHolder.SelectedDate).FirstOrDefault());
-                            gridDataList.Add(FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[index]);
+                            gridDataList.Add(FilteredPeopleHolder.PersonAccountModelCollection[index]);
                         }
                     }
                 }
@@ -266,7 +265,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             {
                 for(int index = 0; index < FilteredPeopleHolder.FilteredPersonCollection.Count; index++)
                 {
-                    if(FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[index].ExpandState)
+                    if(FilteredPeopleHolder.PersonAccountModelCollection[index].ExpandState)
                     {
                         _expandedGridSelection = true;
                         return; 
@@ -275,7 +274,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             }
             for (int i = rangeInfo.Top - 1; i < rangeInfo.Bottom; i++)
             {
-                if (i>=0 && FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[i].ExpandState)
+                if (i>=0 && FilteredPeopleHolder.PersonAccountModelCollection[i].ExpandState)
                 {
                     _expandedGridSelection = true;
                 }
@@ -299,14 +298,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 accountCollection.Add(selectedAbsence, newAccount);
             }
 
-            var parentPosition = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection.IndexOf(dataItem);
+            var parentPosition = FilteredPeopleHolder.PersonAccountModelCollection.IndexOf(dataItem);
 
             FilteredPeopleHolder.GetParentPersonAccountWhenUpdated(parentPosition);
 	        PeopleWorksheet.StateHolder.GetChildPersonAccounts(parentPosition, FilteredPeopleHolder);
 															
 
 
-            FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[parentPosition].ExpandState = true;
+            FilteredPeopleHolder.PersonAccountModelCollection[parentPosition].ExpandState = true;
             Grid.Refresh();
             Invalidate();
             Cursor.Current = Cursors.Default;
@@ -540,7 +539,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             e.DataItem.CanBold = true;
 
-            var grid = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[Grid.CurrentCell.RowIndex - 1].GridControl;
+            var grid = FilteredPeopleHolder.PersonAccountModelCollection[Grid.CurrentCell.RowIndex - 1].GridControl;
 
             if (grid != null)
             {
@@ -834,7 +833,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			var actualItemIndex = rowIndex - 1;
 
-			if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState)
+			if (FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState)
 			{
 				ExpandChildGrid(rowIndex, gridInfo);
 			}
@@ -857,14 +856,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			var actualItemIndex = rowIndex - 1;
 
-			if (!FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState)
+			if (!FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState)
 			{
-				FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = true;
+				FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState = true;
 				ExpandChildGrid(rowIndex, gridInfo);
 			}
 			else
 			{
-				FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = false;
+				FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState = false;
 				CollapseChildGrid(rowIndex, gridInfo);
 			}
 		}
@@ -882,7 +881,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 		private void ExpandChildGrid(int rowIndex, GridRangeInfo gridInfo)
 		{
-			var grid = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex - 1].GridControl;
+			var grid = FilteredPeopleHolder.PersonAccountModelCollection[rowIndex - 1].GridControl;
 
 			GetChildPersonAccounts(rowIndex, grid);
 
@@ -947,8 +946,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 childGrid.Invalidate();
 
                 // remove child grid
-                FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = false;
-                FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].GridControl = null;
+                FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState = false;
+                FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].GridControl = null;
 
                 //// Get child grid and dispose it
                 var gridControl = Grid[rowIndex, GridInCellColumnIndex].Control as GridControl;
@@ -989,8 +988,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 if (accountCollection.Count == 0)
                 {
                     // remove child grid
-                    FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = false;
-                    FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].GridControl = null;
+                    FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState = false;
+                    FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].GridControl = null;
 
                     // Get child grid and dispose it
                     var gridControl = Grid[rowIndex, GridInCellColumnIndex].Control as GridControl;
@@ -1015,8 +1014,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             if (rowIndex < 0) return;
 
             //Current period of receiver replaced with current period of the sender ??
-            var accounts = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].Parent;
-            bool isParent = !FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState;
+            var accounts = FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].Parent;
+            bool isParent = !FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState;
 
             if (accounts != null)
             {
@@ -1111,7 +1110,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 var actualItemIndex = gridRangeInfo.Top - 1;
 
                 // Child list remove
-                if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState)
+                if (FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState)
                 {
                     RemoveChild(gridRangeInfo.Top, gridRangeInfo.IsRows);
                 }
@@ -1145,15 +1144,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             return Grid.CurrentCell.RowIndex > 0;
         }
 
-        private IPersonAccountModel CurrentPersonRotationView
+        private IPersonAccountModel CurrentPersonAccountView
         {
-            get { return FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[CurrentRowIndex]; }
+            get { return FilteredPeopleHolder.PersonAccountModelCollection[CurrentRowIndex]; }
         }
 
         private bool IsCurrentRowExpanded()
         {
             return IsValidRow()
-                && CurrentPersonRotationView.ExpandState;
+                && CurrentPersonAccountView.ExpandState;
         }
 
         private int CurrentRowIndex
@@ -1166,15 +1165,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             int columnIndex;
             if (IsCurrentRowExpanded())
             {
-                columnIndex = CurrentPersonRotationView.GridControl.CurrentCell.ColIndex + 2;
+                columnIndex = CurrentPersonAccountView.GridControl.CurrentCell.ColIndex + 2;
             }
             else
             {
-                var parentColIndex = Grid.CurrentCell.ColIndex;
+                var parentColIndex = gridColumnIndex();
                 columnIndex = (parentColIndex == 1) ? (3) : parentColIndex; // TODO: Use constants instead.
             }
             return columnIndex;
         }
+
+		private int gridColumnIndex()
+		{
+			if (Grid.CurrentCell.ColIndex == -1)
+				Grid.CurrentCell.MoveTo(0, 0);
+			return Grid.CurrentCell.ColIndex;
+		}
 
         private void DeletePersonAccounts()
         {
@@ -1227,14 +1233,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
                 if (gridRangeInfo.Height == 1)
                 {
-                    selectedPersons.Add(FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection
+                    selectedPersons.Add(FilteredPeopleHolder.PersonAccountModelCollection
                         [gridRangeInfo.Top - 1].Parent.Person);
                 }
                 else
                 {
                     for (int row = gridRangeInfo.Bottom; row >= gridRangeInfo.Top; row--)
                     {
-                        selectedPersons.Add(FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection
+                        selectedPersons.Add(FilteredPeopleHolder.PersonAccountModelCollection
                             [row - 1].Parent.Person);
                     }
                 }
@@ -1257,7 +1263,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
                     if (personAccountChildCollection != null)
                     {
-                        FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[actualItemIndex].ExpandState = true;
+                        FilteredPeopleHolder.PersonAccountModelCollection[actualItemIndex].ExpandState = true;
                         GetChildPersonAccounts(rowIndex, childGrid);
                         personAccountChildCollection =
                             PeopleWorksheet.StateHolder.PersonAccountChildGridDataWhenAndChild;
@@ -1278,7 +1284,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         public override void Sort(bool isAscending)
         {
             // Gets the filtered people grid data as a collection
-            var personAccountCollection = new List<IPersonAccountModel>(FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection);
+            var personAccountCollection = new List<IPersonAccountModel>(FilteredPeopleHolder.PersonAccountModelCollection);
 
             var columnIndex = GetColumnIndex();
 
@@ -1337,7 +1343,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         internal override void PrepareView()
         {
             ColCount = _gridColumns.Count;
-            RowCount = FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Count;
+            RowCount = FilteredPeopleHolder.PersonAccountModelCollection.Count;
 
             Grid.RowCount = RowCount;
             Grid.ColCount = ColCount - 1;
@@ -1451,11 +1457,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             CanCopyRow = false;
             CanCopyChildRow = false;
 
-            if (!FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState)
+            if (!FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState)
             {
                 CanCopyRow = true;
                 var accounts =
-                    FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].Parent;
+                    FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].Parent;
 
                 foreach (var account in accounts.AllPersonAccounts())
                 {
@@ -1524,16 +1530,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                 var actualIndex = rowIndex + 1;
                 var gridInfo = GridRangeInfo.Cells(actualIndex, GridInCellColumnIndex, actualIndex, ParentGridLastColumnIndex);
 
-                if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState)
+                if (FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState)
                 {
-                    FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState = false;
+                    FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState = false;
 
                     // Get child grid and dispose it
                     var gridControl = Grid[actualIndex, GridInCellColumnIndex].Control as GridControl;
 
                     if (gridControl != null)
                     {
-                        FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].GridControl = null;
+                        FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].GridControl = null;
                         gridCreatorDispose(gridControl, gridInfo);
 
                         Grid.RowHeights[actualIndex] = Grid.DefaultRowHeight;
@@ -1550,21 +1556,21 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             for (var rowIndex = 0; rowIndex < Grid.RowCount; rowIndex++)
             {
-                if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Count <= rowIndex) break;
+                if (FilteredPeopleHolder.PersonAccountModelCollection.Count <= rowIndex) break;
 
                 var actualIndex = rowIndex + 1;
                 var gridInfo = GridRangeInfo.Cells(actualIndex, GridInCellColumnIndex, actualIndex, ParentGridLastColumnIndex);
 
-                if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState)
+                if (FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState)
                 {
-                    FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].ExpandState = false;
+                    FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].ExpandState = false;
 
                     // Get child grid and dispose it
                     var gridControl = Grid[actualIndex, GridInCellColumnIndex].Control as GridControl;
 
                     if (gridControl != null)
                     {
-                        FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[rowIndex].GridControl = null;
+                        FilteredPeopleHolder.PersonAccountModelCollection[rowIndex].GridControl = null;
 
                         gridCreatorDispose(gridControl, gridInfo);
                         Grid.RowHeights[actualIndex] = Grid.DefaultRowHeight;
@@ -1581,10 +1587,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			var ranges = new List<GridRangeInfo>();
             foreach (var person in selectedPersons)
             {
-                for (int i = 0; i < FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Count; i++)
+                for (int i = 0; i < FilteredPeopleHolder.PersonAccountModelCollection.Count; i++)
                 {
                     int actualIndex = i + 1;
-                    if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[i].Parent.Person.Equals(person))
+                    if (FilteredPeopleHolder.PersonAccountModelCollection[i].Parent.Person.Equals(person))
                     {
                         ranges.Add(GridRangeInfo.Row(actualIndex));
                     }
