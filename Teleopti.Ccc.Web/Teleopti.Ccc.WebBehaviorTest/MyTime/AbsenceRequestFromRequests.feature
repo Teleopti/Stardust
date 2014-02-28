@@ -6,7 +6,7 @@
 @ignore
 Scenario: When requesting absence tracked as days view remaining and used time
 Given I am an agent
-And I have a person period that starts on '2014-01-01'
+#And I have a person period that starts on '2014-01-01'
 And I have a requestable absence with
 | Field       | Value    |
 | Name        | Vacation |
@@ -16,7 +16,7 @@ And I have a personal account with
 | Absence     | Vacation   |
 | FromDate    | 2014-01-01 |
 | Accrued     | 25         |
-And I have an absence with
+And I have an approved absence request with
 | Field     | Value            |
 | Absence   | Vacation         |
 | StartTime | 2014-01-01 00:00 |
@@ -40,7 +40,7 @@ And I have a personal account with
 | Absence     | Illness    |
 | FromDate    | 2014-01-01 |
 | Accrued     | 250:00     |
-And I have an absence with
+And I have an approved absence request with
 | Field     | Value            |
 | Absence   | Illness          |
 | StartTime | 2014-01-01 00:00 |
@@ -133,7 +133,7 @@ And I have a personal account with
 | Absence     | Vacation   |
 | FromDate    | 2015-01-01 |
 | Accrued     | 25         |
-And I have an absence with
+And I have an approved absence request with
 | Field     | Value            |
 | Absence   | Vacation         |
 | StartTime | 2014-01-01 00:00 |
