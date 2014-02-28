@@ -6517,7 +6517,7 @@ Meeting</value>
     <comment>Error message in SkillSummery</comment>
   </data>
   <data name="FilterOnContractTimeLimitationsWithParams" xml:space="preserve">
-    <value>Filter on contract time limitations (shift with contract time betweeen {0} and {1})</value>
+    <value>Filter on contract time limitations (shift with contract time between {0} and {1})</value>
     <comment>Scheduling error message</comment>
   </data>
   <data name="FilterOnPersonalPeriodLimitationsWithParams" xml:space="preserve">
