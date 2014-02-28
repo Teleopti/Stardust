@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 
 		public PersonAbsenceAccountConfigurable()
 		{
-			Extra = "0";
+			Accrued = "0";
 			BalanceIn = "0";
 			BalanceOut = "0";
 			Extra = "0";
