@@ -8581,7 +8581,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Filter on contract time limitations (shift with contract time betweeen {0} and {1}).
+        ///   Looks up a localized string similar to Filter on contract time limitations (shift with contract time between {0} and {1}).
         /// </summary>
         public static string FilterOnContractTimeLimitationsWithParams {
             get {
