@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -35,8 +37,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeScenario()
 		{
+			var useBroker = "false";
+			if (ScenarioContext.Current.ScenarioInfo.Tags.Contains("broker"))
+				useBroker = "true";
+
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			WebRequestOutsideBrowser("Test/BeforeScenario?enableMyTimeMessageBroker=false");
+			WebRequestOutsideBrowser(string.Format(CultureInfo.InvariantCulture,"Test/BeforeScenario?enableMyTimeMessageBroker={0}",useBroker));
 		}
 
 		/// <summary>
