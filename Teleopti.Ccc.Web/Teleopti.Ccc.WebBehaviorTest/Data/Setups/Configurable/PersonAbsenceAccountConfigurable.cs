@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
 			switch (TrackerType.ToLower())
 			{
-				case "days":
+				case "Days":
 					personAbsenceAccount.Add(new AccountDay(FromDate)
 						{
 							Accrued = TimeSpan.Parse(Accrued),
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 							Extra = TimeSpan.Parse(Extra)
 						});
 					break;
-				case "hours":
+				case "Hours":
 					personAbsenceAccount.Add(new AccountTime(FromDate)
 						{
 							Accrued = TimeSpan.Parse(Accrued),
