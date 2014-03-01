@@ -112,13 +112,13 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.4.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=2.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.2.4\lib\net40\MbCache.dll</HintPath>
+      <HintPath>..\packages\MbCache.2.5\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.4.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.2.4\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\packages\MbCache.2.5\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -132,6 +132,7 @@
     <Compile Include="Configuration\AuthenticationModule.cs" />
     <Compile Include="Configuration\CommandDispatcherModule.cs" />
     <Compile Include="Configuration\CommandHandlersModule.cs" />
+    <Compile Include="Configuration\AutofacMbCacheIntegration.cs" />
     <Compile Include="Configuration\PersonAccountModule.cs" />
     <Compile Include="Configuration\EventHandlersModule.cs" />
     <Compile Include="Configuration\EventsPublisherModule.cs" />

@@ -1,5 +1,4 @@
-﻿@WatiN
-@WeekSchedule
+﻿@WeekSchedule
 Feature: View week schedule
 	In order to know how to work this week
 	As an agent

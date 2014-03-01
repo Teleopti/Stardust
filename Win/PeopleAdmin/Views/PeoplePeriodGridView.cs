@@ -1616,7 +1616,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		{
 			IList<IPerson> selectedPersons = new List<IPerson>();
 
-			if (_currentSelectedPersonPeriods != null && _currentSelectedPersonPeriods[0] != null)
+			if (_currentSelectedPersonPeriods != null && _currentSelectedPersonPeriods.Count != 0 && _currentSelectedPersonPeriods[0] != null)
 			{
 				for (int i = 0; i < _currentSelectedPersonPeriods.Count; i++)
 				{
@@ -1640,21 +1640,24 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
 			var gridRangeInfoList = Grid.Model.SelectedRanges;
 
-			for (var index = gridRangeInfoList.Count; index > 0; index--)
+			if (FilteredPeopleHolder.PersonPeriodGridViewCollection.Count != 0)
 			{
-				var gridRangeInfo = gridRangeInfoList[index - PeopleAdminConstants.GridCollectionMapValue];
+				for (var index = gridRangeInfoList.Count; index > 0; index--)
+				{
+					var gridRangeInfo = gridRangeInfoList[index - PeopleAdminConstants.GridCollectionMapValue];
 
-				if (gridRangeInfo.Height == PeopleAdminConstants.GridRangeInFOHeightValue)
-				{
-					selectedPersons.Add(FilteredPeopleHolder.PersonPeriodGridViewCollection
-						[gridRangeInfo.Top - PeopleAdminConstants.GridCurrentRowIndexMapValue].Parent);
-				}
-				else
-				{
-					for (var row = gridRangeInfo.Bottom; row >= gridRangeInfo.Top; row--)
+					if (gridRangeInfo.Height == PeopleAdminConstants.GridRangeInFOHeightValue)
 					{
 						selectedPersons.Add(FilteredPeopleHolder.PersonPeriodGridViewCollection
-							[row - PeopleAdminConstants.GridCurrentRowIndexMapValue].Parent);
+							[gridRangeInfo.Top - PeopleAdminConstants.GridCurrentRowIndexMapValue].Parent);
+					}
+					else
+					{
+						for (var row = gridRangeInfo.Bottom; row >= gridRangeInfo.Top; row--)
+						{
+							selectedPersons.Add(FilteredPeopleHolder.PersonPeriodGridViewCollection
+								[row - PeopleAdminConstants.GridCurrentRowIndexMapValue].Parent);
+						}
 					}
 				}
 			}

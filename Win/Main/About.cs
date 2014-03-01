@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Win.Main
 			{
 				agent.ShowDialog(this);
 			}
-		}
+        }
 
     }
 }

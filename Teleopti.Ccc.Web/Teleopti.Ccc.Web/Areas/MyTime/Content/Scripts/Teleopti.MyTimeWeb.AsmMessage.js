@@ -35,7 +35,8 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 		}
 
 	    messageSpan.text(messageCount);
-		messageSpan.show();
+		messageSpan.removeClass('hide');
+	    messageSpan.show();
 		
 		messageSpan.parent().addClass("asm-new-message-indicator");
 	}

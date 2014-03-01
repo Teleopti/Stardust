@@ -4,7 +4,6 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
@@ -12,8 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class WeekScheduleTimeIndicatorStepDefinitions
 	{
-		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
-
 		[Given(@"I should see the time indicator at time '(.*)'")]
 		[Then(@"I should see the time indicator at time '(.*)'")]
 		public void ThenIShouldSeeTheTimeIndicatorAtTime(DateTime date)
@@ -24,9 +21,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		    TimeSpan minTimelineTime;
 		    TimeSpan maxTimelineTime;
 			
-			_page.AnyTimelineLabel.WaitUntilExists();
+			Browser.Interactions.AssertExists(".weekview-timeline-label");
 
-			var startText = _page.TimelineLabels.First().InnerHtml.Split('<')[0];
+			var result = (string)Browser.Interactions.Javascript("return $('.weekview-timeline-label').first().html();");
+			var startText = result.Split('<')[0];
 			var returnCharAt = startText.IndexOf('\n');
 			if (returnCharAt>=0)
 			{
@@ -37,7 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				throw new ValidationException("Could not find timeline start label time.");
 			}
 
-			var endText = _page.TimelineLabels[_page.TimelineLabels.Count - 1].InnerHtml.Split('<')[0];
+			result = (string)Browser.Interactions.Javascript("return $('.weekview-timeline-label').last().html();");
+			var endText = result.Split('<')[0];
 			returnCharAt = endText.IndexOf('\n');
 			if (returnCharAt >= 0)
 			{
