@@ -1,4 +1,4 @@
-﻿.asmMessage-body-inner ol
+﻿.asm-messages ol
 {
 	list-style: none;
 	margin-left: 0em;
@@ -9,15 +9,11 @@
 	width: 483px;
 }
 
-.message-option {
-	width: 100%
-}
-
 .rtl .asmMessage-list
 {
     margin-right: 483px;
 }
-.asmMessage-body-inner .asmMessage-item
+.asm-messages .asmMessage-item
 {
 	padding-top: 0.5em;
 	padding-bottom: 0.8em;
@@ -28,26 +24,26 @@
 	margin-top: 0.1em;
 	margin-bottom: 0.1em;
 }
-.asmMessage-body-inner .friendly-message {
+.asm-messages .friendly-message {
 	width: 433px;
 }
-.asmMessage-body-inner .loading
+.asm-messages .loading
 {
 	height: 5em;
 }
-.asmMessage-body-inner .arrow-down
+.asm-messages .arrow-down
 {
 	height: 5em;
 }
 
-.no-rgba .asmMessage-body-inner li {
+.no-rgba .asm-messages li {
 	 border: 1px solid #dfdfdf;
 }
-.asmMessage-body-inner .asmMessage-subject 
+.asm-messages .asmMessage-subject 
 {
 	border-bottom: 1px solid rgb(228, 228, 228);
 }
-.asmMessage-body-inner .asmMessage-details 
+.asm-messages .asmMessage-details 
 {
 	font-size: smaller;
 	border-bottom: 1px solid rgb(228, 228, 228);
@@ -58,13 +54,13 @@
 	border-bottom: 1px solid rgb(228, 228, 228);
 	padding-bottom: 10px;
 }
-.asmMessage-body-inner .asmMessage-caption 
+.asm-messages .asmMessage-caption 
 {
 	color: #B0B0B0;
 	font-style: italic;
 	font-size: xx-small;
 }
-.asmMessage-body-inner .asmMessage-data-type {
+.asm-messages .asmMessage-data-type {
 	padding-right: 20px;
 	padding-left: 0px;
 }
@@ -72,27 +68,27 @@
 	padding-right: 20px;
 	padding-left: 0px;
 }
-.rtl .asmMessage-body-inner .asmMessage-data-type {
+.rtl .asm-messages .asmMessage-data-type {
 	padding-right: 0px;
 	padding-left: 20px;
 }
-.asmMessage-body-inner .asmMessage-data-date {
+.asm-messages .asmMessage-data-date {
 	padding-right: 20px;
 	padding-left: 0px;
 }
-.rtl .asmMessage-body-inner .asmMessage-data-date {
+.rtl .asm-messages .asmMessage-data-date {
 	padding-right: 0px;
 	padding-left: 20px;
 }
-.asmMessage-body-inner .asmMessage-data-sender {
+.asm-messages .asmMessage-data-sender {
 	padding-right: 20px;
 	padding-left: 0px;
 }
-.rtl .asmMessage-body-inner .asmMessage-data-sender {
+.rtl .asm-messages .asmMessage-data-sender {
 	padding-right: 0px;
 	padding-left: 20px;
 }
-.asmMessage-body-inner .asmMessage-text 
+.asm-messages .asmMessage-text 
 {
 	padding-top: 0.3em;
 }
@@ -140,7 +136,7 @@
 	font-size: 85%;
 	font-style: italic;
 }
-.asmMessage-body-inner .asmMessage-selected
+.asm-messages .asmMessage-selected
 {
     background: rgb(240, 240, 240);
 }
@@ -169,7 +165,7 @@
 	position: absolute;
 }
 
-.asmMessage-title {
+.title {
 	margin: 0 0 5px 0;
 }
 

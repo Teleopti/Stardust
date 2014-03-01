@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -38,31 +36,45 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             {
                 fixThisMatrix(workingItem,schedulingOptions,rollbackService );
             }
-
         }
 
         private void fixThisMatrix(IMatrixData workingItem, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService)
         {
             var tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(new List<IMatrixData>( ){workingItem });
             var scheduleDayCollection = tempWorkingList[0].ScheduleDayDataCollection;
+            var startIndex = 0;
+            var endIndex = 6;
+            var alreadyAnalyzedDates = new List<DateOnly>();
             while (tempWorkingList.Count > 0)
             {
-                DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(scheduleDayCollection);
+                if (startIndex >= scheduleDayCollection.Count)
+                {
+                    startIndex = 0;
+                    endIndex = 6;
+                }
+                var newScheduleDayCollection = trimTheList(scheduleDayCollection, startIndex, endIndex, alreadyAnalyzedDates);
+                startIndex = endIndex + 1;
+                endIndex = endIndex + 7;
+                DateOnly? resultingDate = _bestSpotForAddingDayOffFinder.Find(newScheduleDayCollection);
                 if (!resultingDate.HasValue) break ;
+                alreadyAnalyzedDates.Add(resultingDate.Value );
                 var result = assignDayOff(resultingDate.Value, tempWorkingList[0], schedulingOptions.DayOffTemplate, rollbackService);
                 if (!result) break;
                 tempWorkingList = _matrixDataWithToFewDaysOff.FindMatrixesWithToFewDaysOff(tempWorkingList);
-                scheduleDayCollection= new ReadOnlyCollection<IScheduleDayData>(removeDateFromCollection(scheduleDayCollection.ToList(), resultingDate.Value));
             }
         }
 
-        private List<IScheduleDayData> removeDateFromCollection(List<IScheduleDayData> scheduleDayCollection, DateOnly value)
+        private IList<IScheduleDayData> trimTheList(ReadOnlyCollection<IScheduleDayData> scheduleDayCollection, int startIndex, int endIndex, List<DateOnly> alreadyAnalyzedDates)
         {
-            var scheduleDay = scheduleDayCollection.FirstOrDefault(x => x.DateOnly.Equals(value));
-            scheduleDayCollection.Remove(scheduleDay);
-            return scheduleDayCollection;
+            var result = new List<IScheduleDayData>();
+            for (int i = startIndex; i <= endIndex; i++)
+            {
+                if (i >= scheduleDayCollection.Count) break;
+                if (alreadyAnalyzedDates.Contains(scheduleDayCollection[i].DateOnly)) continue;
+                result.Add(scheduleDayCollection[i]);
+            }
+            return result;
         }
-
 
         private bool assignDayOff(DateOnly date, IMatrixData matrixData, IDayOffTemplate dayOffTemplate, ISchedulePartModifyAndRollbackService rollbackService)
         {

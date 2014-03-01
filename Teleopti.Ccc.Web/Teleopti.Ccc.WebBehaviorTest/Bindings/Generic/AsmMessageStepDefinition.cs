@@ -8,7 +8,6 @@ using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Legacy;
@@ -16,7 +15,6 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
-using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -25,18 +23,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class AsmMessageStepDefinition
 	{
-		private MessagePage _page { get { return Pages.Pages.MessagePage; } }
-
 		[Then(@"Message tab should be visible")]
 		public void ThenMessageTabShouldBeVisible()
 		{
-			EventualAssert.That(() => _page.MessageLink.Exists, Is.True);
+			Browser.Interactions.AssertExists("[href*='#MessageTab']");
 		}
 
 		[Then(@"Message tab should not be visible")]
 		public void ThenMessageTabShouldNotBeVisible()
 		{
-			EventualAssert.That(() => _page.MessageLink.Exists, Is.False);
+			Browser.Interactions.AssertNotExists(".container", "[href*='#MessageTab']");
 		}
 
 		[Given(@"I have an unread message with")]
@@ -48,36 +44,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 		[Given(@"I should be notified that I have '(.*)' unread message\(s\)")]
 		[Then(@"I should be notified that I have '(.*)' unread message\(s\)")]
-		public void ThenIShouldBeNotifiedThatIHaveUnreadMessageS(string unreadMessageCount)
+		public void ThenIShouldBeNotifiedThatIHaveUnreadMessageS(int unreadMessageCount)
 		{
-			var messageCount = parseInt(unreadMessageCount);
-
-			if (messageCount == 0)
-				EventualAssert.That(() => Pages.Pages.CurrentPortalPage.MessageLink.Span(Find.BySelector(".badge")).Exists, Is.False);
+			if (unreadMessageCount == 0)
+				Browser.Interactions.AssertNotExists(".container", "[href*='#MessageTab'] span.badge");
 			else
-				EventualAssert.That(() => Pages.Pages.CurrentPortalPage.MessageLink.Span(Find.BySelector(".badge")).InnerHtml, Is.EqualTo(unreadMessageCount));
-		}
-
-		private int parseInt(string stringInt)
-		{
-			int parseResult;
-			if (!int.TryParse(stringInt, NumberStyles.Number, CultureInfo.InvariantCulture, out parseResult))
-				return 0;
-
-			return parseResult;
+				Browser.Interactions.AssertFirstContains("[href*='#MessageTab'] span.badge", unreadMessageCount.ToString(CultureInfo.InvariantCulture));
 		}
 
 		[When(@"I receive message number '(.*)' while not viewing message page")]
 		public void WhenIReceiveMessageNumberWhileNotViewingMessagePage(int messageCount)
 		{
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString(CultureInfo.InvariantCulture) + ");");
 		}
 
 		[When(@"I receive message number '(.*)'")]
 		public void WhenIReceiveMessageNumber(int messageCount)
 		{
-			Browser.Interactions.AssertExists("#AsmMessages-list");
-			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.AssertExists(".message-list");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString(CultureInfo.InvariantCulture) + ");");
 
 			var pushMessageDialogueJsonObject = new StringBuilder();
 			pushMessageDialogueJsonObject.Append("var messageItem = {");
@@ -92,162 +77,125 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 			Browser.Interactions.Javascript(pushMessageDialogueJsonObject.ToString());
 		}
-		
-		[Given(@"I am viewing messages")]
-		[When(@"I am viewing messages")]
-		public void WhenIAmViewingMessages()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoMessagePage();
-		}
 
 		[Then(@"I should not see any messages")]
 		public void ThenIShouldNotSeeAnyMessages()
 		{
-			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(0));
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(0)");
+			Browser.Interactions.AssertNotExists(".container", ".header");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(0)");
 		}
 
 		[Then(@"I should see '(.*)' message\(s\) in the list")]
 		public void ThenIShouldSeeMessageSInTheList(int messageCount)
 		{
-			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(messageCount));
+			Browser.Interactions.AssertJavascriptResultContains("return $(\".header\").length;", messageCount.ToString(CultureInfo.InvariantCulture));
 		}
 
-		[Then(@"I should see the message details form with on the message at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheMessageDetailsFormWithOnTheMessageAtPositionInTheList(int position, Table table)
+		[Then(@"I should see the message detail form with the message '(.*)'")]
+		public void ThenIShouldSeeTheMessageDetailFormWithTheMessage(string messageText)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.MessageDetailSection(position).DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Message(position).InnerHtml.Contains(table.Rows[0][1]), Is.True);
-		}
-		
-		[When(@"I click on the message at position '(.*)' in the list")]
-		public void GivenIClickOnTheMessageAtPositionInTheList(int position)
-		{
-			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.AtLeast(position));
-			var messageBodyDiv = _page.MessageBodyDivs[position - 1].EventualGet();
-			messageBodyDiv.EventualClick();
+			Browser.Interactions.AssertVisibleUsingJQuery(".detail-form");
+			Browser.Interactions.AssertFirstContainsUsingJQuery(".detail-form .message-text", messageText);
 		}
 
-		[When(@"I click the confirm button on the message at position '(.*)' in the list")]
-		public void WhenIClickTheConfirmButtonOnTheMessageAtPositionInTheList(int position)
+		[When(@"I click on the message with the title '(.*)'")]
+		public void WhenIClickOnTheMessageWithTheTitle(string messsageTitle)
 		{
-			Pages.Pages.MessagePage.ConfirmButton(position).EventualClick();
+			Browser.Interactions.ClickUsingJQuery(string.Format(CultureInfo.InvariantCulture, ".message .title:contains('{0}')", messsageTitle));
 		}
 
-		[When(@"I confirm reading the message at position '(.*)' of '(.*)' in the list")]
-		public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition, int messageCount)
-		{
-			Browser.Interactions.AssertExists("#AsmMessages-list");
 
-			var newMessageCount = messageCount - 1;
-			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(messageCount));
-			_page.MessageBodyDivs[listPosition - 1].Click();
-			Pages.Pages.MessagePage.ConfirmButton(listPosition).EventualClick();
-			Browser.Current.Eval(string.Format(CultureInfo.InvariantCulture,
-			                                   "Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab({0});", newMessageCount));
+		[When(@"I confirm reading the message with the title '(.*)'")]
+		public void WhenIConfirmReadingTheMessageWithTheTitle(string messageTitle)
+		{
+			Browser.Interactions.ClickUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+			                                         ".message:has(.title:contains('{0}')) .confirm-read", messageTitle));
 		}
 
 		[Then(@"I should see a user-friendly message explaining I dont have any messages")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnyMessages()
 		{
-			EventualAssert.That(() => _page.FriendlyMessage.Style.GetAttributeValue("display"), Is.Not.EqualTo("none"));
+			Browser.Interactions.AssertVisibleUsingJQuery(".no-messages");
 		}
 
 		[When(@"I enter the text reply '(.*)'")]
 		public void WhenIEnterTheTextReply(string reply)
 		{
 			const string js = @"Teleopti.MyTimeWeb.AsmMessageList.AddReplyText('{0}');";
-			Browser.Current.Eval(string.Format(js, reply));
+			Browser.Interactions.Javascript(string.Format(js, reply));
 		}
 
-		[Then(@"I should see the message details form with an editable text box on the message at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheMessageDetailsFormWithAnEditableTextBoxOnTheMessageAtPositionInTheList(int position)
+		[Then(@"I should be able to write a text reply for the message with the title '(.*)'")]
+		public void ThenIShouldBeAbleToWriteATextReplyForTheMessageWithTheTitle(string messageTitle)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Reply(position).DisplayVisible(), Is.True);
+			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+																		".message:has(.title:contains('{0}')) .text-reply",
+			                                                            messageTitle));
 		}
 
-		[Then(@"I should see this conversation on the message at position '(.*)' in the list")]
-		public void ThenIShouldSeeThisConversationOnTheMessageAtPositionInTheList(int position, Table table)
+		[Then(@"I can see a conversation for the message with the title '(.*)' with")]
+		public void ThenICanSeeAConversationForTheMessageWithTheTitleWith(string messageTitle, Table table)
 		{
-			foreach (var tableRow in table.Rows)
+			var dialogue1 = table.Rows[0][0];
+			var dialogue2 = table.Rows[1][0];
+			const string selector = ".message:has(.title:contains('{0}')) .dialogue > span:contains('{1}')";
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture, selector, messageTitle, dialogue1));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture, selector, messageTitle, dialogue2));
+		}
+
+		[Then(@"I should not be able to send response for the message with the title '(.*)'")]
+		public void ThenTheSendButtonShouldBeDisabledForTheMessageWithTheTitle(string messageTitle)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+																		".message:has(.title:contains('{0}')) .confirm-read:disabled",
+																		messageTitle));
+		}
+
+		[Then(@"I should be able to send response for the message with the title '(.*)'")]
+		public void ThenTheSendButtonShouldBeEnabledForTheMessageWithTheTitle(string messageTitle)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+																		".message:has(.title:contains('{0}')) .confirm-read:not(disabled)",
+																		messageTitle));
+		}
+
+		[When(@"I choose reply option '(.*)' for the message with the title '(.*)'")]
+		public void WhenIChooseReplyOptionForTheMessageWithTheTitle(string replyOption, string messageTitle)
+		{
+			string selector = string.Format(CultureInfo.InvariantCulture, ".message:has(.title:contains('{0}')) .message-option:contains('{1}')", messageTitle, replyOption);
+			Browser.Interactions.ClickUsingJQuery(selector);
+		}
+
+		[Then(@"I should be able to select one of the following options for the message with the title '(.*)'")]
+		public void ThenIShouldBeAbleToSelectOneOfTheFollowingOptionsForTheMessageWithTheTitle(string messageTitle, Table table)
+		{
+			for (int i = 0; i < table.RowCount; i++)
 			{
-				EventualAssert.That(
-					() => Pages.Pages.CurrentMessageReplyPage.DialogueMessages(position).InnerHtml.Contains(tableRow[0]),
-					Is.EqualTo(true));
+				Browser.Interactions.AssertFirstContainsUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+																	   ".message:has(.title:contains('{0}')) .message-option:nth-child({1})",
+																	   messageTitle, i + 1),
+																	   table.Rows[i][0]);
 			}
 		}
 
-		[Then(@"the send button should be disabled on the message at position '(.*)' in the list")]
-		public void ThenTheSendButtonShouldBeDisabledOnTheMessageAtPositionInTheList(int position)
+		[Then(@"I should not see any options for the message with the title '(.*)'")]
+		public void ThenIShouldNotSeeAnyOptionsForTheMessageWithTheTitle(string messageTitle)
 		{
-			EventualAssert.That(() => Pages.Pages.MessagePage.ConfirmButton(position).Enabled, Is.False);
+			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(CultureInfo.InvariantCulture,
+																	   ".message:has(.title:contains('{0}')) .message-option",
+																	   messageTitle));
 		}
-
-		[Then(@"the send button should be enabled on the message at position '(.*)' in the list")]
-		public void ThenTheSendButtonShouldBeEnabled(int position)
-		{
-			EventualAssert.That(() => Pages.Pages.MessagePage.ConfirmButton(position).Enabled, Is.True);
-		}
-
-		[When(@"I click the radiobutton with caption '(.*)' on the message at position '(.*)' in the list")]
-		public void WhenIClickTheRadiobuttonWithCaptionOnTheMessageAtPositionInTheList(string option, int position)
-		{
-			var btn = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Buttons.First(r => r.InnerHtml.Equals(option)).EventualGet();
-			btn.EventualClick();
-		}
-
-		[Then(@"the radiobutton with caption '(.*)' should not be checked on the message at position '(.*)' in the list")]
-		public void ThenTheRadiobuttonWithCaptionShouldNotBeCheckedOnTheMessageAtPositionInTheList(string option, int position)
-		{
-			var btn = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Buttons.First(r => r.InnerHtml.Equals(option)).EventualGet();
-			Assert.That(btn.ClassName.Contains("active"),Is.False);
-		}
-
-		[Then(@"I should see radiobuttons on the message at position '(.*)' in the list with")]
-		public void ThenIShouldSeeRadiobuttonsOnTheMessageAtPositionInTheListWith(int position, Table table)
-		{
-			var messageDetailDiv = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).EventualGet();
-			foreach (var tableRow in table.Rows)
-			{
-				EventualAssert.That(() => messageDetailDiv.InnerHtml.Contains(tableRow[0]), Is.EqualTo(true));
-			}
-		}
-
-		[Then(@"I should not see any options on the message at position '(.*)' in the list")]
-		public void ThenIShouldNotSeeAnyOptionsOnTheMessageAtPositionInTheList(int position)
-		{
-			var messageDetailDiv = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).EventualGet();
-			foreach (var radioButton in messageDetailDiv.RadioButtons)
-			{
-				Assert.That(IsDisplayed(radioButton), Is.False);
-			}
-		}
-
-		private static bool IsDisplayed(Element element)
-		{
-			if(string.Equals(element.Style.Display,"none"))
-			{
-				return false;
-			}
-			if(element.Parent!=null)
-			{
-				return IsDisplayed(element.Parent);
-			}
-			return true;
-		}
-
+		
 		[When(@"the message with title '(.*)' is deleted by the sender")]
 		public void WhenTheMessageWithTitleIsDeletedByTheSender(string title)
 		{
-			Browser.Interactions.AssertExists("#AsmMessages-list");
+			Browser.Interactions.AssertExists(".message-list");
 			Guid id;
-			IPushMessageDialogue pushMessageDialogue;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var repository = new PushMessageDialogueRepository(uow);
-				pushMessageDialogue = repository.LoadAll().First(m => m.PushMessage.GetTitle(new NoFormatting()).Equals(title));
-				id = (Guid)pushMessageDialogue.Id;
+				IPushMessageDialogue pushMessageDialogue = repository.LoadAll().First(m => m.PushMessage.GetTitle(new NoFormatting()).Equals(title));
+				id = pushMessageDialogue.Id.GetValueOrDefault();
 			}
 
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
@@ -256,6 +204,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			javaScript.AppendFormat(CultureInfo.InvariantCulture, "Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage( '{0}' );", id.ToString());
 
 			Browser.Interactions.Javascript(javaScript.ToString());
+		}
+
+		[Then(@"the reply option '(.*)' should not be selected for the message with the title '(.*)'")]
+		public void ThenTheReplyOptionShouldNotBeSelectedForTheMessageWithTheTitle(string replyOption, string messageTitle)
+		{
+			Browser.Interactions.AssertNotExistsUsingJQuery(
+				string.Format(CultureInfo.InvariantCulture, ".message:has(.title:contains('{0}')) .message-option:contains('{1}')",
+				              messageTitle, replyOption),
+				string.Format(CultureInfo.InvariantCulture, ".message:has(.title:contains('{0}')) .message-option.active:contains('{1}')",
+				              messageTitle, replyOption));
 		}
 	}
 }

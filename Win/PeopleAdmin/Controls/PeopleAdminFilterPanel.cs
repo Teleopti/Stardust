@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -18,17 +19,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
     public partial class PeopleAdminFilterPanel : BaseUserControl
     {
         private readonly ILifetimeScope _container;
-        private PeopleWorksheet _parentControl;
-        private FilteredPeopleHolder _filteredPeopleHolder;
+        private readonly PeopleWorksheet _parentControl;
+        private readonly FilteredPeopleHolder _filteredPeopleHolder;
         private readonly IApplicationFunction _myApplicationFunction =
             ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
                    DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage);
 
-        private readonly WorksheetStateHolder _worksheetStateHolder;
-        private IPersonSelectorPresenter _personSelectorPresenter;
+        private readonly IPersonSelectorPresenter _personSelectorPresenter;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public PeopleAdminFilterPanel(FilteredPeopleHolder filteredPeopleHolder, WorksheetStateHolder worksheetStateHolder, PeopleWorksheet peopleWorksheet,
+        public PeopleAdminFilterPanel(FilteredPeopleHolder filteredPeopleHolder, PeopleWorksheet peopleWorksheet,
             ILifetimeScope container)
         {
             _container = container;
@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             if (!DesignMode)
             {
                 _parentControl = peopleWorksheet;
-                _worksheetStateHolder = worksheetStateHolder;
                 SetTexts();
                 _filteredPeopleHolder = filteredPeopleHolder;
                 _personSelectorPresenter = _container.Resolve<IPersonSelectorPresenter>();
@@ -54,29 +53,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
 
             var selectorView = _personSelectorPresenter.View;
             selectorView.HideMenu = true;
+	        selectorView.ShowCheckBoxes = true;
+	        selectorView.PreselectedPersonIds = _filteredPeopleHolder.FilteredPersonCollection.Select(p => p.Id.GetValueOrDefault());
+	        selectorView.VisiblePersonIds = _filteredPeopleHolder.PersonCollection.Select(p => p.Id.GetValueOrDefault());
 
             _personSelectorPresenter.LoadTabs();
         }
 
         void ReloadPeople()
         {
-            _filteredPeopleHolder.GetUnitOfWork.Dispose();
-
-            var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork();
-
-            var accounts = new PersonAbsenceAccountRepository(uow).LoadAllAccounts();
-
-            var currentScenario = _container.Resolve<ICurrentScenario>();
-            ITraceableRefreshService service = new TraceableRefreshService(currentScenario ,new ScheduleRepository(uow));
-
-            _filteredPeopleHolder.SetState(service, uow, accounts);
             _filteredPeopleHolder.SelectedDate = _personSelectorPresenter.SelectedDate;
                  
-            _filteredPeopleHolder.LoadIt();
-            _filteredPeopleHolder.SetRotationCollection(_worksheetStateHolder.AllRotations);
-            _filteredPeopleHolder.SetAvailabilityCollection(_worksheetStateHolder.AllAvailabilities);
-
-            _filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(_personSelectorPresenter.SelectedPersonGuids);
+            _filteredPeopleHolder.ReassociateSelectedPeopleWithNewUow(_personSelectorPresenter.CheckedPersonGuids);
         }
 
         private void ButtonAdvOkClick(object sender, EventArgs e)

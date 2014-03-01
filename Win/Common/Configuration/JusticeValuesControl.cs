@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.UserTexts;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     		var source = repository.LoadAll();
 
 			_source.Clear();
-            foreach (var shiftCategory in source)
+            foreach (var shiftCategory in source.OrderBy(c => c.Description.Name).ToList())
             {
                 if (shiftCategory.DayOfWeekJusticeValues.Count != 7)
                     shiftCategory.ReinitializeDayOfWeekDictionary();

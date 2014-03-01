@@ -2,7 +2,6 @@
 using System.Configuration;
 using Autofac;
 using MbCache.Configuration;
-using MbCache.Core;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server.Resolvers;
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		private readonly CacheBuilder _cacheBuilder;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public RealTimeContainerInstaller(MbCacheModule mbCacheModule)
 		{
 			_cacheBuilder = mbCacheModule.Builder;
@@ -33,17 +31,11 @@ namespace Teleopti.Ccc.Rta.Server
 					.CacheMethod(svc => svc.GetReadModel(Guid.NewGuid()))
 				.As<IDatabaseReader>();
 
-			builder.Register(c =>
-									{
-										var mbcache = c.Resolve<IMbCacheFactory>();
-										var connStringHandler = c.Resolve<IDatabaseConnectionStringHandler>();
-										var connFac = c.Resolve<IDatabaseConnectionFactory>();
-										var actualAgentStateCache = c.Resolve<IActualAgentStateCache>();
-										var instance = mbcache.Create<IDatabaseReader>(connFac, connStringHandler, actualAgentStateCache);
-										return instance;
-									});
+			builder.RegisterType<DatabaseReader>().AsSelf();
+			builder.Register<IDatabaseReader>(c => c.Resolve<DatabaseReader>())
+				.IntegrateWithMbCache();
+
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
-			//builder.RegisterType<DatabaseReader>().As<IDatabaseReader>();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
 			builder.RegisterType<ActualAgentStateCache>().As<IActualAgentStateCache>().SingleInstance();
