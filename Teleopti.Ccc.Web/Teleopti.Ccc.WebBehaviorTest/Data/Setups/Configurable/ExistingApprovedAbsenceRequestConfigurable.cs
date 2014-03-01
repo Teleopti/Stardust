@@ -4,16 +4,22 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 {
-	public class ExistingApprovedAbsenceRequestConfigurable : AbsenceRequestConfigurable
+	public class ExistingApprovedAbsenceRequestConfigurable : IUserDataSetup
 	{
+		public string Absence { get; set; }
+
+		public DateTime StartTime { get; set; }
+		public DateTime EndTime { get; set; }
+
 		public ExistingApprovedAbsenceRequestConfigurable()
 		{
-			var today = DateTime.Now;
+			var today = DateTime.Now.ToUniversalTime();
 			Absence = "Vocation";
 			StartTime = today;
 			EndTime = today.AddHours(5);
@@ -22,8 +28,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public ExistingApprovedAbsenceRequestConfigurable(ExistingApprovedAbsenceRequestConfig config)
 		{
 			Absence = config.Absence;
-			StartTime = config.StartTime;
-			EndTime = config.EndTime;
+			StartTime = config.StartTime.ToUniversalTime();
+			EndTime = config.EndTime.ToUniversalTime();
 		}
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
