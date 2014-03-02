@@ -6,6 +6,8 @@ using System.Linq;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -32,19 +34,19 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
     	private IPerson _selectedPerson;
         private ICollection<DateOnly> _dateOnlyList;
-        private ISchedulingResultStateHolder _stateHolder;
+        private ISchedulerStateHolder _stateHolder;
         private bool _dateIsSelected;
         private IDictionary<IPerson, IPersonAccountCollection> _allAccounts;
 		private readonly IDictionary<EmploymentType, string> _employmentTypeList;
-        private IList<IOptionalColumn> _optionalColumns;
     	private readonly IDictionary<SchedulePeriodType, string> _schedulePeriodTypeList;
         private ISchedulerGroupPagesProvider _groupPagesProvider;
 	    private readonly ILifetimeScope _container;
 	    private readonly DateOnlyPeriod _dateOnlyPeriod;
+	    private readonly DateOnlyPeriod _requestedPeriod;
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
 
-    	public AgentInfoControl()
+        public AgentInfoControl()
         {
             InitializeComponent();
             if (!DesignMode)
@@ -54,18 +56,20 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			_schedulePeriodTypeList = LanguageResourceHelper.TranslateEnum<SchedulePeriodType>();
         }
 
-		public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider, ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod)
-			: this()
-		{
-			_workShiftWorkTime = workShiftWorkTime;
+	    public AgentInfoControl(IWorkShiftWorkTime workShiftWorkTime, ISchedulerGroupPagesProvider groupPagesProvider,
+	                            ILifetimeScope container, DateOnlyPeriod dateOnlyPeriod, DateOnlyPeriod requestedPeriod)
+		    : this()
+	    {
+		    _workShiftWorkTime = workShiftWorkTime;
 		    _groupPagesProvider = groupPagesProvider;
-			_container = container;
-			_dateOnlyPeriod = dateOnlyPeriod;
-		}
+		    _container = container;
+		    _dateOnlyPeriod = dateOnlyPeriod;
+		    _requestedPeriod = requestedPeriod;
+	    }
 
-    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
-            ICollection<DateOnly> dateOnlyList, ISchedulingResultStateHolder stateHolder,
+            ICollection<DateOnly> dateOnlyList, ISchedulerStateHolder stateHolder,
             IDictionary<IPerson, IPersonAccountCollection> allAccounts)
         {
             if (personDictionary.Values.Count == 0 || dateOnlyList.Count == 0)
@@ -83,7 +87,6 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _dateOnlyList = dateOnlyList;
             _stateHolder = stateHolder;
             _allAccounts = allAccounts;
-        	_optionalColumns = _stateHolder.OptionalColumns;
             update();
         }
 
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             if (tabControlAgentInfo.SelectedTab == tabPageAdvSchedulePeriod && _dateIsSelected)
             {
-                updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+                updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
                 return;
             }
 
@@ -105,7 +108,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             if (tabControlAgentInfo.SelectedTab == tabPageAdvRestrictions && _dateIsSelected)
             {
-                updateRestrictionData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+                updateRestrictionData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
                 return;
             }
             if (tabControlAgentInfo.SelectedTab == tabPageAdvPerson && _dateIsSelected)
@@ -114,9 +117,43 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 updatePersonInfo(_selectedPerson);
             }
 	        if (tabControlAgentInfo.SelectedTab == tabPageFairness && _dateIsSelected)
-		        updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder);
+	        {
+				if(_selectedPerson.WorkflowControlSet.UseShiftCategoryFairness)
+				{
+					tableLayoutPanelRanking.Visible = false;
+					tableLayoutPanelFairness.Visible = true;
+					updateFairnessData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
+				}
+				else if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction))
+				{
+					tableLayoutPanelRanking.Visible = true;
+					tableLayoutPanelFairness.Visible = false;
+					updateRankingData(_stateHolder.Schedules[_selectedPerson], _stateHolder.SchedulingResultState.ShiftCategories,
+					                  _stateHolder.FilteredPersonDictionary.Values.ToList());
+				}
+	        }
+        }
 
+        private void updateRankingData(IScheduleRange scheduleRange, IEnumerable<IShiftCategory> shiftCategories, IList<IPerson> filteredPersons)
+        {
+            labelDayOffPointValue.Text = "";
+            labelSeniorityPointsValue.Text = "";
+            labelShiftCategoryPointValue.Text = "";
+	        labelRanking.Text = "";
 
+			var rankedPersonBasedOnStartDate = _container.Resolve<IRankedPersonBasedOnStartDate>();
+            var personDayOffPointsCalculator = _container.Resolve<IPersonDayOffPointsCalculator>();
+            var personShiftCategoryPointCalculator = _container.Resolve<IPersonShiftCategoryPointCalculator>();
+            var dayOffPoints =  personDayOffPointsCalculator.CalculateDaysOffSeniorityValue(scheduleRange, _requestedPeriod);
+            var shiftCategoryPoints =
+                 personShiftCategoryPointCalculator.CalculateShiftCategorySeniorityValue(scheduleRange, _requestedPeriod,
+                                                                                              shiftCategories.ToList());
+	        labelRanking.Text =
+		        rankedPersonBasedOnStartDate.GetRankForPerson(filteredPersons, _selectedPerson)
+		                                    .ToString(CultureInfo.CurrentCulture);
+			labelDayOffPointValue.Text = dayOffPoints.ToString(CultureInfo.CurrentCulture);
+            labelShiftCategoryPointValue.Text = shiftCategoryPoints.ToString(CultureInfo.CurrentCulture);
+            labelSeniorityPointsValue.Text = (dayOffPoints + shiftCategoryPoints).ToString(CultureInfo.CurrentCulture);
         }
 
         private void initializeFairnessTab()
@@ -286,7 +323,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                 UseStudentAvailability = true,
                 UseRotations = true
             };
-            var helper = new AgentInfoHelper(person, date, _stateHolder, schedulingOptions, _workShiftWorkTime);
+            var helper = new AgentInfoHelper(person, date, _stateHolder.SchedulingResultState, schedulingOptions, _workShiftWorkTime);
 
             helper.SchedulePeriodData();
 
@@ -691,7 +728,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             try
             {
-                foreach (var column in _optionalColumns)
+                foreach (var column in _stateHolder.SchedulingResultState.OptionalColumns)
                 {
                     createAndAddItem(listViewPerson, column.Name,
 									 person.GetColumnValue(column) != null

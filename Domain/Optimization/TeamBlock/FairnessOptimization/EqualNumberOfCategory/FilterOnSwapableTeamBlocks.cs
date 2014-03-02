@@ -17,14 +17,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 		private readonly ITeamBlockContractTimeValidator _teamBlockContractTimeValidator;
 		private readonly ITeamBlockSameSkillValidator _teamBlockSameSkillValidator;
 		private readonly ITeamBlockSameRuleSetBagValidator _teamBlockSameRuleSetBagValidator;
+		private readonly ITeamBlockSameTimeZoneValidator _teamBlockSameTimeZoneValidator;
 
-		public FilterOnSwapableTeamBlocks(ITeamBlockPeriodValidator teamBlockPeriodValidator, ITeamMemberCountValidator teamMemberCountValidator, ITeamBlockContractTimeValidator teamBlockContractTimeValidator, ITeamBlockSameSkillValidator teamBlockSameSkillValidator, ITeamBlockSameRuleSetBagValidator teamBlockSameRuleSetBagValidator)
+		public FilterOnSwapableTeamBlocks(ITeamBlockPeriodValidator teamBlockPeriodValidator,
+		                                  ITeamMemberCountValidator teamMemberCountValidator,
+		                                  ITeamBlockContractTimeValidator teamBlockContractTimeValidator,
+		                                  ITeamBlockSameSkillValidator teamBlockSameSkillValidator,
+		                                  ITeamBlockSameRuleSetBagValidator teamBlockSameRuleSetBagValidator,
+		                                  ITeamBlockSameTimeZoneValidator teamBlockSameTimeZoneValidator)
 		{
 			_teamBlockPeriodValidator = teamBlockPeriodValidator;
 			_teamMemberCountValidator = teamMemberCountValidator;
 			_teamBlockContractTimeValidator = teamBlockContractTimeValidator;
 			_teamBlockSameSkillValidator = teamBlockSameSkillValidator;
 			_teamBlockSameRuleSetBagValidator = teamBlockSameRuleSetBagValidator;
+			_teamBlockSameTimeZoneValidator = teamBlockSameTimeZoneValidator;
 		}
 
 		public IList<ITeamBlockInfo> Filter(IList<ITeamBlockInfo> teamBlockInfoList, ITeamBlockInfo teamBlockInfoToWorkWith)
@@ -50,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 				if(!_teamBlockSameRuleSetBagValidator.ValidateSameRuleSetBag(teamBlockInfo, teamBlockInfoToWorkWith))
 					continue;
 
-				//inga lås i blocken
+				if (!_teamBlockSameTimeZoneValidator.Validate(teamBlockInfo, teamBlockInfoToWorkWith))
+					continue;
 
 				possibleTeamBlocksToSwapWith.Add(teamBlockInfo);
 			}

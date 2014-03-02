@@ -58,9 +58,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 	        while (!_cancelMe)
 	        {
 				var unSuccessfulSwaps = new List<ITeamBlockInfo>();
-		        var instance = PrincipalAuthorization.Instance();
-		        if (!instance.IsPermitted(DefinedRaptorApplicationFunctionPaths.UnderConstruction)) return;
-		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+		        var listOfAllTeamBlock = _constructTeamBlock.Construct(allPersonMatrixList, selectedPeriod, selectedPersons,
+		                                                               schedulingOptions.UseTeamBlockPerOption,
+		                                                               schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+		                                                               schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 
 		        IList<ITeamBlockInfo> filteredTeamBlocks = listOfAllTeamBlock.Where(_teamBlockSeniorityValidator.ValidateSeniority).ToList();
 				filteredTeamBlocks = _filterForTeamBlockInSelection.Filter(filteredTeamBlocks, selectedPersons, selectedPeriod);
@@ -101,7 +102,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 
 				        unSuccessfulSwaps.Remove(teamBlockInfoHighSeniority);
 
-
 				        teamBlockPriorityDefinitionInfo.SetShiftCategoryPoint(teamBlockInfoLowSeniority, highSeniorityPoints);
 
 				        var highSeniorityIndex = priorityList.IndexOf(teamBlockInfoHighSeniority);
@@ -110,7 +110,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				        break;
 			        }
 
-			        var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzedTeamBlocks.Count/totalBlockCount);
+			        double analyzed = analyzedTeamBlocks.Count/totalBlockCount;
+					if(Math.Abs(analyzed - (int)analyzed) > 0.00001)
+						continue;
+
+			        var message = Resources.FairnessOptimizationOn + " " + Resources.Seniority + ": " + new Percent(analyzed);
 
 			        if (loop > 1) message += " (" + loop + ")";
 
