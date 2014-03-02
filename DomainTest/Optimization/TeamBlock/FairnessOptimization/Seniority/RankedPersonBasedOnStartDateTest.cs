@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mock.Playback())
             {
-                var result = _target.GetRankedPerson(personList).ToList() ;
+                var result = _target.GetRankedPersonList(personList).ToList() ;
                 Assert.AreEqual(result.Count(), 3);
                 Assert.AreEqual(result[0],_person3 );
                 Assert.AreEqual(result[1],_person1 );
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
             }
             using (_mock.Playback())
             {
-                var result = _target.GetRankedPerson(personList).ToList();
+                var result = _target.GetRankedPersonList(personList).ToList();
                 Assert.AreEqual(result.Count(), 3);
                 Assert.AreEqual(result[0], _person2);
                 Assert.AreEqual(result[1], _person1);

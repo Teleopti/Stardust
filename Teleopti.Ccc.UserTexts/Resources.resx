@@ -11962,4 +11962,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Month Schedule</value>
     <comment>Month schedule in permission tree</comment>
   </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Ranking</value>
+    <comment>Ranking</comment>
+  </data>
 </root>
