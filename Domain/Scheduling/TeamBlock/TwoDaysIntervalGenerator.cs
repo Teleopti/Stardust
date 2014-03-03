@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                         var keyTimeSpan = toLocalTimeKey(skillIntervalData.Period.StartDateTime, dateOnly);
                         timeSpanDic.Add(keyTimeSpan, skillIntervalData);
                     }
-
+                    if (sourceList.Count == 0) continue;
                     if (dayIntervalData.ContainsKey(dateOnly.AddDays(1)))
                     {
                         sourceList = dayIntervalData[dateOnly.AddDays(1)];

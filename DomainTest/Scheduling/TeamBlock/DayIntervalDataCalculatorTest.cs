@@ -33,90 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.IsNull(result);
         }
 
-		//[Test]
-		//public void VerifyCalculationOvernightShiftForSingleDay()
-		//{
-
-		//	var skillIntervalData0 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 01, 22, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 01, 23, 0, 0, DateTimeKind.Utc)), 3, 3, 0, null, null);
-
-		//	var skillIntervalData1 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 01, 23, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc)), 4, 4, 0, null, null);
-		//	var skillIntervalData2 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 02, 1, 0, 0, DateTimeKind.Utc)), 5, 5, 0, null, null);
-		//	var skillIntervalData3 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 02, 1, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 02, 2, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
-		//	IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-		//	list.Add(new DateOnly(2013, 10, 01), new List<ISkillIntervalData> { skillIntervalData0, skillIntervalData1, skillIntervalData2, skillIntervalData3 });
-		//	list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3 });
-
-
-		//	var result = _target.Calculate(list);
-		//	Assert.AreEqual(result.Count, 6);
-		//	Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 3);
-		//	Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 4);
-		//	Assert.AreEqual(result[new TimeSpan(1, 0, 0, 0)].ForecastedDemand, 5);
-		//	Assert.AreEqual(result[new TimeSpan(1, 1, 0, 0)].ForecastedDemand, 6);
-		//	Assert.AreEqual(result[new TimeSpan(0, 0, 0, 0)].ForecastedDemand, 5);
-		//	Assert.AreEqual(result[new TimeSpan(0, 1, 0, 0)].ForecastedDemand, 6);
-
-		//}
-
-		//[Test]
-		//public void VerifyCalculationOvernightShiftForTwoDays()
-		//{
-
-		//	var skillIntervalData0 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 01, 22, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 01, 23, 0, 0, DateTimeKind.Utc)), 3, 3, 0, null, null);
-
-		//	var skillIntervalData1 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 01, 23, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc)), 4, 4, 0, null, null);
-		//	var skillIntervalData2 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 02, 1, 0, 0, DateTimeKind.Utc)), 5, 5, 0, null, null);
-		//	var skillIntervalData3 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 02, 1, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 02, 2, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
-		//	var skillIntervalData4 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 02, 22, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 02, 23, 0, 0, DateTimeKind.Utc)), 7, 7, 0, null, null);
-		//	var skillIntervalData5 =
-		//		new SkillIntervalData(
-		//			new DateTimePeriod(new DateTime(2013, 10, 02, 23, 0, 0, DateTimeKind.Utc),
-		//							   new DateTime(2013, 10, 03, 0, 0, 0, DateTimeKind.Utc)), 2, 2, 0, null, null);
-		//	IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-		//	list.Add(new DateOnly(2013, 10, 01), new List<ISkillIntervalData> { skillIntervalData0, skillIntervalData1, skillIntervalData2, skillIntervalData3, skillIntervalData4, skillIntervalData5 });
-		//	list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3, skillIntervalData4, skillIntervalData5 });
-
-
-		//	var result = _target.Calculate(list);
-		//	Assert.AreEqual(result.Count, 8);
-		//	Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 5);
-		//	Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 3);
-		//	Assert.AreEqual(result[new TimeSpan(1, 0, 0, 0)].ForecastedDemand, 5);
-		//	Assert.AreEqual(result[new TimeSpan(1, 1, 0, 0)].ForecastedDemand, 6);
-		//	Assert.AreEqual(result[new TimeSpan(1, 22, 0, 0)].ForecastedDemand, 7);
-		//	Assert.AreEqual(result[new TimeSpan(1, 23, 0, 0)].ForecastedDemand, 2);
-		//	Assert.AreEqual(result[new TimeSpan(0, 0, 0, 0)].ForecastedDemand, 5);
-		//	Assert.AreEqual(result[new TimeSpan(0, 1, 0, 0)].ForecastedDemand, 6);
-
-		//}
-
 		[Test]
 		public void VerifyEmptySkillIntervalIsConsideredForMedianCalculation()
 		{
@@ -145,10 +61,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			var result = _target.Calculate(list);
 			Assert.AreEqual(result.Count, 4);
-			Assert.AreEqual(result[new TimeSpan(1, 15, 0, 0)].ForecastedDemand, 4);
-			Assert.AreEqual(result[new TimeSpan(1, 16, 0, 0)].ForecastedDemand, 6);
-			Assert.AreEqual(result[new TimeSpan(1, 17, 0, 0)].ForecastedDemand, 8);
-			Assert.AreEqual(result[new TimeSpan(1, 18, 0, 0)].ForecastedDemand, 11);
+			Assert.AreEqual(result[new TimeSpan(0, 15, 0, 0)].ForecastedDemand, 4);
+			Assert.AreEqual(result[new TimeSpan(0, 16, 0, 0)].ForecastedDemand, 6);
+			Assert.AreEqual(result[new TimeSpan(0, 17, 0, 0)].ForecastedDemand, 8);
+			Assert.AreEqual(result[new TimeSpan(0, 18, 0, 0)].ForecastedDemand, 11);
 
 		}
 
