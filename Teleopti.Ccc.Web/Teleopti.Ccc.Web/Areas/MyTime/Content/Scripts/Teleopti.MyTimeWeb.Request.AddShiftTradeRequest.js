@@ -149,13 +149,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					if (data.HasWorkflowControlSet) {
 					    self.now = moment(new Date(data.NowYear, data.NowMonth-1, data.NowDay));
 						setDatePickerRange(data.OpenPeriodRelativeStart, data.OpenPeriodRelativeEnd);
-						self.requestedDate(moment(self.now).add('days', data.OpenPeriodRelativeStart));
+						var requestedDate = moment(self.now).add('days', data.OpenPeriodRelativeStart);
 						if (date && Object.prototype.toString.call(date) === '[object Date]') {
 							var md = moment(date);
 							if (self.isRequestedDateValid(md)) {
-								self.requestedDate(md);
+							    requestedDate = md;
 							}
 						}
+					    self.requestedDate(requestedDate);
 					}
 					else {
 					    self.setScheduleLoadedReady();
