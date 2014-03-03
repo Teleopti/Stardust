@@ -14,14 +14,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 	{
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+		private readonly IAbsencePreferenceFullDayLayerCreator _absencePreferenceFullDayLayerCreator;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public AbsencePreferenceScheduler(IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			IAbsencePreferenceFullDayLayerCreator absencePreferenceFullDayLayerCreator)
 		{
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
+			_absencePreferenceFullDayLayerCreator = absencePreferenceFullDayLayerCreator;
 		}
 
         public void AddPreferredAbsence(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions)
@@ -40,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                         continue;
 
                     if (effectiveRestriction == null || effectiveRestriction.Absence == null) continue;
-                    var layer = new AbsenceLayer(effectiveRestriction.Absence, part.Period);
+	                var layer = _absencePreferenceFullDayLayerCreator.Create(part, effectiveRestriction.Absence);
                     part.CreateAndAddAbsence(layer);
                     _schedulePartModifyAndRollbackService.Modify(part);
 

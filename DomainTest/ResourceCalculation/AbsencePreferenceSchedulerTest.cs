@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	    private IScheduleDayPro _scheduleDayPro;
 	    private IScheduleDayPro _scheduleDayPro2;
 	    private IScheduleDay _scheduleDay;
+		private IAbsencePreferenceFullDayLayerCreator _absencePreferenceFullDayLayerCreator;
 
 		[SetUp]
 		public void Setup()
@@ -34,7 +35,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		    _scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 		    _scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
 		    _scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_target = new AbsencePreferenceScheduler(_effectiveRestrictionCreator,_rollBackService);
+			_absencePreferenceFullDayLayerCreator = _mocks.StrictMock<IAbsencePreferenceFullDayLayerCreator>();
+			_target = new AbsencePreferenceScheduler(_effectiveRestrictionCreator,_rollBackService, _absencePreferenceFullDayLayerCreator);
 		}
 
        [Test]
@@ -109,14 +111,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var date = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(date, date.AddDays(1));
+			var absenceLayer = new AbsenceLayer(absence, period);
 
             using(_mocks.Record())
             {
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _options)).Return(effectiveRestriction);
-                Expect.Call(_scheduleDay.Period).Return(period);
-                Expect.Call(() => _scheduleDay.CreateAndAddAbsence(new AbsenceLayer(absence, period))).IgnoreArguments();
+				Expect.Call(_absencePreferenceFullDayLayerCreator.Create(_scheduleDay, absence)).Return(absenceLayer);
+	            Expect.Call(() => _scheduleDay.CreateAndAddAbsence(absenceLayer));
                 Expect.Call(() => _rollBackService.Modify(_scheduleDay));
             }
 
@@ -136,14 +139,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var date = new DateTime(2009, 2, 2, 0, 0, 0, DateTimeKind.Utc);
             var period = new DateTimePeriod(date, date.AddDays(1));
             _target.DayScheduled += targetDayScheduled;
+			var absenceLayer = new AbsenceLayer(absence, period);
+
 
             using(_mocks.Record())
             {
                 Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_scheduleDay, _options)).Return(effectiveRestriction);
-                Expect.Call(_scheduleDay.Period).Return(period);
-                Expect.Call(() => _scheduleDay.CreateAndAddAbsence(new AbsenceLayer(absence, period))).IgnoreArguments();
+	            Expect.Call(_absencePreferenceFullDayLayerCreator.Create(_scheduleDay, absence)).Return(absenceLayer);
+                Expect.Call(() => _scheduleDay.CreateAndAddAbsence(absenceLayer));
                 Expect.Call(() => _rollBackService.Modify(_scheduleDay));
             }
 

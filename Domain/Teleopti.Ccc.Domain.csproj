@@ -498,6 +498,7 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\PersonToSingleAgentTeamRootPersonGroupConverter.cs" />
+    <Compile Include="Scheduling\Restrictions\AbsencePreferenceFullDayLayerCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalGenerator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDays.cs" />
