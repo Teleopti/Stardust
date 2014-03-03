@@ -732,6 +732,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
@@ -745,7 +746,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\Tests.html" />
-    <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
@@ -759,6 +759,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />

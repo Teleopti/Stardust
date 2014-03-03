@@ -8,7 +8,7 @@
 		
 		"should have no sites if none filled": function() {
 			var vm = viewModel();
-			assert.equals(vm.sites, []);
+			assert.equals(vm.sites(), []);
 		},
 		
 		"can fill sites data": function () {
@@ -17,7 +17,7 @@
 			var vm = viewModel();
 			vm.fill([site1, site2]);
 
-			assert.equals(vm.sites, [site1, site2]);
+			assert.equals(vm.sites(), [site1, site2]);
 		}
 	});
 });

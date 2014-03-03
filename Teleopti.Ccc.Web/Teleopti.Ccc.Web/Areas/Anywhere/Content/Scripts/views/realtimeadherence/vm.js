@@ -1,10 +1,13 @@
-﻿define([], function() {
+﻿define([
+		'knockout'
+],
+	function (ko) {
 	return function () {
 
 		var that = {};
-		that.sites = [];
+		that.sites = ko.observableArray();
 		that.fill = function(data) {
-			that.sites = data;
+			that.sites(data);
 		};
 		
 		return that;

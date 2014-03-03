@@ -3,12 +3,14 @@ define([
 		'knockout',
 		'text!templates/realtimeadherence/view.html',
 		'views/realtimeadherence/vm',
-		'errorview'
+		'errorview',
+		'ajax'
 ], function (
 		ko,
 		view,
 		realTimeAdherenceViewModel,
-		errorview
+		errorview,
+		ajax
 	) {
 
 	var viewModel;
@@ -29,9 +31,15 @@ define([
 		display: function (options) {
 			
 			viewModel = realTimeAdherenceViewModel();
-			
 			ko.applyBindings(viewModel, options.bindingElement);
-			
+
+			ajax.ajax({
+				url: "Sites",
+				success: function (data) {
+					viewModel.fill(data);
+				}
+			});
+
 		},
 	};
 });

@@ -2,6 +2,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_siteRepository = siteRepository;
 		}
 
+		[UnitOfWorkAction, HttpGet]
 		public JsonResult Index()
 		{
 			return Json(_siteRepository.LoadAll().Select(x =>
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				            {
 					            Id = x.Id.Value.ToString(),
 					            Name = x.Description.Name
-				            }));
+				            }), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
