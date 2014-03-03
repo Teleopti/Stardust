@@ -295,6 +295,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var tooltip = ExtendedTooltip(fields.Date);
 			Browser.Interactions.AssertExistsUsingJQuery(tooltip);
 
+			if (fields.EndTimeMaximum != null) Browser.Interactions.AssertFirstContainsUsingJQuery(tooltip, fields.EndTimeMaximum);
+
+			// sometimes the tooltip will hide, and will lose the tooltip content
 			var resultHtml = Browser.Interactions.Javascript("return $(\"" + tooltip + "\").html()") as string;
 
 			if (fields.Preference != null) Assert.IsTrue(resultHtml.Contains(fields.Preference));
