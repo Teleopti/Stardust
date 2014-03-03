@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.DayOff;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -19,14 +20,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
     {
         private readonly IAbsencePreferenceScheduler _absencePreferenceScheduler;
 	    private readonly ITeamDayOffScheduler _teamDayOffScheduler;
-        private readonly ITeamBlockMissingDaysOffScheduler _missingDaysOffScheduler;
+        //private readonly ITeamBlockMissingDaysOffScheduler _missingDaysOffScheduler;
+        private readonly ITeamBlockMissingDayOffHandler _missingDaysOffScheduler;
         private bool _cancelMe;
 
         public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
         public AdvanceDaysOffSchedulingService(IAbsencePreferenceScheduler absencePreferenceScheduler,
-			ITeamDayOffScheduler teamDayOffScheduler, 
-            ITeamBlockMissingDaysOffScheduler missingDaysOffScheduler)
+			ITeamDayOffScheduler teamDayOffScheduler,
+            ITeamBlockMissingDayOffHandler missingDaysOffScheduler)
         {
             _absencePreferenceScheduler = absencePreferenceScheduler;
 	        _teamDayOffScheduler = teamDayOffScheduler;
