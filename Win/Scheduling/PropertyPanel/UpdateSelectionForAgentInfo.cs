@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
                     }
 
                     if (agentInfo != null)
-                        agentInfo.UpdateData(personDic, dateList, schedulerStateHolder.SchedulingResultState,
-                                              schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
+                        agentInfo.UpdateData(personDic, dateList, schedulerStateHolder,
+											  schedulerStateHolder.SchedulingResultState.AllPersonAccounts);
 
                     string label = string.Empty;
                     switch (scheduleTimeType)

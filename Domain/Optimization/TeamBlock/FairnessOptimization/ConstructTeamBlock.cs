@@ -8,8 +8,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 {
     public interface IConstructTeamBlock
     {
-        IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-                                        IList<IPerson> selectedPersons, ISchedulingOptions schedulingOptions);
+	    IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+	                                    IList<IPerson> selectedPersons, bool useTeamBlockPerOption,
+	                                    BlockFinderType blockFinderTypeForAdvanceScheduling,
+	                                    IGroupPageLight groupOnGroupPageForTeamBlockPer);
     }
 
     /// <summary>
@@ -28,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
 
         public IList<ITeamBlockInfo> Construct(IList<IScheduleMatrixPro> allPersonMatrixList,
                                                DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-                                               ISchedulingOptions schedulingOptions)
+											   bool useTeamBlockPerOption, BlockFinderType blockFinderTypeForAdvanceScheduling,
+												IGroupPageLight groupOnGroupPageForTeamBlockPer)
         {
             var listOfAllTeamBlock = new List<ITeamBlockInfo>();
 
@@ -52,13 +55,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
                     //if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
                     //    continue;
 
-                    bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
-                                           schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
+                    bool singleAgentTeam = groupOnGroupPageForTeamBlockPer != null &&
+                                           groupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
+
                     ITeamBlockInfo teamBlockInfo;
-                    if (schedulingOptions.UseTeamBlockPerOption)
+                    if (useTeamBlockPerOption)
                         teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
-                                                                                  schedulingOptions
-                                                                                      .BlockFinderTypeForAdvanceScheduling,
+                                                                                  blockFinderTypeForAdvanceScheduling,
                                                                                   singleAgentTeam, allPersonMatrixList);
                     else
                         teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
@@ -71,5 +74,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization
             }
             return listOfAllTeamBlock;
         }
+        
     }
 }

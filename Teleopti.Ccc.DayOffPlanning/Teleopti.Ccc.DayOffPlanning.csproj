@@ -118,7 +118,6 @@
     <Compile Include="ConsecutiveDaysOffSolver.cs" />
     <Compile Include="ConsecutiveWorkdaysSolver.cs" />
     <Compile Include="ConsecutiveWorkdayValidator.cs" />
-    <Compile Include="DayOffRulesValidator.cs" />
     <Compile Include="ExtendReduceDaysOffDecisionMaker.cs" />
     <Compile Include="ExtendReduceTimeDecisionMaker.cs" />
     <Compile Include="FiveConsecutiveWorkDaysSolver.cs" />
