@@ -371,6 +371,7 @@
     <Compile Include="Optimization\WorkShiftRuleSetHasShortBreakTest.cs" />
     <Compile Include="Payroll\PayrollExportProgressTest.cs" />
     <Compile Include="Payroll\PayrollResultDetailTest.cs" />
+    <Compile Include="ResourceCalculation\AbsencePreferenceFullDayLayerCreatorTest.cs" />
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
