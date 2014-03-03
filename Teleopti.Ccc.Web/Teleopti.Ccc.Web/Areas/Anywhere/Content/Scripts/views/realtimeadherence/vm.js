@@ -1,4 +1,13 @@
 ﻿define([], function() {
-	return function () { return 's'; };
+	return function () {
+
+		var obj = {};
+		
+		obj.fill = function(data) {
+			obj.sites = data;
+		};
+
+		return obj;
+	};
 }
 );
