@@ -113,6 +113,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddIntradayAbsenceOnShift.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\BusterTests.feature.cs">
+      <DependentUpon>BusterTests.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Anywhere\RealTimeAdherenceOverview.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -483,7 +488,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesMustHave.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyTime\QUnitTestsStepDefinition.cs" />
+    <Compile Include="Bindings\UnitTestsStepDefinition.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceOnWeekday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ContractScheduleFromTable.cs" />
@@ -709,6 +714,10 @@
     <None Include="Anywhere\AddIntradayAbsenceOnShift.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AddIntradayAbsenceOnShift.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\BusterTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BusterTests.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\RealTimeAdherenceOverview.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
