@@ -7,7 +7,7 @@
 		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<DBNamePrefix>$(CCNetProject)</DBNamePrefix>
-		<AzureDBNamePrefix>Bug26852_$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
+		<AzureDBNamePrefix>$(Computername)_$(CCNetProject)</AzureDBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<DBServerSQL2005>$(Computername)\SQL2005</DBServerSQL2005>
