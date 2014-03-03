@@ -31,6 +31,7 @@ define([
 		display: function (options) {
 			
 			viewModel = realTimeAdherenceViewModel();
+			
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			ajax.ajax({
