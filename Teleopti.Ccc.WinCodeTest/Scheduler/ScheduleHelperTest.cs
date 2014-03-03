@@ -264,6 +264,41 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             }
         }
 
+		[Test]
+		public void ShouldReturnSchedulesWithinValidSchedulePeriod()
+		{
+			var schedulePart1 = _mocks.StrictMock<IScheduleDay>();
+			var schedulePart2 = _mocks.StrictMock<IScheduleDay>();
+			var person1 = _mocks.StrictMock<IPerson>();
+			var person2 = _mocks.StrictMock<IPerson>();
+			var dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			var dateOnly = new DateOnly(2013, 1, 1);
+			var virtualSchedulePeriod1 = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			var virtualSchedulePeriod2 = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			var schedules = new List<IScheduleDay> {schedulePart1, schedulePart2};
+
+			using (_mocks.Record())
+			{
+				Expect.Call(schedulePart1.Person).Return(person1);
+				Expect.Call(schedulePart2.Person).Return(person2);
+				Expect.Call(schedulePart1.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+				Expect.Call(schedulePart2.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);
+				Expect.Call(dateOnlyAsDateTimePeriod.DateOnly).Return(dateOnly).Repeat.Twice();
+				Expect.Call(person1.VirtualSchedulePeriod(dateOnly)).Return(virtualSchedulePeriod1);
+				Expect.Call(person2.VirtualSchedulePeriod(dateOnly)).Return(virtualSchedulePeriod2);
+				Expect.Call(virtualSchedulePeriod1.IsValid).Return(true);
+				Expect.Call(virtualSchedulePeriod2.IsValid).Return(false);
+
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = ScheduleHelper.SchedulesWithinValidSchedulePeriod(schedules);
+				Assert.AreEqual(1, result.Count);
+				Assert.AreEqual(schedulePart1, result[0]);
+			}	
+		}
+
         #region test help code
 
         //to get id

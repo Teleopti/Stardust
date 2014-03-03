@@ -5494,6 +5494,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemSwapAndReschedule.Enabled = hasFunctionPermissionForTeams(_temporarySelectedEntitiesFromTreeView.OfType<ITeam>(), automaticScheduleFunction);
 			if (_teamLeaderMode)
 				toolStripMenuItemSwapAndReschedule.Enabled = false;
+
+			if (!toolStripMenuItemSwapAndReschedule.Enabled) return;
+			var schedulesWithinValidPeriod = ScheduleHelper.SchedulesWithinValidSchedulePeriod(selectedSchedules);
+			toolStripMenuItemSwapAndReschedule.Enabled = schedulesWithinValidPeriod.Count == selectedSchedules.Count;
 		}
 
 		private void updateSelectionInfo(IList<IScheduleDay> selectedSchedules)
