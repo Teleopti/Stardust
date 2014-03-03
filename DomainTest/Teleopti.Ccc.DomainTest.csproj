@@ -413,6 +413,8 @@
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ActivityIntervalDataCreatorTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\DayOff\TeamBlockMissingDayOffHandlerTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\DayOff\ValidNumberOfDayOffInAWeekSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForDaysTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MedianCalculatorForSkillIntervalTest.cs" />
     <Compile Include="Scheduling\TeamBlock\NightlyRestRestrictionForTeamBlockTest.cs" />
@@ -444,6 +446,7 @@
     <Compile Include="Scheduling\Assignment\ReplaceLayerInScheduleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHourTest.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\DayOff\SplitSchedulePeriodToWeekPeriodTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMissingDaysOffSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptionsTest.cs" />
