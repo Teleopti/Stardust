@@ -1,7 +1,7 @@
 require.config(requireconfiguration);
 
 require([
-        'tests'
+        'tests', 'views/realtimeadherence/vm_test'
     ], function() {
 
     });

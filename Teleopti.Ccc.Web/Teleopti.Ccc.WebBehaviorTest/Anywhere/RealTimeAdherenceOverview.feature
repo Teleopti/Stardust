@@ -3,14 +3,15 @@
 	As a real time analyst
 	I want to see which parts of the organization currently not adhering to the schedule
 
+@ignore
 Scenario: Show site
 	Given I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
-	And there is a site named 'Paris'
+	And there is a site named 'London'
 	When I view Real time adherence overview
-	Then I should see the site 'Paris'
+	Then I should see the site 'London'
 
 Scenario: Show team
 	Given I have a role with
@@ -119,24 +120,24 @@ Given there is an activity named 'Phone'
 
 Scenario: Should not be able to view Real time adherence overview when not permitted
 	Given I have a role with
-         | Field                                  | Value       |
-         | Name                                   | Team leader |
-         | Access to real time adherence overview | False       |
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to real time adherence overview | False       |
 	When I view Real time adherence overview
 	Then I should see a message that I have no permission for this function
 
 Scenario: Should not see Real time adherence overview in menu when not permitted
 	Given I have a role with
-         | Field                                  | Value       |
-         | Name                                   | Team leader |
-         | Access to real time adherence overview | False       |
+	 | Field                                  | Value       |
+	 | Name                                   | Team leader |
+	 | Access to real time adherence overview | False       |
 	When I view Anywhere
 	Then I should not see Real time adherence overview in the menu
 	
 Scenario: Should be able to go to Real time adherence overview
 	Given I have a role with
-         | Field                                  | Value              |
-         | Name                                   | Real time analyist |
-         | Access to real time adherence overview | True               |
+	 | Field                                  | Value              |
+	 | Name                                   | Real time analyist |
+	 | Access to real time adherence overview | True               |
 	When I view Anywhere
 	Then I should see Real time adherence overview in the menu
