@@ -2,12 +2,17 @@
 define([
 		'knockout',
 		'text!templates/realtimeadherence/view.html',
+		'views/realtimeadherence/vm',
 		'errorview'
 ], function (
 		ko,
 		view,
+		realTimeAdherenceViewModel,
 		errorview
 	) {
+
+	var viewModel;
+	
 	return {
 		initialize: function (options) {
 			errorview.remove();
@@ -22,6 +27,10 @@ define([
 		},
 
 		display: function (options) {
+			
+			viewModel = realTimeAdherenceViewModel();
+			
+			ko.applyBindings(viewModel, options.bindingElement);
 			
 		},
 	};

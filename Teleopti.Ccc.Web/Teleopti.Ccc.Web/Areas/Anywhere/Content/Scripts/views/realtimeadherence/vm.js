@@ -1,13 +1,13 @@
 ﻿define([], function() {
 	return function () {
 
-		var obj = {};
-		
-		obj.fill = function(data) {
-			obj.sites = data;
+		var that = {};
+		that.sites = [];
+		that.fill = function(data) {
+			that.sites = data;
 		};
-
-		return obj;
+		
+		return that;
 	};
 }
 );
