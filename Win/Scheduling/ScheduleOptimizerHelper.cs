@@ -93,7 +93,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                      optimizerPreferences,
                                                                      rollbackService,
                                                                      SchedulingStateHolder,
-																	 _singleSkillDictionary);
+																	 _singleSkillDictionary,
+																	 _container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
+																	 _container.Resolve<ISkillIntervalDataDivider>(),
+																	 _container.Resolve<ISkillIntervalDataAggregator>());
 
             IList<IIntradayOptimizer2> optimizers = creator.Create();
             IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);

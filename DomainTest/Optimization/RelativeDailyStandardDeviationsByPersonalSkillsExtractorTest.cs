@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -23,8 +24,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private ISkillStaffPeriodHolder _skillStaffPeriodHolder;
         private IList<ISkillStaffPeriod> _skillStaffPeriods;
         private IAdvancedPreferences _advancedPreferences;
-
-        [SetUp]
+		private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
+		private ISkillIntervalDataDivider _skillIntervalDataDivider;
+		private ISkillIntervalDataAggregator _skillIntervalDataAggregator;
+	    private IList<ISkillIntervalData> _skillIntervalDatas;
+			
+			
+			[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -37,7 +43,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
             _advancedPreferences = new AdvancedPreferences();
-            _target = new RelativeDailyValueByPersonalSkillsExtractor(_matrix, _advancedPreferences);
+			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
+			_skillIntervalDataDivider = _mocks.StrictMock<ISkillIntervalDataDivider>();
+			_skillIntervalDataAggregator = _mocks.StrictMock<ISkillIntervalDataAggregator>();
+	        _target = new RelativeDailyValueByPersonalSkillsExtractor(_matrix, _advancedPreferences,
+	                                                                  _skillStaffPeriodToSkillIntervalDataMapper,
+	                                                                  _skillIntervalDataDivider,
+	                                                                  _skillIntervalDataAggregator);
+			_skillIntervalDatas = new List<ISkillIntervalData>();
         }
 
         [Test]
@@ -56,6 +69,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             TeleoptiPrincipal.Current.Regional.TimeZone);
             */
 
+			_skillIntervalDatas.Add(new SkillIntervalData(new DateTimePeriod(), 10, -10, 10, null, null));
+
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
@@ -72,11 +87,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_skillStaffPeriodHolder).Repeat.Any();
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
-
-				//Expect.Call(_advancedPreferences.UseMinimumStaffing)
-				//    .Return(false).Repeat.AtLeastOnce();
-				//Expect.Call(_advancedPreferences.UseMaximumStaffing)
-				//    .Return(false).Repeat.AtLeastOnce();
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(
+					_skillIntervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>
+			            {
+				            _skillIntervalDatas
+			            })).Return(_skillIntervalDatas);
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
@@ -108,6 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             TeleoptiPrincipal.Current.Regional.TimeZone);
             */
         	_advancedPreferences.UseMaximumStaffing = false;
+			_skillIntervalDatas.Add(new SkillIntervalData(new DateTimePeriod(), 10, -10, 10, null, 10));
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
@@ -124,7 +144,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_skillStaffPeriodHolder).Repeat.Any();
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
-
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(
+					_skillIntervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>
+			            {
+				            _skillIntervalDatas
+			            })).Return(_skillIntervalDatas);
                 
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
@@ -156,6 +184,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             scheduleDay.Date, scheduleDay.Date.AddDays(1),
             TeleoptiPrincipal.Current.Regional.TimeZone);
             */
+
+			_skillIntervalDatas.Add(new SkillIntervalData(new DateTimePeriod(), 10, -10, 10, 10, null));
         	_advancedPreferences.UseMinimumStaffing = false;
             using (_mocks.Record())
             {
@@ -173,7 +203,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_skillStaffPeriodHolder).Repeat.Any();
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
-
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(
+					_skillIntervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>
+			            {
+				            _skillIntervalDatas
+			            })).Return(_skillIntervalDatas);
                
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
@@ -205,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             scheduleDay.Date, scheduleDay.Date.AddDays(1),
             TeleoptiPrincipal.Current.Regional.TimeZone);
             */
-
+			_skillIntervalDatas.Add(new SkillIntervalData(new DateTimePeriod(), 10, -10, 10, 10, 10));
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
@@ -222,7 +260,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_skillStaffPeriodHolder).Repeat.Any();
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
-
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
+					  .Return(_skillIntervalDatas);
+				Expect.Call(
+					_skillIntervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>
+			            {
+				            _skillIntervalDatas
+			            })).Return(_skillIntervalDatas);
                 
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
@@ -256,6 +302,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             */
         	_advancedPreferences.UseMinimumStaffing = false;
         	_advancedPreferences.UseMaximumStaffing = false;
+
+			_skillIntervalDatas.Add(new SkillIntervalData(new DateTimePeriod(), 10, -10,	 10, null, null));
+			_skillIntervalDatas.Add(new SkillIntervalData(new DateTimePeriod(), 10, -20,	 10, null, null));
+			_skillIntervalDatas.Add(new SkillIntervalData(new DateTimePeriod(), 10, -30, 10, null, null));
             using (_mocks.Record())
             {
                 Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
@@ -272,7 +322,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_skillStaffPeriodHolder).Repeat.Any();
                 Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
                     .Return(_skillStaffPeriods).Repeat.Any();
-
+	            Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+	                  .Return(_skillIntervalDatas);
+	            Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
+	                  .Return(_skillIntervalDatas);
+	            Expect.Call(
+		            _skillIntervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>
+			            {
+				            _skillIntervalDatas
+			            })).Return(_skillIntervalDatas);
               
 
                 SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);

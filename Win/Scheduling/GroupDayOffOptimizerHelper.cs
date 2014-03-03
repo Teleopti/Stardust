@@ -303,7 +303,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				IScheduleMatrixLockableBitArrayConverter lockableBitArrayConverter = new ScheduleMatrixLockableBitArrayConverter(matrix);
                 var relativeDailyValueByPersonalSkillsExtractor = new RelativeDailyValueByPersonalSkillsExtractor(matrix,
                                                                                                           optimizationPreferences
-                                                                                                              .Advanced);
+                                                                                                              .Advanced,
+																	_container.Resolve<ISkillStaffPeriodToSkillIntervalDataMapper>(),
+																	 _container.Resolve<ISkillIntervalDataDivider>(),
+																	 _container.Resolve<ISkillIntervalDataAggregator>());
                 
                  var optimizer = new GroupIntradayOptimizer(lockableBitArrayConverter, decisionMaker,
                                                            relativeDailyStandardDeviationsByAllSkillsExtractor,
