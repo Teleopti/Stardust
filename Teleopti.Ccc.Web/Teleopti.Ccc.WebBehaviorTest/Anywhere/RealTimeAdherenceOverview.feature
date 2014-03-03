@@ -17,10 +17,10 @@ Scenario: Show team
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
-	And there is a site named 'Paris'
-	And there is a team named 'Green' on site 'Paris'
-	When I view Real time adherence for site 'Paris'
-	Then I should see the team 'Green'
+	And there is a site named 'London'
+	And there is a team named 'Red' on site 'London'
+	When I view Real time adherence for site 'London'
+	Then I should see the team 'Red'
 
 @ignore
 Scenario: View updates of sum of employees not adhering to schedule for each site
