@@ -1,4 +1,0 @@
-$(SQL_AUTH_STRING)|Data Source=dxtjaxi97u.database.windows.net;Encrypt=True;trustServerCertificate=false;User Id=ProNet;Password=2394#JHbnjk12
-$(DB_ANALYTICS)|ProNet_TeleoptiAnalytics
-$(DB_CCC7)|ProNet_TeleoptiCCC7
-

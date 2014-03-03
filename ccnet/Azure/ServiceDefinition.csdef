@@ -1,0 +1,45 @@
+<ServiceDefinition name="TeleoptiCCC"
+xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+
+  <WebRole name="TeleoptiCCC" vmsize="ExtraSmall">
+    <Sites>
+      <Site name="TeleoptiCCC" physicalDirectory="../Azure/Temp/AzureContent/TeleoptiCCC">
+        <VirtualApplication name="SDK" physicalDirectory="../Azure/Temp/AzureContent/SDK" />
+        <VirtualApplication name="Analytics" physicalDirectory="../Azure/Temp/AzureContent/Analytics" />
+        <VirtualApplication name="Web" physicalDirectory="../Azure/Temp/AzureContent/Web" />
+        <VirtualApplication name="MyTime" physicalDirectory="../Azure/Temp/AzureContent/MyTime" />
+        <VirtualApplication name="Client" physicalDirectory="../Azure/Temp/AzureContent/Client" />
+        <VirtualApplication name="RTA" physicalDirectory="../Azure/Temp/AzureContent/RTA" />
+		<VirtualApplication name="Broker" physicalDirectory="../Azure/Temp/AzureContent/Broker" />
+        <Bindings>
+          <Binding name="HttpsIn" endpointName="HttpsIn" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Certificates>
+      <Certificate name="fakedress.teleopticloud.com" storeLocation="LocalMachine" storeName="My"/>
+    </Certificates>
+    <Endpoints>
+  		<InputEndpoint name="HttpsIn" protocol="https" port="443" certificate="fakedress.teleopticloud.com" />
+    </Endpoints>
+    <Imports>
+		<Import moduleName="Diagnostics" />
+		<Import moduleName="RemoteAccess" />
+		<Import moduleName="RemoteForwarder" />
+    </Imports>
+    <Startup>
+	  <Task commandLine="PrepareConfigAndSignClickOnce.cmd" executionContext="elevated" taskType="background" />
+      <Task commandLine="IIS7ConfigMoveToNET4.cmd" executionContext="elevated" taskType="background" />
+      <Task commandLine="InstallService.cmd" executionContext="elevated" taskType="background" />
+	  <Task commandLine="InitializeCopyPayroll.cmd" executionContext="elevated" taskType="background" />
+    </Startup>
+	<ConfigurationSettings>
+		<Setting name="TeleoptiDriveMap.BlobPath" />
+		<Setting name="TeleoptiDriveMap.AccountName" />
+		<Setting name="TeleoptiDriveMap.AccountKey" />
+		<Setting name="TeleoptiDriveMap.ContainerName" />
+		<Setting name="TeleoptiDriveMap.DataSourceName" />
+	</ConfigurationSettings>
+
+  </WebRole>
+</ServiceDefinition>

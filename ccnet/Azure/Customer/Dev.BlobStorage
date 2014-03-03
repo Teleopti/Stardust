@@ -1,5 +1,0 @@
-$(BlobPath),"http://teleopticcc7.blob.core.windows.net/"
-$(AccountName),""
-$(AccountKey),"IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ=="
-$(ContainerName),"teleopticcc/Payroll"
-$(DataSourceName),"teleopticcc-dev"
