@@ -22,18 +22,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     foreach(var skillIntervalData in skillIntervalList )
                     {
                         if(!tempPeriodToSkillIntervalData.ContainsKey(skillIntervalData.Period ))
-                            tempPeriodToSkillIntervalData.Add(skillIntervalData.Period, AggregateTwoIntervals(skillIntervalData,null));
+                            tempPeriodToSkillIntervalData.Add(skillIntervalData.Period, aggregateTwoIntervals(skillIntervalData,null));
                         else
-                            tempPeriodToSkillIntervalData[skillIntervalData.Period] = AggregateTwoIntervals(tempPeriodToSkillIntervalData[skillIntervalData.Period], skillIntervalData);
+                            tempPeriodToSkillIntervalData[skillIntervalData.Period] = aggregateTwoIntervals(tempPeriodToSkillIntervalData[skillIntervalData.Period], skillIntervalData);
                     
                     }
                 
                 }
 
-            return tempPeriodToSkillIntervalData.Values.ToList();
+            return tempPeriodToSkillIntervalData.Values.OrderBy(x => x.Period.StartDateTime).ToList();
         }
 
-        private static ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1, ISkillIntervalData skillIntervalData2)
+        private static ISkillIntervalData aggregateTwoIntervals(ISkillIntervalData skillIntervalData1, ISkillIntervalData skillIntervalData2)
         {
             if (skillIntervalData2 == null)
             {

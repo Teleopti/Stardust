@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -28,6 +29,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixPro _matrix1;
 		private IScheduleMatrixPro _matrix2;
 		private ISingleSkillDictionary _singleSkillDictionary;
+		private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
+		private ISkillIntervalDataDivider _skillIntervalDataDivider;
+		private ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 
 		[SetUp]
 		public void Setup()
@@ -48,15 +52,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_singleSkillDictionary = new SingleSkillDictionary();
+			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
+			_skillIntervalDataDivider = _mocks.StrictMock<ISkillIntervalDataDivider>();
+			_skillIntervalDataAggregator = _mocks.StrictMock<ISkillIntervalDataAggregator>();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
-				_workShiftContainerList,
+			_workShiftContainerList,
 												   _decisionMaker,
 												   _scheduleService,
 												   optimizerPreferences,
 												   _rollbackService,
 												   _schedulingResultStateHolder,
-												   _singleSkillDictionary);
+												   _singleSkillDictionary,
+												   _skillStaffPeriodToSkillIntervalDataMapper,
+												   _skillIntervalDataDivider,
+												   _skillIntervalDataAggregator);
 		}
 
 		[Test]
