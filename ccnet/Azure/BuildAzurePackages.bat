@@ -63,14 +63,13 @@ XCOPY /d /y "%Dependencies%\RegisterEventLogSource.exe" "%ContentDest%\TeleoptiC
 ::Get Azure stuff
 robocopy %AzureDependencies% "%ContentDest%\TeleoptiCCC\bin\ccc7_azure" /mir
 
-::update config
-FOR /F %%G IN ('DIR /B Customer\*.txt') DO CALL :FuncDeployConfig %%G 
-IF %ERRORLEV% NEQ 0 SET ERRORLEV=103 & GOTO error
+::deploy config
+ROBOCOPY "%AZUREDIR%\Customer" "%output%" *.cscfg
 
 ::run cxpack
 echo building cspack ...
-ECHO "c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef.BuildTemplate" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
-"c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef.BuildTemplate" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
+ECHO "c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
+"c:\Program Files\Windows Azure SDK\v1.6\bin\cspack.exe" "ServiceDefinition.csdef" /role:TeleoptiCCC;Temp\AzureContent\TeleoptiCCC /out:"%output%\Azure-%version%.cspkg"
 if %errorlevel% NEQ 0 (
 SET /A ERRORLEV=202
 GOTO :Error
@@ -78,11 +77,6 @@ GOTO :Error
 echo building cspack. done!
 
 GOTO :eof
-
-:FuncDeployConfig
-IF %ERRORLEV% EQU 0 CALL DeployConfig.bat %1
-SET ERRORLEV=%ERRORLEVEL%
-EXIT /b %ERRORLEV%
 
 :Error
 COLOR C
