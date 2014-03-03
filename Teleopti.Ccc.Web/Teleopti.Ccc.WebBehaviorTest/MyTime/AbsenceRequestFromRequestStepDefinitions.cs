@@ -1,9 +1,11 @@
 ﻿using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
@@ -15,6 +17,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void GivenIHaveAnApprovedAbsenceRequest()
 		{
 			DataMaker.Data().Apply(new ExistingApprovedAbsenceRequest());
+		}
+
+		[Given(@"I have an approved absence request with")]
+		public void GivenIHaveAnApprovedAbsenceRequestWith(Table table)
+		{
+			var config = table.CreateInstance<ExistingApprovedAbsenceRequestConfig>();
+			DataMaker.Data().Apply(new ExistingApprovedAbsenceRequestConfigurable(config));
 		}
 
 		[Given(@"I have a denied absence request")]
