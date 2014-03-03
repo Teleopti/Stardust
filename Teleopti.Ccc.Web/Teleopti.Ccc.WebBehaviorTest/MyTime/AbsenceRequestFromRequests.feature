@@ -16,7 +16,7 @@ And I have a personal account with
 | Absence     | Vacation   |
 | FromDate    | 2014-01-01 |
 | Accrued     | 25         |
-And I have an approved absence request with
+And I have an absence with
 | Field     | Value            |
 | Absence   | Vacation         |
 | StartTime | 2014-01-01 00:00 |
@@ -39,7 +39,7 @@ And I have a personal account with
 | Absence     | Illness    |
 | FromDate    | 2014-01-01 |
 | Accrued     | 250:00     |
-And I have an approved absence request with
+And I have an absence with
 | Field     | Value            |
 | Absence   | Illness          |
 | StartTime | 2014-01-01 00:00 |
@@ -132,7 +132,7 @@ And I have a personal account with
 | Absence     | Vacation   |
 | FromDate    | 2015-01-01 |
 | Accrued     | 25         |
-And I have an approved absence request with
+And I have an absence with
 | Field     | Value            |
 | Absence   | Vacation         |
 | StartTime | 2014-01-01 00:00 |

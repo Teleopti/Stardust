@@ -19,13 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new ExistingApprovedAbsenceRequest());
 		}
 
-		[Given(@"I have an approved absence request with")]
-		public void GivenIHaveAnApprovedAbsenceRequestWith(Table table)
-		{
-			var config = table.CreateInstance<ExistingApprovedAbsenceRequestConfig>();
-			DataMaker.Data().Apply(new ExistingApprovedAbsenceRequestConfigurable(config));
-		}
-
 		[Given(@"I have a denied absence request")]
 		public void GivenIHaveADeniedAbsenceRequest()
 		{
