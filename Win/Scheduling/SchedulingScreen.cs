@@ -4931,7 +4931,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var requestedPeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
 
-			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod);
+			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod);
 			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
 
 			//container can fix this to one row

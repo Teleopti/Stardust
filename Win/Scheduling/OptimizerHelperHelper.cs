@@ -174,26 +174,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new ReadOnlyCollection<IScheduleDay>(clipObjectListFilter());
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Validators")]
-        public static IList<IDayOffLegalStateValidator> CreateLegalStateValidators(
-           ILockableBitArray bitArray,
-           IDaysOffPreferences dayOffPreferences,
-           IOptimizationPreferences optimizerPreferences)
-        {
-            MinMax<int> periodArea = bitArray.PeriodArea;
-            if (!dayOffPreferences.ConsiderWeekBefore)
-                periodArea = new MinMax<int>(periodArea.Minimum + 7, periodArea.Maximum + 7);
-            IOfficialWeekendDays weekendDays = new OfficialWeekendDays();
-            IDayOffLegalStateValidatorListCreator validatorListCreator =
-                new DayOffOptimizationLegalStateValidatorListCreator
-                    (optimizerPreferences.DaysOff,
-                     weekendDays,
-                     bitArray.ToLongBitArray(),
-                     periodArea);
-
-            return validatorListCreator.BuildActiveValidatorList();
-        }
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
             ILockableBitArray scheduleMatrixArray,

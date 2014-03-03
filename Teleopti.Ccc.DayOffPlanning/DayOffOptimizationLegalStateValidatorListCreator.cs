@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanning

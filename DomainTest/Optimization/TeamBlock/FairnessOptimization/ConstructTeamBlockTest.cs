@@ -52,12 +52,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 				Expect.Call(_schedulingOptions.GroupOnGroupPageForTeamBlockPer).Return(_groupPageLight).Repeat.AtLeastOnce();
 				Expect.Call(_groupPageLight.Key).Return("SingleAgentTeam");
 				Expect.Call(_schedulingOptions.UseTeamBlockPerOption).Return(false);
+				Expect.Call(_schedulingOptions.BlockFinderTypeForAdvanceScheduling).Return(BlockFinderType.SingleDay);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _dateOnlyPeriod.StartDate, BlockFinderType.SingleDay, true, _scheduleMatrixPros)).Return(_teamBlockInfo);
 			}
 
 			using (_mock.Playback())
 			{
-				var result = _target.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions);
+				var result = _target.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions.UseTeamBlockPerOption,
+																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(_teamBlockInfo, result[0]);
 			}
@@ -78,7 +81,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization
 
 			using (_mock.Playback())
 			{
-				var result = _target.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions);
+				var result = _target.Construct(_scheduleMatrixPros, _dateOnlyPeriod, _persons, _schedulingOptions.UseTeamBlockPerOption,
+																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer);
 				Assert.AreEqual(1, result.Count);
 				Assert.AreEqual(_teamBlockInfo, result[0]);
 			}

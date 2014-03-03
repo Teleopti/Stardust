@@ -360,6 +360,8 @@
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Infrastructure\MessageFilterManager.cs" />
+    <Compile Include="Optimization\DayOffRulesValidator.cs" />
+    <Compile Include="Optimization\DaysOffLegalStateValidatorsFactory.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterEx.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportData.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportService.cs" />
@@ -376,13 +378,34 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForEqualNumberOfCategoryFairness.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterForTeamBlockInSelection.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\FilterOnSwapableTeamBlocks.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PrioritiseWeekDay.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep1.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\JuniorTeamBlockExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PersonDayOffPointsCalculator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PersonShiftCategoryPointCalculator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PossibleSwappableBitArrays.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\PostSwapValidationForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapper.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityTeamBlockSwapValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DescisionMakerToSwapTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorTeamBlockLocator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SuitableDayOffsToGiveAway.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffDaySwapDecisionMaker.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffDaySwapper.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SuitableDayOffSpotDetector.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffSwapper.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockLocatorWithHigestPoints.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\DayOffStep2.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\PersonStartDateFromPersonPeriod.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\SeniorityCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\RankedPersonBasedOnStartDate.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityExtractor.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\SeniorityInfo.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfo.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointExtractor.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\ShiftCategoryPointInfoExtractor.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\TeamBlockDayOffFairnessOptimizationServiceFacade.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockPoints.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\WeekDayPointCalculatorForTeamBlock.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\SeniorityDaysOff\WeekDayPoints.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockContractTimeValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockInfoPriorityDefinitionInfo.cs" />
@@ -395,6 +418,7 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameRuleSetBagValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameSkillValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockShiftCategoryLimitationValidator.cs" />
+    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameTimeZoneValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidator.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs">
       <SubType>Code</SubType>
@@ -404,9 +428,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\DetermineTeamBlockPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationService.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSizeClassifier.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockWeight.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockWeightExtractor.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
@@ -1898,7 +1919,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Analyzer\" />
-    <Folder Include="Optimization\TeamBlock\FairnessOptimization\ShiftCategoryPoints\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />

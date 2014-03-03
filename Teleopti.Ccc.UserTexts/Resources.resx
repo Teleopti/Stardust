@@ -11938,19 +11938,15 @@ Reduce the complexity to use these shifts.</value>
     <value>Schedule must be reloaded</value>
     <comment>Message in shifteditor if the user ha a schedule thats not up to date</comment>
   </data>
-  <data name="xxDayOffPoints" xml:space="preserve">
+  <data name="DayOffPoints" xml:space="preserve">
     <value>Day Off Points:</value>
     <comment>Day off fairness points under fairness tab in agent info</comment>
   </data>
-  <data name="xxSeniority" xml:space="preserve">
-    <value>Seniority</value>
-    <comment>A tag to represent the values of seniority under fairness tab in agent info</comment>
-  </data>
-  <data name="xxSeniorityPoints" xml:space="preserve">
+  <data name="SeniorityPoints" xml:space="preserve">
     <value>Seniority Points:</value>
     <comment>Seniority points under fairness tab in agent info</comment>
   </data>
-  <data name="xxShiftCategoryPoints" xml:space="preserve">
+  <data name="ShiftCategoryPoints" xml:space="preserve">
     <value>Shift Category Points:</value>
     <comment>Shift category points for the selected agent. Under fairness tab in agent info</comment>
   </data>
@@ -11965,5 +11961,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="MonthSchedule" xml:space="preserve">
     <value>Month Schedule</value>
     <comment>Month schedule in permission tree</comment>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Ranking</value>
+    <comment>Ranking</comment>
   </data>
 </root>
