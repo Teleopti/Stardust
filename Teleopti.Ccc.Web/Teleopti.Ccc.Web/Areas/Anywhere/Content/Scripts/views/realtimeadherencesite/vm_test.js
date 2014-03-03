@@ -1,4 +1,4 @@
-﻿require(['buster', 'views/realtimeadherencesite/vm'], function (buster, viewModel) {
+﻿define(['buster', 'views/realtimeadherencesite/vm'], function (buster, viewModel) {
 
 	buster.testCase("realTimeAdherenceSite_viewModel", {
 		"should fill site's team data": function () {

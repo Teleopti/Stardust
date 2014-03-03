@@ -1,4 +1,4 @@
-﻿require(['buster', 'views/realtimeadherence/vm'], function (buster, viewModel) {
+﻿define(['buster', 'views/realtimeadherence/vm'], function (buster, viewModel) {
 
 	buster.testCase("realTimeAdherence_viewModel", {
 		"can create instance": function () {
