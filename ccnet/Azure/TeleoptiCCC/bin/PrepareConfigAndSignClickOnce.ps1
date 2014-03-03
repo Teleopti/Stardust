@@ -159,7 +159,9 @@ Try
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     
-    Remove-Item "$fullPath"
+	if (Test-Path "$fullPath") {
+		Remove-Item "$fullPath"
+	}
 
     #Get customer specific config from BlobStorage
     CopyFileFromBlobStorage -destinationFolder "$SupportToolFolder" -filename "$settingsFile"
