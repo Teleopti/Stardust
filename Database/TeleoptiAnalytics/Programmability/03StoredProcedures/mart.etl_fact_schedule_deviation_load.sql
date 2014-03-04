@@ -26,6 +26,7 @@ GO
 -- =============================================
 --exec mart.etl_fact_schedule_deviation_load @start_date='2013-02-04 00:00:00',@end_date='2013-02-06 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=0
 --exec mart.etl_fact_schedule_deviation_load @start_date='2014-02-17 00:00:00',@end_date='2014-02-23 00:00:00',@business_unit_code='9D812B66-A7BD-4FFF-A2D8-A2D90001CAF1',@isIntraday=1
+--exec mart.etl_fact_schedule_deviation_load @start_date='2014-03-04 00:00:00',@end_date='2014-03-05 00:00:00',@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@isIntraday=1
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -42,6 +43,16 @@ if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_d
 	)
 EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_schedule_deviation_load'
 
+--recursive call: If this is Intraday=true then go for an extra deviation load as we were in Intraday=false
+--Why??! Because we need to fetch agent statistics according to date period set for in the ETL.Agent-step
+if (@isIntraday=1)
+BEGIN
+	EXEC mart.etl_fact_schedule_deviation_load
+	@start_date=@start_date,
+	@end_date=@end_date,
+	@business_unit_code=@business_unit_code,
+	@isIntraday=0
+END
 
 DECLARE @start_date_id int
 DECLARE @end_date_id int
