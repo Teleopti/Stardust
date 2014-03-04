@@ -1,4 +1,4 @@
-<nav class="navbar navbar-inverse navbar-static-top">
+<nav class="navbar navbar-inverse navbar-static-top menu">
 	<div class="container">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="#">Teleopti</a>
@@ -7,7 +7,7 @@
 			<ul class="nav navbar-nav">
 				<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a href="#">Schedules</a></li>
 				<!-- ko if: RealTimeAdherenceVisible -->
-				<li data-bind="css: { active: ActiveView() == 'realtimeadherence' }"><a href="#realtimeadherence">Real time adherence</a></li>
+				<li id="link-realtimeadherence" data-bind="css: { active: ActiveView() == 'realtimeadherence' }"><a href="#realtimeadherence">Real time adherence</a></li>
 				<!-- /ko -->
 			</ul>
 		</div>

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see a message that I have no permission for this function")]
 		public void ThenIShouldSeeAMessageThatIHaveNoPermissionForThisFunction()
 		{
-			Browser.Interactions.AssertExists(".alert-error");
+			Browser.Interactions.AssertExists(".error-message");
 		}
 
 		[Then(@"I should see Real time adherence overview in the menu")]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should not see Real time adherence overview in the menu")]
 		public void ThenIShouldNotSeeRealTimeAdherenceOverviewInTheMenu()
 		{
-			Browser.Interactions.AssertNotExists(".brand", "#link-realtimeadherence");
+			Browser.Interactions.AssertNotExists(".menu", "#link-realtimeadherence");
 		}
 
 		[Then(@"I should see site '(.*)' with (.*) of (.*) employees out of adherence")]
