@@ -1,3 +1,0 @@
-$(SQL_AUTH_STRING)|Data Source=fl8qpszm4k.database.windows.net,1433;Encrypt=True;trustServerCertificate=false;User Id=ScicomMalaysia;Password=aerk45LLsTD99#
-$(DB_ANALYTICS)|ScicomMalaysia_TeleoptiAnalytics
-$(DB_CCC7)|ScicomMalaysia_TeleoptiCCC7
