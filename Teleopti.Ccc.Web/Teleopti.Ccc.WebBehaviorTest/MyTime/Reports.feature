@@ -3,7 +3,7 @@
 	As an agent
 	I want to be able to view my reports
 
-@ingore
+@ignore
 Scenario: Show reports with permissions
 	Given  I am an Agent
 	And I have the permission for report 'Requests per Agent'
@@ -11,7 +11,7 @@ Scenario: Show reports with permissions
 	Then I should only see report 'Requests per Agent' 
 	And I should not see any other reports
 
-@ingore
+@ignore
 Scenario: My Report should display at top of the drop list
 	Given  I am an Agent
 	And I have the permission for 'My Report'
@@ -19,7 +19,7 @@ Scenario: My Report should display at top of the drop list
 	When I click reports menu
 	Then I should see My Report display at top of the drop list 
 
-@ingore
+@ignore
 Scenario: Reports should be sorted alphabetically 
 	Given  I am an Agent
 	And I have the permission for report 'Requests per Agent'
@@ -30,7 +30,7 @@ Scenario: Reports should be sorted alphabetically
 	And I should see report 'Agent Skills' display as the second item of the drop list 
 	And I should see report 'Requests per Agent' display at botom of the drop list 
 
-@ingore
+@ignore
 Scenario: Should not show the reports menu with no permission for any report
 	Given  I am an Agent
 	And I have no permission for any report 
@@ -44,7 +44,7 @@ Scenario: Should open report with permission
 	When I click 'Requests per Agent' in the drop list
 	Then It should open report 'Requests per Agent' in a new window
 
-@ingore
+@ignore
 Scenario: Should open My Report with permission
 	Given  I am an Agent
 	And I have permission for 'My Report'
