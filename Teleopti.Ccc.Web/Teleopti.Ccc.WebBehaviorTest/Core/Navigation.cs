@@ -323,6 +323,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
 				new ApplicationStartupTimeout());
 		}
+		
+				public static void GotoAnywhereRealTimeAdherenceOverview()
+		{
+			GoToWaitForUrlAssert(
+				"Anywhere#realtimeadherence",
+				"Anywhere#realtimeadherence",
+				new ApplicationStartupTimeout());
+		}
+
+
+		public static void GotoAnywhereRealTimeAdherenceOverview(Guid siteId)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#realtimeadherencesite/{0}",siteId),
+				"Anywhere#realtimeadherence",
+				new ApplicationStartupTimeout());
+		}
 	}
 
 	public class GotoArgs

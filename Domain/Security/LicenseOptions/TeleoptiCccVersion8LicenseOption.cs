@@ -48,6 +48,11 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 													  DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb);
 			function.IsPreliminary = false;
 			EnabledApplicationFunctions.Add(function);
+			
+			function = ApplicationFunction.FindByPath(allApplicationFunctions,
+													  DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview);
+			function.IsPreliminary = false;
+			EnabledApplicationFunctions.Add(function);
 
             function = ApplicationFunction.FindByPath(allApplicationFunctions,
                                                           DefinedRaptorApplicationFunctionPaths.MonthSchedule);

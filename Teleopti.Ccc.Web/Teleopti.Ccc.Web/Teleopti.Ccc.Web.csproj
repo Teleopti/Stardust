@@ -252,6 +252,8 @@
       <Link>Core\MessageBroker\SubscriptionPassThrough.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\SitesController.cs" />
+    <Compile Include="Areas\Anywhere\Core\SiteViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelMapper.cs" />
@@ -735,9 +737,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\configuration.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\current-state.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\timeline-unit.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.js" />
@@ -745,6 +750,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\messagebroker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\Tests.html" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
@@ -756,6 +763,9 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />
@@ -765,6 +775,8 @@
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesite\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherence\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.js" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.js" />
@@ -922,6 +934,8 @@
     <Content Include="Content\bootstrap\Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap\Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap\Content\bootstrap-theme.min.css" />
+    <Content Include="Content\busterjs\buster-test.css" />
+    <Content Include="Content\busterjs\buster-test.js" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\css\select2-spinner.gif" />
@@ -1289,6 +1303,7 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Anywhere\Content\Scripts\test\" />
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
   </ItemGroup>
   <ItemGroup>

@@ -119,5 +119,6 @@
 		// Anywhere
 		public const string SchedulesAnywhere = "Raptor/Anywhere/Schedules";
 
+	    public const string RealTimeAdherenceOverview = "Raptor/Anywhere/RealTimeAdherenceOverview";
     }
 }

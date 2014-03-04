@@ -11966,4 +11966,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Ranking</value>
     <comment>Ranking</comment>
   </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Real time adherence overview</value>
+    <comment>Permission name</comment>
+  </data>
 </root>
