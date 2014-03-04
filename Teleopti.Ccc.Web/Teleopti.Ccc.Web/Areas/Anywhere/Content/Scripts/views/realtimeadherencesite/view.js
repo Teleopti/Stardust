@@ -2,7 +2,7 @@
 define([
 	'knockout',
 		'text!templates/realtimeadherencesite/view.html',
-		'views/realtimeadherence/vm',
+		'views/realtimeadherencesite/vm',
 		'ajax'
 ], function (
 	ko,
@@ -24,7 +24,7 @@ define([
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			ajax.ajax({
-				url: "Teams",
+				url: "Teams/ForSite?siteId=" + options.id,
 				success: function (data) {
 					viewModel.fill(data);
 				}
