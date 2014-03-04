@@ -22,7 +22,19 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         self.requestViewModel = ko.observable();
 
         self.createRequestViewModel = function () {
-            return new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);
+        	var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);
+        	ajax.Ajax({
+        		url: 'Requests/Absences',
+        		dataType: "json",
+        		type: 'GET',
+        		data: {
+        			date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+        		},
+        		success: function (data) {
+        			vm.readAbsences(data);
+        		}
+        	});
+            return vm;
         };
         
         self.createShiftTradeRequestViewModel = function () {

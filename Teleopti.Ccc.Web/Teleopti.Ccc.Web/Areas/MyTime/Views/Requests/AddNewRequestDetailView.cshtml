@@ -16,12 +16,11 @@
     </label>
     <div class ="row">
 	    <div class="col-xs-4">
-		    <select class="request-new-absence input-sm form-control" data-bind="value: AbsenceId">
-			    @foreach (var absenceType in Model.AbsenceTypes)
-			    {
-				    <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-			    }
-		    </select>
+			<select class="request-new-absence input-sm form-control" data-bind="value: AbsenceId">
+				<!-- ko foreach: Absences -->
+				<option data-bind="text: Name, value: Id"></option>
+				<!-- /ko -->
+			</select>
 	    </div>
 	    <div class="absence-personal-account">
 		    <span>Remaining:</span>

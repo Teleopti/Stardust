@@ -13,8 +13,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.IsUpdate = ko.observable(false);
     self.DateFrom = ko.observable(moment().startOf('day'));
     self.DateTo = ko.observable(moment().startOf('day'));
-    self.TimeFromInternal = ko.observable(defaultDateTimes.defaultStartTime);
-    self.TimeToInternal = ko.observable(defaultDateTimes.defaultEndTime);
+    self.TimeFromInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultStartTime : null);
+    self.TimeToInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultEndTime : null);
     self.DateFormat = ko.observable();
     self.TimeFrom = ko.computed({
         read: function() {
@@ -46,6 +46,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.ShowError = ko.observable(false);
     self.ErrorMessage = ko.observable('');
     self.AbsenceId = ko.observable();
+	self.Absences = ko.observableArray();
     self.Subject = ko.observable();
     self.Message = ko.observable();
     self.EntityId = ko.observable();
@@ -57,6 +58,17 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
         return !self.IsFullDay() && self.IsEditable();
     });
 
+    self.readAbsences = function (data) {
+    	for (var i = 0; i < data.AbsenceTypes.length; i++) {
+    		var newAbsence = {
+    			Id: data.AbsenceTypes[i].Id,
+    			Name: data.AbsenceTypes[i].Name
+    		};
+    		
+    		self.Absences.push(newAbsence);
+    	}
+    };
+	
     self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
     });

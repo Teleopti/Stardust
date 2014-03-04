@@ -58,6 +58,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult Absences()
+		{
+			return Json(_requestsViewModelFactory.CreateRequestFormViewModel(), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
 		[HttpPostOrPut]
 		public JsonResult TextRequest(TextRequestForm form)
 		{
