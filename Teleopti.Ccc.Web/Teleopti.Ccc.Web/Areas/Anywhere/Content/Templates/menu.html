@@ -1,35 +1,34 @@
-
 <nav class="navbar navbar-inverse navbar-static-top">
-		<div class="container">
-		    <div class="navbar-header">  
-		        <a class="navbar-brand" href="#">Teleopti</a>
-		        
-		    </div>
-            <div>
-                <ul class="nav navbar-nav">
-                    <li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
-				<!-- ko if: RealTimeAdherenceVisible -->
-			    <li data-bind="css: {active: ActiveView() == 'realtimeadherence'}"><a href="#realtimeadherence">Real time adherence</a></li>
-				<!-- /ko -->
-                </ul>
-            </div>
-		    <ul class="nav navbar-nav navbar-right">
-		        <li class="dropdown">
-		            <a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="css: { active: ActiveView() == 'settings' }">
-		                <i class="glyphicon glyphicon-user"></i>
-		                <span class="user-name">
-		                    <small data-bind="text: UserName"></small>
-		                </span> <b class="caret"></b>
-		            </a>
-		            <ul class="dropdown-menu">
-		                <li><a href="#" tabindex="-1"><span data-bind="text: Resources.Home"></span></a></li>
-		                <li class="divider"></li>
-		                <li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
-		                <li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
-		                <li class="divider"></li>
-		                <li><a href="authentication/signout" tabindex="-1"><i class="glyphicon glyphicon-eject"></i> <span data-bind="text: Resources.LogOut"></span></a></li> 
-		            </ul>
-		        </li>
-		    </ul>
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">Teleopti</a>
+
 		</div>
+		<div>
+			<ul class="nav navbar-nav">
+				<li data-bind="css: { active: ActiveView() == 'teamschedule' }"><a href="#">Schedules</a></li>
+				<!-- ko if: RealTimeAdherenceVisible -->
+				<li data-bind="css: { active: ActiveView() == 'realtimeadherence' }"><a href="#realtimeadherence">Real time adherence</a></li>
+				<!-- /ko -->
+			</ul>
+		</div>
+		<ul class="nav navbar-nav navbar-right">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-bind="css: { active: ActiveView() == 'settings' }">
+					<i class="glyphicon glyphicon-user"></i>
+					<span class="user-name">
+						<small data-bind="text: UserName"></small>
+					</span><b class="caret"></b>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="#" tabindex="-1"><span data-bind="text: Resources.Home"></span></a></li>
+					<li class="divider"></li>
+					<li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
+					<li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
+					<li class="divider"></li>
+					<li><a href="authentication/signout" tabindex="-1"><i class="glyphicon glyphicon-eject"></i><span data-bind="text: Resources.LogOut"></span></a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
 </nav>
