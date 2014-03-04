@@ -84,8 +84,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ScheduleReporting
             float lunchTop = top;
             float break2Top = top;
 
-            if(GetSchedulePartView(part))
-                return personTop;
+			if (GetSchedulePartView(part))
+			{
+				DrawLine(personTop - 3, pageWidth, 1);
+				return personTop;
+			}
 			float left = 190;
             IVisualLayerCollection projection = part.ProjectionService().CreateProjection();
             if (projection.HasLayers && projection.Period().HasValue)
