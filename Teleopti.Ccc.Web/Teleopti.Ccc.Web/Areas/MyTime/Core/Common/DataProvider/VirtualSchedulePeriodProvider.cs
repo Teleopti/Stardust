@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -46,13 +47,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public DateOnly CalculateStudentAvailabilityDefaultDate()
 		{
 			var person = _personProvider.CurrentUser();
-			return _defaultDateCalculator.Calculate(person.WorkflowControlSet, StudentAvailabilityPeriod);
+			return _defaultDateCalculator.Calculate(person.WorkflowControlSet, StudentAvailabilityPeriod, person.PersonPeriodCollection);
 		}
 
 		public DateOnly CalculatePreferenceDefaultDate()
 		{
 			var person = _personProvider.CurrentUser();
-			return _defaultDateCalculator.Calculate(person.WorkflowControlSet, PreferencePeriod);
+			return _defaultDateCalculator.Calculate(person.WorkflowControlSet, PreferencePeriod, person.PersonPeriodCollection);
 		}
 	}
 }
