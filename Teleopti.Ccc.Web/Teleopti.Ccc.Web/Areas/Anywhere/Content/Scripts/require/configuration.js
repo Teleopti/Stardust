@@ -43,7 +43,7 @@
 			exports: 'Lazy'
 		},
 		'bootstrap': ['jquery'],
-
+		'knockout': ['jquery'],
 		'knockoutBindings': ['knockout'],
 		'select2': ['jquery', 'knockoutBindings'],
 		'timepicker': ['bootstrap', 'knockoutBindings'],

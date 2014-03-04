@@ -1,6 +1,4 @@
 require.config(requireconfiguration);
-		'knockout': ['jquery'],
-
 
 require([
         'jquery',
