@@ -250,6 +250,10 @@ ROLLBACK TRAN
 		--RAISERROR (@ErrorMsg,16,1)
 	END
 
+	--To be dropped when customer goes from CCC 7 to CCC 8
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonDayOff]', @newname = N'PersonDayOff_old', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[Auditing].[PersonDayOff_AUD]', @newname = N'PersonDayOff_AUD_old', @objtype = N'OBJECT'
+
 	PRINT char(9) + 'Total number of DayOff converted:' + cast(@Converted as nvarchar(10))
 
 	INSERT INTO DatabaseVersion(BuildNumber, SystemVersion) VALUES (@BuildNumber,@SystemVersion) 
