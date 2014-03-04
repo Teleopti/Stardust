@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the used time is '(.*)'")]
 		public void ThenIShouldSeeTheUsedTimeIs(string usedTime)
 		{
-			Browser.Interactions.AssertExists(string.Format(".remainingTime :contains('{0}']", usedTime));
+			Browser.Interactions.AssertExists(string.Format(".usedTime :contains('{0}']", usedTime));
 		}
 	}
 }
