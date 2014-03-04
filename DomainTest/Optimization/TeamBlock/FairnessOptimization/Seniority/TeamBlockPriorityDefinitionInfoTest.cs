@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			{
 				var result = _target.HighToLowSeniorityListBlockInfo;
 				Assert.AreEqual(2, result.Count());
-				Assert.AreEqual(_teamBlockInfo1, result[1]);
-				Assert.AreEqual(_teamBlockInfo2, result[0]);
+				Assert.AreEqual(_teamBlockInfo1, result[0]);
+				Assert.AreEqual(_teamBlockInfo2, result[1]);
 			}
 		}
 

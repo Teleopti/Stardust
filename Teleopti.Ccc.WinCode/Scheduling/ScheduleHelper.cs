@@ -143,6 +143,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IVisualLayerCollection res = projSvc.CreateProjection();
             return res.ContractTime();
         }
+
+		public static IList<IScheduleDay> SchedulesWithinValidSchedulePeriod(IList<IScheduleDay> schedules)
+		{
+			var result = new List<IScheduleDay>();
+			foreach (var scheduleDay in schedules)
+			{
+				var person = scheduleDay.Person;
+				var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
+				var schedulePeriod = person.VirtualSchedulePeriod(dateOnly);
+				if(schedulePeriod.IsValid) 
+					result.Add(scheduleDay);
+			}
+
+			return result;
+		}
     }
 
     public class ScheduleDisplayRow

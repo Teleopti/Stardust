@@ -1,3 +1,0 @@
-$(SQL_AUTH_STRING)|Data Source=s8v4m110k9.database.windows.net;Encrypt=True;trustServerCertificate=false;User Id=TeleoptiDemoUser;Password=TeleoptiDemoPwd2
-$(DB_ANALYTICS)|Demo_TeleoptiAnalytics
-$(DB_CCC7)|Demo_TeleoptiCCC7

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		}
 
 		[Test]
-		public void ShouldNotIncludeIfNotAllHaveSignificantMainShift()
+		public void ShouldNotIncludeIfNotAllScheduled()
 		{
 
 			using (_mocks.Record())
@@ -50,18 +50,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_scheduleDictionary[_person]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly())).Return(_scheduleDay);
 
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+				Expect.Call(_scheduleDay.IsScheduled()).Return(false);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.IsFullyScheduled(_teamBlockInfos, _scheduleDictionary);
+				var result = _target.Filter(_teamBlockInfos, _scheduleDictionary);
 				Assert.That(result.Count == 0);
 			}
 		}
 
 		[Test]
-		public void ShouldIncludeIfAllHaveSignificantMainShift()
+		public void ShouldIncludeIfAllScheduled()
 		{
 
 			using (_mocks.Record())
@@ -72,12 +72,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				Expect.Call(_scheduleDictionary[_person]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly())).Return(_scheduleDay);
 
-				Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(_scheduleDay.IsScheduled()).Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.IsFullyScheduled(_teamBlockInfos, _scheduleDictionary);
+				var result = _target.Filter(_teamBlockInfos, _scheduleDictionary);
 				Assert.IsTrue(result.Contains(_teamBlockInfo));
 			}
 		}

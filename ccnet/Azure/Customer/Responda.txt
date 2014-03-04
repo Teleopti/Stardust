@@ -1,3 +1,0 @@
-$(SQL_AUTH_STRING)|Data Source=dxtjaxi97u.database.windows.net;Encrypt=True;trustServerCertificate=false;User Id=Responda;Password=aerlnr37623#
-$(DB_ANALYTICS)|Responda_TeleoptiAnalytics
-$(DB_CCC7)|Responda_TeleoptiCCC7

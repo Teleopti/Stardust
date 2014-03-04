@@ -9,42 +9,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     
     public interface ITwoDaysIntervalGenerator
     {
-	    Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> GenerateTwoDaysInterval(
-		    IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
+	    Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> GenerateTwoDaysInterval(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
     }
 
     public class TwoDaysIntervalGenerator : ITwoDaysIntervalGenerator 
     {
 	    public Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> GenerateTwoDaysInterval(
-		    IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData)
-	    {
-		    var twoDayIntervalsForAllDays = new Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>>();
+            IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData)
+        {
+            var twoDayIntervalsForAllDays = new Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>>();
+            
+            foreach(var dateOnly in dayIntervalData.Keys )
+            {
+                var timeSpanDic = new Dictionary<TimeSpan, ISkillIntervalData>();
+                if (dayIntervalData.ContainsKey(dateOnly))
+                {
+                    IList<ISkillIntervalData> sourceList = dayIntervalData[dateOnly];
+                    foreach (var skillIntervalData in sourceList)
+                    {
+                        var keyTimeSpan = toLocalTimeKey(skillIntervalData.Period.StartDateTime, dateOnly);
+                        timeSpanDic.Add(keyTimeSpan, skillIntervalData);
+                    }
+                    if (sourceList.Count == 0) continue;
+                    if (dayIntervalData.ContainsKey(dateOnly.AddDays(1)))
+                    {
+                        sourceList = dayIntervalData[dateOnly.AddDays(1)];
+                        foreach (var skillIntervalData in sourceList)
+                        {
+                            var keyTimeSpan = toLocalTimeKey(skillIntervalData.Period.StartDateTime, dateOnly);
+                            timeSpanDic.Add(keyTimeSpan, skillIntervalData);
+                        }
+                    }
+                }
+                if (timeSpanDic.Keys.Count > 0)
+                    twoDayIntervalsForAllDays.Add(dateOnly, timeSpanDic);
+            }
 
-		    var firstDate = dayIntervalData.Keys.Min();
-		    for (int i = 0; i < dayIntervalData.Count - 1; i++)
-		    {
-			    var dateOnly = firstDate.AddDays(i);
-			    var timeSpanDic = new Dictionary<TimeSpan, ISkillIntervalData>();
-
-			    var sourceList = dayIntervalData[dateOnly];
-			    foreach (var skillIntervalData in sourceList)
-			    {
-				    var keyTimeSpan = toLocalTimeKey(skillIntervalData.Period.StartDateTime, dateOnly);
-				    timeSpanDic.Add(keyTimeSpan, skillIntervalData);
-			    }
-
-				sourceList = dayIntervalData[dateOnly.AddDays(1)];
-				foreach (var skillIntervalData in sourceList)
-				{
-					var keyTimeSpan = toLocalTimeKey(skillIntervalData.Period.StartDateTime, dateOnly);
-					timeSpanDic.Add(keyTimeSpan, skillIntervalData);
-				}
-
-				twoDayIntervalsForAllDays.Add(dateOnly, timeSpanDic);
-		    }
-
-		    return twoDayIntervalsForAllDays;
-	    }
+            return twoDayIntervalsForAllDays;
+        }
 
 	    private TimeSpan toLocalTimeKey(DateTime dateTime, DateOnly baseDate)
 		{

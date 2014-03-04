@@ -1,3 +1,0 @@
-$(SQL_AUTH_STRING)|Data Source=dxtjaxi97u.database.windows.net,1433;Encrypt=True;trustServerCertificate=false;User Id=forsakringskassanUs;Password=aerk45LLsTD99#
-$(DB_ANALYTICS)|forsakringskassan_TeleoptiAnalytics
-$(DB_CCC7)|forsakringskassan_TeleoptiCCC7

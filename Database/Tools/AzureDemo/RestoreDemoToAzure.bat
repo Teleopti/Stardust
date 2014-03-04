@@ -1,21 +1,19 @@
 @ECHO off
 COLOR A
 SET version=%1
+SET DESTSERVER=%2
+SET AZUREADMINUSER=%3
+set AZUREADMINPWD=%4
+
 set /A ERRORLEV=0
 set SOURCEUSER=bcpUser
 set SOURCEPWD=abc123456
 set PREVIOUSBUILD=\\hebe\Installation\PreviousBuilds
-set DESTSERVER=s8v4m110k9.database.windows.net
-set DESTSERVERPREFIX=s8v4m110k9
 set DESTUSER=TeleoptiDemoUser
 set DESTPWD=TeleoptiDemoPwd2
-set DESTANALYTICS=Dev_TeleoptiAnalytics
 set SRCANALYTICS=TeleoptiAnalytics_Demo
-set DESTCCC7=Dev_TeleoptiCCC7
 set SRCCCC7=TeleoptiCCC7_Demo
 set SRCAGG=TeleoptiCCC7Agg_Demo
-set AZUREADMINUSER=teleopti
-set AZUREADMINPWD=T3l30pt1
 set workingdir=c:\temp\AzureRestore
 set ROOTDIR=%~dp0
 set ROOTDIR=%ROOTDIR:~0,-1%
@@ -23,10 +21,33 @@ set ROOTDIR=%ROOTDIR:~0,-1%
 IF "%version%"=="" (
 SET /P version=Provide exact CCC version to copy to SQL Azure: 
 )
-
 IF "%version%"=="" SET ERRORLEV=1 & GOTO :error
 
+IF "%DESTSERVER%"=="" (
+SET /P DESTSERVER=Provide the SQL Azure destination server:
+)
+IF "%DESTSERVER%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF "%AZUREADMINUSER%"=="" (
+SET /P AZUREADMINUSER=Provide the SQL Azure admin SQL Login:
+)
+IF "%AZUREADMINUSER%"=="" SET ERRORLEV=1 & GOTO :error
+
+IF "%AZUREADMINPWD%"=="" (
+SET /P AZUREADMINPWD=Provide the SQL Azure admin SQL password:
+)
+IF "%AZUREADMINPWD%"=="" SET ERRORLEV=1 & GOTO :error
+
+
+For /F "tokens=1* delims=." %%A IN ("%DESTSERVER%") DO (
+    set DESTSERVERPREFIX=%%A
+)
+
 IF NOT EXIST "%PREVIOUSBUILD%\%version%" SET ERRORLEV=33 & GOTO :error
+
+
+set DESTANALYTICS=TeleoptiAnalytics_Baseline_%version%
+set DESTCCC7=TeleoptiCCC7_Baseline_%version%
 
 ::--------
 ::Get source files for this version
@@ -99,9 +120,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=18 & GOTO :error
 ::Drop current Demo in Azure
 echo dropping Azure Dbs...
 SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE %DESTANALYTICS%"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=19 & GOTO :error
 SQLCMD -Stcp:%DESTSERVER% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -U%AZUREADMINUSER%@%DESTSERVERPREFIX% -P%AZUREADMINPWD% -dmaster -Q"DROP DATABASE %DESTCCC7%"
-IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=20 & GOTO :error
 echo dropping Azure. Done!
 
 ::Create Azure Demo
@@ -162,7 +181,7 @@ COLOR C
 ECHO.
 ECHO --------
 IF %ERRORLEV% NEQ 0 ECHO Errors found!
-IF %ERRORLEV% EQU 1 ECHO Sorry, you need to provide a version!
+IF %ERRORLEV% EQU 1 ECHO Sorry, you need to provide correct input!
 IF %ERRORLEV% EQU 2 ECHO Could not execute Allow_XP_CmdShell
 IF %ERRORLEV% EQU 3 ECHO Could not restore local database
 IF %ERRORLEV% EQU 4 ECHO Could not restore local users in database

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[When(@"I see the remaining time is '(.*)'")]
+		[Then(@"I should see the remaining days is '(.*)'")]
 		[Then(@"I should see the remaining time is '(.*)'")]
 		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
 		{
@@ -24,10 +25,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[When(@"I see the used time is '(.*)'")]
+		[Then(@"I should see the used days is '(.*)'")]
 		[Then(@"I should see the used time is '(.*)'")]
 		public void ThenIShouldSeeTheUsedTimeIs(string usedTime)
 		{
-			Browser.Interactions.AssertExists(string.Format(".remainingTime :contains('{0}']", usedTime));
+			Browser.Interactions.AssertExists(string.Format(".usedTime :contains('{0}']", usedTime));
 		}
 	}
 }

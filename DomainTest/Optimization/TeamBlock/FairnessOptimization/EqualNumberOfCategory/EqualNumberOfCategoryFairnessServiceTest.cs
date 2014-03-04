@@ -295,7 +295,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 		{
 
 			Expect.Call(_filterPersonsForTotalDistribution.Filter(_allMatrixes)).Return(_selectedPersons);
-			Expect.Call(_constructTeamBlock.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions))
+			Expect.Call(_constructTeamBlock.Construct(_allMatrixes, new DateOnlyPeriod(), _selectedPersons, _schedulingOptions.UseTeamBlockPerOption,
+																 _schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+																 _schedulingOptions.GroupOnGroupPageForTeamBlockPer))
 				  .Return(_teamBlockInfos);
 			Expect.Call(_filterForEqualNumberOfCategoryFairness.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
 
@@ -303,7 +305,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Eq
 				  .Return(_totalDistributionSummary);
 			Expect.Call(_filterForTeamBlockInSelection.Filter(_teamBlockInfos, _selectedPersons, new DateOnlyPeriod()))
 				  .Return(_teamBlockInfos);
-			Expect.Call(_filterForFullyScheduledBlocks.IsFullyScheduled(_teamBlockInfos, _sceduleDictionary)).Return(_teamBlockInfos);
+			Expect.Call(_filterForFullyScheduledBlocks.Filter(_teamBlockInfos, _sceduleDictionary)).Return(_teamBlockInfos);
 			Expect.Call(_filterForNoneLockedTeamBlocks.Filter(_teamBlockInfos)).Return(_teamBlockInfos);
 		}
 

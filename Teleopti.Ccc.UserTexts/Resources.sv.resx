@@ -11440,4 +11440,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Summering</value>
     <comment>Text on summary tab on web my report</comment>
   </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Ranking</value>
+    <comment>Ranking</comment>
+  </data>
 </root>

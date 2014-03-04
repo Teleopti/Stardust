@@ -259,7 +259,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						if (date && Object.prototype.toString.call(date) === '[object Date]') {
 							var md = moment(date);
 							if (self.isRequestedDateValid(md)) {
-								requestedDate = md;
+							    requestedDate = md;
 							}
 						}
 						self.requestedDate(requestedDate);
