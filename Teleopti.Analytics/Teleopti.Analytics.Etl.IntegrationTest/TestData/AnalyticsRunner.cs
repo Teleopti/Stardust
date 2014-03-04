@@ -5,8 +5,6 @@ using System.IO;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
@@ -37,23 +35,49 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 		{
 			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
+				SqlCommand command = connection.CreateCommand();
 				connection.Open();
+				string script = "";
+
+				command.CommandType = System.Data.CommandType.Text;
+				command.CommandText =
+					"IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_setupTestData]') AND type in (N'P', N'PC')) DROP PROCEDURE [mart].[sys_setupTestData]";
+				command.ExecuteNonQuery();
+
 				var file = new FileInfo(@"TestData\mart.sys_setupTestData.sql");
-				string script = file.OpenText().ReadToEnd();
-				
-				var server = new Server(new ServerConnection(connection));
-				server.ConnectionContext.ExecuteNonQuery(script);
-				server.ConnectionContext.ExecuteNonQuery("exec [mart].[sys_setupTestData]");
+				script = file.OpenText().ReadToEnd();
+				command.CommandText = script;
+				command.ExecuteNonQuery();
+
+				command.CommandType = System.Data.CommandType.Text; 
+				command.CommandText =
+					"IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.Add_QueueAgent_stat') AND type in (N'P', N'PC')) DROP PROCEDURE dbo.Add_QueueAgent_stat";
+				command.ExecuteNonQuery();
 
 				file = new FileInfo(@"TestData\dbo.Add_QueueAgent_stat.sql");
 				script = file.OpenText().ReadToEnd();
+				command.CommandText = script;
+				command.ExecuteNonQuery();
 
-				server.ConnectionContext.ExecuteNonQuery(script);
-				server.ConnectionContext.ExecuteNonQuery(string.Format("exec dbo.Add_QueueAgent_stat @TestDay='{0}', @agent_id={1}, @orig_agent_id='{2}', @agent_name='{3}'",DateTime.Today,52,"152","Ola H"));
+				command.CommandText =
+					"IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence_for_test]') AND type in (N'P', N'PC')) DROP PROCEDURE [mart].[report_data_agent_schedule_adherence_for_test]";
+				command.ExecuteNonQuery();
 
 				file = new FileInfo(@"TestData\mart.report_data_agent_schedule_adherence_for_test.sql");
 				script = file.OpenText().ReadToEnd();
-				server.ConnectionContext.ExecuteNonQuery(script);
+				command.CommandText = script;
+				command.ExecuteNonQuery();
+
+				command.CommandType = System.Data.CommandType.StoredProcedure;
+				command.CommandText = "mart.sys_setupTestData";
+				command.ExecuteNonQuery();
+
+				command.CommandText = "dbo.Add_QueueAgent_stat";
+				command.Parameters.AddWithValue("@TestDay", DateTime.Today);
+				command.Parameters.AddWithValue("@agent_id", 52);
+				command.Parameters.AddWithValue("@orig_agent_id", 152);
+				command.Parameters.AddWithValue("@agent_name", "Ola H");
+				command.ExecuteNonQuery();
 
 			}
 		}

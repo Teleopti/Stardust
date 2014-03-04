@@ -1,6 +1,3 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence_for_test]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[report_data_agent_schedule_adherence_for_test]
-GO
 --select * from mart.dim_person
 --exec mart.report_data_agent_schedule_adherence_for_test @date_from='2014-02-18 00:00:00',@date_to='2014-02-19 00:00:00',@adherence_id=1,@person_code='80CF5548-C89F-4978-9C56-A2D7016B7943',@time_zone_code=N'W. Europe Standard Time', @report_resource_key ='ResReportAdherencePerDay'
 CREATE PROCEDURE [mart].[report_data_agent_schedule_adherence_for_test]

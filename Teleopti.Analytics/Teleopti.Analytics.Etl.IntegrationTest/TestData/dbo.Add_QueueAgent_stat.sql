@@ -1,7 +1,3 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.Add_QueueAgent_stat') AND type in (N'P', N'PC'))
-DROP PROCEDURE dbo.Add_QueueAgent_stat
-GO
-
 create proc dbo.Add_QueueAgent_stat
 @TestDay datetime = null,
 @agent_id int = 52,
@@ -37,11 +33,11 @@ delete from dbo.queues
 declare @Minute int
 set @Minute = 60 --seconds
 
-delete from dbo.agent_info where agent_id = @agent_id
-delete from dbo.agent_logg where agent_id = @agent_id
+delete from dbo.agent_info
+delete from dbo.agent_logg
 
 declare @log_object_id int
-select @log_object_id = max(log_object_id) from dbo.log_object
+select @log_object_id = isnull(max(log_object_id),1) from dbo.log_object
 
 declare @queue_id int
 declare @orig_queue_id int

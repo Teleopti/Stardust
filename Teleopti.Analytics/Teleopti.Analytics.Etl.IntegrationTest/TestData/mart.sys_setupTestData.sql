@@ -1,10 +1,3 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_setupTestData]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[sys_setupTestData]
-GO
-
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON
-GO
-
 create proc mart.sys_setupTestData
 @IntervalsPerDay INT = 96,
 @Culture nvarchar(200) = N'1053',
