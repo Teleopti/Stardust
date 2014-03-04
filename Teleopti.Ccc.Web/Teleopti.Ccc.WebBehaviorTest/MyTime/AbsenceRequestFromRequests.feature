@@ -6,7 +6,6 @@
 @ignore
 Scenario: When requesting absence tracked as days view remaining and used days
 Given I am an agent
-#And I have a person period that starts on '2014-01-01'
 And I have a requestable absence with
 | Field       | Value    |
 | Name        | Vacation |
@@ -77,8 +76,8 @@ And I input absence request values with 'Illness' for date '2014-10-03'
 And I see the remaining time is '250:00'
 And I see the used time is '00:00'
 And I input absence request values with 'Vacation' for date '2014-10-03'
-Then I should see the remaining time is '25 days'
-And I should see the used time is '0 days'
+Then I should see the remaining days is '25 days'
+And I should see the used days is '0 days'
 
 @ignore
 Scenario: When changing request date change remaining and used time
@@ -108,8 +107,8 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 And I see the remaining time is '21 days'
 And I see the used time is '4 days'
 When I input absence request values with 'Vacation' for date '2015-10-03'
-Then I should see the remaining time is '25 days'
-And I should see the used time is '0 days'
+Then I should see the remaining days is '25 days'
+And I should see the used days is '0 days'
 
 @ignore
 Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
@@ -139,8 +138,8 @@ And I input absence request values with 'Vacation' for
 | Field | Value      |
 | From  | 2014-12-28 |
 | To    | 2015-01-02 |
-Then I should see the remaining time is '25 days'
-And I should see the used time is '0 days'
+Then I should see the remaining days is '25 days'
+And I should see the used days is '0 days'
 
 @ignore
 Scenario: Don't show personal account when you do not have permission
