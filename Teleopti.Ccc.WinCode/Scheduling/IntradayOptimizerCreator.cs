@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IPersonSkillProvider personSkillProvider,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
-			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx)
+			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx,
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataDivider skillIntervalDataDivider,
 			ISkillIntervalDataAggregator skillIntervalDataAggregator)

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
 		private ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private ISkillIntervalDataAggregator _skillIntervalDataAggregator;
+		private IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
 
 		[SetUp]
 		public void Setup()
@@ -57,6 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
 			_skillIntervalDataDivider = _mocks.StrictMock<ISkillIntervalDataDivider>();
 			_skillIntervalDataAggregator = _mocks.StrictMock<ISkillIntervalDataAggregator>();
+			_scheduleMatrixLockableBitArrayConverterEx = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverterEx>();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
 			                                        _workShiftContainerList,
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			                                        _rollbackService,
 			                                        _schedulingResultStateHolder,
 			                                        _personSkillProvider, _mocks.DynamicMock<ICurrentTeleoptiPrincipal>(),
+													_scheduleMatrixLockableBitArrayConverterEx,
 													_skillStaffPeriodToSkillIntervalDataMapper,
 												   _skillIntervalDataDivider,
 												   _skillIntervalDataAggregator);
