@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new PersonAbsenceAccountConfigurable(personAbsenceAccountConfig));
 		}
 
+		[Then(@"I should see the remaining days is '(.*)'")]
 		[When(@"I see the remaining time is '(.*)'")]
 		[Then(@"I should see the remaining time is '(.*)'")]
 		public void ThenIShouldSeeTheRemainingTimeIs(string remainingTime)
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists(string.Format(".remainingTime :contains('{0}']", remainingTime));
 		}
 
+		[Then(@"I should see the used days is '(.*)'")]
 		[When(@"I see the used time is '(.*)'")]
 		[Then(@"I should see the used time is '(.*)'")]
 		public void ThenIShouldSeeTheUsedTimeIs(string usedTime)
