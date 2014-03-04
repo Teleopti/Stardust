@@ -301,6 +301,7 @@ INNER JOIN mart.dim_date d
 INNER JOIN mart.dim_interval i
 	ON b.interval_id = i.interval_id
 	AND @nowUtcInterval between i.interval_start and i.interval_end
+WHERE b.time_zone_id=@time_zone_id
 
 --Multiple Time zones?
 IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
