@@ -38,21 +38,21 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Team       | Green      |
 	| Start Date | 2014-01-21 |
 	And Ashley Andeen has a person period with
-    | Field      | Value      |
-    | Team       | Red        |
-    | Start Date | 2014-01-21 |
+		| Field      | Value      |
+		| Team       | Red        |
+		| Start Date | 2014-01-21 |
 	And Pierre Baldi has a shift with
-    | Field          | Value      |
-    | Start time     | 12:00      |
-    | End time       | 19:00      |
-    | Activity       | Phone      |
-    | Date           | 2014-01-21 |
+		| Field          | Value      |
+		| Start time     | 12:00      |
+		| End time       | 19:00      |
+		| Activity       | Phone      |
+		| Date           | 2014-01-21 |
 	And Ashley Andeen has a shift with
-    | Field          | Value      |
-    | Start time     | 12:00      |
-    | End time       | 19:00      |
-    | Activity       | Phone      |
-    | Date           | 2014-01-21 |
+		| Field          | Value      |
+		| Start time     | 12:00      |
+		| End time       | 19:00      |
+		| Activity       | Phone      |
+		| Date           | 2014-01-21 |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
@@ -83,9 +83,9 @@ Given there is an activity named 'Phone'
 	| Team       | Green      |
 	| Start Date | 2014-01-21 |
 	And Ashley Andeen has a person period with
-    | Field      | Value      |
-    | Team       | Red        |
-    | Start Date | 2014-01-21 |
+		| Field      | Value      |
+		| Team       | Red        |
+		| Start Date | 2014-01-21 |
 	 And Pierre Baldi has a shift with
 	| Field          | Value      |
 	| Start time     | 12:00      |
@@ -93,11 +93,11 @@ Given there is an activity named 'Phone'
 	| Activity       | Phone      |
 	| Date           | 2014-01-21 |
 	 And Ashley Andeen has a shift with
-    | Field      | Value      |
-    | Start time | 12:00      |
-    | End time   | 19:00      |
-    | Activity   | Phone      |
-    | Date       | 2014-01-21 |
+		| Field      | Value      |
+		| Start time | 12:00      |
+		| End time   | 19:00      |
+		| Activity   | Phone      |
+		| Date       | 2014-01-21 |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
