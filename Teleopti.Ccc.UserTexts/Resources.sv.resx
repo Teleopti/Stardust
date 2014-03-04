@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -11355,7 +11355,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Skiftbyte nekat då skiften är på olika datum.</value>
   </data>
   <data name="IllegalTeamBlockCombination" xml:space="preserve">
-    <value>Optimering med block mellan fridagar och att inte hålla ihop teamens fridagar supportas inte</value>
+    <value>Optimering med block mellan fridagar och att inte hålla ihop teamens fridagar stöds inte</value>
     <comment>Optimizing with block between days off and not keeping team days off together is not supported</comment>
   </data>
   <data name="ActiveAgents" xml:space="preserve">
@@ -11443,5 +11443,17 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="Ranking" xml:space="preserve">
     <value>Ranking</value>
     <comment>Ranking</comment>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Fridagspoäng:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Erfarenhetspoäng:</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Skiftkategoripoäng:</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Månadsschema</value>
   </data>
 </root>
