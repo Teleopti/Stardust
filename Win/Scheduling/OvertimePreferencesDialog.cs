@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         public OvertimePreferencesDialog(IOvertimePreferences overtimePreferences, IEnumerable<IScheduleTag> scheduleTags, string settingValue, IEnumerable<IActivity> availableActivity, int resolution, IList<IMultiplicatorDefinitionSet> definitionSets)
             : this()
         {
+            checkBoxOnAvailableAgentsOnly.Visible = false;
             _scheduleTags = scheduleTags;
             _settingValue = settingValue;
             _availableActivity = availableActivity;
