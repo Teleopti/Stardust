@@ -13,8 +13,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		double CurrentDemand { get; }
         double MinMaxBoostFactor { get; set; }
 		TimeSpan Resolution();
-	    double RelativeDifference { get; }
         double AbsoluteDifference { get; }
+		double RelativeDifference();
+		double RelativeDifferenceMinStaffBoosted();
+		double RelativeDifferenceMaxStaffBoosted();
+		double RelativeDifferenceBoosted();
 	}
 
 	public class SkillIntervalData : ISkillIntervalData
@@ -52,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 	    public double ForecastedDemand 
         { get
 	        {
-                if (_forecastedDemand == 0)
+                if (Math.Abs(_forecastedDemand - 0) < 0.01)
                     _forecastedDemand = 0.01;
 	            return _forecastedDemand;
 	        }    
@@ -75,13 +78,45 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 			return Period.EndDateTime.Subtract(Period.StartDateTime);
 		}
 
-        public double RelativeDifference
-        {
-            get
-            {
-                return CurrentDemand / ForecastedDemand;
-            }
-        }
         public double AbsoluteDifference { get { return CurrentDemand - ForecastedDemand; } }
+
+		public double RelativeDifference()
+		{
+			return CurrentDemand / ForecastedDemand * -1;
+		}
+
+		public double RelativeDifferenceMinStaffBoosted()
+		{
+			if (!MinimumHeads.HasValue)
+				return RelativeDifference();
+
+			if (MinimumHeads.Value > 0 && CurrentHeads < MinimumHeads.Value)
+				return ((CurrentHeads - MinimumHeads.Value) * 10000) + RelativeDifference();
+
+			return RelativeDifference();
+
+		}
+
+		public double RelativeDifferenceMaxStaffBoosted()
+		{
+			if (!MaximumHeads.HasValue)
+				return RelativeDifference();
+
+			if (MaximumHeads.Value > 0 && CurrentHeads > MaximumHeads.Value)
+				return ((CurrentHeads - MaximumHeads.Value) * 10000) + RelativeDifference();
+
+			return RelativeDifference();
+		}
+
+		public double RelativeDifferenceBoosted()
+		{
+			double ret = 0;
+			if (MinimumHeads.HasValue && MinimumHeads.Value > 0 && CurrentHeads < MinimumHeads.Value)
+				ret = (CurrentHeads - MinimumHeads.Value) * 10000;
+			if (MaximumHeads.HasValue && MaximumHeads.Value > 0 && CurrentHeads > MaximumHeads.Value)
+				ret += (CurrentHeads - MaximumHeads.Value) * 10000;
+
+			return ret + RelativeDifference();
+		}
 	}
 }

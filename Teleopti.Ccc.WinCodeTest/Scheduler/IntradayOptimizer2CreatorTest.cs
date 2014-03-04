@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.Security;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -30,6 +31,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IScheduleMatrixPro _matrix1;
 		private IScheduleMatrixPro _matrix2;
 		private IPersonSkillProvider _personSkillProvider;
+		private ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
+		private ISkillIntervalDataDivider _skillIntervalDataDivider;
+		private ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 
 		[SetUp]
 		public void Setup()
@@ -50,6 +54,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_personSkillProvider = new PersonSkillProvider();
+			_skillStaffPeriodToSkillIntervalDataMapper = _mocks.StrictMock<ISkillStaffPeriodToSkillIntervalDataMapper>();
+			_skillIntervalDataDivider = _mocks.StrictMock<ISkillIntervalDataDivider>();
+			_skillIntervalDataAggregator = _mocks.StrictMock<ISkillIntervalDataAggregator>();
 
 			_target = new IntradayOptimizer2Creator(_scheduleMatrixContainerList,
 			                                        _workShiftContainerList,
@@ -58,9 +65,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			                                        optimizerPreferences,
 			                                        _rollbackService,
 			                                        _schedulingResultStateHolder,
-			                                        _personSkillProvider, 
-													_mocks.DynamicMock<ICurrentTeleoptiPrincipal>(),
-													new ScheduleMatrixLockableBitArrayConverterEx());
+			                                        _personSkillProvider, _mocks.DynamicMock<ICurrentTeleoptiPrincipal>(),
+													_skillStaffPeriodToSkillIntervalDataMapper,
+												   _skillIntervalDataDivider,
+												   _skillIntervalDataAggregator);
 		}
 
 		[Test]

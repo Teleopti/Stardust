@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -24,6 +25,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IScheduleMatrixLockableBitArrayConverterEx _scheduleMatrixLockableBitArrayConverterEx;
+		private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
+		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
+		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -36,6 +40,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IPersonSkillProvider personSkillProvider,
 			ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 			IScheduleMatrixLockableBitArrayConverterEx scheduleMatrixLockableBitArrayConverterEx)
+			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
+			ISkillIntervalDataDivider skillIntervalDataDivider,
+			ISkillIntervalDataAggregator skillIntervalDataAggregator)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftStateContainerList = workShiftContainerList;
@@ -47,6 +54,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_personSkillProvider = personSkillProvider;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_scheduleMatrixLockableBitArrayConverterEx = scheduleMatrixLockableBitArrayConverterEx;
+			_skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
+			_skillIntervalDataDivider = skillIntervalDataDivider;
+			_skillIntervalDataAggregator = skillIntervalDataAggregator;
 		}
 
 		/// <summary>
@@ -68,8 +78,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				IScheduleMatrixLockableBitArrayConverter matrixConverter =
 					new ScheduleMatrixLockableBitArrayConverter(scheduleMatrix, _scheduleMatrixLockableBitArrayConverterEx);
 
-				IScheduleResultDailyValueCalculator dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
-				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix, _optimizerPreferences.Advanced);
+				IScheduleResultDailyValueCalculator dailyValueCalculator = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
+				                                                                                                           _optimizerPreferences.Advanced,
+				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
+				                                                                                                           _skillIntervalDataDivider,
+				                                                                                                           _skillIntervalDataAggregator);
+				IScheduleResultDataExtractor personalSkillsDataExtractor = new RelativeDailyValueByPersonalSkillsExtractor(scheduleMatrix,
+				                                                                                                           _optimizerPreferences.Advanced,
+				                                                                                                           _skillStaffPeriodToSkillIntervalDataMapper,
+				                                                                                                           _skillIntervalDataDivider,
+				                                                                                                           _skillIntervalDataAggregator);
 
 				INonBlendSkillCalculator nonBlendSkillCalculator = new NonBlendSkillCalculator();
 
