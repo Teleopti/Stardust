@@ -24,23 +24,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				var databaseConnectionStringHandler = new DatabaseConnectionStringHandlerFake();
 				var databaseWriter = new DatabaseWriter(databaseConnectionFactory, databaseConnectionStringHandler);
 				var databaseReader = new DatabaseReader(databaseConnectionFactory, databaseConnectionStringHandler,
-				                                        new ActualAgentStateCache(databaseWriter));
+																								new ActualAgentStateCache(databaseWriter));
 				var mbCacheFactory = new MbCacheFactoryFake();
-				return new RtaDataHandler(new SignalSender(TestSiteConfigurationSetup.Url.ToString()),
-				                          new DataSourceResolverFake(),
-				                          new PersonResolverFake(n => DataMaker.Person(n).Person),
-				                          new ActualAgentAssembler(databaseReader, new CurrentAndNextLayerExtractor(),
-				                                                   mbCacheFactory,
-				                                                   new AlarmMapper(databaseReader, databaseWriter,
-				                                                                   mbCacheFactory)),
-				                          new ActualAgentStateCache(databaseWriter));
+				return new RtaDataHandler(new AsyncSignalSender(TestSiteConfigurationSetup.Url.ToString()),
+																	new DataSourceResolverFake(),
+																	new PersonResolverFake(n => DataMaker.Person(n).Person),
+																	new ActualAgentAssembler(databaseReader, new CurrentAndNextLayerExtractor(),
+																													 mbCacheFactory,
+																													 new AlarmMapper(databaseReader, databaseWriter,
+																																					 mbCacheFactory)),
+																	new ActualAgentStateCache(databaseWriter));
 			});
 
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		public void WhenSetsHisPhoneStateTo(string personName, string state)
 		{
 			rtaFactory.Value.ProcessRtaData(personName, state, TimeSpan.Zero, CurrentTime.Value(), Guid.Empty, "0",
-			                                DateHelper.MinSmallDateTime, false);
+																			DateHelper.MinSmallDateTime, false);
 		}
 	}
 
@@ -61,6 +61,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	public class MbCacheFactoryFake : IMbCacheFactory
 	{
 		public T Create<T>(params object[] parameters) where T : class
+		{
+			throw new NotImplementedException();
+		}
+
+		public T ToCachedComponent<T>(T uncachedComponent) where T : class
 		{
 			throw new NotImplementedException();
 		}
