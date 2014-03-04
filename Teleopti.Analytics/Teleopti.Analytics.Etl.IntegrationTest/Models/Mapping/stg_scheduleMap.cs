@@ -8,7 +8,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.Models.Mapping
         public stg_scheduleMap()
         {
             // Primary Key
-            this.HasKey(t => new { t.schedule_date, t.person_code, t.interval_id, t.activity_start, t.scenario_code, t.shift_start });
+			this.HasKey(t => new { t.schedule_date_local, t.schedule_date_utc, t.person_code, t.interval_id, t.activity_start, t.scenario_code, t.shift_start });
 
             // Properties
             this.Property(t => t.interval_id)
@@ -20,7 +20,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.Models.Mapping
 
             // Table & Column Mappings
             this.ToTable("stg_schedule", "stage");
-            this.Property(t => t.schedule_date).HasColumnName("schedule_date");
+			this.Property(t => t.schedule_date_local).HasColumnName("schedule_date_local");
+			this.Property(t => t.schedule_date_utc).HasColumnName("schedule_date_utc");
             this.Property(t => t.person_code).HasColumnName("person_code");
             this.Property(t => t.interval_id).HasColumnName("interval_id");
             this.Property(t => t.activity_start).HasColumnName("activity_start");

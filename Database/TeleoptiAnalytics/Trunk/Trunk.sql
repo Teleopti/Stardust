@@ -329,3 +329,480 @@ GO
 IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'fact_agent_state' AND jobstep_id=86)
 INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(86,N'fact_agent_state')
 GO
+
+----------------  
+--Name: DJ
+--Date: 2014-02-03
+--Desc: #26422 - re-factor mart do match new PersonAssignment
+----------------
+DROP TABLE [stage].[stg_schedule]
+GO
+CREATE TABLE [stage].[stg_schedule](
+	[schedule_date_local] smalldatetime NOT NULL,
+	[schedule_date_utc] smalldatetime NOT NULL,
+	[person_code] uniqueidentifier NOT NULL,
+	[interval_id] smallint NOT NULL,
+	[activity_start] smalldatetime NOT NULL,
+	[scenario_code] uniqueidentifier NOT NULL,
+	[activity_code] uniqueidentifier NULL,
+	[absence_code] uniqueidentifier NULL,
+	[activity_end] smalldatetime NOT NULL,
+	[shift_start] smalldatetime NOT NULL,
+	[shift_end] smalldatetime NOT NULL,
+	[shift_startinterval_id] smallint NOT NULL,
+	[shift_endinterval_id] smallint NOT NULL,
+	[shift_category_code] uniqueidentifier NULL,
+	[shift_length_m] int NOT NULL,
+	[scheduled_time_m] int NULL,
+	[scheduled_time_absence_m] int NULL,
+	[scheduled_time_activity_m] int NULL,
+	[scheduled_contract_time_m] int NULL,
+	[scheduled_contract_time_activity_m] int NULL,
+	[scheduled_contract_time_absence_m] int NULL,
+	[scheduled_work_time_m] int NULL,
+	[scheduled_work_time_activity_m] int NULL,
+	[scheduled_work_time_absence_m] int NULL,
+	[scheduled_over_time_m] int NULL,
+	[scheduled_ready_time_m] int NULL,
+	[scheduled_paid_time_m] int NULL,
+	[scheduled_paid_time_activity_m] int NULL,
+	[scheduled_paid_time_absence_m] int NULL,
+	[last_publish] smalldatetime NOT NULL,
+	[business_unit_code] uniqueidentifier NOT NULL,
+	[business_unit_name] nvarchar(50) NOT NULL,
+	[datasource_id] smallint NOT NULL,
+	[insert_date] smalldatetime NOT NULL,
+	[update_date] smalldatetime NOT NULL,
+	[datasource_update_date] smalldatetime NOT NULL,
+	[overtime_code] uniqueidentifier NULL,
+ CONSTRAINT [PK_stg_schedule] PRIMARY KEY CLUSTERED 
+(
+	[schedule_date_local] ASC,
+	[schedule_date_utc] ASC,
+	[person_code] ASC,
+	[interval_id] ASC,
+	[activity_start] ASC,
+	[scenario_code] ASC,
+	[shift_start] ASC
+)
+) ON [STAGE]
+
+ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+DROP TABLE [stage].[stg_schedule_changed]
+GO
+CREATE TABLE [stage].[stg_schedule_changed](
+	[schedule_date_local] smalldatetime NOT NULL,
+	[person_code] uniqueidentifier NOT NULL,
+	[scenario_code] uniqueidentifier NOT NULL,
+	[business_unit_code] uniqueidentifier NOT NULL,
+	[datasource_id] smallint NOT NULL,
+	[datasource_update_date] smalldatetime NOT NULL,
+ CONSTRAINT [PK_stg_schedule_changed] PRIMARY KEY CLUSTERED 
+(
+	[schedule_date_local] ASC,
+	[person_code] ASC,
+	[scenario_code] ASC
+)
+) ON [STAGE]
+
+----------------  
+--Name: KJ
+--Date: 2014-02-04
+--Desc: New column fact_schedule for local date
+----------------
+--ADD NEW COLUMN
+CREATE TABLE [mart].[fact_schedule_tmp](
+	[shift_startdate_local_id] [int] NOT NULL,
+	[schedule_date_id] [int] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[interval_id] [smallint] NOT NULL,
+	[activity_starttime] [smalldatetime] NOT NULL,
+	[scenario_id] [smallint] NOT NULL,
+	[activity_id] [int] NULL,
+	[absence_id] [int] NULL,
+	[activity_startdate_id] [int] NULL,
+	[activity_enddate_id] [int] NULL,
+	[activity_endtime] [smalldatetime] NULL,
+	[shift_startdate_id] [int] NULL,
+	[shift_starttime] [smalldatetime] NULL,
+	[shift_enddate_id] [int] NULL,
+	[shift_endtime] [smalldatetime] NULL,
+	[shift_startinterval_id] [smallint] NULL,
+	[shift_endinterval_id] smallint NULL,
+	[shift_category_id] [int] NULL,
+	[shift_length_id] [int] NULL,
+	[scheduled_time_m] [int] NULL,
+	[scheduled_time_absence_m] [int] NULL,
+	[scheduled_time_activity_m] [int] NULL,
+	[scheduled_contract_time_m] [int] NULL,
+	[scheduled_contract_time_activity_m] [int] NULL,
+	[scheduled_contract_time_absence_m] [int] NULL,
+	[scheduled_work_time_m] [int] NULL,
+	[scheduled_work_time_activity_m] [int] NULL,
+	[scheduled_work_time_absence_m] [int] NULL,
+	[scheduled_over_time_m] [int] NULL,
+	[scheduled_ready_time_m] [int] NULL,
+	[scheduled_paid_time_m] [int] NULL,
+	[scheduled_paid_time_activity_m] [int] NULL,
+	[scheduled_paid_time_absence_m] [int] NULL,
+	[last_publish] [smalldatetime] NULL,
+	[business_unit_id] [int] NULL,
+	[datasource_id] [smallint] NULL,
+	[insert_date] [smalldatetime] NULL,
+	[update_date] [smalldatetime] NULL,
+	[datasource_update_date] [smalldatetime] NULL,
+	[overtime_id] [int] NOT NULL,
+	CONSTRAINT [PK_fact_schedule_tmp] PRIMARY KEY CLUSTERED 
+(
+	[shift_startdate_local_id] ASC,
+	[scenario_id] ASC,
+	[schedule_date_id] ASC,
+	[person_id] ASC,
+	[interval_id] ASC,
+	[activity_starttime] ASC
+) ON [MART]
+) ON [MART]
+
+GO
+
+--Prepare intervals for new column
+DECLARE @date_min smalldatetime
+SET @date_min='1900-01-01'
+
+CREATE TABLE #intervals
+(
+	interval_id smallint not null,
+	interval_start smalldatetime null,
+	interval_end smalldatetime null
+)
+
+INSERT #intervals(interval_id,interval_start,interval_end)
+SELECT interval_id= interval_id,
+	interval_start= interval_start,
+	interval_end = interval_end
+FROM mart.dim_interval
+ORDER BY interval_id
+--remove one minute from last interval to be able to join shifts ending at UTC midnight
+update #intervals 
+set interval_end=dateadd(minute,-1,interval_end) 
+where interval_end=dateadd(day,1,@date_min)
+
+--INSERT DATA FROM OLD FACT_SCHEDULE
+INSERT [mart].[fact_schedule_tmp](shift_startdate_local_id, schedule_date_id, person_id, interval_id, activity_starttime, scenario_id, activity_id, absence_id, activity_startdate_id, activity_enddate_id, activity_endtime, shift_startdate_id, shift_starttime, shift_enddate_id, shift_endtime, shift_startinterval_id, shift_endinterval_id, shift_category_id, shift_length_id, scheduled_time_m, scheduled_time_absence_m, scheduled_time_activity_m, scheduled_contract_time_m, scheduled_contract_time_activity_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_work_time_activity_m, scheduled_work_time_absence_m, scheduled_over_time_m, scheduled_ready_time_m, scheduled_paid_time_m, scheduled_paid_time_activity_m, scheduled_paid_time_absence_m, last_publish, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date, overtime_id)
+SELECT btz.local_date_id, f.schedule_date_id, f.person_id, f.interval_id, f.activity_starttime, f.scenario_id, f.activity_id, f.absence_id, f.activity_startdate_id, f.activity_enddate_id, f.activity_endtime, f.shift_startdate_id, f.shift_starttime, f.shift_enddate_id, f.shift_endtime, f.shift_startinterval_id, di.interval_id, f.shift_category_id, f.shift_length_id, f.scheduled_time_m, f.scheduled_time_absence_m, f.scheduled_time_activity_m, f.scheduled_contract_time_m, f.scheduled_contract_time_activity_m, f.scheduled_contract_time_absence_m, f.scheduled_work_time_m, f.scheduled_work_time_activity_m, f.scheduled_work_time_absence_m, f.scheduled_over_time_m, f.scheduled_ready_time_m, f.scheduled_paid_time_m, f.scheduled_paid_time_activity_m, f.scheduled_paid_time_absence_m, f.last_publish, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date, f.overtime_id
+FROM [mart].[fact_schedule] f
+INNER JOIN mart.bridge_time_zone btz 
+	ON f.shift_startdate_id=btz.date_id 
+	AND f.shift_startinterval_id=btz.interval_id
+INNER JOIN mart.dim_person dp
+	ON f.person_id=dp.person_id
+	AND btz.time_zone_id=dp.time_zone_id
+INNER JOIN #intervals di
+	ON	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) > di.interval_start
+	AND	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) <= di.interval_end
+GO
+
+--drop all constraints
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_scenario]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_person]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_interval1]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_interval]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date4]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date3]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date2]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date1]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_date]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_activity]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [FK_fact_schedule_dim_absence]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_update_date]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_insert_date]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_datasource_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_last_publish]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_length_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_category_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_startinterval_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_endtime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_enddate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_starttime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_startdate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_endtime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_enddate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_startdate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_absence_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_scenario_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_activity_starttime]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_interval_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_person_id]
+GO
+ALTER TABLE [mart].[fact_schedule] DROP CONSTRAINT [DF_fact_schedule_schedule_date_id]
+GO
+
+--RENAME old TABLE
+EXEC sp_rename 'mart.fact_schedule', 'fact_schedule_old'
+GO
+--RENAME TMP KEY
+EXEC sp_rename 'mart.PK_fact_schedule', 'PK_fact_schedule_old'
+GO
+--RENAME TMP TABLE
+EXEC sp_rename 'mart.fact_schedule_tmp', 'fact_schedule'
+GO
+--RENAME TMP KEY
+EXEC sp_rename 'mart.PK_fact_schedule_tmp', 'PK_fact_schedule'
+GO
+--ADD ALL CONSTRAINTS
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_schedule_date_id]  DEFAULT ((-1)) FOR [schedule_date_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_person_id]  DEFAULT ((-1)) FOR [person_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_interval_id]  DEFAULT ((-1)) FOR [interval_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_activity_starttime]  DEFAULT (((1900)-(1))-(1)) FOR [activity_starttime]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_scenario_id]  DEFAULT ((-1)) FOR [scenario_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_activity_id]  DEFAULT ((-1)) FOR [activity_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_absence_id]  DEFAULT ((-1)) FOR [absence_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_activity_startdate_id]  DEFAULT ((-1)) FOR [activity_startdate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_activity_enddate_id]  DEFAULT ((-1)) FOR [activity_enddate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_activity_endtime]  DEFAULT (((2059)-(12))-(31)) FOR [activity_endtime]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_startdate_id]  DEFAULT ((-1)) FOR [shift_startdate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_starttime]  DEFAULT (((1900)-(1))-(1)) FOR [shift_starttime]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_enddate_id]  DEFAULT ((-1)) FOR [shift_enddate_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_endtime]  DEFAULT (((2059)-(12))-(31)) FOR [shift_endtime]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_startinterval_id]  DEFAULT ((-1)) FOR [shift_startinterval_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_endinterval_id]  DEFAULT ((-1)) FOR [shift_endinterval_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_category_id]  DEFAULT ((-1)) FOR [shift_category_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_length_id]  DEFAULT ((-1)) FOR [shift_length_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_last_publish]  DEFAULT (((1900)-(1))-(1)) FOR [last_publish]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+ALTER TABLE [mart].[fact_schedule] ADD  DEFAULT ((-1)) FOR [overtime_id]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_absence]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_activity] FOREIGN KEY([activity_id])
+REFERENCES [mart].[dim_activity] ([activity_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_activity]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_date] FOREIGN KEY([schedule_date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_date]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_date1] FOREIGN KEY([activity_startdate_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_date1]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_date2] FOREIGN KEY([activity_enddate_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_date2]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_date3] FOREIGN KEY([shift_startdate_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_date3]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_date4] FOREIGN KEY([shift_enddate_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_date4]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_interval] FOREIGN KEY([interval_id])
+REFERENCES [mart].[dim_interval] ([interval_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_interval]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_interval1] FOREIGN KEY([shift_startinterval_id])
+REFERENCES [mart].[dim_interval] ([interval_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_interval1]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_interval2] FOREIGN KEY([shift_endinterval_id])
+REFERENCES [mart].[dim_interval] ([interval_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_interval2]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_person]
+GO
+ALTER TABLE [mart].[fact_schedule]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_dim_scenario] FOREIGN KEY([scenario_id])
+REFERENCES [mart].[dim_scenario] ([scenario_id])
+GO
+ALTER TABLE [mart].[fact_schedule] CHECK CONSTRAINT [FK_fact_schedule_dim_scenario]
+GO
+
+----------------  
+--Name: KJ
+--Date: 2014-02-04
+--Desc: New column fact_schedule_deviation for local date
+----------------
+--NEW COLUMN IN FACT_SCHEDULE_DEVIATION
+
+CREATE TABLE [mart].[fact_schedule_deviation_tmp](
+	[shift_startdate_local_id] [int] NOT NULL,
+	[date_id] [int] NOT NULL,
+	[interval_id] [smallint] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[scheduled_ready_time_s] [int] NULL,
+	[ready_time_s] [int] NULL,
+	[contract_time_s] [int] NULL,
+	[deviation_schedule_s] [decimal](18, 4) NULL,
+	[deviation_schedule_ready_s] [decimal](18, 4) NULL,
+	[deviation_contract_s] [decimal](18, 4) NULL,
+	[business_unit_id] [int] NULL,
+	[datasource_id] [smallint] NULL,
+	[insert_date] [smalldatetime] NULL,
+	[update_date] [smalldatetime] NULL,
+	[is_logged_in] [bit] NOT NULL,
+	[shift_startdate_id] [int] NULL,
+	[shift_startinterval_id] [smallint] NULL,
+ CONSTRAINT [PK_fact_schedule_deviation_tmp] PRIMARY KEY CLUSTERED 
+(
+	[shift_startdate_local_id] ASC,
+	[date_id] ASC,
+	[interval_id] ASC,
+	[person_id] ASC
+)ON [MART]
+) ON [MART]
+GO
+--move data
+--INSERT DATA FROM OLD FACT_SCHEDULE_DEVIATION
+INSERT [mart].[fact_schedule_deviation_tmp](shift_startdate_local_id,date_id, interval_id, person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, business_unit_id, datasource_id, insert_date, update_date, is_logged_in, shift_startdate_id, shift_startinterval_id )
+SELECT btz.local_date_id,f.date_id, f.interval_id,f.person_id, scheduled_ready_time_s, ready_time_s, contract_time_s, deviation_schedule_s, deviation_schedule_ready_s, deviation_contract_s, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, is_logged_in, shift_startdate_id, shift_startinterval_id
+FROM [mart].[fact_schedule_deviation] f
+INNER JOIN mart.bridge_time_zone btz 
+	ON f.shift_startdate_id=btz.date_id 
+	AND f.shift_startinterval_id=btz.interval_id
+INNER JOIN mart.dim_person dp
+	ON f.person_id=dp.person_id
+	AND btz.time_zone_id=dp.time_zone_id
+GO
+--drop constraints
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [FK_fact_schedule_deviation_dim_person]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [FK_fact_schedule_deviation_dim_interval]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [FK_fact_schedule_deviation_dim_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [DF_fact_schedule_deviation_update_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [DF_fact_schedule_deviation_insert_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] DROP CONSTRAINT [DF_fact_schedule_deviation_datasource_id]
+GO
+
+--RENAME old TABLE
+EXEC sp_rename 'mart.fact_schedule_deviation', 'fact_schedule_deviation_old'
+GO
+--RENAME TMP KEY
+EXEC sp_rename 'mart.PK_fact_schedule_deviation', 'PK_fact_schedule_deviation_old'
+GO
+--RENAME TMP TABLE
+EXEC sp_rename 'mart.fact_schedule_deviation_tmp', 'fact_schedule_deviation'
+GO
+--RENAME TMP KEY
+EXEC sp_rename 'mart.PK_fact_schedule_deviation_tmp', 'PK_fact_schedule_deviation'
+GO
+--add constraints
+ALTER TABLE [mart].[fact_schedule_deviation] ADD  CONSTRAINT [DF_fact_schedule_deviation_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] ADD  CONSTRAINT [DF_fact_schedule_deviation_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] ADD  CONSTRAINT [DF_fact_schedule_deviation_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_deviation_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] CHECK CONSTRAINT [FK_fact_schedule_deviation_dim_date]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_deviation_dim_interval] FOREIGN KEY([interval_id])
+REFERENCES [mart].[dim_interval] ([interval_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] CHECK CONSTRAINT [FK_fact_schedule_deviation_dim_interval]
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_deviation_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_deviation] CHECK CONSTRAINT [FK_fact_schedule_deviation_dim_person]
+GO
+
+--Drop unused code
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[DimPersonAdapted]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+DROP FUNCTION [mart].[DimPersonAdapted]
+
+
+

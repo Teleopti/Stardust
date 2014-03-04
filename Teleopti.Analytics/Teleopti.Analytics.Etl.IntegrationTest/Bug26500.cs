@@ -11,6 +11,7 @@ using Teleopti.Analytics.Etl.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Core;
+using Teleopti.Ccc.TestCommon.TestData.Setups.Configurable;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
@@ -39,13 +40,21 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
 			BasicShiftSetup.AddPerson(out person, "Ola H", "");
-			BasicShiftSetup.AddThreeShifts("Ola H");
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 			IPerson person2;
 			BasicShiftSetup.AddPerson(out person2, "David J", "");
-			BasicShiftSetup.AddThreeShifts("David J");
+			BasicShiftSetup.AddThreeShifts("David J", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 			
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			dateList.Add(DateTime.Today.AddDays(-3),DateTime.Today.AddDays(3),JobCategoryType.Schedule);
@@ -67,11 +76,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(0), person);
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(1), person);
-			BasicShiftSetup.AddThreeShifts("Ola H");
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			//edit one shift for David
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "David J", DateTime.Today.AddDays(0), person2);
-			BasicShiftSetup.AddShift("David J", DateTime.Today.AddDays(0), 10, 8);
+			BasicShiftSetup.AddShift("David J", DateTime.Today.AddDays(0), 10, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			StepRunner.RunIntraday(jobParameters);
 
