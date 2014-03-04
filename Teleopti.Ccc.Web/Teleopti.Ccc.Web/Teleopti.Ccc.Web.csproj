@@ -763,6 +763,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm_test.js" />
