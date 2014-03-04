@@ -153,7 +153,7 @@ SELECT @ParentForeignId = '0080'	--Parent Foreign id that is hardcoded
 SELECT @ParentId = Id FROM ApplicationFunction WHERE ForeignSource='Raptor' AND IsDeleted='False' AND ForeignId Like(@ParentForeignId + '%')
 	
 --insert/modify application function
-SELECT @ForeignId = '0091' --Foreign id of the function > hardcoded	
+SELECT @ForeignId = '0092' --Foreign id of the function > hardcoded	
 SELECT @FunctionCode = 'Raptor/Anywhere/RealTimeAdherenceOverview' --Name of the function > hardcoded
 SELECT @FunctionDescription = 'RealTimeAdherenceOverview' --Description of the function > hardcoded
 SELECT @ParentId = @ParentId

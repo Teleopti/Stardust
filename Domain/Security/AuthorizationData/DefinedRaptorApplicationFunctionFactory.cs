@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AccessToPerformanceManager, "xxPerformanceManager", DefinedRaptorApplicationFunctionForeignIds.AccessToPerformanceManager, 80);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.PayrollIntegration, "xxPayrollIntegration", DefinedRaptorApplicationFunctionForeignIds.PayrollIntegration, 200);
 			IApplicationFunction underConstruction = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.UnderConstruction, "xxUnderConstruction", DefinedRaptorApplicationFunctionForeignIds.UnderConstruction, null);
-				underConstruction.IsPreliminary = true;
+			underConstruction.IsPreliminary = true;
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAgentPortal, "xxAgentPortal", DefinedRaptorApplicationFunctionForeignIds.OpenAgentPortal, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MobileReports, "xxMobileReports", DefinedRaptorApplicationFunctionForeignIds.MobileReports, null);
 
@@ -89,13 +89,13 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyRestrictedScenario, "xxModifyRestrictedScenario", DefinedRaptorApplicationFunctionForeignIds.ModifyRestrictedScenario, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewActiveAgents, "xxViewActiveAgents", DefinedRaptorApplicationFunctionForeignIds.ViewActiveAgents, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities, "xxModifyAvailabilities", DefinedRaptorApplicationFunctionForeignIds.ModifyAvailabilities, null);
-		
+
 			// PersonAdmin
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPersonNameAndPassword, "xxModifyPersonNameAndPassword", DefinedRaptorApplicationFunctionForeignIds.ModifyPersonNameAndPassword, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyGroupPage, "xxModifyGroupPage", DefinedRaptorApplicationFunctionForeignIds.ModifyGroupPage, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyPeopleWithinGroupPage, "xxModifyPeopleWithinGroupPage", DefinedRaptorApplicationFunctionForeignIds.ModifyPeopleWithinGroupPage, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SendAsm, "xxSendAsm", DefinedRaptorApplicationFunctionForeignIds.SendAsm, null);
-            CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AllowPersonModifications, "xxAllowPersonModifications", DefinedRaptorApplicationFunctionForeignIds.AllowPersonModifications, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AllowPersonModifications, "xxAllowPersonModifications", DefinedRaptorApplicationFunctionForeignIds.AllowPersonModifications, null);
 
 			// Options
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ManageRealTimeAdherence, "xxManageRTA", DefinedRaptorApplicationFunctionForeignIds.ManageRealTimeAdherence, null);
@@ -111,22 +111,22 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 
 			// Forecaster
 			CreateAndAddApplicationFunction(applicationFunctionList,
-			                                DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit,
-			                                "xxExportForecastToOtherBusinessUnit",
-			                                DefinedRaptorApplicationFunctionForeignIds.ExportForecastToOtherBusinessUnit, null);
-            CreateAndAddApplicationFunction(applicationFunctionList,
-			                                DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile,
-                                            "xxImportForecastFromFile",
-											DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
+																			DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit,
+																			"xxExportForecastToOtherBusinessUnit",
+																			DefinedRaptorApplicationFunctionForeignIds.ExportForecastToOtherBusinessUnit, null);
+			CreateAndAddApplicationFunction(applicationFunctionList,
+																DefinedRaptorApplicationFunctionPaths.ImportForecastFromFile,
+																			"xxImportForecastFromFile",
+								DefinedRaptorApplicationFunctionForeignIds.ImportForecastFromFile, null);
 			CreateAndAddApplicationFunction(applicationFunctionList,
 											DefinedRaptorApplicationFunctionPaths.ExportForecastFile,
 											"xxExportToFile",
 											DefinedRaptorApplicationFunctionForeignIds.ExportForecastFile, null);
 			// Budget
 			CreateAndAddApplicationFunction(applicationFunctionList,
-			                                DefinedRaptorApplicationFunctionPaths.RequestAllowances,
-                                            "xxRequestAllowances",
-                                            DefinedRaptorApplicationFunctionForeignIds.RequestAllowances, null);
+																			DefinedRaptorApplicationFunctionPaths.RequestAllowances,
+																						"xxRequestAllowances",
+																						DefinedRaptorApplicationFunctionForeignIds.RequestAllowances, null);
 			// Agent Portal
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OpenAsm, "xxASM", DefinedRaptorApplicationFunctionForeignIds.OpenAsm, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ModifyShiftCategoryPreferences, "xxModifyShiftCategoryPreferences", DefinedRaptorApplicationFunctionForeignIds.ModifyShiftCategoryPreferences, null);
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShareCalendar, "xxShareCalendar", DefinedRaptorApplicationFunctionForeignIds.ShareCalendar, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb, "xxOvertimeAvailabilityWeb", DefinedRaptorApplicationFunctionForeignIds.OvertimeAvailabilityWeb, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyReportWeb, "xxMyReportWeb", DefinedRaptorApplicationFunctionForeignIds.MyReportWeb, null);
-            CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MonthSchedule, "xxMonthSchedule", DefinedRaptorApplicationFunctionForeignIds.MonthSchedule, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MonthSchedule, "xxMonthSchedule", DefinedRaptorApplicationFunctionForeignIds.MonthSchedule, null);
 
 			// Anywhere
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
@@ -192,14 +192,14 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			string parentPath = ApplicationFunction.GetParentPath(functionPath);
 
 			var newFunction = new ApplicationFunction
-			                  	{
-			                  		FunctionCode = codeName,
-			                  		FunctionDescription = functionDescription,
-			                  		Parent = ApplicationFunction.FindByPath(applicationFunctionList, parentPath),
-			                  		ForeignId = definedKey,
-			                  		ForeignSource = DefinedForeignSourceNames.SourceRaptor,
-			                  		SortOrder = sortOrder
-			                  	};
+													{
+														FunctionCode = codeName,
+														FunctionDescription = functionDescription,
+														Parent = ApplicationFunction.FindByPath(applicationFunctionList, parentPath),
+														ForeignId = definedKey,
+														ForeignSource = DefinedForeignSourceNames.SourceRaptor,
+														SortOrder = sortOrder
+													};
 			applicationFunctionList.Add(newFunction);
 			return newFunction;
 		}
