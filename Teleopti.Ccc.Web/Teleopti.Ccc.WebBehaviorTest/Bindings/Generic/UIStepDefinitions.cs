@@ -75,5 +75,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.AssertFirstContains("." + cssClass.Name, text.Text);
 		}
+
+		[Then(@"In the list, I should see the ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
+		public void ThenInTheListIShouldSeeTheMessage(CssClass cssClass, LocalizedText text)
+		{
+			Browser.Interactions.AssertAnyContains("." + cssClass.Name, text.Text);
+		}
+
 	}
 }

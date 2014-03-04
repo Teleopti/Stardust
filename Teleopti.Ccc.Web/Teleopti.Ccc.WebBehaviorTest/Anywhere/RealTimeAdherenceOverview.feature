@@ -10,7 +10,7 @@ Scenario: Show site
 	| Access to real time adherence overview | True              |
 	And there is a site named 'London'
 	When I view Real time adherence overview
-	Then I should see the site 'London'
+	Then In the list, I should see the site 'London'
 
 Scenario: Show team
 	Given I have a role with
