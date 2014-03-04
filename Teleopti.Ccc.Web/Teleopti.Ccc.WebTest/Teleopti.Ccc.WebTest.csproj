@@ -158,6 +158,7 @@
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Controllers\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SitesControllerTest.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\TeamsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapperTest.cs" />

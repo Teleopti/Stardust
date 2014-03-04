@@ -253,6 +253,7 @@
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\SitesController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\TeamsController.cs" />
     <Compile Include="Areas\Anywhere\Core\SiteViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelFactory.cs" />
@@ -264,6 +265,7 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleShiftViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />

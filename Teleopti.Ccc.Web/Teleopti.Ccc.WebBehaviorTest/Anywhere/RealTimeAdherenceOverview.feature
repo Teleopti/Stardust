@@ -11,7 +11,7 @@ Scenario: Show site
 	And there is a site named 'London'
 	When I view Real time adherence overview
 	Then I should see the site 'London'
-@ignore
+
 Scenario: Show team
 	Given I have a role with
 	| Field                                  | Value             |
