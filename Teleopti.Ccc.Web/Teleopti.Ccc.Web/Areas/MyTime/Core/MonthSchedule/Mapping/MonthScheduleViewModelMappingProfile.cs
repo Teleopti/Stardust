@@ -63,22 +63,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 						        || significantPart == SchedulePartView.ContractDayOff);
 					}))
 				.ForMember(d => d.Shift, c => c.ResolveUsing(s =>
+				{
+					var personAssignment = s.ScheduleDay.PersonAssignment();
+					var projection = _projectionProvider.Projection(s.ScheduleDay);
+
+					var isNullPersonAssignment = personAssignment == null;
+					var isNullShiftCategoryInfo = isNullPersonAssignment || personAssignment.ShiftCategory == null;
+					var name = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.Name;
+					var shortName = isNullShiftCategoryInfo ? null : personAssignment.ShiftCategory.Description.ShortName;
+					var color = isNullShiftCategoryInfo ? null : formatRgbColor(personAssignment.ShiftCategory.DisplayColor);
+					var contractTime = projection == null ? TimeSpan.Zero : projection.ContractTime();
+					return new ShiftViewModel
 					{
-						var personAssignment = s.ScheduleDay.PersonAssignment();
-						var projection = _projectionProvider.Projection(s.ScheduleDay);
-						var isNullShiftCategory = personAssignment.ShiftCategory == null;
-						var name = isNullShiftCategory ? null : personAssignment.ShiftCategory.Description.Name;
-						var shortName = isNullShiftCategory ? null : personAssignment.ShiftCategory.Description.ShortName;
-						var color = isNullShiftCategory ? null : formatRgbColor(personAssignment.ShiftCategory.DisplayColor);
-						var contractTime = projection == null ? TimeSpan.Zero : projection.ContractTime();
-						return new ShiftViewModel
-									{
-										Name = name,
-										ShortName = shortName,
-										Color = color,
-										TimeSpan = personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString(),
-										WorkingHours = TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture)
-									};
+						Name = name,
+						ShortName = shortName,
+						Color = color,
+						TimeSpan = isNullPersonAssignment ? string.Empty : personAssignment.Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString(),
+						WorkingHours = TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture)
+					};
 					}));
 		}
 
