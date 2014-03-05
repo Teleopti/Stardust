@@ -202,8 +202,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
 		{
-			Browser.Interactions.AssertAnyContains("#Request-add-section .request-new-error", string.Format(Resources.InvalidTimeValue, Resources.Period));
-			Browser.Interactions.AssertAnyContains("#Request-add-section .request-new-error", Resources.MissingSubject);
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", string.Format(Resources.InvalidTimeValue, Resources.Period));
+			Browser.Interactions.AssertFirstContains("#Request-add-section .request-new-error", Resources.MissingSubject);
 		}
 
 		[Then(@"I should see message adjusted to maximum length")]
