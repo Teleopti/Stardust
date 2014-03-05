@@ -8,12 +8,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 {
 	public static class Navigation
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof (Navigation));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(Navigation));
 
 		public static void GoToWaitForUrlAssert(string pageUrl, string assertUrlContains, params IGoToInterceptor[] interceptors)
 		{
-			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl), 
-				s => Browser.Interactions.GoToWaitForUrlAssert(s, assertUrlContains), 
+			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl),
+				s => Browser.Interactions.GoToWaitForUrlAssert(s, assertUrlContains),
 				interceptors);
 		}
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		private static void InnerGoto(Uri url, Action<string> gotoAction, params IGoToInterceptor[] interceptors)
 		{
-			var args = new GotoArgs {Uri = url};
+			var args = new GotoArgs { Uri = url };
 
 			interceptors.ToList().ForEach(i => i.Before(args));
 
@@ -107,12 +107,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoWeekSchedulePageNoWait()
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
-                new ApplicationStartupTimeout());
+								new ApplicationStartupTimeout());
 		}
 
 		public static void GotoWeekSchedulePage(DateTime date)
 		{
-			GoToWaitForCompleted(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
+			GoToWaitForCompleted(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}",
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
 				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
 		}
@@ -125,13 +125,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoAvailability(DateTime date)
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Availability/Index/{0}/{1}/{2}",
-			                   date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+												 date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
 				 new ApplicationStartupTimeout());
 		}
 
 		public static void GotoPreference()
 		{
-			GoToWaitForCompleted("MyTime#Preference/Index", 
+			GoToWaitForCompleted("MyTime#Preference/Index",
 				new ApplicationStartupTimeout(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
 		}
 
@@ -171,8 +171,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoTeamSchedule(DateTime date)
 		{
-			GoToWaitForCompleted(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
-				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
+			GoToWaitForCompleted(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}",
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00"))
 				, new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 			if (Browser.Current != null)
 				Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
@@ -190,10 +190,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.AssertUrlContains("blank");
 		}
 
-	    public static void GotoMessagePage()
-        {
+		public static void GotoMessagePage()
+		{
 			GoToWaitForCompleted("MyTime#Message/Index", new ApplicationStartupTimeout());
-	    }
+		}
 
 		public static void GoToPerformanceTool()
 		{
@@ -213,8 +213,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoAnywhereTeamSchedule(DateTime date)
 		{
 			GoToWaitForUrlAssert(string.Format("Anywhere#teamschedule/{0}{1}{2}",
-				date.Year.ToString("0000"), 
-				date.Month.ToString("00"), 
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
 				date.Day.ToString("00")),
 				"Anywhere#teamschedule",
 				new ApplicationStartupTimeout());
@@ -225,8 +225,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForUrlAssert(
 				string.Format("Anywhere#teamschedule/{0}/{1}{2}{3}",
 				teamId,
-				date.Year.ToString("0000"), 
-				date.Month.ToString("00"), 
+				date.Year.ToString("0000"),
+				date.Month.ToString("00"),
 				date.Day.ToString("00")),
 				"Anywhere#teamschedule",
 				new ApplicationStartupTimeout());
@@ -236,11 +236,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoToWaitForUrlAssert(
 				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}",
-				              groupId,
-				              personId,
-				              date.Year.ToString("0000"),
-				              date.Month.ToString("00"),
-				              date.Day.ToString("00")
+											groupId,
+											personId,
+											date.Year.ToString("0000"),
+											date.Month.ToString("00"),
+											date.Day.ToString("00")
 					),
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForUrlAssert(
 				string.Format("Anywhere#personschedule/{0}/{1}/{2}{3}{4}/addfulldayabsence",
 				groupId,
-				personId, 
+				personId,
 				date.Year.ToString("0000"),
 				date.Month.ToString("00"),
 				date.Day.ToString("00")),
@@ -285,6 +285,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
+		public static void GotoAnywhereRealTimeAdherenceOverview()
+		{
+			GoToWaitForUrlAssert(
+				"Anywhere#realtimeadherence",
+				"Anywhere#realtimeadherence",
+				new ApplicationStartupTimeout());
+		}
+
+		public static void GotoAnywhereRealTimeAdherenceOverview(Guid siteId)
+		{
+			GoToWaitForUrlAssert(
+				string.Format("Anywhere#realtimeadherencesite/{0}", siteId),
+				"Anywhere#realtimeadherence",
+				new ApplicationStartupTimeout());
+		}
+
 		public static void GotoRequestsShiftTrade(DateTime date)
 		{
 			GoToWaitForCompleted(
@@ -292,8 +308,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Year.ToString("0000"),
 				date.Month.ToString("00"),
 				date.Day.ToString("00")),
-				new BustCache(), 
-				new ApplicationStartupTimeout(), 
+				new BustCache(),
+				new ApplicationStartupTimeout(),
 				new WaitUntilReadyForInteraction());
 			if (Browser.Current != null)
 				Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
@@ -304,18 +320,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted("MyTime#MyReport/Index", new ApplicationStartupTimeout());
 		}
 
-	    public static void GotoMonthSchedulePage(DateTime date)
-	    {
-            GoToWaitForCompleted(string.Format("MyTime#Schedule/Month/{0}/{1}/{2}",
-                date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-                new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
-	    }
+		public static void GotoMonthSchedulePage(DateTime date)
+		{
+			GoToWaitForCompleted(string.Format("MyTime#Schedule/Month/{0}/{1}/{2}",
+					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+					new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+		}
 
-        public static void GotoMonthSchedulePage()
-        {
-            GoToWaitForCompleted("MyTime#Schedule/Month",
-                new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
-        }
+		public static void GotoMonthSchedulePage()
+		{
+			GoToWaitForCompleted("MyTime#Schedule/Month",
+					new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+		}
 
 		public static void GoToMyReport(DateTime date)
 		{
@@ -323,6 +339,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
 				new ApplicationStartupTimeout());
 		}
+
 	}
 
 	public class GotoArgs

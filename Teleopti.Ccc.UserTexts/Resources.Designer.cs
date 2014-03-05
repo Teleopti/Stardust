@@ -18053,6 +18053,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Real time adherence overview.
+        /// </summary>
+        public static string RealTimeAdherenceOverview {
+            get {
+                return ResourceManager.GetString("RealTimeAdherenceOverview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Re&amp;place.
         /// </summary>
         public static string ReAmpersandplace {

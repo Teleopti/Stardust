@@ -1343,8 +1343,4 @@
   <data name="ResStateGroupColon" xml:space="preserve">
     <value>Statusgrupper:</value>
   </data>
-  <data name="ResReportAgentSkills" xml:space="preserve">
-    <value>Agent Kompetenser</value>
-    <comment>Agent Kompetenser</comment>
-  </data>
 </root>

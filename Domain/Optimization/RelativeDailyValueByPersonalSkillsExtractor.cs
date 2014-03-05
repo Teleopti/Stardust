@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -12,15 +14,26 @@ namespace Teleopti.Ccc.Domain.Optimization
     public class RelativeDailyValueByPersonalSkillsExtractor : IScheduleResultDailyValueCalculator
     {
         private readonly IAdvancedPreferences _advancedPreferences;
-        private readonly IScheduleMatrixPro _scheduleMatrix;
+	    private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
+	    private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
+	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
+	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences advancedPreferences)
-        {
-            _scheduleMatrix = scheduleMatrix;
-            _advancedPreferences = advancedPreferences;
-        }
+	    public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix,
+	                                                       IAdvancedPreferences advancedPreferences,
+	                                                       ISkillStaffPeriodToSkillIntervalDataMapper
+		                                                       skillStaffPeriodToSkillIntervalDataMapper,
+	                                                       ISkillIntervalDataDivider skillIntervalDataDivider,
+															ISkillIntervalDataAggregator skillIntervalDataAggregator)
+	    {
+		    _scheduleMatrix = scheduleMatrix;
+		    _advancedPreferences = advancedPreferences;
+		    _skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
+		    _skillIntervalDataDivider = skillIntervalDataDivider;
+		    _skillIntervalDataAggregator = skillIntervalDataAggregator;
+	    }
 
-        public IList<double?> Values()
+	    public IList<double?> Values()
         {
             IList<double?> ret = new List<double?>();
 
@@ -65,48 +78,52 @@ namespace Teleopti.Ccc.Domain.Optimization
         // todo: move to extractor methods
         private IList<double> GetIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
         {
-            IEnumerable<ISkill> personsActiveSkills = ExtractPersonalSkillList(scheduleDay);
+            IEnumerable<ISkill> personsActiveSkills = extractPersonalSkillList(scheduleDay);
+			var minResolution = personsActiveSkills.Min(skill => skill.DefaultResolution);
 
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                scheduleDay.Date, scheduleDay.Date.AddDays(1),
                TeleoptiPrincipal.Current.Regional.TimeZone);
-           
-            IList<ISkillStaffPeriod> personsSkillStaffPeriods =
-                _scheduleMatrix.SchedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(personsActiveSkills, dateTimePeriod);
+
+			IList<IList<ISkillIntervalData>> nestedList = new List<IList<ISkillIntervalData>>();
+
+			foreach (var personsActiveSkill in personsActiveSkills)
+			{
+				IList<ISkillStaffPeriod> personsSkillStaffPeriods =
+				_scheduleMatrix.SchedulingStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new[] { personsActiveSkill }, dateTimePeriod);
+
+				if (!personsSkillStaffPeriods.Any())
+					continue;
+
+				var skillIntervalDataList =
+				_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(personsSkillStaffPeriods);
+
+				var splittedSkillIntervalDataList = _skillIntervalDataDivider.SplitSkillIntervalData(skillIntervalDataList,
+																									  minResolution);
+				nestedList.Add(splittedSkillIntervalDataList);
+			}
+
+			var aggregatedByPeriodSkillIntevalDataList =
+				_skillIntervalDataAggregator.AggregateSkillIntervalData(nestedList);
            
             bool useMinPersonnel = _advancedPreferences.UseMinimumStaffing;
             bool useMaxPersonnel = _advancedPreferences.UseMaximumStaffing;
 
-            return SkillStaffPeriodsRelativeDifference(personsSkillStaffPeriods, useMinPersonnel, useMaxPersonnel);
+			return skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntevalDataList, useMinPersonnel, useMaxPersonnel);
         }
 
-        //todo: move to extractor methods
-        /// <summary>
-        /// Gets the intraday relative differences in hours between forecasted and scheduled resources in the specified
-        /// <see cref="ISkillStaffPeriod"/> list.
-        /// </summary>
-        /// <param name="skillStaffPeriods">The skill staff periods.</param>
-        /// <param name="considerMinStaffing">if set to <c>true</c> then consider the preset minimum staffing.</param>
-        /// <param name="considerMaxStaffing">if set to <c>true</c> then consider the preset maximum staffing.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// This method is used for getting the difference diference in hours for a day, preceding by a method
-        /// that gets the <see cref="ISkillStaffPeriod"/> list for a given day. This method is called by
-        /// that <see cref="ISkillStaffPeriod"/> list as parameter.
-        /// todo: move to extractor methods
-        /// </remarks>
-        public static IList<double> SkillStaffPeriodsRelativeDifference(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, bool considerMinStaffing, bool considerMaxStaffing)
+		public static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList, bool considerMinStaffing, bool considerMaxStaffing)
         {
-            if (considerMinStaffing && considerMaxStaffing)
-                return skillStaffPeriods.Select(s => s.RelativeDifferenceBoosted()).ToList();
-            if (considerMinStaffing)
-                return skillStaffPeriods.Select(s => s.RelativeDifferenceMinStaffBoosted() ).ToList();
-            if (considerMaxStaffing)
-                return skillStaffPeriods.Select(s => s.RelativeDifferenceMaxStaffBoosted()).ToList();
-            return skillStaffPeriods.Select(s => s.RelativeDifference).ToList();
+			if (considerMinStaffing && considerMaxStaffing)
+				return skillIntervalDataList.Select(s => s.RelativeDifferenceBoosted()).ToList();
+			if (considerMinStaffing)
+				return skillIntervalDataList.Select(s => s.RelativeDifferenceMinStaffBoosted()).ToList();
+			if (considerMaxStaffing)
+				return skillIntervalDataList.Select(s => s.RelativeDifferenceMaxStaffBoosted()).ToList();
+			return skillIntervalDataList.Select(s => s.RelativeDifference()).ToList();
         }
 
-        private IEnumerable<ISkill> ExtractPersonalSkillList(DateOnly scheduleDate)
+        private IEnumerable<ISkill> extractPersonalSkillList(DateOnly scheduleDate)
         {
             return _scheduleMatrix.Person.Period(scheduleDate).PersonSkillCollection.Select(s => s.Skill).ToList();
         }

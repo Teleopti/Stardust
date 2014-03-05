@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
         public bool AccessToUnderConstruction { get; set; }
         public bool AccessToMonthSchedule { get; set; }
 		public bool AccessToPreferences { get; set; }
+		public bool AccessToRealTimeAdherenceOverview { get; set; }
 		public bool AccessToTeamSchedule { get; set; }
-
 	    public bool AccessToViewAllGroupPages { get; set; }
 
 		public RoleConfigurable()
@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
             AccessToUnderConstruction = true;
             AccessToMonthSchedule = true;
 			AccessToPreferences = true;
+			AccessToRealTimeAdherenceOverview = false;
 			AccessToTeamSchedule = true;
 		}
 
@@ -205,6 +206,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
             if (!AccessToMonthSchedule)
                 applicationFunctions = from f in applicationFunctions
                                        where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MonthSchedule
+                                       select f;
+			if (!AccessToRealTimeAdherenceOverview)
+                applicationFunctions = from f in applicationFunctions
+                                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
                                        select f;
 			return applicationFunctions;
 		}

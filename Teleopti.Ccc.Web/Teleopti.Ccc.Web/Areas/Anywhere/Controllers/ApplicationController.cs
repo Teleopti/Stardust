@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			            		UserName = _currentTeleoptiPrincipal.Current().Identity.Name,
 								IsMyTimeAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb),
 								IsMobileReportsAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MobileReports),
+								IsRealTimeAdherenceAvailable = _principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview),
 			            	}, JsonRequestBehavior.AllowGet);
 		}
 

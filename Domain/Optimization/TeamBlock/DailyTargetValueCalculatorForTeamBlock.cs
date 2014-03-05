@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             }
             else
             {
-                var aggregatedValues = finalSkillIntervalData.Select(interval => interval.RelativeDifference).ToList();
+                var aggregatedValues = finalSkillIntervalData.Select(interval => interval.RelativeDifference()).ToList();
                 if (targetValueCalculation == TargetValueOptions.StandardDeviation)
                     return Calculation.Variances.StandardDeviation(aggregatedValues);
                 return Calculation.Variances.Teleopti(aggregatedValues);
