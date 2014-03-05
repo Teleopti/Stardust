@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private MockRepository _mocks;
         private IScheduleMatrixPro _matrix;
         private IPerson _person;
-        private HashSet<ISkill> _skillList;
+        private List<ISkill> _skillList;
         private ISkill _skillA;
         private IScheduleDayPro _scheduleDayPro;
         private ISchedulingResultStateHolder _stateHolder;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             _mocks = new MockRepository();
             _matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-            _skillList = new HashSet<ISkill>();
+            _skillList = new List<ISkill>();
             _skillA = SkillFactory.CreateSkill("skillA", SkillTypeFactory.CreateSkillType(), 15);
             _skillList.Add(_skillA);
             _person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2010, 1, 1), _skillList);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_skillIntervalDatas = new List<ISkillIntervalData>();
         }
 
-		[Test, Ignore]
+		[Test]
 		public void VerifyValueOneDayOneSkillStaffPeriod()
 		{
 			ISkillStaffPeriod skillStaffPeriod1 = _mocks.StrictMock<ISkillStaffPeriod>();
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(0, ret[0].Value);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void VerifyValueOneDayOneSkillStaffPeriodMinStaff()
 		{
 			ISkillStaffPeriod skillStaffPeriod1;
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(0, ret[0].Value);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void VerifyValueOneDayOneSkillStaffPeriodMaxStaff()
 		{
 			ISkillStaffPeriod skillStaffPeriod1;
@@ -227,7 +227,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(0, ret[0].Value);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void VerifyValueOneDayOneSkillStaffPeriodMinMaxStaff()
 		{
 			ISkillStaffPeriod skillStaffPeriod1;
@@ -284,7 +284,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(0, ret[0].Value);
 		}
 
-		[Test, Ignore]
+		[Test]
 		public void VerifyValueOneDayMultipleSkillStaffPeriod()
 		{
 			ISkillStaffPeriod skillStaffPeriod1 = _mocks.StrictMock<ISkillStaffPeriod>();

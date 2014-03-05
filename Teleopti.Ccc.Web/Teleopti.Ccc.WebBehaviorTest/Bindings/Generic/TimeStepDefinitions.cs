@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"the time is '(.*)'")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
-			TestControllerMethods.SetCurrentTime(time);
+			CurrentTime.Set(time);
 		}
 
 		[When(@"the current browser time is '(.*)'")]

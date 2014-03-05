@@ -39,9 +39,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
-			if (ShiftColor != null)
-				shiftCategory.DisplayColor = Color.FromName(ShiftColor);
+			IShiftCategory shiftCategory = null;
+			if (ShiftCategory != null)
+			{
+				shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+				if (ShiftColor != null && shiftCategory != null)
+					shiftCategory.DisplayColor = Color.FromName(ShiftColor);
+			}
 
 			var activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
 			var assignmentRepository = new PersonAssignmentRepository(uow);

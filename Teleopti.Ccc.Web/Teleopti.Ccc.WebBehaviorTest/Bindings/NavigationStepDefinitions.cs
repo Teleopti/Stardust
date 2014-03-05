@@ -144,8 +144,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
 			              let team = t.Team
 			              where team.Description.Name.Equals(teamName)
-			              select team.Id.Value).First();
+			              select team.Id.GetValueOrDefault()).First();
 			return teamId;
+		}
+
+		private static Guid IdForSite(string siteName)
+		{
+			var siteId = (from t in DataMaker.Data().UserDatasOfType<SiteConfigurable>()
+						  let site = t.Site
+						  where site.Description.Name.Equals(siteName)
+						  select site.Id.GetValueOrDefault()).First();
+			return siteId;
 		}
 
 		[Given(@"I am viewing group schedules staffing metrics for '([0-9\-\\\/]*)' and '(.*)'")]
@@ -205,6 +214,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			var personId = DataMaker.Person(name).Person.Id.Value;
 			Navigation.GotoAnywherePersonScheduleAddActivityForm(personId, IdForTeam(@group), date);
 		}
+
+		[When(@"I view Real time adherence overview")]
+		public void WhenIViewRealTimeAdherenceOverview()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereRealTimeAdherenceOverview();
+		}
+
+		[When(@"I view Real time adherence for site '(.*)'")]
+		public void WhenIViewRealTimeAdherenceForSite(string site)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereRealTimeAdherenceOverview(IdForSite(site));
+		}
+
+
 
 		private static Guid groupIdByName(string team)
 		{
@@ -338,6 +363,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoAnywhere();
 		}
+
+		[When(@"I view Anywhere")]
+		public void WhenIViewAnywhere()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhere();
+		}
+
 
 		[When(@"I navigate to shift trade for '(.*)'")]
 		public void WhenINavigateToShiftTradeFor(DateTime date)
