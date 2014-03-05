@@ -59,10 +59,9 @@ CREATE TABLE #result(
 
 
 CREATE TABLE #fact_schedule_day_count(
-	[date_id] [int] NOT NULL,
-	[date_date] smalldatetime NOT NULL,
-	[start_interval_id] [smallint] NOT NULL,
+	[local_date] smalldatetime NOT NULL,
 	[person_id] [int] NOT NULL ,
+	person_name nvarchar(200),
 	[scenario_id] [smallint] NOT NULL ,
 	[starttime] [smalldatetime] NULL,
 	[shift_category_id] [int] NOT NULL ,
@@ -94,105 +93,86 @@ SELECT * FROM mart.SplitStringInt(@absence_set)
 
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit
-IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
-	SET @hide_time_zone = 1
-ELSE
-	SET @hide_time_zone = 0
+SET @hide_time_zone = 1
 
 
 /* Get data from mart.fact_schedule_day_count */
-INSERT INTO #fact_schedule_day_count (date_id,date_date,start_interval_id,person_id,scenario_id,starttime,shift_category_id,day_off_id,absence_id,day_count)
-SELECT	d.date_id,
-		d.date_date,
-		fs.start_interval_id,
-		fs.person_id,
-		fs.scenario_id,
-		fs.starttime,
-		fs.shift_category_id,
-		fs.day_off_id,
-		fs.absence_id,
-		fs.day_count
+INSERT INTO #fact_schedule_day_count (local_date,person_id,person_name,scenario_id,starttime,shift_category_id,day_off_id,absence_id,day_count)
+SELECT
+	d.date_date,
+	p.person_id,
+	p.person_name,
+	fs.scenario_id,
+	fs.starttime,
+	fs.shift_category_id,
+	fs.day_off_id,
+	fs.absence_id,
+	fs.day_count
 FROM mart.fact_schedule_day_count fs
-INNER JOIN mart.bridge_time_zone b
-	ON	fs.start_interval_id = b.interval_id
-	AND fs.date_id = b.date_id
-	AND b.time_zone_id = @time_zone_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND @date_to
+INNER JOIN mart.dim_person p
+	ON fs.person_id=p.person_id
+INNER JOIN mart.dim_date d
+	ON fs.shift_startdate_local_id = d.date_id
+WHERE d.date_date BETWEEN  @date_from AND @date_to
+AND fs.scenario_id=@scenario_id
+AND p.team_id IN(select right_id from #rights_teams)--where viewer has team permissions
+AND p.person_id in (SELECT right_id FROM #rights_agents)--where viewer has agent permissions
+
 
 
 /*First Shift Categories*/
 INSERT #result(person_id,person_name,category_name,category_count,category_type,hide_time_zone,date_date)
-SELECT	p.person_id,
-		p.person_name,
+SELECT	f.person_id,
+		f.person_name,
 		sc.shift_category_name,
-		sum(f.day_count),
+		1, --will/should only be one (1) per day, agent, scenario
 		'shift_category',
 		@hide_time_zone,
-		f.date_date
+		f.local_date
 FROM 
 	#fact_schedule_day_count f
-INNER JOIN mart.dim_person p
-	ON f.person_id=p.person_id
 INNER JOIN mart.dim_shift_category sc
 	ON sc.shift_category_id=f.shift_category_id
-WHERE f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har r"ttighet p≈
-AND sc.shift_category_id IN (SELECT id FROM #shift_categories)
-AND f.shift_category_id<>-1 --d≈ finns inget shift
-GROUP BY p.person_id,f.date_date,p.person_name,sc.shift_category_name
-ORDER BY  sc.shift_category_name, p.person_name
+WHERE sc.shift_category_id IN (SELECT id FROM #shift_categories)
+AND f.shift_category_id<>-1 --is a shift
 
 /*Then Day Off*/
 INSERT #result(person_id,person_name,category_name,category_count,category_type,hide_time_zone,date_date)
 SELECT	p.person_id,
 		p.person_name,
 		ISNULL(lt.term_language,dd.day_off_name),
-		sum(f.day_count),
+		1, --will/should only be one (1) per day, agent, scenario
 		'day_off',
 		@hide_time_zone,
-		f.date_date
+		f.local_date
 FROM 
 	#fact_schedule_day_count f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_day_off dd
 	ON dd.day_off_id=f.day_off_id
-	AND dd.day_off_id<>-1  -- finns ingen day off
 LEFT JOIN mart.language_translation lt
 	ON dd.day_off_name=lt.term_english AND lt.language_id=@language_id
-WHERE f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har r"ttighet p≈
-AND dd.day_off_id in (SELECT id FROM #dayoffs)
-GROUP BY p.person_id,f.date_date,p.person_name,ISNULL(lt.term_language,dd.day_off_name)
-ORDER BY ISNULL(lt.term_language,dd.day_off_name), p.person_name
-
+WHERE dd.day_off_id in (SELECT id FROM #dayoffs)
+AND f.day_off_id<>-1 --is a dayoff
 
 /*Then Full Day Absences*/
 INSERT #result(person_id,person_name,category_name,category_count,category_type,hide_time_zone,date_date)
 SELECT	p.person_id,
 		p.person_name,
 		da.absence_name,
-		sum(f.day_count),
+		1,
 		'absence',
 		@hide_time_zone,
-		f.date_date
+		f.local_date
 FROM 
 	#fact_schedule_day_count f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_absence da
 	ON da.absence_id=f.absence_id
-WHERE f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har r"ttighet p≈
-AND da.absence_id IN (SELECT id FROM #absences)
-AND f.absence_id<>-1 --d≈ finns ingen absence
-GROUP BY p.person_id,f.date_date,p.person_name,da.absence_name
-ORDER BY da.absence_name, p.person_name
+WHERE da.absence_id IN (SELECT id FROM #absences)
+AND f.absence_id<>-1 --is absence
 
 --return RS
 SELECT *

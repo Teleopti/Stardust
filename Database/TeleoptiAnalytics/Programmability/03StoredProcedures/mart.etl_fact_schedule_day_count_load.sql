@@ -17,13 +17,12 @@ GO
 --				2010-01-19 Adding Day Off Name as PK
 --				2012-11-21 Adding new columns for display_color_html and day_off_shortname
 -- =============================================
---exec etl_fact_schedule_day_count_load '2005-12-01','2006-01-05'
+--exec mart.etl_fact_schedule_day_count_load '2013-02-04','2013-03-03','928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_load] 
 @start_date smalldatetime,
 @end_date smalldatetime,
 @business_unit_code uniqueidentifier
-WITH EXECUTE AS OWNER
 AS
 
 --DECLARES
@@ -42,16 +41,14 @@ SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHE
 
 -- Delete rows matching dates
 DELETE FROM mart.fact_schedule_day_count 
-WHERE date_id between @start_date_id AND @end_date_id
+WHERE shift_startdate_local_id between @start_date_id AND @end_date_id
 	AND business_unit_id = @business_unit_id
 
 -----------------------------------------------------------------------------------
--- Insert shift_category_count rows
-
+--SHIFTS
 INSERT INTO mart.fact_schedule_day_count
 	(
-	date_id, --day the absence start, the shift starts or the day off starts
-	start_interval_id,--interval_id that the the absence start, the shift starts or the day off starts
+	shift_startdate_local_id, --day the absence start, the shift starts or the day off starts
 	person_id, 
 	scenario_id, 
 	starttime,
@@ -63,35 +60,30 @@ INSERT INTO mart.fact_schedule_day_count
 	datasource_id, 
 	datasource_update_date
 	)
-
-SELECT
-	date_id					= shift_startdate_id, 
-	start_interval_id		= shift_startinterval_id,
+SELECT 
+	shift_startdate_local_id= shift_startdate_local_id, 
 	person_id				= person_id, 
 	scenario_id				= scenario_id, 
-	starttime				= MAX(shift_starttime),
-	shift_category_id		= MAX(shift_category_id), 
+	starttime				= max(shift_starttime),
+	shift_category_id		= max(shift_category_id), 
 	day_off_id				= -1, 
 	absence_id				= -1, 
-	day_count				= COUNT( DISTINCT shift_category_id) , 
-	business_unit_id		= business_unit_id, 
-	datasource_id			= datasource_id, 
-	datasource_update_date	= MAX(datasource_update_date)
+	day_count				= 1,
+	business_unit_id		= @business_unit_id, 
+	datasource_id			= 1, --hard coded. If you start grouping on this on, make new index to support it!
+	datasource_update_date	= getdate()
 FROM
 	mart.fact_schedule
 WHERE shift_category_id<>-1
-	AND shift_startdate_id BETWEEN @start_date_id AND @end_date_id
+	AND shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
 	AND business_unit_id = @business_unit_id
-GROUP BY shift_startdate_id,shift_startinterval_id,person_id,scenario_id,business_unit_id,datasource_id
-ORDER BY shift_startdate_id,shift_startinterval_id,person_id,scenario_id,business_unit_id,datasource_id
-
+GROUP BY shift_startdate_local_id,person_id,scenario_id
 
 --WHOLE DAY ABSENCES
-
+/*
 INSERT INTO mart.fact_schedule_day_count
 	(
-	date_id, --day the absence start, the shift starts or the day off starts
-	start_interval_id,--interval_id that the the absence start, the shift starts or the day off starts
+	shift_startdate_local_id, --day the absence start, the shift starts or the day off starts
 	person_id, 
 	scenario_id, 
 	starttime,
@@ -113,10 +105,10 @@ SELECT
 	shift_category_id		= -1, 
 	day_off_id				= -1,
 	absence_id				= max(da.absence_id), 
-	day_count				= max(stg.day_count), 
+	day_count				= 1,
 	business_unit_id		= dp.business_unit_id, 
 	datasource_id			= stg.datasource_id, 
-	datasource_update_date	= max(stg.datasource_update_date)
+	datasource_update_date	= getdate()
 FROM (SELECT * FROM Stage.stg_schedule_day_absence_count WHERE date between @start_date and @end_date) stg
 JOIN
 	mart.dim_person		dp
@@ -148,77 +140,11 @@ ON
 	stg.scenario_code = ds.scenario_code
 GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
 ORDER BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
-
-
-
-
-
+*/
 --DAY OFF 
-
---(START: Special handling to increase start_interval_id for day off if already shift category or absence on same PK.)
-CREATE TABLE #fact_schedule_day_off_count (
-											date_id int, 
-											start_interval_id int, 
-											person_id int, 
-											scenario_id int,
-											date smalldatetime, 
-											person_code uniqueidentifier, 
-											scenario_code uniqueidentifier,
-											)
-INSERT INTO #fact_schedule_day_off_count
-SELECT
-	date_id				= dsd.date_id, 
-	start_interval_id	= di.interval_id,
-	person_id			= dp.person_id, 
-	scenario_id			= ds.scenario_id,
-	date				= stg.date,
-	person_code			= stg.person_code,
-	scenario_code		= stg.scenario_code
-FROM (SELECT * FROM Stage.stg_schedule_day_off_count WHERE date between @start_date and @end_date) stg
-JOIN
-	mart.dim_person		dp
-ON
-	stg.person_code	= dp.person_code	AND
-	stg.date BETWEEN dp.valid_from_date	AND dp.valid_to_date  --Is person valid in this range	
-JOIN
-	mart.dim_day_off dd ON
-	stg.day_off_name = dd.day_off_name AND
-	dd.business_unit_id = dp.business_unit_id
-LEFT JOIN
-	mart.dim_date dsd
-ON
-	stg.date = dsd.date_date
-LEFT JOIN
-	mart.dim_interval	di
-ON
-	stg.start_interval_id = di.interval_id
-LEFT JOIN
-	mart.dim_scenario	ds
-ON
-	stg.scenario_code = ds.scenario_code
-GROUP BY dsd.date_id,stg.date,di.interval_id,dp.person_id,stg.person_code,ds.scenario_id,stg.scenario_code,dd.day_off_id,dp.business_unit_id,stg.datasource_id
-ORDER BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dd.day_off_id,dp.business_unit_id,stg.datasource_id
-
-UPDATE stage.stg_schedule_day_off_count
-SET start_interval_id = stg.start_interval_id + 1
-FROM stage.stg_schedule_day_off_count stg
-	INNER JOIN #fact_schedule_day_off_count do
-		ON stg.date = do.date
-			AND stg.start_interval_id = do.start_interval_id
-			AND stg.person_code = do.person_code
-			AND stg.scenario_code = do.scenario_code
-WHERE EXISTS (
-			SELECT date_id, start_interval_id, person_id, scenario_id 
-			FROM mart.fact_schedule_day_count
-			WHERE date_id = do.date_id AND start_interval_id = do.start_interval_id AND person_id = do.person_id AND scenario_id = do.scenario_id
-			)
---(END: Special handling to increase start_interval_id for day off if already shift category or absence on same PK.)
-
-
 INSERT INTO mart.fact_schedule_day_count
 	(
-	date_id, --day the absence start, the shift starts or the day off starts
-	start_interval_id,--interval_id that the the absence start, the shift starts or the day off starts
+	shift_startdate_local_id, --day the absence start, the shift starts or the day off starts
 	person_id, 
 	scenario_id, 
 	starttime,
@@ -232,39 +158,34 @@ INSERT INTO mart.fact_schedule_day_count
 	)
 
 SELECT
-	date_id					= dsd.date_id, 
-	start_interval_id		= di.interval_id,
+	shift_startdate_local_id= dsd.date_id, 
 	person_id				= dp.person_id, 
 	scenario_id				= ds.scenario_id, 
-	starttime				= max(stg.starttime),
+	starttime				= stg.starttime,
 	shift_category_id		= -1, 
-	day_off_id				= dd.day_off_id, 
+	day_off_id				= dd.day_off_id, --is now available in domain, use it!
 	absence_id				= -1, 
-	day_count				= max(stg.day_count), 
-	business_unit_id		= dp.business_unit_id, 
+	day_count				= 1, 
+	business_unit_id		= @business_unit_id, 
 	datasource_id			= stg.datasource_id, 
-	datasource_update_date	= max(stg.datasource_update_date)
-FROM (SELECT * FROM Stage.stg_schedule_day_off_count WHERE date between @start_date and @end_date) stg
+	datasource_update_date	= stg.datasource_update_date
+FROM (SELECT * FROM Stage.stg_schedule_day_off_count WHERE schedule_date_local between @start_date and @end_date) stg
 JOIN
 	mart.dim_person		dp
 ON
 	stg.person_code	= dp.person_code	AND
-	stg.date BETWEEN dp.valid_from_date	AND dp.valid_to_date  --Is person valid in this range	
+	stg.schedule_date_local BETWEEN dp.valid_from_date_local AND dp.valid_to_date_local  --Is person valid in this range	
 JOIN
 	mart.dim_day_off dd ON
 	stg.day_off_name = dd.day_off_name AND
-	dd.business_unit_id = dp.business_unit_id
+	dd.business_unit_id = dp.business_unit_id AND
+	dd.business_unit_id = @business_unit_id
 LEFT JOIN
 	mart.dim_date dsd
 ON
-	stg.date = dsd.date_date
-LEFT JOIN
-	mart.dim_interval	di
-ON
-	stg.start_interval_id = di.interval_id
+	stg.schedule_date_local = dsd.date_date
 LEFT JOIN
 	mart.dim_scenario	ds
 ON
 	stg.scenario_code = ds.scenario_code
-GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dd.day_off_id,dp.business_unit_id,stg.datasource_id
-ORDER BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dd.day_off_id,dp.business_unit_id,stg.datasource_id
+GO

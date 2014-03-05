@@ -804,5 +804,112 @@ GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[DimPersonAdapted]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [mart].[DimPersonAdapted]
 
+--use local agent date on DayOff
+DROP TABLE [stage].[stg_schedule_day_off_count]
+GO
+CREATE TABLE [stage].[stg_schedule_day_off_count](
+	[schedule_date_local] [smalldatetime] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL,
+	[scenario_code] [uniqueidentifier] NOT NULL,
+	[starttime] [smalldatetime] NULL,
+	[day_off_code] [uniqueidentifier] NULL,
+	[day_off_name] [nvarchar](50) NOT NULL,
+	[day_off_shortname] [nvarchar](25) NOT NULL,
+	[day_count] [int] NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[datasource_id] [smallint] NULL,
+	[insert_date] [smalldatetime] NULL,
+	[update_date] [smalldatetime] NULL,
+	[datasource_update_date] [smalldatetime] NULL,
+ CONSTRAINT [PK_stg_schedule_day_off_count] PRIMARY KEY CLUSTERED 
+(
+	[schedule_date_local] ASC,
+	[person_code] ASC,
+	[scenario_code] ASC
+)
+) ON [stage]
 
+ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_update_date]  DEFAULT (getdate()) FOR [update_date]
+GO
 
+--old fact table
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [FK_fact_schedule_day_count_dim_absence]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [FK_fact_schedule_day_count_dim_date]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [FK_fact_schedule_day_count_dim_day_off]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [FK_fact_schedule_day_count_dim_interval]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [FK_fact_schedule_day_count_dim_person]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [FK_fact_schedule_day_count_dim_scenario]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [FK_fact_schedule_day_count_dim_shift_category]
+
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_absence_id]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_datasource_id]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_date_id]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_insert_date]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_person_id]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_scenario_id]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_shift_category_id]
+ALTER TABLE [mart].[fact_schedule_day_count] DROP CONSTRAINT [DF_fact_schedule_day_count_update_date]
+GO
+
+EXEC sp_rename 'mart.fact_schedule_day_count', 'fact_schedule_day_count_old'
+GO
+EXEC sp_rename 'mart.PK_fact_schedule_day_count', 'PK_fact_schedule_day_count_old'
+GO
+
+--new fact table
+CREATE TABLE [mart].[fact_schedule_day_count](
+	[shift_startdate_local_id] [int] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[scenario_id] [smallint] NOT NULL,
+	[starttime] [smalldatetime] NULL,
+	[shift_category_id] [int] NOT NULL,
+	[day_off_id] [int] NOT NULL,
+	[absence_id] [int] NOT NULL,
+	[day_count] [int] NULL,
+	[business_unit_id] [int] NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NULL,
+ CONSTRAINT [PK_fact_schedule_day_count] PRIMARY KEY CLUSTERED 
+(
+	[shift_startdate_local_id] ASC,
+	[person_id] ASC,
+	[scenario_id] ASC
+)
+) ON [MART]
+
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_date_id]  DEFAULT ((-1)) FOR [shift_startdate_local_id]
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_person_id]  DEFAULT ((-1)) FOR [person_id]
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_scenario_id]  DEFAULT ((-1)) FOR [scenario_id]
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_shift_category_id]  DEFAULT ((-1)) FOR [shift_category_id]
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_absence_id]  DEFAULT ((-1)) FOR [absence_id]
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_update_date]  DEFAULT (getdate()) FOR [update_date]
+
+ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_absence]
+
+ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_date] FOREIGN KEY([shift_startdate_local_id])
+REFERENCES [mart].[dim_date] ([date_id])
+ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_date]
+
+ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_day_off] FOREIGN KEY([day_off_id])
+REFERENCES [mart].[dim_day_off] ([day_off_id])
+ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_day_off]
+
+ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_person]
+
+ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_scenario] FOREIGN KEY([scenario_id])
+REFERENCES [mart].[dim_scenario] ([scenario_id])
+ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_scenario]
+
+ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_shift_category] FOREIGN KEY([shift_category_id])
+REFERENCES [mart].[dim_shift_category] ([shift_category_id])
+ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_shift_category]

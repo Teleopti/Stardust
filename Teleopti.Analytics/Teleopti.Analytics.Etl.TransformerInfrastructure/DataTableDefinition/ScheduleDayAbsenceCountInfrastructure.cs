@@ -8,8 +8,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static void AddColumnsToDataTable(DataTable table)
         {
-            table.Columns.Add("date", typeof(DateTime));
-            table.Columns.Add("start_interval_id", typeof(int));
+			table.Columns.Add("schedule_date_local", typeof(DateTime));
             table.Columns.Add("person_code", typeof(Guid));
             table.Columns.Add("scenario_code", typeof(Guid));
             table.Columns.Add("starttime", typeof(DateTime));
