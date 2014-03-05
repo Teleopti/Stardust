@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 			filterItems();
 		}
 
-		public void SortSourceList(IList<SortDescription> sortDescriptions)
+		public void UpdateSorting(IList<SortDescription> sortDescriptions)
 		{
 			var customSorter = new HandlePersonRequestComparer {SortDescriptions = sortDescriptions};
 			PersonRequestViewModels.CustomSort = customSorter;
