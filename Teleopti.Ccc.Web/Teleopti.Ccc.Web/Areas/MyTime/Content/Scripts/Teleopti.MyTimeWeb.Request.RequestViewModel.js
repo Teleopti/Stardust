@@ -46,7 +46,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.ShowError = ko.observable(false);
     self.ErrorMessage = ko.observable('');
     self.AbsenceId = ko.observable();
-	self.Absences = ko.observableArray();
+    self.Absences = ko.observableArray();
+	self.AbsenceAccounts = ko.observableArray();
     self.Subject = ko.observable();
     self.Message = ko.observable();
     self.EntityId = ko.observable();
@@ -59,14 +60,32 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     });
 
     self.readAbsences = function (data) {
-    	for (var i = 0; i < data.AbsenceTypes.length; i++) {
-    		var newAbsence = {
-    			Id: data.AbsenceTypes[i].Id,
-    			Name: data.AbsenceTypes[i].Name
-    		};
-    		
-    		self.Absences.push(newAbsence);
+    	if (data.AbsenceTypes) {
+    		for (var i = 0; i < (data.AbsenceTypes.length) ; i++) {
+    			var newAbsence = {
+    				Id: data.AbsenceTypes[i].Id,
+    				Name: data.AbsenceTypes[i].Name
+    			};
+
+    			self.Absences.push(newAbsence);
+    		}
     	}
+
+    	if (data.AbsenceAccounts) {
+    		for (i = 0; i < data.AbsenceAccounts.length; i++) {
+    			var account = data.AbsenceAccounts[i];
+    			var newAccount = {
+    				AbsenceName: account.AbsenceName,
+    				StartDate: account.StartDate,
+    				EndDate: account.EndDate,
+    				Used: account.Used,
+    				Remaining: account.Remaining
+    			};
+
+    			self.AbsenceAccounts.push(newAccount);
+    		}
+    	}
+
     };
 	
     self.Template = ko.computed(function () {
