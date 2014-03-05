@@ -608,6 +608,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				
 				var addRequestViewModel = function() {
 					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, data.WeekStart, defaultDateTimes);
+					ajax.Ajax({
+						url: 'Requests/Absences',
+						requestDataType: "json",
+						type: 'GET',
+						requestData: {
+							date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+						},
+						success: function (requestData) {
+							model.readAbsences(requestData);
+						}
+					});
 					model.AddRequestCallback = _displayRequest;
 					return model;
 				};
