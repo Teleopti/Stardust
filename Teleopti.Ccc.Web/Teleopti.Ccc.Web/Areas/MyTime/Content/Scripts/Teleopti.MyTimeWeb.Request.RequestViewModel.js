@@ -47,7 +47,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.ErrorMessage = ko.observable('');
     self.AbsenceId = ko.observable();
     self.Absences = ko.observableArray();
-	self.AbsenceAccounts = ko.observableArray();
+    self.AbsenceUsed = ko.observable();
+    self.AbsenceRemaining = ko.observable();
     self.Subject = ko.observable();
     self.Message = ko.observable();
     self.EntityId = ko.observable();
@@ -70,25 +71,14 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     			self.Absences.push(newAbsence);
     		}
     	}
-
-    	if (data.AbsenceAccounts) {
-    		for (i = 0; i < data.AbsenceAccounts.length; i++) {
-    			var account = data.AbsenceAccounts[i];
-    			var newAccount = {
-    				AbsenceName: account.AbsenceName,
-    				StartDate: account.StartDate,
-    				EndDate: account.EndDate,
-    				Used: account.Used,
-    				Remaining: account.Remaining
-    			};
-
-    			self.AbsenceAccounts.push(newAccount);
-    		}
-    	}
-
     };
-	
-    self.Template = ko.computed(function () {
+
+	self.readAbsenceAccount = function(data) {
+		self.AbsenceRemaining(data.Remaining);
+		self.AbsenceUsed(data.Used);
+	};
+
+	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
     });
     
