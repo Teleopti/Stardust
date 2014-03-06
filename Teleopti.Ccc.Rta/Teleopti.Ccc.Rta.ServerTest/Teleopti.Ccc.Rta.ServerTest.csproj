@@ -143,6 +143,7 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssemblerTest.cs" />
     <Compile Include="ActualAgentStateCacheTest.cs" />
+    <Compile Include="AdherenceAggregatorTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseReaderTest.cs" />

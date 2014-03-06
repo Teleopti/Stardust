@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Sockets;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
@@ -17,7 +18,8 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IRtaDataHandler));
 		private static IActualAgentStateCache _stateCache;
-		
+		private readonly IEnumerable<IAfterSend> _afterSends;
+
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IAsyncMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
@@ -27,13 +29,15 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IDataSourceResolver dataSourceResolver,
 		                      IPersonResolver personResolver,
 		                      IActualAgentAssembler agentAssembler,
-		                      IActualAgentStateCache stateCache)
+		                      IActualAgentStateCache stateCache,
+			IEnumerable<IAfterSend> afterSends)
 		{
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
 			_stateCache = stateCache;
+			_afterSends = afterSends;
 
 			if (_asyncMessageSender == null) return;
 
@@ -169,6 +173,7 @@ namespace Teleopti.Ccc.Rta.Server
 				var notification = NotificationFactory.CreateNotification(agentState);
 
 				_asyncMessageSender.SendNotificationAsync(notification);
+				_afterSends.ForEach(s => s.AfterSend(agentState));
 			}
 			catch (Exception exception)
 			{
