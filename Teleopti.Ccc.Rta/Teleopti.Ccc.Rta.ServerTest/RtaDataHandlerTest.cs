@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data.SqlTypes;
-using System.Net.Sockets;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.SignalR;
 using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -16,7 +13,7 @@ using Teleopti.Messaging.Exceptions;
 namespace Teleopti.Ccc.Rta.ServerTest
 {
 	[TestFixture]
-	[NUnit.Framework.Category("LongRunning")]
+	[Category("LongRunning")]
 	public class RtaDataHandlerTest
 	{
 		private MockRepository _mocks;
@@ -307,67 +304,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks.VerifyAll();
 
 			afterSend.AssertWasCalled(s => s.AfterSend(agentState));
-		}
-
-		[Test]
-		public void ShouldCatchSocketException()
-		{
-			int dataSource;
-			IEnumerable<PersonWithBusinessUnit> outPersonBusinessUnits;
-			var retPersonBusinessUnits = new List<PersonWithBusinessUnit>
-			                             	{
-			                             		new PersonWithBusinessUnit
-			                             			{
-			                             				BusinessUnitId = Guid.Empty,
-			                             				PersonId = Guid.Empty
-			                             			}
-			                             	};
-			var agentState = new ActualAgentState{SendOverMessageBroker = true};
-
-			_asyncMessageSender.StartBrokerService();
-			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
-			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
-				retPersonBusinessUnits);
-			_agentAssembler.Expect(
-				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
-				IgnoreArguments().Return(agentState);
-			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments().Throw(new SocketException());			
-
-			_mocks.ReplayAll();
-			assignTargetAndRun();
-			_mocks.VerifyAll();
-		}
-
-		[Test]
-		public void ShouldCatchBrokerNotInstantiatedException()
-		{
-			int dataSource;
-			IEnumerable<PersonWithBusinessUnit> outPersonBusinessUnits;
-			var retPersonBusinessUnits = new List<PersonWithBusinessUnit>
-			                             	{
-			                             		new PersonWithBusinessUnit
-			                             			{
-			                             				BusinessUnitId = Guid.Empty,
-			                             				PersonId = Guid.Empty
-			                             			}
-			                             	};
-			var agentState = new ActualAgentState{SendOverMessageBroker = true};
-
-			_asyncMessageSender.StartBrokerService();
-			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
-			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
-				retPersonBusinessUnits);
-			_agentAssembler.Expect(
-				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
-				IgnoreArguments().Return(agentState);
-			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments().Throw(new BrokerNotInstantiatedException());
-			
-
-			_mocks.ReplayAll();
-			assignTargetAndRun();
-			_mocks.VerifyAll();
 		}
 
 		[Test]
