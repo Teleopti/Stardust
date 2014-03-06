@@ -47,10 +47,5 @@ namespace Teleopti.Messaging.SignalR
 					BinaryData = null
 				};
 		}
-
-		public static Notification CreateNotification(TeamAdherenceMessage actualAgentState)
-		{
-			return new Notification();
-		}
 	}
 }

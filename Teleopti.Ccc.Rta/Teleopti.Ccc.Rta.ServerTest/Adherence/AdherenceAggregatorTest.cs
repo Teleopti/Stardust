@@ -1,8 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Rta.Server.Adherence;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
@@ -13,13 +15,18 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		public void ShouldSendMessageForTeam()
 		{
 			var agentState = new ActualAgentState();
-			var notification = NotificationFactory.CreateNotification(new TeamAdherenceMessage());
-			var broker = MockRepository.GenerateMock<IMessageSender>();
-			var target = new AdherenceAggregator(broker);
+			var teamId = Guid.NewGuid();
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
+			var target = new AdherenceAggregator(broker, teamProvider);
+
+			teamProvider.Expect(x => x.GetTeamId(agentState.PersonId)).Return(teamId);
 
 			target.Invoke(agentState);
 
-			broker.AssertWasCalled(x => x.SendNotification(notification),(a)=> a.IgnoreArguments());
+
+			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().TeamId.Should().Be(teamId);
 		}
 	}
 }
