@@ -70,17 +70,17 @@ SELECT
 	absence_id				= -1, 
 	day_count				= 1,
 	business_unit_id		= @business_unit_id, 
-	datasource_id			= 1, --hard coded. If you start grouping on this on, make new index to support it!
-	datasource_update_date	= getdate()
+	datasource_id			= 1, --hard coded. If you start grouping on this one, make new index to support it!
+	datasource_update_date	= max(datasource_update_date)
 FROM
 	mart.fact_schedule
 WHERE shift_category_id<>-1
-	AND shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
-	AND business_unit_id = @business_unit_id
+AND shift_startdate_local_id BETWEEN @start_date_id AND @end_date_id
+AND business_unit_id = @business_unit_id
+--need to group this one (costly .....) since mart.fact_schedule contains a lot of intervals per day, but we are only interested on the one and only(?) shift_category_id
 GROUP BY shift_startdate_local_id,person_id,scenario_id
 
 --WHOLE DAY ABSENCES
-/*
 INSERT INTO mart.fact_schedule_day_count
 	(
 	shift_startdate_local_id, --day the absence start, the shift starts or the day off starts
@@ -95,52 +95,42 @@ INSERT INTO mart.fact_schedule_day_count
 	datasource_id, 
 	datasource_update_date
 	)
-
 SELECT
 	date_id					= dsd.date_id, 
-	start_interval_id		= di.interval_id,
 	person_id				= dp.person_id, 
 	scenario_id				= ds.scenario_id, 
-	starttime				= max(stg.starttime),
+	starttime				= stg.starttime,
 	shift_category_id		= -1, 
 	day_off_id				= -1,
-	absence_id				= max(da.absence_id), 
+	absence_id				= da.absence_id,
 	day_count				= 1,
-	business_unit_id		= dp.business_unit_id, 
+	business_unit_id		= @business_unit_id, 
 	datasource_id			= stg.datasource_id, 
-	datasource_update_date	= getdate()
-FROM (SELECT * FROM Stage.stg_schedule_day_absence_count WHERE date between @start_date and @end_date) stg
+	datasource_update_date	= stg.datasource_update_date
+FROM (
+	SELECT * FROM Stage.stg_schedule_day_absence_count
+	WHERE schedule_date_local between @start_date and @end_date
+	AND business_unit_code=@business_unit_code
+	) stg
 JOIN
 	mart.dim_person		dp
-
 ON
 	stg.person_code	= dp.person_code
 	AND --trim to person valid in this range
 		(
-				(stg.starttime	>= dp.valid_from_date)
+				(stg.schedule_date_local	>= dp.valid_from_date)
 
 			AND
-				(stg.starttime < dp.valid_to_date)
+				(stg.schedule_date_local < dp.valid_to_date)
 		)
 
-JOIN
-	mart.dim_absence da ON
-	da.absence_code = stg.absence_code
-LEFT JOIN
-	mart.dim_date dsd
-ON
-	stg.date = dsd.date_date
-LEFT JOIN
-	mart.dim_interval	di
-ON
-	stg.start_interval_id = di.interval_id
-LEFT JOIN
-	mart.dim_scenario	ds
-ON
-	stg.scenario_code = ds.scenario_code
-GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
-ORDER BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
-*/
+JOIN mart.dim_absence da
+	ON stg.absence_code = da.absence_code
+LEFT JOIN mart.dim_date dsd
+	ON stg.schedule_date_local = dsd.date_date
+LEFT JOIN mart.dim_scenario	ds
+	ON stg.scenario_code = ds.scenario_code
+
 --DAY OFF 
 INSERT INTO mart.fact_schedule_day_count
 	(
@@ -169,23 +159,20 @@ SELECT
 	business_unit_id		= @business_unit_id, 
 	datasource_id			= stg.datasource_id, 
 	datasource_update_date	= stg.datasource_update_date
-FROM (SELECT * FROM Stage.stg_schedule_day_off_count WHERE schedule_date_local between @start_date and @end_date) stg
-JOIN
-	mart.dim_person		dp
-ON
-	stg.person_code	= dp.person_code	AND
-	stg.schedule_date_local BETWEEN dp.valid_from_date_local AND dp.valid_to_date_local  --Is person valid in this range	
-JOIN
-	mart.dim_day_off dd ON
-	stg.day_off_name = dd.day_off_name AND
-	dd.business_unit_id = dp.business_unit_id AND
-	dd.business_unit_id = @business_unit_id
-LEFT JOIN
-	mart.dim_date dsd
-ON
-	stg.schedule_date_local = dsd.date_date
-LEFT JOIN
-	mart.dim_scenario	ds
-ON
-	stg.scenario_code = ds.scenario_code
+FROM (
+	SELECT * FROM Stage.stg_schedule_day_off_count
+	WHERE schedule_date_local between @start_date and @end_date
+	AND business_unit_code=@business_unit_code
+	) stg
+JOIN mart.dim_person dp
+	ON stg.person_code = dp.person_code
+	AND stg.schedule_date_local BETWEEN dp.valid_from_date_local AND dp.valid_to_date_local  --Is person valid in this range	
+JOIN mart.dim_day_off dd
+	ON stg.day_off_name		= dd.day_off_name
+	AND dd.business_unit_id = dp.business_unit_id
+	AND dd.business_unit_id = @business_unit_id
+LEFT JOIN mart.dim_date dsd
+	ON stg.schedule_date_local = dsd.date_date
+LEFT JOIN mart.dim_scenario	ds
+	ON stg.scenario_code = ds.scenario_code
 GO

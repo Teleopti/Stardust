@@ -913,3 +913,29 @@ ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_
 ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_shift_category] FOREIGN KEY([shift_category_id])
 REFERENCES [mart].[dim_shift_category] ([shift_category_id])
 ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_shift_category]
+GO
+
+DROP TABLE [stage].[stg_schedule_day_absence_count]
+GO
+CREATE TABLE [stage].[stg_schedule_day_absence_count](
+	[schedule_date_local] [smalldatetime] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL,
+	[scenario_code] [uniqueidentifier] NOT NULL,
+	[starttime] [smalldatetime] NULL,
+	[absence_code] [uniqueidentifier] NOT NULL,
+	[day_count] [int] NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[datasource_id] [smallint] NULL,
+	[insert_date] [smalldatetime] NULL,
+	[update_date] [smalldatetime] NULL,
+	[datasource_update_date] [smalldatetime] NULL,
+ CONSTRAINT [PK_stg_schedule_day_absence_count] PRIMARY KEY CLUSTERED 
+(
+	[schedule_date_local] ASC,
+	[person_code] ASC,
+	[scenario_code] ASC
+)
+) ON [STAGE]
+ALTER TABLE [stage].[stg_schedule_day_absence_count] ADD  CONSTRAINT [DF_stg_schedule_day_absence_count_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [stage].[stg_schedule_day_absence_count] ADD  CONSTRAINT [DF_stg_schedule_day_absence_count_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [stage].[stg_schedule_day_absence_count] ADD  CONSTRAINT [DF_stg_schedule_day_absence_count_update_date]  DEFAULT (getdate()) FOR [update_date]
