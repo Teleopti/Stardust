@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private bool _doNotBreakMaxSeatPerWeek = false;
         private bool _doNotBreakNightlyRest = false;
         private bool _doNotBreakWeeklyRest =  false;
+        private bool _availableAgentsOnly ;
 
         public void MapTo(IOvertimePreferences overtimePreferences , IEnumerable<IScheduleTag> scheduleTags,IEnumerable<IActivity> activityList,IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets  )
         {
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             overtimePreferences.AllowBreakMaxWorkPerWeek = _doNotBreakMaxSeatPerWeek;
             overtimePreferences.AllowBreakNightlyRest = _doNotBreakNightlyRest;
             overtimePreferences.AllowBreakWeeklyRest = _doNotBreakWeeklyRest;
-            
+            overtimePreferences.AvailableAgentsOnly = _availableAgentsOnly;
         }
 
         public void MapFrom(IOvertimePreferences overtimePreferences)
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _doNotBreakNightlyRest = overtimePreferences.AllowBreakNightlyRest;
             _doNotBreakWeeklyRest = overtimePreferences.AllowBreakWeeklyRest;
             _extendExistingShifts = overtimePreferences.ExtendExistingShift;
-            
+            _availableAgentsOnly = overtimePreferences.AvailableAgentsOnly;
             _selectTimePeriod = overtimePreferences.SelectedTimePeriod;
             if (overtimePreferences.OvertimeType!=null)
                 _overtimeType = overtimePreferences.OvertimeType.Id;

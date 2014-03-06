@@ -202,6 +202,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerEqualNumberOfCategoryFairnessService(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
+            builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>();
+            builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>();
+            builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>();
             builder.RegisterType<OvertimePeriodValueMapper>();
             builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>();
             builder.RegisterType<CalculateBestOvertime>().As<ICalculateBestOvertime>();
