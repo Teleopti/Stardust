@@ -331,7 +331,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<SplitSchedulePeriodToWeekPeriod>();
             builder.RegisterType<ValidNumberOfDayOffInAWeekSpecification>().As<IValidNumberOfDayOffInAWeekSpecification>();
 			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>();
-			//ITeamScheduling
+			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>();
+			builder.RegisterType<SameShiftCategoryBlockScheduler>().As<ISameShiftCategoryBlockScheduler>();
+			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>();
+			//ITeamBlockScheduler
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
