@@ -337,7 +337,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     }
                     else
                     {
-                        aggregate.CombineAggregatedSkillStaffPeriod(asAgg);
+						if(keyValuePair.Value.Count > 1)
+							aggregate.CombineAggregatedSkillStaffPeriod(asAgg);
                     }
                     
                 }
