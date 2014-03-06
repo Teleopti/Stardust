@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				                                                   mbCacheFactory,
 				                                                   new AlarmMapper(databaseReader, databaseWriter,
 				                                                                   mbCacheFactory)),
-				                          new ActualAgentStateCache(databaseWriter));
+				                          new ActualAgentStateCache(databaseWriter), null);
 			});
 
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IPersonResolver personResolver,
 		                      IActualAgentAssembler agentAssembler,
 		                      IActualAgentStateCache stateCache,
-			IEnumerable<IAfterSend> afterSends)
+		                      IEnumerable<IAfterSend> afterSends)
 		{
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
