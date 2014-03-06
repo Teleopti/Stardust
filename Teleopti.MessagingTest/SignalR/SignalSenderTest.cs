@@ -298,7 +298,7 @@ namespace Teleopti.MessagingTest.SignalR
 			}
 
 			public asyncSignalSenderForTest(IHubConnectionWrapper hubConnection, INow now)
-				: base(null)
+				: base("http://this-is-needed")
 			{
 				_hubConnection = hubConnection;
 				_now = now;
