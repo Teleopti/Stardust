@@ -230,17 +230,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
         {
             var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
             var model = addRequestViewModel();
-            ajax.Ajax({
-            	url: 'Requests/Absences',
-            	DataType: "json",
-            	type: 'GET',
-            	Data: {
-            		date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
-            	},
-            	success: function (Data) {
-            		model.readAbsences(Data);
-            	}
-            });
+            //ajax.Ajax({
+            //	url: 'Requests/Absences',
+            //	DataType: "json",
+            //	type: 'GET',
+            //	Data: {
+            //		date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+            //	},
+            //	success: function (Data) {
+            //		model.readAbsences(Data);
+            //	}
+            //});
             model.DateFormat(datePickerFormat);
 
             self.requestViewModel(model);
