@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private bool _doNotBreakMaxSeatPerWeek = false;
         private bool _doNotBreakNightlyRest = false;
         private bool _doNotBreakWeeklyRest =  false;
-        private bool _availableAgentsOnly ;
+        private bool _availableAgentsOnly = false ;
 
         public void MapTo(IOvertimePreferences overtimePreferences , IEnumerable<IScheduleTag> scheduleTags,IEnumerable<IActivity> activityList,IList<IMultiplicatorDefinitionSet> multiplicatorDefinitionSets  )
         {
