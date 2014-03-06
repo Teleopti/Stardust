@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool Schedule(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions,
 									  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 										ISchedulePartModifyAndRollbackService rollbackService,
-										IResourceCalculateDelayer resourceCalculateDelayer);
+										IResourceCalculateDelayer resourceCalculateDelayer,
+										ISchedulingResultStateHolder schedulingResultStateHolder);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool Schedule(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions,
 									  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 								ISchedulePartModifyAndRollbackService rollbackService,
-								IResourceCalculateDelayer resourceCalculateDelayer)
+								IResourceCalculateDelayer resourceCalculateDelayer,
+								ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_cancelMe = false;
 			var allSelectedDaysAreScheduled = false;
@@ -65,7 +67,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						return false;
 					}
 					_singleDayScheduler.DayScheduled += OnDayScheduled;
-					_singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod, rollbackService, resourceCalculateDelayer);
+					_singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift,
+					                                      selectedPeriod, rollbackService, resourceCalculateDelayer,
+					                                      schedulingResultStateHolder);
 					_singleDayScheduler.DayScheduled -= OnDayScheduled;
 				}
 

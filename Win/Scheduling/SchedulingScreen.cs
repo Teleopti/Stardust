@@ -3664,14 +3664,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
 		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 
-					var teamScheduling = new TeamScheduling();
 					var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 																			 _container.Resolve<IProposedRestrictionAggregator>(),
 																			 _container.Resolve<IWorkShiftFilterService>(),
 																			 _container.Resolve<IWorkShiftSelector>(),
-																			 teamScheduling, 
+																			 _container.Resolve<ITeamScheduling>(), 
 																			 _container.Resolve<ITeamBlockSchedulingOptions>(),
-																			 _schedulerState.SchedulingResultState,
 																			 _container.Resolve<IActivityIntervalDataCreator>());
 
 	                var sameShiftCategoryBlockScheduler =
@@ -4071,15 +4069,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
 																					   tagSetter);
 
-						var teamScheduling = new TeamScheduling();
-
 						var singleDayScheduler = new TeamBlockSingleDayScheduler(_container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
 						                                                         _container.Resolve<IProposedRestrictionAggregator>(),
 						                                                         _container.Resolve<IWorkShiftFilterService>(),
 						                                                         _container.Resolve<IWorkShiftSelector>(),
-																				 teamScheduling, 
+																				 _container.Resolve<ITeamScheduling>(),
 																				 _container.Resolve<ITeamBlockSchedulingOptions>(),
-																			 _schedulerState.SchedulingResultState,
 																			 _container.Resolve<IActivityIntervalDataCreator>());
 
 						var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),

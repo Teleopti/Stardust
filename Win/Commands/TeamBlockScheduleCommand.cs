@@ -101,7 +101,9 @@ namespace Teleopti.Ccc.Win.Commands
 
 				advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 				advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
-												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(), rollbackService, resourceCalculateDelayer);
+				                                          matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
+				                                          rollbackService, resourceCalculateDelayer,
+				                                          _schedulerStateHolder.SchedulingResultState);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 			}
 		}

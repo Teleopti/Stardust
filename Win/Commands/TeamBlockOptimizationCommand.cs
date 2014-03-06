@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -231,12 +230,13 @@ namespace Teleopti.Ccc.Win.Commands
 
             teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
             schedulingOptions.DayOffTemplate = dayOffTemplates[0];
-            teamBlockDayOffOptimizerService.OptimizeDaysOff(
-                allMatrixes,
-                selectedPeriod,
-                selectedPersons,
-                optimizationPreferences,
-                schedulePartModifyAndRollbackService,schedulingOptions, resourceCalculateDelayer);
+	        teamBlockDayOffOptimizerService.OptimizeDaysOff(
+		        allMatrixes,
+		        selectedPeriod,
+		        selectedPersons,
+		        optimizationPreferences,
+		        schedulePartModifyAndRollbackService, schedulingOptions, resourceCalculateDelayer,
+		        _schedulerStateHolder.SchedulingResultState);
             teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
@@ -269,13 +269,12 @@ namespace Teleopti.Ccc.Win.Commands
 			        );
 
             teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-            teamBlockIntradayOptimizationService.Optimize(
-                allMatrixes,
-                selectedPeriod,
-                selectedPersons,
-                optimizationPreferences,
-                schedulePartModifyAndRollbackService, resourceCalculateDelayer
-                );
+	        teamBlockIntradayOptimizationService.Optimize(
+		        allMatrixes,
+		        selectedPeriod,
+		        selectedPersons,
+		        optimizationPreferences,
+		        schedulePartModifyAndRollbackService, resourceCalculateDelayer, _schedulerStateHolder.SchedulingResultState);
             teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 

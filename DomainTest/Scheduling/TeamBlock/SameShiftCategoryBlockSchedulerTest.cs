@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IPerson _person2;
 		private bool _isScheduleFailed;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_selectedPersons = new List<IPerson> { _person1 };
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 		}
 
 		[Test]
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons,
-														  _rollbackService, _resourceCalculateDelayer);
+														  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 
 				Assert.That(result, Is.False);
 			}
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-					                                      _blockPeriod, _rollbackService, _resourceCalculateDelayer)).Return(false);
+														  _blockPeriod, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(false);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_shift.TheWorkShift).Return(workShift);
 				Expect.Call(workShift.ShiftCategory).Return(cat);
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons,
-														  _rollbackService, _resourceCalculateDelayer);
+														  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 
 				Assert.That(result, Is.False);
 			}
@@ -119,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly, _shift,
-					                                      _blockPeriod, _rollbackService, _resourceCalculateDelayer)).Return(false);
+														  _blockPeriod, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(false);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_shift.TheWorkShift).Return(workShift);
 				Expect.Call(workShift.ShiftCategory).Return(cat);
@@ -132,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod, _selectedPersons,
-														  _rollbackService, _resourceCalculateDelayer);
+														  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 
 				Assert.That(result, Is.True);
 			}
@@ -145,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
 										  _selectedPersons,
-														  _rollbackService, _resourceCalculateDelayer);
+														  _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 			Assert.That(result, Is.True);
 		}
 
@@ -161,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Assert.That(_isScheduleFailed, Is.False);
 				var result = _target.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-										  _selectedPersons, _rollbackService, _resourceCalculateDelayer);
+										  _selectedPersons, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 
 				Assert.That(result, Is.False);
 				Assert.That(_isScheduleFailed, Is.True);
