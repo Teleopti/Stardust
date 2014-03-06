@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
 								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 								ISchedulePartModifyAndRollbackService rollbackService, 
-								IResourceCalculateDelayer resourceCalculateDelayer);
+								IResourceCalculateDelayer resourceCalculateDelayer,
+								ISchedulingResultStateHolder schedulingResultStateHolder);
 
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
@@ -40,26 +41,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer,
-										 ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
-										 IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+		                                 ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod,
+		                                 IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
+		                                 IResourceCalculateDelayer resourceCalculateDelayer,
+										ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 
 			if (_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(schedulingOptions) ||
-				_teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(schedulingOptions))
+			    _teamBlockSchedulingOptions.IsBlockSameShiftCategoryInTeamBlock(schedulingOptions))
 			{
 				_sameShiftCategoryBlockScheduler.DayScheduled += OnDayScheduled;
-				bool successful = _sameShiftCategoryBlockScheduler.Schedule(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons, rollbackService, resourceCalculateDelayer);
+				bool successful = _sameShiftCategoryBlockScheduler.Schedule(teamBlockInfo, datePointer, schedulingOptions,
+				                                                            selectedPeriod, selectedPersons, rollbackService,
+																			resourceCalculateDelayer, schedulingResultStateHolder);
 				_sameShiftCategoryBlockScheduler.DayScheduled -= OnDayScheduled;
 				return successful;
 			}
 
-			return scheduleSelectedDays(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons, rollbackService, resourceCalculateDelayer);
+			return scheduleSelectedDays(teamBlockInfo, datePointer, schedulingOptions, selectedPeriod, selectedPersons,
+			                            rollbackService, resourceCalculateDelayer, schedulingResultStateHolder);
 		}
 
 		private bool scheduleSelectedDays(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions,
 								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 								ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-								IResourceCalculateDelayer resourceCalculateDelayer)
+								IResourceCalculateDelayer resourceCalculateDelayer,
+								ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupMembers.Intersect(selectedPersons).ToList();
 			if (selectedTeamMembers.IsEmpty()) return true;
@@ -79,7 +86,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 
 				_singleDayScheduler.DayScheduled += OnDayScheduled;
-				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day, roleModelShift, selectedPeriod, schedulePartModifyAndRollbackService, resourceCalculateDelayer);
+				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day,
+				                                                        roleModelShift, selectedPeriod,
+				                                                        schedulePartModifyAndRollbackService,
+				                                                        resourceCalculateDelayer, schedulingResultStateHolder);
 				_singleDayScheduler.DayScheduled -= OnDayScheduled;
 				if (!successful)
 				{

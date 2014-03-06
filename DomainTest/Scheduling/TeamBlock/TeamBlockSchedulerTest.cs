@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private bool _isScheduleFailed;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
+			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 		}
 
 		[Test]
@@ -69,13 +71,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShiftCategory(_schedulingOptions)).Return(false);
 				Expect.Call(() => _sameShiftCategoryBlockScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_sameShiftCategoryBlockScheduler.Schedule(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-																	  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer)).Return(true);
+																	  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(true);
 				Expect.Call(() => _sameShiftCategoryBlockScheduler.DayScheduled -= _target.OnDayScheduled);
 			}
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
+														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -90,13 +92,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly,
-				                                                  _shift, _blockPeriod, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer)).Return(true);
+																  _shift, _blockPeriod, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(true);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 			}
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
+														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -114,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-				                                          _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
+														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 				Assert.That(result, Is.True);
 			}
 		}
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Assert.That(_isScheduleFailed, Is.False);
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer);
+														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
 
 				Assert.That(result, Is.False);
 				Assert.That(_isScheduleFailed, Is.True);

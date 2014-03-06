@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private IBlockInfo _blockInfoMock;
         private bool _cancelTarget;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 
         [SetUp]
@@ -67,12 +68,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             
             _dateOnlyPeriod = new DateOnlyPeriod(_date,_date);
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
+	        _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
         }
 
         [Test]
         public void ShouldNotContinueIfRollbackIsNull()
         {
-           Assert.IsFalse( _target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, null, _resourceCalculateDelayer));
+			Assert.IsFalse(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, null, _resourceCalculateDelayer, _schedulingResultStateHolder));
         }
 
         [Test]
@@ -92,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
             }
 
         }
@@ -114,13 +116,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(_teamBlockInfoMock  );
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
-																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer)).IgnoreArguments().Return(false);
+																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).IgnoreArguments().Return(false);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
             }
 
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
             }
         }
 
@@ -139,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(_teamBlockInfoMock);
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
-																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer)).IgnoreArguments().Return(true);
+																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).IgnoreArguments().Return(true);
                 Expect.Call(_teamBlockInfoMock.TeamInfo).Return(_teamInfoMock);
                 Expect.Call(_teamInfoMock.MatrixesForGroupAndDate(_date)).Return(_matrixList);
                 Expect.Call(_matrixPro.Person).Return(new Person());
@@ -149,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList , _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
             }
         }
 
@@ -168,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(_teamBlockInfoMock);
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
-																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer)).IgnoreArguments().Return(true);
+																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).IgnoreArguments().Return(true);
                 Expect.Call(_teamBlockInfoMock.TeamInfo).Return(_teamInfoMock);
                 Expect.Call(_teamInfoMock.MatrixesForGroupAndDate(_date)).Return(_matrixList);
                 Expect.Call(_matrixPro.Person).Return(_person);
@@ -181,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
             }
         }
 
@@ -200,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(_teamBlockInfoMock);
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
-																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer)).IgnoreArguments().Return(true);
+																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).IgnoreArguments().Return(true);
                 Expect.Call(_teamBlockInfoMock.TeamInfo).Return(_teamInfoMock);
                 Expect.Call(_teamInfoMock.MatrixesForGroupAndDate(_date)).Return(_matrixList);
                 Expect.Call(_matrixPro.Person).Return(_person);
@@ -216,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
             }
         }
 
@@ -235,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .Return(_teamBlockInfoMock);
                 Expect.Call(() => _rollbackService.ClearModificationCollection());
                 Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
-																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer)).IgnoreArguments().Return(true);
+																	 _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).IgnoreArguments().Return(true);
                 Expect.Call(_teamBlockInfoMock.TeamInfo).Return(_teamInfoMock);
                 Expect.Call(_teamInfoMock.MatrixesForGroupAndDate(_date)).Return(_matrixList);
                 Expect.Call(_matrixPro.Person).Return(_person);
@@ -253,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Playback())
             {
-                Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
             }
         }
 
@@ -276,7 +278,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
                 Assert.IsTrue(_cancelTarget);
-                Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
             }
 			_target.DayScheduled -= targetOnDayScheduled;
 
@@ -316,9 +318,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(teamBlockInfoMock2);
 				Expect.Call(() => _rollbackService.ClearModificationCollection()).Repeat.AtLeastOnce();
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfoMock, _date, _schedulingOptions,
-																	 _dateOnlyPeriod, new List<IPerson>{_person}, _rollbackService, _resourceCalculateDelayer)).IgnoreArguments().Return(false);
+																	 _dateOnlyPeriod, new List<IPerson> { _person }, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).IgnoreArguments().Return(false);
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfoMock2, _date, _schedulingOptions,
-																	 _dateOnlyPeriod, new List<IPerson> { person2 }, _rollbackService, _resourceCalculateDelayer)).IgnoreArguments().Return(true);
+																	 _dateOnlyPeriod, new List<IPerson> { person2 }, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).IgnoreArguments().Return(true);
 				Expect.Call(teamBlockInfoMock2.TeamInfo).Return(teamInfoMock2);
 				Expect.Call(teamInfoMock2.MatrixesForGroupAndDate(_date)).Return(_matrixList);
 				Expect.Call(_matrixPro.Person).Return(new Person());
@@ -328,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Playback())
 			{
-				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, personList, _rollbackService, _resourceCalculateDelayer));
+				Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, personList, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder));
 			}
 		}
 
