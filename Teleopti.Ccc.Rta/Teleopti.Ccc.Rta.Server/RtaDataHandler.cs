@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_asyncMessageSender.SendNotificationAsync(notification);
 			if (_afterSends != null)
 			{
-				_afterSends.ForEach(s => s.AfterSend(agentState));				
+				_afterSends.ForEach(s => s.Invoke(agentState));				
 			}
 		}
 	}

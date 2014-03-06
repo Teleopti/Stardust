@@ -135,6 +135,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentAssembler.cs" />
+    <Compile Include="Adherence\AdherenceAggregator.cs" />
     <Compile Include="AlarmMapper.cs" />
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
     <Compile Include="DatabaseReader.cs" />

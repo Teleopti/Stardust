@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server; 
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.Exceptions;
 
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_mocks.VerifyAll();
 
-			afterSend.AssertWasCalled(s => s.AfterSend(agentState));
+			afterSend.AssertWasCalled(s => s.Invoke(agentState));
 		}
 
 		[Test]
