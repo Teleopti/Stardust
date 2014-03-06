@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Microsoft.Windows.Controls.Primitives;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using DataGrid = Microsoft.Windows.Controls.DataGrid;
@@ -98,32 +99,51 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
 
 	    private void RequestGrid_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
 	    {
-		    var dependencyObject = (DependencyObject) e.OriginalSource;
-		    while (dependencyObject != null && !(dependencyObject is Microsoft.Windows.Controls.Primitives.DataGridColumnHeader))
-			    dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
-		    if (dependencyObject == null 
-				|| !(dependencyObject is Microsoft.Windows.Controls.Primitives.DataGridColumnHeader) 
-				|| !(sender is DataGrid)) return;
-		    if (requestGrid.Items.IsEmpty)
-			    return;
+			var model = DataContext as HandlePersonRequestViewModel;
+			if (!checkState(sender, model)) return;
 
-			var header = dependencyObject as Microsoft.Windows.Controls.Primitives.DataGridColumnHeader;
-			if (header.Column.SortMemberPath == "Headers") return;
+		    var header = tryGetHeader((DependencyObject)e.OriginalSource);
+		    if (header == null) return;
+
+			handleSortDirections(header.Column.SortMemberPath);
+			model.UpdateSorting(_sortDirections);
+			
+			requestGrid.SelectedItem = null;
+		    e.Handled = true;
+	    }
+
+	    private bool checkState(object sender, HandlePersonRequestViewModel model)
+	    {
+		    return !requestGrid.Items.IsEmpty &&
+		           sender is DataGrid &&
+		           model != null &&
+		           !model.PersonRequestViewModels.IsAddingNew &&
+		           !model.PersonRequestViewModels.IsEditingItem;
+	    }
+
+	    private static DataGridColumnHeader tryGetHeader(DependencyObject dependencyObject)
+	    {
+			while (dependencyObject != null && !(dependencyObject is DataGridColumnHeader))
+				dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
+
+			var columnHeader = dependencyObject as DataGridColumnHeader;
+		    if (columnHeader == null || columnHeader.Column.SortMemberPath == "Headers") return null;
+		    return columnHeader;
+	    }
+
+		private void handleSortDirections(string sortMemberPath)
+	    {
 		    var direction = ListSortDirection.Ascending;
-		    if (_sortDirections.Any(s => s.PropertyName == header.Column.SortMemberPath))
+		    if (_sortDirections.Any(s => s.PropertyName == sortMemberPath))
 		    {
-			    var previousSort = _sortDirections.FirstOrDefault(s => s.PropertyName == header.Column.SortMemberPath);
+			    var previousSort = _sortDirections.FirstOrDefault(s => s.PropertyName == sortMemberPath);
 			    direction = previousSort.Direction == ListSortDirection.Ascending
 				                ? ListSortDirection.Descending
 				                : ListSortDirection.Ascending;
 			    _sortDirections.Remove(previousSort);
 		    }
-		    _sortDirections.Insert(0, new SortDescription(header.Column.SortMemberPath, direction));
-		    var model = DataContext as HandlePersonRequestViewModel;
-			if (model != null)
-				model.SortSourceList(_sortDirections);
-			requestGrid.SelectedItem = null;
-		    e.Handled = true;
+		    _sortDirections.Insert(0, new SortDescription(sortMemberPath, direction));
 	    }
+
     }
 }
