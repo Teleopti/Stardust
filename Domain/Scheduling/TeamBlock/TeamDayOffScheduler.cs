@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -151,20 +152,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (currentDaysOff >= targetDaysOff)
 					break;
 
-				IScheduleDay part = matrix.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
-				if (!_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(part))
-					break;
+				var foundSpot = true;
 
-				if (!_hasContractDayOffDefinition.IsDayOff(part))
-					break;
+				while (currentOffDaysList.Count < targetDaysOff && foundSpot)
+				{
+					var sortedWeeks = _dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(matrix);
+					foundSpot = false;
 
-				part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-				rollbackService.Modify(part);
+					foreach (var dayOffOnPeriod in sortedWeeks)
+					{
+						var bestScheduleDay = dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, schedulingOptions);
+						if (bestScheduleDay == null) continue;
+						try
+						{
+							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 
-				var eventArgs = new SchedulingServiceBaseEventArgs(part);
-				OnDayScheduled(eventArgs);
-				if (eventArgs.Cancel)
-					break;
+							var dayOff = bestScheduleDay.PersonDayOffCollection()[0];
+							var authorization = PrincipalAuthorization.Instance();
+							if (!(authorization.IsPermitted(dayOff.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person))) continue;
+
+							rollbackService.Modify(bestScheduleDay);
+							foundSpot = true;
+						}
+						catch (DayOffOutsideScheduleException)
+						{
+							rollbackService.Rollback();
+						}
+						var eventArgs = new SchedulingServiceBaseEventArgs(bestScheduleDay);
+						OnDayScheduled(eventArgs);
+						if (eventArgs.Cancel)
+							return;
+
+						break;
+					}
+
+					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out currentOffDaysList);
+				}
 			}
 		}
 
@@ -221,33 +244,41 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (hasCorrectNumberOfDaysOff && currentDaysOff >= targetDaysOff)
 					continue;
 
+				var foundSpot = true;
 
-
-				foreach (var scheduleDayPro in matrix.UnlockedDays)
+				while (currentOffDaysList.Count < targetDaysOff && foundSpot)
 				{
-					if (currentDaysOff >= targetDaysOff)
-						continue;
+					var sortedWeeks = _dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(matrix);
+					foundSpot = false;
 
-					IScheduleDay part = scheduleDayPro.DaySchedulePart();
-					if (!_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(part))
-						continue;
+					foreach (var dayOffOnPeriod in sortedWeeks)
+					{
+						var bestScheduleDay = dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, schedulingOptions);
+						if (bestScheduleDay == null) continue;
+						try
+						{
+							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 
-					if (!_hasContractDayOffDefinition.IsDayOff(part))
-						continue;
+							var dayOff = bestScheduleDay.PersonDayOffCollection()[0];
+							var authorization = PrincipalAuthorization.Instance();
+							if (!(authorization.IsPermitted(dayOff.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person))) continue;
 
-					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part,
-					                                                                                                  schedulingOptions);
-					if (effectiveRestriction != null && effectiveRestriction.NotAllowedForDayOffs)
-						continue;
+							rollbackService.Modify(bestScheduleDay);
+							foundSpot = true;
+						}
+						catch (DayOffOutsideScheduleException)
+						{
+							rollbackService.Rollback();
+						}
+						var eventArgs = new SchedulingServiceBaseEventArgs(bestScheduleDay);
+						OnDayScheduled(eventArgs);
+						if (eventArgs.Cancel)
+							return;
 
-					part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-					rollbackService.Modify(part);
-					currentDaysOff++;
+						break;
+					}
 
-					var eventArgs = new SchedulingServiceBaseEventArgs(part);
-					OnDayScheduled(eventArgs);
-					if (eventArgs.Cancel)
-						return;
+					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out currentOffDaysList);
 				}
 			}
 		}

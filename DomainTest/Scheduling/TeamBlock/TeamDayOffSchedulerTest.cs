@@ -7,10 +7,11 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -34,6 +35,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private IScheduleDayPro _scheduleDayPro;
 		private IScheduleMatrixPro _scheduleMatrixPro;
+		private IPersonDayOff _personDayOff;
+		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
+		private IPrincipalAuthorization _principalAuthorization;
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
@@ -68,6 +73,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 											  _schedulePartModifyAndRollbackService, _scheduleDayAvailableForDayOffSpecification,
 											  _hasContractDayOffDefinition, _matrixDataListInSteadyState, _matrixDataListCreator,
 											  _schedulingResultStateHolder);
+
+			_personDayOff = _mocks.StrictMock<IPersonDayOff>();
+			_dateOnlyAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			_principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
+			_person = PersonFactory.CreatePerson("Bill");
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -117,6 +127,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
 			}
 		}
+
 		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAddContractDayOffForTeam()
@@ -136,6 +147,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                                    , null, null, null,
 			                                                    new List<IActivityRestriction>());
 
+			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
+			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
@@ -150,25 +164,97 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
 				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { person }, date, _schedulingOptions, scheduleDictionary)).Return(effectiveRestriction).Repeat.Twice();
-				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
+				
+				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods).Repeat.AtLeastOnce();
+				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(scheduleDay);
+				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(null);
+				Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff }));
+				Expect.Call(_personDayOff.FunctionPath).Return("functionPath");
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
+				Expect.Call(scheduleDay.Person).Return(person);
+				Expect.Call(_principalAuthorization.IsPermitted("functionPath", date, person)).Return(true);
+
 				Expect.Call(() => scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate)).Repeat.AtLeastOnce();
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(scheduleDay)).Repeat.AtLeastOnce();
 				int target;
 			    IList<IScheduleDay> currentScheduleDayList;
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-					  .OutRef(1, new List<IScheduleDay>());
-				Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
-				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(true);
+					  .OutRef(1, new List<IScheduleDay>()).Repeat.AtLeastOnce();
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions,
+					                         _groupPersonBuilderForOptimization);
+				}
 			}
 		}
 
-		
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldSkipModifyContractDayOffForTeamWhenNoPermission()
+		{
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var person = PersonFactory.CreatePerson("Bill");
+			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
+			var date = new DateOnly(2013, 2, 1);
+			var matrixData1 = _mocks.StrictMock<IMatrixData>();
+			var matrixDataList = new List<IMatrixData> { matrixData1 };
+			var groupPerson = _mocks.StrictMock<IGroupPerson>();
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+																new EndTimeLimitation(),
+																new WorkTimeLimitation()
+																, null, null, null,
+																new List<IActivityRestriction>());
+
+			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
+			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
+				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(true);
+				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.AtLeastOnce();
+				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson).Repeat.Twice();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
+				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { person }, date, _schedulingOptions, scheduleDictionary)).Return(effectiveRestriction).Repeat.Twice();
+
+				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods).Repeat.AtLeastOnce();
+				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(scheduleDay);
+				Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff }));
+				Expect.Call(_personDayOff.FunctionPath).Return("functionPath");
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
+				Expect.Call(scheduleDay.Person).Return(person);
+				Expect.Call(_principalAuthorization.IsPermitted("functionPath", date, person)).Return(false);
+
+
+				Expect.Call(() => scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate)).Repeat.AtLeastOnce();
+				int target;
+				IList<IScheduleDay> currentScheduleDayList;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
+					  .OutRef(1, new List<IScheduleDay>()).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions,
+											 _groupPersonBuilderForOptimization);
+				}
+			}
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldAddPreferenceDayOffIndividually()
@@ -223,6 +309,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                                    , null, null, null,
 			                                                    new List<IActivityRestriction>());
 
+			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
+			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
+			var date = new DateOnly(2013, 2, 1);
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
@@ -232,20 +322,34 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(false);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, _schedulingOptions)).Return(effectiveRestriction).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
+
+
+				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods).Repeat.AtLeastOnce();
+				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(scheduleDay);
+				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(null);
+				Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff }));
+				Expect.Call(_personDayOff.FunctionPath).Return("functionPath");
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
+				Expect.Call(scheduleDay.Person).Return(_person);
+				Expect.Call(_principalAuthorization.IsPermitted("functionPath", date, _person)).Return(true);
+
 				Expect.Call(scheduleDay.IsScheduled()).Return(false).Repeat.AtLeastOnce();
 				Expect.Call(() => scheduleDay.CreateAndAddDayOff(_schedulingOptions.DayOffTemplate)).Repeat.AtLeastOnce();
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(scheduleDay)).Repeat.AtLeastOnce();
 				int target;
                 IList<IScheduleDay> currentScheduleDayList;
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-					  .OutRef(1, new List<IScheduleDay>());
-				Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
-				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(true);
+					  .OutRef(1, new List<IScheduleDay>()).Repeat.AtLeastOnce(); 
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions,
+					                         _groupPersonBuilderForOptimization);
+				}
 			}
 		}
 	
@@ -272,6 +376,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				DayOffTemplate = _schedulingOptions.DayOffTemplate
 			};
 
+			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
+			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
@@ -289,21 +396,33 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDay.IsScheduled()).Return(false).Repeat.AtLeastOnce();
+
+				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods).Repeat.AtLeastOnce();
+				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(scheduleDay);
+				Expect.Call(scheduleDay.PersonDayOffCollection()).Return(new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff> { _personDayOff }));
+				Expect.Call(_personDayOff.FunctionPath).Return("functionPath");
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(date);
+				Expect.Call(scheduleDay.Person).Return(person);
+				Expect.Call(_principalAuthorization.IsPermitted("functionPath", date, person)).Return(true);
+
 				Expect.Call(() => scheduleDay.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate)).Repeat.AtLeastOnce();
 				Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(scheduleDay)).Repeat.AtLeastOnce();
 				int target;
                 IList<IScheduleDay> currentScheduleDayList;
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList )).Return(true)
 					  .OutRef(1, new List<IScheduleDay>());
-				Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
-				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.DayScheduled += targetDayScheduled;
-				_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
-				_target.DayScheduled -= targetDayScheduled;
+				using (new CustomAuthorizationContext(_principalAuthorization))
+				{
+					_target.DayScheduled += targetDayScheduled;
+					_target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions,
+					                         _groupPersonBuilderForOptimization);
+					_target.DayScheduled -= targetDayScheduled;
+				}
 			}
 		}
 
@@ -389,47 +508,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldContinueIfScheduleDayAvailableForDayOffSpecificationNotSatisfied()
+        public void ShouldContinueIfCantFindBestSpot()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
             var matrixData1 = _mocks.StrictMock<IMatrixData>();
             var matrixDataList = new List<IMatrixData> { matrixData1 };
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
-                Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(false);
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
-                int target;
-                IList<IScheduleDay> currentScheduleDayList;
-                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-                      .OutRef(1, new List<IScheduleDay>());
-                Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(false);
-                
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
-            }
-        }
-
-        [Test]
-        public void ShouldContinueIfNotContractDayOff()
-        {
-            var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
-            var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-           
+			var dayOffOnPeriod = _mocks.StrictMock<IDayOffOnPeriod>();
+			var dayOffPeriods = new List<IDayOffOnPeriod> { dayOffOnPeriod };
+			
 
             using (_mocks.Record())
             {
@@ -441,12 +529,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
                 Expect.Call(scheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
 
+				Expect.Call(_dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(_scheduleMatrixPro)).Return(dayOffPeriods).Repeat.AtLeastOnce();
+				Expect.Call(dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, _schedulingOptions)).Return(null);
+
                 int target;
                 IList<IScheduleDay> currentScheduleDayList;
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(false)
+					 .OutRef(1, new List<IScheduleDay>());
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-                      .OutRef(1, new List<IScheduleDay>());
-                Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true  );
-                Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(false );
+                      .OutRef(1, new List<IScheduleDay>());     
             }
 
             using (_mocks.Playback())
@@ -455,47 +546,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        [Test]
-        public void ShouldContinueIfEffectiveRestrictionNotAllowDayOff()
-        {
-            var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
-            var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                                new EndTimeLimitation(),
-                                                                new WorkTimeLimitation()
-                                                                , null, null, null,
-                                                                new List<IActivityRestriction>());
-
-            effectiveRestriction.NotAllowedForDayOffs = true;
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
-                Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(false);
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, _schedulingOptions)).Return(effectiveRestriction).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
-                Expect.Call(scheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
-
-                int target;
-                IList<IScheduleDay> currentScheduleDayList;
-                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-                      .OutRef(1, new List<IScheduleDay>());
-                Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
-                Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(true);
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
-            }
-        }
-
+        
         [Test]
         public void ShouldThrowExceptionWhenRollbackIsNull()
         {
@@ -680,104 +731,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
                       .OutRef(0, new List<IScheduleDay> ());
                
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
-            }
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldContinueForTeamIfScheduleDayAvailableForDayOffSpecificationNotSatisfied()
-        {
-            var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var person = PersonFactory.CreatePerson("Bill");
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
-            var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                                new EndTimeLimitation(),
-                                                                new WorkTimeLimitation()
-                                                                , null, null, null,
-                                                                new List<IActivityRestriction>());
-
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
-                Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(true);
-                Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.AtLeastOnce();
-                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson).Repeat.Twice();
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
-                Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { person }, date, _schedulingOptions, scheduleDictionary)).Return(effectiveRestriction).Repeat.Twice();
-                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
-                int target;
-                IList<IScheduleDay> currentScheduleDayList;
-                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-                      .OutRef(1, new List<IScheduleDay>());
-                Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(false );
-                
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.DayOffScheduling(matrixList, _schedulePartModifyAndRollbackService, _schedulingOptions, _groupPersonBuilderForOptimization);
-            }
-        }
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldContinueForTeamDayOffIsFromContract()
-        {
-            var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-            var person = PersonFactory.CreatePerson("Bill");
-            var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-            var date = new DateOnly(2013, 2, 1);
-            var matrixData1 = _mocks.StrictMock<IMatrixData>();
-            var matrixDataList = new List<IMatrixData> { matrixData1 };
-            var groupPerson = _mocks.StrictMock<IGroupPerson>();
-            var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
-                                                                new EndTimeLimitation(),
-                                                                new WorkTimeLimitation()
-                                                                , null, null, null,
-                                                                new List<IActivityRestriction>());
-
-
-            using (_mocks.Record())
-            {
-                Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-                Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
-                Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(true);
-                Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.AtLeastOnce();
-                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson).Repeat.Twice();
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
-                Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
-                Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> { person }, date, _schedulingOptions, scheduleDictionary)).Return(effectiveRestriction).Repeat.Twice();
-                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(date)).Return(_scheduleDayPro).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(scheduleDay).Repeat.AtLeastOnce();
-                int target;
-                IList<IScheduleDay> currentScheduleDayList;
-                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-                      .OutRef(1, new List<IScheduleDay>());
-                Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
-                Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(false );
             }
 
             using (_mocks.Playback())
