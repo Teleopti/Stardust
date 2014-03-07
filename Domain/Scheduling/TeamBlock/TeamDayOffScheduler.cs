@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -25,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
 		private readonly IMatrixDataListCreator _matrixDataListCreator;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -33,13 +36,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
 			IHasContractDayOffDefinition hasContractDayOffDefinition,
 			 IMatrixDataListCreator matrixDataListCreator,
-			 ISchedulingResultStateHolder schedulingResultStateHolder)
+			 ISchedulingResultStateHolder schedulingResultStateHolder,
+			IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
 			_matrixDataListCreator = matrixDataListCreator;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
+			_scheduleDayAvailableForDayOffSpecification = scheduleDayAvailableForDayOffSpecification;
 		}
 
 		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, IList<IPerson> selectedPersons,
@@ -81,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var selectedMatrixesForTeam = getMatrixesAndRestriction(matrixListAll, selectedPersons, schedulingOptions,
 					                                                        groupPersonBuilderForOptimization, person, scheduleDate,
 					                                                        out restriction);
-					var canceled = addContractDaysOffForTeam(selectedMatrixesForTeam, schedulingOptions, rollbackService, scheduleDate);
+					var canceled = addContractDaysOffForTeam(selectedMatrixesForTeam, schedulingOptions, rollbackService);
 					if (canceled)
 					{
 						cancelPressed = true;
@@ -166,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private bool addContractDaysOffForTeam(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
-		                                       ISchedulePartModifyAndRollbackService rollbackService, DateOnly scheduleDate)
+		                                       ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			foreach (var matrix in matrixList)
 			{
@@ -174,24 +179,50 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				IList<IScheduleDay> currentOffDaysList;
 				_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrix.SchedulePeriod, out targetDaysOff, out currentOffDaysList);
 
+				var schedulePeriod = matrix.SchedulePeriod;
+				if (!schedulePeriod.IsValid)
+					continue;
+
 				int currentDaysOff = currentOffDaysList.Count;
 				if(currentDaysOff >= targetDaysOff)
 					continue;
 
-				IScheduleDay part = matrix.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
-				if(part.IsScheduled())
-					continue;
+				var foundSpot = true;
 
-				if (!_hasContractDayOffDefinition.IsDayOff(part))
-					continue;
+				while (currentOffDaysList.Count < targetDaysOff && foundSpot)
+				{
+					var sortedWeeks = _dayOffsInPeriodCalculator.WeekPeriodsSortedOnDayOff(matrix);
+					foundSpot = false;
 
-				part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-				rollbackService.Modify(part);
+					foreach (var dayOffOnPeriod in sortedWeeks)
+					{
+						var bestScheduleDay = dayOffOnPeriod.FindBestSpotForDayOff(_hasContractDayOffDefinition, _scheduleDayAvailableForDayOffSpecification, _effectiveRestrictionCreator, schedulingOptions);
+						if (bestScheduleDay == null) continue;
+						try
+						{
+							bestScheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 
-				var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
-				OnDayScheduled(eventArgs);
-				if (eventArgs.Cancel)
-					return true;
+							var personAssignment = bestScheduleDay.PersonAssignment();
+							var authorization = PrincipalAuthorization.Instance();
+							if (!(authorization.IsPermitted(personAssignment.FunctionPath, bestScheduleDay.DateOnlyAsPeriod.DateOnly, bestScheduleDay.Person))) continue;
+
+							rollbackService.Modify(bestScheduleDay);
+							foundSpot = true;
+						}
+						catch (DayOffOutsideScheduleException)
+						{
+							rollbackService.Rollback();
+						}
+						var eventArgs = new SchedulingServiceSuccessfulEventArgs(bestScheduleDay);
+						OnDayScheduled(eventArgs);
+						if (eventArgs.Cancel)
+							return true;
+
+						break;
+					}
+
+					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out currentOffDaysList);
+				}	
 			}
 
 			return false;
