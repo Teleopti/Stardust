@@ -4,14 +4,14 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-	public class SiteAdherence
+	public class AggregatedAdherence
 	{
 		private readonly Dictionary<Guid, bool> _personAdherence = new Dictionary<Guid, bool>();
-		public Guid SiteId { get; private set; }
+		public Guid Key { get; private set; }
 
-		public SiteAdherence(Guid siteId	)
+		public AggregatedAdherence(Guid key)
 		{
-			SiteId = siteId;
+			Key = key;
 		}
 
 		public bool TryUpdateAdherence(Guid personId, double staffingEffect)
