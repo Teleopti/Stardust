@@ -6,7 +6,13 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class TeamAdherence
 	{
-		private readonly Dictionary<Guid, bool> _personAdherence = new Dictionary<Guid, bool>(); 
+		private readonly Dictionary<Guid, bool> _personAdherence = new Dictionary<Guid, bool>();
+		public Guid TeamId { get; private set; }
+
+		public TeamAdherence(Guid teamId)
+		{
+			TeamId = teamId;
+		}
 
 		public bool TryUpdateAdherence(Guid personId, double staffingEffect)
 		{

@@ -17,50 +17,31 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		public AdherenceAggregator(IMessageSender messageSender, ITeamIdForPerson teamProvider, ISiteIdForPerson siteProvider)
 		{
 			_messageSender = messageSender;
-			_teamAdherenceAggregator = new TeamAdherenceAggregator(_messageSender, teamProvider);
+			_teamAdherenceAggregator = new TeamAdherenceAggregator(teamProvider);
 			_siteAdherenceAggregator = new SiteAdherenceAggregator(_messageSender, siteProvider);
 		}
 
 		public void Invoke(IActualAgentState actualAgentState)
 		{
 			_siteAdherenceAggregator.Aggregate(actualAgentState);
-			_teamAdherenceAggregator.Aggregate(actualAgentState);
-		}
-	}
-
-	public class TeamAdherenceAggregator
-	{
-		private readonly IMessageSender _messageSender;
-		private readonly ITeamIdForPerson _teamProvider;
-		private readonly Dictionary<Guid, TeamAdherence> _teamAdherence = new Dictionary<Guid, TeamAdherence>();
-
-		public TeamAdherenceAggregator(IMessageSender messageSender, ITeamIdForPerson teamProvider)
-		{
-			_messageSender = messageSender;
-			_teamProvider = teamProvider;
-		}
-
-		public void Aggregate(IActualAgentState actualAgentState)
-		{
-			if (_teamProvider == null) return;
-			var personId = actualAgentState.PersonId;
-			var teamId = _teamProvider.GetTeamId(personId);
-			if (!_teamAdherence.ContainsKey(teamId))
-				_teamAdherence[teamId] = new TeamAdherence();
-
-			var teamState = _teamAdherence[teamId];
-			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			if (!changed)
-				return;
-			var teamAdherenceMessage = new TeamAdherenceMessage
-			{
-				TeamId = teamId,
-				OutOfAdherence = teamState.NumberOutOfAdherence()
-			};
-			var notification = new Notification { BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage) };
+			var teamAdherence = _teamAdherenceAggregator.Aggregate(actualAgentState);
+			if (teamAdherence == null) return;
+			var notification = createTeamNotification(teamAdherence);
 			_messageSender.SendNotification(notification);
 		}
+
+		private static Notification createTeamNotification(TeamAdherence teamAdherence)
+		{
+			var teamAdherenceMessage = new TeamAdherenceMessage
+				{
+					TeamId = teamAdherence.TeamId,
+					OutOfAdherence = teamAdherence.NumberOutOfAdherence()
+				};
+			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
+			return notification;
+		}
 	}
+
 	public class SiteAdherenceAggregator
 	{
 		private readonly IMessageSender _messageSender;
@@ -78,19 +59,18 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			if (_siteProvider == null) return;
 
 			var personId = actualAgentState.PersonId;
-
 			var siteId = _siteProvider.GetSiteId(personId);
 			if (!_siteAdherence.ContainsKey(siteId))
 				_siteAdherence[siteId] = new SiteAdherence();
 
-			var teamState = _siteAdherence[siteId];
-			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
+			var siteState = _siteAdherence[siteId];
+			var changed = siteState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
 			if (!changed)
 				return;
 			var siteAdherenceMessage = new SiteAdherenceMessage
 			{
 				SiteId = siteId,
-				OutOfAdherence = teamState.NumberOutOfAdherence()
+				OutOfAdherence = siteState.NumberOutOfAdherence()
 			};
 			var notification = new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage) };
 			_messageSender.SendNotification(notification);

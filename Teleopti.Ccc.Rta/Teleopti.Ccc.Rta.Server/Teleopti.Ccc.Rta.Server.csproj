@@ -146,6 +146,7 @@
     <Compile Include="Adherence\ITeamIdForPerson.cs" />
     <Compile Include="Adherence\NotificationExtension.cs" />
     <Compile Include="Adherence\TeamAdherence.cs" />
+    <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="AlarmMapper.cs" />
     <Compile Include="BuildContainer.cs" />
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
