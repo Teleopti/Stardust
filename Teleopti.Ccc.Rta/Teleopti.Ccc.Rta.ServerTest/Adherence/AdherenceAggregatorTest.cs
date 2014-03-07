@@ -76,5 +76,25 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldMapAdherenceFor2PersonsInATeam()
+		{
+			var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
+			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
+			var team = Guid.NewGuid();
+			teamProvider.Expect(x => x.GetTeamId(outOfAdherence1.PersonId)).Return(team);
+			teamProvider.Expect(x => x.GetTeamId(outOfAdherence2.PersonId)).Return(team);
+			var target = new AdherenceAggregator(broker, teamProvider);
+
+			target.Invoke(outOfAdherence1);
+			target.Invoke(outOfAdherence2);
+
+			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(2);
+		}
+
 	}
 }

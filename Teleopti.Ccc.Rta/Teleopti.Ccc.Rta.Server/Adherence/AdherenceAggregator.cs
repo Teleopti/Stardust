@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
@@ -32,7 +33,9 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			
 			_teamAdherence[personId] = Math.Abs(actualAgentState.StaffingEffect);
 
-			var teamAdherenceMessage = new TeamAdherenceMessage { TeamId = teamId, OutOfAdherence = _teamAdherence[personId] };
+			var outOfAdherenceSum = _teamAdherence.Values.Sum();
+
+			var teamAdherenceMessage = new TeamAdherenceMessage { TeamId = teamId, OutOfAdherence = outOfAdherenceSum };
 			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
 			_messageSender.SendNotification(notification);
 		}
