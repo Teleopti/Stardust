@@ -136,6 +136,11 @@
     <Compile Include="Core\CurrentTime.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduledAgentsForShiftTrade.cs" />
+    <Compile Include="SignInWithWindowsAuthentication.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SignInWithWindowsAuthentication.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -766,6 +771,10 @@
     <None Include="Anywhere\ViewConfidentialAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewConfidentialAbsence.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignInWithWindowsAuthentication.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignInWithWindowsAuthentication.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
