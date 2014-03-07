@@ -74,8 +74,7 @@ inner join mart.dim_business_unit bu
 
 /*Run report*/
 IF @report_resource_key = 'ResReportAdherencePerDay'
-	EXEC mart.report_data_agent_schedule_adherence @date_from, @date_from, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @adherence_id, @sort_by ,@time_zone_id, @person_code, @agent_code, @report_id, @language_id, @business_unit_code,0
-
+	EXEC mart.report_data_agent_schedule_adherence @date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @adherence_id, @sort_by ,@time_zone_id, @person_code, @agent_code, @report_id, @language_id, @business_unit_code,0
 
 IF @report_resource_key= 'ResReportScheduledTimePerAgent'
 begin

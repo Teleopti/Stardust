@@ -59,7 +59,7 @@ insert into dbo.queues(queue,orig_desc,log_object_id,orig_queue_id,display_desc)
 select @queue_id,@orig_desc,@log_object_id,@orig_queue_id,@queue_display_desc
 SET IDENTITY_INSERT dbo.queues OFF
 
---yesterday
+--@todayMinus2
 insert dbo.agent_logg values (@queue_id,@todayMinus2,38,@agent_id,@agent_name,@Minute*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus2,39,@agent_id,@agent_name,@Minute*6,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus2,48,@agent_id,@agent_name,@Minute*9,180,180,0,0,0,2,0,0,0,0,0,NULL)
@@ -76,14 +76,15 @@ insert dbo.agent_logg values (@queue_id,@todayMinus2,95,@agent_id,@agent_name,@M
 insert dbo.agent_logg values (@queue_id,@todayMinus1,1,@agent_id,@agent_name,@Minute*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,2,@agent_id,@agent_name,@Minute*6,180,180,0,0,0,2,0,0,0,0,0,NULL)
 
---in the overlapping shift
+--@todayMinus1 - in the overlapping shift
 insert dbo.agent_logg values (@queue_id,@todayMinus1,27,@agent_id,@agent_name,@Minute*12,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,28,@agent_id,@agent_name,@Minute*9,180,180,0,0,0,2,0,0,0,0,0,NULL)
 
---today
+--@todayMinus1
 insert dbo.agent_logg values (@queue_id,@todayMinus1,38,@agent_id,@agent_name,@Minute*3,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,39,@agent_id,@agent_name,@Minute*6,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,48,@agent_id,@agent_name,@Minute*9,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,49,@agent_id,@agent_name,@Minute*15,180,180,0,0,0,2,0,0,0,0,0,NULL)
+insert dbo.agent_logg values (@queue_id,@todayMinus1,56,@agent_id,@agent_name,@Minute*4,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,58,@agent_id,@agent_name,@Minute*12,180,180,0,0,0,2,0,0,0,0,0,NULL)
 insert dbo.agent_logg values (@queue_id,@todayMinus1,59,@agent_id,@agent_name,@Minute*9,180,180,0,0,0,2,0,0,0,0,0,NULL)

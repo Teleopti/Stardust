@@ -129,6 +129,7 @@ CREATE TABLE #person_adh(
 )
 
 CREATE TABLE #result (
+	shift_startdate_local_id int,
 	shift_startdate_id int, --new 20130111
 	shift_startdate datetime,--new 20130111
 	date_id int,
@@ -170,6 +171,7 @@ CREATE TABLE #result (
 	)
 
 CREATE TABLE #counter(
+shift_startdate_local_id int,
 date_id int,
 interval_id smallint,
 date_interval_counter int IDENTITY(1,1)
@@ -454,10 +456,11 @@ WHERE SchTemp.absence_id IS NULL
 
 --Start creating the result set
 --a) insert agent statistics matching scheduled time
-INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
+INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
 person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
 adherence_type_selected,hide_time_zone,count_activity_per_interval)
-	SELECT	b1.date_id, --shift_startdate_id
+	SELECT	fsd.shift_startdate_local_id,
+			b1.date_id, --shift_startdate_id
 			b1.date_date,
 			d.date_id,
 			d.date_date,
@@ -512,10 +515,11 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
 
 --b) insert agent statistics outside shift
-INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
+INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
 person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
 adherence_type_selected,hide_time_zone,count_activity_per_interval)
-	SELECT	b1.date_id,
+	SELECT	fsd.shift_startdate_local_id,
+			b1.date_id,
 			b1.date_date,
 			d.date_id,
 			d.date_date,
@@ -694,14 +698,18 @@ FROM #minmax
 INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND #result.person_id=#minmax.person_id
 
 --add unique id per date_id and interval_id
-INSERT #counter(date_id,interval_id)
-select distinct date_id,interval_id
+INSERT #counter(shift_startdate_local_id,date_id,interval_id)
+select distinct shift_startdate_local_id,date_id,interval_id
 from #result
-order by date_id,interval_id
+order by shift_startdate_local_id,date_id,interval_id
 
 update #result
 set date_interval_counter=c.date_interval_counter
-from #counter c inner join #result r on r.date_id=c.date_id AND r.interval_id=c.interval_id
+from #counter c
+inner join #result r
+	on r.date_id=c.date_id
+	AND r.interval_id=c.interval_id
+	AND r.shift_startdate_local_id = c.shift_startdate_local_id
 
 
 -- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
