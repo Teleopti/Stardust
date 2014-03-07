@@ -5,8 +5,8 @@
 	<Target Name="DeployToAzure">
 		
 		<Message Text="Starting to deploy Azure package ..." Importance="high" />
-		<Message Text="&quot;(CCNetWorkingDirectory)\ccnet\Azure\DeployToAzure.bat&quot;"/>
-		<Exec Command="&quot;(CCNetWorkingDirectory)\ccnet\Azure\DeployToAzure.bat&quot;"/>
+		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\DeployToAzure.bat&quot;"/>
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\Azure\DeployToAzure.bat&quot;"/>
 		<Message Text="Deploy of Azure package done!" Importance="high" />
 	</Target>
 
