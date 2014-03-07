@@ -63,7 +63,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             row["shift_start"] = personPayloadPeriod.StartDateTime;
             row["shift_end"] = personPayloadPeriod.EndDateTime;
             row["shift_startinterval_id"] = new IntervalBase(personPayloadPeriod.StartDateTime, intervalsPerDay).Id;
-			row["shift_endinterval_id"] = new IntervalBase(personPayloadPeriod.EndDateTime, intervalsPerDay).Id;
+			row["shift_endinterval_id"] = new IntervalBase(personPayloadPeriod.EndDateTime.AddSeconds(-1), intervalsPerDay).Id; //remove one seconds to get EndDateTime on correct mart interval
 
             row["shift_length_m"] = personPayloadPeriod.EndDateTime.Subtract(personPayloadPeriod.StartDateTime).TotalMinutes;
 
