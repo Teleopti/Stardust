@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 	{
 		private readonly IMessageSender _messageSender;
 		private readonly ITeamIdForPersonProvider _teamProvider;
-		private readonly Dictionary<Guid, double> _teamAdherence = new Dictionary<Guid, double>();  
+		private readonly Dictionary<Guid, TeamAdherence> _teamAdherence = new Dictionary<Guid, TeamAdherence>();  
 
 		public AdherenceAggregator(IMessageSender messageSender, ITeamIdForPersonProvider teamProvider)
 		{
@@ -26,18 +26,37 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			var personId = actualAgentState.PersonId;
 			var teamId = _teamProvider.GetTeamId(personId);
 
-			double staffingEffect;
-			if (_teamAdherence.TryGetValue(personId, out staffingEffect) &&
-			    staffingEffect.Equals(actualAgentState.StaffingEffect))
+			if (!_teamAdherence.ContainsKey(teamId))
+				_teamAdherence[teamId] = new TeamAdherence();
+
+			var teamState = _teamAdherence[teamId];
+			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
+			if (!changed)
 				return;
-			
-			_teamAdherence[personId] = Math.Abs(actualAgentState.StaffingEffect);
 
-			var outOfAdherenceSum = _teamAdherence.Values.Sum();
-
-			var teamAdherenceMessage = new TeamAdherenceMessage { TeamId = teamId, OutOfAdherence = outOfAdherenceSum };
+			var teamAdherenceMessage = new TeamAdherenceMessage { TeamId = teamId, OutOfAdherence = teamState.NumberOutOfAdherence() };
 			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
 			_messageSender.SendNotification(notification);
+		}
+	}
+
+	public class TeamAdherence
+	{
+		public Guid TeamId { get; set; }
+		private readonly Dictionary<Guid, bool> _personAdherence = new Dictionary<Guid, bool>(); 
+
+		public bool TryUpdateAdherence(Guid personId, double staffingEffect)
+		{
+			var adherence = staffingEffect.Equals(0);
+			var changed = !_personAdherence.ContainsKey(personId) || 
+				_personAdherence[personId] != adherence;
+			_personAdherence[personId] = adherence;
+			return changed;
+		}
+
+		public int NumberOutOfAdherence()
+		{
+			return _personAdherence.Values.Count(x => x == false);
 		}
 	}
 }
