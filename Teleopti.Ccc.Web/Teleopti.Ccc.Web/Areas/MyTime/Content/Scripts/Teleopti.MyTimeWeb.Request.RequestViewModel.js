@@ -1,6 +1,5 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
-/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
@@ -8,6 +7,7 @@
 
 Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addRequestMethod, firstDayOfWeek, defaultDateTimes) {
 	var self = this;
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
@@ -86,15 +86,22 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 
 	function loadAbsenceAccount() {
 		ajax.Ajax({
-			url: 'Requests/FetchAbsenceAccount',
+			url: "Requests/FetchAbsenceAccount",
 			dataType: "json",
 			type: 'GET',
+			contentType: 'application/json; charset=utf-8',
 			data: {
-				absenceId: self.absenceId,
-				date: self.EndDate
+				absenceId: self.AbsenceId,
+				date: self.DateTo
 			},
-			success: function (data) {
+			success: function (data, textStatus, jqXHR) {
 				self.ReadAbsenceAccount(data);
+			},
+			error: function (e) {
+				//console.log(e);
+			},
+			complete: function () {
+				//self.IsLoading(false);
 			}
 		});
 	};
