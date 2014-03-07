@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			TimeSpan periodLength, TimeSpan balanceIn, TimeSpan balanceOut, TimeSpan accrued, TimeSpan extra, TimeSpan used)
 		{
 			var absenceAccount = new PersonAbsenceAccount(person, absence);
-			absenceAccount.Absence.Tracker = Tracker.CreateDayTracker();
+			absenceAccount.Absence.Tracker = Tracker.CreateTimeTracker();
 
 			absenceAccount.Add(new AccountTime(startDate)
 			{
