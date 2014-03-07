@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 		{
 
 			var table = new DataTable("mart.fact_schedule");
+			table.Columns.Add("shift_start_date_local_Id", typeof(int));
 			table.Columns.Add("schedule_date_id", typeof(int));
 			table.Columns.Add("person_id", typeof(int));
 			table.Columns.Add("interval_id", typeof(int));
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 
 		public static void AddFactSchedule(
 			this DataTable dataTable,
+			int shift_start_date_local_Id,
 			int schedule_date_id,
 			int person_id,
 			int interval_id,
@@ -87,6 +89,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 		{
 			var row = dataTable.NewRow();
 
+			row["shift_start_date_local_Id"] = shift_start_date_local_Id;
 			row["schedule_date_id"] = schedule_date_id;
 			row["person_id"] = person_id;
 			row["interval_id"] = interval_id;
