@@ -103,8 +103,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 			type: 'GET',
 			contentType: 'application/json; charset=utf-8',
 			data: {
-				absenceId: self.AbsenceId,
-				date: self.DateTo
+				absenceId: self.AbsenceId(),
+				date: self.DateTo().format("YYYY-MM-DD")
 			},
 			success: function (data, textStatus, jqXHR) {
 				self.ReadAbsenceAccount(data);
