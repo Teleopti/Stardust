@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string TrackerType { get; set; }
 		public DateTime PeriodStartUtc { get; set; }
 		public DateTime PeriodEndUtc { get; set; }
-		public TimeSpan Accrued { get; set; }
-		public TimeSpan Used { get; set; }
-		public TimeSpan Remaining { get; set; }
+		public string Accrued { get; set; }
+		public string Used { get; set; }
+		public string Remaining { get; set; }
 	}
 }
