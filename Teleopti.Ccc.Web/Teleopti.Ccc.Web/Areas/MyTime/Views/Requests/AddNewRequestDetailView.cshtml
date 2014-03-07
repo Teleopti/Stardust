@@ -28,7 +28,7 @@
 			    @Resources.Remaining:
 		    </label>
 			<!-- ko if: AbsenceTrackedAsDay() -->
-		    <span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days	'"></span>
+		    <span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days'"></span>
 			<!-- /ko -->
 			<!-- ko if: AbsenceTrackedAsHour() -->
 		    <span class="remainingTime" data-bind="text: AbsenceRemaining()"></span>
@@ -38,10 +38,10 @@
 			    @Resources.Used:
 		    </label>
 		    <!-- ko if: AbsenceTrackedAsDay() -->
-		    <span class="usedTime" data-bind="if: AbsenceTrackedAsDay(), text: AbsenceUsed() + ' @Resources.Days	'"></span>
+		    <span class="usedTime" data-bind="text: AbsenceUsed() + ' @Resources.Days'"></span>
 			<!-- /ko -->
 			<!-- ko if: AbsenceTrackedAsHour() -->
-		    <span class="usedTime" data-bind="if: AbsenceTrackedAsHour(), text: AbsenceUsed()"></span>
+		    <span class="usedTime" data-bind="text: AbsenceUsed()"></span>
 			<!-- /ko -->
 	    </div>
     </div>
