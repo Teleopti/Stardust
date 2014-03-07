@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-	public interface ITeamIdForPersonProvider
+	public interface ITeamIdForPerson
 	{
 		Guid GetTeamId(Guid personId);
 	}

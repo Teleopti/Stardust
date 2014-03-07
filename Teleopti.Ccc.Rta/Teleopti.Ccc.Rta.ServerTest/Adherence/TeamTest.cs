@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 
 			var broker = new MessageSenderExposingLastNotification();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
 			var team = Guid.NewGuid();
 			teamProvider.Expect(x => x.GetTeamId(outOfAdherence1.PersonId)).Return(team);
 			teamProvider.Expect(x => x.GetTeamId(outOfAdherence2.PersonId)).Return(team);
-			var target = new AdherenceAggregator(broker, teamProvider);
+			var target = new AdherenceAggregator(broker, teamProvider, null);
 
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 
 			var broker = new MessageSenderExposingLastNotification();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
 			teamProvider.Expect(x => x.GetTeamId(outOfAdherence1.PersonId)).Return(Guid.NewGuid());
 			teamProvider.Expect(x => x.GetTeamId(outOfAdherence2.PersonId)).Return(Guid.NewGuid());
-			var target = new AdherenceAggregator(broker, teamProvider);
+			var target = new AdherenceAggregator(broker, teamProvider, null);
 
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);

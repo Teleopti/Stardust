@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var outOfAdherence = new ActualAgentState { StaffingEffect = 1 };
 
 			var broker = new MessageSenderExposingLastNotification();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
-			var target = new AdherenceAggregator(broker, teamProvider);
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
+			var target = new AdherenceAggregator(broker, teamProvider, null);
 
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var outOfAdherence = new ActualAgentState { StaffingEffect = -1 };
 
 			var broker = new MessageSenderExposingLastNotification();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
-			var target = new AdherenceAggregator(broker, teamProvider);
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
+			var target = new AdherenceAggregator(broker, teamProvider, null);
 
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);

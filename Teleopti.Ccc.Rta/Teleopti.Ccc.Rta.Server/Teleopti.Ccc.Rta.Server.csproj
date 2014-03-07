@@ -141,7 +141,8 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssembler.cs" />
     <Compile Include="Adherence\AdherenceAggregator.cs" />
-    <Compile Include="Adherence\ITeamIdForPersonProvider.cs" />
+    <Compile Include="Adherence\ISiteIdForPerson.cs" />
+    <Compile Include="Adherence\ITeamIdForPerson.cs" />
     <Compile Include="Adherence\NotificationExtension.cs" />
     <Compile Include="Adherence\TeamAdherence.cs" />
     <Compile Include="AlarmMapper.cs" />
