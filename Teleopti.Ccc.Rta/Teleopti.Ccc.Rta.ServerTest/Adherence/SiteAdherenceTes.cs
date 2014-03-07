@@ -28,6 +28,41 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		}
 
 		[Test]
+		public void ShouldMapOutOfAdherenceBasedOnNegativeStaffingEffect()
+		{
+			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
+			var outOfAdherence = new ActualAgentState { StaffingEffect = -1 };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var siteIdForPerson = MockRepository.GenerateMock<ISiteIdForPerson>();
+			var target = new AdherenceAggregator(broker, null, siteIdForPerson);
+
+			target.Invoke(inAdherence);
+			target.Invoke(outOfAdherence);
+
+			broker.LastNotification.GetOriginal<SiteAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldAggregateAdherenceFor2PersonsOnASite()
+		{
+			var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
+			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var siteIdForPerson = MockRepository.GenerateMock<ISiteIdForPerson>();
+			var site = Guid.NewGuid();
+			siteIdForPerson.Expect(x => x.GetSiteId(outOfAdherence1.PersonId)).Return(site);
+			siteIdForPerson.Expect(x => x.GetSiteId(outOfAdherence2.PersonId)).Return(site);
+			var target = new AdherenceAggregator(broker, null, siteIdForPerson);
+
+			target.Invoke(outOfAdherence1);
+			target.Invoke(outOfAdherence2);
+
+			broker.LastNotification.GetOriginal<SiteAdherenceMessage>().OutOfAdherence.Should().Be(2);
+		}
+
+		[Test]
 		public void ShouldAggregateAdherenceFor2PersonsInOneSite()
 		{
 			var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
