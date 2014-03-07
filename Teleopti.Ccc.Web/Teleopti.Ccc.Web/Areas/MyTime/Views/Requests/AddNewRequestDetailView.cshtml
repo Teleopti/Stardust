@@ -23,18 +23,26 @@
                 }
 			</select>
 	    </div>
-	    <div class="absence-personal-account" data-bind="if: AbsenceAccountExists">
+	    <div id="absence-personal-account" data-bind="if: AbsenceAccountExists">
 		    <label>
 			    @Resources.Remaining:
 		    </label>
-		    <span class="remainingTime" data-bind="if: AbsenceTrackedAsDay(), text: AbsenceRemaining() + ' @Resources.Days'"></span>
-		    <span class="remainingTime" data-bind="if: AbsenceTrackedAsHour(), text: AbsenceRemaining()"></span>
+			<!-- ko if: AbsenceTrackedAsDay() -->
+		    <span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days	'"></span>
+			<!-- /ko -->
+			<!-- ko if: AbsenceTrackedAsHour() -->
+		    <span class="remainingTime" data-bind="text: AbsenceRemaining()"></span>
+			<!-- /ko -->
 			<span> / </span>
 		    <label>
 			    @Resources.Used:
 		    </label>
-		    <span class="usedTime" data-bind="if: AbsenceTrackedAsDay(), text: AbsenceUsed() + ' @Resources.Days'"></span>
+		    <!-- ko if: AbsenceTrackedAsDay() -->
+		    <span class="usedTime" data-bind="if: AbsenceTrackedAsDay(), text: AbsenceUsed() + ' @Resources.Days	'"></span>
+			<!-- /ko -->
+			<!-- ko if: AbsenceTrackedAsHour() -->
 		    <span class="usedTime" data-bind="if: AbsenceTrackedAsHour(), text: AbsenceUsed()"></span>
+			<!-- /ko -->
 	    </div>
     </div>
 </div>
