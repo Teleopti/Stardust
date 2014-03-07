@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				throw new ArgumentException(string.Format("TimeSpan value {0} should match \"HH:mm\" format.", ts));
 			}
 
-			return new TimeSpan(timeInMinutes, 0, 0);
+			return TimeSpan.FromMinutes(timeInMinutes);
 		}
 	}
 }

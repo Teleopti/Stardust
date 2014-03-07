@@ -3,9 +3,9 @@
 	As an agent
 	I want to be able to submit requests as absence
 
-@ignore
 Scenario: When requesting absence tracked as days view remaining and used days
 Given I am an agent
+And I am american
 And I have a requestable absence with
 | Field       | Value    |
 | Name        | Vacation |
@@ -17,16 +17,15 @@ And I have a personal account with
 | Accrued     | 25         |
 And I have an absence with
 | Field     | Value            |
-| Absence   | Vacation         |
+| Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
-Then I should see the remaining days is '21 days'
-And I should see the used days is '4 days'
+Then I should see the remaining days is '21 Days'
+And I should see the used days is '4 Days'
 
-@ignore
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
 And I have a requestable absence with
@@ -40,18 +39,19 @@ And I have a personal account with
 | Accrued     | 250:00     |
 And I have an absence with
 | Field     | Value            |
-| Absence   | Illness          |
+| Name      | Illness          |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-05 23:59 |
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Illness' for date '2014-10-03'
-Then I should see the used time is '40:00'
-And I should see the remaining time is '210:00'
+Then I should see the used time is '60:00'
+And I should see the remaining time is '190:00'
 
 @ignore
 Scenario: When changing absence type update remaining and used time
 Given I am an agent
+And I am american
 And I have a requestable absence with
 | Field       | Value    |
 | Name        | Vacation |
@@ -76,12 +76,13 @@ And I input absence request values with 'Illness' for date '2014-10-03'
 And I see the remaining time is '250:00'
 And I see the used time is '00:00'
 And I input absence request values with 'Vacation' for date '2014-10-03'
-Then I should see the remaining days is '25 days'
-And I should see the used days is '0 days'
+Then I should see the remaining days is '25 Days'
+And I should see the used days is '0 Days'
 
 @ignore
 Scenario: When changing request date change remaining and used time
 Given I am an agent
+And I am american
 And I have a requestable absence with
 | Field       | Value    |
 | Name        | Vacation |
@@ -93,7 +94,7 @@ And I have a personal account with
 | Accrued     | 25         |
 And I have an absence with
 | Field     | Value            |
-| Absence   | Vacation         |
+| Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
 And I have a personal account with
@@ -107,12 +108,13 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 And I see the remaining time is '21 days'
 And I see the used time is '4 days'
 When I input absence request values with 'Vacation' for date '2015-10-03'
-Then I should see the remaining days is '25 days'
-And I should see the used days is '0 days'
+Then I should see the remaining days is '25 Days'
+And I should see the used days is '0 Days'
 
 @ignore
 Scenario: When requesting absence over multiple account periods show remaining and used time according to end date period
 Given I am an agent
+And I am american
 And I have a requestable absence with
 | Field       | Value    |
 | Name        | Vacation |
@@ -129,7 +131,7 @@ And I have a personal account with
 | Accrued     | 25         |
 And I have an absence with
 | Field     | Value            |
-| Absence   | Vacation         |
+| Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
 And I am viewing requests
@@ -138,8 +140,8 @@ And I input absence request values with 'Vacation' for
 | Field | Value      |
 | From  | 2014-12-28 |
 | To    | 2015-01-02 |
-Then I should see the remaining days is '25 days'
-And I should see the used days is '0 days'
+Then I should see the remaining days is '25 Days'
+And I should see the used days is '0 Days'
 
 @ignore
 Scenario: Don't show personal account when you do not have permission
