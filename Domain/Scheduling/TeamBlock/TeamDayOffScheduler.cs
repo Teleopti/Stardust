@@ -186,13 +186,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if(currentDaysOff >= targetDaysOff)
 					continue;
 
-				//IScheduleDay part = matrix.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
-				//if(part.IsScheduled())
-				//	continue;
-
-				//if (!_hasContractDayOffDefinition.IsDayOff(part))
-				//	continue;
-
 				var foundSpot = true;
 
 				while (currentOffDaysList.Count < targetDaysOff && foundSpot)
@@ -229,14 +222,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out currentOffDaysList);
 				}	
-
-				//part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-				//rollbackService.Modify(part);
-
-				//var eventArgs = new SchedulingServiceSuccessfulEventArgs(part);
-				//OnDayScheduled(eventArgs);
-				//if (eventArgs.Cancel)
-				//	return true;
 			}
 
 			return false;
