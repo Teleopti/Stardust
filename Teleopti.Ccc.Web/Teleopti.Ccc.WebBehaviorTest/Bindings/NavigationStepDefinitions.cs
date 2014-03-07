@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoAsm();
 		}
-		
+
 		[When(@"I am still viewing ASM")]
 		public void WhenIAmStillViewingASM()
 		{
@@ -67,28 +67,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoWeekSchedulePage();
 		}
 
-        [Given(@"I view my week schedule for date '(.*)'")]
-        [When(@"I view my week schedule for date '(.*)'")]
-        public void WhenIViewMyWeekScheduleForDate(DateTime date)
-        {
-            TestControllerMethods.Logon();
-            Navigation.GotoWeekSchedulePage(date);
-        }
+		[Given(@"I view my week schedule for date '(.*)'")]
+		[When(@"I view my week schedule for date '(.*)'")]
+		public void WhenIViewMyWeekScheduleForDate(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoWeekSchedulePage(date);
+		}
 
-        [Given(@"I view my month schedule for date '(.*)'")]
-        [When(@"I view my month schedule for date '(.*)'")]
-        public void WhenIViewMyMonthScheduleForDate(DateTime date)
-        {
-            TestControllerMethods.Logon();
-            Navigation.GotoMonthSchedulePage(date);
-        }
+		[Given(@"I view my month schedule for date '(.*)'")]
+		[When(@"I view my month schedule for date '(.*)'")]
+		public void WhenIViewMyMonthScheduleForDate(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoMonthSchedulePage(date);
+		}
 
-        [When(@"I view my month schedule")]
-        public void WhenIViewMyMonthSchedule()
-        {
-            TestControllerMethods.Logon();
-            Navigation.GotoMonthSchedulePage();
-        }
+		[When(@"I view my month schedule")]
+		public void WhenIViewMyMonthSchedule()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoMonthSchedulePage();
+		}
 
 		[Given(@"I am viewing preferences")]
 		[When(@"I am viewing preferences")]
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date);
 		}
-		
+
 		[When(@"I view schedules for '(.*)' on '(.*)'")]
 		public void WhenIViewSchedulesWithTeamAndDate(string teamName, DateTime date)
 		{
@@ -142,18 +142,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static Guid IdForTeam(string teamName)
 		{
 			var teamId = (from t in DataMaker.Data().UserDatasOfType<TeamConfigurable>()
-			              let team = t.Team
-			              where team.Description.Name.Equals(teamName)
-			              select team.Id.GetValueOrDefault()).First();
+										let team = t.Team
+										where team.Description.Name.Equals(teamName)
+										select team.Id.GetValueOrDefault()).First();
 			return teamId;
 		}
 
 		private static Guid IdForSite(string siteName)
 		{
 			var siteId = (from t in DataMaker.Data().UserDatasOfType<SiteConfigurable>()
-						  let site = t.Site
-						  where site.Description.Name.Equals(siteName)
-						  select site.Id.GetValueOrDefault()).First();
+										let site = t.Site
+										where site.Description.Name.Equals(siteName)
+										select site.Id.GetValueOrDefault()).First();
 			return siteId;
 		}
 
@@ -237,9 +237,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
 				{
 					groupid = (from p in new GroupPageRepository(uow).LoadAll()
-					           from g in p.RootGroupCollection
-					           where g.Description.Name.Equals(team)
-					           select g.Id.Value).Single();
+										 from g in p.RootGroupCollection
+										 where g.Description.Name.Equals(team)
+										 select g.Id.Value).Single();
 				});
 			return groupid;
 		}
@@ -251,12 +251,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I view team schedule")]
-		[Given(@"I view group schedule")]
 		[Given(@"I am viewing team schedule")]
-		[Given(@"I am viewing group schedule")]
 		[Given(@"I am viewing team schedule for today")]
-		[Given(@"I am viewing group schedule for today")]
-		[When(@"I view group schedule")]
 		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
@@ -281,10 +277,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule(DateOnlyForBehaviorTests.TestToday.Date.AddDays(1));
 		}
 
-        [When(@"I view group schedule for '(.*)'")]
-		[Given(@"I am viewing group schedule for '(.*)'")]
+		[When(@"I view group schedule for '(.*)'")]
 		[Given(@"I am viewing team schedule for '(.*)'")]
-        public void WhenIViewTeamScheduleFor(DateTime date)
+		public void WhenIViewTeamScheduleFor(DateTime date)
 		{
 			DataMaker.Data().ApplyLater(new GroupingReadOnlyUpdate());
 			TestControllerMethods.Logon();
@@ -302,7 +297,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRequests();
 		}
 
-		[When(@"I navigate to the group schedule")]
 		[When(@"I navigate to the team schedule")]
 		public void WhenINavigateToTheTeamSchedule()
 		{
@@ -369,13 +363,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhere();
-		}
-
-
-		[When(@"I navigate to shift trade for '(.*)'")]
-		public void WhenINavigateToShiftTradeFor(DateTime date)
-		{
-			Navigation.GotoRequestsShiftTrade(date);
 		}
 
 		[Given(@"I view my report for '(.*)'")]

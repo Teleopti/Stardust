@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var colleague = Pages.Pages.TeamSchedulePage.AgentByName(DataMaker.Person(ColleagueStepDefinitions.TeamColleagueName).Person.Name.ToString());
 			var mySelf = Pages.Pages.TeamSchedulePage.AgentByName(DataMaker.Data().MePerson.Name.ToString());
-			
+
 			EventualAssert.That(() => colleague.Exists, Is.True);
 			EventualAssert.That(() => mySelf.Exists, Is.True);
 
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Then(@"I should see available (team|group) options")]
-		public void ThenIShouldSeeAvailableGroupOptions(string teamGroup,Table table)
+		public void ThenIShouldSeeAvailableGroupOptions(string teamGroup, Table table)
 		{
 			var options = table.CreateSet<SingleValue>();
 
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var firstTeam = Select2Box.FirstOptionText;
 			var lastTeam = Select2Box.LastOptionText;
-			var teams = new List<string> {lastTeam, firstTeam}.OrderBy(t => t).ToArray();
+			var teams = new List<string> { lastTeam, firstTeam }.OrderBy(t => t).ToArray();
 
 			teams.First().Should().Be.EqualTo(firstTeam);
 			teams.Last().Should().Be.EqualTo(lastTeam);
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var team1 = DataMaker.Data().UserData<AnotherSitesTeam>().TheTeam;
 			var team2 = DataMaker.Data().UserData<AnotherSitesSecondTeam>().TheTeam;
-			var expected = new[] {team1, team2}.OrderBy(t => t.Description.Name).First();
+			var expected = new[] { team1, team2 }.OrderBy(t => t.Description.Name).First();
 
 			Select2Box.AssertSelectedOptionValue("Team-Picker", expected.Id.Value.ToString());
 		}
@@ -365,46 +365,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("#Team-Picker");
 		}
 
-		[Then(@"I should not see shiftrade button")]
-		public void ThenIShouldNotSeeShiftradeButton()
+		[When(@"I initialize a shift trade")]
+		public void WhenIInitializeAShiftTrade()
 		{
-			Browser.Interactions.AssertNotExists("#TeamSchedule-body",".glyphicon-random");
+			Browser.Interactions.Click(".initialize-shift-trade");
 		}
 
-		[When(@"I click any shifttrade button")]
-		public void WhenIClickAnyShifttradeButton()
+		[Then(@"I should not be able to initialize a shift trade")]
+		public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
 		{
-			Browser.Interactions.Click(".glyphicon-random");
+			Browser.Interactions.AssertNotExists(".navbar", ".initialize-shift-trade");
 		}
-
-		[Then(@"I should see the add shifttrade section")]
-		public void ThenIShouldSeeTheAddShifttradeSection()
-		{
-			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-		}
-
-		[Then(@"I should see the add shifttrade section for '(.*)'")]
-		public void ThenIShouldSeeTheAddShifttradeSectionFor(DateTime date)
-		{
-			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
-			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
-			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
-			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
-		}
-        
-        [When(@"I initialize a shift trade")]
-        public void WhenIInitializeAShiftTrade()
-        {
-            Browser.Interactions.Click(".initialize-shift-trade");
-        }
-        
-        [Then(@"I should not be able to initialize a shift trade")]
-        public void ThenIShouldNotBeAbleToInitializeAShiftTrade()
-        {
-			//Browser.Interactions.AssertExists(".btn[disabled]>.initialize-shift-trade");
-            Browser.Interactions.AssertNotExists(".navbar", ".initialize-shift-trade");
-        }
 
 		private static void AssertAgentIsDisplayed(string name)
 		{

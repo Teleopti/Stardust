@@ -25,24 +25,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertExists("a[href$='#MyReportTab']");
 		}
 
-		[Then(@"I should see MyReport for '(.*)'")]
-		public void ThenIShouldSeeMyReportFor(string date)
-		{
-			ScenarioContext.Current.Pending();
-		}
-
 		[Then(@"I should see a message saying I dont have access to MyReport")]
 		public void ThenIShouldSeeAMessageSayingIDontHaveAccess()
 		{
 			//todo...
 			Browser.Interactions.AssertExists(".error");
-		}
-
-		[Given(@"I answered '(.*)' calls on the date '(.*)'")]
-		public void GivenIAnsweredCallsOnTheDate(string calls, DateTime date)
-		{
-			DataMaker.Data().Apply(new PreferenceConfigurable { Date = date, IsExtended = true });
-		
 		}
 
 		[Given(@"I do not have any report data for date '(.*)'")]

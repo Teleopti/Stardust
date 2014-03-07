@@ -194,23 +194,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExists(".dayoff");
 		}
 
-		[Then(@"I should see a day off named '(.*)'")]
-		public void ThenIShouldSeeADayOff(string dayOff)
-		{
-			Browser.Interactions.AssertExistsUsingJQuery(".dayoff:contains('{0}')", dayOff);
-		}
-
 		[Then(@"I should see the time line with")]
 		public void ThenIShouldSeeTheTimeLineWith(Table table)
 		{
 			var timeLineInfo = table.CreateInstance<TimeLineInfo>();
 			Browser.Interactions.AssertExists(".time-line[data-start-time='{0}'][data-end-time='{1}']", timeLineInfo.StartTime, timeLineInfo.EndTime);
-		}
-
-		[Then(@"I should not be able to select the absence '(.*)'")]
-		public void ThenIShouldBeAbleToSelectTheAbsence(string absenceName)
-		{
-			Browser.Interactions.AssertNotExists(".intraday-absence-form .absence-type", ".intraday-absence-form .absence-type:contains('" + absenceName + "')");
 		}
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
