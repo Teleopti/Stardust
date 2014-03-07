@@ -17,14 +17,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
     {
         private DataRow _dayAbsenceDataRow;
         private ScheduleProjection _scheduleProjection;
-        private int _intervalsPerDay;
-
         private IList<IScheduleDay> _schedulePartCollection;
 
         [SetUp]
         public void Setup()
         {
-            _intervalsPerDay = 96;
             _schedulePartCollection = SchedulePartFactory.CreateSchedulePartCollection();
             IList<ScheduleProjection> scheduleProjectionCollection = ProjectionsForAllAgentSchedulesFactory.CreateProjectionsForAllAgentSchedules(_schedulePartCollection);
             // Which object in scheduleProjectionCollection represents an whole day absence? Answer: index=8
