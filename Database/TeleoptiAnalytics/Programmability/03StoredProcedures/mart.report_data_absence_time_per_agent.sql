@@ -43,7 +43,6 @@ CREATE TABLE #absences(id int)
 CREATE TABLE #full_absence_days(
 	[person_code] [uniqueidentifier] NULL,
 	[date_date] [smalldatetime] NOT NULL,
-	[starttime] [smalldatetime] NULL,
 	[absence_id] [int] NOT NULL,
 	[day_count] [int] NULL
 )
@@ -56,7 +55,6 @@ CREATE TABLE #result(
 	scheduled_contract_time_absence_m int,
 	scheduled_work_time_absence_m int,
 	scheduled_paid_time_absence_m int,
-	shift_starttime smalldatetime,
 	part_day_count int,
 	full_day_count int,
 	hide_time_zone bit
@@ -104,7 +102,7 @@ FROM mart.fact_schedule f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_date d
-	ON d.date_date = f.shift_startdate_local_id
+	ON d.date_id = f.shift_startdate_local_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND f.scenario_id = @scenario_id
 AND p.team_id IN (select right_id from #rights_teams)
@@ -131,7 +129,7 @@ BEGIN
 		  ON ab.absence_id=f.absence_id
 	WHERE ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
-	GROUP BY f.person_code,f.person_name,ab.absence_id,ab.absence_name
+	GROUP BY f.person_code,f.person_name,ab.absence_id,ab.absence_name,f.local_date
 END
 ELSE
 BEGIN
@@ -154,12 +152,12 @@ BEGIN
 		  ON ab.absence_id=f.absence_id
 	WHERE ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
-	GROUP BY ab.absence_id,ab.absence_name,f.person_code,f.person_name
+	GROUP BY ab.absence_id,ab.absence_name,f.person_code,f.person_name,f.local_date
 END
 
 /*part day or full day?*/
 INSERT INTO #full_absence_days
-SELECT p.person_code,d.date_date, f.starttime,absence_id,day_count
+SELECT p.person_code,d.date_date, absence_id,day_count
 FROM mart.fact_schedule_day_count f
 INNER JOIN mart.dim_person p
       ON f.person_id=p.person_id
@@ -171,7 +169,6 @@ AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
 AND f.absence_id IN (SELECT id FROM #absences)--only selected absences
 AND f.absence_id<>-1 --ej activity
-ORDER BY p.person_code,d.date_date,f.starttime,absence_id
 
 /*set those absences counted as full day absence*/
 UPDATE #result
@@ -182,7 +179,7 @@ FROM
 INNER JOIN 
 	#result r ON r.person_code=f.person_code 
 	AND f.absence_id=r.absence_id 
-	AND f.starttime=r.shift_starttime
+	AND f.date_date=r.date
 
 IF @report_id = 'C5B88862-F7BE-431B-A63F-3DD5FF8ACE54' --4
 BEGIN
