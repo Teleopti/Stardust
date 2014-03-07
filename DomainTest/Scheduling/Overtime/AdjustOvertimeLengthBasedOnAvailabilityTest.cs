@@ -100,6 +100,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Assert.AreEqual(TimeSpan.FromMinutes(15), adjustedOvertimeLength);
         }
        
-        //test for equal case
+        [Test]
+        public void TestIssue27272()
+        {
+			TimeSpan overtimeLayerLength = TimeSpan.FromHours(3).Add(TimeSpan.FromMinutes(30));
+			var shiftEndTime = new DateTime(2011, 05, 14, 14, 30, 0, DateTimeKind.Utc);
+			var overtimeAvailabilityPeriodUtc = new DateTimePeriod(new DateTime(2011, 05, 14, 14, 30, 0, DateTimeKind.Utc), new DateTime(2011, 05, 14, 20, 0, 0, DateTimeKind.Utc));
+			var adjustedOvertimeLength = _target.AdjustOvertimeDuration(overtimeAvailabilityPeriodUtc, overtimeLayerLength, shiftEndTime);
+			Assert.AreEqual(TimeSpan.FromHours(3).Add(TimeSpan.FromMinutes(30)), adjustedOvertimeLength);
+        }
     }
 }
