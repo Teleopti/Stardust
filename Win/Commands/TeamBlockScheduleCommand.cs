@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Win.Commands
 	public interface ITeamBlockScheduleCommand
 	{
 		void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons,
-		             IList<IScheduleDay> selectedSchedules, ITeamBlockScheduler teamBlockScheduler,
-					 ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
+		             IList<IScheduleDay> selectedSchedules, ISchedulePartModifyAndRollbackService rollbackService,
+		             IResourceCalculateDelayer resourceCalculateDelayer);
 	}
 
 	public class TeamBlockScheduleCommand : ITeamBlockScheduleCommand
@@ -38,8 +38,9 @@ namespace Teleopti.Ccc.Win.Commands
 		private ISchedulingOptions _schedulingOptions;
 	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
+		private readonly ITeamBlockScheduler _teamBlockScheduler;
 
-	    public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
+		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			ISchedulerStateHolder schedulerStateHolder,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
  			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
-			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker)
+			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
+			ITeamBlockScheduler teamBlockScheduler)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -66,11 +68,11 @@ namespace Teleopti.Ccc.Win.Commands
 			_teamBlockMaxSeatChecker = teamBlockMaxSeatChecker;
 	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
-
+		    _teamBlockScheduler = teamBlockScheduler;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules,
-			ITeamBlockScheduler teamBlockScheduler, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 		{
 			_schedulingOptions = schedulingOptions;
 			_backgroundWorker = backgroundWorker;
@@ -97,11 +99,13 @@ namespace Teleopti.Ccc.Win.Commands
 				                                         groupPersonBuilderForOptimization);
 				_advanceDaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 
-				var advanceSchedulingService = createSchedulingService(schedulingOptions, groupPersonBuilderForOptimization, teamBlockScheduler);
+				var advanceSchedulingService = createSchedulingService(schedulingOptions, groupPersonBuilderForOptimization);
 
 				advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 				advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
-												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(), rollbackService, resourceCalculateDelayer);
+				                                          matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
+				                                          rollbackService, resourceCalculateDelayer,
+				                                          _schedulerStateHolder.SchedulingResultState);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 			}
 		}
@@ -121,14 +125,16 @@ namespace Teleopti.Ccc.Win.Commands
 			}
 		}
 
-		private TeamBlockSchedulingService createSchedulingService(ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, ITeamBlockScheduler teamBlockScheduler)
+		private TeamBlockSchedulingService createSchedulingService(ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor = new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory, _teamBlockSchedulingOptions, _teamBlockSchedulingCompletionChecker);
+			IValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor =
+				new ValidatedTeamBlockInfoExtractor(_teamBlockSteadyStateValidator, _teamBlockInfoFactory,
+				                                    _teamBlockSchedulingOptions, _teamBlockSchedulingCompletionChecker);
 			var schedulingService =
 				new TeamBlockSchedulingService(schedulingOptions,
 											 teamInfoFactory,
-											 teamBlockScheduler, 
+											 _teamBlockScheduler, 
 											 _safeRollbackAndResourceCalculation,
 											 _workShiftMinMaxCalculator, _teamBlockMaxSeatChecker,validatedTeamBlockExtractor);
 

@@ -29,13 +29,7 @@ namespace Teleopti.Ccc.Rta.WebService
 
 		private static IContainer buildIoc()
 		{
-			var builder = new ContainerBuilder();
-
-			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
-			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
-			return builder.Build();
+			return BuildContainer.Build();
 		}
 
 

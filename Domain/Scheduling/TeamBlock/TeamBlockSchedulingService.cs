@@ -9,8 +9,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamBlockSchedulingService
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-								ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
+
+	    bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+	                          IList<IPerson> selectedPersons,
+	                          ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+	                          IResourceCalculateDelayer resourceCalculateDelayer,
+	                          ISchedulingResultStateHolder schedulingResultStateHolder);
     }
 
     public class TeamBlockSchedulingService : ITeamBlockSchedulingService
@@ -39,33 +43,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-        public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
-									IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
-        {
-            _teamBlockScheduler.DayScheduled += dayScheduled;
-            if (schedulePartModifyAndRollbackService == null) return false;
-            var dateOnlySkipList = new List<DateOnly>();
-            foreach (var datePointer in selectedPeriod.DayCollection())
-            {
-				if (_cancelMe)
-					break;
-                if (dateOnlySkipList.Contains(datePointer)) continue;
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+		    MessageId = "3"),
+	     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+		     MessageId = "2")]
+	    public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+	                                 IList<IPerson> selectedPersons,
+	                                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+	                                 IResourceCalculateDelayer resourceCalculateDelayer,
+										ISchedulingResultStateHolder schedulingResultStateHolder)
+	    {
+		    _teamBlockScheduler.DayScheduled += dayScheduled;
+		    if (schedulePartModifyAndRollbackService == null)
+			    return false;
+		    var dateOnlySkipList = new List<DateOnly>();
+		    foreach (var datePointer in selectedPeriod.DayCollection())
+		    {
+			    if (_cancelMe)
+				    break;
+			    if (dateOnlySkipList.Contains(datePointer))
+				    continue;
 
-                var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
+			    var allTeamInfoListOnStartDate = getAllTeamInfoList(allPersonMatrixList, selectedPeriod, selectedPersons);
 
-                runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService,
-                                                       allTeamInfoListOnStartDate, datePointer, dateOnlySkipList, resourceCalculateDelayer);
-            }
+			    runSchedulingForAllTeamInfoOnStartDate(allPersonMatrixList, selectedPeriod, selectedPersons,
+			                                           schedulePartModifyAndRollbackService,
+			                                           allTeamInfoListOnStartDate, datePointer, dateOnlySkipList,
+			                                           resourceCalculateDelayer, schedulingResultStateHolder);
+		    }
 
-            _teamBlockScheduler.DayScheduled -= dayScheduled;
-            return true;
-        }
+		    _teamBlockScheduler.DayScheduled -= dayScheduled;
+		    return true;
+	    }
 
-        private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+	    private void runSchedulingForAllTeamInfoOnStartDate(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
                                      ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
                                      HashSet<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
-										IResourceCalculateDelayer resourceCalculateDelayer)
+										IResourceCalculateDelayer resourceCalculateDelayer,
+										ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
             {
@@ -73,8 +88,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
-				if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService, resourceCalculateDelayer))
-                    verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer, dateOnlySkipList, teamBlockInfo);
+	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,
+	                                                         selectedPersons, schedulePartModifyAndRollbackService,
+	                                                         resourceCalculateDelayer, schedulingResultStateHolder))
+		            verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
+		                                     dateOnlySkipList, teamBlockInfo);
 				else
 				{
 					OnDayScheduledFailed();

@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using Autofac;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -19,8 +20,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			InitializeComponent();
 		}
 
-		public void Setup(ISchedulerStateHolder stateHolder, ISingleSkillDictionary singleSkillDictionary)
+		public void Setup(ISchedulerStateHolder stateHolder, ILifetimeScope container)
 		{
+			var singleSkillDictionary = container.Resolve<ISingleSkillDictionary>();
+			singleSkillDictionary.Create(stateHolder.SchedulingResultState.PersonsInOrganization.ToList(), stateHolder.RequestedPeriod.DateOnlyPeriod);
 			listView.View = View.Details;
 			listView.GridLines = true;
 			listView.FullRowSelect = true;
