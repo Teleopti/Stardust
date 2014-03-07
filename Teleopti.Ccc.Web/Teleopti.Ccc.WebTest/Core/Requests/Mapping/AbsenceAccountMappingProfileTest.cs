@@ -60,20 +60,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var startDate = new DateTime(2014, 01, 01).AddHours(8);
 			var endDate = startDate.AddYears(1).AddDays(-1);
 
-			var result1 = Mapper.Map<IAccount, AbsenceAccountViewModel>(_accountDay);
-			result1.AbsenceName.Should().Be("Vacation");
-			result1.PeriodStartUtc.Should().Be(startDate);
-			result1.PeriodEndUtc.Should().Be(endDate);
-			result1.Used.Should().Be(TimeSpan.FromDays(3));
-			result1.Remaining.Should().Be(TimeSpan.FromDays(9));
+			var vmDay = Mapper.Map<IAccount, AbsenceAccountViewModel>(_accountDay);
+			vmDay.AbsenceName.Should().Be("Vacation");
+			vmDay.TrackerType.Should().Be("Days");
+			vmDay.PeriodStartUtc.Should().Be(startDate);
+			vmDay.PeriodEndUtc.Should().Be(endDate);
+			vmDay.Used.Should().Be(TimeSpan.FromDays(3));
+			vmDay.Remaining.Should().Be(TimeSpan.FromDays(9));
 
-
-			var result2 = Mapper.Map<IAccount, AbsenceAccountViewModel>(_accountTime);
-			result2.AbsenceName.Should().Be("Illness");
-			result2.PeriodStartUtc.Should().Be(startDate);
-			result2.PeriodEndUtc.Should().Be(endDate);
-			result2.Used.Should().Be(TimeSpan.FromHours(15));
-			result2.Remaining.Should().Be(TimeSpan.FromHours(81));
+			var vmHour = Mapper.Map<IAccount, AbsenceAccountViewModel>(_accountTime);
+			vmHour.AbsenceName.Should().Be("Illness");
+			vmHour.TrackerType.Should().Be("Hours");
+			vmHour.PeriodStartUtc.Should().Be(startDate);
+			vmHour.PeriodEndUtc.Should().Be(endDate);
+			vmHour.Used.Should().Be(TimeSpan.FromHours(15));
+			vmHour.Remaining.Should().Be(TimeSpan.FromHours(81));
 		}
 	}
 }

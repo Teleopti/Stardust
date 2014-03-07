@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 	public class AbsenceAccountViewModel
 	{
 		public string AbsenceName { get; set; }
+		public string TrackerType { get; set; }
 		public DateTime PeriodStartUtc { get; set; }
 		public DateTime PeriodEndUtc { get; set; }
 		public TimeSpan Accrued { get; set; }
