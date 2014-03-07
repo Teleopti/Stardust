@@ -23,19 +23,18 @@
                 }
 			</select>
 	    </div>
-	    <div class="absence-personal-account">
+	    <div class="absence-personal-account" data-bind="if: AbsenceAccountExists">
 		    <label>
 			    @Resources.Remaining:
 		    </label>
-		    <span data-bind="text: AbsenceRemaining"></span>
-			<span data-bind="if: AbsenceTrackedAsDay">@Resources.Days / </span>
-			<span data-bind="if: AbsenceTrackedAsHour">@Resources.Hours / </span>
+		    <span class="remainingTime" data-bind="if: AbsenceTrackedAsDay(), text: AbsenceRemaining() + ' @Resources.Days'"></span>
+		    <span class="remainingTime" data-bind="if: AbsenceTrackedAsHour(), text: AbsenceRemaining()"></span>
+			<span> / </span>
 		    <label>
 			    @Resources.Used:
 		    </label>
-		    <span data-bind="text: AbsenceUsed"></span>
-			<span data-bind="if: AbsenceTrackedAsDay">@Resources.Days / </span>
-			<span data-bind="if: AbsenceTrackedAsHour">@Resources.Hours / </span>
+		    <span class="usedTime" data-bind="if: AbsenceTrackedAsDay(), text: AbsenceUsed() + ' @Resources.Days'"></span>
+		    <span class="usedTime" data-bind="if: AbsenceTrackedAsHour(), text: AbsenceUsed()"></span>
 	    </div>
     </div>
 </div>

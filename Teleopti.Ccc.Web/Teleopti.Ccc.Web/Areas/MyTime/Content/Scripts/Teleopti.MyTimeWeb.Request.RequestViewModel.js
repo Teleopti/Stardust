@@ -58,9 +58,10 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.ShowError = ko.observable(false);
     self.ErrorMessage = ko.observable('');
     self.AbsenceId = ko.observable();
-    self.AbsenceTrackedAsDay = ko.observable();
-    self.AbsenceTrackedAsHour = ko.observable();
+    self.AbsenceTrackedAsDay = ko.observable(false);
+    self.AbsenceTrackedAsHour = ko.observable(false);
     self.Absences = ko.observableArray();
+	self.AbsenceAccountExists = ko.observable(false);
     self.AbsenceUsed = ko.observable();
     self.AbsenceRemaining = ko.observable();
     self.Subject = ko.observable();
@@ -87,13 +88,21 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     	}
     };
 
-    self.readAbsenceAccount = function (data) {
+    function readAbsenceAccount(data) {
+	    console.log("[LIXF]: ", data);
     	if (data) {
-    		self.AbsenceTrackedAsDay(data.Tracker == "Days");
-    		self.AbsenceTrackedAsHour(data.Tracker == "Time");
-		    self.AbsenceRemaining(data.Remaining);
-		    self.AbsenceUsed(data.Used);
-	    }
+    		self.AbsenceAccountExists(true);
+    		self.AbsenceTrackedAsDay(data.TrackerType == "Days");
+    		self.AbsenceTrackedAsHour(data.TrackerType == "Hours");
+    		self.AbsenceRemaining(data.Remaining);
+    		self.AbsenceUsed(data.Used);
+    	} else {
+    		self.AbsenceAccountExists(false);
+    		self.AbsenceTrackedAsDay(false);
+    		self.AbsenceTrackedAsHour(false);
+    		self.AbsenceUsed("0");
+    		self.AbsenceRemaining("0");
+    	}
     };
 
 	function loadAbsenceAccount() {
@@ -107,10 +116,10 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 				date: self.DateTo().format("YYYY-MM-DD")
 			},
 			success: function (data, textStatus, jqXHR) {
-				self.ReadAbsenceAccount(data);
+				readAbsenceAccount(data);
 			},
 			error: function (e) {
-				//console.log(e);
+				readAbsenceAccount();
 			},
 			complete: function () {
 				//self.IsLoading(false);
