@@ -273,6 +273,84 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
+
+		[Test]
+		public void ShouldCreateSkillStaffPeriodListWithCorrectFStaffForVirtualSkillWithDifferentOpenHours()
+		{
+			var mocks = new MockRepository();
+			var skill1 = mocks.StrictMock<ISkill>();
+			var skill2 = mocks.StrictMock<ISkill>();
+			var aggregateSkillSkill = mocks.StrictMock<IAggregateSkill>();
+			var skillDay1 = mocks.StrictMock<ISkillDay>();
+			var skillDay2 = mocks.StrictMock<ISkillDay>();
+			IList<ISkillDay> skillDays1 = new List<ISkillDay> { skillDay1 };
+			IList<ISkillDay> skillDays2 = new List<ISkillDay> { skillDay2 };
+			IList<ISkill> skills = new List<ISkill> { skill1, skill2 };
+			var aggregatedSkills = new ReadOnlyCollection<ISkill>(skills);
+
+			var dateTime = new DateTime(2009, 2, 1, 23, 0, 0, DateTimeKind.Utc);
+
+			var dateTimePeriod1 = new DateTimePeriod(dateTime, dateTime.AddMinutes(15));
+			var dateTimePeriod2 = dateTimePeriod1.MovePeriod(TimeSpan.FromMinutes(15));
+			var dateTimePeriod3 = dateTimePeriod2.MovePeriod(TimeSpan.FromMinutes(15));
+			var dateTimePeriod4 = dateTimePeriod3.MovePeriod(TimeSpan.FromMinutes(15));
+			var dateTimePeriod5 = new DateTimePeriod(dateTimePeriod1.StartDateTime.AddMinutes(-30), dateTimePeriod4.EndDateTime);
+			
+			var averageTaskTime = TimeSpan.FromSeconds(20);
+			var averageAfterTaskTime = TimeSpan.FromSeconds(40);
+			ISkillStaffPeriod period1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod1, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod2, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period3 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod3, new Task(6, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period4 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod4, new Task(5, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay1);
+			ISkillStaffPeriod period5 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(dateTimePeriod5, new Task(4, averageTaskTime, averageAfterTaskTime), ServiceAgreement.DefaultValues(), skillDay2);
+
+			((IAggregateSkillStaffPeriod)period4).AggregatedFStaff = 2d;
+			((IAggregateSkillStaffPeriod)period4).IsAggregate = true;
+
+			((IAggregateSkillStaffPeriod) period5).AggregatedFStaff = 5d;
+			((IAggregateSkillStaffPeriod) period5).IsAggregate = true;
+			
+			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { period1, period2, period3, period4 };
+			IList<ISkillStaffPeriod> skillStaffPeriods2 = new List<ISkillStaffPeriod> { period5 };
+			var readOnlySkillStaffPeriods1 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods1);
+			var readOnlySkillStaffPeriods2 = new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods2);
+
+			IDictionary<ISkill, IList<ISkillDay>> skillDaysDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skill1, skillDays1 }, { skill2, skillDays2 } };
+
+			var tresholds = new StaffingThresholds();
+
+			using (mocks.Record())
+			{
+				Expect.Call(skill1.DefaultResolution).Return(15).Repeat.AtLeastOnce();
+				Expect.Call(skill2.DefaultResolution).Return(60).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods1).Repeat.AtLeastOnce();
+				Expect.Call(skillDay2.SkillStaffPeriodCollection).Return(readOnlySkillStaffPeriods2).Repeat.AtLeastOnce();
+				Expect.Call(skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
+				Expect.Call(skill1.StaffingThresholds).Return(tresholds).Repeat.AtLeastOnce();
+				Expect.Call(aggregateSkillSkill.AggregateSkills).Return(aggregatedSkills).Repeat.AtLeastOnce();
+			}
+
+			using (mocks.Playback())
+			{
+				_skillStaffPeriodHolder = new SkillStaffPeriodHolder(skillDaysDictionary);
+				Assert.AreEqual(2, _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.Count);
+				var dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill1];
+				Assert.AreEqual(4, dic.Count);
+				dic = _skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary[skill2];
+				Assert.AreEqual(1, dic.Count);
+
+				var list = _skillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, dateTimePeriod5);
+				Assert.AreEqual(6, list.Count);
+				Assert.AreEqual(5d, list[0].FStaff);
+				Assert.AreEqual(5d, list[1].FStaff);
+				Assert.AreEqual(5d, list[2].FStaff);
+				Assert.AreEqual(5d, list[3].FStaff);
+				Assert.AreEqual(5d, list[4].FStaff);
+				Assert.AreEqual(7d, list[5].FStaff);
+			}
+		}
+
+
         [Test]
         public void VerifyAggregatedPropertiesAreSet()
         {
