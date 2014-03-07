@@ -85,6 +85,7 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DummyContextPopulator.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
+    <Compile Include="FakeData\AbsenceAccountFactory.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />

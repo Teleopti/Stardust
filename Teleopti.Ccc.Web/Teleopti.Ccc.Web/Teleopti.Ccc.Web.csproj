@@ -278,6 +278,9 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceAccountProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceAccountProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceAccountViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
@@ -296,6 +299,7 @@
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MyReport\DailyMetricsViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\AbsenceAccountViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\RequestFormViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditPersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />

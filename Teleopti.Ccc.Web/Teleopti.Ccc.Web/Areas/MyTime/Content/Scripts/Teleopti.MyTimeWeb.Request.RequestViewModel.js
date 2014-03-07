@@ -79,10 +79,33 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     	if (data) {
     		self.AbsenceTrackedAsDay(data.Tracker == "Days");
     		self.AbsenceTrackedAsHour(data.Tracker == "Time");
-    		self.AbsenceRemaining(data.Remaining);
-    		self.AbsenceUsed(data.Used);
-    	}
+		    self.AbsenceRemaining(data.Remaining);
+		    self.AbsenceUsed(data.Used);
+	    }
     };
+
+	function loadAbsenceAccount() {
+		ajax.Ajax({
+			url: 'Requests/FetchAbsenceAccount',
+			dataType: "json",
+			type: 'GET',
+			data: {
+				absenceId: self.absenceId,
+				date: self.EndDate
+			},
+			success: function (data) {
+				self.ReadAbsenceAccount(data);
+			}
+		});
+	};
+
+	self.AbsenceId.subscribe(function () {
+		loadAbsenceAccount();
+	});
+
+	self.DateTo.subscribe(function () {
+		loadAbsenceAccount();
+	});
 
 	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";

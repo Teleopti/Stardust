@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IPersonRequestProvider _personRequestProvider;
 		private readonly IMappingEngine _mapper;
 		private readonly IAbsenceTypesProvider _absenceTypesProvider;
+		private readonly IAbsenceAccountProvider _personAccountProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 		private readonly IShiftTradePeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
@@ -27,11 +28,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IShiftTradeScheduleViewModelMapper _shiftTradeScheduleViewModelMapper;
 
-		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
-										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
-										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, 
-										IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, INow now, ILoggedOnUser loggedOnUser, 
-										IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper)
+		public RequestsViewModelFactory(
+			IPersonRequestProvider personRequestProvider,
+			IMappingEngine mapper,
+			IAbsenceTypesProvider absenceTypesProvider, 
+			IPermissionProvider permissionProvider,
+			IShiftTradeRequestProvider shiftTradeRequestprovider, 
+			IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, 
+			IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker,
+			INow now,
+			ILoggedOnUser loggedOnUser, 
+			IShiftTradeScheduleViewModelMapper shiftTradeScheduleViewModelMapper,
+			IAbsenceAccountProvider personAccountProvider)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -43,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_now = now;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeScheduleViewModelMapper = shiftTradeScheduleViewModelMapper;
+			_personAccountProvider = personAccountProvider;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -99,6 +108,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 									requestableAbsence.Description.Name
 							}).ToList()
 				};
+		}
+
+		public AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date)
+		{
+			var absence = _absenceTypesProvider.GetRequestableAbsences().First(x => x.Id == absenceId);
+			var absenceAccount = _personAccountProvider.GetPersonAccount(absence, date);
+			return _mapper.Map<IAccount, AbsenceAccountViewModel>(absenceAccount);
 		}
 
 		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel()

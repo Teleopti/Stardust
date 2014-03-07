@@ -65,6 +65,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult FetchAbsenceAccount(Guid absenceId, DateOnly date)
+		{
+			return Json(_requestsViewModelFactory.GetAbsenceAccountViewModel(absenceId, date), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
 		[HttpPostOrPut]
 		public JsonResult TextRequest(TextRequestForm form)
 		{
