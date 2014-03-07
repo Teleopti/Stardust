@@ -45,5 +45,36 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			broker.AssertWasCalled(x => x.SendNotification(null), a => a.IgnoreArguments().Repeat.Once());
 		}
 
+		[Test]
+		public void ShouldMapOutOfAdherenceBasedOnPositiveStaffingEffect()
+		{
+			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
+			var outOfAdherence = new ActualAgentState { StaffingEffect = 1 };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
+			var target = new AdherenceAggregator(broker, teamProvider);
+
+			target.Invoke(inAdherence);
+			target.Invoke(outOfAdherence);
+
+			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
+		
+		[Test]
+		public void ShouldMapOutOfAdherenceBasedOnNegativeStaffingEffect()
+		{
+			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
+			var outOfAdherence = new ActualAgentState { StaffingEffect = -1 };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPersonProvider>();
+			var target = new AdherenceAggregator(broker, teamProvider);
+
+			target.Invoke(inAdherence);
+			target.Invoke(outOfAdherence);
+
+			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
 	}
 }

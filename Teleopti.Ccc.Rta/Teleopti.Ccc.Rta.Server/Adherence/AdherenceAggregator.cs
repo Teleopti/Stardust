@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			    staffingEffect.Equals(actualAgentState.StaffingEffect))
 				return;
 			
-			_teamAdherence[personId] = actualAgentState.StaffingEffect;
+			_teamAdherence[personId] = Math.Abs(actualAgentState.StaffingEffect);
 
-			var teamAdherenceMessage = new TeamAdherenceMessage {TeamId = teamId};
+			var teamAdherenceMessage = new TeamAdherenceMessage { TeamId = teamId, OutOfAdherence = _teamAdherence[personId] };
 			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
 			_messageSender.SendNotification(notification);
 		}
