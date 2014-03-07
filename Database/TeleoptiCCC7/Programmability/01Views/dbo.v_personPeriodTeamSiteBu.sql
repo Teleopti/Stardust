@@ -25,7 +25,9 @@ SELECT
 	pp.Id as 'PersonPeriod',
 	pp.StartDate as 'StartDate',
 	pp.Parent as 'Parent',
-	bu.Id as 'BusinessUnit'
+	bu.Id as 'BusinessUnit',
+	s.Id as 'Site',
+	t.Id as 'Team'
 FROM dbo.PersonPeriod pp
 INNER JOIN dbo.Team t
 	ON pp.Team = t.Id
