@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             if (possibleAdjustDifference <= 0) return TimeSpan.Zero;
             if (possibleAdjustDifference <= overtimeLayerLength.TotalMinutes)
                 return TimeSpan.FromMinutes(possibleAdjustDifference);
-            return TimeSpan.FromMinutes(Math.Abs(possibleAdjustDifference - overtimeLayerLength.TotalMinutes));
+            return TimeSpan.FromMinutes(overtimeLayerLength.TotalMinutes);
         }
 
     }
