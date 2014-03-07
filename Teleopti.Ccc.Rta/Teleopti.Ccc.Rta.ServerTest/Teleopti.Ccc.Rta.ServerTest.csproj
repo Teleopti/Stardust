@@ -154,9 +154,8 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssemblerTest.cs" />
     <Compile Include="ActualAgentStateCacheTest.cs" />
-    <Compile Include="Adherence\SiteTest.cs" />
-    <Compile Include="Adherence\TeamTest.cs" />
-    <Compile Include="Adherence\OutOfAdherenceTest.cs" />
+    <Compile Include="Adherence\SiteAdherenceTes.cs" />
+    <Compile Include="Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Adherence\SendMessageTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />

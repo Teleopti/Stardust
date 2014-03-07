@@ -9,8 +9,40 @@ using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 {
-	public class TeamTest
+	public class TeamAdherenceTest
 	{
+		[Test]
+		public void ShouldMapOutOfAdherenceBasedOnPositiveStaffingEffect()
+		{
+			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
+			var outOfAdherence = new ActualAgentState { StaffingEffect = 1 };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
+			var target = new AdherenceAggregator(broker, teamProvider, null);
+
+			target.Invoke(inAdherence);
+			target.Invoke(outOfAdherence);
+
+			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldMapOutOfAdherenceBasedOnNegativeStaffingEffect()
+		{
+			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
+			var outOfAdherence = new ActualAgentState { StaffingEffect = -1 };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
+			var target = new AdherenceAggregator(broker, teamProvider, null);
+
+			target.Invoke(inAdherence);
+			target.Invoke(outOfAdherence);
+
+			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
+		}
+
 		[Test]
 		public void ShouldAggregateAdherenceFor2PersonsInATeam()
 		{

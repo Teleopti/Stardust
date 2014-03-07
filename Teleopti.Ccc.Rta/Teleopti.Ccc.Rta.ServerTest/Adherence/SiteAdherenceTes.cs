@@ -9,7 +9,7 @@ using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 {
-	public class SiteTest
+	public class SiteAdherenceTes
 	{
 		[Test]
 		public void ShouldAggregateAdherenceFor2PersonsInOneSite()
