@@ -145,6 +145,7 @@
     <Compile Include="Adherence\ISiteIdForPerson.cs" />
     <Compile Include="Adherence\ITeamIdForPerson.cs" />
     <Compile Include="Adherence\NotificationExtension.cs" />
+    <Compile Include="Adherence\SiteAdherenceAggregator.cs" />
     <Compile Include="Adherence\TeamAdherence.cs" />
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="AlarmMapper.cs" />

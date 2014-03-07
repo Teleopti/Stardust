@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -18,16 +16,18 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		{
 			_messageSender = messageSender;
 			_teamAdherenceAggregator = new TeamAdherenceAggregator(teamProvider);
-			_siteAdherenceAggregator = new SiteAdherenceAggregator(_messageSender, siteProvider);
+			_siteAdherenceAggregator = new SiteAdherenceAggregator(siteProvider);
 		}
 
 		public void Invoke(IActualAgentState actualAgentState)
 		{
-			_siteAdherenceAggregator.Aggregate(actualAgentState);
+			var siteAdherence = _siteAdherenceAggregator.Aggregate(actualAgentState);
+			if (siteAdherence != null)
+				_messageSender.SendNotification(createSiteNotification(siteAdherence));
+
 			var teamAdherence = _teamAdherenceAggregator.Aggregate(actualAgentState);
-			if (teamAdherence == null) return;
-			var notification = createTeamNotification(teamAdherence);
-			_messageSender.SendNotification(notification);
+			if (teamAdherence != null)
+				_messageSender.SendNotification(createTeamNotification(teamAdherence));
 		}
 
 		private static Notification createTeamNotification(TeamAdherence teamAdherence)
@@ -40,40 +40,16 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
 			return notification;
 		}
-	}
 
-	public class SiteAdherenceAggregator
-	{
-		private readonly IMessageSender _messageSender;
-		private readonly ISiteIdForPerson _siteProvider;
-		private readonly Dictionary<Guid, SiteAdherence> _siteAdherence = new Dictionary<Guid, SiteAdherence>();
-
-		public SiteAdherenceAggregator(IMessageSender messageSender, ISiteIdForPerson siteProvider)
+		private static Notification createSiteNotification(SiteAdherence siteAdherence)
 		{
-			_messageSender = messageSender;
-			_siteProvider = siteProvider;
-		}
-
-		public void Aggregate(IActualAgentState actualAgentState)
-		{
-			if (_siteProvider == null) return;
-
-			var personId = actualAgentState.PersonId;
-			var siteId = _siteProvider.GetSiteId(personId);
-			if (!_siteAdherence.ContainsKey(siteId))
-				_siteAdherence[siteId] = new SiteAdherence();
-
-			var siteState = _siteAdherence[siteId];
-			var changed = siteState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			if (!changed)
-				return;
 			var siteAdherenceMessage = new SiteAdherenceMessage
 			{
-				SiteId = siteId,
-				OutOfAdherence = siteState.NumberOutOfAdherence()
+				SiteId = siteAdherence.SiteId,
+				OutOfAdherence = siteAdherence.NumberOutOfAdherence()
 			};
 			var notification = new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage) };
-			_messageSender.SendNotification(notification);
+			return notification;
 		}
 	}
 }
