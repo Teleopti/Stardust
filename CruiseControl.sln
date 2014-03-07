@@ -210,6 +210,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.Inte
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Teleopti.Ccc.Domain.Calculation", "Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj", "{B957AA85-67DE-4E6E-85C0-FA60564D1B60}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.AuthenticationBridge", "Teleopti.Ccc.Web.AuthenticationBridge\Teleopti.Ccc.Web.AuthenticationBridge.csproj", "{2034A371-8FC3-4B50-847E-9835E68EB3AE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -1332,6 +1334,18 @@ Global
 		{B957AA85-67DE-4E6E-85C0-FA60564D1B60}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B957AA85-67DE-4E6E-85C0-FA60564D1B60}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B957AA85-67DE-4E6E-85C0-FA60564D1B60}.Release|x86.ActiveCfg = Release|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|.NET.ActiveCfg = Release|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2034A371-8FC3-4B50-847E-9835E68EB3AE}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
