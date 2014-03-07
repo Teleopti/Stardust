@@ -2482,7 +2482,7 @@ Periods</comment>
     <comment>Open Asm</comment>
   </data>
   <data name="WeekView" xml:space="preserve">
-    <value>Week view</value>
+    <value>Week View</value>
     <comment>Week View</comment>
   </data>
   <data name="ShowAll" xml:space="preserve">
@@ -3841,7 +3841,7 @@ Columns</value>
     <comment>Modify absence</comment>
   </data>
   <data name="ModifyAssignment" xml:space="preserve">
-    <value>Modify assignment</value>
+    <value>Modify Assignment</value>
     <comment>Modify assignment</comment>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
@@ -7347,7 +7347,7 @@ Updated on: {1}</value>
     <comment>View schedules application function</comment>
   </data>
   <data name="ModifyPersonRestriction" xml:space="preserve">
-    <value>Modify person restriction</value>
+    <value>Modify Person Restriction</value>
     <comment>Modify person restriction application function</comment>
   </data>
   <data name="xxx" xml:space="preserve">
@@ -9014,7 +9014,7 @@ Longterm</value>
     <comment>PeriodNotInLegalState</comment>
   </data>
   <data name="AuditTrailSettings" xml:space="preserve">
-    <value>Audit Trail settings</value>
+    <value>Audit Trail Settings</value>
     <comment>App function text</comment>
   </data>
   <data name="AuditTrailSetting" xml:space="preserve">
