@@ -27,12 +27,15 @@
 		    <label>
 			    @Resources.Remaining:
 		    </label>
-		    <span>18 days</span>
-			<span>/</span>
+		    <span data-bind="text: AbsenceRemaining"></span>
+			<span data-bind="if: AbsenceTrackedAsDay">@Resources.Days / </span>
+			<span data-bind="if: AbsenceTrackedAsHour">@Resources.Hours / </span>
 		    <label>
 			    @Resources.Used:
 		    </label>
-			<span>7 days</span>
+		    <span data-bind="text: AbsenceUsed"></span>
+			<span data-bind="if: AbsenceTrackedAsDay">@Resources.Days / </span>
+			<span data-bind="if: AbsenceTrackedAsHour">@Resources.Hours / </span>
 	    </div>
     </div>
 </div>

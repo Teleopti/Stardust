@@ -18,11 +18,13 @@ $(document).ready(function () {
 	test("should read account values", function () {
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 		vm.readAbsenceAccount({
+			Tracker: "Days",
 			Remaining: "15",
 			Used: "2"
 		});
 
-
+		equal(vm.AbsenceTrackedAsDay(), true);
+		equal(vm.AbsenceTrackedAsHour(), false);
 		equal(vm.AbsenceUsed(), '2');
 		equal(vm.AbsenceRemaining(), '15');
 	});

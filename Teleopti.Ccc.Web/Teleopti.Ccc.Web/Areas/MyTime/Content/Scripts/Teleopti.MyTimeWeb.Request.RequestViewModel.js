@@ -46,6 +46,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.ShowError = ko.observable(false);
     self.ErrorMessage = ko.observable('');
     self.AbsenceId = ko.observable();
+    self.AbsenceTrackedAsDay = ko.observable();
+    self.AbsenceTrackedAsHour = ko.observable();
     self.Absences = ko.observableArray();
     self.AbsenceUsed = ko.observable();
     self.AbsenceRemaining = ko.observable();
@@ -73,10 +75,14 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     	}
     };
 
-	self.readAbsenceAccount = function(data) {
-		self.AbsenceRemaining(data.Remaining);
-		self.AbsenceUsed(data.Used);
-	};
+    self.readAbsenceAccount = function (data) {
+    	if (data) {
+    		self.AbsenceTrackedAsDay(data.Tracker == "Days");
+    		self.AbsenceTrackedAsHour(data.Tracker == "Time");
+    		self.AbsenceRemaining(data.Remaining);
+    		self.AbsenceUsed(data.Used);
+    	}
+    };
 
 	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
