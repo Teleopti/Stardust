@@ -120,11 +120,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MbCache.2.5\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -135,7 +140,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentAssembler.cs" />
+    <Compile Include="Adherence\AdherenceAggregator.cs" />
+    <Compile Include="Adherence\ITeamIdForPersonProvider.cs" />
+    <Compile Include="Adherence\NotificationExtension.cs" />
     <Compile Include="AlarmMapper.cs" />
+    <Compile Include="BuildContainer.cs" />
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
     <Compile Include="DatabaseReader.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />
@@ -147,6 +156,7 @@
     <Compile Include="ICurrentAndNextLayerExtractor.cs" />
     <Compile Include="IDatabaseReader.cs" />
     <Compile Include="IDatabaseWriter.cs" />
+    <Compile Include="IAfterSend.cs" />
     <Compile Include="IRtaDataHandlerCache.cs" />
     <Compile Include="Resolvers\IDataSourceResolver.cs" />
     <Compile Include="Resolvers\IPersonResolver.cs" />
@@ -186,6 +196,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.Rta.Interfaces\Teleopti.Ccc.Rta.Interfaces.csproj">
       <Project>{DD380C37-8FC1-4209-BC63-9B88B483264D}</Project>
       <Name>Teleopti.Ccc.Rta.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Rta.LogClientProxy\Teleopti.Ccc.Rta.LogClientProxy.csproj">
+      <Project>{366E2F96-08DF-41DB-B342-F24AF24C13F6}</Project>
+      <Name>Teleopti.Ccc.Rta.LogClientProxy</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

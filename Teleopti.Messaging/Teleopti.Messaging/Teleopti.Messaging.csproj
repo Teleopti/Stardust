@@ -141,6 +141,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SignalR\TeamAdherenceMessage.cs" />
     <Compile Include="SignalR\DoNotSend.cs" />
     <Compile Include="SignalR\HubConnectionWrapper.cs" />
     <Compile Include="SignalR\IHubConnectionWrapper.cs" />

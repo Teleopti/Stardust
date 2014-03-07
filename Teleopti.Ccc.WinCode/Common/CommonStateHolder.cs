@@ -79,6 +79,17 @@ namespace Teleopti.Ccc.WinCode.Common
 			get { return _dayOffs.Where(d => !((IDeleteTag)d).IsDeleted).ToArray(); }
         }
 
+	    public IDayOffTemplate DefaultDayOffTemplate
+	    {
+		    get
+		    {
+				var displayList = ActiveDayOffs.ToList();
+				displayList.Sort(new DayOffTemplateSorter());
+
+				return displayList[0];
+		    }
+	    }
+
         public IEnumerable<IActivity> Activities
         {
             get { return _activities; }
