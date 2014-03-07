@@ -16,13 +16,13 @@ namespace Teleopti.Analytics.Etl.Transformer
         {
             _table = table;
 
-            foreach (DataRow dataRow in CreateDataRows(rootList, _table, intervalsPerDay))
+            foreach (DataRow dataRow in CreateDataRows(rootList, _table))
             {
                 _table.Rows.Add(dataRow);
             }
         }
 
-        public static IList<DataRow> CreateDataRows(IEnumerable<IScheduleDay> schedulePartCollection, DataTable dataTable, int intervalsPerDay)
+        public static IList<DataRow> CreateDataRows(IEnumerable<IScheduleDay> schedulePartCollection, DataTable dataTable)
         {
             IList<DataRow> dataRowCollection = new List<DataRow>();
 
@@ -30,14 +30,14 @@ namespace Teleopti.Analytics.Etl.Transformer
             {
                 if (doDayOffExistInSchedulePart(schedulePart))
                 {
-                    dataRowCollection.Add(CreateDataRow(schedulePart, dataTable, intervalsPerDay));
+                    dataRowCollection.Add(CreateDataRow(schedulePart, dataTable));
                 }
             }
 
             return dataRowCollection;
         }
 
-        public static DataRow CreateDataRow(IScheduleDay schedulePart, DataTable dataTable, int intervalsPerDay)
+        public static DataRow CreateDataRow(IScheduleDay schedulePart, DataTable dataTable)
         {
             if (dataTable == null)
                 return null;

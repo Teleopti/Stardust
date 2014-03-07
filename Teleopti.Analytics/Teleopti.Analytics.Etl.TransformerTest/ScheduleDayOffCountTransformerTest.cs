@@ -91,13 +91,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             {
                 dataTable.Locale = Thread.CurrentThread.CurrentCulture;
                 ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
-                dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable, IntervalsPerDay);
+                dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable);
             }
 
-            Assert.AreEqual(dataRowCollection[0]["date"], _schedulePart1.PersonAssignment().DayOff().Anchor.Date);
-            Assert.AreEqual(dataRowCollection[0]["start_interval_id"],
-                            new IntervalBase(_schedulePart1.PersonAssignment().DayOff().Anchor, IntervalsPerDay).Id);
-
+			Assert.AreEqual(dataRowCollection[0]["schedule_date_local"], _schedulePart1.PersonAssignment().DayOff().Anchor.Date);
             Assert.AreEqual(dataRowCollection[0]["person_code"], _schedulePart1.Person.Id);
             Assert.AreEqual(dataRowCollection[0]["scenario_code"], _schedulePart1.Scenario.Id);
             Assert.AreEqual(dataRowCollection[1]["starttime"], _schedulePart2.PersonAssignment().DayOff().Anchor);
@@ -144,13 +141,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 				{
 					dataTable.Locale = Thread.CurrentThread.CurrentCulture;
 					ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
-					dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable, IntervalsPerDay);
+					dataRowCollection = ScheduleDayOffCountTransformer.CreateDataRows(_schedules, dataTable);
 				}
 			}
 
 			Assert.AreEqual(1, dataRowCollection.Count);
-			Assert.AreEqual(new DateTime(2011, 1, 1), dataRowCollection[0]["date"]);
-			Assert.AreEqual(new IntervalBase(new DateTime(2011, 1, 1).AddHours(12), IntervalsPerDay).Id, dataRowCollection[0]["start_interval_id"]);
+			Assert.AreEqual(new DateTime(2011, 1, 1), dataRowCollection[0]["schedule_date_local"]);
 			Assert.AreEqual(_person.Id, dataRowCollection[0]["person_code"]);
 			Assert.AreEqual(_scenario.Id, dataRowCollection[0]["scenario_code"]);
 			Assert.AreEqual(new DateTime(2011, 1, 1).AddHours(12), dataRowCollection[0]["starttime"]);
@@ -165,7 +161,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
         {
             _mocks = new MockRepository();
             var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-            Assert.That(ScheduleDayOffCountTransformer.CreateDataRow(scheduleDay, null, IntervalsPerDay), Is.Null);
+            Assert.That(ScheduleDayOffCountTransformer.CreateDataRow(scheduleDay, null), Is.Null);
         }
 
         [Test]
@@ -175,9 +171,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             {
                 dataTable.Locale = _cultureInfo;
                 ScheduleDayOffCountInfrastructure.AddColumnsToDataTable(dataTable);
-                var row = ScheduleDayOffCountTransformer.CreateDataRow(null, dataTable, IntervalsPerDay);
+                var row = ScheduleDayOffCountTransformer.CreateDataRow(null, dataTable);
                 Assert.That(row,Is.Not.Null);
-                Assert.That(row["date"].ToString(),Is.EqualTo(""));
+				Assert.That(row["schedule_date_local"].ToString(), Is.EqualTo(""));
             }
             
         }
