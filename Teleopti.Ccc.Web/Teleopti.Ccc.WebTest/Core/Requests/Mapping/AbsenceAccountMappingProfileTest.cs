@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			                                                             TimeSpan.Zero, accrued, TimeSpan.Zero, used);
 
 			accrued = TimeSpan.FromHours(96);
-			used = TimeSpan.FromHours(15);
+			used = TimeSpan.FromMinutes(15 * 60 + 45); // 15:30
 			_absIllness = new Absence { Description = new Description("Illness") };
 			_accountTime = AbsenceAccountFactory.CreateAbsenceAccountHours(_person, _absIllness, startDate, periodLength,
 			                                                               TimeSpan.Zero,
@@ -65,16 +65,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			vmDay.TrackerType.Should().Be("Days");
 			vmDay.PeriodStartUtc.Should().Be(startDate);
 			vmDay.PeriodEndUtc.Should().Be(endDate);
-			vmDay.Used.Should().Be(TimeSpan.FromDays(3));
-			vmDay.Remaining.Should().Be(TimeSpan.FromDays(9));
+			vmDay.Used.Should().Be("3");
+			vmDay.Remaining.Should().Be("9");
 
 			var vmHour = Mapper.Map<IAccount, AbsenceAccountViewModel>(_accountTime);
 			vmHour.AbsenceName.Should().Be("Illness");
 			vmHour.TrackerType.Should().Be("Hours");
 			vmHour.PeriodStartUtc.Should().Be(startDate);
 			vmHour.PeriodEndUtc.Should().Be(endDate);
-			vmHour.Used.Should().Be(TimeSpan.FromHours(15));
-			vmHour.Remaining.Should().Be(TimeSpan.FromHours(81));
+			vmHour.Used.Should().Be("15:45");
+			vmHour.Remaining.Should().Be("80:15");
 		}
 	}
 }
