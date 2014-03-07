@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		private readonly ITeamIdForPerson _teamProvider;
 		private readonly ISiteIdForPerson _siteProvider;
 		private readonly Dictionary<Guid, TeamAdherence> _teamAdherence = new Dictionary<Guid, TeamAdherence>();
+		private readonly Dictionary<Guid, SiteAdherence> _siteAdherence = new Dictionary<Guid, SiteAdherence>();
 
 		public AdherenceAggregator(IMessageSender messageSender, ITeamIdForPerson teamProvider, ISiteIdForPerson siteProvider)
 		{
@@ -25,24 +26,32 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		public void Invoke(IActualAgentState actualAgentState)
 		{
 			var personId = actualAgentState.PersonId;
-			AggregateSiteAdherence();
-			AggregateTeamAdherence(actualAgentState, personId);
+			aggregateSiteAdherence(actualAgentState, personId);
+			aggregateTeamAdherence(actualAgentState, personId);
 		}
 
-		private void AggregateSiteAdherence()
+		private void aggregateSiteAdherence(IActualAgentState actualAgentState, Guid personId)
 		{
 			if (_siteProvider == null) return;
 
+			var siteId = _siteProvider.GetSiteId(personId);
+			if (!_siteAdherence.ContainsKey(siteId))
+				_siteAdherence[siteId] = new SiteAdherence();
+
+			var teamState = _siteAdherence[siteId];
+			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
+			if (!changed)
+				return;
 			var siteAdherenceMessage = new SiteAdherenceMessage
-				{
-					SiteId = Guid.Empty,
-					OutOfAdherence = 2
-				};
-			var notification2 = new Notification {BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage)};
-			_messageSender.SendNotification(notification2);
+			{
+				SiteId = siteId,
+				OutOfAdherence = teamState.NumberOutOfAdherence()
+			};
+			var notification = new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage) };
+			_messageSender.SendNotification(notification);
 		}
 
-		private void AggregateTeamAdherence(IActualAgentState actualAgentState, Guid personId)
+		private void aggregateTeamAdherence(IActualAgentState actualAgentState, Guid personId)
 		{
 			if (_teamProvider == null) return;
 

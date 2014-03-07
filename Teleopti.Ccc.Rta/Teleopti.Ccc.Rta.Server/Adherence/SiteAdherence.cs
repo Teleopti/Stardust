@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-	public class TeamAdherence
+	public class SiteAdherence
 	{
 		private readonly Dictionary<Guid, bool> _personAdherence = new Dictionary<Guid, bool>(); 
 
