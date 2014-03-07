@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 	{
 		private readonly IMessageSender _messageSender;
 		private readonly ITeamIdForPersonProvider _teamProvider;
-		private readonly Dictionary<Guid, TeamAdherence> _teamAdherence = new Dictionary<Guid, TeamAdherence>();  
+		private readonly Dictionary<Guid, TeamAdherence> _teamAdherence = new Dictionary<Guid, TeamAdherence>();
 
 		public AdherenceAggregator(IMessageSender messageSender, ITeamIdForPersonProvider teamProvider)
 		{
@@ -33,7 +33,11 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			if (!changed)
 				return;
 
-			var teamAdherenceMessage = new TeamAdherenceMessage { TeamId = teamId, OutOfAdherence = teamState.NumberOutOfAdherence() };
+			var teamAdherenceMessage = new TeamAdherenceMessage
+				{
+					TeamId = teamId,
+					OutOfAdherence = teamState.NumberOutOfAdherence()
+				};
 			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
 			_messageSender.SendNotification(notification);
 		}
