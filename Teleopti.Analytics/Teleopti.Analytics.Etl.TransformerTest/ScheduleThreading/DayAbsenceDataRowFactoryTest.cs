@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.ScheduleThreading
             {
                 dataTable.Locale = Thread.CurrentThread.CurrentCulture;
                 ScheduleDayAbsenceCountInfrastructure.AddColumnsToDataTable(dataTable);
-                _dayAbsenceDataRow = DayAbsenceDataRowFactory.CreateDayAbsenceDataRow(dataTable, _scheduleProjection, _intervalsPerDay);
+                _dayAbsenceDataRow = DayAbsenceDataRowFactory.CreateDayAbsenceDataRow(dataTable, _scheduleProjection);
             }
         }
 
