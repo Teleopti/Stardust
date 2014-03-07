@@ -89,7 +89,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     };
 
     function readAbsenceAccount(data) {
-	    console.log("[LIXF]: ", data);
     	if (data) {
     		self.AbsenceAccountExists(true);
     		self.AbsenceTrackedAsDay(data.TrackerType == "Days");
