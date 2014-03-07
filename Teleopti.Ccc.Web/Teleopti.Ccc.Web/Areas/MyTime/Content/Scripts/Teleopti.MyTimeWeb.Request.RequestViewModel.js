@@ -40,6 +40,18 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
             self.TimeToInternal(value);
         }
     });
+    
+    self.FormattedDateFrom = ko.computed({
+    	read: function () {
+    		return self.DateFrom().format(self.DateFormat());
+    	}
+    });
+
+    self.FormattedDateTo = ko.computed({
+    	read: function () {
+    		return self.DateTo().format(self.DateFormat());
+    	}
+    });
 
     self.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
     self.TypeEnum = ko.observable(0);

@@ -41,8 +41,8 @@
 </div>
 <div class="row form-group">
     <div class="col-xs-4">
-        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
-            <input class="request-new-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+            <input class="request-new-datefrom input-sm form-control" data-bind="value: FormattedDateFrom" type="text" />
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </span>
     </div>
@@ -57,8 +57,8 @@
 </div>
 <div class="row form-group">
     <div class="col-xs-4">
-        <span class="input-group" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
-            <input class="request-new-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+        <span class="input-group" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+            <input class="request-new-dateto input-sm form-control" data-bind="value: FormattedDateTo" type="text" />
             <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
         </span>
     </div>
