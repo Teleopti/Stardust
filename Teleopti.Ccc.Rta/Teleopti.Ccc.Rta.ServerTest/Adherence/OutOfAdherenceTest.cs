@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Rta.Server.Adherence;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var broker = new MessageSenderExposingLastNotification();
 			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
 			var target = new AdherenceAggregator(broker, teamProvider, null);
-
+			
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
 

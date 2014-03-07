@@ -25,38 +25,42 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		public void Invoke(IActualAgentState actualAgentState)
 		{
 			var personId = actualAgentState.PersonId;
+			AggregateSiteAdherence();
+			AggregateTeamAdherence(actualAgentState, personId);
+		}
 
-			if (_teamProvider == null)
-			{
-				var siteAdherenceMessage = new SiteAdherenceMessage
+		private void AggregateSiteAdherence()
+		{
+			if (_siteProvider == null) return;
+
+			var siteAdherenceMessage = new SiteAdherenceMessage
 				{
 					SiteId = Guid.Empty,
 					OutOfAdherence = 2
 				};
-				var notification2 = new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage) };
-				_messageSender.SendNotification(notification2);
-			}
-			if (_siteProvider == null)
-			{
-				var teamId = _teamProvider.GetTeamId(personId);
+			var notification2 = new Notification {BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage)};
+			_messageSender.SendNotification(notification2);
+		}
 
-				if (!_teamAdherence.ContainsKey(teamId))
-					_teamAdherence[teamId] = new TeamAdherence();
+		private void AggregateTeamAdherence(IActualAgentState actualAgentState, Guid personId)
+		{
+			if (_teamProvider == null) return;
 
-				var teamState = _teamAdherence[teamId];
-				var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-				if (!changed)
-					return;
+			var teamId = _teamProvider.GetTeamId(personId);
+			if (!_teamAdherence.ContainsKey(teamId))
+				_teamAdherence[teamId] = new TeamAdherence();
 
-				var teamAdherenceMessage = new TeamAdherenceMessage
+			var teamState = _teamAdherence[teamId];
+			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
+			if (!changed)
+				return;
+			var teamAdherenceMessage = new TeamAdherenceMessage
 				{
 					TeamId = teamId,
 					OutOfAdherence = teamState.NumberOutOfAdherence()
 				};
-				var notification = new Notification { BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage) };
-				_messageSender.SendNotification(notification);
-			}
-			
+			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
+			_messageSender.SendNotification(notification);
 		}
 	}
 }
