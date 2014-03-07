@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult Today(DateTime asmZero)
+		public JsonResult Today(DateTime asmZeroLocal)
 		{
-			var model = _asmModelFactory.CreateViewModel(asmZero);
+			var model = _asmModelFactory.CreateViewModel(asmZeroLocal);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 	}

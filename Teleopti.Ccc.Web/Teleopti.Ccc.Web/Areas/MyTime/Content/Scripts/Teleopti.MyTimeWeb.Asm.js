@@ -38,7 +38,8 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				url: 'Asm/Today',
 				dataType: "json",
 				type: 'GET',
-				data: { asmZero: self.yesterday().toJSON() },
+				//pass as string to make sure no time included due to time zone stuff
+				data: { asmZeroLocal: moment(self.yesterday()).format('YYYY-MM-DD') },
 				success: function (data) {
 					self.hours(data.Hours);
 					self._createLayers(data.Layers);
