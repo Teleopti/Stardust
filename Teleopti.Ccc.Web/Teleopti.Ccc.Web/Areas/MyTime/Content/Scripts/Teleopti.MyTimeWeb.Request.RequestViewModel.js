@@ -13,6 +13,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.IsUpdate = ko.observable(false);
     self.DateFrom = ko.observable(moment().startOf('day'));
     self.DateTo = ko.observable(moment().startOf('day'));
+	self.PreviousDateTo = ko.observable(moment());
     self.TimeFromInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultStartTime : null);
     self.TimeToInternal = ko.observable(defaultDateTimes ? defaultDateTimes.defaultEndTime : null);
     self.DateFormat = ko.observable();
@@ -46,6 +47,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.ShowError = ko.observable(false);
     self.ErrorMessage = ko.observable('');
     self.AbsenceId = ko.observable();
+	self.PreviousAbsenceId = ko.observable();
     self.AbsenceTrackedAsDay = ko.observable(false);
     self.AbsenceTrackedAsHour = ko.observable(false);
     self.Absences = ko.observableArray();
@@ -92,27 +94,32 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     	}
     };
 
-	function loadAbsenceAccount() {
-		ajax.Ajax({
-			url: "Requests/FetchAbsenceAccount",
-			dataType: "json",
-			type: 'GET',
-			contentType: 'application/json; charset=utf-8',
-			data: {
-				absenceId: self.AbsenceId(),
-				date: self.DateTo().format("YYYY-MM-DD")
-			},
-			success: function (data, textStatus, jqXHR) {
-				readAbsenceAccount(data);
-			},
-			error: function (e) {
-				readAbsenceAccount();
-			},
-			complete: function () {
-				//self.IsLoading(false);
-			}
-		});
-	};
+    function loadAbsenceAccount() {
+    	if (self.AbsenceId() != self.PreviousAbsenceId() || !self.DateTo().isSame(self.PreviousDateTo())) {
+    		ajax.Ajax({
+    			url: "Requests/FetchAbsenceAccount",
+    			dataType: "json",
+    			type: 'GET',
+    			contentType: 'application/json; charset=utf-8',
+    			data: {
+    				absenceId: self.AbsenceId(),
+    				date: self.DateTo().format("YYYY-MM-DD")
+    			},
+    			success: function (data, textStatus, jqXHR) {
+    				readAbsenceAccount(data);
+    			},
+    			error: function (e) {
+    				readAbsenceAccount();
+    			},
+    			complete: function () {
+    				//self.IsLoading(false);
+    			}
+    		});
+
+    		self.PreviousAbsenceId(self.AbsenceId());
+    		self.PreviousDateTo(self.DateTo());
+    	}
+    };
 
 	self.AbsenceId.subscribe(function () {
 		loadAbsenceAccount();
