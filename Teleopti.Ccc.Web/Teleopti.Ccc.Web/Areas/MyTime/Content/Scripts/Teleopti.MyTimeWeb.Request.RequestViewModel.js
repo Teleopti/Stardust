@@ -78,7 +78,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     	}
     };
 
-    function readAbsenceAccount(data) {
+    self.readAbsenceAccount = function(data) {
     	if (data) {
     		self.AbsenceAccountExists(true);
     		self.AbsenceTrackedAsDay(data.TrackerType == "Days");
