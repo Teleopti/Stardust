@@ -106,10 +106,10 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     				date: self.DateTo().format("YYYY-MM-DD")
     			},
     			success: function (data, textStatus, jqXHR) {
-    				readAbsenceAccount(data);
+    				self.readAbsenceAccount(data);
     			},
     			error: function (e) {
-    				readAbsenceAccount();
+    				self.readAbsenceAccount();
     			},
     			complete: function () {
     				//self.IsLoading(false);
