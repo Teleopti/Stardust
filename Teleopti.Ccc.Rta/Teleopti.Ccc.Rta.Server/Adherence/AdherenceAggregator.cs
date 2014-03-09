@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -11,30 +9,47 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 	public class AdherenceAggregator : IAfterSend
 	{
 		private readonly IMessageSender _messageSender;
-		private readonly ITeamIdForPersonProvider _teamProvider;
-		private readonly Dictionary<Guid, double> _teamAdherence = new Dictionary<Guid, double>();  
+		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
+		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 
-		public AdherenceAggregator(IMessageSender messageSender, ITeamIdForPersonProvider teamProvider)
+		public AdherenceAggregator(IMessageSender messageSender, ITeamIdForPerson teamProvider, ISiteIdForPerson siteProvider)
 		{
 			_messageSender = messageSender;
-			_teamProvider = teamProvider;
+			_teamAdherenceAggregator = new TeamAdherenceAggregator(teamProvider);
+			_siteAdherenceAggregator = new SiteAdherenceAggregator(siteProvider);
 		}
 
 		public void Invoke(IActualAgentState actualAgentState)
 		{
-			var personId = actualAgentState.PersonId;
-			var teamId = _teamProvider.GetTeamId(personId);
+			var siteAdherence = _siteAdherenceAggregator.Aggregate(actualAgentState);
+			if (siteAdherence != null)
+				_messageSender.SendNotification(createSiteNotification(siteAdherence));
 
-			double staffingEffect;
-			if (_teamAdherence.TryGetValue(personId, out staffingEffect) &&
-			    staffingEffect.Equals(actualAgentState.StaffingEffect))
-				return;
-			
-			_teamAdherence[personId] = actualAgentState.StaffingEffect;
+			var teamAdherence = _teamAdherenceAggregator.Aggregate(actualAgentState);
+			if (teamAdherence != null)
+				_messageSender.SendNotification(createTeamNotification(teamAdherence));
+		}
 
-			var teamAdherenceMessage = new TeamAdherenceMessage {TeamId = teamId};
+		private static Notification createTeamNotification(AggregatedAdherence aggregatedAdherence)
+		{
+			var teamAdherenceMessage = new TeamAdherenceMessage
+				{
+					TeamId = aggregatedAdherence.Key,
+					OutOfAdherence = aggregatedAdherence.NumberOutOfAdherence()
+				};
 			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
-			_messageSender.SendNotification(notification);
+			return notification;
+		}
+
+		private static Notification createSiteNotification(AggregatedAdherence aggregatedAdherence)
+		{
+			var siteAdherenceMessage = new SiteAdherenceMessage
+			{
+				SiteId = aggregatedAdherence.Key,
+				OutOfAdherence = aggregatedAdherence.NumberOutOfAdherence()
+			};
+			var notification = new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage) };
+			return notification;
 		}
 	}
 }

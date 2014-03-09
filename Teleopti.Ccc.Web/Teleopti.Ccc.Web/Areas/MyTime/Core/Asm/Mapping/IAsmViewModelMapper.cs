@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 {
 	public interface IAsmViewModelMapper
 	{
-		AsmViewModel Map(DateTime asmZero, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount);
+		AsmViewModel Map(DateTime asmZeroLocal, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount);
 	}
 }

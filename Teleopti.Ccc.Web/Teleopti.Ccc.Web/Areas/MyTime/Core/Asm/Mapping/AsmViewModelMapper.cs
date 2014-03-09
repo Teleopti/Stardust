@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			_loggedOnUser = loggedOnUser;
 		}
 
-		public AsmViewModel Map(DateTime asmZero, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount)
+		public AsmViewModel Map(DateTime asmZeroLocal, IEnumerable<IScheduleDay> scheduleDays, int unreadMessageCount)
 		{
 			var layers = new List<IVisualLayer>();
 			foreach (var proj in scheduleDays.Select(scheduleDay => _projectionProvider.Projection(scheduleDay)).Where(proj => proj != null))
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			var culture = _loggedOnUser.CurrentUser().PermissionInformation.Culture();
 			return new AsmViewModel
 			          	{
-			          		Layers = createAsmLayers(asmZero, timeZone, culture, layers),
-								Hours = createHours(asmZero, timeZone, culture),
+			          		Layers = createAsmLayers(asmZeroLocal, timeZone, culture, layers),
+								Hours = createHours(asmZeroLocal, timeZone, culture),
 								UnreadMessageCount = unreadMessageCount
 			          	};
 		}
