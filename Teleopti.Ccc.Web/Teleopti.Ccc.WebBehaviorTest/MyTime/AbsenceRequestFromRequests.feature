@@ -27,6 +27,7 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '21 Days'
 And I should see the used days is '4 Days'
 
+@ignore
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
 And I have a requestable absence with
