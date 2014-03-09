@@ -115,7 +115,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
-		private ResourceOptimizationHelperWin _optimizationHelperWin;
 		private ScheduleOptimizerHelper _scheduleOptimizerHelper;
 		private readonly IVirtualSkillHelper _virtualSkillHelper;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
@@ -2453,7 +2452,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			_optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, SchedulerState.ConsiderShortBreaks, true);
+			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+			optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, SchedulerState.ConsiderShortBreaks, true);
 		}
 
 		private void validateAllPersons()
@@ -3615,7 +3615,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
-				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+			{
+				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+				optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+			}
 
 			_totalScheduled = 0;
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
@@ -3901,7 +3904,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
-				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+			{
+				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+				optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+			}
 
 			_totalScheduled = 0;
 			var argument = (SchedulingAndOptimizeArgument)e.Argument;
@@ -3987,7 +3993,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
-				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+			{
+				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+				optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+			}
 			var selectedSchedules = options.ScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
 			var scheduleMatrixOriginalStateContainers = _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
@@ -4020,7 +4029,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 																													 _backgroundWorkerOptimization, displayList[0], false,
 																													 _optimizerOriginalPreferences.SchedulingOptions,
 																													 options.DaysOffPreferences);
-					_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
+
+					var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+					optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedSchedules, selectedPeriod);
 
 
@@ -4186,12 +4197,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, new PersonSkillProvider());
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 		
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
-			_optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
+
+			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+			optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
 
 			if (e.Cancel)
 				return;
@@ -5643,7 +5655,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerMessageBrokerHandler = null; // referens till SchedulingScreen
 			}
 			_requestPresenter = null; // referens till SchedulingScreen
-			_optimizationHelperWin = null;
 
 			if (backgroundWorkerLoadData != null)
 			{
