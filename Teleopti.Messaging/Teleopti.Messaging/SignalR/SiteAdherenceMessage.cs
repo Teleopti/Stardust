@@ -2,9 +2,9 @@
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class TeamAdherenceMessage
+	public class SiteAdherenceMessage
 	{
-		public Guid TeamId { get; set; }
+		public Guid SiteId { get; set; }
 
 		public double OutOfAdherence { get; set; }
 	}
