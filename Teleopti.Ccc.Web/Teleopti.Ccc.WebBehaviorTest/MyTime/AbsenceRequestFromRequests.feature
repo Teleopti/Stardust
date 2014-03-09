@@ -3,6 +3,7 @@
 	As an agent
 	I want to be able to submit requests as absence
 
+@ignore
 Scenario: When requesting absence tracked as days view remaining and used days
 Given I am an agent
 And I am american
