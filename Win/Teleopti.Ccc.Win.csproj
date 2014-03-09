@@ -344,6 +344,7 @@
     <Compile Include="Budgeting\EditShrinkageForm.Designer.cs">
       <DependentUpon>EditShrinkageForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Commands\MatrixListFactory.cs" />
     <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
