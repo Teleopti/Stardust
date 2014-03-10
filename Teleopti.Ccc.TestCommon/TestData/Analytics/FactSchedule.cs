@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly int _shiftEnddateId;
 		private readonly DateTime _shiftEndtime;
 		private readonly int _shiftStartintervalId;
+		private readonly int _shiftEndintervalId;
 		private readonly int _shiftCategoryId;
 		private readonly int _shiftLengthId;
 		private readonly int _scheduledTimeM;
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			int shift_enddate_id,
 			DateTime shift_endtime,
 			int shift_startinterval_id,
+			int shift_endinterval_id,
 			int shift_category_id,
 			int shift_length_id,
 			int scheduled_time_m,
@@ -94,6 +96,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_shiftEnddateId = shift_enddate_id;
 			_shiftEndtime = shift_endtime;
 			_shiftStartintervalId = shift_startinterval_id;
+			_shiftEndintervalId = shift_endinterval_id;
 			_shiftCategoryId = shift_category_id;
 			_shiftLengthId = shift_length_id;
 			_scheduledTimeM = scheduled_time_m;
@@ -149,6 +152,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 					_shiftEnddateId,
 					_shiftEndtime,
 					_shiftStartintervalId,
+					_shiftEndintervalId,
 					_shiftCategoryId,
 					_shiftLengthId,
 					_scheduledTimeM,

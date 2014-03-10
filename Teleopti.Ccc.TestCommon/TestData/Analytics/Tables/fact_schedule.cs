@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("shift_enddate_id", typeof(int));
 			table.Columns.Add("shift_endtime", typeof(DateTime));
 			table.Columns.Add("shift_startinterval_id", typeof(int));
+			table.Columns.Add("shift_endinterval_id", typeof(int));
 			table.Columns.Add("shift_category_id", typeof(int));
 			table.Columns.Add("shift_length_id", typeof(int));
 			table.Columns.Add("scheduled_time_m", typeof(int));
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int shift_enddate_id,
 			DateTime shift_endtime,
 			int shift_startinterval_id,
+			int shift_endinterval_id,
 			int shift_category_id,
 			int shift_length_id,
 			int scheduled_time_m,
@@ -105,6 +107,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["shift_enddate_id"] = shift_enddate_id;
 			row["shift_endtime"] = shift_endtime;
 			row["shift_startinterval_id"] = shift_startinterval_id;
+			row["shift_endinterval_id"] = shift_endinterval_id;
 			row["shift_category_id"] = shift_category_id;
 			row["shift_length_id"] = shift_length_id;
 			row["scheduled_time_m"] = scheduled_time_m;
