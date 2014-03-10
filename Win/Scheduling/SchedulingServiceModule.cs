@@ -107,6 +107,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<StudentSchedulingService>().As<IStudentSchedulingService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ShiftProjectionCacheFilter>().As<IShiftProjectionCacheFilter>().InstancePerLifetimeScope();
+			builder.RegisterType<ClassicScheduleCommand>().As<ClassicScheduleCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleCommand>().As<ScheduleCommand>().InstancePerLifetimeScope();
+			//ScheduleCommand
 
             
             builder.RegisterType<AdvanceDaysOffSchedulingService>().As<IAdvanceDaysOffSchedulingService>();
