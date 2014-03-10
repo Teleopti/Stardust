@@ -3876,6 +3876,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
+			var schedulingOptions = _container.Resolve<ISchedulingOptionsCreator>().CreateSchedulingOptions(optimizerPreferences);
+			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(),
 			                                          dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
 			_undoRedo.CommitBatch();
@@ -3883,96 +3885,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
-			setThreadCulture();
+			
 			var argument = (schedulingAndOptimizeArgument)e.Argument;
-			
-
-			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
-			if (lastCalculationState)
-			{
-				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
-				optimizationHelperWin.ResourceCalculateAllDays(null, true);
-			}
-			var selectedSchedules = argument.SelectedScheduleDays;
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
-			var scheduleMatrixOriginalStateContainers = _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
-			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-
-			IGroupPageLight selectedGroupPage;
-			// ***** temporary cope
-			if (argument.OptimizationMethod == OptimizationMethod.BackToLegalState)
-			{
-				selectedGroupPage = _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
-			}
-			else
-			{
-				selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
-			}
-
-			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), selectedGroupPage);
-
-
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
-			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
-			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
-			switch (argument.OptimizationMethod)
-			{
-
-				case OptimizationMethod.BackToLegalState:
-					IList<IDayOffTemplate> displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
-					_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
-					                                                 _backgroundWorkerOptimization, displayList[0], false,
-					                                                 _optimizerOriginalPreferences.SchedulingOptions,
-					                                                 argument.DaysOffPreferences);
-
-					var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
-					optimizationHelperWin.ResourceCalculateMarkedDays(null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
-					IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedSchedules, selectedPeriod);
-
-
-					if (optimizerPreferences.Extra.UseTeams)
-					{
-						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-					}
-
-					_scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization,
-																											 _optimizerOriginalPreferences.SchedulingOptions, selectedPeriod,
-																											 allMatrixes);
-					break;
-				case OptimizationMethod.ReOptimize:
-
-					if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
-					{
-						var selectedPersons = _scheduleView.AllSelectedPersons(selectedSchedules).ToList();
-
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
-						                                                            true,
-						                                                            schedulingOptions.ConsiderShortBreaks);
-
-						var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
-
-						var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
-							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
-																					   tagSetter);
-
-						_container.Resolve<ITeamBlockOptimizationCommand>()
-						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
-						                   rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer);
-
-						break;
-					}
-
-					// we need it here for fairness opt. for example
-					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-					_scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
-
-					break;
-			}
-
-			
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
+			var optimizationCommand = _container.Resolve<OptimizationCommand>();
+			optimizationCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerOptimization, _schedulerState,
+									argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
+									_optimizationPreferences, argument.OptimizationMethod == OptimizationMethod.BackToLegalState, argument.DaysOffPreferences);
 		}
 
 		private void checkCutMode()

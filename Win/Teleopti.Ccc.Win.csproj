@@ -347,6 +347,7 @@
     <Compile Include="Commands\ClassicScheduleCommand.cs" />
     <Compile Include="Commands\GroupPersonBuilderForOptimizationFactory.cs" />
     <Compile Include="Commands\MatrixListFactory.cs" />
+    <Compile Include="Commands\OptimizationCommand.cs" />
     <Compile Include="Commands\ScheduleCommand.cs" />
     <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
     <Compile Include="Common\AvailableSkillWithPreselectedSkill.cs" />
