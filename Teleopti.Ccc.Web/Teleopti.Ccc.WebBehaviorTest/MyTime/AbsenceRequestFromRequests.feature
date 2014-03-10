@@ -3,7 +3,7 @@
 	As an agent
 	I want to be able to submit requests as absence
 
-@ignore
+
 Scenario: When requesting absence tracked as days view remaining and used days
 Given I am an agent
 And I am american
@@ -20,14 +20,14 @@ And I have an absence with
 | Field     | Value            |
 | Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
-| EndTime   | 2014-01-04 23:59 |
+| EndTime   | 2014-01-03 23:59 |
+And The absence account is updated
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
-Then I should see the remaining days is '21 Days'
-And I should see the used days is '4 Days'
+Then I should see the remaining days is '22 Days'
+And I should see the used days is '3 Days'
 
-@ignore
 Scenario: When requesting absence tracked by hours view remaining and used time
 Given I am an agent
 And I have a requestable absence with
@@ -39,18 +39,22 @@ And I have a personal account with
 | Absence     | Illness    |
 | FromDate    | 2014-01-01 |
 | Accrued     | 250:00     |
+And there is a contract with
+    | Field                     | Value         |
+    | Name                      | 8 hours a day |
+    | Average work time per day | 8:00          |
 And I have an absence with
 | Field     | Value            |
 | Name      | Illness          |
 | StartTime | 2014-01-01 00:00 |
-| EndTime   | 2014-01-05 23:59 |
+| EndTime   | 2014-01-03 23:59 |
+And The absence account is updated
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Illness' for date '2014-10-03'
-Then I should see the used time is '60:00'
-And I should see the remaining time is '190:00'
+Then I should see the used time is '24:00'
+And I should see the remaining time is '226:00'
 
-@ignore
 Scenario: When changing absence type update remaining and used time
 Given I am an agent
 And I am american
@@ -76,7 +80,7 @@ And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Illness' for date '2014-10-03'
 And I see the remaining time is '250:00'
-And I see the used time is '00:00'
+And I see the used time is '0:00'
 And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
@@ -99,6 +103,7 @@ And I have an absence with
 | Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
+And The absence account is updated
 And I have a personal account with
 | Field       | Value      |
 | Absence     | Vacation   |
@@ -136,6 +141,7 @@ And I have an absence with
 | Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
+And The absence account is updated
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Vacation' for

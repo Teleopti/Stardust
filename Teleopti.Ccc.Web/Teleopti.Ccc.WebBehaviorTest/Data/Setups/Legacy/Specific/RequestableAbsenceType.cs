@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Specific
 			                               	{
 			                               		Description = new Description(_name),
 			                               		Requestable = true,
-												Tracker = tracker
+												Tracker = tracker,
+												InContractTime  = true
 			                               	});
 		}
 	}

@@ -254,6 +254,7 @@
     <Compile Include="TestData\Setups\Configurable\NoteConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PartTimePercentageConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PersonAccountUpdateConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonAvailabilityConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonDayOffConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonGroupConfigurable.cs" />
