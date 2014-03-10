@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -242,10 +243,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetLayersForMySchedule()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var date = DateTime.Now;
-			var calendarDate = new DateTime(date.Year, date.Month, date.Day, CultureInfo.CurrentCulture.Calendar);
+			var date = DateOnly.Today;
 			var model = new ShiftTradeScheduleViewModel();
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(calendarDate)).Return(model);
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(date)).Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null, null);
 			var result = target.ShiftTradeRequestSchedule(date);
