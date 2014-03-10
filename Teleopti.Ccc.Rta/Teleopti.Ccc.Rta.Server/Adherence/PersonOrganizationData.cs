@@ -6,5 +6,6 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 	{
 		public Guid PersonId { get; set; }
 		public Guid TeamId { get; set; }
+		public Guid SiteId { get; set; }
 	}
 }

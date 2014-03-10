@@ -148,6 +148,7 @@
     <Compile Include="Adherence\NotificationExtension.cs" />
     <Compile Include="Adherence\PersonOrganizationData.cs" />
     <Compile Include="Adherence\SiteAdherenceAggregator.cs" />
+    <Compile Include="Adherence\SiteIdForPerson.cs" />
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="Adherence\TeamIdForPerson.cs" />
     <Compile Include="AlarmMapper.cs" />
