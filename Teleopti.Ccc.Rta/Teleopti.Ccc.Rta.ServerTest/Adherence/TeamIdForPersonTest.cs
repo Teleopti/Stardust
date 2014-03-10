@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -23,33 +21,6 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			var result = target.GetTeamId(personId);
 			result.Should().Be(teamId);
-		}
-	}
-
-	public interface IPersonOrganizationReader
-	{
-		IEnumerable<PersonOrganizationData> LoadAll();
-	}
-	
-	public class PersonOrganizationData
-	{
-		public Guid PersonId { get; set; }
-		public Guid TeamId { get; set; }
-	}
-
-	public class TeamIdForPerson : ITeamIdForPerson
-	{
-		private readonly IPersonOrganizationReader _personOrganizationReader;
-
-		public TeamIdForPerson(IPersonOrganizationReader personOrganizationReader)
-		{
-			_personOrganizationReader = personOrganizationReader;
-		}
-
-		public Guid GetTeamId(Guid personId)
-		{
-			var personData = _personOrganizationReader.LoadAll();
-			return personData.Single(x => x.PersonId == personId).TeamId;
 		}
 	}
 }
