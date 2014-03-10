@@ -34,14 +34,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			WhenIInputAbsenceRequestValuesWithForDate(name, DateOnlyForBehaviorTests.TestToday.Date);
 		}
 
+		[Given(@"I input absence request values with '(.*)' for date '(.*)'")]
 		[When(@"I input absence request values with '(.*)' for date '(.*)'")]
 		public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", "The cake is a.. Cake!");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
 			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", name);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(DataMaker.Data().MyCulture));
+
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
+							  date.ToShortDateString(DataMaker.Data().MyCulture)));
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
+							  date.ToShortDateString(DataMaker.Data().MyCulture)));
 		}
 
 		[When(@"I input overtime availability with")]

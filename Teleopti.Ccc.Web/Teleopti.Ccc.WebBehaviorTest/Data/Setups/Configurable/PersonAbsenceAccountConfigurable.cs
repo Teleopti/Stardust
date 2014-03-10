@@ -41,7 +41,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var absence = new AbsenceRepository(uow).LoadAll().Single(x => x.Description.Name == Absence);
-			var personAbsenceAccount = new PersonAbsenceAccount(user, absence);
+			var repository = new PersonAbsenceAccountRepository(uow);
+			var result = repository.Find(user);
+			IPersonAbsenceAccount personAbsenceAccount = null;
+			if (result.Any())
+			{
+				personAbsenceAccount = result.FirstOrDefault(x => x.Absence.Id == absence.Id);
+			}
+			if (personAbsenceAccount == null)
+			{
+				personAbsenceAccount = new PersonAbsenceAccount(user, absence);
+				repository.Add(personAbsenceAccount);
+			}
 
 			var trackerType = absence.Tracker != null ? absence.Tracker.GetType() : null; 
 			if (trackerType == Tracker.CreateDayTracker().GetType())
@@ -65,8 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 					});
 			}
 
-			var repository = new PersonAbsenceAccountRepository(uow);
-			repository.Add(personAbsenceAccount);
+
 		}
 
 		private static TimeSpan getTimeSpanInMinute(string ts)

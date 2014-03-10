@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(personAccountUpdateConfigurable);
 		}
 
+		[Given(@"I see the remaining time is '(.*)'")]
 		[When(@"I see the remaining time is '(.*)'")]
 		[Then(@"I should see the remaining days is '(.*)'")]
 		[Then(@"I should see the remaining time is '(.*)'")]
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertAnyContains(".remainingTime", remainingTime);
 		}
 
+		[Given(@"I see the used time is '(.*)'")]
 		[When(@"I see the used time is '(.*)'")]
 		[Then(@"I should see the used days is '(.*)'")]
 		[Then(@"I should see the used time is '(.*)'")]

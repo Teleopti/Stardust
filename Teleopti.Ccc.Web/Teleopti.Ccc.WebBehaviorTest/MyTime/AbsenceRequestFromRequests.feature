@@ -85,7 +85,6 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
-@ignore
 Scenario: When changing request date change remaining and used time
 Given I am an agent
 And I am american
@@ -102,18 +101,18 @@ And I have an absence with
 | Field     | Value            |
 | Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
-| EndTime   | 2014-01-04 23:59 |
-And The absence account is updated
+| EndTime   | 2014-01-03 23:59 |
 And I have a personal account with
 | Field       | Value      |
 | Absence     | Vacation   |
 | FromDate    | 2015-01-01 |
 | Accrued     | 25         |
+And The absence account is updated
 And I am viewing requests
 And I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
-And I see the remaining time is '21 days'
-And I see the used time is '4 days'
+And I see the remaining time is '22 Days'
+And I see the used time is '3 Days'
 When I input absence request values with 'Vacation' for date '2015-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
