@@ -10,6 +10,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
@@ -132,10 +133,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult ShiftTradeRequestSchedule(DateTime selectedDate)
+		public JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate)
 		{
-			var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
-			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(calendarDate), JsonRequestBehavior.AllowGet);
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]
