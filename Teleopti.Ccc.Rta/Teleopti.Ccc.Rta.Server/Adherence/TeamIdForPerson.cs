@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {

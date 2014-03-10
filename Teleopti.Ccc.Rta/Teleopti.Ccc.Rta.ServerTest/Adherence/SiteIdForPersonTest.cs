@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence

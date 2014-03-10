@@ -142,11 +142,9 @@
     <Compile Include="ActualAgentAssembler.cs" />
     <Compile Include="Adherence\AdherenceAggregator.cs" />
     <Compile Include="Adherence\AggregatedAdherence.cs" />
-    <Compile Include="Adherence\IPersonOrganizationReader.cs" />
     <Compile Include="Adherence\ISiteIdForPerson.cs" />
     <Compile Include="Adherence\ITeamIdForPerson.cs" />
     <Compile Include="Adherence\NotificationExtension.cs" />
-    <Compile Include="Adherence\PersonOrganizationData.cs" />
     <Compile Include="Adherence\SiteAdherenceAggregator.cs" />
     <Compile Include="Adherence\SiteIdForPerson.cs" />
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
@@ -181,6 +179,10 @@
     <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>

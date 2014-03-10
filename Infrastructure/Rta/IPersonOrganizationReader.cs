@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Infrastructure.Rta
 {
 	public interface IPersonOrganizationReader
 	{

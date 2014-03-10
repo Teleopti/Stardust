@@ -17,12 +17,11 @@ CREATE PROCEDURE [dbo].[LoadAllPersonsCurrentBuSiteTeam]
 AS
 
 SELECT
-	a.Parent as 'Person',
+	a.Parent as 'PersonId',
 --	el.DataSourceId as 'datasource_id',  --CTI stuff. Enable theese to columns to fetch CTI/acd-login at the same time. Note: person:externalLogon is n:n!
 --	el.AcdLogOnOriginalId as 'acd_login_original_id', --CTI stuff
-	a.BusinessUnit as 'Bu',
-	a.BusinessUnit as 'Site',
-	a.BusinessUnit as 'Team'
+	a.Site as 'SiteId',
+	a.Team as 'TeamId'
 FROM
 (
 	SELECT
