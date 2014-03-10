@@ -1031,10 +1031,13 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\MainShiftOptimizeActivitiesSpecificationShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\NotOverWritableActivitiesShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftsShiftFilter.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetAccordingToAccessabilityFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityChecker.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockRuleSetBagExtractor.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockWorkShiftRuleFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ValidDateTimePeriodShiftFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\WorkTimeLimitationShiftFilter.cs" />
