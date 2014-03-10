@@ -3884,7 +3884,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			var options = (schedulingAndOptimizeArgument)e.Argument;
+			var argument = (schedulingAndOptimizeArgument)e.Argument;
 			
 
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
@@ -3894,7 +3894,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
 				optimizationHelperWin.ResourceCalculateAllDays(null, true);
 			}
-			var selectedSchedules = options.SelectedScheduleDays;
+			var selectedSchedules = argument.SelectedScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
 			var scheduleMatrixOriginalStateContainers = _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
@@ -3902,7 +3902,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			IGroupPageLight selectedGroupPage;
 			// ***** temporary cope
-			if (options.OptimizationMethod == OptimizationMethod.BackToLegalState)
+			if (argument.OptimizationMethod == OptimizationMethod.BackToLegalState)
 			{
 				selectedGroupPage = _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
 			}
@@ -3917,7 +3917,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
 			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
-			switch (options.OptimizationMethod)
+			switch (argument.OptimizationMethod)
 			{
 
 				case OptimizationMethod.BackToLegalState:
@@ -3925,7 +3925,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
 					                                                 _backgroundWorkerOptimization, displayList[0], false,
 					                                                 _optimizerOriginalPreferences.SchedulingOptions,
-					                                                 options.DaysOffPreferences);
+					                                                 argument.DaysOffPreferences);
 
 					var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
 					optimizationHelperWin.ResourceCalculateMarkedDays(null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
