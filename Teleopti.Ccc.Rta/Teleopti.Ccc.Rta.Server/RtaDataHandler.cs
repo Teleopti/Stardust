@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Net.Sockets;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
@@ -152,7 +149,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_asyncMessageSender.SendNotificationAsync(notification);
 			if (_afterSends != null)
 			{
-				_afterSends.ForEach(s => s.Invoke(agentState));				
+				_afterSends.ToList().ForEach(s => s.Invoke(agentState));
 			}
 		}
 	}
