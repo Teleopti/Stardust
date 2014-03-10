@@ -13,25 +13,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
     public class RuleSetAccordingToAccessabilityFilter : IRuleSetAccordingToAccessabilityFilter
     {
         private readonly ITeamBlockRuleSetBagExtractor _teamBlockRuleSetBagExtractor;
-        private readonly ITeamBlockWorkShiftRuleFilter _teamBlockWorkShiftRuleFilter;
+        private readonly ITeamBlockIncludedWorkShiftRuleFilter _teamBlockIncludedWorkShiftRuleFilter;
 
-        public RuleSetAccordingToAccessabilityFilter(ITeamBlockRuleSetBagExtractor teamBlockRuleSetBagExtractor, ITeamBlockWorkShiftRuleFilter teamBlockWorkShiftRuleFilter)
+        public RuleSetAccordingToAccessabilityFilter(ITeamBlockRuleSetBagExtractor teamBlockRuleSetBagExtractor, ITeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter)
         {
             _teamBlockRuleSetBagExtractor = teamBlockRuleSetBagExtractor;
-            _teamBlockWorkShiftRuleFilter = teamBlockWorkShiftRuleFilter;
+            _teamBlockIncludedWorkShiftRuleFilter = teamBlockIncludedWorkShiftRuleFilter;
         }
 
         public IEnumerable<IWorkShiftRuleSet> Filter(ITeamBlockInfo teamBlockInfo)
         {
             IList<IRuleSetBag> extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBag(teamBlockInfo).ToList();
-            var filteredList = _teamBlockWorkShiftRuleFilter.Filter(teamBlockInfo.BlockInfo.BlockPeriod, extractedRuleSetBags);
+	        var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(teamBlockInfo.BlockInfo.BlockPeriod,
+	                                                                        extractedRuleSetBags);
             return filteredList;
         }
 
-        public IEnumerable<IWorkShiftRuleSet> Filter(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
+        public IEnumerable<IWorkShiftRuleSet> Filter(ITeamBlockInfo teamBlockInfo, DateOnly explicitDateToCheck)
         {
-            IList<IRuleSetBag> extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBag(teamBlockInfo,dateOnly).ToList();
-            var filteredList = _teamBlockWorkShiftRuleFilter.Filter(teamBlockInfo.BlockInfo.BlockPeriod, extractedRuleSetBags);
+	        var extractedRuleSetBags = _teamBlockRuleSetBagExtractor.GetRuleSetBag(teamBlockInfo, explicitDateToCheck);
+			var filteredList = _teamBlockIncludedWorkShiftRuleFilter.Filter(new DateOnlyPeriod(explicitDateToCheck, explicitDateToCheck),
+	                                                                        extractedRuleSetBags.ToList());
             return filteredList;
         }
     }
