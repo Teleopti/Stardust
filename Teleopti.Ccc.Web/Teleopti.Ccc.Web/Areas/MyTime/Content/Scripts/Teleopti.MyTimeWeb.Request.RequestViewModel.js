@@ -51,9 +51,11 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.AbsenceTrackedAsDay = ko.observable(false);
     self.AbsenceTrackedAsHour = ko.observable(false);
     self.Absences = ko.observableArray();
-	self.AbsenceAccountExists = ko.observable(false);
+    self.AbsenceAccountExists = ko.observable(false);
+    self.AbsenceAccountPeriodStart = ko.observable(moment());
+    self.AbsenceAccountPeriodEnd = ko.observable(moment());
     self.AbsenceUsed = ko.observable();
-    self.AbsenceRemaining = ko.observable();
+	self.AbsenceRemaining = ko.observable();
     self.Subject = ko.observable();
     self.Message = ko.observable();
     self.EntityId = ko.observable();
@@ -83,19 +85,26 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     		self.AbsenceAccountExists(true);
     		self.AbsenceTrackedAsDay(data.TrackerType == "Days");
     		self.AbsenceTrackedAsHour(data.TrackerType == "Hours");
+    		self.AbsenceAccountPeriodStart(moment(data.PeriodStart));
+    		self.AbsenceAccountPeriodEnd(moment(data.PeriodEnd));
     		self.AbsenceRemaining(data.Remaining);
     		self.AbsenceUsed(data.Used);
     	} else {
     		self.AbsenceAccountExists(false);
     		self.AbsenceTrackedAsDay(false);
     		self.AbsenceTrackedAsHour(false);
+    		self.AbsenceAccountPeriodStart(moment());
+    		self.AbsenceAccountPeriodEnd(moment());
     		self.AbsenceUsed("0");
     		self.AbsenceRemaining("0");
     	}
     };
 
     function loadAbsenceAccount() {
-    	if (self.AbsenceId() != self.PreviousAbsenceId() || !self.DateTo().isSame(self.PreviousDateTo())) {
+	    var absenceChanged = self.AbsenceId() != self.PreviousAbsenceId();
+	    var dateToChanged = !self.DateTo().isSame(self.PreviousDateTo().format("YYYY-MM-DD HH:mm:ss"));
+	    var isOutOfPeriodRange = self.DateTo().isBefore(self.AbsenceAccountPeriodStart()) || self.DateTo().isAfter(self.AbsenceAccountPeriodEnd());
+    	if (absenceChanged || (dateToChanged && isOutOfPeriodRange)) {
     		ajax.Ajax({
     			url: "Requests/FetchAbsenceAccount",
     			dataType: "json",
