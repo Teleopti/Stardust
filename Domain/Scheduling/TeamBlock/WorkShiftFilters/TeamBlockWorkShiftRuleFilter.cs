@@ -18,17 +18,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
             {
                 foreach (var workShiftRuleSet in ruleSet.RuleSetCollection)
                 {
+                    var isIncluded = true;
+                    if (workShiftRuleSet.DefaultAccessibility == DefaultAccessibility.Excluded ) isIncluded = false;
                     var accessibilityDaysOfWeek = workShiftRuleSet.AccessibilityDaysOfWeek.ToList();
                     var accessibilityDates = workShiftRuleSet.AccessibilityDates.ToList();
                     var isBlockCleared = true;
                     foreach (var dateOnly in blockPeriod.DayCollection())
                     {
-                        if (accessibilityDaysOfWeek.Contains(dateOnly.DayOfWeek) ||
-                            accessibilityDates.Contains(dateOnly))
+                        if (isIncluded)
                         {
-                            isBlockCleared = false;
-                            break;
+                            if ((accessibilityDaysOfWeek.Count >0 && accessibilityDaysOfWeek.Contains(dateOnly.DayOfWeek)) ||
+                                (accessibilityDates.Count >0 && accessibilityDates.Contains(dateOnly)))
+                            {
+                                isBlockCleared = false;
+                                break;
+                            }
                         }
+                        else
+                        {
+                            if ((accessibilityDaysOfWeek.Count >0 && !accessibilityDaysOfWeek.Contains(dateOnly.DayOfWeek)) ||
+                            (accessibilityDates.Count > 0 && !accessibilityDates.Contains(dateOnly)))
+                            {
+                                isBlockCleared = false;
+                                break;
+                            }
+                        }
+                        
 
                     }
                     if (isBlockCleared)
