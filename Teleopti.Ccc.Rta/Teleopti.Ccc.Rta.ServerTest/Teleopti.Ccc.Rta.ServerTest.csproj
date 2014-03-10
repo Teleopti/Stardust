@@ -155,7 +155,7 @@
     <Compile Include="ActualAgentAssemblerTest.cs" />
     <Compile Include="ActualAgentStateCacheTest.cs" />
     <Compile Include="Adherence\SiteIdForPersonTest.cs" />
-    <Compile Include="Adherence\SiteAdherenceTes.cs" />
+    <Compile Include="Adherence\SiteAdherenceTest.cs" />
     <Compile Include="Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Adherence\SendMessageTest.cs" />
     <Compile Include="Adherence\TeamIdForPersonTest.cs" />
