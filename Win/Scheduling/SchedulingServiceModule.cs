@@ -403,7 +403,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
             builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
             builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
-            builder.RegisterType<TeamBlockWorkShiftRuleFilter>().As<ITeamBlockWorkShiftRuleFilter>();
+            builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
 	    }
     }
 }
