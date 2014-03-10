@@ -63,16 +63,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var vmDay = Mapper.Map<IAccount, AbsenceAccountViewModel>(_accountDay);
 			vmDay.AbsenceName.Should().Be("Vacation");
 			vmDay.TrackerType.Should().Be("Days");
-			vmDay.PeriodStartUtc.Should().Be(startDate);
-			vmDay.PeriodEndUtc.Should().Be(endDate);
+			vmDay.PeriodStart.Should().Be(startDate);
+			vmDay.PeriodEnd.Should().Be(endDate);
 			vmDay.Used.Should().Be("3");
 			vmDay.Remaining.Should().Be("9");
 
 			var vmHour = Mapper.Map<IAccount, AbsenceAccountViewModel>(_accountTime);
 			vmHour.AbsenceName.Should().Be("Illness");
 			vmHour.TrackerType.Should().Be("Hours");
-			vmHour.PeriodStartUtc.Should().Be(startDate);
-			vmHour.PeriodEndUtc.Should().Be(endDate);
+			vmHour.PeriodStart.Should().Be(startDate);
+			vmHour.PeriodEnd.Should().Be(endDate);
 			vmHour.Used.Should().Be("15:45");
 			vmHour.Remaining.Should().Be("80:15");
 		}
