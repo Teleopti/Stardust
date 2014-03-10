@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
         public IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo)
         {
             var possibleWorkShiftRuleSetBagList = new List<IRuleSetBag>();
-            foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+            foreach (var person in teamBlockInfo.TeamInfo.GroupMembers)
             {
                 foreach (var dateOnly in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
                 {
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
         public IEnumerable<IRuleSetBag> GetRuleSetBag(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
         {
             var possibleWorkShiftRuleSetBagList = new List<IRuleSetBag>();
-            foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+            foreach (var person in teamBlockInfo.TeamInfo.GroupMembers)
             {
                 var tempWorkShiftRuleSetBag = person.Period(dateOnly).RuleSetBag;
                 if (tempWorkShiftRuleSetBag == null) continue;
