@@ -53,12 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			else if (classTypeOfTracker == Tracker.CreateTimeTracker().GetType())
 			{
-				var totalMinutes = ts.TotalMinutes;
-
-				var hours = (int)(totalMinutes / 60);
-				var minutes = (int)(totalMinutes % 60);
-
-				result = string.Format("{0}:{1:00}", hours, minutes);
+				result = TimeHelper.GetLongHourMinuteTimeString(ts, CultureInfo.CurrentCulture);
 			}
 
 			return result;
