@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
         }
 
         [Test]
-        public void ShouldExecute()
+        public void ShouldExecuteTeamBlock()
         {
             var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 05, 2014, 03, 09);
 
@@ -53,6 +53,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             using (_mock.Playback())
             {
                 var result = _target.Filter(_teamBlockInfo);
+                Assert.AreEqual(new List<IWorkShiftRuleSet>() { _workShiftRuleSet1 }, result);
+            }
+
+        }
+
+        [Test]
+        public void ShouldExecuteTeamBlockOnSingleDay()
+        {
+            var dateOnlyPeriod = new DateOnlyPeriod(2014, 03, 05, 2014, 03, 09);
+
+            using (_mock.Record())
+            {
+                Expect.Call(_teamBlockRuleSetBagExtractor.GetRuleSetBag(_teamBlockInfo, new DateOnly(2014, 03, 10))).IgnoreArguments()
+                      .Return(new List<IRuleSetBag>() { _ruleSetBag });
+                Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
+                Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
+                Expect.Call(_teamBlockWorkShiftRuleFilter.Filter(dateOnlyPeriod, new List<IRuleSetBag>() { _ruleSetBag })).IgnoreArguments()
+                      .Return(new List<IWorkShiftRuleSet>() { _workShiftRuleSet1 });
+            }
+            using (_mock.Playback())
+            {
+                var result = _target.Filter(_teamBlockInfo,new DateOnly(2014,03,10));
                 Assert.AreEqual(new List<IWorkShiftRuleSet>() { _workShiftRuleSet1 }, result);
             }
 

@@ -91,13 +91,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-				//Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				//Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				//Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				Expect.Call(_ruleSetToShiftsGenerator.Generate(ruleSet1)).Return(shifts);
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
 				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(null, null)).IgnoreArguments().Return(true);
@@ -120,11 +117,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-                //Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-                //Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(false);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				//Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
 			{
@@ -145,13 +139,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-                //Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-                //Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(true);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				//Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
 			{
@@ -171,12 +162,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-                //Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-                //Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(true);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				//Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
 			{
@@ -196,12 +184,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-                //Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-                //Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
-				//Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(null, null)).IgnoreArguments().Return(false);
