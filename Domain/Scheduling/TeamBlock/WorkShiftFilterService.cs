@@ -113,8 +113,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
-
-			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, person, false,schedulingOptions.BlockFinderTypeForAdvanceScheduling );
+            var filteredRulesetList = _ruleSetAccordingToAccessabilityFilter.Filter(teamBlockInfo,dateOnly);
+            var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(filteredRulesetList,dateOnly, person, false, schedulingOptions.BlockFinderTypeForAdvanceScheduling);
             shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList, true);
 			if (shiftList == null)
 				return null;

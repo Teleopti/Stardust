@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling);
+		IList<IShiftProjectionCache> Filter(IEnumerable<IWorkShiftRuleSet> filteredRulesetList, DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling);
         IList<IShiftProjectionCache> FilterForRoleModel(IEnumerable<IWorkShiftRuleSet> ruleSets, DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling);
 	}
 
@@ -68,18 +68,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
             return shiftProjectionCaches;
         }
 
-		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling)
+		public IList<IShiftProjectionCache> Filter(IEnumerable<IWorkShiftRuleSet> filteredRulesetList, DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling)
 		{
 			if (person == null)
 				return null;
 			var shiftProjectionCaches = new List<IShiftProjectionCache>();
             var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var personPeriod = person.Period(scheduleDateOnly);
-			var bag = personPeriod.RuleSetBag;
 
-			var ruleSets = bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly).ToList();
-
-			foreach (IWorkShiftRuleSet ruleSet in ruleSets)
+            foreach (IWorkShiftRuleSet ruleSet in filteredRulesetList)
 			{
 				
                 if (blockFinderTypeForAdvanceScheduling==BlockFinderType.SingleDay   && !ruleSet.IsValidDate(scheduleDateOnly))
