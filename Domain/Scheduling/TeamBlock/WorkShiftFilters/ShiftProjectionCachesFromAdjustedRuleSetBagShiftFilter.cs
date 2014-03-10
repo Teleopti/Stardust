@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public interface IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
 	{
 		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling);
+        IList<IShiftProjectionCache> FilterForRoleModel(IEnumerable<IWorkShiftRuleSet> ruleSets, DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling);
 	}
 
 	public class ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter : IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
@@ -29,6 +30,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_ruleSetToShiftsGenerator = ruleSetToShiftsGenerator;
 			_ruleSetSkillActivityChecker = ruleSetSkillActivityChecker;
 		}
+
+        public IList<IShiftProjectionCache> FilterForRoleModel(IEnumerable<IWorkShiftRuleSet> ruleSets, DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling)
+        {
+            if (person == null)
+                return null;
+            var shiftProjectionCaches = new List<IShiftProjectionCache>();
+            var timeZone = person.PermissionInformation.DefaultTimeZone();
+            var personPeriod = person.Period(scheduleDateOnly);
+
+            foreach (IWorkShiftRuleSet ruleSet in ruleSets)
+            {
+
+                if (blockFinderTypeForAdvanceScheduling == BlockFinderType.SingleDay && !ruleSet.IsValidDate(scheduleDateOnly))
+                    continue;
+
+                if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
+                    continue;
+
+                if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
+                    continue;
+
+                if (!_ruleSetSkillActivityChecker.CheckSkillActivties(ruleSet, personPeriod.PersonSkillCollection))
+                    continue;
+
+                IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleset(ruleSet);
+                if (ruleSetList != null)
+                {
+                    foreach (var projectionCache in ruleSetList)
+                    {
+                        shiftProjectionCaches.Add(projectionCache);
+                        projectionCache.SetDate(scheduleDateOnly, timeZone);
+                    }
+                }
+            }
+
+            return shiftProjectionCaches;
+        }
 
 		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, BlockFinderType blockFinderTypeForAdvanceScheduling)
 		{

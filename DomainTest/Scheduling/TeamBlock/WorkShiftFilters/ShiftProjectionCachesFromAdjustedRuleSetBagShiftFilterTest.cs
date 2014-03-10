@@ -55,6 +55,33 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Assert.IsNull(result);
 		}
 
+        [Test]
+        public void ShouldGetShiftProjectionCachesFromAdjustedRuleSetBagForRoleModel()
+        {
+            var permissionInfo = new PermissionInformation(_person);
+            permissionInfo.SetDefaultTimeZone(_timeZoneInfo);
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
+            var shifts = getCashes();
+            using (_mocks.Record())
+            {
+                Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
+                Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
+                Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
+                Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
+                Expect.Call(_person.PermissionInformation).Return(permissionInfo);
+                Expect.Call(_ruleSetToShiftsGenerator.Generate(ruleSet1)).Return(shifts);
+                Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
+                Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(null, null)).IgnoreArguments().Return(true);
+            }
+            using (_mocks.Playback())
+            {
+                var result = _target.FilterForRoleModel(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets), _dateOnly, _person, false, BlockFinderType.SingleDay);
+
+                Assert.That(result.Count, Is.EqualTo(3));
+            }
+        }
+
 		[Test]
 		public void ShouldGetShiftProjectionCachesFromAdjustedRuleSetBag()
 		{

@@ -354,6 +354,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>();
 			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>();
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
+            builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
+            builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
+            builder.RegisterType<TeamBlockWorkShiftRuleFilter>().As<ITeamBlockWorkShiftRuleFilter>();
 	    }
     }
 }
