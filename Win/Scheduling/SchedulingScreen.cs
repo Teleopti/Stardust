@@ -2146,54 +2146,46 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Virtual skill handling
 
-		private void SkillGridMenuItemPeriodClick(object sender, EventArgs e)
+		private void updateSkillGridMenuItem()
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Period, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
+			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, _skillResultViewSetting,
+														  toolStripButtonChartPeriodView, toolStripButtonChartMonthView,
+														  toolStripButtonChartWeekView, toolStripButtonChartDayView,
+														  toolStripButtonChartIntradayView);
 			menuUpdater.Update();
+			_currentSelectedGridRow = null;
+			drawSkillGrid();
+			reloadChart();
+		}
+
+		private void skillGridMenuItemPeriodClick(object sender, EventArgs e)
+		{
 			_skillResultViewSetting = SkillResultViewSetting.Period;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void SkillGridMenuItemMonthClick(object sender, EventArgs e)
+		private void skillGridMenuItemMonthClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Month, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Month;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void SkillGridMenuItemWeekClick(object sender, EventArgs e)
+		private void skillGridMenuItemWeekClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Week, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Week;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void skillGridMenuItemDay_Click(object sender, EventArgs e)
+		private void skillGridMenuItemDayClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Day, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Day;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void skillGridMenuItemIntraDay_Click(object sender, EventArgs e)
+		private void skillGridMenuItemIntraDayClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Intraday, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Intraday;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
 		private void skillGridMenuItem_Click(object sender, EventArgs e)
@@ -3364,17 +3356,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#endregion
 
-		#region Docking
-
-
-
-		private void dockVisibilityChanged(object sender, DockVisibilityChangedEventArgs arg)
-		{
-			arg.Control.Dispose();
-			Controls.Remove(arg.Control);
-		}
-
-		#endregion
 
 		#region Delete
 
@@ -4548,23 +4529,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void setupContextMenuSkillGrid()
 		{
 			var skillGridMenuItem = new ToolStripMenuItem(Resources.Period) { Name = "Period", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period) };
-			skillGridMenuItem.Click += SkillGridMenuItemPeriodClick;
+			skillGridMenuItem.Click += skillGridMenuItemPeriodClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Month) { Name = "Month", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month) };
-			skillGridMenuItem.Click += SkillGridMenuItemMonthClick;
+			skillGridMenuItem.Click += skillGridMenuItemMonthClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Week) { Name = "Week", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week) };
-			skillGridMenuItem.Click += SkillGridMenuItemWeekClick;
+			skillGridMenuItem.Click += skillGridMenuItemWeekClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Day) { Name = "Day", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day) };
-			skillGridMenuItem.Click += skillGridMenuItemDay_Click;
+			skillGridMenuItem.Click += skillGridMenuItemDayClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Intraday) { Name = "Intraday", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) };
-			skillGridMenuItem.Click += skillGridMenuItemIntraDay_Click;
+			skillGridMenuItem.Click += skillGridMenuItemIntraDayClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.UseShrinkage);
