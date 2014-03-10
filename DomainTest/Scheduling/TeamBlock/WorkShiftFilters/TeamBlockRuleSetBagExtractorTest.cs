@@ -151,6 +151,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             }
         }
 
+        [Test]
+        public void ShouldReturnRuleSetBagForTeamSingleDateOnly()
+        {
+            using (_mock.Record())
+            {
+                Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+                Expect.Call(_teamInfo.GroupPerson.GroupMembers).Return(new List<IPerson>() { _person1, _person2 });
+                Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
+                Expect.Call(_personPeriod1.RuleSetBag).Return(_ruleSetBag1);
+                Expect.Call(_person2.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod2);
+                Expect.Call(_personPeriod2.RuleSetBag).Return(_ruleSetBag2);
+            }
+            using (_mock.Playback())
+            {
+                Assert.AreEqual(2, _target.GetRuleSetBag(_teamBlockInfo,new DateOnly(2014,03,10)).Count());
+            }
+        }
+
     }
 
 
