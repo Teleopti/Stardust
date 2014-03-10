@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupPerson.GroupMembers).Return(new List<IPerson>());
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>());
             }
             using (_mock.Playback())
             {
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupPerson.GroupMembers).Return(new List<IPerson>() { _person1 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1 });
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupPerson.GroupMembers).Return(new List<IPerson>() { _person1 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1 });
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupPerson.GroupMembers).Return(new List<IPerson>() { _person1, _person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1, _person2 });
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             using (_mock.Record())
             {
                 Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-                Expect.Call(_teamInfo.GroupPerson.GroupMembers).Return(new List<IPerson>() { _person1, _person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson>() { _person1, _person2 });
                 Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
                 Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
                 Expect.Call(_person1.Period(new DateOnly(2014, 03, 10))).Return(_personPeriod1);
