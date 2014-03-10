@@ -3615,7 +3615,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var argument = (schedulingAndOptimizeArgument)e.Argument;
 			var scheduleCommand = _container.Resolve<ScheduleCommand>();
-			scheduleCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerScheduling, _schedulerState, argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper, _optimizationPreferences);
+			scheduleCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerScheduling, _schedulerState,
+			                        argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
+			                        _optimizationPreferences);
 		}
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
@@ -3867,21 +3869,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
 		{
+			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
 			var argument = (schedulingAndOptimizeArgument)e.Argument;
 			var scheduleDays = argument.SelectedScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
-
+			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(),
+			                                          dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
+			_undoRedo.CommitBatch();
 		}
 
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			setThreadCulture();
 			var options = (schedulingAndOptimizeArgument)e.Argument;
-			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
+			
 
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
@@ -3919,9 +3923,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 				case OptimizationMethod.BackToLegalState:
 					IList<IDayOffTemplate> displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
 					_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
-																													 _backgroundWorkerOptimization, displayList[0], false,
-																													 _optimizerOriginalPreferences.SchedulingOptions,
-																													 options.DaysOffPreferences);
+					                                                 _backgroundWorkerOptimization, displayList[0], false,
+					                                                 _optimizerOriginalPreferences.SchedulingOptions,
+					                                                 options.DaysOffPreferences);
 
 					var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
 					optimizationHelperWin.ResourceCalculateMarkedDays(null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
@@ -3941,7 +3945,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
 					{
-						var selectedPersons = new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+						var selectedPersons = _scheduleView.AllSelectedPersons(selectedSchedules).ToList();
 
 						var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
 						                                                            true,
@@ -3967,7 +3971,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					break;
 			}
 
-			_undoRedo.CommitBatch();
+			
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
@@ -5065,7 +5069,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var scheduleRepository = new ScheduleRepository(uowFactory);
 			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)),
 															_schedulerMessageBrokerHandler,
-															ScheduleViewBase.AllSelectedPersons(selectedSchedules),
+															_scheduleView.AllSelectedPersons(selectedSchedules),
 															selectedSchedules,
 															scenario,
 															_container.Resolve<IScheduleDictionaryPersister>()))
@@ -5119,7 +5123,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripDropDownButtonSwap.Enabled = true;
 				ToolStripMenuItemSwapRaw.Enabled = true;
 			}
-			if (selectedSchedules.Count <= 1 || ScheduleViewBase.AllSelectedPersons(selectedSchedules).Count() != 2)
+			if (selectedSchedules.Count <= 1 || _scheduleView.AllSelectedPersons(selectedSchedules).Count() != 2)
 				return;
 
 			toolStripDropDownButtonSwap.Enabled = true;

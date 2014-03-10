@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.Win.Reporting
 
             var names = new List<string>();
             IEnumerable<IScheduleDay> selectedSchedules = scheduleViewBase.SelectedSchedules();
-            foreach (var person in ScheduleViewBase.AllSelectedPersons(selectedSchedules))
+			foreach (var person in scheduleViewBase.AllSelectedPersons(selectedSchedules))
             {
                 names.Add(person.Name.ToString());
             }

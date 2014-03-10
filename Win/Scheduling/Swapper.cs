@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IList<IScheduleDay> selectedSchedules = _scheduleView.SelectedSchedules();
 			if (selectedSchedules.Count > 1)
 			{
-				var personList = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedSchedules));
+				var personList = new List<IPerson>(_scheduleView.AllSelectedPersons(selectedSchedules));
 				if (personList.Count != 2)
 					return;
 

@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 			}
 
-			var selectedPersons = ScheduleViewBase.AllSelectedPersons(unlockedSchedules);
+			var selectedPersons = new PersonListExtractorFromScheduleParts(unlockedSchedules).ExtractPersons();
 			var selectedPeriod = unlockedSchedules.Select(s => s.DateOnlyAsPeriod.DateOnly).OrderBy(d => d.Date);
 			var period = new DateOnlyPeriod(selectedPeriod.FirstOrDefault(), selectedPeriod.LastOrDefault());
 
@@ -591,7 +591,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
 				var tagSetter = _container.Resolve<IScheduleTagSetter>();
 				tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
-				IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
+				IList<IPerson> selectedPersons = new List<IPerson>(new PersonListExtractorFromScheduleParts(selectedDays).ExtractPersons());
 				IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization =
 					_container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedDays, selectedPeriod);
 				IList<IScheduleMatrixPro> matrixListForDayOffOptimization =
