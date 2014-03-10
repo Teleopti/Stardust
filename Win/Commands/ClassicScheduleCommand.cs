@@ -17,11 +17,14 @@ namespace Teleopti.Ccc.Win.Commands
 			_matrixListFactory = matrixListFactory;
 		}
 
-		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, ScheduleOptimizerHelper scheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder)
+		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker,
+		                    ScheduleOptimizerHelper scheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules,
+		                    ISchedulerStateHolder schedulerStateHolder)
 		{
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
 
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixList(selectedSchedules, selectedPeriod);
+			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixList(selectedSchedules,
+			                                                                                               selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
@@ -29,7 +32,9 @@ namespace Teleopti.Ccc.Win.Commands
 
 			foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
 			{
-				allScheduleDays.AddRange(schedulerStateHolder.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
+				allScheduleDays.AddRange(
+					schedulerStateHolder.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(
+						scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
 			}
 
 			var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
@@ -38,21 +43,32 @@ namespace Teleopti.Ccc.Win.Commands
 			if (daysOnlyHelper.DaysOnly)
 			{
 				if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, backgroundWorker, daysOnlyHelper.PreferenceOnlyOptions);
+					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					                                                   allMatrixesOfSelectedPersons, true, backgroundWorker,
+					                                                   daysOnlyHelper.PreferenceOnlyOptions);
 
 				if (schedulingOptions.RotationDaysOnly)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, backgroundWorker, daysOnlyHelper.RotationOnlyOptions);
+					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					                                                   allMatrixesOfSelectedPersons, true, backgroundWorker,
+					                                                   daysOnlyHelper.RotationOnlyOptions);
 
 				if (schedulingOptions.AvailabilityDaysOnly)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, backgroundWorker, daysOnlyHelper.AvailabilityOnlyOptions);
+					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					                                                   allMatrixesOfSelectedPersons, true, backgroundWorker,
+					                                                   daysOnlyHelper.AvailabilityOnlyOptions);
 
-				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly || daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
-					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, backgroundWorker, daysOnlyHelper.NoOnlyOptions);
+				if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly ||
+				    daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
+					scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+					                                                   allMatrixesOfSelectedPersons, true, backgroundWorker,
+					                                                   daysOnlyHelper.NoOnlyOptions);
 
 			}
 			else
-				scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, backgroundWorker, schedulingOptions); 
-				
+				scheduleOptimizerHelper.ScheduleSelectedPersonDays(selectedSchedules, matrixesOfSelectedScheduleDays,
+				                                                   allMatrixesOfSelectedPersons, true, backgroundWorker,
+				                                                   schedulingOptions);
+
 		}
 	}
 }
