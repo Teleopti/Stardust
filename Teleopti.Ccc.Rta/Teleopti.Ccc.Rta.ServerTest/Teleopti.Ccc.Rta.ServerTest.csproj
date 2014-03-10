@@ -157,6 +157,7 @@
     <Compile Include="Adherence\SiteAdherenceTes.cs" />
     <Compile Include="Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Adherence\SendMessageTest.cs" />
+    <Compile Include="Adherence\TeamIdForPersonTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseReaderTest.cs" />
