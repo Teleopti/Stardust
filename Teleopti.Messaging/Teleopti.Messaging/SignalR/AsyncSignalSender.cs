@@ -15,7 +15,7 @@ using log4net;
 
 namespace Teleopti.Messaging.SignalR
 {
-	public class AsyncSignalSender : IAsyncMessageSender
+	public class AsyncSignalSender : IMessageSender
 	{
 		private readonly BlockingCollection<Tuple<DateTime, Notification>> _notificationQueue = new BlockingCollection<Tuple<DateTime, Notification>>();
 		private readonly CancellationTokenSource cancelToken = new CancellationTokenSource();
@@ -54,7 +54,7 @@ namespace Teleopti.Messaging.SignalR
 		{
 			StartBrokerService(TimeSpan.FromSeconds(240));
 		}
-
+		
 		public void StartBrokerService(TimeSpan reconnectDelay)
 		{
 			try
@@ -83,7 +83,7 @@ namespace Teleopti.Messaging.SignalR
 			get { return _connectionHandler != null && _connectionHandler.IsInitialized(); }
 		}
 
-		public void SendNotificationAsync(Notification notification)
+		public void SendNotification(Notification notification)
 		{
 			_notificationQueue.Add(new Tuple<DateTime, Notification>(CurrentUtcTime(), notification));
 		}

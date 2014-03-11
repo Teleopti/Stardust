@@ -98,8 +98,8 @@ namespace Teleopti.MessagingTest.SignalR
 			var notification1 = new Notification();
 			var notification2 = new Notification();
 
-			target.SendNotificationAsync(notification1);
-			target.SendNotificationAsync(notification2);
+			target.SendNotification(notification1);
+			target.SendNotification(notification2);
 			target.ProcessTheQueue();
 
 			hubProxy.NotifyClientsMultipleInvokedWith.First().Should().Have.SameValuesAs(new[] {notification1, notification2});
@@ -126,8 +126,8 @@ namespace Teleopti.MessagingTest.SignalR
 
 			var notifications1 = Enumerable.Range(1, 20).Select(i => new Notification()).ToArray();
 			var notifications2 = Enumerable.Range(1, 10).Select(i => new Notification()).ToArray();
-			notifications1.ForEach(target.SendNotificationAsync);
-			notifications2.ForEach(target.SendNotificationAsync);
+			notifications1.ForEach(target.SendNotification);
+			notifications2.ForEach(target.SendNotification);
 
 			target.ProcessTheQueue();
 			target.ProcessTheQueue();
@@ -145,10 +145,10 @@ namespace Teleopti.MessagingTest.SignalR
 
 			now.Mutate(DateTime.UtcNow.AddMinutes(-2));
 			var oldNotification = new Notification();
-			target.SendNotificationAsync(oldNotification);
+			target.SendNotification(oldNotification);
 			now.Mutate(DateTime.UtcNow);
 			var newNotification = new Notification();
-			target.SendNotificationAsync(newNotification);
+			target.SendNotification(newNotification);
 			target.ProcessTheQueue();
 
 			hubProxy.NotifyClientsMultipleInvokedWith.Single().Should().Have.SameValuesAs(new[] {newNotification});
@@ -191,7 +191,7 @@ namespace Teleopti.MessagingTest.SignalR
 
 			hubProxy.Stub(x => x.Invoke("NotifyClientsMultiple", null)).IgnoreArguments().Return(failedTask);
 
-			Assert.DoesNotThrow(() => target.SendNotificationAsync(new Notification()));
+			Assert.DoesNotThrow(() => target.SendNotification(new Notification()));
 			var loggingTask = target.ProcessTheQueue();
 			loggingTask.Wait(500);
 			log.AssertWasCalled(t => t.Debug("", null), a => a.IgnoreArguments());

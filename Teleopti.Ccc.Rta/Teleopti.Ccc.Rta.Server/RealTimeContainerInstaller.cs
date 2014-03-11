@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
 			builder.RegisterType<ActualAgentStateCache>().As<IActualAgentStateCache>().SingleInstance();
 			builder.RegisterType<AlarmMapper>().As<IAlarmMapper>();
-			builder.RegisterType<AsyncSignalSender>().As<IAsyncMessageSender>().WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"])).SingleInstance();
+			builder.RegisterType<AsyncSignalSender>().As<IMessageSender>().WithParameter(new NamedParameter("serverUrl", ConfigurationManager.AppSettings["MessageBroker"])).SingleInstance();
 			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
 			builder.RegisterType<DataSourceResolver>().As<IDataSourceResolver>();
 			builder.RegisterType<PersonResolver>().As<IPersonResolver>();
