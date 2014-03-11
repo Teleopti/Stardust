@@ -269,7 +269,7 @@ namespace Teleopti.MessagingTest.SignalR
 			private readonly IHubConnectionWrapper _hubConnection;
 
 			public signalSenderForTest(IHubConnectionWrapper hubConnection, ILog logger)
-				: base(null)
+				: base("http://neeedsToBeSet")
 			{
 				_hubConnection = hubConnection;
 				Logger = logger;
