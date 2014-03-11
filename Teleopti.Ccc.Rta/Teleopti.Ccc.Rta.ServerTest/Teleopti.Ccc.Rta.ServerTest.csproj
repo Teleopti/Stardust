@@ -154,6 +154,7 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssemblerTest.cs" />
     <Compile Include="ActualAgentStateCacheTest.cs" />
+    <Compile Include="Adherence\NotificationExtension.cs" />
     <Compile Include="Adherence\PersonOrganizationReaderTest.cs" />
     <Compile Include="Adherence\SiteIdForPersonTest.cs" />
     <Compile Include="Adherence\SiteAdherenceTest.cs" />

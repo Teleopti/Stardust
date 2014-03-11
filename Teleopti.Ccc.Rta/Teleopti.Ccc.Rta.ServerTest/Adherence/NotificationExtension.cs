@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Teleopti.Interfaces.MessageBroker;
 
-namespace Teleopti.Ccc.Rta.Server.Adherence
+namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 {
 	public static class NotificationExtension
 	{
