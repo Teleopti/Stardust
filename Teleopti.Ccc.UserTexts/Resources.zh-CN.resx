@@ -3660,7 +3660,7 @@ Periods</comment>
     <comment>People</comment>
   </data>
   <data name="PersonalAccountView" xml:space="preserve">
-    <value>人员账户浏览</value>
+    <value>个人账户视图</value>
     <comment>PersonalAccountView</comment>
   </data>
   <data name="PersonalizeYourAgentPortal" xml:space="preserve">
@@ -10559,5 +10559,9 @@ Teleopti R&amp;D</value>
   </data>
   <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
     <value>你不能通过添加活动来创建第二个班次</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>查看个人账户</value>
+    <comment>text in permission</comment>
   </data>
 </root>
