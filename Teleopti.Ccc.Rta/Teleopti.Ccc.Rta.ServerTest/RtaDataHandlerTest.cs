@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             	};
 			var agentState = new ActualAgentState{SendOverMessageBroker = true};
 
-			var asyncMessageSender = MockRepository.GenerateStub<IMessageSender>();
+			_asyncMessageSender.StartBrokerService();
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments().Throw(new SocketException());			
+			_asyncMessageSender.Expect(m => m.SendNotification(null)).IgnoreArguments().Throw(new SocketException());			
 
 			_mocks.ReplayAll();
 			assignTargetAndRun();
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				r => r.GetAgentState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, new DateTime(), "")).
 				IgnoreArguments().Return(agentState);
 			_stateCache.Expect(s => s.AddAgentStateToCache(agentState));
-			_asyncMessageSender.Expect(m => m.SendNotificationAsync(null)).IgnoreArguments().Throw(new BrokerNotInstantiatedException());
+			_asyncMessageSender.Expect(m => m.SendNotification(null)).IgnoreArguments().Throw(new BrokerNotInstantiatedException());
 			
 
 			_mocks.ReplayAll();
