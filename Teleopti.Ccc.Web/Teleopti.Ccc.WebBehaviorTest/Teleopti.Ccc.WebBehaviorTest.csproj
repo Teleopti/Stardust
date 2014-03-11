@@ -136,11 +136,6 @@
     <Compile Include="Core\CurrentTime.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduledAgentsForShiftTrade.cs" />
-    <Compile Include="SignInWithProviders.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SignInWithProviders.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -667,6 +662,11 @@
       <DependentUpon>Security.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="SignInWithProviders.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SignInWithProviders.feature</DependentUpon>
     </Compile>
     <Compile Include="SignOut.feature.cs">
       <AutoGen>True</AutoGen>
