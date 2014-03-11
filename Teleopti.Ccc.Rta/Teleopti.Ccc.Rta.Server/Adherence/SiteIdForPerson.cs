@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Rta;
 
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 	public class SiteIdForPerson : ISiteIdForPerson
 	{
 		private readonly IPersonOrganizationReader _personOrganizationReader;
+		private IEnumerable<PersonOrganizationData> _personData;
 
 		public SiteIdForPerson(IPersonOrganizationReader personOrganizationReader)
 		{
@@ -15,8 +17,14 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 
 		public Guid GetSiteId(Guid personId)
 		{
-			var personData = _personOrganizationReader.LoadAll();
-			return personData.Single(x => x.PersonId == personId).SiteId;
+			ensureDataIsLoaded();
+			return _personData.Single(x => x.PersonId == personId).SiteId;
+		}
+
+		private void ensureDataIsLoaded()
+		{
+			if (_personData != null) return;
+			_personData = _personOrganizationReader.LoadAll();
 		}
 	}
 }

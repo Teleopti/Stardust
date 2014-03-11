@@ -29,5 +29,26 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			personOrganizationReader.AssertWasCalled(x => x.LoadAll(), a => a.Repeat.Once());
 		}
+
+		[Test]
+		public void ShouldOnlyLoadOnceForSite()
+		{
+			var personOrganizationReader = MockRepository.GenerateMock<IPersonOrganizationReader>();
+			var target = new SiteIdForPerson(personOrganizationReader);
+
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+
+			personOrganizationReader.Stub(x => x.LoadAll()).Return(new[]
+				{
+					new PersonOrganizationData {PersonId = personId1},
+					new PersonOrganizationData {PersonId = personId2}
+				});
+
+			target.GetSiteId(personId1);
+			target.GetSiteId(personId2);
+
+			personOrganizationReader.AssertWasCalled(x => x.LoadAll(), a => a.Repeat.Once());
+		}
 	}
 }
