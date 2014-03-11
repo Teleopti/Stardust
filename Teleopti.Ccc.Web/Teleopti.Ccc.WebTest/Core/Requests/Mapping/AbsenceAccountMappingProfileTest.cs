@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			                                                             TimeSpan.Zero, accrued, TimeSpan.Zero, used);
 
 			accrued = TimeSpan.FromHours(96);
-			used = TimeSpan.FromMinutes(15 * 60 + 45); // 15:30
+			used = TimeSpan.FromMinutes(15 * 60 + 45); // 15:45
 			_absIllness = new Absence { Description = new Description("Illness") };
 			_accountTime = AbsenceAccountFactory.CreateAbsenceAccountHours(_person, _absIllness, startDate, periodLength,
 			                                                               TimeSpan.Zero,

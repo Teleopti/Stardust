@@ -124,10 +124,15 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     				//self.IsLoading(false);
     			}
     		});
-
-    		self.PreviousAbsenceId(self.AbsenceId());
-    		self.PreviousDateTo(self.DateTo());
     	}
+
+	    if ((absenceChanged)) {
+		    self.PreviousAbsenceId(self.AbsenceId());
+	    }
+	    
+	    if (dateToChanged) {
+		    self.PreviousDateTo(self.DateTo());
+	    }
     };
 
 	self.AbsenceId.subscribe(function () {
