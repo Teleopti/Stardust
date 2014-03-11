@@ -149,7 +149,6 @@
     <Compile Include="SignalR\ISignalConnectionHandler.cs" />
     <Compile Include="SignalR\NotificationFactory.cs" />
     <Compile Include="SignalR\SignalBroker.cs" />
-    <Compile Include="SignalR\AsyncSignalSender.cs" />
     <Compile Include="SignalR\SignalSender.cs" />
     <Compile Include="SignalR\SignalSubscriber.cs" />
     <Compile Include="SignalR\SignalConnectionHandler.cs" />
