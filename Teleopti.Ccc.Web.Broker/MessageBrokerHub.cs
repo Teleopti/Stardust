@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Web.Broker
 								   route, RouteToGroupName(route));
 			}
 			
+
 			Groups.Add(Context.ConnectionId, RouteToGroupName(route))
 				  .ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
 

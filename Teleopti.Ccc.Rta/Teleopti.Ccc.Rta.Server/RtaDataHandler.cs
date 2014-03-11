@@ -18,11 +18,11 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IEnumerable<IAfterSend> _afterSends;
 
 		private readonly IActualAgentAssembler _agentAssembler;
-		private readonly IAsyncMessageSender _asyncMessageSender;
+		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
 
-		public RtaDataHandler(IAsyncMessageSender asyncMessageSender,
+		public RtaDataHandler(IMessageSender asyncMessageSender,
 		                      IDataSourceResolver dataSourceResolver,
 		                      IPersonResolver personResolver,
 		                      IActualAgentAssembler agentAssembler,
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			var notification = NotificationFactory.CreateNotification(agentState);
 
-			_asyncMessageSender.SendNotificationAsync(notification);
+			_asyncMessageSender.SendNotification(notification);
 			if (_afterSends != null)
 			{
 				_afterSends.ToList().ForEach(s => s.Invoke(agentState));
