@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		public void ShouldOnlyLoadOnceForTeam()
 		{
 			var personOrganizationReader = MockRepository.GenerateMock<IPersonOrganizationReader>();
-			var target = new TeamIdForPerson(personOrganizationReader);
+			var target = new TeamIdForPerson(new PersonOrganizationProvider(personOrganizationReader));
 
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		public void ShouldOnlyLoadOnceForSite()
 		{
 			var personOrganizationReader = MockRepository.GenerateMock<IPersonOrganizationReader>();
-			var target = new SiteIdForPerson(personOrganizationReader);
+			var target = new SiteIdForPerson(new PersonOrganizationProvider(personOrganizationReader));
 
 			var personId1 = Guid.NewGuid();
 			var personId2 = Guid.NewGuid();
@@ -50,5 +50,29 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			personOrganizationReader.AssertWasCalled(x => x.LoadAll(), a => a.Repeat.Once());
 		}
+
+		[Test]
+		public void ShouldOnlyLoadOnceForSiteAndTeam()
+		{
+			var personOrganizationReader = MockRepository.GenerateMock<IPersonOrganizationReader>();
+			var provider = new PersonOrganizationProvider(personOrganizationReader);
+			var siteIdProvider = new SiteIdForPerson(provider);
+			var teamIdProvider = new TeamIdForPerson(provider);
+
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+
+			personOrganizationReader.Stub(x => x.LoadAll()).Return(new[]
+				{
+					new PersonOrganizationData {PersonId = personId1},
+					new PersonOrganizationData {PersonId = personId2}
+				});
+
+			siteIdProvider.GetSiteId(personId1);
+			teamIdProvider.GetTeamId(personId2);
+
+			personOrganizationReader.AssertWasCalled(x => x.LoadAll(), a => a.Repeat.Once());
+		}
 	}
+
 }
