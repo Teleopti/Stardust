@@ -9,7 +9,7 @@ using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 {
-	public class SiteAdherenceTes
+	public class SiteAdherenceTest
 	{
 		[Test]
 		public void ShouldMapOutOfAdherenceBasedOnPositiveStaffingEffect()

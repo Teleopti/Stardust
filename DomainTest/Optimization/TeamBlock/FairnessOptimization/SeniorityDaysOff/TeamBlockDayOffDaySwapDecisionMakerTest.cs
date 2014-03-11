@@ -124,6 +124,80 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 		}
 
 		[Test]
+		public void ShouldNotSwappOnBestLockedSeniorDays()
+		{
+			_seniorBitArray.Lock(1, true);
+			
+			using (_mocks.Record())
+			{
+				commonMocks();
+				bestLockMock();
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				Assert.IsNull(result);
+			}	
+		}
+
+		[Test]
+		public void ShouldNotSwappOnBestLockedJuniorDays()
+		{
+			_juniorBitArray.Lock(1, true);
+
+			using (_mocks.Record())
+			{
+				commonMocks();
+				bestLockMock();	
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				Assert.IsNull(result);
+			}
+		}
+
+		[Test]
+		public void ShouldNotSwappOnLockedSeniorDays()
+		{
+			_seniorBitArray.Lock(0, true);
+			
+			using (_mocks.Record())
+			{
+				commonMocks();
+				bestLockMock();
+				lockMock();
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				Assert.IsNull(result);
+			}	
+		}
+
+		[Test]
+		public void ShouldNotSwappOnLockedJuniorDays()
+		{
+			_juniorBitArray.Lock(0, true);
+
+			using (_mocks.Record())
+			{
+				commonMocks();
+				bestLockMock();
+				lockMock();
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.Decide(_dateOnly, _teamBlockInfoSenior, _teamBlockInfoJunior, _scheduleDictionary, _optimizationPreferences, _dayOffsToGiveAway);
+				Assert.IsNull(result);
+			}
+		}
+
+		[Test]
 		public void ShouldSwapDayOffsBettweenSeniorAndJunior()
 		{
 			var scheduleDaySeniorToGiveAway = _mocks.StrictMock<IScheduleDay>();
@@ -216,5 +290,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
 			Expect.Call(_matrixJunior.Person).Return(_personJunior);
 		}
 
+		private void bestLockMock()
+		{
+			Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+			Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.DayOff);
+			Expect.Call(_matrixSenior.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
+			Expect.Call(_matrixJunior.OuterWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro1, _scheduleDayPro2 })).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDayPro1.Day).Return(_dateBefore).Repeat.AtLeastOnce();
+			Expect.Call(_scheduleDayPro2.Day).Return(_dateOnly).Repeat.AtLeastOnce();
+			Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(true, true, _matrixSenior)).Return(_seniorBitArray);
+			Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(true, true, _matrixJunior)).Return(_juniorBitArray);	
+		}
+
+		private void lockMock()
+		{
+			var scheduleDaySeniorToGiveAway = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDayJuniorToAccept = _mocks.StrictMock<IScheduleDay>();
+
+			Expect.Call(_range1.ScheduledDay(_dateBefore)).Return(scheduleDaySeniorToGiveAway);
+			Expect.Call(_range2.ScheduledDay(_dateBefore)).Return(scheduleDayJuniorToAccept);
+			Expect.Call(scheduleDaySeniorToGiveAway.SignificantPart()).Return(SchedulePartView.DayOff);
+			Expect.Call(scheduleDayJuniorToAccept.SignificantPart()).Return(SchedulePartView.MainShift);
+		}
 	}
 }

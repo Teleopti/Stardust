@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void _backgroundWorkerResources_DoWork(object sender, DoWorkEventArgs e)
         {
-            _optimizerHelper.ResourceCalculateMarkedDays(e, _backgroundWorkerResources, true, true);
+            _optimizerHelper.ResourceCalculateMarkedDays(_backgroundWorkerResources, true, true);
         }
 
         private void CalculateResources()

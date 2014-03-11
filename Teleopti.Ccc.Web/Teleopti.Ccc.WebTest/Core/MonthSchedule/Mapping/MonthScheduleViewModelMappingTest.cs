@@ -255,5 +255,15 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 
 			result.Shift.WorkingHours.Should().Be(TimeHelper.GetLongHourMinuteTimeString(contractTime, CultureInfo.CurrentUICulture));
 		}
+
+		[Test]
+		public void ShouldMapShiftForEmptyDay()
+		{
+			PersonAssignment personAssignment = null;
+			var scheduleDay = new StubFactory().ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
+
+			var result = Mapper.Map<MonthScheduleDayDomainData, MonthDayViewModel>(new MonthScheduleDayDomainData { ScheduleDay = scheduleDay });
+			result.Shift.Should().Not.Be.Null();
+		}
 	}
 }

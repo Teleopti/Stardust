@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_personSkillProvider = personSkillProvider;
 		}
 
-		public void ResourceCalculateAllDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
+		public void ResourceCalculateAllDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
 		{
 			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
-				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,
+				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,
 				                      _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
 			}
 		}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				progressBar.PerformStep();
 		}
 
-		public void ResourceCalculateMarkedDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
+		public void ResourceCalculateMarkedDays(BackgroundWorker backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
 			if (!_stateHolder.DaysToRecalculate.Any()) return;
 			if (!_stateHolder.SchedulingResultState.Skills.Any()) return;
@@ -80,29 +80,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
 			using (new ResourceCalculationContext<IResourceCalculationDataContainerWithSingleOperation>(resources))
 			{
-				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
-				                      _stateHolder.DaysToRecalculate);
+				resourceCalculateDays(backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
+				                      _stateHolder.DaysToRecalculate.ToList());
 				_stateHolder.ClearDaysToRecalculate();
 			}
 		}
 
-		private void resourceCalculateDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment, bool considerShortBreaks, IEnumerable<DateOnly> dates)
+		private void resourceCalculateDays(BackgroundWorker backgroundWorker, bool useOccupancyAdjustment, bool considerShortBreaks, ICollection<DateOnly> datesList)
 		{
-			var numberOfDays = dates.Count();
-			if (numberOfDays == 0) return;
+			if (datesList.Count == 0)
+				return;
 
-			for (int index = 0; index < numberOfDays; index++)
+			foreach (var date in datesList)
 			{
-				DateOnly date = dates.ElementAt(index);
 				prepareAndCalculateDate(date, useOccupancyAdjustment, considerShortBreaks, null);
 				if (backgroundWorker != null)
 				{
+					backgroundWorker.ReportProgress(1);
 					if (backgroundWorker.CancellationPending)
 					{
-						e.Cancel = true;
 						return;
 					}
-					backgroundWorker.ReportProgress(1);
 				}
 			}
 		}

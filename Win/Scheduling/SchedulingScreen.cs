@@ -115,7 +115,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ShiftCategoryDistributionModel _shiftCategoryDistributionModel;
 		private ScheduleViewBase _scheduleView;
 		private RequestView _requestView;
-		private ResourceOptimizationHelperWin _optimizationHelperWin;
 		private ScheduleOptimizerHelper _scheduleOptimizerHelper;
 		private readonly IVirtualSkillHelper _virtualSkillHelper;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
@@ -1091,7 +1090,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					Cursor = Cursors.WaitCursor;
 					disableAllExceptCancelInRibbon();
 					_backgroundWorkerRunning = true;
-					_backgroundWorkerOptimization.RunWorkerAsync(new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+					_backgroundWorkerOptimization.RunWorkerAsync(new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 							 {
 								 OptimizationMethod = OptimizationMethod.BackToLegalState,
 								 DaysOffPreferences = daysOffPreferences
@@ -1118,7 +1117,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
-						var optimizationPreferences = new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+						var optimizationPreferences = new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 							{
 								OptimizationMethod = OptimizationMethod.ReOptimize
 							};
@@ -2072,7 +2071,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool isPermittedToViewMeeting()
 		{
 			const string functionPath = DefinedRaptorApplicationFunctionPaths.ModifyMeetings;
-			return CheckPermission(functionPath);
+			return checkPermission(functionPath);
 		}
 		private bool isPermittedToEditMeeting()
 		{
@@ -2084,10 +2083,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private bool isPermittedToWriteProtect()
 		{
 			const string functionPath = DefinedRaptorApplicationFunctionPaths.SetWriteProtection;
-			return CheckPermission(functionPath);
+			return checkPermission(functionPath);
 		}
 
-		private bool CheckPermission(string functionPath)
+		private bool checkPermission(string functionPath)
 		{
 			var schedulePart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 			if (schedulePart != null)
@@ -2147,54 +2146,46 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#region Virtual skill handling
 
-		private void SkillGridMenuItemPeriodClick(object sender, EventArgs e)
+		private void updateSkillGridMenuItem()
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Period, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
+			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, _skillResultViewSetting,
+														  toolStripButtonChartPeriodView, toolStripButtonChartMonthView,
+														  toolStripButtonChartWeekView, toolStripButtonChartDayView,
+														  toolStripButtonChartIntradayView);
 			menuUpdater.Update();
+			_currentSelectedGridRow = null;
+			drawSkillGrid();
+			reloadChart();
+		}
+
+		private void skillGridMenuItemPeriodClick(object sender, EventArgs e)
+		{
 			_skillResultViewSetting = SkillResultViewSetting.Period;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void SkillGridMenuItemMonthClick(object sender, EventArgs e)
+		private void skillGridMenuItemMonthClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Month, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Month;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void SkillGridMenuItemWeekClick(object sender, EventArgs e)
+		private void skillGridMenuItemWeekClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Week, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Week;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void skillGridMenuItemDay_Click(object sender, EventArgs e)
+		private void skillGridMenuItemDayClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Day, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Day;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
-		private void skillGridMenuItemIntraDay_Click(object sender, EventArgs e)
+		private void skillGridMenuItemIntraDayClick(object sender, EventArgs e)
 		{
-			var menuUpdater = new SkillGridMenuItemUpdate(_contextMenuSkillGrid, SkillResultViewSetting.Intraday, toolStripButtonChartPeriodView, toolStripButtonChartMonthView, toolStripButtonChartWeekView, toolStripButtonChartDayView, toolStripButtonChartIntradayView);
-			menuUpdater.Update();
 			_skillResultViewSetting = SkillResultViewSetting.Intraday;
-			_currentSelectedGridRow = null;
-			drawSkillGrid();
-			reloadChart();
+			updateSkillGridMenuItem();
 		}
 
 		private void skillGridMenuItem_Click(object sender, EventArgs e)
@@ -2453,7 +2444,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
 		{
 			setThreadCulture();
-			_optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, SchedulerState.ConsiderShortBreaks, true);
+			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+			optimizationHelperWin.ResourceCalculateMarkedDays(_backgroundWorkerResourceCalculator, SchedulerState.ConsiderShortBreaks, true);
 		}
 
 		private void validateAllPersons()
@@ -3364,17 +3356,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		#endregion
 
-		#region Docking
-
-
-
-		private void dockVisibilityChanged(object sender, DockVisibilityChangedEventArgs arg)
-		{
-			arg.Control.Dispose();
-			Controls.Remove(arg.Control);
-		}
-
-		#endregion
 
 		#region Delete
 
@@ -3465,7 +3446,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						if (options.ShowDialog(this) == DialogResult.OK)
 						{
 							options.Refresh();
-							startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+							startBackgroundScheduleWork(_backgroundWorkerScheduling, new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 						}
 					}
 				}
@@ -3498,7 +3479,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						_optimizerOriginalPreferences.SchedulingOptions.OnlyShiftsWhenUnderstaffed = true;
 						Refresh();
-						startBackgroundScheduleWork(_backgroundWorkerScheduling, new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
+						startBackgroundScheduleWork(_backgroundWorkerScheduling, new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules()), true);
 					}
 				}
 			}
@@ -3508,7 +3489,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_backgroundWorkerRunning) return;
 
-			var scheduleDays = ((SchedulingAndOptimizeArgument)argument).ScheduleDays;
+			var scheduleDays = ((schedulingAndOptimizeArgument)argument).SelectedScheduleDays;
 			int selectedScheduleCount = scheduleDays.Count;
 
 			var startDay = scheduleDays.FirstOrDefault();
@@ -3582,144 +3563,42 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private class SchedulingAndOptimizeArgument
+		private class schedulingAndOptimizeArgument
 		{
-			public IList<IScheduleDay> ScheduleDays { get; private set; }
+			public IList<IScheduleDay> SelectedScheduleDays { get; private set; }
 			public OptimizationMethod OptimizationMethod { get; set; }
 			public IDaysOffPreferences DaysOffPreferences { get; set; }
 			public IOvertimePreferences OvertimePreferences { get; set; }
 
-			public SchedulingAndOptimizeArgument(IList<IScheduleDay> scheduleDays)
+			public schedulingAndOptimizeArgument(IList<IScheduleDay> selectedScheduleDays)
 			{
-				ScheduleDays = scheduleDays;
+				SelectedScheduleDays = selectedScheduleDays;
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void _backgroundWorkerScheduling_DoWork(object sender, DoWorkEventArgs e)
 		{
-			var argument = (SchedulingAndOptimizeArgument)e.Argument;
-			var scheduleDays = argument.ScheduleDays;
+			_totalScheduled = 0;
+			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
+			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var scheduleDays = argument.SelectedScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
-			var dateOnlyList = selectedPeriod.DayCollection();
-			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
-			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroundWorkerScheduling(e));
+			turnOffCalculateMinMaxCacheIfNeeded(_optimizerOriginalPreferences.SchedulingOptions);
+			AdvanceLoggingService.LogSchedulingInfo(_optimizerOriginalPreferences.SchedulingOptions,
+			                                        scheduleDays.Select(x => x.Person).Distinct().Count(),
+			                                        selectedPeriod.DayCollection().Count(),
+			                                        () => runBackgroundWorkerScheduling(e));
+			_undoRedo.CommitBatch();
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
 		{
-			setThreadCulture();
-			var schedulingOptions = _optimizerOriginalPreferences.SchedulingOptions;
-			schedulingOptions.DayOffTemplate = _schedulerState.CommonStateHolder.DefaultDayOffTemplate;
-			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
-			if (lastCalculationState)
-				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
-
-			_totalScheduled = 0;
-			var argument = (SchedulingAndOptimizeArgument)e.Argument;
-
-			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
-
-			//set to false for first scheduling and then use it for RemoveShiftCategoryBackToLegalState
-			var useShiftCategoryLimitations = schedulingOptions.UseShiftCategoryLimitations;
-			schedulingOptions.UseShiftCategoryLimitations = false;
-			var scheduleDays = argument.ScheduleDays;
-
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
-			var selectedPersons = scheduleDays.Select(x => x.Person).Distinct().ToList();
-
-			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
-			if (matrixesOfSelectedScheduleDays.Count == 0)
-				return;
-
-			var allScheduleDays = new List<IScheduleDay>();
-
-			foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
-			{
-				allScheduleDays.AddRange(_schedulerState.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
-			}
-
-			var allMatrixesOfSelectedPersons = _container.Resolve<IMatrixListFactory>().CreateMatrixList(allScheduleDays, selectedPeriod);
-
-			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
-
-			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-
-			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
-					 .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
-
-			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
-			{
-				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-
-				if (schedulingOptions.UseTeamBlockPerOption || schedulingOptions.UseGroupScheduling)
-                {
-					var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true,
-																		schedulingOptions.ConsiderShortBreaks);
-
-	                ISchedulePartModifyAndRollbackService rollbackService =
-		                new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
-		                                                         _container.Resolve<IScheduleDayChangeCallback>(),
-		                                                         new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-
-					var teamBlockScheduleCommand = _container.Resolve<ITeamBlockScheduleCommand>();
-					teamBlockScheduleCommand.Execute(schedulingOptions, _backgroundWorkerScheduling, selectedPersons, scheduleDays,
-	                                                 rollbackService, resourceCalculateDelayer);
-
-
-                }
-                else
-				{
-					var daysOnlyHelper = new DaysOnlyHelper(schedulingOptions);
-
-					if (daysOnlyHelper.DaysOnly)
-					{
-						if (schedulingOptions.PreferencesDaysOnly || schedulingOptions.UsePreferencesMustHaveOnly)
-							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.PreferenceOnlyOptions);
-
-						if (schedulingOptions.RotationDaysOnly)
-							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.RotationOnlyOptions);
-
-						if (schedulingOptions.AvailabilityDaysOnly)
-							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.AvailabilityOnlyOptions);
-
-						if (daysOnlyHelper.UsePreferencesWithNoDaysOnly || daysOnlyHelper.UseRotationsWithNoDaysOnly || daysOnlyHelper.UseAvailabilityWithNoDaysOnly || schedulingOptions.UseStudentAvailability)
-							_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, daysOnlyHelper.NoOnlyOptions);
-
-					}
-					else
-						_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, schedulingOptions);
-				}
-						
-			}
-			else
-			{
-				_scheduleOptimizerHelper.ScheduleSelectedStudents(scheduleDays, _backgroundWorkerScheduling, schedulingOptions);
-			}
-
-			//shiftcategorylimitations
-			if (!_backgroundWorkerScheduling.CancellationPending)
-			{
-				schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
-				if (schedulingOptions.UseShiftCategoryLimitations)
-				{
-					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
-
-					if (schedulingOptions.UseGroupScheduling)
-					{
-						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-					}
-
-					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, _backgroundWorkerScheduling,
-																				 _optimizationPreferences,
-																				 schedulingOptions,
-																				 selectedPeriod, allMatrixes);
-				}
-			}
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
-			_undoRedo.CommitBatch();
+			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var scheduleCommand = _container.Resolve<ScheduleCommand>();
+			scheduleCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerScheduling, _schedulerState,
+			                        argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
+			                        _optimizationPreferences);
 		}
 
 		private void turnOffCalculateMinMaxCacheIfNeeded(ISchedulingOptions schedulingOptions)
@@ -3901,14 +3780,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
 			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
 			if (lastCalculationState)
-				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
+			{
+				var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+				optimizationHelperWin.ResourceCalculateAllDays(null, true);
+			}
 
 			_totalScheduled = 0;
-			var argument = (SchedulingAndOptimizeArgument)e.Argument;
+			var argument = (schedulingAndOptimizeArgument)e.Argument;
 
 			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 
-			var scheduleDays = argument.ScheduleDays;
+			var scheduleDays = argument.SelectedScheduleDays;
 
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 
@@ -3968,103 +3850,28 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void _backgroundWorkerOptimization_DoWork(object sender, DoWorkEventArgs e)
 		{
-			var argument = (SchedulingAndOptimizeArgument)e.Argument;
-			var scheduleDays = argument.ScheduleDays;
+			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
+			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var scheduleDays = argument.SelectedScheduleDays;
 			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
 			var dateOnlyList = selectedPeriod.DayCollection();
 			_schedulerState.SchedulingResultState.SkillDaysOnDateOnly(dateOnlyList);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(), dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
-
+			var schedulingOptions = _container.Resolve<ISchedulingOptionsCreator>().CreateSchedulingOptions(optimizerPreferences);
+			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
+			AdvanceLoggingService.LogOptimizationInfo(optimizerPreferences, scheduleDays.Select(x => x.Person).Distinct().Count(),
+			                                          dateOnlyList.Count(), () => runBackgroupWorkerOptimization(e));
+			_undoRedo.CommitBatch();
 		}
 
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
-			setThreadCulture();
-			var options = (SchedulingAndOptimizeArgument)e.Argument;
-			_undoRedo.CreateBatch(Resources.UndoRedoReOptimize);
-
-			bool lastCalculationState = _schedulerState.SchedulingResultState.SkipResourceCalculation;
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = false;
-			if (lastCalculationState)
-				_optimizationHelperWin.ResourceCalculateAllDays(e, null, true);
-			var selectedSchedules = options.ScheduleDays;
-			var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
-			var scheduleMatrixOriginalStateContainers = _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules, selectedPeriod);
-			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
-			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-
-			IGroupPageLight selectedGroupPage;
-			// ***** temporary cope
-			if (options.OptimizationMethod == OptimizationMethod.BackToLegalState)
-			{
-				selectedGroupPage = _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
-			}
-			else
-			{
-				selectedGroupPage = _optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
-			}
-
-			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), selectedGroupPage);
-
-
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
-			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
-			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
-			switch (options.OptimizationMethod)
-			{
-
-				case OptimizationMethod.BackToLegalState:
-					IList<IDayOffTemplate> displayList = _schedulerState.CommonStateHolder.ActiveDayOffs.ToList();
-					_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers,
-																													 _backgroundWorkerOptimization, displayList[0], false,
-																													 _optimizerOriginalPreferences.SchedulingOptions,
-																													 options.DaysOffPreferences);
-					_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
-					IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedSchedules, selectedPeriod);
-
-
-					if (optimizerPreferences.Extra.UseTeams)
-					{
-						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-					}
-
-					_scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization,
-																											 _optimizerOriginalPreferences.SchedulingOptions, selectedPeriod,
-																											 allMatrixes);
-					break;
-				case OptimizationMethod.ReOptimize:
-
-					if (optimizerPreferences.Extra.UseTeamBlockOption || optimizerPreferences.Extra.UseTeams)
-					{
-						var selectedPersons = new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1,
-						                                                            true,
-						                                                            schedulingOptions.ConsiderShortBreaks);
-
-						var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
-
-						var rollbackService = new SchedulePartModifyAndRollbackService(_schedulerState.SchedulingResultState,
-							                                                           _container.Resolve<IScheduleDayChangeCallback>(),
-																					   tagSetter);
-
-						_container.Resolve<ITeamBlockOptimizationCommand>()
-						          .Execute(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, optimizerPreferences,
-						                   rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer);
-
-						break;
-					}
-
-					// we need it here for fairness opt. for example
-					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-					_scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions);
-
-					break;
-			}
-
-			_undoRedo.CommitBatch();
-			_schedulerState.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
+			
+			var argument = (schedulingAndOptimizeArgument)e.Argument;
+			var optimizationCommand = _container.Resolve<OptimizationCommand>();
+			optimizationCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerOptimization, _schedulerState,
+									argument.SelectedScheduleDays, _groupPagePerDateHolder, _scheduleOptimizerHelper,
+									_optimizationPreferences, argument.OptimizationMethod == OptimizationMethod.BackToLegalState, argument.DaysOffPreferences);
 		}
 
 		private void checkCutMode()
@@ -4186,12 +3993,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 				initMessageBroker(period.LoadedPeriod());
 			}
 
-			_optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, new PersonSkillProvider());
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 		
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
-			_optimizationHelperWin.ResourceCalculateAllDays(e, backgroundWorkerLoadData, true);
+
+			var optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _container.Resolve<IPersonSkillProvider>());
+			optimizationHelperWin.ResourceCalculateAllDays(backgroundWorkerLoadData, true);
 
 			if (e.Cancel)
 				return;
@@ -4721,23 +4529,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void setupContextMenuSkillGrid()
 		{
 			var skillGridMenuItem = new ToolStripMenuItem(Resources.Period) { Name = "Period", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Period) };
-			skillGridMenuItem.Click += SkillGridMenuItemPeriodClick;
+			skillGridMenuItem.Click += skillGridMenuItemPeriodClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Month) { Name = "Month", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Month) };
-			skillGridMenuItem.Click += SkillGridMenuItemMonthClick;
+			skillGridMenuItem.Click += skillGridMenuItemMonthClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Week) { Name = "Week", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Week) };
-			skillGridMenuItem.Click += SkillGridMenuItemWeekClick;
+			skillGridMenuItem.Click += skillGridMenuItemWeekClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Day) { Name = "Day", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Day) };
-			skillGridMenuItem.Click += skillGridMenuItemDay_Click;
+			skillGridMenuItem.Click += skillGridMenuItemDayClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.Intraday) { Name = "Intraday", Checked = _skillResultViewSetting.Equals(SkillResultViewSetting.Intraday) };
-			skillGridMenuItem.Click += skillGridMenuItemIntraDay_Click;
+			skillGridMenuItem.Click += skillGridMenuItemIntraDayClick;
 			_contextMenuSkillGrid.Items.Add(skillGridMenuItem);
 
 			skillGridMenuItem = new ToolStripMenuItem(Resources.UseShrinkage);
@@ -5160,7 +4968,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var scheduleRepository = new ScheduleRepository(uowFactory);
 			using (var exportForm = new ExportToScenarioResultView(uowFactory, scheduleRepository, new MoveDataBetweenSchedules(allNewRules, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState)),
 															_schedulerMessageBrokerHandler,
-															ScheduleViewBase.AllSelectedPersons(selectedSchedules),
+															_scheduleView.AllSelectedPersons(selectedSchedules),
 															selectedSchedules,
 															scenario,
 															_container.Resolve<IScheduleDictionaryPersister>()))
@@ -5214,7 +5022,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				toolStripDropDownButtonSwap.Enabled = true;
 				ToolStripMenuItemSwapRaw.Enabled = true;
 			}
-			if (selectedSchedules.Count <= 1 || ScheduleViewBase.AllSelectedPersons(selectedSchedules).Count() != 2)
+			if (selectedSchedules.Count <= 1 || _scheduleView.AllSelectedPersons(selectedSchedules).Count() != 2)
 				return;
 
 			toolStripDropDownButtonSwap.Enabled = true;
@@ -5643,7 +5451,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_schedulerMessageBrokerHandler = null; // referens till SchedulingScreen
 			}
 			_requestPresenter = null; // referens till SchedulingScreen
-			_optimizationHelperWin = null;
 
 			if (backgroundWorkerLoadData != null)
 			{
@@ -7075,11 +6882,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 							options.Refresh();
 
 							startBackgroundScheduleWork(_backgroundWorkerOvertimeScheduling,
-																					new SchedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
+																					new schedulingAndOptimizeArgument(_scheduleView.SelectedSchedules())
 																						{
 																							OvertimePreferences = overtimePreferences
 																						}, true);
-
 						}
 					}
 				}

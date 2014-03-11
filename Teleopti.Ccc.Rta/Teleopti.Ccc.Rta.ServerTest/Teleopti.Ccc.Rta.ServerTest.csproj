@@ -154,9 +154,11 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssemblerTest.cs" />
     <Compile Include="ActualAgentStateCacheTest.cs" />
-    <Compile Include="Adherence\SiteAdherenceTes.cs" />
+    <Compile Include="Adherence\SiteIdForPersonTest.cs" />
+    <Compile Include="Adherence\SiteAdherenceTest.cs" />
     <Compile Include="Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Adherence\SendMessageTest.cs" />
+    <Compile Include="Adherence\TeamIdForPersonTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseReaderTest.cs" />
@@ -171,6 +173,10 @@
     <Compile Include="ScheduleLayerTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>

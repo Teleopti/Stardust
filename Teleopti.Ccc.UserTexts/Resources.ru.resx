@@ -1811,7 +1811,7 @@ Periods</comment>
     <comment>Show personal shifts menu item</comment>
   </data>
   <data name="ShowPrevious" xml:space="preserve">
-    <value>Отобразить предыдущие</value>
+    <value>Отобразить предыдущий</value>
     <comment>Show previous menu item</comment>
   </data>
   <data name="ShowPreviousShift" xml:space="preserve">
@@ -2985,7 +2985,7 @@ Periods</comment>
     <comment>Add new week to schedule</comment>
   </data>
   <data name="AddPartTimePercentage" xml:space="preserve">
-    <value>Добавить определение процента частичной занятости</value>
+    <value>Добавить определение процента неполной занятости</value>
     <comment>New Part-time percentage</comment>
   </data>
   <data name="AddGroupingAbsence" xml:space="preserve">
@@ -3009,7 +3009,7 @@ Periods</comment>
     <comment>EnterSettingsForThisScorecard</comment>
   </data>
   <data name="EnterTargetValuesForEachTeam" xml:space="preserve">
-    <value>Ввести целевые значения для каждой команды</value>
+    <value>Ввести целевые значения для каждой группы</value>
     <comment>EnterTargetValuesForEachTeam</comment>
   </data>
   <data name="FilterKPIs" xml:space="preserve">
@@ -3395,7 +3395,7 @@ Periods</comment>
     <comment>The week contains to much work time ({0}) the max is {1}.</comment>
   </data>
   <data name="BusinessRuleNightlyRestRuleErrorMessage" xml:space="preserve">
-    <value>Ежедневный отдых должен быть как минимум {0} часов между 2 сменами. Между {1} и {2} только {3} часа(-ов).</value>
+    <value>Ежедневный отдых должен быть как минимум {0} часа (-ов) между 2 сменами. Между {1} и {2} только {3} часа(-ов).</value>
     <comment>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
@@ -3477,7 +3477,7 @@ Periods</comment>
     <comment>Agents inc</comment>
   </data>
   <data name="AgentsIncWithShrinkage" xml:space="preserve">
-    <value>Операторы, вкл. сокращение</value>
+    <value>Операторы, вкл., с сокращением</value>
     <comment>Agents inc with shrinkage</comment>
   </data>
   <data name="Emails" xml:space="preserve">
@@ -3497,7 +3497,7 @@ Periods</comment>
     <comment>Hours inc</comment>
   </data>
   <data name="HoursIncShrinkage" xml:space="preserve">
-    <value>Часы, вкл. сокращение</value>
+    <value>Часы, вкл., с сокращением</value>
     <comment>Hours inc shrinkage</comment>
   </data>
   <data name="TotalAEW" xml:space="preserve">
@@ -3761,7 +3761,7 @@ Periods</comment>
     <comment>Grid header</comment>
   </data>
   <data name="OpenForecaster" xml:space="preserve">
-    <value>Средство прогнозирования</value>
+    <value>Инструмент прогнозирования</value>
     <comment>Function name for Forecaster</comment>
   </data>
   <data name="OpenReports" xml:space="preserve">
@@ -4382,7 +4382,7 @@ Periods</comment>
     <comment>Set Schedule Publishing Dates</comment>
   </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
-    <value>Управление многоузловыми распределениями</value>
+    <value>Управление мультисайтовыми распределениями</value>
     <comment>Toolstrip menu item in Forecaster</comment>
   </data>
   <data name="ListOfValues" xml:space="preserve">
@@ -5199,7 +5199,7 @@ Periods</comment>
     <comment>Invalid multisite distribution</comment>
   </data>
   <data name="ExternalLogOnView" xml:space="preserve">
-    <value>Внешний вид входа в систему</value>
+    <value>Вид внешнего входа в систему</value>
     <comment>ExternalLogOnView</comment>
   </data>
   <data name="GeneralView" xml:space="preserve">
@@ -5263,7 +5263,7 @@ Periods</comment>
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
-    <value>Изменить запросы</value>
+    <value>Текстовые запросы</value>
     <comment>Function CreateTextRequest</comment>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
@@ -5573,7 +5573,7 @@ Periods</comment>
     <comment>Preferred date or dates not selected before set the preference by clicking Gallery item.</comment>
   </data>
   <data name="ErrorMessagePreferredDatesNotValid" xml:space="preserve">
-    <value>Недопустимая дата (даты) предпочтения. График уже определен для выбранной даты (дат).</value>
+    <value>Недопустимая дата (-ы) предпочтения. График уже определен для выбранной даты (дат).</value>
     <comment>Error message to show when user try to set preferences for date(s) with schedule or requests.</comment>
   </data>
   <data name="AllDayEvent" xml:space="preserve">
@@ -5673,7 +5673,7 @@ Periods</comment>
     <comment>Canceling load and closing application...</comment>
   </data>
   <data name="IsPaidTime" xml:space="preserve">
-    <value>Оплаченное время</value>
+    <value>Оплачиваемое время</value>
     <comment>Options gui</comment>
   </data>
   <data name="IsWorkTime" xml:space="preserve">
@@ -5750,12 +5750,12 @@ Periods</comment>
   </data>
   <data name="ApplyLicenseInstructions" xml:space="preserve">
     <value>Инструкции:
-* Приобрести лицензию (контактные данные см. на www.teleopti.com)
-* Получить файл лицензии (например, по эл. почте)
-* Сохранить лицензию на диске
+* Приобретите лицензию (контактные данные см. на www.teleopti.com)
+* Получите файл лицензии (например, по эл. почте)
+* Сохраните лицензию на диске
 * Если в приложении работа ожидает сохранения, то сохраните ее перед применением лицензии
 * Найдите файл лицензии с помощью кнопки обзора внизу 
-* Применить лицензию
+* Примените лицензию
 * Приложение закроется
 * Перезапустите MyTime, чтобы получить новые лицензированные опции
 * Снова запустите приложение</value>
@@ -5862,7 +5862,7 @@ Periods</comment>
     <comment>Title</comment>
   </data>
   <data name="PaidTime" xml:space="preserve">
-    <value>Оплаченное время</value>
+    <value>Оплачиваемое время</value>
     <comment>Paid Time</comment>
   </data>
   <data name="WorkTime" xml:space="preserve">
@@ -5883,7 +5883,7 @@ Periods</comment>
 Лицензия распространяется на максимум {2} активных оператора.
 
 Схема лицензии – "{3}".
-Активированы опции:
+Активированнные опции:
 {4}</value>
     <comment>license text shown in about box</comment>
   </data>
@@ -6723,7 +6723,7 @@ Periods</comment>
     <comment>Skill grid scheduler</comment>
   </data>
   <data name="IntervalStdev" xml:space="preserve">
-    <value>Интервал stdev</value>
+    <value>Интервальное stdev</value>
     <comment>Skill grid scheduler</comment>
   </data>
   <data name="TeleoptiLicenseException" xml:space="preserve">
@@ -6970,7 +6970,7 @@ Periods</comment>
     <value>Добавить дни</value>
   </data>
   <data name="AuthorizingFunctionsThreeDots" xml:space="preserve">
-    <value>Функции авторизации</value>
+    <value>Функции авторизации...</value>
   </data>
   <data name="AvailabilityWeekday" xml:space="preserve">
     <value>Доступные
@@ -7034,7 +7034,7 @@ Periods</comment>
     <value>Запрос на изменение смены {0} - {1} отклонен.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
-    <value>Запрос на изменение смен {0} - {1} должен был  утвержден снова, ввиду изменения расписания.</value>
+    <value>Запрос на изменение смен {0} - {1} должен быть утвержден снова, ввиду изменения расписания.</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
     <value>Тесктовый запрос был подтвержден.</value>
@@ -7118,7 +7118,7 @@ Periods</comment>
     <value>Между выходными днями</value>
   </data>
   <data name="BlockScheduling" xml:space="preserve">
-    <value>Блочное планирование</value>
+    <value>Планирование блоками</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledReadyTime" xml:space="preserve">
     <value>Время готовности VS Запланированное время готовности по графику</value>
@@ -7136,10 +7136,10 @@ Periods</comment>
     <value>Выбрать даты</value>
   </data>
   <data name="DeleteDateParenthesisS" xml:space="preserve">
-    <value>Удалить дату(ы)</value>
+    <value>Удалить дату (-ы)</value>
   </data>
   <data name="MeetingErrorMessageWithOneParameter" xml:space="preserve">
-    <value>Пожалуйста удалите {0} из мероприятия, т.к. у вас нет достаточных полномочий для управления рабочим временем этого сотрудника.</value>
+    <value>Пожалуйста, удалите {0} из мероприятия, т.к. у вас нет достаточных полномочий для управления рабочим временем этого сотрудника.</value>
   </data>
   <data name="DateToColon" xml:space="preserve">
     <value>Дата окончания:</value>
@@ -7310,7 +7310,7 @@ Periods</comment>
     <value>Права:</value>
   </data>
   <data name="ProductNameColon" xml:space="preserve">
-    <value>Имя продукта:</value>
+    <value>Название продукта:</value>
   </data>
   <data name="ProductVersionColon" xml:space="preserve">
     <value>Версия продукта:</value>
@@ -7579,7 +7579,7 @@ Periods</comment>
     <value>Длина сегмента по умолчанию</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Время работы vs.Время по расписанию</value>
+    <value>Время работы VS Время по расписанию</value>
   </data>
   <data name="Send" xml:space="preserve">
     <value>Отправить</value>
@@ -7627,13 +7627,13 @@ Periods</comment>
     <value>"Обязательные" пожелания</value>
   </data>
   <data name="UnhandledExceptionMessage" xml:space="preserve">
-    <value>В Teleopti CCC обнаружена ошибка. Приложение будет закрыто. Приносим извинения за доставленные неудобства. Информация с которой вы работали могла быть потеряна.
+    <value>В Teleopti CCC обнаружена ошибка. Приложение будет закрыто. Приносим извинения за доставленные неудобства. Информация, с которой вы работали, могла быть потеряна.
 
-Для решения этой проблемы, ваша информация об ошибке будет крайне ценна для нас. Сообщить нам об ошибке Вы можете, нажав на кнопку "Отправить сообщение по электронной почте", расположенную ниже. Это позволит открыть по умолчанию программу электронной почты. Просьба также в письмо включать следующее:
+Для решения этой проблемы, информация об ошибке будет крайне ценна для нас. Сообщить нам об ошибке Вы можете, нажав на кнопку "Отправить сообщение по электронной почте", расположенную ниже. Это позволит открыть по умолчанию программу электронной почты. Просьба также в письмо включать следующее:
 
 1. Максимально подробное описание Ваших шагов перед возникновением ошибки
 2. С какими данными в системе вы работали непосредственно перед возникновением ошибки
-3. Скриншот с ошибкой Teleopti ССС в фоновом режиме
+3. Скриншот с ошибкой Teleopti ССС
 
 Вы можете также скопировать текст сообщения об ошибке в буфер обмена и вставить его в сообщение электронной почты.
 
@@ -7674,7 +7674,7 @@ Teleopti R&amp;D</value>
 Teleopti R&amp;D</value>
   </data>
   <data name="AFileContainingTheErrorMessageCouldNotBeCreated" xml:space="preserve">
-    <value>Файл, содержащий сообщение об ошибке не может быть создан. Скопируйте в буфер обмена и вставьте в сообщение электронной почты.</value>
+    <value>Файл, содержащий сообщение об ошибке, не может быть создан. Скопируйте в буфер обмена и вставьте в сообщение электронной почты.</value>
   </data>
   <data name="ResetLayout" xml:space="preserve">
     <value>Сброс макета</value>
@@ -7722,7 +7722,7 @@ Teleopti R&amp;D</value>
     <value>Интеграция с зарплатной системой</value>
   </data>
   <data name="DeleteDefinitionSet" xml:space="preserve">
-    <value>Удалить определение</value>
+    <value>Удалить набор определений</value>
   </data>
   <data name="CampaignEmailsHandlingtimePercent" xml:space="preserve">
     <value>Эл. сообщения кампании (акции), время обработки %</value>
@@ -7869,7 +7869,7 @@ Teleopti R&amp;D</value>
     <value>Привязать к интервалу:</value>
   </data>
   <data name="TheFileCouldNotBeOpenedPleaseCheckIfPdfFilesAreAssociatedWithAProgram" xml:space="preserve">
-    <value>Файл не может быть открыт. Пожалуйста, проверьте, что PDF файлы ассоциирован с программой.</value>
+    <value>Файл не может быть открыт. Пожалуйста, проверьте, что PDF файлы ассоциированыс программой.</value>
   </data>
   <data name="TeleoptiCCCColonModuleColonFromToDateScenarioColon" xml:space="preserve">
     <value>TELEOPTI CCC: {0} {1} - {2} Сценарий: {3} </value>
@@ -7935,7 +7935,7 @@ Teleopti R&amp;D</value>
     <value>Импорт статистики очереди из файла</value>
   </data>
   <data name="Conversation" xml:space="preserve">
-    <value>Переговоры</value>
+    <value>Диалог</value>
   </data>
   <data name="FilterOnWorkTimeLimitationsWithParams" xml:space="preserve">
     <value>Фильтр по ограничению рабочего времени (смены с рабочим временем между {0} и {1})</value>
@@ -7947,7 +7947,7 @@ Teleopti R&amp;D</value>
     <value>Показать панель быстрого доступа ниже ленты</value>
   </data>
   <data name="ExportNoOfAgentInfo" xml:space="preserve">
-    <value>Выбранная область для {0} агента(ов)</value>
+    <value>Выбранная область для {0} агента (-ов)</value>
   </data>
   <data name="UndoRedoPaste" xml:space="preserve">
     <value>Назад</value>
@@ -8486,13 +8486,13 @@ Teleopti R&amp;D</value>
     <value>Несостоявшиеся</value>
   </data>
   <data name="AbandonedAfterServiceLevel" xml:space="preserve">
-    <value>Несостоявшиеся, с уровнем сервиса ниже требуемого</value>
+    <value>Несостоявшиеся, с SL ниже цели</value>
   </data>
   <data name="AbandonedShort" xml:space="preserve">
     <value>Несостоявшиеся кратковременные</value>
   </data>
   <data name="AbandonedWithinServiceLevel" xml:space="preserve">
-    <value>Несостоявшиеся с соблюдением уровня сервиса</value>
+    <value>Несостоявшиеся с целевым SL</value>
   </data>
   <data name="Offered" xml:space="preserve">
     <value>Поступившие</value>
@@ -8591,7 +8591,7 @@ Teleopti R&amp;D</value>
     <value>Сдвинуть время начала на один интервал позднее</value>
   </data>
   <data name="CannotAddPreferenceSelectedItemNotAvailableParameter0" xml:space="preserve">
-    <value>Предпочтение не может быть установлено, т.к. '{0}' более недоступно.</value>
+    <value>Предпочтение не может быть добавлено, т.к. '{0}' более недоступно.</value>
   </data>
   <data name="CanNotOvertimeWithoutMultiplicatorDefinitionSets" xml:space="preserve">
     <value>Невозможно добавить сверхурочное время без наборов определений множителя</value>
@@ -8646,7 +8646,7 @@ Teleopti R&amp;D</value>
     <value>Настройки контрольного журнала ведения расписания</value>
   </data>
   <data name="AuditTrailSettingOffQuestion" xml:space="preserve">
-    <value>Отключение контрольно журнала приведет к удалению всех сохраненных до этого данных. Продолжить?</value>
+    <value>Отключение контрольного журнала приведет к удалению всех сохраненных до этого данных. Продолжить?</value>
   </data>
   <data name="EnableScheduleAuditTrail" xml:space="preserve">
     <value>Включить контрольный журнал ведения расписания</value>
@@ -8673,7 +8673,7 @@ Teleopti R&amp;D</value>
     <value>Планирование: {0} дней из {1}</value>
   </data>
   <data name="DaysPerYearColon" xml:space="preserve">
-    <value>Дней в год:</value>
+    <value>Дней в году:</value>
   </data>
   <data name="AttritionRate" xml:space="preserve">
     <value>Процент оттока сотрудников</value>
@@ -8824,13 +8824,13 @@ Teleopti R&amp;D</value>
     <value>Дни, представленные ниже, не будут сохранены.</value>
   </data>
   <data name="PreferenceViewCalculationInfo" xml:space="preserve">
-    <value>{0} (Нормально) {1} (Сезонно) {2} (Входной баланс) {3} (Дополнительно) {4} (Выходной баланс) = {5}</value>
+    <value>{0} (Обычно) {1} (Сезонно) {2} (Входной баланс) {3} (Дополнительно) {4} (Выходной баланс) = {5}</value>
   </data>
   <data name="ViewSchedulePeriodCalculation" xml:space="preserve">
     <value>Просмотр расчета периода планирования</value>
   </data>
   <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
-    <value>Смена со специальной активностью не может быть использована в планировании.</value>
+    <value>Смена со специальной активностью не может быть использована в планировании!</value>
   </data>
   <data name="PasteError" xml:space="preserve">
     <value>Вставить ошибку</value>
@@ -8905,7 +8905,7 @@ Teleopti R&amp;D</value>
     <value>Метрики очереди оператора</value>
   </data>
   <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
-    <value>Макс. продолжительность назначения {0} часов. Текущая продолжительность назначения {1} ч.</value>
+    <value>Макс. продолжительность назначения {0} часа (-ов). Текущая продолжительность назначения {1} ч.</value>
   </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
     <value>Выбранный период не должен быть длиннее, чем {0}.</value>
@@ -9262,7 +9262,7 @@ Teleopti R&amp;D</value>
     <value>Импорт</value>
   </data>
   <data name="ImportFileNameColon" xml:space="preserve">
-    <value>Импорт названия файла:</value>
+    <value>Название файла импорта:</value>
   </data>
   <data name="ImportStaffing" xml:space="preserve">
     <value>Импорт штата</value>
@@ -9406,7 +9406,7 @@ Teleopti R&amp;D</value>
     <value>Импорт прогноза из файла</value>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
-    <value>Разрешения запроса</value>
+    <value>Допущения запроса</value>
   </data>
   <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
     <value>Показать только доступные для изменения смены</value>
@@ -9733,7 +9733,7 @@ Teleopti R&amp;D</value>
     <value>На неделе не достигнуто минимальное ({0}) недельное время отдыха.</value>
   </data>
   <data name="ActiveAgentsInUseColon" xml:space="preserve">
-    <value>Используются активные операторы:</value>
+    <value>Используемые активные операторы:</value>
   </data>
   <data name="MasterActivityCanResultInColon" xml:space="preserve">
     <value>Возможный результат в активностях:</value>
@@ -9868,7 +9868,7 @@ Teleopti R&amp;D</value>
     <value>Регулировать банк времени в соответствие с сезонностью</value>
   </data>
   <data name="TagChangesWithColon" xml:space="preserve">
-    <value>Изменить тег на:</value>
+    <value>Тег изменений:</value>
   </data>
   <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
     <value>Запланированное и фактическое количество операторов</value>
@@ -9925,7 +9925,7 @@ Teleopti R&amp;D</value>
     <value>Отсутствие типа отсутствия</value>
   </data>
   <data name="SubmitRequest" xml:space="preserve">
-    <value>Передать</value>
+    <value>Отправить</value>
   </data>
   <data name="OverridePeriod" xml:space="preserve">
     <value>Изменить время периода</value>
@@ -9946,7 +9946,7 @@ Teleopti R&amp;D</value>
     <value>Управление наборами правил</value>
   </data>
   <data name="ManualAgents" xml:space="preserve">
-    <value>Операторы (ручное изменение)</value>
+    <value>Операторы (изменение вручную)</value>
   </data>
   <data name="RequestCannotUpdateDelete" xml:space="preserve">
     <value>Статус вашего запроса был изменен, вы не можете обновить/удалить его.</value>
@@ -10093,7 +10093,7 @@ Teleopti R&amp;D</value>
     <value>Проверенное количество клиентов</value>
   </data>
   <data name="WalkAways" xml:space="preserve">
-    <value>Ушедшие</value>
+    <value>Ушедшие клиенты</value>
   </data>
   <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
     <value>Ваши предпочтения вне диапазона.</value>
@@ -10444,7 +10444,7 @@ Teleopti R&amp;D</value>
     <value>Стоп! Данные правила слишком сложные, и смены не могут быть созданы в пределах максимального лимита. Смены из данного набора правил не будут доступны для планирования и оптимизации. Измените правила, чтобы использовать данные смены.</value>
   </data>
   <data name="ShiftGenerationWarning" xml:space="preserve">
-    <value>Предупреждение! Создание смен по данным правилам занимает слишком много времени. Это повлияет на планирование и оптимизацию в даьнейшем!</value>
+    <value>Предупреждение! Создание смен по данным правилам занимает слишком много времени. Это повлияет на планирование и оптимизацию в дальнейшем!</value>
   </data>
   <data name="ProcessingDotDotDot" xml:space="preserve">
     <value>Обработка...</value>
@@ -10480,7 +10480,7 @@ Teleopti R&amp;D</value>
     <value>Низкая</value>
   </data>
   <data name="CollectingData" xml:space="preserve">
-    <value>Сбор данные...</value>
+    <value>Сбор данных...</value>
   </data>
   <data name="Improved" xml:space="preserve">
     <value>Улучшено</value>
@@ -10627,13 +10627,13 @@ Teleopti R&amp;D</value>
     <value>Активность навыка</value>
   </data>
   <data name="TagChangesWithWithColon" xml:space="preserve">
-    <value>Тег изменения:</value>
+    <value>Тег изменений:</value>
   </data>
   <data name="TypeOfOvertime" xml:space="preserve">
     <value>Тип сверхурочного времени</value>
   </data>
   <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
-    <value>Позволять нарушать макисмальное время контракта в неделю </value>
+    <value>Позволять нарушать максимальное время контракта в неделю </value>
   </data>
   <data name="AllowBreakContractNightlyRest" xml:space="preserve">
     <value>Позволять нарушать время отдыха между сменами по контракту</value>
@@ -10759,7 +10759,7 @@ Teleopti R&amp;D</value>
     <value>Сверхурочная доступность</value>
   </data>
   <data name="PaidTimeHeader" xml:space="preserve">
-    <value>Оплаченное время</value>
+    <value>Оплачиваемое время</value>
   </data>
   <data name="PartTimePercentageHeader" xml:space="preserve">
     <value>Процент неполной занятости</value>
@@ -10826,5 +10826,116 @@ Teleopti R&amp;D</value>
   </data>
   <data name="ModifyAvailabilities" xml:space="preserve">
     <value>Изменить доступности</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Сохранять текущий&gt;</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Использовать сезонность день месяца</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Навыки оператора</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>У вас нет бюджетной группы.</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Попытка запланировать пустые слоты...</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Запрос на обмен сменами отклонен, т.к. смены за разные даты.</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Добавить интервальное отсутствие</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Интервальное отсутствие</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Одновременная оптимизация блоками между выходными днями и не сохранение выходных дней группы не поддерживается</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Группа сравнения</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Время состояния по оператору</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Подробное соблюдение графика</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>Мой отчет</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Активные операторы</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>Нет периода</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Неверное время завершения.</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Добавьте интервальное отсутствие к существующей смене.</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Вы не можете создать вторую смену с помощью добавления активности.</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>Вы уже не являетесь сотрудником на эту дату</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Метрика</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Готовность</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Значение</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Вчера</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Время задания</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Общее время задания</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Время чата</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>У вас нет прав доступа к группам.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Сравнить с группами из</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Время готовности / Запланированное время готовности (%)</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Расписание должно быть загружено еще раз</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Выходные:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Приоритет:</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Категория смены:</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Подробное соблюдение графика</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Сводка</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Планирование месяца</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Приоритетность</value>
   </data>
 </root>

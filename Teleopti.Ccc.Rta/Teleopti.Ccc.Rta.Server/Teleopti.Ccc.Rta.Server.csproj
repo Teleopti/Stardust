@@ -146,7 +146,9 @@
     <Compile Include="Adherence\ITeamIdForPerson.cs" />
     <Compile Include="Adherence\NotificationExtension.cs" />
     <Compile Include="Adherence\SiteAdherenceAggregator.cs" />
+    <Compile Include="Adherence\SiteIdForPerson.cs" />
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
+    <Compile Include="Adherence\TeamIdForPerson.cs" />
     <Compile Include="AlarmMapper.cs" />
     <Compile Include="BuildContainer.cs" />
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
@@ -177,10 +179,6 @@
     <CodeAnalysisDictionary Include="CodeAnalysisDictionary.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
-      <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
-      <Name>Teleopti.Ccc.Domain</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>

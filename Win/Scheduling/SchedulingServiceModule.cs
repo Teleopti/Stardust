@@ -107,6 +107,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<StudentSchedulingService>().As<IStudentSchedulingService>().InstancePerLifetimeScope();
 
             builder.RegisterType<ShiftProjectionCacheFilter>().As<IShiftProjectionCacheFilter>().InstancePerLifetimeScope();
+			builder.RegisterType<ClassicScheduleCommand>().As<ClassicScheduleCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleCommand>().As<ScheduleCommand>().InstancePerLifetimeScope();
+			builder.RegisterType<OptimizationCommand>().As<OptimizationCommand>().InstancePerLifetimeScope();
+			//OptimizationCommand
 
             
             builder.RegisterType<AdvanceDaysOffSchedulingService>().As<IAdvanceDaysOffSchedulingService>();
@@ -397,6 +401,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>();
 			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>();
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
+            builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
+            builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
+            builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
 	    }
     }
 }
