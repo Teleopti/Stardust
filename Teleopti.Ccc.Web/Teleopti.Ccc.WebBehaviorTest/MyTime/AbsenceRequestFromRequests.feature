@@ -146,9 +146,12 @@ And I input absence request values with "Vacation" from "2014-12-28" to "2015-01
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
-@ignore
 Scenario: Don't show personal account when you do not have permission
-Given I am an agent without permission for personal account
+Given there is a role with
+	| Field                              | Value                                 |
+	| Name                               | No access to personal absence account |
+	| Access to personal absence account | False                                 |
+And I have the role 'No access to personal absence account'
 And I have a requestable absence with
 | Field       | Value    |
 | Name        | Vacation |

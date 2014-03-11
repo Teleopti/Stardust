@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToRealTimeAdherenceOverview { get; set; }
 		public bool AccessToTeamSchedule { get; set; }
 	    public bool AccessToViewAllGroupPages { get; set; }
+		public bool AccessToPersonalAbsenceAccount { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -75,6 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = false;
 			AccessToTeamSchedule = true;
+			AccessToPersonalAbsenceAccount = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -211,6 +213,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
                 applicationFunctions = from f in applicationFunctions
                                        where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
                                        select f;
+			if (!AccessToPersonalAbsenceAccount)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount
+									   select f;
 			return applicationFunctions;
 		}
 	}

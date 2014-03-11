@@ -52,7 +52,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertAnyContains(".usedTime", usedTime);
 		}
+
+		[Then(@"I should not see the remaining and used time")]
+		public void ThenIShouldNotSeeTheRemainingAndUsedTime()
+		{
+			Browser.Interactions.AssertNotExists(".request-new-absence", "#absence-personal-account");
+		}
 	}
-
-
 }

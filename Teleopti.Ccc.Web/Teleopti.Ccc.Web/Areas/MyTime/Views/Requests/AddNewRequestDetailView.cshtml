@@ -16,34 +16,36 @@
     </label>
     <div class ="row">
 	    <div class="col-xs-4">
-			<select class="request-new-absence input-sm form-control" data-bind="value: AbsenceId">
-                @foreach (var absenceType in Model.AbsenceTypes)
-                {
-                    <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-                }
-			</select>
+		    <select class="request-new-absence input-sm form-control" data-bind="value: AbsenceId">
+			    @foreach (var absenceType in Model.AbsenceTypes)
+			    {
+				    <option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+			    }
+		    </select>
 	    </div>
+		<!-- ko if: PersonalAccountPermission -->
 	    <div id="absence-personal-account" data-bind="if: AbsenceAccountExists">
 		    <label>
 			    @Resources.Remaining:
 		    </label>
-			<!-- ko if: AbsenceTrackedAsDay() -->
+		    <!-- ko if: AbsenceTrackedAsDay() -->
 		    <span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days'"></span>
-			<!-- /ko -->
-			<!-- ko if: AbsenceTrackedAsHour() -->
+		    <!-- /ko -->
+		    <!-- ko if: AbsenceTrackedAsHour() -->
 		    <span class="remainingTime" data-bind="text: AbsenceRemaining()"></span>
-			<!-- /ko -->
-			<span> / </span>
+		    <!-- /ko -->
+		    <span> / </span>
 		    <label>
 			    @Resources.Used:
 		    </label>
 		    <!-- ko if: AbsenceTrackedAsDay() -->
 		    <span class="usedTime" data-bind="text: AbsenceUsed() + ' @Resources.Days'"></span>
-			<!-- /ko -->
-			<!-- ko if: AbsenceTrackedAsHour() -->
+		    <!-- /ko -->
+		    <!-- ko if: AbsenceTrackedAsHour() -->
 		    <span class="usedTime" data-bind="text: AbsenceUsed()"></span>
-			<!-- /ko -->
+		    <!-- /ko -->
 	    </div>
+		<!-- /ko -->
     </div>
 </div>
 <div class="row form-group">

@@ -34,6 +34,15 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         	//		vm.readAbsences(data);
         	//	}
         	//});
+        	ajax.Ajax({
+        		url: 'Requests/PersonalAccountPermission',
+        		dataType: "json",
+        		type: 'GET',
+
+        		success: function (data) {
+        			vm.readPersonalAccountPermission(data);
+        		}
+        	});
             return vm;
         };
         
