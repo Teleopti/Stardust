@@ -512,7 +512,6 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 	INNER JOIN mart.dim_date d 
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
-ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
 
 --b) insert agent statistics outside shift
 INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
@@ -567,7 +566,6 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
 	WHERE NOT EXISTS (SELECT 1 FROM #result r where r.person_id=fsd.person_id and r.interval_id=i.interval_id and r.date_id=d.date_id)--WHERE NO MATCH ON SCHEDULE
-ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
 
 ----------
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
@@ -699,7 +697,7 @@ INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND 
 
 --add unique id per date_id and interval_id
 INSERT #counter(shift_startdate_local_id,date_id,interval_id)
-select distinct shift_startdate_local_id,date_id,interval_id
+select shift_startdate_local_id,date_id,interval_id
 from #result
 order by shift_startdate_local_id,date_id,interval_id
 
@@ -710,7 +708,6 @@ inner join #result r
 	on r.date_id=c.date_id
 	AND r.interval_id=c.interval_id
 	AND r.shift_startdate_local_id = c.shift_startdate_local_id
-
 
 -- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
 -- NOTE: If you change the column order/name you need to consider SDK DTO as well!
