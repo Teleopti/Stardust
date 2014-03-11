@@ -459,7 +459,7 @@ WHERE SchTemp.absence_id IS NULL
 INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
 person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
 adherence_type_selected,hide_time_zone,count_activity_per_interval)
-	SELECT	fsd.shift_startdate_local_id,
+	SELECT	fs.shift_startdate_local_id,
 			b1.date_id, --shift_startdate_id
 			b1.date_date,
 			d.date_id,
