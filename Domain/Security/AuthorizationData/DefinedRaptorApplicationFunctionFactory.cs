@@ -170,6 +170,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb, "xxOvertimeAvailabilityWeb", DefinedRaptorApplicationFunctionForeignIds.OvertimeAvailabilityWeb, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MyReportWeb, "xxMyReportWeb", DefinedRaptorApplicationFunctionForeignIds.MyReportWeb, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.MonthSchedule, "xxMonthSchedule", DefinedRaptorApplicationFunctionForeignIds.MonthSchedule, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount, "xxViewPersonalAccount", DefinedRaptorApplicationFunctionForeignIds.ViewPersonalAccount, null);
 
 			// Anywhere
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);

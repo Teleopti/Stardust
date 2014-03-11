@@ -1772,7 +1772,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can change and save.
+        ///   Looks up a localized string similar to Can Change and Save.
         /// </summary>
         public static string AllowPersonModifications {
             get {
@@ -2503,7 +2503,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Audit Trail settings.
+        ///   Looks up a localized string similar to Audit Trail Settings.
         /// </summary>
         public static string AuditTrailSettings {
             get {
@@ -2557,7 +2557,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Automatic scheduling.
+        ///   Looks up a localized string similar to Automatic Scheduling.
         /// </summary>
         public static string AutomaticScheduling {
             get {
@@ -5185,7 +5185,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create performance manager report.
+        ///   Looks up a localized string similar to Create Performance Manager Report.
         /// </summary>
         public static string CreatePerformanceManagerReport {
             get {
@@ -5194,7 +5194,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift trade request.
+        ///   Looks up a localized string similar to Shift Trade Request.
         /// </summary>
         public static string CreateShiftTradeRequest {
             get {
@@ -7087,7 +7087,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Early warning.
+        ///   Looks up a localized string similar to Early Warning.
         /// </summary>
         public static string EarlyWarning {
             get {
@@ -13012,7 +13012,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify assignment.
+        ///   Looks up a localized string similar to Modify Assignment.
         /// </summary>
         public static string ModifyAssignment {
             get {
@@ -13021,7 +13021,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify availabilities.
+        ///   Looks up a localized string similar to Modify Availabilities.
         /// </summary>
         public static string ModifyAvailabilities {
             get {
@@ -13039,7 +13039,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify group page.
+        ///   Looks up a localized string similar to Modify Group Page.
         /// </summary>
         public static string ModifyGroupPage {
             get {
@@ -13066,7 +13066,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify people within group page.
+        ///   Looks up a localized string similar to Modify People within Group Page.
         /// </summary>
         public static string ModifyPeopleWithinGroupPage {
             get {
@@ -13084,7 +13084,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify name and password.
+        ///   Looks up a localized string similar to Modify Name and Password.
         /// </summary>
         public static string ModifyPersonNameAndPassword {
             get {
@@ -13093,7 +13093,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify person restriction.
+        ///   Looks up a localized string similar to Modify Person Restriction.
         /// </summary>
         public static string ModifyPersonRestriction {
             get {
@@ -13120,7 +13120,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify restricted scenarios.
+        ///   Looks up a localized string similar to Modify Restricted Scenarios.
         /// </summary>
         public static string ModifyRestrictedScenario {
             get {
@@ -13156,7 +13156,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Modify write protected schedule.
+        ///   Looks up a localized string similar to Modify Write Protected Schedule.
         /// </summary>
         public static string ModifyWriteProtectedSchedule {
             get {
@@ -14121,7 +14121,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Password.
+        ///   Looks up a localized string similar to New password.
         /// </summary>
         public static string NewPassword {
             get {
@@ -15409,7 +15409,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Real time reports.
+        ///   Looks up a localized string similar to Real Time Reports.
         /// </summary>
         public static string OnlineReports {
             get {
@@ -18053,7 +18053,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Real time adherence overview.
+        ///   Looks up a localized string similar to Real Time Adherence Overview.
         /// </summary>
         public static string RealTimeAdherenceOverview {
             get {
@@ -18722,7 +18722,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request allowances.
+        ///   Looks up a localized string similar to Request Allowances.
         /// </summary>
         public static string RequestAllowances {
             get {
@@ -19325,7 +19325,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Availability Per Agent.
+        ///   Looks up a localized string similar to Availability per Agent.
         /// </summary>
         public static string ResReportAvailabilityPerAgent {
             get {
@@ -21276,7 +21276,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Send message (ASM).
+        ///   Looks up a localized string similar to Send Message (ASM).
         /// </summary>
         public static string SendASM {
             get {
@@ -21573,7 +21573,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Set write protection.
+        ///   Looks up a localized string similar to Set Write Protection.
         /// </summary>
         public static string SetWriteProtection {
             get {
@@ -25835,7 +25835,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View active agents.
+        ///   Looks up a localized string similar to View Active Agents.
         /// </summary>
         public static string ViewActiveAgents {
             get {
@@ -25862,7 +25862,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View confidential.
+        ///   Looks up a localized string similar to View Confidential.
         /// </summary>
         public static string ViewConfidential {
             get {
@@ -25898,11 +25898,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View performance manager report.
+        ///   Looks up a localized string similar to View Performance Manager Report.
         /// </summary>
         public static string ViewPerformanceManagerReport {
             get {
                 return ResourceManager.GetString("ViewPerformanceManagerReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View Personal Account.
+        /// </summary>
+        public static string ViewPersonalAccount {
+            get {
+                return ResourceManager.GetString("ViewPersonalAccount", resourceCulture);
             }
         }
         
@@ -25934,7 +25943,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View restricted scenarios.
+        ///   Looks up a localized string similar to View Restricted Scenarios.
         /// </summary>
         public static string ViewRestrictedScenario {
             get {
@@ -25970,7 +25979,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View schedules.
+        ///   Looks up a localized string similar to View Schedules.
         /// </summary>
         public static string ViewSchedules {
             get {
@@ -25979,7 +25988,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View unpublished schedules.
+        ///   Looks up a localized string similar to View Unpublished Schedules.
         /// </summary>
         public static string ViewUnpublishedSchedules {
             get {

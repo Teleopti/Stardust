@@ -11970,4 +11970,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Real Time Adherence Overview</value>
     <comment>Permission name</comment>
   </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>View Personal Account</value>
+    <comment>text in permissions</comment>
+  </data>
 </root>
