@@ -100,4 +100,26 @@ Scenario: View absence types
 	And I click to add a new absence request
 	Then I should see an absence type called Vacation in droplist
 
-
+Scenario: When requesting absence tracked as days view remaining and used days
+Given I am an agent
+And I am american
+And I have a requestable absence with
+| Field       | Value           |
+| Name        | VacationTracked |
+| TrackerType | Day             |
+And I have a personal account with
+| Field    | Value           |
+| Absence  | VacationTracked |
+| FromDate | 2014-01-01      |
+| Accrued  | 25              |
+And I have an absence with
+| Field     | Value            |
+| Name      | VacationTracked  |
+| StartTime | 2014-01-01 00:00 |
+| EndTime   | 2014-01-03 23:59 |
+And I view my week schedule for date '2014-10-03'
+When I click on the day summary for date '2014-10-03'
+And I click to add a new absence request
+And I input absence request values with 'VacationTracked' for date '2014-10-03'
+Then I should see the remaining days is '22 Days'
+And I should see the used days is '3 Days'

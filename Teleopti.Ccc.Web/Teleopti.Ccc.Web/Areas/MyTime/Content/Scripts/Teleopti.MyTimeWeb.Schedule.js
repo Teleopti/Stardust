@@ -240,7 +240,18 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
             //	success: function (Data) {
             //		model.readAbsences(Data);
             //	}
-            //});
+			//});
+
+            ajax.Ajax({
+            	url: 'Requests/PersonalAccountPermission',
+            	dataType: "json",
+            	type: 'GET',
+
+            	success: function (data) {
+            		model.readPersonalAccountPermission(data);
+            	}
+            });
+	        
             model.DateFormat(datePickerFormat);
 
             self.requestViewModel(model);
