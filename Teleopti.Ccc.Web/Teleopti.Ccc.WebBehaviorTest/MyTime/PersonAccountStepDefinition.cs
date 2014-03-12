@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see the remaining and used time")]
 		public void ThenIShouldNotSeeTheRemainingAndUsedTime()
 		{
-			Browser.Interactions.AssertNotExists(".request-new-absence", "#absence-personal-account");
+			Browser.Interactions.AssertNotExists(".form-control", "#absence-personal-account");
 		}
 	}
 }

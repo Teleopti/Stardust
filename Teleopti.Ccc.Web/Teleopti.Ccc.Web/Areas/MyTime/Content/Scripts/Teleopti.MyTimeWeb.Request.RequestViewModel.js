@@ -140,6 +140,10 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.readPersonalAccountPermission = function(data) {
 		self.PersonalAccountPermission(data);
 	};
+
+	self.ShowAbsenceAccount = ko.computed(function() {
+		return self.PersonalAccountPermission() && self.AbsenceAccountExists && self.IsEditable;
+	});
 	
 	self.AbsenceId.subscribe(function () {
 		loadAbsenceAccount();

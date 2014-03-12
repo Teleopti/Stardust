@@ -142,7 +142,7 @@ And I input absence request values with "Vacation" from "2014-12-28" to "2015-01
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
-Scenario: Don't show personal account when you do not have permission
+Scenario: Do Not show personal account when you do not have permission
 Given there is a role with
 	| Field                              | Value                                 |
 	| Name                               | No access to personal absence account |
@@ -159,6 +159,22 @@ And I have a personal account with
 | Accrued     | 25         |
 And I am viewing requests
 When I click to add a new absence request
+Then I should not see the remaining and used time
+
+Scenario: Do not show personal account when absence requests is not editable
+Given I am an agent
+And I have a requestable absence with
+| Field       | Value    |
+| Name        | Vacation |
+| TrackerType | Day      |
+And I have a personal account with
+| Field       | Value      |
+| Absence     | Vacation   |
+| FromDate    | 2014-01-01 |
+| Accrued     | 25         |
+And I have an approved absence request
+And I am viewing requests
+When I click on the request at position '1' in the list
 Then I should not see the remaining and used time
 
 Scenario: Add absence request
