@@ -890,6 +890,17 @@ ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_d
 ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_insert_date]  DEFAULT (getdate()) FOR [insert_date]
 ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_update_date]  DEFAULT (getdate()) FOR [update_date]
 
+--get old data
+INSERT INTO  [mart].[fact_schedule_day_count] (shift_startdate_local_id, person_id, scenario_id, starttime, shift_category_id, day_off_id, absence_id, day_count, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date)
+SELECT btz.local_date_id, f.person_id, f.scenario_id, f.starttime, f.shift_category_id, f.day_off_id, f.absence_id, f.day_count, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date
+FROM [mart].[fact_schedule_day_count_old] f
+INNER JOIN mart.bridge_time_zone btz 
+	ON f.date_id=btz.date_id 
+	AND f.start_interval_id=btz.interval_id
+INNER JOIN mart.dim_person dp
+	ON f.person_id=dp.person_id
+	AND btz.time_zone_id=dp.time_zone_id
+
 ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_absence] FOREIGN KEY([absence_id])
 REFERENCES [mart].[dim_absence] ([absence_id])
 ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_absence]
