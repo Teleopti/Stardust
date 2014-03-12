@@ -308,6 +308,7 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
