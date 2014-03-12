@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Microsoft.IdentityModel.Protocols.WSFederation;
+using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Web.Filters
@@ -14,6 +16,8 @@ namespace Teleopti.Ccc.Web.Filters
 	public sealed class TeleoptiPrincipalAuthorizeAttribute : AuthorizeAttribute
 	{
 		private readonly IEnumerable<Type> _excludeControllerTypes;
+
+		public string Realm { get; set; }
 
 		public TeleoptiPrincipalAuthorizeAttribute()
 			: this(null)
@@ -44,18 +48,27 @@ namespace Teleopti.Ccc.Web.Filters
 				filterContext.Result = new HttpStatusCodeResult(403);
 				return;
 			}
-			var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
+			//var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
 
-			filterContext.Result = new RedirectToRouteResult(
-				new RouteValueDictionary(
-					new
-						{
-							controller = "Authentication",
-							action = "",
-							area = targetArea
-						}
-					)
-				);
+			//filterContext.Result = new RedirectToRouteResult(
+			//	new RouteValueDictionary(
+			//		new
+			//			{
+			//				controller = "Authentication",
+			//				action = "",
+			//				area = targetArea
+			//			}
+			//		)
+			//	);
+
+			var fam = FederatedAuthentication.WSFederationAuthenticationModule;
+			var signIn = new SignInRequestMessage(new Uri(fam.Issuer), Realm ?? fam.Realm)
+			{
+				Context = "ru=" + filterContext.HttpContext.Request.Path,
+				//AuthenticationType = "urn:Teleopti"
+			};
+
+			filterContext.Result = new RedirectResult(signIn.WriteQueryString());
 		}
 	}
 }
