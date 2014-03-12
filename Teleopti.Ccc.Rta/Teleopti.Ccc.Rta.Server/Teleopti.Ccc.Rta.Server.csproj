@@ -151,7 +151,7 @@
     <Compile Include="Adherence\TeamAdherenceAggregator.cs" />
     <Compile Include="Adherence\TeamIdForPerson.cs" />
     <Compile Include="AlarmMapper.cs" />
-    <Compile Include="BuildContainer.cs" />
+    <Compile Include="ContainerBuilder.cs" />
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
     <Compile Include="DatabaseReader.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />

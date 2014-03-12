@@ -1,21 +1,19 @@
 ﻿using Autofac;
 using MbCache.Configuration;
 using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Rta.LogClientProxy.TeleoptiRtaService;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public static class BuildContainer
+	public static class ContainerBuilder
 	{
-		 public static IContainer Build()
+		 public static Autofac.ContainerBuilder CreateBuilder()
 		 {
-			 var builder = new ContainerBuilder();
+			 var builder = new Autofac.ContainerBuilder();
 
 			 var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
-			 builder.RegisterType<TeleoptiRtaService>().SingleInstance();
 			 builder.RegisterModule(mbCacheModule);
 			 builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
-			 return builder.Build();
+			 return builder;
 		 }
 	}
 }

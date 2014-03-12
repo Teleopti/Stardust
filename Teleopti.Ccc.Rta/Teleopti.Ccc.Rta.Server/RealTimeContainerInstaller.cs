@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_cacheBuilder = mbCacheModule.Builder;
 		}
 
-		protected override void Load(ContainerBuilder builder)
+		protected override void Load(Autofac.ContainerBuilder builder)
 		{
 			builder.RegisterType<DatabaseConnectionStringHandler>().As<IDatabaseConnectionStringHandler>();
 			builder.RegisterType<DatabaseConnectionFactory>().As<IDatabaseConnectionFactory>();
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Rta.Server
 			registerAdherenceComponents(builder);
 		}
 
-		private static void registerAdherenceComponents(ContainerBuilder builder)
+		private static void registerAdherenceComponents(Autofac.ContainerBuilder builder)
 		{
 			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IAfterSend>();
 			builder.RegisterType<TeamIdForPerson>().SingleInstance().As<ITeamIdForPerson>();
