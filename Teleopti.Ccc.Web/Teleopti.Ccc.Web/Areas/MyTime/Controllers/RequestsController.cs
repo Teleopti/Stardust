@@ -64,13 +64,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpGet]
-		public JsonResult Absences()
-		{
-			return Json(_requestsViewModelFactory.CreateRequestFormViewModel(), JsonRequestBehavior.AllowGet);
-		}
-
-		[UnitOfWorkAction]
-		[HttpGet]
 		public JsonResult PersonalAccountPermission()
 		{
 			bool personalAccountPermission = _permissionProvider.HasApplicationFunctionPermission(

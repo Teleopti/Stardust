@@ -96,18 +96,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			return _mapper.Map<IPersonRequest, RequestViewModel>(request);
 		}
 		
-		public RequestFormViewModel CreateRequestFormViewModel()
-		{
-			return new RequestFormViewModel
-				{
-					AbsenceTypes =
-						_absenceTypesProvider.GetRequestableAbsences().Select(requestableAbsence => new AbsenceTypeViewModel
-							{
-								Id = requestableAbsence.Id,
-								Name =
-									requestableAbsence.Description.Name
-							}).ToList()
-				};
 		}
 
 		public AbsenceAccountViewModel GetAbsenceAccountViewModel(Guid absenceId, DateOnly date)
@@ -115,8 +103,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			var absence = _absenceTypesProvider.GetRequestableAbsences().First(x => x.Id == absenceId);
 			var absenceAccount = _personAccountProvider.GetPersonAccount(absence, date);
 			return _mapper.Map<IAccount, AbsenceAccountViewModel>(absenceAccount);
-		}
-
 		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel()
 		{
 			return _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet(), _now);

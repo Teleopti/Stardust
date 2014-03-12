@@ -50,7 +50,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.PreviousAbsenceId = ko.observable();
 	self.AbsenceTrackedAsDay = ko.observable(false);
 	self.AbsenceTrackedAsHour = ko.observable(false);
-	self.Absences = ko.observableArray();
 	self.AbsenceAccountExists = ko.observable(false);
 	self.AbsenceAccountPeriodStart = ko.observable(moment());
 	self.AbsenceAccountPeriodEnd = ko.observable(moment());
@@ -67,18 +66,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 		return !self.IsFullDay() && self.IsEditable();
 	});
 
-	self.readAbsences = function (data) {
-		if (data.AbsenceTypes) {
-			for (var i = 0; i < (data.AbsenceTypes.length) ; i++) {
-				var newAbsence = {
-					Id: data.AbsenceTypes[i].Id,
-					Name: data.AbsenceTypes[i].Name
-				};
 
-				self.Absences.push(newAbsence);
-			}
-		}
-	};
 
 	self.readAbsenceAccount = function(data) {
 		if (data) {
