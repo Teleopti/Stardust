@@ -11,11 +11,11 @@
             <textarea class="form-control request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
         <!-- /ko -->
 <div class="form-group">
-    <label>
+    <label style="padding-top: 10px;">
         @Resources.AbsenceType
     </label>
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-6" style="padding-top: 6px;">
             <select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable">
                 @foreach (var absenceType in Model.AbsenceTypes)
                 {
@@ -23,6 +23,32 @@
                 }
             </select>
         </div>
+		<!-- ko if: PersonalAccountPermission -->
+	    <div id="absence-personal-account" data-bind="if: AbsenceAccountExists">
+			<div>
+				<label>
+					@Resources.Remaining:
+				</label>
+				<!-- ko if: AbsenceTrackedAsDay() -->
+				<span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days	'"></span>
+				<!-- /ko -->
+				<!-- ko if: AbsenceTrackedAsHour() -->
+				<span class="remainingTime" data-bind="text: AbsenceRemaining()"></span>
+				<!-- /ko -->
+			</div>
+			<div>
+				<label>
+					@Resources.Used:
+				</label>
+				<!-- ko if: AbsenceTrackedAsDay() -->
+				<span class="usedTime" data-bind="text: AbsenceUsed() + ' @Resources.Days	'"></span>
+				<!-- /ko -->
+				<!-- ko if: AbsenceTrackedAsHour() -->
+				<span class="usedTime" data-bind="text: AbsenceUsed()"></span>
+				<!-- /ko -->
+			</div>
+	    </div>
+		<!-- /ko -->
     </div>
 </div>
 <div class="row form-group">
