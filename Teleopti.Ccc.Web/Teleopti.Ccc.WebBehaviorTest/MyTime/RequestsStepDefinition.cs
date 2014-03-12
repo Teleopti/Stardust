@@ -210,11 +210,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotExists(".request:nth-child(" + position + ")", ".request:nth-child(" + position + ") .btn[data-bind*='reSend']");
 		}
 
-		[Then(@"I should not see any shifts to trade with")]
-		public void ThenIShouldNotSeeAnyShiftsToTradeWith()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
 	}
 }

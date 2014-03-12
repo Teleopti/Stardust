@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Infrastructure.Rta;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class SiteIdForPerson : ISiteIdForPerson
 	{
-		private readonly IPersonOrganizationReader _personOrganizationReader;
+		private readonly IPersonOrganizationProvider _personOrganizationProvider;
 
-		public SiteIdForPerson(IPersonOrganizationReader personOrganizationReader)
+		public SiteIdForPerson(IPersonOrganizationProvider personOrganizationProvider)
 		{
-			_personOrganizationReader = personOrganizationReader;
+			_personOrganizationProvider = personOrganizationProvider;
 		}
 
 		public Guid GetSiteId(Guid personId)
 		{
-			var personData = _personOrganizationReader.LoadAll();
-			return personData.Single(x => x.PersonId == personId).SiteId;
+			return _personOrganizationProvider.LoadAll()
+				.Single(x => x.PersonId == personId).SiteId;
 		}
 	}
 }

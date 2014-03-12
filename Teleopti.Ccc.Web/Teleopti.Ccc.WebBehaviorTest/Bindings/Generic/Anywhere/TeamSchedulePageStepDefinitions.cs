@@ -256,13 +256,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertNotExists("#group-picker option:nth-child(" + teams.Length + ")", "#group-picker option:nth-child(" + (teams.Length + 1) + ")");
 		}
 
-		[Then(@"I should see no team available")]
-		public void ThenIShouldSeeNoTeamAvailable()
-		{
-			Browser.Interactions.AssertExists("#group-picker");
-			Browser.Interactions.AssertNotExists("#group-picker", "#group-picker option");
-		}
-
 		[Then(@"I should be able to select skills")]
 		public void ThenIShouldBeAbleToSelectSkills(Table table)
 		{
@@ -272,13 +265,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			skills.ForEach(s => Browser.Interactions.AssertAnyContains("#skill-selector li", s.Skill));
 
 			Browser.Interactions.AssertNotExists("#skill-selector li:nth-child(" + skills.Length + ")", "#skill-selector li:nth-child(" + (skills.Length + 1) + ")");
-		}
-
-
-		[Then(@"I should see '(.*)' with a day off")]
-		public void ThenIShouldSeeADayOffFor(string personName)
-		{
-			Browser.Interactions.AssertExistsUsingJQuery(".person:contains('{0}') .dayoff", personName);
 		}
 
 		[Then(@"I should see '(.*)' with a day off named '(.*)'")]

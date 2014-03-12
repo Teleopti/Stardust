@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 	public class TeamAdherenceAggregator
 	{
 		private readonly ITeamIdForPerson _teamProvider;
-		private readonly Dictionary<Guid, AggregatedAdherence> _teamAdherence = new Dictionary<Guid, AggregatedAdherence>();
+		private readonly Dictionary<Guid, AggregatedAdherence> _teamAdherences = new Dictionary<Guid, AggregatedAdherence>();
 
 		public TeamAdherenceAggregator(ITeamIdForPerson teamProvider)
 		{
@@ -17,15 +17,18 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		public AggregatedAdherence Aggregate(IActualAgentState actualAgentState)
 		{
 			if (_teamProvider == null) return null;
+			
 			var personId = actualAgentState.PersonId;
 			var teamId = _teamProvider.GetTeamId(personId);
-			
-			if (!_teamAdherence.ContainsKey(teamId))
-				_teamAdherence[teamId] = new AggregatedAdherence(teamId);
 
-			var teamState = _teamAdherence[teamId];
+			AggregatedAdherence teamState;
+			if (!_teamAdherences.TryGetValue(teamId, out teamState))
+			{
+				teamState = new AggregatedAdherence(teamId);
+				_teamAdherences[teamId] = teamState;
+			}
 			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			return !changed ? null : _teamAdherence[teamId];
+			return changed ? teamState : null;
 		}
 	}
 }

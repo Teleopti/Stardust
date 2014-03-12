@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PhoneStateStepDefinitions
 	{
-
 		private readonly Lazy<IRtaDataHandler> rtaFactory = new Lazy<IRtaDataHandler>(() =>
 			{
 				var databaseConnectionFactory = new DatabaseConnectionFactory();
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				var databaseReader = new DatabaseReader(databaseConnectionFactory, databaseConnectionStringHandler,
 				                                        new ActualAgentStateCache(databaseWriter));
 				var mbCacheFactory = new MbCacheFactoryFake();
-				return new RtaDataHandler(new AsyncSignalSender(TestSiteConfigurationSetup.Url.ToString()),
+				return new RtaDataHandler(new SignalSender(TestSiteConfigurationSetup.Url.ToString()),
 				                          new DataSourceResolverFake(),
 				                          new PersonResolverFake(n => DataMaker.Person(n).Person),
 				                          new ActualAgentAssembler(databaseReader, new CurrentAndNextLayerExtractor(),

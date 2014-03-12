@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var siteId = Guid.NewGuid();
 			var personId = Guid.NewGuid();
 			var personOrganizationReader = MockRepository.GenerateStub<IPersonOrganizationReader>();
-			var target = new SiteIdForPerson(personOrganizationReader);
+			var target = new SiteIdForPerson(new PersonOrganizationProvider(personOrganizationReader));
 
 			personOrganizationReader.Stub(x => x.LoadAll()).Return(new[] { new PersonOrganizationData{PersonId = personId, SiteId= siteId} });
 

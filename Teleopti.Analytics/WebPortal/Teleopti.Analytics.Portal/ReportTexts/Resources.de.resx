@@ -987,4 +987,115 @@
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Datum bis (Schichtbeginn)</value>
   </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Erfüllt</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Erfüllt (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Notwendigkeiten</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Unerfüllt</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>aktuelle Seite</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Finden</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Finde nächsten</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Finde Text in Bericht</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>erste Seite</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>ungültige Seitenzahl</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>letzte Seite</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>nächste Seite</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>keine weiteren Übereinstimmungen gefunden</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>von</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Seiteneinstellungen</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Seitenbreite</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>vorherige Seite</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Drucklayout</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Drucken</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Verarbeitung anhalten</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Text nicht gefunden.</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Gesamtseiten</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Ganze Seite</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Vergrößern</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Verbindung zur Datenbank ist abgebrochen. Bitte schränken Sie Ihre Suchkriterien ein.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Verfügbarkeit pro Agent</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Verfügbare Tage</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Verfügbare Zeit</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>geplante Tage</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Auslastung</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Nur aktive Skills</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agent Skills</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Nur aktive Skills:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Zeit im Status pro Agent</value>
+  </data>
 </root>

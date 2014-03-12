@@ -17,15 +17,19 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		public AggregatedAdherence Aggregate(IActualAgentState actualAgentState)
 		{
 			if (_siteIdForPerson == null) return null;
+
 			var personId = actualAgentState.PersonId;
 			var siteId = _siteIdForPerson.GetSiteId(personId);
 
-			if (!_siteAdherences.ContainsKey(siteId))
-				_siteAdherences[siteId] = new AggregatedAdherence(siteId);
+			AggregatedAdherence siteState;
+			if (!_siteAdherences.TryGetValue(siteId, out siteState))
+			{
+				siteState = new AggregatedAdherence(siteId);
+				_siteAdherences[siteId] = siteState;
+			}
 
-			var teamState = _siteAdherences[siteId];
-			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			return !changed ? null : _siteAdherences[siteId];
+			var changed = siteState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
+			return changed ? _siteAdherences[siteId] : null;
 		}
 	}
 }

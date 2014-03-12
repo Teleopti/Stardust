@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 					TeamId = aggregatedAdherence.Key,
 					OutOfAdherence = aggregatedAdherence.NumberOutOfAdherence()
 				};
-			var notification = new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
-			return notification;
+			return new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage)};
 		}
 
 		private static Notification createSiteNotification(AggregatedAdherence aggregatedAdherence)
@@ -48,8 +47,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 				SiteId = aggregatedAdherence.Key,
 				OutOfAdherence = aggregatedAdherence.NumberOutOfAdherence()
 			};
-			var notification = new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage) };
-			return notification;
+			return new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage) };
 		}
 	}
 }

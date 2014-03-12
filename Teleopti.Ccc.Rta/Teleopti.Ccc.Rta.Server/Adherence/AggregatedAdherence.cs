@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 
 		public bool TryUpdateAdherence(Guid personId, double staffingEffect)
 		{
-			var adherence = staffingEffect.Equals(0);
+			var inAdherence = staffingEffect.Equals(0);
 			var changed = !_personAdherence.ContainsKey(personId) || 
-			              _personAdherence[personId] != adherence;
-			_personAdherence[personId] = adherence;
+			              _personAdherence[personId] != inAdherence;
+			_personAdherence[personId] = inAdherence;
 			return changed;
 		}
 
