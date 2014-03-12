@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.IntegrationTest.Models;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
@@ -107,21 +105,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// now it should have data on all three dates 96 interval
-			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-			
-			var factSchedules = from s in db.fact_schedule select s;
+			var factSchedules = SqlCommands.RowsInFactSchedule();
 
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 			step = new IntradayStageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-			factSchedules = from s in db.fact_schedule select s;
-
+			factSchedules = SqlCommands.RowsInFactSchedule();
 			// still it should have data on all three dates 96 interval, in the bug only 64 one day extra before the two was deleted
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 
 			step = new FactScheduleDayCountJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
@@ -197,20 +192,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// now it should have data on all three dates 96 interval
-			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			var factSchedules = SqlCommands.RowsInFactSchedule();
 
-			var factSchedules = from s in db.fact_schedule select s;
-
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 			step = new IntradayStageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
-			factSchedules = from s in db.fact_schedule select s;
+			factSchedules = SqlCommands.RowsInFactSchedule();
 
-			
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 		}
 
 		

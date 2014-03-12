@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.IntegrationTest.Models;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
@@ -68,9 +66,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			StepRunner.RunNightly(jobParameters);
 
 			// now it should have data on all three dates on both persons 192 interval
-			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-			var factSchedules = from s in db.fact_schedule select s;
-			Assert.That(factSchedules.Count(), Is.EqualTo(192));
+			var factSchedules = SqlCommands.RowsInFactSchedule();
+			Assert.That(factSchedules, Is.EqualTo(192));
 
 			//edit three shifts for Ola
 			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
@@ -84,9 +81,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			StepRunner.RunIntraday(jobParameters);
 
-			factSchedules = from s in db.fact_schedule select s;
-
-			Assert.That(factSchedules.Count(), Is.EqualTo(192));
+			factSchedules = SqlCommands.RowsInFactSchedule();
+			Assert.That(factSchedules, Is.EqualTo(192));
 		}
 	}
 }
