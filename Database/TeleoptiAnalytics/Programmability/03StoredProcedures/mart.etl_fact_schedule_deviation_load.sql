@@ -43,17 +43,6 @@ if (@is_delayed_job=0 --only run once per ETL, dynamic SP will call using: @is_d
 	)
 EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_schedule_deviation_load'
 
---recursive call: If this is Intraday=true then go for an extra deviation load as we were in Intraday=false (aka Nightly)
---Why??! Because we need to fetch agent statistics according to date period set for in the ETL.Agent-step
-if (@isIntraday=1)
-BEGIN
-	EXEC mart.etl_fact_schedule_deviation_load
-	@start_date=@start_date,
-	@end_date=@end_date,
-	@business_unit_code=@business_unit_code,
-	@isIntraday=0
-END
-
 DECLARE @start_date_id int
 DECLARE @end_date_id int
 DECLARE @max_date_id int
