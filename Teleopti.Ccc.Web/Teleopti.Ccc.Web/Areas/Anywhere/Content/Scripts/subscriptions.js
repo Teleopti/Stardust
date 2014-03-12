@@ -109,8 +109,8 @@ define([
 		if (!siteAdherenceSubscription)
 			return;
 		startPromise.done(function () {
-			siteAdherenceSubscription = null;
 			messagebroker.unsubscribe(siteAdherenceSubscription);
+			siteAdherenceSubscription = null;
 		});
 	};
 
