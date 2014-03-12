@@ -1201,6 +1201,10 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Messaging\Teleopti.Messaging.csproj">
+      <Project>{4F4DF171-4A56-4E0D-90CB-CB2AFDEA4411}</Project>
+      <Name>Teleopti.Messaging</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Win\Teleopti.Ccc.Win.csproj">
       <Project>{26C57CBE-E75F-42C9-9747-8016AEB305F2}</Project>
       <Name>Teleopti.Ccc.Win</Name>

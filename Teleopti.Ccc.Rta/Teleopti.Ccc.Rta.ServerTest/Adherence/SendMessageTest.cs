@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
 			var target = new AdherenceAggregator(broker, teamProvider, null);
 
-			teamProvider.Expect(x => x.GetTeamId(agentState.PersonId)).Return(teamId);
+			teamProvider.Stub(x => x.GetTeamId(agentState.PersonId)).Return(teamId);
 
 			target.Invoke(agentState);
 
@@ -44,6 +44,69 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			broker.AssertWasCalled(x => x.SendNotification(null), a => a.IgnoreArguments().Repeat.Once());
 		}
- 
+
+		[Test]
+		public void ShouldSetBusinessIdOnTeamMessage()
+		{
+			var agentState = new ActualAgentState{BusinessUnit = Guid.NewGuid()};
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
+			var target = new AdherenceAggregator(broker, teamProvider, null);
+
+			teamProvider.Stub(x => x.GetTeamId(agentState.PersonId)).Return(Guid.NewGuid());
+
+			target.Invoke(agentState);
+
+			broker.LastNotification.BusinessUnitId.Should().Be.EqualTo(agentState.BusinessUnit.ToString());
+		}
+
+		[Test]
+		public void ShouldSetDomainTypeOnTeamMessage()
+		{
+			var agentState = new ActualAgentState();
+
+			var broker = new MessageSenderExposingLastNotification();
+			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
+			var target = new AdherenceAggregator(broker, teamProvider, null);
+
+			teamProvider.Stub(x => x.GetTeamId(agentState.PersonId)).Return(Guid.NewGuid());
+
+			target.Invoke(agentState);
+
+			broker.LastNotification.DomainType.Should().Be.EqualTo(typeof(TeamAdherenceMessage).Name);
+		}
+
+		[Test]
+		public void ShouldSetBusinessIdOnSiteMessage()
+		{
+			var agentState = new ActualAgentState { BusinessUnit = Guid.NewGuid() };
+
+			var broker = new MessageSenderExposingLastNotification();
+			var siteProvider = MockRepository.GenerateMock<ISiteIdForPerson>();
+			var target = new AdherenceAggregator(broker, null, siteProvider);
+
+			siteProvider.Stub(x => x.GetSiteId(agentState.PersonId)).Return(Guid.NewGuid());
+
+			target.Invoke(agentState);
+
+			broker.LastNotification.BusinessUnitId.Should().Be.EqualTo(agentState.BusinessUnit.ToString());
+		}
+
+		[Test]
+		public void ShouldSetDomainTypeOnSiteMessage()
+		{
+			var agentState = new ActualAgentState();
+
+			var broker = new MessageSenderExposingLastNotification();
+			var siteProvider = MockRepository.GenerateMock<ISiteIdForPerson>();
+			var target = new AdherenceAggregator(broker, null, siteProvider);
+
+			siteProvider.Stub(x => x.GetSiteId(agentState.PersonId)).Return(Guid.NewGuid());
+
+			target.Invoke(agentState);
+
+			broker.LastNotification.DomainType.Should().Be.EqualTo(typeof(SiteAdherenceMessage).Name);
+		}
 	}
 }
