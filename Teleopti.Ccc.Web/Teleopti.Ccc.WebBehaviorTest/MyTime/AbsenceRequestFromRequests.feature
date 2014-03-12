@@ -21,7 +21,6 @@ And I have an absence with
 | Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-03 23:59 |
-And The absence account is updated
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
@@ -48,7 +47,6 @@ And I have an absence with
 | Name      | Illness          |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-03 23:59 |
-And The absence account is updated
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with 'Illness' for date '2014-10-03'
@@ -107,7 +105,6 @@ And I have a personal account with
 | Absence     | Vacation   |
 | FromDate    | 2015-01-01 |
 | Accrued     | 25         |
-And The absence account is updated
 And I am viewing requests
 And I click to add a new absence request
 And I input absence request values with 'Vacation' for date '2014-10-03'
@@ -139,7 +136,6 @@ And I have an absence with
 | Name      | Vacation         |
 | StartTime | 2014-01-01 00:00 |
 | EndTime   | 2014-01-04 23:59 |
-And The absence account is updated
 And I am viewing requests
 When I click to add a new absence request
 And I input absence request values with "Vacation" from "2014-12-28" to "2015-01-02"
