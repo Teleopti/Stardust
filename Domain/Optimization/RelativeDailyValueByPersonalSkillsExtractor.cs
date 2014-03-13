@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public double? DayValue(DateOnly scheduleDay)
         {
             IList<double> intradayRelativePersonnelDeficits =
-                GetIntradayRelativePersonnelDeficits(scheduleDay);
+                getIntradayRelativePersonnelDeficits(scheduleDay);
 
             double? result = null;
 
@@ -76,10 +76,12 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         // todo: move to extractor methods
-        private IList<double> GetIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
+        private IList<double> getIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
         {
-            IEnumerable<ISkill> personsActiveSkills = extractPersonalSkillList(scheduleDay);
-			var minResolution = personsActiveSkills.Min(skill => skill.DefaultResolution);
+            IEnumerable<ISkill> personsActiveSkills = extractPersonalSkillList(scheduleDay).ToList();
+			var minResolution = 15;
+			if(personsActiveSkills.Any())
+				minResolution = personsActiveSkills.Min(skill => skill.DefaultResolution);
 
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                scheduleDay.Date, scheduleDay.Date.AddDays(1),
@@ -109,7 +111,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             bool useMinPersonnel = _advancedPreferences.UseMinimumStaffing;
             bool useMaxPersonnel = _advancedPreferences.UseMaximumStaffing;
 
-			return skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntevalDataList, useMinPersonnel, useMaxPersonnel);
+			var resultingList = skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntevalDataList, useMinPersonnel, useMaxPersonnel);
+	        return resultingList;
         }
 
 		public static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList, bool considerMinStaffing, bool considerMaxStaffing)
