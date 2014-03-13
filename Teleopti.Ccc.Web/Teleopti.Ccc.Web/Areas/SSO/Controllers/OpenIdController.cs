@@ -48,10 +48,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
 			if (windowsAccount != null)
 			{
-				var username = windowsAccount.UserName;
+				var currentHttp = _currentHttpContext.Current();
 				idrequest.LocalIdentifier =
-					new Uri(_currentHttpContext.Current().Request.Url,
-							_currentHttpContext.Current().Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + username));
+					new Uri(currentHttp.Request.Url,
+							currentHttp.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + windowsAccount.UserName + "@" + windowsAccount.DomainName));
 				idrequest.IsAuthenticated = true;
 				_openIdProvider.SendResponse(request);
 			}
