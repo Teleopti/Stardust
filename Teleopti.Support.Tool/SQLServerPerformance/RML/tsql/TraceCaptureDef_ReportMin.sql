@@ -88,7 +88,7 @@ SELECT @FileName =
         RIGHT('0'+LTRIM(cast(datepart(MINUTE, @Now) as VARCHAR(2))), 2)
 
 --add folder name
-select @fileName = @FolderName + @fileName
+select @FileName = @FolderName + @FileName
 
 --number of files to use
 select @fileCount = @MaxDisc*1024/@maxfilesize 		--  Start to roll over trace files if more then this figure
@@ -102,7 +102,7 @@ select @stoptime = dateadd(mi,@MaxMinutesInt,getdate())
 exec @rc = sp_trace_create
 	@TraceID		output,
 	@options		= 2 /* rollover*/,
-	@tracefile		= @fileName,
+	@tracefile		= @FileName,
 	@maxfilesize	= @maxfilesize,
 	@stoptime		= @stoptime,
 	@filecount		= @fileCount
@@ -236,7 +236,7 @@ END
 
 
 -- SELECT @TraceID back to callint batch file
-print cast(@TraceID as nvarchar(5)) + ',"' + @fileName + '"'
+print cast(@TraceID as nvarchar(5)) + ',"' + @FileName + '"'
 SET NOCOUNT OFF
 
 goto finish
@@ -259,11 +259,11 @@ print '--Get running traces:'
 print 'SELECT * FROM :: fn_trace_getinfo(default)'
 print '--------'
 print '--Select data from current trace:'
-print 'SELECT * FROM ::fn_trace_gettable('''+@fileName+'.trc'', DEFAULT)'
+print 'SELECT * FROM ::fn_trace_gettable('''+@FileName+'.trc'', DEFAULT)'
 print '--------'
 */
 /*
-print '--'+@fileName
+print '--'+@FileName
 print '--Issue the following commands (t-sql) if you need to stop the trace manually:'
 print 'exec sp_trace_setstatus ' + cast(@TraceID as varchar) + ', 0'
 print 'go'
