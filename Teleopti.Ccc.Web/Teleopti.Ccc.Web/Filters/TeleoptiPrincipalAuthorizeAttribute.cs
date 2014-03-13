@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.Web.Filters
 				filterContext.Result = new HttpStatusCodeResult(403);
 				return;
 			}
+
 			//var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
 
 			//filterContext.Result = new RedirectToRouteResult(

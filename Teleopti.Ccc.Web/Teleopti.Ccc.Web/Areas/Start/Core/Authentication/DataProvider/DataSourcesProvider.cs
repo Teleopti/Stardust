@@ -9,15 +9,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 	{
 		private readonly IApplicationData _applicationData;
 		private readonly IAvailableWindowsDataSources _availableWindowsDataSources;
-		private readonly IWindowsAccountProvider _windowsAccountProvider;
+		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 
 		public DataSourcesProvider(IApplicationData applicationData,
 		                           IAvailableWindowsDataSources availableWindowsDataSources,
-		                           IWindowsAccountProvider windowsAccountProvider)
+		                           ITokenIdentityProvider tokenIdentityProvider)
 		{
 			_applicationData = applicationData;
 			_availableWindowsDataSources = availableWindowsDataSources;
-			_windowsAccountProvider = windowsAccountProvider;
+			_tokenIdentityProvider = tokenIdentityProvider;
 		}
 
 		public IEnumerable<IDataSource> RetrieveDatasourcesForApplication()
@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		public IEnumerable<IDataSource> RetrieveDatasourcesForWindows()
 		{
-			var winAccount = _windowsAccountProvider.RetrieveWindowsAccount();
+			var winAccount = _tokenIdentityProvider.RetrieveToken();
 			return winAccount == null
 			       	? null
 			       	: _availableWindowsDataSources.AvailableDataSources(_applicationData.RegisteredDataSourceCollection,
-			       	                                                    winAccount.DomainName,
-			       	                                                    winAccount.UserName);
+			       	                                                    winAccount.UserDomain,
+			       	                                                    winAccount.UserIdentifier);
 		}
 
 		public IDataSource RetrieveDataSourceByName(string dataSourceName)

@@ -308,6 +308,8 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\SSO\Core\IWindowsAccountProvider.cs" />
+    <Compile Include="Areas\SSO\Core\WindowsAccountProvider.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
@@ -585,9 +587,9 @@
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\DataSourcesProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IBusinessUnitProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IDataSourcesProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\IWindowsAccountProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\WindowsAccount.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\WindowsAccountProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\ITokenIdentityProvider.cs" />
+    <Compile Include="Areas\SSO\Core\WindowsAccount.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\TokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\FormsAuthenticationWrapper.cs" />

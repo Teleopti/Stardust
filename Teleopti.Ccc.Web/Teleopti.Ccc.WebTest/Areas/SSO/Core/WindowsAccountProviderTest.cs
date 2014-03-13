@@ -3,10 +3,10 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
-namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
+namespace Teleopti.Ccc.WebTest.Areas.SSO.Core
 {
 	//todo: Gillar inte mockeridjupet på httpcontextbase. Finns säkert nåt lib därute som gör detta enklare
 	//kolla upp det...
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			string userName = string.Empty;
 			serverVariables.Add("LOGON_USER", userName);
 
-			WindowsAccount retrieveWindowsAccount = target.RetrieveWindowsAccount();
+			var retrieveWindowsAccount = target.RetrieveWindowsAccount();
 
 			retrieveWindowsAccount.Should().Be.Null();
 			

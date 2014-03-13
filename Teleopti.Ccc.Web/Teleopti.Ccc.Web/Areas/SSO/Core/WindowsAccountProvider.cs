@@ -1,8 +1,9 @@
 ﻿using System.Threading;
 using Microsoft.IdentityModel.Claims;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
-namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
+namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
 	public class WindowsAccountProvider : IWindowsAccountProvider
 	{
@@ -15,12 +16,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		public WindowsAccount RetrieveWindowsAccount()
 		{
-			var currentIdentity = Thread.CurrentPrincipal.Identity as IClaimsIdentity;
-			if (currentIdentity == null)
-			{
-				return null;
-			}
-
 			// err-hantering + test för detta senare... + browserstöd.
 			var splitBySeparator = _httpContext.Current().Request.ServerVariables["LOGON_USER"].Split('\\');
 			if(splitBySeparator.Length != 2)

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
+namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
 	public class WindowsAccount
 	{

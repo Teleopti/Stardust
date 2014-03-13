@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 			builder.RegisterType<DataSourcesProvider>().As<IDataSourcesProvider>().SingleInstance();
 			builder.RegisterType<Authenticator>().As<IAuthenticator>().SingleInstance();
 			builder.RegisterType<BusinessUnitProvider>().As<IBusinessUnitProvider>();
-			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
+			builder.RegisterType<TokenIdentityProvider>().As<ITokenIdentityProvider>().SingleInstance();
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
 			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
 			builder.RegisterType<FormsAuthenticationWrapper>().As<IFormsAuthentication>();

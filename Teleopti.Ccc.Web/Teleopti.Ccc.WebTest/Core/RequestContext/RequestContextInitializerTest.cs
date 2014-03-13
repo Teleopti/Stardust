@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	    		_setThreadCulture,
 	    		new WebRequestPrincipalContext(
 					new FakeCurrentHttpContext(_httpContextBase),
-	    			new TeleoptiPrincipalFactory()
+					new TeleoptiPrincipalFactory(), null
 	    			)
 	    		);
 		}

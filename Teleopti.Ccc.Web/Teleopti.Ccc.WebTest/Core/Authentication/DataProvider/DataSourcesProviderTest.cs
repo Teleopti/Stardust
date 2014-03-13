@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		private MockRepository mocks;
 		private IDataSourcesProvider target;
 		private IAvailableWindowsDataSources availableWindowsDataSources;
-		private IWindowsAccountProvider windowsAccountProvider;
+		private ITokenIdentityProvider tokenIdentityProvider;
 
 		[SetUp]
 		public void Setup()
@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			mocks = new MockRepository();
 			applicationData = mocks.StrictMock<IApplicationData>();
 			availableWindowsDataSources = mocks.StrictMock<IAvailableWindowsDataSources>();
-			windowsAccountProvider = mocks.DynamicMock<IWindowsAccountProvider>();
-			target = new DataSourcesProvider(applicationData, availableWindowsDataSources, windowsAccountProvider);
+			tokenIdentityProvider = mocks.DynamicMock<ITokenIdentityProvider>();
+			target = new DataSourcesProvider(applicationData, availableWindowsDataSources, tokenIdentityProvider);
 		}
 
 		[Test]
@@ -53,15 +53,15 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			var validDs = mocks.StrictMock<IDataSource>();
 			var invalidDs = mocks.StrictMock<IDataSource>();
 			var dsList = new[] { validDs, invalidDs };
-			var winAccount = new WindowsAccount("domain", "user");
+			var winAccount = new TokenIdentity {UserIdentifier = "user", UserDomain = "domain"};
 
 			using (mocks.Record())
 			{
 				Expect.Call(applicationData.RegisteredDataSourceCollection)
 					.Return(dsList);
 
-				Expect.Call(windowsAccountProvider.RetrieveWindowsAccount()).Return(winAccount);
-				Expect.Call(availableWindowsDataSources.AvailableDataSources(dsList, winAccount.DomainName, winAccount.UserName))
+				Expect.Call(tokenIdentityProvider.RetrieveToken()).Return(winAccount);
+				Expect.Call(availableWindowsDataSources.AvailableDataSources(dsList, winAccount.UserDomain, winAccount.UserIdentifier))
 					.Return(new[] { validDs });
 			}
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		{
 			using (mocks.Record())
 			{
-				Expect.Call(windowsAccountProvider.RetrieveWindowsAccount()).Return(null);
+				Expect.Call(tokenIdentityProvider.RetrieveToken()).Return(null);
 			}
 
 			using (mocks.Playback())

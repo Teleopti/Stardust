@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private IRepositoryFactory repositoryFactory;
 		private MockRepository mocks;
 		private IAuthenticator target;
-		private IWindowsAccountProvider windowsAccountProvider;
+		private ITokenIdentityProvider tokenIdentityProvider;
 		private IFindApplicationUser findApplicationUser;
 		private IIpAddressResolver ipFinder;
 		const string dataSourceName = "Gurkmajonääääs";
@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			mocks = new MockRepository();
 			dataSourcesProvider = mocks.StrictMock<IDataSourcesProvider>();
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
-			windowsAccountProvider = mocks.DynamicMock<IWindowsAccountProvider>();
+			tokenIdentityProvider = mocks.DynamicMock<ITokenIdentityProvider>();
 			findApplicationUser = mocks.DynamicMock<IFindApplicationUser>();
 			ipFinder = mocks.DynamicMock<IIpAddressResolver>();
-			target = new Authenticator(dataSourcesProvider, windowsAccountProvider, repositoryFactory, findApplicationUser, ipFinder);
+			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, findApplicationUser, ipFinder);
 		}
 
 		
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			var uow = mocks.DynamicMock<IUnitOfWork>();
 			var personRepository = mocks.DynamicMock<IPersonRepository>();
-			var winAccount = new WindowsAccount("domain", "user");
+			var winAccount = new TokenIdentity {UserDomain = "domain", UserIdentifier = "user"};
 
 			IPerson person;
 
@@ -55,11 +55,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
 
-				Expect.Call(windowsAccountProvider.RetrieveWindowsAccount()).Return(winAccount);
+				Expect.Call(tokenIdentityProvider.RetrieveToken()).Return(winAccount);
 
 				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
 
-				Expect.Call(personRepository.TryFindWindowsAuthenticatedPerson(winAccount.DomainName, winAccount.UserName, out person)).Return(true);
+				Expect.Call(personRepository.TryFindWindowsAuthenticatedPerson(winAccount.UserDomain, winAccount.UserIdentifier, out person)).Return(true);
 			}
 
 			using (mocks.Playback())

@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Web.Mvc;
+using Microsoft.IdentityModel.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
