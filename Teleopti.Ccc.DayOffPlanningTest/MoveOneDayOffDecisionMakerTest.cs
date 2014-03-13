@@ -174,6 +174,29 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             Assert.IsTrue(bitArray[6]);
         }
 
+		[Test]
+		public void Bug27312FlatDemands()
+		{
+			IList<double?> values = new List<double?> { -50, -50, -50, -50, -50, -50, -50 };
+			ILockableBitArray bitArray = new LockableBitArray(7, false, false, null);
+			bitArray.PeriodArea = new MinMax<int>(0, 5);
+			bitArray.Set(5, true);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_validator.IsValid(new BitArray(0), 0)).IgnoreArguments().Return(false).Repeat.Any();
+				_logWriter.LogInfo(null);
+				LastCall.IgnoreArguments().Repeat.AtLeastOnce();
+			}
+			bool res;
+			using (_mocks.Playback())
+			{
+				res = _target.Execute(bitArray, values);
+			}
+			Assert.IsFalse(res);
+			Assert.IsTrue(bitArray[5]);
+		}
+
         private static ILockableBitArray createArray1()
         {
             ILockableBitArray ret = new LockableBitArray(7, false, false, null);
