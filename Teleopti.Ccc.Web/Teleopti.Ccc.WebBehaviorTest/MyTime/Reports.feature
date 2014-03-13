@@ -37,6 +37,13 @@ Scenario: My Report should display at top of the drop list
 	Then I should see My Report display at top of the drop list 
 
 @ignore
+Scenario: Show report tab
+	Given  I am an agent
+	And I have the role 'Access to Request per Agent'
+	When I am viewing an application page
+	Then Reports tab should be visible 
+
+@ignore
 Scenario: Reports should be sorted alphabetically 
 	Given  I have the role 'Access to Request per Agent'
 	And I have the role 'Access to Absence Time per Agent'
@@ -51,18 +58,10 @@ Scenario: Reports should be sorted alphabetically
 Scenario: Should not show the reports menu with no permission for any report
 	Given  I have the role 'No access to MyReport' 
 	When I logon MyTime Web
-	Then I should not see the reports menu
+	Then I should not see the 'Reports' nor MyReport tab
 
 @ignore
 Scenario: Open standard report 
 	Given  I have the role 'Access to Request per Agent'
 	When I click 'Requests per Agent' in the list
 	Then It should open report 'Requests per Agent' in a new window
-
-@ignore
-Scenario: Open My Report
-	Given  I am an agent
-	And I have my report data for '2013-10-02'
-	And the current time is '2013-10-03'
-	When I click 'My Report' in the list
-	Then I should see my report with data for '2013-10-02' in the current page
