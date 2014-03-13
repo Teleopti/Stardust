@@ -2,11 +2,11 @@
 		'knockout'
 ],
 	function (ko) {
-	return function () {
+		return function () {
 
-		var that = {};
-		that.OutOfAdherence = ko.observable();
-		return that;
-	};
-}
+			var that = {};
+			that.OutOfAdherence = ko.observable();
+			return that;
+		};
+	}
 );
