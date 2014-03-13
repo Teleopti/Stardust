@@ -23,16 +23,7 @@ define([
 			throw e;
 		}
 	};
-
-	var groupScheduleHub = $.connection.groupScheduleHub;
-	groupScheduleHub.client.exceptionHandler = errorview.display;
-	var incomingGroupSchedule = null;
-	var groupScheduleSubscription = null;
-	groupScheduleHub.client.incomingGroupSchedule = function (data) {
-		if (incomingGroupSchedule != null)
-			logException(function () { incomingGroupSchedule(data); });
-	};
-
+	
 	var personScheduleHub = $.connection.personScheduleHub;
 	personScheduleHub.client.exceptionHandler = errorview.display;
 	var personScheduleSubscription = null;
@@ -56,16 +47,6 @@ define([
 			incomingPersonSchedule = null;
 			messagebroker.unsubscribe(personScheduleSubscription);
 			personScheduleSubscription = null;
-		});
-	};
-
-	var unsubscribeGroupSchedule = function () {
-		if (!groupScheduleSubscription)
-			return;
-		startPromise.done(function () {
-			incomingGroupSchedule = null;
-			messagebroker.unsubscribe(groupScheduleSubscription);
-			groupScheduleSubscription = null;
 		});
 	};
 
@@ -122,23 +103,6 @@ define([
 			});
 		},
 
-		subscribeGroupSchedule: function (groupId, date, callback) {
-			unsubscribeGroupSchedule();
-			incomingGroupSchedule = callback;
-			startPromise.done(function () {
-				groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
-
-				groupScheduleSubscription = messagebroker.subscribe({
-					domainType: 'IPersonScheduleDayReadModel',
-					callback: function (notification) {
-						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
-							groupScheduleHub.server.subscribeGroupSchedule(groupId, date);
-						}
-					}
-				});
-			});
-		},
-
 		subscribePersonSchedule: function (personId, date, callback) {
 			unsubscribePersonSchedule();
 			incomingPersonSchedule = callback;
@@ -161,7 +125,6 @@ define([
 		},
 		
 		unsubscribePersonSchedule: unsubscribePersonSchedule,
-		unsubscribeGroupSchedule: unsubscribeGroupSchedule,
 		unsubscribeDailyStaffingMetrics: unsubscribeDailyStaffingMetrics
 	};
 

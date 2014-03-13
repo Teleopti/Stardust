@@ -1,15 +1,9 @@
 define([
 				'jquery',
 				'messagebroker',
-				'signalrhubs',
-				'helpers',
-				'errorview'
 ], function (
 			$,
-			messagebroker,
-			signalRHubs,
-			helpers,
-			errorview
+			messagebroker
 	) {
 
 	var startPromise = messagebroker.start();

@@ -4,7 +4,7 @@ define([
 		'jquery',
 		'navigation',
 		'moment',
-		'subscriptions',
+		'subscriptions.groupschedule',
 		'helpers',
 		'views/teamschedule/vm',
 		'views/teamschedule/person',
