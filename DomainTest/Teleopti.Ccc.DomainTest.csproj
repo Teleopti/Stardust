@@ -377,6 +377,7 @@
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
     <Compile Include="ResourceCalculation\PeriodResourceDetailTest.cs" />
     <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
+    <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertimeTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
