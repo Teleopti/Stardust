@@ -11,7 +11,7 @@ define([
 			helpers
 	) {
 
-	var startPromise = messagebroker.start();
+	var startPromise;
 
 	var dailyStaffingMetricsSubscription = null;
 
@@ -50,6 +50,11 @@ define([
 	};
 
 	return {
+		start: function () {
+			startPromise = messagebroker.start();
+			return startPromise;
+		},
+
 		subscribeDailyStaffingMetrics: function (date, skillId, callback) {
 			unsubscribeDailyStaffingMetrics();
 			startPromise.done(function () {

@@ -6,7 +6,7 @@ define([
 			messagebroker
 	) {
 
-	var startPromise = messagebroker.start();
+	var startPromise;
 
 	var siteAdherenceSubscription = null;
 
@@ -20,6 +20,11 @@ define([
 	};
 
 	return {
+		start: function () {
+			startPromise = messagebroker.start();
+			return startPromise;
+		},
+
 		subscribeAdherence: function () {
 			console.log('starting subscribe');
 			unsubscribeAdherence();

@@ -1,20 +1,26 @@
 define([
-				'jquery',
-				'messagebroker'
-], function (
-			$,
-			messagebroker
+		'jquery',
+		'subscriptions.groupschedule',
+		'subscriptions.personschedule',
+		'subscriptions.staffingmetrics',
+		'subscriptions.adherence'
+	], function(
+		$,
+		groupschedule,
+		personschedule,
+		staffingmetrics,
+		adherence
 	) {
 
-	var startPromise;
-	
-	var start = function () {
-		startPromise = messagebroker.start();
-		return startPromise;
-	};
+		return {
+			start: function () {
+				return $.when(
+					groupschedule.start(),
+					personschedule.start(),
+					staffingmetrics.start(),
+					adherence.start()				
+				);
+			}
+		};
 
-	return {
-		start: start
-	};
-
-});
+	});

@@ -12,8 +12,7 @@ define([
 			errorview
 	) {
 
-	var startPromise = messagebroker.start();
-	
+	var startPromise;
 
 	// why is signalr eating my exceptions?
 	var logException = function (func) {
@@ -55,6 +54,11 @@ define([
 	};
 
 	return {
+		start: function () {
+			startPromise = messagebroker.start();
+			return startPromise;
+		},
+
 		subscribePersonSchedule: function (personId, date, callback) {
 			unsubscribePersonSchedule();
 			incomingPersonSchedule = callback;
