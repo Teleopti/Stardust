@@ -33,17 +33,16 @@
         }
         else
 		{
-
 			<li class="dropdown" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
 																					 {
 																						 if (optionGroup.Text != Resources.ShiftCategory)
 																						 {
-				                                                                                            @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
+																							 @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
 																						 }
 																						 foreach (var option in optionGroup.Options)
 																						 {
-				                                                                                            @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
-																							   }
+																							 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
+																						 }
 																					 }]">
 				<a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="click: applyPreference">
 					<span data-bind="'text': selectedPreferenceText()"></span>
