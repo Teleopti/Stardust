@@ -22,7 +22,8 @@
 
 			"should update number out of adherence": function () {
 				var vm = viewModel();
-				
+
+				vm.fill([{ Name: 'London', Id: 'guid1' }]);
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.sites()[0].OutOfAdherence(), 1);
@@ -31,11 +32,17 @@
 			"should update number out of adherence on existing site": function () {
 				var vm = viewModel();
 				vm.fill([{ Name: 'London', Id: 'guid1' }]);
-
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.sites().length, 1);
 				assert.equals(vm.sites()[0].OutOfAdherence(), 1);
+			},
+			
+			"should not add when update if there is no site": function() {
+				var vm = viewModel();
+				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
+
+				assert.equals(vm.sites().length, 0);
 			}
 
 		});

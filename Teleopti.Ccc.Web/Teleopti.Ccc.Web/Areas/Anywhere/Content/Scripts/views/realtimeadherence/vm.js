@@ -21,23 +21,23 @@
 			var theSite = lazy(that.sites())
 				.filter(function (x) { return x.Id == id; })
 				.first();
-			if (!theSite) {
-				theSite = site();
-				theSite.Id = id;
-			}
 			return theSite;
 		};
 
-		that.fill = function (data) {
+		that.fill = function(data) {
 			for (var i = 0; i < data.length; i++) {
-				var theSite = siteForId(data[i].Id);
-				theSite.Name = data[i].Name;
-				that.sites.push(theSite);
+				var newSite = site();
+				newSite.Id = data[i].Id;
+				newSite.Name = data[i].Name;
+
+				that.sites.push(newSite);
 			}
 		};
 
 		that.update = function (data) {
-			siteForId(data.Id).OutOfAdherence(data.OutOfAdherence);
+			var existingSite = siteForId(data.Id);
+			if (existingSite)
+				existingSite.OutOfAdherence(data.OutOfAdherence);
 		};
 
 		return that;
