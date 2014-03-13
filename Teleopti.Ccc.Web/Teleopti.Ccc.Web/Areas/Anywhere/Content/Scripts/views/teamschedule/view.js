@@ -5,7 +5,7 @@ define([
 		'navigation',
 		'moment',
 		'subscriptions.groupschedule',
-		'subscriptions',
+		'subscriptions.staffingmetrics',
 		'helpers',
 		'views/teamschedule/vm',
 		'views/teamschedule/person',
@@ -20,7 +20,7 @@ define([
 		navigation,
 		momentX,
 		groupschedulesubscriptions,
-		subscriptions,
+		staffingmetricssubscriptions,
 		helpers,
 		teamScheduleViewModel,
 		personViewModel,
@@ -154,7 +154,7 @@ define([
 					return;
 				viewModel.LoadingStaffingMetrics(true);
 
-				subscriptions.subscribeDailyStaffingMetrics(
+				staffingmetricssubscriptions.subscribeDailyStaffingMetrics(
 					helpers.Date.ToServer(viewModel.Date()),
 					viewModel.SelectedSkill().Id,
 					function (data) {
@@ -172,7 +172,7 @@ define([
 
 		dispose: function (options) {
 			groupschedulesubscriptions.unsubscribeGroupSchedule();
-			subscriptions.unsubscribeDailyStaffingMetrics();
+			staffingmetricssubscriptions.unsubscribeDailyStaffingMetrics();
 			$(".datepicker.dropdown-menu").remove();
 		},
 
