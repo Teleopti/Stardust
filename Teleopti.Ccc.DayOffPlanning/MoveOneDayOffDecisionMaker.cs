@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             {
                 foreach (int moveTo in indexesToMoveTo)
                 {
-                    if (values[moveTo - lockableBitArray.PeriodArea.Minimum] < values[moveFrom - lockableBitArray.PeriodArea.Minimum])
+                    if (values[moveTo - lockableBitArray.PeriodArea.Minimum] <= values[moveFrom - lockableBitArray.PeriodArea.Minimum])
                         break;
 
                     ILockableBitArray clone = (LockableBitArray)lockableBitArray.Clone();
