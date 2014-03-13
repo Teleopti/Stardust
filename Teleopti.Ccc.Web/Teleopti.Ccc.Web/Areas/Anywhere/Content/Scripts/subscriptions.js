@@ -24,30 +24,11 @@ define([
 		}
 	};
 	
-	var personScheduleHub = $.connection.personScheduleHub;
-	personScheduleHub.client.exceptionHandler = errorview.display;
-	var personScheduleSubscription = null;
-	var incomingPersonSchedule = null;
-	personScheduleHub.client.incomingPersonSchedule = function (data) {
-		if (incomingPersonSchedule != null)
-			logException(function () { incomingPersonSchedule(data); });
-	};
-
 	var dailyStaffingMetricsSubscription = null;
 
 	var start = function () {
 		startPromise = messagebroker.start();
 		return startPromise;
-	};
-
-	var unsubscribePersonSchedule = function () {
-		if (!personScheduleSubscription)
-			return;
-		startPromise.done(function () {
-			incomingPersonSchedule = null;
-			messagebroker.unsubscribe(personScheduleSubscription);
-			personScheduleSubscription = null;
-		});
 	};
 
 	var unsubscribeDailyStaffingMetrics = function () {
@@ -103,28 +84,6 @@ define([
 			});
 		},
 
-		subscribePersonSchedule: function (personId, date, callback) {
-			unsubscribePersonSchedule();
-			incomingPersonSchedule = callback;
-			startPromise.done(function () {
-
-				personScheduleHub.server.personSchedule(personId, date);
-
-				personScheduleSubscription = messagebroker.subscribe({
-					domainReferenceType: 'Person',
-					domainReferenceId: personId,
-					domainType: 'IPersonScheduleDayReadModel',
-					callback: function (notification) {
-						if (isMatchingDates(date, notification.StartDate, notification.EndDate)) {
-							personScheduleHub.server.personSchedule(personId, date);
-						}
-					}
-				});
-
-			});
-		},
-		
-		unsubscribePersonSchedule: unsubscribePersonSchedule,
 		unsubscribeDailyStaffingMetrics: unsubscribeDailyStaffingMetrics
 	};
 
