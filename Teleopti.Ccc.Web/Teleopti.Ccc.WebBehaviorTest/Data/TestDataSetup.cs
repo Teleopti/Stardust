@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
 			var matrixReportsParent = applicationFunctionRepository.LoadAll().First(x => x.FunctionCode == "Reports");
-			var names = new[] { "ResReportAbandonmentAndSpeedOfAnswer", "ResReportForecastvsActualWorkload", "ResReportServiceLevelAndAgentsReady" };
+			var names = new[] { "ResReportAbandonmentAndSpeedOfAnswer", "ResReportForecastvsActualWorkload", "ResReportServiceLevelAndAgentsReady", "ResReportRequestsPerAgent" };
 
 			applicationFunctionRepository.AddRange(
 				names.Select(n => new ApplicationFunction(n, matrixReportsParent) { ForeignSource = DefinedForeignSourceNames.SourceMatrix }));

@@ -20,14 +20,14 @@ Background:
 	| Field              | Value                 |
 	| Name               | No access to MyReport |
 	| Access to MyReport | False                 |
+	
 
 @ignore
 Scenario: Show reports with permissions
-	Given I have the role 'Access to Request per Agent'
+	Given I am american
 	And I have the role 'No access to MyReport'
 	When I click reports menu
 	Then I should only see report 'Requests per Agent' 
-	And I should not see any other reports
 
 @ignore
 Scenario: My Report should display at top of the drop list

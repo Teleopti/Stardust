@@ -77,11 +77,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		 public bool AccessToShiftCategoryAndFullDayAbsencePerDay { get; set; }
 		 public bool AccessToShiftCategoryPerDay { get; set; }
 		 public bool AccessToTeamMetrics { get; set; }
-		 public bool AccessToResReportTimeInStatePerAgent { get; set; }*/
+		 public bool AccessToResReportTimeInStatePerAgent { get; set; }
 
 		 public bool AccessToRequestsPerAgent { get; set; }
 		 public bool AccessToAgentSkills { get; set; }
-		 public bool AccessToAbsenceTimePerAgent { get; set; }
+		 public bool AccessToAbsenceTimePerAgent { get; set; }*/
 
 		public RoleConfigurable()
 		{
@@ -108,9 +108,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = false;
 			AccessToTeamSchedule = true;
-			AccessToRequestsPerAgent = false;
+			/*AccessToRequestsPerAgent = false;
 			AccessToAgentSkills = false;
-			AccessToAbsenceTimePerAgent = false;
+			AccessToAbsenceTimePerAgent = false;*/
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -256,9 +256,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ReportAgentSkills
 												  select f;
 				if (!AccessToAbsenceTimePerAgent)
+
 				applicationFunctions = from f in applicationFunctions
 											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ReportAbsenceTimePerAgent
 												  select f;*/
+
+
 
 			return applicationFunctions;
 		}
