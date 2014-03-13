@@ -26,11 +26,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.Click(".overtime-availability-bar");
 		}
 
-		[Then(@"I should not be able to see schedule link")]
-		public void ThenIShouldNotBeAbleToSeeScheduleLink()
-		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(".bdd-mytime-top-menu", "a[href='#ScheduleTab']");
-		}
-
 	}
 }

@@ -115,32 +115,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-my-schedule-row", string.Format(".shift-trade-agent-name:contains('{0}')", name));
 		}
 		
-		[Then(@"I should not see a possible schedule to trade with")]
-		public void ThenIShouldNotSeeAPossibleScheduleToTradeWith()
-		{
-			//Henke todo: stämmer inte riktigt, det kan ju vara mina egna...
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.False);
-		}
-
-
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Year.ToString());
 			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Month.ToString());
 			Browser.Interactions.AssertJavascriptResultContains("return $('.add-shifttrade-datepicker').val();", date.Day.ToString());
-		}
-
-		[When(@"I uncheck the my team filter checkbox")]
-		public void WhenIUncheckTheMyTeamFilterCheckbox()
-		{
-			Browser.Interactions.Click(".shift-trade-myteam-filter");
-		}
-
-		[When(@"I click the search button")]
-		public void WhenIClickTheSearchButton()
-		{
-			Browser.Interactions.Click(".shift-trade-search");
 		}
 
 		[When(@"I click on the next date")]
@@ -154,13 +134,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.shift-trade-label:lt(1)').text() + ' ' + $('.shift-trade-label:lt(2)').text();", timeLineHourFrom);
 			Browser.Interactions.AssertFirstContains(".shift-trade-label:last-child", timeLineHourTo);
-		}
-
-		[Then(@"I should see my scheduled day off '(.*)'")]
-		public void ThenIShouldSeeMyScheduledDayOff(string dayOffName)
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.EqualTo(1));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.First().Span(Find.First()).Text, Is.EqualTo(dayOffName));
 		}
 
 		[Then(@"I should see details with a schedule from")]

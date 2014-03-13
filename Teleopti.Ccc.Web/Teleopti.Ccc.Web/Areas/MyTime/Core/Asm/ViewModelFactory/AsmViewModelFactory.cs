@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 			_pushMessageProvider = pushMessageProvider;
 		}
 
-		public AsmViewModel CreateViewModel(DateTime asmZero)
+		public AsmViewModel CreateViewModel(DateTime asmZeroLocal)
 		{
-			var theDate = new DateOnly(asmZero);
+			var theDate = new DateOnly(asmZeroLocal);
 			var loadPeriod = new DateOnlyPeriod(theDate, theDate.AddDays(2));
 			var schedules = _scheduleProvider.GetScheduleForPeriod(loadPeriod);
-			return _mapper.Map(asmZero, schedules, _pushMessageProvider.UnreadMessageCount);
+			return _mapper.Map(asmZeroLocal, schedules, _pushMessageProvider.UnreadMessageCount);
 		}
 	}
 }

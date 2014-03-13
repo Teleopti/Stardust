@@ -1254,7 +1254,7 @@ Date</value>
     <comment>New special event</comment>
   </data>
   <data name="NewPassword" xml:space="preserve">
-    <value>New Password</value>
+    <value>New password</value>
     <comment>New password</comment>
   </data>
   <data name="NewScorecard" xml:space="preserve">
@@ -3833,7 +3833,7 @@ Columns</value>
     <comment>Remove Meeting</comment>
   </data>
   <data name="AutomaticScheduling" xml:space="preserve">
-    <value>Automatic scheduling</value>
+    <value>Automatic Scheduling</value>
     <comment>Automatic scheduling</comment>
   </data>
   <data name="ModifyAbsence" xml:space="preserve">
@@ -3841,7 +3841,7 @@ Columns</value>
     <comment>Modify absence</comment>
   </data>
   <data name="ModifyAssignment" xml:space="preserve">
-    <value>Modify assignment</value>
+    <value>Modify Assignment</value>
     <comment>Modify assignment</comment>
   </data>
   <data name="ModifyMainShift" xml:space="preserve">
@@ -3853,7 +3853,7 @@ Columns</value>
     <comment>Modify personal shift</comment>
   </data>
   <data name="ModifyPersonNameAndPassword" xml:space="preserve">
-    <value>Modify name and password</value>
+    <value>Modify Name and Password</value>
     <comment>Modify name and password</comment>
   </data>
   <data name="ModifyPersonTimeActivity" xml:space="preserve">
@@ -5152,7 +5152,7 @@ Availability</value>
     <comment>Function CreateAbsenceRequest</comment>
   </data>
   <data name="CreateShiftTradeRequest" xml:space="preserve">
-    <value>Shift trade request</value>
+    <value>Shift Trade Request</value>
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
@@ -5303,7 +5303,7 @@ Availability</value>
     <comment>Holiday time for trackingdescription</comment>
   </data>
   <data name="EarlyWarning" xml:space="preserve">
-    <value>Early warning</value>
+    <value>Early Warning</value>
     <comment>Early warning</comment>
   </data>
   <data name="MinMaxStaffing" xml:space="preserve">
@@ -5514,7 +5514,7 @@ Availability</value>
     <comment>Text on description when creating a skill</comment>
   </data>
   <data name="ViewUnpublishedSchedules" xml:space="preserve">
-    <value>View unpublished schedules</value>
+    <value>View Unpublished Schedules</value>
     <comment>View unpublished schedules Permission function</comment>
   </data>
   <data name="GlobalFunctions" xml:space="preserve">
@@ -6453,11 +6453,11 @@ Meeting</value>
     <value>for</value>
   </data>
   <data name="ModifyGroupPage" xml:space="preserve">
-    <value>Modify group page</value>
+    <value>Modify Group Page</value>
     <comment>Modify group page</comment>
   </data>
   <data name="ModifyPeopleWithinGroupPage" xml:space="preserve">
-    <value>Modify people within group page</value>
+    <value>Modify People within Group Page</value>
     <comment>Modify people within group page</comment>
   </data>
   <data name="Impact" xml:space="preserve">
@@ -7323,15 +7323,15 @@ Updated on: {1}</value>
     <comment>Collapse All Nodes</comment>
   </data>
   <data name="CreatePerformanceManagerReport" xml:space="preserve">
-    <value>Create performance manager report</value>
+    <value>Create Performance Manager Report</value>
     <comment>Create performance manager report application function</comment>
   </data>
   <data name="ModifyWriteProtectedSchedule" xml:space="preserve">
-    <value>Modify write protected schedule</value>
+    <value>Modify Write Protected Schedule</value>
     <comment>Modify write protected schedule application function</comment>
   </data>
   <data name="SetWriteProtection" xml:space="preserve">
-    <value>Set write protection</value>
+    <value>Set Write Protection</value>
     <comment>Set write protection application function</comment>
   </data>
   <data name="UnderConstruction" xml:space="preserve">
@@ -7339,15 +7339,15 @@ Updated on: {1}</value>
     <comment>Application function is under construction</comment>
   </data>
   <data name="ViewPerformanceManagerReport" xml:space="preserve">
-    <value>View performance manager report</value>
+    <value>View Performance Manager Report</value>
     <comment>View performance manager report application function</comment>
   </data>
   <data name="ViewSchedules" xml:space="preserve">
-    <value>View schedules</value>
+    <value>View Schedules</value>
     <comment>View schedules application function</comment>
   </data>
   <data name="ModifyPersonRestriction" xml:space="preserve">
-    <value>Modify person restriction</value>
+    <value>Modify Person Restriction</value>
     <comment>Modify person restriction application function</comment>
   </data>
   <data name="xxx" xml:space="preserve">
@@ -8213,7 +8213,7 @@ Period</value>
     <comment>Text replacement</comment>
   </data>
   <data name="ViewConfidential" xml:space="preserve">
-    <value>View confidential</value>
+    <value>View Confidential</value>
     <comment>Application Function View Confidential</comment>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
@@ -8568,7 +8568,7 @@ Period: {3}</value>
     <value>Scheduling result</value>
   </data>
   <data name="OnlineReports" xml:space="preserve">
-    <value>Real time reports</value>
+    <value>Real Time Reports</value>
     <comment>Online reports application function</comment>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
@@ -9014,7 +9014,7 @@ Longterm</value>
     <comment>PeriodNotInLegalState</comment>
   </data>
   <data name="AuditTrailSettings" xml:space="preserve">
-    <value>Audit Trail settings</value>
+    <value>Audit Trail Settings</value>
     <comment>App function text</comment>
   </data>
   <data name="AuditTrailSetting" xml:space="preserve">
@@ -9515,11 +9515,11 @@ Period</comment>
     <comment>Restricted</comment>
   </data>
   <data name="ModifyRestrictedScenario" xml:space="preserve">
-    <value>Modify restricted scenarios</value>
+    <value>Modify Restricted Scenarios</value>
     <comment>Modify restricted scenarios</comment>
   </data>
   <data name="ViewRestrictedScenario" xml:space="preserve">
-    <value>View restricted scenarios</value>
+    <value>View Restricted Scenarios</value>
     <comment>View restricted scenarios</comment>
   </data>
   <data name="PlanningTimeBankCaption" xml:space="preserve">
@@ -9869,7 +9869,7 @@ Period</comment>
     <comment>Meetings created by me</comment>
   </data>
   <data name="SendASM" xml:space="preserve">
-    <value>Send message (ASM)</value>
+    <value>Send Message (ASM)</value>
     <comment>Send Asm</comment>
   </data>
   <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
@@ -10203,7 +10203,7 @@ These options are activated:
     <comment>total allowance</comment>
   </data>
   <data name="AllowPersonModifications" xml:space="preserve">
-    <value>Can change and save</value>
+    <value>Can Change and Save</value>
   </data>
   <data name="ViewAllowance" xml:space="preserve">
     <value>View allowance</value>
@@ -10615,7 +10615,7 @@ These options are activated:
     <comment>Import forecast from file</comment>
   </data>
   <data name="RequestAllowances" xml:space="preserve">
-    <value>Request allowances</value>
+    <value>Request Allowances</value>
     <comment>Request allowances</comment>
   </data>
   <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
@@ -11444,8 +11444,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Message for optimistic lock exception in messaging.</comment>
   </data>
   <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
-    <value>Availability Per Agent</value>
-    <comment> the report Availability Per Agent</comment>
+    <value>Availability per Agent</value>
+    <comment> the report Availability per Agent</comment>
   </data>
   <data name="TeamBlockNotInLegalState" xml:space="preserve">
     <value>The team block period is not in legal state.</value>
@@ -11463,7 +11463,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>used in Chat skills</comment>
   </data>
   <data name="ViewActiveAgents" xml:space="preserve">
-    <value>View active agents</value>
+    <value>View Active Agents</value>
     <comment>permission</comment>
   </data>
   <data name="SkillTypeChat" xml:space="preserve">
@@ -11819,7 +11819,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Keeps the existing tag</comment>
   </data>
   <data name="ModifyAvailabilities" xml:space="preserve">
-    <value>Modify availabilities</value>
+    <value>Modify Availabilities</value>
     <comment>Modify availabilities in scheduler</comment>
   </data>
   <data name="UseDayOfMonthSeasonality" xml:space="preserve">
@@ -11965,5 +11965,13 @@ Reduce the complexity to use these shifts.</value>
   <data name="Ranking" xml:space="preserve">
     <value>Ranking</value>
     <comment>Ranking</comment>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Real Time Adherence Overview</value>
+    <comment>Permission name</comment>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>View Personal Account</value>
+    <comment>text in permissions</comment>
   </data>
 </root>

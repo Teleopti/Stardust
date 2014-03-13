@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 	public class AbsenceConfigurable : IDataSetup
 	{
 		public string Name { get; set; }
+		public string ShortName { get; set; }
 		public string Color { get; set; }
 		public bool? InContractTime { get; set; }
 		public bool? Confidential { get; set; }
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Absence = new Absence {Description = new Description(Name)};
+			Absence = new Absence {Description = new Description(Name, ShortName)};
 
 			if (Color != null)
 				Absence.DisplayColor = System.Drawing.Color.FromName(Color);

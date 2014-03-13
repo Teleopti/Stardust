@@ -44,9 +44,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToOvertimeAvailability { get; set; }
 		public bool AccessToMyReport { get; set; }
         public bool AccessToUnderConstruction { get; set; }
+        public bool AccessToMonthSchedule { get; set; }
 		public bool AccessToPreferences { get; set; }
+		public bool AccessToRealTimeAdherenceOverview { get; set; }
 		public bool AccessToTeamSchedule { get; set; }
-
 	    public bool AccessToViewAllGroupPages { get; set; }
 
 		 /*access for Reports
@@ -102,8 +103,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
-			AccessToUnderConstruction = true;
+            AccessToUnderConstruction = true;
+            AccessToMonthSchedule = true;
 			AccessToPreferences = true;
+			AccessToRealTimeAdherenceOverview = false;
 			AccessToTeamSchedule = true;
 			AccessToRequestsPerAgent = false;
 			AccessToAgentSkills = false;
@@ -235,6 +238,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
             if (!AccessToUnderConstruction)
                 applicationFunctions = from f in applicationFunctions
                                        where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.UnderConstruction
+                                       select f; 
+            if (!AccessToMonthSchedule)
+                applicationFunctions = from f in applicationFunctions
+                                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MonthSchedule
+                                       select f;
+			if (!AccessToRealTimeAdherenceOverview)
+                applicationFunctions = from f in applicationFunctions
+                                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
                                        select f;
 				/*if (!AccessToRequestsPerAgent)
 				applicationFunctions = from f in applicationFunctions

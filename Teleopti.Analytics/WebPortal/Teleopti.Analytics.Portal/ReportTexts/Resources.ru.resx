@@ -175,7 +175,7 @@
     <value>Запланированное время по графику</value>
   </data>
   <data name="ResServiceLevelPercent" xml:space="preserve">
-    <value>Уровень Сервиса (%)</value>
+    <value>Уровень сервиса (%)</value>
   </data>
   <data name="ResSiteNameColon" xml:space="preserve">
     <value>Сайт:</value>
@@ -463,7 +463,7 @@
     <value>Статистика очереди</value>
   </data>
   <data name="ResAbandonedCallsWithinSL" xml:space="preserve">
-    <value>Несостоявшиеся  с соблюдением уровня сервиса</value>
+    <value>Несостоявшиеся с соблюдением уровня сервиса</value>
   </data>
   <data name="ResAbandonedShortCalls" xml:space="preserve">
     <value>Несостоявшиеся кратковременные звонки </value>
@@ -499,7 +499,7 @@
     <value>Помощь</value>
   </data>
   <data name="ResAcdLoginName" xml:space="preserve">
-    <value>Acd Логин</value>
+    <value>Acd логин</value>
   </data>
   <data name="ResReportAgentQueueStatistics" xml:space="preserve">
     <value>Статистика оператора по очереди</value>
@@ -562,7 +562,7 @@
     <value>Запланированное время отсутствия по графику (чч:мм)</value>
   </data>
   <data name="ResScheduledOverTime" xml:space="preserve">
-    <value>Залпнированное сверхурочное время по графику (чч:мм)</value>
+    <value>Запланированное сверхурочное время по графику (чч:мм)</value>
   </data>
   <data name="ResAbsenceColon" xml:space="preserve">
     <value>Отсутствие:</value>
@@ -802,7 +802,7 @@
     <value>Не определено</value>
   </data>
   <data name="ResReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Время готовности VS Запланированное по графику время работы по контакту</value>
+    <value>Время готовности VS Запланированное по графику время контракта</value>
   </data>
   <data name="ResReadyTimeVsScheduledReadyTime" xml:space="preserve">
     <value>Время готовности VS Запланированное время готовности по графику</value>
@@ -959,7 +959,7 @@
     <value>Время сессии истекло</value>
   </data>
   <data name="SessionExpiredText" xml:space="preserve">
-    <value>Время сессии истекло по причине бездействия. Вы будете перенаправлены на страницу аутентификации.</value>
+    <value>Время сессии истекло по причине бездействия. Вы будете перенаправлены на страницу идентификации.</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
     <value>Соблюдение графика на оператора</value>
@@ -1083,5 +1083,20 @@
   </data>
   <data name="RepViewerZoom" xml:space="preserve">
     <value>Увеличить</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Только активные навыки</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Навыки оператора</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Только активные навыки:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Время в состоянии по оператору</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Группы состояний:</value>
   </data>
 </root>

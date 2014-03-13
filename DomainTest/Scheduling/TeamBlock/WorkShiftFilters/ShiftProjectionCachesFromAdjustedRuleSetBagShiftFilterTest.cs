@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private DateOnly _dateOnly;
 		private IPerson _person;
 		private IPersonPeriod _personPeriod;
-		private IRuleSetBag _ruleSetBag;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_person = _mocks.StrictMock<IPerson>();
 			_personPeriod = _mocks.StrictMock<IPersonPeriod>();
-			_ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_ruleSetDeletedActivityChecker = _mocks.StrictMock<IRuleSetDeletedActivityChecker>();
@@ -51,9 +49,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			var result = _target.Filter(_dateOnly, null, false,BlockFinderType.SingleDay );
+			var result = _target.Filter(new List<IWorkShiftRuleSet>(), _dateOnly, null, false,BlockFinderType.SingleDay );
 			Assert.IsNull(result);
 		}
+
+        [Test]
+        public void ShouldGetShiftProjectionCachesFromAdjustedRuleSetBagForRoleModel()
+        {
+            var permissionInfo = new PermissionInformation(_person);
+            permissionInfo.SetDefaultTimeZone(_timeZoneInfo);
+            var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+            var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
+            var shifts = getCashes();
+            using (_mocks.Record())
+            {
+                Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
+                Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
+                Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
+                Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
+                Expect.Call(_person.PermissionInformation).Return(permissionInfo);
+                Expect.Call(_ruleSetToShiftsGenerator.Generate(ruleSet1)).Return(shifts);
+                Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
+                Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(null, null)).IgnoreArguments().Return(true);
+            }
+            using (_mocks.Playback())
+            {
+                var result = _target.FilterForRoleModel(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets), _dateOnly, _person, false, BlockFinderType.SingleDay);
+
+                Assert.That(result.Count, Is.EqualTo(3));
+            }
+        }
 
 		[Test]
 		public void ShouldGetShiftProjectionCachesFromAdjustedRuleSetBag()
@@ -66,20 +91,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				Expect.Call(_ruleSetToShiftsGenerator.Generate(ruleSet1)).Return(shifts);
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
 				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(null, null)).IgnoreArguments().Return(true);
 			}
 			using (_mocks.Playback())
 			{
-                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
+                var result = _target.Filter(ruleSets, _dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(3));
 			}
@@ -95,15 +117,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(false);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
 			{
-                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
+                var result = _target.Filter(ruleSets, _dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -120,17 +139,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(true);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
 			{
-                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
+                var result = _target.Filter(ruleSets, _dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -146,16 +162,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(true);
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
-				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 			}
 			using (_mocks.Playback())
 			{
-                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
+                var result = _target.Filter(ruleSets, _dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -171,19 +184,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			using (_mocks.Record())
 			{
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
-				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
-				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
 				Expect.Call(ruleSet1.IsValidDate(_dateOnly)).Return(true);
 				Expect.Call(_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
 				Expect.Call(_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet1)).Return(false);
-				Expect.Call(_ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill>());
                 Expect.Call(_person.PermissionInformation).Return(permissionInfo);
 				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivties(null, null)).IgnoreArguments().Return(false);
 			}
 			using (_mocks.Playback())
 			{
-                var result = _target.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay);
+                var result = _target.Filter(ruleSets, _dateOnly, _person, false, BlockFinderType.SingleDay);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}

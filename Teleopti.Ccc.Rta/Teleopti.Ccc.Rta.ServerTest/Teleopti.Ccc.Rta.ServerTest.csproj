@@ -97,6 +97,13 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Autofac.3.0.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\..\packages\Autofac.3.0.2\lib\net40\Autofac.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
@@ -111,6 +118,10 @@
     <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.5.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MbCache.2.5\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.5.0.5\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -143,11 +154,19 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssemblerTest.cs" />
     <Compile Include="ActualAgentStateCacheTest.cs" />
+    <Compile Include="Adherence\NotificationExtension.cs" />
+    <Compile Include="Adherence\PersonOrganizationReaderTest.cs" />
+    <Compile Include="Adherence\SiteIdForPersonTest.cs" />
+    <Compile Include="Adherence\SiteAdherenceTest.cs" />
+    <Compile Include="Adherence\TeamAdherenceTest.cs" />
+    <Compile Include="Adherence\SendMessageTest.cs" />
+    <Compile Include="Adherence\TeamIdForPersonTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseReaderTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="DatabaseWriterTest.cs" />
+    <Compile Include="IocTest.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Resolvers\PersonResolverTest.cs" />
@@ -156,6 +175,18 @@
     <Compile Include="ScheduleLayerTest.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
+      <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
+      <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
+      <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
+      <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
+      <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
+      <Name>Teleopti.Ccc.TestCommon</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>

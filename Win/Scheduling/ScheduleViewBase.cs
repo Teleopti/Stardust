@@ -1192,7 +1192,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return ret;
         }
 
-	    public static IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
+	    public virtual IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
         {
             var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
             return extractor.ExtractPersons();

@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
 
@@ -145,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 								WorkflowControlSet = new WorkflowControlSet(null)
 							};
 			personProvider.Stub(x => x.CurrentUser()).Return(person);
-			defaultDateCalculator.Stub(x => x.Calculate(person.WorkflowControlSet, VirtualSchedulePeriodProvider.StudentAvailabilityPeriod)).Return(date);
+			defaultDateCalculator.Stub(x => x.Calculate(person.WorkflowControlSet, VirtualSchedulePeriodProvider.StudentAvailabilityPeriod, new List<IPersonPeriod>())).Return(date);
 
 			var target = new VirtualSchedulePeriodProvider(personProvider, defaultDateCalculator);
 
@@ -164,8 +165,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			{
 				WorkflowControlSet = new WorkflowControlSet(null)
 			};
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today));
 			personProvider.Stub(x => x.CurrentUser()).Return(person);
-			defaultDateCalculator.Stub(x => x.Calculate(person.WorkflowControlSet, VirtualSchedulePeriodProvider.PreferencePeriod)).Return(date);
+			defaultDateCalculator.Stub(
+				x =>
+				x.Calculate(person.WorkflowControlSet, VirtualSchedulePeriodProvider.PreferencePeriod, person.PersonPeriodCollection))
+			                     .Return(date);
 
 			var target = new VirtualSchedulePeriodProvider(personProvider, defaultDateCalculator);
 

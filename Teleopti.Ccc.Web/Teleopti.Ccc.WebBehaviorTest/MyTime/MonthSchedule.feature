@@ -9,19 +9,21 @@ Given there is a role with
 	| Field | Value                 |
 	| Name  | Full access to mytime |
 	And there is a role with
-	| Field                     | Value                            |
-	| Name                      | Production full access to mytime |
-	| AccessToUnderConstruction | false                            |
-	And there are shift categories 
-	| Name  |
-	| Early |
+	| Field                    | Value                            |
+	| Name                     | No permission for month schedule |
+	| Access to month schedule | false                            |  
+	And there is a shift category with 
+	| Field | Value |
+	| Name  | Early |
+	| Color | Green |
 	And there is a dayoff with
 	| Field | Value  |
 	| Name  | DayOff |
 	And there is an absence with
-	| Field | Value    |
-	| Name  | Illness  |
-	| Color | Red      |
+	| Field      | Value   |
+	| Name       | Illness |
+	| Short name | IL      |
+	| Color      | Red     |
 	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
@@ -50,16 +52,21 @@ And I should see '2014-02-02' as the last day
 
 Scenario: View when you are working
 Given I have the role 'Full access to mytime'
-    And I have the workflow control set 'Published schedule'
+And I have the workflow control set 'Published schedule'
 And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2014-01-07 09:00 |
 	| EndTime        | 2014-01-07 18:00 |
 	| Shift category | Early            |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should work on '2014-01-07'
+Then I should see the shift with
+	| Field          | Value         |
+	| Date           | 2014-01-07    |
+	| Time span      | 09:00 - 18:00 |
+	| Shift category | Early         |
+	| Working hours  | 9:00          |
 
-Scenario: View when you are not working
+Scenario: View when you have a day off
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
 	And I have a day off with
@@ -67,7 +74,46 @@ Given I have the role 'Full access to mytime'
 	| Name  | DayOff     |
 	| Date  | 2014-01-07 |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-07'
+Then I should see the day off on '2014-01-07'
+
+Scenario: View when you have a part time absence on working day
+Given I have the role 'Full access to mytime'
+And I have the workflow control set 'Published schedule'
+And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2014-01-16 09:00 |
+	| EndTime        | 2014-01-16 18:00 |
+	| Shift category | Early            |
+And I have an absence with
+	| Field		| Value            |
+	| Name      | Illness          |
+	| StartTime | 2014-01-16 09:00 |
+	| EndTime   | 2014-01-16 12:00 |
+When I view my month schedule for date '2014-01-16'
+Then I should see the shift with
+	| Field          | Value         |
+	| Date           | 2014-01-16    |
+	| Time span      | 09:00 - 18:00 |
+	| Shift category | Early         |
+	| Working hours  | 6:00          |
+And I should see the absence on date '2014-01-16'
+
+Scenario: View when you have a full day absence on working day
+Given I have the role 'Full access to mytime'
+And I have the workflow control set 'Published schedule'
+And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2014-01-16 09:00 |
+	| EndTime        | 2014-01-16 18:00 |
+	| Shift category | Early            |
+And I have an absence with
+	| Field		| Value            |
+	| Name      | Illness          |
+	| StartTime | 2014-01-16 09:00 |
+	| EndTime   | 2014-01-16 18:00 |
+When I view my month schedule for date '2014-01-16'
+Then I should not see a shift on date '2014-01-16'
+And I should see the absence on date '2014-01-16'
 
 Scenario: View when you are in absence on day off
 Given I have the role 'Full access to mytime'
@@ -81,17 +127,25 @@ Given I have the role 'Full access to mytime'
 	| Name      | Illness          |
 	| StartTime | 2014-01-16 00:00 |
 	| EndTime   | 2014-01-16 23:59 |
-When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-16'
+When I view my month schedule for date '2014-01-01'
+Then I should see the absence with 
+    | Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-01-16       |
 
-Scenario: View when you have full day absence 
+Scenario: View when you have full day absence
 Given I have the role 'Full access to mytime'
     And I have the workflow control set 'Published schedule'
-	And I have a full-day absence today with
-	| Field         | Value      |
-	| Date          | 2014-01-07 |
+	And I have an absence with
+	| Field      | Value            |
+	| Name       | Illness          |
+	| Start time | 2014-01-07 00:00 |
+	| End time   | 2014-01-07 23:59 |
 When I view my month schedule for date '2014-01-07'
-Then I should see an indication implying I should not work on '2014-01-07'
+Then I should see the absence with 
+    | Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-01-07       |
 
 Scenario: Distinguish day out of current month 
 Given I have the role 'Full access to mytime'
@@ -176,8 +230,8 @@ And I view my month schedule for date '2014-01-07'
 When I select the month 'maj' in the calendar 
 Then I should end up in month view for '2014-05-01'
 
-Scenario: Should not see month view in production yet
-Given I have the role 'Production full access to mytime'
+Scenario: Should not see month view without permission
+Given I have the role 'No permission for month schedule'
 And I have the workflow control set 'Published schedule'
 When I view my week schedule for date '2014-01-07'
 Then I should not be able to access month view

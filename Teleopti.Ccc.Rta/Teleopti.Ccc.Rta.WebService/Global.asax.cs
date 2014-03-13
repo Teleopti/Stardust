@@ -4,11 +4,10 @@ using System.Security.Principal;
 using System.Threading;
 using Autofac;
 using Autofac.Integration.Wcf;
-using MbCache.Configuration;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Server;
 using log4net;
 using log4net.Config;
+using ContainerBuilder = Teleopti.Ccc.Rta.Server.ContainerBuilder;
 
 namespace Teleopti.Ccc.Rta.WebService
 {
@@ -29,12 +28,8 @@ namespace Teleopti.Ccc.Rta.WebService
 
 		private static IContainer buildIoc()
 		{
-			var builder = new ContainerBuilder();
-
-			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
+			var builder = ContainerBuilder.CreateBuilder();
 			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
 			return builder.Build();
 		}
 

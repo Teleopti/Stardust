@@ -11,7 +11,12 @@ namespace Teleopti.Interfaces.MessageBroker
 	[Serializable]
 	public class Subscription
 	{
-		private static readonly StringCollection TypesWithException = new StringCollection {typeof(IActualAgentState).Name};
+		private static readonly StringCollection TypesWithDatasourceException = new StringCollection
+		{
+			typeof (IActualAgentState).Name,
+			"SiteAdherenceMessage",
+			"TeamAdherenceMessage"
+		};
 		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof(IStatisticTask).Name};
 
 		/// <summary>
@@ -156,13 +161,13 @@ namespace Teleopti.Interfaces.MessageBroker
 
 		private string excludeDatasourceForCertainTypes()
 		{
-			return TypesWithException.Contains(DomainType) ? null : DataSource;
+			return TypesWithDatasourceException.Contains(DomainType) ? null : DataSource;
 		}
 
 		private string excludeBusinessUnitForCertainTypes()
 		{
 			var emptyId = IdToString(Guid.Empty);
-			return (TypesWithBusinessUnitException.Contains(DomainType) || (TypesWithException.Contains(DomainType) && emptyId.Equals(DomainId))) ? emptyId : BusinessUnitId;
+			return (TypesWithBusinessUnitException.Contains(DomainType) || (TypesWithDatasourceException.Contains(DomainType) && emptyId.Equals(DomainId))) ? emptyId : BusinessUnitId;
 		}
 	}
 }

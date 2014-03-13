@@ -22,7 +22,7 @@ namespace SdkTestClientWin.Domain
 
 		public string PersonId
 		{
-			get { return _personDto.Id; }
+			get { return _personDto != null ? _personDto.Id : string.Empty; }
 		}
 
 		public string ContractDescription

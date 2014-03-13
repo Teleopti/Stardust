@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StartTimeAsc" xml:space="preserve">
     <value>Heure de début ascendante</value>
@@ -3109,7 +3109,7 @@
     <value>Depacer Jours max</value>
   </data>
   <data name="SchedulingSessionOptions" xml:space="preserve">
-    <value>Options Session Plannification</value>
+    <value>Options Session Planification</value>
   </data>
   <data name="UseConsecutiveDaysOff" xml:space="preserve">
     <value>Utiliser Jours libres consécutifs</value>
@@ -3208,7 +3208,7 @@
     <value>Sélection Agent</value>
   </data>
   <data name="Go" xml:space="preserve">
-    <value>Allez-y</value>
+    <value>Exécuter</value>
   </data>
   <data name="Togt" xml:space="preserve">
     <value>Vers - &gt;</value>
@@ -3406,7 +3406,7 @@
     <value>Sélectionnez accompagnateur</value>
   </data>
   <data name="ZeroOneFoundDot" xml:space="preserve">
-    <value>{0} {1} trouvé.</value>
+    <value>{0} {1} trouvées.</value>
   </data>
   <data name="ActivityNext" xml:space="preserve">
     <value>Activité suivante</value>
@@ -5047,7 +5047,7 @@
     <value>Horaires dans la journée</value>
   </data>
   <data name="TimeBetweenDays" xml:space="preserve">
-    <value>Longueur d'horaires</value>
+    <value>Longueurs d'horaires entre Jours</value>
   </data>
   <data name="AreYouSureYouWantToDeleteItem" xml:space="preserve">
     <value>Êtes-vous sûr de supprimer l'élément '{0}'?</value>
@@ -5335,10 +5335,10 @@
     <value>Début Période tard</value>
   </data>
   <data name="MaxWorkTime" xml:space="preserve">
-    <value>Temps travail max</value>
+    <value>Temps contrat max</value>
   </data>
   <data name="MinWorkTime" xml:space="preserve">
-    <value>Temps travail min</value>
+    <value>Temps contrat min</value>
   </data>
   <data name="Forecasted" xml:space="preserve">
     <value>Prévu</value>
@@ -6577,22 +6577,22 @@
     <value>Une valeur multiplicateur non valable</value>
   </data>
   <data name="AbsoluteDifferenceIncoming" xml:space="preserve">
-    <value>Différence absolue entrant</value>
+    <value>Différence absolue inc.</value>
   </data>
   <data name="ForecastedAgentsIncoming" xml:space="preserve">
-    <value>Agents prévus entrant</value>
+    <value>Agents prévus inc.</value>
   </data>
   <data name="ForecastedHours" xml:space="preserve">
     <value>Heures prévues</value>
   </data>
   <data name="ForecastedHoursIncoming" xml:space="preserve">
-    <value>Heures prévues entrant</value>
+    <value>Heures prévues inc.</value>
   </data>
   <data name="ScheduledAgentsIncoming" xml:space="preserve">
-    <value>Agents planifiés entrant</value>
+    <value>Agents planifiés inc.</value>
   </data>
   <data name="ScheduledHoursIncoming" xml:space="preserve">
-    <value>Heures planifiées entrant</value>
+    <value>Heures planifiées inc.</value>
   </data>
   <data name="CreateInfo" xml:space="preserve">
     <value>Créé par: {0}  Créé le: {1}</value>
@@ -7473,7 +7473,7 @@ Ces options sont activés:
     <value>Merci de supprimer {0} du meeting car vous n'avez pas suffisamment de permissions pour cette personne.</value>
   </data>
   <data name="RelativeDifferenceIncoming" xml:space="preserve">
-    <value>Différence relative entrant</value>
+    <value>Différence relative inc.</value>
   </data>
   <data name="EarliestEndTime" xml:space="preserve">
     <value>Fin au plus tôt</value>
@@ -8375,7 +8375,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Employés prévus</value>
   </data>
   <data name="ForecastedEmployeesIncoming" xml:space="preserve">
-    <value>Employés prévus entrant</value>
+    <value>Employés prévus inc.</value>
   </data>
   <data name="IndexAfterCustomerWork" xml:space="preserve">
     <value>Index travail post client</value>
@@ -8405,7 +8405,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Employés planifiés</value>
   </data>
   <data name="ScheduledEmployeesIncoming" xml:space="preserve">
-    <value>Employés planifiés entrant</value>
+    <value>Employés planifiés inc.</value>
   </data>
   <data name="ServedCustomers" xml:space="preserve">
     <value>Clients servis</value>

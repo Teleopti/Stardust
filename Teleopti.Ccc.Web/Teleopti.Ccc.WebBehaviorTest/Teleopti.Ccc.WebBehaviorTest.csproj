@@ -52,9 +52,18 @@
     <Reference Include="IISExpress.Automation">
       <HintPath>..\..\packages\IISExpress.Automation.0.1.1\lib\net40\IISExpress.Automation.dll</HintPath>
     </Reference>
+    <Reference Include="LinFu.DynamicProxy">
+      <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache">
+      <HintPath>..\..\packages\MbCache.2.5\lib\net40\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu">
+      <HintPath>..\..\packages\MbCache.2.5\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -104,13 +113,27 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddIntradayAbsenceOnShift.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\BusterTests.feature.cs">
+      <DependentUpon>BusterTests.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\RealTimeAdherenceOverview.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>RealTimeAdherenceOverview.feature</DependentUpon>
+    </Compile>
     <Compile Include="Anywhere\ViewScheduleActivityDetails.feature.cs">
       <DependentUpon>ViewScheduleActivityDetails.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Bindings\Generic\AlarmStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
+    <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="Core\CurrentTime.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduledAgentsForShiftTrade.cs" />
     <Compile Include="MyTime\AbsenceRequestFromRequests.feature.cs">
@@ -469,7 +492,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>PreferencesMustHave.feature</DependentUpon>
     </Compile>
-    <Compile Include="MyTime\QUnitTestsStepDefinition.cs" />
+    <Compile Include="Bindings\UnitTestsStepDefinition.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceInContractTimeOnWeekday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\AbsencePreferenceOnWeekday.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ContractScheduleFromTable.cs" />
@@ -694,6 +717,14 @@
     <None Include="Anywhere\AddIntradayAbsenceOnShift.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AddIntradayAbsenceOnShift.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\BusterTests.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>BusterTests.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\RealTimeAdherenceOverview.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RealTimeAdherenceOverview.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ViewScheduleActivityDetails.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -971,6 +1002,14 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Interfaces\Teleopti.Ccc.Rta.Interfaces.csproj">
+      <Project>{dd380c37-8fc1-4209-bc63-9b88b483264d}</Project>
+      <Name>Teleopti.Ccc.Rta.Interfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj">
+      <Project>{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}</Project>
+      <Name>Teleopti.Ccc.Rta.Server</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

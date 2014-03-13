@@ -32,6 +32,31 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Se
         }
 
         [Test]
+        public void ReturnNullIfPersonMissingInEmptyRankDictionary()
+        {
+            var personList = new List<IPerson>();
+            var result = _target.GetRankForPerson(personList, _person1);
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void ReturnNullIfPersonMissingInRankDictionary()
+        {
+            var personList = new List<IPerson>() {_person2, _person3};
+            var today = DateOnly.Today;
+            using (_mock.Record())
+            {
+                Expect.Call(_personStartDateFromPersonPeriod.GetPersonStartDate(_person2)).Return(today);
+                Expect.Call(_personStartDateFromPersonPeriod.GetPersonStartDate(_person3)).Return(today.AddDays(-15));
+            }
+            using (_mock.Playback())
+            {
+                var result = _target.GetRankForPerson(personList, _person1);
+                Assert.IsNull(result);
+            }
+        }
+
+        [Test]
         public void RankedPersonWithMultiplePersonPeriod()
         {
             var personList = new List<IPerson>() {_person1, _person2, _person3};

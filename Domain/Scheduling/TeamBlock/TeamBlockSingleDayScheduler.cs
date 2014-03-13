@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 											   IList<IPerson> selectedPersons, DateOnly day,
 											   IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod, 
 												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-												IResourceCalculateDelayer resourceCalculateDelayer);
+												IResourceCalculateDelayer resourceCalculateDelayer,
+												ISchedulingResultStateHolder schedulingResultStateHolder);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
@@ -29,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly ITeamScheduling _teamScheduling;
 		private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
-		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 		private bool _cancelMe;
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										   IWorkShiftSelector workShiftSelector,
 										   ITeamScheduling teamScheduling,
 										   ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
-											ISchedulingResultStateHolder schedulingResultStateHolder,
 											IActivityIntervalDataCreator activityIntervalDataCreator)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_workShiftSelector = workShiftSelector;
 			_teamScheduling = teamScheduling;
 			_teamBlockSchedulingOptions = teamBlockSchedulingOptions;
-			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 		}
 
@@ -57,7 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 									  IList<IPerson> selectedPersons, DateOnly day,
 									  IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod, 
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-										IResourceCalculateDelayer resourceCalculateDelayer)
+										IResourceCalculateDelayer resourceCalculateDelayer,
+										ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			if (roleModelShift == null) return false;
 			var teamInfo = teamBlockInfo.TeamInfo;
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
 					if (shifts.IsNullOrEmpty()) continue;
 
-					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, day, _schedulingResultStateHolder);
+					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, day, schedulingResultStateHolder);
 
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																								 schedulingOptions
