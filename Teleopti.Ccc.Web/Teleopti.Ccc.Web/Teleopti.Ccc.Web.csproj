@@ -739,6 +739,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherence.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
