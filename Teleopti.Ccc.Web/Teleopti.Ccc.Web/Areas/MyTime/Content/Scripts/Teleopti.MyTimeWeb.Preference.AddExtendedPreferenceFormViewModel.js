@@ -126,7 +126,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	    self.IsSaveAsNewTemplate(!self.IsSaveAsNewTemplate());
 	};
 	this.IsSaveAsNewTemplateClass = ko.computed(function () {
-	    return self.IsSaveAsNewTemplate() ? 'glyphicon glyphicon-minus-sign' : undefined;
+		return self.IsSaveAsNewTemplate() ? 'glyphicon glyphicon-minus-sign' : 'glyphicon glyphicon-plus-sign';
 	});
 
 	_initPreferenceString();
