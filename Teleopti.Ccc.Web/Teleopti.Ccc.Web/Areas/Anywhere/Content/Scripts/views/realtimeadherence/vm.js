@@ -24,7 +24,6 @@
 			if (!theSite) {
 				theSite = site();
 				theSite.Id = id;
-				that.sites.push(theSite);
 			}
 			return theSite;
 		};
@@ -33,6 +32,7 @@
 			for (var i = 0; i < data.length; i++) {
 				var theSite = siteForId(data[i].Id);
 				theSite.Name = data[i].Name;
+				that.sites.push(theSite);
 			}
 		};
 
