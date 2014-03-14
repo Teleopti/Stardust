@@ -163,9 +163,7 @@
     <Compile Include="Adherence\TeamIdForPersonTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
-    <Compile Include="DatabaseReaderTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
-    <Compile Include="DatabaseWriterTest.cs" />
     <Compile Include="IocTest.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
