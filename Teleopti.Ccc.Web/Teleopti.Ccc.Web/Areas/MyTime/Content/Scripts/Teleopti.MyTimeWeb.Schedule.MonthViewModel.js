@@ -1,6 +1,8 @@
 ﻿/// <reference path="~/Content/jquery/jquery-1.10.2.js" />
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
+/// <reference path="~/Content/moment/moment.js" />
 
 if (typeof (Teleopti) === 'undefined') {
     Teleopti = {};
@@ -47,7 +49,7 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
     this.weekViewModels = ko.observableArray();
     this.weekDayNames = ko.observableArray();
 
-    this.selectedDate = ko.observable(moment());
+    this.selectedDate = ko.observable(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash ? moment(Teleopti.MyTimeWeb.Portal.ParseHash().dateHash) : moment());
 
     this.formattedSelectedDate = ko.computed(function() {
         return self.selectedDate().format('MMMM YYYY');
