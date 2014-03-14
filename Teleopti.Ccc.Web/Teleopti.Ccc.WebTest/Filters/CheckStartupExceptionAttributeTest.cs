@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Filters;
@@ -44,12 +45,16 @@ namespace Teleopti.Ccc.WebTest.Filters
 		}
 
 		[Test]
-		public void ShouldHaveLowestOrdeOfAll()
+		public void ShouldHaveLowestOrderOfAll()
 		{
-			var definedAuthorizeAttributes = from type in typeof (CheckStartupResultAttribute).Assembly.GetTypes()
-			                                       where typeof (AuthorizeAttribute).IsAssignableFrom(type)
+			var definedAuthorizeAttributesWithEmpty = from type in typeof (CheckStartupResultAttribute).Assembly.GetTypes()
+			                                       where typeof (AuthorizeAttribute).IsAssignableFrom(type) && type.GetConstructors().Any(x => x.GetParameters().Length.Equals(0))
 			                                       select (AuthorizeAttribute) Activator.CreateInstance(type);
-			var targetAttributeExcluded = definedAuthorizeAttributes.Where(authorizeAttribute => authorizeAttribute.GetType() != target.GetType());
+			var definedAuthorizeAttributesWithAuthenticationModuleConstructor = from type in typeof(CheckStartupResultAttribute).Assembly.GetTypes()
+											 where typeof(AuthorizeAttribute).IsAssignableFrom(type) && type.GetConstructors().Any(x => x.GetParameters().Any(y => y.ParameterType == typeof(IAuthenticationModule)))
+											 select (AuthorizeAttribute)Activator.CreateInstance(type, MockRepository.GenerateMock<IAuthenticationModule>());
+
+			var targetAttributeExcluded = definedAuthorizeAttributesWithEmpty.Concat(definedAuthorizeAttributesWithAuthenticationModuleConstructor).Where(authorizeAttribute => authorizeAttribute.GetType() != target.GetType());
 
 			foreach (var authorizeAttribute in targetAttributeExcluded)
 			{

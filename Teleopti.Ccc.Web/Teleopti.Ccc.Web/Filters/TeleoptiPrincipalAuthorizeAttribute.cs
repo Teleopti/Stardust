@@ -15,17 +15,19 @@ namespace Teleopti.Ccc.Web.Filters
 	[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, Inherited = true, AllowMultiple = true)]
 	public sealed class TeleoptiPrincipalAuthorizeAttribute : AuthorizeAttribute
 	{
+		private readonly IAuthenticationModule _authenticationModule;
 		private readonly IEnumerable<Type> _excludeControllerTypes;
 
 		public string Realm { get; set; }
 
-		public TeleoptiPrincipalAuthorizeAttribute()
-			: this(null)
+		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule)
+			: this(authenticationModule, null)
 		{
 		}
 
-		public TeleoptiPrincipalAuthorizeAttribute(IEnumerable<Type> excludeControllerTypes)
+		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IEnumerable<Type> excludeControllerTypes)
 		{
+			_authenticationModule = authenticationModule;
 			Order = 2;
 			_excludeControllerTypes = excludeControllerTypes ?? new List<Type>();
 		}
@@ -49,21 +51,7 @@ namespace Teleopti.Ccc.Web.Filters
 				return;
 			}
 
-			//var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
-
-			//filterContext.Result = new RedirectToRouteResult(
-			//	new RouteValueDictionary(
-			//		new
-			//			{
-			//				controller = "Authentication",
-			//				action = "",
-			//				area = targetArea
-			//			}
-			//		)
-			//	);
-
-			var fam = FederatedAuthentication.WSFederationAuthenticationModule;
-			var signIn = new SignInRequestMessage(new Uri(fam.Issuer), Realm ?? fam.Realm)
+			var signIn = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), Realm ?? _authenticationModule.Realm)
 			{
 				Context = "ru=" + filterContext.HttpContext.Request.Path,
 				HomeRealm = "urn:Teleopti"

@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
+using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.Register(c => SignalRConfiguration.ActionScheduler).As<IActionScheduler>();
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>();
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
-			
+			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
 		}
 	}
 }

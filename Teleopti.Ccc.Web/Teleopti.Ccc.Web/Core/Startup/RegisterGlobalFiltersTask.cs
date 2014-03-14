@@ -13,11 +13,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	[TaskPriority(1)]
 	public class RegisterGlobalFiltersTask : IBootstrapperTask
 	{
-		private static IErrorMessageProvider _errorMessageProvider;
+		private readonly IErrorMessageProvider _errorMessageProvider;
+		private readonly IAuthenticationModule _authenticationModule;
 
-		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider) 
+		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider, IAuthenticationModule authenticationModule)
 		{
 			_errorMessageProvider = errorMessageProvider;
+			_authenticationModule = authenticationModule;
 		}
 
 		public Task Execute()
@@ -27,10 +29,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		}
 
 		//rk - org from global.asax
-		private static void registerGlobalFilters(GlobalFilterCollection filters)
+		private void registerGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
-			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(new List<Type>
+			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, new List<Type>
 			                                                    	{
 																		typeof(ShareCalendarController),
 																		typeof(TestController),
