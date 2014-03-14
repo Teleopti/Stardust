@@ -24,7 +24,8 @@ Scenario: Show team
 
 @ignore
 Scenario: View updates of sum of employees not adhering to schedule for each site
-	Given I have a role with
+	Given the current time is '2014-01-21 13:00'
+	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
@@ -36,23 +37,21 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	And Pierre Baldi has a person period with
 	| Field      | Value      |
 	| Team       | Green      |
-	| Start Date | 2014-01-21 |
+	| Start Date | 2014-01-01 |
 	And Ashley Andeen has a person period with
 		| Field      | Value      |
 		| Team       | Red        |
-		| Start Date | 2014-01-21 |
+		| Start Date | 2014-01-01 |
 	And Pierre Baldi has a shift with
-		| Field          | Value      |
-		| Start time     | 12:00      |
-		| End time       | 19:00      |
-		| Activity       | Phone      |
-		| Date           | 2014-01-21 |
+		| Field      | Value            |
+		| Start time | 2014-01-21 12:00 |
+		| End time   | 2014-01-21 19:00 |
+		| Activity   | Phone            |
 	And Ashley Andeen has a shift with
-		| Field          | Value      |
-		| Start time     | 12:00      |
-		| End time       | 19:00      |
-		| Activity       | Phone      |
-		| Date           | 2014-01-21 |
+		| Field      | Value            |
+		| Start time | 2014-01-21 12:00 |
+		| End time   | 2014-01-21 19:00 |
+		| Activity   | Phone            |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
@@ -65,8 +64,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	 When the current time is '2014-01-21 13:00'
-	 And I view Real time adherence overview
+	 When I view Real time adherence overview
 	 And 'Pierre Baldi' sets his phone state to 'Pause'
 	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
