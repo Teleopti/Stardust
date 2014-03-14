@@ -27,8 +27,10 @@
 		that.fill = function(data) {
 			for (var i = 0; i < data.length; i++) {
 				var newSite = site();
+
 				newSite.Id = data[i].Id;
 				newSite.Name = data[i].Name;
+				newSite.Total = data[i].Total;
 
 				that.sites.push(newSite);
 			}

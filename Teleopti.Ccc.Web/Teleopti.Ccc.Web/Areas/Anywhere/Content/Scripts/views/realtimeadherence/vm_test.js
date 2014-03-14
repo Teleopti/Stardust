@@ -43,8 +43,17 @@
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.sites().length, 0);
-			}
+			},
 
+			"should set total number when fill": function () {
+				var expected = 37;
+				var vm = viewModel();
+				var site = { Total: expected };
+
+				vm.fill([site]);
+
+				assert.equals(vm.sites()[0].Total, expected);
+			}
 		});
 
 	};
