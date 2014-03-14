@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("scheduled_paid_time_m", typeof(int));
 			table.Columns.Add("scheduled_paid_time_activity_m", typeof(int));
 			table.Columns.Add("scheduled_paid_time_absence_m", typeof(int));
-			table.Columns.Add("last_publish", typeof(DateTime));
 			table.Columns.Add("business_unit_id", typeof(int));
 			table.Columns.Add("datasource_id", typeof(int));
 			table.Columns.Add("insert_date", typeof(DateTime));
@@ -124,7 +123,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["scheduled_paid_time_m"] = scheduled_paid_time_m;
 			row["scheduled_paid_time_activity_m"] = scheduled_paid_time_activity_m;
 			row["scheduled_paid_time_absence_m"] = scheduled_paid_time_absence_m;
-			row["last_publish"] = DateTime.Now;
 			row["business_unit_id"] = business_unit_id;
 			row["datasource_id"] = 10;
 			row["insert_date"] = DateTime.Now;
