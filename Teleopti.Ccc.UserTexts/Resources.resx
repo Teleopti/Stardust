@@ -11886,4 +11886,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Schedule must be reloaded</value>
     <comment>Message in shifteditor if the user ha a schedule thats not up to date</comment>
   </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Navigate</value>
+    <comment>In the context, navigate back and forward...</comment>
+  </data>
 </root>
