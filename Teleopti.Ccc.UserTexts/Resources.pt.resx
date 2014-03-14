@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CampaignEmailsHandlingtime" xml:space="preserve">
     <value>Ajuste do tempo de atendimento de e-mails %</value>
@@ -7413,7 +7413,7 @@ Teleopti P&amp;D
     <value>Conflito</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Um outro usuário modificou esses registros. Você precisa tomar uma decisão antes de continuar. Clique em OK para aceitar as alterações do outro usuário. Por favor esteja ciente de que se você fizer isso, todas as suas alterações correspondentes serão perdidas. Clique em Cancelar para continuar sem salvar. Você será alertado novamente sobre esse conflito na próxima vez que você clicar em Salvar. Clique em Sobrescrever para salvar as suas alterações e excluir as alterações que foram feitas pelos outros usuários.</value>
+    <value>Um outro usuário modificou esses registros. Você precisa tomar uma decisão antes de continuar. Clique em OK para aceitar as alterações do outro usuário. Por favor esteja ciente de que se você fizer isso, todas as suas alterações correspondentes serão perdidas. Clique em Sobrescrever para salvar as suas alterações e excluir as alterações que foram feitas pelos outros usuários.</value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>Não salvo</value>
