@@ -16,7 +16,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static Uri Url;
 		public static int Port;
 
+		public static Uri UrlAuthenticationBridge;
+		public static int PortAuthenticationBridge;
+
 		private static IISExpress _server;
+		private static IISExpress _serverAuthenticationBridge;
 
 		public static void Setup()
 		{
@@ -39,12 +43,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				Port = new Random().Next(57000, 57999);
 				Url = new Uri(string.Format("http://localhost:{0}/", Port));
+
+				PortAuthenticationBridge = Port - 1;
+				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
+				
 				FileConfigurator.ConfigureByTags("Data\\iisexpress.config", "Data\\iisexpress.running.config", new AllTags());
 				_server = new IISExpress(new Parameters
 					{
 						Systray = true,
 						Config = "Data\\iisexpress.running.config"
 					});
+
+				FileConfigurator.ConfigureByTags("Data\\iisexpressAuthenticationBridge.config", "Data\\iisexpressAuthenticationBridge.running.config", new AllTags());
+				_serverAuthenticationBridge = new IISExpress(new Parameters
+				{
+					Systray = true,
+					Config = "Data\\iisexpressAuthenticationBridge.running.config"
+				});
 			}
 			catch (Exception)
 			{
@@ -53,10 +68,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			}
 		}
 
+
 		public static void TearDown()
 		{
 			if (_server != null)
 				_server.Dispose();
+
+			if (_serverAuthenticationBridge != null)
+				_serverAuthenticationBridge.Dispose();
 
 			RevertWebConfig();
 		}

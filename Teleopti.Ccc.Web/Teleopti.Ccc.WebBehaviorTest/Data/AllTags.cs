@@ -21,6 +21,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("Url", TestSiteConfigurationSetup.Url.ToString());
 			Add("Port", TestSiteConfigurationSetup.Port.ToString());
+			
+			Add("Url", TestSiteConfigurationSetup.Url.ToString());
+			Add("Port", TestSiteConfigurationSetup.Port.ToString());
+
 			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
 			Add("SitePath", Paths.WebPath());
 			Add("ConfigPath", Paths.WebBinPath());
