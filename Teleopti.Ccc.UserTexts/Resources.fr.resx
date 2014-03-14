@@ -7601,7 +7601,7 @@ Teleopti R&amp;D</value>
 Vos préférences peuvent maintenant aller de {1}h à {2}h.</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Un autre utilisateur a modifié ces données. Vous devez décider que faire avant de continuer. Cliquez OK pour accepter les changements de l'autre utilisateur. Merci de noter que vos changements correspondants seront perdus. Cliquez Cancel pour continuer sans sauvegarder, Vous serez avertis de ce conflit une nouvelle fois quand vous cliquerez Save. Cliquez écraser pour sauver vos changements et supprimer les autres changements faits par les autres utilisateurs.</value>
+    <value>Un autre utilisateur a modifié ces données. Vous devez décider que faire avant de continuer. Cliquez OK pour accepter les changements de l'autre utilisateur. Merci de noter que vos changements correspondants seront perdus. Cliquez écraser pour sauver vos changements et supprimer les autres changements faits par les autres utilisateurs.</value>
   </data>
   <data name="SnapToIntervalColon" xml:space="preserve">
     <value>Ajuster à l'intervalle</value>

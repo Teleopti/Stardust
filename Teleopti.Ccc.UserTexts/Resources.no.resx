@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Skjult tekstredigeringsboks</value>
@@ -6050,7 +6050,7 @@ Ukedag</value>
     <value>Konflikt</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>En annen bruker har allerede modifisert disse dataene. Du må bestemme hva du skal gjøre før du fortsetter. Klikk OK for å godta den andre brukerens endringer. Vær oppmerksom på at dine tilsvarende endringer vil gå tapt. Klikk Avbryt for å fortsette uten å lagre. Du vil se denne konflikten på nytt når du klikker Lagre. Klikk Overskriv å lagre endringene og slette endringer gjort av andre brukere.</value>
+    <value>En annen bruker har allerede modifisert disse dataene. Du må bestemme hva du skal gjøre før du fortsetter. Klikk OK for å godta den andre brukerens endringer. Vær oppmerksom på at dine tilsvarende endringer vil gå tapt. Klikk Overskriv å lagre endringene og slette endringer gjort av andre brukere.</value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>Ikke lagret</value>
