@@ -24,7 +24,8 @@ Background:
 
 @ignore
 Scenario: Show reports with permissions
-	Given I am american
+	Given I am an agent 
+	And I am american
 	And I have the role 'No access to MyReport'
 	When I click reports menu
 	Then I should only see report 'Requests per Agent' 
