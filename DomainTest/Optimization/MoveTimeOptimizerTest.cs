@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private void tryScheduleSecondDate(bool success)
 		{
-			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short);
+			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime);
 			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays);
 			Expect.Call(_mostOverStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 			Expect.Call(_personAssignment.MainShift).Return(_mainShift);
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
     	private void tryScheduleFirstDate(bool success, bool sameContractTime)
 		{
-			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Short);
+			Expect.Call(_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long);
 			Expect.Call(_workShiftOriginalStateContainer.OldPeriodDaysState).Return(_originalDays);
 			Expect.Call(_mostUnderStaffSchedulePart.AssignmentHighZOrder()).Return(_personAssignment);
 			Expect.Call(_personAssignment.MainShift).Return(_mainShift);

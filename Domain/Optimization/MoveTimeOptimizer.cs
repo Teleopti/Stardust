@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private bool tryScheduleSecondDay(DateOnly secondDate, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
         {
-            return tryScheduleDay(secondDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.Short, originalLength);
+            return tryScheduleDay(secondDate, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime, originalLength);
         }
 
 		private bool tryScheduleFirstDay(DateOnly firstDate, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, TimeSpan originalLength)
