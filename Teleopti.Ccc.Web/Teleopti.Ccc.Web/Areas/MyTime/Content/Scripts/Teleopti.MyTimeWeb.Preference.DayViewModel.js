@@ -78,7 +78,8 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 				$('<div/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
 				$('<div/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
 
-		return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(self.ExtendedTitle(), text);
+		return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(
+			$('<div/>').text(self.ExtendedTitle()).html(), text);
 	});
 
     this.HasDayOff = ko.computed(function() {
