@@ -36,6 +36,12 @@
 			}
 		};
 
+		that.updateFromNotification = function(notification) {
+			var data = JSON.parse(notification.BinaryData);
+			data.Id = data.SiteId;
+			that.update(data);
+		};
+
 		that.update = function (data) {
 			var existingSite = siteForId(data.Id);
 			if (existingSite)

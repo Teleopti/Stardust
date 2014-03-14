@@ -25,17 +25,12 @@ define([
 			return startPromise;
 		},
 
-		subscribeAdherence: function () {
-			console.log('starting subscribe');
+		subscribeAdherence: function (callback) {
 			unsubscribeAdherence();
 			startPromise.done(function () {
-				console.log('startpromise done!');
 				siteAdherenceSubscription = messagebroker.subscribe({
 					domainType: 'SiteAdherenceMessage',
-					callback: function (notification) {
-						console.log('message arived' + notification);
-						$('body').append("arrived!");
-					}
+					callback: callback
 				});
 			});
 		},
