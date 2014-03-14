@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -8,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
@@ -15,33 +18,18 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 	[TestFixture]
 	public class ReportsProviderTest
 	{
-		//[Test]
-		//public void ShouldReturnFalseIfHasNoReportsPermission()
-		//{
-		//	var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
-
-		//	principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(false);
-
-		//	var target = new PermissionProvider(principalAuthorization);
-
-		//	var result = target.HasApplicationFunctionPermission("ApplicationFunctionPath");
-
-		//	result.Should().Be(false);
-		//}
-
 		[Test]
-		public void ShouldReturnMyReportWhenNoOtherReportsPermission()
+		public void ShouldReturnPermittedReports()
 		{
 			var principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
+			var reportList = new List<IApplicationFunction> { new ApplicationFunction("Report CA"), new ApplicationFunction("ResReportAbandonmentAndSpeedOfAnswer") };
+			principalAuthorization.Stub(x => x.GrantedFunctionsBySpecification(new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix))).IgnoreArguments().Return(reportList);
 
-			principalAuthorization.Stub(x => x.IsPermitted("ApplicationFunctionPath")).Return(false);
-
-			var permissionProvider = new PermissionProvider(principalAuthorization);
 			var target = new ReportsProvider(principalAuthorization);
 
-			var result = target.HasReportsPermission(principalAuthorization);
+			var result = target.GetReports();
 
-			result.Should().Be(true);
+			result.Count().Should().Be(1);
 		}
 
 	}
