@@ -30,7 +30,7 @@
 
 				newSite.Id = data[i].Id;
 				newSite.Name = data[i].Name;
-				newSite.Total = data[i].Total;
+				newSite.NumberOfAgents = data[i].NumberOfAgents;
 
 				that.sites.push(newSite);
 			}

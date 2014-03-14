@@ -45,14 +45,14 @@
 				assert.equals(vm.sites().length, 0);
 			},
 
-			"should set total number when fill": function () {
+			"should set number of agents when fill": function () {
 				var expected = 37;
 				var vm = viewModel();
-				var site = { Total: expected };
+				var site = { NumberOfAgents: expected };
 
 				vm.fill([site]);
 
-				assert.equals(vm.sites()[0].Total, expected);
+				assert.equals(vm.sites()[0].NumberOfAgents, expected);
 			},
 
 			"should do update from notification": function() {
