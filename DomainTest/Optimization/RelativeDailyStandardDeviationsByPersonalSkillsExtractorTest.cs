@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				            _skillIntervalDatas
 			            })).Return(_skillIntervalDatas);
 
-				SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
+				setSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
 			}
 			IList<double?> ret;
@@ -156,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			            })).Return(_skillIntervalDatas);
 
 
-				SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
+				setSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
 			}
 			IList<double?> ret;
@@ -215,7 +216,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			            })).Return(_skillIntervalDatas);
 
 
-				SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
+				setSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
 			}
 			IList<double?> ret;
@@ -272,7 +273,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			            })).Return(_skillIntervalDatas);
 
 
-				SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
+				setSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
 
 			}
 			IList<double?> ret;
@@ -334,9 +335,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			            })).Return(_skillIntervalDatas);
 
 
-				SetSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
-				SetSkillStaffPeriodExpectations(skillStaffPeriod2, 2);
-				SetSkillStaffPeriodExpectations(skillStaffPeriod3, 3);
+				setSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
+				setSkillStaffPeriodExpectations(skillStaffPeriod2, 2);
+				setSkillStaffPeriodExpectations(skillStaffPeriod3, 3);
 
 			}
 			IList<double?> ret;
@@ -348,7 +349,47 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(0.81d, ret[0].Value, 0.1);
 		}
 
-		private static void SetSkillStaffPeriodExpectations(ISkillStaffPeriod skillStaffPeriod, double relativeDifference)
+		[Test]
+		public void ShouldHandlePersonWithNoSkills()
+		{
+			ISkillStaffPeriod skillStaffPeriod1 = _mocks.StrictMock<ISkillStaffPeriod>();
+			_skillStaffPeriods = new List<ISkillStaffPeriod> { skillStaffPeriod1 };
+			DateOnly scheduleDay = new DateOnly(2010, 4, 1);
+
+			_skillList.Clear();
+			var skillToRemove = _person.Period(new DateOnly(2010, 1, 1)).PersonSkillCollection.ToList()[0];
+			((IPersonPeriodModifySkills)_person.Period(new DateOnly(2010, 1, 1))).DeletePersonSkill(skillToRemove);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.Person).Return(_person).Repeat.Any();
+				Expect.Call(_matrix.EffectivePeriodDays)
+					.Return(new ReadOnlyCollection<IScheduleDayPro>
+						(new List<IScheduleDayPro> { _scheduleDayPro }))
+					.Repeat.Any();
+				Expect.Call(_matrix.SchedulingStateHolder)
+					.Return(_stateHolder).Repeat.Any();
+
+				Expect.Call(_scheduleDayPro.Day)
+					.Return(scheduleDay).Repeat.Any();
+
+				Expect.Call(
+					_skillIntervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>()))
+				      .Return(new List<ISkillIntervalData>());
+
+				setSkillStaffPeriodExpectations(skillStaffPeriod1, 1);
+
+			}
+			IList<double?> ret;
+			using (_mocks.Playback())
+			{
+				ret = _target.Values();
+			}
+			Assert.AreEqual(1, ret.Count);
+			Assert.IsFalse(ret[0].HasValue);
+		}
+
+		private static void setSkillStaffPeriodExpectations(ISkillStaffPeriod skillStaffPeriod, double relativeDifference)
 		{
 			Expect.Call(skillStaffPeriod.RelativeDifference).Return(relativeDifference).Repeat.Any();
 			Expect.Call(skillStaffPeriod.RelativeDifferenceMinStaffBoosted()).Return(relativeDifference).Repeat.Any();

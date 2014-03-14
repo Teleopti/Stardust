@@ -11959,8 +11959,8 @@ Reduce the complexity to use these shifts.</value>
     <comment>Text on summary tab on web my report</comment>
   </data>
   <data name="MonthSchedule" xml:space="preserve">
-    <value>Month Schedule</value>
-    <comment>Month schedule in permission tree</comment>
+    <value>Monthly Schedule</value>
+    <comment>Monthly schedule in permission tree</comment>
   </data>
   <data name="Ranking" xml:space="preserve">
     <value>Ranking</value>
