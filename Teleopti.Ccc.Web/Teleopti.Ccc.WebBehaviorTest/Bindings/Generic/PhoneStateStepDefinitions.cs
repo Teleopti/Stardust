@@ -26,11 +26,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				var databaseConnectionFactory = new DatabaseConnectionFactory();
 				var databaseConnectionStringHandler = new DatabaseConnectionStringHandlerFake();
 				var databaseWriter = new DatabaseWriter(databaseConnectionFactory, databaseConnectionStringHandler);
+				var now = new ThisIsNow(CurrentTime.Value());
 				var databaseReader = new DatabaseReader(databaseConnectionFactory, databaseConnectionStringHandler,
-				                                        new ActualAgentStateCache(databaseWriter));
+				                                        new ActualAgentStateCache(databaseWriter), now);
 				var mbCacheFactory = new MbCacheFactoryFake();
 				var messageSender = new SignalSender(TestSiteConfigurationSetup.Url.ToString());
-				var personOrganizationProvider = new PersonOrganizationProvider(new PersonOrganizationReader(new Now(), ConnectionStringHelper.ConnectionStringUsedInTests));
+				var personOrganizationProvider = new PersonOrganizationProvider(new PersonOrganizationReader(now, ConnectionStringHelper.ConnectionStringUsedInTests));
 				return new RtaDataHandler(messageSender,
 				                          new DataSourceResolverFake(),
 				                          new PersonResolverFake(n => DataMaker.Person(n).Person),
