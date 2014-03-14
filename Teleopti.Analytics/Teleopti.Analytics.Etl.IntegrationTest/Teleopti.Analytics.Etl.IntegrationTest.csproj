@@ -45,10 +45,6 @@
     <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Microsoft.SqlServer.Smo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files\Microsoft SQL Server\110\SDK\Assemblies\Microsoft.SqlServer.Smo.dll</HintPath>
-    </Reference>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
@@ -403,6 +399,10 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{aa4a5374-77af-44f0-85c1-6cabc6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.Library\Teleopti.Ccc.DBManager.Library.csproj">
+      <Project>{CF33F7A6-78D3-4167-A42D-20E453F8B1B6}</Project>
+      <Name>Teleopti.Ccc.DBManager.Library</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
