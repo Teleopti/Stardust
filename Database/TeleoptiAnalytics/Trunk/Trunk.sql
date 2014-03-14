@@ -318,7 +318,7 @@ GO
 ----------------  
 --Name: DJ
 --Date: 2013-11-08
---Desc: New jobsteps for stg_state_group and fact_agent_state
+--Desc: #26422 - New jobsteps for stg_state_group and fact_agent_state
 ----------------
 IF NOT EXISTS (SELECT 1 FROM [mart].[etl_jobstep] WHERE jobstep_name=N'stg_state_group' AND jobstep_id=84)
 INSERT [mart].[etl_jobstep] ([jobstep_id], [jobstep_name]) VALUES(84,N'stg_state_group')
@@ -367,7 +367,6 @@ CREATE TABLE [stage].[stg_schedule](
 	[scheduled_paid_time_m] int NULL,
 	[scheduled_paid_time_activity_m] int NULL,
 	[scheduled_paid_time_absence_m] int NULL,
-	[last_publish] smalldatetime NOT NULL,
 	[business_unit_code] uniqueidentifier NOT NULL,
 	[business_unit_name] nvarchar(50) NOT NULL,
 	[datasource_id] smallint NOT NULL,
@@ -411,7 +410,7 @@ CREATE TABLE [stage].[stg_schedule_changed](
 ----------------  
 --Name: KJ
 --Date: 2014-02-04
---Desc: New column fact_schedule for local date
+--Desc: #26422 - New column fact_schedule for local date
 ----------------
 --ADD NEW COLUMN
 CREATE TABLE [mart].[fact_schedule_tmp](
@@ -448,7 +447,6 @@ CREATE TABLE [mart].[fact_schedule_tmp](
 	[scheduled_paid_time_m] [int] NULL,
 	[scheduled_paid_time_activity_m] [int] NULL,
 	[scheduled_paid_time_absence_m] [int] NULL,
-	[last_publish] [smalldatetime] NULL,
 	[business_unit_id] [int] NULL,
 	[datasource_id] [smallint] NULL,
 	[insert_date] [smalldatetime] NULL,
@@ -491,8 +489,8 @@ set interval_end=dateadd(minute,-1,interval_end)
 where interval_end=dateadd(day,1,@date_min)
 
 --INSERT DATA FROM OLD FACT_SCHEDULE
-INSERT [mart].[fact_schedule_tmp](shift_startdate_local_id, schedule_date_id, person_id, interval_id, activity_starttime, scenario_id, activity_id, absence_id, activity_startdate_id, activity_enddate_id, activity_endtime, shift_startdate_id, shift_starttime, shift_enddate_id, shift_endtime, shift_startinterval_id, shift_endinterval_id, shift_category_id, shift_length_id, scheduled_time_m, scheduled_time_absence_m, scheduled_time_activity_m, scheduled_contract_time_m, scheduled_contract_time_activity_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_work_time_activity_m, scheduled_work_time_absence_m, scheduled_over_time_m, scheduled_ready_time_m, scheduled_paid_time_m, scheduled_paid_time_activity_m, scheduled_paid_time_absence_m, last_publish, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date, overtime_id)
-SELECT btz.local_date_id, f.schedule_date_id, f.person_id, f.interval_id, f.activity_starttime, f.scenario_id, f.activity_id, f.absence_id, f.activity_startdate_id, f.activity_enddate_id, f.activity_endtime, f.shift_startdate_id, f.shift_starttime, f.shift_enddate_id, f.shift_endtime, f.shift_startinterval_id, di.interval_id, f.shift_category_id, f.shift_length_id, f.scheduled_time_m, f.scheduled_time_absence_m, f.scheduled_time_activity_m, f.scheduled_contract_time_m, f.scheduled_contract_time_activity_m, f.scheduled_contract_time_absence_m, f.scheduled_work_time_m, f.scheduled_work_time_activity_m, f.scheduled_work_time_absence_m, f.scheduled_over_time_m, f.scheduled_ready_time_m, f.scheduled_paid_time_m, f.scheduled_paid_time_activity_m, f.scheduled_paid_time_absence_m, f.last_publish, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date, f.overtime_id
+INSERT [mart].[fact_schedule_tmp](shift_startdate_local_id, schedule_date_id, person_id, interval_id, activity_starttime, scenario_id, activity_id, absence_id, activity_startdate_id, activity_enddate_id, activity_endtime, shift_startdate_id, shift_starttime, shift_enddate_id, shift_endtime, shift_startinterval_id, shift_endinterval_id, shift_category_id, shift_length_id, scheduled_time_m, scheduled_time_absence_m, scheduled_time_activity_m, scheduled_contract_time_m, scheduled_contract_time_activity_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_work_time_activity_m, scheduled_work_time_absence_m, scheduled_over_time_m, scheduled_ready_time_m, scheduled_paid_time_m, scheduled_paid_time_activity_m, scheduled_paid_time_absence_m, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date, overtime_id)
+SELECT btz.local_date_id, f.schedule_date_id, f.person_id, f.interval_id, f.activity_starttime, f.scenario_id, f.activity_id, f.absence_id, f.activity_startdate_id, f.activity_enddate_id, f.activity_endtime, f.shift_startdate_id, f.shift_starttime, f.shift_enddate_id, f.shift_endtime, f.shift_startinterval_id, di.interval_id, f.shift_category_id, f.shift_length_id, f.scheduled_time_m, f.scheduled_time_absence_m, f.scheduled_time_activity_m, f.scheduled_contract_time_m, f.scheduled_contract_time_activity_m, f.scheduled_contract_time_absence_m, f.scheduled_work_time_m, f.scheduled_work_time_activity_m, f.scheduled_work_time_absence_m, f.scheduled_over_time_m, f.scheduled_ready_time_m, f.scheduled_paid_time_m, f.scheduled_paid_time_activity_m, f.scheduled_paid_time_absence_m, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date, f.overtime_id
 FROM [mart].[fact_schedule] f
 INNER JOIN mart.bridge_time_zone btz 
 	ON f.shift_startdate_id=btz.date_id 
@@ -620,8 +618,6 @@ ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_category_id
 GO
 ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_length_id]  DEFAULT ((-1)) FOR [shift_length_id]
 GO
-ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_last_publish]  DEFAULT (((1900)-(1))-(1)) FOR [last_publish]
-GO
 ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
 GO
 ALTER TABLE [mart].[fact_schedule] ADD  CONSTRAINT [DF_fact_schedule_insert_date]  DEFAULT (getdate()) FOR [insert_date]
@@ -694,7 +690,7 @@ GO
 ----------------  
 --Name: KJ
 --Date: 2014-02-04
---Desc: New column fact_schedule_deviation for local date
+--Desc: #26422 - New column fact_schedule_deviation for local date
 ----------------
 --NEW COLUMN IN FACT_SCHEDULE_DEVIATION
 

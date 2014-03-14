@@ -173,7 +173,6 @@ INSERT INTO mart.fact_schedule
 	scheduled_paid_time_m,
 	scheduled_paid_time_activity_m,
 	scheduled_paid_time_absence_m,
-	last_publish, 
 	business_unit_id,
 	datasource_id, 
 	datasource_update_date,

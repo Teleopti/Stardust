@@ -51,7 +51,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("scheduled_paid_time_m", typeof(int));
             table.Columns.Add("scheduled_paid_time_activity_m", typeof(int));
             table.Columns.Add("scheduled_paid_time_absence_m", typeof(int));
-            table.Columns.Add("last_publish", typeof(DateTime));
             table.Columns.Add("business_unit_code", typeof(Guid));
             table.Columns.Add("business_unit_name", typeof(String));
             table.Columns.Add("datasource_id", typeof(int));

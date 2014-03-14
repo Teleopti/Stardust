@@ -37,7 +37,6 @@ SELECT
 	scheduled_paid_time_m				= f.scheduled_paid_time_m,
 	scheduled_paid_time_activity_m		= f.scheduled_paid_time_activity_m,
 	scheduled_paid_time_absence_m		= f.scheduled_paid_time_absence_m,
-	last_publish						= f.last_publish, 
 	business_unit_id					= dp.business_unit_id,
 	datasource_id						= f.datasource_id, 
 	datasource_update_date				= f.datasource_update_date,
