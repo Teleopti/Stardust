@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<AuthenticationModule>();
 			builder.RegisterModule<UnitOfWorkModule>();
 			builder.RegisterModule<LocalServiceBusPublisherModule>();
+			builder.RegisterModule<DateAndTimeModule>();
 
 			using (var container = builder.Build())
 			{
