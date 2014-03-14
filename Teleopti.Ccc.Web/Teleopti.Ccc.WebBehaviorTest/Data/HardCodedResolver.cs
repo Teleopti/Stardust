@@ -41,14 +41,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			// use autofac soon?
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
+			{
+				var utcTheTime = CurrentTime.Value() == DateTime.MinValue ? DateTime.UtcNow : CurrentTime.Value();
+				
 				return new[]
 					{
 						new ScheduleProjectionReadOnlyUpdater(
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
 							new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))),
-							new ThisIsNow(CurrentTime.Value())
+							new ThisIsNow(utcTheTime)
 							)
 					};
+			}
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
 				return new[]
 					{
