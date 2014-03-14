@@ -21,12 +21,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("Url", TestSiteConfigurationSetup.Url.ToString());
 			Add("Port", TestSiteConfigurationSetup.Port.ToString());
-			
-			Add("Url", TestSiteConfigurationSetup.Url.ToString());
-			Add("Port", TestSiteConfigurationSetup.Port.ToString());
+
+			Add("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
+			Add("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
 
 			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
 			Add("SitePath", Paths.WebPath());
+			Add("SitePathAuthenticationBridge", Paths.FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\"));
 			Add("ConfigPath", Paths.WebBinPath());
 			Add("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.Url.ToString());
             Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());

@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
 		private static readonly string BackupWebConfig = Path.Combine(Paths.WebPath(), "web.backup.config");
 		private static readonly string BehaviorTestWebConfig = Path.Combine(Paths.WebPath(), "web.fromtest.config");
+		private static readonly string TargetAuthenticationBridgeWebConfig = Path.Combine(Paths.FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\"), "web.config");
+		private static readonly string BackupAuthenticationBridgeWebConfig = Path.Combine(Paths.FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\"), "web.backup.config");
 
 		public static Uri Url;
 		public static int Port;
@@ -20,7 +22,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static int PortAuthenticationBridge;
 
 		private static IISExpress _server;
-		private static IISExpress _serverAuthenticationBridge;
 
 		public static void Setup()
 		{
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				AttemptToUseIISExpress();
 
 			UpdateWebConfigFromTemplate();
+			UpdateAuthenticationBridgeWebConfigFromTemplate();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
@@ -48,18 +50,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 				
 				FileConfigurator.ConfigureByTags("Data\\iisexpress.config", "Data\\iisexpress.running.config", new AllTags());
-				_server = new IISExpress(new Parameters
+				var parameters = new Parameters
 					{
 						Systray = true,
-						Config = "Data\\iisexpress.running.config"
-					});
-
-				FileConfigurator.ConfigureByTags("Data\\iisexpressAuthenticationBridge.config", "Data\\iisexpressAuthenticationBridge.running.config", new AllTags());
-				_serverAuthenticationBridge = new IISExpress(new Parameters
-				{
-					Systray = true,
-					Config = "Data\\iisexpressAuthenticationBridge.running.config"
-				});
+						Config = "Data\\iisexpress.running.config /apppool:\"Clr4IntegratedAppPool\""
+					};
+				_server = new IISExpress(parameters);
 			}
 			catch (Exception)
 			{
@@ -74,10 +70,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (_server != null)
 				_server.Dispose();
 
-			if (_serverAuthenticationBridge != null)
-				_serverAuthenticationBridge.Dispose();
-
 			RevertWebConfig();
+			RevertAuthenticationBridgeWebConfig();
 		}
 
 		public static void RecycleApplication()
@@ -121,10 +115,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			File.Copy(TargetWebConfig, BehaviorTestWebConfig, true);
 		}
 
+		private static void UpdateAuthenticationBridgeWebConfigFromTemplate()
+		{
+			var tags = new AllTags();
+
+			if (File.Exists(TargetAuthenticationBridgeWebConfig))
+				File.Copy(TargetAuthenticationBridgeWebConfig, BackupAuthenticationBridgeWebConfig, true);
+
+			FileConfigurator.ConfigureByTags(
+				TargetAuthenticationBridgeWebConfig,
+				TargetAuthenticationBridgeWebConfig,
+				tags
+				);
+		}
+
 		private static void RevertWebConfig()
 		{
 			if (File.Exists(BackupWebConfig))
 				File.Copy(BackupWebConfig, TargetWebConfig, true);
+		}
+
+		private static void RevertAuthenticationBridgeWebConfig()
+		{
+			if (File.Exists(BackupAuthenticationBridgeWebConfig))
+				File.Copy(BackupAuthenticationBridgeWebConfig, TargetAuthenticationBridgeWebConfig, true);
 		}
 	}
 }
