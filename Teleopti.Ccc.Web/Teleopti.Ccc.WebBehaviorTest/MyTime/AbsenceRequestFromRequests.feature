@@ -83,6 +83,16 @@ And I input absence request values with 'Vacation' for date '2014-10-03'
 Then I should see the remaining days is '25 Days'
 And I should see the used days is '0 Days'
 
+Scenario: Do not show personal account when select an absence type not tracked
+Given I am an agent
+And I have a requestable absence with
+| Field       | Value    |
+| Name        | Vacation |
+And I am viewing requests
+When I click to add a new absence request
+And I input absence request values with 'Vacation' for date '2014-10-03'
+Then I should not see the remaining and used time
+
 Scenario: When changing request date change remaining and used time
 Given I am an agent
 And I am american
