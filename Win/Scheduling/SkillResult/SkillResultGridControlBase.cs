@@ -1,17 +1,27 @@
-﻿using Teleopti.Ccc.Infrastructure.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
+using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common.Chart;
+using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
-	public class SkillResultGridControlBase : TeleoptiGridControl, IHelpContext
+	public abstract class SkillResultGridControlBase : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
 	{
 		private ChartSettings _chartSettings;
 		private readonly ChartSettings _defaultChartSettings = new ChartSettings();
+		private GridRow _currentSelectedGridRow;
+		private IList<IGridRow> _gridRows;
+		public AbstractDetailView Owner { get; set; }
 
 		public void InitializeBase(string settingName)
 		{
@@ -35,6 +45,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			get
 			{
 				return Name;
+			}
+		}
+
+		public GridRow CurrentSelectedGridRow
+		{
+			get
+			{
+				return _currentSelectedGridRow;
 			}
 		}
 
@@ -64,6 +82,105 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			_defaultChartSettings.SelectedRows.Add("ForecastedHours");
 			_defaultChartSettings.SelectedRows.Add("ScheduledHours");
 			_defaultChartSettings.SelectedRows.Add("RelativeDifference");
+		}
+
+		public abstract bool HasColumns { get;}
+
+		public void RefreshGrid()
+		{
+			Refresh();
+		}
+
+		public void GoToDate(DateTime theDate)
+		{
+			RefreshGrid();
+		}
+
+		public DateTime GetLocalCurrentDate(int column)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IDictionary<int, GridRow> EnabledChartGridRows
+		{
+			get
+			{
+
+				if (GridRows == null)
+					return new Dictionary<int, GridRow>();
+
+				IDictionary<int, GridRow> settings = (from r in GridRows.OfType<GridRow>()
+													  where r.ChartSeriesSettings != null &&
+															r.ChartSeriesSettings.Enabled
+													  select r).ToDictionary(k => GridRows.IndexOf(k), v => v);
+
+				return settings;
+			}
+		}
+
+		public ReadOnlyCollection<GridRow> AllGridRows
+		{
+			get
+			{
+				if (GridRows == null)
+					return new ReadOnlyCollection<GridRow>(new List<GridRow>());
+				return new ReadOnlyCollection<GridRow>(new List<GridRow>(GridRows.OfType<GridRow>()));
+			}
+		}
+
+		public int MainHeaderRow
+		{
+			get
+			{
+				return 0;
+			}
+		}
+
+		public IList<IGridRow> GridRows
+		{
+			get { return _gridRows; }
+			set { _gridRows = value; }
+		}
+
+		public IList<GridRow> EnabledChartGridRowsMicke65()
+		{
+			IList<GridRow> ret = new List<GridRow>();
+			foreach (string key in ChartSettings.SelectedRows)
+			{
+				foreach (GridRow gridRow in GridRows.OfType<GridRow>())
+				{
+					if (gridRow.DisplayMember == key)
+						ret.Add(gridRow);
+				}
+			}
+
+			return ret;
+		}
+
+		public void SetRowVisibility(string key, bool enabled)
+		{
+			if (enabled)
+				ChartSettings.SelectedRows.Add(key);
+			else
+			{
+				ChartSettings.SelectedRows.Remove(key);
+			}
+		}
+
+		protected override void OnSelectionChanged(GridSelectionChangedEventArgs e)
+		{
+			if (e == null)
+				throw new ArgumentNullException("e");
+			if (e.Range.Top > 0)
+			{
+				GridRow gridRow = GridRows[e.Range.Top] as GridRow;
+
+				if (gridRow != null)
+				{
+					_currentSelectedGridRow = gridRow;
+				}
+			}
+			base.OnSelectionChanged(e);
 		}
 	}
 }
