@@ -56,11 +56,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			}
 		}
 
-		public ChartSettings ChartSettings
-		{
-			get { return _chartSettings; }
-		}
-
 		public void SaveSetting()
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -72,8 +67,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
 		public IChartSeriesSetting ConfigureSetting(string key)
 		{
-			var ret = ChartSettings.DefinedSetting(key, new ChartSettingsManager().ChartSettingsDefault);
-			ret.Enabled = ChartSettings.SelectedRows.Contains(key);
+			var ret = _chartSettings.DefinedSetting(key, new ChartSettingsManager().ChartSettingsDefault);
+			ret.Enabled = _chartSettings.SelectedRows.Contains(key);
 			return ret;
 		}
 
@@ -145,7 +140,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 		public IList<GridRow> EnabledChartGridRowsMicke65()
 		{
 			IList<GridRow> ret = new List<GridRow>();
-			foreach (string key in ChartSettings.SelectedRows)
+			foreach (string key in _chartSettings.SelectedRows)
 			{
 				foreach (GridRow gridRow in GridRows.OfType<GridRow>())
 				{
@@ -160,10 +155,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 		public void SetRowVisibility(string key, bool enabled)
 		{
 			if (enabled)
-				ChartSettings.SelectedRows.Add(key);
+				_chartSettings.SelectedRows.Add(key);
 			else
 			{
-				ChartSettings.SelectedRows.Remove(key);
+				_chartSettings.SelectedRows.Remove(key);
 			}
 		}
 
@@ -173,7 +168,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				throw new ArgumentNullException("e");
 			if (e.Range.Top > 0)
 			{
-				GridRow gridRow = GridRows[e.Range.Top] as GridRow;
+				var gridRow = GridRows[e.Range.Top] as GridRow;
 
 				if (gridRow != null)
 				{
