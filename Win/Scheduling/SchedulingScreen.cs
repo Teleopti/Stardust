@@ -32,6 +32,7 @@ using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
+using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;

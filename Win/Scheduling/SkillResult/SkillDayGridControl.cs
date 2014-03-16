@@ -7,7 +7,6 @@ using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -21,11 +20,11 @@ using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-	public class SkillDayGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
+	public class SkillDayGridControl : SkillResultGridControlBase, ITaskOwnerGrid
     {
 		private const int rowHeaderWidth = 200;
         private const int cellWidth = 55;
@@ -456,19 +455,5 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             base.OnSelectionChanged(e);
         }
-
-        #region IHelpContext Members
-
-        public bool HasHelp
-        {
-            get { return true; }
-        }
-
-        public string HelpId
-        {
-            get { return Name; }
-        }
-
-        #endregion
     }
 }

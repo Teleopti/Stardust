@@ -18,9 +18,9 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
-	public class SkillFullPeriodGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, ISkillFullPeriodGridControl
+	public class SkillFullPeriodGridControl : SkillResultGridControlBase, ITaskOwnerGrid, ISkillFullPeriodGridControl
     {
         private AbstractDetailView _owner;
         private const int rowHeaderWidth = 200;
@@ -341,19 +341,5 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             base.OnSelectionChanged(e);
         }
-
-        #region IHelpContext Members
-
-        public bool HasHelp
-        {
-            get { return true; }
-        }
-
-        public string HelpId
-        {
-            get { return Name; }
-        }
-
-        #endregion
     }
 }

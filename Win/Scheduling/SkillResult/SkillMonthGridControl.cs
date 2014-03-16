@@ -18,21 +18,21 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
-	public class SkillWeekGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext, ISkillWeekGridControl
+	public class SkillMonthGridControl : SkillResultGridControlBase, ITaskOwnerGrid, ISkillMonthGridControl
     {
         private AbstractDetailView _owner;
-        private const int rowHeaderWidth = 200;
-        private const string settingName = "SchedulerSkillDayGridAndChart";
-		private RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
+        private const int RowHeaderWidth = 200;
+        private const string SettingName = "SchedulerSkillDayGridAndChart";
+		private RowManagerScheduler<SkillMonthGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
         private IList<IGridRow> _gridRows;
         private GridRow _currentSelectedGridRow;
         private readonly ChartSettings _chartSettings;
         private readonly ChartSettings _defaultChartSettings = new ChartSettings();
-		private readonly SkillWeekGridControlPresenter _presenter;
+		private readonly SkillMonthGridControlPresenter _presenter;
 
-        public SkillWeekGridControl()
+        public SkillMonthGridControl()
         {
             initializeComponent();
             initializeGrid();
@@ -40,10 +40,10 @@ namespace Teleopti.Ccc.Win.Scheduling
            
             using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
+                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(SettingName, _defaultChartSettings);
             }
 
-			_presenter = new SkillWeekGridControlPresenter(this);
+			_presenter = new SkillMonthGridControlPresenter(this);
         }
 
         private void initializeComponent()
@@ -89,12 +89,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		private GridCellModelBase initializeCallPercentReadOnlyCell()
         {
-			return new PercentReadOnlyCellModel(Model) { NumberOfDecimals = 1 };
+        	return new PercentReadOnlyCellModel(Model) {NumberOfDecimals = 1};
         }
 
         private void gridSkillDataQueryColWidth(object sender, GridRowColSizeEventArgs e)
         {	
-			e.Size = rowHeaderWidth;
+			e.Size = RowHeaderWidth;
             e.Handled = true;   
         }
 
@@ -124,57 +124,58 @@ namespace Teleopti.Ccc.Win.Scheduling
             ((NumericReadOnlyCellModel)CellModels["NumericReadOnlyCell"]).NumberOfDecimals = 2;
             DateOnly baseDate;
 
-            _gridRows = new List<IGridRow> {new DateHeaderGridRow(DateHeaderType.WeekDates, dates)};
+            //_gridRows = new List<IGridRow> {new DateHeaderGridRow(DateHeaderType.WeekDates, dates)};
+			_gridRows = new List<IGridRow> { new DateHeaderGridRow(DateHeaderType.MonthNameYear, dates) };
         	baseDate = dates.Count > 0 ? dates.First() : DateOnly.MinValue;
 
-            _rowManager = new RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>>(this, new List<IntervalDefinition>(), 15, schedulerStateHolder);
+            _rowManager = new RowManagerScheduler<SkillMonthGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>>(this, new List<IntervalDefinition>(), 15, schedulerStateHolder);
             _rowManager.BaseDate = baseDate;
 
-        	SkillWeekGridRow gridRow;
+        	SkillMonthGridRow gridRow;
 
 			if (skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 			{
-				gridRow = new SkillWeekGridRow(_rowManager, "TimeCell", "ForecastedHours", UserTexts.Resources.ForecastedHours);
+				gridRow = new SkillMonthGridRow(_rowManager, "TimeCell", "ForecastedHours", UserTexts.Resources.ForecastedHours);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				if (!skill.IsVirtual)
 				{
-					gridRow = new SkillWeekGridRowMinMaxIssues(_rowManager, "TimeCell", "ScheduledHours", UserTexts.Resources.ScheduledHours);
+					gridRow = new SkillMonthGridRowMinMaxIssues(_rowManager, "TimeCell", "ScheduledHours", UserTexts.Resources.ScheduledHours);
 					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 				else
 				{
-					gridRow = new SkillWeekGridRowMinMaxIssuesSummary(_rowManager, "TimeCell", "ScheduledHours", UserTexts.Resources.ScheduledHours);
+					gridRow = new SkillMonthGridRowMinMaxIssuesSummary(_rowManager, "TimeCell", "ScheduledHours", UserTexts.Resources.ScheduledHours);
 					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 
-				gridRow = new SkillWeekGridRow(_rowManager, "TimeSpanCell", "AbsoluteDifference", UserTexts.Resources.AbsoluteDifference);
+				gridRow = new SkillMonthGridRow(_rowManager, "TimeSpanCell", "AbsoluteDifference", UserTexts.Resources.AbsoluteDifference);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				if (!skill.IsVirtual)
 				{
-					gridRow = new SkillWeekGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",UserTexts.Resources.RelativeDifference, skill);
+					gridRow = new SkillMonthGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",UserTexts.Resources.RelativeDifference, skill);
 					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 				else
 				{
-					gridRow = new SkillWeekGridRowStaffingIssuesSummary(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",UserTexts.Resources.RelativeDifference);
+					gridRow = new SkillMonthGridRowStaffingIssuesSummary(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",UserTexts.Resources.RelativeDifference);
 					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 
 				
-				gridRow = new SkillWeekGridRow(_rowManager, "NumericReadOnlyCell", "DailySmoothness", UserTexts.Resources.StandardDeviation);
+				gridRow = new SkillMonthGridRow(_rowManager, "NumericReadOnlyCell", "DailySmoothness", UserTexts.Resources.StandardDeviation);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 
-                gridRow = new SkillWeekGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
+                gridRow = new SkillMonthGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
@@ -182,19 +183,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (skill.SkillType.ForecastSource == ForecastSource.Email || skill.SkillType.ForecastSource == ForecastSource.Backoffice || skill.SkillType.ForecastSource == ForecastSource.Time)
 			{
-				gridRow = new SkillWeekGridRow(_rowManager, "TimeCell", "ForecastedHoursIncoming", UserTexts.Resources.ForecastedHoursIncoming);
+				gridRow = new SkillMonthGridRow(_rowManager, "TimeCell", "ForecastedHoursIncoming", UserTexts.Resources.ForecastedHoursIncoming);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillWeekGridRow(_rowManager, "TimeCell", "ScheduledHoursIncoming", UserTexts.Resources.ScheduledHoursIncoming);
+				gridRow = new SkillMonthGridRow(_rowManager, "TimeCell", "ScheduledHoursIncoming", UserTexts.Resources.ScheduledHoursIncoming);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillWeekGridRow(_rowManager, "TimeSpanCell", "AbsoluteIncomingDifference", UserTexts.Resources.AbsoluteDifferenceIncoming);
+				gridRow = new SkillMonthGridRow(_rowManager, "TimeSpanCell", "AbsoluteIncomingDifference", UserTexts.Resources.AbsoluteDifferenceIncoming);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
-				gridRow = new SkillWeekGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeIncomingDifference", UserTexts.Resources.RelativeDifferenceIncoming, skill);
+				gridRow = new SkillMonthGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeIncomingDifference", UserTexts.Resources.RelativeDifferenceIncoming, skill);
 				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
@@ -204,21 +205,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 		
 		public void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill)
 		{
-			var skillWeekPeriods = _presenter.CreateDataSource(stateHolder, skill);
-			if (skillWeekPeriods == null) return;
-			_rowManager.SetDataSource(new List<IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> { skillWeekPeriods });
+			var skillMonthPeriods = _presenter.CreateDataSource(stateHolder, skill);
+			if (skillMonthPeriods == null) return;
+			_rowManager.SetDataSource(new List<IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> { skillMonthPeriods });
 		}
 
 		public void SetupGrid(int colCount)
 		{
 			ColCount = colCount;
 			RowCount = _gridRows.Count - 1;
-			ColWidths[0] = rowHeaderWidth;
+			ColWidths[0] = RowHeaderWidth;
 		}
 
         public void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
         {
-           _presenter.DrawWeekGrid(stateHolder, skill);	
+           _presenter.DrawMonthGrid(stateHolder, skill);	
         }
 
         public void RefreshGrid()
@@ -312,7 +313,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         public bool HasColumns
         {
-			get { return _presenter.Weeks.Count > 0; }
+			get { return _presenter.Months.Count > 0; }
         }
 
         public GridRow CurrentSelectedGridRow
@@ -334,19 +335,5 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
             base.OnSelectionChanged(e);
         }
-
-        #region IHelpContext Members
-
-        public bool HasHelp
-        {
-            get { return true; }
-        }
-
-        public string HelpId
-        {
-            get { return Name; }
-        }
-
-        #endregion
     }
 }

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common;
@@ -13,9 +12,9 @@ using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Win.Common;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
-    public class SkillIntradayGridControl : TeleoptiGridControl, ITaskOwnerGrid, IHelpContext
+    public class SkillIntradayGridControl : SkillResultGridControlBase, ITaskOwnerGrid
     {
         private const int HeaderWidth = 200;
         private const int HeaderHeight12HourClock = 26;
@@ -181,14 +180,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region IHelpContext Members
 
-        public bool HasHelp
+        public new bool HasHelp
         {
             get { return _presenter.HasHelp; }
-        }
-
-        public string HelpId
-        {
-            get { return Name; }
         }
 
         #endregion
