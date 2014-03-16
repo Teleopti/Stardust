@@ -194,7 +194,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private SkillResultViewSetting _skillResultViewSetting;
 		private const int maxCalculatMinMaxCacheEnries = 100000;
 		private DateTimePeriod _selectedPeriod;
-	    private bool isWindowLoaded = false;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
 
@@ -6501,66 +6500,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripButtonViewAllowance_Click(object sender, EventArgs e)
+		private void toolStripItemViewAllowanceClick(object sender, EventArgs e)
 		{
-			showRequestAllowanceView();
-		}
-
-		private void toolStripMenuItemViewAllowance_Click(object sender, EventArgs e)
-		{
-			isWindowLoaded = false;
-			showRequestAllowanceView();
-		}
-
-		private void showRequestAllowanceView()
-		{
-			var defaultRequest = _requestView.SelectedAdapters().Count > 0
-														 ? _requestView.SelectedAdapters().First().PersonRequest
-														 : _schedulerState.PersonRequests.FirstOrDefault(
-															 r =>
-															 r.Request is AbsenceRequest &&
-															 _schedulerState.RequestedPeriod.Period().Contains(r.Request.Period));
-
-			if (defaultRequest == null)
-			{
-				var allowanceView = new RequestAllowanceView(null, _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate);
-
-				if (!isWindowLoaded)
-				{
-					allowanceView.Show(this);
-					isWindowLoaded = true;
-					allowanceView.FormClosed += allowanceView_FormClosed;
-				}
-				else
-				{
-					isWindowLoaded = false;
-				}
-			}
-			else
-			{
-				var requestDate = new DateOnly(defaultRequest.RequestedDate);
-				var personPeriod = defaultRequest.Person.PersonPeriodCollection.FirstOrDefault(p => p.Period.Contains(requestDate));
-				if (personPeriod != null)
-				{
-					var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
-
-					if (!isWindowLoaded)
-					{
-						allowanceView.Show(this);
-						isWindowLoaded = true;
-						allowanceView.FormClosed += allowanceView_FormClosed;
-					}
-					else
-					{
-						isWindowLoaded = false;
-					}
-				}
-			}
-		}
-
-		private void allowanceView_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			isWindowLoaded = false;
+			_requestView.ShowRequestAllowanceView(this);
 		}
 
 		private void toolStripViewRequestHistory_Click(object sender, EventArgs e)

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -24,14 +25,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
         private IList<PersonRequestViewModel> _source = new List<PersonRequestViewModel>();
         private readonly HandlePersonRequestViewModel _model;
-        private IEventAggregator _eventAggregator;
+	    private readonly ISchedulerStateHolder _schedulerStateHolder;
+	    private IEventAggregator _eventAggregator;
         private readonly IPersonRequestCheckAuthorization _authorization;
-        
+		private bool _isWindowLoaded;
 
 
         public RequestView(FrameworkElement handlePersonRequestView, ISchedulerStateHolder schedulerStateHolder, IUndoRedoContainer container, IDictionary<IPerson, IPersonAccountCollection> allAccountPersonCollection,IEventAggregator eventAggregator)
         {
-            _eventAggregator = eventAggregator;
+	        _schedulerStateHolder = schedulerStateHolder;
+	        _eventAggregator = eventAggregator;
             _container = container;
             _personRequestList = schedulerStateHolder.PersonRequests;
             _authorization = new PersonRequestCheckAuthorization();
@@ -148,11 +151,68 @@ namespace Teleopti.Ccc.Win.Scheduling
             get { return GetType().Name; }
         }
 
-        #endregion
+	    public bool IsWindowLoaded
+	    {
+		    get { return _isWindowLoaded; }
+		    set { _isWindowLoaded = value; }
+	    }
+
+	    #endregion
 
         public void FilterDays(TimeSpan timeSpan)
         {
             _model.FilterOutOlderThan(timeSpan);
         }
+
+		public void ShowRequestAllowanceView(IWin32Window owner)
+		{
+			var defaultRequest = SelectedAdapters().Count > 0
+														 ? SelectedAdapters().First().PersonRequest
+														 : _schedulerStateHolder.PersonRequests.FirstOrDefault(
+															 r =>
+															 r.Request is AbsenceRequest &&
+															 _schedulerStateHolder.RequestedPeriod.Period().Contains(r.Request.Period));
+
+			if (defaultRequest == null)
+			{
+				var allowanceView = new RequestAllowanceView(null, _schedulerStateHolder.RequestedPeriod.DateOnlyPeriod.StartDate);
+
+				if (!_isWindowLoaded)
+				{
+					allowanceView.Show(owner);
+					_isWindowLoaded = true;
+					allowanceView.FormClosed += allowanceView_FormClosed;
+				}
+				else
+				{
+					_isWindowLoaded = false;
+				}
+			}
+			else
+			{
+				var requestDate = new DateOnly(defaultRequest.RequestedDate);
+				var personPeriod = defaultRequest.Person.PersonPeriodCollection.FirstOrDefault(p => p.Period.Contains(requestDate));
+				if (personPeriod != null)
+				{
+					var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
+
+					if (!_isWindowLoaded)
+					{
+						allowanceView.Show(owner);
+						_isWindowLoaded = true;
+						allowanceView.FormClosed += allowanceView_FormClosed;
+					}
+					else
+					{
+						_isWindowLoaded = false;
+					}
+				}
+			}
+		}
+
+		private void allowanceView_FormClosed(object sender, FormClosedEventArgs e)
+		{
+			_isWindowLoaded = false;
+		}
     }
 }
