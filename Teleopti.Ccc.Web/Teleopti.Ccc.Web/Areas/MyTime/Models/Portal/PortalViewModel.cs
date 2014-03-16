@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public class PortalViewModel
 	{
 		public IEnumerable<NavigationItem> NavigationItems { get; set; }
+		public IEnumerable<ReportNavigationItem> ReportNavigationItems { get; set; }
 		public string CustomerName { get; set; }
 		public bool ShowChangePassword { get; set; }
 		public bool HasAsmPermission { get; set; }
@@ -26,9 +27,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	}
 
 
+
 		public int UnreadMessageCount { get; set; }
 	}
 
+	public class ReportNavigationItem : NavigationItem
+	{
+		public string Url { get; set; }
+		public bool IsMyReport { get; set; }
+		public bool IsDivider { get; set; }
+	}
 	public class PreferenceOption : Option, IPreferenceOption
 	{
 		public bool Extended { get; set; }

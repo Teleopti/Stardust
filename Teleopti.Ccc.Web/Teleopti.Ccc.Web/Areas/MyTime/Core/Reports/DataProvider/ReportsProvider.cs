@@ -29,15 +29,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 			var mobileReportFunctionSpecification = DefinedReports.ReportInformations;
 
 			var allPermittedReports = _principalAuthorization.GrantedFunctionsBySpecification(externalApplicationFunctionSpecification).ToList();
-
-
 			var query =
 				from c in allPermittedReports
 				where !(from o in mobileReportFunctionSpecification select o.FunctionCode)
 					.Contains(c.FunctionCode)
 				select c;
 			return query;
-			//return DefinedReports.ReportInformations.Where(r => grantedFunctions.Contains(r.FunctionCode)).ToList();
 		}
 	}
 
