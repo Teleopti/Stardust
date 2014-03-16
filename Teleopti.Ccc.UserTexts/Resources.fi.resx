@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>Poissaolo</value>
@@ -7999,7 +7999,7 @@ päivämäärä</value>
     <value>Konflikti</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Toinen käyttäjä on muuttanut näitä tietoja. Sinun täytyy päättää mitä tehdä ennen kuin voit jatkoa. Klikkaa OK hyväksyäksesi toisen käyttäjän muutokset. Huomaathan, että sinun tekemät muutokset menetetään. Klikkaa peruuta jatkaaksesi tallentamatta. Sinulta  kysytään tätä uudelleen, kun klikkaat tallennusta. Klikkaa korvaa tallentaaksesi muutokset. Toisen käyttäjän muutokset korvataan. </value>
+    <value>Toinen käyttäjä on muuttanut näitä tietoja. Sinun täytyy päättää mitä tehdä ennen kuin voit jatkoa. Klikkaa OK hyväksyäksesi toisen käyttäjän muutokset. Huomaathan, että sinun tekemät muutokset menetetään.  Klikkaa korvaa tallentaaksesi muutokset. Toisen käyttäjän muutokset korvataan. </value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>Ei tallennettu</value>

@@ -4,5 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public string Id { get; set; }
 		public string Name { get; set; }
+		public int NumberOfAgents { get; set; }
 	}
 }

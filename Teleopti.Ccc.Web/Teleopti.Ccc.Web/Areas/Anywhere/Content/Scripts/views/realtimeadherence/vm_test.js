@@ -43,8 +43,31 @@
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.sites().length, 0);
-			}
+			},
 
+			"should set number of agents when fill": function () {
+				var expected = 37;
+				var vm = viewModel();
+				var site = { NumberOfAgents: expected };
+
+				vm.fill([site]);
+
+				assert.equals(vm.sites()[0].NumberOfAgents, expected);
+			},
+
+			"should do update from notification": function() {
+				var vm = viewModel();
+				var notification = {
+					BinaryData: '{"SiteId":"theguid","OutOfAdherence":2}',
+				};
+				var site = { Id: "theguid"};
+				vm.fill([site]);
+
+				vm.updateFromNotification(notification);
+
+				assert.equals(vm.sites()[0].OutOfAdherence(), 2);
+			}
+			
 		});
 
 	};

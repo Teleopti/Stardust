@@ -10,6 +10,7 @@ using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -127,6 +128,13 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		public void ShouldRegisterApplicationPath()
 		{
 			requestContainer.Resolve<IPhysicalApplicationPath>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveSitesController()
+		{
+			requestContainer.Resolve<SitesController>()
 				.Should().Not.Be.Null();
 		}
 

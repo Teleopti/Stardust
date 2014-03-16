@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Maskeret Redigeringstekstboks</value>
@@ -7958,7 +7958,7 @@ Ugedag</value>
     <comment>Conflict</comment>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>En anden bruger har ændret disse poster. Du skal beslutte, hvad du vil gøre, før du fortsætter. Klik på OK for at acceptere den anden brugers ændringer. Bemærk venligst, at dine tilsvarende ændringer vil gå tabt. Klik på Annuller for at fortsætte uden at gemme. Du vil blive promptet om denne konflikt igen, når du klikker på Gem. Klik på Overskriv for at gemme dine ændringer og slette ændringer foretaget af andre brugere.</value>
+    <value>En anden bruger har ændret disse poster. Du skal beslutte, hvad du vil gøre, før du fortsætter. Klik på OK for at acceptere den anden brugers ændringer. Bemærk venligst, at dine tilsvarende ændringer vil gå tabt. Klik på Overskriv for at gemme dine ændringer og slette ændringer foretaget af andre brugere.</value>
     <comment>Info text when conflicts occur</comment>
   </data>
   <data name="NotSaved" xml:space="preserve">

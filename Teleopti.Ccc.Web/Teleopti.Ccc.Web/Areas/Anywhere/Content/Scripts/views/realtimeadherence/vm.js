@@ -27,11 +27,19 @@
 		that.fill = function(data) {
 			for (var i = 0; i < data.length; i++) {
 				var newSite = site();
+
 				newSite.Id = data[i].Id;
 				newSite.Name = data[i].Name;
+				newSite.NumberOfAgents = data[i].NumberOfAgents;
 
 				that.sites.push(newSite);
 			}
+		};
+
+		that.updateFromNotification = function(notification) {
+			var data = JSON.parse(notification.BinaryData);
+			data.Id = data.SiteId;
+			that.update(data);
 		};
 
 		that.update = function (data) {

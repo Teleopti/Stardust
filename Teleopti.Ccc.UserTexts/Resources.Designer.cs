@@ -13813,6 +13813,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Navigate.
+        /// </summary>
+        public static string Navigate {
+            get {
+                return ResourceManager.GetString("Navigate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Negative effect:.
         /// </summary>
         public static string NegativeEffectColon {

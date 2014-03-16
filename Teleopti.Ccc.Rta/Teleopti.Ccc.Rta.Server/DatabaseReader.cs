@@ -18,23 +18,30 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
         private readonly IActualAgentStateCache _actualAgentStateCache;
-        private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
+	    private readonly INow _now;
+	    private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
-        public DatabaseReader(IDatabaseConnectionFactory databaseConnectionFactory,
-                              IDatabaseConnectionStringHandler databaseConnectionStringHandler,
-                              IActualAgentStateCache actualAgentStateCache)
+	    public DatabaseReader(IDatabaseConnectionFactory databaseConnectionFactory,
+		    IDatabaseConnectionStringHandler databaseConnectionStringHandler,
+		    IActualAgentStateCache actualAgentStateCache,
+		    INow now)
         {
             _databaseConnectionFactory = databaseConnectionFactory;
             _databaseConnectionStringHandler = databaseConnectionStringHandler;
             _actualAgentStateCache = actualAgentStateCache;
+	        _now = now;
         }
 
         public IList<ScheduleLayer> GetReadModel(Guid personId)
-		{
-			var query = string.Format(CultureInfo.InvariantCulture,
-									  @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
-											FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
-											WHERE PersonId='{0}'", personId);
+        {
+	        var utcDate = _now.UtcDateTime().Date;
+	        var query = string.Format(CultureInfo.InvariantCulture,
+		        @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+											FROM ReadModel.ScheduleProjectionReadOnly rta
+											WHERE PersonId='{0}'
+											AND BelongsToDate BETWEEN '{1}' AND '{2}'", personId,
+						utcDate.AddDays(-1),
+		        utcDate.AddDays(1));
 			var layers = new List<ScheduleLayer>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{

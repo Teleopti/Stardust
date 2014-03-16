@@ -11974,4 +11974,8 @@ Reduce the complexity to use these shifts.</value>
     <value>View Personal Account</value>
     <comment>text in permissions</comment>
   </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Navigate</value>
+    <comment>In the context, navigate back and forward...</comment>
+  </data>
 </root>
