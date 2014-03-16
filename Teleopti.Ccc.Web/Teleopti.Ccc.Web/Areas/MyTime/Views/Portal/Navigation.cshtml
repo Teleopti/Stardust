@@ -32,6 +32,34 @@
                         }
                     </li>
                 }
+					@if (Model.ReportNavigationItems.Count() > 0)
+					{
+		  
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
+							<ul class="dropdown-menu">
+								@foreach (var reportNavSection in Model.ReportNavigationItems)
+								{
+									if (reportNavSection.IsDivider)
+									{
+										<li class="divider"></li>
+										continue;
+									}
+									<li>
+										@if (reportNavSection.IsMyReport)
+										{
+											<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
+										}
+										@if (!reportNavSection.IsMyReport)
+										{
+											<a href="@reportNavSection.Url" target="_blank">@reportNavSection.Title</a>
+										}
+									</li>
+								}
+							</ul>
+						</li>
+					}
+	           
             </ul>
                 
             <div class="navbar-right">
