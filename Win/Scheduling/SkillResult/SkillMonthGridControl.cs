@@ -4,18 +4,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
@@ -27,20 +23,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 		private RowManagerScheduler<SkillMonthGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
         private IList<IGridRow> _gridRows;
         private GridRow _currentSelectedGridRow;
-        private readonly ChartSettings _chartSettings;
-        private readonly ChartSettings _defaultChartSettings = new ChartSettings();
+        
+        
 		private readonly SkillMonthGridControlPresenter _presenter;
 
         public SkillMonthGridControl()
         {
             initializeComponent();
             initializeGrid();
-            setupChartDefault();
-           
-            using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
-            }
+
+	        InitializeBase(settingName);
 
 			_presenter = new SkillMonthGridControlPresenter(this);
         }
@@ -61,12 +53,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             e.Handled = true;
         }
 
-        private void setupChartDefault()
-        {
-            _defaultChartSettings.SelectedRows.Add("ForecastedHours");
-            _defaultChartSettings.SelectedRows.Add("ScheduledHours");
-            _defaultChartSettings.SelectedRows.Add("RelativeDifference");
-        }
+        
 
         private void initializeGrid()
         {
@@ -109,12 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             e.Handled = true;
         }
 
-        private IChartSeriesSetting configureSetting(string key)
-        {
-            var ret = _chartSettings.DefinedSetting(key, new ChartSettingsManager().ChartSettingsDefault);
-            ret.Enabled = _chartSettings.SelectedRows.Contains(key);
-            return ret;
-        }
+        
 
         public void CreateGridRows(ISkill skill, IList<DateOnly> dates, ISchedulerStateHolder schedulerStateHolder)
         {
@@ -135,47 +117,47 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			if (skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 			{
 				gridRow = new SkillMonthGridRow(_rowManager, "TimeCell", "ForecastedHours", UserTexts.Resources.ForecastedHours);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				if (!skill.IsVirtual)
 				{
 					gridRow = new SkillMonthGridRowMinMaxIssues(_rowManager, "TimeCell", "ScheduledHours", UserTexts.Resources.ScheduledHours);
-					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 				else
 				{
 					gridRow = new SkillMonthGridRowMinMaxIssuesSummary(_rowManager, "TimeCell", "ScheduledHours", UserTexts.Resources.ScheduledHours);
-					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 
 				gridRow = new SkillMonthGridRow(_rowManager, "TimeSpanCell", "AbsoluteDifference", UserTexts.Resources.AbsoluteDifference);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				if (!skill.IsVirtual)
 				{
 					gridRow = new SkillMonthGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",UserTexts.Resources.RelativeDifference, skill);
-					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 				else
 				{
 					gridRow = new SkillMonthGridRowStaffingIssuesSummary(_rowManager, "ReadOnlyPercentCell", "RelativeDifference",UserTexts.Resources.RelativeDifference);
-					gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+					gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 					_gridRows.Add(_rowManager.AddRow(gridRow));
 				}
 
 				
 				gridRow = new SkillMonthGridRow(_rowManager, "NumericReadOnlyCell", "DailySmoothness", UserTexts.Resources.StandardDeviation);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 
                 gridRow = new SkillMonthGridRow(_rowManager, "ReadOnlyPercentCell", "EstimatedServiceLevel", UserTexts.Resources.ESL);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
 
@@ -183,19 +165,19 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			if (skill.SkillType.ForecastSource == ForecastSource.Email || skill.SkillType.ForecastSource == ForecastSource.Backoffice || skill.SkillType.ForecastSource == ForecastSource.Time)
 			{
 				gridRow = new SkillMonthGridRow(_rowManager, "TimeCell", "ForecastedHoursIncoming", UserTexts.Resources.ForecastedHoursIncoming);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				gridRow = new SkillMonthGridRow(_rowManager, "TimeCell", "ScheduledHoursIncoming", UserTexts.Resources.ScheduledHoursIncoming);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				gridRow = new SkillMonthGridRow(_rowManager, "TimeSpanCell", "AbsoluteIncomingDifference", UserTexts.Resources.AbsoluteDifferenceIncoming);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 
 				gridRow = new SkillMonthGridRowStaffingIssues(_rowManager, "ReadOnlyPercentCell", "RelativeIncomingDifference", UserTexts.Resources.RelativeDifferenceIncoming, skill);
-				gridRow.ChartSeriesSettings = configureSetting(gridRow.DisplayMember);
+				gridRow.ChartSeriesSettings = ConfigureSetting(gridRow.DisplayMember);
 				_gridRows.Add(_rowManager.AddRow(gridRow));
 			}
 
@@ -243,10 +225,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         public void SetRowVisibility(string key, bool enabled)
         {
             if(enabled)
-                _chartSettings.SelectedRows.Add(key);
+				ChartSettings.SelectedRows.Add(key);
             else
             {
-                _chartSettings.SelectedRows.Remove(key);
+				ChartSettings.SelectedRows.Remove(key);
             }  
         }
 
@@ -258,7 +240,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
         public IList<GridRow> EnabledChartGridRowsMicke65()
         {
             IList<GridRow> ret = new List<GridRow>();
-            foreach (string key in _chartSettings.SelectedRows)
+			foreach (string key in ChartSettings.SelectedRows)
             {
                 foreach (GridRow gridRow in _gridRows.OfType<GridRow>())
                 {
@@ -284,15 +266,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
                                                       select r).ToDictionary(k => _gridRows.IndexOf(k), v => v);
 
                 return settings;
-            }
-        }
-
-        public void SaveSetting()
-        {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                new PersonalSettingDataRepository(uow).PersistSettingValue(_chartSettings);
-                uow.PersistAll();
             }
         }
 
