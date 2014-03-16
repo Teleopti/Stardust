@@ -4,41 +4,39 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Win.Common;
 
 namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
     public class SkillIntradayGridControl : SkillResultGridControlBase, ITaskOwnerGrid
     {
-        private const int HeaderWidth = 200;
-        private const int HeaderHeight12HourClock = 26;
+        private const int headerWidth = 200;
+        private const int headerHeight12HourClock = 26;
         private readonly SkillIntradayGridPresenter _presenter;
 
         public SkillIntradayGridControl(ChartSettings chartSettings)
         {
             _presenter = new SkillIntradayGridPresenter(this, chartSettings);
-            QueryCellInfo += GridSkillDataQueryCellInfo;
-            ColWidths[0] = HeaderWidth;
-            if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = HeaderHeight12HourClock;
+            QueryCellInfo += gridSkillDataQueryCellInfo;
+            ColWidths[0] = headerWidth;
+            if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
             DefaultColWidth = 70;
         }
 
         public SkillIntradayGridControl(string settingName)
         {
             _presenter = new SkillIntradayGridPresenter(this, settingName);
-            QueryCellInfo += GridSkillDataQueryCellInfo;
-            ColWidths[0] = HeaderWidth;
-            if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = HeaderHeight12HourClock;
+            QueryCellInfo += gridSkillDataQueryCellInfo;
+            ColWidths[0] = headerWidth;
+            if (!TimeHelper.CurrentCultureUsing24HourClock()) RowHeights[0] = headerHeight12HourClock;
             DefaultColWidth = 65;
         }
 
-        private void GridSkillDataQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+        private void gridSkillDataQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
         {
             if (e.ColIndex < 0 || e.RowIndex < 0 ) return;
             if (_presenter.GridRows.Count<=e.RowIndex) return;

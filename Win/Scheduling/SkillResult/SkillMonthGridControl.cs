@@ -15,7 +15,6 @@ using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SkillResult
@@ -23,8 +22,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 	public class SkillMonthGridControl : SkillResultGridControlBase, ITaskOwnerGrid, ISkillMonthGridControl
     {
         private AbstractDetailView _owner;
-        private const int RowHeaderWidth = 200;
-        private const string SettingName = "SchedulerSkillDayGridAndChart";
+        private const int rowHeaderWidth = 200;
+        private const string settingName = "SchedulerSkillDayGridAndChart";
 		private RowManagerScheduler<SkillMonthGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
         private IList<IGridRow> _gridRows;
         private GridRow _currentSelectedGridRow;
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
            
             using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(SettingName, _defaultChartSettings);
+                _chartSettings = new PersonalSettingDataRepository(uow).FindValueByKey(settingName, _defaultChartSettings);
             }
 
 			_presenter = new SkillMonthGridControlPresenter(this);
@@ -94,7 +93,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
         private void gridSkillDataQueryColWidth(object sender, GridRowColSizeEventArgs e)
         {	
-			e.Size = RowHeaderWidth;
+			e.Size = rowHeaderWidth;
             e.Handled = true;   
         }
 
@@ -214,7 +213,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 		{
 			ColCount = colCount;
 			RowCount = _gridRows.Count - 1;
-			ColWidths[0] = RowHeaderWidth;
+			ColWidths[0] = rowHeaderWidth;
 		}
 
         public void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)

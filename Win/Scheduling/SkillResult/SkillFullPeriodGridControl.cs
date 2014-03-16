@@ -15,7 +15,6 @@ using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Scheduling.SkillResult

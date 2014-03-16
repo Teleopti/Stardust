@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
@@ -285,7 +284,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             }
         }
 
-        private static IDictionary<DateTime, IList<ISkillStaffPeriod>> createDataSourceDictionary(IEnumerable<DateTimePeriod> dateTimePeriods, ISchedulerStateHolder stateHolder, ISkill skill)
+        private static IDictionary<DateTime, IList<ISkillStaffPeriod>> createDataSourceDictionary(IList<DateTimePeriod> dateTimePeriods, ISchedulerStateHolder stateHolder, ISkill skill)
         {
             ISkillStaffPeriodDictionary skillStaffPeriods;
             IAggregateSkill aggregateSkillSkill = skill;
