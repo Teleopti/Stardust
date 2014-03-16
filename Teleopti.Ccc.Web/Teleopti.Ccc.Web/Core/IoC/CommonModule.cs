@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
@@ -44,6 +45,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
 			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>();
 			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
+			builder.RegisterType<ReportsProvider>().As<IReportsProvider>();
+			builder.RegisterType<ReportsNavigationProvider>().As<IReportsNavigationProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)
