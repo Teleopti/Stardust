@@ -8,7 +8,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
-	public class NumberOfAgentsInTeamReader
+	public interface INumberOfAgentsInTeamReader
+	{
+		IDictionary<Guid, int> FetchNumberOfAgents(ITeam[] teams);
+	}
+
+	public class NumberOfAgentsInTeamReader : INumberOfAgentsInTeamReader
 	{
 		private readonly CurrentUnitOfWork _currentUnitOfWork;
 		private readonly INow _now;
