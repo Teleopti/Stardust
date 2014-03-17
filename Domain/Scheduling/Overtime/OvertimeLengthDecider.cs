@@ -53,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
                 var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(filteredSkillDays.SelectMany(x => x.SkillStaffPeriodCollection));
                 if (mappedData.Count > 0)
                     mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
-                nestedList.Add(mappedData);
+                if(mappedData.Count > 0)
+                    nestedList.Add(mappedData);
             }
 
             var aggregatedMappedData  = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(nestedList);
