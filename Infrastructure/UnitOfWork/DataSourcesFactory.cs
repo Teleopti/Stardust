@@ -19,13 +19,6 @@ using Teleopti.Ccc.Domain.Common.Logging;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	/// <summary>
-	/// Factory for LogonableDataSources
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2008-04-23
-	/// </remarks>
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
@@ -37,9 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private AuthenticationSettings _authenticationSettings;
 
 		public const string NoDataSourceName = "[not set]";
-		private const string _connectionStringKeyName = "connection.connection_string";
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers")]
 		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
 		{
 			_enversConfiguration = enversConfiguration;
@@ -47,7 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static string isSqlServerOnline(string connectionString)
 		{
 			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
@@ -91,9 +81,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public bool TryCreate(XElement element, out IDataSource dataSource)
 		{
 			createApplicationConfiguration(element);
-			if (_applicationConfiguration.Properties.ContainsKey(_connectionStringKeyName))
+			if (_applicationConfiguration.Properties.ContainsKey(Environment.ConnectionString))
 			{
-				string connectionString = _applicationConfiguration.Properties[_connectionStringKeyName];
+				string connectionString = _applicationConfiguration.Properties[Environment.ConnectionString];
 				string resultOfOnline = isSqlServerOnline(connectionString);
 				if (string.IsNullOrEmpty(resultOfOnline))
 				{
@@ -105,8 +95,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return false;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "dataSource"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public IDataSource Create(XElement hibernateConfiguration)
+		public IDataSource Create(XElement hibernateConfiguration)
 		{
 			if (hibernateConfiguration.Name != "datasource")
 				throw new DataSourceException(@"Missing <dataSource> in xml source ");
@@ -192,7 +181,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			//Add Schema
 			const string sql = "CREATE SCHEMA [Auditing] AUTHORIZATION [dbo]";
-			using (var conn = new SqlConnection(_applicationConfiguration.Properties[_connectionStringKeyName]))
+			using (var conn = new SqlConnection(_applicationConfiguration.Properties[Environment.ConnectionString]))
 			{
 				conn.Open();
 				using (var cmd = new SqlCommand(sql, conn))
