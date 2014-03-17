@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Linq;
-using NHibernate.Cfg;
 using NHibernate.Engine;
 using NHibernate.Transaction;
 using NUnit.Framework;
@@ -47,22 +46,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifyXmlBased()
 		{
-			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
+			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" +
+			                       ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
-			var xmlString = xmlText("test", correctMatrix);
+			XElement nhibernateXmlConfiguration = xmlText("test", correctMatrix);
+			IDataSource res;
+			target.TryCreate(nhibernateXmlConfiguration, out res);
+			Assert.AreEqual("test", res.Application.Name);
+			Assert.AreEqual("matrixName", res.Statistic.Name);
+			Assert.IsNull(res.OriginalFileName);
 
-			//using (var xmlReader = new XmlTextReader(xmlString, XmlNodeType.Document, null))
-			//{
-				XElement nhibernateXmlConfiguration = xmlText("test", correctMatrix);
-				IDataSource res;
-				target.TryCreate(nhibernateXmlConfiguration, out res);
-				Assert.AreEqual("test", res.Application.Name);
-				Assert.AreEqual("matrixName", res.Statistic.Name);
-				Assert.IsNull(res.OriginalFileName);
-
-				Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
-				Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
-			//}
+			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
+			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
 		}
 
 		[Test]
@@ -92,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		[ExpectedException(typeof(HibernateConfigException))]
+		[ExpectedException(typeof(DataSourceException))]
 		public void VerifyMissingSesssionFactoryElement()
 		{
 			IDataSource res;
@@ -168,12 +163,9 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			const string authenticationSettings = @"<authentication><logonMode>win</logonMode> <!-- win or mix --></authentication>";
 
 			IDataSource res;
-			bool success = target.TryCreate(nonValidXmlTextWithAuthenticationSettings(authenticationSettings), out res);
-			wasSuccess(success);
+			target.TryCreate(nonValidXmlTextWithAuthenticationSettings(authenticationSettings), out res)
+				.Should().Be.False();
 		}
-
-
-
 
 		[Test]
 		public void VerifyAuthenticationSettingsFileBasedWithoutEntry()
@@ -289,10 +281,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			return XElement.Parse(str);
 		}
 
-		private void wasSuccess(bool success)
+		private void wasSuccess(bool result)
 		{
+			result.Should().Be.True();
 			enversConfiguration.AssertWasCalled(x => x.Configure(null), options => options.IgnoreArguments());
-			success.Should().Be.EqualTo(success);
 		}
 	}
 }
