@@ -119,6 +119,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private double calculatePeriodValue(DateOnly dateOnly, IActivity activity, IPerson person)
         {
             var aggregateSkill = createAggregateSkill(person, dateOnly, activity);
+            if (aggregateSkill == null) return 0;
             var aggregatedSkillStaffPeriods = skillStaffPeriods(aggregateSkill, dateOnly);
             double? result = SkillStaffPeriodHelper.SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
             if (result.HasValue)
@@ -143,21 +144,25 @@ namespace Teleopti.Ccc.Win.Scheduling
         private IAggregateSkill createAggregateSkill(IPerson person, DateOnly dateOnly, IActivity activity)
         {
             var skills = aggregateSkills(person, dateOnly).Where(x => x.Activity == activity).ToList();
-            var aggregateSkillSkill = new Skill("", "", Color.Pink, 15, skills[0].SkillType);
-            aggregateSkillSkill.ClearAggregateSkill();
-            foreach (ISkill skill in skills)
+            if (skills.Count > 0)
             {
-                aggregateSkillSkill.AddAggregateSkill(skill);
-            }
-            aggregateSkillSkill.IsVirtual = true;
+                var aggregateSkillSkill = new Skill("", "", Color.Pink, 15, skills[0].SkillType);
+                aggregateSkillSkill.ClearAggregateSkill();
+                foreach (ISkill skill in skills)
+                {
+                    aggregateSkillSkill.AddAggregateSkill(skill);
+                }
+                aggregateSkillSkill.IsVirtual = true;
 
-            if (aggregateSkillSkill.AggregateSkills.Any())
-            {
-                ((ISkill)aggregateSkillSkill).DefaultResolution =
-                    aggregateSkillSkill.AggregateSkills.Min(s => s.DefaultResolution);
-            }
+                if (aggregateSkillSkill.AggregateSkills.Any())
+                {
+                    ((ISkill)aggregateSkillSkill).DefaultResolution =
+                        aggregateSkillSkill.AggregateSkills.Min(s => s.DefaultResolution);
+                }
 
-            return aggregateSkillSkill;
+                return aggregateSkillSkill;
+            }
+            return null;
         }
 
 
