@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Web;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 {
@@ -58,8 +56,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		}
 	}
 
-	public interface IReportsNavigationProvider
-	{
-		IList<ReportNavigationItem> GetNavigationItems();
-	}
 }

@@ -278,6 +278,8 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsNavigationProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />

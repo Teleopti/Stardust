@@ -3,7 +3,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
@@ -19,22 +18,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 
 		public IEnumerable<IApplicationFunction> GetReports()
 		{
-			var externalApplicationFunctionSpecification =
-				new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix);
-			var mobileReportFunctionSpecification = DefinedReports.ReportInformations;
-
-			var allPermittedReports = _principalAuthorization.GrantedFunctionsBySpecification(externalApplicationFunctionSpecification).ToList();
-			var query =
-				from c in allPermittedReports
-				where !(from o in mobileReportFunctionSpecification select o.FunctionCode)
-					.Contains(c.FunctionCode)
-				select c;
-			return query;
+			return
+				_principalAuthorization.GrantedFunctionsBySpecification(
+					new ExternalApplicationFunctionSpecification(DefinedForeignSourceNames.SourceMatrix)).ToList();
 		}
 	}
 
-	public interface IReportsProvider
-	{
-		IEnumerable<IApplicationFunction> GetReports();
-	}
 }
