@@ -60,12 +60,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
 			var reportsList = new List<ReportNavigationItem>();
-			if (reportsItems.Count.Equals(1) && reportsItems.First().IsMyReport)
+			if (reportsItems != null && (reportsItems.Count.Equals(1) && reportsItems.First().IsMyReport))
 			{
 				navigationItems.Add(reportsItems.First());
 			}
-			else
-				reportsList.AddRange(reportsItems);
+			else if (reportsItems != null) reportsList.AddRange(reportsItems);
 
 			return new PortalViewModel
 						{
