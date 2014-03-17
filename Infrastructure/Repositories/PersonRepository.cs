@@ -549,7 +549,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					foreach (PersonSkill pSkill in personPeriod.PersonSkillCollection)
 					{
-						if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
+                        if (pSkill.Skill.SkillType.Description.Name == "xyyyxxxyyyyx")
+                            throw new InvalidDataException("lazy load elände");
+                        if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
 							throw new InvalidDataException("lazy load elände");
 					}
 				}

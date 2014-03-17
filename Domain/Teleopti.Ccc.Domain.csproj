@@ -473,6 +473,8 @@
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />
     <Compile Include="Scheduling\DoNothingScheduleDayChangeCallBack.cs" />
+    <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailability.cs" />
+    <Compile Include="Scheduling\Overtime\AnalyzePersonAccordingToAvailability.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertime.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalData.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDecider.cs" />
@@ -584,6 +586,7 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
     <Compile Include="Scheduling\Assignment\DayOff.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataAggregator.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceFullDayLayerCreator.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriod.cs" />
     <Compile Include="ResourceCalculation\TransformResourcesFromStorageCommand.cs" />
