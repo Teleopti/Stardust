@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                               new NewMaxWeekWorkTimeRule(
                                   new WeeksFromScheduleDaysExtractor()),
                               new MinWeeklyRestRule(
-                                  new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor()),
+                                  new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor(), new DayOffMaxFlexCalculator(new WorkTimeStartEndExtractor())),
                               new NewDayOffRule(new WorkTimeStartEndExtractor()),
                               new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
 

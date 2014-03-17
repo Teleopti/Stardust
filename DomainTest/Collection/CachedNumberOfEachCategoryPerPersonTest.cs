@@ -16,12 +16,22 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		private MockRepository _mocks;
 		private ICachedNumberOfEachCategoryPerPerson _target;
 		private IScheduleDictionary _dic;
+	    private IPerson _person;
+	    private IScheduleRange _range;
+	    private IScheduleDay _scheduleDay;
+	    private IPersonAssignment _personAssignment;
+	    private IShiftCategory _shiftCategory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
 			_dic = _mocks.StrictMock<IScheduleDictionary>();
+	        _person = _mocks.StrictMock<IPerson>();
+            _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("AM");
+	        _range = _mocks.StrictMock<IScheduleRange>();
+	        _scheduleDay = _mocks.StrictMock<IScheduleDay>();
+	        _personAssignment = _mocks.StrictMock<IPersonAssignment>();
 		}
 
 		[Test]
@@ -150,6 +160,40 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Assert.AreEqual(0, _target.ItemCount);
 			}
 		}
+
+        [Test]
+        public void ShouldNotConsiderPersonWhoHaveLeft()
+        {
+            var periodToMonitor = new DateOnlyPeriod(2013, 09, 12, 2013, 09, 13);
+            var dateToMonitor = new DateOnly(2013, 09, 13);
+            
+            using (_mocks.Record())
+            {
+                Expect.Call(() => _dic.PartModified += null).IgnoreArguments();
+                
+                Expect.Call(_dic[_person]).Return(_range);
+
+                Expect.Call(_person.TerminalDate).Return(dateToMonitor.AddDays(-1));
+                Expect.Call(_range.ScheduledDay(dateToMonitor.AddDays(-1))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+                Expect.Call(_personAssignment.ShiftCategory).Return(_shiftCategory);
+
+                Expect.Call(_person.TerminalDate).Return(dateToMonitor);
+                Expect.Call(_range.ScheduledDay(dateToMonitor)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+                Expect.Call(_personAssignment.ShiftCategory).Return(_shiftCategory);
+            }
+
+            using (_mocks.Playback())
+            {
+                _target = new CachedNumberOfEachCategoryPerPerson( _dic, periodToMonitor);
+                //_target.get(personList);
+                var result = _target.GetValue(_person);
+                Assert.AreEqual(1, result.Count);
+                Assert.IsTrue(result.ContainsKey(_shiftCategory ) );
+                Assert.AreEqual(2,result[_shiftCategory ]);
+            }
+        }
 
 	}
 }

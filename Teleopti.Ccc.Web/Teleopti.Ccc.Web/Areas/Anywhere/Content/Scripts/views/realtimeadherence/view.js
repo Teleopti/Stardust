@@ -3,7 +3,7 @@ define([
 		'knockout',
 		'text!templates/realtimeadherence/view.html',
 		'views/realtimeadherence/vm',
-		'subscriptions',
+		'subscriptions.adherence',
 		'errorview',
 		'ajax'
 ], function (
@@ -43,7 +43,9 @@ define([
 				}
 			});
 
-			subscriptions.subscribeAdherence();
+			subscriptions.subscribeAdherence(function (notification) {
+				viewModel.updateFromNotification(notification);
+			});
 		},
 	};
 });

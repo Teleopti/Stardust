@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>放弃的电话</value>
@@ -7401,7 +7401,7 @@ Teleopti R&amp;D</value>
     <value>冲突</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>其他用户已经修改了这些记录。在继续进行操作之前，你必须决定如何处理。点击“确定”接受其他用户的修改；请注意，您所作的修改将丢失。点击“取消”将不保存并继续；当保存时将重新提示本条告警信息。点击覆写将把您的修改进行保存而删除其他用户所作的修改。</value>
+    <value>其他用户已经修改了这些记录。在继续进行操作之前，你必须决定如何处理。点击“确定”接受其他用户的修改；请注意，您所作的修改将丢失。点击覆写将把您的修改进行保存而删除其他用户所作的修改。</value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>未保存</value>

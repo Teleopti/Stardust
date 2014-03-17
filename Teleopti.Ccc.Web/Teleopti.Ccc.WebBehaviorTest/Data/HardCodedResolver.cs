@@ -7,12 +7,14 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Resources;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.SignalR;
 
@@ -39,12 +41,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			// use autofac soon?
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduledResourcesChangedEvent>>))
+			{
+				var utcTheTime = CurrentTime.Value() == DateTime.MinValue ? DateTime.UtcNow : CurrentTime.Value();
+				
 				return new[]
 					{
 						new ScheduleProjectionReadOnlyUpdater(
 							new ScheduleProjectionReadOnlyRepository(CurrentUnitOfWork.Make()),
-							new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))))
+							new EventPublisher(this, new EventContextPopulator(new CurrentIdentity(), new CurrentInitiatorIdentifier(CurrentUnitOfWork.Make()))),
+							new ThisIsNow(utcTheTime)
+							)
 					};
+			}
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
 				return new[]
 					{

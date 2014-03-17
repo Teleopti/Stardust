@@ -176,6 +176,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly ICollection<IPersonWriteProtectionInfo> _modifiedWriteProtections = new HashSet<IPersonWriteProtectionInfo>();
 		private SchedulingScreenSettings _currentSchedulingScreenSettings;
 		private ZoomLevel _currentZoomLevel;
+		private ZoomLevel _previousZoomLevel;
 		private SplitterManagerRestrictionView _splitterManager;
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private bool _inUpdate;
@@ -1865,13 +1866,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void pasteSpecial()
 		{
-			var authorization = PrincipalAuthorization.Instance();
 			var options = new PasteOptions();
 			var clipboardSpecialOptions = new ClipboardSpecialOptions();
 			clipboardSpecialOptions.ShowRestrictions = _scheduleView is AgentRestrictionsDetailView;
 			clipboardSpecialOptions.DeleteMode = false;
 			clipboardSpecialOptions.ShowOvertimeAvailability = false;
-			clipboardSpecialOptions.ShowShiftAsOvertime = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyAvailabilities); ;
+			clipboardSpecialOptions.ShowShiftAsOvertime = true;
 
 			var pasteSpecial = new FormClipboardSpecial(options, clipboardSpecialOptions, MultiplicatorDefinitionSet) { Text = Resources.PasteSpecial };
 			pasteSpecial.ShowDialog();
@@ -4492,9 +4492,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void enableRibbonForRequests(bool value)
 		{
 			toolStripTabItem1.Visible = value;
+			toolStripTabItemHome.Visible = !value;
 			if (value)
 			{
 				updateRequestCommandsAvailability();
+				toolStripTabItem1.Checked = true;
 			}
 			else
 			{
@@ -4838,6 +4840,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				default:
 					throw new InvalidEnumArgumentException("level", (int)level, typeof(ZoomLevel));
 			}
+			_previousZoomLevel = _currentZoomLevel;
 			_currentZoomLevel = level;
 
 			if (_currentZoomLevel == ZoomLevel.Level6)
@@ -6924,6 +6927,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonShowPropertyPanel.Checked = !toolStripButtonShowPropertyPanel.Checked;
 			schedulerSplitters1.ToggelPropertyPanel(!toolStripButtonShowPropertyPanel.Checked);
 			_showInfoPanel = toolStripButtonShowPropertyPanel.Checked;
+		}
+
+		private void toolStripButtonRequestBackClick(object sender, EventArgs e)
+		{
+			toolStripTabItemHome.Checked = true;
+			zoom(_previousZoomLevel);
 		}
 	}
 }

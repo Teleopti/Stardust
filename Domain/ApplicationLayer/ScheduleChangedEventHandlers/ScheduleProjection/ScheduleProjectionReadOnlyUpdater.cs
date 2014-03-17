@@ -10,11 +10,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 	    private readonly IPublishEventsFromEventHandlers _serviceBus;
+		private readonly INow _now;
 
-		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IPublishEventsFromEventHandlers serviceBus)
+		public ScheduleProjectionReadOnlyUpdater(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
+																							IPublishEventsFromEventHandlers serviceBus,
+																							INow now)
 		{
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		    _serviceBus = serviceBus;
+			_now = now;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -48,26 +52,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			handleEnqueueRtaMessage(@event, closestLayerToNow);
 		}
 
-		private static bool isLayerRightNow(ProjectionChangedEventLayer layer)
+		private bool isLayerRightNow(ProjectionChangedEventLayer layer)
 		{
-			return layer.StartDateTime <= DateTime.UtcNow &&
-			        layer.EndDateTime >= DateTime.UtcNow;
+			var now = _now.UtcDateTime();
+			return layer.StartDateTime <= now &&
+			        layer.EndDateTime >= now;
 		}
 		
-		private static bool isCurrentLayerCloser(ProjectionChangedEventLayer layer, ProjectionChangedEventLayer closestLayerToNow)
+		private bool isCurrentLayerCloser(ProjectionChangedEventLayer layer, ProjectionChangedEventLayer closestLayerToNow)
 		{
-			return layer.StartDateTime >= DateTime.UtcNow &&
+			return layer.StartDateTime >= _now.UtcDateTime() &&
 			         layer.StartDateTime < closestLayerToNow.StartDateTime;
 		}
 
 		private void handleEnqueueRtaMessage(ProjectionChangedEventBase @event, ProjectionChangedEventLayer closestLayer)
 		{
-			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
+			var now = _now.UtcDateTime();
+			var nextActivityStartTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(now,
 			                                                                                           @event.PersonId);
 			var layerPeriod = new DateTimePeriod(DateTime.SpecifyKind(closestLayer.StartDateTime, DateTimeKind.Utc),
 				DateTime.SpecifyKind(closestLayer.EndDateTime, DateTimeKind.Utc));
 			if (NotifyRtaDecider.ShouldSendMessage(layerPeriod, nextActivityStartTime) &&
-				@event.ScheduleDays.Any(d => d.Date >= DateTime.UtcNow.Date))
+				@event.ScheduleDays.Any(d => d.Date >= now.Date))
 			{
 				_serviceBus.Publish(new ScheduleProjectionReadOnlyChanged
 					{
@@ -76,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 						PersonId = @event.PersonId,
 						ActivityStartDateTime = layerPeriod.StartDateTime,
 						ActivityEndDateTime = layerPeriod.EndDateTime,
-						Timestamp = DateTime.UtcNow
+						Timestamp = now
 					});
 			}
 		}

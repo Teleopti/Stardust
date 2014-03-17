@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>Panggilan diabaikan</value>
@@ -2303,7 +2303,7 @@ Opsi berikut diaktifkan:
     <value>Periode Sebelumnya</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>User lain telah memodifikasi data ini. Anda perlu memutuskan apa yang akan dilakukan sebelum melanjutkan. Klik OK untuk menerima perubahan dari user lain. Harap dicatat bahwa perubahan terkait akan hilang. Klik Cancel untuk melanjutkan tanpa menyimpan. Anda akan ditanyakan konflik ini lagi ketika anda mengklik Save. Klik Overwrite untuk menyimpan perubahan anda dan menghapus perubahan yang telah dibuat oleh user lain.</value>
+    <value>User lain telah memodifikasi data ini. Anda perlu memutuskan apa yang akan dilakukan sebelum melanjutkan. Klik OK untuk menerima perubahan dari user lain. Harap dicatat bahwa perubahan terkait akan hilang. Klik Overwrite untuk menyimpan perubahan anda dan menghapus perubahan yang telah dibuat oleh user lain.</value>
   </data>
   <data name="PeriodInLegalState" xml:space="preserve">
     <value>Periode dalam status resmi</value>
