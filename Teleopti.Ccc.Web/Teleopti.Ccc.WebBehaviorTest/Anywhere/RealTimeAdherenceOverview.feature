@@ -22,7 +22,6 @@ Scenario: Show team
 	When I view Real time adherence for site 'London'
 	Then I should see the team 'Red'
 
-@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
