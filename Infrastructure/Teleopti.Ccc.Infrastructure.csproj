@@ -272,7 +272,9 @@
     <Compile Include="Repositories\OvertimeAvailabilityRepository.cs" />
     <Compile Include="Repositories\ResourceCalculationPrerequisitesLoader.cs" />
     <Compile Include="Repositories\ScheduledResourcesReadModelStorage.cs" />
+    <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\IPersonOrganizationReader.cs" />
+    <Compile Include="Rta\NumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\PersonOrganizationData.cs" />
     <Compile Include="Rta\PersonOrganizationReader.cs" />
     <Compile Include="UnitOfWork\ClearEvents.cs" />

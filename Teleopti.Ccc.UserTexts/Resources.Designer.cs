@@ -13210,7 +13210,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Month Schedule.
+        ///   Looks up a localized string similar to Monthly Schedule.
         /// </summary>
         public static string MonthSchedule {
             get {
@@ -13809,6 +13809,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NameYourTypeColon {
             get {
                 return ResourceManager.GetString("NameYourTypeColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Navigate.
+        /// </summary>
+        public static string Navigate {
+            get {
+                return ResourceManager.GetString("Navigate", resourceCulture);
             }
         }
         

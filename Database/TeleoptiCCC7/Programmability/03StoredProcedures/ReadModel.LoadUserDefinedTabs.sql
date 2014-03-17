@@ -75,7 +75,7 @@ SELECT @dynamicSQL=''
   INSERT INTO #endResult
   SELECT NodeId, Person PersonId, null TeamId, null SiteId, BusinessUnitId,
   Node, ParentId, FirstName, LastName, EmploymentNumber, Level,
-  case when ISNULL(TerminalDate, '2100-01-01') > @ondate then 1 else 0 end Show
+  case when ISNULL(TerminalDate, '2100-01-01') >= @ondate then 1 else 0 end Show
   FROM #result
   left join PersonGroup on NodeId = PersonGroup
   left JOIN Person ON Person = Person.Id WHERE Person.IsDeleted = 0 OR Person.IsDeleted is null

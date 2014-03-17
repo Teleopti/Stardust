@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
-using Microsoft.SqlServer.Management.Common;
-using Microsoft.SqlServer.Management.Smo;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
@@ -40,17 +39,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				connection.Open();
 				var file = new FileInfo(@"TestData\mart.sys_setupTestData.sql");
 				string script = file.OpenText().ReadToEnd();
-				
-				var server = new Server(new ServerConnection(connection));
-				server.ConnectionContext.ExecuteNonQuery(script);
-				server.ConnectionContext.ExecuteNonQuery("exec [mart].[sys_setupTestData]");
+
+				new SqlBatchExecutor(connection, new NullLog()).ExecuteBatchSql(script);
+				using (var command = new SqlCommand("exec [mart].[sys_setupTestData]", connection))
+					command.ExecuteNonQuery();
 
 				file = new FileInfo(@"TestData\dbo.Add_QueueAgent_stat.sql");
 				script = file.OpenText().ReadToEnd();
 
-				server.ConnectionContext.ExecuteNonQuery(script);
-				server.ConnectionContext.ExecuteNonQuery(string.Format("exec dbo.Add_QueueAgent_stat @TestDay='{0}', @agent_id={1}, @orig_agent_id='{2}', @agent_name='{3}'",DateTime.Today,52,"152","Ola H"));
-
+				new SqlBatchExecutor(connection, new NullLog()).ExecuteBatchSql(script);
+				using (var command = new SqlCommand(string.Format("exec dbo.Add_QueueAgent_stat @TestDay='{0}', @agent_id={1}, @orig_agent_id='{2}', @agent_name='{3}'", DateTime.Today, 52, "152", "Ola H"), connection))
+					command.ExecuteNonQuery();
                
 			}
 		}

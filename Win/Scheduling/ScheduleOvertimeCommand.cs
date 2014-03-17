@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
                     if (!overtimePreferences.AllowBreakWeeklyRest)
                         rules.Add(new MinWeeklyRestRule(
-                                      new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor()));
+                                      new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor(), new DayOffMaxFlexCalculator(new WorkTimeStartEndExtractor())));
 
                     _schedulePartModifyAndRollbackService.ClearModificationCollection();
 

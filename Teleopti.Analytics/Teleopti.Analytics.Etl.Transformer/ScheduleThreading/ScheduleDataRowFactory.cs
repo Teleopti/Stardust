@@ -104,7 +104,7 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             row["datasource_id"] = 1;
             row["insert_date"] = insertDateTime;
             row["update_date"] = insertDateTime;
-            row["datasource_update_date"] = insertDateTime;
+	        row["datasource_update_date"] = scheduleProjection.SchedulePart.PersonAssignment(true).UpdatedOn;
 
 			if (timeInfo.OverTime.Time > 0)
 			{

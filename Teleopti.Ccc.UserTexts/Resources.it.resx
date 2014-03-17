@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Activities" xml:space="preserve">
     <value>Attività</value>
@@ -3822,7 +3822,7 @@ Teleopti R&amp;D</value>
     <value>Nuova richiesta di scambio turni {0} - {1}, approva o rifiuta dalla ltua lista delle richieste.</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Un altro utente ha modificato questi record. Devi decidere cosa fare prima di continuare. Premi su OK per accettare tali cambiamenti. Nota che le tue modifiche andranno perse per favore. Premi su Annulla per continuare senza salvare. Ti verrà riproposto il conflitto quando premerai su Salva. Seleziona Sovrascrivi per salvare le tue modifiche ed eliminare quelle degli altri utenti.</value>
+    <value>Un altro utente ha modificato questi record. Devi decidere cosa fare prima di continuare. Premi su OK per accettare tali cambiamenti. Nota che le tue modifiche andranno perse per favore. Seleziona Sovrascrivi per salvare le tue modifiche ed eliminare quelle degli altri utenti.</value>
   </data>
   <data name="PleaseSaveAgainWhenYouHaveReviewedTheAppliedChanges" xml:space="preserve">
     <value>Salva ancora quando avrai rivisto le modifiche apportate per favore.</value>

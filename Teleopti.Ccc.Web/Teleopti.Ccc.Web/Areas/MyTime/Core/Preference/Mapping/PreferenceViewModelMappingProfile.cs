@@ -172,6 +172,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						Color = s.DisplayColor.ToHtml(),
 						Extended = true
 					})
+					.OrderBy(pref => pref.Text)
 					.ToArray();
 
 			var dayOffs = _preferenceOptionsProvider()
@@ -184,6 +185,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					Color = s.DisplayColor.ToHtml(),
 					Extended = false
 				})
+				.OrderBy(d => d.Text)
 				.ToArray();
 
 			var absences = _preferenceOptionsProvider()
@@ -196,6 +198,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					Color = s.DisplayColor.ToHtml(),
 					Extended = false
 				})
+				.OrderBy(abs => abs.Text)
 				.ToArray();
 
 			var optionGroups = new List<PreferenceOptionGroup>
