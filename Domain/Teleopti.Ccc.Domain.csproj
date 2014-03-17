@@ -1052,6 +1052,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayer.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionService.cs" />
     <Compile Include="Scheduling\TimeZoneGuard.cs" />
+    <Compile Include="Scheduling\WeeklyRest\DayOffWithLongestSpan.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />

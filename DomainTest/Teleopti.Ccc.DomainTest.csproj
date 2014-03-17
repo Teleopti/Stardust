@@ -866,6 +866,7 @@
     <Compile Include="Scheduling\ShiftCategorySorterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ActivityTimeLimiterTest.cs" />
     <Compile Include="Scheduling\SkillDayHelperTest.cs" />
+    <Compile Include="Scheduling\WeeklyRest\DayOffWithLongestSpanTest.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTimeTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxTest.cs" />
