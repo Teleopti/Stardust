@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<DatabaseReader>().AsSelf();
 			builder.Register<IDatabaseReader>(c => c.Resolve<DatabaseReader>())
 				.IntegrateWithMbCache();
-			builder.Register<ILoadActualAgentState>(c => c.Resolve<IDatabaseReader>());
+			builder.Register<ILoadActualAgentState>(c => c.Resolve<DatabaseReader>());
 
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
