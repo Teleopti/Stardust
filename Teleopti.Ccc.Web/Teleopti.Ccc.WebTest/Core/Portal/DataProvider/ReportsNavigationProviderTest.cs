@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 		private PermissionProvider _permissionProvider;
 		private IReportsNavigationProvider _target;
 		private IReportsProvider _reportsProvider;
+		private ISessionSpecificDataProvider _sessionProvider;
 
 		[SetUp]
 		public void Setup()
@@ -29,7 +32,9 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.DataProvider
 			_principalAuthorization = MockRepository.GenerateMock<IPrincipalAuthorization>();
 			_permissionProvider = new PermissionProvider(_principalAuthorization);
 			_reportsProvider = MockRepository.GenerateMock<IReportsProvider>();
-			_target = new ReportsNavigationProvider(_principalAuthorization,_reportsProvider);
+			_sessionProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
+			_target = new ReportsNavigationProvider(_principalAuthorization,_reportsProvider,_sessionProvider);
+			_sessionProvider.Stub(x => x.GrabFromCookie()).Return(new SessionSpecificData(Guid.NewGuid(), "", Guid.NewGuid()));
 		}
 
 		[Test]
