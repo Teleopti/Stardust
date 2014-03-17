@@ -38,7 +38,15 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             // Load people who are selected by user.
             _permissionsExplorerInstance.SelectedPersonsToAddToRole = _personSelectorPresenter.SelectedPersonGuids;
-            DialogResult = DialogResult.OK;
+            if (_personSelectorPresenter.SelectedPersonGuids.Count == 0)
+            {
+                MessageBox.Show(UserTexts.Resources.SelectAtleastOnePerson, UserTexts.Resources.PeopleInsertScreen, MessageBoxButtons.OK);
+                DialogResult = DialogResult.None;
+            }
+            else
+            {
+                DialogResult = DialogResult.OK;    
+            }
         }
 
         private void buttonAdvCancel_Click(object sender, EventArgs e)
