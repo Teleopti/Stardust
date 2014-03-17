@@ -163,7 +163,7 @@
     <Compile Include="ICurrentAndNextLayerExtractor.cs" />
     <Compile Include="IDatabaseReader.cs" />
     <Compile Include="IDatabaseWriter.cs" />
-    <Compile Include="IAfterSend.cs" />
+    <Compile Include="IActualAgentStateHasBeenSent.cs" />
     <Compile Include="IRtaDataHandlerCache.cs" />
     <Compile Include="Resolvers\IDataSourceResolver.cs" />
     <Compile Include="Resolvers\IPersonResolver.cs" />

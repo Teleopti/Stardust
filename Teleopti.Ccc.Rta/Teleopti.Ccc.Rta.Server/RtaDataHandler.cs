@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IRtaDataHandler));
 		private static IActualAgentStateCache _stateCache;
-		private readonly IEnumerable<IAfterSend> _afterSends;
+		private readonly IEnumerable<IActualAgentStateHasBeenSent> _afterSends;
 
 		private readonly IActualAgentAssembler _agentAssembler;
 		private readonly IMessageSender _asyncMessageSender;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IPersonResolver personResolver,
 		                      IActualAgentAssembler agentAssembler,
 		                      IActualAgentStateCache stateCache,
-		                      IEnumerable<IAfterSend> afterSends)
+		                      IEnumerable<IActualAgentStateHasBeenSent> afterSends)
 		{
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;

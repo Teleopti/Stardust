@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private static void registerAdherenceComponents(Autofac.ContainerBuilder builder)
 		{
-			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IAfterSend>();
+			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
 			builder.RegisterType<TeamIdForPerson>().SingleInstance().As<ITeamIdForPerson>();
 			builder.RegisterType<SiteIdForPerson>().SingleInstance().As<ISiteIdForPerson>();
 			builder.RegisterType<PersonOrganizationProvider>().SingleInstance().As<IPersonOrganizationProvider>();

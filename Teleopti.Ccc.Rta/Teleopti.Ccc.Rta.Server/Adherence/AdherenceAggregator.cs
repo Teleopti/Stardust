@@ -7,7 +7,7 @@ using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-	public class AdherenceAggregator : IAfterSend
+	public class AdherenceAggregator : IActualAgentStateHasBeenSent
 	{
 		private readonly IMessageSender _messageSender;
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
