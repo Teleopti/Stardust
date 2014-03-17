@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public interface IDataSourcesFactory
 	{
 		IDataSource Create(IDictionary<string, string> settings, string statisticConnectionString);
-		bool TryCreate(XElement element, out IDataSource dataSource);
+		bool TryCreate(XElement nhibernateConfiguration, out IDataSource dataSource);
 	}
 }
