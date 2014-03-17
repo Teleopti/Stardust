@@ -627,8 +627,8 @@
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerAgentPresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftPerDatePresenter.cs" />
     <Compile Include="Scheduling\ShiftCategoryDistribution\ShiftStatisticsPresenter.cs" />
-    <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
-    <Compile Include="Scheduling\SkillMonthGridControlPresenter.cs" />
+    <Compile Include="Scheduling\SkillResult\SkillFullPeriodGridControlPresenter.cs" />
+    <Compile Include="Scheduling\SkillResult\SkillMonthGridControlPresenter.cs" />
     <Compile Include="Scheduling\DayPresenterNew.cs" />
     <Compile Include="Scheduling\DayPresenterScaleCalculator.cs" />
     <Compile Include="Scheduling\GridlockCommands\GridlockAllAvailabilityAvailableCommand.cs" />
@@ -954,7 +954,7 @@
     <Compile Include="Scheduling\ScheduleSortingCommands\SortByStartAscendingCommand.cs" />
     <Compile Include="Scheduling\ScheduleSortingCommands\SortByStartDescendingCommand.cs" />
     <Compile Include="Scheduling\SetTagCommand.cs" />
-    <Compile Include="Scheduling\SkillWeekGridControlPresenter.cs" />
+    <Compile Include="Scheduling\SkillResult\SkillWeekGridControlPresenter.cs" />
     <Compile Include="Scheduling\SplitLongDayAbsences.cs" />
     <Compile Include="Scheduling\Editor\TriggerShiftEditorUpdate.cs" />
     <Compile Include="Scheduling\IAddLayerViewModel.cs" />
