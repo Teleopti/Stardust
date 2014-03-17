@@ -11,24 +11,28 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	public class TeamsController : Controller
 	{
 		private readonly ISiteRepository _siteRepository;
-
-		public TeamsController(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsQuery)
+		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
+		
+		public TeamsController(ISiteRepository siteRepository, INumberOfAgentsInTeamReader numberOfAgentsInTeamReader)
 		{
 			_siteRepository = siteRepository;
+			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 		}
 
 		[UnitOfWorkAction, HttpGet]
 		public JsonResult ForSite(string siteId)
 		{
-			return Json(
-				_siteRepository.Get(new Guid(siteId))
-					.TeamCollection
-					.Select(
-						teamViewModel => new TeamViewModel
-						{
-							Id = teamViewModel.Id.Value.ToString(),
-							Name = teamViewModel.Description.Name
-						}),
+			var teams = _siteRepository.Get(new Guid(siteId)).TeamCollection.ToArray();
+			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
+
+			return Json(teams
+				.Select(
+					team => new TeamViewModel
+					{
+						Id = team.Id.Value.ToString(),
+						Name = team.Description.Name,
+						NumberOfAgents = numberOfAgents[team.Id.Value]
+					}),
 				JsonRequestBehavior.AllowGet
 				);
 		}

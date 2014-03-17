@@ -35,5 +35,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			result.Single().Name.Should().Be("team1");
 			result.Single().Id.Should().Be(team.Id.Value.ToString());
 		}
+
+		[Test]
+		public void ShouldGetNumberOfAgents()
+		{
+			const int expected = 2;
+
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
+			var target = new TeamsController(siteRepository, numberOfAgentsQuery);
+
+			var site = new Site(" ");
+			site.SetId(Guid.NewGuid());
+			var team = new Team { Description = new Description(" ") };
+			team.SetId(Guid.NewGuid());
+			site.AddTeam(team);
+			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
+			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { team })).Return(new Dictionary<Guid, int>() { { team.Id.Value, expected } });
+			var result = target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
+
+			result.Single().NumberOfAgents.Should().Be.EqualTo(expected);
+		}
 	}
 }
