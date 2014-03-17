@@ -5083,6 +5083,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
+		private TeleoptiGridControl resolveControlFromSkillResultViewSetting()
+		{
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+				return _skillIntradayGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
+				return _skillDayGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
+				return _skillWeekGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
+				return _skillMonthGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
+				return _skillFullPeriodGridControl;
+
+			return null;
+		}
+
 		private void refreshSummarySkillIfActive()
 		{
 			if (_tabSkillData.SelectedIndex < 0) return;
@@ -5092,39 +5112,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!aggregateSkillSkill.IsVirtual)
 				return;
 
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
-			{
-				_skillWeekGridControl.SetDataSource(_schedulerState, skill);
-				_skillWeekGridControl.Refresh();
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
-			{
-				_skillMonthGridControl.SetDataSource(_schedulerState, skill);
-				_skillMonthGridControl.Refresh();
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
-			{
-				_skillFullPeriodGridControl.SetDataSource(_schedulerState, skill);
-				_skillFullPeriodGridControl.Refresh();
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			var skillGridControl = resolveControlFromSkillResultViewSetting();
+			if (skillGridControl is SkillIntradayGridControl)
 			{
 				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
 				if (_skillIntradayGridControl.Presenter.RowManager != null)
-				{
 					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
-					_skillFullPeriodGridControl.Refresh();
-				}
 			}
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
+			else
 			{
-				_skillDayGridControl.SetDataSource(_schedulerState, skill);
-				_skillDayGridControl.Refresh();
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+				if (selectedSkillGridControl == null)
+					return;
+
+				selectedSkillGridControl.SetDataSource(_schedulerState, skill);
 			}
+
+			skillGridControl.Refresh();
 		}
 
 		private void drawIntraday(ISkill skill, IAggregateSkill aggregateSkillSkill)

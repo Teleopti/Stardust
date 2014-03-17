@@ -8,6 +8,7 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Forecasting.Forms;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -55,6 +56,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 				return _currentSelectedGridRow;
 			}
 		}
+
+		public abstract void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill);
 
 		public void SaveSetting()
 		{

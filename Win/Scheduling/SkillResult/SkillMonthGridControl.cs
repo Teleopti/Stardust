@@ -6,7 +6,6 @@ using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Rows;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Rows;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.SkillResult;
 using Teleopti.Interfaces.Domain;
 
@@ -179,7 +178,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             Rows.HeaderCount = 0;
         }
 		
-		public void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill)
+		public override void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill)
 		{
 			var skillMonthPeriods = _presenter.CreateDataSource(stateHolder, skill);
 			if (skillMonthPeriods == null) return;

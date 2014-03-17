@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
             Rows.HeaderCount = 1;
         }
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
+		public override void SetDataSource(ISchedulerStateHolder stateHolder,ISkill skill)
 		{
 		    var stateHolderTimeZone = stateHolder.TimeZoneInfo;
             var dateTimePeriods = stateHolder.RequestedPeriod.Period(stateHolderTimeZone).WholeDayCollection(stateHolderTimeZone);
