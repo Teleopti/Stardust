@@ -31,5 +31,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".site:contains('{0}'):contains('{1}')", site, numberOfOutAdherence));
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".site:contains('{0}'):contains('{1}')", site, total));
 		}
+
+		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
+		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int numberOfOutAdherence, int total)
+		{
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team:contains('{0}'):contains('{1}')", team, numberOfOutAdherence));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team:contains('{0}'):contains('{1}')", team, total));
+		}
+
 	}
 }

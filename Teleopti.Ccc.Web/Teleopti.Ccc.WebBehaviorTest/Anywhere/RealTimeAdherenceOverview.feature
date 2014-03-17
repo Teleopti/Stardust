@@ -69,7 +69,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
-@ignore
+
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
 Given there is an activity named 'Phone'
 	And there is a site named 'Paris'
@@ -109,10 +109,11 @@ Given there is an activity named 'Phone'
 	| Staffing effect | -1           |
 	 When the current time is '2014-01-21 13:00'
 	 And I view Real time adherence for site 'Paris'
-	 And Pierre Baldi sets his phone state to 'Pause'
-	 And Ashley Andeen sets her phone state to 'Ready'
+	 And 'Pierre Baldi' sets his phone state to 'Pause'
+	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
 	 And I should see team 'Red' with 0 of 1 employees out of adherence
+
 
 Scenario: Should not be able to view Real time adherence overview when not permitted
 	Given I have a role with
