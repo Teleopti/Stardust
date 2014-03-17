@@ -4,65 +4,36 @@
 	I want to be able to view my reports
 
 Background: 
-	Given there is a role with
-	| Field                       | Value                       |
-	| Name                        | Access to Request per Agent |
-	| Access to Request per Agent | True                        |
-	And there is a role with
-	| Field                  | Value                  |
-	| Name                   | Access to Agent Skills |
-	| Access to Agent Skills | True                   |
-	And there is a role with
-	| Field                            | Value                            |
-	| Name                             | Access to Absence Time per Agent |
-	| Access to Absence Time per Agent | True                             |
-	And there is a role with
-	| Field              | Value                 |
-	| Name               | No access to MyReport |
-	| Access to MyReport | False                 |
-	
+Given there is a role with
+	| Field                    | Value                       |
+	| Name                     | No access to Matrix reports |
+	| Access To Matrix Reports | False                       |
 
-@ignore
 Scenario: Show reports with permissions
-	Given I am an agent 
-	And I am american
-	And I have the role 'No access to MyReport'
-	When I click reports menu
-	Then I should only see report 'Requests per Agent' 
-
-@ignore
-Scenario: My Report should display at top of the drop list
-	Given  I am an agent
-	And I have the role 'Access to Request per Agent'
-	When I click reports menu
-	Then I should see My Report display at top of the drop list 
-
-@ignore
-Scenario: Show report tab
-	Given  I am an agent
-	And I have the role 'Access to Request per Agent'
 	When I am viewing an application page
-	Then Reports tab should be visible 
+	And I click reports menu
+	Then I should see the dropdown report list 
 
-@ignore
-Scenario: Reports should be sorted alphabetically 
-	Given  I have the role 'Access to Request per Agent'
-	And I have the role 'Access to Absence Time per Agent'
-	And I have the role 'Access to Agent Skills'
-	And I have the role 'No access to MyReport'
-	When I click reports menu
-	Then I should see report 'Absence Time per Agent' display at top of the drop list 
-	And I should see report 'Agent Skills' display as the second item of the drop list 
-	And I should see report 'Requests per Agent' display at botom of the drop list 
-
-@ignore
 Scenario: Should not show the reports menu with no permission for any report
-	Given  I have the role 'No access to MyReport' 
-	When I logon MyTime Web
-	Then I should not see the 'Reports' nor MyReport tab
+	Given I have the role 'AgentWithoutAnyReport'
+	When I am viewing an application page
+	Then I should not see any report menu
 
+Scenario: Show MyReport menu
+	Given I have the role 'No access to Matrix reports'
+	When I am viewing an application page
+	Then MyReport tab should be visible 
 @ignore
+#there are more than 3 normal reports by default when setup
+#position 1 is MyReport, position 2 is divider by default
 Scenario: Open standard report 
-	Given  I have the role 'Access to Request per Agent'
-	When I click 'Requests per Agent' in the list
-	Then It should open report 'Requests per Agent' in a new window
+	When I am viewing an application page
+	And I click reports menu
+	And I click the report at position '3' in the list
+	Then The report should be opened in a new window
+	
+@ignore
+Scenario: Open MyReport 
+	Given  I have permission to MyReport
+	When I click 'MyReport'
+	Then I should see my report displayed in the same window

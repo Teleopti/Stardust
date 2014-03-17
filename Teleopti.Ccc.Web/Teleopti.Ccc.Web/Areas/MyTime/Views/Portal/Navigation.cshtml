@@ -36,8 +36,8 @@
 					{
 		  
 						<li class="dropdown">
-							<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
-							<ul class="dropdown-menu">
+							<a id="reports" href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
+							<ul id="report-list" class="dropdown-menu">
 								@foreach (var reportNavSection in Model.ReportNavigationItems)
 								{
 									if (reportNavSection.IsDivider)

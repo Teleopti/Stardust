@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
+﻿using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Legacy.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static IDataSource DataSource;
 		public static IBusinessUnit BusinessUnit { get { return CommonBusinessUnit.BusinessUnitFromFakeState; } }
-
+		
 		public static IPerson PersonThatCreatesTestData;
 
 		public static string CommonPassword = "1";
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IApplicationRole AgentRoleWithoutAbsenceRequests;
 		public static IApplicationRole AgentRoleWithoutTeamSchedule;
 		public static IApplicationRole AgentRoleWithoutMyTimeWeb;
+		public static IApplicationRole AgentRoleWithoutAnyReport;
 		public static IApplicationRole SupervisorRole;
 		public static IApplicationRole SupervisorRoleSecondBusinessUnit;
 
