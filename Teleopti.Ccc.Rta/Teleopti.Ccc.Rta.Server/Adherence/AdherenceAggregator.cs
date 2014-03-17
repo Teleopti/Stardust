@@ -31,22 +31,22 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 				_messageSender.SendNotification(createTeamNotification(teamAdherence, actualAgentState.BusinessUnit));
 		}
 
-		private static Notification createTeamNotification(AggregatedAdherence aggregatedAdherence, Guid businessUnitId)
+		private static Notification createTeamNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
 		{
 			var teamAdherenceMessage = new TeamAdherenceMessage
 				{
-					TeamId = aggregatedAdherence.Key,
-					OutOfAdherence = aggregatedAdherence.NumberOutOfAdherence()
+					TeamId = aggregatedValues.Key,
+					OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
 				};
 			return new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage), BusinessUnitId = businessUnitId.ToString(), DomainType = "TeamAdherenceMessage"};
 		}
 
-		private static Notification createSiteNotification(AggregatedAdherence aggregatedAdherence, Guid businessUnitId)
+		private static Notification createSiteNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
 		{
 			var siteAdherenceMessage = new SiteAdherenceMessage
 			{
-				SiteId = aggregatedAdherence.Key,
-				OutOfAdherence = aggregatedAdherence.NumberOutOfAdherence()
+				SiteId = aggregatedValues.Key,
+				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
 			};
 			return new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage), BusinessUnitId = businessUnitId.ToString(), DomainType = "SiteAdherenceMessage"};
 		}
