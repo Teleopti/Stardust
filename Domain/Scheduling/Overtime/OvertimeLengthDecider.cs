@@ -19,14 +19,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         private readonly IOvertimeSkillIntervalDataDivider _overtimeSkillIntervalDataDivider;
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly ICalculateBestOvertime _calculateBestOvertime;
+        private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
 
 
         public OvertimeLengthDecider(ISkillResolutionProvider skillResolutionProvider,
                                      IOvertimeSkillStaffPeriodToSkillIntervalDataMapper overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                      IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
-                                     ISchedulingResultStateHolder schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper)
+                                     ISchedulingResultStateHolder schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, OvertimePeriodValueMapper overtimePeriodValueMapper, 
+                                        IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator)
         {
             _overtimePeriodValueMapper = overtimePeriodValueMapper;
+            _overtimeSkillIntervalDataAggregator = overtimeSkillIntervalDataAggregator;
             _skillResolutionProvider = skillResolutionProvider;
             _overtimeSkillStaffPeriodToSkillIntervalDataMapper = overtimeSkillStaffPeriodToSkillIntervalDataMapper;
             _overtimeSkillIntervalDataDivider = overtimeSkillIntervalDataDivider;
@@ -41,12 +44,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             var minimumResolution = _skillResolutionProvider.MinimumResolution(skills);
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly> { dateOnly });
             if (skillDays == null) return TimeSpan.Zero;
-            skillDays = skillDays.Where(x => skills.Contains(x.Skill)).ToList();
-            var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDays.SelectMany(x => x.SkillStaffPeriodCollection));
-            if (mappedData.Count == 0) return TimeSpan.Zero;
-            mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
+            
+            IList<IList<IOvertimeSkillIntervalData>> nestedList = new List<IList<IOvertimeSkillIntervalData>>();
+            foreach (var personsActiveSkill in skills)
+            {
+                var filteredSkillDays = skillDays.Where(x => x.Skill == personsActiveSkill ).ToList();
+                if (filteredSkillDays.Count == 0) continue;
+                var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(filteredSkillDays.SelectMany(x => x.SkillStaffPeriodCollection));
+                if (mappedData.Count > 0)
+                    mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
+                nestedList.Add(mappedData);
+            }
 
-            return _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(mappedData), overtimeStartTime, minimumResolution);
+            var aggregatedMappedData  = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(nestedList);
+
+            return _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(aggregatedMappedData), overtimeStartTime, minimumResolution);
         }
 
         private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)
@@ -61,5 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             }
             return ret;
         }
+
+        //backgroud worker problems
     }
 }
