@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 		private Configuration _applicationConfiguration;
 		private Configuration _statisticConfiguration;
-		private AuthenticationSettings _authenticationSettings;
 
 		public const string NoDataSourceName = "[not set]";
 
@@ -103,15 +102,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				createApplicationConfiguration(hibernateConfiguration);
 			using (PerformanceOutput.ForOperation("Create statistic configuration"))
 				_statisticConfiguration = createStatisticConfiguration(hibernateConfiguration);
-			using (PerformanceOutput.ForOperation("Create authentication settings"))
-				_authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
+			var authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
 			var appFact = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], _messageSenders);
 			if (_statisticConfiguration == null)
 			{
-                return new DataSource(appFact, null, _authenticationSettings);
+				return new DataSource(appFact, null, authenticationSettings);
 			}
 			return
-				 new DataSource(appFact, new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), _authenticationSettings);
+				 new DataSource(appFact, new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), authenticationSettings);
 		}
 
 		public IDataSource Create(IDictionary<string, string> settings,
@@ -130,8 +128,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_statisticConfiguration = null;
 				statFactory = null;
 			}
-			_authenticationSettings = createDefaultAuthenticationSettings();
-			return new DataSource(appFactory, statFactory, _authenticationSettings);
+			var authenticationSettings = createDefaultAuthenticationSettings();
+			return new DataSource(appFactory, statFactory, authenticationSettings);
 		}
 
 		private static ISessionFactory buildSessionFactory(Configuration nhConf)
