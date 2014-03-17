@@ -15382,6 +15382,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to On available agents only.
+        /// </summary>
+        public static string OnAvailableAgentsOnly {
+            get {
+                return ResourceManager.GetString("OnAvailableAgentsOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One function available.
         /// </summary>
         public static string OneFunctionAvailable {

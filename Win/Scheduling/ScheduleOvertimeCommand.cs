@@ -30,18 +30,20 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IProjectionProvider _projectionProvider;
         private BackgroundWorker _backgroundWorker;
+        private IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
 
         public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState,
                                        ISchedulingResultStateHolder schedulingResultStateHolder,
                                        IOvertimeLengthDecider overtimeLengthDecider,
                                        ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                       IProjectionProvider projectionProvider)
+                                       IProjectionProvider projectionProvider, IAnalyzePersonAccordingToAvailability analyzePersonAccordingToAvailability)
         {
             _schedulerState = schedulerState;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _overtimeLengthDecider = overtimeLengthDecider;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _projectionProvider = projectionProvider;
+            _analyzePersonAccordingToAvailability = analyzePersonAccordingToAvailability;
         }
 
         public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
@@ -75,6 +77,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (overtimeLayerLength == TimeSpan.Zero)
                         continue;
 
+                    if (overtimePreferences.AvailableAgentsOnly)
+                    {
+                        overtimeLayerLength = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), overtimeLayerLength, scheduleEndTime);
+                        if (overtimeLayerLength == TimeSpan.Zero)
+                            continue;
+                    }
+                    
                     //extend shift
                     var overtimeLayerPeriod = new DateTimePeriod(scheduleEndTime, scheduleEndTime.Add(overtimeLayerLength));
                     scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,

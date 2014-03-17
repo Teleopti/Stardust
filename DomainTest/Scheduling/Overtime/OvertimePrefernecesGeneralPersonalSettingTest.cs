@@ -85,6 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
            _overtimePrefernces.AllowBreakMaxWorkPerWeek = true;
             _overtimePrefernces.AllowBreakNightlyRest = true;
             _overtimePrefernces.AllowBreakWeeklyRest = false;
+            _overtimePrefernces.AvailableAgentsOnly = true;
             _overtimePrefernces.ExtendExistingShift = true;
             _overtimePrefernces.SelectedTimePeriod  = new TimePeriod(TimeSpan.FromHours(10),TimeSpan.FromHours(12));
             _overtimePrefernces.OvertimeType = _definitionSet;
@@ -98,6 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Assert.IsTrue(overtimePrefernces.AllowBreakNightlyRest );
             Assert.IsFalse(overtimePrefernces.AllowBreakWeeklyRest  );
             Assert.IsTrue( overtimePrefernces.ExtendExistingShift  );
+            Assert.IsTrue(overtimePrefernces.AvailableAgentsOnly );
             Assert.AreEqual(overtimePrefernces.SelectedTimePeriod , new TimePeriod(TimeSpan.FromHours(10), TimeSpan.FromHours(12)));
             Assert.AreEqual(overtimePrefernces.OvertimeType ,_definitionSet );
 
@@ -109,6 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Expect.Call(_overtimePreferncesMock.AllowBreakNightlyRest).Return(true);
             Expect.Call(_overtimePreferncesMock.AllowBreakWeeklyRest).Return(true);
             Expect.Call(_overtimePreferncesMock.ExtendExistingShift).Return(false);
+            Expect.Call(_overtimePreferncesMock.AvailableAgentsOnly).Return(true);
             
         }
 
@@ -119,6 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             Expect.Call(() => _overtimePreferncesMock.AllowBreakMaxWorkPerWeek = true);
             Expect.Call(() => _overtimePreferncesMock.AllowBreakNightlyRest  = true);
             Expect.Call(() => _overtimePreferncesMock.AllowBreakWeeklyRest  = true);
+            Expect.Call(() => _overtimePreferncesMock.AvailableAgentsOnly   = true);
             Expect.Call(() => _overtimePreferncesMock.SelectedTimePeriod = new TimePeriod(TimeSpan.FromHours(1), TimeSpan.FromHours(2)));
         }
 
