@@ -21,6 +21,16 @@
 				assert.equals(vm.teams()[1].NumberOfAgents, team2.NumberOfAgents);
 			},
 
+
+			"should update number out of adherence": function () {
+				var vm = viewModel();
+
+				vm.fill([{ Name: 'Red', Id: 'guid1' }]);
+				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
+
+				assert.equals(vm.teams()[0].OutOfAdherence(), 1);
+			}
+
 		});
 
 

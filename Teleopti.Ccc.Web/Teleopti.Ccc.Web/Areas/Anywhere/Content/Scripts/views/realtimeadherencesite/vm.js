@@ -20,6 +20,20 @@
 			}
 		};
 
+		var teamForId = function (id) {
+			if (!id)
+				return undefined;
+			var theTeam = lazy(that.teams())
+				.filter(function (x) { return x.Id == id; })
+				.first();
+			return theTeam;
+		};
+
+		that.update = function (data) {
+			var existingTeam = teamForId(data.Id);
+			if (existingTeam)
+				existingTeam.OutOfAdherence(data.OutOfAdherence);
+		};
 
 		return that;
 	};

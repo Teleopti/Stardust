@@ -761,6 +761,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\Tests.html" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\team.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
