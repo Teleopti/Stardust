@@ -5017,69 +5017,58 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void drawSkillGrid()
 		{
-			if (_teamLeaderMode) return;
-			if (_scheduleView != null)
+			if (_teamLeaderMode || _scheduleView == null)
+				return;
+
+			if (_tabSkillData.SelectedIndex >= 0)
 			{
-				if (_tabSkillData.SelectedIndex >= 0)
+				_currentIntraDayDate = _scheduleView.SelectedDateLocal();
+				TabPageAdv tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
+				var skill = (ISkill) tab.Tag;
+				IAggregateSkill aggregateSkillSkill = skill;
+				_chartDescription = skill.Name;
+
+				var skillGridControl = resolveControlFromSkillResultViewSetting();
+				if (skillGridControl is SkillIntradayGridControl)
 				{
-					_currentIntraDayDate = _scheduleView.SelectedDateLocal();
-					TabPageAdv tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
-					var skill = (ISkill)tab.Tag;
-					IAggregateSkill aggregateSkillSkill = skill;
-					_chartDescription = skill.Name;
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
-					{
-						positionControl(_skillWeekGridControl);
-						ActiveControl = _skillWeekGridControl;
-						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);
-					}
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
-					{
-						positionControl(_skillMonthGridControl);
-						ActiveControl = _skillMonthGridControl;
-						_skillMonthGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillMonthGridControl.DrawDayGrid(_schedulerState, skill);
-					}
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
-					{
-						if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-						{
-							positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
-							TabPageAdv thisTab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
-							thisTab.Controls.Add(_skillResultHighlightGridControl);
-							_skillResultHighlightGridControl.DrawGridContents(_schedulerState, skill);
-							_skillResultHighlightGridControl.Left = SkillFullPeriodGridControl.PreferredGridWidth + 5;
-							_skillResultHighlightGridControl.Top = 0;
-							_skillResultHighlightGridControl.Width = thisTab.Width - _skillResultHighlightGridControl.Left;
-							_skillResultHighlightGridControl.Height = thisTab.Height;
-							_skillResultHighlightGridControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Left;
-						}
-						else
-						{
-							positionControl(_skillFullPeriodGridControl);
-						}
-
-						ActiveControl = _skillFullPeriodGridControl;
-						_skillFullPeriodGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillFullPeriodGridControl.DrawDayGrid(_schedulerState, skill);
-					}
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
-					{
-						drawIntraday(skill, aggregateSkillSkill);
-					}
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
-					{
-						positionControl(_skillDayGridControl);
-						ActiveControl = _skillDayGridControl;
-						_skillDayGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillDayGridControl.DrawDayGrid(_schedulerState, skill);
-					}
+					drawIntraday(skill, aggregateSkillSkill);
+					return;
 				}
+
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+				if (selectedSkillGridControl == null)
+					return;
+
+				if (selectedSkillGridControl is SkillFullPeriodGridControl)
+				{
+					if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+					{
+						positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
+						TabPageAdv thisTab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
+						thisTab.Controls.Add(_skillResultHighlightGridControl);
+						_skillResultHighlightGridControl.DrawGridContents(_schedulerState, skill);
+						_skillResultHighlightGridControl.Left = SkillFullPeriodGridControl.PreferredGridWidth + 5;
+						_skillResultHighlightGridControl.Top = 0;
+						_skillResultHighlightGridControl.Width = thisTab.Width - _skillResultHighlightGridControl.Left;
+						_skillResultHighlightGridControl.Height = thisTab.Height;
+						_skillResultHighlightGridControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top |
+						                                          AnchorStyles.Left;
+					}
+					else
+					{
+						positionControl(skillGridControl);
+					}
+
+					ActiveControl = skillGridControl;
+					selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
+					selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
+					return;
+				}
+
+				positionControl(skillGridControl);
+				ActiveControl = skillGridControl;
+				selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
+				selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
 			}
 		}
 

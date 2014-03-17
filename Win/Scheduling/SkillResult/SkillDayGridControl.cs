@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			_rowManager.SetDataSource(new List<IDictionary<DateTime, IList<ISkillStaffPeriod>>> { dataSource });
 		}
 
-        public void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
+        public override void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
         {
            
             if (stateHolder == null || skill==null) return;

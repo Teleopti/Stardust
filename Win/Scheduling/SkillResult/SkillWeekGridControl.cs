@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 			ColWidths[0] = rowHeaderWidth;
 		}
 
-        public void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
+        public override void DrawDayGrid(ISchedulerStateHolder stateHolder,ISkill skill)
         {
            _presenter.DrawWeekGrid(stateHolder, skill);	
         }

@@ -59,6 +59,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 
 		public abstract void SetDataSource(ISchedulerStateHolder stateHolder, ISkill skill);
 
+		public abstract void DrawDayGrid(ISchedulerStateHolder stateHolder, ISkill skill);
+
 		public void SaveSetting()
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
