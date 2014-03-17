@@ -39,15 +39,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                             string statisticConnectionString);
 
         /// <summary>
-        /// Creates the schema.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-04-23
-        /// </remarks>
-        void CreateSchema();
-
-        /// <summary>
         /// Tries to create the specified file.
         /// </summary>
         /// <param name="file">The file.</param>

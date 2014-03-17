@@ -8,7 +8,6 @@ using System.Linq;
 using log4net;
 using NHibernate;
 using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
-		private Configuration _applicationConfiguration;
 		private Configuration _statisticConfiguration;
 
 		public const string NoDataSourceName = "[not set]";
@@ -79,10 +77,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public bool TryCreate(XElement element, out IDataSource dataSource)
 		{
-			createApplicationConfiguration(element);
-			if (_applicationConfiguration.Properties.ContainsKey(Environment.ConnectionString))
+			var appConfig = createApplicationConfiguration(element);
+			if (appConfig.Properties.ContainsKey(Environment.ConnectionString))
 			{
-				string connectionString = _applicationConfiguration.Properties[Environment.ConnectionString];
+				string connectionString = appConfig.Properties[Environment.ConnectionString];
 				string resultOfOnline = isSqlServerOnline(connectionString);
 				if (string.IsNullOrEmpty(resultOfOnline))
 				{
@@ -98,12 +96,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			if (hibernateConfiguration.Name != "datasource")
 				throw new DataSourceException(@"Missing <dataSource> in xml source ");
-			using (PerformanceOutput.ForOperation("Create application configuration"))
-				createApplicationConfiguration(hibernateConfiguration);
+			var appConfig = createApplicationConfiguration(hibernateConfiguration);
 			using (PerformanceOutput.ForOperation("Create statistic configuration"))
 				_statisticConfiguration = createStatisticConfiguration(hibernateConfiguration);
 			var authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
-			var appFact = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], _messageSenders);
+			var appFact = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider, appConfig.Properties[Environment.ConnectionString], _messageSenders);
 			if (_statisticConfiguration == null)
 			{
 				return new DataSource(appFact, null, authenticationSettings);
@@ -116,8 +113,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 												  string statisticConnectionString)
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
-			createApplicationConfiguration(settings);
-                        var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_applicationConfiguration.Properties[Environment.ConnectionString],_messageSenders);
+			var appConfig = createApplicationConfiguration(settings);
+			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider,appConfig.Properties[Environment.ConnectionString],_messageSenders);
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				_statisticConfiguration = createStatisticConfigurationInner(statisticConnectionString, NoDataSourceName);
@@ -140,7 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private void createApplicationConfiguration(IDictionary<string, string> settings)
+		private Configuration createApplicationConfiguration(IDictionary<string, string> settings)
 		{
 			var appCfg = new Configuration();
 			foreach (var item in settings)
@@ -149,12 +146,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			setDefaultValuesOnApplicationConf(appCfg);
 			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
-			_applicationConfiguration = appCfg;
+			return appCfg;
 		}
 
-		private void createApplicationConfiguration(XElement nhibernateConfiguration)
+		private Configuration createApplicationConfiguration(XElement nhibernateConfiguration)
 		{
-			string temporaryConfigFile = Path.GetTempFileName();
+			var temporaryConfigFile = Path.GetTempFileName();
 			try
 			{
 				var settings = new XmlWriterSettings {Indent = true, IndentChars = ("\t"), OmitXmlDeclaration = true};
@@ -166,28 +163,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				var appCfg = new Configuration();
 				appCfg.Configure(temporaryConfigFile);
 				setDefaultValuesOnApplicationConf(appCfg);
-				_applicationConfiguration = appCfg;
+				return appCfg;
 			}
 			finally
 			{
 				if (File.Exists(temporaryConfigFile))
 					File.Delete(temporaryConfigFile);
 			}
-		}
-
-		public void CreateSchema()
-		{
-			//Add Schema
-			const string sql = "CREATE SCHEMA [Auditing] AUTHORIZATION [dbo]";
-			using (var conn = new SqlConnection(_applicationConfiguration.Properties[Environment.ConnectionString]))
-			{
-				conn.Open();
-				using (var cmd = new SqlCommand(sql, conn))
-					cmd.ExecuteNonQuery();
-			}
-
-			var appSchema = new SchemaExport(_applicationConfiguration);
-			appSchema.Create(false, true);
 		}
 
 		private Configuration createStatisticConfiguration(string file, XElement rootElement)
