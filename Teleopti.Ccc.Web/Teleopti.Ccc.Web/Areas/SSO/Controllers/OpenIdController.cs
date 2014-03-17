@@ -4,8 +4,8 @@ using System.Web.Mvc;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
+using log4net;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		private readonly IOpenIdProviderWapper _openIdProvider;
 		private readonly IWindowsAccountProvider _windowsAccountProvider;
 		private readonly ICurrentHttpContext _currentHttpContext;
+		private static ILog _logger = LogManager.GetLogger(typeof(OpenIdController));
 
 		public OpenIdController(IOpenIdProviderWapper openIdProvider, IWindowsAccountProvider windowsAccountProvider, ICurrentHttpContext currentHttpContext)
 		{
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		[ValidateInput(false)]
 		public ActionResult Provider()
 		{
+			_logger.Warn("Start of the OpenIdController.Provider()");
 			var request = _openIdProvider.GetRequest();
 
 			// handles request from site
@@ -48,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
 			if (windowsAccount != null)
 			{
+				_logger.Warn("Found WindowsAccount");
 				var currentHttp = _currentHttpContext.Current();
 				idrequest.LocalIdentifier =
 					new Uri(currentHttp.Request.Url,
@@ -57,8 +60,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			}
 			else
 			{
+				_logger.Warn("NOT Found WindowsAccount");
 				idrequest.IsAuthenticated = false;
 			}
+			_logger.Warn("Return EmptyResult");
 			return new EmptyResult();
 		}
 

@@ -29,10 +29,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Port = Url.Port;
 
 			if (IniFileInfo.IISExpress)
+			{
+				getPortAndUrl();
+				UpdateWebConfigFromTemplate();
+				UpdateAuthenticationBridgeWebConfigFromTemplate();
 				AttemptToUseIISExpress();
-
-			UpdateWebConfigFromTemplate();
-			UpdateAuthenticationBridgeWebConfigFromTemplate();
+			}
+			else
+			{
+				UpdateWebConfigFromTemplate();
+				UpdateAuthenticationBridgeWebConfigFromTemplate();
+			}
+			
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
@@ -43,12 +51,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			// http://stackoverflow.com/questions/4772092/starting-and-stopping-iis-express-programmatically
 			try
 			{
-				Port = new Random().Next(57000, 57999);
-				Url = new Uri(string.Format("http://localhost:{0}/", Port));
-
-				PortAuthenticationBridge = Port - 1;
-				UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
-				
 				FileConfigurator.ConfigureByTags("Data\\iisexpress.config", "Data\\iisexpress.running.config", new AllTags());
 				var parameters = new Parameters
 					{
@@ -62,6 +64,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				Url = new Uri(IniFileInfo.Url);
 				Port = Url.Port;
 			}
+		}
+
+		private static void getPortAndUrl()
+		{
+			Port = new Random().Next(57000, 57999);
+			Url = new Uri(string.Format("http://localhost:{0}/", Port));
+
+			PortAuthenticationBridge = Port - 1;
+			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
 		}
 
 
