@@ -86,21 +86,33 @@ define([
 				.filter(function (x) { return x.OverlapsTimeLine(); });
 		};
 
+		this.SortValue = null;
+		
 		this.OrderBy = function () {
-
-			var visibleShiftLayers = visibleLayers().filter(function (x) { return !x.IsFullDayAbsence; });
+			if (self.SortValue != null)
+				return self.SortValue;
+			var visibleShiftLayers = visibleLayers().filter(function(x) {
+				self.SortValue = !x.IsFullDayAbsence;
+				return self.SortValue;
+			});
 			
-			if (visibleShiftLayers.some())
-				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
+			if (visibleShiftLayers.some()) {
+				self.SortValue = visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
+				return self.SortValue;
+			} 
 			
 			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
-			if (visibleFullDayAbsences.some())
-				return 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
+			if (visibleFullDayAbsences.some()) {
+				self.SortValue = 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
+				return self.SortValue;
+			} 
 			
-			if (visibleDayOffs().some())
-				return 10000;
-			
-			return 20000;
+			if (visibleDayOffs().some()) {
+				self.SortValue = 10000;
+				return self.SortValue;
+			}
+			self.SortValue = 20000;
+			return self.SortValue;
 		};
 
 
