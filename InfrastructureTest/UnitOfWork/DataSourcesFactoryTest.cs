@@ -69,7 +69,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (var xmlReader = new XmlTextReader(xmlString, XmlNodeType.Document, null))
 			{
 				XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
-				IDataSource res = target.Create(nhibernateXmlConfiguration);
+				IDataSource res;
+				target.TryCreate(nhibernateXmlConfiguration, out res);
 				Assert.AreEqual("test", res.Application.Name);
 				Assert.AreEqual("matrixName", res.Statistic.Name);
 				Assert.IsNull(res.OriginalFileName);
@@ -91,7 +92,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
 
-			IDataSource res = target.Create(nhibernateXmlConfiguration);
+			IDataSource res;
+			target.TryCreate(nhibernateXmlConfiguration, out res);
 			var sessionFactory = (ISessionFactoryImplementor)((NHibernateUnitOfWorkFactory)res.Application).SessionFactory;
 			Assert.IsInstanceOf<AdoNetTransactionFactory>(sessionFactory.TransactionFactory);
 		}

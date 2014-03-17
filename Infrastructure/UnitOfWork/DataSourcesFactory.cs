@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				string resultOfOnline = isSqlServerOnline(connectionString);
 				if (string.IsNullOrEmpty(resultOfOnline))
 				{
-                    dataSource = Create(element);
+					dataSource = Create(element);
 					return true;
 				}
 			}
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return false;
 		}
 
-		public IDataSource Create(XElement hibernateConfiguration)
+		private IDataSource Create(XElement hibernateConfiguration)
 		{
 			if (hibernateConfiguration.Name != "datasource")
 				throw new DataSourceException(@"Missing <dataSource> in xml source ");

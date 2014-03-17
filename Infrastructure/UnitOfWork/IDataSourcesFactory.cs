@@ -14,18 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
     public interface IDataSourcesFactory
     {
         /// <summary>
-        /// Creates the datasource using the specified nhibernate config xml structure.
-        /// </summary>
-        /// <param name="hibernateConfiguration">The nhibernate config xml structure.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Klas
-        /// Created date: 2008-12-09
-        /// </remarks>
-        IDataSource Create(XElement hibernateConfiguration);
-
-
-        /// <summary>
         /// Creates the specified settings.
         /// </summary>
         /// <param name="settings">The settings.</param>
