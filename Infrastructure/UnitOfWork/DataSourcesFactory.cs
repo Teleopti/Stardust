@@ -56,24 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "dataSource")]
-		public bool TryCreate(string file, out IDataSource dataSource)
-		{
-			XElement element = XElement.Load(file);
-			if (element.Name != "datasource")
-			{
-				throw new DataSourceException(@"Missing <dataSource> in file " + file);
-			}
-
-			if (TryCreate(element, out dataSource))
-			{
-				return true;
-			}
-
-			dataSource = null;
-			return false;
-		}
-
 		public bool TryCreate(XElement element, out IDataSource dataSource)
 		{
 			var appConfig = createApplicationConfiguration(element);
