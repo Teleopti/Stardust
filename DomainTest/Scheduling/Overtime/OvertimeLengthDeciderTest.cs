@@ -104,7 +104,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
         public void ShouldNotExtendWhenSpecifiedDurationIsZero()
         {
 
-            var skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
+            var skillIntervalData1 = new OvertimeSkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 0, 1);
+            var skillIntervalDataList = new List<IOvertimeSkillIntervalData>() { skillIntervalData1 };
             MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
             using (_mocks.Record())
             {
@@ -121,6 +122,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
                 Expect.Call(_calculateBestOvertime.GetBestOvertime(duration, new List<OvertimePeriodValue>(), _date, 15))
                       .IgnoreArguments()
                       .Return(TimeSpan.Zero);
+            }
+            using (_mocks.Playback())
+            {
+                var resultLength = _target.Decide(_person, new DateOnly(_date), _date, _skill1.Activity, duration);
+
+                Assert.That(resultLength, Is.EqualTo(TimeSpan.Zero));
+            }
+        }
+
+        [Test]
+        public void ShouldReturnZeroIfNoForecastIsAvailable()
+        {
+
+            var skillIntervalDataList = new List<IOvertimeSkillIntervalData>();
+            MinMax<TimeSpan> duration = new MinMax<TimeSpan>(TimeSpan.FromHours(0), TimeSpan.FromHours(0));
+            using (_mocks.Record())
+            {
+                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+                              Return(new List<ISkillDay> { _skillDay1 });
+
+                Expect.Call(_skillResolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+                Expect.Call(_overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+                     skillIntervalDataList).Repeat.AtLeastOnce();
+                Expect.Call(_skillDay1.Skill).Return(_skill1);
             }
             using (_mocks.Playback())
             {

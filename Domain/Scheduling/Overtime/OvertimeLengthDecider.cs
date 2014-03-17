@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             if (skillDays == null) return TimeSpan.Zero;
             skillDays = skillDays.Where(x => skills.Contains(x.Skill)).ToList();
             var mappedData = _overtimeSkillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDays.SelectMany(x => x.SkillStaffPeriodCollection));
+            if (mappedData.Count == 0) return TimeSpan.Zero;
             mappedData = _overtimeSkillIntervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 
             return _calculateBestOvertime.GetBestOvertime(duration, _overtimePeriodValueMapper.Map(mappedData), overtimeStartTime, minimumResolution);
