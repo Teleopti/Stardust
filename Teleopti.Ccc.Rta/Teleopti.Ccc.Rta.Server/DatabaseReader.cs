@@ -13,7 +13,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-    public class DatabaseReader : IDatabaseReader
+	public class DatabaseReader : IDatabaseReader
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
