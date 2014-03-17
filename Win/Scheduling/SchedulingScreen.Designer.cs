@@ -2678,7 +2678,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonViewAllowance.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonViewAllowance, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonViewAllowance, false);
-			this.toolStripButtonViewAllowance.Click += new System.EventHandler(this.toolStripButtonViewAllowance_Click);
+			this.toolStripButtonViewAllowance.Click += new System.EventHandler(this.toolStripItemViewAllowanceClick);
 			// 
 			// toolStripButtonViewRequestHistory
 			// 
@@ -3224,7 +3224,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripMenuItemViewAllowance, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemViewAllowance.Size = new System.Drawing.Size(205, 22);
 			this.toolStripMenuItemViewAllowance.Text = "xxViewAllowance";
-			this.toolStripMenuItemViewAllowance.Click += new System.EventHandler(this.toolStripMenuItemViewAllowance_Click);
+			this.toolStripMenuItemViewAllowance.Click += new System.EventHandler(this.toolStripItemViewAllowanceClick);
 			// 
 			// xxViewOldRequestsToolStripMenuItem
 			// 
@@ -3232,7 +3232,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.xxViewOldRequestsToolStripMenuItem, System.Windows.Forms.Keys.None);
 			this.xxViewOldRequestsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
 			this.xxViewOldRequestsToolStripMenuItem.Text = "xxViewHistory";
-			this.xxViewOldRequestsToolStripMenuItem.Click += new System.EventHandler(this.toolStripViewRequestHistory_Click);
+			this.xxViewOldRequestsToolStripMenuItem.Click += new System.EventHandler(this.toolStripItemViewAllowanceClick);
 			// 
 			// toolStripExFilterDays
 			// 

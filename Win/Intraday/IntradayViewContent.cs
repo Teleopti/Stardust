@@ -18,6 +18,7 @@ using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Scheduling;
+using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.Chart;
 using Teleopti.Ccc.WinCode.Common.Clipboard;

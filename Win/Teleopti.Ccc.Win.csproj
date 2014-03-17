@@ -1404,14 +1404,17 @@
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SchedulerStateScheduleDayChangedCallback.cs" />
     <Compile Include="Scheduling\ScheduleTimeType.cs" />
-    <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Scheduling\SkillGridMenuItemUpdate.cs" />
-    <Compile Include="Scheduling\SkillMonthGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillMonthGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Scheduling\SkillWeekGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillResultGridControlBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SkillResult\SkillWeekGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Scheduling\PersonsFilterView.cs">
@@ -2343,7 +2346,7 @@
     <Compile Include="Forecasting\Forms\WorkloadPages\WorkloadQueues.designer.cs">
       <DependentUpon>WorkloadQueues.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SkillIntradayGridPresenter.cs" />
+    <Compile Include="Scheduling\SkillResult\SkillIntradayGridPresenter.cs" />
     <Compile Include="Common\Configuration\OptionCore.cs" />
     <Compile Include="Common\Configuration\KpiSettings.cs">
       <SubType>UserControl</SubType>
@@ -2852,10 +2855,10 @@
     <Compile Include="Forecasting\Forms\SkillPages\SkillGeneral.designer.cs">
       <DependentUpon>SkillGeneral.cs</DependentUpon>
     </Compile>
-    <Compile Include="Scheduling\SkillDayGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillDayGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Scheduling\SkillIntradayGridControl.cs">
+    <Compile Include="Scheduling\SkillResult\SkillIntradayGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Scheduling\OverViewView.cs" />
