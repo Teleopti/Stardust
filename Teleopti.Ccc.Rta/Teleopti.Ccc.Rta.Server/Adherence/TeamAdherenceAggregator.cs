@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		public AggregatedValues Aggregate(IActualAgentState actualAgentState)
 		{
 			if (_teamProvider == null) return null;
-			
+
 			var personId = actualAgentState.PersonId;
 			var teamId = _teamProvider.GetTeamId(personId);
 
