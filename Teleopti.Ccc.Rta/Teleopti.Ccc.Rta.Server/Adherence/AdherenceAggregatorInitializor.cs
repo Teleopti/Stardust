@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		{
 			var states = from d in _personOrganizationProvider.LoadAll()
 				let state = _databaseReader.LoadOldState(d.PersonId)
+				where state != null
 				select state;
 			foreach (var actualAgentState in states)
 				_aggregator.Invoke(actualAgentState);

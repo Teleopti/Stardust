@@ -29,6 +29,22 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			aggregator.AssertWasCalled(i => i.Invoke(state1));
 			aggregator.AssertWasCalled(i => i.Invoke(state2));
 		}
+
+		[Test]
+		public void ShouldNotCallAggregateOnInnerIfStateIsNull()
+		{
+			var aggregator = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
+			var loadActualAgentState = MockRepository.GenerateMock<ILoadActualAgentState>();
+			var personOrganizationData = new PersonOrganizationData {PersonId = Guid.NewGuid()};
+			var target = new AdherenceAggregatorInitializor(aggregator,
+			                                                new FakePersonOrganizationProvider(new[]
+				                                                {personOrganizationData}),
+			                                                loadActualAgentState);
+			loadActualAgentState.Stub(x => x.LoadOldState(personOrganizationData.PersonId)).Return(null);
+			target.Initialize();
+
+			aggregator.AssertWasNotCalled(i => i.Invoke(null));
+		}
 	}
 
 	public class FakePersonOrganizationProvider : IPersonOrganizationProvider
