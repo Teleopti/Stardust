@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
-		private Configuration _statisticConfiguration;
 
 		public const string NoDataSourceName = "[not set]";
 
@@ -97,16 +96,15 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			if (hibernateConfiguration.Name != "datasource")
 				throw new DataSourceException(@"Missing <dataSource> in xml source ");
 			var appConfig = createApplicationConfiguration(hibernateConfiguration);
-			using (PerformanceOutput.ForOperation("Create statistic configuration"))
-				_statisticConfiguration = createStatisticConfiguration(hibernateConfiguration);
+			var statConfiguration = createStatisticConfiguration(hibernateConfiguration);
 			var authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
 			var appFact = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider, appConfig.Properties[Environment.ConnectionString], _messageSenders);
-			if (_statisticConfiguration == null)
+			if (statConfiguration == null)
 			{
 				return new DataSource(appFact, null, authenticationSettings);
 			}
 			return
-				 new DataSource(appFact, new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), authenticationSettings);
+				 new DataSource(appFact, new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(statConfiguration), statConfiguration.Properties[Environment.ConnectionString]), authenticationSettings);
 		}
 
 		public IDataSource Create(IDictionary<string, string> settings,
@@ -117,12 +115,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider,appConfig.Properties[Environment.ConnectionString],_messageSenders);
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
-				_statisticConfiguration = createStatisticConfigurationInner(statisticConnectionString, NoDataSourceName);
-				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]);
+				var statConfiguration = createStatisticConfigurationInner(statisticConnectionString, NoDataSourceName);
+				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(statConfiguration), statConfiguration.Properties[Environment.ConnectionString]);
 			}
 			else
 			{
-				_statisticConfiguration = null;
 				statFactory = null;
 			}
 			var authenticationSettings = createDefaultAuthenticationSettings();
