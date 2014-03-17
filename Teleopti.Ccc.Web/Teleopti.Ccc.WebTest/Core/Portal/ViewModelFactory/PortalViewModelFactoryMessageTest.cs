@@ -9,7 +9,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
