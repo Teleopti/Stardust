@@ -112,10 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private Configuration createApplicationConfiguration(IDictionary<string, string> settings)
 		{
 			var appCfg = new Configuration();
-			foreach (var item in settings)
-			{
-				appCfg.SetProperty(item.Key, item.Value);
-			}
+			appCfg.SetProperties(settings);
 			setDefaultValuesOnApplicationConf(appCfg);
 			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
 			return appCfg;
@@ -123,8 +120,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private static IDictionary<string, string> createApplicationProperties(XElement nhibernateConfiguration)
 		{
-			var xElementProperties = nhibernateConfiguration.Descendants(((XNamespace)"urn:nhibernate-configuration-2.2") + "session-factory").Elements();
-			return xElementProperties.ToDictionary(p => p.Attribute("name").Value, p => p.Value);
+			var sessionFactory = nhibernateConfiguration.Descendants(((XNamespace)"urn:nhibernate-configuration-2.2") + "session-factory").Single();
+			var sessionFactoryProperties = sessionFactory.Elements();
+			var ret = sessionFactoryProperties.ToDictionary(p => p.Attribute("name").Value, p => p.Value);
+			ret[Environment.SessionFactoryName] = sessionFactory.Attribute("name").Value;
+			return ret;
 		}
 
 		private static AuthenticationSettings createAuthenticationSettings(XElement rootElement)
