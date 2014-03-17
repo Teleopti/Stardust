@@ -28,8 +28,8 @@ CD %ROOTDIR%
 ::Deplot latest Azure package to Azure (teleopti-dev)
 SET ThisScriptsDirectory=%~dp0
 SET PowerShellScriptPath=%ThisScriptsDirectory%DeployToAzure.ps1
-ECHO PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' 'teleopticcc-dev' 'd:\%version%\Azure-%version%.cspkg' 'd:\%version%\teleopticcc-dev.cscfg' 'staging' 'AzureDemo.publishsettings' '%version%'";
-PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' 'teleopticcc-dev' 'd:\%version%\Azure-%version%.cspkg' 'd:\%version%\teleopticcc-dev.cscfg' 'staging' 'AzureDemo.publishsettings' '%version%'";
+ECHO PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' 'teleopticcc-dev' 'd:\%version%\Azure-%version%.cspkg' 'd:\%version%\teleopticcc-dev.cscfg' 'production' 'AzureDemo.publishsettings' '%version%'";
+PowerShell -NoProfile -ExecutionPolicy Bypass -Command "& '%PowerShellScriptPath%' '%ThisScriptsDirectory%' 'Teleopti CCC Azure' 'teleopticcc-dev' 'd:\%version%\Azure-%version%.cspkg' 'd:\%version%\teleopticcc-dev.cscfg' 'production' 'AzureDemo.publishsettings' '%version%'";
 
 
 
