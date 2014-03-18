@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
@@ -91,6 +92,16 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			{
 				container.IsRegistered<IReportViewModelFactory>()
 					.Should().Be.True();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveNumberOfAgentsInTeamReader()
+		{
+			using (var container = builder.Configure())
+			{
+				container.Resolve<INumberOfAgentsInTeamReader>()
+					.Should().Not.Be.Null();
 			}
 		}
 	}

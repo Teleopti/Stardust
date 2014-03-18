@@ -5,6 +5,7 @@ using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 	public class NumberOfAgentsInTeamReader : INumberOfAgentsInTeamReader
 	{
-		private readonly CurrentUnitOfWork _currentUnitOfWork;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly INow _now;
 		private const string sqlQuery = @"
 SELECT
@@ -39,7 +40,7 @@ and a.Team in (:teams)
 group by a.Team";
 
 
-		public NumberOfAgentsInTeamReader(CurrentUnitOfWork currentUnitOfWork, INow now)
+		public NumberOfAgentsInTeamReader(ICurrentUnitOfWork currentUnitOfWork, INow now)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_now = now;
