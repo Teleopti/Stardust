@@ -790,8 +790,8 @@
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesite\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherence\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.js" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.js" />

@@ -1,7 +1,7 @@
 ﻿
 define([
 		'knockout',
-		'text!templates/realtimeadherence/view.html',
+		'text!templates/realtimeadherencesites/view.html',
 		'views/realtimeadherencesites/vm',
 		'subscriptions.adherencesites',
 		'errorview',
