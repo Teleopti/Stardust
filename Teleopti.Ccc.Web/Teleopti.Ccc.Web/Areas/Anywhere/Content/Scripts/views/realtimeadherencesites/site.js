@@ -6,10 +6,7 @@
 
 			var that = {};
 			that.OutOfAdherence = ko.observable();
-			that.Name;
-			that.NumberOfAgents;
-			that.Id;
-
+		
 			that.fill = function (data) {
 				console.log(data);
 				that.Id = data.Id;
