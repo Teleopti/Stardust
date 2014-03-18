@@ -1,4 +1,5 @@
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -14,12 +15,36 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public bool? InContractTime { get; set; }
 		public bool? Confidential { get; set; }
 		public bool? Requestable { get; set; }
+		public string TrackerType { get; set; }
 
 		public Absence Absence;
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Absence = new Absence {Description = new Description(Name, ShortName)};
+			Absence = new Absence { Description = new Description(Name, ShortName) };
+
+			ITracker tracker = null;
+			if (!string.IsNullOrEmpty(TrackerType))
+			{
+				switch (TrackerType.ToLower())
+				{
+					case "day":
+						tracker = Tracker.CreateDayTracker();
+						break;
+					case "time":
+						tracker = Tracker.CreateTimeTracker();
+						break;
+					case "overtime":
+						tracker = Tracker.CreateOvertimeTracker();
+						break;
+					case "comp":
+						tracker = Tracker.CreateCompTracker();
+						break;
+				}
+				Absence.Tracker = tracker;
+			}
+
+			
 
 			if (Color != null)
 				Absence.DisplayColor = System.Drawing.Color.FromName(Color);
@@ -32,7 +57,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 			if (Requestable.HasValue)
 				Absence.Requestable = Requestable.Value;
-
+			
 			var absenceRepository = new AbsenceRepository(uow);
 			absenceRepository.Add(Absence);
 		}

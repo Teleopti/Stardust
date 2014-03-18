@@ -22,7 +22,17 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
         self.requestViewModel = ko.observable();
 
         self.createRequestViewModel = function () {
-            return new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);
+            var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);
+        	ajax.Ajax({
+        		url: 'Requests/PersonalAccountPermission',
+        		dataType: "json",
+        		type: 'GET',
+
+        		success: function (data) {
+        			vm.readPersonalAccountPermission(data);
+        		}
+        	});
+            return vm;
         };
         
         self.createShiftTradeRequestViewModel = function () {

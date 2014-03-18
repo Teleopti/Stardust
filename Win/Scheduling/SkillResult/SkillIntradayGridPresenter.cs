@@ -14,7 +14,7 @@ using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Win.Scheduling
+namespace Teleopti.Ccc.Win.Scheduling.SkillResult
 {
     public class SkillIntradayGridPresenter
     {

@@ -32,6 +32,7 @@ using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.LockMenuBuilders;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
+using Teleopti.Ccc.Win.Scheduling.SkillResult;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -193,7 +194,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private SkillResultViewSetting _skillResultViewSetting;
 		private const int maxCalculatMinMaxCacheEnries = 100000;
 		private DateTimePeriod _selectedPeriod;
-	    private bool isWindowLoaded = false;
 		private ScheduleTimeType _scheduleTimeType;
 		private DateTime _lastSaved = DateTime.Now;
 
@@ -2969,27 +2969,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_updating = false;
 		}
 
-		private void skillDayGridControl_GotFocus(object sender, EventArgs e)
-		{
-			updateRibbon(ControlType.SchedulerGridSkillData);
-		}
-
-		private void skillIntradayGridControl_GotFocus(object sender, EventArgs e)
-		{
-			updateRibbon(ControlType.SchedulerGridSkillData);
-		}
-
-		private void skillWeekGridControl_GotFocus(object sender, EventArgs e)
-		{
-			updateRibbon(ControlType.SchedulerGridSkillData);
-		}
-
-		private void skillMonthGridControl_GotFocus(object sender, EventArgs e)
-		{
-			updateRibbon(ControlType.SchedulerGridSkillData);
-		}
-
-		private void skillFullPeriodGridControl_GotFocus(object sender, EventArgs e)
+		private void skillGridControlGotFucus(object sender, EventArgs e)
 		{
 			updateRibbon(ControlType.SchedulerGridSkillData);
 		}
@@ -3108,32 +3088,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_gridChartManager.UpdateChartSettings(_currentSelectedGridRow, e.Enabled, e.ChartSeriesStyle, e.GridToChartAxis, e.LineColor);
 		}
 
-		private void skillWeekGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
+		private void skillGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
 		{
-			if (_skillWeekGridControl.CurrentSelectedGridRow != null)
+			var skillResultGridControlBase = (SkillResultGridControlBase)sender;
+			if (skillResultGridControlBase.CurrentSelectedGridRow != null)
 			{
-				_currentSelectedGridRow = _skillWeekGridControl.CurrentSelectedGridRow;
-				IChartSeriesSetting chartSeriesSettings = _skillWeekGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
-				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation, chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
-			}
-		}
-
-		private void skillMonthGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
-		{
-			if (_skillMonthGridControl.CurrentSelectedGridRow != null)
-			{
-				_currentSelectedGridRow = _skillMonthGridControl.CurrentSelectedGridRow;
-				IChartSeriesSetting chartSeriesSettings = _skillMonthGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
-				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation, chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
-			}
-		}
-
-		private void skillFullPeriodGridControlSelectionChanged(object sender, GridSelectionChangedEventArgs e)
-		{
-			if (_skillFullPeriodGridControl.CurrentSelectedGridRow != null)
-			{
-				_currentSelectedGridRow = _skillFullPeriodGridControl.CurrentSelectedGridRow;
-				IChartSeriesSetting chartSeriesSettings = _skillFullPeriodGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
+				_currentSelectedGridRow = skillResultGridControlBase.CurrentSelectedGridRow;
+				IChartSeriesSetting chartSeriesSettings = skillResultGridControlBase.CurrentSelectedGridRow.ChartSeriesSettings;
 				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation, chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
 			}
 		}
@@ -3148,24 +3109,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void skillDayGridControl_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
-		{
-			if (_skillDayGridControl.CurrentSelectedGridRow != null)
-			{
-				_currentSelectedGridRow = _skillDayGridControl.CurrentSelectedGridRow;
-				IChartSeriesSetting chartSeriesSettings = _skillDayGridControl.CurrentSelectedGridRow.ChartSeriesSettings;
-				_gridrowInChartSettingButtons.SetButtons(chartSeriesSettings.Enabled, chartSeriesSettings.AxisLocation, chartSeriesSettings.SeriesType, chartSeriesSettings.Color);
-			}
-		}
 
 		private void toolStripButtonGridInChart_Click(object sender, EventArgs e)
 		{
 			reloadChart();
-		}
-
-		private static void chartControlSkillData_ChartRegionMouseEnter(object sender, ChartRegionMouseEventArgs e)
-		{
-			//GridChartManager.SetChartToolTip(e.Region, _chartControlSkillData);
 		}
 
 		private void chartControlSkillData_ChartRegionMouseHover(object sender, ChartRegionMouseEventArgs e)
@@ -5070,70 +5017,79 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void drawSkillGrid()
 		{
-			if (_teamLeaderMode) return;
-			if (_scheduleView != null)
+			if (_teamLeaderMode || _scheduleView == null)
+				return;
+
+			if (_tabSkillData.SelectedIndex >= 0)
 			{
-				if (_tabSkillData.SelectedIndex >= 0)
+				_currentIntraDayDate = _scheduleView.SelectedDateLocal();
+				TabPageAdv tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
+				var skill = (ISkill) tab.Tag;
+				IAggregateSkill aggregateSkillSkill = skill;
+				_chartDescription = skill.Name;
+
+				var skillGridControl = resolveControlFromSkillResultViewSetting();
+				if (skillGridControl is SkillIntradayGridControl)
 				{
-					_currentIntraDayDate = _scheduleView.SelectedDateLocal();
-					TabPageAdv tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
-					var skill = (ISkill)tab.Tag;
-					IAggregateSkill aggregateSkillSkill = skill;
-					_chartDescription = skill.Name;
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
-					{
-						positionControl(_skillWeekGridControl);
-						ActiveControl = _skillWeekGridControl;
-						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);
-					}
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
-					{
-						positionControl(_skillMonthGridControl);
-						ActiveControl = _skillMonthGridControl;
-						_skillMonthGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillMonthGridControl.DrawDayGrid(_schedulerState, skill);
-					}
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
-					{
-						if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-						{
-							positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
-							TabPageAdv thisTab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
-							thisTab.Controls.Add(_skillResultHighlightGridControl);
-							_skillResultHighlightGridControl.DrawGridContents(_schedulerState, skill);
-							_skillResultHighlightGridControl.Left = SkillFullPeriodGridControl.PreferredGridWidth + 5;
-							_skillResultHighlightGridControl.Top = 0;
-							_skillResultHighlightGridControl.Width = thisTab.Width - _skillResultHighlightGridControl.Left;
-							_skillResultHighlightGridControl.Height = thisTab.Height;
-							_skillResultHighlightGridControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top | AnchorStyles.Left;
-						}
-						else
-						{
-							positionControl(_skillFullPeriodGridControl);
-						}
-
-						ActiveControl = _skillFullPeriodGridControl;
-						_skillFullPeriodGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillFullPeriodGridControl.DrawDayGrid(_schedulerState, skill);
-					}
-
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
-					{
-						drawIntraday(skill, aggregateSkillSkill);
-					}
-					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
-					{
-						positionControl(_skillDayGridControl);
-						ActiveControl = _skillDayGridControl;
-						_skillDayGridControl.DrawDayGrid(_schedulerState, skill);
-						_skillDayGridControl.DrawDayGrid(_schedulerState, skill);
-					}
+					drawIntraday(skill, aggregateSkillSkill);
+					return;
 				}
+
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+				if (selectedSkillGridControl == null)
+					return;
+
+				if (selectedSkillGridControl is SkillFullPeriodGridControl)
+				{
+					if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+					{
+						positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
+						TabPageAdv thisTab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
+						thisTab.Controls.Add(_skillResultHighlightGridControl);
+						_skillResultHighlightGridControl.DrawGridContents(_schedulerState, skill);
+						_skillResultHighlightGridControl.Left = SkillFullPeriodGridControl.PreferredGridWidth + 5;
+						_skillResultHighlightGridControl.Top = 0;
+						_skillResultHighlightGridControl.Width = thisTab.Width - _skillResultHighlightGridControl.Left;
+						_skillResultHighlightGridControl.Height = thisTab.Height;
+						_skillResultHighlightGridControl.Anchor = AnchorStyles.Right | AnchorStyles.Bottom | AnchorStyles.Top |
+						                                          AnchorStyles.Left;
+					}
+					else
+					{
+						positionControl(skillGridControl);
+					}
+
+					ActiveControl = skillGridControl;
+					selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
+					selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
+					return;
+				}
+
+				positionControl(skillGridControl);
+				ActiveControl = skillGridControl;
+				selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
+				selectedSkillGridControl.DrawDayGrid(_schedulerState, skill);
 			}
+		}
+
+		private TeleoptiGridControl resolveControlFromSkillResultViewSetting()
+		{
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+				return _skillIntradayGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
+				return _skillDayGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
+				return _skillWeekGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
+				return _skillMonthGridControl;
+
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
+				return _skillFullPeriodGridControl;
+
+			return null;
 		}
 
 		private void refreshSummarySkillIfActive()
@@ -5145,39 +5101,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!aggregateSkillSkill.IsVirtual)
 				return;
 
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
-			{
-				_skillWeekGridControl.SetDataSource(_schedulerState, skill);
-				_skillWeekGridControl.Refresh();
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
-			{
-				_skillMonthGridControl.SetDataSource(_schedulerState, skill);
-				_skillMonthGridControl.Refresh();
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
-			{
-				_skillFullPeriodGridControl.SetDataSource(_schedulerState, skill);
-				_skillFullPeriodGridControl.Refresh();
-			}
-
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
+			var skillGridControl = resolveControlFromSkillResultViewSetting();
+			if (skillGridControl is SkillIntradayGridControl)
 			{
 				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
 				if (_skillIntradayGridControl.Presenter.RowManager != null)
-				{
 					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
-					_skillFullPeriodGridControl.Refresh();
-				}
 			}
-			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
+			else
 			{
-				_skillDayGridControl.SetDataSource(_schedulerState, skill);
-				_skillDayGridControl.Refresh();
+				var selectedSkillGridControl = skillGridControl as SkillResultGridControlBase;
+				if (selectedSkillGridControl == null)
+					return;
+
+				selectedSkillGridControl.SetDataSource(_schedulerState, skill);
 			}
+
+			skillGridControl.Refresh();
 		}
 
 		private void drawIntraday(ISkill skill, IAggregateSkill aggregateSkillSkill)
@@ -5368,22 +5309,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 			notesEditor.NotesChanged += notesEditor_NotesChanged;
 			notesEditor.PublicNotesChanged += notesEditor_PublicNotesChanged;
 
-			_skillDayGridControl.GotFocus += skillDayGridControl_GotFocus;
-			_skillIntradayGridControl.GotFocus += skillIntradayGridControl_GotFocus;
-			_skillWeekGridControl.GotFocus += skillWeekGridControl_GotFocus;
-			_skillMonthGridControl.GotFocus += skillMonthGridControl_GotFocus;
-			_skillFullPeriodGridControl.GotFocus += skillFullPeriodGridControl_GotFocus;
+			_skillDayGridControl.GotFocus += skillGridControlGotFucus;
+			_skillIntradayGridControl.GotFocus += skillGridControlGotFucus;
+			_skillWeekGridControl.GotFocus += skillGridControlGotFucus;
+			_skillMonthGridControl.GotFocus += skillGridControlGotFucus;
+			_skillFullPeriodGridControl.GotFocus += skillGridControlGotFucus;
 
-			_skillDayGridControl.SelectionChanged += skillDayGridControl_SelectionChanged;
+			_skillDayGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
-			_skillWeekGridControl.SelectionChanged += skillWeekGridControlSelectionChanged;
-			_skillMonthGridControl.SelectionChanged += skillMonthGridControlSelectionChanged;
-			_skillFullPeriodGridControl.SelectionChanged += skillFullPeriodGridControlSelectionChanged;
+			_skillWeekGridControl.SelectionChanged += skillGridControlSelectionChanged;
+			_skillMonthGridControl.SelectionChanged += skillGridControlSelectionChanged;
+			_skillFullPeriodGridControl.SelectionChanged += skillGridControlSelectionChanged;
 			_skillResultHighlightGridControl.GoToDate += _skillResultHighlightGridControl_GoToDate;
 
 			_gridrowInChartSettingButtons.LineInChartSettingsChanged += gridlinesInChartSettings_LineInChartSettingsChanged;
 			_gridrowInChartSettingButtons.LineInChartEnabledChanged += gridrowInChartSetting_LineInChartEnabledChanged;
-			_chartControlSkillData.ChartRegionMouseEnter += chartControlSkillData_ChartRegionMouseEnter;
 			_chartControlSkillData.ChartRegionMouseHover += chartControlSkillData_ChartRegionMouseHover;
 			_chartControlSkillData.ChartRegionClick += chartControlSkillData_ChartRegionClick;
 			_undoRedo.ChangedHandler += undoRedo_Changed;
@@ -5552,33 +5492,34 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_skillResultHighlightGridControl != null) _skillResultHighlightGridControl.GoToDate -= _skillResultHighlightGridControl_GoToDate;
 
-			if (_skillDayGridControl != null) _skillDayGridControl.GotFocus -= skillDayGridControl_GotFocus;
+			if (_skillDayGridControl != null)
+				_skillDayGridControl.GotFocus -= skillGridControlGotFucus;
 			if (_skillIntradayGridControl != null)
-				_skillIntradayGridControl.GotFocus -= skillIntradayGridControl_GotFocus;
+				_skillIntradayGridControl.GotFocus -= skillGridControlGotFucus;
 
 			if (_skillWeekGridControl != null)
-				_skillWeekGridControl.GotFocus -= skillWeekGridControl_GotFocus;
+				_skillWeekGridControl.GotFocus -= skillGridControlGotFucus;
 
 			if (_skillMonthGridControl != null)
-				_skillMonthGridControl.GotFocus -= skillMonthGridControl_GotFocus;
+				_skillMonthGridControl.GotFocus -= skillGridControlGotFucus;
 
 			if (_skillFullPeriodGridControl != null)
-				_skillFullPeriodGridControl.GotFocus -= skillFullPeriodGridControl_GotFocus;
+				_skillFullPeriodGridControl.GotFocus -= skillGridControlGotFucus;
 
 			if (_skillDayGridControl != null)
-				_skillDayGridControl.SelectionChanged -= skillDayGridControl_SelectionChanged;
+				_skillDayGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
 			if (_skillIntradayGridControl != null)
 				_skillIntradayGridControl.SelectionChanged -= skillIntradayGridControl_SelectionChanged;
 
 			if (_skillWeekGridControl != null)
-				_skillWeekGridControl.SelectionChanged -= skillWeekGridControlSelectionChanged;
+				_skillWeekGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
 			if (_skillMonthGridControl != null)
-				_skillMonthGridControl.SelectionChanged -= skillMonthGridControlSelectionChanged;
+				_skillMonthGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
 			if (_skillFullPeriodGridControl != null)
-				_skillFullPeriodGridControl.SelectionChanged -= skillFullPeriodGridControlSelectionChanged;
+				_skillFullPeriodGridControl.SelectionChanged -= skillGridControlSelectionChanged;
 
 			if (_gridrowInChartSettingButtons != null)
 			{
@@ -5588,7 +5529,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_chartControlSkillData != null)
 			{
-				_chartControlSkillData.ChartRegionMouseEnter -= chartControlSkillData_ChartRegionMouseEnter;
 				_chartControlSkillData.ChartRegionMouseHover -= chartControlSkillData_ChartRegionMouseHover;
 				_chartControlSkillData.ChartRegionClick -= chartControlSkillData_ChartRegionClick;
 			}
@@ -6554,66 +6494,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 		}
 
-		private void toolStripButtonViewAllowance_Click(object sender, EventArgs e)
+		private void toolStripItemViewAllowanceClick(object sender, EventArgs e)
 		{
-			showRequestAllowanceView();
-		}
-
-		private void toolStripMenuItemViewAllowance_Click(object sender, EventArgs e)
-		{
-			isWindowLoaded = false;
-			showRequestAllowanceView();
-		}
-
-		private void showRequestAllowanceView()
-		{
-			var defaultRequest = _requestView.SelectedAdapters().Count > 0
-														 ? _requestView.SelectedAdapters().First().PersonRequest
-														 : _schedulerState.PersonRequests.FirstOrDefault(
-															 r =>
-															 r.Request is AbsenceRequest &&
-															 _schedulerState.RequestedPeriod.Period().Contains(r.Request.Period));
-
-			if (defaultRequest == null)
-			{
-				var allowanceView = new RequestAllowanceView(null, _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate);
-
-				if (!isWindowLoaded)
-				{
-					allowanceView.Show(this);
-					isWindowLoaded = true;
-					allowanceView.FormClosed += allowanceView_FormClosed;
-				}
-				else
-				{
-					isWindowLoaded = false;
-				}
-			}
-			else
-			{
-				var requestDate = new DateOnly(defaultRequest.RequestedDate);
-				var personPeriod = defaultRequest.Person.PersonPeriodCollection.FirstOrDefault(p => p.Period.Contains(requestDate));
-				if (personPeriod != null)
-				{
-					var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
-
-					if (!isWindowLoaded)
-					{
-						allowanceView.Show(this);
-						isWindowLoaded = true;
-						allowanceView.FormClosed += allowanceView_FormClosed;
-					}
-					else
-					{
-						isWindowLoaded = false;
-					}
-				}
-			}
-		}
-
-		private void allowanceView_FormClosed(object sender, FormClosedEventArgs e)
-		{
-			isWindowLoaded = false;
+			_requestView.ShowRequestAllowanceView(this);
 		}
 
 		private void toolStripViewRequestHistory_Click(object sender, EventArgs e)

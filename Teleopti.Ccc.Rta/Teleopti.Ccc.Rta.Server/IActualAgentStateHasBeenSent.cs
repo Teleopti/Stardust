@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public interface IAfterSend
+	public interface IActualAgentStateHasBeenSent
 	{
 		void Invoke(IActualAgentState actualAgentState);
 	}

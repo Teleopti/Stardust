@@ -4,7 +4,9 @@ using System.Security.Principal;
 using System.Threading;
 using Autofac;
 using Autofac.Integration.Wcf;
+using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server.Adherence;
 using log4net;
 using log4net.Config;
 using ContainerBuilder = Teleopti.Ccc.Rta.Server.ContainerBuilder;
@@ -21,7 +23,10 @@ namespace Teleopti.Ccc.Rta.WebService
 			XmlConfigurator.Configure();
 			var container = buildIoc();
 			AutofacHostFactory.Container = container;
-			_timer = new Timer(myCallback, container, 0, 5000);
+			_timer = new Timer(flushBufferToDatabase, container, 0, 5000);
+
+			container.Resolve<IRtaDataHandler>();
+			container.Resolve<AdherenceAggregatorInitializor>().Initialize();
 
 			setDefaultGenericPrincipal();
 		}
@@ -34,7 +39,7 @@ namespace Teleopti.Ccc.Rta.WebService
 		}
 
 
-		private void myCallback(object state)
+		private void flushBufferToDatabase(object state)
 		{
 			var container = state as IContainer;
 			var cache = container.Resolve<IActualAgentStateCache>();

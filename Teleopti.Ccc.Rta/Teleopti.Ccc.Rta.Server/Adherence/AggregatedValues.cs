@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-	public class AggregatedAdherence
+	public class AggregatedValues
 	{
 		private readonly Dictionary<Guid, bool> _personAdherence = new Dictionary<Guid, bool>();
 		public Guid Key { get; private set; }
 
-		public AggregatedAdherence(Guid key)
+		public AggregatedValues(Guid key)
 		{
 			Key = key;
 		}

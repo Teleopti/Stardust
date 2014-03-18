@@ -230,6 +230,28 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
         {
             var datePickerFormat = $('#Request-detail-datepicker-format').val().toUpperCase();
             var model = addRequestViewModel();
+            //ajax.Ajax({
+            //	url: 'Requests/Absences',
+            //	DataType: "json",
+            //	type: 'GET',
+            //	Data: {
+            //		date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+            //	},
+            //	success: function (Data) {
+            //		model.readAbsences(Data);
+            //	}
+			//});
+
+            ajax.Ajax({
+            	url: 'Requests/PersonalAccountPermission',
+            	dataType: "json",
+            	type: 'GET',
+
+            	success: function (data) {
+            		model.readPersonalAccountPermission(data);
+            	}
+            });
+	        
             model.DateFormat(datePickerFormat);
 
             self.requestViewModel(model);
@@ -609,6 +631,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				var addRequestViewModel = function() {
 					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, data.WeekStart, defaultDateTimes);
 					model.AddRequestCallback = _displayRequest;
+
 					return model;
 				};
 

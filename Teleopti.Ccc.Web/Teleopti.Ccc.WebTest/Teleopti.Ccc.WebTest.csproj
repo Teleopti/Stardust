@@ -167,6 +167,8 @@
     <Compile Include="Core\Portal\DataProvider\ReportsProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\AbsenceAccountProviderTest.cs" />
+    <Compile Include="Core\Requests\Mapping\AbsenceAccountMappingProfileTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapperTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamControllerTest.cs" />

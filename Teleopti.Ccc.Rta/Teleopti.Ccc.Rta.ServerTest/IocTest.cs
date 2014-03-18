@@ -27,8 +27,18 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			using (var container = ContainerBuilder.CreateBuilder().Build())
 			{
-				container.Resolve<IEnumerable<IAfterSend>>()
+				container.Resolve<IEnumerable<IActualAgentStateHasBeenSent>>()
 					.Single().GetType().Should().Be<AdherenceAggregator>();
+			}
+		}
+
+		[Test]
+		public void ShouldResolveAdherenceAggregatorInitializor()
+		{
+			using (var container = ContainerBuilder.CreateBuilder().Build())
+			{
+				container.Resolve<AdherenceAggregatorInitializor>()
+					.Should().Not.Be.Null();
 			}
 		}
 	}

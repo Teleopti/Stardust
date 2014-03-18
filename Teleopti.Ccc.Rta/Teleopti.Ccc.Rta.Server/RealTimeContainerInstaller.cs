@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<DatabaseReader>().AsSelf();
 			builder.Register<IDatabaseReader>(c => c.Resolve<DatabaseReader>())
 				.IntegrateWithMbCache();
+			builder.Register<ILoadActualAgentState>(c => c.Resolve<DatabaseReader>());
 
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.RegisterType<CurrentAndNextLayerExtractor>().As<ICurrentAndNextLayerExtractor>().SingleInstance();
 			builder.RegisterType<DataSourceResolver>().As<IDataSourceResolver>();
 			builder.RegisterType<PersonResolver>().As<IPersonResolver>();
-
+			builder.RegisterType<AdherenceAggregatorInitializor>();
 			builder.RegisterModule<DateAndTimeModule>();
 
 			registerAdherenceComponents(builder);
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private static void registerAdherenceComponents(Autofac.ContainerBuilder builder)
 		{
-			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IAfterSend>();
+			builder.RegisterType<AdherenceAggregator>().SingleInstance().As<IActualAgentStateHasBeenSent>();
 			builder.RegisterType<TeamIdForPerson>().SingleInstance().As<ITeamIdForPerson>();
 			builder.RegisterType<SiteIdForPerson>().SingleInstance().As<ISiteIdForPerson>();
 			builder.RegisterType<PersonOrganizationProvider>().SingleInstance().As<IPersonOrganizationProvider>();

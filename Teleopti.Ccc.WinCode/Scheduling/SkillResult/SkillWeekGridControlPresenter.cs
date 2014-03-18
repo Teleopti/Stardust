@@ -4,7 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.WinCode.Scheduling
+namespace Teleopti.Ccc.WinCode.Scheduling.SkillResult
 {
 	public interface ISkillWeekGridControl
 	{

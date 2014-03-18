@@ -141,7 +141,8 @@
   <ItemGroup>
     <Compile Include="ActualAgentAssembler.cs" />
     <Compile Include="Adherence\AdherenceAggregator.cs" />
-    <Compile Include="Adherence\AggregatedAdherence.cs" />
+    <Compile Include="Adherence\AdherenceAggregatorInitializor.cs" />
+    <Compile Include="Adherence\AggregatedValues.cs" />
     <Compile Include="Adherence\IPersonOrganizationProvider.cs" />
     <Compile Include="Adherence\ISiteIdForPerson.cs" />
     <Compile Include="Adherence\ITeamIdForPerson.cs" />
@@ -163,7 +164,7 @@
     <Compile Include="ICurrentAndNextLayerExtractor.cs" />
     <Compile Include="IDatabaseReader.cs" />
     <Compile Include="IDatabaseWriter.cs" />
-    <Compile Include="IAfterSend.cs" />
+    <Compile Include="IActualAgentStateHasBeenSent.cs" />
     <Compile Include="IRtaDataHandlerCache.cs" />
     <Compile Include="Resolvers\IDataSourceResolver.cs" />
     <Compile Include="Resolvers\IPersonResolver.cs" />

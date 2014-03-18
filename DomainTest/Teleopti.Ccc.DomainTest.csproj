@@ -404,6 +404,8 @@
     <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
+    <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
+    <Compile Include="Scheduling\Overtime\AnalyzePersonAccordingToAvailabilityTest.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertimeTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueMapperTest.cs" />
@@ -411,6 +413,7 @@
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromStorageTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeLengthDeciderTest.cs" />
+    <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillStaffPeriodToSkillIntervalDataMapperTest.cs" />

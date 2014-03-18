@@ -13,7 +13,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-    public class DatabaseReader : IDatabaseReader
+	public class DatabaseReader : IDatabaseReader
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		    var query =
 				string.Format(
-					"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
+					"SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(
@@ -97,6 +97,7 @@ namespace Teleopti.Ccc.Rta.Server
 				{
 					while (reader.Read())
 					{
+						
 						var agentState = new ActualAgentState
 							{
 								PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
@@ -113,7 +114,9 @@ namespace Teleopti.Ccc.Rta.Server
 								OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
 														   ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
 														   : "",
-								AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"))
+								AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart")),
+								PersonId = reader.GetGuid(reader.GetOrdinal("PersonId")),
+								StaffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
 							};
 						LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personToLoad, agentState);
 						return agentState;

@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             			}
 			                             	};
 			var agentState = new ActualAgentState { SendOverMessageBroker = true };
-			var afterSend = MockRepository.GenerateMock<IAfterSend>();
+			var afterSend = MockRepository.GenerateMock<IActualAgentStateHasBeenSent>();
 
 			var asyncMessageSender = MockRepository.GenerateStub<IMessageSender>();
 			_dataSourceResolver.Stub(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists("#Request-add-section");
 		}
 
+		[Given(@"I click to add a new absence request")]
 		[When(@"I click to add a new absence request")]
 		public void WhenIClickToAddANewAbsenceRequest()
 		{
@@ -163,5 +164,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertInputValueUsingJQuery("#Schedule-addRequest-subject-input", subject);
 		}
+
+		[When(@"I change absence to '(.*)'")]
+		public void WhenIChangeAbsenceTo(string absence)
+		{
+			Browser.Interactions.ClickContaining(string.Format(".request-body:nth-child() .request-data-type"), absence);
+		}
+
 	}
 }

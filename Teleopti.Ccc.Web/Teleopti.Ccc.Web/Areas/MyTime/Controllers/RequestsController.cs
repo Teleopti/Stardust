@@ -2,9 +2,11 @@
 using System.Globalization;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -22,18 +24,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
 		private readonly IShiftTradeRequestPersister _shiftTradeRequestPersister;
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
+		private readonly IPermissionProvider _permissionProvider;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
 								IAbsenceRequestPersister absenceRequestPersister, 
 								IShiftTradeRequestPersister shiftTradeRequestPersister,
-								IRespondToShiftTrade respondToShiftTrade)
+								IRespondToShiftTrade respondToShiftTrade, 
+								IPermissionProvider permissionProvider)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
 			_shiftTradeRequestPersister = shiftTradeRequestPersister;
 			_respondToShiftTrade = respondToShiftTrade;
+			_permissionProvider = permissionProvider;
 		}
 
 		[EnsureInPortal]
@@ -55,6 +60,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult RequestDetail(Guid id)
 		{
 			return Json(_requestsViewModelFactory.CreateRequestViewModel(id), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult PersonalAccountPermission()
+		{
+			bool personalAccountPermission = _permissionProvider.HasApplicationFunctionPermission(
+				DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
+
+			return Json(personalAccountPermission, JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult FetchAbsenceAccount(Guid absenceId, DateOnly date)
+		{
+			return Json(_requestsViewModelFactory.GetAbsenceAccountViewModel(absenceId, date), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]

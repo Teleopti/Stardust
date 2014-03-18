@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToTeamSchedule { get; set; }
 	    public bool AccessToViewAllGroupPages { get; set; }
 	    public bool AccessToMatrixReports { get; set; }
+		public bool AccessToPersonalAbsenceAccount { get; set; }
 
 		 /*access for Reports
 		 public bool AccessToAbandomentAndSpeedOfAnswer { get; set; }
@@ -110,6 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToRealTimeAdherenceOverview = false;
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;
+			AccessToPersonalAbsenceAccount = true;
 			/*AccessToRequestsPerAgent = false;
 			AccessToAgentSkills = false;
 			AccessToAbsenceTimePerAgent = false;*/
@@ -249,6 +251,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
                 applicationFunctions = from f in applicationFunctions
                                        where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
                                        select f;
+            if (!AccessToPersonalAbsenceAccount)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount
+									   select f;                          
 			if (!AccessToMatrixReports)
 				applicationFunctions = from f in applicationFunctions
 											  where f.ForeignSource != DefinedForeignSourceNames.SourceMatrix
