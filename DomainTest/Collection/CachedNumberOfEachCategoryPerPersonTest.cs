@@ -53,9 +53,11 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person]).Return(range);
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
 				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//now the key have been added
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 13))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assEmpty);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
+				
 			}
 
 			using (_mocks.Playback())
@@ -92,10 +94,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person1]).Return(range);
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
 				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//add values for another person
 				Expect.Call(_dic[person2]).Return(range);
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
 				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//fire event that removes person1
 				Expect.Call(scheduleDay.Person).Return(person1);
 				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
@@ -139,10 +143,12 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person1]).Return(range);
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
 				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//add values for another person
 				Expect.Call(_dic[person2]).Return(range);
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
 				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				//fire event that removes all
 
 			}
@@ -176,11 +182,13 @@ namespace Teleopti.Ccc.DomainTest.Collection
                 Expect.Call(_person.TerminalDate).Return(dateToMonitor.AddDays(-1));
                 Expect.Call(_range.ScheduledDay(dateToMonitor.AddDays(-1))).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+	            Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
                 Expect.Call(_personAssignment.ShiftCategory).Return(_shiftCategory);
 
                 Expect.Call(_person.TerminalDate).Return(dateToMonitor);
                 Expect.Call(_range.ScheduledDay(dateToMonitor)).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.PersonAssignment(true)).Return(_personAssignment);
+	            Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
                 Expect.Call(_personAssignment.ShiftCategory).Return(_shiftCategory);
             }
 

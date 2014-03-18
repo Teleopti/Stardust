@@ -41,9 +41,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person1]).Return(range);
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
 				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				Expect.Call(_dic[person2]).Return(range);
 				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
-				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assEmpty);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
 			}
 			using (_mocks.Playback())
 			{
