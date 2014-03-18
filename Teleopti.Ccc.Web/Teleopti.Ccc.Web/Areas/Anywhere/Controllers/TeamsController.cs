@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
@@ -25,16 +26,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var teams = _siteRepository.Get(new Guid(siteId)).TeamCollection.ToArray();
 			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
 
-			return Json(teams
-				.Select(
-					team => new TeamViewModel
-					{
-						Id = team.Id.Value.ToString(),
-						Name = team.Description.Name,
-						NumberOfAgents = numberOfAgents[team.Id.Value]
-					}),
-				JsonRequestBehavior.AllowGet
-				);
+			var returnTeams = new List<TeamViewModel>();
+			foreach (var team in teams)
+			{
+				var teamViewModel = new TeamViewModel
+				{
+					Id = team.Id.Value.ToString(),
+					Name = team.Description.Name
+				};
+
+				if (numberOfAgents != null)
+					teamViewModel.NumberOfAgents = numberOfAgents[team.Id.Value];
+
+				returnTeams.Add(teamViewModel);
+			}
+			return Json(returnTeams, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
