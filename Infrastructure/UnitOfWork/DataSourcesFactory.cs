@@ -113,7 +113,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var appCfg = new Configuration();
 			appCfg.SetProperties(settings);
 			setDefaultValuesOnApplicationConf(appCfg);
-			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
 			return appCfg;
 		}
 

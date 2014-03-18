@@ -191,7 +191,6 @@
     <Compile Include="NHibernateConfiguration\IEnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriver.cs" />
     <Compile Include="NHibernateConfiguration\NHibernateConfigurationExtensions.cs" />
-    <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliary.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
     <Compile Include="Foundation\ConstraintViolationException.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
