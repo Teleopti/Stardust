@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			{
 			    if (dateOnly > filteredAgent.TerminalDate) continue;
                 var scheduleDay = _scheduleDictionary[filteredAgent].ScheduledDay(dateOnly);
+				if(!scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) continue;
 				var shiftCategory = scheduleDay.PersonAssignment(true).ShiftCategory;
 				if (shiftCategory == null)
 					continue;
