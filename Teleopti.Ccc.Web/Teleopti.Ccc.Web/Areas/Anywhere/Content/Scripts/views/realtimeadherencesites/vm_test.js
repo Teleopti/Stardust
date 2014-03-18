@@ -66,8 +66,17 @@
 				vm.updateFromNotification(notification);
 
 				assert.equals(vm.sites()[0].OutOfAdherence(), 2);
+			},
+
+			"should go to realtime adherence teams view": function () {
+				var vm = viewModel();
+				var site = { Id: "aguid"};
+				vm.fill([site]);
+
+				vm.sites()[0].openSite();
+
+				assert.equals(window.location.hash, "#realtimeadherenceteams/aguid");
 			}
-			
 		});
 
 	};
