@@ -1,7 +1,7 @@
 ﻿define([
 		'knockout',
 		'lazy',
-		'views/realtimeadherencesite/team'
+		'views/realtimeadherenceteams/team'
 ],
 	function (ko,
 		lazy,

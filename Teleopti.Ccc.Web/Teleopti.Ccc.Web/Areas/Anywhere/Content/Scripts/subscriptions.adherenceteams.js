@@ -1,6 +1,6 @@
 define([
 				'jquery',
-				'messagebroker',
+				'messagebroker'
 ], function (
 			$,
 			messagebroker
@@ -8,14 +8,14 @@ define([
 
 	var startPromise;
 
-	var siteAdherenceSubscription = null;
+	var teamAdherenceSubscription = null;
 
 	var unsubscribeAdherence = function () {
-		if (!siteAdherenceSubscription)
+		if (!teamAdherenceSubscription)
 			return;
 		startPromise.done(function () {
-			messagebroker.unsubscribe(siteAdherenceSubscription);
-			siteAdherenceSubscription = null;
+			messagebroker.unsubscribe(teamAdherenceSubscription);
+			teamAdherenceSubscription = null;
 		});
 	};
 
@@ -28,8 +28,8 @@ define([
 		subscribeAdherence: function (callback) {
 			unsubscribeAdherence();
 			startPromise.done(function () {
-				siteAdherenceSubscription = messagebroker.subscribe({
-					domainType: 'SiteAdherenceMessage',
+				teamAdherenceSubscription = messagebroker.subscribe({
+					domainType: 'TeamAdherenceMessage',
 					callback: callback
 				});
 			});

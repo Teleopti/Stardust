@@ -1,4 +1,4 @@
-﻿define(['buster', 'views/realtimeadherencesite/vm'], function (buster, viewModel) {
+﻿define(['buster', 'views/realtimeadherenceteams/vm'], function (buster, viewModel) {
 	return function () {
 		
 		buster.testCase("real time adherence site view model", {
