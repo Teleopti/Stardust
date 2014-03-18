@@ -71,7 +71,12 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 
 
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
-Given there is an activity named 'Phone'
+Given the current time is '2014-01-21 13:00'
+	And I have a role with
+	| Field                                  | Value             |
+	| Name                                   | Real time analyst |
+	| Access to real time adherence overview | True              |
+And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -84,17 +89,15 @@ Given there is an activity named 'Phone'
 		| Team       | Red        |
 		| Start Date | 2014-01-21 |
 	 And Pierre Baldi has a shift with
-	| Field          | Value      |
-	| Start time     | 12:00      |
-	| End time       | 19:00      |
-	| Activity       | Phone      |
-	| Date           | 2014-01-21 |
+	| Field      | Value             |
+	| Start time | 2014-01-21  12:00 |
+	| End time   | 2014-01-21 19:00  |
+	| Activity   | Phone             |
 	 And Ashley Andeen has a shift with
-		| Field      | Value      |
-		| Start time | 12:00      |
-		| End time   | 19:00      |
-		| Activity   | Phone      |
-		| Date       | 2014-01-21 |
+		| Field      | Value            |
+		| Start time | 2014-01-21 12:00 |
+		| End time   | 2014-01-21 19:00 |
+		| Activity   | Phone            |
 	And there is an alarm with 
 	| Field           | Value    |
 	| Activity        | Phone    |
@@ -107,8 +110,7 @@ Given there is an activity named 'Phone'
 	| Phone state     | Pause        |
 	| Name            | Not adhering |
 	| Staffing effect | -1           |
-	 When the current time is '2014-01-21 13:00'
-	 And I view Real time adherence for site 'Paris'
+	 When I view Real time adherence for site 'Paris'
 	 And 'Pierre Baldi' sets his phone state to 'Pause'
 	 And 'Ashley Andeen' sets her phone state to 'Ready'
 	 Then I should see team 'Green' with 1 of 1 employees out of adherence
