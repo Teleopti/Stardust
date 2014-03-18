@@ -52,39 +52,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 	    public bool AccessToMatrixReports { get; set; }
 		public bool AccessToPersonalAbsenceAccount { get; set; }
 
-		 /*access for Reports
-		 public bool AccessToAbandomentAndSpeedOfAnswer { get; set; }
-		 public bool AccessToAbsenceTimePerAbsence { get; set; }
-		 public bool AccessToActivityTimePerAgent { get; set; }
-		 public bool AccessToAdherencePerAgent { get; set; }
-		 public bool AccessToAdherencePerDay { get; set; }
-		 public bool AccessToAgentQueueMetrics { get; set; }
-		 public bool AccessToAgentQueueStatistics { get; set; }
-		 public bool AccessToAgentMetrics { get; set; }
-		 public bool AccessToAgentStatistics { get; set; }
-		 public bool AccessToAvailabilityPerAgent { get; set; }
-		 public bool AccessToForecastVsActualWorkload { get; set; }
-		 public bool AccessToForecastVsScheduledHours { get; set; }
-		 public bool AccessToImprove { get; set; }
-		 public bool AccessToPreferencePerAgent { get; set; }
-		 public bool AccessToPreferencePerDay { get; set; }
-		 public bool AccessToQueueStatistics { get; set; }
-		 public bool AccessToScheduledAgentsPerActivity { get; set; }
-		 public bool AccessToScheduledAgentsPerIntervalAndTeam { get; set; }
-		 public bool AccessToScheduledOvertimePerAgent { get; set; }
-		 public bool AccessToScheduledTimePerActivity { get; set; }
-		 public bool AccessToScheduledTimePerAgent { get; set; }
-		 public bool AccessToServiceLevelAndAgentsReady { get; set; }
-		 public bool AccessToShiftCategoryAndFullDayAbsencePerAgent { get; set; }
-		 public bool AccessToShiftCategoryAndFullDayAbsencePerDay { get; set; }
-		 public bool AccessToShiftCategoryPerDay { get; set; }
-		 public bool AccessToTeamMetrics { get; set; }
-		 public bool AccessToResReportTimeInStatePerAgent { get; set; }
-
-		 public bool AccessToRequestsPerAgent { get; set; }
-		 public bool AccessToAgentSkills { get; set; }
-		 public bool AccessToAbsenceTimePerAgent { get; set; }*/
-
 		public RoleConfigurable()
 		{
 			Name = DefaultName.Make("A role");
@@ -112,9 +79,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;
 			AccessToPersonalAbsenceAccount = true;
-			/*AccessToRequestsPerAgent = false;
-			AccessToAgentSkills = false;
-			AccessToAbsenceTimePerAgent = false;*/
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -259,21 +223,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 											  where f.ForeignSource != DefinedForeignSourceNames.SourceMatrix
 											  select f;
-				/*if (!AccessToRequestsPerAgent)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ReportRequestsPerAgent
-												  select f;
-				if (!AccessToAgentSkills)
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ReportAgentSkills
-												  select f;
-				if (!AccessToAbsenceTimePerAgent)
-
-				applicationFunctions = from f in applicationFunctions
-											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ReportAbsenceTimePerAgent
-												  select f;*/
-
-
 
 			return applicationFunctions;
 		}

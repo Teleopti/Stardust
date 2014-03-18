@@ -40,12 +40,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click(string.Format("#report-list :nth-child({0})", position));
 		}
 
-		/*[Then(@"The report should be opened in a new window")]
-		public void ThenTheReportShouldBeOpenedInANewWindow()
-		{
-			Browser.Interactions.AssertUrlContains("Selection.aspx");
-		}*/
-
 		[Then(@"The report should not be opened in the same window")]
 		public void ThenTheReportShouldNotBeOpenedInTheSameWindow()
 		{
