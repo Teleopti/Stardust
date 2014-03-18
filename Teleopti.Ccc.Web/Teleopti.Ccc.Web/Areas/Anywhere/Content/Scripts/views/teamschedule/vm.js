@@ -31,7 +31,7 @@ define([
 				second = second.OrderBy();
 				return first == second ? 0 : (first < second ? -1 : 1);
 			});
-		}).extend({ throttle: 1 });
+		}).extend({ throttle: 10 });
 
 		var layers = function() {
 			return lazy(self.Persons())
