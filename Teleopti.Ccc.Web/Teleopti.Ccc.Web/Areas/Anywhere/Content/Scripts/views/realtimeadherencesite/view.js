@@ -3,7 +3,7 @@ define([
 	'knockout',
 		'text!templates/realtimeadherencesite/view.html',
 		'views/realtimeadherencesite/vm',
-		'subscriptions.adherence',
+		'subscriptions.teamadherence',
 		'ajax'
 ], function (
 	ko,
