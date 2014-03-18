@@ -3,13 +3,15 @@ define([
 		'subscriptions.groupschedule',
 		'subscriptions.personschedule',
 		'subscriptions.staffingmetrics',
-		'subscriptions.adherence'
+		'subscriptions.adherenceteams',
+		'subscriptions.adherencesites'
 	], function(
 		$,
 		groupschedule,
 		personschedule,
 		staffingmetrics,
-		adherence
+		adherenceteams,
+		adherencesites
 	) {
 
 		return {
@@ -18,7 +20,8 @@ define([
 					groupschedule.start(),
 					personschedule.start(),
 					staffingmetrics.start(),
-					adherence.start()				
+					adherenceteams.start(),
+					adherencesites.start()
 				);
 			}
 		};
