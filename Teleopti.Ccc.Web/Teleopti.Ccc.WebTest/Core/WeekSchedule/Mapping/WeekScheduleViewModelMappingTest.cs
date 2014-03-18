@@ -340,7 +340,9 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		{
 			var stubs = new StubFactory();
 			var absenceToDisplay = stubs.PersonAbsenceStub();
+			absenceToDisplay.Layer.Payload.Priority = 1;
 			var lowPriorityAbsence = stubs.PersonAbsenceStub();
+			lowPriorityAbsence.Layer.Payload.Priority = 100;
 			var scheduleDay = stubs.ScheduleDayStub(DateTime.Now.Date, SchedulePartView.FullDayAbsence, new[] {absenceToDisplay, lowPriorityAbsence});
 			var projection = stubs.ProjectionStub();
 			var domainData = new WeekScheduleDayDomainData
