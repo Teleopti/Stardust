@@ -52,9 +52,10 @@ $(document).ready(function () {
 		var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel();
 		vm.readAbsenceAccount();
 
+		var today = moment().startOf('day');
 		equal(vm.AbsenceAccountExists(), false);
-		equal(vm.AbsenceAccountPeriodStart().isSame(moment()), true),
-		equal(vm.AbsenceAccountPeriodEnd().isSame(moment()), true),
+		equal(vm.AbsenceAccountPeriodStart().isSame(today), true),
+		equal(vm.AbsenceAccountPeriodEnd().isSame(today), true),
 		equal(vm.AbsenceTrackedAsDay(), false);
 		equal(vm.AbsenceTrackedAsHour(), false);
 		equal(vm.AbsenceUsed(), '0');

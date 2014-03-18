@@ -78,11 +78,13 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 			self.AbsenceRemaining(data.Remaining);
 			self.AbsenceUsed(data.Used);
 		} else {
+			var today = moment().startOf('day');
+
 			self.AbsenceAccountExists(false);
 			self.AbsenceTrackedAsDay(false);
 			self.AbsenceTrackedAsHour(false);
-			self.AbsenceAccountPeriodStart(moment());
-			self.AbsenceAccountPeriodEnd(moment());
+			self.AbsenceAccountPeriodStart(today);
+			self.AbsenceAccountPeriodEnd(today);
 			self.AbsenceUsed("0");
 			self.AbsenceRemaining("0");
 		}
