@@ -425,7 +425,6 @@
     </Compile>
     <Compile Include="Optimization\TeamBlock\DailyTargetValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidator.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\DetermineTeamBlockPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationService.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
