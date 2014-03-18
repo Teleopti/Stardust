@@ -27,11 +27,7 @@
 		that.fill = function(data) {
 			for (var i = 0; i < data.length; i++) {
 				var newSite = site();
-
-				newSite.Id = data[i].Id;
-				newSite.Name = data[i].Name;
-				newSite.NumberOfAgents = data[i].NumberOfAgents;
-
+				newSite.fill(data[i]);
 				that.sites.push(newSite);
 			}
 		};
