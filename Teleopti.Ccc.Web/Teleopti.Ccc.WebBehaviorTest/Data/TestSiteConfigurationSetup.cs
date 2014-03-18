@@ -21,6 +21,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static Uri UrlAuthenticationBridge;
 		public static int PortAuthenticationBridge;
 
+		public static Uri UrlWindowsIdentityProvider;
+		public static int PortWindowsIdentityProvider;
+
 		private static IISExpress _server;
 
 		public static void Setup()
@@ -73,8 +76,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			PortAuthenticationBridge = Port - 1;
 			UrlAuthenticationBridge = new Uri(string.Format("http://localhost:{0}/", PortAuthenticationBridge));
-		}
 
+			PortWindowsIdentityProvider = Port + 1;
+			UrlWindowsIdentityProvider = new Uri(string.Format("http://localhost:{0}/", PortWindowsIdentityProvider));
+		}
 
 		public static void TearDown()
 		{
