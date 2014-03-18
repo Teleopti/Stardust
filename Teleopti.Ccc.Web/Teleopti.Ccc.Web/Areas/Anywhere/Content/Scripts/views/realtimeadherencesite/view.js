@@ -3,11 +3,13 @@ define([
 	'knockout',
 		'text!templates/realtimeadherencesite/view.html',
 		'views/realtimeadherencesite/vm',
+		'subscriptions.adherence',
 		'ajax'
 ], function (
 	ko,
 		view,
 		realTimeAdherenceViewModel,
+		subscriptions,
 		ajax
 	) {
 	var viewModel;
@@ -28,6 +30,10 @@ define([
 				success: function (data) {
 					viewModel.fill(data);
 				}
+			});
+
+			subscriptions.subscribeAdherence(function(notification) {
+				viewModel.updateFromNotification(notification);
 			});
 		},
 	};

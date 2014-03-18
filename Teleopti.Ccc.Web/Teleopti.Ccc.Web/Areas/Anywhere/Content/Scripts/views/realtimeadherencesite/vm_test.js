@@ -21,7 +21,6 @@
 				assert.equals(vm.teams()[1].NumberOfAgents, team2.NumberOfAgents);
 			},
 
-
 			"should update number out of adherence": function () {
 				var vm = viewModel();
 
@@ -29,11 +28,47 @@
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.teams()[0].OutOfAdherence(), 1);
+			},
+
+			"should update number out of adherence on existing team": function () {
+				var vm = viewModel();
+				vm.fill([{ Name: 'Team Green', Id: 'guid1' }]);
+				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
+
+				assert.equals(vm.teams().length, 1);
+				assert.equals(vm.teams()[0].OutOfAdherence(), 1);
+			},
+
+			"should not add when update if there is no team": function () {
+				var vm = viewModel();
+				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
+
+				assert.equals(vm.teams().length, 0);
+			},
+
+			"should set number of agents when fill": function () {
+				var expected = 37;
+				var vm = viewModel();
+				var team = { NumberOfAgents: expected };
+
+				vm.fill([team]);
+
+				assert.equals(vm.teams()[0].NumberOfAgents, expected);
+			},
+
+			"should do update from notification": function () {
+				var vm = viewModel();
+				var notification = {
+					BinaryData: '{"TeamId":"theguid","OutOfAdherence":2}',
+				};
+				var team = { Id: "theguid" };
+				vm.fill([team]);
+
+				vm.updateFromNotification(notification);
+
+				assert.equals(vm.teams()[0].OutOfAdherence(), 2);
 			}
 
-		});
-
-
-		
+		});		
 	};
 });

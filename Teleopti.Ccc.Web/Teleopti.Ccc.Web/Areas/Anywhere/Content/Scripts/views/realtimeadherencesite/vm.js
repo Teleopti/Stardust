@@ -35,6 +35,12 @@
 				existingTeam.OutOfAdherence(data.OutOfAdherence);
 		};
 
+		that.updateFromNotification = function(notification) {
+			var data = JSON.parse(notification.BinaryData);
+			data.Id = data.TeamId;
+			that.update(data);
+		};
+
 		return that;
 	};
 
