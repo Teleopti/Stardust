@@ -41,7 +41,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var personList = new List<IPerson> {person1, person2};
 			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(),
 																			_shiftCategory);
-			var assEmpty = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 
 			using (_mocks.Record())
 			{
@@ -50,9 +49,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person1]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				Expect.Call(_dic[person2]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assEmpty);
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
 			}
 
 			using (_mocks.Playback())
@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var personList = new List<IPerson> { person1 };
 			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(),
 																			_shiftCategory);
-			var assEmpty = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 
 			using (_mocks.Record())
 			{
@@ -84,9 +83,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person1]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				Expect.Call(_dic[person1]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 13))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assEmpty);
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
 			}
 
 			using (_mocks.Playback())
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var personList = new List<IPerson> { person1 };
 			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(),
 																			_shiftCategory);
-			var assEmpty = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
+
 			var dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 
 			using (_mocks.Record())
@@ -122,9 +122,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person1]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				Expect.Call(_dic[person1]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 13))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assEmpty);
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
 				//event is rised
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsPeriod);
 				Expect.Call(dateOnlyAsPeriod.DateOnly).Return(new DateOnly(2013, 09, 12));
@@ -163,11 +164,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Expect.Call(_dic[person1]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(_scheduleDay);
 				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 				Expect.Call(_dic[person1]).Return(_range);
 				Expect.Call(_range.ScheduledDay(new DateOnly(2013, 09, 13))).Return(_scheduleDay);
-				Expect.Call(_scheduleDay.PersonAssignment(true)).Return(assEmpty);
-				//event is rised
-
+				Expect.Call(_scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
 			}
 
 			using (_mocks.Playback())
