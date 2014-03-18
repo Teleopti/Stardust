@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Threading;
 using System.Xml.Linq;
 using System.Linq;
 using log4net;

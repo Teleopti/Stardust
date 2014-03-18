@@ -128,22 +128,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		public void VerifyCreateDropSchemaWorks()
-		{
-			//hard to test
-			Assert.IsNotNull(target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix));
-			//target.CreateSchema(); --nope - will fail if david's script is used
-		}
-
-		[Test]
-		public void VerifyCreateDropSchemaIfNoMatrix()
-		{
-			//hard to test
-			Assert.IsNotNull(target.Create(nHibSettings(), null));
-			//target.CreateSchema(); --nope - will fail if david's script is used
-		}
-
-		[Test]
 		public void VerifyAuthenticationSettingsFileBasedWithEntry()
 		{
 			const string authenticationSettings = @"<authentication><logonMode>win</logonMode> <!-- win or mix --></authentication>";
@@ -187,7 +171,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			Assert.IsInstanceOf<AuthenticationSettings>(res.AuthenticationSettings);
 			Assert.IsTrue(LogOnModeOption.Mix == res.AuthenticationSettings.LogOnMode);
-
 		}
 
 		private static IDictionary<string, string> nHibSettings()
