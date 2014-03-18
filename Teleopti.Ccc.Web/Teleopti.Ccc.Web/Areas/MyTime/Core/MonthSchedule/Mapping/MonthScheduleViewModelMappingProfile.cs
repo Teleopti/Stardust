@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MonthSchedule.Mapping
 						var absenceCollection = s.ScheduleDay.PersonAbsenceCollection();
 						if (absenceCollection.Any())
 						{
-							var absence = absenceCollection.OrderBy(a => a.Layer.Payload.Priority).First();
+							var absence = absenceCollection.OrderBy(a => a.Layer.Payload.Priority).ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a)).First();
 							var name = absence.Layer.Payload.Description.Name;
 							var shortName = absence.Layer.Payload.Description.ShortName;
 							return new AbsenceViewModel
