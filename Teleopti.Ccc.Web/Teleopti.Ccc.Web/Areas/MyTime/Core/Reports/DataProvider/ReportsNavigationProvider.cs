@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		{
 			var data = _sessionSpecificDataProvider.GrabFromCookie();
 			var matrixWebsiteUrl = ConfigurationManager.AppSettings["MatrixWebSiteUrl"];
+			if (!matrixWebsiteUrl.EndsWith("/"))
+				matrixWebsiteUrl += "/";
 			var realBu = data.BusinessUnitId;
 			var reportsList = new List<ReportNavigationItem>();
 			if (_principalAuthorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyReportWeb))
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 				});
 			foreach (var applicationFunction in otherReports)
 			{
-				var url = string.Format(CultureInfo.CurrentCulture, "{0}?ReportId={1}&BuId={2}",
+				var url = string.Format(CultureInfo.CurrentCulture, "{0}Selection.aspx?ReportId={1}&BuId={2}",
 					matrixWebsiteUrl, applicationFunction.ForeignId, realBu);
 
 				reportsList.Add(new ReportNavigationItem
