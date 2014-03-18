@@ -71,12 +71,12 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 
 
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
-Given the current time is '2014-01-21 13:00'
+	Given the current time is '2014-01-21 13:00'
 	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
-And there is an activity named 'Phone'
+	And there is an activity named 'Phone'
 	And there is a site named 'Paris'
 	And there is a team named 'Green' on site 'Paris'
 	And there is a team named 'Red' on site 'Paris'
@@ -89,10 +89,10 @@ And there is an activity named 'Phone'
 		| Team       | Red        |
 		| Start Date | 2014-01-21 |
 	 And Pierre Baldi has a shift with
-	| Field      | Value             |
-	| Start time | 2014-01-21  12:00 |
-	| End time   | 2014-01-21 19:00  |
-	| Activity   | Phone             |
+	| Field      | Value            |
+	| Start time | 2014-01-21 12:00 |
+	| End time   | 2014-01-21 19:00 |
+	| Activity   | Phone            |
 	 And Ashley Andeen has a shift with
 		| Field      | Value            |
 		| Start time | 2014-01-21 12:00 |
