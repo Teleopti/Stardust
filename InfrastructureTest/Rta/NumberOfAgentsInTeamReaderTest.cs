@@ -40,6 +40,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			result[team.Id.Value].Should().Be.EqualTo(2);
 		}
 
+		[Test]
+		public void ShouldReturnEmptyListWhenTeamIsEmpty()
+		{
+			var target = new NumberOfAgentsInTeamReader(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal())), new Now());
+			var result = target.FetchNumberOfAgents(new ITeam[] {});
+
+			result.Should().Be.Empty();
+		}
+
 		private PersonPeriod createPersonPeriodAndPersistDependencies(ITeam team)
 		{
 			var ptp = new PartTimePercentage(" ");

@@ -49,6 +49,8 @@ group by a.Team";
 		public IDictionary<Guid, int> FetchNumberOfAgents(ITeam[] teams)
 		{
 			var ret = new Dictionary<Guid, int>();
+			if (!teams.Any()) return ret;
+
 			var queryResult = _currentUnitOfWork.Session().CreateSQLQuery(sqlQuery)
 				.SetParameterList("teams", teams.Select(x => x.Id.Value))
 				.SetDateTime("now", _now.UtcDateTime())
