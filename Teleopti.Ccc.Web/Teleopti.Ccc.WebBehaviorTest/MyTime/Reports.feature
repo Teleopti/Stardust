@@ -32,8 +32,8 @@ Scenario: Open standard report
 	And I click the report at position '3' in the list
 	Then The report should not be opened in the same window
 	
-@ignore
-Scenario: Open MyReport 
-	Given  I have permission to MyReport
-	When I click 'MyReport'
-	Then I should see my report displayed in the same window
+Scenario: Open MyReport
+	When I am viewing an application page
+	And I click reports menu
+	And I click the report at position '1' in the list
+	Then I should see a user-friendly message explaining I dont have anything to view
