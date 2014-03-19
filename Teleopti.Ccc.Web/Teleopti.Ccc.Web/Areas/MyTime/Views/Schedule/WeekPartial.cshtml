@@ -60,10 +60,11 @@
             </span>
         </div>
     </div>
-    <ul class="list-inline navbar-nav" style="margin-top: 15px">
-        <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-        <li><a href="#" id="week-schedule-month" data-bind="    click: month">@Resources.MonthView</a></li>
-    </ul>
+	<ul class="nav navbar-nav">
+		<li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+		<li><a href="#" id="week-schedule-week" data-bind="click: week">@Resources.Week</a></li>
+		<li><a href="#" id="week-schedule-month" data-bind="click: month">@Resources.Month</a></li>
+	</ul>
 </div>
 <ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
 	<li data-bind="visible: overtimeAvailabilityPermission, css: { active: overtimeAvailabilityActive }">

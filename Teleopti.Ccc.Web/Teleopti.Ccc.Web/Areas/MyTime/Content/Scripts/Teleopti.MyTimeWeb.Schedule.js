@@ -152,6 +152,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		    Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 		};
 
+		self.week = function(date) {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(date.format('YYYY-MM-DD')));
+		};
+		
 		self.month = function () {
 		    var d = self.selectedDate();
 		    Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
