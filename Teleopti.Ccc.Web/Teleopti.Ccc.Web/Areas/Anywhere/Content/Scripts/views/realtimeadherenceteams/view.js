@@ -21,13 +21,13 @@
 		},
 
 		display: function (options) {
-
+			var siteId = options.id;
 			viewModel = realTimeAdherenceViewModel();
 
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			ajax.ajax({
-				url: "Teams/ForSite?siteId=" + options.id,
+				url: "Teams/ForSite?siteId=" + siteId,
 				success: function (data) {
 					viewModel.fill(data);
 				}
@@ -35,7 +35,7 @@
 
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
-			});
+			}, siteId);
 		},
 	};
 });

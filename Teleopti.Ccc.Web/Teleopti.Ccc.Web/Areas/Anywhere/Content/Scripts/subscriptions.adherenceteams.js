@@ -25,11 +25,12 @@ define([
 			return startPromise;
 		},
 
-		subscribeAdherence: function (callback) {
+		subscribeAdherence: function (callback, siteId) {
 			unsubscribeAdherence();
 			startPromise.done(function () {
 				teamAdherenceSubscription = messagebroker.subscribe({
 					domainType: 'TeamAdherenceMessage',
+					domainReferenceId: siteId,
 					callback: callback
 				});
 			});
