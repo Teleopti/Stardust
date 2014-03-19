@@ -67,6 +67,19 @@ define([
 			self.GroupPages.push.apply(self.GroupPages, newItems);
 		};
 
+		var personForId = function(id, personArray) {
+			if (!id)
+				return undefined;
+			var personvm = lazy(personArray)
+				.filter(function(x) { return x.Id == id; })
+				.first();
+			if (!personvm) {
+				personvm = new personViewModel({ Id: id });
+				personArray.push(personvm);
+			}
+			return personvm;
+		};
+
 		this.UpdateSchedules = function (data, timeLine) {
 			// data might include the same person more than once, with data for more than one day
 			
@@ -78,8 +91,7 @@ define([
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.Date();
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
-				var personvm = new personViewModel({ Id: schedule.PersonId });
-				personArray.push(personvm);
+				var personvm = personForId(schedule.PersonId, personArray);
 				personvm.AddData(schedule, timeLine);
 			}
 			self.Persons.push.apply(self.Persons, personArray);
