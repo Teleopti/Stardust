@@ -789,6 +789,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
+    <Content Include="Areas\Anywhere\Content\Styles\realtimeadherence.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
