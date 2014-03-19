@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod,
 				                                                       selectedPersons, schedulePartModifyAndRollbackService,
-				                                                       resourceCalculateDelayer, schedulingResultStateHolder);
+				                                                       resourceCalculateDelayer, schedulingResultStateHolder, null);
 				if (!success)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);

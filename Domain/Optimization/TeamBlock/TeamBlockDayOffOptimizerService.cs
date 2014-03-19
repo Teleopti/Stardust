@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 				                                                        selectedPersons, rollbackService, resourceCalculateDelayer,
-				                                                        schedulingResultStateHolder);
+				                                                        schedulingResultStateHolder, null);
 				if (!success)
 					return false;
 			}
