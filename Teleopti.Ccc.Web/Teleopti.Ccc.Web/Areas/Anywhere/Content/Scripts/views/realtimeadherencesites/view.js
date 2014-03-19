@@ -1,9 +1,9 @@
 ﻿
 define([
 		'knockout',
-		'text!templates/realtimeadherence/view.html',
-		'views/realtimeadherence/vm',
-		'subscriptions.adherence',
+		'text!templates/realtimeadherencesites/view.html',
+		'views/realtimeadherencesites/vm',
+		'subscriptions.adherencesites',
 		'errorview',
 		'ajax'
 ], function (

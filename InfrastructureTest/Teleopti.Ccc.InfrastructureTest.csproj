@@ -247,7 +247,6 @@
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactoryTest.cs" />
     <Compile Include="NHibernateConfiguration\HybridWebSessionContextTest.cs" />
     <Compile Include="NHibernateConfiguration\PerformanceTest.cs" />
-    <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliaryTest.cs" />
     <Compile Include="NHibernateConfiguration\HashedStringTest.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingTypeTest.cs" />
     <Compile Include="Foundation\LogOnOffTest.cs" />
@@ -382,6 +381,7 @@
     <Compile Include="Repositories\WorkflowControlSetRepositoryTest.cs" />
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingActivityRepositoryTest.cs" />
+    <Compile Include="Rta\NumberOfAgentsInTeamReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReaderTest.cs" />
     <Compile Include="Rta\PersonOrganizationReaderTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />

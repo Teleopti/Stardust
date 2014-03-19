@@ -1,5 +1,4 @@
-﻿using System.Data.SqlClient;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork

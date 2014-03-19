@@ -1,13 +1,15 @@
 ﻿
 define([
 	'knockout',
-		'text!templates/realtimeadherencesite/view.html',
-		'views/realtimeadherencesite/vm',
+		'text!templates/realtimeadherenceteams/view.html',
+		'views/realtimeadherenceteams/vm',
+		'subscriptions.adherenceteams',
 		'ajax'
 ], function (
 	ko,
 		view,
 		realTimeAdherenceViewModel,
+		subscriptions,
 		ajax
 	) {
 	var viewModel;
@@ -28,6 +30,10 @@ define([
 				success: function (data) {
 					viewModel.fill(data);
 				}
+			});
+
+			subscriptions.subscribeAdherence(function(notification) {
+				viewModel.updateFromNotification(notification);
 			});
 		},
 	};

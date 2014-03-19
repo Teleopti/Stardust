@@ -288,16 +288,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoAnywhereRealTimeAdherenceOverview()
 		{
 			GoToWaitForUrlAssert(
-				"Anywhere#realtimeadherence",
-				"Anywhere#realtimeadherence",
+				"Anywhere#realtimeadherencesites",
+				"Anywhere#realtimeadherencesites",
 				new ApplicationStartupTimeout());
 		}
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid siteId)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#realtimeadherencesite/{0}", siteId),
-				"Anywhere#realtimeadherence",
+				string.Format("Anywhere#realtimeadherenceteams/{0}", siteId),
+				"Anywhere#realtimeadherenceteams",
 				new ApplicationStartupTimeout());
 		}
 

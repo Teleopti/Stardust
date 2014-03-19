@@ -747,10 +747,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherence.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
@@ -765,7 +766,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\Tests.html" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
@@ -777,12 +779,12 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\site.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\site.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />
@@ -792,8 +794,8 @@
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesite\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherence\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.js" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.js" />

@@ -111,8 +111,13 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			IList<IDataSource> dataSources = new List<IDataSource>();
 			foreach (string file in Directory.GetFiles(xmlDirectory, "*.nhib.xml"))
 			{
+				XElement element = XElement.Load(file);
+				if (element.Name != "datasource")
+				{
+					throw new DataSourceException(@"Missing <dataSource> in file " + file);
+				}
 				IDataSource dataSource;
-				if (DataSourcesFactory.TryCreate(file, out dataSource))
+				if (DataSourcesFactory.TryCreate(element, out dataSource))
 				{
 					dataSource.AuthenticationTypeOption = AuthenticationTypeOption.Application | AuthenticationTypeOption.Windows;
 					dataSource.OriginalFileName = file;

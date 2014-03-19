@@ -115,7 +115,13 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		public void ShouldMapAbsenceShortName()
 		{
 			var stubs = new StubFactory();
-			var personAbsence = new PersonAbsence(new Person(), new Scenario(" "), new AbsenceLayer(new Absence { Description = new Description(" ", "IL") }, new DateTimePeriod()));
+			var scenario = new Scenario(" ");
+			var personAbsence0 = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description(" ", "FI") }, new DateTimePeriod()));
+			personAbsence0.Layer.Payload.Priority = 1;
+			var personAbsence = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description(" ", "IL") }, new DateTimePeriod()));
+			personAbsence.Layer.Payload.Priority = 1;
+			var personAbsence2 = new PersonAbsence(new Person(), scenario, new AbsenceLayer(new Absence { Description = new Description(" ", "HO") }, new DateTimePeriod()));
+			personAbsence2.Layer.Payload.Priority = 100;
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.FullDayAbsence, personAbsence);
 			var monthDomainData = new MonthScheduleDomainData { Days = new[] { new MonthScheduleDayDomainData { ScheduleDay = scheduleDay } }, CurrentDate = DateOnly.Today };
 

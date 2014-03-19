@@ -92,12 +92,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			ExceptionToConsole(
 				() =>
-					{
-						if (allowCreateByNHib && IniFileInfo.CreateByNHib)
-							dataSourceFactory.CreateSchema();
-						else
-							database.CreateSchemaByDbManager();
-					},
+				{
+					if (allowCreateByNHib && IniFileInfo.CreateByNHib)
+							throw new NotSupportedException("not supported anymore! (?)");
+					database.CreateSchemaByDbManager();
+				},
 				"Failed to create database schema {0}!", database.ConnectionString
 				);
 		}

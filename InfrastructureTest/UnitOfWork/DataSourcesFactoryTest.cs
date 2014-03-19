@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
-using System.Xml;
 using System.Xml.Linq;
 using NHibernate.Engine;
 using NHibernate.Transaction;
@@ -21,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	public class DataSourcesFactoryTest
 	{
 		private IDataSourcesFactory target;
-		private string testFile;
 		private IEnversConfiguration enversConfiguration;
 
 		[SetUp]
@@ -29,28 +26,15 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			enversConfiguration = MockRepository.GenerateMock<IEnversConfiguration>();
 			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
-			string currDirectory = Directory.GetCurrentDirectory();
-			testFile = currDirectory + "test.hbm.xml";
-		}
-
-		[TearDown]
-		public void Teardown()
-		{
-			if (File.Exists(testFile))
-				File.Delete(testFile);
 		}
 
 		[Test]
 		public void VerifyFileBased()
 		{
 			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
-
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(xmlText("test", correctMatrix));
-			}
+			var xElement = xmlText("test", correctMatrix);
 			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
+			bool success = target.TryCreate(xElement, out res);
 			wasSuccess(success);
 			Assert.AreEqual("test", res.Application.Name);
 			Assert.AreEqual("matrixName", res.Statistic.Name);
@@ -62,21 +46,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void VerifyXmlBased()
 		{
-			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
+			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" +
+			                       ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
-			string xmlString = xmlText("test", correctMatrix);
+			XElement nhibernateXmlConfiguration = xmlText("test", correctMatrix);
+			IDataSource res;
+			target.TryCreate(nhibernateXmlConfiguration, out res);
+			Assert.AreEqual("test", res.Application.Name);
+			Assert.AreEqual("matrixName", res.Statistic.Name);
+			Assert.IsNull(res.OriginalFileName);
 
-			using (var xmlReader = new XmlTextReader(xmlString, XmlNodeType.Document, null))
-			{
-				XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
-				IDataSource res = target.Create(nhibernateXmlConfiguration);
-				Assert.AreEqual("test", res.Application.Name);
-				Assert.AreEqual("matrixName", res.Statistic.Name);
-				Assert.IsNull(res.OriginalFileName);
-
-				Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
-				Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
-			}
+			Assert.IsInstanceOf<NHibernateUnitOfWorkFactory>(res.Application);
+			Assert.IsInstanceOf<NHibernateUnitOfWorkMatrixFactory>(res.Statistic);
 		}
 
 		[Test]
@@ -85,13 +66,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			target = new DataSourcesFactory(enversConfiguration, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest());
 			string correctMatrix = @"<matrix name=""matrixName""><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
-			string xmlString = xmlText("test", correctMatrix);
+			var nhibernateXmlConfiguration = xmlText("test", correctMatrix);
 
-			XmlTextReader xmlReader = new XmlTextReader(xmlString, XmlNodeType.Document, null);
-
-			XElement nhibernateXmlConfiguration = XElement.Load(xmlReader);
-
-			IDataSource res = target.Create(nhibernateXmlConfiguration);
+			IDataSource res;
+			target.TryCreate(nhibernateXmlConfiguration, out res);
 			var sessionFactory = (ISessionFactoryImplementor)((NHibernateUnitOfWorkFactory)res.Application).SessionFactory;
 			Assert.IsInstanceOf<AdoNetTransactionFactory>(sessionFactory.TransactionFactory);
 		}
@@ -101,12 +79,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			string matrix = @"<matrix><connectionString>" + ConnectionStringHelper.ConnectionStringUsedInTestsMatrix + @"</connectionString></matrix>";
 
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(xmlText(string.Empty, matrix));
-			}
 			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
+			bool success = target.TryCreate(xmlText(string.Empty, matrix), out res);
 			wasSuccess(success);
 			Assert.AreEqual(DataSourcesFactory.NoDataSourceName, res.Application.Name);
 			Assert.AreEqual(DataSourcesFactory.NoDataSourceName, res.Statistic.Name);
@@ -114,45 +88,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		[Test]
 		[ExpectedException(typeof(DataSourceException))]
-		public void VerifyDataSourceElementExists()
+		public void VerifyMissingSesssionFactoryElement()
 		{
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(@"<gurka></gurka>");
-			}
 			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
-			wasSuccess(success);
-		}
-
-
-		[Test]
-		[ExpectedException(typeof(DataSourceException))]
-		public void VerifyConnectionStringExists()
-		{
-			const string missingConnectionString = @"<matrix name=""matrixName""></matrix>";
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(xmlText("test", missingConnectionString));
-			}
-			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
-			wasSuccess(success);
-		}
-
-
-		[Test]
-		[ExpectedException(typeof(DataSourceException))]
-		public void VerifyConnectionStringIsNotEmpty()
-		{
-			const string emptyConnectionString = @"<matrix name=""matrixName""><connectionString>  </connectionString></matrix>";
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(xmlText("test", emptyConnectionString));
-			}
-			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
-			wasSuccess(success);
+			target.TryCreate(XElement.Parse("<gurka></gurka>"), out res);
 		}
 
 		[Test]
@@ -189,32 +128,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		}
 
 		[Test]
-		public void VerifyCreateDropSchemaWorks()
-		{
-			//hard to test
-			Assert.IsNotNull(target.Create(nHibSettings(), ConnectionStringHelper.ConnectionStringUsedInTestsMatrix));
-			//target.CreateSchema(); --nope - will fail if david's script is used
-		}
-
-		[Test]
-		public void VerifyCreateDropSchemaIfNoMatrix()
-		{
-			//hard to test
-			Assert.IsNotNull(target.Create(nHibSettings(), null));
-			//target.CreateSchema(); --nope - will fail if david's script is used
-		}
-
-		[Test]
 		public void VerifyAuthenticationSettingsFileBasedWithEntry()
 		{
 			const string authenticationSettings = @"<authentication><logonMode>win</logonMode> <!-- win or mix --></authentication>";
-
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(xmlTextWithAuthenticationSettings(authenticationSettings));
-			}
+			var xmlElement = xmlTextWithAuthenticationSettings(authenticationSettings);
 			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
+			bool success = target.TryCreate(xmlElement, out res);
 			wasSuccess(success);
 
 			Assert.IsInstanceOf<AuthenticationSettings>(res.AuthenticationSettings);
@@ -227,29 +146,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			const string authenticationSettings = @"<authentication><logonMode>win</logonMode> <!-- win or mix --></authentication>";
 
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(nonValidXmlTextWithAuthenticationSettings(authenticationSettings));
-			}
 			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
-			wasSuccess(success);
+			target.TryCreate(nonValidXmlTextWithAuthenticationSettings(authenticationSettings), out res)
+				.Should().Be.False();
 		}
-
-
-
 
 		[Test]
 		public void VerifyAuthenticationSettingsFileBasedWithoutEntry()
 		{
 			string authenticationSettings = string.Empty;
 
-			using (StreamWriter file1 = new StreamWriter(testFile))
-			{
-				file1.WriteLine(xmlTextWithAuthenticationSettings(authenticationSettings));
-			}
 			IDataSource res;
-			bool success = target.TryCreate(testFile, out res);
+			bool success = target.TryCreate(xmlTextWithAuthenticationSettings(authenticationSettings), out res);
 			wasSuccess(success);
 
 			Assert.IsInstanceOf<AuthenticationSettings>(res.AuthenticationSettings);
@@ -263,7 +171,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			Assert.IsInstanceOf<AuthenticationSettings>(res.AuthenticationSettings);
 			Assert.IsTrue(LogOnModeOption.Mix == res.AuthenticationSettings.LogOnMode);
-
 		}
 
 		private static IDictionary<string, string> nHibSettings()
@@ -278,10 +185,10 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			return ret;
 		}
 
-		private static string xmlText(string applicationDataSourceName,
+		private static XElement xmlText(string applicationDataSourceName,
 											 string matrixInfo)
 		{
-			return string.Concat(
+			var str =  string.Concat(
 				 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 						 <datasource>
 						  <hibernate-configuration  xmlns=""urn:nhibernate-configuration-2.2"" >
@@ -300,11 +207,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 						  ", matrixInfo, @"
 						</datasource>
 					 ");
+			return XElement.Parse(str);
 		}
 
-		private static string xmlTextWithAuthenticationSettings(string authenticationSettings)
+		private static XElement xmlTextWithAuthenticationSettings(string authenticationSettings)
 		{
-			return string.Concat(
+			var str = string.Concat(
 				 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 						 <datasource>
 						  <hibernate-configuration  xmlns=""urn:nhibernate-configuration-2.2"" >
@@ -326,11 +234,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 						  ", authenticationSettings, @"
 						</datasource>
 					 ");
+			return XElement.Parse(str);
 		}
 
-		private static string nonValidXmlTextWithAuthenticationSettings(string authenticationSettings)
+		private static XElement nonValidXmlTextWithAuthenticationSettings(string authenticationSettings)
 		{
-			return string.Concat(
+			var str = string.Concat(
 				 @"<?xml version=""1.0"" encoding=""utf-8"" ?>
 						 <datasource>
 						  <hibernate-configuration  xmlns=""urn:nhibernate-configuration-2.2"" >
@@ -352,12 +261,13 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 						  ", authenticationSettings, @"
 						</datasource>
 					 ");
+			return XElement.Parse(str);
 		}
 
-		private void wasSuccess(bool success)
+		private void wasSuccess(bool result)
 		{
+			result.Should().Be.True();
 			enversConfiguration.AssertWasCalled(x => x.Configure(null), options => options.IgnoreArguments());
-			success.Should().Be.EqualTo(success);
 		}
 	}
 }

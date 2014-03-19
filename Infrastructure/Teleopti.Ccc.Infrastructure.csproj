@@ -191,7 +191,6 @@
     <Compile Include="NHibernateConfiguration\IEnversConfiguration.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriver.cs" />
     <Compile Include="NHibernateConfiguration\NHibernateConfigurationExtensions.cs" />
-    <Compile Include="NHibernateConfiguration\SqlServerProgrammabilityAuxiliary.cs" />
     <Compile Include="NHibernateConfiguration\ColorNumber.cs" />
     <Compile Include="Foundation\ConstraintViolationException.cs" />
     <Compile Include="NHibernateConfiguration\DateOnlyMappingType.cs" />
@@ -275,6 +274,7 @@
     <Compile Include="Rta\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="Rta\IPersonOrganizationReader.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReader.cs" />
+    <Compile Include="Rta\NumberOfAgentsInTeamReader.cs" />
     <Compile Include="Rta\PersonOrganizationData.cs" />
     <Compile Include="Rta\PersonOrganizationReader.cs" />
     <Compile Include="UnitOfWork\ClearEvents.cs" />

@@ -350,7 +350,6 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockShiftCategoryLimitationValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockSameTimeZoneValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidatorTest.cs" />
-    <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlockTest.cs" />
