@@ -1,9 +1,5 @@
-﻿using System;
-using Newtonsoft.Json;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Client;
-using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {

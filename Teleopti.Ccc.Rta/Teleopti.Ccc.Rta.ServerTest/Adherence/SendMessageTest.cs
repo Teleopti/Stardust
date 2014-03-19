@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Configuration;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -9,7 +7,6 @@ using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.ServerTest.Adherence
