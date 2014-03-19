@@ -225,6 +225,7 @@
 			this.numericUpDownDaysOffPerWeekMin.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDownDaysOffPerWeekMin.TabIndex = 3;
 			this.numericUpDownDaysOffPerWeekMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownDaysOffPerWeekMin.ValueChanged += new System.EventHandler(this.numericUpDownDaysOffPerWeekMinValueChanged);
 			// 
 			// label2
 			// 
@@ -244,6 +245,7 @@
 			this.numericUpDownDaysOffPerWeekMax.Size = new System.Drawing.Size(41, 20);
 			this.numericUpDownDaysOffPerWeekMax.TabIndex = 5;
 			this.numericUpDownDaysOffPerWeekMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownDaysOffPerWeekMax.ValueChanged += new System.EventHandler(this.numericUpDownDaysOffPerWeekMaxValueChanged);
 			// 
 			// checkBoxConsecutiveDaysOff
 			// 
@@ -275,6 +277,7 @@
 			this.numericUpDownConsDayOffMin.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDownConsDayOffMin.TabIndex = 8;
 			this.numericUpDownConsDayOffMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownConsDayOffMin.ValueChanged += new System.EventHandler(this.numericUpDownConsDayOffMinValueChanged);
 			// 
 			// label3
 			// 
@@ -294,6 +297,7 @@
 			this.numericUpDownConsDayOffMax.Size = new System.Drawing.Size(41, 20);
 			this.numericUpDownConsDayOffMax.TabIndex = 10;
 			this.numericUpDownConsDayOffMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownConsDayOffMax.ValueChanged += new System.EventHandler(this.numericUpDownConsDayOffMaxValueChanged);
 			// 
 			// checkBoxConsecutiveWorkDays
 			// 
@@ -325,6 +329,7 @@
 			this.numericUpDownConsWorkDaysMin.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDownConsWorkDaysMin.TabIndex = 13;
 			this.numericUpDownConsWorkDaysMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownConsWorkDaysMin.ValueChanged += new System.EventHandler(this.numericUpDownConsWorkDaysMinValueChanged);
 			// 
 			// label5
 			// 
@@ -344,6 +349,7 @@
 			this.numericUpDownConsWorkDaysMax.Size = new System.Drawing.Size(41, 20);
 			this.numericUpDownConsWorkDaysMax.TabIndex = 15;
 			this.numericUpDownConsWorkDaysMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownConsWorkDaysMax.ValueChanged += new System.EventHandler(this.numericUpDownConsWorkDaysMaxValueChanged);
 			// 
 			// checkBoxFullWeekEndsOff
 			// 
@@ -375,6 +381,7 @@
 			this.numericUpDownFullWeekendsOffMin.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDownFullWeekendsOffMin.TabIndex = 18;
 			this.numericUpDownFullWeekendsOffMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownFullWeekendsOffMin.ValueChanged += new System.EventHandler(this.numericUpDownFullWeekendsOffMinValueChanged);
 			// 
 			// label9
 			// 
@@ -394,6 +401,7 @@
 			this.numericUpDownFullWeekendsOffMax.Size = new System.Drawing.Size(41, 20);
 			this.numericUpDownFullWeekendsOffMax.TabIndex = 20;
 			this.numericUpDownFullWeekendsOffMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownFullWeekendsOffMax.ValueChanged += new System.EventHandler(this.numericUpDownFullWeekendsOffMaxValueChanged);
 			// 
 			// checkBoxWeekEndDaysOff
 			// 
@@ -425,6 +433,7 @@
 			this.numericUpDownWeekEndDaysOffMin.Size = new System.Drawing.Size(40, 20);
 			this.numericUpDownWeekEndDaysOffMin.TabIndex = 23;
 			this.numericUpDownWeekEndDaysOffMin.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownWeekEndDaysOffMin.ValueChanged += new System.EventHandler(this.numericUpDownWeekEndDaysOffMinValueChanged);
 			// 
 			// label11
 			// 
@@ -444,6 +453,7 @@
 			this.numericUpDownWeekEndDaysOffMax.Size = new System.Drawing.Size(41, 20);
 			this.numericUpDownWeekEndDaysOffMax.TabIndex = 25;
 			this.numericUpDownWeekEndDaysOffMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.numericUpDownWeekEndDaysOffMax.ValueChanged += new System.EventHandler(this.numericUpDownWeekEndDaysOffMaxValueChanged);
 			// 
 			// tableLayoutPanel20
 			// 
@@ -467,7 +477,7 @@
 			// 
 			this.label0.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.label0.AutoSize = true;
-			this.label0.Location = new System.Drawing.Point(3, 5);
+			this.label0.Location = new System.Drawing.Point(313, 5);
 			this.label0.Name = "label0";
 			this.label0.Size = new System.Drawing.Size(15, 13);
 			this.label0.TabIndex = 25;
@@ -496,9 +506,9 @@
 			// 
 			this.checkBoxKeepExistingDaysOff.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.checkBoxKeepExistingDaysOff.AutoSize = true;
-			this.checkBoxKeepExistingDaysOff.Location = new System.Drawing.Point(313, 3);
+			this.checkBoxKeepExistingDaysOff.Location = new System.Drawing.Point(3, 3);
 			this.checkBoxKeepExistingDaysOff.Name = "checkBoxKeepExistingDaysOff";
-			this.checkBoxKeepExistingDaysOff.Size = new System.Drawing.Size(98, 17);
+			this.checkBoxKeepExistingDaysOff.Size = new System.Drawing.Size(135, 17);
 			this.checkBoxKeepExistingDaysOff.TabIndex = 23;
 			this.checkBoxKeepExistingDaysOff.Text = "xxKeepExistingDaysOff";
 			this.checkBoxKeepExistingDaysOff.UseVisualStyleBackColor = true;
