@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
@@ -14,7 +17,7 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			_organizationForPerson = organizationForPerson;
 		}
 
-		public AggregatedValues Aggregate(IActualAgentState actualAgentState)
+		public Notification CreateNotification(IActualAgentState actualAgentState)
 		{
 			if (_organizationForPerson == null) return null;
 
@@ -29,7 +32,25 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			}
 
 			var changed = siteState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			return changed ? _siteAdherences[siteId] : null;
+			return changed
+				? createSiteNotification(_siteAdherences[siteId], actualAgentState.BusinessUnit)
+				: null;
+		}
+
+		private static Notification createSiteNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
+		{
+			var siteAdherenceMessage = new SiteAdherenceMessage
+			{
+				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
+			};
+			return new Notification
+			{
+				BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage),
+				BusinessUnitId = businessUnitId.ToString(),
+				DomainType = "SiteAdherenceMessage",
+				DomainId = aggregatedValues.Key.ToString()
+			};
+			
 		}
 	}
 }

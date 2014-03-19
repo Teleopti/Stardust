@@ -86,5 +86,21 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().OutOfAdherence.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldSetSiteIdAsDomainReferenceId()
+		{
+			var siteId = Guid.NewGuid();
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			organizationForPerson.Expect(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
+				.Return(new PersonOrganizationData { SiteId = siteId });
+
+			var target = new AdherenceAggregator(broker, organizationForPerson);
+			target.Invoke(new ActualAgentState());
+
+			broker.LastTeamNotification.DomainReferenceId
+				.Should().Be.EqualTo(siteId.ToString());
+		}
 	}
 }

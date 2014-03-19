@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
@@ -14,12 +17,13 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			_organizationForPerson = organizationForPerson;
 		}
 
-		public AggregatedValues Aggregate(IActualAgentState actualAgentState)
+		public Notification CreateNotification(IActualAgentState actualAgentState)
 		{
 			if (_organizationForPerson == null) return null;
 
 			var personId = actualAgentState.PersonId;
-			var teamId = _organizationForPerson.GetOrganization(personId).TeamId;
+			var personOrganizationData = _organizationForPerson.GetOrganization(personId);
+			var teamId = personOrganizationData.TeamId;
 
 			AggregatedValues teamState;
 			if (!_teamAdherences.TryGetValue(teamId, out teamState))
@@ -28,7 +32,26 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 				_teamAdherences[teamId] = teamState;
 			}
 			var changed = teamState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			return changed ? teamState : null;
+			return changed
+				? createTeamNotification(_teamAdherences[teamId], actualAgentState.BusinessUnit, personOrganizationData.SiteId)
+				: null;
+		}
+
+		private static Notification createTeamNotification(AggregatedValues aggregatedValues, Guid businessUnitId, Guid siteId)
+		{
+			var teamAdherenceMessage = new TeamAdherenceMessage
+			{
+				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
+			};
+
+			return new Notification
+			{
+				BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage),
+				BusinessUnitId = businessUnitId.ToString(),
+				DomainType = "TeamAdherenceMessage",
+				DomainId = aggregatedValues.Key.ToString(),
+				DomainReferenceId = siteId.ToString()
+			};
 		}
 	}
 }

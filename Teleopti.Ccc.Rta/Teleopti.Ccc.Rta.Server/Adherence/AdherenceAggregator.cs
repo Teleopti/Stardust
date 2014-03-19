@@ -22,42 +22,13 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 
 		public void Invoke(IActualAgentState actualAgentState)
 		{
-			var siteAdherence = _siteAdherenceAggregator.Aggregate(actualAgentState);
+			var siteAdherence = _siteAdherenceAggregator.CreateNotification(actualAgentState);
 			if (siteAdherence != null)
-				_messageSender.SendNotification(createSiteNotification(siteAdherence, actualAgentState.BusinessUnit));
+				_messageSender.SendNotification(siteAdherence);
 
-			var teamAdherence = _teamAdherenceAggregator.Aggregate(actualAgentState);
+			var teamAdherence = _teamAdherenceAggregator.CreateNotification(actualAgentState);
 			if (teamAdherence != null)
-				_messageSender.SendNotification(createTeamNotification(teamAdherence, actualAgentState.BusinessUnit));
-		}
-
-		private static Notification createTeamNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
-		{
-			var teamAdherenceMessage = new TeamAdherenceMessage
-			{
-				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
-			};
-			return createNotification("TeamAdherenceMessage", teamAdherenceMessage, businessUnitId, aggregatedValues);
-		}
-
-		private static Notification createSiteNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
-		{
-			var siteAdherenceMessage = new SiteAdherenceMessage
-			{
-				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
-			};
-			return createNotification("SiteAdherenceMessage", siteAdherenceMessage, businessUnitId, aggregatedValues);
-		}
-
-		private static Notification createNotification(string domainType, object message, Guid businessUnitId, AggregatedValues aggregatedValues)
-		{
-			return new Notification
-			{
-				BinaryData = JsonConvert.SerializeObject(message),
-				BusinessUnitId = businessUnitId.ToString(),
-				DomainType = domainType,
-				DomainId = aggregatedValues.Key.ToString()
-			};
+				_messageSender.SendNotification(teamAdherence);
 		}
 	}
 }
