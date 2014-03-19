@@ -5,10 +5,12 @@ Project("{D2ABAB84-BF74-430A-B69E-9DC6D40DDA17}") = "TeleoptiAnalytics", "Teleop
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		CreateDatabase2005x|Default = CreateDatabase2005x|Default
+		CreateDatabase2005|Default = CreateDatabase2005|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{10702025-0ACF-414D-9AC0-2AD705E87AB4}.CreateDatabase2005x|Default.ActiveCfg = CreateDatabase2005
+		{10702025-0ACF-414D-9AC0-2AD705E87AB4}.CreateDatabase2005|Default.ActiveCfg = CreateDatabase2005
+		{10702025-0ACF-414D-9AC0-2AD705E87AB4}.CreateDatabase2005|Default.Build.0 = CreateDatabase2005
+		{10702025-0ACF-414D-9AC0-2AD705E87AB4}.CreateDatabase2005|Default.Deploy.0 = CreateDatabase2005
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
