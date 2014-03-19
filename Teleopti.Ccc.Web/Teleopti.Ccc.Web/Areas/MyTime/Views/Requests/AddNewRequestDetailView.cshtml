@@ -21,9 +21,14 @@
     </select>
 </div>
 <div>
-	<span class="input-append" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
-        <input class="request-new-datefrom" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}" type="text" />
-		<span class="add-on"><i class="icon-th"></i></span>
+	<span class="input-append">
+		<![if (!IE)|(gt IE 8)]>
+		<input class="request-new-datefrom" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+		<![endif]>
+		<!--[if lte IE 8]>
+		<input class="request-new-datefrom" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
+		<![endif]-->
+		<span class="add-on" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="icon-th"></i></span>
 	</span>
 	<div class="input-append bootstrap-timepicker">
         <input type="text" class="request-new-timefrom input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
@@ -31,9 +36,14 @@
     </div>
 </div>
 <div>
-    <span class="input-append"  data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, weekStart: weekStart()}">
-        <input class="request-new-dateto" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: weekStart()}" type="text"  />
-        <span class="add-on"><i class="icon-th"></i></span>
+    <span class="input-append">
+		<![if (!IE)|(gt IE 8)]>
+		<input class="request-new-dateto" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+		<![endif]>
+		<!--[if lte IE 8]>
+		<input class="request-new-dateto" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
+		<![endif]-->
+		<span class="add-on" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="icon-th"></i></span>
     </span>
     <div class="input-append bootstrap-timepicker">
         <input type="text" class="request-new-timeto input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
