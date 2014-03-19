@@ -156,7 +156,7 @@
     <Compile Include="ActualAgentStateCacheTest.cs" />
     <Compile Include="Adherence\AdherenceAggregatorInitializorTest.cs" />
     <Compile Include="Adherence\NotificationExtension.cs" />
-    <Compile Include="Adherence\PersonOrganizationForPersonTest.cs" />
+    <Compile Include="Adherence\OrganizationForPersonTest.cs" />
     <Compile Include="Adherence\PersonOrganizationProviderTest.cs" />
     <Compile Include="Adherence\SiteAdherenceTest.cs" />
     <Compile Include="Adherence\TeamAdherenceTest.cs" />
