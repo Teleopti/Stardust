@@ -1,11 +1,9 @@
-﻿.realtimeadherence {
-	
+﻿.realtimeadherencesites .site {
+	height: 250px;
+	cursor: pointer;
 }
 
-.site {
-		height: 250px;
-	}
-
-.team {
-		height: 250px;
-	}
+.realtimeadherenceteams .team {
+	height: 250px;
+	cursor: pointer;
+}
