@@ -1023,6 +1023,8 @@
     <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Content\justgage\justgage.1.0.1.min.js" />
+    <Content Include="Content\justgage\raphael-min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\all.min.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\bg.js" />

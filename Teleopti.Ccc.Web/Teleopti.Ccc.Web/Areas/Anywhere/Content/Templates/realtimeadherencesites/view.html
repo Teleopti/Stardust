@@ -1,11 +1,9 @@
 ﻿<div class="container realtimeadherence">
-	<div class="row" data-bind="foreach: sites">
-		<div class="col-md-4">
-			<div class="well well-sm site" data-bind="click: openSite">
-				<h3 data-bind="text: Name"></h3>
-				<div data-bind="text: OutOfAdherence"></div>
-				<div data-bind="text: NumberOfAgents"></div>
+		<div class="row" data-bind="foreach: sites">
+			<div class="col-md-4">
+				<div class="well well-sm site" data-bind="click: openSite">
+					<div data-bind="gage: { outOfAdherence: OutOfAdherence, numberOfAgents: NumberOfAgents, id: Id, title: Name}"></div>
+				</div>
 			</div>
 		</div>
-	</div>
 </div>
