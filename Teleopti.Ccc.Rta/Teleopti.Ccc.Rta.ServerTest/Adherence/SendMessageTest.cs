@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 
 			target.Invoke(agentState);
 
-			broker.LastNotification.GetOriginal<TeamAdherenceMessage>().TeamId.Should().Be(teamId);
+			broker.LastNotification.DomainId.Should().Be(teamId.ToString());
 		}
 
 		[Test]

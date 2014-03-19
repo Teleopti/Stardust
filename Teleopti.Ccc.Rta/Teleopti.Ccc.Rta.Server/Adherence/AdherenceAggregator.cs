@@ -7,7 +7,6 @@ using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
-
 	public class AdherenceAggregator : IActualAgentStateHasBeenSent
 	{
 		private readonly IMessageSender _messageSender;
@@ -35,21 +34,30 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		private static Notification createTeamNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
 		{
 			var teamAdherenceMessage = new TeamAdherenceMessage
-				{
-					TeamId = aggregatedValues.Key,
-					OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
-				};
-			return new Notification {BinaryData = JsonConvert.SerializeObject(teamAdherenceMessage), BusinessUnitId = businessUnitId.ToString(), DomainType = "TeamAdherenceMessage"};
+			{
+				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
+			};
+			return createNotification("TeamAdherenceMessage", teamAdherenceMessage, businessUnitId, aggregatedValues);
 		}
 
 		private static Notification createSiteNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
 		{
 			var siteAdherenceMessage = new SiteAdherenceMessage
 			{
-				SiteId = aggregatedValues.Key,
 				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
 			};
-			return new Notification { BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage), BusinessUnitId = businessUnitId.ToString(), DomainType = "SiteAdherenceMessage"};
+			return createNotification("SiteAdherenceMessage", siteAdherenceMessage, businessUnitId, aggregatedValues);
+		}
+
+		private static Notification createNotification(string domainType, object message, Guid businessUnitId, AggregatedValues aggregatedValues)
+		{
+			return new Notification
+			{
+				BinaryData = JsonConvert.SerializeObject(message),
+				BusinessUnitId = businessUnitId.ToString(),
+				DomainType = domainType,
+				DomainId = aggregatedValues.Key.ToString()
+			};
 		}
 	}
 }
