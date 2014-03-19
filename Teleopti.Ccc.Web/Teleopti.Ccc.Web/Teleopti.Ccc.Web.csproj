@@ -747,11 +747,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceteams.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
@@ -792,6 +794,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
+    <Content Include="Areas\Anywhere\Content\Styles\realtimeadherence.css" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
@@ -1025,6 +1028,8 @@
     <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Content\justgage\justgage.1.0.1.min.js" />
+    <Content Include="Content\justgage\raphael-min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\all.min.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\bg.js" />

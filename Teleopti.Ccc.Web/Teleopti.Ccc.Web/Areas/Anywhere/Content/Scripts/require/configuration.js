@@ -19,6 +19,9 @@
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
 
+		justgage: '../../../../Content/justgage/justgage.1.0.1.min',
+		raphael: '../../../../Content/justgage/raphael-min',
+
 		knockoutBindings: 'knockout.bindings',
 
 		noext: '../../../../Content/require/noext',
@@ -29,7 +32,7 @@
 
 		text: '../../../../Content/require/text'
 	},
-
+	
 	// dependencies that requires loading order
 	shim: {
 		'buster': {
@@ -47,12 +50,14 @@
 		'knockoutBindings': ['knockout'],
 		'select2': ['jquery', 'knockoutBindings'],
 		'timepicker': ['bootstrap', 'knockoutBindings'],
-
 		'signalr': ['jquery'],
-
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],
 		'momentDatepickerKo': ['momentDatepicker'],
-		'swipeListener': ['jquery']
+		'swipeListener': ['jquery'],
+		'justgage': {
+			exports: 'JustGage',
+			deps: ['raphael']
+		}
 	}
 };

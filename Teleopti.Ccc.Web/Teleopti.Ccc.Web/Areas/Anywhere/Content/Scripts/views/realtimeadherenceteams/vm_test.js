@@ -59,7 +59,8 @@
 			"should do update from notification": function () {
 				var vm = viewModel();
 				var notification = {
-					BinaryData: '{"TeamId":"theguid","OutOfAdherence":2}',
+					DomainId: 'theguid',
+					BinaryData: '{"OutOfAdherence":2}',
 				};
 				var team = { Id: "theguid" };
 				vm.fill([team]);
@@ -68,7 +69,6 @@
 
 				assert.equals(vm.teams()[0].OutOfAdherence(), 2);
 			}
-
 		});		
 	};
 });

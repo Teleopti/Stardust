@@ -1,6 +1,6 @@
-﻿
-define([
+﻿define([
 		'knockout',
+		'knockout.justgagebinding',
 		'text!templates/realtimeadherencesites/view.html',
 		'views/realtimeadherencesites/vm',
 		'subscriptions.adherencesites',
@@ -8,6 +8,7 @@ define([
 		'ajax'
 ], function (
 		ko,
+		justGageBinding,
 		view,
 		realTimeAdherenceViewModel,
 		subscriptions,
@@ -16,11 +17,11 @@ define([
 	) {
 
 	var viewModel;
-	
+
 	return {
 		initialize: function (options) {
 			errorview.remove();
-			
+
 			var menu = ko.contextFor($('nav')[0]).$data;
 			if (!menu.RealTimeAdherenceVisible()) {
 				errorview.display('No permission for real time adherence overview!');
@@ -31,9 +32,9 @@ define([
 		},
 
 		display: function (options) {
-			
+
 			viewModel = realTimeAdherenceViewModel();
-			
+
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			ajax.ajax({

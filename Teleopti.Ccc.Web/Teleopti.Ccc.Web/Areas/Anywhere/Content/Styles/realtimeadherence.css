@@ -1,0 +1,9 @@
+﻿.realtimeadherencesites .site {
+	height: 250px;
+	cursor: pointer;
+}
+
+.realtimeadherenceteams .team {
+	height: 250px;
+	cursor: pointer;
+}

@@ -1,0 +1,37 @@
+﻿using System.Collections.Generic;
+using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Interfaces.MessageBroker.Client;
+
+namespace Teleopti.Ccc.TestCommon.FakeData
+{
+	public class MessageSenderExposingNotifications : IMessageSender
+	{
+		public MessageSenderExposingNotifications()
+		{
+			AllNotifications = new List<Notification>();
+		}
+
+		public bool IsAlive { get; private set; }
+		public void StartBrokerService()
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public Notification LastNotification;
+		public Notification LastTeamNotification;
+		public Notification LastSiteNotification;
+		public ICollection<Notification> AllNotifications;
+
+		public void SendNotification(Notification notification)
+		{
+			LastNotification = notification;
+			
+			if (notification.DomainType.Contains("Team"))
+				LastTeamNotification = notification;
+			else
+				LastSiteNotification = notification;
+
+			AllNotifications.Add(notification);
+		}
+	}
+}

@@ -7,11 +7,7 @@ so that I can easier plan my weekends, holidays etc.
 Background: 
 Given there is a role with
 	| Field | Value                 |
-	| Name  | Full access to mytime |
-	And there is a role with
-	| Field                    | Value                            |
-	| Name                     | No permission for month schedule |
-	| Access to month schedule | false                            |  
+	| Name  | Full access to mytime | 
 	And there is a shift category with 
 	| Field | Value |
 	| Name  | Early |
@@ -230,8 +226,10 @@ And I view my month schedule for date '2014-01-07'
 When I select the month 'maj' in the calendar 
 Then I should end up in month view for '2014-05-01'
 
-Scenario: Should not see month view without permission
-Given I have the role 'No permission for month schedule'
+Scenario: Can switch to weekly schedule when click week tab
+Given I have the role 'Full access to mytime'
 And I have the workflow control set 'Published schedule'
-When I view my week schedule for date '2014-01-07'
-Then I should not be able to access month view
+When I view my month schedule for date '2014-01-19'
+And I navigate to week schedule by click Week tab
+Then I should end up in week view for '2014-01-01'
+

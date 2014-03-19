@@ -1,23 +1,27 @@
 ﻿define([
-		'knockout'
+        'knockout',
+        'navigation'
 ],
-	function (ko) {
-		return function () {
+    function (
+        ko,
+        navigation
+		) {
+    	return function () {
 
-			var that = {};
-			that.OutOfAdherence = ko.observable();
-		
-			that.fill = function (data) {
-				console.log(data);
-				that.Id = data.Id;
-				that.Name = data.Name;
-				that.NumberOfAgents = data.NumberOfAgents;
-			};
+    		var that = {};
+    		that.OutOfAdherence = ko.observable();
 
-			that.openSite = function() {
-				window.location.hash = "#realtimeadherenceteams/" + that.Id;
-			};
-			return that;
-		};
-	}
+    		that.fill = function (data) {
+    			that.Id = data.Id;
+    			that.Name = data.Name;
+    			that.NumberOfAgents = data.NumberOfAgents;
+    		};
+
+    		that.openSite = function () {
+			    navigation.GotoRealTimeAdherenceTeams(that.Id);
+    		};
+
+    		return that;
+    	};
+    }
 );

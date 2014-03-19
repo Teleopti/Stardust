@@ -141,12 +141,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.ClickUsingJQuery(selector);
         }
 
-	    [Then(@"I should not be able to access month view")]
-	    public void ThenIShouldNotBeAbleToAccessMonthView()
-	    {
-		    Browser.Interactions.AssertNotExists("#week-schedule-today", "#week-schedule-month");
-	    }
-
 		[Then(@"I should see the absence on date '(.*)'")]
         public void ThenIShouldSeeTheAbsenceOnDate(string date)
         {
@@ -157,6 +151,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldNotSeeAShiftOnDate(string date)
 		{
 			Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0}']", date), string.Format("[data-cal-date='{0}'] .shift", date));
+		}
+
+		[When(@"I navigate to week schedule by click Week tab")]
+		public void WhenINavigateToWeekScheduleByClickTab()
+		{
+			Browser.Interactions.Click("#month-schedule-week");
 		}
 
 	 }
