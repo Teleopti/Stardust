@@ -1,7 +1,7 @@
 ﻿//fix - don't have the dependencies here!
 define([
 		'knockout',
-		'knockoutBindings',
+		'knockout.adherencebindings',
 		'text!templates/realtimeadherencesites/view.html',
 		'views/realtimeadherencesites/vm',
 		'subscriptions.adherencesites',
