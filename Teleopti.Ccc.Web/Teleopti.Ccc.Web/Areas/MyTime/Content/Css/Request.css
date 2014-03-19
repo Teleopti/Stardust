@@ -340,3 +340,8 @@
 	z-index: 111;
 	text-align: center;
 }
+.shift-trade-swap-detail-send-again {
+	position: absolute;
+	bottom:25px;
+	right: 22px;
+}
