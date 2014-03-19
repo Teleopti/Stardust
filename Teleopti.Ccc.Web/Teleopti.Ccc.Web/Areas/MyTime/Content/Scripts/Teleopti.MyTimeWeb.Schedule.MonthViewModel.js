@@ -67,10 +67,6 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
         self.selectedDate(date);
     };
 
-    self.today = function () {
-    	Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
-    };
-	
     this.week = function (day) {
     	var d = day.currentDate;
     	if (typeof(d) === 'undefined') {
