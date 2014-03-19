@@ -1,8 +1,8 @@
-﻿<div class="container realtimeadherence">
+﻿<div class="container realtimeadherenceteams">
 	<div class="row" data-bind="foreach: teams">
 		<div class="col-md-4">
 			<div class="well well-sm team">
-				<div data-bind="gage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name}"></div>
+				<div data-bind="justgage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name}"></div>
 			</div>
 		</div>
 	</div>

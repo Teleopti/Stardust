@@ -1,11 +1,11 @@
 define([
 	'knockout',
-	'gage'
+	'justgage'
 ], function(
 	ko,
-	gage
+	justgage
 ) {
-	ko.bindingHandlers.gage = {
+	ko.bindingHandlers.justgage = {
 		init: function(element, valueAccessor, allBindingsAccessor) {
 			var options = valueAccessor();
 			var id = ko.utils.unwrapObservable(options.id);
@@ -16,7 +16,7 @@ define([
 				max = -1;
 			}
 
-			var gageObject = new gage({
+			var gageObject = new justgage({
 				id: id,
 				value: 'xxx?',
 				min: 0,

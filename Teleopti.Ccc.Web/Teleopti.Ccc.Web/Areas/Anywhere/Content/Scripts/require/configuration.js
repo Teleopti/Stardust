@@ -19,7 +19,7 @@
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
 
-		gage: '../../../../Content/justgage/justgage.1.0.1.min',
+		justgage: '../../../../Content/justgage/justgage.1.0.1.min',
 		raphael: '../../../../Content/justgage/raphael-min',
 
 		knockoutBindings: 'knockout.bindings',
@@ -55,7 +55,7 @@
 		'momentDatepicker': ['momentLanguages'],
 		'momentDatepickerKo': ['momentDatepicker'],
 		'swipeListener': ['jquery'],
-		'gage': {
+		'justgage': {
 			exports: 'JustGage',
 			deps: ['raphael']
 		}
