@@ -74,12 +74,13 @@ Teleopti.MyTimeWeb.Schedule.MonthViewModel = function () {
     this.week = function (day) {
     	var d = day.currentDate;
     	if (typeof(d) === 'undefined') {
-    		d = self.selectedDate().clone();
+    		d = self.selectedDate();
+    		d.startOf('month');
     	}
-      Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
     };
 
-    self.month = function () {
+	self.month = function () {
     	var d = self.selectedDate();
     	Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Month" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
     };

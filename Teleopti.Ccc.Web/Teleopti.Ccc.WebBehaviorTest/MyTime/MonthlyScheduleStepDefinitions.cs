@@ -153,5 +153,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0}']", date), string.Format("[data-cal-date='{0}'] .shift", date));
 		}
 
+		[When(@"I navigate to week schedule by click Week tab")]
+		public void WhenINavigateToWeekScheduleByClickTab()
+		{
+			Browser.Interactions.Click("#month-schedule-week");
+		}
+
 	 }
 }
