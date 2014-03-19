@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider
 		{
 			var data = _sessionSpecificDataProvider.GrabFromCookie();
 			var matrixWebsiteUrl = ConfigurationManager.AppSettings["MatrixWebSiteUrl"];
-			if (!matrixWebsiteUrl.EndsWith("/"))
+			if (!string.IsNullOrEmpty(matrixWebsiteUrl) && !matrixWebsiteUrl.EndsWith("/"))
 				matrixWebsiteUrl += "/";
 			var realBu = data.BusinessUnitId;
 			var reportsList = new List<ReportNavigationItem>();
