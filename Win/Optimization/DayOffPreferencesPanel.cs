@@ -218,5 +218,55 @@ namespace Teleopti.Ccc.Win.Optimization
             setNumericUpDownFullWeekEndsOffStatus();
             setNumericUpDownWeekEndDaysOffStatus();
         }
+
+		private void numericUpDownDaysOffPerWeekMinValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownDaysOffPerWeekMin.Value > numericUpDownDaysOffPerWeekMax.Value) numericUpDownDaysOffPerWeekMax.Value = numericUpDownDaysOffPerWeekMin.Value;
+		}
+
+		private void numericUpDownDaysOffPerWeekMaxValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownDaysOffPerWeekMax.Value < numericUpDownDaysOffPerWeekMin.Value) numericUpDownDaysOffPerWeekMin.Value = numericUpDownDaysOffPerWeekMax.Value;
+		}
+
+		private void numericUpDownConsDayOffMinValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownConsDayOffMin.Value > numericUpDownConsDayOffMax.Value) numericUpDownConsDayOffMax.Value = numericUpDownConsDayOffMin.Value;
+		}
+
+		private void numericUpDownConsDayOffMaxValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownConsDayOffMax.Value < numericUpDownConsDayOffMin.Value) numericUpDownConsDayOffMin.Value = numericUpDownConsDayOffMax.Value;
+		}
+
+		private void numericUpDownConsWorkDaysMinValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownConsWorkDaysMin.Value > numericUpDownConsWorkDaysMax.Value) numericUpDownConsWorkDaysMax.Value = numericUpDownConsWorkDaysMin.Value;
+		}
+
+		private void numericUpDownConsWorkDaysMaxValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownConsWorkDaysMax.Value < numericUpDownConsWorkDaysMin.Value) numericUpDownConsWorkDaysMin.Value = numericUpDownConsWorkDaysMax.Value;
+		}
+
+		private void numericUpDownFullWeekendsOffMinValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownFullWeekendsOffMin.Value > numericUpDownFullWeekendsOffMax.Value) numericUpDownFullWeekendsOffMax.Value = numericUpDownFullWeekendsOffMin.Value;
+		}
+
+		private void numericUpDownFullWeekendsOffMaxValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownFullWeekendsOffMax.Value < numericUpDownFullWeekendsOffMin.Value) numericUpDownFullWeekendsOffMin.Value = numericUpDownFullWeekendsOffMax.Value;
+		}
+
+		private void numericUpDownWeekEndDaysOffMinValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownWeekEndDaysOffMin.Value > numericUpDownWeekEndDaysOffMax.Value) numericUpDownWeekEndDaysOffMax.Value = numericUpDownWeekEndDaysOffMin.Value;
+		}
+
+		private void numericUpDownWeekEndDaysOffMaxValueChanged(object sender, EventArgs e)
+		{
+			if (numericUpDownWeekEndDaysOffMax.Value < numericUpDownWeekEndDaysOffMin.Value) numericUpDownWeekEndDaysOffMin.Value = numericUpDownWeekEndDaysOffMax.Value;
+		}
     }
 }
