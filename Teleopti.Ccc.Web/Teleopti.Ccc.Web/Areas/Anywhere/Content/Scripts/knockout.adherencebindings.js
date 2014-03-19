@@ -13,7 +13,7 @@ define([
 
 			var gageObject = new gage({
 				id: id,
-				value: '?',
+				value: 'xxx?',
 				min: 0,
 				max: ko.utils.unwrapObservable(options.max),
 				title: ko.utils.unwrapObservable(options.title),
@@ -22,7 +22,12 @@ define([
 			});
 			element.gage = gageObject;
 		},
-		update: function(element, valueAccessor) {
+		update: function (element, valueAccessor) {
+			var options = valueAccessor();
+			var value = ko.utils.unwrapObservable(options.value);
+			if (value) {
+				element.gage.refresh(3);
+			}
 		}
 	};
 });
