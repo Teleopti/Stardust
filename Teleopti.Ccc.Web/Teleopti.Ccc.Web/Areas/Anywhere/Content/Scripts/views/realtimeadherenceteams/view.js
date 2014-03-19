@@ -1,12 +1,13 @@
-﻿
-define([
-	'knockout',
+﻿define([
+		'knockout',
+		'knockout.adherencebindings',
 		'text!templates/realtimeadherenceteams/view.html',
 		'views/realtimeadherenceteams/vm',
 		'subscriptions.adherenceteams',
 		'ajax'
 ], function (
-	ko,
+		ko,
+		gageBinding,
 		view,
 		realTimeAdherenceViewModel,
 		subscriptions,
@@ -32,7 +33,7 @@ define([
 				}
 			});
 
-			subscriptions.subscribeAdherence(function(notification) {
+			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
 			});
 		},

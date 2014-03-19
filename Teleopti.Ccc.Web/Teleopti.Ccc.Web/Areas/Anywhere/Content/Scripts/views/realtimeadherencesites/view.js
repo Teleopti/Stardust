@@ -1,5 +1,4 @@
-﻿//fix - don't have the dependencies here!
-define([
+﻿define([
 		'knockout',
 		'knockout.adherencebindings',
 		'text!templates/realtimeadherencesites/view.html',
