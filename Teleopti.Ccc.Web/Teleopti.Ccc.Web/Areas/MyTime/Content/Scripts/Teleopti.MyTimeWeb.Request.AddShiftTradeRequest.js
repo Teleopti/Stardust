@@ -431,6 +431,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
     
 	return {
 		Init: function () {
+			vm = '';
 			initScrollPaging();
 		},
 		SetShiftTradeRequestDate: function (date) {

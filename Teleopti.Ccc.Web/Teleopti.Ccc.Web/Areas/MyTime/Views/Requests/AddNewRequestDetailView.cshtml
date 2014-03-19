@@ -50,10 +50,15 @@
 </div>
 <div class="row form-group">
     <div class="col-xs-4">
-        <span class="input-group">
-            <input class="request-new-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
-            <span class="input-group-addon" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="glyphicon glyphicon-calendar"></i></span>
-        </span>
+	    <span class="input-group">
+			<![if (!IE)|(gt IE 8)]>
+		    <input class="request-new-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+			<![endif]>
+			<!--[if lte IE 8]>
+		    <input class="request-new-datefrom input-sm form-control" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
+		    <![endif]-->
+		    <span class="input-group-addon" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="glyphicon glyphicon-calendar"></i></span>
+	    </span>
     </div>
     <div class="col-xs-2">
         <div class="bootstrap-timepicker">
@@ -67,7 +72,12 @@
 <div class="row form-group">
     <div class="col-xs-4">
         <span class="input-group">
+			<![if (!IE)|(gt IE 8)]>
             <input class="request-new-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+			<![endif]>
+			<!--[if lte IE 8]>
+		    <input class="request-new-dateto input-sm form-control" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
+		    <![endif]-->
             <span class="input-group-addon" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="glyphicon glyphicon-calendar"></i></span>
         </span>
     </div>
