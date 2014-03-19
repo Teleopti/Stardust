@@ -1,4 +1,12 @@
-﻿define(['buster', 'views/realtimeadherencesites/vm'], function (buster, viewModel) {
+﻿define([
+    'buster',
+    'views/realtimeadherencesites/vm',
+    'window'
+], function (
+    buster,
+    viewModel,
+    window
+    ) {
 	return function () {
 
 		buster.testCase("real time adherence view model", {
@@ -11,7 +19,7 @@
 				var site1 = { Name: 'London', Id: 'guid1' };
 				var site2 = { Name: 'Paris', Id: 'guid2' };
 				var vm = viewModel();
-				
+
 				vm.fill([site1, site2]);
 
 				assert.equals(vm.sites()[0].Id, "guid1");
@@ -37,8 +45,8 @@
 				assert.equals(vm.sites().length, 1);
 				assert.equals(vm.sites()[0].OutOfAdherence(), 1);
 			},
-			
-			"should not add when update if there is no site": function() {
+
+			"should not add when update if there is no site": function () {
 				var vm = viewModel();
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
@@ -55,12 +63,12 @@
 				assert.equals(vm.sites()[0].NumberOfAgents, expected);
 			},
 
-			"should do update from notification": function() {
+			"should do update from notification": function () {
 				var vm = viewModel();
 				var notification = {
 					BinaryData: '{"SiteId":"theguid","OutOfAdherence":2}',
 				};
-				var site = { Id: "theguid"};
+				var site = { Id: "theguid" };
 				vm.fill([site]);
 
 				vm.updateFromNotification(notification);
@@ -70,12 +78,13 @@
 
 			"should go to realtime adherence teams view": function () {
 				var vm = viewModel();
-				var site = { Id: "aguid"};
+				var site = { Id: "aguid" };
 				vm.fill([site]);
+				this.stub(window, "setLocationHash");
 
 				vm.sites()[0].openSite();
 
-				assert.equals(window.location.hash, "#realtimeadherenceteams/aguid");
+				assert.calledWith(window.setLocationHash, "realtimeadherenceteams/aguid");
 			}
 		});
 
