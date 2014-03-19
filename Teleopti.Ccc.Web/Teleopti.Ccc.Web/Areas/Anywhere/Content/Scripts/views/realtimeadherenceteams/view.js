@@ -1,13 +1,13 @@
 ﻿define([
 		'knockout',
-		'knockout.adherencebindings',
+		'knockout.justgagebinding',
 		'text!templates/realtimeadherenceteams/view.html',
 		'views/realtimeadherenceteams/vm',
 		'subscriptions.adherenceteams',
 		'ajax'
 ], function (
 		ko,
-		gageBinding,
+		justGageBinding,
 		view,
 		realTimeAdherenceViewModel,
 		subscriptions,

@@ -1,6 +1,6 @@
 ﻿define([
 		'knockout',
-		'knockout.adherencebindings',
+		'knockout.justgagebinding',
 		'text!templates/realtimeadherencesites/view.html',
 		'views/realtimeadherencesites/vm',
 		'subscriptions.adherencesites',
@@ -8,7 +8,7 @@
 		'ajax'
 ], function (
 		ko,
-		koBinding,
+		justGageBinding,
 		view,
 		realTimeAdherenceViewModel,
 		subscriptions,
