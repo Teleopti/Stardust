@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Configuration;
+using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -18,11 +22,11 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var agentState = new ActualAgentState();
 			var teamId = Guid.NewGuid();
 
-			var broker = new MessageSenderExposingLastNotification();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
-			var target = new AdherenceAggregator(broker, teamProvider, null);
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			teamProvider.Stub(x => x.GetTeamId(agentState.PersonId)).Return(teamId);
+			organizationForPerson.Stub(x => x.GetOrganization(agentState.PersonId)).Return(new PersonOrganizationData{TeamId = teamId});
 
 			target.Invoke(agentState);
 
@@ -35,14 +39,17 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var oldState = new ActualAgentState { StaffingEffect = 1 };
 			var newState = new ActualAgentState { StaffingEffect = 1 };
 
-			var broker = MockRepository.GenerateMock<IMessageSender>();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
-			var target = new AdherenceAggregator(broker, teamProvider, null);
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			var target = new AdherenceAggregator(broker, organizationForPerson);
+
+			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).Return(new PersonOrganizationData());
 
 			target.Invoke(oldState);
 			target.Invoke(newState);
 
-			broker.AssertWasCalled(x => x.SendNotification(null), a => a.IgnoreArguments().Repeat.Once());
+			broker.AllNotifications.Select(x => x.DomainType)
+				.Should().Have.SameValuesAs("TeamAdherenceMessage", "SiteAdherenceMessage");
 		}
 
 		[Test]
@@ -50,15 +57,15 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		{
 			var agentState = new ActualAgentState{BusinessUnit = Guid.NewGuid()};
 
-			var broker = new MessageSenderExposingLastNotification();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
-			var target = new AdherenceAggregator(broker, teamProvider, null);
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			teamProvider.Stub(x => x.GetTeamId(agentState.PersonId)).Return(Guid.NewGuid());
+			organizationForPerson.Stub(x => x.GetOrganization(agentState.PersonId)).Return(new PersonOrganizationData());
 
 			target.Invoke(agentState);
 
-			broker.LastNotification.BusinessUnitId.Should().Be.EqualTo(agentState.BusinessUnit.ToString());
+			broker.LastTeamNotification.BusinessUnitId.Should().Be.EqualTo(agentState.BusinessUnit.ToString());
 		}
 
 		[Test]
@@ -66,11 +73,11 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		{
 			var agentState = new ActualAgentState();
 
-			var broker = new MessageSenderExposingLastNotification();
-			var teamProvider = MockRepository.GenerateMock<ITeamIdForPerson>();
-			var target = new AdherenceAggregator(broker, teamProvider, null);
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			teamProvider.Stub(x => x.GetTeamId(agentState.PersonId)).Return(Guid.NewGuid());
+			organizationForPerson.Stub(x => x.GetOrganization(agentState.PersonId)).Return(new PersonOrganizationData());
 
 			target.Invoke(agentState);
 
@@ -82,11 +89,11 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		{
 			var agentState = new ActualAgentState { BusinessUnit = Guid.NewGuid() };
 
-			var broker = new MessageSenderExposingLastNotification();
-			var siteProvider = MockRepository.GenerateMock<ISiteIdForPerson>();
-			var target = new AdherenceAggregator(broker, null, siteProvider);
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			siteProvider.Stub(x => x.GetSiteId(agentState.PersonId)).Return(Guid.NewGuid());
+			organizationForPerson.Stub(x => x.GetOrganization(agentState.PersonId)).Return(new PersonOrganizationData());
 
 			target.Invoke(agentState);
 
@@ -98,15 +105,15 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		{
 			var agentState = new ActualAgentState();
 
-			var broker = new MessageSenderExposingLastNotification();
-			var siteProvider = MockRepository.GenerateMock<ISiteIdForPerson>();
-			var target = new AdherenceAggregator(broker, null, siteProvider);
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
-			siteProvider.Stub(x => x.GetSiteId(agentState.PersonId)).Return(Guid.NewGuid());
+			organizationForPerson.Stub(x => x.GetOrganization(agentState.PersonId)).Return(new PersonOrganizationData());
 
 			target.Invoke(agentState);
 
-			broker.LastNotification.DomainType.Should().Be.EqualTo(typeof(SiteAdherenceMessage).Name);
+			broker.LastSiteNotification.DomainType.Should().Be.EqualTo(typeof(SiteAdherenceMessage).Name);
 		}
 	}
 }

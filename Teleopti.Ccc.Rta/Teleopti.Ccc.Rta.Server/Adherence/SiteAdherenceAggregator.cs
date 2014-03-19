@@ -6,20 +6,20 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class SiteAdherenceAggregator
 	{
-		private readonly ISiteIdForPerson _siteIdForPerson;
+		private readonly IOrganizationForPerson _organizationForPerson;
 		private readonly Dictionary<Guid, AggregatedValues> _siteAdherences = new Dictionary<Guid, AggregatedValues>();
 
-		public SiteAdherenceAggregator(ISiteIdForPerson siteIdForPerson)
+		public SiteAdherenceAggregator(IOrganizationForPerson organizationForPerson)
 		{
-			_siteIdForPerson = siteIdForPerson;
+			_organizationForPerson = organizationForPerson;
 		}
 
 		public AggregatedValues Aggregate(IActualAgentState actualAgentState)
 		{
-			if (_siteIdForPerson == null) return null;
+			if (_organizationForPerson == null) return null;
 
 			var personId = actualAgentState.PersonId;
-			var siteId = _siteIdForPerson.GetSiteId(personId);
+			var siteId = _organizationForPerson.GetOrganization(personId).SiteId;
 
 			AggregatedValues siteState;
 			if (!_siteAdherences.TryGetValue(siteId, out siteState))

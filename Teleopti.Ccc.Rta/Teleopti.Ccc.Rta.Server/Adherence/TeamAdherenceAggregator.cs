@@ -6,20 +6,20 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class TeamAdherenceAggregator
 	{
-		private readonly ITeamIdForPerson _teamProvider;
+		private readonly IOrganizationForPerson _organizationForPerson;
 		private readonly Dictionary<Guid, AggregatedValues> _teamAdherences = new Dictionary<Guid, AggregatedValues>();
 
-		public TeamAdherenceAggregator(ITeamIdForPerson teamProvider)
+		public TeamAdherenceAggregator(IOrganizationForPerson organizationForPerson)
 		{
-			_teamProvider = teamProvider;
+			_organizationForPerson = organizationForPerson;
 		}
 
 		public AggregatedValues Aggregate(IActualAgentState actualAgentState)
 		{
-			if (_teamProvider == null) return null;
+			if (_organizationForPerson == null) return null;
 
 			var personId = actualAgentState.PersonId;
-			var teamId = _teamProvider.GetTeamId(personId);
+			var teamId = _organizationForPerson.GetOrganization(personId).TeamId;
 
 			AggregatedValues teamState;
 			if (!_teamAdherences.TryGetValue(teamId, out teamState))

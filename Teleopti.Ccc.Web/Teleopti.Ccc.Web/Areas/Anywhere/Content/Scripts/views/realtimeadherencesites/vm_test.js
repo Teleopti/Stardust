@@ -66,7 +66,8 @@
 			"should do update from notification": function () {
 				var vm = viewModel();
 				var notification = {
-					BinaryData: '{"SiteId":"theguid","OutOfAdherence":2}',
+					DomainId: 'theguid',
+					BinaryData: '{"OutOfAdherence":2}',
 				};
 				var site = { Id: "theguid" };
 				vm.fill([site]);

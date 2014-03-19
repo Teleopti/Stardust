@@ -13,11 +13,11 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 		private readonly TeamAdherenceAggregator _teamAdherenceAggregator;
 		private readonly SiteAdherenceAggregator _siteAdherenceAggregator;
 
-		public AdherenceAggregator(IMessageSender messageSender, ITeamIdForPerson teamProvider, ISiteIdForPerson siteProvider)
+		public AdherenceAggregator(IMessageSender messageSender, IOrganizationForPerson organizationForPerson)
 		{
 			_messageSender = messageSender;
-			_teamAdherenceAggregator = new TeamAdherenceAggregator(teamProvider);
-			_siteAdherenceAggregator = new SiteAdherenceAggregator(siteProvider);
+			_teamAdherenceAggregator = new TeamAdherenceAggregator(organizationForPerson);
+			_siteAdherenceAggregator = new SiteAdherenceAggregator(organizationForPerson);
 		}
 
 		public void Invoke(IActualAgentState actualAgentState)
