@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly string BehaviorTestWebConfig = Path.Combine(Paths.WebPath(), "web.fromtest.config");
 		private static readonly string TargetAuthenticationBridgeWebConfig = Path.Combine(Paths.FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\"), "web.config");
 		private static readonly string BackupAuthenticationBridgeWebConfig = Path.Combine(Paths.FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\"), "web.backup.config");
+		private static readonly string TargetWindowsIdentityProviderWebConfig = Path.Combine(Paths.FindProjectPath(@"Teleopti.Ccc.Web.WindowsIdentityProvider\"), "web.config");
+		private static readonly string BackupWindowsIdentityProviderWebConfig = Path.Combine(Paths.FindProjectPath(@"Teleopti.Ccc.Web.WindowsIdentityProvider\"), "web.backup.config");
 
 		public static Uri Url;
 		public static int Port;
@@ -23,6 +25,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static Uri UrlWindowsIdentityProvider;
 		public static int PortWindowsIdentityProvider;
+
+
 
 		private static IISExpress _server;
 
@@ -36,12 +40,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				getPortAndUrl();
 				UpdateWebConfigFromTemplate();
 				UpdateAuthenticationBridgeWebConfigFromTemplate();
+				UpdateWindowsIdentityProviderWebConfigFromTemplate();
 				AttemptToUseIISExpress();
 			}
 			else
 			{
 				UpdateWebConfigFromTemplate();
 				UpdateAuthenticationBridgeWebConfigFromTemplate();
+				UpdateWindowsIdentityProviderWebConfigFromTemplate();
 			}
 			
 			GenerateAndWriteTestDataNHibFileFromTemplate();
@@ -87,7 +93,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				_server.Dispose();
 
 			RevertWebConfig();
-			RevertAuthenticationBridgeWebConfig();
 		}
 
 		public static void RecycleApplication()
@@ -133,26 +138,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void UpdateAuthenticationBridgeWebConfigFromTemplate()
 		{
+			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.AuthenticationBridge.web.config");
+
 			var tags = new AllTags();
 
 			if (File.Exists(TargetAuthenticationBridgeWebConfig))
 				File.Copy(TargetAuthenticationBridgeWebConfig, BackupAuthenticationBridgeWebConfig, true);
 
 			FileConfigurator.ConfigureByTags(
-				TargetAuthenticationBridgeWebConfig,
+				sourceFile,
 				TargetAuthenticationBridgeWebConfig,
 				tags
 				);
 		}
 
+		private static void UpdateWindowsIdentityProviderWebConfigFromTemplate()
+		{
+			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.WindowsIdentityProvider.web.config");
+
+			var tags = new AllTags();
+
+			if (File.Exists(TargetWindowsIdentityProviderWebConfig))
+				File.Copy(TargetWindowsIdentityProviderWebConfig, BackupWindowsIdentityProviderWebConfig, true);
+
+			FileConfigurator.ConfigureByTags(
+				sourceFile,
+				TargetWindowsIdentityProviderWebConfig,
+				tags
+				);
+		}
+
+
 		private static void RevertWebConfig()
 		{
 			if (File.Exists(BackupWebConfig))
 				File.Copy(BackupWebConfig, TargetWebConfig, true);
-		}
-
-		private static void RevertAuthenticationBridgeWebConfig()
-		{
+			if (File.Exists(BackupAuthenticationBridgeWebConfig))
+				File.Copy(BackupAuthenticationBridgeWebConfig, TargetAuthenticationBridgeWebConfig, true);
 			if (File.Exists(BackupAuthenticationBridgeWebConfig))
 				File.Copy(BackupAuthenticationBridgeWebConfig, TargetAuthenticationBridgeWebConfig, true);
 		}
