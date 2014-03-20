@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Web;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 
 		public OpenIdController()
 		{
-			_openIdProvider = new OpenIdProviderWapper(new OpenIdProvider(new StandardProviderApplicationStore()));
+			_openIdProvider = new OpenIdProviderWapper(new OpenIdProvider(OpenIdProvider.HttpApplicationStore));
 			_windowsAccountProvider = new WindowsAccountProvider();
 		}
 
@@ -43,7 +44,15 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			}
 
 			// handles request from browser
-			var idrequest = request as IAuthenticationRequest;
+			ProviderEndpoint.PendingRequest = (IHostProcessedRequest) request;
+			return RedirectToAction("TriggerWindowsAuthorization");
+		}
+
+		[Authorize]
+		public ActionResult TriggerWindowsAuthorization()
+		{
+			var idrequest = ProviderEndpoint.PendingRequest as IAuthenticationRequest;
+			ProviderEndpoint.PendingRequest = null;
 
 			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
 			if (windowsAccount != null)
@@ -54,21 +63,14 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 					new Uri(currentHttp.Request.Url,
 							currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" + windowsAccount.UserName + "@" + windowsAccount.DomainName));
 				idrequest.IsAuthenticated = true;
-				_openIdProvider.SendResponse(request);
+				_openIdProvider.SendResponse(idrequest);
 			}
 			else
 			{
 				_logger.Warn("NOT Found WindowsAccount");
 				idrequest.IsAuthenticated = false;
 			}
-			_logger.Warn("Return EmptyResult");
-			var builder = new StringBuilder();
-			foreach (string variable in Request.ServerVariables.AllKeys)
-			{
-				builder.AppendLine(string.Format("key: {0}, value: {1}", variable, Request.ServerVariables[variable]));
-			}
-			return new ContentResult(){Content = builder.ToString()};
-			//return new EmptyResult();L
+			return new EmptyResult();
 		}
 
 		public ActionResult AskUser()
@@ -76,4 +78,5 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			return View();
 		}
 	}
+	
 }

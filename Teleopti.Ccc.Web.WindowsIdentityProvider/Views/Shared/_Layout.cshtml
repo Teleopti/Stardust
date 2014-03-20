@@ -12,7 +12,7 @@
 				<div id="logindisplay">
 					@if (Request.IsAuthenticated)
 					{
-						<text>Welcome <strong>@Request.LogonUserIdentity.Name</strong>!</text>
+						<text>Welcome <strong>@Request.ServerVariables["LOGON_USER"]</strong>!</text>
 					}
 					else
 					{
