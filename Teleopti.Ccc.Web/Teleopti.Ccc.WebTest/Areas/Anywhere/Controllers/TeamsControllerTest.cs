@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			site.AddTeam(team);
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
 
-			var result = target.ForSite(site.Id.Value.ToString()).Data as TeamViewModel;
+			var result = target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
 
-			result.Teams.Single().Name.Should().Be("team1");
-			result.Teams.Single().Id.Should().Be(team.Id.Value.ToString());
+			result.Single().Name.Should().Be("team1");
+			result.Single().Id.Should().Be(team.Id.Value.ToString());
 		}
 
 		[Test]
@@ -50,27 +50,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			site.AddTeam(team);
 			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
 			numberOfAgentsQuery.Stub(x => x.FetchNumberOfAgents(new[] { team })).Return(new Dictionary<Guid, int>() { { team.Id.Value, expected } });
-			var result = target.ForSite(site.Id.Value.ToString()).Data as TeamViewModel;
+			var result = target.ForSite(site.Id.Value.ToString()).Data as IEnumerable<TeamViewModel>;
 
-			result.Teams.Single().NumberOfAgents.Should().Be.EqualTo(expected);
-		}
-
-		[Test]
-		public void ShouldReturnSiteName()
-		{
-			var expected = Guid.NewGuid().ToString();
-			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var target = new TeamsController(siteRepository, null);
-			var site = new Site(expected);
-			site.SetId(Guid.NewGuid());
-			var team = new Team { Description = new Description("team1") };
-			team.SetId(Guid.NewGuid());
-			site.AddTeam(team);
-			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
-
-			var result = target.ForSite(site.Id.Value.ToString()).Data as TeamViewModel;
-
-			result.SiteName.Should().Be.EqualTo(expected);
+			result.Single().NumberOfAgents.Should().Be.EqualTo(expected);
 		}
 	}
 }

@@ -30,18 +30,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			if (_numberOfAgentsInTeamReader != null)
 				numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams);
 
-			var teamViewModel = new TeamViewModel
+			var teamViewModels = teams.Select(team => new TeamViewModel
 			{
-				SiteName = site.Description.Name,
-				Teams = teams.Select(team => new TeamData
-				{
-					Id = team.Id.Value.ToString(),
-					Name = team.Description.Name,
-					NumberOfAgents = tryGetNumberOfAgents(numberOfAgents, team),
-				})
-			};
+				Id = team.Id.Value.ToString(),
+				Name = team.Description.Name,
+				NumberOfAgents = tryGetNumberOfAgents(numberOfAgents, team),
+			});
 
-			return Json(teamViewModel, JsonRequestBehavior.AllowGet);
+			return Json(teamViewModels, JsonRequestBehavior.AllowGet);
 		}
 
 		private static int tryGetNumberOfAgents(IDictionary<Guid, int> numberOfAgents, ITeam team)
