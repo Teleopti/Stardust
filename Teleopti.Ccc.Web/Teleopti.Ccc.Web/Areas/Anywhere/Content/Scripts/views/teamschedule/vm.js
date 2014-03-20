@@ -5,7 +5,7 @@ define([
 	'shared/timeline',
 	'shared/group-page',
 	'views/teamschedule/person',
-	'resources!r',
+	'resources',
 	'moment'
 ], function (
 	ko,

@@ -27,7 +27,7 @@
 
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
-		resources: 'require/resources',
+		resourcesr: 'require/resourcesr',
 
 		templates: '../templates',
 

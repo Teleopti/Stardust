@@ -750,6 +750,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
@@ -1081,7 +1082,7 @@
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
     <Content Include="Content\moment\moment.all.min.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\require\resources.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\resourcesr.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\signalrrr.js" />
     <Content Include="Content\require\noext.js" />
     <Content Include="Content\require\require.js" />
