@@ -1,14 +1,17 @@
 ﻿define([
 		'knockout',
 		'lazy',
-		'views/realtimeadherenceteams/team'
+		'views/realtimeadherenceteams/team',
+		'resources'
 ],
 	function (ko,
 		lazy,
-		team) {
+		team,
+		resources) {
 	return function () {
 
 		var that = {};
+		that.resources = resources;
 		that.teams = ko.observableArray();
 		that.siteName = ko.observable();
 		that.fill = function (data) {

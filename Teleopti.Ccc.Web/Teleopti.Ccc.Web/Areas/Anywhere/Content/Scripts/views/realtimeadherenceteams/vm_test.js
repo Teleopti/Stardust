@@ -77,6 +77,14 @@
 
 				assert.equals(vm.siteName(), expected);
 
+			},
+
+			"should have resources" : function () {
+			
+				var vm = viewModel();
+
+				assert.defined(vm.resources);
+
 			}
 		});		
 	};
