@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -14,12 +15,15 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		[Test]
 		public void ShouldMapOutOfAdherenceBasedOnPositiveStaffingEffect()
 		{
+			var siteId = Guid.NewGuid();
 			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
 			var outOfAdherence = new ActualAgentState { StaffingEffect = 1 };
 
-			var broker = new MessageSenderExposingLastNotification();
-			var siteIdForPerson = MockRepository.GenerateMock<ISiteIdForPerson>();
-			var target = new AdherenceAggregator(broker, null, siteIdForPerson);
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
+				.Return(new PersonOrganizationData { SiteId = siteId });
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
@@ -30,12 +34,15 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 		[Test]
 		public void ShouldMapOutOfAdherenceBasedOnNegativeStaffingEffect()
 		{
+			var siteId = Guid.NewGuid();
 			var inAdherence = new ActualAgentState { StaffingEffect = 0 };
 			var outOfAdherence = new ActualAgentState { StaffingEffect = -1 };
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
+			organizationForPerson.Stub(x => x.GetOrganization(Guid.Empty)).IgnoreArguments()
+				.Return(new PersonOrganizationData {SiteId = siteId});
 
-			var broker = new MessageSenderExposingLastNotification();
-			var siteIdForPerson = MockRepository.GenerateMock<ISiteIdForPerson>();
-			var target = new AdherenceAggregator(broker, null, siteIdForPerson);
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
 			target.Invoke(inAdherence);
 			target.Invoke(outOfAdherence);
@@ -49,12 +56,12 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 
-			var broker = new MessageSenderExposingLastNotification();
-			var siteIdForPerson = MockRepository.GenerateMock<ISiteIdForPerson>();
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var site = Guid.NewGuid();
-			siteIdForPerson.Expect(x => x.GetSiteId(outOfAdherence1.PersonId)).Return(site);
-			siteIdForPerson.Expect(x => x.GetSiteId(outOfAdherence2.PersonId)).Return(site);
-			var target = new AdherenceAggregator(broker, null, siteIdForPerson);
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData { SiteId = site });
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData{SiteId = site});
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);
@@ -68,12 +75,12 @@ namespace Teleopti.Ccc.Rta.ServerTest.Adherence
 			var outOfAdherence1 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 			var outOfAdherence2 = new ActualAgentState { StaffingEffect = 1, PersonId = Guid.NewGuid() };
 
-			var broker = new MessageSenderExposingLastNotification();
-			var siteProvider = MockRepository.GenerateMock<ISiteIdForPerson>();
+			var broker = new MessageSenderExposingNotifications();
+			var organizationForPerson = MockRepository.GenerateMock<IOrganizationForPerson>();
 			var siteId = Guid.NewGuid();
-			siteProvider.Expect(x => x.GetSiteId(outOfAdherence1.PersonId)).Return(siteId);
-			siteProvider.Expect(x => x.GetSiteId(outOfAdherence2.PersonId)).Return(siteId);
-			var target = new AdherenceAggregator(broker, null, siteProvider);
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence1.PersonId)).Return(new PersonOrganizationData { SiteId = siteId });
+			organizationForPerson.Expect(x => x.GetOrganization(outOfAdherence2.PersonId)).Return(new PersonOrganizationData { SiteId = siteId });
+			var target = new AdherenceAggregator(broker, organizationForPerson);
 
 			target.Invoke(outOfAdherence1);
 			target.Invoke(outOfAdherence2);

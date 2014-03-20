@@ -156,12 +156,11 @@
     <Compile Include="ActualAgentStateCacheTest.cs" />
     <Compile Include="Adherence\AdherenceAggregatorInitializorTest.cs" />
     <Compile Include="Adherence\NotificationExtension.cs" />
-    <Compile Include="Adherence\PersonOrganizationReaderTest.cs" />
-    <Compile Include="Adherence\SiteIdForPersonTest.cs" />
+    <Compile Include="Adherence\OrganizationForPersonTest.cs" />
+    <Compile Include="Adherence\PersonOrganizationProviderTest.cs" />
     <Compile Include="Adherence\SiteAdherenceTest.cs" />
     <Compile Include="Adherence\TeamAdherenceTest.cs" />
     <Compile Include="Adherence\SendMessageTest.cs" />
-    <Compile Include="Adherence\TeamIdForPersonTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />

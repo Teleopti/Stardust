@@ -25,6 +25,8 @@
 
 		<link rel="stylesheet" href="Areas/Anywhere/Content/Styles/team-schedule.css" />
 		<link rel="stylesheet" href="Areas/Anywhere/Content/Styles/person-schedule.css" />
+		<link rel="stylesheet" href="Areas/Anywhere/Content/Styles/realtimeadherence.css" />
+
         
         <link href="content/favicon.ico" rel="shortcut icon" type="image/x-icon"/>
         

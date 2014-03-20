@@ -26,12 +26,12 @@ define([
 
 		this.Persons = ko.observableArray();
 		this.SortedPersons = ko.computed(function() {
-			return self.Persons().sort(function(first, second) {
+			return self.Persons().sort(function (first, second) {
 				first = first.OrderBy();
 				second = second.OrderBy();
 				return first == second ? 0 : (first < second ? -1 : 1);
 			});
-		}).extend({ throttle: 10 });
+		});
 
 		var layers = function() {
 			return lazy(self.Persons())
@@ -67,33 +67,34 @@ define([
 			self.GroupPages.push.apply(self.GroupPages, newItems);
 		};
 
-		var personForId = function (id) {
+		var personForId = function(id, personArray) {
 			if (!id)
 				return undefined;
-			var person = lazy(self.Persons())
-				.filter(function (x) { return x.Id == id; })
+			var personvm = lazy(personArray)
+				.filter(function(x) { return x.Id == id; })
 				.first();
-			if (!person) {
-				person = new personViewModel({ Id: id });
-				self.Persons.push(person);
+			if (!personvm) {
+				personvm = new personViewModel({ Id: id });
+				personArray.push(personvm);
 			}
-			return person;
+			return personvm;
 		};
 
 		this.UpdateSchedules = function (data, timeLine) {
 			// data might include the same person more than once, with data for more than one day
 			
 			self.Persons([]);
-			
+			var personArray = [];
 			// add schedule data. a person might get more than 1 schedule added
 			for (var i = 0; i < data.length; i++) {
 				var schedule = data[i];
 				schedule.GroupId = self.GroupId();
 				schedule.Offset = self.Date();
 				schedule.Date = moment(schedule.Date, resources.FixedDateFormatForMoment);
-				var person = personForId(schedule.PersonId);
-				person.AddData(schedule, timeLine);
+				var personvm = personForId(schedule.PersonId, personArray);
+				personvm.AddData(schedule, timeLine);
 			}
+			self.Persons.push.apply(self.Persons, personArray);
 		};
 
 		this.NextDay = function () {

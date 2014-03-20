@@ -1,12 +1,13 @@
-﻿
-define([
-	'knockout',
+﻿define([
+		'knockout',
+		'knockout.justgagebinding',
 		'text!templates/realtimeadherenceteams/view.html',
 		'views/realtimeadherenceteams/vm',
 		'subscriptions.adherenceteams',
 		'ajax'
 ], function (
-	ko,
+		ko,
+		justGageBinding,
 		view,
 		realTimeAdherenceViewModel,
 		subscriptions,
@@ -20,21 +21,21 @@ define([
 		},
 
 		display: function (options) {
-
+			var siteId = options.id;
 			viewModel = realTimeAdherenceViewModel();
 
 			ko.applyBindings(viewModel, options.bindingElement);
 
 			ajax.ajax({
-				url: "Teams/ForSite?siteId=" + options.id,
+				url: "Teams/ForSite?siteId=" + siteId,
 				success: function (data) {
 					viewModel.fill(data);
 				}
 			});
 
-			subscriptions.subscribeAdherence(function(notification) {
+			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
-			});
+			}, siteId);
 		},
 	};
 });

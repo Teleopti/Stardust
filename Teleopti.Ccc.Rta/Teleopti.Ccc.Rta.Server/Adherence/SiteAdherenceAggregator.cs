@@ -1,25 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.Rta.Server.Adherence
 {
 	public class SiteAdherenceAggregator
 	{
-		private readonly ISiteIdForPerson _siteIdForPerson;
+		private readonly IOrganizationForPerson _organizationForPerson;
 		private readonly Dictionary<Guid, AggregatedValues> _siteAdherences = new Dictionary<Guid, AggregatedValues>();
 
-		public SiteAdherenceAggregator(ISiteIdForPerson siteIdForPerson)
+		public SiteAdherenceAggregator(IOrganizationForPerson organizationForPerson)
 		{
-			_siteIdForPerson = siteIdForPerson;
+			_organizationForPerson = organizationForPerson;
 		}
 
-		public AggregatedValues Aggregate(IActualAgentState actualAgentState)
+		public Notification CreateNotification(IActualAgentState actualAgentState)
 		{
-			if (_siteIdForPerson == null) return null;
+			if (_organizationForPerson == null) return null;
 
 			var personId = actualAgentState.PersonId;
-			var siteId = _siteIdForPerson.GetSiteId(personId);
+			var siteId = _organizationForPerson.GetOrganization(personId).SiteId;
 
 			AggregatedValues siteState;
 			if (!_siteAdherences.TryGetValue(siteId, out siteState))
@@ -29,7 +32,25 @@ namespace Teleopti.Ccc.Rta.Server.Adherence
 			}
 
 			var changed = siteState.TryUpdateAdherence(personId, actualAgentState.StaffingEffect);
-			return changed ? _siteAdherences[siteId] : null;
+			return changed
+				? createSiteNotification(_siteAdherences[siteId], actualAgentState.BusinessUnit)
+				: null;
+		}
+
+		private static Notification createSiteNotification(AggregatedValues aggregatedValues, Guid businessUnitId)
+		{
+			var siteAdherenceMessage = new SiteAdherenceMessage
+			{
+				OutOfAdherence = aggregatedValues.NumberOutOfAdherence()
+			};
+			return new Notification
+			{
+				BinaryData = JsonConvert.SerializeObject(siteAdherenceMessage),
+				BusinessUnitId = businessUnitId.ToString(),
+				DomainType = "SiteAdherenceMessage",
+				DomainId = aggregatedValues.Key.ToString()
+			};
+			
 		}
 	}
 }

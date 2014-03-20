@@ -43,8 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				                          new[]
 					                          {
 						                          new AdherenceAggregator(messageSender,
-						                                                  new TeamIdForPerson(personOrganizationProvider),
-						                                                  new SiteIdForPerson(personOrganizationProvider))
+						                                                  new OrganizationForPerson(personOrganizationProvider))
 					                          });
 			});
 

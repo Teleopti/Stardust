@@ -23,6 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				return null;
 
 			var shiftReadModel = JsonConvert.DeserializeObject<Model>(scheduleReadModel.Model);
+			if(shiftReadModel.Shift.Projection.Count == 0)
+				return null;
 			return new ShiftTradeAddPersonScheduleViewModel
 			{
 				PersonId = scheduleReadModel.PersonId,
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public IList<ShiftTradeAddPersonScheduleViewModel> Map(IEnumerable<IPersonScheduleDayReadModel> scheduleReadModels)
 		{
-			return scheduleReadModels.Select(Map).ToList();
+			return scheduleReadModels.Select(Map).Where(s => s != null).ToList();
 		}
 	}
 }

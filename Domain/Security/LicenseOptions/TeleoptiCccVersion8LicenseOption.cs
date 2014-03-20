@@ -48,10 +48,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			function.IsPreliminary = false;
 			EnabledApplicationFunctions.Add(function);
 
-			function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.MonthSchedule);
-			function.IsPreliminary = false;
-			EnabledApplicationFunctions.Add(function);
-
 			function = ApplicationFunction.FindByPath(allApplicationFunctions, DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount);
 			function.IsPreliminary = false;
 			EnabledApplicationFunctions.Add(function);
