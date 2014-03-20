@@ -44,15 +44,15 @@
 																							 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
 																						 }
 																					 }]">
-				<a data-toggle="dropdown" class="dropdown-toggle" href="#" data-bind="click: applyPreference">
+				<button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
 					<span data-bind="'text': selectedPreferenceText()"></span>
 					<span class="caret"></span>
-				</a>
+				</button>
 				<ul role="menu" class="dropdown-menu" data-bind="foreach: availablePreferences">
-					<!-- ko if: Value != '-' -->
+					<!-- ko 'if': 'Value' != '-' -->
 					<li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
 					<!-- /ko -->
-					<!-- ko if: Value == '-' -->
+					<!-- ko 'if': 'Value' == '-' -->
 					<li class="divider"></li>
 					<!-- /ko -->
 				</ul>
