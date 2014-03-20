@@ -466,6 +466,8 @@
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ExtractDayOffFromGivenWeek.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractor.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlier.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
@@ -1053,7 +1055,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayer.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionService.cs" />
     <Compile Include="Scheduling\TimeZoneGuard.cs" />
-    <Compile Include="Scheduling\WeeklyRest\DayOffWithLongestSpan.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\DayOffToTimeSpanExtractor.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />
