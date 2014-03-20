@@ -12,7 +12,12 @@
 		<span class="add-on" data-bind="clickable: previousDateValid">
 			<i class="icon-arrow-left" data-bind="click: previousDate, enable: !IsLoading()"></i>
 		</span>
+		<![if (!IE)|(gt IE 8)]>
 		<input type="text" class="span2 add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { format: DatePickerFormat(), startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+		<![endif]>
+		<!--[if lte IE 8]>
+		<input type="text" class="span2 add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
+		<![endif]-->
 		<span class="add-on" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 			<i class="icon-th" ></i>
 		</span>
