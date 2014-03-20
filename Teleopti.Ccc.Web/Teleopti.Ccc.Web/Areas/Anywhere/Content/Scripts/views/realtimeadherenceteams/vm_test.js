@@ -11,7 +11,7 @@
 				var team1 = { Name: 'Green', Id: 'guid1', NumberOfAgents:5};
 				var team2 = { Name: 'Red', Id: 'guid2', NumberOfAgents:6};
 				var vm = viewModel();
-				vm.fill([team1, team2]);
+				vm.fill({ Teams: [team1, team2] });
 
 				assert.equals(vm.teams()[0].Id, team1.Id);
 				assert.equals(vm.teams()[0].Name, team1.Name);
@@ -24,7 +24,7 @@
 			"should update number out of adherence": function () {
 				var vm = viewModel();
 
-				vm.fill([{ Name: 'Red', Id: 'guid1' }]);
+				vm.fill({ Teams: [{ Name: 'Red', Id: 'guid1' }] });
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.teams()[0].OutOfAdherence(), 1);
@@ -32,7 +32,7 @@
 
 			"should update number out of adherence on existing team": function () {
 				var vm = viewModel();
-				vm.fill([{ Name: 'Team Green', Id: 'guid1' }]);
+				vm.fill({ Teams: [{ Name: 'Team Green', Id: 'guid1' }] });
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.teams().length, 1);
@@ -51,7 +51,7 @@
 				var vm = viewModel();
 				var team = { NumberOfAgents: expected };
 
-				vm.fill([team]);
+				vm.fill({ Teams: [team] });
 
 				assert.equals(vm.teams()[0].NumberOfAgents, expected);
 			},
@@ -63,11 +63,20 @@
 					BinaryData: '{"OutOfAdherence":2}',
 				};
 				var team = { Id: "theguid" };
-				vm.fill([team]);
+				vm.fill({ Teams: [team] });
 
 				vm.updateFromNotification(notification);
 
 				assert.equals(vm.teams()[0].OutOfAdherence(), 2);
+			},
+
+			"should set site name for team": function() {
+				var expected = "London";
+				var vm = viewModel();
+				vm.fill({ SiteName: expected, Teams: [{}]});
+
+				assert.equals(vm.siteName(), expected);
+
 			}
 		});		
 	};
