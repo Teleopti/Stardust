@@ -4,9 +4,11 @@
 		<li class="active" data-bind="text: siteName"></li>
 	</ul>
 	<div class="row" data-bind="foreach: teams">
-		<div class="col-md-4">
-			<div class="well well-sm team">
-				<div data-bind="justgage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name}"></div>
+		<div data-bind="if: NumberOfAgents > 0">
+			<div class="col-md-4">
+				<div class="well well-sm team">
+					<div data-bind="justgage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name}"></div>
+				</div>
 			</div>
 		</div>
 	</div>

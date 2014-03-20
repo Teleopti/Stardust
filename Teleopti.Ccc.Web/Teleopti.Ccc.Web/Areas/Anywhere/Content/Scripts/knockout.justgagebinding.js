@@ -11,10 +11,6 @@ define([
 			var id = ko.utils.unwrapObservable(options.id);
 			element.id = id;
 			var max = ko.utils.unwrapObservable(options.max);
-			if (max == 0) {
-				//hack if no agents in team/site!
-				max = -1;
-			}
 
 			var gageObject = new justgage({
 				id: id,
