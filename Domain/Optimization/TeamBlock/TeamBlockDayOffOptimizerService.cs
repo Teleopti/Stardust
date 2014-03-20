@@ -150,18 +150,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				if (teamInfo.GroupPerson.GroupMembers.Any())
 				{
-					rollbackService.ClearModificationCollection();
-					bool failed = false;
 					foreach (var matrix in teamInfo.MatrixesForGroup())
 					{
+						rollbackService.ClearModificationCollection();
+
 						var success = runOneMatrixOnly(optimizationPreferences, rollbackService, matrix, schedulingOptions, teamInfo,
 												   selectedPeriod, selectedPersons, allPersonMatrixList);
-						if (!success)
-							failed = true;
-					}
 
-					previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, !failed,
-					                                   teamInfosToRemove, teamInfo, totalLiveTeamInfos, currentTeamInfoCounter);
+						previousPeriodValue = handleResult(rollbackService, schedulingOptions, previousPeriodValue, success,
+													   teamInfosToRemove, teamInfo, totalLiveTeamInfos, currentTeamInfoCounter);
+					}
 					
 					if (_cancelMe)
 						break;
