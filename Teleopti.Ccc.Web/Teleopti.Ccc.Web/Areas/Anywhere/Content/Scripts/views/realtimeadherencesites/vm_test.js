@@ -1,14 +1,17 @@
 ﻿
 define('resources', {});
 
+define('window', {
+	setLocationHash: function() {},
+	locationReplace: function() {},
+});
+
 define([
     'buster',
-    'views/realtimeadherencesites/vm',
-    'window'
+    'views/realtimeadherencesites/vm'
 ], function (
     buster,
-    viewModel,
-    window
+    viewModel
     ) {
 	return function () {
 
@@ -84,6 +87,7 @@ define([
 				var vm = viewModel();
 				var site = { Id: "aguid" };
 				vm.fill([site]);
+				var window = require('window');
 				this.stub(window, "setLocationHash");
 
 				vm.sites()[0].openSite();
