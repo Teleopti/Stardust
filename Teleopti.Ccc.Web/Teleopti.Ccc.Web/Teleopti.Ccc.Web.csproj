@@ -519,8 +519,14 @@
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
     <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
+    <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
+    <Compile Include="Core\Startup\IFindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\InitializeApplication\BundleScripts.cs" />
     <Compile Include="Core\Startup\InitializeApplication\MessageBrokerTask.cs" />
+    <Compile Include="Core\Startup\IRegisterArea.cs" />
+    <Compile Include="Core\Startup\IRegisterAreas.cs" />
+    <Compile Include="Core\Startup\RegisterArea.cs" />
+    <Compile Include="Core\Startup\RegisterAreas.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
