@@ -18,7 +18,12 @@
                                 <i class="glyphicon glyphicon-chevron-left" data-bind="enable: !IsLoading()"></i>
                             </button>
 						</span>
+                        <![if (!IE)|(gt IE 8)]>
 						<input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()" />
+                        <![endif]>
+                        <!--[if lte IE 8]>
+                        <input type="text" class="col-xs-2 form-control add-shifttrade-datepicker" data-bind="value: requestedDate().format(DatePickerFormat())" readonly="readonly" />
+                        <![endif]-->
 						<span class="input-group-btn">
 							<button class="btn btn-default" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
