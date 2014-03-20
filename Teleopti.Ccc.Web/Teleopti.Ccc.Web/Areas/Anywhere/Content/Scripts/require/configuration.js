@@ -19,6 +19,7 @@
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
 
+		//depends on eve, hardcoded in  justgage.20130410.js
 		justgage: '../../../../Content/justgage/justgage.20130410',
 		raphael: '../../../../Content/justgage/raphael-min',
 
