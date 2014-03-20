@@ -53,9 +53,14 @@
 </div>
 <div class="row form-group">
     <div class="col-xs-8">
-        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
-            <input class="request-edit-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
-            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-calendar"></i></span>
+        <span class="input-group">
+				<![if (!IE)|(gt IE 8)]>
+				<input class="request-edit-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
+				<![endif]>
+				<!--[if lte IE 8]>
+				<input class="request-edit-datefrom input-sm form-control" data-bind="value: DateFrom().format(DateFormat())"  readonly="readonly" type="text" />
+				<![endif]-->
+            <span class="input-group-addon input-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable"><i class="glyphicon glyphicon-calendar"></i></span>
         </span>
     </div>
     <div class="col-xs-4 bootstrap-timepicker">
@@ -67,9 +72,14 @@
 </div>
 <div class="row form-group">
     <div class="col-xs-8">
-        <span class="input-group" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
-            <input class="request-edit-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
-            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-calendar"></i></span>
+        <span class="input-group">
+			<![if (!IE)|(gt IE 8)]>
+			<input class="request-edit-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
+			<![endif]>
+			<!--[if lte IE 8]>
+			<input class="request-edit-dateto input-sm form-control" data-bind="value: DateTo().format(DateFormat())" readonly="readonly" type="text" />
+			<![endif]-->
+            <span class="input-group-addon input-sm" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }"><i class="glyphicon glyphicon-calendar"></i></span>
         </span>
     </div>
     <div class="col-xs-4 bootstrap-timepicker">
