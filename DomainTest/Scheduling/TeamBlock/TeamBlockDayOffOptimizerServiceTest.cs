@@ -396,9 +396,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
 			Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
-			                                                     new DateOnlyPeriod(DateOnly.MinValue,
-			                                                                        DateOnly.MinValue.AddDays(1)),
-																 _selectedPersons, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(!failOnRescheduling);
+				new DateOnlyPeriod(DateOnly.MinValue,
+					DateOnly.MinValue.AddDays(1)),
+				_selectedPersons, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, null))
+				.Return(!failOnRescheduling);
 			if (failOnRescheduling)
 				return;
 

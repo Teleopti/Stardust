@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -204,6 +205,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             registerFairnessOptimizationService(builder);
             registerDayOffFairnessOptimizationService(builder);
 			registerEqualNumberOfCategoryFairnessService(builder);
+	        registerWeeklyRestSolverClasses(builder);
 
             builder.RegisterType<ScheduleOvertimeCommand>().As<IScheduleOvertimeCommand>();
             builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>();
@@ -407,6 +409,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
             builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
             builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
+	    }
+
+		private static void registerWeeklyRestSolverClasses(ContainerBuilder builder)
+	    {
+			builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
+		    //IShiftNudgeEarlier
 	    }
     }
 }
