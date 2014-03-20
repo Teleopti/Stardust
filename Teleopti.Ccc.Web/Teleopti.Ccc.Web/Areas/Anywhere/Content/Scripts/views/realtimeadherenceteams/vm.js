@@ -10,12 +10,15 @@
 
 		var that = {};
 		that.teams = ko.observableArray();
-		that.fill = function(data) {
-			for (var i = 0; i < data.length; i++) {
+		that.siteName = ko.observable();
+		that.fill = function (data) {
+			that.siteName(data.SiteName);
+			var teams = data.Teams;
+			for (var i = 0; i < teams.length; i++) {
 				var newTeam = team();
-				newTeam.Id = data[i].Id;
-				newTeam.Name = data[i].Name;
-				newTeam.NumberOfAgents = data[i].NumberOfAgents;
+				newTeam.Id = teams[i].Id;
+				newTeam.Name = teams[i].Name;
+				newTeam.NumberOfAgents = teams[i].NumberOfAgents;
 				that.teams.push(newTeam);
 			}
 		};
