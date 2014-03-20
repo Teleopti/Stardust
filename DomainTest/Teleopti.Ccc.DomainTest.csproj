@@ -359,6 +359,7 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRestrictionOverLimitValidatorTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\EnsureWeeklyRestRuleTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ExtractDayOffFromGivenWeekTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractorTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlierTest.cs" />
