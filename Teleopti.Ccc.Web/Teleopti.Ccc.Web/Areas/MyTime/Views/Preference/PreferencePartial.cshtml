@@ -33,17 +33,30 @@
         }
         else
 		{
-			<li class="dropdown" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
-																					 {
-																						 if (optionGroup.Text != Resources.ShiftCategory)
-																						 {
-																							 @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
-																						 }
-																						 foreach (var option in optionGroup.Options)
-																						 {
-																							 @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
-																						 }
-																					 }]">
+			<li class="dropdown" id="preference-split-button" data-mytime-preference-option="[@{
+				                                                                                  var oIdx = 0;
+				                                                                                  foreach (var optionGroup in Model.Options.PreferenceOptions)
+				                                                                                  {
+					                                                                                  oIdx++;
+					                                                                                  if (optionGroup.Text != Resources.ShiftCategory)
+					                                                                                  {
+						                                                                                  @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
+					                                                                                  }
+					                                                                                  var idx = 0;
+					                                                                                  foreach (var option in optionGroup.Options)
+					                                                                                  {
+						                                                                                  if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
+						                                                                                  {
+							                                                                                  @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
+						                                                                                  }
+						                                                                                  else
+						                                                                                  {
+							                                                                                  @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
+						                                                                                  }
+						                                                                                  idx++;
+					                                                                                  }
+				                                                                                  }
+			                                                                                  }]">
 				<button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
 					<span data-bind="'text': selectedPreferenceText()"></span>
 					<span class="caret"></span>
