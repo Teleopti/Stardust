@@ -1,8 +1,15 @@
 ﻿.realtimeadherencesites .site {
-	height: 250px;
 	cursor: pointer;
 }
 
 .realtimeadherenceteams .team {
+	cursor: pointer;
+}
+
+.realtimeadherenceteams .gage {
+	height: 250px;
+}
+
+.realtimeadherencesites .gage {
 	height: 250px;
 }

@@ -19,7 +19,7 @@
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
 
-		justgage: '../../../../Content/justgage/justgage.1.0.1.min',
+		justgage: '../../../../Content/justgage/justgage.20130410',
 		raphael: '../../../../Content/justgage/raphael-min',
 
 		knockoutBindings: 'knockout.bindings',

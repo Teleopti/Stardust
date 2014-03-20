@@ -1025,6 +1025,7 @@
     <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Content\justgage\justgage.20130410.js" />
     <Content Include="Content\justgage\justgage.1.0.1.min.js" />
     <Content Include="Content\justgage\raphael-min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
