@@ -14,7 +14,7 @@ define([
 
 			var gageObject = new justgage({
 				id: id,
-				value: 'xxx?',
+				value: 0,
 				min: 0,
 				max: max,
 				title: ko.utils.unwrapObservable(options.title),

@@ -5,7 +5,7 @@ define([
 		'lazy',
 		'shared/layer',
 		'views/teamschedule/shift-menu',
-		'resources!r'
+		'resources'
 ], function (
 	ko,
 	moment,

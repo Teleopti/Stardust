@@ -1,17 +1,20 @@
 ﻿define([
 		'knockout',
 		'lazy',
-		'views/realtimeadherencesites/site'
+		'views/realtimeadherencesites/site',
+		'resources'
 ],
 	function (
 		ko,
 		lazy,
-		site
+		site,
+		resources
 	) {
 		return function () {
 
-
 			var that = {};
+
+			that.resources = resources;
 
 			that.sites = ko.observableArray();
 

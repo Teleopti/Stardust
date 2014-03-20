@@ -1,7 +1,7 @@
 define([
 		'knockout',
 		'moment',
-		'resources!r'
+		'resources'
 ], function (
 	ko,
 	moment,
