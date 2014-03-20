@@ -5,7 +5,7 @@ using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {
-	[TaskPriority(4)]
+	[TaskPriority(5)]
 	public class InitializeApplicationTask : IBootstrapperTask
 	{
 		private readonly IInitializeApplication _initializeApplication;

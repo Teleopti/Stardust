@@ -7,7 +7,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {
-	[TaskPriority(5)]
+	[TaskPriority(6)]
 	public class MessageBrokerTask : IBootstrapperTask
 	{
 		private readonly IMessageBroker _messageBroker;

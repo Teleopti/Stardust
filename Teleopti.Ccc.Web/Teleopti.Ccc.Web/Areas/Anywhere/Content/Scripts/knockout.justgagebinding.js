@@ -18,7 +18,7 @@ define([
 				min: 0,
 				max: max,
 				title: ko.utils.unwrapObservable(options.title),
-				label: 'xxOut of adherence',
+				label: ko.utils.unwrapObservable(options.label),
 				relativeGaugeSize: true
 			});
 			element.gage = gageObject;

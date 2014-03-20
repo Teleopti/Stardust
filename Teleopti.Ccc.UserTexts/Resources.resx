@@ -11986,4 +11986,8 @@ Reduce the complexity to use these shifts.</value>
     <value>On available agents only</value>
     <comment>only those agents will be included in schedule overtime who have defined the overtime availability</comment>
   </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Out of adherence</value>
+    <comment>Out of adherence</comment>
+  </data>
 </root>

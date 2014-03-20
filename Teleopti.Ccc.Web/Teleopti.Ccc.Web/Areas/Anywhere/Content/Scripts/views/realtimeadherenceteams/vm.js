@@ -1,24 +1,25 @@
 ﻿define([
 		'knockout',
 		'lazy',
-		'views/realtimeadherenceteams/team'
+		'views/realtimeadherenceteams/team',
+		'resources'
 ],
 	function (ko,
 		lazy,
-		team) {
+		team,
+		resources) {
 	return function () {
 
 		var that = {};
+		that.resources = resources;
 		that.teams = ko.observableArray();
 		that.siteName = ko.observable();
 		that.fill = function (data) {
-			that.siteName(data.SiteName);
-			var teams = data.Teams;
-			for (var i = 0; i < teams.length; i++) {
+			for (var i = 0; i < data.length; i++) {
 				var newTeam = team();
-				newTeam.Id = teams[i].Id;
-				newTeam.Name = teams[i].Name;
-				newTeam.NumberOfAgents = teams[i].NumberOfAgents;
+				newTeam.Id = data[i].Id;
+				newTeam.Name = data[i].Name;
+				newTeam.NumberOfAgents = data[i].NumberOfAgents;
 				that.teams.push(newTeam);
 			}
 		};
@@ -42,6 +43,10 @@
 			var data = JSON.parse(notification.BinaryData);
 			data.Id = notification.DomainId;
 			that.update(data);
+		};
+
+		that.setSiteName = function(data) {
+			that.siteName(data.Name);
 		};
 
 		return that;

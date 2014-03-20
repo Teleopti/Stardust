@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		[SetUp]
 		public void Setup()
 		{
-			target = new RegisterRoutesTask(r => r.Clear(), () => { });
+			target = new RegisterRoutesTask(r => r.Clear(), null);
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldRouteDefaultToMenuIndex()
 		{
 			var routes = new RouteCollection();
-			new RegisterRoutesTask(r => r.Clear(), () => { }).registerRoutes(routes);
+			new RegisterRoutesTask(r => r.Clear(), null).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
 			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/");
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldIgnoreFilesInContentFolder()
 		{
 			var routes = new RouteCollection();
-			new RegisterRoutesTask(r => r.Clear(), () => { }).registerRoutes(routes);
+			new RegisterRoutesTask(r => r.Clear(), null).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
 			httpContext.Expect(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Content/Script/AnyFile");
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		public void ShouldMapAuthenticationRequestToStartArea()
 		{
 			var routes = new RouteCollection();
-			new RegisterRoutesTask(r => r.Clear(), () => { }).registerRoutes(routes);
+			new RegisterRoutesTask(r => r.Clear(), null).registerRoutes(routes);
 
 			var httpContext = MockRepository.GenerateMock<HttpContextBase>();
 			httpContext.Stub(c => c.Request.AppRelativeCurrentExecutionFilePath).Return("~/Authentication");

@@ -1,5 +1,12 @@
 require.config(requireconfiguration);
 
+define('resources', {});
+
+define('window', {
+	setLocationHash: function () { },
+	locationReplace: function () { },
+});
+
 require([
 		'tests',
 		'views/realtimeadherencesites/vm_test',

@@ -25,7 +25,7 @@ define([
 
 		this.DayOffs = ko.observableArray();
 		this.Shifts = ko.observableArray();
-
+		
 		this.ContractTime = ko.computed(function () {
 			var time = moment().startOf('day').add('minutes', self.ContractTimeMinutes());
 			return time.format("H:mm");
@@ -86,27 +86,32 @@ define([
 				.filter(function (x) { return x.OverlapsTimeLine(); });
 		};
 
+		this.SortValue = null;
+
 		this.OrderBy = function () {
-			var visibleShiftLayers = visibleLayers().filter(function(x) {
+			if (self.SortValue != null)
+				return self.SortValue;
+			var visibleShiftLayers = visibleLayers().filter(function (x) {
 				return !x.IsFullDayAbsence;
 			});
-			
+
 			if (visibleShiftLayers.some()) {
-				return visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
-			} 
-			
+				self.SortValue = visibleShiftLayers.map(function (x) { return x.StartMinutes(); }).min();
+				return self.SortValue;
+			}
+
 			var visibleFullDayAbsences = visibleLayers().filter(function (x) { return x.IsFullDayAbsence; });
 			if (visibleFullDayAbsences.some()) {
-				return 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
-			} 
-			
+				self.SortValue = 5000 + visibleFullDayAbsences.map(function (x) { return x.StartMinutes(); }).min();
+				return self.SortValue;
+			}
+
 			if (visibleDayOffs().some()) {
 				return 10000;
 			}
 			return 20000;
 		};
-
-
+		
 		this.Menu = new menu();
 
 		this.Selected = ko.observable(false);

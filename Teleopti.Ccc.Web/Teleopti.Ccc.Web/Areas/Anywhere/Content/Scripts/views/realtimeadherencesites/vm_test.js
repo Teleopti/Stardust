@@ -1,11 +1,4 @@
 ﻿
-define('resources', {});
-
-define('window', {
-	setLocationHash: function() {},
-	locationReplace: function() {},
-});
-
 define([
     'buster',
     'views/realtimeadherencesites/vm'

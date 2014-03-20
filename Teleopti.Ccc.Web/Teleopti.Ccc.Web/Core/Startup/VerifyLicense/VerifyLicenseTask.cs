@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 {
-	[TaskPriority(5)]
+	[TaskPriority(7)]
 	public class VerifyLicenseTask : IBootstrapperTask, ILicenseFeedback
 	{
 		private readonly ILicenseVerifierFactory _licenseVerifierFactory;

@@ -50,5 +50,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			result.Single().NumberOfAgents.Should().Be.EqualTo(expected);
 		}
+
+		[Test]
+		public void ShouldGetSingleSite()
+		{
+			var expected = Guid.NewGuid().ToString();
+			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
+			var target = new SitesController(siteRepository, null);
+			var site = new Site(expected);
+			site.SetId(Guid.NewGuid());
+			siteRepository.Stub(x => x.Get(site.Id.Value)).Return(site);
+
+			var result = target.Get(site.Id.Value.ToString()).Data as SiteViewModel;
+
+			result.Id.Should().Be.EqualTo(site.Id.Value.ToString());
+			result.Name.Should().Be.EqualTo(expected);
+		}
 	}
 }

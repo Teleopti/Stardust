@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
@@ -31,6 +32,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					Name = site.Description.Name,
 					NumberOfAgents = numberOfAgents[site.Id.Value]
 				}), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction, HttpGet]
+		public JsonResult Get(string siteId)
+		{
+			var site = _siteRepository.Get(new Guid(siteId));
+			return Json(new SiteViewModel
+			{
+				Id = site.Id.Value.ToString(),
+				Name = site.Description.Name
+			}, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
