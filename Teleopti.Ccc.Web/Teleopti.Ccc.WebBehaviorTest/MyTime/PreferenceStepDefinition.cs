@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button()
 		{
 			var data = DataMaker.Data().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			Browser.Interactions.AssertFirstContains("#preference-split-button a", data.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertFirstContains("#preference-split-button button", data.ShiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the standard preference in the calendar")]
