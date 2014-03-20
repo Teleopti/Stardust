@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         public void Setup()
         {
             _mock = new MockRepository();
-            _target = new ContractContractWeeklyRestForPersonWeek();
+            _target = new ContractWeeklyRestForPersonWeek();
             _person = _mock.StrictMock<IPerson>();
             _personPeriod = _mock.StrictMock<IPersonPeriod>();
             _personContract = _mock.StrictMock<IPersonContract>();
@@ -92,22 +93,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         }
     }
 
-    public class ContractContractWeeklyRestForPersonWeek : IContractWeeklyRestForPersonWeek
-    {
-        public TimeSpan GetWeeklyRestFromContract(PersonWeek personWeek)
-        {
-            var person = personWeek.Person;
-            var period = person.Period(personWeek.Week.StartDate) ?? person.Period(personWeek.Week.EndDate);
-            if (period == null)
-            {
-                return TimeSpan.FromSeconds(0);
-            }
-            return  period.PersonContract.Contract.WorkTimeDirective.WeeklyRest;
-        }
-    }
-
-    public  interface IContractWeeklyRestForPersonWeek
-    {
-        TimeSpan GetWeeklyRestFromContract(PersonWeek personWeek);
-    }
+    
 }

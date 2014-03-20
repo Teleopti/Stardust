@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             foreach (PersonWeek personWeek in personWeeks)
             {
                 var person = personWeek.Person;
-                IScheduleRange currentSchedules = rangeClones[person];
+                IScheduleRange currentSchedules = rangeClones [person];
                 var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
                 foreach (DateOnly day in personWeek.Week.DayCollection())
                 {
