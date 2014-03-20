@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Interfaces.Domain;
@@ -15,26 +16,94 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         private IEnsureWeeklyRestRule _target;
         private IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
         private IDayOffMaxFlexCalculator _dayOffMaxFlexCalculator;
+        private IPerson _person;
+        private IScheduleRange _currentSchedules;
+        private IScheduleDay _scheduleDay1;
+        private IScheduleDay _scheduleDay2;
+        private IPersonAssignment _personAssignment2;
+        private IPersonAssignment _personAssignment1;
+        private IScheduleDay _scheduleDay3;
+        private IScheduleDay _scheduleDay4;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
+            _person = _mock.StrictMock<IPerson>();
+            _currentSchedules = _mock.StrictMock<IScheduleRange>();
+            _scheduleDay1 = _mock.StrictMock<IScheduleDay>();
+            _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
+            _scheduleDay3 = _mock.StrictMock<IScheduleDay>();
+            _scheduleDay4 = _mock.StrictMock<IScheduleDay>();
+            _personAssignment1 = _mock.StrictMock<IPersonAssignment>();
+            _personAssignment2 = _mock.StrictMock<IPersonAssignment>();
+
             _workTimeStartEndExtractor = _mock.StrictMock<IWorkTimeStartEndExtractor>();
             _dayOffMaxFlexCalculator = _mock.StrictMock<IDayOffMaxFlexCalculator>();
             _target = new EnsureWeeklyRestRule(_workTimeStartEndExtractor, _dayOffMaxFlexCalculator);
         }
 
         [Test]
+        public void ReturnTrueIfNoScheduleDayFound()
+        {
+            DateOnlyPeriod week = new DateOnlyPeriod(2014, 03, 19, 2014, 03, 20);
+            PersonWeek personWeek = new PersonWeek(_person, week);
+
+            using (_mock.Record())
+            {
+                Expect.Call(_currentSchedules.ScheduledDayCollection(week))
+                    .IgnoreArguments()
+                    .Return(new List<IScheduleDay>());
+            }
+            using (_mock.Playback())
+            {
+                var result = _target.HasMinWeeklyRest(personWeek, _currentSchedules, TimeSpan.FromHours(10));
+                Assert.IsTrue(result);
+            }
+        }
+
+        [Test]
         public void ReturnTrueIfNoPersonAssignmentFound()
         {
-            Assert.Pass();
+            DateOnlyPeriod week = new DateOnlyPeriod(2014, 03, 19, 2014, 03, 20);
+            PersonWeek personWeek = new PersonWeek(_person, week);
+
+            using (_mock.Record())
+            {
+                Expect.Call(_currentSchedules.ScheduledDayCollection(week))
+                    .IgnoreArguments()
+                    .Return(new List<IScheduleDay>() {_scheduleDay1, _scheduleDay2});
+                Expect.Call(_scheduleDay1.PersonAssignment()).Return(null);
+                Expect.Call(_scheduleDay2.PersonAssignment()).Return(null);
+            }
+            using (_mock.Playback())
+            {
+                var result = _target.HasMinWeeklyRest(personWeek, _currentSchedules, TimeSpan.FromHours(10));
+                Assert.IsTrue(result);
+            }
         }
 
         [Test]
         public void ReturnFalseIfTheWeekHasInValidWeeklyRest()
         {
-            Assert.Pass();
+            DateOnlyPeriod week = new DateOnlyPeriod(2014, 03, 19, 2014, 03, 20);
+            PersonWeek personWeek = new PersonWeek(_person, week);
+
+            using (_mock.Record())
+            {
+                Expect.Call(_currentSchedules.ScheduledDayCollection(week))
+                    .IgnoreArguments()
+                    .Return(new List<IScheduleDay>() { _scheduleDay1, _scheduleDay2 });
+                Expect.Call(_scheduleDay1.PersonAssignment()).Return(_personAssignment1);
+                Expect.Call(_scheduleDay2.PersonAssignment()).Return(_personAssignment2);
+                Expect.Call(_currentSchedules.ScheduledDay(new DateOnly(2014, 03, 18))).Return(_scheduleDay3);
+                Expect.Call(_currentSchedules.ScheduledDay(new DateOnly(2014, 03, 17))).Return(_scheduleDay4);
+            }
+            using (_mock.Playback())
+            {
+                var result = _target.HasMinWeeklyRest(personWeek, _currentSchedules, TimeSpan.FromHours(10));
+                Assert.IsTrue(result);
+            }
         }
 
         [Test]
