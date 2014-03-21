@@ -4,21 +4,32 @@
 	I want to see which parts of the organization currently not adhering to the schedule
 
 Scenario: Show site
-	Given I have a role with
-	| Field                                  | Value             |
-	| Name                                   | Real time analyst |
-	| Access to real time adherence overview | True              |
-	And there is a site named 'London'
-	When I view Real time adherence overview
-	Then I should see the site 'London'
-
-Scenario: Show team
-	Given I have a role with
+	Given the current time is '2014-01-21 13:00'
+	And I have a role with
 	| Field                                  | Value             |
 	| Name                                   | Real time analyst |
 	| Access to real time adherence overview | True              |
 	And there is a site named 'London'
 	And there is a team named 'Red' on site 'London'
+	And Guy London has a person period with
+	| Field      | Value      |
+	| Team       | Red      |
+	| Start Date | 2014-01-01 |
+	When I view Real time adherence overview
+	Then I should see the site 'London'
+
+Scenario: Show team
+	Given the current time is '2014-01-21 13:00'
+	And I have a role with
+	| Field                                  | Value             |
+	| Name                                   | Real time analyst |
+	| Access to real time adherence overview | True              |
+	And there is a site named 'London'
+	And there is a team named 'Red' on site 'London'
+	And Guy Red has a person period with
+	| Field      | Value      |
+	| Team       | Red      |
+	| Start Date | 2014-01-01 |
 	When I view Real time adherence for site 'London'
 	Then I should see the team 'Red'
 

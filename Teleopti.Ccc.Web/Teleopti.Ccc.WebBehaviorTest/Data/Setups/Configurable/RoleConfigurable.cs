@@ -36,18 +36,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToMytimeWeb { get; set; }
 		public bool AccessToAnywhere { get; set; }
 		public bool AccessToAsm { get; set; }
-        public bool AccessToTextRequests { get; set; }
-        public bool AccessToAbsenceRequests { get; set; }
-        public bool AccessToShiftTradeRequests { get; set; }
+		public bool AccessToTextRequests { get; set; }
+		public bool AccessToAbsenceRequests { get; set; }
+		public bool AccessToShiftTradeRequests { get; set; }
 		public bool AccessToStudentAvailability { get; set; }
 		public bool AccessToCalendarLink { get; set; }
 		public bool AccessToOvertimeAvailability { get; set; }
 		public bool AccessToMyReport { get; set; }
-        public bool AccessToUnderConstruction { get; set; }
+		public bool AccessToUnderConstruction { get; set; }
 		public bool AccessToPreferences { get; set; }
 		public bool AccessToRealTimeAdherenceOverview { get; set; }
 		public bool AccessToTeamSchedule { get; set; }
-	    public bool AccessToViewAllGroupPages { get; set; }
+		public bool AccessToViewAllGroupPages { get; set; }
+		public bool AccessToMatrixReports { get; set; }
 		public bool AccessToPersonalAbsenceAccount { get; set; }
 
 		public RoleConfigurable()
@@ -62,18 +63,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToExtendedPreferences = true;
 			AccessToMytimeWeb = true;
 			AccessToAsm = true;
-            AccessToTextRequests = true;
-            AccessToAbsenceRequests = true;
-            AccessToShiftTradeRequests = true;
+			AccessToTextRequests = true;
+			AccessToAbsenceRequests = true;
+			AccessToShiftTradeRequests = true;
 			AccessToAnywhere = false;
 			AccessToViewAllGroupPages = false;
 			AccessToCalendarLink = false;
 			AccessToOvertimeAvailability = false;
 			AccessToMyReport = true;
-            AccessToUnderConstruction = true;
+			AccessToUnderConstruction = true;
 			AccessToPreferences = true;
 			AccessToRealTimeAdherenceOverview = false;
 			AccessToTeamSchedule = true;
+			AccessToMatrixReports = true;
 			AccessToPersonalAbsenceAccount = true;
 		}
 
@@ -82,15 +84,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			var role = ApplicationRoleFactory.CreateRole(Name, null);
 
 			var availableDataRangeOption = NoDataAccess
-				                               ? AvailableDataRangeOption.None
-				                               : AccessToMyOwn ? AvailableDataRangeOption.MyOwn : AvailableDataRangeOption.MyTeam;
+														 ? AvailableDataRangeOption.None
+														 : AccessToMyOwn ? AvailableDataRangeOption.MyOwn : AvailableDataRangeOption.MyTeam;
 			var availableData = new AvailableData
 			{
 				ApplicationRole = role,
 				AvailableDataRange = availableDataRangeOption
 			};
 			role.AvailableData = availableData;
-			
+
 
 			if (!string.IsNullOrEmpty(AccessToTeam))
 			{
@@ -125,92 +127,97 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		private IEnumerable<IApplicationFunction> FilterApplicationFunctions(IList<IApplicationFunction> allApplicationFunctions)
 		{
 			var applicationFunctions = from f in allApplicationFunctions
-			                           where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.All
-			                           select f;
+												where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.All
+												select f;
 
 			if (!ViewUnpublishedSchedules)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules
+											  select f;
 
 			if (!ViewConfidential)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential
+											  select f;
 
 			if (!AccessToMobileReports)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports
+											  select f;
 
 			if (!AccessToExtendedPreferences)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb
+											  select f;
 			if (!AccessToMytimeWeb)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyTimeWeb
+											  select f;
 			if (!AccessToAsm)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger
+											  select f;
 			if (!AccessToTextRequests)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TextRequests
+											  select f;
 			if (!AccessToAbsenceRequests)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
+											  select f;
 			if (!AccessToAnywhere)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
+											  select f;
 			if (!AccessToStudentAvailability)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StudentAvailability
-				                       select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StudentAvailability
+											  select f;
 			if (!AccessToShiftTradeRequests)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
-				                       select f;
-			if(!AccessToViewAllGroupPages)
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
+											  select f;
+			if (!AccessToViewAllGroupPages)
 				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
-									   select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
+											  select f;
 			if (!AccessToCalendarLink)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShareCalendar
-				                       select f;
-			if(!AccessToOvertimeAvailability)
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShareCalendar
+											  select f;
+			if (!AccessToOvertimeAvailability)
 				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb
-									   select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb
+											  select f;
 			if (!AccessToPreferences)
 				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StandardPreferences
-									   select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StandardPreferences
+											  select f;
 			if (!AccessToTeamSchedule)
 				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
-									   select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.TeamSchedule
+											  select f;
 			if (!AccessToMyReport)
 				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportWeb
-                                       select f;
-            if (!AccessToUnderConstruction)
-                applicationFunctions = from f in applicationFunctions
-                                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.UnderConstruction
-                                       select f; 
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.MyReportWeb
+											  select f;
+			if (!AccessToUnderConstruction)
+				applicationFunctions = from f in applicationFunctions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.UnderConstruction
+											  select f;
 			if (!AccessToRealTimeAdherenceOverview)
-                applicationFunctions = from f in applicationFunctions
-                                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
-                                       select f;
+				applicationFunctions = from f in applicationFunctions
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview
+											  select f;
 			if (!AccessToPersonalAbsenceAccount)
 				applicationFunctions = from f in applicationFunctions
-									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount
-									   select f;
+											  where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewPersonalAccount
+											  select f;
+			if (!AccessToMatrixReports)
+				applicationFunctions = from f in applicationFunctions
+											  where f.ForeignSource != DefinedForeignSourceNames.SourceMatrix
+											  select f;
+
 			return applicationFunctions;
 		}
 	}

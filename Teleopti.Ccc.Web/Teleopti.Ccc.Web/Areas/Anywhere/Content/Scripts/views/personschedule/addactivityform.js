@@ -3,7 +3,7 @@ define([
 	'moment',
 	'navigation',
 	'ajax',
-	'resources!r',
+	'resources',
 	'timepicker',
 	'lazy'
 ], function (

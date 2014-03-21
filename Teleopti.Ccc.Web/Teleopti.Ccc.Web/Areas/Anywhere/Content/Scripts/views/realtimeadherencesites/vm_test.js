@@ -1,21 +1,20 @@
-﻿define([
+﻿
+define([
     'buster',
-    'views/realtimeadherencesites/vm',
-    'window'
+    'views/realtimeadherencesites/vm'
 ], function (
     buster,
-    viewModel,
-    window
+    viewModel
     ) {
 	return function () {
 
 		buster.testCase("real time adherence view model", {
-			"should have no sites if none filled": function () {
+			"should have no sites if none filled": function() {
 				var vm = viewModel();
 				assert.equals(vm.sites(), []);
 			},
 
-			"should fill sites data": function () {
+			"should fill sites data": function() {
 				var site1 = { Name: 'London', Id: 'guid1' };
 				var site2 = { Name: 'Paris', Id: 'guid2' };
 				var vm = viewModel();
@@ -28,7 +27,7 @@
 				assert.equals(vm.sites()[1].Name, "Paris");
 			},
 
-			"should update number out of adherence": function () {
+			"should update number out of adherence": function() {
 				var vm = viewModel();
 
 				vm.fill([{ Name: 'London', Id: 'guid1' }]);
@@ -37,7 +36,7 @@
 				assert.equals(vm.sites()[0].OutOfAdherence(), 1);
 			},
 
-			"should update number out of adherence on existing site": function () {
+			"should update number out of adherence on existing site": function() {
 				var vm = viewModel();
 				vm.fill([{ Name: 'London', Id: 'guid1' }]);
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
@@ -46,14 +45,14 @@
 				assert.equals(vm.sites()[0].OutOfAdherence(), 1);
 			},
 
-			"should not add when update if there is no site": function () {
+			"should not add when update if there is no site": function() {
 				var vm = viewModel();
 				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
 
 				assert.equals(vm.sites().length, 0);
 			},
 
-			"should set number of agents when fill": function () {
+			"should set number of agents when fill": function() {
 				var expected = 37;
 				var vm = viewModel();
 				var site = { NumberOfAgents: expected };
@@ -63,7 +62,7 @@
 				assert.equals(vm.sites()[0].NumberOfAgents, expected);
 			},
 
-			"should do update from notification": function () {
+			"should do update from notification": function() {
 				var vm = viewModel();
 				var notification = {
 					DomainId: 'theguid',
@@ -77,15 +76,22 @@
 				assert.equals(vm.sites()[0].OutOfAdherence(), 2);
 			},
 
-			"should go to realtime adherence teams view": function () {
+			"should go to realtime adherence teams view": function() {
 				var vm = viewModel();
 				var site = { Id: "aguid" };
 				vm.fill([site]);
+				var window = require('window');
 				this.stub(window, "setLocationHash");
 
 				vm.sites()[0].openSite();
 
 				assert.calledWith(window.setLocationHash, "realtimeadherenceteams/aguid");
+			},
+
+			"should have resources available": function () {
+				require('resources').ATextResources = "text";
+				var vm = new viewModel();
+				assert.defined(vm.resources.ATextResources);
 			}
 		});
 

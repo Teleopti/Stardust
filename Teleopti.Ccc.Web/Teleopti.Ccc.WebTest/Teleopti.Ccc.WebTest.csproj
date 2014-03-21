@@ -164,6 +164,8 @@
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactoryTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
+    <Compile Include="Core\Portal\DataProvider\ReportsProviderTest.cs" />
+    <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceAccountProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceAccountMappingProfileTest.cs" />
@@ -171,6 +173,8 @@
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
+    <Compile Include="Core\Startup\FindAreaRegistrationsTest.cs" />
+    <Compile Include="Core\Startup\RegisterAreasTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceRequestProbabilityProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddPersonScheduleViewModelMapperTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeAddScheduleLayerViewModelMapperTest.cs" />

@@ -11,18 +11,14 @@ define([
 			var id = ko.utils.unwrapObservable(options.id);
 			element.id = id;
 			var max = ko.utils.unwrapObservable(options.max);
-			if (max == 0) {
-				//hack if no agents in team/site!
-				max = -1;
-			}
 
 			var gageObject = new justgage({
 				id: id,
-				value: 'xxx?',
+				value: 0,
 				min: 0,
 				max: max,
 				title: ko.utils.unwrapObservable(options.title),
-				label: 'xxOut of adherence',
+				label: ko.utils.unwrapObservable(options.label),
 				relativeGaugeSize: true
 			});
 			element.gage = gageObject;

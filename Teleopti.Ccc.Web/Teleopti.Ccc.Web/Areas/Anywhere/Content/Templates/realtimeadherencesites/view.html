@@ -1,8 +1,10 @@
 ﻿<div class="container realtimeadherencesites">
 	<div class="row" data-bind="foreach: sites">
-		<div class="col-md-4">
-			<div class="well well-sm site" data-bind="click: openSite">
-				<div data-bind="justgage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name}"></div>
+		<div data-bind="if: NumberOfAgents > 0">
+			<div class="col-md-4">
+				<div class="well well-sm site" data-bind="click: openSite">
+					<div class="gage" data-bind="justgage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name, label: $root.resources.OutOfAdherence}"></div>
+				</div>
 			</div>
 		</div>
 	</div>

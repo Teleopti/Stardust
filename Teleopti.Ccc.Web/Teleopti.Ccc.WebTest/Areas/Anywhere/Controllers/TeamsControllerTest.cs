@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 		public void ShouldGetTeamsForSite()
 		{
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
-			var target = new TeamsController(siteRepository, numberOfAgentsQuery);
+			var target = new TeamsController(siteRepository, null);
 			var site = new Site(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team {Description = new Description("team1")};
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var siteRepository = MockRepository.GenerateMock<ISiteRepository>();
 			var numberOfAgentsQuery = MockRepository.GenerateMock<INumberOfAgentsInTeamReader>();
 			var target = new TeamsController(siteRepository, numberOfAgentsQuery);
-
 			var site = new Site(" ");
 			site.SetId(Guid.NewGuid());
 			var team = new Team { Description = new Description(" ") };

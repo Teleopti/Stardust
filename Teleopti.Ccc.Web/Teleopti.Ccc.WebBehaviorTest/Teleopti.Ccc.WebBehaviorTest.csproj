@@ -215,6 +215,12 @@
     </Compile>
     <Compile Include="MyTime\MyReportStepDefinition.cs" />
     <Compile Include="MyTime\PersonAccountStepDefinition.cs" />
+    <Compile Include="MyTime\Reports.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reports.feature</DependentUpon>
+    </Compile>
+    <Compile Include="MyTime\ReportsStepDefinition.cs" />
     <Compile Include="MyTime\ShiftTradeRequestAdd.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -784,6 +790,10 @@
     <None Include="MyTime\MyReportDailyMetrics.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MyReportDailyMetrics.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\Reports.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Reports.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\ShiftTradeRequestAdd.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

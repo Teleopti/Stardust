@@ -12,7 +12,7 @@ define([
         'subscriptions',
         'ajax',
         'errorview',
-        'resources!r'
+        'resources'
     ], function(
         layoutTemplate,
         menuTemplate,

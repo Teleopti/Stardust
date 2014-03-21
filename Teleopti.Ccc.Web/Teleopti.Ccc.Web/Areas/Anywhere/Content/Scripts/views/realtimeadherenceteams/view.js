@@ -33,6 +33,13 @@
 				}
 			});
 
+			ajax.ajax({
+				url: "Sites/Get?siteId=" + siteId,
+				success: function (data) {
+					viewModel.setSiteName(data);
+				}
+			});
+
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
 			}, siteId);

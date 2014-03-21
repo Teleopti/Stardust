@@ -19,14 +19,15 @@
 		timepicker: '../../../../Content/bootstrap-timepicker/js/bootstrap-timepicker',
 		buster: '../../../../Content/busterjs/buster-test',
 
-		justgage: '../../../../Content/justgage/justgage.1.0.1.min',
+		//depends on eve, hardcoded in  justgage.20130410.js
+		justgage: '../../../../Content/justgage/justgage.20130410',
 		raphael: '../../../../Content/justgage/raphael-min',
 
 		knockoutBindings: 'knockout.bindings',
 
 		noext: '../../../../Content/require/noext',
 		signalrrr: 'require/signalrrr',
-		resources: 'require/resources',
+		resourcesr: 'require/resourcesr',
 
 		templates: '../templates',
 

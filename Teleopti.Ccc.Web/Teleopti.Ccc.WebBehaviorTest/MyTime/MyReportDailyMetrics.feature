@@ -2,20 +2,6 @@
 	In order to improve my own performance
 	As an agent
 	I need to see metrics for a specific day
-	
-Scenario: My report tab
-	Given I am an agent
-	When I am viewing an application page
-	Then MyReport tab should be visible 
-
-Scenario: No permission to my report module
-	Given there is a role with
-	| Field						| Value						|
-	| Name						| No access to MyReport		|
-	| Access to MyReport		| False					    |
-	And I have the role 'No access to MyReport'
-	When I am viewing preferences
-	Then MyReport tab should not be visible 
 
 Scenario: No permission to my report module when navigating with URL
 	Given there is a role with

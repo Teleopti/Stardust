@@ -2,7 +2,7 @@ define([
         'knockout',
         'moment',
         'navigation',
-        'resources!r',
+        'resources',
         'ajax'
     ], function(
         ko,

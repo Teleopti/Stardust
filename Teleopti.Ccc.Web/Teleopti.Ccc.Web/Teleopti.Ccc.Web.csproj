@@ -278,9 +278,13 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsNavigationProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceAccountProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceAccountProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceAccountViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
@@ -518,8 +522,14 @@
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
     <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
+    <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
+    <Compile Include="Core\Startup\IFindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\InitializeApplication\BundleScripts.cs" />
     <Compile Include="Core\Startup\InitializeApplication\MessageBrokerTask.cs" />
+    <Compile Include="Core\Startup\IRegisterArea.cs" />
+    <Compile Include="Core\Startup\IRegisterAreas.cs" />
+    <Compile Include="Core\Startup\RegisterArea.cs" />
+    <Compile Include="Core\Startup\RegisterAreas.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -749,6 +759,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
@@ -1024,6 +1035,7 @@
     <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Content\justgage\justgage.20130410.js" />
     <Content Include="Content\justgage\justgage.1.0.1.min.js" />
     <Content Include="Content\justgage\raphael-min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
@@ -1079,7 +1091,7 @@
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
     <Content Include="Content\moment\moment.all.min.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\require\resources.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\resourcesr.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\signalrrr.js" />
     <Content Include="Content\require\noext.js" />
     <Content Include="Content\require\require.js" />

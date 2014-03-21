@@ -9,17 +9,17 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	[TaskPriority(2)]
 	public class RegisterRoutesTask : IBootstrapperTask
 	{
+		private readonly IRegisterAreas _registerAreas;
 		private readonly Action<RouteCollection> _runBefore;
-		private readonly Action _registerAllAreas;
 
-		public RegisterRoutesTask() : this(r => { }, AreaRegistration.RegisterAllAreas)
+		public RegisterRoutesTask(IRegisterAreas registerAreas) : this(r => { }, registerAreas)
 		{
 		}
 
-		public RegisterRoutesTask(Action<RouteCollection> runBefore, Action registerAllAreas)
+		public RegisterRoutesTask(Action<RouteCollection> runBefore, IRegisterAreas registerAreas)
 		{
 			_runBefore = runBefore;
-			_registerAllAreas = registerAllAreas;
+			_registerAreas = registerAreas;
 		}
 
 		public Task Execute()
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				new[] {"Teleopti.Ccc.Web.Areas.Start.*"});
 			mapRoute.DataTokens["area"] = "Start";
 
-			_registerAllAreas();
+			registerAreas();
 
 			mapRoute = routes.MapRoute(
 				"Default",
@@ -57,6 +57,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				null,
 				new[] { "Teleopti.Ccc.Web.Areas.Start.*" });
 			mapRoute.DataTokens["area"] = "Start"; // Parameter defaults
+		}
+
+		private void registerAreas()
+		{
+			if (_registerAreas == null) return;
+
+			_registerAreas.Execute();
 		}
 	}
 }

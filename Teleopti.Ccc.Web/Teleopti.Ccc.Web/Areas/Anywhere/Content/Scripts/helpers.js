@@ -1,7 +1,7 @@
 define(
     [
         'moment',
-        'resources!r'
+        'resources'
     ], function (
         momentX,
         resources
