@@ -1281,7 +1281,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonMainMenuHelp_Click(object sender, EventArgs e)
 		{
-			ViewBase.ShowHelp(this,true);
+			ViewBase.ShowHelp(this,false);
 		}
 
 		private void toolStripButtonMainMenuClose_Click(object sender, EventArgs e)
