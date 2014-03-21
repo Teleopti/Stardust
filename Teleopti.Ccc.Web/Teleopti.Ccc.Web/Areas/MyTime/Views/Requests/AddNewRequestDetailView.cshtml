@@ -28,11 +28,19 @@
 		<!--[if lte IE 8]>
 		<input class="request-new-datefrom" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
 		<![endif]-->
-		<span class="add-on" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="icon-th"></i></span>
+		<span class="btn-group">
+			<button class="btn" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+				<i class="icon-th"></i>
+			</button>
+		</span>
 	</span>
 	<div class="input-append bootstrap-timepicker">
         <input type="text" class="request-new-timefrom input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-        <span class="add-on"><i class="icon-time"></i></span>
+		<span class="btn-group">
+			<button class="btn" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+				<i class="icon-time"></i>
+			</button>
+		</span>
     </div>
 </div>
 <div>
@@ -43,11 +51,19 @@
 		<!--[if lte IE 8]>
 		<input class="request-new-dateto" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
 		<![endif]-->
-		<span class="add-on" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="icon-th"></i></span>
+		<span class="btn-group">
+			<button class="btn" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+				<i class="icon-th"></i>
+			</button>
+		</span>
     </span>
     <div class="input-append bootstrap-timepicker">
         <input type="text" class="request-new-timeto input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
-        <span class="add-on"><i class="icon-time"></i></span>
+        <span class="btn-group">
+			<button class="btn" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled", 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+				<i class="icon-time"></i>
+			</button>
+		</span>
     </div>
 </div>
 <label class="checkbox">
