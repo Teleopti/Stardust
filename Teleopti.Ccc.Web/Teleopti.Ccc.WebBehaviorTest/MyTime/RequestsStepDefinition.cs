@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				bool.TryParse(Browser.Interactions.Javascript("return $('#loadingRequestIndicator').is(':visible')").ToString(), out isVisible);
 				var cssDisplay = Browser.Interactions.Javascript("return $('#loadingRequestIndicator').css('display')").ToString();
 
-				isLoading = !isVisible || string.Compare(cssDisplay, "none", false, CultureInfo.CurrentCulture) != 0;
+				isLoading = isVisible && string.Compare(cssDisplay, "none", false, CultureInfo.CurrentCulture) != 0;
 				count++;
 			}
 		}
