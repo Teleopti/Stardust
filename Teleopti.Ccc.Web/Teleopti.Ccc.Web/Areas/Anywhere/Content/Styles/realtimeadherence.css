@@ -13,7 +13,7 @@
 	height: 250px;
 }
 
-.realtimeadherencesites  .overlay,
+.realtimeadherencesites .overlay,
 .realtimeadherenceteams .overlay {
 	display: block;
 	position:absolute;

@@ -7,7 +7,9 @@
 		<div data-bind="if: NumberOfAgents > 0">
 			<div class="col-md-4">
 				<div class="well well-sm team">
+					<!-- ko if: !hasBeenUpdated() -->
 					<div class="overlay" data-bind="ifnot: hasBeenUpdated, text: $root.resources.WaitingThreeDots"></div>
+					<!-- /ko -->
 					<div class="gage" data-bind="justgage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name, label:  $root.resources.OutOfAdherence}"></div>
 				</div>
 			</div>
