@@ -57,14 +57,22 @@
 			<!--[if lte IE 8]>
 		    <input class="request-new-datefrom input-sm form-control" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
 		    <![endif]-->
-		    <span class="input-group-addon" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="glyphicon glyphicon-calendar"></i></span>
+		    <span class="input-group-btn">
+			    <button class="btn btn-default btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+				    <i class="glyphicon glyphicon-calendar"></i>
+			    </button>
+		    </span>
 	    </span>
     </div>
     <div class="col-xs-2">
         <div class="bootstrap-timepicker">
             <div class="input-group">
                 <input type="text" class="request-new-timefrom input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+	            <span class="input-group-btn">
+		            <button class="btn btn-default btn-sm" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+			            <i class="glyphicon glyphicon-time"></i>
+		            </button>
+	            </span>
             </div>
         </div>
     </div>
@@ -78,16 +86,24 @@
 			<!--[if lte IE 8]>
 		    <input class="request-new-dateto input-sm form-control" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
 		    <![endif]-->
-            <span class="input-group-addon" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }"><i class="glyphicon glyphicon-calendar"></i></span>
+	        <span class="input-group-btn">
+		        <button class="btn btn-default btn-sm" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+					<i class="glyphicon glyphicon-calendar"></i>
+				</button>
+	        </span>
         </span>
     </div>
     <div class="col-xs-2">
         <div class="bootstrap-timepicker">
             <div class="input-group">
                 <input type="text" class="request-new-timeto input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
-                <span class="input-group-addon"><i class="glyphicon glyphicon-time"></i></span>
+	            <span class="input-group-btn">
+					<button class="btn btn-default btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+						<i class="glyphicon glyphicon-time"></i>
+					</button>
+	            </span>
             </div>
-            </div>
+        </div>
     </div>
 </div>
 <label class="checkbox">
