@@ -1,4 +1,5 @@
-﻿using TechTalk.SpecFlow;
+﻿using System.Threading;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -35,6 +36,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.PageSize-1));
 			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
+		}
+
+		[When(@"I wait until requests loaded or timeout")]
+		public void WhenIWaitingNextPageOfRequestLoaded()
+		{
+			var count = 0;
+			var isLoading = true;
+			while (isLoading && count < 10)
+			{
+				count++;
+				Thread.Sleep(50);
+				bool.TryParse(Browser.Interactions.Javascript("return $('.loading-gradient:first').is(':visible')").ToString(), out isLoading);
+			}
 		}
 
 		[Then(@"I should see a requests list")]
