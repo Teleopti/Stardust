@@ -36,6 +36,7 @@ Scenario: Show team
 	And I should see the overlay 'waiting three dots'
 
 
+@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
@@ -83,7 +84,7 @@ Scenario: View updates of sum of employees not adhering to schedule for each sit
 	 Then I should see site 'Paris' with 1 of 1 employees out of adherence
 	 And I should see site 'London' with 0 of 1 employees out of adherence
 
-
+@ignore
 Scenario: View updates of sum of employees not adhering to schedule for each team within a site
 	Given the current time is '2014-01-21 13:00'
 	And I have a role with
