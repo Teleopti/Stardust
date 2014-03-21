@@ -91,7 +91,7 @@ Scenario: Show single page
 	And I have more than one page of requests
 	When I view requests
 	Then I should only see one page of requests
-
+@Ignore
 Scenario: Paging
 	Given I am an agent
 	And I have more than one page of requests
