@@ -35,6 +35,7 @@ using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -201,6 +202,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockIntradayOptimizerService(builder);
 			registerTeamBlockSchedulingService(builder);
             registerTeamBlockOptimizationService(builder);
+
+	        builder.RegisterType<AgentRestrictionsNoWorkShiftfFinder>().As<IAgentRestrictionsNoWorkShiftfFinder>();
             registerFairnessOptimizationService(builder);
             registerDayOffFairnessOptimizationService(builder);
 			registerEqualNumberOfCategoryFairnessService(builder);

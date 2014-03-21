@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_displayRow.ContractTargetTime = TimeSpan.FromMinutes(10);
 				_displayRow.ContractCurrentTime = TimeSpan.FromMinutes(11);
 				_displayRow.CurrentDaysOff = 12;
+				_displayRow.NoWorkshiftFound = true;
 
 				((IAgentDisplayData) _displayRow).MinimumPossibleTime = TimeSpan.FromMinutes(17);
 				((IAgentDisplayData)_displayRow).MaximumPossibleTime = TimeSpan.FromMinutes(14);
@@ -81,12 +82,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				_displayRow.SetWarnings();
 
 				Assert.AreEqual(UserTexts.Resources.No, _displayRow.Ok);
-				Assert.AreEqual(4, _displayRow.Warnings);
+				Assert.AreEqual(5, _displayRow.Warnings);
 				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.ContractTime));
 				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.DaysOffSchedule));
 				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.Min));
 				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.Max));
 				Assert.IsNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.Type));
+				Assert.IsNotNull(_displayRow.Warning((int)AgentRestrictionDisplayRowColumn.Ok));
 			}	
 		}
 
@@ -280,6 +282,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		{
 			_displayRow.CurrentDaysOff = _daysOff;
 			Assert.AreEqual(_daysOff, _displayRow.CurrentDaysOff);
+		}
+
+		[Test]
+		public void ShouldGetSetNoShiftsFound()
+		{
+			_displayRow.NoWorkshiftFound = true;
+			Assert.IsTrue(_displayRow.NoWorkshiftFound);
 		}
 
 		//[Test]
