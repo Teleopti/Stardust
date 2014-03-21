@@ -544,6 +544,7 @@
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowCreatorTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDisplayRowTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsModelTest.cs" />
+    <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsNoWorkShiftfFinderTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPreferencePainterDeciderTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsSchedulePainterDeciderTest.cs" />

@@ -11894,4 +11894,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Select atleast one person</value>
     <comment>Message shown when no person is selected in permisson</comment>
   </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>At least one day cannot be scheduled</value>
+    <comment>Used in scheduler</comment>
+  </data>
 </root>

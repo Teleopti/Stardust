@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 		private IScheduleDay _scheduleDay;
 		private IProjectionService _projectionService;
 		private IVisualLayerCollection _visualLayerCollection;
+		private IAgentRestrictionsNoWorkShiftfFinder _agentRestrictionsNoWorkShiftfFinder;
 			
 		[SetUp]
 		public void Setup()
@@ -34,13 +35,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
 			_periodScheduledAndRestrictionDaysOff = _mocks.StrictMock<IPeriodScheduledAndRestrictionDaysOff>();
 			_schedulePeriodTargetTimeCalculator = _mocks.StrictMock<ISchedulePeriodTargetTimeCalculator>();
-			_target = new AgentRestrictionsDisplayDataExtractor(_schedulePeriodTargetTimeCalculator, _workShiftMinMaxCalculator, _periodScheduledAndRestrictionDaysOff);
 			_schedulingOptions = new RestrictionSchedulingOptions(){UseScheduling = true};
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_effectiveDays = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro>{_scheduleDayPro});
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_projectionService = _mocks.StrictMock<IProjectionService>();
 			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+			_agentRestrictionsNoWorkShiftfFinder = _mocks.StrictMock<IAgentRestrictionsNoWorkShiftfFinder>();
+			_target = new AgentRestrictionsDisplayDataExtractor(_schedulePeriodTargetTimeCalculator, _workShiftMinMaxCalculator, _periodScheduledAndRestrictionDaysOff, _agentRestrictionsNoWorkShiftfFinder);
 		}
 
 		[Test]
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 				Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
 				Expect.Call(_workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions)).Return(new MinMax<TimeSpan>());
 				Expect.Call(_periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, _schedulingOptions.UseScheduling, _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations)).Return(33).Repeat.AtLeastOnce();
+				Expect.Call(_agentRestrictionsNoWorkShiftfFinder.Find(_scheduleDay, _schedulingOptions)).Return(true);
 			}
 
 			using(_mocks.Playback())
@@ -76,6 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			Assert.AreEqual(new MinMax<TimeSpan>().Minimum, data.MinimumPossibleTime);
 			Assert.AreEqual(new MinMax<TimeSpan>().Maximum, data.MaximumPossibleTime);
 			Assert.AreEqual(33, data.ScheduledAndRestrictionDaysOff);
+			Assert.IsTrue(data.NoWorkshiftFound);
 		}
 	}
 }
