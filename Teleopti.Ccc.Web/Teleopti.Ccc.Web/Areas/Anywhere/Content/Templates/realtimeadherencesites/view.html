@@ -8,7 +8,19 @@
 						<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
 					</div>
 					<!-- /ko -->
-					<div class="gage" data-bind="justgage: { value: OutOfAdherence, max: NumberOfAgents, id: Id, title: Name, label: $root.resources.OutOfAdherence}"></div>
+					<div class="gage" data-bind="
+							justgage: {
+								value: OutOfAdherence,
+								max: NumberOfAgents,
+								id: Id,
+								title: Name,
+								label:  $root.resources.OutOfAdherence
+							},
+							attr: {
+								'data-value': OutOfAdherence,
+								'data-max': NumberOfAgents
+							}
+							"></div>
 				</div>
 			</div>
 		</div>
