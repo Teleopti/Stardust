@@ -696,6 +696,7 @@
       <DependentUpon>WeekSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\WeekScheduleStepDefinitions.cs" />
+    <Compile Include="AuthenticationStepDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">

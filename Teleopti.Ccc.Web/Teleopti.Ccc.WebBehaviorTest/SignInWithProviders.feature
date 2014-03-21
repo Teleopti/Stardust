@@ -23,18 +23,15 @@ Background:
 	| Access to mytime web | true                     |
 
 Scenario: Sign in without being a windows user in CCC
-	Given Windows authentication can be used
-	And Teleopti application authentication can be used
+	Given I have the role 'Role for business unit 1'
 	And I am a user with
 	| Field                  | Value |
 	| Windows authentication | false |
 	When I go to mytime web
-	Then I should see the sign in page
+	Then I should see a log on error 'NoDatasource'
 
 Scenario: Sign in as a windows user in CCC
 	Given I have the role 'Role for business unit 1'
-	And Windows authentication can be used
-	And Teleopti application authentication can be used
 	And I am a user with
 	| Field                  | Value |
 	| Windows authentication | true  |
@@ -42,9 +39,7 @@ Scenario: Sign in as a windows user in CCC
 	Then I should be signed in
 
 Scenario: Sign in as a windows user in CCC with multiple data sources
-	Given Windows authentication can be used
-	And Teleopti application authentication can be used
-	And I have the role 'Role for business unit 1'
+	Given I have the role 'Role for business unit 1'
 	And I have access to two data sources
 	And I am a user with
 	| Field                  | Value |
@@ -54,9 +49,7 @@ Scenario: Sign in as a windows user in CCC with multiple data sources
 	Then I should be signed in
 
 Scenario: Sign in as a windows user in CCC with multiple business units
-	Given Windows authentication can be used
-	And Teleopti application authentication can be used
-	And I have the role 'Role for business unit 1'
+	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
 	And I am a user with
 	| Field                  | Value |
@@ -66,9 +59,7 @@ Scenario: Sign in as a windows user in CCC with multiple business units
 	Then I should be signed in
 	
 Scenario: Sign in as a windows user in CCC with multiple data sources and multiple business units
-	Given Windows authentication can be used
-	And Teleopti application authentication can be used
-	And I have the role 'Role for business unit 1'
+	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
 	And I have access to two data sources
 	And I am a user with

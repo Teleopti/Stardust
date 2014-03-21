@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.IoC
 				.AssignableTo<IAuthenticationType>()
 				.As<IAuthenticationType>()
 				.SingleInstance();
+
+			builder.RegisterType<AvailableApplicationIdentityDataSource>().As<IAvailableApplicationTokenDataSource>();
 			builder.RegisterType<DataSourcesViewModelFactory>().As<IDataSourcesViewModelFactory>().SingleInstance();
 		}
 	}

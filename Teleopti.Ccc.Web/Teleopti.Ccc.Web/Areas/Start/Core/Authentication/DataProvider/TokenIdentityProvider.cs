@@ -52,5 +52,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 		public string UserIdentifier { get; set; }
 		public string UserDomain { get; set; }
 		public string OriginalToken { get; set; }
+		public string DataSource { get; set; }
 	}
 }

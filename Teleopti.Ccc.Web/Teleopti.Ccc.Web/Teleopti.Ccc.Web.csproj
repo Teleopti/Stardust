@@ -308,8 +308,11 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
     <Compile Include="Areas\SSO\Core\IWindowsAccountProvider.cs" />
     <Compile Include="Areas\SSO\Core\WindowsAccountProvider.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
@@ -514,7 +517,6 @@
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinder.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />

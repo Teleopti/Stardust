@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 		IEnumerable<IDataSource> RetrieveDatasourcesForApplication();
 		IEnumerable<IDataSource> RetrieveDatasourcesForWindows();
 		IDataSource RetrieveDataSourceByName(string dataSourceName);
+		IEnumerable<IDataSource> RetrieveDatasourcesForApplicationIdentityToken();
 	}
 }

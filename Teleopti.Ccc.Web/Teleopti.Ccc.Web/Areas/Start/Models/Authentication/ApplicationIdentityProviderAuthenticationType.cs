@@ -7,32 +7,30 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 {
-	public class ApplicationAuthenticationType : IAuthenticationType
+	public class ApplicationIdentityProviderAuthenticationType : IAuthenticationType
 	{
 		private readonly Lazy<IAuthenticator> _authenticator;
 		private readonly Lazy<IDataSourcesProvider> _dataSourcesProvider;
 
-		public ApplicationAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider)
+		public ApplicationIdentityProviderAuthenticationType(Lazy<IAuthenticator> authenticator, Lazy<IDataSourcesProvider> dataSourcesProvider)
 		{
 			_authenticator = authenticator;
 			_dataSourcesProvider = dataSourcesProvider;
 		}
 
-		public string TypeString { get { return "application"; } }
+		public string TypeString { get { return "application_token"; } }
 
 		public IEnumerable<IDataSource> DataSources()
 		{
-			return _dataSourcesProvider.Value.RetrieveDatasourcesForApplication();
+			return _dataSourcesProvider.Value.RetrieveDatasourcesForApplicationIdentityToken();
 		}
 
 		public IAuthenticationModel BindModel(ModelBindingContext bindingContext)
 		{
-			return new ApplicationAuthenticationModel(_authenticator.Value)
-				{
-					UserName = bindingContext.ValueProvider.GetValue("username").AttemptedValue,
-					Password = bindingContext.ValueProvider.GetValue("password").AttemptedValue,
-					DataSourceName = bindingContext.ValueProvider.GetValue("datasource").AttemptedValue
-				};
+			return new ApplicationIdentityAuthenticationModel(_authenticator.Value)
+			{
+				DataSourceName = bindingContext.ValueProvider.GetValue("datasource").AttemptedValue
+			};
 		}
 	}
 }
