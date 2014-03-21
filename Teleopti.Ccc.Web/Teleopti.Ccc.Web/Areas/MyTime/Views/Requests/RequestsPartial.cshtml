@@ -82,10 +82,8 @@
             @Resources.NoRequestsFound
         </div>
         
-        <div data-bind="visible: isLoadingRequests">	   
-            <div class="loading-gradient">
-                <div class="loading"></div>
-            </div>
+        <div id="loadingRequestIndicator" class="loading-gradient" data-bind="visible: isLoadingRequests">	   
+            <div class="loading"></div>
         </div>
 		
         <div class="request-list" data-bind="foreach: ColumnRequests">
@@ -126,7 +124,7 @@
             </div>
         </div>
 	    
-        <div class="arrow-down displaynone" data-bind="fadeInIf: MoreToLoad, hideWhenFadedOut: true">
+        <div id="pagingIndicator" class="arrow-down displaynone" data-bind="fadeInIf: MoreToLoad, hideWhenFadedOut: true">
         </div>
         <div class="clearboth">
         </div>
