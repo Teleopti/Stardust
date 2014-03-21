@@ -1098,6 +1098,7 @@
     <Compile Include="Specification\SpecificationTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingTest.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\AsmAlertTimeTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DefaultSegmentTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\StringSettingTest.cs" />
     <Compile Include="SystemSetting\PersonalSettingDataTest.cs" />
