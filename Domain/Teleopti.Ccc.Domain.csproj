@@ -1169,6 +1169,7 @@
     <Compile Include="SystemSetting\GlobalSettingData.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSetting.cs" />
     <Compile Include="SystemSetting\GlobalSetting\AdherenceReportSettingCalculationMethod.cs" />
+    <Compile Include="SystemSetting\GlobalSetting\AsmAlertTime.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CalendarLinkSettings.cs" />
     <Compile Include="SystemSetting\GlobalSetting\CommonNameDescriptionSettingScheduleExport.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DefaultSegment.cs" />

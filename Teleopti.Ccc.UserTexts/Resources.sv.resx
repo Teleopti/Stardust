@@ -11472,4 +11472,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="OnAvailableAgentsOnly" xml:space="preserve">
     <value>Endast på tillgängliga agenter</value>
   </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Tid före byte av aktivitet att varna agenten (sekunder)</value>
+    <comment>Label used in System setting</comment>
+  </data>
 </root>

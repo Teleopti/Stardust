@@ -11990,4 +11990,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Out of adherence</value>
     <comment>Out of adherence</comment>
   </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Time ahead of activity change to alert agent (seconds)</value>
+    <comment>Label used in System setting</comment>
+  </data>
 </root>
