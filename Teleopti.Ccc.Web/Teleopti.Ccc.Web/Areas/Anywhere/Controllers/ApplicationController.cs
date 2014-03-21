@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.CannotCreateSecondShiftWhenAddingActivity,
 					UserTexts.Resources.OutOfAdherence,
 					UserTexts.Resources.RealTimeAdherence,
+					UserTexts.Resources.WaitingThreeDots,
 
 					DateAndTimeFormatExtensions.FixedDateFormat,
 					DateAndTimeFormatExtensions.FixedDateTimeFormat,

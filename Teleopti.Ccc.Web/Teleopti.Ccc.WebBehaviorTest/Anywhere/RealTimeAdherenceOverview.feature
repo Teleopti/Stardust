@@ -17,6 +17,7 @@ Scenario: Show site
 	| Start Date | 2014-01-01 |
 	When I view Real time adherence overview
 	Then I should see the site 'London'
+	And I should see the overlay 'waiting three dots'
 
 Scenario: Show team
 	Given the current time is '2014-01-21 13:00'
@@ -32,6 +33,8 @@ Scenario: Show team
 	| Start Date | 2014-01-01 |
 	When I view Real time adherence for site 'London'
 	Then I should see the team 'Red'
+	And I should see the overlay 'waiting three dots'
+
 
 Scenario: View updates of sum of employees not adhering to schedule for each site
 	Given the current time is '2014-01-21 13:00'
