@@ -46,7 +46,11 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 					return new Teleopti.Start.Authentication.DataSourceViewModel(d.Name, d.Type);
 				});
 				self.DataSources.push.apply(self.DataSources, map);
-				self.SelectDataSource(self.DataSources()[0]);
+				var dataSources = self.DataSources();
+				self.SelectDataSource(dataSources[0]);
+				if (dataSources.length == 1) {
+					self.SignIn();
+				} 
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				try {
