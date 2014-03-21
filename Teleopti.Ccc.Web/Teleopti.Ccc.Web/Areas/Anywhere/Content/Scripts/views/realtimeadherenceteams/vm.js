@@ -35,8 +35,10 @@
 
 		that.update = function (data) {
 			var existingTeam = teamForId(data.Id);
-			if (existingTeam)
+			if (existingTeam) {
 				existingTeam.OutOfAdherence(data.OutOfAdherence);
+				existingTeam.hasBeenUpdated(true);
+			}
 		};
 
 		that.updateFromNotification = function(notification) {
@@ -51,7 +53,5 @@
 
 		return that;
 	};
-
-
 }
 );

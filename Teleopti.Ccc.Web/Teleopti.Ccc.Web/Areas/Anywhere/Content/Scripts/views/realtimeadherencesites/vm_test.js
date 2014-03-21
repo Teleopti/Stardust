@@ -92,7 +92,26 @@ define([
 				require('resources').ATextResources = "text";
 				var vm = new viewModel();
 				assert.defined(vm.resources.ATextResources);
+			},
+
+
+			"should indicate if site has been updated": function () {
+				var vm = viewModel();
+
+				vm.fill([{ Id: 'guid1' }]);
+				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
+
+				assert.isTrue(vm.sites()[0].hasBeenUpdated());
+			},
+
+			"should indicate if site has not been updated": function () {
+				var vm = viewModel();
+
+				vm.fill([{ Id: 'guid1' }]);
+
+				assert.isFalse(vm.sites()[0].hasBeenUpdated());
 			}
+
 		});
 
 	};

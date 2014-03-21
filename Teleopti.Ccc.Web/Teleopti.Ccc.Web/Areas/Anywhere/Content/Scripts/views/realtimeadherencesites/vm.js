@@ -43,8 +43,10 @@
 
 			that.update = function (data) {
 				var existingSite = siteForId(data.Id);
-				if (existingSite)
+				if (existingSite) {
 					existingSite.OutOfAdherence(data.OutOfAdherence);
+					existingSite.hasBeenUpdated(true);
+				}
 			};
 
 			return that;

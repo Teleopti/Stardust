@@ -69,11 +69,13 @@
 
 				assert.equals(vm.teams()[0].OutOfAdherence(), 2);
 			},
+
 			"should have resources" : function () {
 				var vm = viewModel();
 
 				assert.defined(vm.resources);
 			},
+
 			"should get site name" : function() {
 				var vm = viewModel();
 				var site = { Name: Math.random()};
@@ -81,7 +83,24 @@
 				vm.setSiteName(site);
 
 				assert.equals(vm.siteName(), site.Name);
-			}			
+			},
+
+			"should indicate if team has been updated": function() {
+				var vm = viewModel();
+
+				vm.fill([{ Id: 'guid1' }]);
+				vm.update({ Id: 'guid1', OutOfAdherence: 1 });
+
+				assert.isTrue(vm.teams()[0].hasBeenUpdated());
+			},
+
+			"should indicate if team has not been updated": function () {
+				var vm = viewModel();
+
+				vm.fill([{ Id: 'guid1' }]);
+
+				assert.isFalse(vm.teams()[0].hasBeenUpdated());
+			}
 		});		
 	};
 });
