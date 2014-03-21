@@ -87,6 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 		private IScheduleDay _selectedDay;
 		private bool _moveToDate;
 		private bool _clearSelection;
+		private IAgentRestrictionsNoWorkShiftfFinder _agentRestrictionsNoWorkShiftfFinder;
 		//private ManualResetEvent[] _resetEvents;
 		//private ManualResetEvent _waitClick;
 
@@ -276,6 +277,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 
 			_model.DisplayRows.Clear();
 
+			_agentRestrictionsNoWorkShiftfFinder = container.Resolve<IAgentRestrictionsNoWorkShiftfFinder>();
 			var locker = container.Resolve<IMatrixUserLockLocker>();
 			var scheduleMatrixListCreator = new ScheduleMatrixListCreator(stateHolder.SchedulingResultState);
 			var agentRestrictionsDisplayRowCreator = new AgentRestrictionsDisplayRowCreator(stateHolder, scheduleMatrixListCreator, locker);
@@ -437,7 +439,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			IWorkShiftWeekMinMaxCalculator workShiftWeekMinMaxCalculator = new WorkShiftWeekMinMaxCalculator();
 			IWorkShiftMinMaxCalculator workShiftMinMaxCalculator = new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor, schedulePeriodTargetTimeCalculator,workShiftWeekMinMaxCalculator);
 			var periodScheduledAndRestrictionDaysOff = new PeriodScheduledAndRestrictionDaysOff();
-			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, workShiftMinMaxCalculator, periodScheduledAndRestrictionDaysOff);
+			var dataExtractor = new AgentRestrictionsDisplayDataExtractor(schedulePeriodTargetTimeCalculator, workShiftMinMaxCalculator, periodScheduledAndRestrictionDaysOff, _agentRestrictionsNoWorkShiftfFinder);
 
 			dataExtractor.ExtractTo(displayRow, _schedulingOptions); 
 			displayRow.SetWarnings();

@@ -24,6 +24,7 @@ using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -223,6 +224,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerTeamBlockCommon(builder);
 			registerTeamBlockDayOffOptimizerService(builder);
 			registerTeamBlockIntradayOptimizerService(builder);
+
+	        builder.RegisterType<AgentRestrictionsNoWorkShiftfFinder>().As<IAgentRestrictionsNoWorkShiftfFinder>();
         }
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)

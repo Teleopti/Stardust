@@ -11612,4 +11612,8 @@ Reduce the complexity to use these shifts.</value>
     <value>On this date you are no longer an employee</value>
     <comment>On this date you are no longer an employee</comment>
   </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>At least one day cannot be scheduled</value>
+    <comment>Used in scheduler</comment>
+  </data>
 </root>
