@@ -78,8 +78,6 @@
      * Option to show shorthand big numbers (human friendly)
      */
 
-eve = require('eve');
-
 JustGage = function (config) {
 
 	// if (!config.id) {alert("Missing id parameter for gauge!"); return false;}
