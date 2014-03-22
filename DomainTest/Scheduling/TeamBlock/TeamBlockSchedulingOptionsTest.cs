@@ -245,5 +245,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var result = _target.IsSingleAgentTeam(_schedulingOptions);
             Assert.IsTrue(result);
         }
+
+		[Test]
+		public void IsBlockWithSameShiftCategoryInvolvedShouldReturnTrueIfBlockIsNotSingleDay()
+		{
+			_schedulingOptions.UseTeamBlockSameShiftCategory = false;
+			Assert.IsFalse(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
+
+			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
+
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.None;
+			Assert.IsFalse(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
+
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+			Assert.IsFalse(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
+
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
+			Assert.IsTrue(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
+
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
+			Assert.IsTrue(_target.IsBlockWithSameShiftCategoryInvolved(_schedulingOptions));
+		}
 	}
 }

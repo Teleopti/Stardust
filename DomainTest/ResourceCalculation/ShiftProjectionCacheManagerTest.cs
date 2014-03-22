@@ -64,15 +64,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false);
+                var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false, true);
                 Assert.IsNotNull(ret);
                 Assert.AreEqual(3,ret.Count);
             }
         }
-
-        
-
-        
 
         [Test]
 		public void ShouldNotGetAnyWorkShiftsWhenDeletedShiftCategoryInRuleSetBag()
@@ -92,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false);
+				var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false, true);
 				Assert.IsNotNull(ret);
 				Assert.AreEqual(0, ret.Count);
 			}	
@@ -115,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			using (_mocks.Playback())
 			{
-				var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag,false);
+				var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false, true);
 				Assert.IsNotNull(ret);
 				Assert.AreEqual(0, ret.Count);
 			}		
@@ -150,11 +146,39 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, true);
+                var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, true, true);
                 Assert.IsNotNull(ret);
                 Assert.AreEqual(0, ret.Count);
             }
         }
+
+	    [Test]
+	    public void ShouldNotCheckIsValidDateIfNotAsked()
+	    {
+			IList<IWorkShiftRuleSet> ruleSets = new List<IWorkShiftRuleSet> { _ruleSet };
+			var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
+			var dateOnly = new DateOnly(2009, 2, 2);
+			TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+			var callback = _mocks.DynamicMock<IWorkShiftAddCallback>();
+			using (_mocks.Record())
+			{
+				Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
+				Expect.Call(_ruleSet.OnlyForRestrictions).Return(false);
+				Expect.Call(_activityChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
+				Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
+				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet, callback)).Return(getWorkShiftsInfo()).IgnoreArguments();
+				Expect.Call(_shiftFromMasterActivityService.Generate(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
+				Expect.Call(_shiftFromMasterActivityService.Generate(getWorkShifts()[0])).IgnoreArguments().Return(getWorkShifts());
+				Expect.Call(_shiftFromMasterActivityService.Generate(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
+			}
+
+			using (_mocks.Playback())
+			{
+				var ret = _target.ShiftProjectionCachesFromRuleSetBag(dateOnly, timeZoneInfo, _ruleSetBag, false, false);
+				Assert.IsNotNull(ret);
+				Assert.AreEqual(3, ret.Count);
+			}
+	    }
 
         private IList<IWorkShift> getWorkShifts()
         {
