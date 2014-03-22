@@ -372,6 +372,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 																		selectedPersons, rollbackService);
+				
 				if (!success)
 					return false;
 			}
