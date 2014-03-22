@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private bool _isScheduleFailed;
 		private ITeamBlockClearer _teamBlockClearer;
 		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
+		private IResourceCalculateDelayer _resourceCalculateDelayer;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 		[SetUp]
 		public void Setup()

@@ -3537,10 +3537,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                        selectedPeriod.DayCollection().Count(),
 			                                        () => runBackgroundWorkerScheduling(e));
 			_undoRedo.CommitBatch();
-					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(singleDayScheduler, 
-																					_container.Resolve<ITeamBlockRoleModelSelector>(),
-																					_container.Resolve<ITeamBlockClearer>(),
-																					_container.Resolve<ITeamBlockSchedulingOptions>());
+
 		}
 
 		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
@@ -3817,10 +3814,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
-						var teamBlockScheduler = new TeamBlockScheduler(singleDayScheduler, _container.Resolve<ITeamBlockRoleModelSelector>(),
-							_container.Resolve<ITeamBlockClearer>(),
-																					_container.Resolve<ITeamBlockSchedulingOptions>());
-			
 			var argument = (schedulingAndOptimizeArgument)e.Argument;
 			var optimizationCommand = _container.Resolve<OptimizationCommand>();
 			optimizationCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerOptimization, _schedulerState,
