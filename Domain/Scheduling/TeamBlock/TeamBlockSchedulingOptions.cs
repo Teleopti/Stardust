@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		bool IsTeamSameShiftCategoryInTeamBlock(ISchedulingOptions schedulingOptions);
 		bool IsTeamSameActivityInTeamBlock(ISchedulingOptions schedulingOptions);
 		bool IsTeamSchedulingWithSameActivity(ISchedulingOptions schedulingOptions);
+		bool IsBlockWithSameShiftCategoryInvolved(ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockSchedulingOptions : ITeamBlockSchedulingOptions
@@ -129,6 +130,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			return IsTeamScheduling(schedulingOptions) &&
 			       schedulingOptions.UseCommonActivity;
+		}
+
+		public bool IsBlockWithSameShiftCategoryInvolved(ISchedulingOptions schedulingOptions)
+		{
+			var blockFinder = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
+			var isNoneOrSingleDay = (blockFinder == BlockFinderType.None || blockFinder == BlockFinderType.SingleDay);
+			return (!isNoneOrSingleDay && schedulingOptions.UseTeamBlockSameShiftCategory);
 		}
 	}
 }

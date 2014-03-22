@@ -295,7 +295,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>();
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
-			builder.RegisterType<SameShiftCategoryBlockScheduler>().As<ISameShiftCategoryBlockScheduler>();
             builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
 		}
 

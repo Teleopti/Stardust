@@ -3707,17 +3707,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
 																			 _schedulerState.SchedulingResultState);
 
-	                var sameShiftCategoryBlockScheduler =
-		                new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
-		                                                    singleDayScheduler,
-		                                                    _container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
-															_container.Resolve<ITeamBlockClearer>());
 
-
-					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
-																					_container.Resolve<ITeamBlockSchedulingOptions>(),
-																					singleDayScheduler, 
-																					_container.Resolve<ITeamBlockRoleModelSelector>());
+					ITeamBlockScheduler teamBlockScheduler = new TeamBlockScheduler(singleDayScheduler, 
+																					_container.Resolve<ITeamBlockRoleModelSelector>(),
+																					_container.Resolve<ITeamBlockClearer>(),
+																					_container.Resolve<ITeamBlockSchedulingOptions>());
 
 					var teamBlockScheduleCommand = _container.Resolve<ITeamBlockScheduleCommand>();
 					teamBlockScheduleCommand.Execute(schedulingOptions, _backgroundWorkerScheduling, selectedPersons, scheduleDays,
@@ -4116,15 +4110,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 																			 _container.Resolve<ICreateSkillIntervalDataPerDateAndActivity>(),
 																			 _schedulerState.SchedulingResultState);
 
-						var sameShiftCategoryBlockScheduler = new SameShiftCategoryBlockScheduler(_container.Resolve<ITeamBlockRoleModelSelector>(),
-						                                                                          singleDayScheduler,
-																								  _container.Resolve<ITeamBlockSchedulingCompletionChecker>(),
-																								  _container.Resolve<ITeamBlockClearer>());
-
-						var teamBlockScheduler = new TeamBlockScheduler(sameShiftCategoryBlockScheduler,
-																						_container.Resolve<ITeamBlockSchedulingOptions>(),
-																						singleDayScheduler, 
-																						_container.Resolve<ITeamBlockRoleModelSelector>());
+						var teamBlockScheduler = new TeamBlockScheduler(singleDayScheduler, _container.Resolve<ITeamBlockRoleModelSelector>(),
+							_container.Resolve<ITeamBlockClearer>(),
+																					_container.Resolve<ITeamBlockSchedulingOptions>());
 
 
 						_container.Resolve<ITeamBlockOptimizationCommand>()
