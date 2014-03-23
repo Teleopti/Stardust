@@ -1,3 +1,5 @@
+﻿
+
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -7,21 +9,21 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
-	public interface IShiftNudgeEarlier
+	public interface IShiftNudgeLater
 	{
 		bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, 
+			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
 	}
 
-	public class ShiftNudgeEarlier : IShiftNudgeEarlier
+	public class ShiftNudgeLater : IShiftNudgeLater
 	{
-		private readonly ITeamBlockClearer _teamBlockClearer;
+		 private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 
-		public ShiftNudgeEarlier(ITeamBlockClearer teamBlockClearer,
+		public ShiftNudgeLater(ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator, ITeamBlockScheduler teamBlockScheduler)
 		{
 			_teamBlockClearer = teamBlockClearer;
@@ -37,11 +39,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projectionPeriod = personAssignment.ProjectionService().CreateProjection().Period().Value;
 			var shiftStartDate = projectionPeriod.StartDateTime.Date;
-			var shiftEnd = projectionPeriod.EndDateTime;
-			var adjustedEnd = shiftEnd.Add(TimeSpan.FromMinutes(-15)); //allways adjust 15 minutes regardless of interval length
-			var dateOffset = (int)adjustedEnd.Date.Subtract(shiftStartDate).TotalDays;
-			var shiftEndUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedEnd, scheduleDay.TimeZone);
-			var latestEndTime = shiftEndUserLocalDateTime.TimeOfDay.Add(TimeSpan.FromDays(dateOffset));
+			var shiftStart = projectionPeriod.StartDateTime;
+			var adjustedStart = shiftStart.Add(TimeSpan.FromMinutes(15)); //allways adjust 15 minutes regardless of interval length
+			var dateOffset = (int)adjustedStart.Date.Subtract(shiftStartDate).TotalDays;
+			var shiftStartUserLocalDateTime = TimeZoneHelper.ConvertFromUtc(adjustedStart, scheduleDay.TimeZone);
+			var earliestStartTime = shiftStartUserLocalDateTime.TimeOfDay.Add(TimeSpan.FromDays(dateOffset));
 		
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
@@ -49,12 +51,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(shiftDate, personAssignment.Person, teamBlockInfo,
 				schedulingOptions);
 
-			if (effectiveRestriction.EndTimeLimitation.StartTime.HasValue && effectiveRestriction.EndTimeLimitation.StartTime.Value > latestEndTime)
+			if (effectiveRestriction.StartTimeLimitation.EndTime.HasValue && effectiveRestriction.StartTimeLimitation.EndTime.Value < earliestStartTime)
 				return false;
 
-			var adjustedEndTimeLimitation = new EndTimeLimitation(effectiveRestriction.EndTimeLimitation.StartTime, latestEndTime);
-			var adjustedEffectiveRestriction = new EffectiveRestriction(effectiveRestriction.StartTimeLimitation,
-				adjustedEndTimeLimitation, effectiveRestriction.WorkTimeLimitation, effectiveRestriction.ShiftCategory,
+			var adjustedStartTimeLimitation = new StartTimeLimitation(earliestStartTime, effectiveRestriction.StartTimeLimitation.EndTime);
+			var adjustedEffectiveRestriction = new EffectiveRestriction(adjustedStartTimeLimitation,
+				effectiveRestriction.EndTimeLimitation, effectiveRestriction.WorkTimeLimitation, effectiveRestriction.ShiftCategory,
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
 
@@ -65,6 +67,5 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			
 			return result;
 		}
-
 	}
 }
