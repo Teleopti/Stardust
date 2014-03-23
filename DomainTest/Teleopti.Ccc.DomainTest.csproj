@@ -831,8 +831,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilterTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilterTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockRuleSetBagExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockIncludedWorkShiftRuleFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitationShiftFilterTest.cs" />

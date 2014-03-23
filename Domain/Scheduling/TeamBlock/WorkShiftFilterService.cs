@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
 
@@ -24,15 +25,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
 		private readonly IPersonalShiftsShiftFilter _personalShiftsShiftFilter;
 		private readonly IShiftCategoryRestrictionShiftFilter _shiftCategoryRestrictionShiftFilter;
-		private readonly IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter;
 		private readonly ITimeLimitsRestrictionShiftFilter _timeLimitsRestrictionShiftFilter;
 		private readonly IWorkTimeLimitationShiftFilter _workTimeLimitationShiftFilter;
 		private readonly IShiftLengthDecider _shiftLengthDecider;
 		private readonly IWorkShiftMinMaxCalculator _minMaxCalculator;
 		private readonly ICommonActivityFilter _commonActivityFilter;
         private readonly IRuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessabilityFilter;
+		private readonly IShiftProjectionCacheManager _shiftProjectionCacheManager;
 
-	    public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
+		public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			IBusinessRulesShiftFilter businessRulesShiftFilter,
 			ICommonMainShiftFilter commonMainShiftFilter,
 			IContractTimeShiftFilter contractTimeShiftFilter,
@@ -42,12 +43,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			INotOverWritableActivitiesShiftFilter notOverWritableActivitiesShiftFilter,
 			IPersonalShiftsShiftFilter personalShiftsShiftFilter,
 			IShiftCategoryRestrictionShiftFilter shiftCategoryRestrictionShiftFilter,
-			IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter,
 			ITimeLimitsRestrictionShiftFilter timeLimitsRestrictionShiftFilter,
 			IWorkTimeLimitationShiftFilter workTimeLimitationShiftFilter,
 			IShiftLengthDecider shiftLengthDecider,
 			IWorkShiftMinMaxCalculator minMaxCalculator,
-			ICommonActivityFilter commonActivityFilter, IRuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter)
+			ICommonActivityFilter commonActivityFilter, 
+			IRuleSetAccordingToAccessabilityFilter ruleSetAccordingToAccessabilityFilter,
+			IShiftProjectionCacheManager shiftProjectionCacheManager)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -59,13 +61,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_notOverWritableActivitiesShiftFilter = notOverWritableActivitiesShiftFilter;
 			_personalShiftsShiftFilter = personalShiftsShiftFilter;
 			_shiftCategoryRestrictionShiftFilter = shiftCategoryRestrictionShiftFilter;
-			_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter = shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter;
 			_timeLimitsRestrictionShiftFilter = timeLimitsRestrictionShiftFilter;
 			_workTimeLimitationShiftFilter = workTimeLimitationShiftFilter;
 			_shiftLengthDecider = shiftLengthDecider;
 			_minMaxCalculator = minMaxCalculator;
 			_commonActivityFilter = commonActivityFilter;
 	        _ruleSetAccordingToAccessabilityFilter = ruleSetAccordingToAccessabilityFilter;
+		    _shiftProjectionCacheManager = shiftProjectionCacheManager;
 		}
 
 		public IList<IShiftProjectionCache> FilterForRoleModel(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, bool sameContractTime)
@@ -88,9 +90,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-                        var filteredRulesetList = _ruleSetAccordingToAccessabilityFilter.Filter(teamBlockInfo);
-                        var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.FilterForRoleModel(filteredRulesetList, dateOnly, groupMembers.First(), false, schedulingOptions.BlockFinderTypeForAdvanceScheduling);
-                        shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupMembers.First(), matrixList, sameContractTime);
+            var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.Filter(teamBlockInfo).ToList();
+			var ruleSetBag = new RuleSetBag();
+			foreach (var workShiftRuleSet in filteredRuleSetList)
+			{
+				ruleSetBag.AddRuleSet(workShiftRuleSet);
+			}
+			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+				groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
+			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
+				groupPerson, matrixList, sameContractTime);
+			if (shiftList == null || shiftList.Count == 0)
+			{
+				if (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations ||
+					schedulingOptions.UseStudentAvailability)
+				{
+					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+						groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
+					shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
+						groupPerson, matrixList, sameContractTime);
+				}
+			}
 			if (shiftList == null)
 				return null;
 			return shiftList.Count == 0 ? null : shiftList;
@@ -113,9 +133,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
-            var filteredRulesetList = _ruleSetAccordingToAccessabilityFilter.Filter(teamBlockInfo,dateOnly);
-            var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(filteredRulesetList,dateOnly, person, false, schedulingOptions.BlockFinderTypeForAdvanceScheduling);
-            shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList, true);
+			var filteredRuleSetList = _ruleSetAccordingToAccessabilityFilter.Filter(teamBlockInfo, dateOnly);
+			var ruleSetBag = new RuleSetBag();
+			foreach (var workShiftRuleSet in filteredRuleSetList)
+			{
+				ruleSetBag.AddRuleSet(workShiftRuleSet);
+			}
+			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+				person.PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
+			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person, matrixList,
+				true);
+			if (shiftList == null || shiftList.Count == 0)
+			{
+				if (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations ||
+				    schedulingOptions.UseStudentAvailability)
+				{
+					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
+						person.PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
+					shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, person,
+						matrixList, true);
+				}
+			}
 			if (shiftList == null)
 				return null;
 			return shiftList.Count == 0 ? null : shiftList;
