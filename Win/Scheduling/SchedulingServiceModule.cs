@@ -350,12 +350,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<PersonalShiftsShiftFilter>().As<IPersonalShiftsShiftFilter>();
 		    builder.RegisterType<RuleSetToShiftsGenerator>().As<IRuleSetToShiftsGenerator>();
 		    builder.RegisterType<ShiftCategoryRestrictionShiftFilter>().As<IShiftCategoryRestrictionShiftFilter>();
-		    builder.RegisterType<ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>().As<IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>();
 		    builder.RegisterType<ValidDateTimePeriodShiftFilter>().As<IValidDateTimePeriodShiftFilter>();
 		    builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>();
 		    builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>();
 			builder.RegisterType<CommonActivityFilter>().As<ICommonActivityFilter>();
-			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
             builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
             builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
             builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
