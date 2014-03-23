@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (teamBlockInfo == null)
 				return null;
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
+			var person = groupMembers.First();
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).ToList();
 			if (matrixList.Count == 0) return null;
 			var firstMember = teamBlockInfo.TeamInfo.GroupMembers.First();
@@ -97,18 +98,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				ruleSetBag.AddRuleSet(workShiftRuleSet);
 			}
 			var shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
-				groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
+				person.PermissionInformation.DefaultTimeZone(), ruleSetBag, false, false);
 			shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
-				groupPerson, matrixList, sameContractTime);
+				person, matrixList, sameContractTime);
 			if (shiftList == null || shiftList.Count == 0)
 			{
 				if (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations ||
 					schedulingOptions.UseStudentAvailability)
 				{
 					shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(dateOnly,
-						groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
+						person.PermissionInformation.DefaultTimeZone(), ruleSetBag, true, false);
 					shiftList = runFiltersForRoleModel(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList,
-						groupPerson, matrixList, sameContractTime);
+						person, matrixList, sameContractTime);
 				}
 			}
 			if (shiftList == null)
