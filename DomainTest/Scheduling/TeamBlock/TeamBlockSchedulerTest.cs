@@ -59,11 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 		}
 
-					_selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder))
-					.Return(true);
-					_selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, null);
-		
+
 		[Test]
 		public void ShouldSchedule()
 		{
@@ -82,8 +78,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(result, Is.True);
 			}
 		}
-
-					_selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, null);
 		
 		[Test]
 		public void ShouldNotifySubscribersWhenScheduleFailed()
