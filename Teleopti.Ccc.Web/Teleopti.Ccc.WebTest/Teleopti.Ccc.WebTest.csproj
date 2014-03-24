@@ -326,6 +326,7 @@
     <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
+    <Compile Include="Filters\IdentityProviderProviderTest.cs" />
     <Compile Include="MappingProfileForProbing.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />

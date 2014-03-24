@@ -15,11 +15,13 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		private readonly IErrorMessageProvider _errorMessageProvider;
 		private readonly IAuthenticationModule _authenticationModule;
+		private readonly IIdentityProviderProvider _identityProviderProvider;
 
-		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider, IAuthenticationModule authenticationModule)
+		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider, IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider)
 		{
 			_errorMessageProvider = errorMessageProvider;
 			_authenticationModule = authenticationModule;
+			_identityProviderProvider = identityProviderProvider;
 		}
 
 		public Task Execute()
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private void registerGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
-			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, new List<Type>
+			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, _identityProviderProvider, new List<Type>
 			                                                    	{
 																		typeof(ShareCalendarController),
 																		typeof(TestController),

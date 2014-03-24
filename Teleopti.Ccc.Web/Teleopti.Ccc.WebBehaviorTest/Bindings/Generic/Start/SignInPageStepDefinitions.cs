@@ -1,3 +1,4 @@
+using System.IO;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -211,6 +212,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void ThenIShouldSeeAnError(string resourceText)
 		{
 			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#Password-change-error", resourceText);
+		}
+
+		private const string DefaultIdentityProviders = "<add key=\"IdentityProviders\" value=\"urn:Windows|urn:Teleopti\" />";
+		private const string ApplicationOnlyIdentityProviders = "<add key=\"IdentityProviders\" value=\"urn:Teleopti\" />";
+
+		[BeforeScenario("ApplicationLogOnOnly")]
+		public void BeforeApplicationLogOnOnly()
+		{
+			var configPath = Path.Combine(Paths.WebPath(), "web.config");
+			var content = File.ReadAllText(configPath);
+			File.WriteAllText(configPath, content.Replace(DefaultIdentityProviders, ApplicationOnlyIdentityProviders));
+		}
+
+		[AfterScenario("ApplicationLogOnOnly")]
+		public void AfterApplicationLogOnOnly()
+		{
+			var configPath = Path.Combine(Paths.WebPath(), "web.config");
+			var content = File.ReadAllText(configPath);
+			File.WriteAllText(configPath, content.Replace(ApplicationOnlyIdentityProviders, DefaultIdentityProviders));
 		}
 	}
 }

@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<SubscriptionFiller>().As<IBeforeSubscribe>();
 			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
 			builder.RegisterType<AuthenticationModule>().As<IAuthenticationModule>().SingleInstance();
+			builder.RegisterType<IdentityProviderProvider>().As<IIdentityProviderProvider>().SingleInstance();
 		}
 	}
 }

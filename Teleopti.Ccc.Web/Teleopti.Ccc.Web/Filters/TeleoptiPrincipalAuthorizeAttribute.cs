@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.Routing;
 using Microsoft.IdentityModel.Protocols.WSFederation;
-using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Filters
 {
@@ -16,18 +15,20 @@ namespace Teleopti.Ccc.Web.Filters
 	public sealed class TeleoptiPrincipalAuthorizeAttribute : AuthorizeAttribute
 	{
 		private readonly IAuthenticationModule _authenticationModule;
+		private readonly IIdentityProviderProvider _identityProviderProvider;
 		private readonly IEnumerable<Type> _excludeControllerTypes;
 
 		public string Realm { get; set; }
 
-		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule)
-			: this(authenticationModule, null)
+		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider)
+			: this(authenticationModule, identityProviderProvider, null)
 		{
 		}
 
-		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IEnumerable<Type> excludeControllerTypes)
+		public TeleoptiPrincipalAuthorizeAttribute(IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider, IEnumerable<Type> excludeControllerTypes)
 		{
 			_authenticationModule = authenticationModule;
+			_identityProviderProvider = identityProviderProvider;
 			Order = 2;
 			_excludeControllerTypes = excludeControllerTypes ?? new List<Type>();
 		}
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Web.Filters
 			var signIn = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), Realm ?? _authenticationModule.Realm)
 			{
 				Context = "ru=" + filterContext.HttpContext.Request.Path,
-				HomeRealm = "urn:Windows"
+				HomeRealm = _identityProviderProvider.DefaultProvider()
 			};
 
 			filterContext.Result = new RedirectResult(signIn.WriteQueryString());

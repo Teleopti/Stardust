@@ -2,9 +2,11 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Web.Mvc;
+using DotNetOpenAuth.OpenId;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Startup;
 using Teleopti.Ccc.Web.Filters;
 
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 			                                       select (AuthorizeAttribute) Activator.CreateInstance(type);
 			var definedAuthorizeAttributesWithAuthenticationModuleConstructor = from type in typeof(CheckStartupResultAttribute).Assembly.GetTypes()
 											 where typeof(AuthorizeAttribute).IsAssignableFrom(type) && type.GetConstructors().Any(x => x.GetParameters().Any(y => y.ParameterType == typeof(IAuthenticationModule)))
-											 select (AuthorizeAttribute)Activator.CreateInstance(type, MockRepository.GenerateMock<IAuthenticationModule>());
+											 select (AuthorizeAttribute)Activator.CreateInstance(type, MockRepository.GenerateMock<IAuthenticationModule>(), MockRepository.GenerateMock<IIdentityProviderProvider>());
 
 			var targetAttributeExcluded = definedAuthorizeAttributesWithEmpty.Concat(definedAuthorizeAttributesWithAuthenticationModuleConstructor).Where(authorizeAttribute => authorizeAttribute.GetType() != target.GetType());
 

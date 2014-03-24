@@ -36,6 +36,7 @@ Background:
 	| Access to mobile reports | false     |
 	| Access to admin web	   | false     |
 
+	@ApplicationLogOnOnly
 Scenario: Sign in with a user with multiple business units by user name
 	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
@@ -64,16 +65,6 @@ Scenario: Sign in with a user with multiple business units by Windows credential
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
 	
-Scenario: Sign in with a user with one business unit by Windows credentials and I should be directed into that business unit direct without having to select it
-	Given I have the role 'Role for business unit 2'
-	And I am a user with
-	| Field                  | Value |
-	| Windows authentication | true  |
-	And I am viewing the sign in page
-	When I select windows logon data source
-	And I sign in by windows credentials
-	Then I should be signed in
-
 Scenario: Sign in with wrong password should give me an informative error
 	Given I have the role 'Role for business unit 1'
 	And I am viewing the sign in page
