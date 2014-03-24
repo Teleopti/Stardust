@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 								ISchedulePartModifyAndRollbackService rollbackService, 
 								IResourceCalculateDelayer resourceCalculateDelayer,
-								ISchedulingResultStateHolder schedulingResultStateHolder);
+								ISchedulingResultStateHolder schedulingResultStateHolder,
+								IEffectiveRestriction customEffectiveRestriction);
 
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
@@ -40,14 +41,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer,
-		                                 ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
+		                                 ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
+										rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
 								IResourceCalculateDelayer resourceCalculateDelayer,
-								ISchedulingResultStateHolder schedulingResultStateHolder)
+								ISchedulingResultStateHolder schedulingResultStateHolder, IEffectiveRestriction customEffectiveRestriction)
 	{
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupMembers.Intersect(selectedPersons).ToList();
 			if (selectedTeamMembers.IsEmpty())
-				return true;
-			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
+			IShiftProjectionCache roleModelShift;
+			if(customEffectiveRestriction == null)
+			{
+				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
+				
+			}
+			else
+			{
+				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, customEffectiveRestriction);
+			}
+
 			if (roleModelShift == null)
 			{
 				OnDayScheduledFailed();
