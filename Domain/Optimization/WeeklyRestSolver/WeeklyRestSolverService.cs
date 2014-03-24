@@ -12,8 +12,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
     public interface IWeeklyRestSolverService
     {
-        void Execute(IList<IPerson> selectedPerson, IList<IScheduleMatrixPro> allMatrixOnSelectedPeriod,
-            DateOnlyPeriod selectedPeriod);
+        void Execute(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allMatrixOnSelectedPeriod,
+            DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator, ISchedulingOptions schedulingOptions,
+            ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
+            ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
+            IOptimizationPreferences optimizationPreferences);
     }
     public class WeeklyRestSolverService : IWeeklyRestSolverService
     {
@@ -23,8 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         private readonly IDayOffToTimeSpanExtractor _dayOffToTimeSpanExtractor;
 	    private readonly IShiftNudgeManager _shiftNudgeManager;
 
-        public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, 
-                        IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor)
+        public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor, IShiftNudgeManager shiftNudgeManager)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
             _ensureWeeklyRestRule = ensureWeeklyRestRule;
@@ -39,59 +41,57 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		    ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
 			IOptimizationPreferences optimizationPreferences)
 	    {
-		    foreach (var person in selectedPersons)
-		    {
-			    var personMatrix = allMatrixOnSelectedPeriod.FirstOrDefault(s => s.Person == person);
-                var weeklyRestInPersonWeek = new Dictionary<PersonWeek, TimeSpan>();
-			    if (personMatrix != null)
-			    {
-				    var personScheduleRange = personMatrix.ActiveScheduleRange;
-                    var selectedPeriodScheduleDays = personScheduleRange.ScheduledDayCollection(selectedPeriod);
-                    var selctedPersonWeeks = _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays, true);
-                    var personWeeksVoilatingWeeklyRest = new List<PersonWeek>();
-                    foreach (var personWeek in selctedPersonWeeks)
-				    {
-					    var weeklyRest = _contractWeeklyRestForPersonWeek.GetWeeklyRestFromContract(personWeek);
-                        if (!weeklyRestInPersonWeek.ContainsKey(personWeek)) weeklyRestInPersonWeek.Add(personWeek, weeklyRest);
-                        if(!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek,personScheduleRange,weeklyRest  ) )
-                            personWeeksVoilatingWeeklyRest.Add(personWeek);
+	        foreach (var person in selectedPersons)
+	        {
+	            var personMatrix = allMatrixOnSelectedPeriod.FirstOrDefault(s => s.Person == person);
+	            var weeklyRestInPersonWeek = new Dictionary<PersonWeek, TimeSpan>();
+	            if (personMatrix != null)
+	            {
+	                var personScheduleRange = personMatrix.ActiveScheduleRange;
+	                var selectedPeriodScheduleDays = personScheduleRange.ScheduledDayCollection(selectedPeriod);
+	                var selctedPersonWeeks =
+	                    _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays,
+	                        true);
+	                var personWeeksVoilatingWeeklyRest = new List<PersonWeek>();
+	                foreach (var personWeek in selctedPersonWeeks)
+	                {
+	                    var weeklyRest = _contractWeeklyRestForPersonWeek.GetWeeklyRestFromContract(personWeek);
+	                    if (!weeklyRestInPersonWeek.ContainsKey(personWeek))
+	                        weeklyRestInPersonWeek.Add(personWeek, weeklyRest);
+	                    if (!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRest))
+	                        personWeeksVoilatingWeeklyRest.Add(personWeek);
 
-				    }
+	                }
 
-				    //solving the weeks
-                    foreach (var personWeek in personWeeksVoilatingWeeklyRest)
-				    {
-					    var possiblePositionsToFix = _dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(personWeek.Week,
-                        while (possiblePositionsToFix.Count() != 0)
-					    bool success = false;
-					    {
-                            var highProbablePosition = getHighProbablePosition(possiblePositionsToFix);
-                            startPokingShifts();
-                            if (!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange,weeklyRestInPersonWeek[personWeek]))
-                                break;
-                            possiblePositionsToFix.Remove(highProbablePosition);
-                        }
-                    }
-					    if (!success)
-					    {
-						    //do something
-                }
-            }
-            
-        }
+	                //solving the weeks
+	                foreach (var personWeek in personWeeksVoilatingWeeklyRest)
+	                {
+	                    if (_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange,weeklyRestInPersonWeek[personWeek])) continue;
+	                    var possiblePositionsToFix = _dayOffToTimeSpanExtractor.GetDayOffWithTimeSpanAmongAWeek(personWeek.Week, personScheduleRange);
+	                    bool success = false;
+	                    while (possiblePositionsToFix.Count() != 0)
+	                    {
+	                        var highProbablePosition = getHighProbablePosition(possiblePositionsToFix);
+	                        success = _shiftNudgeManager.TrySolveForDayOff(personWeek, highProbablePosition,
+	                            teamBlockGenerator,
+	                            allPersonMatrixList, schedulingOptions, rollbackService, resourceCalculateDelayer,
+	                            schedulingResultStateHolder, selectedPeriod, selectedPersons, optimizationPreferences);
 
-        private void startPokingShifts()
-        {
-            //while no validation error found continue doing below
+	                        if (success)
+	                            break;
+	                        possiblePositionsToFix.Remove(highProbablePosition);
+	                    }
+	                    if (!success)
+	                    {
+	                        //terminator code
+	                    }
+	                }
+	            }
+	        }
 
-            //poke the day before
+	    }
 
-            //do we need to check here ? it think yes
-            //if (!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek]))
-            //    return;
-
-            //poke the day after
-        }
+        
 
         private DateOnly getHighProbablePosition(IDictionary<DateOnly, TimeSpan> possiblePositionsToFix)
         {
