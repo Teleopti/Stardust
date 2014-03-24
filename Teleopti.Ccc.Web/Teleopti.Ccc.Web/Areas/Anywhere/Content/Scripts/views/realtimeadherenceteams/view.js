@@ -42,7 +42,11 @@
 
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
-			}, siteId);
+			},
+			siteId,
+			function () {
+				$('.realtimeadherenceteams').attr("data-subscription-done"," ");
+			});
 		},
 	};
 });

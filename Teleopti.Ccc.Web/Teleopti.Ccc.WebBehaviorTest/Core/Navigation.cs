@@ -285,12 +285,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
-		public static void GotoAnywhereRealTimeAdherenceOverview()
+		public static void GotoAnywhereRealTimeAdherenceOverview(bool waitUntilSubscriptionIsCompleted)
 		{
-			GoToWaitForUrlAssert(
+			if (waitUntilSubscriptionIsCompleted)
+			{
+				GoToWaitForUrlAssert(
+					"Anywhere#realtimeadherencesites",
+					"Anywhere#realtimeadherencesites",
+					new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
+			}
+			else
+			{
+				GoToWaitForUrlAssert(
 				"Anywhere#realtimeadherencesites",
 				"Anywhere#realtimeadherencesites",
 				new ApplicationStartupTimeout());
+			}
+			
 		}
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid siteId)
@@ -298,7 +309,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForUrlAssert(
 				string.Format("Anywhere#realtimeadherenceteams/{0}", siteId),
 				"Anywhere#realtimeadherenceteams",
-				new ApplicationStartupTimeout());
+				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
 		}
 
 		public static void GotoRequestsShiftTrade(DateTime date)
@@ -340,6 +351,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
+	}
+
+	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor
+	{
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			Browser.Interactions.AssertExists("[data-subscription-done]");
+		}
 	}
 
 	public class GotoArgs
