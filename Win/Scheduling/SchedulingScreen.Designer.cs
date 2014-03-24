@@ -3232,7 +3232,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.xxViewOldRequestsToolStripMenuItem, System.Windows.Forms.Keys.None);
 			this.xxViewOldRequestsToolStripMenuItem.Size = new System.Drawing.Size(205, 22);
 			this.xxViewOldRequestsToolStripMenuItem.Text = "xxViewHistory";
-			this.xxViewOldRequestsToolStripMenuItem.Click += new System.EventHandler(this.toolStripItemViewAllowanceClick);
+			this.xxViewOldRequestsToolStripMenuItem.Click += new System.EventHandler(this.toolStripViewRequestHistory_Click);
 			// 
 			// toolStripExFilterDays
 			// 
