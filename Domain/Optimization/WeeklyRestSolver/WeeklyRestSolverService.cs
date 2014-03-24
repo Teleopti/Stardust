@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
@@ -25,14 +27,20 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         private readonly IContractWeeklyRestForPersonWeek _contractWeeklyRestForPersonWeek;
         private readonly IDayOffToTimeSpanExtractor _dayOffToTimeSpanExtractor;
 	    private readonly IShiftNudgeManager _shiftNudgeManager;
+        private readonly IdentifyDayOffWithHighestSpan _identifyDayOffWithHighestSpan;
+        private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
 
-        public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor, IShiftNudgeManager shiftNudgeManager)
+        public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, 
+                    IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor, IShiftNudgeManager shiftNudgeManager,  IdentifyDayOffWithHighestSpan identifyDayOffWithHighestSpan, 
+                    IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
             _ensureWeeklyRestRule = ensureWeeklyRestRule;
             _contractWeeklyRestForPersonWeek = contractWeeklyRestForPersonWeek;
             _dayOffToTimeSpanExtractor = dayOffToTimeSpanExtractor;
 	        _shiftNudgeManager = shiftNudgeManager;
+            _identifyDayOffWithHighestSpan = identifyDayOffWithHighestSpan;
+            _deleteScheduleDayFromUnsolvedPersonWeek = deleteScheduleDayFromUnsolvedPersonWeek;
         }
 
 	    public void Execute(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allMatrixOnSelectedPeriod,
@@ -71,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                    bool success = false;
 	                    while (possiblePositionsToFix.Count() != 0)
 	                    {
-	                        var highProbablePosition = getHighProbablePosition(possiblePositionsToFix);
+	                        var highProbablePosition =_identifyDayOffWithHighestSpan.GetHighProbableDayOffPosition(possiblePositionsToFix);
 	                        success = _shiftNudgeManager.TrySolveForDayOff(personWeek, highProbablePosition,
 	                            teamBlockGenerator,
 	                            allPersonMatrixList, schedulingOptions, rollbackService, resourceCalculateDelayer,
@@ -83,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                    }
 	                    if (!success)
 	                    {
-	                        //terminator code
+                            _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange,possiblePositionsToFix.First().Key ,rollbackService );
 	                    }
 	                }
 	            }
@@ -91,21 +99,5 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 	    }
 
-        
-
-        private DateOnly getHighProbablePosition(IDictionary<DateOnly, TimeSpan> possiblePositionsToFix)
-        {
-            var higestSpan = TimeSpan.MinValue;
-            var resultDate = new DateOnly();
-            foreach (var day in possiblePositionsToFix)
-            {
-                if (day.Value > higestSpan)
-                {
-                    higestSpan = day.Value;
-                    resultDate = day.Key;
-                }
-            }
-            return  resultDate;
-        }
     }
 }

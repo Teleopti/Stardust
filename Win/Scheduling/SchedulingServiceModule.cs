@@ -419,8 +419,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
             builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
             builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
-            
-            //should that class be in here 
+            builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
+		    builder.RegisterType<IdentifyDayOffWithHighestSpan>();
+
             builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
             builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
 	    }
