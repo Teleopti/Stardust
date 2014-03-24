@@ -29,6 +29,8 @@
                             href="authenticate?whr=urn:SalesForce" title="SalesForce">SalesForce</a>
 						<a class="windows button"
                             href="authenticate?whr=urn:Windows" title="Windows">Windows</a>
+						<a class="teleopti button"
+                            href="authenticate?whr=urn:Teleopti" title="Teleopti">Teleopti</a>
 						<a class="myopenid button"
                             href="authenticate?whr=urn:MyOpenId" title="MyOpenId">MyOpenId</a>
                                                 
