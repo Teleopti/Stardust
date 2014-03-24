@@ -48,6 +48,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
+			var teamSchedulingOptions = new TeamBlockSchedulingOptions();
+			if (teamSchedulingOptions.IsBlockScheduling(schedulingOptions) &&
+			    schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)
+				return false;
+
 			var person = personWeek.Person;
 			var leftDate = dayOffDateToWorkWith.AddDays(-1);
 			var rightDate = dayOffDateToWorkWith.AddDays(1);

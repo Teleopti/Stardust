@@ -223,6 +223,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			}
 		}
 
+		[Test]
+		public void ShouldReturnFalseIfBlockIsSchedulePeriod()
+		{
+			_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
+			_schedulingOptions.UseTeamBlockPerOption = true;
+
+			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
+					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
+			Assert.IsFalse(result);
+		}
+
 		private void rollBackMocks()
 		{
 			Expect.Call(() => _rollbackService.ModifyParts(new List<IScheduleDay>{_leftScheduleDay, _rightScheduleDay}));
