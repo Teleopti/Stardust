@@ -92,20 +92,3 @@ CREATE NONCLUSTERED INDEX IX_dim_person_to_be_deleted
 ON [mart].[dim_person] ([to_be_deleted])
 INCLUDE ([person_id],[team_id],[business_unit_code])
 GO
-
---Desc: Bug #26825 - column not used
-IF EXISTS ( --column exist
-	SELECT * FROM sys.columns WHERE object_id = OBJECT_ID(N'[mart].[dim_person]') AND name = N'valid_to_interval_id_maxDate')
-BEGIN
-	IF NOT EXISTS ( --but is not part of any index
-		SELECT * FROM sys.index_columns ic
-		INNER JOIN sys.columns c
-		on c.object_id = ic.object_id
-		 WHERE c.object_id = ic.object_id
-		 AND c.name = N'valid_to_interval_id_maxDate'
-		 AND c.column_id = ic.column_id
-	)
-	BEGIN
-		ALTER TABLE mart.dim_person DROP COLUMN valid_to_interval_id_maxDate
-	END
-END
