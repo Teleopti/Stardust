@@ -162,7 +162,8 @@ Teleopti.MyTimeWeb.Password = (function ($) {
     function _initButton() {
         $("#passwordButton")
 			.click(function () {
-			    _updatePassword($("input#oldPassword[type=password]").val(), $("input#password[type=password]").val());
+				_updatePassword($("input#oldPassword").val(), $("input#password").val());
+			   // _updatePassword($("input#oldPassword[type=password]").val(), $("input#password[type=password]").val());
 			});
     }
 
@@ -171,8 +172,10 @@ Teleopti.MyTimeWeb.Password = (function ($) {
             var alertPassword = $("#alertPassword");
             var incorrectLabel = $("#nonMatchingPassword");
             var passwordButton = $("#passwordButton");
-            var pw = $("input#password[type=password]").val();
-            var pw2 = $("input#passwordValidation[type=password]").val();
+            //var pw = $("input#password[type=password]").val();
+        	//var pw2 = $("input#passwordValidation[type=password]").val();
+            var pw = $("input#password").val();
+            var pw2 = $("input#passwordValidation").val();
             if (pw != pw2) {
                 alertPassword.show();
                 incorrectLabel.show();
