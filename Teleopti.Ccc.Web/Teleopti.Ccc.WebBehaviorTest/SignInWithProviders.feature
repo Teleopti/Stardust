@@ -37,9 +37,9 @@ Scenario: Sign in as a windows user in CCC
 	When I go to mytime web
 	Then I should be signed in
 
+	@ExtraDataSource
 Scenario: Sign in as a windows user in CCC with multiple data sources
 	Given I have the role 'Role for business unit 1'
-	And I have access to two data sources
 	And I am a user with
 	| Field                  | Value |
 	| Windows authentication | true  |
@@ -58,10 +58,10 @@ Scenario: Sign in as a windows user in CCC with multiple business units
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
 	
+@ExtraDataSource
 Scenario: Sign in as a windows user in CCC with multiple data sources and multiple business units
 	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
-	And I have access to two data sources
 	And I am a user with
 	| Field                  | Value |
 	| Windows authentication | true  |

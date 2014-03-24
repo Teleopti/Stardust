@@ -18,11 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Given(@"I have access to two data sources")]
 		public void GivenIHaveAccessToTwoDataSources()
 		{
-			FileConfigurator.ConfigureByTags(
-				"Data\\TestData2.nhib.xml",
-				TargetTestDataNHibFile,
-				new AllTags()
-				);
 		}
 
 		[When(@"I select one data source")]
@@ -30,5 +25,23 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			// first one is selected as default
 		}
+
+		[BeforeScenario("ExtraDataSource")]
+		public void BeforePasswordPolicyScenario()
+		{
+			FileConfigurator.ConfigureByTags(
+				"Data\\TestData2.nhib.xml",
+				TargetTestDataNHibFile,
+				new AllTags()
+				);
+		}
+
+		[AfterScenario("ExtraDataSource")]
+		public void AfterPasswordPolicyScenario()
+		{
+			if (File.Exists(TargetTestDataNHibFile))
+				File.Delete(TargetTestDataNHibFile);
+		}
+
 	}
 }
