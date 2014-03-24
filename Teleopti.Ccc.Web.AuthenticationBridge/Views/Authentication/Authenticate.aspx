@@ -27,8 +27,8 @@
                             href="authenticate?whr=urn:office365:auth10preview" title="WindowsAzure AD">Windows Azure Active Directory (Office 365)</a>    
 						<a class="salesforce button"
                             href="authenticate?whr=urn:SalesForce" title="SalesForce">SalesForce</a>
-						<a class="teleopti button"
-                            href="authenticate?whr=urn:Teleopti" title="Teleopti">Teleopti</a>
+						<a class="windows button"
+                            href="authenticate?whr=urn:Windows" title="Windows">Windows</a>
 						<a class="myopenid button"
                             href="authenticate?whr=urn:MyOpenId" title="MyOpenId">MyOpenId</a>
                                                 

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Filters
 			var signIn = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), Realm ?? _authenticationModule.Realm)
 			{
 				Context = "ru=" + filterContext.HttpContext.Request.Path,
-				HomeRealm = "urn:Teleopti"
+				HomeRealm = "urn:Windows"
 			};
 
 			filterContext.Result = new RedirectResult(signIn.WriteQueryString());
