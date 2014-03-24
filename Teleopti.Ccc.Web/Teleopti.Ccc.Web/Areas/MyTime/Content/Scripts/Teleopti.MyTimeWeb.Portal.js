@@ -36,6 +36,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 	//disable navigation controls on ajax-begin
 	function _disablePortalControls() {
 		$('#Team-Picker').select2("enable", false);
+		$('#body-inner').hide();
 	}
 
 	function _attachAjaxEvents() {
@@ -236,6 +237,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			success: function (html) {
 				var viewId = hashInfo.actionHash; //gröt
 				$('#body-inner').html(html);
+				$('#body-inner').show();
 				_invokeInitCallback(viewId, secondAction);
 				currentViewId = viewId;
 			}
