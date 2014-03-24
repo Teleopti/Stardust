@@ -58,7 +58,7 @@
 		'swipeListener': ['jquery'],
 		'justgage': {
 			exports: 'JustGage',
-			deps: ['raphael']
+			deps: ['require/raphaelloader']
 		}
 	}
 };

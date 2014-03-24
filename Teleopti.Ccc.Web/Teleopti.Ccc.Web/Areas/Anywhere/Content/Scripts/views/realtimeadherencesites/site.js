@@ -21,6 +21,8 @@
 			    navigation.GotoRealTimeAdherenceTeams(that.Id);
     		};
 
+    		that.hasBeenUpdated = ko.observable(false);
+
     		return that;
     	};
     }

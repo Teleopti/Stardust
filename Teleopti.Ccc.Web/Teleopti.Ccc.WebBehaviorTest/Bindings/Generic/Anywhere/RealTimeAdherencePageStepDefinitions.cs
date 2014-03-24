@@ -28,15 +28,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see site '(.*)' with (.*) of (.*) employees out of adherence")]
 		public void ThenIShouldSeeSiteWithOfEmployeesOutOfAdherence(string site, int numberOfOutAdherence, int total)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".site:contains('{0}'):contains('{1}')", site, numberOfOutAdherence));
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".site:contains('{0}'):contains('{1}')", site, total));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".site [data-value='{0}']:contains('{1}')", numberOfOutAdherence, site));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".site [data-max='{0}']:contains('{1}')", total, site));
 		}
 
 		[Then(@"I should see team '(.*)' with (.*) of (.*) employees out of adherence")]
 		public void ThenIShouldSeeTeamWithOfEmployeesOutOfAdherence(string team, int numberOfOutAdherence, int total)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team:contains('{0}'):contains('{1}')", team, numberOfOutAdherence));
-			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team:contains('{0}'):contains('{1}')", team, total));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team [data-value='{0}']:contains('{1}')", numberOfOutAdherence, team));
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".team [data-max='{0}']:contains('{1}')", total, team));
 		}
 
 	}

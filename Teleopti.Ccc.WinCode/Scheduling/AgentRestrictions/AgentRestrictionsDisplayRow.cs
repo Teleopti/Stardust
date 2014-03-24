@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		int CurrentDaysOff { get; set; }
 		TimePeriod MinMaxTime { get; set; }
 		string Ok { get; }
+		bool NoWorkshiftFound { get; set; }
 	}
 
 	public sealed class AgentRestrictionsDisplayRow : IAgentRestrictionsDisplayRow, IAgentDisplayData
@@ -93,6 +94,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			if (!CurrentDaysOff.Equals(TargetDaysOff)) _warnings.Add(AgentRestrictionDisplayRowColumn.DaysOffSchedule);
 			if (((IAgentDisplayData)this).MinimumPossibleTime > MinMaxTime.EndTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Min);
 			if (((IAgentDisplayData)this).MaximumPossibleTime < MinMaxTime.StartTime) _warnings.Add(AgentRestrictionDisplayRowColumn.Max);
+			if(NoWorkshiftFound) _warnings.Add(AgentRestrictionDisplayRowColumn.Ok);
 		}
 
 		public string Warning(int index)
@@ -105,6 +107,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			if (column.Equals(AgentRestrictionDisplayRowColumn.DaysOffSchedule)) return UserTexts.Resources.WrongNumberOfDaysOff;
 			if (column.Equals(AgentRestrictionDisplayRowColumn.Min)) return UserTexts.Resources.LowestPossibleWorkTimeIsTooHigh;
 			if (column.Equals(AgentRestrictionDisplayRowColumn.Max)) return UserTexts.Resources.HighestPossibleWorkTimeIsTooLow;
+			if (column.Equals(AgentRestrictionDisplayRowColumn.Ok)) return UserTexts.Resources.AtLeastOneDayCannotBeScheduled;
 			
 			return null;	
 		}
@@ -138,6 +141,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		{
 			get {return _warnings.Count > 0 ? UserTexts.Resources.No : UserTexts.Resources.Yes;}
 		}
+
+		public bool NoWorkshiftFound { get; set; }
 
 		public string ContractTargetTimeWithTolerance
 		{

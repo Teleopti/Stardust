@@ -1252,7 +1252,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonMainMenuHelp_Click(object sender, EventArgs e)
 		{
-			ViewBase.ShowHelp(this,true);
+			ViewBase.ShowHelp(this,false);
 		}
 
 		private void toolStripButtonMainMenuClose_Click(object sender, EventArgs e)
@@ -3537,6 +3537,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                                        selectedPeriod.DayCollection().Count(),
 			                                        () => runBackgroundWorkerScheduling(e));
 			_undoRedo.CommitBatch();
+
 		}
 
 		private void runBackgroundWorkerScheduling(DoWorkEventArgs e)
@@ -3813,7 +3814,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
-			
 			var argument = (schedulingAndOptimizeArgument)e.Argument;
 			var optimizationCommand = _container.Resolve<OptimizationCommand>();
 			optimizationCommand.Execute(_optimizerOriginalPreferences, _backgroundWorkerOptimization, _schedulerState,

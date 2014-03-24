@@ -11994,4 +11994,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Time ahead of activity change to alert agent (seconds)</value>
     <comment>Label used in System setting</comment>
   </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>At least one day cannot be scheduled</value>
+    <comment>Used in scheduler</comment>
+  </data>
 </root>

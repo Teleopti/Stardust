@@ -229,21 +229,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereRealTimeAdherenceOverview(IdForSite(site));
 		}
 
-
-
-		private static Guid groupIdByName(string team)
-		{
-			Guid groupid = Guid.Empty;
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
-				{
-					groupid = (from p in new GroupPageRepository(uow).LoadAll()
-										 from g in p.RootGroupCollection
-										 where g.Description.Name.Equals(team)
-										 select g.Id.Value).Single();
-				});
-			return groupid;
-		}
-
 		[When(@"I navigate to the preferences page")]
 		public void WhenINavigateToThePreferencesPage()
 		{

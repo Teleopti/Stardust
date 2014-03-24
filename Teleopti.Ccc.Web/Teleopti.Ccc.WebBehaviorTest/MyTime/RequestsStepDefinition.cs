@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System;
+using System.Globalization;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
@@ -45,9 +47,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var isLoading = true;
 			while (isLoading && count < 10)
 			{
+				Thread.Sleep(100);
+				bool isVisible;
+				bool.TryParse(Browser.Interactions.Javascript("return $('#loadingRequestIndicator').is(':visible')").ToString(), out isVisible);
+				var cssDisplay = Browser.Interactions.Javascript("return $('#loadingRequestIndicator').css('display')").ToString();
+
+				isLoading = isVisible && string.Compare(cssDisplay, "none", false, CultureInfo.CurrentCulture) != 0;
 				count++;
-				Thread.Sleep(50);
-				bool.TryParse(Browser.Interactions.Javascript("return $('.loading-gradient:first').is(':visible')").ToString(), out isLoading);
 			}
 		}
 

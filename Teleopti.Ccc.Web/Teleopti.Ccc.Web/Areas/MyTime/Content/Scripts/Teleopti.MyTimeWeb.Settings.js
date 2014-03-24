@@ -162,7 +162,8 @@ Teleopti.MyTimeWeb.Password = (function ($) {
     function _initButton() {
         $("#passwordButton")
 			.click(function () {
-			    _updatePassword($("input#oldPassword").val(), $("input#password").val());
+				_updatePassword($("input#oldPassword").val(), $("input#password").val());
+			   // _updatePassword($("input#oldPassword[type=password]").val(), $("input#password[type=password]").val());
 			});
     }
 
@@ -171,6 +172,8 @@ Teleopti.MyTimeWeb.Password = (function ($) {
             var alertPassword = $("#alertPassword");
             var incorrectLabel = $("#nonMatchingPassword");
             var passwordButton = $("#passwordButton");
+            //var pw = $("input#password[type=password]").val();
+        	//var pw2 = $("input#passwordValidation[type=password]").val();
             var pw = $("input#password").val();
             var pw2 = $("input#passwordValidation").val();
             if (pw != pw2) {
@@ -190,10 +193,10 @@ Teleopti.MyTimeWeb.Password = (function ($) {
         });
 
         $("input#password").keyup(function () {
-            $("#invalidNewPassword").hide();
+        	$("#invalidNewPassword").hide();
         });
         $("input#passwordValidation").keyup(function () {
-            $("#invalidNewPassword").hide();
+        	$("#invalidNewPassword").hide();
         });
     }
 
@@ -217,7 +220,7 @@ Teleopti.MyTimeWeb.Password = (function ($) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 if (jqXHR.status == 400) {
-                    var error = $.parseJSON(jqXHR.responseText);
+                	var error = $.parseJSON(jqXHR.responseText);
                     if (error.IsAuthenticationSuccessful) {
                         $("#alertPassword").show();
                         $("#invalidNewPassword").show();

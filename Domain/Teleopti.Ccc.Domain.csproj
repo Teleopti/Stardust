@@ -618,7 +618,6 @@
     <Compile Include="Scheduling\TeamBlock\SkillInterval\TeamBlockOpenHourService.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecification.cs" />
-    <Compile Include="Scheduling\TeamBlock\SameShiftCategoryBlockScheduler.cs" />
     <Compile Include="Scheduling\Assignment\EditableShiftLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditableShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
@@ -1037,8 +1036,6 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetAccordingToAccessabilityFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilter.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.cs" />
-    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockRuleSetBagExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TeamBlockIncludedWorkShiftRuleFilter.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\TimeLimitsRestrictionShiftFilter.cs" />
