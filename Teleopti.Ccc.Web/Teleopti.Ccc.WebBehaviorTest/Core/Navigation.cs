@@ -73,11 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted("Authentication", new ApplicationStartupTimeout());
 		}
 
-		public static void GotoMobileReportsSignInPage(string hash)
-		{
-			GoToWaitForCompleted("MobileReports/Authentication" + hash, new ApplicationStartupTimeout());
-		}
-
 		public static void GotoMobileReportsPage()
 		{
 			GoToWaitForCompleted("MobileReports#", new ApplicationStartupTimeout());
@@ -184,12 +179,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.AssertUrlContains("blank");
 		}
 
-		public static void GotoBlank()
-		{
-			GotoRaw("about:blank");
-			Browser.Interactions.AssertUrlContains("blank");
-		}
-
 		public static void GotoMessagePage()
 		{
 			GoToWaitForCompleted("MyTime#Message/Index", new ApplicationStartupTimeout());
@@ -201,11 +190,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 
 		public static void GotoAnywhere()
-		{
-			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
-		}
-
-		public static void GotoAnywhereTeamSchedule()
 		{
 			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
 		}
@@ -310,20 +294,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				string.Format("Anywhere#realtimeadherenceteams/{0}", siteId),
 				"Anywhere#realtimeadherenceteams",
 				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
-		}
-
-		public static void GotoRequestsShiftTrade(DateTime date)
-		{
-			GoToWaitForCompleted(
-				string.Format("MyTime#Requests/Index/ShiftTrade/{0}{1}{2}",
-				date.Year.ToString("0000"),
-				date.Month.ToString("00"),
-				date.Day.ToString("00")),
-				new BustCache(),
-				new ApplicationStartupTimeout(),
-				new WaitUntilReadyForInteraction());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
 		public static void GoToMyReport()
