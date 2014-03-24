@@ -25,14 +25,14 @@
 	</div>
 	<ul class="nav navbar-nav">
 		<!-- ko if: showTeamPicker -->
-		<li data-bind="if: showGroupings" style="padding-top: 10px">
+		<li data-bind="if: showGroupings" class="ie8style"
 			<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
 				<optgroup data-bind="attr: { label: text }, foreach: children">
 					<option data-bind="text: text, value: id"></option>
 				</optgroup>
 			</select>
 		</li>
-		<li data-bind="ifnot: showGroupings" style="padding-top: 10px">
+		<li data-bind="ifnot: showGroupings" class="ie8style">
 			<select id="Team-Picker" data-bind="foreach: availableTeams, select2: { value: selectedTeam } ">
 				<option data-bind="text: text, value: id"></option>
 			</select>
