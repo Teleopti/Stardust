@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using NHibernate.Hql.Ast.ANTLR;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -47,6 +46,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private IScheduleDay _leftScheduleDay;
 		private IScheduleDay _rightScheduleDay;
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
+		private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private IOptimizationPreferences _optimizationPreferences;
 
 		[SetUp]
 		public void Setup()
@@ -58,8 +59,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_contractWeeklyRestForPersonWeek = new ContractWeeklyRestForPersonWeek();
 			_teamBlockScheduleCloner = _mocks.StrictMock<ITeamBlockScheduleCloner>();
 			_filterForTeamBlockInSelection = _mocks.StrictMock<IFilterForTeamBlockInSelection>();
+			_teamBlockRestrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule,
-				_contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection);
+				_contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection,
+				_teamBlockRestrictionOverLimitValidator);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
 			_personWeek = new PersonWeek(_person, new DateOnlyPeriod(2014, 03, 24, 2014, 03, 30));
@@ -81,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_leftScheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_rightScheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			_optimizationPreferences = new OptimizationPreferences();
 		}
 
 		[Test]
@@ -106,13 +110,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
+
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_leftTeamBlockInfo, _optimizationPreferences))
+					.Return(true);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_rightTeamBlockInfo, _optimizationPreferences))
+					.Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons);
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 				Assert.IsTrue(result);
 			}
 		}
@@ -147,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons);
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -168,7 +177,48 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons);
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
+				Assert.IsFalse(result);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfRestrictionValidatorFails()
+		{
+
+			using (_mocks.Record())
+			{
+				initialMocks();
+				Expect.Call(_filterForTeamBlockInSelection.Filter(
+					new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod))
+					.Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo });
+				middleMocks();
+
+				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
+				Expect.Call(_shiftNudgeEarlier.Nudge(_leftScheduleDay, _rollbackService, _schedulingOptions,
+					_resourceCalculateDelayer, _leftTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					.Return(true);
+				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(false);
+				Expect.Call(_shiftNudgeLater.Nudge(_rightScheduleDay, _rollbackService, _schedulingOptions,
+					_resourceCalculateDelayer, _rightTeamBlockInfo, _schedulingResultStateHolder, _selectedPeriod, _selectedPersons))
+					.Return(true);
+				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
+
+				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
+
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_leftTeamBlockInfo, _optimizationPreferences))
+					.Return(false);
+				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_rightTeamBlockInfo, _optimizationPreferences))
+					.Return(false);
+
+				rollBackMocks();
+			}
+
+			using (_mocks.Playback())
+			{
+				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
+					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
 		}

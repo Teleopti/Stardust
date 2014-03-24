@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
 			ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
+			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+			IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class ShiftNudgeManager : IShiftNudgeManager
@@ -25,10 +26,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IContractWeeklyRestForPersonWeek _contractWeeklyRestForPersonWeek;
 		private readonly ITeamBlockScheduleCloner _teamBlockScheduleCloner;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
+		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 
 		public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
-			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection)
+			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
+			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			_shiftNudgeEarlier = shiftNudgeEarlier;
 			_shiftNudgeLater = shiftNudgeLater;
@@ -36,13 +39,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_contractWeeklyRestForPersonWeek = contractWeeklyRestForPersonWeek;
 			_teamBlockScheduleCloner = teamBlockScheduleCloner;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
+			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 		}
 
 		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
 			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
 			ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
+			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
 			var person = personWeek.Person;
 			var leftDate = dayOffDateToWorkWith.AddDays(-1);
@@ -94,25 +98,37 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool success = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 			if (!success)
 			{
-				rollbackService.ModifyParts(clonedSchedules);
-				rollbackService.ClearModificationCollection();
-				var dateList = new HashSet<DateOnly>();
-				foreach (var cloneSchedule in clonedSchedules)
-				{
-					var dateOnly = cloneSchedule.DateOnlyAsPeriod.DateOnly;
-					dateList.Add(dateOnly);
-					dateList.Add(dateOnly.AddDays(1));
-				}
-				foreach (var dateOnly in dateList)
-				{
-					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
-				}
+				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, clonedSchedules);
 				return false;
 			}
 
-			//validate broken restrictions
+			bool leftOk = _teamBlockRestrictionOverLimitValidator.Validate(leftTeamBlock, optimizationPreferences);
+			bool rightOk = _teamBlockRestrictionOverLimitValidator.Validate(rightTeamBlock, optimizationPreferences);
+			if (!(leftOk && rightOk))
+			{
+				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, clonedSchedules);
+				return false;
+			}
 
 			return true;
+		}
+
+		private static void rollBackAndResourceCalculate(ISchedulePartModifyAndRollbackService rollbackService,
+			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> clonedSchedules)
+		{
+			rollbackService.ModifyParts(clonedSchedules);
+			rollbackService.ClearModificationCollection();
+			var dateList = new HashSet<DateOnly>();
+			foreach (var cloneSchedule in clonedSchedules)
+			{
+				var dateOnly = cloneSchedule.DateOnlyAsPeriod.DateOnly;
+				dateList.Add(dateOnly);
+				dateList.Add(dateOnly.AddDays(1));
+			}
+			foreach (var dateOnly in dateList)
+			{
+				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
+			}
 		}
 
 		private IList<IScheduleDay> cloneSchedules(ITeamBlockInfo leftTeamBlock, ITeamBlockInfo rightTeamBlock)

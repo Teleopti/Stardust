@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	    public void Execute(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allMatrixOnSelectedPeriod,
 		    DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator, ISchedulingOptions schedulingOptions,
 		    ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
-		    ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList)
+		    ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
+			IOptimizationPreferences optimizationPreferences)
 	    {
 		    foreach (var person in selectedPersons)
 		    {
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 					    {
 						    success = _shiftNudgeManager.TrySolveForDayOff(personWeek, possiblePosition.Key, teamBlockGenerator,
 								allPersonMatrixList, schedulingOptions, rollbackService, resourceCalculateDelayer,
-							    schedulingResultStateHolder, selectedPeriod, selectedPersons);
+							    schedulingResultStateHolder, selectedPeriod, selectedPersons, optimizationPreferences);
 
 						    if (success)
 							    break;
