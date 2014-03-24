@@ -11970,4 +11970,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Real time adherence overview</value>
     <comment>Permission name</comment>
   </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>No datasource available for you, my friend.</value>
+    <comment>Message displayed when no datasource is available after sign in</comment>
+  </data>
 </root>

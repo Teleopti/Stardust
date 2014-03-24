@@ -33,7 +33,7 @@
 
         <div id="signin">
 
-            <div id="DataSources" data-bind="visible: DataSources().length > 0, foreach: DataSources" class="list-group">
+            <div id="DataSources" data-bind="visible: HasDataSources, foreach: DataSources" class="list-group">
                 <a href="#" class="list-group-item" data-bind="click: $parent.SelectDataSource, css: { 'application': !IsWindows, 'windows': IsWindows, 'active': $parent.SelectedDataSource() == $data }">
                     <span data-bind="text: Name"></span>
                     <span data-bind="if: IsWindows">@Resources.WindowsLogonWithBrackets</span>
@@ -51,10 +51,11 @@
                 <div id="Signin-error" 
 					 class="alert alert-warning" 
 					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
-					 data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase">
+                     data-nobusinessunitext="@Resources.NoAllowedBusinessUnitFoundInCurrentDatabase"
+					 data-nodatasourcetext="@Resources.NoDatasource">
                 </div>
 
-                <button class="btn btn-primary" id="Login-button" type="submit" data-bind="enable: Ajax.Inactive">@Resources.LogOn</button>
+                <button class="btn btn-primary" id="Login-button" type="submit" data-bind="enable: Ajax.Inactive, visible: HasDataSources">@Resources.LogOn</button>
                 <img data-bind="visible: Ajax.Active" src="@Url.Content("~/Areas/Start/Content/Images/ajax-loader-small.gif")" alt="..." />
             </form>
         </div>

@@ -18,7 +18,11 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.DisplayUserNameAndPasswordBoxes = ko.observable(false);
 
 	this.UserNameFocus = ko.observable(false);
-	
+
+	this.HasDataSources = ko.computed(function() {
+		return self.DataSources().length > 0;
+	});
+
 	this.SelectDataSource = function (dataSource) {
 		self.SelectedDataSource(dataSource);
 
@@ -47,10 +51,15 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 				});
 				self.DataSources.push.apply(self.DataSources, map);
 				var dataSources = self.DataSources();
+				if (dataSources.length == 0) {
+					self.ErrorMessage($('#Signin-error').data('nodatasourcetext'));
+					return;
+				}
+
 				self.SelectDataSource(dataSources[0]);
 				if (dataSources.length == 1) {
 					self.SignIn();
-				} 
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				try {
