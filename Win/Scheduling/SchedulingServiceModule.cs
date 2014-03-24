@@ -414,7 +414,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private static void registerWeeklyRestSolverClasses(ContainerBuilder builder)
 	    {
 			builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
-		    //IShiftNudgeEarlier
+			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
+			builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
+			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
+			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
+			builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
+			builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
+			//ITeamBlockScheduleCloner
 	    }
     }
 }
