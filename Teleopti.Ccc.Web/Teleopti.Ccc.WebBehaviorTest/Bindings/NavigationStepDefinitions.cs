@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIGoToMytimeWeb()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoWeekSchedulePage();
+			Navigation.GotoWeekSchedulePageNoWait();
 		}
 
 
