@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I go to mytime web")]
 		public void WhenIGoToMytimeWeb()
 		{
-			TestControllerMethods.Logon();
+			DataMaker.Data().ApplyDelayed();
 			Navigation.GotoWeekSchedulePageNoWait();
 		}
 

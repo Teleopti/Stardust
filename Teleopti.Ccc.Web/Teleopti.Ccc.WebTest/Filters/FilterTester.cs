@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.WebTest.Filters
 			controller.ControllerContext.HttpContext.Stub(x => x.Items).Return(_items);
 			controller.ControllerContext.HttpContext.Stub(x => x.User).Return(_user);
 			controller.ControllerContext.HttpContext.Request.Stub(x => x.Headers).Return(_headers);
+			controller.ControllerContext.HttpContext.Request.Stub(x => x.RequestContext)
+				.Return(new RequestContext(controller.ControllerContext.HttpContext, controller.ControllerContext.RouteData));
 
 			var cache = MockRepository.GenerateMock<HttpCachePolicyBase>();
 			controller.ControllerContext.HttpContext.Response.Stub(x => x.Cache).Return(cache);

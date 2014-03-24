@@ -40,7 +40,20 @@ namespace Teleopti.Ccc.Web.Filters
 
 		protected override bool AuthorizeCore(HttpContextBase httpContext)
 		{
-			return httpContext.User.Identity.IsAuthenticated;
+			if (isInsideStartArea(httpContext))
+			{
+				return httpContext.User.Identity.IsAuthenticated;
+			}
+			return httpContext.User.Identity is ITeleoptiIdentity;
+		}
+
+		private static bool isInsideStartArea(HttpContextBase httpContext)
+		{
+			var areaToken = httpContext.Request.RequestContext.RouteData.DataTokens["area"];
+			if (areaToken == null) return false;
+			var area = areaToken.ToString();
+			var isInsideStartArea = area.ToUpperInvariant() == "START";
+			return isInsideStartArea;
 		}
 
 		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)

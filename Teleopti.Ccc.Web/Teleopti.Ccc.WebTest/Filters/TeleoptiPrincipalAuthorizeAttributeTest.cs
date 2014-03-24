@@ -39,16 +39,19 @@ namespace Teleopti.Ccc.WebTest.Filters
 			result.RouteValues.Values.Should().Have.SameValuesAs("Start", "Authentication", "");
 		}
 
-		[Test,Ignore("Should work without other handling")]
+		[Test]
 		public void ShouldRedirectToAreasAuthenticationSignIn()
 		{
-			var target = new TeleoptiPrincipalAuthorizeAttribute(MockRepository.GenerateMock<IAuthenticationModule>());
+			var authenticationModule = MockRepository.GenerateMock<IAuthenticationModule>();
+			authenticationModule.Stub(x => x.Issuer).Return("http://myissuer");
+			authenticationModule.Stub(x => x.Realm).Return("http://mytime");
+			var target = new TeleoptiPrincipalAuthorizeAttribute(authenticationModule);
 			var filterTester = new FilterTester();
 			filterTester.IsUser(Thread.CurrentPrincipal);
 			filterTester.AddRouteDataToken("area", "MyTime");
 
-			var result = filterTester.InvokeFilter(target) as RedirectToRouteResult;
-			result.RouteValues.Values.Should().Have.SameValuesAs("MyTime", "Authentication", "");
+			var result = filterTester.InvokeFilter(target) as RedirectResult;
+			result.Url.Should().Contain("http://myissuer");
 		}
 
 		[Test]
