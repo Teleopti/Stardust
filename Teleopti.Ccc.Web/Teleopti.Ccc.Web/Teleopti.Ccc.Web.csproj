@@ -308,6 +308,9 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
+    <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
+    <Compile Include="Areas\SSO\Controllers\AuthenticationController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
     <Compile Include="Areas\SSO\Core\IWindowsAccountProvider.cs" />
     <Compile Include="Areas\SSO\Core\WindowsAccountProvider.cs" />
@@ -829,6 +832,29 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\main.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />
     <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
+    <Content Include="Areas\SSO\Content\Css\login.css" />
+    <Content Include="Areas\SSO\Content\Css\Site.css" />
+    <Content Include="Areas\SSO\Content\Images\ajax-loader-small.gif" />
+    <Content Include="Areas\SSO\Content\Images\body_bg.jpg" />
+    <Content Include="Areas\SSO\Content\Images\ccc_icon.png" />
+    <Content Include="Areas\SSO\Content\Images\login_logo.png" />
+    <Content Include="Areas\SSO\Content\Images\login_page_bg.png" />
+    <Content Include="Areas\SSO\Content\Images\mobile_logo.png" />
+    <Content Include="Areas\SSO\Content\Images\signin_bg_sprite.png" />
+    <Content Include="Areas\SSO\Content\Images\windows-small-icon.png" />
+    <Content Include="Areas\SSO\Content\Images\Windows8-icon.png" />
+    <Content Include="Areas\SSO\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.AuthenticationState.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ChangePasswordView.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ChangePasswordViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.DataSourceViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Init.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.JQueryAjaxViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Navigation.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Settings.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInView.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Common.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
@@ -1149,7 +1175,6 @@
     <Content Include="Areas\SSO\Views\OpenId\Xrds.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\AskUser.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\Identifier.cshtml" />
-    <Content Include="Areas\SSO\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\SSO\Views\_ViewStart.cshtml" />
     <Content Include="Areas\SSO\Views\Web.config" />
     <Content Include="..\..\Teleopti.Ccc.Web.Broker\customTimeoutSettings.config.notinuse">
@@ -1171,6 +1196,8 @@
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Areas\SSO\Views\Authentication\SignIn.cshtml" />
+    <Content Include="Areas\SSO\Views\Shared\_LayoutBase.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -37,7 +37,7 @@ Scenario: Sign in as a windows user in CCC
 	When I go to mytime web
 	Then I should be signed in
 
-	@ExtraDataSource
+@ExtraDataSource
 Scenario: Sign in as a windows user in CCC with multiple data sources
 	Given I have the role 'Role for business unit 1'
 	And I am a user with

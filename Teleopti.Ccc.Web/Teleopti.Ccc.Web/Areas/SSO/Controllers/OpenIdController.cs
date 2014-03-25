@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using System.Web.Security;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
@@ -45,31 +46,26 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			}
 
 			// handles request from browser
-			var idrequest = request as IAuthenticationRequest;
+			var idrequest = request as IHostProcessedRequest;
 
-			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
-			if (windowsAccount != null)
+			if (!User.Identity.IsAuthenticated)
 			{
-				_logger.Warn("Found WindowsAccount");
-				var currentHttp = _currentHttpContext.Current();
-				idrequest.LocalIdentifier =
-					new Uri(currentHttp.Request.Url,
-							currentHttp.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + windowsAccount.UserName + "@" + windowsAccount.DomainName));
-				idrequest.IsAuthenticated = true;
-				_openIdProvider.SendResponse(request);
+				return this.RedirectToAction("SignIn", "Authentication", new { returnUrl = this.Url.Action("ProcessAuthRequest") });
 			}
-			else
-			{
-				_logger.Warn("NOT Found WindowsAccount");
-				idrequest.IsAuthenticated = false;
-			}
-			_logger.Warn("Return EmptyResult");
-			return new EmptyResult();
+
+			return null;
+
 		}
 
 		public ActionResult AskUser()
 		{
 			return View();
+		}
+
+		public ActionResult ProcessAuthRequest()
+		{
+			//throw new NotImplementedException();
+			return null;
 		}
 	}
 }

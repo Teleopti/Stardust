@@ -38,7 +38,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			                                                    	{
 																		typeof(ShareCalendarController),
 																		typeof(TestController),
-																		typeof(OpenIdController)
+																		typeof(OpenIdController),
+																		typeof(Areas.SSO.Controllers.AuthenticationController),
+																		typeof(Areas.SSO.Controllers.AuthenticationApiController)
 			                                                    	}));
 			filters.Add(new CheckStartupResultAttribute());
 		}

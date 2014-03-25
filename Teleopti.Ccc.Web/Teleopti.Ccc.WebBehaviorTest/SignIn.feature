@@ -36,7 +36,7 @@ Background:
 	| Access to mobile reports | false     |
 	| Access to admin web	   | false     |
 
-	@ApplicationLogOnOnly
+@ApplicationLogOnOnly
 Scenario: Sign in with a user with multiple business units by user name
 	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
