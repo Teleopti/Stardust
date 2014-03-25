@@ -95,6 +95,11 @@ FROM mart.fact_agent_state AS fact
     ON fact.person_id = dim.person_id
 WHERE dim.to_be_deleted = 1
 
+DELETE FROM mart.fact_hourly_availability
+FROM mart.fact_hourly_availability AS fact
+   INNER JOIN mart.dim_person AS dim
+    ON fact.person_id = dim.person_id
+WHERE dim.to_be_deleted = 1
 
 -- dim_person
 DELETE FROM mart.dim_person
