@@ -46,6 +46,8 @@
 
 			subscriptions.subscribeAdherence(function (notification) {
 				viewModel.updateFromNotification(notification);
+			}, function() {
+				$('.realtimeadherencesites').attr("data-subscription-done"," ");
 			});
 		},
 	};

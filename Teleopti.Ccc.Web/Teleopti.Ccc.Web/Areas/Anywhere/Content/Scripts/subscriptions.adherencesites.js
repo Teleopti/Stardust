@@ -25,13 +25,14 @@ define([
 			return startPromise;
 		},
 
-		subscribeAdherence: function (callback) {
+		subscribeAdherence: function (callback, subscriptionDone) {
 			unsubscribeAdherence();
 			startPromise.done(function () {
 				siteAdherenceSubscription = messagebroker.subscribe({
 					domainType: 'SiteAdherenceMessage',
 					callback: callback
 				});
+				subscriptionDone();
 			});
 		},
 

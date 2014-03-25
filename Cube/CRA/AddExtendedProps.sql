@@ -28,6 +28,7 @@ EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'
 EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'SCHEMA',@level0name=N'mart',@level1type=N'TABLE', @level1name=N'fact_schedule_preference',@value=N'Holds the numbers of preferences created and handled in Teleopti CCC application. Shift Category, Day Off, Extended with count of Requested, Accepted, Denied'
 EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'SCHEMA',@level0name=N'mart',@level1type=N'TABLE', @level1name=N'fact_request',@value=N'Holds the number of reqests and days requested from the Teleopti CCC application'
 EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'SCHEMA',@level0name=N'mart',@level1type=N'TABLE', @level1name=N'fact_requested_days',@value=N'Holds the specific dates requested from the Teleopti CCC application'
+EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'SCHEMA',@level0name=N'mart',@level1type=N'TABLE', @level1name=N'fact_agent_skill',@value=N'Holds all the skill for each person on a given date from the Teleopti CCC application'
 ----------
 --Bridge tables
 ----------
@@ -54,12 +55,6 @@ EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'
 ----------
 --dimension tables
 ----------
-EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_absence,@level2name =display_color_html,@value ='A HTML representation of the Absence color'
-EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_absence,@level2name =absence_shortname,@value ='The short name of the Absence'
-EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_activity,@level2name =display_color_html,@value ='A HTML representation of the Activity color'
-EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_day_off,@level2name =display_color_html,@value ='A HTML representation of the Day Off color'
-EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_day_off,@level2name =day_off_shortname,@value ='The short name of the Day Off'
-
 EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'SCHEMA',@level0name=N'mart',@level1type=N'TABLE', @level1name=N'dim_quality_quest',@value=N'The dim_quality_quest table contains all quality questionnaires used in a external quality monitoring system'
 EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'SCHEMA',@level0name=N'mart',@level1type=N'TABLE', @level1name=N'dim_request_status',@value=N'A static dimension table holding request statuses'
 EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'SCHEMA',@level0name=N'mart',@level1type=N'TABLE', @level1name=N'dim_request_type',@value=N'A static dimension table holding request types'
@@ -165,6 +160,24 @@ EXEC sys.sp_addextendedproperty @name=N'Teleopti.CRA.Description',@level0type=N'
 --------------------
 --Column descriptions
 --------------------
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =fact_agent_skill,@level2name =person_id,@value ='ID representing the agent/person in Teleopti CCC in mart.dim_person table.'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =fact_agent_skill,@level2name =skill_id,@value ='ID representing the skill in mart.dim_skill'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =fact_agent_skill,@level2name =has_skill,@value ='Bit flag, but implemented as a Int for aggregation reasons, representing if the agent have this skill ot not'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =fact_agent_skill,@level2name =active,@value ='Bit flag represetning if the agent have this skill as an active skill or not'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =fact_agent_skill,@level2name =business_unit_id,@value ='ID representing the business unit in mart.dim_business_unit table.'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =fact_agent_skill,@level2name =datasource_id,@value ='One for each logobject_id.the source (database,log_object,application instance), from where data was extracted.'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name ='mart',@level1type = N'Table',@level2type = N'Column',@level1name =dim_person,@level2name =valid_to_date_id_maxDate,@value ='An Id representing the person period end date, limit by the max date available in the data mart'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name ='mart',@level1type = N'Table',@level2type = N'Column',@level1name =dim_person,@level2name =valid_from_date_id_local,@value ='An Id representing the person period start date based on agent local date'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name ='mart',@level1type = N'Table',@level2type = N'Column',@level1name =dim_person,@level2name =valid_to_date_id_local,@value ='An Id representing the person period end date based on agent local date'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name ='mart',@level1type = N'Table',@level2type = N'Column',@level1name =dim_person,@level2name =valid_from_date_local,@value ='A Date representing the person period end date based on agent local date'
+EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name ='mart',@level1type = N'Table',@level2type = N'Column',@level1name =dim_person,@level2name =valid_to_date_local,@value ='A Date representing the person period start date based on agent local date'
+
+EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_absence,@level2name =display_color_html,@value ='A HTML representation of the Absence color'
+EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_absence,@level2name =absence_shortname,@value ='The short name of the Absence'
+EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_activity,@level2name =display_color_html,@value ='A HTML representation of the Activity color'
+EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_day_off,@level2name =display_color_html,@value ='A HTML representation of the Day Off color'
+EXEC sys.sp_addextendedproperty @name = N'Teleopti.CRA.Description', @level0type = N'Schema', @level0name =mart,@level1type = N'Table',@level2type = N'Column',@level1name =dim_day_off,@level2name =day_off_shortname,@value ='The short name of the Day Off'
+
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @value = 'ID for the day off.',@level0type = N'Schema', @level0name =mart,@level1type = N'Table',  @level1name =dim_day_off,@level2type = N'Column', @level2name =day_off_id
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @value = 'Day off id from Teleopti CCC application, not defined yet.',@level0type = N'Schema', @level0name =mart,@level1type = N'Table',  @level1name =dim_day_off,@level2type = N'Column', @level2name =day_off_code
 EXEC sp_addextendedproperty @name = N'Teleopti.CRA.Description', @value = 'The name/description of the day off type.',@level0type = N'Schema', @level0name =mart,@level1type = N'Table',  @level1name =dim_day_off,@level2type = N'Column', @level2name =day_off_name

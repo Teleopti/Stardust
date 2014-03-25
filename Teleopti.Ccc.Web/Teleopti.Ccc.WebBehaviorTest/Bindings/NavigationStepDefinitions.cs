@@ -219,29 +219,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewRealTimeAdherenceOverview()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceOverview();
+			Navigation.GotoAnywhereRealTimeAdherenceOverview(true);
 		}
+
+		[When(@"I try to view Real time adherence overview")]
+		public void WhenITryToViewRealTimeAdherenceOverview()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereRealTimeAdherenceOverview(false);
+		}
+
 
 		[When(@"I view Real time adherence for site '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForSite(string site)
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereRealTimeAdherenceOverview(IdForSite(site));
-		}
-
-
-
-		private static Guid groupIdByName(string team)
-		{
-			Guid groupid = Guid.Empty;
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
-				{
-					groupid = (from p in new GroupPageRepository(uow).LoadAll()
-										 from g in p.RootGroupCollection
-										 where g.Description.Name.Equals(team)
-										 select g.Id.Value).Single();
-				});
-			return groupid;
 		}
 
 		[When(@"I navigate to the preferences page")]
