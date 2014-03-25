@@ -29,10 +29,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	    private readonly IShiftNudgeManager _shiftNudgeManager;
         private readonly IdentifyDayOffWithHighestSpan _identifyDayOffWithHighestSpan;
         private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
+        private readonly IBrokenWeekOutsideSelectionSpecification _brokenWeekOutsideSelectionSpecification;
 
         public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, 
                     IDayOffToTimeSpanExtractor dayOffToTimeSpanExtractor, IShiftNudgeManager shiftNudgeManager,  IdentifyDayOffWithHighestSpan identifyDayOffWithHighestSpan, 
-                    IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek)
+                    IDeleteScheduleDayFromUnsolvedPersonWeek deleteScheduleDayFromUnsolvedPersonWeek, IBrokenWeekOutsideSelectionSpecification brokenWeekOutsideSelectionSpecification)
         {
             _weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
             _ensureWeeklyRestRule = ensureWeeklyRestRule;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	        _shiftNudgeManager = shiftNudgeManager;
             _identifyDayOffWithHighestSpan = identifyDayOffWithHighestSpan;
             _deleteScheduleDayFromUnsolvedPersonWeek = deleteScheduleDayFromUnsolvedPersonWeek;
+            _brokenWeekOutsideSelectionSpecification = brokenWeekOutsideSelectionSpecification;
         }
 
 	    public void Execute(IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allMatrixOnSelectedPeriod,
@@ -71,7 +73,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 	                }
 
-	                //solving the weeks
 	                foreach (var personWeek in personWeeksVoilatingWeeklyRest)
 	                {
 	                    if (_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange,weeklyRestInPersonWeek[personWeek])) continue;
@@ -86,7 +87,17 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                            schedulingResultStateHolder, selectedPeriod, selectedPersons, optimizationPreferences);
 
 	                        if (success)
-	                            break;
+	                        {
+                                var foundProblemWithThisWeek = _brokenWeekOutsideSelectionSpecification.IsSatisfy( personWeek, selctedPersonWeeks.ToList(),  weeklyRestInPersonWeek, personScheduleRange);
+	                            if (foundProblemWithThisWeek)
+	                            {
+	                                //rollback this week 
+	                                _shiftNudgeManager.RollbackLastScheduledWeek(rollbackService, resourceCalculateDelayer);
+                                    _deleteScheduleDayFromUnsolvedPersonWeek.DeleteAppropiateScheduleDay(personScheduleRange, possiblePositionsToFix.First().Key, rollbackService);
+	                            }
+                                break;
+	                        }
+	                            
 	                        possiblePositionsToFix.Remove(highProbablePosition);
 	                    }
 	                    if (!success)
@@ -98,6 +109,26 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	        }
 
 	    }
+
+        //private bool checkForBrokenWeeksOutsideSelection(PersonWeek personWeek, IEnumerable<PersonWeek> selctedPersonWeeks, DateOnlyPeriod selectedPeriod, Dictionary<PersonWeek, TimeSpan> weeklyRestInPersonWeek, IScheduleRange personScheduleRange)
+        //{
+        //    //check week before
+        //    var dateInPreviousWeek = personWeek.Week.StartDate.AddDays(-1);
+        //    var dateInNextWeek = personWeek.Week.StartDate.AddDays(1);
+        //    var foundAProblemInThisWeek = false;
+        //    if (!selectedPeriod.Contains(dateInPreviousWeek))
+        //    {
+        //        var previousPersonWeek = selctedPersonWeeks.FirstOrDefault(s => s.Week.Contains(dateInPreviousWeek));
+        //        if (!_ensureWeeklyRestRule.HasMinWeeklyRest(previousPersonWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek])) foundAProblemInThisWeek = true;
+        //    }
+        //    if (!foundAProblemInThisWeek && !selectedPeriod.Contains(dateInNextWeek))
+        //    {
+        //        var nextPersonWeek = selctedPersonWeeks.FirstOrDefault(s => s.Week.Contains(dateInNextWeek ));
+        //        if (!_ensureWeeklyRestRule.HasMinWeeklyRest(nextPersonWeek, personScheduleRange, weeklyRestInPersonWeek[personWeek])) foundAProblemInThisWeek = true;
+        //    }
+        //    return foundAProblemInThisWeek ;
+        //}
+        
 
     }
 }
