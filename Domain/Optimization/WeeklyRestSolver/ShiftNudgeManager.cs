@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	{
 		bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
 			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
-			ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService,
+			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences);
@@ -27,11 +27,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly ITeamBlockScheduleCloner _teamBlockScheduleCloner;
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
+		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
 		public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
 			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
-			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
+			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			_shiftNudgeEarlier = shiftNudgeEarlier;
 			_shiftNudgeLater = shiftNudgeLater;
@@ -40,14 +41,16 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_teamBlockScheduleCloner = teamBlockScheduleCloner;
 			_filterForTeamBlockInSelection = filterForTeamBlockInSelection;
 			_teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
+			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
 		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
 			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
-			ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService rollbackService,
+			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamSchedulingOptions = new TeamBlockSchedulingOptions();
 			if (teamSchedulingOptions.IsBlockScheduling(schedulingOptions) &&
 			    schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)
