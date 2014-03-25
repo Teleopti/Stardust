@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Win.Reporting
         private void pictureBox1_Click(object sender, EventArgs e)
         {
             var reportCode = new ReportNameHelper(ReportFunctionCode);
-            HelpHelper.Current.GetHelp((BaseUserControl)Parent.Parent, reportCode, true);
+            HelpHelper.Current.GetHelp((BaseUserControl)Parent.Parent, reportCode, false);
         }
 
         public override bool HasHelp
