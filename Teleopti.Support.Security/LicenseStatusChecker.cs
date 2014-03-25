@@ -14,61 +14,44 @@ namespace Teleopti.Support.Security
         public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
-            using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
-            {
-                try
-                {
-                    connection.Open();
-                }
-                catch (SqlException ex)
-                {
-                    log.Debug("Could not open Sql Connection. Error message: "+ ex.Message);
-                    return 1;
-                }
-                catch (InvalidOperationException ex)
-                {
-                    log.Debug("Could not open Sql Connection. Error message: "+ ex.Message);
-                    return 1;
-                }
-                //Check version
-                SqlCommand command;
-                using (command = connection.CreateCommand())
-                {
-                    command.CommandText = "SELECT COUNT(*) FROM dbo.LicenseStatus";
-                    var versionCount = (int)command.ExecuteScalar();
-                    if (versionCount > 0)
-                    {
-                        return 0;
-                    }
-                }
+	        using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
+	        {
 
-				log.Debug("LicenseStatusChecker ...");
-                var status = new LicenseStatusXml
-                                 {
-                                     StatusOk = true,
-                                     NumberOfActiveAgents = 1,
-                                     CheckDate = DateTime.Today.Date,
-                                     LastValidDate = DateTime.Today.Date.AddDays(1),
-                                     DaysLeft = 30
-                                 };
+		        connection.Open();
 
-                var value = status.GetNewStatusDocument().OuterXml;
-                try
-                {
-                    command = connection.CreateCommand();
-                    command.CommandText = string.Format(CultureInfo.InvariantCulture,
-                                                        "INSERT INTO dbo.LicenseStatus (Id, XmlString) VALUES (NewID(),'{0}')",
-                                                        value);
+		        //Check version
+		        SqlCommand command;
+		        using (command = connection.CreateCommand())
+		        {
+			        command.CommandText = "SELECT COUNT(*) FROM dbo.LicenseStatus";
+			        var versionCount = (int) command.ExecuteScalar();
+			        if (versionCount > 0)
+			        {
+				        return 0;
+			        }
+		        }
 
-                    command.ExecuteNonQuery();
-                }
-                catch (SqlException ex)
-                {
-                    log.Debug("Could not save the status: "+ ex.Message);
-                    return 1;
-                }
-            }
-			log.Debug("LicenseStatusChecker. Done!");
+		        log.Debug("LicenseStatusChecker ...");
+		        var status = new LicenseStatusXml
+		        {
+			        StatusOk = true,
+			        NumberOfActiveAgents = 1,
+			        CheckDate = DateTime.Today.Date,
+			        LastValidDate = DateTime.Today.Date.AddDays(1),
+			        DaysLeft = 30
+		        };
+
+		        var value = status.GetNewStatusDocument().OuterXml;
+
+		        command = connection.CreateCommand();
+		        command.CommandText = string.Format(CultureInfo.InvariantCulture,
+			        "INSERT INTO dbo.LicenseStatus (Id, XmlString) VALUES (NewID(),'{0}')",
+			        value);
+
+		        command.ExecuteNonQuery();
+
+	        }
+	        log.Debug("LicenseStatusChecker. Done!");
 	        return 0;
         }
     }
