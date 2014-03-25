@@ -2,7 +2,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
-using Teleopti.Ccc.Domain.Collection;
 using log4net.Config;
 using log4net;
 using System.Linq;
@@ -17,33 +16,43 @@ namespace Teleopti.Support.Security
         private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
         private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
-		private static readonly ICommandLineCommand RemoveDuplicateAssignments = new RemoveDuplicateAssignments();
 		private static readonly ILog log = LogManager.GetLogger(typeof(Program));
 
 		static void Main(string[] args)
 		{
+			AppDomain.CurrentDomain.UnhandledException += appDomainUnhandledException;
+
 			XmlConfigurator.Configure();
 			Console.WriteLine("Please be patient, don't close this window!");
 			Console.WriteLine("");
 			log.Debug("Starting Teleopti.Support.Security");
 
-			var commandLineArgument = new CommandLineArgument(args);
-			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
+			try
 			{
-				CrossDatabaseViewUpdate.Execute(commandLineArgument);
+				var commandLineArgument = new CommandLineArgument(args);
+				if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
+				{
+					CrossDatabaseViewUpdate.Execute(commandLineArgument);
+				}
+				else
+				{
+					setPersonAssignmentDate(commandLineArgument);
+					removeDuplicateAssignments(commandLineArgument);
+					ForecasterDateAdjustment.Execute(commandLineArgument);
+					PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
+					PasswordEncryption.Execute(commandLineArgument);
+					LicenseStatusChecker.Execute(commandLineArgument);
+					convertDayOffToNewStructure(commandLineArgument);
+					initAuditData(commandLineArgument);
+				}
 			}
-			else
+			catch (Exception e)
 			{
-				setPersonAssignmentDate(commandLineArgument);
-				RemoveDuplicateAssignments.Execute(commandLineArgument);
-				ForecasterDateAdjustment.Execute(commandLineArgument);
-				PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
-				PasswordEncryption.Execute(commandLineArgument);
-				LicenseStatusChecker.Execute(commandLineArgument);
-				convertDayOffToNewStructure(commandLineArgument);
-				initAuditData(commandLineArgument);
+				handleError(e);
 			}
+			
 			Thread.Sleep(TimeSpan.FromSeconds(3));
+			log.Debug("Teleopti.Support.Security successful");
 			Environment.ExitCode = 0;
         }
 
@@ -61,6 +70,14 @@ namespace Teleopti.Support.Security
 			log.Debug("Converting DayOffs ...");
 			callProcInSeparateTransaction(commandLineArgument, proc);
 			log.Debug("Converting DayOffs. Done!");
+		}
+
+		private static void removeDuplicateAssignments(CommandLineArgument commandLineArgument)
+		{
+			const string proc = "[dbo].[MergePersonAssignments]";
+			log.Debug("RemoveDuplicateAssignments ...");
+			callProcInSeparateTransaction(commandLineArgument, proc);
+			log.Debug("RemoveDuplicateAssignments. Done!");
 		}
 
 		private static void callProcInSeparateTransaction(CommandLineArgument commandLineArgument, string proc)
@@ -116,6 +133,20 @@ namespace Teleopti.Support.Security
 				}
 			}
 			log.Debug("Converting schedule data. Done!");
+		}
+
+		private static void appDomainUnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			handleError((Exception)e.ExceptionObject);
+		}
+
+		private static void handleError(Exception e)
+		{
+			log.Fatal("Teleopti.Support.Security has exited with fatal error:");
+			log.Fatal(e.Message);
+			log.Fatal(e.StackTrace);
+			Thread.Sleep(TimeSpan.FromSeconds(5));
+			Environment.Exit(1);
 		}
 	}
 }
