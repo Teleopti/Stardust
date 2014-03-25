@@ -312,6 +312,7 @@
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
+    <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\SSO\Core\IWindowsAccountProvider.cs" />
     <Compile Include="Areas\SSO\Core\WindowsAccountProvider.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityAuthenticationModel.cs" />

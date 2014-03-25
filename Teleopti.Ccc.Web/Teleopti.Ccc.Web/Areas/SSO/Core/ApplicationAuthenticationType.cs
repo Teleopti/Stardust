@@ -37,10 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 		}
 	}
 
-	public interface IIdentityProviderAuthenticationType
+	public interface IIdentityProviderAuthenticationType : IAuthenticationType
 	{
-		string TypeString { get; }
-		IEnumerable<IDataSource> DataSources();
-		IAuthenticationModel BindModel(ModelBindingContext bindingContext);
 	}
 }

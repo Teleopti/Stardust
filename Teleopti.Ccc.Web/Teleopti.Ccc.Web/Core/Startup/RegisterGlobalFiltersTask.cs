@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(TestController),
 																		typeof(OpenIdController),
 																		typeof(Areas.SSO.Controllers.AuthenticationController),
-																		typeof(Areas.SSO.Controllers.AuthenticationApiController)
+																		typeof(Areas.SSO.Controllers.AuthenticationApiController),
+																		typeof(Areas.SSO.Controllers.ApplicationAuthenticationApiController)
 			                                                    	}));
 			filters.Add(new CheckStartupResultAttribute());
 		}

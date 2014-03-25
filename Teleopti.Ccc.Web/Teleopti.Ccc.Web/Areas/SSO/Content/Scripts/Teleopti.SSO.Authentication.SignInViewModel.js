@@ -57,9 +57,7 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 				}
 
 				self.SelectDataSource(dataSources[0]);
-				if (dataSources.length == 1) {
-					self.SignIn();
-				}
+				
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				try {
@@ -86,7 +84,7 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 		var selectedDataSource = self.SelectedDataSource();
 		state.TryToSignIn({
 			data: {
-				type: selectedDataSource.Type,
+				type: "application",
 				datasource: selectedDataSource.Name,
 				username: self.UserName(),
 				password: self.Password()

@@ -48,7 +48,6 @@
             <div id="DataSources" data-bind="visible: HasDataSources, foreach: DataSources" class="list-group">
                 <a href="#" class="list-group-item application" data-bind="click: $parent.SelectDataSource, css: { 'active': $parent.SelectedDataSource() == $data }">
                     <span data-bind="text: Name"></span>
-                    <span data-bind="if: IsWindows">@Resources.WindowsLogonWithBrackets</span>
                 </a>
             </div>
             <form data-bind="submit: SignIn">
