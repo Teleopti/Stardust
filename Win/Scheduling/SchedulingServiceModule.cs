@@ -420,6 +420,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
             builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
             builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().As<IDeleteScheduleDayFromUnsolvedPersonWeek>();
+            builder.RegisterType<BrokenWeekOutsideSelectionSpecification>().As<IBrokenWeekOutsideSelectionSpecification>();
 		    builder.RegisterType<IdentifyDayOffWithHighestSpan>();
 			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
 			builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();

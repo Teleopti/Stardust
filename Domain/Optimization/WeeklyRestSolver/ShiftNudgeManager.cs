@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 			IOptimizationPreferences optimizationPreferences);
+
+	    bool RollbackLastScheduledWeek(ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
 	}
 
 	public class ShiftNudgeManager : IShiftNudgeManager
@@ -28,8 +30,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IFilterForTeamBlockInSelection _filterForTeamBlockInSelection;
 		private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+	        private IList<IScheduleDay> _clonedSchedules;
 
-		public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
+	    public ShiftNudgeManager(IShiftNudgeEarlier shiftNudgeEarlier, IShiftNudgeLater shiftNudgeLater,
 			IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek,
 			ITeamBlockScheduleCloner teamBlockScheduleCloner, IFilterForTeamBlockInSelection filterForTeamBlockInSelection,
 			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator, ISchedulingOptionsCreator schedulingOptionsCreator)
@@ -74,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				return false;
 
 			//first clone the left and right teamblocks if we have to roll back
-			var clonedSchedules = cloneSchedules(leftTeamBlock, rightTeamBlock);
+			_clonedSchedules = cloneSchedules(leftTeamBlock, rightTeamBlock);
 
 			var weeklyRestTime = _contractWeeklyRestForPersonWeek.GetWeeklyRestFromContract(personWeek);
 			var personRange = leftTeamBlock.TeamInfo.MatrixForMemberAndDate(person, leftDate).ActiveScheduleRange;
@@ -106,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool success = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 			if (!success)
 			{
-				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, clonedSchedules);
+				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
 				return false;
 			}
 
@@ -114,12 +117,22 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool rightOk = _teamBlockRestrictionOverLimitValidator.Validate(rightTeamBlock, optimizationPreferences);
 			if (!(leftOk && rightOk))
 			{
-				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, clonedSchedules);
+				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
 				return false;
 			}
 
 			return true;
 		}
+
+	    public  bool RollbackLastScheduledWeek(ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+	    {
+	        if (_clonedSchedules != null && _clonedSchedules.Count > 0)
+	        {
+                rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
+                return true;
+	        }
+            return false;
+	    }
 
 		private static void rollBackAndResourceCalculate(ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IList<IScheduleDay> clonedSchedules)
