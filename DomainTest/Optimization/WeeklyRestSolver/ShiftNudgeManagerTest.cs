@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockRestrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule,
 				_contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection,
-				_teamBlockRestrictionOverLimitValidator);
+				_teamBlockRestrictionOverLimitValidator, new SchedulingOptionsCreator());
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
 			_personWeek = new PersonWeek(_person, new DateOnlyPeriod(2014, 03, 24, 2014, 03, 30));
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
+					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 				Assert.IsTrue(result);
 			}
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
+					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
+					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			using (_mocks.Playback())
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
+					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 				Assert.IsFalse(result);
 			}
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_schedulingOptions.UseTeamBlockPerOption = true;
 
 			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
-					_allPersonMatrixList, _schedulingOptions, _rollbackService, _resourceCalculateDelayer,
+					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
 					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
 			Assert.IsFalse(result);
 		}

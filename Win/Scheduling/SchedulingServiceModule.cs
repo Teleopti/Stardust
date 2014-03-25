@@ -419,6 +419,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<ExtractDayOffFromGivenWeek>().As<IExtractDayOffFromGivenWeek>();
             builder.RegisterType<ScheduleDayWorkShiftTimeExtractor>().As<IScheduleDayWorkShiftTimeExtractor>();
             builder.RegisterType<WeeklyRestSolverService>().As<IWeeklyRestSolverService>();
+			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
+			builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
+			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
+			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
+			builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
+			builder.RegisterType<TeamBlockScheduleCloner>().As<ITeamBlockScheduleCloner>();
             
             //should that class be in here 
             builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
