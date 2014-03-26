@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         private readonly PersonFinderPresenter _presenter;
         private readonly IGracefulDataSourceExceptionHandler _dataSourceExceptionHandler = new GracefulDataSourceExceptionHandler();
 
-        public PersonFinderView()
+        public PersonFinderView(DateOnly dateOnly)
         {
             InitializeComponent();
             SetTexts();
 			dateTimePickerAdv1.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
-            dateTimePickerAdv1.Value = DateTime.Today.AddMonths(-1);
+	        dateTimePickerAdv1.Value = dateOnly.Date;
             dateTimePickerAdv1.Calendar.TodayButton.Text = Resources.Today;
             listView1.ListViewItemSorter = new ListViewColumnSorter();
             IPersonFinderReadOnlyRepository repository = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         private void addSettingValues()
         {
             var setting = attemptDatabaseConnectionLoadSettings();
-            dateTimePickerAdv1.Value = setting.TerminalDate;
             comboBox2.SelectedValue = setting.NumberOfRowsPerPage;
         }
 

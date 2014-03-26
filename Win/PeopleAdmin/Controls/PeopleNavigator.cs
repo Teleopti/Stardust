@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls
             {
                 IEnumerable<Guid> selectedGuids = new List<Guid>();
 
-                using (var findForm = new PersonFinderView())
+				using (var findForm = new PersonFinderView(_selectorPresenter.SelectedDate))
                 {
                     findForm.DoubleClickSelectedPeople += FindFormDoubleClickSelectedPeople;
                     findForm.ShowDialog(this);
