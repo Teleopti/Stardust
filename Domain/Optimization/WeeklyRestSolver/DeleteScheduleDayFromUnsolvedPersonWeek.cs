@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         void DeleteAppropiateScheduleDay(IScheduleRange personScheduleRange, DateOnly dayOff,
             ISchedulePartModifyAndRollbackService rollbackService);
     }
-    public class DeleteScheduleDayFromUnsolvedPersonWeek
+    public class DeleteScheduleDayFromUnsolvedPersonWeek : IDeleteScheduleDayFromUnsolvedPersonWeek
     {
         private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 
