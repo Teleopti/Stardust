@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Sockets;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Rta.Server.Repeater;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
@@ -22,6 +24,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
+		private readonly MessageRepeater _messageRepeaterTempFor390Only;
 
 		public RtaDataHandler(IMessageSender asyncMessageSender,
 		                      IDataSourceResolver dataSourceResolver,
@@ -29,6 +32,8 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IActualAgentAssembler agentAssembler,
 		                      IActualAgentStateCache stateCache)
 		{
+			_messageRepeaterTempFor390Only = new MessageRepeater(asyncMessageSender, new MinuteTrigger(new ConfigReader()), new CreateNotification());
+
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
@@ -169,6 +174,7 @@ namespace Teleopti.Ccc.Rta.Server
 				var notification = NotificationFactory.CreateNotification(agentState);
 
 			_asyncMessageSender.SendNotification(notification);
+				_messageRepeaterTempFor390Only.Invoke(agentState);
 			}
 			catch (Exception exception)
 			{
