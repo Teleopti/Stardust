@@ -5648,7 +5648,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>used in rta summary</comment>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>Totalt avvikande:</value>
+    <value>Avvikelse:</value>
     <comment>used in rta summary</comment>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
@@ -11475,5 +11475,11 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
     <value>Tid före byte av aktivitet att varna agenten (sekunder)</value>
     <comment>Label used in System setting</comment>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Minst en dag kan inte schemaläggas</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Avvikelse</value>
   </data>
 </root>

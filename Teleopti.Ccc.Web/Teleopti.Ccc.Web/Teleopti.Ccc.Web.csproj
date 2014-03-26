@@ -761,6 +761,9 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
@@ -803,6 +806,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
     <Content Include="Areas\Anywhere\Content\Styles\realtimeadherence.css" />
+    <Content Include="Areas\Anywhere\Content\Templates\diagnosis\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />

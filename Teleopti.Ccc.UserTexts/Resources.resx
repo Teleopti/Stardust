@@ -5946,7 +5946,7 @@ Start Date</value>
     <comment>used in rta summary</comment>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>Total out of adherence:</value>
+    <value>Out of adherence:</value>
     <comment>used in rta summary</comment>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
