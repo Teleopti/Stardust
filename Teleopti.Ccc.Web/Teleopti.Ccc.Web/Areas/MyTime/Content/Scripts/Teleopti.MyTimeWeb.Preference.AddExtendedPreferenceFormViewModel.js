@@ -195,6 +195,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		self.ActivityMinimumTime(newValue.ActivityMinimumTime === undefined ? '' : newValue.ActivityMinimumTime);
 		self.ActivityMaximumTime(newValue.ActivityMaximumTime == undefined ? '' : newValue.ActivityMaximumTime);
 
+		self.IsTimeInputVisible(isShiftCategorySelectedAsStandardPreferenceMethod());
 		_initPreferenceString();
 	};
     
