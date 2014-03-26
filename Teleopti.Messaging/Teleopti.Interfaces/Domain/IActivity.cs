@@ -59,11 +59,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool InReadyTime { get; set; }
 
-        /// <summary>
-        /// Parent grouping activity
-        /// </summary>
-        IGroupingActivity GroupingActivity { get; set; }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether [requires skill].

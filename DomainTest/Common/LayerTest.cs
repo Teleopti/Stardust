@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Common
         public void Setup()
         {
             fakeActivity = ActivityFactory.CreateActivity("dummy",Color.DeepPink);
-            fakeActivity.GroupingActivity = new GroupingActivity("test");
         }
 
         /// <summary>

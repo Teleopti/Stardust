@@ -42,13 +42,10 @@
 			this.tableLayoutPanelBody = new System.Windows.Forms.TableLayoutPanel();
 			this.tableLayoutPanelSubHeader1 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader1 = new System.Windows.Forms.Label();
-			this.buttonAdvDeleteGroupingActivity = new Syncfusion.Windows.Forms.ButtonAdv();
-			this.buttonNewGroupingActivity = new System.Windows.Forms.Button();
 			this.tableLayoutPanelSubHeader2 = new System.Windows.Forms.TableLayoutPanel();
 			this.labelSubHeader2 = new System.Windows.Forms.Label();
 			this.buttonAdvDeleteActivity = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonNewActivity = new System.Windows.Forms.Button();
-			this.gridControlGroupingActivities = new Syncfusion.Windows.Forms.Grid.GridControl();
 			this.contextMenuStrip2 = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
 			this.gridControlActivities = new Syncfusion.Windows.Forms.Grid.GridControl();
@@ -60,7 +57,6 @@
 			this.tableLayoutPanelBody.SuspendLayout();
 			this.tableLayoutPanelSubHeader1.SuspendLayout();
 			this.tableLayoutPanelSubHeader2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.gridControlGroupingActivities)).BeginInit();
 			this.contextMenuStrip2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.gridControlActivities)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
@@ -81,7 +77,6 @@
 			this.tableLayoutPanelBody.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader1, 0, 0);
 			this.tableLayoutPanelBody.Controls.Add(this.tableLayoutPanelSubHeader2, 0, 2);
-			this.tableLayoutPanelBody.Controls.Add(this.gridControlGroupingActivities, 0, 1);
 			this.tableLayoutPanelBody.Controls.Add(this.gridControlActivities, 0, 3);
 			this.tableLayoutPanelBody.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelBody.Location = new System.Drawing.Point(0, 55);
@@ -103,8 +98,6 @@
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelSubHeader1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanelSubHeader1.Controls.Add(this.labelSubHeader1, 0, 0);
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonAdvDeleteGroupingActivity, 2, 0);
-			this.tableLayoutPanelSubHeader1.Controls.Add(this.buttonNewGroupingActivity, 1, 0);
 			this.tableLayoutPanelSubHeader1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelSubHeader1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanelSubHeader1.Name = "tableLayoutPanelSubHeader1";
@@ -128,29 +121,6 @@
 			this.labelSubHeader1.TabIndex = 0;
 			this.labelSubHeader1.Text = "xxEnterPropertyValuesForGroupingActivities";
 			this.labelSubHeader1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			// 
-			// buttonAdvDeleteGroupingActivity
-			// 
-			this.buttonAdvDeleteGroupingActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonAdvDeleteGroupingActivity.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_delete_32x32;
-			this.buttonAdvDeleteGroupingActivity.Location = new System.Drawing.Point(477, 1);
-			this.buttonAdvDeleteGroupingActivity.Margin = new System.Windows.Forms.Padding(3, 1, 0, 3);
-			this.buttonAdvDeleteGroupingActivity.Name = "buttonAdvDeleteGroupingActivity";
-			this.buttonAdvDeleteGroupingActivity.Size = new System.Drawing.Size(24, 24);
-			this.buttonAdvDeleteGroupingActivity.TabIndex = 7;
-			this.buttonAdvDeleteGroupingActivity.TabStop = false;
-			// 
-			// buttonNewGroupingActivity
-			// 
-			this.buttonNewGroupingActivity.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.buttonNewGroupingActivity.BackColor = System.Drawing.Color.White;
-			this.buttonNewGroupingActivity.Image = global::Teleopti.Ccc.Win.Properties.Resources.test_add2;
-			this.buttonNewGroupingActivity.Location = new System.Drawing.Point(450, 1);
-			this.buttonNewGroupingActivity.Margin = new System.Windows.Forms.Padding(3, 1, 0, 3);
-			this.buttonNewGroupingActivity.Name = "buttonNewGroupingActivity";
-			this.buttonNewGroupingActivity.Size = new System.Drawing.Size(24, 24);
-			this.buttonNewGroupingActivity.TabIndex = 6;
-			this.buttonNewGroupingActivity.UseVisualStyleBackColor = false;
 			// 
 			// tableLayoutPanelSubHeader2
 			// 
@@ -231,28 +201,7 @@
 			gridBaseStyle4.Name = "Column Header";
 			gridBaseStyle4.StyleInfo.BaseStyle = "Header";
 			gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
-			this.gridControlGroupingActivities.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
-            gridBaseStyle1,
-            gridBaseStyle2,
-            gridBaseStyle3,
-            gridBaseStyle4});
-			this.gridControlGroupingActivities.ColWidthEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridColWidth[] {
-            new Syncfusion.Windows.Forms.Grid.GridColWidth(0, 35)});
-			this.gridControlGroupingActivities.ContextMenuStrip = this.contextMenuStrip2;
-			this.gridControlGroupingActivities.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.gridControlGroupingActivities.ForeColor = System.Drawing.SystemColors.ControlText;
-			this.gridControlGroupingActivities.Location = new System.Drawing.Point(3, 36);
-			this.gridControlGroupingActivities.Name = "gridControlGroupingActivities";
-			this.gridControlGroupingActivities.NumberedRowHeaders = false;
-			this.gridControlGroupingActivities.Properties.BackgroundColor = System.Drawing.SystemColors.Window;
-			this.gridControlGroupingActivities.RowHeightEntries.AddRange(new Syncfusion.Windows.Forms.Grid.GridRowHeight[] {
-            new Syncfusion.Windows.Forms.Grid.GridRowHeight(0, 21)});
-			this.gridControlGroupingActivities.SerializeCellsBehavior = Syncfusion.Windows.Forms.Grid.GridSerializeCellsBehavior.SerializeAsRangeStylesIntoCode;
-			this.gridControlGroupingActivities.Size = new System.Drawing.Size(501, 208);
-			this.gridControlGroupingActivities.SmartSizeBox = false;
-			this.gridControlGroupingActivities.TabIndex = 59;
-			this.gridControlGroupingActivities.UseRightToLeftCompatibleTextBox = true;
-			this.gridControlGroupingActivities.Visible = false;
+
 			// 
 			// contextMenuStrip2
 			// 
@@ -386,7 +335,6 @@
 			this.tableLayoutPanelSubHeader1.PerformLayout();
 			this.tableLayoutPanelSubHeader2.ResumeLayout(false);
 			this.tableLayoutPanelSubHeader2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.gridControlGroupingActivities)).EndInit();
 			this.contextMenuStrip2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.gridControlActivities)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).EndInit();
@@ -403,14 +351,11 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddFromClipboard;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader1;
         private System.Windows.Forms.Label labelSubHeader1;
-        private Syncfusion.Windows.Forms.ButtonAdv buttonAdvDeleteGroupingActivity;
-        private System.Windows.Forms.Button buttonNewGroupingActivity;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelSubHeader2;
         private System.Windows.Forms.Label labelSubHeader2;
         private Syncfusion.Windows.Forms.ButtonAdv buttonAdvDeleteActivity;
         private System.Windows.Forms.Button buttonNewActivity;
         private System.Windows.Forms.Label label2;
-        private Syncfusion.Windows.Forms.Grid.GridControl gridControlGroupingActivities;
         private Syncfusion.Windows.Forms.Grid.GridControl gridControlActivities;
         private System.Windows.Forms.ToolTip toolTip1;
         private Syncfusion.Windows.Forms.Tools.GradientPanel gradientPanelHeader;

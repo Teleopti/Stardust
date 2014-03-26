@@ -51,11 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             ISkill skill = SkillFactory.CreateSkill("testSkill");
 
-            GroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity();
-            PersistAndRemoveFromUnitOfWork(groupingActivity);
-
-            skill.Activity.GroupingActivity = groupingActivity;
-					skill.Activity.SetId(null);
+			skill.Activity.SetId(null);
             PersistAndRemoveFromUnitOfWork(skill.Activity);
 
             PersistAndRemoveFromUnitOfWork(skill.SkillType);

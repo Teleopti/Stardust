@@ -127,7 +127,6 @@
     <Compile Include="Common\CommandLineArgument.cs" />
     <Compile Include="Creators\ContractCreator.cs" />
     <Compile Include="Creators\DefaultDataCreator.cs" />
-    <Compile Include="Creators\GroupingActivityCreator.cs" />
     <Compile Include="Creators\KeyPerformanceIndicatorCreator.cs" />
     <Compile Include="Creators\PersonCreator.cs" />
     <Compile Include="Creators\RtaStateGroupCreator.cs" />

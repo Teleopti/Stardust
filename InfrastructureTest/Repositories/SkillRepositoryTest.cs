@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IActivity _activity;
         private StaffingThresholds _staffingThresholds;
         private TimeSpan _midnightBreakOffset;
-        private IGroupingActivity _groupingActivity;
 
         /// <summary>
         /// Runs every test. Implemented by repository's concrete implementation.
@@ -39,9 +38,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _skillType = SkillTypeFactory.CreateSkillType();
             PersistAndRemoveFromUnitOfWork(_skillType);
 						_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
-            _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
-            PersistAndRemoveFromUnitOfWork(_groupingActivity);
-            _activity.GroupingActivity = _groupingActivity;
             PersistAndRemoveFromUnitOfWork(_activity);
             _staffingThresholds = new StaffingThresholds(new Percent(0.1), new Percent(0.2), new Percent(0.3));
             _midnightBreakOffset = new TimeSpan(3, 0, 0);
@@ -448,13 +444,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void VerifyGettingSkillsThatHaveCertainActivities()
         {
-					var blueActivity = new Activity("Blue Activity") { DisplayColor = Color.Blue };
-					var redActivity = new Activity("Red Activity") { DisplayColor = Color.Red };
-					var greenActivity = new Activity("Green Activity") { DisplayColor = Color.Green };
-
-            blueActivity.GroupingActivity = _groupingActivity;
-            redActivity.GroupingActivity = _groupingActivity;
-            greenActivity.GroupingActivity = _groupingActivity;
+			var blueActivity = new Activity("Blue Activity") { DisplayColor = Color.Blue };
+			var redActivity = new Activity("Red Activity") { DisplayColor = Color.Red };
+			var greenActivity = new Activity("Green Activity") { DisplayColor = Color.Green };
 
             PersistAndRemoveFromUnitOfWork(blueActivity);
             PersistAndRemoveFromUnitOfWork(redActivity);

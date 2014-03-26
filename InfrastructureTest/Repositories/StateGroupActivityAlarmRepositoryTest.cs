@@ -22,13 +22,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IActivity activity;
         private IRtaStateGroup stateGroup;
         private IAlarmType alarmType;
-    	private IGroupingActivity groupAct;
 
     	protected override void ConcreteSetup()
         {
-            groupAct = new GroupingActivity("f");
-            PersistAndRemoveFromUnitOfWork(groupAct);
-
             stateGroup = new RtaStateGroup("state group", true, true);
             PersistAndRemoveFromUnitOfWork(stateGroup);
 
@@ -44,8 +40,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IStateGroupActivityAlarm CreateAggregateWithCorrectBusinessUnit()
         {
-					activity = new Activity("roger") { DisplayColor = Color.White };
-			activity.GroupingActivity = groupAct;
+			activity = new Activity("roger") { DisplayColor = Color.White };
 			PersistAndRemoveFromUnitOfWork(activity);
 
             IStateGroupActivityAlarm stateGroupActivityAlarm = new StateGroupActivityAlarm(stateGroup, activity);

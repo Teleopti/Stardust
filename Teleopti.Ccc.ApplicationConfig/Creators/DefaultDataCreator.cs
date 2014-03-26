@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 		private BusinessUnitCreator _businessUnitCreator;
 		private ApplicationRoleCreator _applicationRoleCreator;
 		private AvailableDataCreator _availableDataCreator;
-		private GroupingActivityCreator _groupingActivityCreator;
 		private SkillTypeCreator _skillTypeCreator;
 		private KeyPerformanceIndicatorCreator _keyPerformanceIndicatorCreator;
 
@@ -80,10 +79,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			IApplicationRole agentRole = _applicationRoleCreator.Create(ShippedApplicationRoleNames.AgentRole, "xxBuildInStandardAgentRole", false);
 			defaultAggregateRoot.AgentRole = agentRole;
 
-			_groupingActivityCreator = new GroupingActivityCreator(_person, _sessionFactory);
-			IGroupingActivity groupingActivity = _groupingActivityCreator.Create("Default");
-			defaultAggregateRoot.GroupingActivity = groupingActivity;
-
 			_skillTypeCreator = new SkillTypeCreator(_person, _sessionFactory);
 			defaultAggregateRoot.SkillTypeInboundTelephony = _skillTypeCreator.Create(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
 			defaultAggregateRoot.SkillTypeTime = _skillTypeCreator.Create(new Description("SkillTypeTime"), ForecastSource.Time);
@@ -127,8 +122,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 			availableData = _availableDataCreator.Create(defaultAggregateRoot.AgentRole, AvailableDataRangeOption.MyTeam);
 			_availableDataCreator.Save(availableData);
 
-			//Save GroupingActivity
-			_groupingActivityCreator.Save(defaultAggregateRoot.GroupingActivity);
 
 			//Save Skilltypes, if they exists fetch'em
 			if (_skillTypeCreator.Save(defaultAggregateRoot.SkillTypeInboundTelephony))
