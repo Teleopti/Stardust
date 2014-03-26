@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
 			builder.RegisterType<ApplicationAuthenticationType>().As<IIdentityProviderAuthenticationType>().SingleInstance();
 			builder.RegisterType<DataSourcesViewModelFactory>().As<IDataSourcesViewModelFactory>().SingleInstance();
 			builder.RegisterType<OpenIdProvider>().SingleInstance();
-			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 		}
 	}

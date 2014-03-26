@@ -26,5 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 		{
 			_openIdProvider.SendResponse(request);
 		}
+
+		public Channel Channel()
+		{
+			return _openIdProvider.Channel;
+		}
 	}
 }

@@ -13,12 +13,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 	public class AuthenticationApiController : Controller
 	{
 		private readonly IDataSourcesViewModelFactory _dataSourcesViewModelFactory;
-		private readonly IWebLogOn _webLogon;
 
-		public AuthenticationApiController(IDataSourcesViewModelFactory dataSourcesViewModelFactory, IWebLogOn webLogon)
+		public AuthenticationApiController(IDataSourcesViewModelFactory dataSourcesViewModelFactory)
 		{
 			_dataSourcesViewModelFactory = dataSourcesViewModelFactory;
-			_webLogon = webLogon;
 		}
 
 		[HttpGet]
@@ -28,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		}
 
 		[HttpPost]
-		public JsonResult Logon(IAuthenticationModel model, Guid businessUnitId)
+		public JsonResult Logon(IAuthenticationModel model)
 		{
 			try
 			{
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				model.SaveAuthenticateResult(result);
 				if (!result.Successful)
 					return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
-				_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.GetValueOrDefault());
 			}
 			catch (PermissionException)
 			{
