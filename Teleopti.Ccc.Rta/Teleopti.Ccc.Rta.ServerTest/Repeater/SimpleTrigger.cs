@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Rta.ServerTest.Repeater
 	{
 		private Action _action;
 
-		public void SetTriggerMethod(Action action)
+		public void Initialize(Action action)
 		{
 			_action = action;
 		}

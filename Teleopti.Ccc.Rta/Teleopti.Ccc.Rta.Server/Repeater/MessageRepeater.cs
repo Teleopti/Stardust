@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Rta.Server.Repeater
 			
 			if (messageRepeaterTrigger != null)
 			{
-				messageRepeaterTrigger.SetTriggerMethod(flush);
+				messageRepeaterTrigger.Initialize(flush);
 			}
 		}
 

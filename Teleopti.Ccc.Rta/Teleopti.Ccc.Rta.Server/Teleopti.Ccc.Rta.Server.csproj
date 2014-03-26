@@ -152,6 +152,7 @@
     <Compile Include="Repeater\ICreateNotification.cs" />
     <Compile Include="Repeater\IMessageRepeaterTrigger.cs" />
     <Compile Include="Repeater\MessageRepeater.cs" />
+    <Compile Include="Repeater\MinuteTrigger.cs" />
     <Compile Include="Resolvers\IDataSourceResolver.cs" />
     <Compile Include="Resolvers\IPersonResolver.cs" />
     <Compile Include="Resolvers\PersonResolver.cs" />
