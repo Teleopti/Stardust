@@ -81,14 +81,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			var weeklyRestTime = _contractWeeklyRestForPersonWeek.GetWeeklyRestFromContract(personWeek);
 			var personRange = leftTeamBlock.TeamInfo.MatrixForMemberAndDate(person, leftDate).ActiveScheduleRange;
-			var leftScheduleDay = personRange.ScheduledDay(leftDate);
-			var rightScheduleDay = personRange.ScheduledDay(rightDate);
 			bool restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 			bool leftNudgeSuccess = true;
 			bool rightNudgeSuccess = true;
 			while (!restTimeEnsured)
 			{
-				if(leftNudgeSuccess)
+                var leftScheduleDay = personRange.ScheduledDay(leftDate);
+                var rightScheduleDay = personRange.ScheduledDay(rightDate);
+                if(leftNudgeSuccess)
 				{
 					leftNudgeSuccess =_shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions, resourceCalculateDelayer, leftTeamBlock,
 						schedulingResultStateHolder, selectedPeriod, selectedPersons);
