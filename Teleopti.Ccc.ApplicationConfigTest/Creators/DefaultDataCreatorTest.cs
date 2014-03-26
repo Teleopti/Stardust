@@ -60,8 +60,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
 
             Assert.AreEqual("BusinessUnit", defaultAggregateRoot.BusinessUnit.Name);
 
-            Assert.AreEqual(new Description("Default"), defaultAggregateRoot.GroupingActivity.Description);
-
             Assert.AreEqual(new Description("SkillTypeInboundTelephony"), defaultAggregateRoot.SkillTypeInboundTelephony.Description);
             Assert.AreEqual(ForecastSource.InboundTelephony,defaultAggregateRoot.SkillTypeInboundTelephony.ForecastSource);
 

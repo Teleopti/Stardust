@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IScenario _scenario;
         private ISkillType _skillType;
         private IActivity _activity;
-        private IGroupingActivity _groupingActivity;
         private ISkill _skill;
         private IWorkload _workload;
         private DateTime _date;
@@ -46,13 +45,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _skillType = SkillTypeFactory.CreateSkillType();
             _skill = SkillFactory.CreateSkill("dummy", _skillType, 15);
             _activity = new Activity("dummyActivity");
-            _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("ga1");
             _skill.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(_skillType);
-            PersistAndRemoveFromUnitOfWork(_groupingActivity);
-
-            _groupingActivity.AddActivity(_activity);
 
             TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
             _skill.TimeZone = timeZoneInfo;
@@ -267,7 +262,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
             rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
             rep.Remove(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
-            rep.Remove(new GroupingActivityRepository(UnitOfWork).Load(_skill.Activity.GroupingActivity.Id.Value));
             rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
 
 
@@ -414,7 +408,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
 			rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
 			rep.Remove(new WorkloadRepository(UnitOfWork).Load(_skill.WorkloadCollection.First().Id.Value));
-			rep.Remove(new GroupingActivityRepository(UnitOfWork).Load(_skill.Activity.GroupingActivity.Id.Value));
 			rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
 			rep.Remove(skillDayRepository.Load(skillDay.Id.Value));
 

@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		public static IWorkflowControlSet WorkflowControlSetPreferencesOpenNextMonth;
 		public static IWorkflowControlSet WorkflowControlSetPreferenceClosed;
 
-		public static IGroupingActivity GroupingActivity;
 		public static IShiftCategory ShiftCategory;
 		public static IDayOffTemplate DayOffTemplate;
 		public static IAbsence Absence;

@@ -380,7 +380,6 @@
     <Compile Include="Repositories\WebReportRepositoryTest.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepositoryTest.cs" />
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
-    <Compile Include="Repositories\GroupingActivityRepositoryTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInTeamReaderTest.cs" />
     <Compile Include="Rta\NumberOfAgentsInSiteReaderTest.cs" />
     <Compile Include="Rta\PersonOrganizationReaderTest.cs" />

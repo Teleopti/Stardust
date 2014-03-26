@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
         private ActivityCreator _target;
         private IPerson _person;
         private ISessionFactory _sessionFactory;
-        private IGroupingActivity _groupingActivity;
 
         [SetUp]
         public void Setup()
@@ -21,9 +20,7 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             _sessionFactory = SetupFixtureForAssembly.SessionFactory;
             _person = SetupFixtureForAssembly.Person;
 
-            GroupingActivityCreator creator = new GroupingActivityCreator(_person, _sessionFactory);
-            _groupingActivity = creator.Create("ga");
-            _target = new ActivityCreator(_groupingActivity);
+            _target = new ActivityCreator();
         }
 
         [Test]
@@ -35,7 +32,6 @@ namespace Teleopti.Ccc.ApplicationConfigTest.Creators
             Assert.AreEqual(Color.BlanchedAlmond, activity.DisplayColor);
             Assert.AreEqual(false, activity.InReadyTime);
             Assert.AreEqual(true, activity.InContractTime);
-            Assert.AreEqual(_groupingActivity,activity.GroupingActivity);
         }
     }
 }

@@ -388,7 +388,6 @@
     <Compile Include="Repositories\WebReportRepository.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepository.cs" />
     <Compile Include="Repositories\WorkloadRepository.cs" />
-    <Compile Include="Repositories\GroupingActivityRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Repositories\RepositoryFactory.cs" />
     <Compile Include="Repositories\ShiftCategoryRepository.cs" />

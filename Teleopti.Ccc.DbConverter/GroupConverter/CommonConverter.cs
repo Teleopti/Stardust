@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 ActivityConverter actConverter =
-                    new ActivityConverter(uow, new ActivityMapper(MappedObjectPair, _defaultAggregateRoot.GroupingActivity));
+                    new ActivityConverter(uow, new ActivityMapper(MappedObjectPair));
                 actConverter.ConvertAndPersist(oldActivities.Values);
             }
         }

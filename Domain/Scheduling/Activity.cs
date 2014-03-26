@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private bool _requiresSkill;
         private bool _inReadyTime;
         private string _payrollCode;
-        private IGroupingActivity _groupingActivity;
         
         private ReportLevelDetail _reportLevelDetail;
     	private bool _requiresSeat;
@@ -91,19 +90,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return _allowOverwrite; }
             set { _allowOverwrite = value; }
         }
-
-		public virtual IGroupingActivity GroupingActivity
-		{
-			get { return _groupingActivity; }
-			set
-			{
-				InParameter.NotNull("value", value);
-				if (_groupingActivity == value) return;
-				if (_groupingActivity != null) _groupingActivity.RemoveActivity(this);
-				_groupingActivity = value;
-				_groupingActivity.AddActivity(this);
-			}
-		}
 
 		public virtual ReportLevelDetail ReportLevelDetail
 		{

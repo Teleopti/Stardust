@@ -26,11 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             shiftCat = ShiftCategoryFactory.CreateShiftCategory("used in test");
             act = new Activity("used in test");
-            IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("used in test");
 
-            PersistAndRemoveFromUnitOfWork(groupingActivity);
-
-            act.GroupingActivity = groupingActivity;
             PersistAndRemoveFromUnitOfWork(shiftCat);
             PersistAndRemoveFromUnitOfWork(act);
         }
@@ -127,7 +123,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ruleSet2.Description = new Description("second", "sdg");
             ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(10, 11, 12, 13), new TimeSpan()));
             Activity actForExtender = new Activity("sdf");
-            actForExtender.GroupingActivity = act.GroupingActivity;
             PersistAndRemoveFromUnitOfWork(actForExtender);
             ruleSet.AddExtender(
                 new ActivityRelativeEndExtender(act, new TimePeriodWithSegment(11, 12, 13, 14, 15),

@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.DatabaseConverter
     public class DefaultAggregateRoot
     {
         private IBusinessUnit _businessUnit;
-        private IGroupingActivity _groupingActivity;
         private IApplicationRole _administratorRole;
         private IApplicationRole _businessUnitAdministratorRole;
         private IApplicationRole _agentRole;
@@ -35,20 +34,6 @@ namespace Teleopti.Ccc.DatabaseConverter
         {
             get { return _businessUnit; }
             set { _businessUnit = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the grouping activity.
-        /// </summary>
-        /// <value>The grouping activity.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-10-22
-        /// </remarks>
-        public IGroupingActivity GroupingActivity
-        {
-            get { return _groupingActivity; }
-            set { _groupingActivity = value; }
         }
 
         /// <summary>

@@ -98,7 +98,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAbsence);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateWorkflowControlSet);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateAgentPersons);
-			GlobalUnitOfWorkState.UnitOfWorkAction(CreateGroupingActivity);
 			GlobalUnitOfWorkState.UnitOfWorkAction(CreateActivities);
 		}
 
@@ -295,24 +294,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			TestData.ActivityLunch = new Activity("Legacy activity Lunch"){DisplayColor = Color.FromKnownColor(KnownColor.Yellow)};
 			TestData.ActivityTraining = new Activity("Legacy activity Training"){DisplayColor =  Color.FromKnownColor(KnownColor.Purple)};
 
-			TestData.ActivityPhone.GroupingActivity = TestData.GroupingActivity;
-			TestData.ActivityShortBreak.GroupingActivity = TestData.GroupingActivity;
-			TestData.ActivityLunch.GroupingActivity = TestData.GroupingActivity;
-			TestData.ActivityTraining.GroupingActivity = TestData.GroupingActivity;
-
 			var activityRepository = new ActivityRepository(unitOfWork);
 			activityRepository.Add(TestData.ActivityPhone);
 			activityRepository.Add(TestData.ActivityShortBreak);
 			activityRepository.Add(TestData.ActivityLunch);
 			activityRepository.Add(TestData.ActivityTraining);
-		}
-
-		private static void CreateGroupingActivity(IUnitOfWork unitOfWork)
-		{
-			TestData.GroupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("ActivityGroup");
-
-			var groupingActivityRepository = new GroupingActivityRepository(unitOfWork);
-			groupingActivityRepository.Add(TestData.GroupingActivity);
 		}
 
 		private static void CreateShiftCategory(IUnitOfWork unitOfWork)

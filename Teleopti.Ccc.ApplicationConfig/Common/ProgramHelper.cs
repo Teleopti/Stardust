@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.ApplicationConfig.Common
 			IAbsence defaultAbsence = absenceCreator.Create(new Description("Default", "DE"), Color.DarkViolet, 1, true);
 
 			//Create standard activities
-			ActivityCreator activityCreator = new ActivityCreator(defaultAggregateRoot.GroupingActivity);
+			ActivityCreator activityCreator = new ActivityCreator();
 			IActivity defaultActivity = activityCreator.Create("Default", new Description("Default"), Color.DeepSkyBlue, true, true);
 
 			//Create standard contract

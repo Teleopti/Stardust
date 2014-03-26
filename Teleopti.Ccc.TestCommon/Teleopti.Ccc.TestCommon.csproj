@@ -118,7 +118,6 @@
     <Compile Include="FakeData\DayOffFactory.cs" />
     <Compile Include="FakeData\DaysOffPreferencesFactory.cs" />
     <Compile Include="FakeData\FakeUserTextTranslator.cs" />
-    <Compile Include="FakeData\GroupingActivityFactory.cs" />
     <Compile Include="FakeData\LicenseDataFactory.cs" />
     <Compile Include="FakeData\MultiplicatorDefinitionSetFactory.cs" />
     <Compile Include="FakeData\MultiplicatorFactory.cs" />

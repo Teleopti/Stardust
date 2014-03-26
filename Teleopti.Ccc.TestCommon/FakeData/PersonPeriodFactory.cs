@@ -28,9 +28,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ITeam team = new Team();
             IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
 
-            IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
             IActivity activity = new Activity("dummy activity");
-            activity.GroupingActivity = groupActivity;
 
             foreach (Skill skill in skills)
             {
@@ -81,11 +79,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IPersonPeriod CreatePersonPeriod(DateOnly startDate, IPersonContract personContract, ITeam team)
         {
             IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
-
-            IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
             IActivity activity = new Activity("dummy activity");
-            activity.GroupingActivity = groupActivity;
-
             return personPeriod;
         }
     }

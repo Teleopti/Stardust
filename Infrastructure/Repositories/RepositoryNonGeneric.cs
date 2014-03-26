@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					//ouch! this creates a lot of problem
 					//don't dare to remove it though
-					UnitOfWork.Reassociate(root);
+				UnitOfWork.Reassociate(root);
 				}
 				delRootInfo.SetDeleted();
 			}
