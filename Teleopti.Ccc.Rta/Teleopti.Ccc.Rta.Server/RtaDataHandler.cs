@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IActualAgentAssembler agentAssembler,
 		                      IActualAgentStateCache stateCache)
 		{
-			_messageRepeaterTempFor390Only = new MessageRepeater(asyncMessageSender, new MinuteTrigger(new ConfigReader()), new CreateNotification());
+			//hack - fix nicer when merged to default
+			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[MinuteTrigger.RepeatIntervalKey]))
+				_messageRepeaterTempFor390Only = new MessageRepeater(asyncMessageSender, new MinuteTrigger(new ConfigReader()), new CreateNotification());
 
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
@@ -174,7 +176,10 @@ namespace Teleopti.Ccc.Rta.Server
 				var notification = NotificationFactory.CreateNotification(agentState);
 
 			_asyncMessageSender.SendNotification(notification);
-				_messageRepeaterTempFor390Only.Invoke(agentState);
+
+				//hack - remove when merged to default
+				if(_messageRepeaterTempFor390Only!=null)
+					_messageRepeaterTempFor390Only.Invoke(agentState);
 			}
 			catch (Exception exception)
 			{
