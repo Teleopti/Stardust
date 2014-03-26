@@ -9,21 +9,17 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
     /// </summary>
     public class ActivityMapper : Mapper<IActivity, global::Domain.Activity>
     {
-        private readonly IGroupingActivity _groupingActivity;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="ActivityMapper"/> class.
         /// </summary>
         /// <param name="mappedObjectPair">The mapped object pair.</param>
-        /// <param name="groupingActivity">The grouping activity.</param>
         /// <remarks>
         /// Created by: rogerkr
         /// Created date: 10/23/2007
         /// </remarks>
-        public ActivityMapper(MappedObjectPair mappedObjectPair, IGroupingActivity groupingActivity)
+        public ActivityMapper(MappedObjectPair mappedObjectPair)
             : base(mappedObjectPair, null)
         {
-            _groupingActivity = groupingActivity;
         }
 
         /// <summary>
@@ -37,7 +33,6 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
             string oldName = ConversionHelper.MapString(oldEntity.Name,Description.MaxLengthOfName);
             IActivity newAct = new Activity(oldName);
-            newAct.GroupingActivity = _groupingActivity;
             newAct.DisplayColor = oldEntity.ColorLayout;
             newAct.RequiresSkill = oldEntity.RequiresSkill;
             newAct.InContractTime = oldEntity.InWorkTime;

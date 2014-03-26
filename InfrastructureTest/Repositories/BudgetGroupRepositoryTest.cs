@@ -28,11 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var skillType = SkillTypeFactory.CreateSkillType();
             PersistAndRemoveFromUnitOfWork(skillType);
 
-            var groupingActivity = new GroupingActivity("GA");
-            PersistAndRemoveFromUnitOfWork(groupingActivity);
-
             var activity = new Activity("a");
-            activity.GroupingActivity = groupingActivity;
             PersistAndRemoveFromUnitOfWork(activity);
 
             var staffingThresholds = new StaffingThresholds(new Percent(0.1), new Percent(0.2), new Percent(0.3));

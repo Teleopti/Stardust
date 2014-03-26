@@ -18,24 +18,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     [Category("LongRunning")]
     public class MasterActivityRepositoryTest : RepositoryTest<IMasterActivity>
     {
-        private IGroupingActivity _groupAct;
-
         private IActivity _activity1;
         private IActivity _activity2;
         private IActivity _activity3;
 
         protected override void ConcreteSetup()
         {
-            _groupAct = new GroupingActivity("f");
-            PersistAndRemoveFromUnitOfWork(_groupAct);
 
 						_activity1 = new Activity("zz");
 						_activity2 = new Activity("ff");
 						_activity3 = new Activity("aa");
-
-            _activity1.GroupingActivity = _groupAct;
-            _activity2.GroupingActivity = _groupAct;
-            _activity3.GroupingActivity = _groupAct;
 
 
             PersistAndRemoveFromUnitOfWork(_activity1);

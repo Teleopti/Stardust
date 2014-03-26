@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     public class GroupPageRepository : Repository<IGroupPage>, IGroupPageRepository
     {
         /// <summary>
-        /// Initilaze a new instance of the <see cref="GroupingActivityRepository"/> class 
+        /// Initilaze a new instance of the class 
         /// </summary>
         /// <param name="unitOfWork"></param>
         public GroupPageRepository(IUnitOfWork unitOfWork)

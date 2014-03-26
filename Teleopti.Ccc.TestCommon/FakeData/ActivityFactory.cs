@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             Activity ret = new Activity(name);
             ((IActivity)ret).SetId(Guid.NewGuid());
-            ret.GroupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("test");
             ret.DisplayColor = color;
             return ret;
         }
