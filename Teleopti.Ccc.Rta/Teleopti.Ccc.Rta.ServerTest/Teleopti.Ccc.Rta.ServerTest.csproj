@@ -148,6 +148,8 @@
     <Compile Include="DatabaseReaderTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="DatabaseWriterTest.cs" />
+    <Compile Include="Repeater\MessageRepeaterTest.cs" />
+    <Compile Include="Repeater\SimpleTrigger.cs" />
     <Compile Include="Resolvers\DataSourceResolverTest.cs" />
     <Compile Include="InvalidateRtaDataHandlerCacheTest.cs" />
     <Compile Include="Resolvers\PersonResolverTest.cs" />
