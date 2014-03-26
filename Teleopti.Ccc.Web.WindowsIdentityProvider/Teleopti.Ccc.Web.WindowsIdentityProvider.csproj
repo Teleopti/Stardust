@@ -113,10 +113,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Core\IProviderEndpointWrapper.cs" />
     <Compile Include="Controllers\OpenIdController.cs" />
-    <Compile Include="Core\IOpenIdProviderWapper.cs" />
+    <Compile Include="Core\ProviderEndpointWrapper.cs" />
+    <Compile Include="Core\CurrentHttpContext.cs" />
+    <Compile Include="Core\ICurrentHttpContext.cs" />
+    <Compile Include="Core\IOpenIdProviderWrapper.cs" />
     <Compile Include="Core\IWindowsAccountProvider.cs" />
-    <Compile Include="Core\OpenIdProviderWapper.cs" />
+    <Compile Include="Core\OpenIdProviderWrapper.cs" />
     <Compile Include="Core\WindowsAccount.cs" />
     <Compile Include="Core\WindowsAccountProvider.cs" />
     <Compile Include="Global.asax.cs">

@@ -3,11 +3,11 @@ using DotNetOpenAuth.OpenId.Provider;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Core
 {
-	public class OpenIdProviderWapper : IOpenIdProviderWapper
+	public class OpenIdProviderWrapper : IOpenIdProviderWrapper
 	{
 		private readonly OpenIdProvider _openIdProvider;
 
-		public OpenIdProviderWapper(OpenIdProvider openIdProvider)
+		public OpenIdProviderWrapper(OpenIdProvider openIdProvider)
 		{
 			_openIdProvider = openIdProvider;
 		}

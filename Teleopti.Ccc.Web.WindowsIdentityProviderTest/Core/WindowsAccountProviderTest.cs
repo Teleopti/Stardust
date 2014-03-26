@@ -3,13 +3,10 @@ using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Web.Areas.SSO.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
 
-namespace Teleopti.Ccc.WebTest.Areas.SSO.Core
+namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 {
-	//todo: Gillar inte mockeridjupet på httpcontextbase. Finns säkert nåt lib därute som gör detta enklare
-	//kolla upp det...
 	[TestFixture]
 	public class WindowsAccountProviderTest
 	{
@@ -22,9 +19,6 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Core
 		[SetUp]
 		public void Setup()
 		{
-			//mocks = new MockRepository();
-			//http = mocks.DynamicMock<HttpContextBase>();
-
 			serverVariables = new NameValueCollection();
 			httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			httpRequest.Stub(x => x.ServerVariables).Return(serverVariables);
@@ -62,8 +56,6 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Core
 			var retrieveWindowsAccount = target.RetrieveWindowsAccount();
 
 			retrieveWindowsAccount.Should().Be.Null();
-			
-
 		}
 
 	}

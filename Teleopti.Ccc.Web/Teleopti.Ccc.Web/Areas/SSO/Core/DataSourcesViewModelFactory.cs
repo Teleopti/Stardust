@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 			return _authenticationType.DataSources().Select(dataSource => new DataSourceViewModel
 			{
 				Name = dataSource.DataSourceName,
-				Type = "teleopti"
+				Type = "application"
 			});
 		}
 	}

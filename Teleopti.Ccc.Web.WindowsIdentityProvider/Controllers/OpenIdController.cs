@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
-using System.Web;
 using System.Web.Mvc;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider;
@@ -12,14 +10,25 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 {
 	public class OpenIdController : Controller
 	{
-		private readonly IOpenIdProviderWapper _openIdProvider;
+		private readonly IOpenIdProviderWrapper _openIdProvider;
 		private readonly IWindowsAccountProvider _windowsAccountProvider;
+		private readonly ICurrentHttpContext _currentHttpContext;
+		private readonly IProviderEndpointWrapper _providerEndpointWrapper;
 		private static ILog _logger = LogManager.GetLogger(typeof(OpenIdController));
 
 		public OpenIdController()
+			: this(
+				new OpenIdProviderWrapper(new OpenIdProvider(OpenIdProvider.HttpApplicationStore)),
+				new WindowsAccountProvider(new CurrentHttpContext()), new CurrentHttpContext(), new ProviderEndpointWrapper())
 		{
-			_openIdProvider = new OpenIdProviderWapper(new OpenIdProvider(OpenIdProvider.HttpApplicationStore));
-			_windowsAccountProvider = new WindowsAccountProvider();
+		}
+
+		public OpenIdController(IOpenIdProviderWrapper openIdProviderWrapper, IWindowsAccountProvider windowsAccountProvider, ICurrentHttpContext currentHttpContext, IProviderEndpointWrapper providerEndpointWrapper)
+		{
+			_openIdProvider = openIdProviderWrapper;
+			_windowsAccountProvider = windowsAccountProvider;
+			_currentHttpContext = currentHttpContext;
+			_providerEndpointWrapper = providerEndpointWrapper;
 		}
 
 		public ActionResult Identifier()
@@ -44,21 +53,21 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			}
 
 			// handles request from browser
-			ProviderEndpoint.PendingRequest = (IHostProcessedRequest) request;
+			_providerEndpointWrapper.PendingRequest = (IHostProcessedRequest)request;
 			return RedirectToAction("TriggerWindowsAuthorization");
 		}
 
 		[Authorize]
 		public ActionResult TriggerWindowsAuthorization()
 		{
-			var idrequest = ProviderEndpoint.PendingRequest as IAuthenticationRequest;
-			ProviderEndpoint.PendingRequest = null;
+			var idrequest = _providerEndpointWrapper.PendingRequest as IAuthenticationRequest;
+			_providerEndpointWrapper.PendingRequest = null;
 
 			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
 			if (windowsAccount != null)
 			{
 				_logger.Warn("Found WindowsAccount");
-				var currentHttp = HttpContext;
+				var currentHttp = _currentHttpContext.Current();
 				idrequest.LocalIdentifier =
 					new Uri(currentHttp.Request.Url,
 							currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" + windowsAccount.UserName + "@" + windowsAccount.DomainName));
@@ -78,5 +87,4 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 			return View();
 		}
 	}
-	
 }

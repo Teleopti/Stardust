@@ -313,8 +313,6 @@
     <Compile Include="Areas\SSO\Controllers\AuthenticationController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactory.cs" />
-    <Compile Include="Areas\SSO\Core\IWindowsAccountProvider.cs" />
-    <Compile Include="Areas\SSO\Core\WindowsAccountProvider.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
@@ -598,7 +596,6 @@
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IBusinessUnitProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IDataSourcesProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\ITokenIdentityProvider.cs" />
-    <Compile Include="Areas\SSO\Core\WindowsAccount.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\TokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />

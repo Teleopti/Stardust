@@ -3,7 +3,7 @@ using DotNetOpenAuth.OpenId.Provider;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Core
 {
-	public interface IOpenIdProviderWapper
+	public interface IOpenIdProviderWrapper
 	{
 		IRequest GetRequest();
 		OutgoingWebResponse PrepareResponse(IRequest request);
