@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Rta.Server.Repeater;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
@@ -21,6 +24,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
+		private readonly IList<MessageRepeater> _messageRepeaterTempFor390Only = new List<MessageRepeater>();
 
 		public RtaDataHandler(IMessageSender asyncMessageSender,
 		                      IDataSourceResolver dataSourceResolver,
@@ -29,6 +33,20 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IActualAgentStateCache stateCache,
 		                      IEnumerable<IActualAgentStateHasBeenSent> afterSends)
 		{
+			//hack - fix nicer when merged to default
+			int repeatInterval;
+			if (int.TryParse(ConfigurationManager.AppSettings[MinuteTrigger.RepeatIntervalKey], out repeatInterval))
+			{
+				int numberOfRepeaters;
+				if(!int.TryParse(ConfigurationManager.AppSettings[MinuteTrigger.RepeatNumberOfTimes], out numberOfRepeaters))
+					numberOfRepeaters = 1;
+				for (var i = 0; i < numberOfRepeaters; i++)
+				{
+					_messageRepeaterTempFor390Only.Add(new MessageRepeater(asyncMessageSender, new MinuteTrigger(new ConfigReader()),
+						new CreateNotification()));
+				}
+			}
+
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
@@ -147,10 +165,15 @@ namespace Teleopti.Ccc.Rta.Server
 			var notification = NotificationFactory.CreateNotification(agentState);
 
 			_asyncMessageSender.SendNotification(notification);
-			if (_afterSends != null)
+		if (_afterSends != null)
+
 			{
 				_afterSends.ToList().ForEach(s => s.Invoke(agentState));
 			}
+							//hack - remove when merged to default
+				if(_messageRepeaterTempFor390Only!=null)
+					_messageRepeaterTempFor390Only.ForEach(x => x.Invoke(agentState));
+
 		}
 	}
 }
