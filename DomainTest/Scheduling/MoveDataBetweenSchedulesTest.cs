@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -112,6 +113,52 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			Assert.AreEqual(2, scheduleDay.PersistableScheduleDataCollection().Count());
 			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAssignment>().Count());
 			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAbsence>().Count());
+		}
+
+		[Test]
+		public void ShouldConsiderAllExportedDaysWhenValidatingNightlyRest()
+		{
+			var activity = new Activity("activity") { InWorkTime = true };
+			var shiftCategory = new ShiftCategory("shiftCategory");
+			var person1 = new Person { Name = new Name("person1", "person1") };
+			var dateOnly = new DateOnly(new DateTime(2000, 1, 1));
+			var team = new Team();
+			var personContract = PersonContractFactory.CreateFulltimePersonContractWithWorkingWeekContractSchedule();
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(dateOnly, personContract, team);
+			var workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+			var nightlyRest = new NewNightlyRestRule(workTimeStartEndExtractor);
+			var rules = NewBusinessRuleCollection.Minimum();
+
+			person1.AddPersonPeriod(personPeriod);
+			rules.Add(nightlyRest);
+			target = new MoveDataBetweenSchedules(rules, new EmptyScheduleDayChangeCallback());
+
+			var startTimeLateDay1 = new DateTime(2000, 1, 3, 15, 0, 0, DateTimeKind.Utc);
+			var endTimeLateDay1 = new DateTime(2000, 1, 3, 22, 0, 0, DateTimeKind.Utc);
+
+			var startTimeLateDay2 = new DateTime(2000, 1, 4, 15, 0, 0, DateTimeKind.Utc);
+			var endTimeLateDay2 = new DateTime(2000, 1, 4, 22, 0, 0, DateTimeKind.Utc);
+
+			var startTimeEarlyDay1 = new DateTime(2000, 1, 3, 6, 0, 0, DateTimeKind.Utc);
+			var endTimeEarlyDay1 = new DateTime(2000, 1, 3, 15, 0, 0, DateTimeKind.Utc);
+
+			var startTimeEarlyDay2 = new DateTime(2000, 1, 4, 6, 0, 0, DateTimeKind.Utc);
+			var endTimeEarlyDay2 = new DateTime(2000, 1, 4, 15, 0, 0, DateTimeKind.Utc);
+
+			var sourceDay1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeLateDay1, endTimeLateDay1), shiftCategory, new Scenario("dummy1"));
+			var sourceDay2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeLateDay2, endTimeLateDay2), shiftCategory, new Scenario("dummy1"));
+
+			var destinationDay1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeEarlyDay1, endTimeEarlyDay1), shiftCategory, destination.Scenario);
+			var destinationDay2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(activity, person1, new DateTimePeriod(startTimeEarlyDay2, endTimeEarlyDay2), shiftCategory, destination.Scenario);
+
+			putScheduleDataToDic(destinationDay1);
+			putScheduleDataToDic(destinationDay2);
+
+			var sourceScheduleDay1 = createPartWithData(sourceDay1, new DateOnly(2000, 1, 3));
+			var sourceScheduleDay2 = createPartWithData(sourceDay2, new DateOnly(2000, 1, 4));
+
+			var result = target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { sourceScheduleDay1, sourceScheduleDay2 });
+			Assert.IsEmpty(result);
 		}
 
 

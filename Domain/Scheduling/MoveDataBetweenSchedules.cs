@@ -17,12 +17,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _scheduleDayChangeCallback = scheduleDayChangeCallback;
         }
 
-        public IEnumerable<IBusinessRuleResponse> CopySchedulePartsToAnotherDictionary(IScheduleDictionary destination, IEnumerable<IScheduleDay> sourceParts)
-        {
-            var ruleBreaks = new List<IBusinessRuleResponse>();
-            foreach (var part in sourceParts)
-            {
-                var sourceData = destination[part.Person].ScheduledDay(part.DateOnlyAsPeriod.DateOnly);
+		public IEnumerable<IBusinessRuleResponse> CopySchedulePartsToAnotherDictionary(IScheduleDictionary destination, IEnumerable<IScheduleDay> sourceParts)
+		{
+			var rangeClones = new Dictionary<IPerson, IScheduleRange>();
+			var persList = new HashSet<IPerson>();
+			IList<IScheduleDay> sourceDataList = new List<IScheduleDay>();
+
+			foreach (var part in sourceParts)
+			{
+				persList.Add(part.Person);
+				var sourceData = destination[part.Person].ScheduledDay(part.DateOnlyAsPeriod.DateOnly);
 				IList<IPersistableScheduleData> absencesNextDay = new List<IPersistableScheduleData>();
 
 				foreach (var dataInDestination in sourceData.PersistableScheduleDataCollection())
@@ -33,15 +37,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					}
 				}
 
-                sourceData.Clear<IExportToAnotherScenario>();
-                foreach (var dataToExport in part.PersistableScheduleDataCollection().OfType<IExportToAnotherScenario>())
-                {
+				sourceData.Clear<IExportToAnotherScenario>();
+				foreach (var dataToExport in part.PersistableScheduleDataCollection().OfType<IExportToAnotherScenario>())
+				{
 					// bug #22073, the part contains PersonsAbsence for the next day too, for some reason, so we skip them
-					if(dataToExport is PersonAbsence && !dataToExport.Period.Intersect(part.Period))
+					if (dataToExport is PersonAbsence && !dataToExport.Period.Intersect(part.Period))
 						continue;
-                    var clonedWithNewParameters = dataToExport.CloneAndChangeParameters(sourceData);
-                    sourceData.Add(clonedWithNewParameters);                        
-                }
+					var clonedWithNewParameters = dataToExport.CloneAndChangeParameters(sourceData);
+					sourceData.Add(clonedWithNewParameters);
+				}
 
 				foreach (var dataInDestination in absencesNextDay.OfType<IExportToAnotherScenario>())
 				{
@@ -52,19 +56,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					}
 				}
 
-                ruleBreaks.AddRange(modifyDestination(destination, sourceData));
-            }
-            return ruleBreaks;
-        }
+				sourceDataList.Add(sourceData);
+				destination.Modify(ScheduleModifier.ScenarioExport, sourceData, NewBusinessRuleCollection.Minimum(), _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
+			}
 
-        private IEnumerable<IBusinessRuleResponse> modifyDestination(IScheduleDictionary destination, IScheduleDay sourceData)
-        {
-            var ruleBreaks = destination.Modify(ScheduleModifier.ScenarioExport, sourceData, _newBusinessRules, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-            if(ruleBreaks.Count()>0)
-            {
-                destination.Modify(ScheduleModifier.ScenarioExport, sourceData, NewBusinessRuleCollection.Minimum(), _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-            }
-            return ruleBreaks;
-        }
+			foreach (var person in persList)
+			{
+				rangeClones.Add(person, (IScheduleRange)destination[person].Clone());
+			}
+
+			return _newBusinessRules.CheckRules(rangeClones, sourceDataList);
+		}    
     }
 }
