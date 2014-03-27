@@ -1,27 +1,39 @@
-declare @SourceId int
-declare @DataSourceId int
-declare @BusinessUnit uniqueidentifier
-declare @teamId uniqueidentifier
-
 --===EDIT===
--- The output is limited to one StateCode per active StateGroup
---1) SQLCMD mode
---Not run this script in SQLCMD-mode. see "Query"-menu
+--Note: youn need to run this script in "SQLCMD"-mode. see "Query"-menu
 
---2) your app db
-USE REPLACE_TO_MATCH_APP_DB
+-- your app db
+USE EDIT_YOUR_CCC7_DB
 
---3) your analytics db
---change 
-:setvar analytics REPLACE_TO_MATCH_ANALYTICS_DB
+--your analytics db
+:setvar EDIT_YOUR_ANALYTICS_DB
 
 --4) team.Id
 --set this values to match the team_code (aka team.Id) you would like to send RTA events to
-set @teamId = '34590A63-6331-4921-BC9F-9B5E015AB495' 
+declare @SourceId int
+declare @DataSourceId int
+declare @BusinessUnit uniqueidentifier
+declare @teamIdSet nvarchar(max)
+declare @siteIdSet nvarchar(max)
+
+set @teamIdSet = '0A1CDB27-BC01-4BB9-B0B3-9B5E015AB495' 
+set @siteIdSet = 'D970A45A-90FF-4111-BFE1-9B5E015AB45C'
+
+--get the chosen team(s)
+IF OBJECT_ID('tempdb.dbo.#teams') IS NOT NULL DROP TABLE #teams
+CREATE TABLE #teams (id uniqueidentifier)
+
+IF OBJECT_ID('tempdb.dbo.#sites') IS NOT NULL DROP TABLE #sites
+CREATE TABLE #sites (id uniqueidentifier)
+
+INSERT #teams
+	SELECT * FROM mart.SplitStringString(@teamIdSet)
+
+INSERT #sites
+	SELECT * FROM mart.SplitStringString(@siteIdSet)
 
 --==========
 --show all available teams
-select bu.Name 'BusinessUnit',s.Name 'Site',t.Name 'Team',t.Id as 'Team Id',count(p.Id) 'number of agents'
+select bu.Name 'BusinessUnit',s.Name 'Site', s.Id 'Site Id', t.Name 'Team',t.Id as 'Team Id',count(p.Id) 'number of agents'
 from BusinessUnit bu
 inner join site s
 	on s.BusinessUnit = bu.Id
@@ -32,8 +44,8 @@ inner join PersonPeriodWithEndDate pp
 	and getdate() between pp.StartDate and pp.EndDate
 inner join Person p
 	on p.Id = pp.Parent
-group by bu.Name,s.Name,t.Name,t.Id
-order by 1,2,3
+group by bu.Name,s.Name,s.Id,t.Name,t.Id
+order by bu.Name,s.Name,T.Name
 
 IF OBJECT_ID('tempdb.dbo.#t') IS NOT NULL DROP TABLE #t
 create table #t (BusinessUnit uniqueidentifier, SourceId int, PlatformTypeId char(36), LogOn nvarchar(50), Person char(36), StateCode nvarchar(25))
@@ -50,7 +62,7 @@ inner join PersonPeriodWithEndDate pp
 	and getdate() between pp.StartDate and pp.EndDate
 inner join Person p
 	on p.Id = pp.Parent
-where t.Id=@teamId
+where 	(t.Id in (select Id from #teams) or s.id in (select Id from #sites))
 
 --get the most frequent datasource connected to this team
 select top 1 @DataSourceId = ex.DataSourceId
@@ -72,7 +84,7 @@ inner join RtaStateGroup rg
 	on rg.BusinessUnit = bu.Id
 inner join RtaState rs
 	on rs.Parent = rg.Id
-where t.Id = @teamId
+where 	(t.Id in (select Id from #teams) or s.id in (select Id from #sites))
 GROUP BY ex.DataSourceId
 ORDER BY count(DataSourceId) desc
 
@@ -103,7 +115,8 @@ inner join RtaStateGroup rg
 	and rg.IsDeleted=0
 inner join RtaState rs
 	on rs.Parent = rg.Id
-where t.Id = @teamId
+where
+	(t.Id in (select Id from #teams) or s.id in (select Id from #sites))
 and ex.DataSourceId = @DataSourceId
 and rs.Id in (
 	select a.Id from (
