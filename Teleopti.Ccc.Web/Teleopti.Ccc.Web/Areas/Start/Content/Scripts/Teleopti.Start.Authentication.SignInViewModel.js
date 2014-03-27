@@ -3,8 +3,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	var self = this;
 
 	this.DataSources = ko.observableArray();
-	this.UserName = ko.observable('');
-	this.Password = ko.observable('');
 	this.ErrorMessage = ko.observable();
 	this.HasErrorMessage = ko.computed(function () {
 		var errorMessage = self.ErrorMessage();
@@ -15,10 +13,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 
 	this.SelectedDataSource = ko.observable();
 
-	this.DisplayUserNameAndPasswordBoxes = ko.observable(false);
-
-	this.UserNameFocus = ko.observable(false);
-
 	this.HasDataSources = ko.computed(function() {
 		return self.DataSources().length > 0;
 	});
@@ -26,14 +20,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	this.SelectDataSource = function (dataSource) {
 		self.SelectedDataSource(dataSource);
 
-		if (!dataSource.IsWindows) {
-			self.DisplayUserNameAndPasswordBoxes(true);
-			self.UserNameFocus(false);
-			self.UserNameFocus(true);
-		} else {
-			self.DisplayUserNameAndPasswordBoxes(false);
-			self.UserNameFocus(false);
-		}
 		self.ErrorMessage('');
 	};
 
@@ -88,9 +74,7 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 			data: {
 				isWindows: selectedDataSource.IsWindows,
 				type: selectedDataSource.Type,
-				datasource: selectedDataSource.Name,
-				username: self.UserName(),
-				password: self.Password()
+				datasource: selectedDataSource.Name
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);

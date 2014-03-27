@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Web.Mvc;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		private static TokenIdentity getTokenIdentity(string nameClaimValue)
 		{
-			return nameClaimValue.Contains("\\")
+			return nameClaimValue.Contains("#")
 				? getWindowsTokenIdentity(nameClaimValue)
 				: getApplicationTokenIdentity(nameClaimValue);
 		}
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 
 		private static TokenIdentity getWindowsTokenIdentity(string nameClaimValue)
 		{
-			var nameAndDomain = nameClaimValue.Split('/').Last().Split('\\');
+			var nameAndDomain = nameClaimValue.Split('/').Last().Split('#');
 			return new TokenIdentity
 			{
 				UserDomain = nameAndDomain[1],

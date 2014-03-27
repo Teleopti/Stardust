@@ -5,10 +5,7 @@
     @Styles.Render(BundleScripts.SignInCss)
     @Scripts.Render(BundleScripts.SignInJs)
 
-    <!-- dont want to minify this one... Will be corrupt using IE8 (bug 26427)-->
-    <script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.js")"></script>
-
-    <script type="text/javascript">
+   <script type="text/javascript">
         var authentication;
         $(function () {
             Teleopti.Start.Authentication.Settings = {
@@ -34,20 +31,12 @@
         <div id="signin">
 
             <div id="DataSources" data-bind="visible: HasDataSources, foreach: DataSources" class="list-group">
-                <a href="#" class="list-group-item" data-bind="click: $parent.SelectDataSource, css: { 'application': !IsWindows, 'windows': IsWindows, 'active': $parent.SelectedDataSource() == $data }">
+                <a href="#" class="list-group-item" data-bind="click: $parent.SelectDataSource, css: {'active': $parent.SelectedDataSource() == $data }">
                     <span data-bind="text: Name"></span>
                     <span data-bind="if: IsWindows">@Resources.WindowsLogonWithBrackets</span>
                 </a>
             </div>
             <form data-bind="submit: SignIn">
-                <div data-bind="visible: DisplayUserNameAndPasswordBoxes">
-                    <div class="form-group">
-                        <input type="text" id="Username-input" class="form-control" placeholder="@Resources.UserName" data-bind="value: UserName, valueUpdate: 'afterkeydown'" autocapitalize="off" autocorrect="off" />
-                    </div>
-                    <div class="form-group">
-                        <input type="password" id="Password-input" class="form-control" placeholder="@Resources.Password" data-bind="value: Password, valueUpdate: 'afterkeydown'" />
-                    </div>
-                </div>
                 <div id="Signin-error" 
 					 class="alert alert-warning" 
 					 data-bind="visible: HasErrorMessage, text: ErrorMessage"
@@ -69,33 +58,6 @@
         <div id="menu">
             <div data-bind="foreach: Applications" class="list-group">
                 <a href="#" class="list-group-item" data-bind="attr: { href: Url }, text: Name"></a>
-            </div>
-        </div>
-
-        <div id="changepassword">
-            <div id="PasswordAlreadyExpired" class="alert alert-warning login-warning" data-bind="visible: MustChangePassword">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordHasAlreadyExpired
-            </div>
-            <div id="PasswordExpireSoon" class="alert alert-warning login-warning" data-bind="visible: !MustChangePassword()">
-                <button type="button" class="close" data-dismiss="alert">×</button>
-                <strong>@Resources.WarningWithExclamatory</strong> @Resources.YourPasswordWillExpireSoon
-            </div>
-            <div class="login-form"> 
-                <div class="form-group">
-                    <input type="password" id="New-password" placeholder="@Resources.NewPassword" data-bind="value: NewPassword" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="password" id="Confirm-new-password" placeholder="@Resources.ConfirmNewPassword" data-bind="value: ConfirmNewPassword" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <input type="password" id="Old-password" placeholder="@Resources.PasswordOld" data-bind="value: OldPassword" class="form-control" />
-                </div>
-                <div id="Password-change-error" class="alert alert-warning" data-bind="visible: ErrorMessage().length > 0, text: ErrorMessage"
-					data-notmatch="@Resources.PasswordsDoNotMatch">
-                </div>
-                <button class="btn btn-primary" id="Change-password-button" data-bind="click: ApplyChangePassword">@Resources.Apply</button>
-                <button class="btn btn-primary" id="Skip-button" data-bind="visible: !MustChangePassword(), click: SkipChangePassword">@Resources.Skip</button>
             </div>
         </div>
     </div>

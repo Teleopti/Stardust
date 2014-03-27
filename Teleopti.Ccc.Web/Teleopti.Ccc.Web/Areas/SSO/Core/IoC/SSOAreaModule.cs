@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
 		{
 			builder.RegisterType<OpenIdProviderWapper>().As<IOpenIdProviderWapper>().SingleInstance();
 			builder.RegisterType<ApplicationAuthenticationType>().As<IApplicationAuthenticationType>().SingleInstance();
-			builder.RegisterType<DataSourcesViewModelFactory>().As<IDataSourcesViewModelFactory>().SingleInstance();
+			builder.RegisterType<ApplicationDataSourcesViewModelFactory>().As<IApplicationDataSourcesViewModelFactory>().SingleInstance();
 			builder.RegisterType<ProviderEndpointWrapper>().As<IProviderEndpointWrapper>().SingleInstance();
 			builder.RegisterType<OpenIdProvider>().SingleInstance();
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();

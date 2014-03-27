@@ -6,6 +6,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
@@ -17,26 +18,23 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
+		private readonly IFormsAuthentication _formsAuthentication;
 
-		public TestController(
-			IMutateNow mutateNow, 
-			ISessionSpecificDataProvider 
-			sessionSpecificDataProvider, 
-			IAuthenticator authenticator, 
-			IWebLogOn logon, 
-			IBusinessUnitProvider businessUnitProvider
-			)
+		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, IFormsAuthentication formsAuthentication)
 		{
 			_mutateNow = mutateNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
 			_businessUnitProvider = businessUnitProvider;
+			_formsAuthentication = formsAuthentication;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
+			_formsAuthentication.SignOut();
+
 			updateIocNow(null);
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 			var viewModel = new TestMessageViewModel

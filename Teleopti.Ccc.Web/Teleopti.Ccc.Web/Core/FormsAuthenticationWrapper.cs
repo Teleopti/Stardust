@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Security;
+using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Core
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public void SignOut()
 		{
+			FederatedAuthentication.SessionAuthenticationModule.SignOut();
 			FormsAuthentication.SignOut();
 		}
 

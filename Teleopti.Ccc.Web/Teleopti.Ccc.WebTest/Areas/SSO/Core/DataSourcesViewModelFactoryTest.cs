@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Core
 	[TestFixture]
 	public class DataSourcesViewModelFactoryTest
 	{
-		private static DataSourcesViewModelFactory Target(IDataSourcesProvider dataSourcesProvider)
+		private static ApplicationDataSourcesViewModelFactory Target(IDataSourcesProvider dataSourcesProvider)
 		{
-			return new DataSourcesViewModelFactory(new ApplicationAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider)));
+			return new ApplicationDataSourcesViewModelFactory(new ApplicationAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider)));
 		}
 
 		[Test]

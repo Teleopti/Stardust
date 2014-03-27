@@ -46,6 +46,7 @@ Scenario: Sign in with a user with multiple business units by user name
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
 
+@ApplicationLogOnOnly
 Scenario: Sign in with a user with one business unit by user name and I should be directed into that business unit direct without having to select it
 	Given I have the role 'Role for business unit 1'
 	And I am viewing the sign in page
@@ -60,11 +61,10 @@ Scenario: Sign in with a user with multiple business units by Windows credential
 	| Field                  | Value |
 	| Windows authentication | true  |
 	And I am viewing the sign in page
-	When I select windows logon data source
-	And I sign in by windows credentials
-	And I select business unit 'Business Unit 1'
+	When I select business unit 'Business Unit 1'
 	Then I should be signed in
-	
+
+@ApplicationLogOnOnly
 Scenario: Sign in with wrong password should give me an informative error
 	Given I have the role 'Role for business unit 1'
 	And I am viewing the sign in page
@@ -72,6 +72,7 @@ Scenario: Sign in with wrong password should give me an informative error
 	And I sign in by user name and wrong password
 	Then I should see a log on error 'LogOnFailedInvalidUserNameOrPassword'
 
+@ApplicationLogOnOnly
 Scenario: Sign in without permission
 	Given I have the role 'No access'
 	And I am viewing the sign in page

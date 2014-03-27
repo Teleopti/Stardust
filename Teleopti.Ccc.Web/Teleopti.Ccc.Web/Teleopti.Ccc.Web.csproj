@@ -323,7 +323,6 @@
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
     <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
-    <Compile Include="Areas\SSO\Controllers\AuthenticationController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
     <Compile Include="Areas\SSO\Core\SsoAuthenticationModelBinder.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactory.cs" />
@@ -868,7 +867,6 @@
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInView.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInViewModel.js" />
     <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Common.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
@@ -943,7 +941,6 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ApplicationViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.AuthenticationState.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitViewModel.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js" />

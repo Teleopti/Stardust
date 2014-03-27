@@ -18,16 +18,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 	public class SignInPageStepDefinitions
 	{
 
-		public void SelectApplicationTestDataSource()
+		public void SelectTestDataSource()
 		{
-			Browser.Interactions.ClickContaining("#DataSources a.application", "TestData");
+			Browser.Interactions.ClickContaining("#DataSources a", "TestData");
 		}
-
-		public void SelectWindowsTestDataSource()
-		{
-			Browser.Interactions.ClickContaining("#DataSources a.windows", "TestData");
-		}
-
+		
 		private void SignInApplication(string username, string password)
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Username-input", username);
@@ -65,13 +60,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[When(@"I select application logon data source")]
 		public void WhenISelectApplicationLogonDataSource()
 		{
-			SelectApplicationTestDataSource();
+			SelectTestDataSource();
 		}
 
 		[When(@"I select windows logon data source")]
 		public void WhenISelectWindowsLogonDataSource()
 		{
-			SelectWindowsTestDataSource();
+			SelectTestDataSource();
 		}
 
 		[When(@"I sign in by user name and wrong password")]
@@ -91,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenISignInAgain()
 		{
 			Navigation.GotoGlobalSignInPage();
-			SelectApplicationTestDataSource();
+			SelectTestDataSource();
 			SignInApplication(DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
 		}
 
@@ -163,7 +158,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenISignInUsingMyNewPassword(string newPassword)
 		{
 			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			SelectApplicationTestDataSource();
+			SelectTestDataSource();
 			SignInApplication(userName, newPassword);
 		}
 

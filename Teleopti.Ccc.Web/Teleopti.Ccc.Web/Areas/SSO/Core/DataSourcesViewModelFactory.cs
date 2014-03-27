@@ -4,11 +4,11 @@ using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
-	public class DataSourcesViewModelFactory : IDataSourcesViewModelFactory
+	public class ApplicationDataSourcesViewModelFactory : IApplicationDataSourcesViewModelFactory
 	{
 		private readonly IApplicationAuthenticationType _authenticationType;
 
-		public DataSourcesViewModelFactory(IApplicationAuthenticationType authenticationType)
+		public ApplicationDataSourcesViewModelFactory(IApplicationAuthenticationType authenticationType)
 		{
 			_authenticationType = authenticationType;
 		}
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 		}
 	}
 
-	public interface IDataSourcesViewModelFactory
+	public interface IApplicationDataSourcesViewModelFactory
 	{
 		IEnumerable<DataSourceViewModel> DataSources();
 	}
