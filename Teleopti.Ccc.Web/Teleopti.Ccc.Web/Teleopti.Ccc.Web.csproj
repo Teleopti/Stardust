@@ -417,7 +417,6 @@
     <Compile Include="Areas\SSO\Core\OpenIdProviderWapper.cs" />
     <Compile Include="Areas\SSO\Core\IoC\SSOAreaModule.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistration.cs" />
-    <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Anywhere\Core\IoC\AnywhereAreaModule.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IIpAddressResolver.cs" />

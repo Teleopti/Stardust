@@ -77,5 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				return Json(result);
 			}
 		}
+
+		
 	}
 }

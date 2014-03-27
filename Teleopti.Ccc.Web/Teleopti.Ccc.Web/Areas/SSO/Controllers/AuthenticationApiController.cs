@@ -24,30 +24,5 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		{
 			return Json(_dataSourcesViewModelFactory.DataSources(), JsonRequestBehavior.AllowGet);
 		}
-
-		[HttpPost]
-		public JsonResult Logon(IAuthenticationModel model)
-		{
-			try
-			{
-				var result = model.AuthenticateUser();
-				model.SaveAuthenticateResult(result);
-				if (!result.Successful)
-					return errorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
-			}
-			catch (PermissionException)
-			{
-				return errorMessage(Resources.InsufficientPermissionForWeb);
-			}
-			return Json(string.Empty, JsonRequestBehavior.AllowGet);
-		}
-
-		private JsonResult errorMessage(string message)
-		{
-			Response.StatusCode = 400;
-			Response.TrySkipIisCustomErrors = true;
-			ModelState.AddModelError("Error", message);
-			return ModelState.ToJson();
-		}
 	}
 }

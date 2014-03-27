@@ -91,9 +91,6 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);
-			},
-			nobusinessunit: function () {
-				self.ErrorMessage($('#Signin-error').data('nobusinessunitext'));
 			}
 		});
 
