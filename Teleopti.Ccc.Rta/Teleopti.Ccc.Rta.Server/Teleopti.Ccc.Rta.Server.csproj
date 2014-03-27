@@ -154,10 +154,8 @@
     <Compile Include="CurrentAndNextLayerExtractor.cs" />
     <Compile Include="DatabaseReader.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />
-    <Compile Include="ActualAgentStateCache.cs" />
     <Compile Include="DatabaseWriter.cs" />
     <Compile Include="IActualAgentAssembler.cs" />
-    <Compile Include="IActualAgentStateCache.cs" />
     <Compile Include="IAlarmMapper.cs" />
     <Compile Include="ICurrentAndNextLayerExtractor.cs" />
     <Compile Include="IDatabaseReader.cs" />
