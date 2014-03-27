@@ -68,10 +68,10 @@
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><span class="user-name" title="@User.Identity.Name"><small>@User.Identity.Name</small></span> <b class="caret"></b></a>
 						<ul class="dropdown-menu">
-							<li><a href="#" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
+							<li><a href="#" id="regional-settings" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
 							@if (Model.ShowChangePassword)
 	   {
-								<li><a href="#" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
+								<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
 						}
 							<li class="divider"></li>
 							@if (Model.HasAsmPermission)
