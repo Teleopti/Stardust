@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Rta.Server
 	public class RtaDataHandler : IRtaDataHandler
 	{
 		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IRtaDataHandler));
-		private static IActualAgentStateCache _stateCache;
 		
 		private readonly IActualAgentAssembler _agentAssembler;
+		private readonly IDatabaseWriter _databaseWriter;
 		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IDataSourceResolver dataSourceResolver,
 		                      IPersonResolver personResolver,
 		                      IActualAgentAssembler agentAssembler,
-		                      IActualAgentStateCache stateCache)
+													IDatabaseWriter databaseWriter)
 		{
 			//hack - fix nicer when merged to default
 			int repeatInterval;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
-			_stateCache = stateCache;
+			_databaseWriter = databaseWriter;
 
 			if (_asyncMessageSender == null) return;
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Rta.Server
 				if (agentState == null)
 					return;
 
-				_stateCache.AddAgentStateToCache(agentState);
+				_databaseWriter.AddOrUpdate(new[] { agentState });
 				sendRtaState(agentState);
 			}
 			catch (SocketException exception)
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Rta.Server
 						continue;
 					}
 					LoggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode, agentState);
-					_stateCache.AddAgentStateToCache(agentState);
+					_databaseWriter.AddOrUpdate(new[] { agentState });
 					if (agentState.SendOverMessageBroker)
 						sendRtaState(agentState);
 				}
@@ -169,11 +169,10 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private void handleLastOfBatch(DateTime batchId, string sourceId)
 		{
-			_stateCache.FlushCacheToDatabase();
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents.Where(agent => agent != null))
 			{
-				_stateCache.AddAgentStateToCache(agent);
+				_databaseWriter.AddOrUpdate(new[] { agent });
 				sendRtaState(agent);
 			}
 		}

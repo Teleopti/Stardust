@@ -13,26 +13,23 @@ using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-    public class DatabaseReader : IDatabaseReader
+	public class DatabaseReader : IDatabaseReader
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
-        private readonly IActualAgentStateCache _actualAgentStateCache;
-        private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
-        public DatabaseReader(IDatabaseConnectionFactory databaseConnectionFactory,
-                              IDatabaseConnectionStringHandler databaseConnectionStringHandler,
-                              IActualAgentStateCache actualAgentStateCache)
-        {
-            _databaseConnectionFactory = databaseConnectionFactory;
-            _databaseConnectionStringHandler = databaseConnectionStringHandler;
-            _actualAgentStateCache = actualAgentStateCache;
-        }
+		public DatabaseReader(IDatabaseConnectionFactory databaseConnectionFactory,
+													IDatabaseConnectionStringHandler databaseConnectionStringHandler)
+		{
+			_databaseConnectionFactory = databaseConnectionFactory;
+			_databaseConnectionStringHandler = databaseConnectionStringHandler;
+		}
 
-        public IList<ScheduleLayer> GetReadModel(Guid personId)
+		public IList<ScheduleLayer> GetReadModel(Guid personId)
 		{
 			var query = string.Format(CultureInfo.InvariantCulture,
-									  @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+										@"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 											FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
 											WHERE PersonId='{0}'", personId);
 			var layers = new List<ScheduleLayer>();
@@ -61,22 +58,13 @@ namespace Teleopti.Ccc.Rta.Server
 			return layers.OrderBy(l => l.EndDateTime).ToList();
 		}
 
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security",
-			"CA2100:Review SQL queries for security vulnerabilities")]
 		public IActualAgentState LoadOldState(Guid personToLoad)
 		{
 			LoggingSvc.DebugFormat("Getting old state for person: {0}", personToLoad);
 
-		    IActualAgentState notFlushedState;
-		    if (_actualAgentStateCache.TryGetLatestState(personToLoad, out notFlushedState))
-		    {
-		        return notFlushedState;
-		    }
-
-		    var query =
-				string.Format(
-					"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
+			var query =
+			string.Format(
+				"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(
@@ -101,11 +89,11 @@ namespace Teleopti.Ccc.Rta.Server
 								StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
 								NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart")),
 								BatchId = !reader.IsDBNull(reader.GetOrdinal("BatchId"))
-											  ? reader.GetDateTime(reader.GetOrdinal("BatchId"))
-											  : (DateTime?)null,
+												? reader.GetDateTime(reader.GetOrdinal("BatchId"))
+												: (DateTime?)null,
 								OriginalDataSourceId = !reader.IsDBNull(reader.GetOrdinal("OriginalDataSourceId"))
-														   ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
-														   : "",
+															 ? reader.GetString(reader.GetOrdinal("OriginalDataSourceId"))
+															 : "",
 								AlarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"))
 							};
 						LoggingSvc.DebugFormat("Found old state for person: {0}, AgentState: {1}", personToLoad, agentState);
@@ -155,7 +143,7 @@ namespace Teleopti.Ccc.Rta.Server
 			return missingUsers;
 		}
 
-		public ConcurrentDictionary<Tuple<string,Guid,Guid>, List<RtaStateGroupLight>> StateGroups()
+		public ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>> StateGroups()
 		{
 			const string query =
 				@"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId, sg.Name StateGroupName, BusinessUnit BusinessUnitId, sg.IsLogOutState 
@@ -190,10 +178,10 @@ namespace Teleopti.Ccc.Rta.Server
 				}
 				reader.Close();
 			}
-            return new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(stateGroups.GroupBy(s => new Tuple<string, Guid, Guid>(s.StateCode, s.PlatformTypeId, s.BusinessUnitId)).ToDictionary(g => g.Key, g => g.ToList()));
+			return new ConcurrentDictionary<Tuple<string, Guid, Guid>, List<RtaStateGroupLight>>(stateGroups.GroupBy(s => new Tuple<string, Guid, Guid>(s.StateCode, s.PlatformTypeId, s.BusinessUnitId)).ToDictionary(g => g.Key, g => g.ToList()));
 		}
 
-		public ConcurrentDictionary<Tuple<Guid,Guid,Guid>, List<RtaAlarmLight>> ActivityAlarms()
+		public ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>> ActivityAlarms()
 		{
 			var stateGroups = new List<RtaAlarmLight>();
 			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
@@ -211,23 +199,23 @@ namespace Teleopti.Ccc.Rta.Server
 												 ? reader.GetString(reader.GetOrdinal("StateGroupName"))
 												 : "",
 							StateGroupId = !reader.IsDBNull(reader.GetOrdinal("StateGroupId"))
-											   ? reader.GetGuid(reader.GetOrdinal("StateGroupId"))
-											   : Guid.Empty,
+												 ? reader.GetGuid(reader.GetOrdinal("StateGroupId"))
+												 : Guid.Empty,
 							ActivityId = !reader.IsDBNull(reader.GetOrdinal("ActivityId"))
 											 ? reader.GetGuid(reader.GetOrdinal("ActivityId"))
 											 : Guid.Empty,
 							DisplayColor = !reader.IsDBNull(reader.GetOrdinal("DisplayColor"))
-											   ? reader.GetInt32(reader.GetOrdinal("DisplayColor"))
-											   : 0,
+												 ? reader.GetInt32(reader.GetOrdinal("DisplayColor"))
+												 : 0,
 							StaffingEffect = !reader.IsDBNull(reader.GetOrdinal("StaffingEffect"))
 												 ? reader.GetDouble(reader.GetOrdinal("StaffingEffect"))
 												 : 0,
 							AlarmTypeId = !reader.IsDBNull(reader.GetOrdinal("AlarmTypeId"))
-											  ? reader.GetGuid(reader.GetOrdinal("AlarmTypeId"))
-											  : Guid.Empty,
+												? reader.GetGuid(reader.GetOrdinal("AlarmTypeId"))
+												: Guid.Empty,
 							Name = !reader.IsDBNull(reader.GetOrdinal("Name"))
-									   ? reader.GetString(reader.GetOrdinal("Name"))
-									   : "",
+										 ? reader.GetString(reader.GetOrdinal("Name"))
+										 : "",
 							ThresholdTime = !reader.IsDBNull(reader.GetOrdinal("ThresholdTime"))
 												? reader.GetInt64(reader.GetOrdinal("ThresholdTime"))
 												: 0,
@@ -238,8 +226,8 @@ namespace Teleopti.Ccc.Rta.Server
 				reader.Close();
 			}
 			return
-				new ConcurrentDictionary<Tuple<Guid,Guid,Guid>, List<RtaAlarmLight>>(stateGroups.GroupBy(g => new Tuple<Guid,Guid,Guid>(g.ActivityId,g.StateGroupId,g.BusinessUnit))
-																			   .ToDictionary(k => k.Key, v => v.ToList()));
+				new ConcurrentDictionary<Tuple<Guid, Guid, Guid>, List<RtaAlarmLight>>(stateGroups.GroupBy(g => new Tuple<Guid, Guid, Guid>(g.ActivityId, g.StateGroupId, g.BusinessUnit))
+																				 .ToDictionary(k => k.Key, v => v.ToList()));
 		}
 
 		public ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> LoadAllExternalLogOns()
@@ -306,7 +294,7 @@ namespace Teleopti.Ccc.Rta.Server
 					if (dictionary.ContainsKey(loadedSourceIdAsString))
 					{
 						LoggingSvc.WarnFormat("There is already a source defined with the id = {0}",
-											   loadedSourceIdAsString);
+												 loadedSourceIdAsString);
 						continue;
 					}
 					dictionary.AddOrUpdate(loadedSourceIdAsString, loadedDataSourceId, (s, i) => loadedDataSourceId);

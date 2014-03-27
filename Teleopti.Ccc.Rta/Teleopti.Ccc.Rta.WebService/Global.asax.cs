@@ -15,15 +15,12 @@ namespace Teleopti.Ccc.Rta.WebService
 	public class Global : System.Web.HttpApplication
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (Global));
-		private static Timer _timer;
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			XmlConfigurator.Configure();
 			var container = buildIoc();
 			AutofacHostFactory.Container = container;
-			_timer = new Timer(myCallback, container, 0, 5000);
-
 			setDefaultGenericPrincipal();
 		}
 
@@ -36,15 +33,6 @@ namespace Teleopti.Ccc.Rta.WebService
 			builder.RegisterModule(mbCacheModule);
 			builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
 			return builder.Build();
-		}
-
-
-		private void myCallback(object state)
-		{
-			var container = state as IContainer;
-			var cache = container.Resolve<IActualAgentStateCache>();
-
-			cache.FlushCacheToDatabase();
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

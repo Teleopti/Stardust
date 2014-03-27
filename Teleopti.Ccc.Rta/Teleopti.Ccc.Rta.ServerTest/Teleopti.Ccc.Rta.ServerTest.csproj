@@ -142,12 +142,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentAssemblerTest.cs" />
-    <Compile Include="ActualAgentStateCacheTest.cs" />
     <Compile Include="AlarmMapperTest.cs" />
     <Compile Include="CurrentAndNextLayerExtractorTest.cs" />
-    <Compile Include="DatabaseReaderTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
-    <Compile Include="DatabaseWriterTest.cs" />
     <Compile Include="Repeater\MessageRepeaterTest.cs" />
     <Compile Include="Repeater\MinuteTriggerTest.cs" />
     <Compile Include="Repeater\SimpleTrigger.cs" />

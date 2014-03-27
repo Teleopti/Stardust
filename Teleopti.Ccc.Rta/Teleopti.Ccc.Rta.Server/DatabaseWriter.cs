@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Rta.Server
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
             MessageId = "0")]
-        public void AddOrUpdate(IList<IActualAgentState> actualAgentStates)
+        public void AddOrUpdate(IEnumerable<IActualAgentState> actualAgentStates)
         {
             if (!actualAgentStates.Any())
                 return;
