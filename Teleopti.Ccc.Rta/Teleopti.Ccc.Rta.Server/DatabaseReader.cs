@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			var query =
 			string.Format(
-				"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
+				"SELECT PersonId, StaffingEffect, AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode, BatchId, OriginalDataSourceId, AlarmStart FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personToLoad);
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(
