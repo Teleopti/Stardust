@@ -325,6 +325,7 @@
     <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
     <Compile Include="Areas\SSO\Controllers\AuthenticationController.cs" />
     <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
+    <Compile Include="Areas\SSO\Core\SsoAuthenticationModelBinder.cs" />
     <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\SSO\Core\IProviderEndpointWrapper.cs" />
     <Compile Include="Areas\SSO\Core\ProviderEndpointWrapper.cs" />
@@ -614,9 +615,9 @@
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\TokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\Services\FormsAuthenticationWrapper.cs" />
+    <Compile Include="Core\FormsAuthenticationWrapper.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IAuthenticator.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\Services\IFormsAuthentication.cs" />
+    <Compile Include="Core\IFormsAuthentication.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IWebLogOn.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />
     <Compile Include="Areas\Start\Core\IoC\StartAreaModule.cs" />

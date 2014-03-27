@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {

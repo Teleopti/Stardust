@@ -6,7 +6,7 @@ Teleopti.SSO.Authentication.NavigationConstructor = function () {
 	this.GotoMustChangePassword = function (dataSourceName) {
 		window.location.hash = 'mustchangepassword/' + encodeURIComponent(dataSourceName);
 	};
-	this.GotoBusinessUnits = function (returnUrl) {
+	this.GotoReturnUrl = function (returnUrl) {
 		window.location = returnUrl;
 	};
 	this.GotoSignIn = function () {

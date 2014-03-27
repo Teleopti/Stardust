@@ -1,7 +1,8 @@
-﻿namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
+﻿namespace Teleopti.Ccc.Web.Core
 {
     public interface IFormsAuthentication
     {
+	    void SetAuthCookie(string userName);
         void SignOut();
     }
 }

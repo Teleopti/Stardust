@@ -9,10 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<OpenIdProviderWapper>().As<IOpenIdProviderWapper>().SingleInstance();
-			builder.RegisterType<ApplicationAuthenticationType>().As<IIdentityProviderAuthenticationType>().SingleInstance();
+			builder.RegisterType<ApplicationAuthenticationType>().As<IApplicationAuthenticationType>().SingleInstance();
 			builder.RegisterType<DataSourcesViewModelFactory>().As<IDataSourcesViewModelFactory>().SingleInstance();
+			builder.RegisterType<ProviderEndpointWrapper>().As<IProviderEndpointWrapper>().SingleInstance();
 			builder.RegisterType<OpenIdProvider>().SingleInstance();
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
+			builder.RegisterType<ApplicationAuthenticationType>().As<IApplicationAuthenticationType>().SingleInstance();
 		}
 	}
 }

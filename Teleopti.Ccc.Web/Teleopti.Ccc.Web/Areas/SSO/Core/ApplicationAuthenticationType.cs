@@ -8,7 +8,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
-	public class ApplicationAuthenticationType : IIdentityProviderAuthenticationType
+	public interface IApplicationAuthenticationType
+	{
+		string TypeString { get; }
+		IEnumerable<IDataSource> DataSources();
+		ApplicationAuthenticationModel BindModel(ModelBindingContext bindingContext);
+	}
+
+	public class ApplicationAuthenticationType : IApplicationAuthenticationType
 	{
 		private readonly Lazy<IAuthenticator> _authenticator;
 		private readonly Lazy<IDataSourcesProvider> _dataSourcesProvider;
@@ -26,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 			return _dataSourcesProvider.Value.RetrieveDatasourcesForApplication();
 		}
 
-		public IAuthenticationModel BindModel(ModelBindingContext bindingContext)
+		public ApplicationAuthenticationModel BindModel(ModelBindingContext bindingContext)
 		{
 			return new ApplicationAuthenticationModel(_authenticator.Value)
 				{
@@ -35,9 +42,5 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 					DataSourceName = bindingContext.ValueProvider.GetValue("datasource").AttemptedValue
 				};
 		}
-	}
-
-	public interface IIdentityProviderAuthenticationType : IAuthenticationType
-	{
 	}
 }

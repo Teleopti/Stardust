@@ -33,8 +33,6 @@ Teleopti.SSO.Authentication.ChangePasswordViewModel = function (data) {
 	};
 
 	this.SkipChangePassword = function () {
-		data.authenticationState.AttemptGotoApplicationBySignIn({
-			baseUrl: data.baseUrl
-		});
+		data.authenticationState.GotoReturnUrl();
 	};
 };

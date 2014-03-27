@@ -1,6 +1,7 @@
 ﻿using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
+using Teleopti.Ccc.Web.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 {

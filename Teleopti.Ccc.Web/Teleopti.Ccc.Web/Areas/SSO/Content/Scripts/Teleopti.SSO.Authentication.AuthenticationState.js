@@ -18,8 +18,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 	var applications;
 
 	var gotoSignInView = Teleopti.SSO.Authentication.Navigation.GotoSignIn;
-	var gotoBusinessUnitsView = Teleopti.SSO.Authentication.Navigation.GotoBusinessUnits;
-	var gotoMenuView = Teleopti.SSO.Authentication.Navigation.GotoMenu;
+	var gotoReturnUrl = Teleopti.SSO.Authentication.Navigation.GotoReturnUrl;
 	var gotoChangePassword = Teleopti.SSO.Authentication.Navigation.GotoChangePassword;
 	var gotoMustChangePassword = Teleopti.SSO.Authentication.Navigation.GotoMustChangePassword;
 
@@ -40,43 +39,50 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 					gotoMustChangePassword(authenticationModel.datasource);
 					return;
 				}
-				self.AttemptGotoApplicationBySignIn(options);
+
+				self.GotoReturnUrl();
 			}
 		});
 
 		$.ajax(options);
 	};
 
-	this.AttemptGotoApplicationBySignIn = function (options) {
-		$.extend(options, {
-			success: function (responseData, textStatus, jqXHR) {
 
-				if (responseData.length > 1) {
-					gotoBusinessUnitsView(authenticationModel.type, authenticationModel.datasource);
-					return;
-				}
-
-				if (responseData.length == 0) {
-					options.nobusinessunit();
-					return;
-				}
-
-				if (responseData.length == 1) {
-					$.extend(options, {
-						data: {
-							businessUnitId: responseData[0].Id
-						}
-					});
-					self.AttemptGotoApplicationBySelectingBusinessUnit(options);
-					return;
-				}
-
-				options.errormessage("obscure amount of business units found");
-			}
-		});
-
-		businessUnitsAjax(options);
+	this.GotoReturnUrl = function() {
+		gotoReturnUrl(Teleopti.SSO.Authentication.Settings.returnUrl);
 	};
+
+	//this.AttemptGotoApplicationBySignIn = function (options) {
+
+	//	$.extend(options, {
+	//		success: function (responseData, textStatus, jqXHR) {
+
+	//			if (responseData.length > 1) {
+	//				gotoBusinessUnitsView(authenticationModel.type, authenticationModel.datasource);
+	//				return;
+	//			}
+
+	//			if (responseData.length == 0) {
+	//				options.nobusinessunit();
+	//				return;
+	//			}
+
+	//			if (responseData.length == 1) {
+	//				$.extend(options, {
+	//					data: {
+	//						businessUnitId: responseData[0].Id
+	//					}
+	//				});
+	//				self.AttemptGotoApplicationBySelectingBusinessUnit(options);
+	//				return;
+	//			}
+
+	//			options.errormessage("obscure amount of business units found");
+	//		}
+	//	});
+
+	//	businessUnitsAjax(options);
+	//};
 
 	this.CheckState = function () {
 		if (authenticationModel) {
@@ -107,63 +113,63 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 			},
 			success: function (responseData, textStatus, jqXHR) {
 				authenticationModel.password = options.data.newPassword;
-				self.AttemptGotoApplicationBySignIn(options);
+				self.GotoReturnUrl();
 			}
 		});
 
 		$.ajax(options);
 	};
 
-	var businessUnitsAjax = function (options) {
+	//var businessUnitsAjax = function (options) {
 
-		var success = options.success;
+	//	var success = options.success;
 
-		$.extend(options, {
-			url: data.baseUrl + "SSO/AuthenticationApi/BusinessUnits",
-			dataType: "json",
-			type: 'GET',
-			cache: false,
-			data: authenticationModel,
-			success: function (responseData, textStatus, jqXHR) {
-				businessUnits = responseData;
-				success(responseData, textStatus, jqXHR);
-			}
-		});
+	//	$.extend(options, {
+	//		url: data.baseUrl + "SSO/AuthenticationApi/BusinessUnits",
+	//		dataType: "json",
+	//		type: 'GET',
+	//		cache: false,
+	//		data: authenticationModel,
+	//		success: function (responseData, textStatus, jqXHR) {
+	//			businessUnits = responseData;
+	//			success(responseData, textStatus, jqXHR);
+	//		}
+	//	});
 
-		$.ajax(options);
-	};
+	//	$.ajax(options);
+	//};
 
-	var logonAjax = function (options) {
+	//var logonAjax = function (options) {
 
-		$.extend(options, {
-			url: data.baseUrl + "SSO/AuthenticationApi/Logon",
-			dataType: "json",
-			type: 'POST',
-			cache: false,
-			data: authenticationModel
-		});
+	//	$.extend(options, {
+	//		url: data.baseUrl + "SSO/AuthenticationApi/Logon",
+	//		dataType: "json",
+	//		type: 'POST',
+	//		cache: false,
+	//		data: authenticationModel
+	//	});
 
-		$.ajax(options);
-	};
+	//	$.ajax(options);
+	//};
 
-	var applicationsAjax = function (options) {
+	//var applicationsAjax = function (options) {
 
-		var success = options.success;
+	//	var success = options.success;
 
-		$.extend(options, {
-			url: data.baseUrl + "SSO/Menu/Applications",
-			dataType: "json",
-			type: 'GET',
-			cache: false,
-			data: null,
-			success: function (responseData, textStatus, jqXHR) {
-				applications = responseData;
-				success(responseData, textStatus, jqXHR);
-			}
-		});
+	//	$.extend(options, {
+	//		url: data.baseUrl + "SSO/Menu/Applications",
+	//		dataType: "json",
+	//		type: 'GET',
+	//		cache: false,
+	//		data: null,
+	//		success: function (responseData, textStatus, jqXHR) {
+	//			applications = responseData;
+	//			success(responseData, textStatus, jqXHR);
+	//		}
+	//	});
 
-		$.ajax(options);
-	};
+	//	$.ajax(options);
+	//};
 
 
 	this.TryToSignIn = function (options) {
@@ -191,108 +197,108 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 		$.extend(options, {
 			error: error
 		});
-		if (!authenticationModel.isWindows) {
+		//if (!authenticationModel.isWindows) {
 			checkPasswordAjax(options);
-		} else {
-			self.AttemptGotoApplicationBySignIn(options);
-		}
+		//} else {
+		//	self.GotoReturnUrl();
+		//}
 	};
 
-	this.AttemptGotoApplicationBySelectingBusinessUnit = function (options) {
-		authenticationModel.businessUnitId = options.data.businessUnitId;
+	//this.AttemptGotoApplicationBySelectingBusinessUnit = function (options) {
+	//	authenticationModel.businessUnitId = options.data.businessUnitId;
 
-		var error = options.error || gotoSignInView;
-		var errormessage = options.errormessage || gotoSignInView;
+	//	var error = options.error || gotoSignInView;
+	//	var errormessage = options.errormessage || gotoSignInView;
 
-		$.extend(options, {
-			success: function (logonData, textState, jqXHR) {
+	//	$.extend(options, {
+	//		success: function (logonData, textState, jqXHR) {
 
-				$.extend(options, {
-					success: function (applicationsData, textState, jqXHR) {
+	//			$.extend(options, {
+	//				success: function (applicationsData, textState, jqXHR) {
 
-						var area;
+	//					var area;
 
-						var inApplication = ko.utils.arrayFirst(applicationsData, function (a) {
-							var url = "/" + a.Area + "/";
-							return window.location.href.indexOf(url) !== -1;
-						});
+	//					var inApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+	//						var url = "/" + a.Area + "/";
+	//						return window.location.href.indexOf(url) !== -1;
+	//					});
 						
-						var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
-							return a.Area === "Anywhere";
-						});
+	//					var anywhereApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+	//						return a.Area === "Anywhere";
+	//					});
 
-						if (inApplication)
-							area = inApplication.Area;
-						else if (applicationsData.length == 1)
-							area = applicationsData[0].Area;
-						else if (anywhereApplication)
-							area = anywhereApplication.Area;
+	//					if (inApplication)
+	//						area = inApplication.Area;
+	//					else if (applicationsData.length == 1)
+	//						area = applicationsData[0].Area;
+	//					else if (anywhereApplication)
+	//						area = anywhereApplication.Area;
 
-						if (area) {
-							window.location.href = data.baseUrl + area;
-							return;
-						}
+	//					if (area) {
+	//						window.location.href = data.baseUrl + area;
+	//						return;
+	//					}
 
-						if (applicationsData.length > 1) {
-							gotoMenuView();
-							return;
-						}
+	//					if (applicationsData.length > 1) {
+	//						gotoMenuView();
+	//						return;
+	//					}
 
-						errormessage("obscure amount of applications found");
-					}
-				});
+	//					errormessage("obscure amount of applications found");
+	//				}
+	//			});
 
-				applicationsAjax(options);
+	//			applicationsAjax(options);
 
-			},
-			error: error,
-			errormessage: errormessage
-		});
+	//		},
+	//		error: error,
+	//		errormessage: errormessage
+	//	});
 
-		logonAjax(options);
-	};
-
-
+	//	logonAjax(options);
+	//};
 
 
 
-	this.GetDataForBusinessUnitSelectionView = function (options) {
-		if (authenticationModel)
-			$.extend(authenticationModel, options.data);
-		else
-			authenticationModel = options.data;
 
-		if (businessUnits) {
-			options.businessunits(businessUnits);
-			return;
-		}
 
-		$.extend(options, {
-			success: function () {
-				options.businessunits(businessUnits);
-			},
-			error: gotoSignInView
-		});
+	//this.GetDataForBusinessUnitSelectionView = function (options) {
+	//	if (authenticationModel)
+	//		$.extend(authenticationModel, options.data);
+	//	else
+	//		authenticationModel = options.data;
 
-		businessUnitsAjax(options);
-	};
+	//	if (businessUnits) {
+	//		options.businessunits(businessUnits);
+	//		return;
+	//	}
 
-	this.GetDataForMenu = function (options) {
+	//	$.extend(options, {
+	//		success: function () {
+	//			options.businessunits(businessUnits);
+	//		},
+	//		error: gotoSignInView
+	//	});
 
-		if (applications) {
-			options.applications(applications);
-			return;
-		}
+	//	businessUnitsAjax(options);
+	//};
 
-		$.extend(options, {
-			success: function () {
-				options.applications(applications);
-			},
-			error: gotoSignInView
-		});
+	//this.GetDataForMenu = function (options) {
 
-		applicationsAjax(options);
-	};
+	//	if (applications) {
+	//		options.applications(applications);
+	//		return;
+	//	}
+
+	//	$.extend(options, {
+	//		success: function () {
+	//			options.applications(applications);
+	//		},
+	//		error: gotoSignInView
+	//	});
+
+	//	applicationsAjax(options);
+	//};
 
 };
 

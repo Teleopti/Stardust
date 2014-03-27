@@ -15,40 +15,40 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 	public class ApplicationAuthenticationApiController : Controller
 	{
 		private readonly ICurrentPrincipalContext _currentPrincipalContext;
+		private readonly IFormsAuthentication _formsAuthentication;
 		private readonly IDataSourcesProvider _dataSourceProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly ILoadPasswordPolicyService _loadPasswordPolicyService;
 
-		public ApplicationAuthenticationApiController(IDataSourcesProvider dataSourceProvider, IRepositoryFactory repositoryFactory, ILoadPasswordPolicyService loadPasswordPolicyService, ICurrentPrincipalContext currentPrincipalContext)
+		public ApplicationAuthenticationApiController(IDataSourcesProvider dataSourceProvider, IRepositoryFactory repositoryFactory, ILoadPasswordPolicyService loadPasswordPolicyService, ICurrentPrincipalContext currentPrincipalContext, IFormsAuthentication formsAuthentication)
 		{
 			_currentPrincipalContext = currentPrincipalContext;
+			_formsAuthentication = formsAuthentication;
 			_dataSourceProvider = dataSourceProvider;
 			_repositoryFactory = repositoryFactory;
 			_loadPasswordPolicyService = loadPasswordPolicyService;
 		}
 
 		[HttpGet]
-		public JsonResult CheckPassword(IAuthenticationModel model)
+		public JsonResult CheckPassword(ApplicationAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
-			var passwordWarningViewModel = new PasswordWarningViewModel();
 			if (!result.Successful)
 			{
-				passwordWarningViewModel.AlreadyExpired = result.PasswordExpired;
-				if (!result.PasswordExpired)
+				if (result.PasswordExpired)
 				{
-					model.SaveAuthenticateResult(result);
-					Response.StatusCode = 400;
-					Response.TrySkipIisCustomErrors = true;
-					ModelState.AddModelError("Error", result.Message);
-					return ModelState.ToJson();
+					return Json(new PasswordWarningViewModel {AlreadyExpired = true}, JsonRequestBehavior.AllowGet);
 				}
+				model.SaveAuthenticateResult(result);
+				Response.StatusCode = 400;
+				Response.TrySkipIisCustomErrors = true;
+				ModelState.AddModelError("Error", result.Message);
+				return ModelState.ToJson();
 			}
-			else
-			{
-				passwordWarningViewModel.WillExpireSoon = result.HasMessage;
-			}
-			return Json(passwordWarningViewModel, JsonRequestBehavior.AllowGet);
+
+			_formsAuthentication.SetAuthCookie(model.UserName);
+			model.SaveAuthenticateResult(result);
+			return Json(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage}, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPostOrPut]

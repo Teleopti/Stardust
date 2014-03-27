@@ -12,20 +12,25 @@ namespace Teleopti.Ccc.Infrastructure.Util
         /// </summary>
         private static byte[] toCompressedByteArray(this string source)
         {
-            // convert the source string into a memory stream
-            using (
-                MemoryStream inMemStream = new MemoryStream(Encoding.UTF8.GetBytes(source)),
-                             outMemStream = new MemoryStream())
-            {
-                // create a compression stream with the output stream
-                using (var zipStream = new GZipStream(outMemStream, CompressionMode.Compress))
-                    // copy the source string into the compression stream
-                    inMemStream.WriteTo(zipStream);
-
-                // return the compressed bytes in the output stream
-                return outMemStream.ToArray();
-            }
+	        return Encoding.UTF8.GetBytes(source).ToCompressedByteArray();
         }
+
+		public static byte[] ToCompressedByteArray(this byte[] source)
+		{
+			// convert the source string into a memory stream
+			using (
+				MemoryStream inMemStream = new MemoryStream(source),
+							 outMemStream = new MemoryStream())
+			{
+				// create a compression stream with the output stream
+				using (var zipStream = new GZipStream(outMemStream, CompressionMode.Compress))
+					// copy the source string into the compression stream
+					inMemStream.WriteTo(zipStream);
+
+				// return the compressed bytes in the output stream
+				return outMemStream.ToArray();
+			}
+		}
 
         /// <summary>
         /// Returns the base64 encoded string for the compressed byte array of the source string
@@ -50,5 +55,19 @@ namespace Teleopti.Ccc.Infrastructure.Util
             using (var streamReader = new StreamReader(decompressionStream))
                 return streamReader.ReadToEnd();
         }
+
+		public static byte[] ToUncompressedString(this byte[] source)
+		{
+			// get the byte array representation for the compressed string
+			// load the byte array into a memory stream
+			using (var inMemStream = new MemoryStream(source))
+			// and decompress the memory stream into the original string
+			using (var decompressionStream = new GZipStream(inMemStream, CompressionMode.Decompress))
+			using (var streamReader = new MemoryStream())
+			{
+				decompressionStream.CopyTo(streamReader);
+				return streamReader.ToArray();
+			}
+		}
     }
 }

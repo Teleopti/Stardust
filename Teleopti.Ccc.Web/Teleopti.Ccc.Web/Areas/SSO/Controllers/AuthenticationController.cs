@@ -13,9 +13,10 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
 		}
 
-		public ViewResult SignIn()
+		public ViewResult SignIn(string returnUrl)
 		{
 			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
+			ViewBag.ReturnUrl = returnUrl;
 			return View();
 		}
 	}

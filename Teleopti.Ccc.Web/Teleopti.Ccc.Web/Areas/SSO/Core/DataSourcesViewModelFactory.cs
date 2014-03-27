@@ -6,9 +6,9 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
 	public class DataSourcesViewModelFactory : IDataSourcesViewModelFactory
 	{
-		private readonly IIdentityProviderAuthenticationType _authenticationType;
+		private readonly IApplicationAuthenticationType _authenticationType;
 
-		public DataSourcesViewModelFactory(IIdentityProviderAuthenticationType authenticationType)
+		public DataSourcesViewModelFactory(IApplicationAuthenticationType authenticationType)
 		{
 			_authenticationType = authenticationType;
 		}

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using System.Web.Mvc;
-using System.Web.Security;
-using DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy;
-using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider.Behaviors;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using log4net;
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
 	public class OpenIdController : Controller
 	{
+		private const string PendingRequestKey = "PendingRequest";
 		private readonly IOpenIdProviderWapper _openIdProvider;
 		private readonly ICurrentHttpContext _currentHttpContext;
 		private readonly IProviderEndpointWrapper _providerEndpointWrapper;
@@ -49,11 +51,15 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			}
 
 			// handles request from browser
-			_providerEndpointWrapper.PendingRequest = (IHostProcessedRequest)request;
-
 			if (!User.Identity.IsAuthenticated)
 			{
-				return this.RedirectToAction("SignIn", "Authentication", new { returnUrl = this.Url.Action("ProcessAuthRequest") });
+
+				return this.RedirectToAction("SignIn", "Authentication",
+					new
+					{
+						returnUrl =
+							this.Url.Action("ProcessAuthRequest") + "?a=" + Url.Encode(SerializationHelper.SerializeAsXml((IHostProcessedRequest)request))
+					});
 			}
 
 			return null;
@@ -67,7 +73,8 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 		public ActionResult ProcessAuthRequest()
 		{
-			if (_providerEndpointWrapper.PendingRequest == null)
+			var pendingRequest = getPendingRequest();
+			if (pendingRequest == null)
 			{
 				return new ContentResult { Content = "Sorry, no PendingRequest" };
 			}
@@ -80,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			}
 
 			// We can't respond immediately with a positive result.  But if we still have to respond immediately...
-			if (_providerEndpointWrapper.PendingRequest.Immediate)
+			if (((IHostProcessedRequest)pendingRequest).Immediate)
 			{
 				// We can't stop to prompt the user -- we must just return a negative response.
 				return this.SendAssertion();
@@ -89,12 +96,19 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			return null;
 		}
 
+		private object getPendingRequest()
+		{
+			var request = _currentHttpContext.Current().Request.QueryString["a"];
+			var pendingRequest = SerializationHelper.Deserialize<IHostProcessedRequest>(request);
+
+			return pendingRequest;
+		}
+
 		public ActionResult SendAssertion()
 		{
-			var pendingRequest = _providerEndpointWrapper.PendingRequest;
+			var pendingRequest = getPendingRequest();//_providerEndpointWrapper.PendingRequest;
 			var authReq = pendingRequest as IAuthenticationRequest;
 			var anonReq = pendingRequest as IAnonymousRequest;
-			_providerEndpointWrapper.PendingRequest = null; // clear session static so we don't do this again
 			if (pendingRequest == null)
 			{
 				throw new InvalidOperationException("There's no pending authentication request!");
@@ -124,15 +138,15 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				}
 			}
 
-			return _openIdProvider.PrepareResponse(pendingRequest).AsActionResult();
+			return _openIdProvider.PrepareResponse((IHostProcessedRequest)pendingRequest).AsActionResult();
 		}
 
 
 		private bool AutoRespondIfPossible(out ActionResult response)
 		{
 			// If the odds are good we can respond to this one immediately (without prompting the user)...
-			if (_providerEndpointWrapper.PendingRequest.IsReturnUrlDiscoverable(_openIdProvider.Channel().WebRequestHandler) == RelyingPartyDiscoveryResult.Success
-				&& User.Identity.IsAuthenticated)
+			var pendingRequest = getPendingRequest();
+			if (User.Identity.IsAuthenticated)
 			{
 				// Is this is an identity authentication request? (as opposed to an anonymous request)...
 				if (_providerEndpointWrapper.PendingAuthenticationRequest != null)

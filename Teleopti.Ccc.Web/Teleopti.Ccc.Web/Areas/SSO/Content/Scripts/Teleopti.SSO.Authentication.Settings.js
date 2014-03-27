@@ -1,2 +1,2 @@
 ﻿
-Teleopti.SSO.Authentication.Settings = { baseUrl: '' };
+Teleopti.SSO.Authentication.Settings = { baseUrl: '', returnUrl: '' };
