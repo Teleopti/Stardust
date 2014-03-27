@@ -49,7 +49,7 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 
 
 	this.GotoReturnUrl = function() {
-		gotoReturnUrl(Teleopti.SSO.Authentication.Settings.returnUrl);
+		gotoReturnUrl(Teleopti.SSO.Authentication.Settings.returnUrl, Teleopti.SSO.Authentication.Settings.pendingRequest);
 	};
 
 	//this.AttemptGotoApplicationBySignIn = function (options) {

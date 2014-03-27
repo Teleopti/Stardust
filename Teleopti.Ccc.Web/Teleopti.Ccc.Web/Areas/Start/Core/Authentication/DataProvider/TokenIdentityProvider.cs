@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using Microsoft.IdentityModel.Claims;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			var teleoptiIdentity = _httpContext.Current().User.Identity as ITeleoptiIdentity;
 			if (teleoptiIdentity != null)
 			{
-				return GetTokenIdentity(teleoptiIdentity.TokenIdentity);
+				return getTokenIdentity(teleoptiIdentity.TokenIdentity);
 			}
 
 			var currentIdentity = _httpContext.Current().User.Identity as IClaimsIdentity;
@@ -31,19 +33,37 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			}
 
 			var nameClaim = currentIdentity.Claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.NameIdentifier);
-			var nameClaimValue = nameClaim.Value;
-			return GetTokenIdentity(nameClaimValue);
+			var nameClaimValue = Uri.UnescapeDataString(nameClaim.Value);
+			return getTokenIdentity(nameClaimValue);
 		}
 
-		private static TokenIdentity GetTokenIdentity(string nameClaimValue)
+		private static TokenIdentity getTokenIdentity(string nameClaimValue)
 		{
-			var nameAndDomain = nameClaimValue.Split('/').Last().Split('@');
+			return nameClaimValue.Contains("\\")
+				? getWindowsTokenIdentity(nameClaimValue)
+				: getApplicationTokenIdentity(nameClaimValue);
+		}
+
+		private static TokenIdentity getApplicationTokenIdentity(string nameClaimValue)
+		{
+			var nameAndDatasource = nameClaimValue.Split('/').Last().Split('§');
 			return new TokenIdentity
-				{
-					UserDomain = nameAndDomain[1],
-					UserIdentifier = nameAndDomain[0],
-					OriginalToken = nameClaimValue
-				};
+			{
+				DataSource = nameAndDatasource[1],
+				UserIdentifier = nameAndDatasource[0],
+				OriginalToken = nameClaimValue
+			};
+		}
+
+		private static TokenIdentity getWindowsTokenIdentity(string nameClaimValue)
+		{
+			var nameAndDomain = nameClaimValue.Split('/').Last().Split('\\');
+			return new TokenIdentity
+			{
+				UserDomain = nameAndDomain[1],
+				UserIdentifier = nameAndDomain[0],
+				OriginalToken = nameClaimValue
+			};
 		}
 	}
 

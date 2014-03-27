@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				return ModelState.ToJson();
 			}
 
-			_formsAuthentication.SetAuthCookie(model.UserName);
+			_formsAuthentication.SetAuthCookie(model.UserName + "§" + model.DataSourceName);
 			model.SaveAuthenticateResult(result);
 			return Json(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage}, JsonRequestBehavior.AllowGet);
 		}

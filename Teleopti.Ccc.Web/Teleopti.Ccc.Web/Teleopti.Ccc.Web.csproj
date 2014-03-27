@@ -1210,8 +1210,8 @@
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Areas\SSO\Views\Authentication\SignIn.cshtml" />
     <Content Include="Areas\SSO\Views\Shared\_LayoutBase.cshtml" />
+    <Content Include="Areas\SSO\Views\OpenId\SignIn.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1361,6 +1361,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
+    <Folder Include="Areas\SSO\Views\Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />

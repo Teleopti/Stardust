@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Text;
 using System.Web.Mvc;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using DotNetOpenAuth.OpenId.Provider.Behaviors;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Ccc.Web.Areas.SSO.Core;
+using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
+using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using log4net;
 
@@ -16,17 +16,18 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
 	public class OpenIdController : Controller
 	{
-		private const string PendingRequestKey = "PendingRequest";
 		private readonly IOpenIdProviderWapper _openIdProvider;
 		private readonly ICurrentHttpContext _currentHttpContext;
-		private readonly IProviderEndpointWrapper _providerEndpointWrapper;
+		private readonly ILayoutBaseViewModelFactory _layoutBaseViewModelFactory;
+		private readonly IFormsAuthentication _formsAuthentication;
 		private static ILog _logger = LogManager.GetLogger(typeof(OpenIdController));
 
-		public OpenIdController(IOpenIdProviderWapper openIdProvider, ICurrentHttpContext currentHttpContext, IProviderEndpointWrapper providerEndpointWrapper)
+		public OpenIdController(IOpenIdProviderWapper openIdProvider, ICurrentHttpContext currentHttpContext,ILayoutBaseViewModelFactory layoutBaseViewModelFactory, IFormsAuthentication formsAuthentication)
 		{
 			_openIdProvider = openIdProvider;
 			_currentHttpContext = currentHttpContext;
-			_providerEndpointWrapper = providerEndpointWrapper;
+			_layoutBaseViewModelFactory = layoutBaseViewModelFactory;
+			_formsAuthentication = formsAuthentication;
 		}
 
 		public ActionResult Identifier()
@@ -53,17 +54,20 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			// handles request from browser
 			if (!User.Identity.IsAuthenticated)
 			{
-
-				return this.RedirectToAction("SignIn", "Authentication",
-					new
-					{
-						returnUrl =
-							this.Url.Action("ProcessAuthRequest") + "?a=" + Url.Encode(SerializationHelper.SerializeAsXml((IHostProcessedRequest)request))
-					});
+				ViewBag.ReturnUrl = Url.Action("ProcessAuthRequest");
+				ViewBag.PendingRequest =
+					Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
+				return SignIn();
 			}
 
 			return null;
 
+		}
+
+		public ViewResult SignIn()
+		{
+			ViewBag.LayoutBase = _layoutBaseViewModelFactory.CreateLayoutBaseViewModel();
+			return View("SignIn");
 		}
 
 		public ActionResult AskUser()
@@ -71,42 +75,41 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 			return View();
 		}
 
-		public ActionResult ProcessAuthRequest()
+		[HttpPost]
+		public ActionResult ProcessAuthRequest(string pendingRequest)
 		{
-			var pendingRequest = getPendingRequest();
-			if (pendingRequest == null)
+			var request = getPendingRequest(pendingRequest);
+			if (request == null)
 			{
 				return new ContentResult { Content = "Sorry, no PendingRequest" };
 			}
 
 			// Try responding immediately if possible.
 			ActionResult response;
-			if (this.AutoRespondIfPossible(out response))
+			if (AutoRespondIfPossible(request, out response))
 			{
 				return response;
 			}
 
 			// We can't respond immediately with a positive result.  But if we still have to respond immediately...
-			if (((IHostProcessedRequest)pendingRequest).Immediate)
+			if (request.Immediate)
 			{
 				// We can't stop to prompt the user -- we must just return a negative response.
-				return this.SendAssertion();
+				return sendAssertion(request);
 			}
 
 			return null;
 		}
 
-		private object getPendingRequest()
+		private IHostProcessedRequest getPendingRequest(string request)
 		{
-			var request = _currentHttpContext.Current().Request.QueryString["a"];
-			var pendingRequest = SerializationHelper.Deserialize<IHostProcessedRequest>(request);
+			var pendingRequest = SerializationHelper.Deserialize<IHostProcessedRequest>(Convert.FromBase64String(request).ToUncompressedString());
 
 			return pendingRequest;
 		}
 
-		public ActionResult SendAssertion()
+		private ActionResult sendAssertion(IHostProcessedRequest pendingRequest)
 		{
-			var pendingRequest = getPendingRequest();//_providerEndpointWrapper.PendingRequest;
 			var authReq = pendingRequest as IAuthenticationRequest;
 			var anonReq = pendingRequest as IAnonymousRequest;
 			if (pendingRequest == null)
@@ -127,9 +130,11 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 
 			if (authReq != null && authReq.IsAuthenticated.Value)
 			{
+				string userName;
+				_formsAuthentication.TryGetCurrentUser(out userName);
 				if (authReq.IsDirectedIdentity)
 				{
-					authReq.LocalIdentifier = createUserLocalIdentifier();
+					authReq.LocalIdentifier = createUserLocalIdentifier(userName);
 				}
 
 				if (!authReq.IsDelegatedIdentifier)
@@ -138,34 +143,35 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				}
 			}
 
-			return _openIdProvider.PrepareResponse((IHostProcessedRequest)pendingRequest).AsActionResult();
+			return _openIdProvider.PrepareResponse(pendingRequest).AsActionResult();
 		}
 
 
-		private bool AutoRespondIfPossible(out ActionResult response)
+		private bool AutoRespondIfPossible(IHostProcessedRequest pendingRequest, out ActionResult response)
 		{
-			// If the odds are good we can respond to this one immediately (without prompting the user)...
-			var pendingRequest = getPendingRequest();
-			if (User.Identity.IsAuthenticated)
+			string userName;
+			if (_formsAuthentication.TryGetCurrentUser(out userName))
 			{
+				var pending = pendingRequest as IAuthenticationRequest;
 				// Is this is an identity authentication request? (as opposed to an anonymous request)...
-				if (_providerEndpointWrapper.PendingAuthenticationRequest != null)
+				if (pending != null)
 				{
 					// If this is directed identity, or if the claimed identifier being checked is controlled by the current user...
-					if (_providerEndpointWrapper.PendingAuthenticationRequest.IsDirectedIdentity
-						|| UserControlsIdentifier(_providerEndpointWrapper.PendingAuthenticationRequest))
+					if (pending.IsDirectedIdentity
+						|| UserControlsIdentifier(pending))
 					{
-						_providerEndpointWrapper.PendingAuthenticationRequest.IsAuthenticated = true;
-						response = this.SendAssertion();
+						pending.IsAuthenticated = true;
+						response = sendAssertion(pendingRequest);
 						return true;
 					}
 				}
 
 				// If this is an anonymous request, we can respond to that too.
-				if (_providerEndpointWrapper.PendingAnonymousRequest != null)
+				var pendingAnonymousRequest = pendingRequest as IAnonymousRequest;
+				if (pendingAnonymousRequest != null)
 				{
-					_providerEndpointWrapper.PendingAnonymousRequest.IsApproved = true;
-					response = this.SendAssertion();
+					pendingAnonymousRequest.IsApproved = true;
+					response = sendAssertion(pendingRequest);
 					return true;
 				}
 			}
@@ -181,12 +187,13 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				throw new ArgumentNullException("authReq");
 			}
 
-			if (User == null || User.Identity == null)
+			string userName;
+			if (!_formsAuthentication.TryGetCurrentUser(out userName))
 			{
 				return false;
 			}
 
-			var userLocalIdentifier = createUserLocalIdentifier();
+			var userLocalIdentifier = createUserLocalIdentifier(userName);
 
 			// Assuming the URLs on the web server are not case sensitive (on Windows servers they almost never are),
 			// and usernames aren't either, compare the identifiers without case sensitivity.
@@ -196,11 +203,11 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				authReq.LocalIdentifier == PpidGeneration.PpidIdentifierProvider.GetIdentifier(userLocalIdentifier, authReq.Realm);
 		}
 
-		private Uri createUserLocalIdentifier()
+		private Uri createUserLocalIdentifier(string userName)
 		{
 			var currentHttp = _currentHttpContext.Current();
 			Uri userLocalIdentifier = new Uri(currentHttp.Request.Url,
-				currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" + User.Identity.Name + "@datasource"));
+				currentHttp.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + userName));
 			return userLocalIdentifier;
 		}
 	}

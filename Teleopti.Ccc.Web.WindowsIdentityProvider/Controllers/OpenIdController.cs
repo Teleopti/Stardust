@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProvider.Controllers
 				var currentHttp = _currentHttpContext.Current();
 				idrequest.LocalIdentifier =
 					new Uri(currentHttp.Request.Url,
-							currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" + windowsAccount.UserName + "@" + windowsAccount.DomainName));
+							currentHttp.Response.ApplyAppPathModifier("~/OpenId/AskUser/" + windowsAccount.UserName + "\\" + windowsAccount.DomainName));
 				idrequest.IsAuthenticated = true;
 				_openIdProvider.SendResponse(idrequest);
 			}

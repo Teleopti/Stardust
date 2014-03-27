@@ -4,5 +4,6 @@
     {
 	    void SetAuthCookie(string userName);
         void SignOut();
+	    bool TryGetCurrentUser(out string userName);
     }
 }

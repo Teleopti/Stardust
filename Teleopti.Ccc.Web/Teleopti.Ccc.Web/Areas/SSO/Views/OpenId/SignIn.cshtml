@@ -25,7 +25,8 @@
 
 			Teleopti.SSO.Authentication.Settings = {
 				baseUrl: '@Url.Content("~/")',
-				returnUrl: '@ViewBag.ReturnUrl'
+				returnUrl: '@ViewBag.ReturnUrl',
+				pendingRequest: '@ViewBag.PendingRequest'
 			};
 			authentication = new Teleopti.SSO.Authentication.Init();
 		});

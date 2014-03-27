@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			request.Stub(x => x.AcceptTypes).Return(new[] { "application/xrds+xml" });
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
-			var target = new OpenIdController(null, null, null);
+			var target = new OpenIdController(null, null, null, null);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.Identifier();
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
-			var target = new OpenIdController(null, null, null);
+			var target = new OpenIdController(null, null, null, null);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.Identifier();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnAskUserView()
 		{
-			var target = new OpenIdController(null, null, null);
+			var target = new OpenIdController(null, null, null, null);
 
 			var result = target.AskUser();
 
