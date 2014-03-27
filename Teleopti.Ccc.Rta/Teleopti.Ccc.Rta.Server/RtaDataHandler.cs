@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Rta.Server
 				if (agentState == null)
 					return;
 
-				_databaseWriter.AddOrUpdate(new[] { agentState });
+				_databaseWriter.AddOrUpdate(agentState);
 				sendRtaState(agentState);
 			}
 			catch (SocketException exception)
@@ -140,13 +140,13 @@ namespace Teleopti.Ccc.Rta.Server
 					LoggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
 
 					var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
-																   personWithBusinessUnit.BusinessUnitId,
-																   platformTypeId,
-																   stateCode,
-																   timestamp,
-																   timeInState,
-																   batch,
-																   sourceId);
+						personWithBusinessUnit.BusinessUnitId,
+						platformTypeId,
+						stateCode,
+						timestamp,
+						timeInState,
+						batch,
+						sourceId);
 					if (agentState == null)
 					{
 						LoggingSvc.WarnFormat(
@@ -155,8 +155,9 @@ namespace Teleopti.Ccc.Rta.Server
 							timeInState, batchId, sourceId);
 						continue;
 					}
-					LoggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode, agentState);
-					_databaseWriter.AddOrUpdate(new[] { agentState });
+					LoggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode,
+						agentState);
+					_databaseWriter.AddOrUpdate(agentState);
 					if (agentState.SendOverMessageBroker)
 						sendRtaState(agentState);
 				}
@@ -172,7 +173,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents.Where(agent => agent != null))
 			{
-				_databaseWriter.AddOrUpdate(new[] { agent });
+				_databaseWriter.AddOrUpdate(agent);
 				sendRtaState(agent);
 			}
 		}
