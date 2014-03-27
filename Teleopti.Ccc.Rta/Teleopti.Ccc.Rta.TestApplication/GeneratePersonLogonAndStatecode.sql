@@ -1,24 +1,24 @@
---===EDIT===
---Note: youn need to run this script in "SQLCMD"-mode. see "Query"-menu
-
--- your app db
-USE EDIT_YOUR_CCC7_DB
-
---your analytics db
-:setvar EDIT_YOUR_ANALYTICS_DB
-
---4) team.Id
---set this values to match the team_code (aka team.Id) you would like to send RTA events to
 declare @SourceId int
 declare @DataSourceId int
 declare @BusinessUnit uniqueidentifier
 declare @teamIdSet nvarchar(max)
 declare @siteIdSet nvarchar(max)
 
-set @teamIdSet = '0A1CDB27-BC01-4BB9-B0B3-9B5E015AB495' 
-set @siteIdSet = 'D970A45A-90FF-4111-BFE1-9B5E015AB45C'
 
---get the chosen team(s)
+--=============EDIT=============
+--Note: you need to run this script in "SQLCMD"-mode. see "Query"-menu
+
+-- your app db
+USE EDIT_YOUR_CCC7_DB
+
+--your analytics db
+:setvar analytics EDIT_YOUR_ANALYTICS_DB
+
+--site and team ids as comma seperated strings
+set @teamIdSet = '0A1CDB27-BC01-4BB9-B0B3-9B5E015AB495,143E088C-B6F4-453C-9656-A0A200DA099A'
+set @siteIdSet = 'D970A45A-90FF-4111-BFE1-9B5E015AB45C,E8428339-BBF1-456B-8DE7-BB2208D93073,7BB69C40-AAE8-4E82-BA3D-449284F56ED6'
+--==============================
+
 IF OBJECT_ID('tempdb.dbo.#teams') IS NOT NULL DROP TABLE #teams
 CREATE TABLE #teams (id uniqueidentifier)
 
@@ -30,8 +30,6 @@ INSERT #teams
 
 INSERT #sites
 	SELECT * FROM mart.SplitStringString(@siteIdSet)
-
---==========
 --show all available teams
 select bu.Name 'BusinessUnit',s.Name 'Site', s.Id 'Site Id', t.Name 'Team',t.Id as 'Team Id',count(p.Id) 'number of agents'
 from BusinessUnit bu
