@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Rta.Server
 	    private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IDatabaseReader));
 
 		public DatabaseReader(IDatabaseConnectionFactory databaseConnectionFactory,
-													IDatabaseConnectionStringHandler databaseConnectionStringHandler)
+													IDatabaseConnectionStringHandler databaseConnectionStringHandler,
 		    INow now)
 		{
 			_databaseConnectionFactory = databaseConnectionFactory;

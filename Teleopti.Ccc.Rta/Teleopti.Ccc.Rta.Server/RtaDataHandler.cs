@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Rta.Server
 			IDataSourceResolver dataSourceResolver,
 			IPersonResolver personResolver,
 			IActualAgentAssembler agentAssembler,
-													IDatabaseWriter databaseWriter)
+													IDatabaseWriter databaseWriter,
 			IEnumerable<IActualAgentStateHasBeenSent> afterSends)
 		{
 			_asyncMessageSender = asyncMessageSender;
