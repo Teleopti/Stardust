@@ -111,10 +111,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			IPerson per = PersonFactory.CreatePerson("for test");
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IActivity activity = new Activity("Training");
-			activity.GroupingActivity = new GroupingActivity("group training");
 			new Repository(UnitOfWork).Add(per);
 			new Repository(UnitOfWork).Add(scenario);
-			new Repository(UnitOfWork).Add(activity.GroupingActivity);
 			new Repository(UnitOfWork).Add(activity);
 			UnitOfWork.PersistAll();
 
@@ -159,7 +157,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			}
 
 			//cleanup
-			new Repository(UnitOfWork).Remove(activity.GroupingActivity);
 			new Repository(UnitOfWork).Remove(activity);
 			new Repository(UnitOfWork).Remove(per);
 			new Repository(UnitOfWork).Remove(scenario);

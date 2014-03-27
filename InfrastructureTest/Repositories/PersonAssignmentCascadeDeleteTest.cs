@@ -71,10 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		protected override void SetupForRepositoryTest()
 		{
 			var dummyCat = ShiftCategoryFactory.CreateShiftCategory("dummyCat");
-			var groupAct = new GroupingActivity("f");
-			PersistAndRemoveFromUnitOfWork(groupAct);
 			var dummyActivity = new Activity("dummy") { DisplayColor = Color.DodgerBlue };
-			dummyActivity.GroupingActivity = groupAct;
 			PersistAndRemoveFromUnitOfWork(dummyActivity);
 			var dummyAgent = PersonFactory.CreatePerson("m");
 			var dummyScenario = ScenarioFactory.CreateScenarioAggregate("Default", false);

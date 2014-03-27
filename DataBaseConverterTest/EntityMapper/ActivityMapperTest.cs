@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
         [SetUp]
         public void Setup()
         {
-            _target = new ActivityMapper(new MappedObjectPair(), new GroupingActivity("test"));
+            _target = new ActivityMapper(new MappedObjectPair());
         }
 
 

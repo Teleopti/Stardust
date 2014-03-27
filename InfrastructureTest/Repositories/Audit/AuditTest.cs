@@ -99,7 +99,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				session.CreateQuery(@"update Scenario p set p.IsDeleted = 1").ExecuteUpdate();
 				session.CreateQuery(@"update ShiftCategory p set p.IsDeleted = 1").ExecuteUpdate();
 				session.CreateQuery(@"update Activity p set p.IsDeleted = 1").ExecuteUpdate();
-				session.CreateQuery(@"update GroupingActivity p set p.IsDeleted = 1").ExecuteUpdate();
 				session.CreateQuery(@"update Absence p set p.IsDeleted = 1").ExecuteUpdate();
 				session.CreateQuery(@"update DayOffTemplate p set p.IsDeleted = 1").ExecuteUpdate();
 				session.CreateQuery(@"update MultiplicatorDefinitionSet p set p.IsDeleted = 1").ExecuteUpdate();

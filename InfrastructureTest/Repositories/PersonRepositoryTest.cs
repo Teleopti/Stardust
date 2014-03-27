@@ -322,11 +322,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 
 			//  CreateProjection Activity with GroupActivity
-			IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
-			PersistAndRemoveFromUnitOfWork(groupActivity);
 
 			IActivity activity = new Activity("dummy activity");
-			activity.GroupingActivity = groupActivity;
 			PersistAndRemoveFromUnitOfWork(activity);
 					
 			// CreateProjection Skill Type
@@ -377,10 +374,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldThrowIfTwoPeriodsWithSameSkill()
 		{
-			var groupActivity = new GroupingActivity("dummy group activity");
-			PersistAndRemoveFromUnitOfWork(groupActivity);
 			var activity = new Activity("dummy activity");
-			activity.GroupingActivity = groupActivity;
 			PersistAndRemoveFromUnitOfWork(activity);
 
 			var skill = SkillFactory.CreateSkill("dummy skill");
@@ -424,11 +418,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 
 			//  CreateProjection Activity with GroupActivity
-			IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
-			PersistAndRemoveFromUnitOfWork(groupActivity);
 
 			IActivity activity = new Activity("dummy activity");
-			activity.GroupingActivity = groupActivity;
 			PersistAndRemoveFromUnitOfWork(activity);
 					
 			// CreateProjection Skill Type
@@ -784,9 +775,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(scenOk);
 			PersistAndRemoveFromUnitOfWork(scenNo);
 
-			IGroupingActivity gAct = new GroupingActivity("sdf");
-			PersistAndRemoveFromUnitOfWork(gAct);
-			IActivity act = new Activity("sdf") { GroupingActivity = gAct };
+			IActivity act = new Activity("sdf");
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
@@ -819,10 +808,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IScenario scen = ScenarioFactory.CreateScenarioAggregate();
 			PersistAndRemoveFromUnitOfWork(scen);
-			IGroupingActivity gAct = new GroupingActivity("sdf");
-			PersistAndRemoveFromUnitOfWork(gAct);
 			IActivity act = new Activity("sdf");
-			act.GroupingActivity = gAct;
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
@@ -899,10 +885,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IScenario scen = ScenarioFactory.CreateScenarioAggregate();
 			PersistAndRemoveFromUnitOfWork(scen);
-			IGroupingActivity gAct = new GroupingActivity("sdf");
-			PersistAndRemoveFromUnitOfWork(gAct);
 			IActivity act = new Activity("sdf");
-			act.GroupingActivity = gAct;
 			PersistAndRemoveFromUnitOfWork(act);
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			PersistAndRemoveFromUnitOfWork(skType);
@@ -1023,8 +1006,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			ITeam team = TeamFactory.CreateSimpleTeam("hola");
 			ISite site = SiteFactory.CreateSimpleSite();
 			site.AddTeam(team);
-			IGroupingActivity groupActivity = new GroupingActivity("dummy group activity");
-			PersistAndRemoveFromUnitOfWork(groupActivity);
 			IActivity act = new Activity("for test");
 			ISkillType skType = SkillTypeFactory.CreateSkillType();
 			ISkill skill = new Skill("for test", "sdf", Color.Blue, 3, skType);
@@ -1058,8 +1039,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			noPerson2.AddPersonPeriod(noPeriod2);
 
-			PersistAndRemoveFromUnitOfWork(groupActivity);
-			act.GroupingActivity = groupActivity;
 			PersistAndRemoveFromUnitOfWork(sCategory);
 			PersistAndRemoveFromUnitOfWork(act);
 			PersistAndRemoveFromUnitOfWork(skType);
@@ -1219,10 +1198,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private IRuleSetBag createBag()
 		{
-			IGroupingActivity groupingActivity = new GroupingActivity("asdf");
-			PersistAndRemoveFromUnitOfWork(groupingActivity);
 			IActivity dummyActivity = new Activity("dummy");
-			dummyActivity.GroupingActivity = groupingActivity;
 			PersistAndRemoveFromUnitOfWork(dummyActivity);
 			IShiftCategory shiftCat = ShiftCategoryFactory.CreateShiftCategory("dummy");
 			PersistAndRemoveFromUnitOfWork(shiftCat);
@@ -1538,10 +1514,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			//add pers ass
 			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			scenario.DefaultScenario = true;
-			IGroupingActivity groupingActivity = new GroupingActivity("asdf");
-			PersistAndRemoveFromUnitOfWork(groupingActivity);
 			IActivity act = new Activity("df");
-			act.GroupingActivity = groupingActivity;
 			PersistAndRemoveFromUnitOfWork(scenario);
 			PersistAndRemoveFromUnitOfWork(act);
 			IPersonAssignment ass = PersonAssignmentFactory.CreateAssignmentWithPersonalShift(act, 

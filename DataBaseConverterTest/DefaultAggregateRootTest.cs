@@ -42,21 +42,6 @@ namespace Teleopti.Ccc.DatabaseConverterTest
             Assert.AreSame(bu, target.BusinessUnit);
         }
 
-        /// <summary>
-        /// Verifies the grouping activity property.
-        /// </summary>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2007-10-22
-        /// </remarks>
-        [Test]
-        public void VerifyGroupingActivityProperty()
-        {
-            GroupingActivity ga = GroupingActivityFactory.CreateSimpleGroupingActivity("hej");
-            target.GroupingActivity = ga;
-            Assert.AreSame(ga, target.GroupingActivity);
-        }
-
         [Test]
         public void VerifyApplicationRoleProperty()
         {

@@ -381,7 +381,6 @@
     <Compile Include="Repositories\WebReportRepositoryTest.cs" />
     <Compile Include="Repositories\WorkflowControlSetRepositoryTest.cs" />
     <Compile Include="Repositories\WorkloadRepositoryTest.cs" />
-    <Compile Include="Repositories\GroupingActivityRepositoryTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZoneTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterTest.cs" />

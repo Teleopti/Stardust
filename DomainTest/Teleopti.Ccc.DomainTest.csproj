@@ -914,7 +914,6 @@
     <Compile Include="Common\WorkTimeTest.cs" />
     <Compile Include="Common\BusinessUnitTest.cs" />
     <Compile Include="Common\ContractTest.cs" />
-    <Compile Include="Common\GroupingActivityTest.cs" />
     <Compile Include="Common\EntityTest.cs" />
     <Compile Include="Common\LayerTest.cs" />
     <Compile Include="Common\NameTest.cs" />
