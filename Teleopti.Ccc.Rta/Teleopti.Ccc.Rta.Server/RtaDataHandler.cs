@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Rta.Server.Repeater;
 using Teleopti.Ccc.Rta.Server.Resolvers;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
-		private readonly IList<MessageRepeater> _messageRepeaterTempFor390Only = new List<MessageRepeater>();
+		private readonly List<MessageRepeater> _messageRepeaterTempFor390Only = new List<MessageRepeater>();
 
 		public RtaDataHandler(IMessageSender asyncMessageSender,
 		                      IDataSourceResolver dataSourceResolver,
