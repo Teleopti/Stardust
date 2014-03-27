@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net.Sockets;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Rta.Server.Repeater;
 using Teleopti.Ccc.Rta.Server.Resolvers;
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
-		private readonly MessageRepeater _messageRepeaterTempFor390Only;
+		private readonly IList<MessageRepeater> _messageRepeaterTempFor390Only = new List<MessageRepeater>();
 
 		public RtaDataHandler(IMessageSender asyncMessageSender,
 		                      IDataSourceResolver dataSourceResolver,
@@ -33,8 +34,18 @@ namespace Teleopti.Ccc.Rta.Server
 		                      IActualAgentStateCache stateCache)
 		{
 			//hack - fix nicer when merged to default
-			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[MinuteTrigger.RepeatIntervalKey]))
-				_messageRepeaterTempFor390Only = new MessageRepeater(asyncMessageSender, new MinuteTrigger(new ConfigReader()), new CreateNotification());
+			int repeatInterval;
+			if (int.TryParse(ConfigurationManager.AppSettings[MinuteTrigger.RepeatIntervalKey], out repeatInterval))
+			{
+				int numberOfRepeaters;
+				if(!int.TryParse(ConfigurationManager.AppSettings[MinuteTrigger.RepeatNumberOfTimes], out numberOfRepeaters))
+					numberOfRepeaters = 1;
+				for (var i = 0; i < numberOfRepeaters; i++)
+				{
+					_messageRepeaterTempFor390Only.Add(new MessageRepeater(asyncMessageSender, new MinuteTrigger(new ConfigReader()),
+						new CreateNotification()));
+				}
+			}
 
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
@@ -179,7 +190,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 				//hack - remove when merged to default
 				if(_messageRepeaterTempFor390Only!=null)
-					_messageRepeaterTempFor390Only.Invoke(agentState);
+					_messageRepeaterTempFor390Only.ForEach(x => x.Invoke(agentState));
 			}
 			catch (Exception exception)
 			{

@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Rta.Server.Repeater
 	{
 		private readonly IConfigReader _configReader;
 		public const string RepeatIntervalKey = "RepeatIntervalMinutes";
+		public const string RepeatNumberOfTimes = "RepeatNumberOfTimes";
 
 		public MinuteTrigger(IConfigReader configReader)
 		{
