@@ -19,9 +19,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public IEnumerable<IBusinessRuleResponse> CopySchedulePartsToAnotherDictionary(IScheduleDictionary destination, IEnumerable<IScheduleDay> sourceParts)
 		{
-			var ruleBreaks = new List<IBusinessRuleResponse>();
+			var rangeClones = new Dictionary<IPerson, IScheduleRange>();
+			var persList = new HashSet<IPerson>();
+			IList<IScheduleDay> sourceDataList = new List<IScheduleDay>();
+
 			foreach (var sourcePart in sourceParts)
 			{
+				persList.Add(sourcePart.Person);
 				var destinationDay = destination[sourcePart.Person].ScheduledDay(sourcePart.DateOnlyAsPeriod.DateOnly);
 				var currentDestinationAss = destinationDay.PersonAssignment(true);
 
@@ -47,30 +51,28 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					destinationDay.Add(clonedWithNewParameters);
 				}
 
+
 				//put back absence outside current day
 				foreach (var clonedWithNewParameters in absencesNextDay.Select(dataInDestination => dataInDestination.CloneAndChangeParameters(destinationDay)))
 				{
 					destinationDay.Add(clonedWithNewParameters);
 				}
 
-				ruleBreaks.AddRange(modifyDestination(destination, destinationDay));
+				sourceDataList.Add(destinationDay);
+				destination.Modify(ScheduleModifier.ScenarioExport, destinationDay, NewBusinessRuleCollection.Minimum(), _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
 			}
-			return ruleBreaks;
+
+			foreach (var person in persList)
+			{
+				rangeClones.Add(person, (IScheduleRange)destination[person].Clone());
+			}
+
+			return _newBusinessRules.CheckRules(rangeClones, sourceDataList);
 		}
 
 		private static bool isAbsenceInsideScheduleDay(IPersistableScheduleData dataInDestination, IScheduleDay scheduleDay)
 		{
 			return dataInDestination is IPersonAbsence && !dataInDestination.Period.Intersect(scheduleDay.Period);
-		}
-
-		private IEnumerable<IBusinessRuleResponse> modifyDestination(IScheduleDictionary destination, IScheduleDay sourceData)
-		{
-			var ruleBreaks = destination.Modify(ScheduleModifier.ScenarioExport, sourceData, _newBusinessRules, _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-			if (ruleBreaks.Any())
-			{
-				destination.Modify(ScheduleModifier.ScenarioExport, sourceData, NewBusinessRuleCollection.Minimum(), _scheduleDayChangeCallback, new ScheduleTagSetter(NullScheduleTag.Instance));
-			}
-			return ruleBreaks;
 		}
 	}
 }
