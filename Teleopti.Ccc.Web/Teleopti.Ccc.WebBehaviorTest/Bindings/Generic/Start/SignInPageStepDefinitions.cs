@@ -130,22 +130,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{
 			Browser.Interactions.AssertExists("#Username-input");
-			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MyTime");
-			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MobileReports");
-		}
-
-		[Then(@"I should see MyTime's sign in page")]
-		public void ThenIShouldSeeMyTimesSignInPage()
-		{
-			Browser.Interactions.AssertExists("#Username-input");
-			Browser.Interactions.AssertUrlContains("/MyTime/Authentication");
-		}
-
-		[Then(@"I should see Mobile Report's sign in page")]
-		public void ThenIShouldSeeMobileReportsSignInPage()
-		{
-			Browser.Interactions.AssertExists("#Username-input");
-			Browser.Interactions.AssertUrlContains("/MobileReports/Authentication");
+			Browser.Interactions.AssertUrlContains("/SSO/OpenId/Provider");
 		}
 
 		[Then(@"I should see the global menu")]
