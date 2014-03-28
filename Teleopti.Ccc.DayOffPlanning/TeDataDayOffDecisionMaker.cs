@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanning
+namespace Teleopti.Ccc.Domain.Secret
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Te")]
 	public class TeDataDayOffDecisionMaker : IDayOffDecisionMaker

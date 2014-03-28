@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.Domain.Secret.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
+namespace Teleopti.Ccc.Domain.SecretTest.Scheduling
 {
     [TestFixture]
     public class PossibleMinMaxWorkShiftLengthExtractorTest

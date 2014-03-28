@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization

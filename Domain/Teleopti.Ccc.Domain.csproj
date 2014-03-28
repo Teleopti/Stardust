@@ -1613,9 +1613,9 @@
     <EmbeddedResource Include="Kpi\Scorecard.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj">
+    <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.Domain.Secret.csproj">
       <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
-      <Name>Teleopti.Ccc.DayOffPlanning</Name>
+      <Name>Teleopti.Ccc.Domain.Secret</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
       <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>

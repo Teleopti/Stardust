@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanning
+namespace Teleopti.Ccc.Domain.Secret
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CMSB")]
 	public class CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker : IDayOffDecisionMaker

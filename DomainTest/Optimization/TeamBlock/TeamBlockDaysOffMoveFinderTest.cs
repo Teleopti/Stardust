@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 

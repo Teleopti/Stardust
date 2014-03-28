@@ -1,13 +1,11 @@
-using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanningTest
+namespace Teleopti.Ccc.Domain.SecretTest
 {
     [TestFixture]
     public class DayOffOptimizationWeekendLegalStateValidatorListCreatorTest

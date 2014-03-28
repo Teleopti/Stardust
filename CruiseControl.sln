@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
 		CodeAnalysisDictionary.xml = CodeAnalysisDictionary.xml
@@ -135,9 +137,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus
 		{E65D42D5-246C-45A3-B62E-442203E2A84D} = {E65D42D5-246C-45A3-B62E-442203E2A84D}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DayOffPlanningTest", "Teleopti.Ccc.DayOffPlanningTest\Teleopti.Ccc.DayOffPlanningTest.csproj", "{8CA6DF87-B017-4180-A8E4-A80C16D954F1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Domain.SecretTest", "Teleopti.Ccc.DayOffPlanningTest\Teleopti.Ccc.Domain.SecretTest.csproj", "{8CA6DF87-B017-4180-A8E4-A80C16D954F1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DayOffPlanning", "Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj", "{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Domain.Secret", "Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.Domain.Secret.csproj", "{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus.Host", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\Teleopti.Ccc.Sdk.ServiceBus.Host.csproj", "{B37A5C3F-C1EE-4BCF-AF07-767E52E7C34D}"
 	ProjectSection(ProjectDependencies) = postProject

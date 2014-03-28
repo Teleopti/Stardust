@@ -2,7 +2,7 @@
 using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanning
+namespace Teleopti.Ccc.Domain.Secret
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Tui")]
     public class TuiCaseSolver : IDayOffBackToLegalStateSolver

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
