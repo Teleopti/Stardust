@@ -136,6 +136,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
         self.requestedDate = ko.computed({
         	read: function () {
+        		//remove old layer's tooltip if it still exist
+        		$("[class='tooltip fade top in']").remove();
+        		
                 return self.requestedDateInternal();
             },
             write: function (value) {
@@ -456,8 +459,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function loadAPageIfRequired() {
 
 	    if ($('#Request-add-shift-trade').filter(':visible').length == 0)
-	        return;
-	    
+	    	return;
+		
 	    $('#tooltipContainer').each(function (i, el) {
 			// Is this element visible onscreen?
 			// LoadMore
