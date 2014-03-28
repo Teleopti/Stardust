@@ -1,4 +1,6 @@
 using Autofac;
+using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
@@ -27,8 +29,6 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Specification;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
-using Teleopti.Ccc.Domain.Secret;
-using Teleopti.Ccc.Domain.Secret.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Win.Commands;

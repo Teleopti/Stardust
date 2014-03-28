@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
     /// <summary>
     /// Moves the whole week-end to all possible possible places without loosing legal state

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
     public class FreeWeekendValidator : IDayOffLegalStateValidator
     {

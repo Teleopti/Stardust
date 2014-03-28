@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret.Scheduling
+namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 {
 
     public class ShiftCategoryFairnessShiftValueCalculator : IShiftCategoryFairnessShiftValueCalculator

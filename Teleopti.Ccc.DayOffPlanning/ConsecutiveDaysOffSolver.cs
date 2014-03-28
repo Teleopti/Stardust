@@ -1,7 +1,7 @@
 using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
     public class ConsecutiveDaysOffSolver : IDayOffBackToLegalStateSolver
     {

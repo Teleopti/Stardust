@@ -2,7 +2,7 @@
 using System.Drawing;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CMSB")]
 	public class CMSBCaseSolver : IDayOffBackToLegalStateSolver

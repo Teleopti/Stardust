@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
     /// <summary>
     /// Moves one day off to the best possible place without loosing legal state according to the provided validators

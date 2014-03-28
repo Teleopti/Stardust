@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.SecretTest
+namespace Teleopti.Ccc.DayOffPlanningTest
 {
     [TestFixture]
     public class MoveWeekendDayOffDecisionMakerTest

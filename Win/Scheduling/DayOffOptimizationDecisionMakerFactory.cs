@@ -1,9 +1,9 @@
 ﻿
 
 using System.Collections.Generic;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 

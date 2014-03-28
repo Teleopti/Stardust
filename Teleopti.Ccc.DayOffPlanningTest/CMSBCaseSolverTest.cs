@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.SecretTest
+namespace Teleopti.Ccc.DayOffPlanningTest
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "CMSB"), TestFixture]
 	public class CMSBCaseSolverTest

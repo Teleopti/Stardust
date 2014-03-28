@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.SecretTest
+namespace Teleopti.Ccc.DayOffPlanningTest
 {
     [TestFixture]
     public class MatrixRestrictionLockerTest

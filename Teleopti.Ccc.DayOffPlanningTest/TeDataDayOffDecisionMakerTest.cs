@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Secret;
+using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.SecretTest
+namespace Teleopti.Ccc.DayOffPlanningTest
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Te"), TestFixture]
 	public class TeDataDayOffDecisionMakerTest

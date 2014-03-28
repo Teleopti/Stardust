@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
    
     public class LockableBitArray : ILockableBitArray

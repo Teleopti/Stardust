@@ -2,7 +2,7 @@
 using System.Collections;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
     public class ConsecutiveWorkdayValidator : IDayOffLegalStateValidator
     {

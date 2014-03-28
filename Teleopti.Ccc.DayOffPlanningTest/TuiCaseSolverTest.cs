@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Secret;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.SecretTest
+namespace Teleopti.Ccc.DayOffPlanningTest
 {
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Tui"), TestFixture]
     public class TuiCaseSolverTest

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Secret;
+using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.SecretTest
+namespace Teleopti.Ccc.DayOffPlanningTest
 {
     [TestFixture]
     public class ConsecutiveDayOffValidatorTest

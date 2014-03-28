@@ -2,9 +2,9 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Secret;
+using Teleopti.Ccc.DayOffPlanning;
 
-namespace Teleopti.Ccc.Domain.SecretTest
+namespace Teleopti.Ccc.DayOffPlanningTest
 {
     [TestFixture]
     public class WorkShiftLegalStateDayIndexCalculatorTest

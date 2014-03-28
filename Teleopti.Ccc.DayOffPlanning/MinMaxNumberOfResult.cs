@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.Secret
+namespace Teleopti.Ccc.DayOffPlanning
 {
     public enum MinMaxNumberOfResult
     {
