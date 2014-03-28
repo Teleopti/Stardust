@@ -173,8 +173,6 @@ Teleopti.MyTimeWeb.Password = (function ($) {
             var passwordButton = $("#passwordButton");
             var pw = $("input#password[type=password]").val();
             var pw2 = $("input#passwordValidation[type=password]").val();
-            console.log("pw: ", pw);
-	        console.log("pw2: ", pw2);
             if (pw != pw2) {
                 alertPassword.show();
                 incorrectLabel.show();
