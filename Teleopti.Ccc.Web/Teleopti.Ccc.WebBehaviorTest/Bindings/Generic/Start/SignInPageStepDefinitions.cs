@@ -209,23 +209,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#Password-change-error", resourceText);
 		}
 
-		private const string DefaultIdentityProviders = "<add key=\"IdentityProviders\" value=\"urn:Windows|urn:Teleopti\" />";
-		private const string ApplicationOnlyIdentityProviders = "<add key=\"IdentityProviders\" value=\"urn:Teleopti\" />";
+		private const string DefaultIdentityProviders = "<add key=\"IdentityProviders\" value=\"urn:Teleopti\" />";
+		private const string WindowsAndApplicationIdentityProviders = "<add key=\"IdentityProviders\" value=\"urn:Windows|urn:Teleopti\" />";
 
-		[BeforeScenario("ApplicationLogOnOnly")]
-		public void BeforeApplicationLogOnOnly()
+		[BeforeScenario("WindowsAndApplicationLogon")]
+		public void BeforeWindowsAndApplicationLogon()
 		{
 			var configPath = Path.Combine(Paths.WebPath(), "web.config");
 			var content = File.ReadAllText(configPath);
-			File.WriteAllText(configPath, content.Replace(DefaultIdentityProviders, ApplicationOnlyIdentityProviders));
+			File.WriteAllText(configPath, content.Replace(DefaultIdentityProviders, WindowsAndApplicationIdentityProviders));
 		}
 
-		[AfterScenario("ApplicationLogOnOnly")]
-		public void AfterApplicationLogOnOnly()
+		[AfterScenario("WindowsAndApplicationLogon")]
+		public void AfterWindowsAndApplicationLogon()
 		{
 			var configPath = Path.Combine(Paths.WebPath(), "web.config");
 			var content = File.ReadAllText(configPath);
-			File.WriteAllText(configPath, content.Replace(ApplicationOnlyIdentityProviders, DefaultIdentityProviders));
+			File.WriteAllText(configPath, content.Replace(WindowsAndApplicationIdentityProviders, DefaultIdentityProviders));
 		}
 	}
 }

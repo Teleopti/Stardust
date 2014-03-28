@@ -58,6 +58,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
 			_logon.LogOn(dataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
+			if (result.Successful)
+			{
+				_formsAuthentication.SetAuthCookie(userName + "§" + dataSourceName);
+			}
+
 			var viewModel = new TestMessageViewModel
 			                	{
 			                		Title = "Quick logon",

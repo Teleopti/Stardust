@@ -21,6 +21,7 @@ Background:
 	| Business Unit        | Business Unit 2          |
 	| Access to mytime web | true                     |
 
+@WindowsAndApplicationLogon
 Scenario: Sign in without being a windows user in CCC
 	Given I have the role 'Role for business unit 1'
 	And I am a user with
@@ -28,7 +29,7 @@ Scenario: Sign in without being a windows user in CCC
 	| Windows authentication | false |
 	When I go to mytime web
 	Then I should see a log on error 'NoDatasource'
-
+@WindowsAndApplicationLogon
 Scenario: Sign in as a windows user in CCC
 	Given I have the role 'Role for business unit 1'
 	And I am a user with
@@ -38,6 +39,7 @@ Scenario: Sign in as a windows user in CCC
 	Then I should be signed in
 
 @ExtraDataSource
+@WindowsAndApplicationLogon
 Scenario: Sign in as a windows user in CCC with multiple data sources
 	Given I have the role 'Role for business unit 1'
 	And I am a user with
@@ -47,7 +49,7 @@ Scenario: Sign in as a windows user in CCC with multiple data sources
 	And I select one data source
 	And I sign in by windows credentials
 	Then I should be signed in
-
+@WindowsAndApplicationLogon
 Scenario: Sign in as a windows user in CCC with multiple business units
 	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
@@ -57,7 +59,7 @@ Scenario: Sign in as a windows user in CCC with multiple business units
 	When I go to mytime web
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
-	
+@WindowsAndApplicationLogon
 @ExtraDataSource
 Scenario: Sign in as a windows user in CCC with multiple data sources and multiple business units
 	Given I have the role 'Role for business unit 1'
