@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
+using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
@@ -113,6 +115,20 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			ViewBag.SetTime = "hello";
 
 			return View("Message", viewModel);
+		}
+
+		[ValidateInput(false)]
+		public ActionResult HandleReturn()
+		{
+			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromNameValueCollection(WSFederationMessage.GetBaseUrl(ControllerContext.HttpContext.Request.Url), ControllerContext.HttpContext.Request.Form);
+			if (wsFederationMessage.Context != null)
+			{
+				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
+				string returnUrl = wctx["ru"];
+
+				return new RedirectResult(returnUrl);
+			}
+			return new EmptyResult();
 		}
 
 		private void updateIocNow(DateTime? dateTimeSet)

@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Core;
+using AuthorizationContext = System.Web.Mvc.AuthorizationContext;
 
 namespace Teleopti.Ccc.Web.Filters
 {
@@ -62,6 +65,24 @@ namespace Teleopti.Ccc.Web.Filters
 			if (filterContext.RequestContext.HttpContext.Request.IsAjaxRequest())
 			{
 				filterContext.Result = new HttpStatusCodeResult(403);
+				return;
+			}
+
+			if (filterContext.HttpContext.User.Identity is IClaimsIdentity &&
+			    filterContext.HttpContext.User.Identity.IsAuthenticated)
+			{
+				var targetArea = filterContext.RouteData.DataTokens["area"] ?? "Start";
+
+				filterContext.Result = new RedirectToRouteResult(
+					new RouteValueDictionary(
+						new
+							{
+								controller = "Authentication",
+								action = "",
+								area = targetArea
+							}
+						)
+					);
 				return;
 			}
 

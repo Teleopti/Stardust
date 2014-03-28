@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Specialized;
 using System.Web;
 using System.Web.Util;
 using Microsoft.IdentityModel.Protocols.WSFederation;
@@ -16,13 +17,11 @@ namespace Teleopti.Ccc.Web.Core
 			if (requestValidationSource == RequestValidationSource.Form &&
 			    collectionKey.Equals(WSFederationConstants.Parameters.Result, StringComparison.Ordinal))
 			{
-				SignInResponseMessage message =
-					WSFederationMessage.CreateFromFormPost(context.Request) as SignInResponseMessage;
-
-				if (message != null)
-				{
+				var baseUrl = WSFederationMessage.GetBaseUrl(context.Request.Url);
+				Func<NameValueCollection> formGetter, queryStringGetter;
+				Microsoft.Web.Infrastructure.DynamicValidationHelper.ValidationUtility.GetUnvalidatedCollections(context, out formGetter, out queryStringGetter);
+				if (WSFederationMessage.CreateFromNameValueCollection(baseUrl, formGetter()) is SignInResponseMessage)
 					return true;
-				}
 			}
 			return base.IsValidRequestString(context, value, requestValidationSource, collectionKey,
 			                                 out validationFailureIndex);

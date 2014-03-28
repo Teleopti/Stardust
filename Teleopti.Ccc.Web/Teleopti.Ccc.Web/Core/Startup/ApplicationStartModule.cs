@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 						}
 					};
 
-				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += new System.EventHandler(WSFederationAuthenticationModule_SignedIn);
+				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 			}
 			catch (Exception ex)
 			{
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			}
 		}
 
-		void WSFederationAuthenticationModule_SignedIn(object sender, System.EventArgs e)
+		void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
 		{
 			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromFormPost(HttpContext.Current.Request);
 			if (wsFederationMessage.Context != null)
