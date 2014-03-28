@@ -65,5 +65,18 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 			target.RetrieveToken().DataSource.Should().Be.EqualTo("Teleopti CCC");
 			target.RetrieveToken().OriginalToken.Should().Be.EqualTo("http://fakeschema.com/kunningm§Teleopti CCC");
 		}
+
+		[Test]
+		public void ShouldReturnNullIfNoNameIdentifier()
+		{
+			httpContext.User =
+				new ClaimsPrincipal(
+					new ClaimsIdentityCollection(new Collection<IClaimsIdentity>
+						{
+							new ClaimsIdentity(new[] {new Claim(ClaimTypes.Country, "http://fakeschema.com/kunningm#TOPTINET")})
+						}));
+
+			target.RetrieveToken().Should().Be.Null();
+		}
 	}
 }

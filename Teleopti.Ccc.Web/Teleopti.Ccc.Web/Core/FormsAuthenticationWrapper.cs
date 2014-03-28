@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
 using System.Web.Security;
+using Common.Logging;
 using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Web.Core
 {
 	public class FormsAuthenticationWrapper : IFormsAuthentication
 	{
+		private ILog _logger = LogManager.GetLogger<FormsAuthenticationWrapper>();
 		private readonly ICurrentHttpContext _httpContext;
 
 		public FormsAuthenticationWrapper(ICurrentHttpContext httpContext)
@@ -37,6 +39,7 @@ namespace Teleopti.Ccc.Web.Core
 					if (ticket != null && !ticket.Expired)
 					{
 						userName = ticket.Name;
+						_logger.DebugFormat("Found user {0}!",userName);
 						return true;
 					}
 				}
@@ -45,6 +48,7 @@ namespace Teleopti.Ccc.Web.Core
 				}
 			}
 
+			_logger.Debug("Didn't find user!");
 			userName = null;
 			return false;
 		}

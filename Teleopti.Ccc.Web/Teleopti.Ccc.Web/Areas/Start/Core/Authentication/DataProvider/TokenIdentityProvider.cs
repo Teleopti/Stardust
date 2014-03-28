@@ -32,8 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider
 			}
 
 			var nameClaim = currentIdentity.Claims.FirstOrDefault(x => x.ClaimType == ClaimTypes.NameIdentifier);
-			var nameClaimValue = Uri.UnescapeDataString(nameClaim.Value);
-			return getTokenIdentity(nameClaimValue);
+			if (nameClaim != null)
+			{
+				var nameClaimValue = Uri.UnescapeDataString(nameClaim.Value);
+				return getTokenIdentity(nameClaimValue);
+			}
+			return null;
 		}
 
 		private static TokenIdentity getTokenIdentity(string nameClaimValue)

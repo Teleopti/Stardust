@@ -372,7 +372,7 @@
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingShiftTradeRequest.cs" />
-    <Compile Include="MyTime\PasswordPolicy.feature.cs">
+    <Compile Include="PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -857,7 +857,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\PasswordPolicy.feature">
+    <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PasswordPolicy.feature.cs</LastGenOutput>
     </None>

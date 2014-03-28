@@ -143,9 +143,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 				$.extend(options, {
 					success: function (applicationsData, textState, jqXHR) {
-
 						var area;
-
 						var inApplication = ko.utils.arrayFirst(applicationsData, function (a) {
 							var url = "/" + a.Area + "/";
 							return window.location.href.indexOf(url) !== -1;

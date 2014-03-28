@@ -44,23 +44,28 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		{
 			_logger.Warn("Start of the OpenIdController.Provider()");
 			var request = _openIdProvider.GetRequest();
-
-			// handles request from site
-			if (request.IsResponseReady)
+			if (request != null)
 			{
-				return _openIdProvider.PrepareResponse(request).AsActionResult();
-			}
+				// handles request from site
+				if (request.IsResponseReady)
+				{
+					return _openIdProvider.PrepareResponse(request).AsActionResult();
+				}
 
-			// handles request from browser
-			if (!User.Identity.IsAuthenticated)
-			{
-				ViewBag.ReturnUrl = Url.Action("ProcessAuthRequest");
-				ViewBag.PendingRequest =
-					Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
-				return SignIn();
-			}
+				var pendingRequest = Convert.ToBase64String(SerializationHelper.SerializeAsBinary(request).ToCompressedByteArray());
+					
+				// handles request from browser
+				string userName;
+				if (!_formsAuthentication.TryGetCurrentUser(out userName))
+				{
+					ViewBag.ReturnUrl = Url.Action("ProcessAuthRequest");
+					ViewBag.PendingRequest = pendingRequest;
+					return SignIn();
+				}
 
-			return null;
+				return ProcessAuthRequest(pendingRequest);
+			}
+			return new EmptyResult();
 
 		}
 
