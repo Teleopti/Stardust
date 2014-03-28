@@ -53,41 +53,9 @@ CREATE TABLE #fact_schedule(
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
-	[activity_starttime] [smalldatetime] NOT NULL,
 	[scenario_id] [smallint] NOT NULL,
 	[activity_id] [int] NULL,
-	[absence_id] [int] NULL,
-	[activity_startdate_id] [int] NULL,
-	[activity_enddate_id] [int] NULL,
-	[activity_endtime] [smalldatetime] NULL,
-	[shift_startdate_id] [int] NULL,
-	[shift_starttime] [smalldatetime] NULL,
-	[shift_enddate_id] [int] NULL,
-	[shift_endtime] [smalldatetime] NULL,
-	[shift_startinterval_id] [smallint] NULL,
-	[shift_category_id] [int] NULL,
-	[shift_length_id] [int] NULL,
-	[scheduled_time_m] [int] NULL,
-	[scheduled_time_absence_m] [int] NULL,
-	[scheduled_time_activity_m] [int] NULL,
-	[scheduled_contract_time_m] [int] NULL,
-	[scheduled_contract_time_activity_m] [int] NULL,
-	[scheduled_contract_time_absence_m] [int] NULL,
-	[scheduled_work_time_m] [int] NULL,
-	[scheduled_work_time_activity_m] [int] NULL,
-	[scheduled_work_time_absence_m] [int] NULL,
-	[scheduled_over_time_m] [int] NULL,
-	[scheduled_ready_time_m] [int] NULL,
-	[scheduled_paid_time_m] [int] NULL,
-	[scheduled_paid_time_activity_m] [int] NULL,
-	[scheduled_paid_time_absence_m] [int] NULL,
-	[last_publish] [smalldatetime] NULL,
-	[business_unit_id] [int] NULL,
-	[datasource_id] [smallint] NULL,
-	[insert_date] [smalldatetime] NULL,
-	[update_date] [smalldatetime] NULL,
-	[datasource_update_date] [smalldatetime] NULL,
-	[overtime_id] [int] NOT NULL
+	[scheduled_time_m] [int] NULL
 ) 
 
 /* Check if time zone will be hidden (if only one exist then hide) */
@@ -112,7 +80,7 @@ SELECT * FROM SplitStringInt(@activity_set)
 
 
 INSERT INTO #fact_schedule
-SELECT *
+SELECT schedule_date_id, person_id, interval_id, scenario_id, activity_id, scheduled_time_m
 FROM mart.fact_schedule fs
 WHERE schedule_date_id IN (SELECT b.date_id FROM mart.bridge_time_zone b INNER JOIN mart.dim_date d ON b.local_date_id = d.date_id WHERE d.date_date =  @date_from AND b.time_zone_id=@time_zone_id)
 AND fs.scenario_id = @scenario_id

@@ -41,10 +41,6 @@
           <DataField>scheduled_paid_time_absence_m</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="shift_starttime">
-          <DataField>shift_starttime</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
         <Field Name="part_day_count">
           <DataField>part_day_count</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
