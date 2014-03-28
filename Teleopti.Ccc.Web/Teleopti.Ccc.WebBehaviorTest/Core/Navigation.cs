@@ -151,6 +151,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoPasswordPage()
 		{
+			GotoWeekSchedulePage();
 			GoToWaitForUrlAssert("MyTime#Settings/Password", "Settings/Password", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PasswordPage>());
 		}

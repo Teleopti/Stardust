@@ -74,6 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 					ModelState.AddModelError("Error", result.IsAuthenticationSuccessful ? Resources.PasswordPolicyWarning : Resources.InvalidUserNameOrPassword);
 					return ModelState.ToJson();
 				}
+				_formsAuthentication.SetAuthCookie(model.UserName + "§" + model.DataSourceName);
 				return Json(result);
 			}
 		}
