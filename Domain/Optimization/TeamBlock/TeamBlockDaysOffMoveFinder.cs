@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Secret;
+using Teleopti.Ccc.Domain.Secret.DayOffPlanning;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
