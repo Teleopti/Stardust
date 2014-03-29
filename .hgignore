@@ -5,6 +5,7 @@ syntax: glob
 
 *.obj
 *.exe
+*.dll
 *.pdb
 *.user
 *.aps
