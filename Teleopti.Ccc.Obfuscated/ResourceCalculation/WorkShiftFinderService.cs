@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 						highestShiftValue = workShiftCalculationResultHolder.Value;
 				}
 
-				if (Math.Abs(highestShiftValue - double.MinValue) < 0.000001)
+				if (Math.Abs(highestShiftValue - double.MinValue) < 0.00001)
 					return null;
 
 				if (highestShiftValue <= 0)

@@ -108,6 +108,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             IVisualLayerCollection layerCollectionFilteredByPeriodAndActivity = layerCollectionFilteredByPeriod.FilterLayers(_activity);
             if (!layerCollectionFilteredByPeriodAndActivity.HasLayers) return splittedValues;
 
+	        var retValues = new double[splittedValues.Length];
             for (int i = 0; i < splittedValues.Length; i++)
             {
                 var time = _period.StartDateTime.AddMinutes(i*_lengthToSplitOn);
@@ -117,11 +118,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                     DateTimePeriod? intersection = period.Intersection(layer.Period);
                     if (intersection.HasValue)
                     {
-                        splittedValues[i] += intersection.Value.ElapsedTime().TotalMinutes;
+                        retValues[i] = splittedValues[i] + intersection.Value.ElapsedTime().TotalMinutes;
                     }
                 }
             }
-            return splittedValues;
+			return retValues;
         }
 
         /// <summary>
