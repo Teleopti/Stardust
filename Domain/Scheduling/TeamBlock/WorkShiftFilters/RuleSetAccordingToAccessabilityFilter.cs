@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	    private IEnumerable<IWorkShiftRuleSet> filterForSkillActivity(IEnumerable<IWorkShiftRuleSet> filteredList, ITeamBlockInfo teamBlockInfo)
 	    {
 		    var retList = new List<IWorkShiftRuleSet>();
-		    var aggregatedSkills = _skillAggregator.AggregatedSkills(teamBlockInfo.TeamInfo.GroupPerson,
+		    var aggregatedSkills = _skillAggregator.AggregatedSkills(teamBlockInfo.TeamInfo.GroupMembers,
 				teamBlockInfo.BlockInfo.BlockPeriod).ToList();
 		    foreach (var workShiftRuleSet in filteredList)
 		    {
