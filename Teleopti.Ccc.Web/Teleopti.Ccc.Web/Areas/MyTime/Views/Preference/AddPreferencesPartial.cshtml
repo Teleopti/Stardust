@@ -114,38 +114,24 @@
                     <td>
                         <i class="icon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
-	                <td>
-						<div class="input-append">
-				            <input type="text" class="preference-extended-work-time-min form-control width85" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
-							<div class="btn-group">
-								<button class="btn dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
-								@foreach (var timeSpan in timeLengths)
-								{
-									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { MinimumWorkTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
-								}
-								</ul>
-							</div>
-						</div>
-	                </td>
+                    <td>
+                        <select class="preference-extended-work-time-min width131" data-bind="value: MinimumWorkTime" title="@Resources.MinWorkTime">
+                            <option value=""></option>
+                            @foreach (var timeSpan in timeLengths)
+                            {
+                                <option value="@timeSpan.Value">@timeSpan.Text</option>
+                            }
+                        </select>
+                    </td>
                     <td></td>
                     <td>
-						<div class="input-append">
-				            <input type="text" class="preference-extended-work-time-max form-control width85" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
-							<div class="btn-group">
-								<button class="btn dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
-								@foreach (var timeSpan in timeLengths)
-								{
-									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { MaximumWorkTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
-								}
-								</ul>
-							</div>
-						</div>
+                        <select class="preference-extended-work-time-max width131" data-bind="value: MaximumWorkTime" title="@Resources.MaxWorkTime">
+                            <option value=""></option>
+                            @foreach (var timeSpan in timeLengths)
+                            {
+                                <option value="@timeSpan.Value">@timeSpan.Text</option>
+                            }
+                        </select>
                     </td>
                     <td></td>
                 </tr>
@@ -213,36 +199,22 @@
                         <i class="icon-resize-horizontal" title="@Resources.WorkTime"></i>
                     </td>
                     <td>
-						<div class="input-append">
-				            <input type="text" class="preference-activity-extended-work-time-min form-control width85" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
-							<div class="btn-group">
-								<button class="btn dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
-								@foreach (var timeSpan in timeLengths)
-								{
-									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { ActivityMinimumTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
-								}
-								</ul>
-							</div>
-						</div>
+                        <select class="preference-activity-extended-work-time-min width131" data-bind="value: ActivityMinimumTime" title="@Resources.MinWorkTime">
+                            <option value="">&nbsp;</option>
+                            @foreach (var timeSpan in timeLengths)
+                            {
+                                <option value="@timeSpan.Value">@timeSpan.Text</option>
+                            }
+                        </select>
                     </td>
                     <td>
-						<div class="input-append">
-				            <input type="text" class="preference-activity-extended-work-time-max form-control width85" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
-							<div class="btn-group">
-								<button class="btn dropdown-toggle" data-toggle="dropdown">
-									<span class="caret"></span>
-								</button>
-								<ul class="dropdown-menu" style="max-height: 270px; overflow-y:scroll; ">
-								@foreach (var timeSpan in timeLengths)
-								{
-									<li class="ui-menu-item" role="presentation"><a href="#" class="ui-corner-all" data-bind="click: function (data, event) { ActivityMaximumTime('@timeSpan.Value'); }" tabindex="-1">@timeSpan.Text</a></li>
-								}
-								</ul>
-							</div>
-						</div>
+                        <select class="preference-activity-extended-work-time-max width131" data-bind="value: ActivityMaximumTime" title="@Resources.MaxWorkTime">
+                            <option value="">&nbsp;</option>
+                            @foreach (var timeSpan in timeLengths)
+                            {
+                                <option value="@timeSpan.Value">@timeSpan.Text</option>
+                            }
+                        </select>
                     </td>
                 </tr>
             </table>

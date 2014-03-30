@@ -219,9 +219,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			if (fields.EndTimeMaximumNextDay)
 				Browser.Interactions.Click(".preference-end-time-max-next-day");
 			if (fields.WorkTimeMinimum != null)
-				Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".preference-extended-work-time-min", fields.WorkTimeMinimum);
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-extended-work-time-min", fields.WorkTimeMinimum);
 			if (fields.WorkTimeMaximum != null)
-				Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".preference-extended-work-time-max", fields.WorkTimeMaximum);
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-extended-work-time-max", fields.WorkTimeMaximum);
 
 			if (fields.Activity != null)
 			{
@@ -238,9 +238,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			if (fields.ActivityEndTimeMaximum != null)
 				Browser.Interactions.Javascript(string.Format("$('.preference-activity-end-time-max').timepicker('setTime', '{0}');", fields.ActivityEndTimeMaximum));
 			if (fields.ActivityTimeMinimum != null)
-				Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".preference-activity-extended-work-time-min", fields.ActivityTimeMinimum);
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-activity-extended-work-time-min", fields.ActivityTimeMinimum);
 			if (fields.ActivityTimeMaximum != null)
-				Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".preference-activity-extended-work-time-max", fields.ActivityTimeMaximum);
+				Browser.Interactions.SelectOptionByTextUsingJQuery(".preference-activity-extended-work-time-max", fields.ActivityTimeMaximum);
 		}
 
 		[Then(@"I should not see the edit time fields")]
@@ -267,8 +267,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertExists(".preference-end-time-min-next-day:not(:enabled):not(.active)");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-end-time-max').val() === '';", "True");
 			Browser.Interactions.AssertExists(".preference-end-time-max-next-day:not(:enabled):not(.active)");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-extended-work-time-min').val() === '';", "True");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-extended-work-time-max').val() === '';", "True");
+			Browser.Interactions.AssertExists(".preference-extended-work-time-min option:checked[value='']");
+			Browser.Interactions.AssertExists(".preference-extended-work-time-max option:checked[value='']");
 
 			AssertExtendedActivityTimeFieldsAreReset();
 		}
@@ -325,8 +325,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-start-time-max').val() === '';", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-min').val() === '';", "True");
 			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-end-time-max').val() === '';", "True");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-extended-work-time-min').val() === '';", "True");
-			Browser.Interactions.AssertJavascriptResultContains("return $('.preference-activity-extended-work-time-max').val() === '';", "True");
+			Browser.Interactions.AssertExists(".preference-activity-extended-work-time-min option:checked[value='']");
+			Browser.Interactions.AssertExists(".preference-activity-extended-work-time-max option:checked[value='']");
 		}
 
 		[Then(@"I should see the activity minimum and maximum fields")]
