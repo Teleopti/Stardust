@@ -801,6 +801,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\NotOverWritableActivitiesShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\PersonalShiftsShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetAccordingToAccessabilityFilterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetSkillActivityCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\RuleSetToShiftsGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ShiftCategoryRestrictionShiftFilterTest.cs" />
