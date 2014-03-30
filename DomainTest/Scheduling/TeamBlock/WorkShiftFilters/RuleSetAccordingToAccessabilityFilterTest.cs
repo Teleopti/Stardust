@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
@@ -19,8 +20,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
         private ITeamBlockRuleSetBagExtractor _teamBlockRuleSetBagExtractor;
         private ITeamBlockInfo _teamBlockInfo;
         private IBlockInfo _blockInfo;
+	    private IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
+	    private IGroupPersonSkillAggregator _skillAggregator;
+	    private ITeamInfo _teamInfo;
+	    private IGroupPerson _groupPerson;
+	    private List<ISkill> _skillList;
+	    private ISkill _skill;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -28,9 +35,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             _teamBlockRuleSetBagExtractor = _mock.StrictMock<ITeamBlockRuleSetBagExtractor>();
             _teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
             _blockInfo = _mock.StrictMock<IBlockInfo>();
-            _target = new RuleSetAccordingToAccessabilityFilter(_teamBlockRuleSetBagExtractor, _teamBlockIncludedWorkShiftRuleFilter);
+	        _ruleSetSkillActivityChecker = _mock.StrictMock<IRuleSetSkillActivityChecker>();
+		    _skillAggregator = _mock.StrictMock<IGroupPersonSkillAggregator>();
+		    _target = new RuleSetAccordingToAccessabilityFilter(_teamBlockRuleSetBagExtractor,
+			    _teamBlockIncludedWorkShiftRuleFilter, _ruleSetSkillActivityChecker, _skillAggregator);
             _workShiftRuleSet1 = _mock.StrictMock<IWorkShiftRuleSet>();
             _ruleSetBag = _mock.StrictMock<IRuleSetBag>();
+		    _teamInfo = _mock.StrictMock<ITeamInfo>();
+		    _groupPerson = _mock.StrictMock<IGroupPerson>();
+		    _skill = SkillFactory.CreateSkill("skill");
+		    _skillList = new List<ISkill>{_skill};
 
         }
 
@@ -43,10 +57,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
             {
                 Expect.Call(_teamBlockRuleSetBagExtractor.GetRuleSetBag(_teamBlockInfo))
                       .Return(new List<IRuleSetBag> { _ruleSetBag });
-                Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-                Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
+                Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo).Repeat.Twice();
+                Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod).Repeat.Twice();
                 Expect.Call(_teamBlockIncludedWorkShiftRuleFilter.Filter(dateOnlyPeriod, new List<IRuleSetBag> { _ruleSetBag }))
                       .Return(new List<IWorkShiftRuleSet> { _workShiftRuleSet1 });
+	            Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+	            Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
+				Expect.Call(_skillAggregator.AggregatedSkills(_groupPerson, dateOnlyPeriod)).Return(_skillList);
+	            Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_workShiftRuleSet1, _skillList)).Return(true);
             }
             using (_mock.Playback())
             {
@@ -67,6 +85,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
                       .Return(new List<IRuleSetBag> { _ruleSetBag });
                 Expect.Call(_teamBlockIncludedWorkShiftRuleFilter.Filter(dateOnlyPeriod, new List<IRuleSetBag> { _ruleSetBag }))
                       .Return(new List<IWorkShiftRuleSet> { _workShiftRuleSet1 });
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
+	            Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
+	            Expect.Call(_blockInfo.BlockPeriod).Return(dateOnlyPeriod);
+				Expect.Call(_skillAggregator.AggregatedSkills(_groupPerson, dateOnlyPeriod)).Return(_skillList);
+				Expect.Call(_ruleSetSkillActivityChecker.CheckSkillActivities(_workShiftRuleSet1, _skillList)).Return(true);
             }
             using (_mock.Playback())
             {

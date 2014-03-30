@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					  .Return(false);
 				Expect.Call(_teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(_schedulingOptions)).Return(true).Repeat.Twice();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(()=>_teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(()=>_teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
