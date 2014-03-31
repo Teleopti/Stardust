@@ -134,6 +134,7 @@
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
     <Compile Include="Core\CurrentTime.cs" />
+    <Compile Include="Data\Setups\Configurable\AlertTimeSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="Data\Setups\Configurable\PersonAbsenceAccountConfigurable.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ScheduledAgentsForShiftTrade.cs" />
@@ -207,6 +208,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AsmActivityNotification.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\AsmActivityNotificationStepDefinition.cs" />
     <Compile Include="MyTime\MonthlyScheduleStepDefinitions.cs" />
     <Compile Include="MyTime\MonthSchedule.feature.cs">
       <AutoGen>True</AutoGen>
