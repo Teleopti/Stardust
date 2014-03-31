@@ -46,8 +46,7 @@ Scenario: Sign in as a windows user in CCC with multiple data sources
 	| Field                  | Value |
 	| Windows authentication | true  |
 	When I go to mytime web
-	And I select one data source
-	And I sign in by windows credentials
+	And I select the first data source
 	Then I should be signed in
 @WindowsAndApplicationLogon
 Scenario: Sign in as a windows user in CCC with multiple business units
@@ -68,8 +67,7 @@ Scenario: Sign in as a windows user in CCC with multiple data sources and multip
 	| Field                  | Value |
 	| Windows authentication | true  |
 	When I go to mytime web
-	And I select one data source
-	And I sign in by windows credentials
+	And I select the first data source
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
 

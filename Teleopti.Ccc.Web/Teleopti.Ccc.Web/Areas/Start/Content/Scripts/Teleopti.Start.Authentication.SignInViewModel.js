@@ -10,18 +10,10 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	});
 
 	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
-
-	this.SelectedDataSource = ko.observable();
-
+	
 	this.HasDataSources = ko.computed(function() {
 		return self.DataSources().length > 0;
 	});
-
-	this.SelectDataSource = function (dataSource) {
-		self.SelectedDataSource(dataSource);
-
-		self.ErrorMessage('');
-	};
 
 	this.LoadDataSources = function () {
 		$.ajax({
@@ -42,9 +34,8 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 					return;
 				}
 
-				self.SelectDataSource(dataSources[0]);
 				if (dataSources.length == 1) {
-					self.SignIn();
+					self.SignIn(dataSources[0]);
 				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -64,12 +55,11 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 		});
 	};
 
-	this.SignIn = function () {
+	this.SignIn = function (selectedDataSource) {
 		var state = data.authenticationState;
 
 		self.ErrorMessage('');
 
-		var selectedDataSource = self.SelectedDataSource();
 		state.TryToSignIn({
 			data: {
 				isWindows: selectedDataSource.IsWindows,

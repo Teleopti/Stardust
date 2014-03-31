@@ -50,12 +50,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			SignInApplication(userName, password);
 		}
 
-		[When(@"I sign in by windows credentials")]
-		public void WhenISignInByWindowsAuthentication()
-		{
-			Browser.Interactions.Click("#Login-button");
-		}
-
 		[Given(@"I select application logon data source")]
 		[When(@"I select application logon data source")]
 		public void WhenISelectApplicationLogonDataSource()

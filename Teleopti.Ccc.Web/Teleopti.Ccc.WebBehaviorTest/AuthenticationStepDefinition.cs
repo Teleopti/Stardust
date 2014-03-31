@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 		}
 
-		[When(@"I select one data source")]
-		public void WhenISelectOneDataSource()
+		[When(@"I select the first data source")]
+		public void WhenISelectTheFirstDataSource()
 		{
-			// first one is selected as default
+			Browser.Interactions.ClickUsingJQuery("#DataSources a:first");
 		}
 
 		[BeforeScenario("ExtraDataSource")]
