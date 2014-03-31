@@ -16,13 +16,13 @@ namespace Teleopti.Analytics.Etl.Transformer
         {
             _table = table;
 
-            foreach (DataRow dataRow in CreateDataRows(rootList, _table, intervalsPerDay))
+            foreach (DataRow dataRow in CreateDataRows(rootList, _table))
             {
                 _table.Rows.Add(dataRow);
             }
         }
 
-        public static IList<DataRow> CreateDataRows(IEnumerable<IScheduleDay> schedulePartCollection, DataTable dataTable, int intervalsPerDay)
+        public static IList<DataRow> CreateDataRows(IEnumerable<IScheduleDay> schedulePartCollection, DataTable dataTable)
         {
             IList<DataRow> dataRowCollection = new List<DataRow>();
 
@@ -30,14 +30,14 @@ namespace Teleopti.Analytics.Etl.Transformer
             {
                 if (doDayOffExistInSchedulePart(schedulePart))
                 {
-                    dataRowCollection.Add(CreateDataRow(schedulePart, dataTable, intervalsPerDay));
+                    dataRowCollection.Add(CreateDataRow(schedulePart, dataTable));
                 }
             }
 
             return dataRowCollection;
         }
 
-        public static DataRow CreateDataRow(IScheduleDay schedulePart, DataTable dataTable, int intervalsPerDay)
+        public static DataRow CreateDataRow(IScheduleDay schedulePart, DataTable dataTable)
         {
             if (dataTable == null)
                 return null;
@@ -47,17 +47,16 @@ namespace Teleopti.Analytics.Etl.Transformer
 
 			var personDayOff = extractDayOff(schedulePart);
 
-            dataRow["date"] = personDayOff.Anchor.Date;
-            dataRow["start_interval_id"] = new IntervalBase(personDayOff.Anchor, intervalsPerDay).Id;
+			dataRow["schedule_date_local"] = schedulePart.DateOnlyAsPeriod.DateOnly.Date;
             dataRow["person_code"] = schedulePart.Person.Id;
             dataRow["scenario_code"] = schedulePart.Scenario.Id;
             dataRow["starttime"] = personDayOff.Anchor;
-            dataRow["day_off_code"] = DBNull.Value;
+            dataRow["day_off_code"] = DBNull.Value; //now we got the DayOff code, get it!
             dataRow["day_off_name"] = personDayOff.Description.Name; //Get from domain
             dataRow["day_off_shortname"] = personDayOff.Description.ShortName; //Get from domain
             dataRow["day_count"] = 1;
             dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
-			dataRow["datasource_update_date"] = RaptorTransformerHelper.GetUpdatedDate(schedulePart.PersonAssignment());
+			dataRow["datasource_update_date"] = schedulePart.PersonAssignment().UpdatedOn;
 
             return dataRow;
         }

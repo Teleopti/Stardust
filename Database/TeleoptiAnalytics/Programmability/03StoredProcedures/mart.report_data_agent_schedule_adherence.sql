@@ -3,12 +3,7 @@ DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
 GO
 
 /* 
-exec mart.report_data_agent_schedule_adherence @date_from='2013-02-08 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'19',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'2',@sort_by=N'5',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2013-02-04 00:00:00',@date_to='2013-02-07 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'19',@agent_person_code=N'd42dfe69-185f-4504-9a17-9b5e015b256e',@adherence_id=N'1',@sort_by=N'3',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1053,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2009-02-01 00:00:00',@adherence_id=1,@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'0',@team_set=N'7',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@sort_by=N'6',@time_zone_id=N'1',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2009-01-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'2',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@date_to='2009-02-11 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+exec mart.report_data_agent_schedule_adherence @date_from='2013-02-04 00:00:00',@date_to='2013-02-05 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'13',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 */
 -- =============================================
 -- Author:		KJ
@@ -65,6 +60,7 @@ SET NOCOUNT ON
 --Create all needed temp tables. Just for performance
 ------------
 CREATE TABLE #fact_schedule_deviation_raw (
+	shift_startdate_local_id int,
 	shift_startdate_id INT,
 	shift_startinterval_id int,
 	date_id INT,
@@ -85,6 +81,7 @@ CREATE CLUSTERED INDEX #CIX_fact_schedule_deviation_raw ON #fact_schedule_deviat
 
 
 CREATE TABLE #fact_schedule_deviation (
+	shift_startdate_local_id int,--NEW 20140218
 	shift_startdate_id INT, --NEW 20130111
 	shift_startinterval_id int,--NEW 20130111
 	date_id INT,
@@ -132,6 +129,7 @@ CREATE TABLE #person_adh(
 )
 
 CREATE TABLE #result (
+	shift_startdate_local_id int,
 	shift_startdate_id int, --new 20130111
 	shift_startdate datetime,--new 20130111
 	date_id int,
@@ -173,6 +171,7 @@ CREATE TABLE #result (
 	)
 
 CREATE TABLE #counter(
+shift_startdate_local_id int,
 date_id int,
 interval_id smallint,
 date_interval_counter int IDENTITY(1,1)
@@ -180,6 +179,7 @@ date_interval_counter int IDENTITY(1,1)
 
 --NEW 20130111
 CREATE TABLE #fact_schedule_raw (
+	shift_startdate_local_id int,
 	shift_startdate_id INT,
 	shift_startinterval_id int,
 	schedule_date_id INT,
@@ -192,6 +192,7 @@ CREATE TABLE #fact_schedule_raw (
 	)
 
 CREATE TABLE #fact_schedule (
+	shift_startdate_local_id int,
 	shift_startdate_id INT, --NEW 20130111
 	shift_startinterval_id int,--NEW 20130111
 	schedule_date_id INT,
@@ -208,21 +209,8 @@ CREATE TABLE #rights_agents (right_id int)
 
 CREATE TABLE #rights_teams (right_id int)
 
-CREATE TABLE #person_intervals(
-	site_id int,
-	site_name nvarchar(100),
-	team_id int,
-	team_name nvarchar(100),
-	person_code uniqueidentifier,
-	person_id int,
-	first_name nvarchar(30),
-	last_name nvarchar(30),
-	person_name nvarchar(200),
-	interval_id int,
-	interval_name nvarchar(30)
-	)
-
-CREATE TABLE #agent_ids(person_id int)
+--Table to hold agents to view
+CREATE TABLE #person_id (person_id int)
 
 CREATE TABLE #bridge_time_zone
 	(
@@ -335,9 +323,6 @@ BEGIN
 	SELECT * FROM mart.SplitStringInt(@team_set)
 END
 
---Table to hold agents to view
-CREATE TABLE #person_id (person_id int)
-
 --Join the ResultSets above as:
 --a) teams allowed = #rights_teams.
 --b) agent allowed = #rights_agents
@@ -351,8 +336,9 @@ INNER JOIN #rights_agents a
 	ON a.right_id = dp.person_id
 	
 --Create UTC table from: mart.fact_schedule_deviation
-INSERT INTO #fact_schedule_deviation_raw(shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
+INSERT INTO #fact_schedule_deviation_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
+	fsd.shift_startdate_local_id,--new20140218
 	fsd.shift_startdate_id,--new20130111
 	fsd.shift_startinterval_id,--new20130111
 	fsd.date_id,
@@ -368,8 +354,9 @@ FROM mart.fact_schedule_deviation fsd
 WHERE fsd.date_id between @minUtcDateId-1 AND @maxUtcDateId+1
 AND fsd.person_id IN (SELECT person_id FROM #person_id)
 
-INSERT INTO #fact_schedule_deviation(shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
+INSERT INTO #fact_schedule_deviation(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,date_id,interval_id,person_id,deviation_schedule_ready_s,deviation_schedule_s,deviation_contract_s,ready_time_s,is_logged_in,contract_time_s)
 SELECT 
+	fsd.shift_startdate_local_id,
 	fsd.shift_startdate_id,--new20130111
 	fsd.shift_startinterval_id,--new20130111
 	fsd.date_id,
@@ -386,13 +373,12 @@ INNER JOIN #bridge_time_zone b
 	ON	fsd.shift_startinterval_id= b.interval_id
 	AND fsd.shift_startdate_id=b.date_id --NEW 20130111
 
-
-
 --Get all fact_schedule-data for the day in question.
 --Note: local date e.g. incl. time zone
 --step 1 get raw data for speed
-INSERT #fact_schedule_raw(shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,activity_id,absence_id,scheduled_time_m,scheduled_ready_time_m)
+INSERT #fact_schedule_raw(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,activity_id,absence_id,scheduled_time_m,scheduled_ready_time_m)
 SELECT 
+		shift_startdate_local_id,
 		shift_startdate_id,
 		shift_startinterval_id,
 		schedule_date_id,
@@ -402,7 +388,6 @@ SELECT
 		absence_id,
 		scheduled_time_m,
 		scheduled_ready_time_m
-
 FROM 
 	mart.fact_schedule fs
 INNER JOIN #person_id a
@@ -412,8 +397,9 @@ INNER JOIN #bridge_time_zone b
 	AND fs.shift_startdate_id = b.date_id
 WHERE fs.scenario_id=@scenario_id
 
-INSERT #fact_schedule(shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
+INSERT #fact_schedule(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
 SELECT
+	fs.shift_startdate_local_id,
 	fs.shift_startdate_id,
 	fs.shift_startinterval_id,
 	fs.schedule_date_id,
@@ -428,7 +414,7 @@ INNER JOIN #person_id a
 INNER JOIN #bridge_time_zone b
 	ON	fs.shift_startinterval_id= b.interval_id
 	AND fs.shift_startdate_id= b.date_id
-GROUP BY fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id,fs.person_id,fs.interval_id
+GROUP BY fs.shift_startdate_local_id,fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id,fs.person_id,fs.interval_id
 
 --Update with activity.
 --a) In case there are multiple activities per interval, we use activities where in_ready_time = 1
@@ -439,6 +425,7 @@ FROM #fact_schedule_raw fs
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
+	AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id--in case overlapping shifts
 INNER JOIN mart.dim_activity a
 	ON a.activity_id=fs.activity_id
 WHERE a.in_ready_time=1
@@ -451,6 +438,7 @@ FROM #fact_schedule_raw fs
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
+	AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id--in case overlapping shifts
 INNER JOIN mart.dim_activity a
 	ON a.activity_id=fs.activity_id
 WHERE SchTemp.activity_id IS NULL
@@ -463,25 +451,17 @@ INNER JOIN #fact_schedule SchTemp
 	ON SchTemp.schedule_date_id=fs.schedule_date_id
 	AND SchTemp.person_id=fs.person_id
 	AND SchTemp.interval_id=fs.interval_id
+	AND SchTemp.shift_startdate_local_id=fs.shift_startdate_local_id--in case overlapping shifts
 WHERE SchTemp.absence_id IS NULL
 
---Get all intervals for the collection of person and teams
-INSERT #person_intervals
-	SELECT site_id,site_name,team_id,team_name,person_code,p.person_id,first_name,last_name,person_name,interval_id,interval_name
-	FROM mart.dim_person p
-	INNER JOIN mart.dim_interval i
-		ON 1=1
-	INNER JOIN #person_id a
-		ON p.person_id = a.person_id
-	--WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date
-	WHERE @date_from BETWEEN p.valid_from_date AND p.valid_to_date OR @date_to BETWEEN p.valid_from_date AND p.valid_to_date --20120905 KJ ADDED @DATE_TO
 
 --Start creating the result set
 --a) insert agent statistics matching scheduled time
-INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
+INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
 person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
 adherence_type_selected,hide_time_zone,count_activity_per_interval)
-	SELECT	b1.date_id,
+	SELECT	fs.shift_startdate_local_id,
+			b1.date_id, --shift_startdate_id
 			b1.date_date,
 			d.date_id,
 			d.date_date,
@@ -521,6 +501,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON fsd.person_id=fs.person_id
 		AND fsd.date_id=fs.schedule_date_id
 		AND fsd.interval_id=fs.interval_id
+		AND fsd.shift_startdate_local_id=fs.shift_startdate_local_id
 	INNER JOIN #bridge_time_zone b1
 		ON	fs.shift_startinterval_id= b1.interval_id
 		AND fs.shift_startdate_id=b1.date_id
@@ -532,13 +513,13 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 	INNER JOIN mart.dim_date d 
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
-ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
 
 --b) insert agent statistics outside shift
-INSERT #result(shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
+INSERT #result(shift_startdate_local_id,shift_startdate_id,shift_startdate,date_id,date,interval_id,interval_name,intervals_per_day,site_id,site_name,team_id,team_name,person_code,person_id,
 person_first_name,person_last_name,person_name,deviation_s,ready_time_s,is_logged_in,activity_id,absence_id,adherence_calc_s,
 adherence_type_selected,hide_time_zone,count_activity_per_interval)
-	SELECT	b1.date_id,
+	SELECT	fsd.shift_startdate_local_id,
+			b1.date_id,
 			b1.date_date,
 			d.date_id,
 			d.date_date,
@@ -586,7 +567,6 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
 	WHERE NOT EXISTS (SELECT 1 FROM #result r where r.person_id=fsd.person_id and r.interval_id=i.interval_id and r.date_id=d.date_id)--WHERE NO MATCH ON SCHEDULE
-ORDER BY p.site_id,p.team_id,p.person_id,p.person_name,b1.date_id,b1.date_date,d.date_id,d.date_date,i.interval_id
 
 ----------
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
@@ -717,15 +697,18 @@ FROM #minmax
 INNER JOIN #result ON #result.shift_startdate_id=#minmax.shift_startdate_id AND #result.person_id=#minmax.person_id
 
 --add unique id per date_id and interval_id
-INSERT #counter(date_id,interval_id)
-select distinct date_id,interval_id
+INSERT #counter(shift_startdate_local_id,date_id,interval_id)
+select shift_startdate_local_id,date_id,interval_id
 from #result
-order by date_id,interval_id
+order by shift_startdate_local_id,date_id,interval_id
 
 update #result
 set date_interval_counter=c.date_interval_counter
-from #counter c inner join #result r on r.date_id=c.date_id AND r.interval_id=c.interval_id
-
+from #counter c
+inner join #result r
+	on r.date_id=c.date_id
+	AND r.interval_id=c.interval_id
+	AND r.shift_startdate_local_id = c.shift_startdate_local_id
 
 -- Sortering 1=FirstName,2=LastName,3=Shift_start,4=Adherence,5=ShiftEnd 6=Date
 -- NOTE: If you change the column order/name you need to consider SDK DTO as well!

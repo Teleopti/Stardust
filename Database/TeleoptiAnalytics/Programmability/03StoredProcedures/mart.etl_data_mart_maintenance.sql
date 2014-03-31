@@ -115,27 +115,27 @@ BEGIN
 	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 9
 						and configuration_name = 'YearsToKeepFactSchedule'),100),getdate())
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule f2 inner join mart.dim_date d2 on f2.schedule_date_id = d2.date_id)
+						from mart.fact_schedule f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
 
 	--fact_schedule_day_count
 	delete mart.fact_schedule_day_count
 	from mart.fact_schedule_day_count f
-	inner join mart.dim_date d on f.date_id = d.date_id
+	inner join mart.dim_date d on f.shift_startdate_local_id = d.date_id
 	where 1=1
 	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 10
 						and configuration_name = 'YearsToKeepFactScheduleDayCount'),100),getdate())
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule_day_count f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+						from mart.fact_schedule_day_count f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
 
 	--fact_schedule_deviation
 	delete mart.fact_schedule_deviation
 	from mart.fact_schedule_deviation f
-	inner join mart.dim_date d on f.date_id = d.date_id
+	inner join mart.dim_date d on f.shift_startdate_local_id = d.date_id
 	where 1=1
 	and d.date_date < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 11
 						and configuration_name = 'YearsToKeepFactScheduleDeviation'),100),getdate())
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
-						from mart.fact_schedule_deviation f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+						from mart.fact_schedule_deviation f2 inner join mart.dim_date d2 on f2.shift_startdate_local_id = d2.date_id)
 
 	--fact_schedule_forecast_skill
 	delete mart.fact_schedule_forecast_skill

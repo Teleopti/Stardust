@@ -67,10 +67,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 			//some report data
 			const int intervalId = 32;
-			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, theDay.DateId, 0, 22, intervalId, scenarioId));
+			DataMaker.Data().Analytics().Setup(new FactSchedule(personId, theDay.DateId, theDay.DateId, 0, 22, intervalId, scenarioId));
 			DataMaker.Data().Analytics().Setup(new FactAgent(theDay.DateId, intervalId, acdLoginId, theDay.DateId, intervalId - 8, 600, 900, 300, 55,0, 0, 7, 210, 60));
 			DataMaker.Data().Analytics().Setup(new FactAgentQueue(theDay.DateId, intervalId, 5, acdLoginId, 210, 60, 7, 0));
-			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
+			DataMaker.Data().Analytics().Setup(new FactScheduleDeviation(theDay.DateId, theDay.DateId, intervalId, personId, 900, 60, 60, 60, true));
 		}
 
 		[Then(@"I should see my report with data for '(.*)'")]
