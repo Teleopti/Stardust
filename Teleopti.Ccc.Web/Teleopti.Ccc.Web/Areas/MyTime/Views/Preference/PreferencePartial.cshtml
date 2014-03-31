@@ -32,35 +32,45 @@
             <li><a href="#" id="Preference-add-extended-button"><i class="glyphicon glyphicon-edit"></i>&nbsp;@Resources.Preference</a></li>
         }
         else
-        {
-            <li>
-                <div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var optionGroup in Model.Options.PreferenceOptions)
-                                                                                                    {
-                                                                                                        if (optionGroup.Text != Resources.ShiftCategory)
-                                                                                                        {
-                                                                                                            @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},");
-                                                                                                        }
-                                                                                                        foreach (var option in optionGroup.Options)
-                                                                                                        {
-                                                                                                            @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
-                                                                                                        }
-                                                                                                    }]">
-                    <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
-
-                    <button class="btn dropdown-toggle" data-toggle="dropdown">
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
-                        <!-- ko if: Value != '-' -->
-                        <li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
-                        <!-- /ko -->
-                        <!-- ko if: Value == '-' -->
-                        <li class="divider"></li>
-                        <!-- /ko -->
-                    </ul>
-                </div>
-            </li>
-        }
+		{
+			<li class="dropdown" id="preference-split-button" data-mytime-preference-option="[@{
+				                                                                                  var oIdx = 0;
+				                                                                                  foreach (var optionGroup in Model.Options.PreferenceOptions)
+				                                                                                  {
+					                                                                                  oIdx++;
+					                                                                                  if (optionGroup.Text != Resources.ShiftCategory)
+					                                                                                  {
+						                                                                                  @Html.Raw("{'Color': '', 'Value': '-', 'Text': ''},")
+					                                                                                  }
+					                                                                                  var idx = 0;
+					                                                                                  foreach (var option in optionGroup.Options)
+					                                                                                  {
+						                                                                                  if (idx + 1 == optionGroup.Options.Count() && Model.Options.PreferenceOptions.Count() == oIdx)
+						                                                                                  {
+							                                                                                  @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'}")
+						                                                                                  }
+						                                                                                  else
+						                                                                                  {
+							                                                                                  @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},")
+						                                                                                  }
+						                                                                                  idx++;
+					                                                                                  }
+				                                                                                  }
+			                                                                                  }]">
+				<button type="button" data-toggle="dropdown" class="btn btn-default navbar-btn dropdown-toggle">
+					<span data-bind="'text': selectedPreferenceText()"></span>
+					<span class="caret"></span>
+				</button>
+				<ul role="menu" class="dropdown-menu" data-bind="foreach: availablePreferences">
+					<!-- ko if: Value != '-' -->
+					<li><a href="#" data-bind="click: $parent.selectAndapplyPreference, 'text': Text"></a></li>
+					<!-- /ko -->
+					<!-- ko if: Value == '-' -->
+					<li class="divider"></li>
+					<!-- /ko -->
+				</ul>
+			</li>
+		}
         <li><a href="#" data-bind="click: deletePreference"><i class="glyphicon glyphicon-remove"></i>&nbsp;@Resources.Remove</a></li>
     </ul>
     <!-- ko if: mustHaveEnabled -->

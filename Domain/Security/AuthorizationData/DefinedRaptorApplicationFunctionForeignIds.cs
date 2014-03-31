@@ -117,7 +117,7 @@
 		public const string ShareCalendar = "0088";
 		public const string OvertimeAvailabilityWeb = "0089";
 		public const string MyReportWeb = "0090";
-		public const string MonthSchedule = "0091";
+		public const string ViewPersonalAccount = "0093";
 
 		// Mobile Reports
 		public const string MobileReports = "0074";

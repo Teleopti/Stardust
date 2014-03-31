@@ -2232,7 +2232,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         private void toolStripButtonHelp_Click(object sender, EventArgs e)
         {
-            ViewBase.ShowHelp(this,true);
+            ViewBase.ShowHelp(this,false);
         }
 
         private bool CheckToClose()

@@ -111,7 +111,6 @@
     <Compile Include="Creators\ScenarioCreatorTest.cs" />
     <Compile Include="Creators\SkillTypeCreatorTest.cs" />
     <Compile Include="Common\CreatorFactory.cs" />
-    <Compile Include="Creators\GroupingActivityCreatorTest.cs" />
     <Compile Include="Creators\AvailableDataCreatorTest.cs" />
     <Compile Include="Creators\BusinessUnitCreatorTest.cs" />
     <Compile Include="Common\CommandLineArgumentTest.cs" />

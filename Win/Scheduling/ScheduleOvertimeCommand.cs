@@ -30,18 +30,20 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private readonly IProjectionProvider _projectionProvider;
         private BackgroundWorker _backgroundWorker;
+        private IAnalyzePersonAccordingToAvailability _analyzePersonAccordingToAvailability;
 
         public ScheduleOvertimeCommand(ISchedulerStateHolder schedulerState,
                                        ISchedulingResultStateHolder schedulingResultStateHolder,
                                        IOvertimeLengthDecider overtimeLengthDecider,
                                        ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-                                       IProjectionProvider projectionProvider)
+                                       IProjectionProvider projectionProvider, IAnalyzePersonAccordingToAvailability analyzePersonAccordingToAvailability)
         {
             _schedulerState = schedulerState;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _overtimeLengthDecider = overtimeLengthDecider;
             _schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
             _projectionProvider = projectionProvider;
+            _analyzePersonAccordingToAvailability = analyzePersonAccordingToAvailability;
         }
 
         public void Exectue(IOvertimePreferences overtimePreferences, BackgroundWorker backgroundWorker,
@@ -75,6 +77,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (overtimeLayerLength == TimeSpan.Zero)
                         continue;
 
+                    if (overtimePreferences.AvailableAgentsOnly)
+                    {
+                        overtimeLayerLength = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), overtimeLayerLength, scheduleEndTime);
+                        if (overtimeLayerLength == TimeSpan.Zero)
+                            continue;
+                    }
+                    
                     //extend shift
                     var overtimeLayerPeriod = new DateTimePeriod(scheduleEndTime, scheduleEndTime.Add(overtimeLayerLength));
                     scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity,
@@ -87,7 +96,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
                     if (!overtimePreferences.AllowBreakWeeklyRest)
                         rules.Add(new MinWeeklyRestRule(
-                                      new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor()));
+                                      new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor(), new DayOffMaxFlexCalculator(new WorkTimeStartEndExtractor())));
 
                     _schedulePartModifyAndRollbackService.ClearModificationCollection();
 
@@ -110,6 +119,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private double calculatePeriodValue(DateOnly dateOnly, IActivity activity, IPerson person)
         {
             var aggregateSkill = createAggregateSkill(person, dateOnly, activity);
+            if (aggregateSkill == null) return 0;
             var aggregatedSkillStaffPeriods = skillStaffPeriods(aggregateSkill, dateOnly);
             double? result = SkillStaffPeriodHelper.SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
             if (result.HasValue)
@@ -134,21 +144,25 @@ namespace Teleopti.Ccc.Win.Scheduling
         private IAggregateSkill createAggregateSkill(IPerson person, DateOnly dateOnly, IActivity activity)
         {
             var skills = aggregateSkills(person, dateOnly).Where(x => x.Activity == activity).ToList();
-            var aggregateSkillSkill = new Skill("", "", Color.Pink, 15, skills[0].SkillType);
-            aggregateSkillSkill.ClearAggregateSkill();
-            foreach (ISkill skill in skills)
+            if (skills.Count > 0)
             {
-                aggregateSkillSkill.AddAggregateSkill(skill);
-            }
-            aggregateSkillSkill.IsVirtual = true;
+                var aggregateSkillSkill = new Skill("", "", Color.Pink, 15, skills[0].SkillType);
+                aggregateSkillSkill.ClearAggregateSkill();
+                foreach (ISkill skill in skills)
+                {
+                    aggregateSkillSkill.AddAggregateSkill(skill);
+                }
+                aggregateSkillSkill.IsVirtual = true;
 
-            if (aggregateSkillSkill.AggregateSkills.Any())
-            {
-                ((ISkill)aggregateSkillSkill).DefaultResolution =
-                    aggregateSkillSkill.AggregateSkills.Min(s => s.DefaultResolution);
-            }
+                if (aggregateSkillSkill.AggregateSkills.Any())
+                {
+                    ((ISkill)aggregateSkillSkill).DefaultResolution =
+                        aggregateSkillSkill.AggregateSkills.Min(s => s.DefaultResolution);
+                }
 
-            return aggregateSkillSkill;
+                return aggregateSkillSkill;
+            }
+            return null;
         }
 
 

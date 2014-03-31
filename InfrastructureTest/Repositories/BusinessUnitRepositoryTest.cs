@@ -55,11 +55,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             ISkillType type = SkillTypeFactory.CreateSkillType();
             PersistAndRemoveFromUnitOfWork(type);
 
-            GroupingActivity ga = GroupingActivityFactory.CreateSimpleGroupingActivity("test");
-            PersistAndRemoveFromUnitOfWork(ga);
 
             Activity activity = new Activity("test");
-            activity.GroupingActivity = ga;
             PersistAndRemoveFromUnitOfWork(activity);
 
             ISkill skill = SkillFactory.CreateSkill("NewName",type,15);

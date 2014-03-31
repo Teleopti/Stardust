@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
-using System.Xml;
 using System.Xml.Linq;
 using System.Linq;
 using log4net;
 using NHibernate;
 using NHibernate.Cfg;
-using NHibernate.Tool.hbm2ddl;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -19,27 +16,15 @@ using Teleopti.Ccc.Domain.Common.Logging;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	/// <summary>
-	/// Factory for LogonableDataSources
-	/// </summary>
-	/// <remarks>
-	/// Created by: rogerkr
-	/// Created date: 2008-04-23
-	/// </remarks>
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
-		private Configuration _applicationConfiguration;
-		private Configuration _statisticConfiguration;
-		private AuthenticationSettings _authenticationSettings;
 
 		public const string NoDataSourceName = "[not set]";
-		private const string _connectionStringKeyName = "connection.connection_string";
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers")]
 		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
 		{
 			_enversConfiguration = enversConfiguration;
@@ -47,7 +32,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		private static string isSqlServerOnline(string connectionString)
 		{
 			if (string.IsNullOrEmpty(connectionString)) throw new ArgumentNullException("connectionString");
@@ -70,34 +54,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "dataSource")]
-		public bool TryCreate(string file, out IDataSource dataSource)
+		public bool TryCreate(XElement nhibernateConfiguration, out IDataSource dataSource)
 		{
-			XElement element = XElement.Load(file);
-			if (element.Name != "datasource")
+			var nhProperties = createApplicationProperties(nhibernateConfiguration);
+			string connectionString;
+			if (nhProperties.TryGetValue(Environment.ConnectionString, out connectionString))
 			{
-				throw new DataSourceException(@"Missing <dataSource> in file " + file);
-			}
-
-			if (TryCreate(element, out dataSource))
-			{
-				return true;
-			}
-
-			dataSource = null;
-			return false;
-		}
-
-		public bool TryCreate(XElement element, out IDataSource dataSource)
-		{
-			createApplicationConfiguration(element);
-			if (_applicationConfiguration.Properties.ContainsKey(_connectionStringKeyName))
-			{
-				string connectionString = _applicationConfiguration.Properties[_connectionStringKeyName];
-				string resultOfOnline = isSqlServerOnline(connectionString);
+				var resultOfOnline = isSqlServerOnline(connectionString);
 				if (string.IsNullOrEmpty(resultOfOnline))
 				{
-                    dataSource = Create(element);
+					var authenticationSettings = createAuthenticationSettings(nhibernateConfiguration);
+					var matrixElement = nhibernateConfiguration.Elements("matrix").Single();
+					var matrixNameElement = matrixElement.Attribute("name");
+					var matrixName = matrixNameElement!=null ? matrixNameElement.Value : NoDataSourceName;
+					var matrixConnstring = matrixElement.Element("connectionString").Value;
+					dataSource = createDataSource(nhProperties, matrixConnstring,matrixName, authenticationSettings);
 					return true;
 				}
 			}
@@ -105,44 +76,27 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return false;
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "dataSource"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public IDataSource Create(XElement hibernateConfiguration)
+		public IDataSource Create(IDictionary<string, string> settings, string statisticConnectionString)
 		{
-			if (hibernateConfiguration.Name != "datasource")
-				throw new DataSourceException(@"Missing <dataSource> in xml source ");
-			using (PerformanceOutput.ForOperation("Create application configuration"))
-				createApplicationConfiguration(hibernateConfiguration);
-			using (PerformanceOutput.ForOperation("Create statistic configuration"))
-				_statisticConfiguration = createStatisticConfiguration(hibernateConfiguration);
-			using (PerformanceOutput.ForOperation("Create authentication settings"))
-				_authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
-			var appFact = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], _messageSenders);
-			if (_statisticConfiguration == null)
-			{
-                return new DataSource(appFact, null, _authenticationSettings);
-			}
-			return
-				 new DataSource(appFact, new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), _authenticationSettings);
+			var authenticationSettings = createDefaultAuthenticationSettings();
+			return createDataSource(settings, statisticConnectionString, NoDataSourceName, authenticationSettings);
 		}
 
-		public IDataSource Create(IDictionary<string, string> settings,
-												  string statisticConnectionString)
+		private IDataSource createDataSource(IDictionary<string, string> settings, string statisticConnectionString, string statisticName, IAuthenticationSettings authenticationSettings)
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
-			createApplicationConfiguration(settings);
-                        var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_applicationConfiguration.Properties[Environment.ConnectionString],_messageSenders);
+			var appConfig = createApplicationConfiguration(settings);
+			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(appConfig), _enversConfiguration.AuditSettingProvider, appConfig.Properties[Environment.ConnectionString], _messageSenders);
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
-				_statisticConfiguration = createStatisticConfigurationInner(statisticConnectionString, NoDataSourceName);
-				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]);
+				var statConfiguration = createStatisticConfiguration(statisticConnectionString, statisticName);
+				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(statConfiguration), statConfiguration.Properties[Environment.ConnectionString]);
 			}
 			else
 			{
-				_statisticConfiguration = null;
 				statFactory = null;
 			}
-			_authenticationSettings = createDefaultAuthenticationSettings();
-			return new DataSource(appFactory, statFactory, _authenticationSettings);
+			return new DataSource(appFactory, statFactory, authenticationSettings);
 		}
 
 		private static ISessionFactory buildSessionFactory(Configuration nhConf)
@@ -153,87 +107,23 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		private void createApplicationConfiguration(IDictionary<string, string> settings)
+		private Configuration createApplicationConfiguration(IDictionary<string, string> settings)
 		{
 			var appCfg = new Configuration();
-			foreach (var item in settings)
-			{
-				appCfg.SetProperty(item.Key, item.Value);
-			}
+			appCfg.SetProperties(settings);
 			setDefaultValuesOnApplicationConf(appCfg);
-			appCfg.AddAuxiliaryDatabaseObject(new SqlServerProgrammabilityAuxiliary());
-			_applicationConfiguration = appCfg;
+			return appCfg;
 		}
 
-		private void createApplicationConfiguration(XElement nhibernateConfiguration)
+		private static IDictionary<string, string> createApplicationProperties(XElement nhibernateConfiguration)
 		{
-			string temporaryConfigFile = Path.GetTempFileName();
-			try
-			{
-				var settings = new XmlWriterSettings {Indent = true, IndentChars = ("\t"), OmitXmlDeclaration = true};
-			    using (XmlWriter xmlWriter = XmlWriter.Create(temporaryConfigFile, settings))
-				{
-					nhibernateConfiguration.WriteTo(xmlWriter);
-				}
-
-				var appCfg = new Configuration();
-				appCfg.Configure(temporaryConfigFile);
-				setDefaultValuesOnApplicationConf(appCfg);
-				_applicationConfiguration = appCfg;
-			}
-			finally
-			{
-				if (File.Exists(temporaryConfigFile))
-					File.Delete(temporaryConfigFile);
-			}
-		}
-
-		public void CreateSchema()
-		{
-			//Add Schema
-			const string sql = "CREATE SCHEMA [Auditing] AUTHORIZATION [dbo]";
-			using (var conn = new SqlConnection(_applicationConfiguration.Properties[_connectionStringKeyName]))
-			{
-				conn.Open();
-				using (var cmd = new SqlCommand(sql, conn))
-					cmd.ExecuteNonQuery();
-			}
-
-			var appSchema = new SchemaExport(_applicationConfiguration);
-			appSchema.Create(false, true);
-		}
-
-		private Configuration createStatisticConfiguration(string file, XElement rootElement)
-		{
-			Configuration statCfg = null;
-
-			int count = rootElement.Elements("matrix").Count();
-			if (count == 1)
-			{
-				XElement matrixElement = rootElement.Element("matrix");
-				XElement connString = matrixElement.Element("connectionString");
-				if (connString == null || string.IsNullOrEmpty(connString.Value))
-				{
-					if (String.IsNullOrEmpty(file))
-					{
-						throw new DataSourceException(@"Missing <connectionString> in xml structure");
-					}
-					throw new DataSourceException(@"Missing <connectionString> in file " + file);
-				}
-
-				XAttribute matrixAttribute = matrixElement.Attribute("name");
-				string matrixname = NoDataSourceName;
-				if (matrixAttribute != null)
-					matrixname = matrixAttribute.Value;
-
-				statCfg = createStatisticConfigurationInner(connString.Value, matrixname);
-			}
-			return statCfg;
-		}
-
-		private Configuration createStatisticConfiguration(XElement rootElement)
-		{
-			return createStatisticConfiguration(String.Empty, rootElement);
+			var sessionFactory = nhibernateConfiguration.Descendants(((XNamespace)"urn:nhibernate-configuration-2.2") + "session-factory").SingleOrDefault();
+			if (sessionFactory == null)
+				throw new DataSourceException("Missing session-factory element!");
+			var sessionFactoryProperties = sessionFactory.Elements();
+			var ret = sessionFactoryProperties.ToDictionary(p => p.Attribute("name").Value, p => p.Value);
+			ret[Environment.SessionFactoryName] = sessionFactory.Attribute("name").Value;
+			return ret;
 		}
 
 		private static AuthenticationSettings createAuthenticationSettings(XElement rootElement)
@@ -261,12 +151,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private static AuthenticationSettings createDefaultAuthenticationSettings()
 		{
-			var authenticationSettings = new AuthenticationSettings {LogOnMode = LogOnModeOption.Mix};
-
-		    return authenticationSettings;
+			return new AuthenticationSettings {LogOnMode = LogOnModeOption.Mix};
 		}
 
-		private Configuration createStatisticConfigurationInner(string connectionString, string matrixname)
+		private Configuration createStatisticConfiguration(string connectionString, string matrixname)
 		{
 			//REMOVE ME LATER!!!!!!!!!!!!!!!!/((
 			Log4NetConfiguration.SetConnectionString(connectionString);

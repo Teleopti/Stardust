@@ -4,47 +4,35 @@ using System.Security.Principal;
 using System.Threading;
 using Autofac;
 using Autofac.Integration.Wcf;
-using MbCache.Configuration;
-using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server.Adherence;
 using log4net;
 using log4net.Config;
+using ContainerBuilder = Teleopti.Ccc.Rta.Server.ContainerBuilder;
 
 namespace Teleopti.Ccc.Rta.WebService
 {
 	public class Global : System.Web.HttpApplication
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof (Global));
-		private static Timer _timer;
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			XmlConfigurator.Configure();
 			var container = buildIoc();
 			AutofacHostFactory.Container = container;
-			_timer = new Timer(myCallback, container, 0, 5000);
 
+			container.Resolve<IRtaDataHandler>();
+			container.Resolve<AdherenceAggregatorInitializor>().Initialize();
 			setDefaultGenericPrincipal();
 		}
 
 		private static IContainer buildIoc()
 		{
-			var builder = new ContainerBuilder();
-
-			var mbCacheModule = new MbCacheModule(new InMemoryCache(20), null);
+			var builder = ContainerBuilder.CreateBuilder();
 			builder.RegisterType<TeleoptiRtaService>().SingleInstance();
-			builder.RegisterModule(mbCacheModule);
-			builder.RegisterModule(new RealTimeContainerInstaller(mbCacheModule));
 			return builder.Build();
-		}
-
-
-		private void myCallback(object state)
-		{
-			var container = state as IContainer;
-			var cache = container.Resolve<IActualAgentStateCache>();
-
-			cache.FlushCacheToDatabase();
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

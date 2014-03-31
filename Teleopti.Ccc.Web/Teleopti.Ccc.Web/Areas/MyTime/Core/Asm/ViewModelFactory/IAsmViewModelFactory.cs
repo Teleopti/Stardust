@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory
 {
 	public interface IAsmViewModelFactory
 	{
-		AsmViewModel CreateViewModel(DateTime asm);
+		AsmViewModel CreateViewModel(DateTime asmZeroLocal);
 	}
 }

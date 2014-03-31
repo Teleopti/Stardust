@@ -129,6 +129,8 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			{
 				e.Style.CellType = "Static";
 				e.Style.CellValue = agentRestrictionsDisplayRow.Warnings == 0 ? UserTexts.Resources.Yes : UserTexts.Resources.No;
+				var warning = agentRestrictionsDisplayRow.Warning(e.ColIndex);
+				e.Style.CellTipText = warning ?? string.Empty;
 			}
 
 			return true;

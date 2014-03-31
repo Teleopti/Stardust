@@ -1,10 +1,19 @@
 require.config(requireconfiguration);
 
-require([
-        'tests',
-			'views/realtimeadherence/vm_test',
-			'views/realtimeadherencesite/vm_test'
-		
-    ], function() {
+define('resources', {});
 
-    });
+define('window', {
+	setLocationHash: function () { },
+	locationReplace: function () { },
+});
+
+require([
+		'tests',
+		'views/realtimeadherencesites/vm_test',
+		'views/realtimeadherenceteams/vm_test',
+		'views/diagnosis/vm_test'
+], function () {
+	for (var i = 0, j = arguments.length; i < j; i++) {
+		arguments[i]();
+	}
+});

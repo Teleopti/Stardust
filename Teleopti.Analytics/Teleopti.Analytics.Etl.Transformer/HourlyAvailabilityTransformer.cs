@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 
@@ -12,16 +13,15 @@ namespace Teleopti.Analytics.Etl.Transformer
 		{
 			foreach (var schedulePart in rootList)
 			{
-				var restrictionBases = schedulePart.RestrictionCollection();
-				foreach (var restrictionBase in restrictionBases)
-				{
-					var availRestriction = restrictionBase as IStudentAvailabilityRestriction;
-					if(availRestriction == null) continue;
-					var newDataRow = table.NewRow();
-					newDataRow = fillDataRow(newDataRow, availRestriction, schedulePart);
-					table.Rows.Add(newDataRow);
+				IStudentAvailabilityRestriction availRestriction =
+					schedulePart.RestrictionCollection().OfType<IStudentAvailabilityRestriction>().FirstOrDefault();
 
-				}
+				if (availRestriction == null)
+					continue;
+				
+				var newDataRow = table.NewRow();
+				newDataRow = fillDataRow(newDataRow, availRestriction, schedulePart);
+				table.Rows.Add(newDataRow);
 			}
 		}
 
@@ -70,7 +70,7 @@ namespace Teleopti.Analytics.Etl.Transformer
 
 			if (availRestriction.WorkTimeLimitation.EndTime.HasValue)
 			{
-				minutes = availRestriction.WorkTimeLimitation.EndTime.Value.Minutes;
+				minutes = (int)availRestriction.WorkTimeLimitation.EndTime.Value.TotalMinutes;
 			}
 			return minutes;
 		}

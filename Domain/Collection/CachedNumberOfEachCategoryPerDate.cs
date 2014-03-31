@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		{
 			_scheduleDictionary = scheduleDictionary;
 			_periodToMonitor = periodToMonitor;
-			_scheduleDictionary.PartModified += scheduleDictionary_PartModified;
+			_scheduleDictionary.PartModified += scheduleDictionaryPartModified;
 		}
 
 		public IDictionary<IShiftCategory, int> GetValue(DateOnly dateOnly)
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Collection
 			_filteredAgents = filteredPersons;
 		}
 
-		void scheduleDictionary_PartModified(object sender, ModifyEventArgs e)
+		private void scheduleDictionaryPartModified(object sender, ModifyEventArgs e)
 		{
 			if (e.ModifiedPart == null)
 				_internalDic.Clear();
@@ -68,7 +68,9 @@ namespace Teleopti.Ccc.Domain.Collection
 			IDictionary<IShiftCategory, int> value = new Dictionary<IShiftCategory, int>();
 			foreach (var filteredAgent in _filteredAgents)
 			{
-				var scheduleDay = _scheduleDictionary[filteredAgent].ScheduledDay(dateOnly);
+			    if (dateOnly > filteredAgent.TerminalDate) continue;
+                var scheduleDay = _scheduleDictionary[filteredAgent].ScheduledDay(dateOnly);
+				if(!scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) continue;
 				var shiftCategory = scheduleDay.PersonAssignment(true).ShiftCategory;
 				if (shiftCategory == null)
 					continue;

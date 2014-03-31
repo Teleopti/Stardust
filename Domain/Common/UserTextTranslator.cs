@@ -25,7 +25,9 @@ namespace Teleopti.Ccc.Domain.Common
             {
                 if (textToTranslate.StartsWith("xxx", StringComparison.OrdinalIgnoreCase)) textToTranslate = textToTranslate.Substring(3);
                 if (textToTranslate.StartsWith("xx", StringComparison.OrdinalIgnoreCase)) textToTranslate = textToTranslate.Substring(2);
-                string translatedText = Resources.ResourceManager.GetString(textToTranslate);
+
+	            Resources.ResourceManager.IgnoreCase = true;
+					string translatedText = Resources.ResourceManager.GetString(textToTranslate);
                 if (!string.IsNullOrEmpty(translatedText))
                    result = translatedText;
             }

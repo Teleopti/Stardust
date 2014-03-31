@@ -644,7 +644,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
 
         private void toolStripButtonMainHelp_Click(object sender, EventArgs e)
         {
-            ViewBase.ShowHelp(this,true);
+            ViewBase.ShowHelp(this,false);
         }
         private void toolStripButtonContract_Click(object sender, EventArgs e)
         {

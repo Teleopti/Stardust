@@ -1,10 +1,12 @@
 ﻿using System;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 
 namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
+	 [Scope(Feature = "21211 View Monthly schedule")]
     [Binding]
     public class MonthlyScheduleStepDefinitions
     {
@@ -42,25 +44,49 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.AssertExists(string.Format(".cal-day-outmonth span[data-cal-date='{0:yyyy-MM-dd}']", date));
         }
 
-        [Then(@"I should see an indication implying I should work on '(.*)'")]
-        public void ThenIShouldSeeAnIndicationImplyingIShouldWorkOn(DateTime date)
+		[Then(@"I should see the shift with")]
+		public void ThenIShouldSeeTheShiftWith(Table table)
+		{
+			var shift = table.CreateInstance<ShiftListItem>();
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.ShiftCategory);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.TimeSpan);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .shift", shift.Date), shift.WorkingHours);
+		}
+					
+		public class ShiftListItem
+		{
+			public string Date { get; set; }
+			public string ShiftCategory { get; set; }
+			public string TimeSpan { get; set; }
+			public string WorkingHours { get; set; }
+		}
+		
+        [Then(@"I should see the day off on '(.*)'")]
+        public void ThenIShouldSeeTheDayOffOn(string date)
         {
-            Browser.Interactions.AssertExists(string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+            Browser.Interactions.AssertExists(string.Format("[data-cal-date='{0}'] .dayoff", date));
         }
 
-        [Then(@"I should see an indication implying I should not work on '(.*)'")]
-        public void ThenIShouldSeeAnIndicationImplyingIShouldNotWorkOn(DateTime date)
+        [Then(@"I should see the absence with")]
+        public void ThenIShouldSeeTheAbsenceWith(Table table)
         {
-            Browser.Interactions.AssertExists(string.Format(".not-working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+            var absence = table.CreateInstance<AbsenceListItem>();
+            Browser.Interactions.AssertAnyContains(string.Format("[data-cal-date='{0}'] .absence", absence.Date), absence.Name);
+        }
+
+        public class AbsenceListItem
+        {
+            public string Name { get; set; }
+            public string Date { get; set; }
         }
 
         [Then(@"I should not see any indication for day '(.*)'")]
         public void ThenIShouldNotSeeAnyIndicationForDay(DateTime date)
         {
-            Browser.Interactions.AssertNotExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", date),
-                string.Format(".not-working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
-            Browser.Interactions.AssertNotExists(string.Format("span[data-cal-date='{0:yyyy-MM-dd}']", date), 
-                string.Format(".working-day span[data-cal-date='{0:yyyy-MM-dd}']", date));
+            Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0:yyyy-MM-dd}']", date),
+                string.Format("[data-cal-date='{0:yyyy-MM-dd}'] .absence", date));
+            Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0:yyyy-MM-dd}']", date), 
+                string.Format("[data-cal-date='{0:yyyy-MM-dd}'] .shift", date));
         }
 
         [Then(@"I should end up in month view for current month")]
@@ -73,13 +99,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldSeeAsTheFirstDayOfWeekLabel(string dayOfWeek)
         {
             Browser.Interactions.AssertFirstContainsUsingJQuery(".weekday-name", dayOfWeek);
-            //Browser.Interactions.AssertFirstContains(".weekday-name", dayOfWeek);
-        }
-
-        [Given(@"I am using a device with narrow view")]
-        public void GivenIAmUsingADeviceWithNarrowView()
-        {
-            Browser.Interactions.SetWidth(480);
         }
 
         [When(@"I choose the day '(.*)'")]
@@ -122,10 +141,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.ClickUsingJQuery(selector);
         }
 
-        [Then(@"I should not be able to access month view")]
-        public void ThenIShouldNotBeAbleToAccessMonthView()
+		[Then(@"I should see the absence on date '(.*)'")]
+        public void ThenIShouldSeeTheAbsenceOnDate(string date)
         {
-            Browser.Interactions.AssertNotExists("#week-schedule-today", "#week-schedule-month");
-        }
-    }
+			  Browser.Interactions.AssertExists(string.Format("[data-cal-date='{0}'] .absence", date));
+		  }
+
+		[Then(@"I should not see a shift on date '(.*)'")]
+		public void ThenIShouldNotSeeAShiftOnDate(string date)
+		{
+			Browser.Interactions.AssertNotExists(string.Format("[data-cal-date='{0}']", date), string.Format("[data-cal-date='{0}'] .shift", date));
+		}
+
+		[When(@"I navigate to week schedule by click Week tab")]
+		public void WhenINavigateToWeekScheduleByClickTab()
+		{
+			Browser.Interactions.Click("#month-schedule-week");
+		}
+
+	 }
 }

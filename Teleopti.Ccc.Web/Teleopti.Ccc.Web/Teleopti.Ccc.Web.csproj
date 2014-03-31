@@ -294,6 +294,13 @@
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\Extensions.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsNavigationProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\IReportsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\AbsenceAccountProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IAbsenceAccountProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\AbsenceAccountViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Reports\DataProvider\ReportsNavigationProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeEditScheduleLayerViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\DatePersons.cs" />
@@ -312,6 +319,7 @@
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthDayViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MonthSchedule\MonthScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\MyReport\DailyMetricsViewModel.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\AbsenceAccountViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditPersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeEditScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\WeekSchedule\OvertimeAvailabilityInput.cs" />
@@ -540,8 +548,14 @@
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
     <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
+    <Compile Include="Core\Startup\FindAreaRegistrations.cs" />
+    <Compile Include="Core\Startup\IFindAreaRegistrations.cs" />
     <Compile Include="Core\Startup\InitializeApplication\BundleScripts.cs" />
     <Compile Include="Core\Startup\InitializeApplication\MessageBrokerTask.cs" />
+    <Compile Include="Core\Startup\IRegisterArea.cs" />
+    <Compile Include="Core\Startup\IRegisterAreas.cs" />
+    <Compile Include="Core\Startup\RegisterArea.cs" />
+    <Compile Include="Core\Startup\RegisterAreas.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
     <Compile Include="Areas\MyTime\Controllers\SettingsController.cs" />
@@ -766,6 +780,18 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\knockout.justgagebinding.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\raphaelloader.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherenceteams.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.staffingmetrics.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.personschedule.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\knockout.bindings.js" />
@@ -780,7 +806,8 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\Tests.html" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\team.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addactivityform.js" />
@@ -792,11 +819,12 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page-group.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesite\vm_test.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherence\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherenceteams\vm_test.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\site.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\realtimeadherencesites\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift-menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\shared\group-page.js" />
@@ -804,10 +832,12 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\shift.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
+    <Content Include="Areas\Anywhere\Content\Styles\realtimeadherence.css" />
+    <Content Include="Areas\Anywhere\Content\Templates\diagnosis\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesite\view.html" />
-    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherence\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.js" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.js" />
@@ -819,6 +849,8 @@
     <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.RequestViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyReport.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Month.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MonthViewModel.js" />
@@ -1056,6 +1088,9 @@
     <Content Include="Areas\MyTime\Content\Images\view_top_wide_bg.png" />
     <Content Include="Areas\MyTime\Content\Images\view_ul_states_sprite.png" />
     <Content Include="Areas\MyTime\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Content\justgage\justgage.20130410.js" />
+    <Content Include="Content\justgage\justgage.1.0.1.min.js" />
+    <Content Include="Content\justgage\raphael-min.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko-amd.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\all.min.js" />
     <Content Include="Content\moment-datepicker\moment.i18n\bg.js" />
@@ -1109,7 +1144,7 @@
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
     <Content Include="Content\moment\moment.all.min.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\require\resources.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\resourcesr.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\require\signalrrr.js" />
     <Content Include="Content\require\noext.js" />
     <Content Include="Content\require\require.js" />

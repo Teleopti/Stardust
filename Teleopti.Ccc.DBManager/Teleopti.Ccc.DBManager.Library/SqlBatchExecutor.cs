@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Teleopti.Ccc.DBManager.Library
@@ -19,7 +17,6 @@ namespace Teleopti.Ccc.DBManager.Library
 			_log = log;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		public void ExecuteBatchSql(string sql)
 		{
 			var transaction = _sqlConnection.BeginTransaction();

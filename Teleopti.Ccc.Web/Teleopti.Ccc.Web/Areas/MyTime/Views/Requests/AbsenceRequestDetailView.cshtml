@@ -11,11 +11,11 @@
             <textarea class="form-control request-edit-message" placeholder="@Resources.Message" data-bind="value: Message" />
         <!-- /ko -->
 <div class="form-group">
-    <label>
+    <label style="padding-top: 10px;">
         @Resources.AbsenceType
     </label>
     <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-6" style="padding-top: 6px;">
             <select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable">
                 @foreach (var absenceType in Model.AbsenceTypes)
                 {
@@ -23,33 +23,85 @@
                 }
             </select>
         </div>
+		<!-- ko if: ShowAbsenceAccount -->
+	    <div id="absence-personal-account">
+			<div>
+				<label>
+					@Resources.Remaining:
+				</label>
+				<!-- ko if: AbsenceTrackedAsDay() -->
+				<span class="remainingTime" data-bind="text: AbsenceRemaining() + ' @Resources.Days	'"></span>
+				<!-- /ko -->
+				<!-- ko if: AbsenceTrackedAsHour() -->
+				<span class="remainingTime" data-bind="text: AbsenceRemaining()"></span>
+				<!-- /ko -->
+			</div>
+			<div>
+				<label>
+					@Resources.Used:
+				</label>
+				<!-- ko if: AbsenceTrackedAsDay() -->
+				<span class="usedTime" data-bind="text: AbsenceUsed() + ' @Resources.Days	'"></span>
+				<!-- /ko -->
+				<!-- ko if: AbsenceTrackedAsHour() -->
+				<span class="usedTime" data-bind="text: AbsenceUsed()"></span>
+				<!-- /ko -->
+			</div>
+	    </div>
+		<!-- /ko -->
     </div>
 </div>
 <div class="row form-group">
     <div class="col-xs-8">
-        <span class="input-group" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
-            <input class="request-edit-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
-            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-calendar"></i></span>
+        <span class="input-group">
+				<![if (!IE)|(gt IE 8)]>
+				<input class="request-edit-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
+				<![endif]>
+				<!--[if lte IE 8]>
+				<input class="request-edit-datefrom input-sm form-control" data-bind="value: DateFrom().format(DateFormat())"  readonly="readonly" type="text" />
+				<![endif]-->
+	        <span class="input-group-btn">
+		        <button class="btn btn-default btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
+			        <i class="glyphicon glyphicon-calendar"></i>
+		        </button>
+	        </span>
         </span>
     </div>
     <div class="col-xs-4 bootstrap-timepicker">
         <div class="request-edit-timefrom input-group">
             <input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
-            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
+	        <span class="input-group-btn">
+		        <button class="btn btn-default btn-sm" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+			        <i class="glyphicon glyphicon-time"></i>
+		        </button>
+			</span>
         </div>
     </div>
 </div>
 <div class="row form-group">
     <div class="col-xs-8">
-        <span class="input-group" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
-            <input class="request-edit-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
-            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-calendar"></i></span>
+        <span class="input-group">
+			<![if (!IE)|(gt IE 8)]>
+			<input class="request-edit-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
+			<![endif]>
+			<!--[if lte IE 8]>
+			<input class="request-edit-dateto input-sm form-control" data-bind="value: DateTo().format(DateFormat())" readonly="readonly" type="text" />
+			<![endif]-->
+	        <span class="input-group-btn">
+				<button class="btn btn-default btn-sm" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }">
+					<i class="glyphicon glyphicon-calendar"></i>
+				</button>
+			</span>
         </span>
     </div>
     <div class="col-xs-4 bootstrap-timepicker">
         <div class="request-edit-timeto input-group">
             <input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled" />
-            <span class="input-group-addon input-sm"><i class="glyphicon glyphicon-time"></i></span>
+            <span class="input-group-btn">
+				<button class="btn btn-default btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEnabled, 'disabled': IsTimeInputEnabled ? null : 'disabled'">
+					<i class="glyphicon glyphicon-time"></i>
+				</button>
+			</span>
         </div>
     </div>
 </div>

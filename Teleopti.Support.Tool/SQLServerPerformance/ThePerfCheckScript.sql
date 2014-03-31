@@ -70,7 +70,8 @@ index_level	page_count			avg_fragmentation_in_percent	avg_page_space_used_in_per
 -- Ok, this is not our business ...
 -- Rebuilding index consumes a lot of I/O and transaction log space. This is not Teleopti stuff. Hand over to customer IT.
 -- .. but this is how you REBUILD a table (the clustered index inself) plus all other (non-clustered index) on that specific table
-ALTER INDEX ALL ON mart.fact_schedule_forecast_skill reorganize
+ALTER INDEX ALL ON mart.fact_schedule_forecast_skill reorganize --if avg_fragmentation_in_percent value > 5% and < = 30%
+ALTER INDEX ALL ON mart.fact_schedule_forecast_skill rebuild --if avg_fragmentation_in_percent value > 30%
 
 ---------
 -- queries access the master database or msdb
@@ -272,15 +273,15 @@ DECLARE @Duration datetime
 DECLARE @IntervalInSeconds int
 DECLARE @DateFrom datetime
 
-SET @Duration='24:00:00' --EDIT: default 24 hours
-SET @IntervalInSeconds=900 --EDIT: default 15 min
+SET @Duration='02:00:00' --2 hour. default 24 hours in SP
+SET @IntervalInSeconds=300 --every 5 minutes
 
 --collect data
 EXEC [dbo].[DBA_VirtualFilestats_Load] @Duration=@Duration,@IntervalInSeconds=@IntervalInSeconds
 
---view result last batch => @Duration
-SELECT @DateFrom=getdate()-@Duration
-EXEC [dbo].DBA_report_data_IO_By_Interval @DateFrom=@DateFrom,@DateTo='2059-12-31'
+--view all data
+--settings for data collection
+EXEC [dbo].DBA_report_data_IO_By_Interval @DateFrom='2001-12-31',@DateTo='2059-12-31'
 
 --view all result
 --EXEC [dbo].DBA_report_data_IO_By_Interval @DateFrom='1900-01-01',@DateTo='2059-12-31'
@@ -319,7 +320,7 @@ http://www.brentozar.com/sql/sql-server-san-best-practices/
 -- This job will collect IO stats every tuesday (00:00), 24 hours, every 15 minutes
 USE [msdb]
 GO
-IF EXISTS (select 1 from sys.databases where name='TeleoptiAnalytisc')
+IF EXISTS (select 1 from sys.databases where name='TeleoptiAnalytics')
 BEGIN
 	DECLARE @server_name nvarchar(30)
 	SELECT @server_name = CAST(SERVERPROPERTY('ServerName') AS nvarchar(30))

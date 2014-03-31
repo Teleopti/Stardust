@@ -2,7 +2,7 @@ define([
 		'knockout',
 		'helpers',
 		'shared/timeline-time',
-		'resources!r'
+		'resources'
 	], function (ko, helpers, timeViewModel, resources) {
 
 		var minutes = helpers.Minutes;

@@ -40,10 +40,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _activity = new Activity("activity");
 
-            GroupingActivity groupAct = new GroupingActivity("f");
-            PersistAndRemoveFromUnitOfWork(groupAct);
-            _activity.GroupingActivity = groupAct;
-
             PersistAndRemoveFromUnitOfWork(_organizer);
             PersistAndRemoveFromUnitOfWork(_attendee1);
             PersistAndRemoveFromUnitOfWork(_scenario);

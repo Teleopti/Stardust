@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
+using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {
@@ -141,5 +142,30 @@ namespace Teleopti.Ccc.DomainTest.Helper
 				};
 			target.Route().Should().Contain("ShortTerm");
 		}
+
+		[Test]
+		public void ShouldExcludeDatasourceForTeamAdherenceMessage()
+		{
+			target = new Subscription
+			{
+				DataSource = Guid.NewGuid().ToString(),
+				DomainType = typeof(SiteAdherenceMessage).Name
+			};
+
+			target.Route().Should().Not.Contain(target.DataSource);
+		}
+
+		[Test]
+		public void ShouldExcludeDatasourceForSiteAdherenceMessage()
+		{
+			target = new Subscription
+			{
+				DataSource = Guid.NewGuid().ToString(),
+				DomainType = typeof(TeamAdherenceMessage).Name
+			};
+
+			target.Route().Should().Not.Contain(target.DataSource);
+		}
+
 	}
 }

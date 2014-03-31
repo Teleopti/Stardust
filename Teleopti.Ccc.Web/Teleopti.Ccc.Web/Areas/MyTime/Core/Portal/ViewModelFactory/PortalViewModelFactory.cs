@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Reports.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
 
@@ -16,21 +18,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 		private readonly ILicenseActivator _licenseActivator;
 		private readonly IPushMessageProvider _pushMessageProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IReportsNavigationProvider _reportsNavigationProvider;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
 												  ILicenseActivator licenseActivator,
 												  IPushMessageProvider pushMessageProvider,
-												  ILoggedOnUser loggedOnUser)
+												  ILoggedOnUser loggedOnUser, IReportsNavigationProvider reportsNavigationProvider)
 		{
 			_permissionProvider = permissionProvider;
 			_licenseActivator = licenseActivator;
 			_pushMessageProvider = pushMessageProvider;
 			_loggedOnUser = loggedOnUser;
+			_reportsNavigationProvider = reportsNavigationProvider;
 		}
 
 		public PortalViewModel CreatePortalViewModel()
 		{
 			var navigationItems = new List<NavigationItem> { createWeekScheduleNavigationItem() };
+			var reportsItems = _reportsNavigationProvider.GetNavigationItems();
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
 				navigationItems.Add(createTeamScheduleNavigationItem());
@@ -54,13 +59,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			{
 				navigationItems.Add(createMessageNavigationItem(_pushMessageProvider.UnreadMessageCount));
 			}
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.MyReportWeb))
+			var reportsList = new List<ReportNavigationItem>();
+			if (reportsItems != null && (reportsItems.Count.Equals(1) && reportsItems.First().IsMyReport))
 			{
-				navigationItems.Add(createMyeReportNavigationItem());
+				navigationItems.Add(reportsItems.First());
 			}
+			else if (reportsItems != null) reportsList.AddRange(reportsItems);
 
 			return new PortalViewModel
 						{
+							ReportNavigationItems = reportsList,
 							NavigationItems = navigationItems,
 							CustomerName = _licenseActivator.CustomerName,
 							ShowChangePassword = showChangePassword(),

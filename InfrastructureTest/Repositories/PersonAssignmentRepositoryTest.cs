@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IScenario _dummyScenario;
         private IShiftCategory _dummyCat;
         private IShiftCategory _dummyCategory;
-        private IGroupingActivity _groupAct;
         private IMultiplicatorDefinitionSet _definitionSet;
 
 
@@ -39,9 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             using(var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 var repRemove = new Repository(uow);
-                _groupAct = new GroupingActivityRepository(uow).Load(_groupAct.Id.Value);
                 repRemove.Remove(_dummyActivity);
-                repRemove.Remove(_groupAct);
                 repRemove.Remove(_dummyCategory);
                 repRemove.Remove(_dummyCat);
                 repRemove.Remove(loaded);
@@ -62,10 +59,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _dummyCat = ShiftCategoryFactory.CreateShiftCategory("dummyCat");
             _rep = RepositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
-            _groupAct = new GroupingActivity("f");
-            PersistAndRemoveFromUnitOfWork(_groupAct);
 						_dummyActivity = new Activity("dummy") { DisplayColor = Color.DodgerBlue };
-            _dummyActivity.GroupingActivity = _groupAct;
             PersistAndRemoveFromUnitOfWork(_dummyActivity);
             _dummyAgent = PersonFactory.CreatePerson("m");
             _dummyAgent2 = PersonFactory.CreatePerson("n");

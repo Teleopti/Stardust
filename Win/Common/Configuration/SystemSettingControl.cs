@@ -13,141 +13,145 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Common.Configuration
 {
-    public partial class SystemSettingControl : BaseUserControl, ISettingPage
-    {
-        private DefaultSegment _defaultSegmentSetting;
-        private AdherenceReportSetting _adherenceReportSetting;
-        private StringSetting _supportEmailSetting;
+	public partial class SystemSettingControl : BaseUserControl, ISettingPage
+	{
+		private DefaultSegment _defaultSegmentSetting;
+		private AdherenceReportSetting _adherenceReportSetting;
+		private StringSetting _supportEmailSetting;
+		private AsmAlertTime _asmAlertTime;
 
-        public SystemSettingControl()
-        {
-            InitializeComponent();
-        }
+		public SystemSettingControl()
+		{
+			InitializeComponent();
+		}
 
-        public void InitializeDialogControl()
-        {
-            setColors();
-            SetTexts();
-        }
+		public void InitializeDialogControl()
+		{
+			setColors();
+			SetTexts();
+		}
 
-        private void setColors()
-        {
-            BackColor = ColorHelper.WizardBackgroundColor();
-            tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
+		private void setColors()
+		{
+			BackColor = ColorHelper.WizardBackgroundColor();
+			tableLayoutPanelBody.BackColor = ColorHelper.WizardBackgroundColor();
 
-            gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
-            labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
+			gradientPanelHeader.BackgroundColor = ColorHelper.OptionsDialogHeaderGradientBrush();
+			labelHeader.ForeColor = ColorHelper.OptionsDialogHeaderForeColor();
 
-            autoLabelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
-            autoLabelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
-        }
+			autoLabelSubHeader1.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
+			autoLabelSubHeader1.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
+		}
 
-        public void LoadControl()
-        {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                _defaultSegmentSetting = new GlobalSettingDataRepository(uow).FindValueByKey("DefaultSegment", new DefaultSegment());
-                _adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
-                _supportEmailSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
-            }
-            var calculatorTypeCollection = LanguageResourceHelper.TranslateEnumToList<AdherenceReportSettingCalculationMethod>();
-            var adherenceSetting = _adherenceReportSetting.CalculationMethod;
-            comboBoxAdvAdherencReportCalculation.DataSource = calculatorTypeCollection;
-            comboBoxAdvAdherencReportCalculation.DisplayMember = "Value";
-            comboBoxAdvAdherencReportCalculation.ValueMember = "Key";
+		public void LoadControl()
+		{
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				_defaultSegmentSetting = new GlobalSettingDataRepository(uow).FindValueByKey("DefaultSegment", new DefaultSegment());
+				_adherenceReportSetting = new GlobalSettingDataRepository(uow).FindValueByKey(AdherenceReportSetting.Key, new AdherenceReportSetting());
+				_supportEmailSetting = new GlobalSettingDataRepository(uow).FindValueByKey("SupportEmailSetting", new StringSetting());
+				_asmAlertTime = new GlobalSettingDataRepository(uow).FindValueByKey("AsmAlertTime", new AsmAlertTime());
+			}
+			var calculatorTypeCollection = LanguageResourceHelper.TranslateEnumToList<AdherenceReportSettingCalculationMethod>();
+			var adherenceSetting = _adherenceReportSetting.CalculationMethod;
+			comboBoxAdvAdherencReportCalculation.DataSource = calculatorTypeCollection;
+			comboBoxAdvAdherencReportCalculation.DisplayMember = "Value";
+			comboBoxAdvAdherencReportCalculation.ValueMember = "Key";
 
-            foreach (var pair in calculatorTypeCollection.Where(pair => pair.Key == adherenceSetting))
-                comboBoxAdvAdherencReportCalculation.SelectedValue = pair.Key;
-
-
-            comboBoxAdvAdherencReportCalculation.SelectedIndexChanged += ComboBoxAdvAdherencReportCalculationSelectedIndexChanged;
-            textBoxSuportEmail.Text = _supportEmailSetting.StringValue;
-            initIntervalLengthComboBox(_defaultSegmentSetting.SegmentLength);
-        }
-
-        private void initIntervalLengthComboBox(int defaultLength)
-        {
-            var intervalLengths = new List<IntervalLengthItem>
-                                  	{
-                                  		new IntervalLengthItem(10),
-                                  		new IntervalLengthItem(15),
-                                  		new IntervalLengthItem(30),
-                                  		new IntervalLengthItem(60)
-                                  	};
-
-        	comboBoxAdvIntervalLength.DataSource = intervalLengths;
-            comboBoxAdvIntervalLength.DisplayMember = "Text";
-            IntervalLengthItem selectedIntervalLengthItem =
-                intervalLengths.FirstOrDefault(length => length.Minutes == defaultLength);
-            comboBoxAdvIntervalLength.SelectedItem = selectedIntervalLengthItem;
-        }
-
-        public void SaveChanges()
-        {
-            Persist();
-        }
+			foreach (var pair in calculatorTypeCollection.Where(pair => pair.Key == adherenceSetting))
+				comboBoxAdvAdherencReportCalculation.SelectedValue = pair.Key;
 
 
-        public void Unload()
-        {
-        }
+			comboBoxAdvAdherencReportCalculation.SelectedIndexChanged += ComboBoxAdvAdherencReportCalculationSelectedIndexChanged;
+			textBoxSuportEmail.Text = _supportEmailSetting.StringValue;
+			initIntervalLengthComboBox(_defaultSegmentSetting.SegmentLength);
+			numericUpDownAsmSetting.Value = _asmAlertTime.SecondsBeforeChange;
+		}
 
-        public TreeFamily TreeFamily()
-        {
-            return new TreeFamily(Resources.SystemSettings);
-        }
+		private void initIntervalLengthComboBox(int defaultLength)
+		{
+			var intervalLengths = new List<IntervalLengthItem>
+												{
+													new IntervalLengthItem(10),
+													new IntervalLengthItem(15),
+													new IntervalLengthItem(30),
+													new IntervalLengthItem(60)
+												};
 
-        public string TreeNode()
-        {
-            return Resources.SystemSettings;
-        }
+			comboBoxAdvIntervalLength.DataSource = intervalLengths;
+			comboBoxAdvIntervalLength.DisplayMember = "Text";
+			IntervalLengthItem selectedIntervalLengthItem =
+					intervalLengths.FirstOrDefault(length => length.Minutes == defaultLength);
+			comboBoxAdvIntervalLength.SelectedItem = selectedIntervalLengthItem;
+		}
 
-    	public void OnShow()
-    	{
-    	}
+		public void SaveChanges()
+		{
+			Persist();
+		}
 
-    	public void SetUnitOfWork(IUnitOfWork value)
-        {}
+		public void Unload()
+		{
+		}
 
-        public void Persist()
-        {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                _defaultSegmentSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_defaultSegmentSetting).GetValue(new DefaultSegment());
-                _adherenceReportSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_adherenceReportSetting).GetValue( new AdherenceReportSetting());
-                SupportEmailToSetting();
-                _supportEmailSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_supportEmailSetting).GetValue(new StringSetting());
-                uow.PersistAll();
-            }
-        }
+		public TreeFamily TreeFamily()
+		{
+			return new TreeFamily(Resources.SystemSettings);
+		}
 
-        public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
-        {
-            throw new NotImplementedException();
-        }
+		public string TreeNode()
+		{
+			return Resources.SystemSettings;
+		}
 
-        public ViewType ViewType
-        {
-            get { return ViewType.SystemSetting; }
-        }
+		public void OnShow()
+		{
+		}
 
-        private void ComboBoxAdvIntervalLengthSelectedIndexChanged(object sender, EventArgs e)
-        {
-            var selectedIntervalLengthItem = (IntervalLengthItem)comboBoxAdvIntervalLength.SelectedItem;
-            _defaultSegmentSetting.SegmentLength = selectedIntervalLengthItem.Minutes;
-        }
+		public void SetUnitOfWork(IUnitOfWork value)
+		{ }
 
-        private void ComboBoxAdvAdherencReportCalculationSelectedIndexChanged(object sender, EventArgs e)
-        {
-            var selected = (KeyValuePair<AdherenceReportSettingCalculationMethod, string>)
-                comboBoxAdvAdherencReportCalculation.SelectedItem;
-            _adherenceReportSetting.CalculationMethod = selected.Key;
-        }
+		public void Persist()
+		{
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				_defaultSegmentSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_defaultSegmentSetting).GetValue(new DefaultSegment());
+				_adherenceReportSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_adherenceReportSetting).GetValue(new AdherenceReportSetting());
+				SupportEmailToSetting();
+				_supportEmailSetting = new GlobalSettingDataRepository(uow).PersistSettingValue(_supportEmailSetting).GetValue(new StringSetting());
+				_asmAlertTime.SecondsBeforeChange = (int)numericUpDownAsmSetting.Value;
+				_asmAlertTime = new GlobalSettingDataRepository(uow).PersistSettingValue(_asmAlertTime).GetValue(new AsmAlertTime());
+				uow.PersistAll();
+			}
+		}
 
-        private void SupportEmailToSetting()
-        {
-            _supportEmailSetting.StringValue = textBoxSuportEmail.Text;
-        }
+		public void LoadFromExternalModule(SelectedEntity<IAggregateRoot> entity)
+		{
+			throw new NotImplementedException();
+		}
 
-    }
+		public ViewType ViewType
+		{
+			get { return ViewType.SystemSetting; }
+		}
+
+		private void ComboBoxAdvIntervalLengthSelectedIndexChanged(object sender, EventArgs e)
+		{
+			var selectedIntervalLengthItem = (IntervalLengthItem)comboBoxAdvIntervalLength.SelectedItem;
+			_defaultSegmentSetting.SegmentLength = selectedIntervalLengthItem.Minutes;
+		}
+
+		private void ComboBoxAdvAdherencReportCalculationSelectedIndexChanged(object sender, EventArgs e)
+		{
+			var selected = (KeyValuePair<AdherenceReportSettingCalculationMethod, string>)
+					comboBoxAdvAdherencReportCalculation.SelectedItem;
+			_adherenceReportSetting.CalculationMethod = selected.Key;
+		}
+
+		private void SupportEmailToSetting()
+		{
+			_supportEmailSetting.StringValue = textBoxSuportEmail.Text;
+		}
+
+	}
 }

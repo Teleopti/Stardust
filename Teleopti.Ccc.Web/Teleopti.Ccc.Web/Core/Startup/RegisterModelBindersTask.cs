@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.Startup
 {
-	[TaskPriority(3)]
+	[TaskPriority(4)]
 	public class RegisterModelBindersTask : IBootstrapperTask
 	{
 		private readonly IEnumerable<IAuthenticationType> _authenticatorTypes;

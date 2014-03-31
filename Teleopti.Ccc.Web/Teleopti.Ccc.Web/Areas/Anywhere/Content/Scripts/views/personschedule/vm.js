@@ -9,7 +9,7 @@ define([
 	'views/personschedule/addintradayabsenceform',
 	'shared/group-page',
 	'helpers',
-	'resources!r',
+	'resources',
 	'select2',
 	'lazy'
 ], function (

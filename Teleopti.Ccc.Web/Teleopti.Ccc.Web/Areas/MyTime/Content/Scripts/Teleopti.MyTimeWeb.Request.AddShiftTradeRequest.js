@@ -136,6 +136,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
         self.requestedDate = ko.computed({
         	read: function () {
+        		//remove old layer's tooltip if it still exist
+        		$("[class='tooltip fade top in']").remove();
+        		
                 return self.requestedDateInternal();
             },
             write: function (value) {
@@ -284,7 +287,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				type: 'GET',
 				contentType: 'application/json; charset=utf-8',
 				data: {
-				    selectedDate: self.requestedDateInternal().toDate().toJSON(),
+					selectedDate: self.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
 				    teamId: self.selectedTeamInternal(),
 				    Take: take,
 				    Skip: skip
@@ -431,6 +434,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
     
 	return {
 		Init: function () {
+			vm = '';
 			initScrollPaging();
 		},
 		SetShiftTradeRequestDate: function (date) {
@@ -455,8 +459,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function loadAPageIfRequired() {
 
 	    if ($('#Request-add-shift-trade').filter(':visible').length == 0)
-	        return;
-	    
+	    	return;
+		
 	    $('#tooltipContainer').each(function (i, el) {
 			// Is this element visible onscreen?
 			// LoadMore

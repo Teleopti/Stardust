@@ -21,20 +21,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new RequestableAbsenceType(name));
 		}
 
+		[Given(@"I have a requestable absence with")]
+		public void GivenIHaveARequestableAbsenceWith(Table table)
+		{
+			var requestableAbsenceFields = table.CreateInstance<RequestableAbsenceFields>();
+			DataMaker.Data().Apply(new RequestableAbsenceType(requestableAbsenceFields));
+		}
+
 		[When(@"I input absence request values with (\S*)")]
 		public void WhenIInputAbsenceRequestValuesWith(string name)
 		{
 			WhenIInputAbsenceRequestValuesWithForDate(name, DateOnlyForBehaviorTests.TestToday.Date);
 		}
 
+		[Given(@"I input absence request values with '(.*)' for date '(.*)'")]
 		[When(@"I input absence request values with '(.*)' for date '(.*)'")]
 		public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
 		{
+			WhenIInputAbsenceRequestValuesWithFromTo(name, date, date);
+		}
+
+		[When(@"I input absence request values with ""(.*)"" from ""(.*)"" to ""(.*)""")]
+		public void WhenIInputAbsenceRequestValuesWithFromTo(string absenceName, DateTime dateFrom, DateTime dateTo)
+		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-subject", "The cake is a.. Cake!");
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-message", "A message. A very very very short message. Or maybe not.");
-			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", name);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-datefrom", date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(DataMaker.Data().MyCulture));
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-add-section .request-new-absence", absenceName);
+
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-datefrom').datepicker('set', '{0}');",
+							  dateFrom.ToShortDateString(DataMaker.Data().MyCulture)));
+			Browser.Interactions.Javascript(string.Format("$('#Request-add-section .request-new-dateto').datepicker('set', '{0}');",
+							  dateTo.ToShortDateString(DataMaker.Data().MyCulture)));
 		}
 
 		[When(@"I input overtime availability with")]

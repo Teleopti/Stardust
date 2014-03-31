@@ -5,55 +5,85 @@
 @model PortalViewModel
 
 <div id="autocollapse" class="navbar navbar-default navbar-fixed-top bdd-mytime-top-menu">
-    <div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
-        
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                       <span class="sr-only">Toggle navigation</span>
-                       <span class="icon-bar"></span>
-                       <span class="icon-bar"></span>
-                       <span class="icon-bar"></span>
-                   </button>
-            <a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
-        </div>
-        
-        <div class="collapse navbar-collapse transition-fix" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-                @foreach (var navSection in Model.NavigationItems)
-                {
-                    <li>
-                        @if (navSection.UnreadMessageCount>0)
-                        {
-                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
-                        }
-                        else
-                        {
-                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge hide"></span></a>
-                        }
-                    </li>
-                }
-            </ul>
-                
-            <div class="navbar-right">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><span class="user-name" title="@User.Identity.Name"><small> @User.Identity.Name</small></span> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
-                            @if (Model.ShowChangePassword)
-                            {
-                                <li><a href="#" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
-                            }
-                            <li class="divider"></li>
-                            @if (Model.HasAsmPermission)
-                            {
-                                <li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
-                                <li class="divider"></li>
-                            }
-                            <li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout"})</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
+	<div class="container">
+		<div class="hidden" data-culture-show-meridian="@Model.ShowMeridian.ToString().ToLowerInvariant()"></div>
+
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="@string.Format("#{0}Tab", Model.NavigationItems.FirstOrDefault().Controller)">Teleopti</a>
+		</div>
+
+		<div class="collapse navbar-collapse transition-fix" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+				@foreach (var navSection in Model.NavigationItems)
+	{
+					<li>
+						@if (navSection.UnreadMessageCount > 0)
+	  {
+							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
+					}
+	  else
+	  {
+							<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title<span class="badge hide"></span></a>
+					}
+					</li>
+			}
+				@if (Model.ReportNavigationItems.Count() > 0)
+	{
+		  
+					<li class="dropdown">
+						<a id="reports" href="#" class="dropdown-toggle" data-toggle="dropdown">@Resources.Reports <b class="caret"></b></a>
+						<ul id="report-list" class="dropdown-menu">
+							@foreach (var reportNavSection in Model.ReportNavigationItems)
+	   {
+		   if (reportNavSection.IsDivider)
+		   {
+								<li class="divider"></li>
+								continue;
+							}
+								<li>
+									@if (reportNavSection.IsMyReport)
+		 {
+										<a href="@string.Format("#{0}Tab", reportNavSection.Controller)" data-mytime-action="@Html.Portal().GetAction(reportNavSection)">@reportNavSection.Title<span class="badge hide"></span></a>
+								}
+									@if (!reportNavSection.IsMyReport)
+		 {
+										<a href="@reportNavSection.Url" target="_blank">@reportNavSection.Title</a>
+								}
+								</li>
+						}
+						</ul>
+					</li>
+			}
+
+			</ul>
+
+			<div class="navbar-right">
+				<ul class="nav navbar-nav">
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle user-name-link" data-toggle="dropdown"><i class="glyphicon glyphicon-user"></i><span class="user-name" title="@User.Identity.Name"><small>@User.Identity.Name</small></span> <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#" id="regional-settings" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
+							@if (Model.ShowChangePassword)
+	   {
+								<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
+						}
+							<li class="divider"></li>
+							@if (Model.HasAsmPermission)
+	   {
+								<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
+								<li class="divider"></li>
+						}
+							<li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
 </div>

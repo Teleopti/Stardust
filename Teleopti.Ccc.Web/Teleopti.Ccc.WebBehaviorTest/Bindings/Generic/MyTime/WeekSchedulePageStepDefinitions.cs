@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[When(@"I click on the day summary for date '(.*)'")]
+		[Given(@"I click on the day summary for date '(.*)'")]
 		public void WhenIClickOnTheDaySummaryForDate(DateTime date)
 		{
 			Browser.Interactions.Click(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-summary", date.ToString("yyyy-MM-dd")));
@@ -24,12 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIClickOvertimeAvailabilityBar()
 		{
 			Browser.Interactions.Click(".overtime-availability-bar");
-		}
-
-		[Then(@"I should not be able to see schedule link")]
-		public void ThenIShouldNotBeAbleToSeeScheduleLink()
-		{
-			Browser.Interactions.AssertNotExistsUsingJQuery(".bdd-mytime-top-menu", "a[href='#ScheduleTab']");
 		}
 
 	}

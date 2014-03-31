@@ -1,4 +1,7 @@
-﻿using TechTalk.SpecFlow;
+﻿using System;
+using System.Globalization;
+using System.Threading;
+using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
@@ -35,6 +38,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.PageSize-1));
 			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
+		}
+
+		[When(@"I wait until requests loaded or timeout")]
+		public void WhenIWaitingNextPageOfRequestLoaded()
+		{
+			var count = 0;
+			var isLoading = true;
+			while (isLoading && count < 10)
+			{
+				Thread.Sleep(100);
+				bool isVisible;
+				bool.TryParse(Browser.Interactions.Javascript("return $('#loadingRequestIndicator').is(':visible')").ToString(), out isVisible);
+				var cssDisplay = Browser.Interactions.Javascript("return $('#loadingRequestIndicator').css('display')").ToString();
+
+				isLoading = isVisible && string.Compare(cssDisplay, "none", false, CultureInfo.CurrentCulture) != 0;
+				count++;
+			}
 		}
 
 		[Then(@"I should see a requests list")]
@@ -208,12 +228,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldNotSeeResendShifttradeButtonForRequestAtPosition(int position)
 		{
 			Browser.Interactions.AssertNotExists(".request:nth-child(" + position + ")", ".request:nth-child(" + position + ") .btn[data-bind*='reSend']");
-		}
-
-		[Then(@"I should not see any shifts to trade with")]
-		public void ThenIShouldNotSeeAnyShiftsToTradeWith()
-		{
-			ScenarioContext.Current.Pending();
 		}
 
 	}

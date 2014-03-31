@@ -85,9 +85,11 @@
     <Compile Include="DateTimeExtensions.cs" />
     <Compile Include="DummyContextPopulator.cs" />
     <Compile Include="FakeCurrentInitiatorIdentifier.cs" />
+    <Compile Include="FakeData\AbsenceAccountFactory.cs" />
     <Compile Include="FakeData\CultureInfoFactory.cs" />
     <Compile Include="FakeData\EditableShiftFactory.cs" />
     <Compile Include="FakeData\FakeDataSource.cs" />
+    <Compile Include="FakeData\MessageSenderExposingNotifications.cs" />
     <Compile Include="FakeInitiatorIdentifier.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDataReadScheduleRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonAbsenceReadScheduleRepository.cs" />
@@ -116,7 +118,6 @@
     <Compile Include="FakeData\DayOffFactory.cs" />
     <Compile Include="FakeData\DaysOffPreferencesFactory.cs" />
     <Compile Include="FakeData\FakeUserTextTranslator.cs" />
-    <Compile Include="FakeData\GroupingActivityFactory.cs" />
     <Compile Include="FakeData\LicenseDataFactory.cs" />
     <Compile Include="FakeData\MultiplicatorDefinitionSetFactory.cs" />
     <Compile Include="FakeData\MultiplicatorFactory.cs" />
@@ -252,6 +253,7 @@
     <Compile Include="TestData\Setups\Configurable\NoteConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\OvertimeAvailabilityConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PartTimePercentageConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PersonAccountUpdateConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonAvailabilityConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonDayOffConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonGroupConfigurable.cs" />

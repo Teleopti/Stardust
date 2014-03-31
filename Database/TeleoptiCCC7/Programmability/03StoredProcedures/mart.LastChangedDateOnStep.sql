@@ -19,6 +19,8 @@ AS
 
 DECLARE @thisTime datetime
 DECLARE @lastTime datetime
+DECLARE @maxDayToGoBackForScheduleUpdates int
+SET @maxDayToGoBackForScheduleUpdates=14 --Number of days to go back for updated Schedule data
 
 --insert missing stepName for each BU
 INSERT INTO mart.LastUpdatedPerStep(StepName,BusinessUnit,[Date])
@@ -80,9 +82,11 @@ BEGIN
 	FROM [ReadModel].[ScheduleDay] s
 	INNER JOIN #persons p ON p.PersonId = s.PersonId
 	WHERE InsertedOn > @lastTime --InsertedOn includes milliseconds, @lastTime does not => we will always catch the last changed schedule over and over again
+	AND InsertedOn > DATEADD(DAY,-@maxDayToGoBackForScheduleUpdates,GETUTCDATE())  --Limit the number of days we go back. #27450
 
 	--get max for this BU
 	SET @thisTime = (SELECT max(InsertedOn) from #PersonsUpdated)
+
 END
 IF @stepName = 'Permissions'
 BEGIN

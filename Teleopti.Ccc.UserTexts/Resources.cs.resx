@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>Absence</value>
@@ -1538,7 +1538,7 @@ Periods</comment>
     <comment>Quarter</comment>
   </data>
   <data name="QuestionCreateAnotherSubSkill" xml:space="preserve">
-    <value>Chcete vytvořit další podstupeň kvalifikace?</value>
+    <value>Chcete vytvořit další dílčí kvalifikaci?</value>
     <comment>Do you want to create another sub skill?</comment>
   </data>
   <data name="QuestionCreateAnotherWorkload" xml:space="preserve">
@@ -1546,7 +1546,7 @@ Periods</comment>
     <comment>Do you want to create another workload?</comment>
   </data>
   <data name="QuestionCreateSubSkill" xml:space="preserve">
-    <value>Vícemístná kvalifikace neobsahuje žádné podstupně kvalifikace. Chcete nějaký vytvořit?</value>
+    <value>Vícemístná kvalifikace neobsahuje žádné dílčí kvalifikace. Chcete nějakou vytvořit?</value>
     <comment>The multi-site skill does not contain any sub skills. Would you like to create one?</comment>
   </data>
   <data name="QuestionDeleteTheSkillTwoParameters" xml:space="preserve">
@@ -1848,7 +1848,7 @@ Periods</comment>
     <comment>Skill data grids</comment>
   </data>
   <data name="SkillDayIsInvalidOneParameter" xml:space="preserve">
-    <value>Informace o chybě: {0} Ověřte, že max. počet agentů je 0 nebo je vyšší než min. počet agentů nebo že se distribuce mezi podstupni kvalifikace doplňuje do 100%.</value>
+    <value>Informace o chybě: {0} Ověřte, že max. počet agentů je 0 nebo je vyšší než min. počet agentů nebo že se distribuce mezi dílčími kvalifikacemi doplňuje do 100%.</value>
     <comment>Error information: {0} Check that max agents are 0 or higher than min agents, or that the distribution between the sub skills adds to 100%.</comment>
   </data>
   <data name="SkillDayTemplate" xml:space="preserve">
@@ -1948,19 +1948,19 @@ Periods</comment>
     <comment>Start time</comment>
   </data>
   <data name="SubSkill" xml:space="preserve">
-    <value>Podstupeň kvalifikace</value>
+    <value>Dílčí kvalifikace</value>
     <comment>Sub skill</comment>
   </data>
   <data name="SubSkillDistributions" xml:space="preserve">
-    <value>Distribuce podstupňů kvalifikace</value>
+    <value>Distribuce dílčích kvalifikací</value>
     <comment>Sub skills distributions</comment>
   </data>
   <data name="SubSkillHasValueInTemplate" xml:space="preserve">
-    <value>Podstupeň kvalifikace nemůže být smazán. Obsahuje hodnoty v distribučních šablonách. Hodnoty nejprve odstraňte a zkuste to znovu.</value>
+    <value>Dílčí kvalifikace nemůže být smazána. Obsahuje hodnoty v distribučních šablonách. Hodnoty nejprve odstraňte a zkuste to znovu.</value>
     <comment>The sub skill cannot be deleted. It has values in distribution templates. Remove them first and try again.</comment>
   </data>
   <data name="SubSkills" xml:space="preserve">
-    <value>Podstupně kvalifikace</value>
+    <value>Dílčí kvalifikace</value>
     <comment>Sub skills</comment>
   </data>
   <data name="Summary" xml:space="preserve">
@@ -2577,7 +2577,7 @@ Vyloučení</value>
     <comment>Grid In Chart</comment>
   </data>
   <data name="BackToLegalState" xml:space="preserve">
-    <value>Zpět do legálního stavu</value>
+    <value>Zpět do povoleném stavu</value>
     <comment>Back To Legal State</comment>
   </data>
   <data name="EditCommonAgentNameDescription" xml:space="preserve">
@@ -3142,7 +3142,7 @@ Vyjmout</value>
     <comment>Open hours</comment>
   </data>
   <data name="SubSkillDistributionsColon" xml:space="preserve">
-    <value>Distribuce podstupňů kvalifikace:</value>
+    <value>Distribuce dílčí kvalifikace:</value>
     <comment>Sub skills distributions</comment>
   </data>
   <data name="FindAmpersandReplace" xml:space="preserve">
@@ -4894,7 +4894,7 @@ Pracovní náplň</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="AvailableTime" xml:space="preserve">
-    <value>Dostupný čas</value>
+    <value>Doba připr.</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
   <data name="IdleTime" xml:space="preserve">
@@ -6862,7 +6862,7 @@ Jsou aktivovány tyto volby:
     <comment>Scheduled hours incoming</comment>
   </data>
   <data name="InReadyTime" xml:space="preserve">
-    <value>V prostoji</value>
+    <value>V době připr.</value>
     <comment>"In Ready Time" column header for the activity setting page</comment>
   </data>
   <data name="SelectAMultiplicator" xml:space="preserve">
@@ -6953,7 +6953,7 @@ Aktualizováno: {1}</value>
     <value>Doba připr. / Plánovaná doba připr. </value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsScheduledTime" xml:space="preserve">
-    <value>Doba připr. / Plánovaná doba připr. (včetne doby pred a po začátku zmeny)</value>
+    <value>Doba připr. / Plánovaná doba připr. (včetně doby před a po začátku směny)</value>
   </data>
   <data name="CloseApplication" xml:space="preserve">
     <value>Zavřít aplikaci</value>
@@ -7352,7 +7352,7 @@ Aktualizováno: {1}</value>
     <value>Uroveň sestavy</value>
   </data>
   <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Doba připravenosti / Plánovaná smluvní doba</value>
+    <value>Doba připr. / Plánovaná smluvní doba</value>
   </data>
   <data name="AnsweredContacts" xml:space="preserve">
     <value>Vyřízené hovory</value>
@@ -7637,7 +7637,7 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
     <value>Opravdu chete setkat setkání {0}?</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
-    <value>Součet rozložení mezi dílčí kvalifikacimusí být 100%</value>
+    <value>Součet rozložení mezi dílčí kvalifikaci musí být 100%</value>
   </data>
   <data name="YouMustHaveAtLeastOneDateInShiftTradeRequest" xml:space="preserve">
     <value>Musíte mít alespoň jedno datum ve svém požadavku na výměnu směny.</value>
@@ -7979,7 +7979,7 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
     <value>Konflikt</value>
   </data>
   <data name="InfoTextConflict" xml:space="preserve">
-    <value>Tento záznam upravoval jiný uživatel. Před pokračováním se musíte rozhodnout co udělat. Kliknutím na OK,  akceptjete změny ostatních uživatelů. Upozornění, příslušné vaše změny budou ztracen. Kliknutím na Zrušit, pokračujete bez uložení. Kliknutím na Přepsat, uložíte vaše změny a smažete změny ostatních uživatelů.</value>
+    <value>Tento záznam upravoval jiný uživatel. Před pokračováním se musíte rozhodnout co udělat. Kliknutím na OK,  akceptjete změny ostatních uživatelů. Upozornění, příslušné vaše změny budou ztracen. Kliknutím na Přepsat, uložíte vaše změny a smažete změny ostatních uživatelů.</value>
   </data>
   <data name="NotSaved" xml:space="preserve">
     <value>Neuloženo</value>
@@ -7994,10 +7994,10 @@ Abychom Vám mohli dát relevantní informace o této chybě, žádáme Vás, ab
     <value>Neznámý</value>
   </data>
   <data name="PeriodInLegalState" xml:space="preserve">
-    <value>Období v legálním stavu</value>
+    <value>Období v povoleném stavu</value>
   </data>
   <data name="WeekInLegalState" xml:space="preserve">
-    <value>Týden v legálním stavu</value>
+    <value>Týden v povoleném stavu</value>
   </data>
   <data name="BusinessOrientation" xml:space="preserve">
     <value>Obchodní požadavky</value>
@@ -8396,7 +8396,7 @@ Období: {3}</value>
     <value>Přidat pohyblivé období</value>
   </data>
   <data name="DaysOffBackToLegalState" xml:space="preserve">
-    <value>Volné dny zpět do legálního stavu</value>
+    <value>Volné dny zpět do povoleném stavu</value>
   </data>
   <data name="Rescheduling" xml:space="preserve">
     <value>Opakované plánování</value>
@@ -8766,7 +8766,7 @@ Chybová zpráva: {0}</value>
     <value>Vybrané činnosti</value>
   </data>
   <data name="PeriodNotInLegalState" xml:space="preserve">
-    <value>Období není v legálním stavu</value>
+    <value>Období není v povoleném stavu</value>
   </data>
   <data name="AuditTrailSettings" xml:space="preserve">
     <value>Nastavení auditu plánu</value>
@@ -9462,10 +9462,10 @@ Chybová zpráva: {0}</value>
     <value>Stejné dny volna</value>
   </data>
   <data name="ResReportAdherencePerAgent" xml:space="preserve">
-    <value>Spravedlnost dle operátora</value>
+    <value>Dodržování dle operátora</value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
-    <value>Spravedlnost dle dne</value>
+    <value>Dodržování dle dne</value>
   </data>
   <data name="PleaseChooseSkillSet" xml:space="preserve">
     <value>Prosím zvolte sadu kvalifikací.</value>
@@ -9786,7 +9786,8 @@ Tyto volitelné funkce jsou používány:
     <value>Organizace</value>
   </data>
   <data name="PersonFinderFieldPartTimePercentage" xml:space="preserve">
-    <value>Procento částečně</value>
+    <value>Procentní podíl
+zkrácených úvazků</value>
   </data>
   <data name="PersonFinderFieldShiftBag" xml:space="preserve">
     <value>Množina směn</value>
@@ -10192,5 +10193,720 @@ Tyto volitelné funkce jsou používány:
   </data>
   <data name="MobileReports" xml:space="preserve">
     <value>Mobilní reporty</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>Hodinová dostupnost</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>Hodinová dostupnost</value>
+  </data>
+  <data name="OpenStudentAvailability" xml:space="preserve">
+    <value>Otevřít hodinovou dostupnost</value>
+  </data>
+  <data name="LockStudentAvailability" xml:space="preserve">
+    <value>Uzamknout Hodinovou dostupnost</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Hodinové dostupnosti</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Splnění hodinové dostupnosti</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Povolit schůzky</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Přidat rozšířené preference</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Ostatní</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Rozšířené preference</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>Rozložení mezi dílčími kvalifikacemi musí být rovno 100%</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Maximální obsazenost agentů musí být vyšší nebo rovna minimální obsazenosti agentů</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>Maximum agentů musí být vyšší nebo rovno minimum agentů</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Naplánovaní agenti podle aktivit</value>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Dobra nepřipr.</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Celkem</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Nebyla nalezena žádná zpráva</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Optimalizace spravedlnosti zapnuta</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value>- hodnota po optimalizace není lepší, návrat zpět.</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value>- hodnota po =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value>- hodnota před =</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Odesílatel</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Odeslat</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Zvolené umístění souboru neexistuje, prosím zadejte platnou cestu.</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Něco se při exportu souboru  nepodařilo, prosím zkuste jiné umístění</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Zvolené umístění souboru je příliš dlouhé, prosím zadejte platnou cestu</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Stejná aktivita</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>Po kontrole zachovat aktivity</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Váš plán {0} byl změněn!</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows)</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>Použít průměrnou délku směny</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Přihlášení selhalo! Účet je zablokován.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Přihlášení selhalo! Platnost hesla vypršela.</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Přeskočit</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Chybné jméno nebo heslo</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Platnost Vašeho heslo vypršela.</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Platnost Vašeho hesla brzy vyprší.</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Varování!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Předpovědět znovu</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>Lidé</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Odstranit</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Pracovní náplně</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>Musíte zvolit minimálně jednu pracovní náplň</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Můj plán</value>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Chyba během ukládání vyšich zěn. Nejpravděpodobnější důvod je, že vy nebo jiný uživatel smazala data, která byla nastavena. Z důvodu ochrany konzistence dat bude formulář uzavřen. Omlouváme se, Vaše změny budou ztraceny.</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Datum (začátek směn)</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Pro výměnu není dostupný žádný agent</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Datum od (začátek směn)</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Datum do (začátek směn)</value>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>Málo</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Střední</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Hodně</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Rychlá předpověď</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Sezénnost a trendy datového rozsahu</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Styl vyhlazení</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Zvolit historická data pro šablonu dní</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Zobrazit informační zprávu</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Chyby</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Rychlá předpověď bude spuštěna jako proces na pozadí jakmile bude tento průvodce dokončen, podívejte se na status do historie procesů.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Nelze zobrazit plán když je status požadavku na změnu Nový, odsouhlaste nebo odmítněte.</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Název nové šablony</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Název šablony s prázdnými preferencemi</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Jméno nesmí být prázdné nebo delší než 50 znaků.</value>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Nedostatečné obsazení pro :</value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>Nedostatečné obsazení pro : {0} </value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>Jeden nebo více dní během požadovaného období {0} nebo povolen rozpočet.</value>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>Pro období {0} není rozpočet</value>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>Není rozpočet pro období: {0}</value>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>Pro den {0} není povolen dostatečný rozpočet.</value>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>Váš požadavek byl zamítnut. Období není otevřeno pro zasílání požadavků.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>Váš požadavek byl zamítnut. Den není otevřen pro zasílání požadavků. Následující otevřené datum je {0}</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>Kritický podstav pro : {0}</value>
+  </data>
+  <data name="CurrentNumberOfShifts" xml:space="preserve">
+    <value>Současný počet směn:</value>
+  </data>
+  <data name="GeneratingShifts" xml:space="preserve">
+    <value>Generování směn</value>
+  </data>
+  <data name="ShiftGenerationStop" xml:space="preserve">
+    <value>Stop! Tato pravidla jsou příliš komplexní a směny nemohou být generovány v rámci max. limitu. Žádné směny z této sady pravidel nebudou dostupné pro plánování a optimalizaci. Omezte komplexnost aby bylo možné směny použít.</value>
+  </data>
+  <data name="ShiftGenerationWarning" xml:space="preserve">
+    <value>Varování! Generování směn podle těchto pravidel trvá příliš dlouho. To sníží výkonnost plánování a optimalizace v následujících fázích!</value>
+  </data>
+  <data name="TooComplexRuleset" xml:space="preserve">
+    <value>to je příliš komplexní sada pravidel</value>
+  </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>Zobrazit všechny skupiny stránek</value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Generovat předpověď pro </value>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Zvolené nepřítomnosti</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Zpracovávám ...</value>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Zpráv ({0})</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>Není povolen dostatečný rozpočet pro den:</value>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Šance na získání požadavku na absenci garantována:</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Přdat hodinovou dostupnost</value>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Váš požadavek na absenci byl zamítnut. Některé dny v požadovaném období nejsou otevřeny pro požadavky. Můžete zaslat požadavek pro toto období: {0}.</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Plán přesčasů</value>
+  </data>
+  <data name="ScheduleOvertimeOptions" xml:space="preserve">
+    <value>Možnosti plánu přesčasů</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Kvalifikace aktivit</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Stávající stránka</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Najít</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Najít další</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Najít text v reportu</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>První stránka</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Poslední stránka</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Další</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Další stránka</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Nenalezeny další výsledky</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Nastavení stránky</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Šířka stránky</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Předchozí stránka</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Rozložení tisku</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Tisk</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Zastavit vykreslování</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Text nenalezen</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Stránek celkem</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Celá stránka</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zvětšit</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Vypršel limit pro připojení do databáze, zkuste omezit podmínky vyhledávání.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Splněno</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Plnění (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Musím mít</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Nesplněno</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>Kategorie změn</value>
+  </data>
+  <data name="SwitchToViewPointOfSelectedAgent" xml:space="preserve">
+    <value>Přepnout pohled zvoleného agenta</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Sdílení kalendáře</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Sdílet můj kalendář</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>Zrušit</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>Pro přihlášení k Vašemu plánu z aplikace kalendáře, použijte URL níže. Pro instrukce jak postupovat z většiny běžných aplikací pro kalendáře viz. </value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Odeslat znovu</value>
+  </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Dostupnost pro přesčas</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>Placený čas</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>Procentní podíl
+zkrácených úvazků</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>Množina směn</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>Filtrovat dle hodinové dostupnosti</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>Hodinová dostupnost</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Předmět je příliš dlouhý</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Průměr</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Rozložení</value>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Směna jako přesčas</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>Podle data</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>Rozložení kategorie směn</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>Na agenta</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>Na kategorii směn</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Informace k analýze</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>zde</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Celkový čas zvolených aktivit</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Prosím zvolte SDK</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Zachovat&gt;</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Upravit dostupnost</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Použit den z měsíční sezónnosti</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Kvalifikace agentů</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Není zde pro Vás žádná skupina rozpočtů</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Probíhá řešení nenaplánovaných dní ...</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Výměna směny zamítnuta protože jsou směny s různým datem.</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Přidat absenci během dne</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Absence během dne</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Optimalizace s bloky mezi dny volna a bez zachování dnů týmu dohromady není podporována</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Porovnat s týmem</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Čas ve stavu na agenta</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detail dodržování</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>Můj Report</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Aktivních agentů</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>Není dostupné žádné období</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Chybný čas konce.</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Přidejte, prosím, absenci v rámci dne do stávající směny.</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Nemůžete vytvořit druhou směnu přidáním činnosti.</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>Pro toto datum nejste již zaměstnanec</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Metrika</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Připravenost</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Hodnota</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Včera</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Čas úkolu</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Celkový čas úkolu</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Čas hovoru</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Nemáte přístup k žádným týmům.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Porovnat s týmmy z</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Dobra připr. / plánovaná doba připr. (%)</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Plán musí být znovu načten</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Body za dny volna</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Body za senioritu</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Body za kategorii směn</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Detail dodržování</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Souhrn</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Měsíční plán</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Hodnocení</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Přehled dodržování v reálném čase</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>Skupina rozpočtu počtu zaměstnanců</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>Počet zaměstnanců</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Přidat celodenní absenci</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Neplatné datum konce</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Rozlišení (minuty)</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Tým s jedním agentem</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>Stejná směna</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>Prosím zvolte  v blokové optimalizaci alespoň jednu možnost "Stejná kategorie směn", "Stejný čas začátku", nebo "Stejná směna"</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Potvrďte odstranění</value>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>Není povoleno přesunout pracovní směnu na jiný den, vytvořte novou.</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Přidání preferencí ....</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>Spravedlivý</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Dobrý</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>Špatný</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Shromažďuji data ...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Zlepšeno</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>Adresát odpověděl na Vaši předchozí zprávu. Obnovte okno, aybste viděli jeho odpověď. Vaše zpráva nebude odeslána.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Dostupnost na agenta</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>Blok období týmu není v povoleném stavu</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Max paraleleních úkolů:</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>Zobrazit aktivní agenty</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>Ztracené chaty</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>Zodpovězené chaty</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>Průměrně chat </value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>Zamítnuto</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Lokální čas</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Přidat dostupnost přesčasů</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>Kalkulované chaty</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Kampaň chyty %</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Dostupnost přesčasů</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Minule uložená dostupnsot přesčasů:</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Odchylka chatu:</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>Předpovězené chaty</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>Index chatů</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>Příchozí chaty</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Originalní příchozí chaty</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Celkem chaty</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>Ověřené chaty</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Čas kampaní chtatu %</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Chaty</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Celkový čas chatů</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Filtrovat dostupnost přesčasu</value>
+  </data>
+  <data name="AssignmentOptions" xml:space="preserve">
+    <value>Možnosti přiřazení</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Trvání přesčasu</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>Označit změny s:</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Typ přesčasu</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Prodloužit konec stávající směny:</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Trvání přesčasu:</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Kvalifikace aktivity:</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Typ přesčasu:</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>Typ sleodování</value>
+  </data>
+  <data name="WorkflowControlSetHeader" xml:space="preserve">
+    <value>Sada pracovních postupů</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>Pracovní doba</value>
   </data>
 </root>

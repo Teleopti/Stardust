@@ -608,7 +608,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IForecastTemplateOwner.cs" />
-    <Compile Include="Domain\IGroupingActivity.cs" />
     <Compile Include="Domain\ILayer.cs" />
     <Compile Include="Domain\ILayerCollection.cs" />
     <Compile Include="Domain\ILayerCollectionOwner.cs">
@@ -750,7 +749,6 @@
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
-    <Compile Include="MessageBroker\Client\IAsyncMessageSender.cs" />
     <Compile Include="MessageBroker\Client\IMessageSender.cs" />
     <Compile Include="MessageBroker\Core\Consts.cs">
       <SubType>Code</SubType>

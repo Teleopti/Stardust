@@ -48,38 +48,44 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Senior
 				{
 					var mostValuableDayIndexOfSenior = getIndexFromMatrix(dateOnly, seniorMatrix, considerWeekBefore, considerWeekAfter);
 					var mostValuableDayIndexOfJunior = getIndexFromMatrix(dateOnly, juniorMatrix, considerWeekBefore, considerWeekAfter);
-					var workingSeniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,
-					                                                                       seniorMatrix);
-					var workingJuniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,
-					                                                                       juniorMatrix);
-					workingSeniorBitArray.Set(mostValuableDayIndexOfSenior, true);
-					workingJuniorBitArray.Set(mostValuableDayIndexOfJunior, false);
+					var workingSeniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,seniorMatrix);
+					var workingJuniorBitArray = _lockableBitArrayFactory.ConvertFromMatrix(considerWeekBefore, considerWeekAfter,juniorMatrix);
+					var isLocked = workingSeniorBitArray.IsLocked(mostValuableDayIndexOfSenior, true) || workingJuniorBitArray.IsLocked(mostValuableDayIndexOfJunior, true);
 
-					foreach (var dayOffDay in dayOffsToGiveAway)
+					if (!isLocked)
 					{
-						if (_cancel) return null;
-						var candidateDaySenior = seniorScheduleRange.ScheduledDay(dayOffDay);
-						var candidateDayJunior = juniorScheduleRange.ScheduledDay(dayOffDay);
+						workingSeniorBitArray.Set(mostValuableDayIndexOfSenior, true);
+						workingJuniorBitArray.Set(mostValuableDayIndexOfJunior, false);
 
-						if (isOnlySeniorHasDayOff(candidateDaySenior, candidateDayJunior))
+						foreach (var dayOffDay in dayOffsToGiveAway)
 						{
-							var giveAwayDayOffSeniorBitArray = (ILockableBitArray) workingSeniorBitArray.Clone();
-							var acceptDayOffJuniorBitArray = (ILockableBitArray) workingJuniorBitArray.Clone();
-							var giveAwayDayOffDayIndexOfSenior = getIndexFromMatrix(dayOffDay, seniorMatrix, considerWeekBefore,
-							                                                        considerWeekAfter);
-							var acceptDayOffDayIndexOfJunior = getIndexFromMatrix(dayOffDay, juniorMatrix, considerWeekBefore,
-							                                                      considerWeekAfter);
-							giveAwayDayOffSeniorBitArray.Set(giveAwayDayOffDayIndexOfSenior, false);
-							acceptDayOffJuniorBitArray.Set(acceptDayOffDayIndexOfJunior, true);
+							if (_cancel) return null;
+							var candidateDaySenior = seniorScheduleRange.ScheduledDay(dayOffDay);
+							var candidateDayJunior = juniorScheduleRange.ScheduledDay(dayOffDay);
 
-							if (_dayOffRulesValidator.Validate(giveAwayDayOffSeniorBitArray, optimizationPreferences) &&
-							    _dayOffRulesValidator.Validate(acceptDayOffJuniorBitArray, optimizationPreferences))
+							if (isOnlySeniorHasDayOff(candidateDaySenior, candidateDayJunior))
 							{
-								return new PossibleSwappableDays
+								var giveAwayDayOffSeniorBitArray = (ILockableBitArray) workingSeniorBitArray.Clone();
+								var acceptDayOffJuniorBitArray = (ILockableBitArray) workingJuniorBitArray.Clone();
+								var giveAwayDayOffDayIndexOfSenior = getIndexFromMatrix(dayOffDay, seniorMatrix, considerWeekBefore,considerWeekAfter);
+								var acceptDayOffDayIndexOfJunior = getIndexFromMatrix(dayOffDay, juniorMatrix, considerWeekBefore,considerWeekAfter);
+								isLocked = giveAwayDayOffSeniorBitArray.IsLocked(giveAwayDayOffDayIndexOfSenior, true) || acceptDayOffJuniorBitArray.IsLocked(acceptDayOffDayIndexOfJunior, true);
+
+								if (!isLocked)
+								{
+									giveAwayDayOffSeniorBitArray.Set(giveAwayDayOffDayIndexOfSenior, false);
+									acceptDayOffJuniorBitArray.Set(acceptDayOffDayIndexOfJunior, true);
+
+									if (_dayOffRulesValidator.Validate(giveAwayDayOffSeniorBitArray, optimizationPreferences) &&
+									    _dayOffRulesValidator.Validate(acceptDayOffJuniorBitArray, optimizationPreferences))
 									{
-										DateForSeniorDayOff = dateOnly,
-										DateForRemovingSeniorDayOff = dayOffDay
-									};
+										return new PossibleSwappableDays
+											{
+												DateForSeniorDayOff = dateOnly,
+												DateForRemovingSeniorDayOff = dayOffDay
+											};
+									}
+								}
 							}
 						}
 					}

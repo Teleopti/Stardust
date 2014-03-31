@@ -57,7 +57,9 @@ namespace Teleopti.Ccc.Domain.Collection
 
 			foreach (var dateOnly in _periodToMonitor.DayCollection())
 			{
-				var scheduleDay = range.ScheduledDay(dateOnly);
+			    if (dateOnly > person.TerminalDate) continue;
+                var scheduleDay = range.ScheduledDay(dateOnly);
+				if (!scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) continue;
 				var shiftCategory = scheduleDay.PersonAssignment(true).ShiftCategory;
 				if (shiftCategory == null)
 					continue;

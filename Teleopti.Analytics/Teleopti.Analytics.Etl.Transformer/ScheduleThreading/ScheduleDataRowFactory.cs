@@ -104,7 +104,24 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
             row["datasource_id"] = 1;
             row["insert_date"] = insertDateTime;
             row["update_date"] = insertDateTime;
-            row["datasource_update_date"] = insertDateTime;
+
+	        var personAssignmentUpdateOn = DateTime.MinValue;
+			if (scheduleProjection.SchedulePart.PersonAssignment() != null)
+			{
+				personAssignmentUpdateOn = scheduleProjection.SchedulePart.PersonAssignment().UpdatedOn.Value;
+			}
+			var absenceUpdateOn = DateTime.MinValue;
+	        foreach (var personAbsence in scheduleProjection.SchedulePart.PersonAbsenceCollection())
+	        {
+		        if (personAbsence.UpdatedOn.Value > absenceUpdateOn)
+		        {
+			        absenceUpdateOn = personAbsence.UpdatedOn.Value;
+		        }
+	        }
+	        if (absenceUpdateOn > personAssignmentUpdateOn)
+		        row["datasource_update_date"] = absenceUpdateOn;
+			else
+				row["datasource_update_date"] = personAssignmentUpdateOn;
 
 			if (timeInfo.OverTime.Time > 0)
 			{

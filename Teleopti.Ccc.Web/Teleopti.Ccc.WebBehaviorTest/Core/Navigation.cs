@@ -73,11 +73,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted("Authentication", new ApplicationStartupTimeout());
 		}
 
-		public static void GotoMobileReportsSignInPage(string hash)
-		{
-			GoToWaitForCompleted("MobileReports/Authentication" + hash, new ApplicationStartupTimeout());
-		}
-
 		public static void GotoMobileReportsPage()
 		{
 			GoToWaitForCompleted("MobileReports#", new ApplicationStartupTimeout());
@@ -185,12 +180,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Browser.Interactions.AssertUrlContains("blank");
 		}
 
-		public static void GotoBlank()
-		{
-			GotoRaw("about:blank");
-			Browser.Interactions.AssertUrlContains("blank");
-		}
-
 		public static void GotoMessagePage()
 		{
 			GoToWaitForCompleted("MyTime#Message/Index", new ApplicationStartupTimeout());
@@ -202,11 +191,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 
 		public static void GotoAnywhere()
-		{
-			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
-		}
-
-		public static void GotoAnywhereTeamSchedule()
 		{
 			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
 		}
@@ -286,34 +270,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
-		public static void GotoAnywhereRealTimeAdherenceOverview()
+		public static void GotoAnywhereRealTimeAdherenceOverview(bool waitUntilSubscriptionIsCompleted)
 		{
-			GoToWaitForUrlAssert(
-				"Anywhere#realtimeadherence",
-				"Anywhere#realtimeadherence",
+			if (waitUntilSubscriptionIsCompleted)
+			{
+				GoToWaitForUrlAssert(
+					"Anywhere#realtimeadherencesites",
+					"Anywhere#realtimeadherencesites",
+					new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
+			}
+			else
+			{
+				GoToWaitForUrlAssert(
+				"Anywhere#realtimeadherencesites",
+				"Anywhere#realtimeadherencesites",
 				new ApplicationStartupTimeout());
+			}
+			
 		}
 
 		public static void GotoAnywhereRealTimeAdherenceOverview(Guid siteId)
 		{
 			GoToWaitForUrlAssert(
-				string.Format("Anywhere#realtimeadherencesite/{0}", siteId),
-				"Anywhere#realtimeadherence",
-				new ApplicationStartupTimeout());
-		}
-
-		public static void GotoRequestsShiftTrade(DateTime date)
-		{
-			GoToWaitForCompleted(
-				string.Format("MyTime#Requests/Index/ShiftTrade/{0}{1}{2}",
-				date.Year.ToString("0000"),
-				date.Month.ToString("00"),
-				date.Day.ToString("00")),
-				new BustCache(),
-				new ApplicationStartupTimeout(),
-				new WaitUntilReadyForInteraction());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
+				string.Format("Anywhere#realtimeadherenceteams/{0}", siteId),
+				"Anywhere#realtimeadherenceteams",
+				new ApplicationStartupTimeout(), new WaitUntilSubscriptionIsCompleted());
 		}
 
 		public static void GoToMyReport()
@@ -341,6 +322,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
+	}
+
+	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor
+	{
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			Browser.Interactions.AssertExists("[data-subscription-done]");
+		}
 	}
 
 	public class GotoArgs

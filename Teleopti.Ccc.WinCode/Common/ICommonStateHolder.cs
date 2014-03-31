@@ -63,5 +63,6 @@ namespace Teleopti.Ccc.WinCode.Common
 	    IEnumerable<IAbsence> ActiveAbsences { get; }
 	    IEnumerable<IDayOffTemplate> ActiveDayOffs { get; }
 	    IEnumerable<IShiftCategory> ActiveShiftCategories { get; }
+	    IDayOffTemplate DefaultDayOffTemplate { get; }
     }
 }

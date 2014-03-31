@@ -845,10 +845,16 @@ namespace Teleopti.Ccc.Win.Scheduling
                 //split long absences, will remove the long absence on splitday
                 foreach (IPersonAbsence personAbsenceSplitPart in splits)
                 {
-                    IScheduleDay splitPart = Presenter.SchedulerState.Schedules[personAbsence.Person].ScheduledDay(personAbsenceSplitPart.Period.ToDateOnlyPeriod(splitDay.TimeZone).StartDate);
-                    IScheduleDay cloneSplitPart = (IScheduleDay)splitPart.Clone();
+	                var dateOnly = personAbsenceSplitPart.Period.ToDateOnlyPeriod(splitDay.TimeZone).StartDate;
+                    var splitPart = Presenter.SchedulerState.Schedules[personAbsence.Person].ScheduledDay(dateOnly);
+                    var cloneSplitPart = (IScheduleDay)splitPart.Clone();
 
-                    splitPart.Clear<IPersonAbsence>();
+					foreach (var clearAbsence in splitPart.PersonAbsenceCollection().Reverse())
+					{
+						var clearDateOnly = clearAbsence.Period.ToDateOnlyPeriod(splitDay.TimeZone).StartDate;
+						if (clearDateOnly.Equals(dateOnly)) splitPart.Remove(clearAbsence);
+					}
+
                     splitPart.Add(personAbsenceSplitPart);
                     foreach (IPersonAbsence personAbsenceCloneDay in cloneSplitPart.PersonAbsenceCollection(true))
                     {
@@ -881,10 +887,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void splitAbsences(IList<IScheduleDay> selectedParts)
         {
-            foreach (IScheduleDay part in selectedParts)
+            foreach (var part in selectedParts)
             {
-                IScheduleDay day = Presenter.SchedulerState.Schedules[part.Person].ScheduledDay(part.Period.ToDateOnlyPeriod(part.TimeZone).StartDate);
-                splitLongAbsencePeriod(day);
+                var day = Presenter.SchedulerState.Schedules[part.Person].ScheduledDay(part.Period.ToDateOnlyPeriod(part.TimeZone).StartDate);
+	            var locks = Presenter.LockManager.Gridlocks(part.Person, day.DateOnlyAsPeriod.DateOnly);
+	            var locked = false;
+
+	            if (locks != null)
+	            {
+		            foreach (var gridLock in locks)
+		            {
+			            if (gridLock.Value.LockType == LockType.WriteProtected && !PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+				            locked = true; 
+			            else
+				            locked = true;     
+		            }
+	            }
+
+	            if(!locked) splitLongAbsencePeriod(day);
             }
         }
 
@@ -1192,7 +1212,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return ret;
         }
 
-	    public static IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
+	    public virtual IEnumerable<IPerson> AllSelectedPersons(IEnumerable<IScheduleDay> selectedSchedules)
         {
             var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
             return extractor.ExtractPersons();

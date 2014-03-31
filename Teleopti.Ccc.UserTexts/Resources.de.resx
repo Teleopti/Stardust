@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AbandonedCalls" xml:space="preserve">
     <value>abgebrochene Anrufe</value>
@@ -10368,5 +10368,554 @@ Diese Optionen sind aktiviert:
   </data>
   <data name="EmptyTemplateName" xml:space="preserve">
     <value>Name leere Präferenz-Vorlage</value>
+  </data>
+  <data name="StudentAvailability" xml:space="preserve">
+    <value>Stundenverfügbarkeit</value>
+  </data>
+  <data name="CreateStudentAvailability" xml:space="preserve">
+    <value>Stundenverfügbarkeit</value>
+  </data>
+  <data name="AddStudentAvailability" xml:space="preserve">
+    <value>Verfügbarkeit hinzufügen</value>
+  </data>
+  <data name="StudentHours" xml:space="preserve">
+    <value>Hilfskräfte</value>
+  </data>
+  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
+    <value>Für diese Verfügbarkeit sind keine Schichten vorhanden.</value>
+  </data>
+  <data name="StudentAvailabilityPeriod" xml:space="preserve">
+    <value>Verfügbarkeitsperiode</value>
+  </data>
+  <data name="OpenStudentAvailability" xml:space="preserve">
+    <value>Öffne Stundenverfügbarkeit</value>
+  </data>
+  <data name="LockStudentAvailability" xml:space="preserve">
+    <value>Sperre Stundenverfügbarkeit</value>
+  </data>
+  <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
+    <value>Mehrere Skills haben den gleichen Namen. Bitte überprüfen Sie die Eigenschaften des Multi-site Skills. Forecaster wird geschlossen.</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Stundenverfügbarkeit</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Erfüllung Studentenverfügbarkeit</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Name darf nicht leer oder länger als 50 Zeichen sein.</value>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Ungenügende Besetzung für:</value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>Ungenügende Besetzung am: {0} bei</value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>Ein oder mehrere Tage in der Anfrageperiode {0} haben keine Budgetvorgabe.</value>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>Kein Budget für die Periode {0}</value>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>Es gibt keine Budgetgruppe für Person: {0}</value>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>Keine ausreichende Budgetvorgabe für den Tag {0}.</value>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>Ihre Anfrage wurde abgelehnt. Die Periode ist noch nicht für Anfragen geöffnet.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>Ihre Anfrage wurde abgelehnt. Der Tag ist nicht für Anfragen geöffnet. Nächste geöffnete Periode ist {0}.</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>Kritische Unterbesetzung am: {0} um</value>
+  </data>
+  <data name="CurrentNumberOfShifts" xml:space="preserve">
+    <value>Aktuelle Anzahl der Schichten:</value>
+  </data>
+  <data name="GeneratingShifts" xml:space="preserve">
+    <value>Schichten werden erstellt</value>
+  </data>
+  <data name="ShiftGenerationStop" xml:space="preserve">
+    <value>Diese Regeln sind zu komplex. Es konnten keine Schichten erzeugt werden. Keine Schichten aus dieser Schichtsammlung werden zur Planung und Optimierung zur Verfügung stehen. Bitte reduzieren Sie die Komplexität, wenn Sie diese Schichten verwenden wollen. </value>
+  </data>
+  <data name="ShiftGenerationWarning" xml:space="preserve">
+    <value>Achtung! Schichterzeugung mit diesen Regeln dauert sehr lange. Dies wird die Leistungsfähigkeit der Planung und Optimierung beeinflussen. </value>
+  </data>
+  <data name="TooComplexRuleset" xml:space="preserve">
+    <value>ist eine zu komplexe Schichtsammlung! </value>
+  </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>Alle Gruppierungen anzeigen</value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Forecast erzeugen für</value>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Abwesenheiten auswählen</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Verarbeitung...</value>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Mitteilungen ({0})</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>Es steht zu wenig Budgetvorgabe zur Verfügung für Tag:</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Ganztags-Abwesenheit hinzufügen</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>ungültiges Enddatum</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Auflösung (Minuten)</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>gleiche Schicht</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>Bitte wählen Sie mindestens eine der Optionen "Gleiche Schichtkategorie", "Gleiche Startzeit" oder "Gleiche Schicht" in der Blockoptimierung.</value>
+  </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Entfernen bestätigen</value>
+  </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>Es ist nicht möglich, eine Schicht an einen anderen Tag zu verlegen, Erzeugen Sie eine neue stattdessen.</value>
+  </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Wahrscheinlichkeit Abwesenheitsanfragen bestätigt zu bekommen:</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Präferenz hinzufügen...</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Stundenverfügbarkeit hinzufügen...</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>ausreichend</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>gut</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>schlecht</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Erfasse Daten...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>verbessert</value>
+  </data>
+  <data name="RecipientAnsweredToEarlierMessage" xml:space="preserve">
+    <value>Der Empfänger hat auf eine Ihrer früheren Nachrichten geantwortet. Aktualisieren Sie das Fenster um die Antwort zu sehen. Ihre Nachricht wird nicht gesendet. </value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Verfügbarkeit pro Agent</value>
+  </data>
+  <data name="TeamBlockNotInLegalState" xml:space="preserve">
+    <value>Die Block-Periode des Teams ist nicht im gültigen Status. </value>
+  </data>
+  <data name="SelectAtleastOneBlockOption" xml:space="preserve">
+    <value>Bitte wählen Sie mindestens eine der Optionen "Schichtkategorie", "Startzeit" oder "Gleiche Schicht" in der Blockplanung.</value>
+  </data>
+  <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
+    <value>Ihr Abwesenheitsantrag wurde abgelehnt. Einige Tage in der beantragten Periode sind nicht für Anfragen geöffnet. Sie können Anträge für die folgende Periode eingeben: {0}.</value>
+  </data>
+  <data name="MaxParallelTasks" xml:space="preserve">
+    <value>Max. parallele Aufgaben:</value>
+  </data>
+  <data name="ViewActiveAgents" xml:space="preserve">
+    <value>Sehe aktive Agents</value>
+  </data>
+  <data name="SkillTypeChat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="AbandonedChats" xml:space="preserve">
+    <value>abgebrochene Chats</value>
+  </data>
+  <data name="AnsweredChats" xml:space="preserve">
+    <value>beantwortete Chats</value>
+  </data>
+  <data name="AverageChats" xml:space="preserve">
+    <value>durchschnittliche Chats</value>
+  </data>
+  <data name="RequestStatusDtoAutodenied" xml:space="preserve">
+    <value>abgelehnt</value>
+  </data>
+  <data name="LocalTime" xml:space="preserve">
+    <value>Lokale Zeit</value>
+  </data>
+  <data name="AddOvertimeAvailabilityThreeDots" xml:space="preserve">
+    <value>Überstunden-Verfügbarkeit hinzufügen</value>
+  </data>
+  <data name="CalculatedChats" xml:space="preserve">
+    <value>berechnete Chats</value>
+  </data>
+  <data name="CampaignChatsPercentSign" xml:space="preserve">
+    <value>Kampagnen Chats %</value>
+  </data>
+  <data name="OvertimeAvailability" xml:space="preserve">
+    <value>Überstunden-Verfügbarkeit</value>
+  </data>
+  <data name="PreviousSavedOvertimeAvailabilityColon" xml:space="preserve">
+    <value>Vorher gespeicherte Überstunden-Verfügbarkeit:</value>
+  </data>
+  <data name="Chat" xml:space="preserve">
+    <value>Chat</value>
+  </data>
+  <data name="DeviationChatsColon" xml:space="preserve">
+    <value>Differenz Chats:</value>
+  </data>
+  <data name="ForecastedChats" xml:space="preserve">
+    <value>prognostizierte Chats</value>
+  </data>
+  <data name="IndexChats" xml:space="preserve">
+    <value>Index Chats</value>
+  </data>
+  <data name="OfferedChats" xml:space="preserve">
+    <value>angebotene Chats</value>
+  </data>
+  <data name="OriginalOfferedChats" xml:space="preserve">
+    <value>Original angebotene Chats</value>
+  </data>
+  <data name="TotalChats" xml:space="preserve">
+    <value>Chats Gesamt</value>
+  </data>
+  <data name="ValidatedChats" xml:space="preserve">
+    <value>validierte Chats</value>
+  </data>
+  <data name="CampaignChatTimePercentSign" xml:space="preserve">
+    <value>Kampagnen Chat Zeit %</value>
+  </data>
+  <data name="Chats" xml:space="preserve">
+    <value>Chats</value>
+  </data>
+  <data name="TotalChatTime" xml:space="preserve">
+    <value>Gesamtzeit Chat</value>
+  </data>
+  <data name="FilterOvertimeAvailability" xml:space="preserve">
+    <value>Filter Überstunden-Verfügbarkeit</value>
+  </data>
+  <data name="OvertimeDuration" xml:space="preserve">
+    <value>Überstundendauer</value>
+  </data>
+  <data name="ScheduleOvertime" xml:space="preserve">
+    <value>Plane Überstunden</value>
+  </data>
+  <data name="SkillActivity" xml:space="preserve">
+    <value>Skill-Aktivität</value>
+  </data>
+  <data name="TagChangesWithWithColon" xml:space="preserve">
+    <value>markiere Änderungen mit:</value>
+  </data>
+  <data name="TypeOfOvertime" xml:space="preserve">
+    <value>Überstunden-Typ</value>
+  </data>
+  <data name="AllowBreakContractMaxWorkTimePerWeek" xml:space="preserve">
+    <value>Erlaube die max. Arbeitszeit pro Woche zu brechen</value>
+  </data>
+  <data name="AllowBreakContractNightlyRest" xml:space="preserve">
+    <value>Erlaube die nächtliche Ruhezeit zu brechen</value>
+  </data>
+  <data name="AllowBreakContractWeeklyRest" xml:space="preserve">
+    <value>Erlaube die wöchentliche Ruhezeit zu brechen</value>
+  </data>
+  <data name="ExtendTheEndOfExistingShiftsColon" xml:space="preserve">
+    <value>Verlängere das Ende der bestehenden Schicht</value>
+  </data>
+  <data name="OvertimeDurationColon" xml:space="preserve">
+    <value>Überstundendauer:</value>
+  </data>
+  <data name="SkillActivityColon" xml:space="preserve">
+    <value>Skill-Aktivität</value>
+  </data>
+  <data name="TypeOfOvertimeColon" xml:space="preserve">
+    <value>Überstunden-Typ</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>aktuelle Seite</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Finde</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Finde nächste</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Finde Text in Bericht</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>erste Seite</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>letzte Seite</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>nächste Seite</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Keine weitere Übereinstimmung gefunden.</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>von</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Seiteneinstellung</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Seitenbreite</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>vorherige Seite</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Drucklayout</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Drucken</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Aktualisieren</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Verarbeitung beenden</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Text nicht gefunden</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Gesamt-Seiten</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>ganze Seite</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Vergrößern</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Verbindung zur Datenbank unterbrochen. Bitte schränken Sie ihre Suchkriterien ein.</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>erfüllt</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>erfüllt (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Notwendigkeiten</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>unerfüllt</value>
+  </data>
+  <data name="ShiftCategoryHeader" xml:space="preserve">
+    <value>Schichtkategorie</value>
+  </data>
+  <data name="ShareCalendar" xml:space="preserve">
+    <value>Teile Kalender</value>
+  </data>
+  <data name="ShareMyCalendar" xml:space="preserve">
+    <value>Teile meinen Kalender</value>
+  </data>
+  <data name="Revoke" xml:space="preserve">
+    <value>Widerrufen</value>
+  </data>
+  <data name="ShareMyCalendarHint" xml:space="preserve">
+    <value>Um auf ihren Kalender von einer Kalender-App zugreifen zu können, benutzen Sie die u.g. URL. Für eine Anleitung für die am häufigsten verwendeten Kalender-Apps siehe  </value>
+  </data>
+  <data name="SendAgain" xml:space="preserve">
+    <value>Erneut senden</value>
+  </data>
+  <data name="OvertimeAvailabilityWeb" xml:space="preserve">
+    <value>Überstunden-Verfügbarkeit</value>
+  </data>
+  <data name="PaidTimeHeader" xml:space="preserve">
+    <value>bezahte Zeit</value>
+  </data>
+  <data name="PartTimePercentageHeader" xml:space="preserve">
+    <value>Teilzeitprozentwert</value>
+  </data>
+  <data name="RuleSetBagLower" xml:space="preserve">
+    <value>Schichtsammlung</value>
+  </data>
+  <data name="TrackerTypeHeader" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="WorkTimeHeader" xml:space="preserve">
+    <value>Arbeitszeit</value>
+  </data>
+  <data name="FilterHourlyAvailability" xml:space="preserve">
+    <value>Filter Stundenverfügbarkeit</value>
+  </data>
+  <data name="HourlyAvailability" xml:space="preserve">
+    <value>Stundenverfügbarkeit</value>
+  </data>
+  <data name="InfoPanel" xml:space="preserve">
+    <value>Info</value>
+  </data>
+  <data name="SubjectTooLong" xml:space="preserve">
+    <value>Betreff zu lang</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Durchschnitt</value>
+  </data>
+  <data name="Distribution" xml:space="preserve">
+    <value>Verteilung</value>
+  </data>
+  <data name="ShiftAsOvertime" xml:space="preserve">
+    <value>Schicht als Überstunden</value>
+  </data>
+  <data name="PerDate" xml:space="preserve">
+    <value>pro Datum</value>
+  </data>
+  <data name="ShiftCategoryDistribution" xml:space="preserve">
+    <value>Verteilung Schichtkategorie</value>
+  </data>
+  <data name="PerAgent" xml:space="preserve">
+    <value>pro Agent</value>
+  </data>
+  <data name="PerShiftCategory" xml:space="preserve">
+    <value>pro Schichtkategorie</value>
+  </data>
+  <data name="AnalysisInfo" xml:space="preserve">
+    <value>Analyseinfo</value>
+  </data>
+  <data name="Here" xml:space="preserve">
+    <value>Hier</value>
+  </data>
+  <data name="LengthOfActivity" xml:space="preserve">
+    <value>Gesamtzeit der ausgewählten Aktivität</value>
+  </data>
+  <data name="PleaseChooseSDK" xml:space="preserve">
+    <value>Bitte SDK auswählen</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;behalten&gt;</value>
+  </data>
+  <data name="ModifyAvailabilities" xml:space="preserve">
+    <value>Verfügbarkeiten ändern</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>benutze Tag des Monats Saisonalität</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Agent-Skills</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Es gibt keine Budgetgruppe für Sie.</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Versuche ungeplante Tage zu beseitigen...</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Schichttausch abgelehnt, da die Schichten an verschiedenen Tagen liegen.</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Intratag-Abwesenheit hinzufügen</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Intratag-Abwesenheit</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Block-Optimierung zwischen freien Tagen und unter nicht-einhalten der freien Tage des Teams wird nicht unterstützt </value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Vergleichsteam:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Zeit in Status pro Agent</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Detaillierte Einhaltung</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>MyReport</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>aktive Agents</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>keine Periode verfügbar</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>ungültige Endzeit</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Bitte fügen Sie eine Intratag-Abwesenheit zur bestehenden Schicht hinzu.</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>Sie können keine zweite Schicht durch hinzufügen einer Aktivität erzeugen.</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>An diesem Datum sind sie nicht als aktiver Agent hinterlegt.</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Kennzahlen</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Bereitzeit</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Wert</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Gestern</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Aufgabenzeit</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Gesamte Aufgabenzeit</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Chat-Zeit</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Sie haben keinen Zugriff auf die Teams.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Vergleiche mit Team vom</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Bereitzeit / geplante Bereitzeit (%)</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Plan muss erneut geladen werden</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Punkte f. freie Tage:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Punkte f. Senioriät:</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Punkte f. Schichtkategorie:</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Detaillierte Einhaltung</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Zusammenfassung</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Rang</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Real Time Adherence Überblick</value>
   </data>
 </root>

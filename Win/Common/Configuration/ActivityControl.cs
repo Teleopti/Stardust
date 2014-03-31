@@ -106,8 +106,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			}
 			gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedBy", Resources.UpdatedBy));
 			gridColumns.Add(new ActivityUpdatedReadOnlyTextColumn<IActivity>("UpdatedTimeInUserPerspective", Resources.UpdatedOn));
-			gridControlGroupingActivities.RowCount = GridRowCount(GridType.Activity);
-			gridControlGroupingActivities.ColCount = gridColumns.Count - 1;  //col index starts on 0
 
 			return new ReadOnlyCollection<SFGridColumnBase<IActivity>>(gridColumns);
 		}
@@ -243,7 +241,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		private GridControl GetGridControl(GridType gridType)
 		{
-			var grid = gridType == GridType.Activity ? gridControlActivities : gridControlGroupingActivities;
+			var grid =  gridControlActivities;
 
 			return grid;
 		}
@@ -267,9 +265,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void LoadSourceList(IUnitOfWork uow)
 		{
 			_sourceList.Clear();
-			var groupingActivityRepository = new GroupingActivityRepository(uow);
 			var activityRepository = new ActivityRepository(uow);
-			_sourceList.Add(GridType.GroupingActivity, groupingActivityRepository.LoadAll());
 			_sourceList.Add(GridType.Activity, activityRepository.LoadAllWithUpdatedBy());
              
             //gridControlActivities.Refresh();
@@ -292,11 +288,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 					var activityList = (IList<IActivity>)_sourceList[GridType.Activity];
 					sourceListCount = activityList.Count;
 					break;
-				case GridType.GroupingActivity:
-					gridHeaderCount = gridControlGroupingActivities.Rows.HeaderCount;
-					var groupingActivityList = (IList<GroupingActivity>)_sourceList[GridType.GroupingActivity];
-					sourceListCount = groupingActivityList.Count;
-					break;
 			}
 			return (sourceListCount + gridHeaderCount);
 		}
@@ -316,10 +307,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			base.SetCommonTexts();
 
 			toolTip1.SetToolTip(buttonNewActivity, Resources.AddActivity);
-			toolTip1.SetToolTip(buttonNewGroupingActivity, Resources.AddGroupingActivity);
 
 			toolTip1.SetToolTip(buttonAdvDeleteActivity, Resources.Delete);
-			toolTip1.SetToolTip(buttonAdvDeleteGroupingActivity, Resources.Delete);
 		}
 
 		public void InitializeDialogControl()
@@ -344,9 +333,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			labelSubHeader2.BackColor = ColorHelper.OptionsDialogSubHeaderBackColor();
 			labelSubHeader2.ForeColor = ColorHelper.OptionsDialogSubHeaderForeColor();
 
-			gridControlGroupingActivities.BackColor = ColorHelper.GridControlGridInteriorColor();
-			gridControlGroupingActivities.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
-
 			gridControlActivities.BackColor = ColorHelper.GridControlGridInteriorColor();
 			gridControlActivities.Properties.BackgroundColor = ColorHelper.WizardBackgroundColor();
 		}
@@ -354,7 +340,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void LoadControl()
 		{
-			GridHelper.GridStyle(gridControlGroupingActivities);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				LoadSourceList(uow);
@@ -377,18 +362,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var activityRepository = new ActivityRepository(uow);
-				
+
                 foreach (var activity in (IList<IActivity>)_sourceList[GridType.Activity])
                 {
                     var a = uow.Merge(activity);
                     LazyLoadingManager.Initialize(a.UpdatedBy);
-                }
-                foreach (var activity in (IList<GroupingActivity>)_sourceList[GridType.GroupingActivity])
-                {
-                    var a = uow.Merge(activity);
-                    LazyLoadingManager.Initialize(a.UpdatedBy);
-                }
-				
+                }			
 				foreach (var activity in _activitiesToBeDeleted)
 				{
 					activityRepository.Remove(activity);
@@ -437,7 +416,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		enum GridType
 		{
-			GroupingActivity,
 			Activity,
 		}
 
@@ -463,7 +441,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 		private void ActivityControlLayout(object sender, LayoutEventArgs e)
 		{
 			gridControlActivities.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
-			gridControlGroupingActivities.ColWidths.ResizeToFit(GridRangeInfo.Table(), GridResizeToFitOptions.IncludeHeaders);
 		}
 
 		private void gridControlActivities_CellClick(object sender, GridCellClickEventArgs e)

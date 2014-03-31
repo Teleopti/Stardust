@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -5648,7 +5648,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>used in rta summary</comment>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>Totalt avvikande:</value>
+    <value>Avvikelse:</value>
     <comment>used in rta summary</comment>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
@@ -8432,7 +8432,7 @@ Period: {3}</value>
     <value>Åtgärden kunde inte genomföras på grund av olika tidszoner.</value>
   </data>
   <data name="OnlineReports" xml:space="preserve">
-    <value>Online-rapporter</value>
+    <value>Realtidsrapporter</value>
   </data>
   <data name="ScheduledTimePerActivityReport" xml:space="preserve">
     <value>Schemalagd tid per aktivitet</value>
@@ -11455,5 +11455,31 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="MonthSchedule" xml:space="preserve">
     <value>Månadsschema</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Se tidsuppföljning</value>
+    <comment>text in permissions</comment>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>RTA-översikt</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Navigera</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Välj minst en person</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Endast på tillgängliga agenter</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Tid före byte av aktivitet att varna agenten (sekunder)</value>
+    <comment>Label used in System setting</comment>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Minst en dag kan inte schemaläggas</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Avvikelse</value>
   </data>
 </root>

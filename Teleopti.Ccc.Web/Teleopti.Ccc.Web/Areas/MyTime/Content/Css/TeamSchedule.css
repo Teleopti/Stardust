@@ -206,3 +206,7 @@
 .select2-container .select2-choice div b {
 	background: url('../../../../Content/select2/select2.png') no-repeat 0 -2px;
 }
+
+.nav .ie8style {
+	padding-top: 10px;
+}

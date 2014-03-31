@@ -48,6 +48,8 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartBrokerService(TimeSpan reconnectDelay)
 		{
+			if (string.IsNullOrEmpty(_serverUrl))
+				return;
 			try
 			{
 				if (_connectionHandler == null)

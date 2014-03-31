@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IScenario _scenario;
         private ISkillType _skillType;
         private IActivity _activity;
-        private IGroupingActivity _groupingActivity;
         private IMultisiteSkill _skill;
         private DateTime _date = new DateTime(2008, 1, 8, 0, 0, 0, DateTimeKind.Utc);
         private IChildSkill _childSkill;
@@ -40,13 +39,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _skillType = SkillTypeFactory.CreateSkillType();
             _skill = SkillFactory.CreateMultisiteSkill("dummy", _skillType, 15);
             _activity = new Activity("dummyActivity");
-            _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("ga1");
             _skill.Activity = _activity;
 
             PersistAndRemoveFromUnitOfWork(_skillType);
-            PersistAndRemoveFromUnitOfWork(_groupingActivity);
-
-            _groupingActivity.AddActivity(_activity);
 
             PersistAndRemoveFromUnitOfWork(_activity);
             PersistAndRemoveFromUnitOfWork(_skill);
@@ -199,7 +194,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IRepository rep = new Repository(UnitOfWork);
             rep.Remove(new SkillTypeRepository(UnitOfWork).Load(_skillType.Id.Value));
             rep.Remove(new ScenarioRepository(UnitOfWork).Load(_scenario.Id.Value));
-            rep.Remove(new GroupingActivityRepository(UnitOfWork).Load(_skill.Activity.GroupingActivity.Id.Value));
             rep.Remove(new ActivityRepository(UnitOfWork).Load(_skill.Activity.Id.Value));
             foreach (var childSkill in new SkillRepository(UnitOfWork).LoadAll())
             {

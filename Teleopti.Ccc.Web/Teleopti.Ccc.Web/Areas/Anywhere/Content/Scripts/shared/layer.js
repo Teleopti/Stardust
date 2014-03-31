@@ -2,7 +2,7 @@ define([
 	'knockout',
 	'moment',
 	'lazy',
-	'resources!r',
+	'resources',
 	'shared/timeline-unit',
 	'helpers'
 ], function (

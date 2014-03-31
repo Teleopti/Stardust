@@ -70,15 +70,16 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 			'<div class="time-limitation"><span class="glyphicon glyphicon-step-backward"></span>{4}</div>' +
 			'<div class="time-limitation"><span class="glyphicon glyphicon-step-forward"></span>{5}</div>' +
 			'<div class="time-limitation"><span class="glyphicon glyphicon-resize-horizontal"></span>{6}</div>')
-			.format($('<span/>').text(self.StartTimeLimitation()).html(),
-				$('<span/>').text(self.EndTimeLimitation()).html(),
-				$('<span/>').text(self.WorkTimeLimitation()).html(),
-				$('<span/>').text(self.Activity()).html(),
-				$('<span/>').text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-').html(),
-				$('<span/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
-				$('<span/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
+			.format($('<div/>').text(self.StartTimeLimitation()).html(),
+				$('<div/>').text(self.EndTimeLimitation()).html(),
+				$('<div/>').text(self.WorkTimeLimitation()).html(),
+				$('<div/>').text(self.Activity()).html(),
+				$('<div/>').text(self.ActivityStartTimeLimitation() ? self.ActivityStartTimeLimitation() : '-').html(),
+				$('<div/>').text(self.ActivityEndTimeLimitation() ? self.ActivityEndTimeLimitation() : '-').html(),
+				$('<div/>').text(self.ActivityTimeLimitation() ? self.ActivityTimeLimitation() : '-').html());
 
-		return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(self.ExtendedTitle(), text);
+		return '<div class="extended-tooltip"><div class="extended-part-title">{0}</div>{1}</div>'.format(
+			$('<div/>').text(self.ExtendedTitle()).html(), text);
 	});
 
     this.HasDayOff = ko.computed(function() {

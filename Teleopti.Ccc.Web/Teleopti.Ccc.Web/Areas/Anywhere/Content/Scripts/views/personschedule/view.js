@@ -2,14 +2,16 @@
 define([
 		'knockout',
 		'views/personschedule/vm',
-		'subscriptions',
+		'subscriptions.personschedule',
+		'subscriptions.groupschedule',
 		'helpers',
 		'text!templates/personschedule/view.html',
 		'resizeevent'
 ], function (
 		ko,
 		personScheduleViewModel,
-		subscriptions,
+		personsubscriptions,
+		groupsubscriptions,
 		helpers,
 		view,
 		resize
@@ -41,7 +43,7 @@ define([
 			viewModel.Date(date);
 
 			var personScheduleDeferred = $.Deferred();
-			subscriptions.subscribePersonSchedule(
+			personsubscriptions.subscribePersonSchedule(
 				viewModel.PersonId(),
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
@@ -52,7 +54,7 @@ define([
 			);
 
 			var groupScheduleDeferred = $.Deferred();
-			subscriptions.subscribeGroupSchedule(
+			groupsubscriptions.subscribeGroupSchedule(
 				viewModel.GroupId(),
 				helpers.Date.ToServer(viewModel.Date()),
 				function (data) {
@@ -69,7 +71,7 @@ define([
 		},
 
 		dispose: function (options) {
-			subscriptions.unsubscribePersonSchedule();
+			personsubscriptions.unsubscribePersonSchedule();
 			$(".datepicker.dropdown-menu").remove();
 		},
 

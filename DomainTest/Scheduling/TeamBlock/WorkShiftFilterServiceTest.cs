@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private INotOverWritableActivitiesShiftFilter _notOverWritableActivitiesShiftFilter;
 		private IPersonalShiftsShiftFilter _personalShiftsShiftFilter;
 		private IShiftCategoryRestrictionShiftFilter _shiftCategoryRestrictionShiftFilter;
-		private IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter;
+		private IShiftProjectionCacheManager _shiftProjectionCacheManager;
 		private ITimeLimitsRestrictionShiftFilter _timeLimitsRestrictionShiftFilter;
 		private IWorkTimeLimitationShiftFilter _workTimeLimitationShiftFilter;
 		private DateOnly _dateOnly;
@@ -50,16 +50,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private Group _group;
 		private List<IScheduleMatrixPro> _matrixList;
 		private ICommonActivityFilter _commonActivityFilter;
+	    private IRuleSetAccordingToAccessabilityFilter _ruleSetAccordingToAccessibilityFilter;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+            _ruleSetAccordingToAccessibilityFilter = _mocks.StrictMock<IRuleSetAccordingToAccessabilityFilter>();
 			_workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
 			_shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
 			_schedulingOptions = new SchedulingOptions();
 			_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.AverageWorkTime;
 			_schedulingOptions.MainShiftOptimizeActivitySpecification = null;
+		    _schedulingOptions.UsePreferences = false;
+			_schedulingOptions.UseRotations = false;
+			_schedulingOptions.UseAvailability = false;
+			_schedulingOptions.UseStudentAvailability = false;
 			_dateOnly = new DateOnly(2013, 3, 1);
 			var zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
 			_timeZoneInfo = (zone);
@@ -77,8 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_notOverWritableActivitiesShiftFilter = _mocks.StrictMock<INotOverWritableActivitiesShiftFilter>();
 			_personalShiftsShiftFilter = _mocks.StrictMock<IPersonalShiftsShiftFilter>();
 			_shiftCategoryRestrictionShiftFilter = _mocks.StrictMock<IShiftCategoryRestrictionShiftFilter>();
-			_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter =
-				_mocks.StrictMock<IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>();
+			_shiftProjectionCacheManager = _mocks.StrictMock<IShiftProjectionCacheManager>();
 			_timeLimitsRestrictionShiftFilter = _mocks.StrictMock<ITimeLimitsRestrictionShiftFilter>();
 			_workTimeLimitationShiftFilter = _mocks.StrictMock<IWorkTimeLimitationShiftFilter>();
 			_commonActivityFilter = _mocks.StrictMock<ICommonActivityFilter>();
@@ -89,9 +94,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 												 _mainShiftOptimizeActivitiesSpecificationShiftFilter,
 												 _notOverWritableActivitiesShiftFilter, _personalShiftsShiftFilter,
 												 _shiftCategoryRestrictionShiftFilter,
-												 _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter,
 												 _timeLimitsRestrictionShiftFilter, _workTimeLimitationShiftFilter,
-												 _shiftLengthDecider, _workShiftMinMaxCalculator, _commonActivityFilter);
+                                                 _shiftLengthDecider, 
+												 _workShiftMinMaxCalculator, 
+												 _commonActivityFilter, 
+												 _ruleSetAccordingToAccessibilityFilter,
+												 _shiftProjectionCacheManager);
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
@@ -161,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
+                Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
 				Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestriction)).Return(caches);
 				Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
 				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, caches, _finderResult)).Return(caches);
@@ -177,6 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
 				      .Return(caches);
+                Expect.Call(_ruleSetAccordingToAccessibilityFilter.Filter(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
 			}
 			using (_mocks.Playback())
 			{
@@ -199,8 +208,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-				Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
-                Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
+				Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
                 Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
                 Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, null, _finderResult)).Return(null);
                 Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
@@ -214,6 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
 				      .Return(null);
+                Expect.Call(_ruleSetAccordingToAccessibilityFilter.Filter(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
 
 			}
 			using (_mocks.Playback())
@@ -237,8 +247,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 				      .Return(true);
-				Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
-                Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
+				Expect.Call(_commonMainShiftFilter.Filter(null, effectiveRestriction)).Return(null);
                 Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(null, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(null);
                 Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, null, _finderResult)).Return(null);
                 Expect.Call(_disallowedShiftCategoriesShiftFilter.Filter(_schedulingOptions.NotAllowedShiftCategories, null, _finderResult)).Return(null);
@@ -248,11 +258,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_workTimeLimitationShiftFilter.Filter(null, effectiveRestriction, _finderResult)).Return(null);
                 Expect.Call(_contractTimeShiftFilter.Filter(_dateOnly, new List<IScheduleMatrixPro> { _matrix }, caches,
                                                             _schedulingOptions, _finderResult)).Return(caches);
-                //Expect.Call(_businessRulesShiftFilter.Filter(_groupPerson, caches, _dateOnly, _finderResult)).Return(caches);
 				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, null, _finderResult)).Return(null);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
                       .Return(null);
+                Expect.Call(_ruleSetAccordingToAccessibilityFilter.Filter(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
 			}
 			using (_mocks.Playback())
 			{
@@ -310,7 +320,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
 				Expect.Call(_effectiveRestrictionShiftFilter.Filter(_schedulingOptions, effectiveRestriction, _finderResult))
 					  .Return(true);
-                Expect.Call(_shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(_dateOnly, _person, false, BlockFinderType.SingleDay)).Return(caches);
+				Expect.Call(_shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_dateOnly, null, null, false, false)).IgnoreArguments().Return(caches);
 				Expect.Call(_commonMainShiftFilter.Filter(caches, effectiveRestrictionWithShiftCategory)).Return(caches);
 				Expect.Call(_mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(caches, _schedulingOptions.MainShiftOptimizeActivitySpecification)).Return(caches);
 				Expect.Call(_shiftCategoryRestrictionShiftFilter.Filter(effectiveRestrictionWithShiftCategory.ShiftCategory, caches, _finderResult)).Return(caches);
@@ -326,6 +336,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _person, caches, _finderResult)).Return(caches);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
                       .Return(caches);
+                Expect.Call(_ruleSetAccordingToAccessibilityFilter.Filter(_teamBlockInfo)).Return(new List<IWorkShiftRuleSet>());
 			}
 			using (_mocks.Playback())
 			{

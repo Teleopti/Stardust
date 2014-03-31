@@ -52,7 +52,7 @@
 	<button id="Deny-shift-trade" data-bind="click: Deny, enable: CanApproveAndDeny, visible: IsPending" class="btn btn-danger">@Resources.Deny</button>
 </div>
 
-<div class="floatright" data-bind="if: isReferred">
+<div class="shift-trade-swap-detail-send-again"  data-bind="if: isReferred">
 	<button class="btn btn-primary" data-bind="click: reSend, clickBubble: false">@Resources.SendAgain</button>
 	<button class="btn btn-danger"  data-bind="click: cancelReferred, clickBubble: false">@Resources.Cancel</button>
 </div>

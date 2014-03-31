@@ -4,9 +4,13 @@ using System.Linq;
 using System.Linq.Expressions;
 using MbCache.Core;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Ccc.Rta.Server;
+using Teleopti.Ccc.Rta.Server.Adherence;
 using Teleopti.Ccc.Rta.Server.Resolvers;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
@@ -17,23 +21,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class PhoneStateStepDefinitions
 	{
-
 		private readonly Lazy<IRtaDataHandler> rtaFactory = new Lazy<IRtaDataHandler>(() =>
 			{
 				var databaseConnectionFactory = new DatabaseConnectionFactory();
 				var databaseConnectionStringHandler = new DatabaseConnectionStringHandlerFake();
 				var databaseWriter = new DatabaseWriter(databaseConnectionFactory, databaseConnectionStringHandler);
-				var databaseReader = new DatabaseReader(databaseConnectionFactory, databaseConnectionStringHandler,
-																								new ActualAgentStateCache(databaseWriter));
+				var now = new ThisIsNow(CurrentTime.Value());
+				var databaseReader = new DatabaseReader(databaseConnectionFactory, databaseConnectionStringHandler, now);
 				var mbCacheFactory = new MbCacheFactoryFake();
-				return new RtaDataHandler(new AsyncSignalSender(TestSiteConfigurationSetup.Url.ToString()),
-																	new DataSourceResolverFake(),
-																	new PersonResolverFake(n => DataMaker.Person(n).Person),
-																	new ActualAgentAssembler(databaseReader, new CurrentAndNextLayerExtractor(),
-																													 mbCacheFactory,
-																													 new AlarmMapper(databaseReader, databaseWriter,
-																																					 mbCacheFactory)),
-																	new ActualAgentStateCache(databaseWriter));
+				var messageSender = new SignalSender(TestSiteConfigurationSetup.Url.ToString());
+				var personOrganizationProvider = new PersonOrganizationProvider(new PersonOrganizationReader(now, ConnectionStringHelper.ConnectionStringUsedInTests));
+				return new RtaDataHandler(messageSender,
+				                          new DataSourceResolverFake(),
+				                          new PersonResolverFake(n => DataMaker.Person(n).Person),
+				                          new ActualAgentAssembler(databaseReader, new CurrentAndNextLayerExtractor(),
+				                                                   mbCacheFactory,
+				                                                   new AlarmMapper(databaseReader, databaseWriter,
+				                                                                   mbCacheFactory)),
+																	databaseWriter,
+				                          new[]
+					                          {
+						                          new AdherenceAggregator(messageSender,
+						                                                  new OrganizationForPerson(personOrganizationProvider))
+					                          });
 			});
 
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]

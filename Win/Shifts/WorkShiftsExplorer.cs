@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private void toolStripButtonHelpClick(object sender, EventArgs e)
         {
-            ViewBase.ShowHelp(this,true);
+            ViewBase.ShowHelp(this,false);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]

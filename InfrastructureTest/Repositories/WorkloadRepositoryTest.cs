@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         private ISkillType _skillType;
         private IActivity _activity;
-        private IGroupingActivity _groupingActivity;
         private ISkill _skill;
 
         /// <summary>
@@ -33,13 +32,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             _skillType = SkillTypeFactory.CreateSkillType();
 						_activity = new Activity("The test") { DisplayColor = Color.Honeydew };
-            _groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
             _skill = SkillFactory.CreateSkill("Skill - Name", _skillType, 15);
             _skill.MidnightBreakOffset = TimeSpan.FromHours(2);
 
             PersistAndRemoveFromUnitOfWork(_skillType);
-            PersistAndRemoveFromUnitOfWork(_groupingActivity);
-            _activity.GroupingActivity = _groupingActivity;
             PersistAndRemoveFromUnitOfWork(_activity);
             _skill.Activity = _activity;
             PersistAndRemoveFromUnitOfWork(_skill);

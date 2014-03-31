@@ -148,9 +148,14 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             var shiftCategoryPoints =
                  personShiftCategoryPointCalculator.CalculateShiftCategorySeniorityValue(scheduleRange, _requestedPeriod,
                                                                                               shiftCategories.ToList());
-	        labelRanking.Text =
-		        rankedPersonBasedOnStartDate.GetRankForPerson(filteredPersons, _selectedPerson)
-		                                    .ToString(CultureInfo.CurrentCulture);
+            var ranking = rankedPersonBasedOnStartDate.GetRankForPerson(filteredPersons, _selectedPerson);
+            if (ranking.HasValue)
+            {
+                labelRanking.Text =
+                    rankedPersonBasedOnStartDate.GetRankForPerson(filteredPersons, _selectedPerson).Value
+                                                .ToString(CultureInfo.CurrentCulture);    
+            }
+            
 			labelDayOffPointValue.Text = dayOffPoints.ToString(CultureInfo.CurrentCulture);
             labelShiftCategoryPointValue.Text = shiftCategoryPoints.ToString(CultureInfo.CurrentCulture);
             labelSeniorityPointsValue.Text = (dayOffPoints + shiftCategoryPoints).ToString(CultureInfo.CurrentCulture);

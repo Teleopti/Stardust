@@ -13,12 +13,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 	{
 		private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 		private readonly IPeriodScheduledAndRestrictionDaysOff _periodScheduledAndRestrictionDaysOff;
+		private readonly IAgentRestrictionsNoWorkShiftfFinder _agentRestrictionsNoWorkShiftfFinder;
 		private readonly ISchedulePeriodTargetTimeCalculator _schedulePeriodTargetTimeCalculator;
 
-		public AgentRestrictionsDisplayDataExtractor(ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff)
+		public AgentRestrictionsDisplayDataExtractor(ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IPeriodScheduledAndRestrictionDaysOff periodScheduledAndRestrictionDaysOff, IAgentRestrictionsNoWorkShiftfFinder agentRestrictionsNoWorkShiftfFinder)
 		{
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 			_periodScheduledAndRestrictionDaysOff = periodScheduledAndRestrictionDaysOff;
+			_agentRestrictionsNoWorkShiftfFinder = agentRestrictionsNoWorkShiftfFinder;
 			_schedulePeriodTargetTimeCalculator = schedulePeriodTargetTimeCalculator;
 		}
 
@@ -29,14 +31,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(agentDisplayData.Matrix);
 			var minMax = _schedulePeriodTargetTimeCalculator.TargetWithTolerance(agentDisplayData.Matrix);
 			var currentDayOffs = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, schedulingOptions.UseScheduling, schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
-
+			var noWorkshiftFound = false;
 			foreach (var scheduleDayPro in agentDisplayData.Matrix.EffectivePeriodDays)
 			{
+				var scheduleDay = scheduleDayPro.DaySchedulePart();
 				//Thread.Sleep(5);
-				var projSvc = scheduleDayPro.DaySchedulePart().ProjectionService();
+				var projSvc = scheduleDay.ProjectionService();
 				var res = projSvc.CreateProjection();
-
 				if (schedulingOptions.UseScheduling) currentContractTime = currentContractTime.Add(res.ContractTime());
+
+				if (!noWorkshiftFound)
+					noWorkshiftFound = _agentRestrictionsNoWorkShiftfFinder.Find(scheduleDay, schedulingOptions);	
 			}
 
 			agentDisplayData.ContractCurrentTime = currentContractTime;
@@ -49,6 +54,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			agentDisplayData.MinimumPossibleTime = minMaxTime.Minimum;
 			agentDisplayData.MaximumPossibleTime = minMaxTime.Maximum;
 			agentDisplayData.ScheduledAndRestrictionDaysOff = _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(agentDisplayData.Matrix, schedulingOptions.UseScheduling , schedulingOptions.UsePreferences, schedulingOptions.UseRotations);
+			agentDisplayData.NoWorkshiftFound = noWorkshiftFound;
 		}
 	}
 }

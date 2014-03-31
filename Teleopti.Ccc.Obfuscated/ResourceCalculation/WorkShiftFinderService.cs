@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             var personPeriod = _person.Period(_scheduleDateOnly);
             IRuleSetBag bag = personPeriod.RuleSetBag;
 
-            _shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, false);
+            _shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, false, true);
 			
             IWorkShiftCalculationResultHolder result = null;
             if(_shiftList.Count > 0)
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			if (result == null && (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations || schedulingOptions.UseStudentAvailability))
 			{
-				_shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, true);
+				_shiftList = _shiftProjectionCacheManager.ShiftProjectionCachesFromRuleSetBag(_scheduleDateOnly, timeZone, bag, true, true);
 				if (_shiftList.Count > 0)
 					result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions, possibleStartEndCategory);
 			}

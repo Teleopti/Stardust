@@ -1,0 +1,32 @@
+﻿<div class="container realtimeadherenceteams">
+	<ul class="breadcrumb">
+		<li><a href="#realtimeadherencesites" data-bind="text: resources.RealTimeAdherence"></a></li>
+		<li class="active" data-bind="text: siteName"></li>
+	</ul>
+	<div class="row" data-bind="foreach: teams">
+		<div data-bind="if: NumberOfAgents > 0">
+			<div class="col-md-4">
+				<div class="well well-sm team">
+					<!-- ko if: !hasBeenUpdated() -->
+					<div class="overlay">
+						<h1 data-bind="text: $root.resources.WaitingThreeDots"></h1>
+					</div>
+					<!-- /ko -->
+					<div class="gage" data-bind="
+							justgage: {
+								value: OutOfAdherence,
+								max: NumberOfAgents,
+								id: Id,
+								title: Name,
+								label:  $root.resources.OutOfAdherence
+							},
+							attr: {
+								'data-value': OutOfAdherence,
+								'data-max': NumberOfAgents
+							}
+							"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
