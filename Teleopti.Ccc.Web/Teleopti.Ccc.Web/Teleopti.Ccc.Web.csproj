@@ -266,8 +266,6 @@
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\TeamViewModel.cs" />
-    <Compile Include="Areas\Diagnosis\Controllers\ApplicationController.cs" />
-    <Compile Include="Areas\Diagnosis\DiagnosisAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Controllers\MyReportController.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainData.cs" />
     <Compile Include="Areas\MyTime\Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingProfile.cs" />
@@ -763,9 +761,6 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.groupschedule.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.adherencesites.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resources.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\view.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\diagnosis\vm_test.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\window.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\tests.main.js" />
@@ -814,11 +809,6 @@
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherenceteams\view.html" />
     <Content Include="Areas\Anywhere\Content\Templates\realtimeadherencesites\view.html" />
     <Content Include="Areas\Anywhere\Views\Application\index.aspx" />
-    <Content Include="Areas\Diagnosis\Content\Scripts\main.js" />
-    <Content Include="Areas\Diagnosis\Content\Scripts\require\signalrrr.js" />
-    <Content Include="Areas\Diagnosis\Content\Scripts\signalrhubs.js" />
-    <Content Include="Areas\Diagnosis\Content\Scripts\view.js" />
-    <Content Include="Areas\Diagnosis\Content\Scripts\vm.js" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.js" />
     <Content Include="Areas\MobileReports\Content\jquery\jquery-1.10.2.min.js" />
     <Content Include="Areas\MobileReports\Content\moment\moment.js" />
@@ -1201,7 +1191,6 @@
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.woff" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="Areas\Diagnosis\Views\Application\index.aspx" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
