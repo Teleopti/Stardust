@@ -33,12 +33,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
         [Test]
         public void ShouldHaveCorrectScheduleInReports()
         {
-            AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
-            AnalyticsRunner.RunSysSetupTestData();
+			DateTime testDate = new DateTime(2013, 06, 15);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+
+			AnalyticsRunner.RunSysSetupTestData(testDate);
             const string timeZoneId = "W. Europe Standard Time";
             IPerson person;
             BasicShiftSetup.SetupBasicForShifts();
-            BasicShiftSetup.AddPerson(out person, "Ola H", "");
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
@@ -50,13 +52,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityLunch);
 
             //Add overlapping
-            BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(0), 9, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+            BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(0), 9, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
-            var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
+            var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(14).ToUniversalTime());
             var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
-            dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
+            dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
             var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
             {
                 Helper =
@@ -68,22 +70,22 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             StepRunner.RunNightly(jobParameters);
 
 	        const string phone = "Phone";
-			var schedule = SqlCommands.ReportDataScheduledTimePerAgent(DateTime.Today.AddDays(-2), DateTime.Today.AddDays(0), 1, person, timeZoneId, phone);
+			var schedule = SqlCommands.ReportDataScheduledTimePerAgent(testDate.AddDays(-2), testDate.AddDays(0), 1, person, timeZoneId, phone);
             
             Assert.That(schedule.Rows.Count, Is.EqualTo(3));
 	        foreach (DataRow row in schedule.Rows)
 	        {
-		        if ((row["date"]).Equals(DateTime.Today.AddDays(-2)))
+		        if ((row["date"]).Equals(testDate.AddDays(-2)))
 		        {
 			        Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
 			        Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(180));
 		        }
-				if ((row["date"]).Equals(DateTime.Today.AddDays(-1)))
+				if ((row["date"]).Equals(testDate.AddDays(-1)))
 				{
 					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
 					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(840));
 				}
-				if ((row["date"]).Equals(DateTime.Today.AddDays(0)))
+				if ((row["date"]).Equals(testDate.AddDays(0)))
 				{
 					Assert.That((row["activity_absence_name"]), Is.EqualTo(phone));
 					Assert.That((row["scheduled_contract_time_m"]), Is.EqualTo(420));
@@ -94,19 +96,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkWithOverlappingShifts()
 		{
-			var today = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(0));
-			var yesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-1));
-			var dayBeforeYesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-2));
+			DateTime testDate = new DateTime(2013, 06, 15);
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
-			if ((today != yesterday) || (today != dayBeforeYesterday))
-				return;
-
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
-			AnalyticsRunner.RunSysSetupTestData();
+			AnalyticsRunner.RunSysSetupTestData(testDate);
 			const string timeZoneId = "W. Europe Standard Time";
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
-			BasicShiftSetup.AddPerson(out person,"Ola H", "");
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -118,12 +115,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 
 			//Add overlapping
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
-			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
+			var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
-			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
 			{
 				Helper =
@@ -137,11 +134,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var factSchedules = SqlCommands.RowsInFactSchedule();
 
 			Assert.That(factSchedules, Is.EqualTo(76));
-			var time = DateTime.Today.AddDays(-1).AddHours(5);
+			var time = testDate.AddDays(-1).AddHours(4); //2013-06-14 04:00
 			var last = SqlCommands.RowsInFactSchedule(time);
 
 			Assert.That(last, Is.EqualTo(32));
-			time = DateTime.Today.AddDays(-2).AddHours(20);
+			time = testDate.AddDays(-2).AddHours(19);
 			var first = SqlCommands.RowsInFactSchedule(time);
 			Assert.That(first, Is.EqualTo(44));
 		}
@@ -149,16 +146,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldFindAdherence()
 		{
-			var today = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(0));
+			DateTime testDate = new DateTime(2013, 06, 15);
 			const string timeZoneId = "W. Europe Standard Time";
-			var yesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-1));
-			var dayBeforeYesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-2));
 
-			if ((today != yesterday) || (today != dayBeforeYesterday))
-			return;
-
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
-			AnalyticsRunner.RunSysSetupTestData();
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
+			AnalyticsRunner.RunSysSetupTestData(testDate);
 
 		    var el = new ExternalLogonConfigurable
 		    {
@@ -171,7 +163,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
-			BasicShiftSetup.AddPerson(out person, "Ola H", "Ola H");
+			BasicShiftSetup.AddPerson(out person, "Ola H", "Ola H", testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -183,15 +175,15 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 
 			//Add overlapping
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
-			var period = new DateTimePeriod(DateTime.Today.AddDays(-14).ToUniversalTime(), DateTime.Today.AddDays(14).ToUniversalTime());
+			var period = new DateTimePeriod(testDate.AddDays(-14).ToUniversalTime(), testDate.AddDays(14).ToUniversalTime());
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
-			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
-			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.AgentStatistics);
-			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Forecast);
-			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.QueueStatistics);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.AgentStatistics);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Forecast);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.QueueStatistics);
 			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
 			{
 				Helper =
@@ -206,50 +198,50 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//Nightly
 			StepRunner.RunNightly(jobParameters);
-			assertOverlapping(person, timeZoneId, "Nightly");
+			assertOverlapping(person, timeZoneId, "Nightly", testDate);
 
 			//Re-Add overlapping
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-2), person);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-1), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-2), person);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 21, 11, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			//Intraday
 			StepRunner.RunIntraday(jobParameters);
-			assertOverlapping(person, timeZoneId, "Intraday");
+			assertOverlapping(person, timeZoneId, "Intraday", testDate);
 
 			//Edit shifts and remove Overlapping
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-2), person);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-2), 17, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
-			BasicShiftSetup.AddShift("Ola H", DateTime.Today.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-1), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-2), person);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-2), 17, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddShift("Ola H", testDate.AddDays(-1), 6, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			//Intraday
 			StepRunner.RunIntraday(jobParameters);
 
 			//Assert on Intraday, shifts back to normal
-			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, DateTime.Today.AddDays(-1)), Is.EqualTo(35));
-			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, DateTime.Today.AddDays(-2)), Is.EqualTo(32));
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-1)), Is.EqualTo(35));
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-2)), Is.EqualTo(32));
 			var column = "deviation_schedule_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(24540));
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(21960));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(24540));
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(21960));
 			column = "scheduled_ready_time_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(25200));
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(25200));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(25200));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(25200));
 			column = "ready_time_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(4740));
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(3240));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(4740));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(3240));
 			column = "deviation_schedule_ready_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(22500));
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(21960));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(22500));
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(21960));
 		}
 
 
-		public void assertOverlapping(IPerson person, string timeZoneId, string ETLType)
+		public void assertOverlapping(IPerson person, string timeZoneId, string ETLType, DateTime testDate)
 		{
 			//Tests for "Ready Time vs. Schedule Ready Time"
 			var adheranceId = 1;
-			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1), adheranceId, person, timeZoneId);
+			var adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), adheranceId, person, timeZoneId);
 			
 			Assert.That(adherance.Rows.Count, Is.EqualTo(81));
 			foreach (DataRow row in adherance.Rows)
@@ -259,7 +251,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				{
 					case 1:
 						{
-							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)));
+							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)));
 							Assert.That((row["interval_id"]), Is.EqualTo(78));
 							Assert.That((row["interval_name"]), Is.EqualTo("19:30-19:45"));
 							Assert.That((row["deviation_tot_m"]), Is.EqualTo(543));
@@ -267,7 +259,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 						}
 					case 7:
 						{
-							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)), "60% interval");
+							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)), "60% interval");
 							Assert.That((row["interval_id"]), Is.EqualTo(88), "60% interval");
 							Assert.That((row["interval_name"]), Is.EqualTo("22:00-22:15"), "60% interval");
 							Assert.That((row["adherence"]), Is.EqualTo(0.6), "60% interval");
@@ -278,7 +270,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 						}
 					case 8:
 						{
-							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)), "100% interval");
+							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)), "100% interval");
 							Assert.That((row["interval_id"]), Is.EqualTo(89), "100% interval");
 							Assert.That((row["interval_name"]), Is.EqualTo("22:15-22:30"), "100% interval");
 							Assert.That((row["adherence"]), Is.EqualTo(1), "100% interval");
@@ -290,7 +282,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 					case 46:
 						{
-							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-1)));
+							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-1)));
 							Assert.That((row["interval_id"]), Is.EqualTo(31));
 							Assert.That((row["interval_name"]), Is.EqualTo("07:45-08:00"));
 							break;
@@ -313,7 +305,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			//Tests for "Ready Time vs. Schedule Time", e.g. the punish if over performing agent
 			adheranceId = 2;
-			adherance = SqlCommands.ReportDataAgentScheduleAdherence(DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1), adheranceId, person, timeZoneId);
+			adherance = SqlCommands.ReportDataAgentScheduleAdherence(testDate.AddDays(-2), testDate.AddDays(-1), adheranceId, person, timeZoneId);
 
 			Assert.That(adherance.Rows.Count, Is.EqualTo(81));
 			foreach (DataRow row in adherance.Rows)
@@ -323,14 +315,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				{
 					case 1:
 						{
-							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-2)));
+							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-2)));
 							Assert.That((row["interval_id"]), Is.EqualTo(78), "First interval_id yesterday");
 							Assert.That((row["interval_name"]), Is.EqualTo("19:30-19:45"), "First interval_name yesterday");
 							break;
 						}
 					case 46:
 						{
-							Assert.That((row["date"]), Is.EqualTo(DateTime.Today.AddDays(-1)));
+							Assert.That((row["date"]), Is.EqualTo(testDate.AddDays(-1)));
 							Assert.That((row["interval_id"]), Is.EqualTo(31), "First interval_id today");
 							Assert.That((row["interval_name"]), Is.EqualTo("07:45-08:00"), "First interval_name today");
 							break;
@@ -353,20 +345,20 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 
 			//Asserts on fact_schedule_deviation
-			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, DateTime.Today.AddDays(-1)), Is.EqualTo(35), "ETL."+ ETLType + " count intervals for Day-1");
-            Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, DateTime.Today.AddDays(-2)), Is.EqualTo(46), "ETL." + ETLType + " count intervals for Day-2");
+			Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-1)), Is.EqualTo(35), "ETL."+ ETLType + " count intervals for Day-1");
+            Assert.That(SqlCommands.CountIntervalsPerLocalDate(person, testDate.AddDays(-2)), Is.EqualTo(46), "ETL." + ETLType + " count intervals for Day-2");
 			var column = "deviation_schedule_s";
-			Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(24540), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(33660), "ETL." + ETLType + " " + column + " for Day-2");
+			Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(24540), "ETL." + ETLType + " " + column + " for Day-1");
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(33660), "ETL." + ETLType + " " + column + " for Day-2");
             column = "scheduled_ready_time_s";
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(25200), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(36000), "ETL." + ETLType + " " + column + " for Day-2");
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(25200), "ETL." + ETLType + " " + column + " for Day-1");
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(36000), "ETL." + ETLType + " " + column + " for Day-2");
             column = "ready_time_s";
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(4740), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(4500), "ETL." + ETLType + " " + column + " for Day-2");
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(4740), "ETL." + ETLType + " " + column + " for Day-1");
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(4500), "ETL." + ETLType + " " + column + " for Day-2");
             column = "deviation_schedule_ready_s";
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-1), column), Is.EqualTo(22500), "ETL." + ETLType + " " + column + " for Day-1");
-            Assert.That(SqlCommands.SumFactScheduleDeviation(person, DateTime.Today.AddDays(-2), column), Is.EqualTo(32580), "ETL." + ETLType + " " + column + " for Day-2");
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-1), column), Is.EqualTo(22500), "ETL." + ETLType + " " + column + " for Day-1");
+            Assert.That(SqlCommands.SumFactScheduleDeviation(person, testDate.AddDays(-2), column), Is.EqualTo(32580), "ETL." + ETLType + " " + column + " for Day-2");
 
 			
 		}

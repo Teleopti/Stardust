@@ -36,15 +36,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForStockholm()
 		{
+			DateTime testDate = new DateTime(2013, 06, 15);
+
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
 			Data.Apply(etlUpdateDate);
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
 			IPerson person;
             BasicShiftSetup.SetupBasicForShifts();
-            BasicShiftSetup.AddPerson(out person, "Ola H","");
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -54,7 +56,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Data.Apply(activityPhone);
 			Data.Apply(activityLunch);
 
-            BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 
 			var readModel = new ScheduleDayReadModel
 			{
@@ -62,8 +64,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ColorCode = 0,
 				ContractTimeTicks = 500,
 				Date = DateTime.Today,
-				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
-				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
+				StartDateTime = testDate.AddDays(-15).AddHours(8),
+				EndDateTime = testDate.AddDays(-15).AddHours(17),
 				Label = "LABEL",
 				NotScheduled = false,
 				Workday = true,
@@ -73,15 +75,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			// we must manipulate readmodel so it "knows" that the dates on the person are updated
 			var readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
-			//readModel.Date = DateTime.Today.AddDays(-1);
-			//readM = new ScheduleDayReadModelSetup { Model = readModel };
-			//Data.Apply(readM);
+
 			readModel.Date = DateTime.Today.AddDays(1);
 			readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
 
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			dateList.Add(DateTime.Today.AddDays(-3),DateTime.Today.AddDays(3),JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture)
 				{
 					Helper =
@@ -125,12 +125,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForBrasil()
 		{
+			DateTime testDate = new DateTime(2013, 06, 15);
+
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
 			Data.Apply(etlUpdateDate);
 
 			var brasilTimeZone = new BrasilTimeZone {TimeZoneId = 2};
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>{brasilTimeZone});
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup> { brasilTimeZone }, testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -142,8 +144,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			IPerson person;
             BasicShiftSetup.SetupBasicForShifts();
-            BasicShiftSetup.AddPerson(out person, "Ola H","");
-			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 
 			Data.Person("Ola H").Apply(new BrasilianTimeZone());
 
@@ -153,8 +155,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ColorCode = 0,
 				ContractTimeTicks = 500,
 				Date = DateTime.Today,
-				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
-				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
+				StartDateTime = testDate.AddDays(-15).AddHours(8),
+				EndDateTime = testDate.AddDays(-15).AddHours(17),
 				Label = "LABEL",
 				NotScheduled = false,
 				Workday = true,
@@ -164,15 +166,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			// we must manipulate readmodel so it "knows" that the dates on the person are updated
 			var readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
-			readModel.Date = DateTime.Today.AddDays(-1);
+			readModel.Date = DateTime.Today.AddDays(1);
 			readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
-			//readModel.Date = DateTime.Today.AddDays(1);
-			//readM = new ScheduleDayReadModelSetup { Model = readModel };
-			//Data.Apply(readM);
 
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
 			{
 				Helper =

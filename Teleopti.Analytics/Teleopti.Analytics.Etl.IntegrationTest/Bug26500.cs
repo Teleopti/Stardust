@@ -32,11 +32,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForStockholm()
 		{
+			DateTime testDate = new DateTime(2013, 06, 15);
+
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
 			Data.Apply(etlUpdateDate);
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
 			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
 			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
@@ -48,14 +50,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
 			IPerson person;
 			BasicShiftSetup.SetupBasicForShifts();
-			BasicShiftSetup.AddPerson(out person, "Ola H", "");
-			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 			IPerson person2;
-			BasicShiftSetup.AddPerson(out person2, "David J", "");
-			BasicShiftSetup.AddThreeShifts("David J", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			BasicShiftSetup.AddPerson(out person2, "David J", "", testDate);
+			BasicShiftSetup.AddThreeShifts("David J", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 			
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			dateList.Add(DateTime.Today.AddDays(-3),DateTime.Today.AddDays(3),JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture)
 				{
 					Helper =
@@ -70,14 +72,14 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			Assert.That(factSchedules, Is.EqualTo(192));
 
 			//edit three shifts for Ola
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(-1), person);
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(0), person);
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", DateTime.Today.AddDays(1), person);
-			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(-1), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(0), person);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "Ola H", testDate.AddDays(1), person);
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 
 			//edit one shift for David
-			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "David J", DateTime.Today.AddDays(0), person2);
-			BasicShiftSetup.AddShift("David J", DateTime.Today.AddDays(0), 10, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
+			RemovePersonSchedule.RemoveAssignmentAndReadmodel(BasicShiftSetup.Scenario.Scenario, "David J", testDate.AddDays(0), person2);
+			BasicShiftSetup.AddShift("David J", testDate.AddDays(0), 10, 8, cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity);
 
 			StepRunner.RunIntraday(jobParameters);
 

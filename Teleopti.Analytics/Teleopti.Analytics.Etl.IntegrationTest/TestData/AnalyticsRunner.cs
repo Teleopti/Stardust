@@ -11,11 +11,11 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 {
 	public static class AnalyticsRunner
 	{
-		public static void RunAnalyticsBaseData(IList<IAnalyticsDataSetup> extraSetups)
+		public static void RunAnalyticsBaseData(IList<IAnalyticsDataSetup> extraSetups, DateTime date)
 		{
 			var analyticsDataFactory = new AnalyticsDataFactory();
 			var timeZones = new UtcAndCetTimeZones();
-			var dates = new CurrentBeforeAndAfterWeekDates();
+			var dates = new CurrentBeforeAndAfterWeekDates() { Date = date };
 			var dataSource = new ExistingDatasources(timeZones);
 			var intervals = new QuarterOfAnHourInterval();
 
@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			analyticsDataFactory.Persist();
 		} 
 
-		public static void RunSysSetupTestData()
+		public static void RunSysSetupTestData(DateTime testDate)
 		{
 			using (var connection = new SqlConnection(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix))
 			{
@@ -74,7 +74,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				command.ExecuteNonQuery();
 
 				command.CommandText = "dbo.Add_QueueAgent_stat";
-				command.Parameters.AddWithValue("@TestDay", DateTime.Today);
+				command.Parameters.AddWithValue("@TestDay", testDate);
 				command.Parameters.AddWithValue("@agent_id", 52);
 				command.Parameters.AddWithValue("@orig_agent_id", 152);
 				command.Parameters.AddWithValue("@agent_name", "Ola H");

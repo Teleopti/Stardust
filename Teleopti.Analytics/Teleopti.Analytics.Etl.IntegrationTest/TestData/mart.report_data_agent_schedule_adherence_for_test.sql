@@ -48,7 +48,7 @@ SELECT
 FROM mart.dim_person
 WHERE person_code = @agent_code
 AND to_be_deleted=0
-AND getdate() between valid_from_date_local and valid_to_date_local
+AND @date_from between valid_from_date_local and valid_to_date_local
 
 SET @time_zone_id = (SELECT time_zone_id FROM mart.dim_time_zone WHERE time_zone_code = @time_zone_code)
 

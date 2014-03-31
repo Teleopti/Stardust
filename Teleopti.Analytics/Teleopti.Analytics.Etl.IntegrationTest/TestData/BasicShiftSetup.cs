@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 			Data.Apply(Scenario);
 		}
 
-		public static void AddPerson(out IPerson person, string name, string externalLogon)
+		public static void AddPerson(out IPerson person, string name, string externalLogon, DateTime testDate)
 		{
 			person = TestState.TestDataFactory.Person(name).Person;
 			var pp = new PersonPeriodConfigurable
@@ -42,7 +42,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 				ContractSchedule = ContractSchedule.ContractSchedule.Description.Name,
 				PartTimePercentage = PartTimePercentage.Name,
 				Team = Team.Name,
-				StartDate = DateTime.Today.AddDays(-6),
+				StartDate = testDate.AddDays(-6),
                 ExternalLogon = externalLogon
 			};
 			Data.Person(name).Apply(pp);
@@ -52,11 +52,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest.TestData
 		public static void AddThreeShifts(string onPerson,
 									IShiftCategory shiftCategory,
 									IActivity activityLunch,
-									IActivity activityPhone)
+									IActivity activityPhone,
+									DateTime testDate)
 		{
-			AddShift(onPerson, DateTime.Today.AddDays(-1), 9, 8, shiftCategory, activityLunch, activityPhone);
-			AddShift(onPerson, DateTime.Today.AddDays(0), 9, 8, shiftCategory, activityLunch, activityPhone);
-			AddShift(onPerson, DateTime.Today.AddDays(1), 9, 8, shiftCategory, activityLunch, activityPhone);
+			AddShift(onPerson, testDate.AddDays(-1), 9, 8, shiftCategory, activityLunch, activityPhone);
+			AddShift(onPerson, testDate.AddDays(0), 9, 8, shiftCategory, activityLunch, activityPhone);
+			AddShift(onPerson, testDate.AddDays(1), 9, 8, shiftCategory, activityLunch, activityPhone);
 		}
 
 		public static void AddShift(string onPerson, 
