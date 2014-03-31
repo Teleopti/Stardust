@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                 Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay> { _skillDay1 });
                 Expect.Call(_locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(DateOnly.Today, _baseLineData.SampleSkill)).Return(new List<ISkillStaffPeriod>( ));
-                Expect.Call(_filterOutIntervalsAfterMidNight.Filter(_skillStaffPeriodList, DateOnly.Today)).Return(_skillStaffPeriodList);
+                Expect.Call(_filterOutIntervalsAfterMidNight.Filter(_skillStaffPeriodList, DateOnly.Today,TimeZoneGuard.Instance.TimeZone )).IgnoreArguments().Return(_skillStaffPeriodList);
                 skillDayExpectCalls(_skillDay1, skillIntervalList);
 
                 Expect.Call(
