@@ -7,19 +7,18 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 	var webNotifications = new Array();
 
 	function _setOptions(options) {
+		if(options && options.originalDocumentTitle)
 		originalDocumentTitle = options.originalDocumentTitle;
-		if (options.baseUrl) {
+		if (options && options.baseUrl) {
 			baseUrl = options.baseUrl;
-		} else {
-			console.warning('Missing base url for icon in notification!');
-		}
-		if (options.module) {
+		} 
+		if (options && options.module) {
 			header = options.module;
 		}
-		if (options.webNotification) {
+		if (options && options.webNotification) {
 			webNotification = options.webNotification;
 		}
-		if (options.header) {
+		if (options && options.header) {
 			header = options.header;
 		}
 	}
@@ -40,7 +39,14 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		});
 		return res.length > 0;
 	}
+
+	function requestNotificationPermission() {
+		if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 1) {
+			window.webkitNotifications.requestPermission();
+		}
+	}
 	function _webNotification(notifyText) {
+		requestNotificationPermission();
 		if (window.webkitNotifications) {
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
 				if (webNotification() && !isShowing(notifyText)) {
