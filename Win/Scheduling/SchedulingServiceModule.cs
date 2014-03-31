@@ -257,11 +257,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockSameSkillValidator>().As<ITeamBlockSameSkillValidator>();
 			builder.RegisterType<TeamBlockPersonsSkillChecker>().As<ITeamBlockPersonsSkillChecker>();
 			builder.RegisterType<TeamBlockSameRuleSetBagValidator>().As<ITeamBlockSameRuleSetBagValidator>();
+            
         }
 
         private static void registerTeamBlockCommon(ContainerBuilder builder)
 		{
-			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
+            builder.RegisterType<LocateMissingIntervalsIfMidNightBreak>().As<ILocateMissingIntervalsIfMidNightBreak>();
+            builder.RegisterType<FilterOutIntervalsAfterMidNight>().As<IFilterOutIntervalsAfterMidNight>();
+            builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
 			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>();
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
@@ -296,6 +299,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
             builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
+            builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>();
 		}
 
 		private static void registerTeamBlockSchedulingService(ContainerBuilder builder)
