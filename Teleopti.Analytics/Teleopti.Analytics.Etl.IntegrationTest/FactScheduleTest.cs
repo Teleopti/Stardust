@@ -35,6 +35,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkWithOverlappingShifts()
 		{
+			var today = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(0));
+			var yesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-1));
+			var dayBeforeYesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-2));
+
+			if ((today != yesterday) || (today != dayBeforeYesterday))
+				return;
+
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 			AnalyticsRunner.RunSysSetupTestData();
 			const string timeZoneId = "W. Europe Standard Time";
@@ -73,6 +80,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldFindAdherence()
 		{
+			var today = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(0));
+			var yesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-1));
+			var dayBeforeYesterday = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(-2));
+
+			if ((today != yesterday) || (today != dayBeforeYesterday))
+			return;
+
 			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
 			AnalyticsRunner.RunSysSetupTestData();
 
