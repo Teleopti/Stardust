@@ -326,6 +326,8 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamBlockShiftCategoryLimitationValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamMemberCountValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\TeamSelectionValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\FilterOutIntervalsAfterMidNightTest.cs" />
+    <Compile Include="Optimization\TeamBlock\LocateMissingIntervalsIfMidNightBreakTest.cs" />
     <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlockTest.cs" />
@@ -420,6 +422,7 @@
     <Compile Include="Scheduling\Assignment\ReplaceLayerInScheduleTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHourTest.cs" />
     <Compile Include="Scheduling\LoadSchedulesForRequestWithoutResourceCalculationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\TeamMemberTerminationOnBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMissingDaysOffSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingOptionsTest.cs" />

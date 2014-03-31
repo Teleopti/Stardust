@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -22,8 +23,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
         private readonly ISkillStaffPeriodToSkillIntervalDataMapper _skillStaffPeriodToSkillIntervalDataMapper;
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+        private readonly ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
+        private readonly IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
 
-        public DailyTargetValueCalculatorForTeamBlock(ISkillResolutionProvider resolutionProvider, ISkillIntervalDataDivider intervalDataDivider, ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator, ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper, ISchedulingResultStateHolder schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+        public DailyTargetValueCalculatorForTeamBlock(ISkillResolutionProvider resolutionProvider, ISkillIntervalDataDivider intervalDataDivider, 
+                                ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator, ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
+                            ISchedulingResultStateHolder schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,ILocateMissingIntervalsIfMidNightBreak locateMissingIntervalsIfMidNightBreak, IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight)
         {
             //_skillIntervalDataSkillFactorApplier = skillIntervalDataSkillFactorApplier;
             _resolutionProvider = resolutionProvider;
@@ -33,6 +38,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             _skillStaffPeriodToSkillIntervalDataMapper = skillStaffPeriodToSkillIntervalDataMapper;
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _groupPersonSkillAggregator = groupPersonSkillAggregator;
+            _locateMissingIntervalsIfMidNightBreak = locateMissingIntervalsIfMidNightBreak;
+            _filterOutIntervalsAfterMidNight = filterOutIntervalsAfterMidNight;
         }
 
         public double TargetValue(ITeamBlockInfo teamBlockInfo , IAdvancedPreferences advancedPreferences)
@@ -71,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             return intervalData.Values.ToList();
         }
 
-        private IDictionary<DateOnly, IList<ISkillIntervalData>> getSkillIntervalListForEachDay( IList<DateOnly> dateOnlyList, IList<ISkill > skills, int minimumResolution)
+        private IDictionary<DateOnly, IList<ISkillIntervalData>> getSkillIntervalListForEachDay(IList<DateOnly> dateOnlyList, IList<ISkill> skills, int minimumResolution)
         {
             var result = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
             
@@ -84,20 +91,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                 var skill = skillDay.Skill;
                 if (skill != null && !skills.Contains(skill)) continue ;
                 if (skillDay.SkillStaffPeriodCollection.Count == 0) continue ;
-                var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
+                IList<ISkillStaffPeriod> skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
+                if (skill.MidnightBreakOffset != TimeSpan.Zero)
+                {
+                    var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill);
+                    skillStaffPeriodCollection = skillStaffPeriodCollection.Concat(missingIntervals).ToList()  ;
+                    skillStaffPeriodCollection = _filterOutIntervalsAfterMidNight.Filter( skillStaffPeriodCollection, currentDate);
+                }
+                
+                var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection);
                 mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
-                //TODO check for the tweeked values ASAD
-                //var adjustedMapedData = new List<ISkillIntervalData>();
-                //foreach (var data in mappedData)
-                //{
-                //    var appliedData = _skillIntervalDataSkillFactorApplier.ApplyFactors(data, skill);
-                //    adjustedMapedData.Add(appliedData);
-                //}
-                //var aggregatedSkillsIntervals = new List<IList<ISkillIntervalData>> { adjustedMapedData, mappedData };
-                //var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(aggregatedSkillsIntervals);
+
                 if(!result.ContainsKey(currentDate ))
                     result.Add(currentDate, mappedData);
-                    //result.Add(currentDate, dayIntervalData);
                 else
                 {
                     var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>> { result[currentDate], mappedData });
@@ -110,10 +116,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
             return result;
         }
-
-        
-
-
         
 	
     }

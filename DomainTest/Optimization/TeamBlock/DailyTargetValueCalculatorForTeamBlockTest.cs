@@ -38,12 +38,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         private IList<ISkillStaffPeriod> _skillStaffPeriodList;
         private ISkillStaffPeriod _skillStaffPeriod1;
         private DateTimePeriod _period;
+        private ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
+        private IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
 
         [SetUp ]
         public void Setup()
         {
             _mock = new MockRepository();
-            //_skillIntervalDataSkillFactorApplier = _mock.StrictMock<ISkillIntervalDataSkillFactorApplier>();
+            _locateMissingIntervalsIfMidNightBreak = _mock.StrictMock<ILocateMissingIntervalsIfMidNightBreak>();
+            _filterOutIntervalsAfterMidNight = _mock.StrictMock<IFilterOutIntervalsAfterMidNight>();
             _resolutionProvider = _mock.StrictMock<ISkillResolutionProvider>();
             _intervalDataDivider = _mock.StrictMock<ISkillIntervalDataDivider>();
             _intervalDataAggregator = _mock.StrictMock<ISkillIntervalDataAggregator>();
@@ -66,14 +69,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _skillStaffPeriodCollecion = new ReadOnlyCollection<ISkillStaffPeriod>(_skillStaffPeriodList);
             _period = new DateTimePeriod(DateTime.UtcNow ,DateTime.UtcNow );
 
-            
-
             _target = new DailyTargetValueCalculatorForTeamBlock(_resolutionProvider, _intervalDataDivider,
                                                                  _intervalDataAggregator,
                                                                  _dayIntervalDataCalculator,
                                                                  _skillStaffPeriodToSkillIntervalDataMapper,
                                                                  _schedulingResultStateHolder,
-                                                                 _groupPersonSkillAggregator);
+                                                                 _groupPersonSkillAggregator,_locateMissingIntervalsIfMidNightBreak ,_filterOutIntervalsAfterMidNight );
         }
 
         [Test]
@@ -137,6 +138,42 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
         }
+
+        [Test]
+        public void TestSkillWithMidnightBreak()
+        {
+            var skillIntervalData1 = new SkillIntervalData(_period, 5, 3, 3, 0, 0);
+            var skillIntervalData2 = new SkillIntervalData(_period, 6, 0, 0, 0, 0);
+            var skillIntervalList = new List<ISkillIntervalData> { skillIntervalData1, skillIntervalData2 };
+
+            IDictionary<DateOnly, IList<ISkillIntervalData>> dateToSkillIntervalDic = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
+            IDictionary<TimeSpan, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<TimeSpan, ISkillIntervalData>();
+
+            timeToSkillIntervalDic.Add(new TimeSpan(10), skillIntervalData1);
+            timeToSkillIntervalDic.Add(new TimeSpan(20), skillIntervalData2);
+            dateToSkillIntervalDic.Add(DateOnly.Today, skillIntervalList);
+            _baseLineData.SampleSkill.MidnightBreakOffset = TimeSpan.FromHours(1);
+            using (_mock.Record())
+            {
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod)).IgnoreArguments().Return(new List<ISkill>{_baseLineData.SampleSkill });
+                Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
+                Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay> { _skillDay1 });
+                Expect.Call(_locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(DateOnly.Today, _baseLineData.SampleSkill)).Return(new List<ISkillStaffPeriod>( ));
+                Expect.Call(_filterOutIntervalsAfterMidNight.Filter(_skillStaffPeriodList, DateOnly.Today)).Return(_skillStaffPeriodList);
+                skillDayExpectCalls(_skillDay1, skillIntervalList);
+
+                Expect.Call(
+                    _intervalDataAggregator.AggregateSkillIntervalData(new List<IList<ISkillIntervalData>>
+                        {
+                            skillIntervalList
+                        })).IgnoreArguments().Return(skillIntervalList);
+
+                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+
+            }
+            Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
+        }
+
 
         private void skillDayExpectCalls(ISkillDay skillDay, List<ISkillIntervalData> skillIntervalList)
         {
