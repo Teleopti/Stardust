@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.GuiHelpers
         public void VerifyReturnLicensedToString()
         {
             DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("Teleopti", new DateTime(2009,11,1), 1000,100, LicenseType.Agent, new Percent(0.1),
-                XmlLicenseService.IsThisAlmostTooManyActiveAgents, XmlLicenseService.IsThisTooManyActiveAgents);
+								XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents);
             
             string returnText = ApplicationTextHelper.LicensedToCustomerText;
             Assert.AreEqual(_expectedLicenseText, returnText);

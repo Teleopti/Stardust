@@ -2897,6 +2897,10 @@
       <Project>{1277112D-B11A-4358-AF9A-8C9C7A5E701E}</Project>
       <Name>Teleopti.Ccc.Sdk.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
+      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
+      <Name>Teleopti.Ccc.Secrets</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.SmartClientPortal\Teleopti.Common.UI.SmartPartControls\Teleopti.Common.UI.SmartPartControls.csproj">
       <Project>{92d88c7b-2401-4bc2-8f89-b919dbc6d143}</Project>
       <Name>Teleopti.Common.UI.SmartPartControls</Name>

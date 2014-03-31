@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Win.Main
 					
                     using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                     {
-                        XmlLicenseService.SaveNewLicense(licenseFilePath, unitOfWork, licenseRepository, XmlLicenseService.GetXmlPublicKey(), personRepository);
+                        new XmlLicensePersister().SaveNewLicense(licenseFilePath, unitOfWork, licenseRepository, XmlLicenseService.GetXmlPublicKey(), personRepository);
                     }
                     
                     var licenseStatusUpdater =

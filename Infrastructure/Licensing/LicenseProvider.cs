@@ -3,6 +3,7 @@
 using System;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 #endregion
@@ -38,9 +39,9 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                                                                       licenseService.MaxActiveAgents,
 																	  licenseService.MaxSeats,
 																	  licenseService.LicenseType,
-                                                                      licenseService.MaxActiveAgentsGrace,
-                                                                      XmlLicenseService.IsThisAlmostTooManyActiveAgents,
-                                                                      XmlLicenseService.IsThisTooManyActiveAgents);
+																																			new Percent(licenseService.MaxActiveAgentsGrace), 
+																																			LicenseActivator.IsThisAlmostTooManyActiveAgents,
+																																			LicenseActivator.IsThisTooManyActiveAgents);
 
             if (licenseService.TeleoptiCccPilotCustomersBaseEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase);

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void Setup()
         {
             _target = new LicenseActivator(_customerName, _expirationDate, _maxActiveAgents, 100, LicenseType.Agent, _maxActiveAgentsGrace,
-                XmlLicenseService.IsThisAlmostTooManyActiveAgents, XmlLicenseService.IsThisTooManyActiveAgents);
+								XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents);
         }
 
         [Test]
