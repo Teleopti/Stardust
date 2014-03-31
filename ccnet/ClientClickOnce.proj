@@ -46,7 +46,6 @@
       <SourceFiles	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\**\*.*"
           Exclude="$(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\Teleopti.Ccc.Agentp*.*;
 		 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\*.pdb;
-                 	  		 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\Detect35SP1.exe;
 							 $(CCNetWorkingDirectory)\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\$(Configuration)\pub.config" />
       <SourceFiles 	Include="$(CCNetWorkingDirectory)\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\bin\$(Configuration)\Teleopti.Ccc.PayrollFormatter.dll"/>
 
