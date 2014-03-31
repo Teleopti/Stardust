@@ -427,6 +427,8 @@
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\ConstructTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\DetermineTeamBlockPriority.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\Seniority\TeamBlockSeniorityFairnessOptimizationService.cs" />
+    <Compile Include="Optimization\TeamBlock\FilterOutIntervalsAfterMidNight.cs" />
+    <Compile Include="Optimization\TeamBlock\LocateMissingIntervalsIfMidNightBreak.cs" />
     <Compile Include="Optimization\TeamBlock\RelativeDailyValueCalculatorForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
@@ -630,6 +632,7 @@
     <Compile Include="Scheduling\Restriction\OvertimeAvailability.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataOpenHour.cs" />
     <Compile Include="Scheduling\TeamBlock\DayOff\SplitSchedulePeriodToWeekPeriod.cs" />
+    <Compile Include="Scheduling\TeamBlock\Specification\TeamMemberTerminationOnBlockSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMaxSeatChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockMissingDaysOffScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockRoleModelSelector.cs" />
