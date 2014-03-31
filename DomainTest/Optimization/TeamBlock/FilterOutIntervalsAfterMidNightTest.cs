@@ -21,12 +21,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         private ISkillStaffPeriod _skillStaffPeriod3;
         private ISkillStaffPeriod _skillStaffPeriod4;
         private TimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _oldTimeZoneValue;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             TimeZoneInfo tz = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
+            _oldTimeZoneValue = TimeZoneGuard.Instance.TimeZone;
             TimeZoneGuard.Instance.TimeZone = tz;
 
             _skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
@@ -35,6 +37,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _skillStaffPeriod4 = _mock.StrictMock<ISkillStaffPeriod>();
             _timeZoneInfo = tz;
             _target = new FilterOutIntervalsAfterMidNight();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            TimeZoneGuard.Instance.TimeZone = _oldTimeZoneValue;
         }
 
         [Test]
