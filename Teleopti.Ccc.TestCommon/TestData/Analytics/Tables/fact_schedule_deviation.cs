@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 		{
 
 			var table = new DataTable("mart.fact_schedule_deviation");
+			table.Columns.Add("shift_startdate_local_id", typeof(int));
 			table.Columns.Add("date_id", typeof(int));
 			table.Columns.Add("interval_id", typeof(int));
 			table.Columns.Add("person_id", typeof(int));
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 
 		public static void AddFactScheduleDeviation(
 			this DataTable dataTable,
+			int shiftStartdateLocalId,
 			int dateId, 
 			int intervalId, 
 			int personId, 
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			bool isLoggedIn)
 		{
 			var row = dataTable.NewRow();
+			row["shift_startdate_local_id"] = shiftStartdateLocalId;
 			row["date_id"] = dateId;
 			row["interval_id"] = intervalId;
 			row["person_id"] = personId;

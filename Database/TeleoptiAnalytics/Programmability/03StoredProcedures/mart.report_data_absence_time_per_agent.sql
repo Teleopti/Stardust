@@ -43,7 +43,6 @@ CREATE TABLE #absences(id int)
 CREATE TABLE #full_absence_days(
 	[person_code] [uniqueidentifier] NULL,
 	[date_date] [smalldatetime] NOT NULL,
-	[starttime] [smalldatetime] NULL,
 	[absence_id] [int] NOT NULL,
 	[day_count] [int] NULL
 )
@@ -56,58 +55,25 @@ CREATE TABLE #result(
 	scheduled_contract_time_absence_m int,
 	scheduled_work_time_absence_m int,
 	scheduled_paid_time_absence_m int,
-	shift_starttime smalldatetime,
 	part_day_count int,
 	full_day_count int,
 	hide_time_zone bit
 )
 
 CREATE TABLE #fact_schedule(
-	[schedule_date_id] [int] NOT NULL,
+	person_code uniqueidentifier,
+	person_name nvarchar(200),
+	local_date smalldatetime,
 	[person_id] [int] NOT NULL,
-	[interval_id] [smallint] NOT NULL,
-	[activity_starttime] [smalldatetime] NOT NULL,
 	[scenario_id] [smallint] NOT NULL,
-	[activity_id] [int] NULL,
 	[absence_id] [int] NULL,
-	[activity_startdate_id] [int] NULL,
-	[activity_enddate_id] [int] NULL,
-	[activity_endtime] [smalldatetime] NULL,
-	[shift_startdate_id] [int] NULL,
-	[shift_starttime] [smalldatetime] NULL,
-	[shift_enddate_id] [int] NULL,
-	[shift_endtime] [smalldatetime] NULL,
-	[shift_startinterval_id] [smallint] NULL,
-	[shift_category_id] [int] NULL,
-	[shift_length_id] [int] NULL,
-	[scheduled_time_m] [int] NULL,
-	[scheduled_time_absence_m] [int] NULL,
-	[scheduled_time_activity_m] [int] NULL,
-	[scheduled_contract_time_m] [int] NULL,
-	[scheduled_contract_time_activity_m] [int] NULL,
 	[scheduled_contract_time_absence_m] [int] NULL,
-	[scheduled_work_time_m] [int] NULL,
-	[scheduled_work_time_activity_m] [int] NULL,
 	[scheduled_work_time_absence_m] [int] NULL,
-	[scheduled_over_time_m] [int] NULL,
-	[scheduled_ready_time_m] [int] NULL,
-	[scheduled_paid_time_m] [int] NULL,
-	[scheduled_paid_time_activity_m] [int] NULL,
 	[scheduled_paid_time_absence_m] [int] NULL,
-	[last_publish] [smalldatetime] NULL,
-	[business_unit_id] [int] NULL,
-	[datasource_id] [smallint] NULL,
-	[insert_date] [smalldatetime] NULL,
-	[update_date] [smalldatetime] NULL,
-	[datasource_update_date] [smalldatetime] NULL,
-	[overtime_id] [int] NOT NULL
 )
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit
-IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
-      SET @hide_time_zone = 1
-ELSE
-      SET @hide_time_zone = 0
+SET @hide_time_zone = 1
 
 /* Get the agents to report on */
 INSERT INTO #rights_agents
@@ -122,114 +88,87 @@ SELECT * FROM SplitStringInt(@absence_set)
 
 /*Speed up fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT *
-FROM mart.fact_schedule fs
-WHERE schedule_date_id in	(
-							select b.date_id 
-							from mart.bridge_time_zone b 
-								INNER JOIN mart.dim_date d 
-									ON b.local_date_id = d.date_id 
-							where d.date_date BETWEEN @date_from AND @date_to
-							)
+SELECT
+	p.person_code,
+	p.person_name,
+	d.date_date,
+	f.person_id,
+	f.scenario_id,
+	f.absence_id,
+	f.scheduled_contract_time_absence_m,
+	f.scheduled_work_time_absence_m,
+	f.scheduled_paid_time_absence_m
+FROM mart.fact_schedule f
+INNER JOIN mart.dim_person p
+	ON f.person_id=p.person_id
+INNER JOIN mart.dim_date d
+	ON d.date_id = f.shift_startdate_local_id
+WHERE d.date_date BETWEEN @date_from AND @date_to
+AND f.scenario_id = @scenario_id
+AND p.team_id IN (select right_id from #rights_teams)
+AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
 
 IF @report_id =  'C5B88862-F7BE-431B-A63F-3DD5FF8ACE54'  --4
 BEGIN
 	/*** report Absence time per agent***/
-	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,shift_starttime,part_day_count,full_day_count,hide_time_zone)
-	SELECT      p.person_code,
-				p.person_name,
+	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,part_day_count,full_day_count,hide_time_zone)
+	SELECT      f.person_code,
+				f.person_name,
 				ab.absence_id,
 				ab.absence_name,
-				MIN(d.date_date),
+				f.local_date,
 				sum(ISNULL(scheduled_contract_time_absence_m,0)),
 				sum(ISNULL(scheduled_work_time_absence_m,0)),
 				sum(ISNULL(scheduled_paid_time_absence_m,0)),
-				f.shift_starttime,
 				1,
 				0,
 				@hide_time_zone
 	FROM 
 		  #fact_schedule f
-	INNER JOIN mart.dim_person p
-		  ON f.person_id=p.person_id
 	INNER JOIN mart.dim_absence ab
 		  ON ab.absence_id=f.absence_id
-	INNER JOIN mart.bridge_time_zone b
-		  ON  f.shift_startinterval_id= b.interval_id	--join on the shiftstartdate
-		  AND f.shift_startdate_id= b.date_id			--join on the shiftstartdate
-	INNER JOIN mart.dim_date d 
-		  ON b.local_date_id = d.date_id
-	INNER JOIN mart.dim_interval i
-		  ON b.local_interval_id = i.interval_id
-	WHERE d.date_date BETWEEN @date_from AND @date_to
-	AND b.time_zone_id = @time_zone_id
-	AND f.scenario_id=@scenario_id
-	AND p.team_id IN(select right_id from #rights_teams)
-	AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
-	AND ab.absence_id IN (SELECT id FROM #absences)--only selected absences
+	WHERE ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
-	GROUP BY p.person_code,p.person_name,ab.absence_id,ab.absence_name,f.shift_starttime
+	GROUP BY f.person_code,f.person_name,ab.absence_id,ab.absence_name,f.local_date
 END
 ELSE
 BEGIN
 	/*** report Absence time per absence***/
-	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,shift_starttime,part_day_count,full_day_count,hide_time_zone)
-	SELECT      p.person_code,
-				p.person_name,
+	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,part_day_count,full_day_count,hide_time_zone)
+	SELECT      f.person_code,
+				f.person_name,
 				ab.absence_id,
 				ab.absence_name,
-				MIN(d.date_date),
+				f.local_date,
 				sum(ISNULL(scheduled_contract_time_absence_m,0)),
 				sum(ISNULL(scheduled_work_time_absence_m,0)),
 				sum(ISNULL(scheduled_paid_time_absence_m,0)),
-				f.shift_starttime,
 				1,
 				0,
 				@hide_time_zone
 	FROM 
 		  #fact_schedule f
-	INNER JOIN mart.dim_person p
-		  ON f.person_id=p.person_id
 	INNER JOIN mart.dim_absence ab
 		  ON ab.absence_id=f.absence_id
-	INNER JOIN mart.bridge_time_zone b
-		  ON  f.shift_startinterval_id= b.interval_id	--join on the shiftstartdate
-		  AND f.shift_startdate_id= b.date_id			--join on the shiftstartdate
-	INNER JOIN mart.dim_date d 
-		  ON b.local_date_id = d.date_id
-	INNER JOIN mart.dim_interval i
-		  ON b.local_interval_id = i.interval_id
-	WHERE d.date_date BETWEEN @date_from AND @date_to
-	AND b.time_zone_id = @time_zone_id
-	AND f.scenario_id=@scenario_id
-	AND p.team_id IN(select right_id from #rights_teams)
-	AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
-	AND ab.absence_id IN (SELECT id FROM #absences)--only selected absences
+	WHERE ab.absence_id IN (SELECT id FROM #absences)--only selected absences
 	AND ab.absence_id<>-1 --ej activity
-	GROUP BY ab.absence_id,ab.absence_name,p.person_code,p.person_name,f.shift_starttime
+	GROUP BY ab.absence_id,ab.absence_name,f.person_code,f.person_name,f.local_date
 END
 
 /*part day or full day?*/
 INSERT INTO #full_absence_days
-SELECT p.person_code,d.date_date, f.starttime,absence_id,day_count
+SELECT p.person_code,d.date_date, absence_id,day_count
 FROM mart.fact_schedule_day_count f
 INNER JOIN mart.dim_person p
       ON f.person_id=p.person_id
-INNER JOIN mart.bridge_time_zone b
-      ON  f.start_interval_id= b.interval_id
-      AND f.date_id= b.date_id
 INNER JOIN mart.dim_date d 
-      ON b.local_date_id = d.date_id
-INNER JOIN mart.dim_interval i
-      ON b.local_interval_id = i.interval_id
+      ON f.shift_startdate_local_id = d.date_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
-AND b.time_zone_id = @time_zone_id
 AND f.scenario_id=@scenario_id
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)--check permissions
 AND f.absence_id IN (SELECT id FROM #absences)--only selected absences
 AND f.absence_id<>-1 --ej activity
-ORDER BY p.person_code,d.date_date, f.starttime,absence_id
 
 /*set those absences counted as full day absence*/
 UPDATE #result
@@ -240,8 +179,7 @@ FROM
 INNER JOIN 
 	#result r ON r.person_code=f.person_code 
 	AND f.absence_id=r.absence_id 
-	AND f.starttime=r.shift_starttime
-
+	AND f.date_date=r.date
 
 IF @report_id = 'C5B88862-F7BE-431B-A63F-3DD5FF8ACE54' --4
 BEGIN

@@ -47,13 +47,12 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
 								continue;
 						}
 
-						if (scheduleProjectionService.SchedulePartProjection.IsSatisfiedBy(VisualLayerCollectionSpecification.OneAbsenceLayer))
+						if (significantPart == SchedulePartView.FullDayAbsence)
 						{
 							// We got a whole day absence - add it to absence day count table
 							absenceDayCountDataTable.Rows.Add(
 								DayAbsenceDataRowFactory.CreateDayAbsenceDataRow(absenceDayCountDataTable,
-																				 scheduleProjectionService,
-																				 jobParameters.IntervalsPerDay));
+																				 scheduleProjectionService));
 						}
 
 						DateTimePeriod? layerCollectionPeriod = scheduleProjectionService.SchedulePartProjection.Period();

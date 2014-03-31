@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 		{
 
 			var table = new DataTable("mart.fact_schedule");
+			table.Columns.Add("shift_start_date_local_Id", typeof(int));
 			table.Columns.Add("schedule_date_id", typeof(int));
 			table.Columns.Add("person_id", typeof(int));
 			table.Columns.Add("interval_id", typeof(int));
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("shift_enddate_id", typeof(int));
 			table.Columns.Add("shift_endtime", typeof(DateTime));
 			table.Columns.Add("shift_startinterval_id", typeof(int));
+			table.Columns.Add("shift_endinterval_id", typeof(int));
 			table.Columns.Add("shift_category_id", typeof(int));
 			table.Columns.Add("shift_length_id", typeof(int));
 			table.Columns.Add("scheduled_time_m", typeof(int));
@@ -40,7 +42,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("scheduled_paid_time_m", typeof(int));
 			table.Columns.Add("scheduled_paid_time_activity_m", typeof(int));
 			table.Columns.Add("scheduled_paid_time_absence_m", typeof(int));
-			table.Columns.Add("last_publish", typeof(DateTime));
 			table.Columns.Add("business_unit_id", typeof(int));
 			table.Columns.Add("datasource_id", typeof(int));
 			table.Columns.Add("insert_date", typeof(DateTime));
@@ -52,6 +53,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 
 		public static void AddFactSchedule(
 			this DataTable dataTable,
+			int shift_start_date_local_Id,
 			int schedule_date_id,
 			int person_id,
 			int interval_id,
@@ -67,6 +69,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			int shift_enddate_id,
 			DateTime shift_endtime,
 			int shift_startinterval_id,
+			int shift_endinterval_id,
 			int shift_category_id,
 			int shift_length_id,
 			int scheduled_time_m,
@@ -87,6 +90,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 		{
 			var row = dataTable.NewRow();
 
+			row["shift_start_date_local_Id"] = shift_start_date_local_Id;
 			row["schedule_date_id"] = schedule_date_id;
 			row["person_id"] = person_id;
 			row["interval_id"] = interval_id;
@@ -102,6 +106,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["shift_enddate_id"] = shift_enddate_id;
 			row["shift_endtime"] = shift_endtime;
 			row["shift_startinterval_id"] = shift_startinterval_id;
+			row["shift_endinterval_id"] = shift_endinterval_id;
 			row["shift_category_id"] = shift_category_id;
 			row["shift_length_id"] = shift_length_id;
 			row["scheduled_time_m"] = scheduled_time_m;
@@ -118,7 +123,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["scheduled_paid_time_m"] = scheduled_paid_time_m;
 			row["scheduled_paid_time_activity_m"] = scheduled_paid_time_activity_m;
 			row["scheduled_paid_time_absence_m"] = scheduled_paid_time_absence_m;
-			row["last_publish"] = DateTime.Now;
 			row["business_unit_id"] = business_unit_id;
 			row["datasource_id"] = 10;
 			row["insert_date"] = DateTime.Now;
