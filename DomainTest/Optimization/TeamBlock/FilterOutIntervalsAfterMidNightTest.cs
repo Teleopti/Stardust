@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
-    [TestFixture ]
+    [TestFixture]
     public class FilterOutIntervalsAfterMidNightTest
     {
         private IFilterOutIntervalsAfterMidNight _target;
@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         {
             _mock = new MockRepository();
             TimeZoneInfo tz = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
-            _oldTimeZoneValue = TimeZoneGuard.Instance.TimeZone;
-            TimeZoneGuard.Instance.TimeZone = tz;
 
             _skillStaffPeriod1 = _mock.StrictMock<ISkillStaffPeriod>();
             _skillStaffPeriod2 = _mock.StrictMock<ISkillStaffPeriod>();
@@ -39,15 +37,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _target = new FilterOutIntervalsAfterMidNight();
         }
 
-        [TearDown]
-        public void TearDown()
-        {
-            TimeZoneGuard.Instance.TimeZone = _oldTimeZoneValue;
-        }
-
         [Test]
         public void ShouldReturnMissingIntervalsAfterMidNight()
         {
+            TimeZoneInfo tz = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
+            _oldTimeZoneValue = TimeZoneGuard.Instance.TimeZone;
+            TimeZoneGuard.Instance.TimeZone = tz;
             DateOnly today = new DateOnly(2014, 03, 27);
             IList<ISkillStaffPeriod> skillStaffPeriodList = new ISkillStaffPeriod[] { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3, _skillStaffPeriod4 };
             using (_mock.Record())
@@ -69,15 +64,19 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             {
                 var result = _target.Filter(skillStaffPeriodList, today);
                 Assert.AreEqual(3, result.Count);
-                Assert.AreEqual(_skillStaffPeriod1 , result[0]);
-                Assert.AreEqual(_skillStaffPeriod2 , result[1]);
-                Assert.AreEqual(_skillStaffPeriod3 , result[2]);
+                Assert.AreEqual(_skillStaffPeriod1, result[0]);
+                Assert.AreEqual(_skillStaffPeriod2, result[1]);
+                Assert.AreEqual(_skillStaffPeriod3, result[2]);
             }
+            TimeZoneGuard.Instance.TimeZone = _oldTimeZoneValue;
         }
 
         [Test]
         public void ShouldReturnAllIntervalsIfAllAreOnSameDay()
         {
+            TimeZoneInfo tz = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
+            _oldTimeZoneValue = TimeZoneGuard.Instance.TimeZone;
+            TimeZoneGuard.Instance.TimeZone = tz;
             DateOnly today = new DateOnly(2014, 03, 27);
             IList<ISkillStaffPeriod> skillStaffPeriodList = new ISkillStaffPeriod[] { _skillStaffPeriod1, _skillStaffPeriod2, _skillStaffPeriod3, _skillStaffPeriod4 };
             using (_mock.Record())
@@ -104,8 +103,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                 Assert.AreEqual(_skillStaffPeriod3, result[2]);
                 Assert.AreEqual(_skillStaffPeriod4, result[3]);
             }
+            TimeZoneGuard.Instance.TimeZone = _oldTimeZoneValue;
         }
     }
 
-    
+
 }
