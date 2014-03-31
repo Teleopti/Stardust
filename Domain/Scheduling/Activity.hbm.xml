@@ -70,10 +70,6 @@
 			  type="boolean"
 			  not-null="true"/>
 			<property name="ReportLevelDetail" not-null="false"></property>
-			<many-to-one name="GroupingActivity"
-					 cascade="none" 
-					 class="Teleopti.Ccc.Domain.Common.GroupingActivity"
-					 not-null="false" foreign-key="FK_Activity_GroupingActivity" />
 		<subclass name="MasterActivity" discriminator-value="1" proxy="MasterActivity">
 			<bag name="ActivityCollection" table="MasterActivityCollection" cascade="none">
 				<key column="MasterActivity" foreign-key="FK_MasterActivity_Master"/>

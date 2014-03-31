@@ -162,8 +162,7 @@ Teleopti.MyTimeWeb.Password = (function ($) {
     function _initButton() {
         $("#passwordButton")
 			.click(function () {
-				_updatePassword($("input#oldPassword").val(), $("input#password").val());
-			   // _updatePassword($("input#oldPassword[type=password]").val(), $("input#password[type=password]").val());
+				_updatePassword($("input#oldPassword[type=password]").val(), $("input#password[type=password]").val());
 			});
     }
 
@@ -172,10 +171,8 @@ Teleopti.MyTimeWeb.Password = (function ($) {
             var alertPassword = $("#alertPassword");
             var incorrectLabel = $("#nonMatchingPassword");
             var passwordButton = $("#passwordButton");
-            //var pw = $("input#password[type=password]").val();
-        	//var pw2 = $("input#passwordValidation[type=password]").val();
-            var pw = $("input#password").val();
-            var pw2 = $("input#passwordValidation").val();
+            var pw = $("input#password[type=password]").val();
+            var pw2 = $("input#passwordValidation[type=password]").val();
             if (pw != pw2) {
                 alertPassword.show();
                 incorrectLabel.show();
@@ -201,7 +198,7 @@ Teleopti.MyTimeWeb.Password = (function ($) {
     }
 
     function _updatePassword(oldPassword, newPassword) {
-        var data = { OldPassword: oldPassword, NewPassword: newPassword };
+    	var data = { OldPassword: oldPassword, NewPassword: newPassword };
         ajax.Ajax({
             url: "Settings/ChangePassword",
             dataType: "json",
@@ -221,7 +218,7 @@ Teleopti.MyTimeWeb.Password = (function ($) {
             error: function (jqXHR, textStatus, errorThrown) {
                 if (jqXHR.status == 400) {
                 	var error = $.parseJSON(jqXHR.responseText);
-                    if (error.IsAuthenticationSuccessful) {
+                	if (error.IsAuthenticationSuccessful) {
                         $("#alertPassword").show();
                         $("#invalidNewPassword").show();
                     } else {

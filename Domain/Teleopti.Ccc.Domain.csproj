@@ -1264,7 +1264,6 @@
     <Compile Include="Forecasting\SkillDayRestrictionSet.cs" />
     <Compile Include="Forecasting\SkillDayTemplate.cs" />
     <Compile Include="Common\EntityBaseTypes\Entity.cs" />
-    <Compile Include="Common\GroupingActivity.cs" />
     <Compile Include="Common\Layer.cs" />
     <Compile Include="AgentInfo\Team.cs" />
     <Compile Include="Common\EntityBaseTypes\AggregateEntity.cs" />
@@ -1515,9 +1514,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\PersonAbsence.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Common\GroupingActivity.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\QueueSource.hbm.xml" />

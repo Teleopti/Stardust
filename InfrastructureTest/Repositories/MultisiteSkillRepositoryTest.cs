@@ -32,9 +32,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             _skillType = SkillTypeFactory.CreateSkillType();
             PersistAndRemoveFromUnitOfWork(_skillType);
             _activity = new Activity("The test"){DisplayColor = Color.Honeydew};
-            GroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
-            PersistAndRemoveFromUnitOfWork(groupingActivity);
-            _activity.GroupingActivity = groupingActivity;
             PersistAndRemoveFromUnitOfWork(_activity);
         }
 
@@ -123,7 +120,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Session.Delete("from Skill");
                 Session.Delete("from SkillType");
                 Session.Delete("from Activity");
-                Session.Delete("from GroupingActivity");
                 Session.Flush();
             }
 

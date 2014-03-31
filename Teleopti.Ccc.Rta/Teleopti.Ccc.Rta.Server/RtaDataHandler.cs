@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Rta.Server.Repeater;
 using Teleopti.Ccc.Rta.Server.Resolvers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.SignalR;
@@ -13,27 +16,27 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public class RtaDataHandler : IRtaDataHandler
 	{
-		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IRtaDataHandler));
-		private static IActualAgentStateCache _stateCache;
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof (IRtaDataHandler));
 		private readonly IEnumerable<IActualAgentStateHasBeenSent> _afterSends;
 
 		private readonly IActualAgentAssembler _agentAssembler;
+		private readonly IDatabaseWriter _databaseWriter;
 		private readonly IMessageSender _asyncMessageSender;
 		private readonly IDataSourceResolver _dataSourceResolver;
 		private readonly IPersonResolver _personResolver;
 
 		public RtaDataHandler(IMessageSender asyncMessageSender,
-		                      IDataSourceResolver dataSourceResolver,
-		                      IPersonResolver personResolver,
-		                      IActualAgentAssembler agentAssembler,
-		                      IActualAgentStateCache stateCache,
-		                      IEnumerable<IActualAgentStateHasBeenSent> afterSends)
+			IDataSourceResolver dataSourceResolver,
+			IPersonResolver personResolver,
+			IActualAgentAssembler agentAssembler,
+													IDatabaseWriter databaseWriter,
+			IEnumerable<IActualAgentStateHasBeenSent> afterSends)
 		{
 			_asyncMessageSender = asyncMessageSender;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_agentAssembler = agentAssembler;
-			_stateCache = stateCache;
+			_databaseWriter = databaseWriter;
 			_afterSends = afterSends;
 
 			if (_asyncMessageSender == null) return;
@@ -58,7 +61,7 @@ namespace Teleopti.Ccc.Rta.Server
 			if (agentState == null)
 				return;
 
-			_stateCache.AddAgentStateToCache(agentState);
+				_databaseWriter.AddOrUpdate(agentState);
 			sendRtaState(agentState);
 		}
 
@@ -70,12 +73,12 @@ namespace Teleopti.Ccc.Rta.Server
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
-		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
+			Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
 			int dataSourceId;
 			var batch = isSnapshot
-				            ? batchId
-				            : (DateTime?) null;
+				? batchId
+				: (DateTime?) null;
 
 			if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
 			{
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.Rta.Server
 			if (isSnapshot && string.IsNullOrEmpty(logOn))
 			{
 				LoggingSvc.InfoFormat("Last of batch detected, initializing handling for batch id: {0}, source id: {1}", batchId,
-				                      sourceId);
+					sourceId);
 				handleLastOfBatch(batchId, sourceId);
 				return;
 			}
@@ -106,13 +109,13 @@ namespace Teleopti.Ccc.Rta.Server
 				LoggingSvc.DebugFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
 
 				var agentState = _agentAssembler.GetAgentState(personWithBusinessUnit.PersonId,
-				                                               personWithBusinessUnit.BusinessUnitId,
-				                                               platformTypeId,
-				                                               stateCode,
-				                                               timestamp,
-				                                               timeInState,
-				                                               batch,
-				                                               sourceId);
+						personWithBusinessUnit.BusinessUnitId,
+						platformTypeId,
+						stateCode,
+						timestamp,
+						timeInState,
+						batch,
+						sourceId);
 				if (agentState == null)
 				{
 					LoggingSvc.WarnFormat(
@@ -121,9 +124,9 @@ namespace Teleopti.Ccc.Rta.Server
 						timeInState, batchId, sourceId);
 					continue;
 				}
-				LoggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode,
-				                      agentState);
-				_stateCache.AddAgentStateToCache(agentState);
+					LoggingSvc.InfoFormat("AgentState built for UserCode: {0}, StateCode: {1}, AgentState: {2}", logOn, stateCode,
+						agentState);
+					_databaseWriter.AddOrUpdate(agentState);
 				if (agentState.SendOverMessageBroker)
 					sendRtaState(agentState);
 			}
@@ -131,11 +134,10 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private void handleLastOfBatch(DateTime batchId, string sourceId)
 		{
-			_stateCache.FlushCacheToDatabase();
 			var missingAgents = _agentAssembler.GetAgentStatesForMissingAgents(batchId, sourceId);
 			foreach (var agent in missingAgents.Where(agent => agent != null))
 			{
-				_stateCache.AddAgentStateToCache(agent);
+				_databaseWriter.AddOrUpdate(agent);
 				sendRtaState(agent);
 			}
 		}
@@ -148,6 +150,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 			_asyncMessageSender.SendNotification(notification);
 			if (_afterSends != null)
+
 			{
 				_afterSends.ToList().ForEach(s => s.Invoke(agentState));
 			}

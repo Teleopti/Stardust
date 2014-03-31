@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void Setup()
         {
             _target = new Activity("TestActivity");
-            _target.GroupingActivity = new GroupingActivity("test");
             _list = new List<IActivity>();
         }
         [Test]
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             Assert.AreEqual("TestActivity", _target.Description.Name);
             Assert.AreEqual(0, _target.DisplayColor.ToArgb());
-            Assert.AreEqual("test", _target.GroupingActivity.Description.Name);
             Assert.IsNull(_target.UpdatedBy);
             Assert.IsNull(_target.UpdatedOn);
             Assert.IsTrue(_target.InContractTime);
@@ -74,16 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             Assert.AreEqual("test",_target.Description.Name);
             Assert.AreEqual("test", _target.Name);
-        }
-
-        /// <summary>
-        /// The GroupingActivity field must not be set to null
-        /// </summary>
-        [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
-        public void VerifyGroupingActivityNotNull()
-        {
-            _target.GroupingActivity = null;
         }
 
         /// <summary>

@@ -6,11 +6,8 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
 {
     public class ActivityCreator
     {
-        private readonly IGroupingActivity _groupingActivity;
-
-        public ActivityCreator(IGroupingActivity groupingActivity)
+        public ActivityCreator()
         {
-            _groupingActivity = groupingActivity;
         }
 
         /// <summary>
@@ -34,7 +31,6 @@ namespace Teleopti.Ccc.ApplicationConfig.Creators
                                          DisplayColor = color,
                                          InReadyTime = inReadyTime,
                                          InContractTime = inContractTime,
-                                         GroupingActivity = _groupingActivity
                                      };
             return activity;
         }

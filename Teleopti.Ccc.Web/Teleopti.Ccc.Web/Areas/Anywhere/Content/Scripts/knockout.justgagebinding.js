@@ -26,7 +26,7 @@ define([
 		update: function (element, valueAccessor) {
 			var options = valueAccessor();
 			var value = ko.utils.unwrapObservable(options.value);
-			if (value) {
+			if (value === parseInt(value)) {
 				element.gage.refresh(value);
 			}
 		}

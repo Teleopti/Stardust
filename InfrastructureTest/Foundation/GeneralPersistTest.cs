@@ -49,12 +49,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             IUnitOfWork UnitOfWork2 = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork();
             ISkillType skillType = SkillTypeFactory.CreateSkillType();
             IActivity activity = ActivityFactory.CreateActivity("The test", Color.Honeydew);
-            IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity("the group");
             ISkill skill = SkillFactory.CreateSkill("Skill - Name", skillType, 15);
 
             new SkillTypeRepository(UnitOfWork).Add(skillType);
-            new GroupingActivityRepository(UnitOfWork).Add(groupingActivity);
-            activity.GroupingActivity = groupingActivity;
             new ActivityRepository(UnitOfWork).Add(activity);
             skill.Activity = activity;
             new SkillRepository(UnitOfWork).Add(skill);
@@ -93,7 +90,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             }
             finally
             {
-                new GroupingActivityRepository(UnitOfWork).Remove(groupingActivity);
                 new ActivityRepository(UnitOfWork).Remove(activity);
                 new SkillTypeRepository(UnitOfWork).Remove(skillType);
                 new SkillRepository(UnitOfWork).Remove(skill);

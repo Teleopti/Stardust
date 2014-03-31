@@ -39,11 +39,9 @@ namespace Teleopti.Ccc.Rta.Server
 			builder.Register<IDatabaseReader>(c => c.Resolve<DatabaseReader>())
 				.IntegrateWithMbCache();
 			builder.Register<ILoadActualAgentState>(c => c.Resolve<DatabaseReader>());
-
 			builder.RegisterType<DatabaseWriter>().As<IDatabaseWriter>().SingleInstance();
 			builder.RegisterType<ActualAgentAssembler>().As<IActualAgentAssembler>();
 			builder.RegisterType<RtaDataHandler>().As<IRtaDataHandler>();
-			builder.RegisterType<ActualAgentStateCache>().As<IActualAgentStateCache>().SingleInstance();
 			builder.RegisterType<AlarmMapper>().As<IAlarmMapper>();
 			builder.RegisterType<SignalSender>()
 				.As<IMessageSender>()

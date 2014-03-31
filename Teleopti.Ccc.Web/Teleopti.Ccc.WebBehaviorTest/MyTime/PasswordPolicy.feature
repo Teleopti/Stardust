@@ -1,5 +1,4 @@
-﻿@WatiN
-@PasswordPolicy
+﻿@PasswordPolicy
 Feature: Password Policy
 	In order to have a good security
 	As a user that is trying to sign in or change password
