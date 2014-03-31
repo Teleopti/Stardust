@@ -86,7 +86,7 @@ Scenario: Alert agent before last activity happens
         And the current time is '2030-01-01 16:59:20'
          And Alert Time setting is '40 seconds'                      
          When I am viewing week schedule
-         Then I should see an alert notifying 'Shift ends at 17:00 !'
+         Then I should see one notify message
 @ignore
 Scenario: Pop up box disappear automaticly
          Given I have the role 'Full access to Schedule '

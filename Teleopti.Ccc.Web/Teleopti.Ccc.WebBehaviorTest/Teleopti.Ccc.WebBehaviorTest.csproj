@@ -202,6 +202,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>22851_FindShiftTradePageFromTeamSchedule.feature</DependentUpon>
     </Compile>
+    <Compile Include="MyTime\AsmActivityNotification.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AsmActivityNotification.feature</DependentUpon>
+    </Compile>
     <Compile Include="MyTime\MonthlyScheduleStepDefinitions.cs" />
     <Compile Include="MyTime\MonthSchedule.feature.cs">
       <AutoGen>True</AutoGen>
@@ -774,6 +779,10 @@
     <None Include="Anywhere\ViewConfidentialAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewConfidentialAbsence.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\AsmActivityNotification.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AsmActivityNotification.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
