@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
+using Teleopti.Ccc.Secrets.Licensing;
 
 namespace Teleopti.Support.LicTool
 {

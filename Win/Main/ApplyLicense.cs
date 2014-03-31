@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;

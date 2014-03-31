@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.Web.Core.Startup.VerifyLicense;
 using log4net;
 using NUnit.Framework;

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Xml;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Infrastructure;
 
