@@ -4,6 +4,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
 /// <reference path="../../../../Content/moment/moment.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/noty/jquery.noty.js" />
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
@@ -216,7 +217,21 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	        }
 	    });
 	}
-    
+	///////////
+	var count = 0;
+	var timeout = 10 * 1000;
+	function _justPopup(options) {
+		if (count < 5) {
+			count++;
+			Teleopti.MyTimeWeb.Notifier.Notify(options, "Lunch at 11:00");
+			setTimeout(_justPopup, timeout);
+		}
+	}
+
+	function _fakeAlert(options) {
+		setTimeout(_justPopup(options), timeout);
+	}
+	////////////
     function _startPollingToAvoidLogOut() {
         setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
     }
@@ -248,6 +263,10 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				vm.unreadMessageCount(data.UnreadMessagesCount);				
 			}
 		},
-	    MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn
+		MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn,
+		FakeAlert: function(options) {
+			notifyOptions = options;
+			_fakeAlert(options);
+		}
 	};
 })(jQuery);
