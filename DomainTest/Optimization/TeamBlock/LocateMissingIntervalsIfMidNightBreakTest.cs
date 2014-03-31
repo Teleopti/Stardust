@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         private ISkillStaffPeriod _skillStaffPeriod3;
         private ISkillStaffPeriod _skillStaffPeriod4;
         private TimeZoneInfo _timeZoneInfo;
+        private TimeZoneInfo _tz;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
-            TimeZoneInfo tz = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
-            TimeZoneGuard.Instance.TimeZone  = tz;
-
+            _tz = (TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time"));
+            
             _skillDay1 = _mock.StrictMock<ISkillDay>();
             _skillDay2 = _mock.StrictMock<ISkillDay>();
             _skill1 = _mock.StrictMock<ISkill>();
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _skillStaffPeriod3 = _mock.StrictMock<ISkillStaffPeriod>();
             _skillStaffPeriod4 = _mock.StrictMock<ISkillStaffPeriod>();
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-            _timeZoneInfo = tz;
+            _timeZoneInfo = _tz;
             _target = new LocateMissingIntervalsIfMidNightBreak(_schedulingResultStateHolder);
         }
 
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             }
             using (_mock.Playback())
             {
-                var result = _target.GetMissingSkillStaffPeriods(today, _skill2);
+                var result = _target.GetMissingSkillStaffPeriods(today, _skill2, _tz);
                 Assert.AreEqual(0, result.Count);
             }
         }
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             }
             using (_mock.Playback())
             {
-                var result = _target.GetMissingSkillStaffPeriods(today, _skill2);
+                var result = _target.GetMissingSkillStaffPeriods(today, _skill2, _tz);
                 Assert.AreEqual(1, result.Count);
                 Assert.AreEqual(_skillStaffPeriod4, result[0]);
             }

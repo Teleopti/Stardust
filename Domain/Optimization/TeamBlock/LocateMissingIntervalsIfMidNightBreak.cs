@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
     public interface ILocateMissingIntervalsIfMidNightBreak
     {
-        IList<ISkillStaffPeriod> GetMissingSkillStaffPeriods(DateOnly dateOnly, ISkill skill);
+        IList<ISkillStaffPeriod> GetMissingSkillStaffPeriods(DateOnly dateOnly, ISkill skill, TimeZoneInfo timeZone);
     }
 
     public class LocateMissingIntervalsIfMidNightBreak : ILocateMissingIntervalsIfMidNightBreak
@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             _schedulingResultStateHolder = schedulingResultStateHolder;
         }
 
-        public IList<ISkillStaffPeriod> GetMissingSkillStaffPeriods(DateOnly dateOnly, ISkill skill)
+        public IList<ISkillStaffPeriod> GetMissingSkillStaffPeriods(DateOnly dateOnly, ISkill skill, TimeZoneInfo timeZone)
         {
             var missingSkillStaffPeriod = new List<ISkillStaffPeriod>();
             if (skill.MidnightBreakOffset  > TimeSpan.Zero)
             {
                 var previousDay = dateOnly.AddDays(-1);
-                TimeZoneInfo timeZone = TimeZoneGuard.Instance.TimeZone;
+                //TimeZoneInfo timeZone = TimeZoneGuard.Instance.TimeZone;
                 var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(new DateOnly[] { previousDay });
                 foreach (var skillDay in skillDays)
                 {

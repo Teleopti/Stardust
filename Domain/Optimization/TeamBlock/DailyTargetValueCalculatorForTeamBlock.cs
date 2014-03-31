@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                 IList<ISkillStaffPeriod> skillStaffPeriodCollection = skillDay.SkillStaffPeriodCollection;
                 if (skill.MidnightBreakOffset != TimeSpan.Zero)
                 {
-                    var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill);
+                    var missingIntervals = _locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(currentDate, skill, TimeZoneGuard.Instance.TimeZone );
                     skillStaffPeriodCollection = skillStaffPeriodCollection.Concat(missingIntervals).ToList()  ;
                     skillStaffPeriodCollection = _filterOutIntervalsAfterMidNight.Filter(skillStaffPeriodCollection, currentDate, TimeZoneGuard.Instance.TimeZone);
                 }
