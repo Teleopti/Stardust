@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 _rollbackService.ClearModificationCollection();
             	IScheduleDay scheduleDay = scheduleDayBefore.DaySchedulePart();
-				result = tryFix(dateOnly, scheduleDay, schedulingOptions);
+				result = tryFix(scheduleDay, schedulingOptions);
                 if (result) 
 					return true;
 
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 _rollbackService.ClearModificationCollection();
 				IScheduleDay scheduleDay = scheduleDayAfter.DaySchedulePart();
-				result = tryFix(dateOnly, scheduleDay, schedulingOptions);
+				result = tryFix(scheduleDay, schedulingOptions);
                 if (!result)
                 {
 					_rollbackService.Rollback();
@@ -58,13 +58,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             return result;
         }
 
-		private bool tryFix(DateOnly dateOnly, IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
+		private bool tryFix(IScheduleDay scheduleDay, ISchedulingOptions schedulingOptions)
 		{
 			scheduleDay.DeleteMainShift(scheduleDay);
 			_rollbackService.Modify(scheduleDay);
+			var dateOnly = scheduleDay.DateOnlyAsPeriod.DateOnly;
 			_resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null);
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
-			bool result = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService);
+			bool result = _scheduleService.SchedulePersonOnDay(scheduleDay.ReFetch(), schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService);
 
 			return result;
 		}
