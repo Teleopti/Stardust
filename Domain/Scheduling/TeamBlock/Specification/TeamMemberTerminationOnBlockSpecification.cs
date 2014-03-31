@@ -9,7 +9,7 @@
     {
         public bool IsSatisfy(ITeamInfo teamInfo, IBlockInfo blockInfo)
         {
-            foreach (var person in teamInfo.GroupPerson.GroupMembers)
+            foreach (var person in teamInfo.GroupMembers)
             {
                 foreach (var day in blockInfo.BlockPeriod.DayCollection())
                 {

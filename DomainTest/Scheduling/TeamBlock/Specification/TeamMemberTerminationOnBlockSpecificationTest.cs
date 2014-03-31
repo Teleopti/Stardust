@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
     {
         private ITeamMemberTerminationOnBlockSpecification _target;
         private ITeamInfo _teamInfo;
-        private IGroupPerson _groupPerson;
         private MockRepository _mock;
         private IPerson _person1;
         private IPerson _person2;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             _mock = new MockRepository();
             _person1 = _mock.StrictMock<IPerson>();
             _person2 = _mock.StrictMock<IPerson>();
-            _groupPerson = _mock.StrictMock<IGroupPerson>();
             _teamInfo = _mock.StrictMock<ITeamInfo>();
             _target = new TeamMemberTerminationOnBlockSpecification();
         }
@@ -38,8 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             var terminationDate = new DateOnly(2014, 04, 02);
             using (_mock.Record())
             {
-                Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-                Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson> {_person1});
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1 });
                 Expect.Call(_person1.TerminalDate).Return(terminationDate).Repeat.Times(3);
             }
             using (_mock.Playback())
@@ -56,8 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             var terminationDate = new DateOnly(2014, 04, 02);
             using (_mock.Record())
             {
-                Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-                Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson> { _person1,_person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1,_person2 });
                 Expect.Call(_person1.TerminalDate).Return(terminationDate).Repeat.Times(3);
                 Expect.Call(_person2.TerminalDate).Return(terminationDate).Repeat.Times(3);
             }
@@ -76,8 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             var terminationDateForPerson2 = new DateOnly(2014, 03, 30);
             using (_mock.Record())
             {
-                Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-                Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
                 Expect.Call(_person1.TerminalDate).Return(terminationDateForPerson1).Repeat.Times(3);
                 Expect.Call(_person2.TerminalDate).Return(terminationDateForPerson2).Repeat.Times(2);
             }
@@ -96,8 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             var terminationDateForPerson2 = new DateOnly(2014, 03, 31);
             using (_mock.Record())
             {
-                Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-                Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
                 Expect.Call(_person1.TerminalDate).Return(terminationDateForPerson1);
                 Expect.Call(_person2.TerminalDate).Return(terminationDateForPerson2);
             }
@@ -115,8 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.Specification
             var terminationDateForPerson1 = new DateOnly(2014, 03, 28);
             using (_mock.Record())
             {
-                Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-                Expect.Call(_groupPerson.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person1, _person2 });
                 Expect.Call(_person1.TerminalDate).Return(terminationDateForPerson1);
             }
             using (_mock.Playback())

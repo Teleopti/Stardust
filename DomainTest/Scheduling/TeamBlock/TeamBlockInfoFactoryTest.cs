@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_dynamicBlockFinder.ExtractBlockInfo(new DateOnly(2013, 2, 27), _teamInfo, BlockFinderType.SchedulePeriod, false))
 					  .Return(_blockInfo);
                 Expect.Call(_teamMemberTerminationOnBlockSpecification.IsSatisfy(_teamInfo, _blockInfo)).Return(true);
-                Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
+                Expect.Call(_teamInfo.GroupMembers).Return(new List<IPerson> { _person });
 				Expect.Call(_blockInfo.BlockPeriod).Return(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MaxValue));
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MaxValue),
 				                                            _allMatrixList)).Return(_teamInfo);

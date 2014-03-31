@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             _baseLineData.SampleSkill.MidnightBreakOffset = TimeSpan.FromHours(1);
             using (_mock.Record())
             {
-                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.GroupPerson, _dateOnlyPeriod)).IgnoreArguments().Return(new List<ISkill>{_baseLineData.SampleSkill });
+                Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_baseLineData.PersonList, _dateOnlyPeriod)).IgnoreArguments().Return(new List<ISkill>{_baseLineData.SampleSkill });
                 Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay> { _skillDay1 });
                 Expect.Call(_locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(DateOnly.Today, _baseLineData.SampleSkill)).Return(new List<ISkillStaffPeriod>( ));
