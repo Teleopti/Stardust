@@ -421,9 +421,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 newShortPeriod.SetCalculatedResource65(skillStaffPeriod.Payload.CalculatedResource);
                 newShortPeriod.Payload.Shrinkage = skillStaffPeriod.Payload.Shrinkage;
                 newShortPeriod.Payload.SkillPersonData = (SkillPersonData) skillStaffPeriod.Payload.SkillPersonData.Clone();
-                ((SkillStaff)newShortPeriod.Payload).ForecastedIncomingDemand = skillStaffPeriod.Payload.ForecastedIncomingDemand*
-                                                                  factor;
-
+				((SkillStaff)newShortPeriod.Payload).ForecastedIncomingDemand = skillStaffPeriod.Payload.ForecastedIncomingDemand;
+																  
                 var aggregate = (IAggregateSkillStaffPeriod) newShortPeriod;
                 aggregate.IsAggregate = true;
                 aggregate.AggregatedFStaff = skillStaffPeriod.FStaff;
