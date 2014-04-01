@@ -76,5 +76,4 @@ Scenario: Sign in without permission
 	And I am viewing the sign in page
 	When I select application logon data source
 	And I sign in by user name
-	Then I should not be signed in
-	And I should see a log on error 'InsufficientPermissionForWeb'
+	Then I should see a log on error 'InsufficientPermissionForWeb'
