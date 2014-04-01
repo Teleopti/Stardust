@@ -2,8 +2,10 @@
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.Furness;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -60,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var furnessDataConverter = new FurnessDataConverter(dividedActivityData);
             IFurnessData furnessData = furnessDataConverter.ConvertDividedActivityToFurnessData();
             _furnessEvaluator = new FurnessEvaluator(furnessData);
-            _furnessEvaluator.Evaluate(1, 8);
+			_furnessEvaluator.Evaluate(1, 8, Variances.StandardDeviation);
             _optimizedDivideActivity = furnessDataConverter.ConvertFurnessDataBackToActivity();
 
 			var person1 =

@@ -1,10 +1,13 @@
-﻿using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+﻿using System;
+using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.Furness;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
     public static class FurnessDataFactory
     {
 
+		[CLSCompliant(false)]
         public static FurnessData CreateFurnessDataForTestSet1()
         {
             FurnessData ret = new FurnessData(3, 3);
@@ -43,6 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             return ret;
         }
 
+		[CLSCompliant(false)]
         public static FurnessData CreateFurnessDataForTestSet2()
         {
             FurnessData ret = new FurnessData(3, 2);
@@ -74,6 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             return ret;
         }
 
+		[CLSCompliant(false)]
         public static FurnessData CreateFurnessDataForTestSet3()
         {
             FurnessData ret = new FurnessData(3, 3);
@@ -112,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             return ret;
         }
 
+		[CLSCompliant(false)]
         public static FurnessData CreateFurnessDataForTestSetZeroDemand()
         {
             FurnessData ret = new FurnessData(3, 3);
