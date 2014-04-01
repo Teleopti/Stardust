@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.IdentityModel.Claims;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
@@ -59,11 +61,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
-			_logon.LogOn(dataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
 			if (result.Successful)
 			{
 				_formsAuthentication.SetAuthCookie(userName + "§" + dataSourceName);
 			}
+
+			var claims = new List<Claim>();
+			claims.Add(new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName));
+			var claimsIdentity = new ClaimsIdentity(claims,"MyType");
+			HttpContext.User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
+
+			_logon.LogOn(dataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
 
 			var viewModel = new TestMessageViewModel
 			                	{
