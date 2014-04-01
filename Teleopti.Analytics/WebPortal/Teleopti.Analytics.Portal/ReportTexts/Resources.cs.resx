@@ -932,7 +932,7 @@
     <value> Přihláste sa do aplikace prosím</value>
   </data>
   <data name="PossibleSolution2" xml:space="preserve">
-    <value> </value>
+    <value>Buď zavřete klienta a přihlašte se znovu pomocí Windows ověření nebo může administrátor změnit webové ověření k formulářům.</value>
   </data>
   <data name="ResAnswCallsWithinSLPerAnswCalls" xml:space="preserve">
     <value>Uskutečněné hovory v stanoveném čase / Uskutečnené hovory
@@ -992,5 +992,263 @@
   </data>
   <data name="ResReportAgentScorecard" xml:space="preserve">
     <value>Výsledková listina agenta</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Splněno</value>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Splněno (%)</value>
+  </data>
+  <data name="ResMustHaves" xml:space="preserve">
+    <value>Musí mít</value>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Nesplněno</value>
+  </data>
+  <data name="ResReportAbsenceTimePerAbsence" xml:space="preserve">
+    <value>Doba absence podle absence</value>
+  </data>
+  <data name="Main" xml:space="preserve">
+    <value>Business Hierarchy</value>
+  </data>
+  <data name="Note" xml:space="preserve">
+    <value>Poznámka</value>
+  </data>
+  <data name="ResGroupPageColon" xml:space="preserve">
+    <value>Stránka skupny:</value>
+  </data>
+  <data name="ResGroupPageGroupColon" xml:space="preserve">
+    <value>Skupina</value>
+  </data>
+  <data name="Skill" xml:space="preserve">
+    <value>Kvalifikace</value>
+  </data>
+  <data name="ResReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>Naplánovaný přesčas na agenta</value>
+  </data>
+  <data name="ResOvertimeColon" xml:space="preserve">
+    <value>Přesčas:</value>
+  </data>
+  <data name="ResOvertimeTypeColon" xml:space="preserve">
+    <value>Typ přesčasu:</value>
+  </data>
+  <data name="ResKpiAverageAfterCallWork" xml:space="preserve">
+    <value>Průměrná práce po hovoru (s)</value>
+  </data>
+  <data name="ResKpiAverageHandleTime" xml:space="preserve">
+    <value>Průměrná doba obsluhy (s)</value>
+  </data>
+  <data name="ResKpiAverageTalkTime" xml:space="preserve">
+    <value>Průměrná doba hovoru (s)</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Pouze aktivní kvalifikace</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Kvalifikace agenta</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Pouze aktivní kvalifikace:</value>
+  </data>
+  <data name="Contracts" xml:space="preserve">
+    <value>Smlouva</value>
+  </data>
+  <data name="ContractSchedule" xml:space="preserve">
+    <value>Plán smlouvy</value>
+  </data>
+  <data name="PartTimepercentages" xml:space="preserve">
+    <value>Procentní podíl částečných úvazků</value>
+  </data>
+  <data name="RuleSetBag" xml:space="preserve">
+    <value>Množina směn</value>
+  </data>
+  <data name="ResNoScorecardAvailable" xml:space="preserve">
+    <value>Žádná karta hodnocení není k dispozici</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>Metrika fronty agenta</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>Doba aktivity na agenta</value>
+  </data>
+  <data name="ResOvertimeH" xml:space="preserve">
+    <value>Přesčas (hh:mm)</value>
+  </data>
+  <data name="ResShiftEndTime" xml:space="preserve">
+    <value>Konec směny</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>Kategorie směn a celodenní absence na den</value>
+  </data>
+  <data name="ResRequestTypeAbsence" xml:space="preserve">
+    <value>Absence</value>
+  </data>
+  <data name="ResRequestTypeShiftTrade" xml:space="preserve">
+    <value>Trh směn</value>
+  </data>
+  <data name="ResRequestTypeText" xml:space="preserve">
+    <value>Text</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Požadavek na agenta</value>
+  </data>
+  <data name="ResRequestStatusApproved" xml:space="preserve">
+    <value>Schváleno</value>
+  </data>
+  <data name="ResRequestStatusDenied" xml:space="preserve">
+    <value>Zamítnuto</value>
+  </data>
+  <data name="ResRequestStatusPending" xml:space="preserve">
+    <value>Čeká</value>
+  </data>
+  <data name="ResRequestTypeColon" xml:space="preserve">
+    <value>Typ požadavku:</value>
+  </data>
+  <data name="ResRequestStatusColon" xml:space="preserve">
+    <value>Status:</value>
+  </data>
+  <data name="ResRequestStatus" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="ResRequestsDayCount" xml:space="preserve">
+    <value>Požadované dny</value>
+  </data>
+  <data name="ResRequestsStartDayCount" xml:space="preserve">
+    <value>Požadavky</value>
+  </data>
+  <data name="ResRequestType" xml:space="preserve">
+    <value>Typ</value>
+  </data>
+  <data name="ResApplicationDate" xml:space="preserve">
+    <value>Datum </value>
+  </data>
+  <data name="ResRequestPeriod" xml:space="preserve">
+    <value>Období požadavku</value>
+  </data>
+  <data name="RedirectNow" xml:space="preserve">
+    <value>Přesměrováno nyní</value>
+  </data>
+  <data name="SessionExpiredHeader" xml:space="preserve">
+    <value>Relace vypršela</value>
+  </data>
+  <data name="SessionExpiredText" xml:space="preserve">
+    <value>Vaše relace vypršela z důvodu neaktivity. Budete brzy přesměrováni na stránku pro přihlášení.</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Celkem</value>
+  </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Odhálšení</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Datum (začátek směn)</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Datum od (začátek směn)</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Datum do (začátek směn)</value>
+  </data>
+  <data name="RepViewerCurrentPage" xml:space="preserve">
+    <value>Stávající stránka</value>
+  </data>
+  <data name="RepViewerExport" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="RepViewerFind" xml:space="preserve">
+    <value>Hledat</value>
+  </data>
+  <data name="RepViewerFindNext" xml:space="preserve">
+    <value>Hledat další</value>
+  </data>
+  <data name="RepViewerFindText" xml:space="preserve">
+    <value>Hledat text v reportu</value>
+  </data>
+  <data name="RepViewerFirstPage" xml:space="preserve">
+    <value>První stránka</value>
+  </data>
+  <data name="RepViewerInvalidPageNumber" xml:space="preserve">
+    <value>Chybné číslo stránky</value>
+  </data>
+  <data name="RepViewerLastPage" xml:space="preserve">
+    <value>Poslední stránka</value>
+  </data>
+  <data name="RepViewerNext" xml:space="preserve">
+    <value>Další</value>
+  </data>
+  <data name="RepViewerNextPage" xml:space="preserve">
+    <value>Další stránka</value>
+  </data>
+  <data name="RepViewerNoMoreMatches" xml:space="preserve">
+    <value>Nebyly nalezeny další záznamy</value>
+  </data>
+  <data name="RepViewerOf" xml:space="preserve">
+    <value>z</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Dodržení dle agenta</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Dodržení dle dne</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Naplánování agentů podle aktivit</value>
+  </data>
+  <data name="RepViewerPageSetup" xml:space="preserve">
+    <value>Nastavení stránky</value>
+  </data>
+  <data name="RepViewerPageWidth" xml:space="preserve">
+    <value>Šířka stránky</value>
+  </data>
+  <data name="RepViewerPreviousPage" xml:space="preserve">
+    <value>Předchozí stránka</value>
+  </data>
+  <data name="RepViewerPrinLayout" xml:space="preserve">
+    <value>Rozložení tisku</value>
+  </data>
+  <data name="RepViewerPrint" xml:space="preserve">
+    <value>Tisk</value>
+  </data>
+  <data name="RepViewerRefresh" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="RepViewerStop" xml:space="preserve">
+    <value>Zastavit vykreslování</value>
+  </data>
+  <data name="RepViewerTextNotFound" xml:space="preserve">
+    <value>Text nenalezen</value>
+  </data>
+  <data name="RepViewerTotalPages" xml:space="preserve">
+    <value>Stránek celkem</value>
+  </data>
+  <data name="RepViewerWholePage" xml:space="preserve">
+    <value>Celá stránka</value>
+  </data>
+  <data name="RepViewerZoom" xml:space="preserve">
+    <value>Zvětšení</value>
+  </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Čas připojení k databázi vypršel, zkuste omezit své vyhledávací podmínky.</value>
+  </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Dostupnost na agenta</value>
+  </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Dostupné dny</value>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Dostupný čas</value>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Naplánované dny</value>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Vytížení</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Čas ve stavu dle agenta</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Stavové skupiny:</value>
   </data>
 </root>
