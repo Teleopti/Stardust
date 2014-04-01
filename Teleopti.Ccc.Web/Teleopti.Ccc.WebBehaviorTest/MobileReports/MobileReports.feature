@@ -28,12 +28,6 @@ Scenario: Enter Application without permission
 	When I view MobileReports
 	Then I should see friendly error message
 
- Scenario: Sign out from application
- 	Given I have the role 'Access to mobile reports'
- 	And I view MobileReports
- 	When I click the signout button
- 	Then I should be signed out from MobileReports
-
 Scenario: View Report
 	Given I have the role 'Access to mobile reports'
 	And I have analytics data for today

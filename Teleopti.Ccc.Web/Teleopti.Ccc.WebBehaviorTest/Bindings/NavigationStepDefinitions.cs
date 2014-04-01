@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I am still viewing ASM")]
 		public void WhenIAmStillViewingASM()
 		{
+			Navigation.GotoAsm();
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Asm.MakeSureWeAreLoggedOn();");
 		}
 

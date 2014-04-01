@@ -676,11 +676,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SignInWithProviders.feature</DependentUpon>
     </Compile>
-    <Compile Include="SignOut.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SignOut.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
     <Compile Include="Core\SystemLevelLock.cs" />
@@ -992,10 +987,6 @@
     <None Include="Security.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Security.feature.cs</LastGenOutput>
-    </None>
-    <None Include="SignOut.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SignOut.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\TextRequestFromSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

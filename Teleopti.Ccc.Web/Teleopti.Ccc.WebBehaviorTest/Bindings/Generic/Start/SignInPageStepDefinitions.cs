@@ -111,9 +111,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		}
 
 		[Then(@"I should see the sign in page")]
-		[Then(@"I should not be signed in")]
-		[Then(@"I should be signed out")]
-		[Then(@"I should be signed out from MobileReports")]
 		[Then(@"I should be redirected to the sign in page")]
 		public void ThenIAmNotSignedIn()
 		{

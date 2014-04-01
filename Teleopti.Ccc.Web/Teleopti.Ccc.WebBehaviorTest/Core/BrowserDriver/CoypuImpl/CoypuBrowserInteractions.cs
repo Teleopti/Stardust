@@ -57,23 +57,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void ClickContaining(string selector, string text)
 		{
-			_browser.FindCss(selector, new Regex(Regex.Escape(text)), options()).Click(options());
+			var opts = options();
+			var newOptions = new Options
+			{
+				ConsiderInvisibleElements = false,
+				RetryInterval = opts.RetryInterval,
+				Timeout = opts.Timeout,
+				WaitBeforeClick = opts.WaitBeforeClick
+			};
+			_browser.FindCss(selector, new Regex(Regex.Escape(text)), newOptions).Click(options());
 		}
-
+		
 		public void AssertExists(string selector)
 		{
-			assert(_browser.FindCss(selector, options()) != null, Is.True, "Could not find element matching selector " + selector);
+			assert(_browser.FindCss(selector, options()).Exists(), Is.True, "Could not find element matching selector " + selector);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			assert(_browser.FindCss(notExistsSelector, options()) == null, Is.True, "Found element matching selector " + notExistsSelector + " although I shouldnt");
+			assert(_browser.FindCss(notExistsSelector, options()).Exists(), Is.False, "Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertAnyContains(string selector, string text)
 		{
-			assert(_browser.FindCss(selector, new Regex(Regex.Escape(text)), options())!=null, Is.True, "Could not find element matching selector " + selector + " with text " + text);
+			assert(_browser.FindCss(selector, new Regex(Regex.Escape(text)), options()).Exists(), Is.True, "Could not find element matching selector " + selector + " with text " + text);
 		}
 
 		public void AssertFirstContains(string selector, string text)
@@ -170,4 +178,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			return builder.ToString();
 		}
 	}
+
 }
