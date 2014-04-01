@@ -6,10 +6,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public static class Pages
 	{
-		private static readonly ScenarioContextLazy<RequestsPage> _requestsPage =
-			new ScenarioContextLazy<RequestsPage>(() => Browser.Current.Page<RequestsPage>());
-		public static RequestsPage RequestsPage { get { return _requestsPage.Value; } }
-
 		private static readonly ScenarioContextLazy<TeamSchedulePage> _teamSchedulePage =
 			new ScenarioContextLazy<TeamSchedulePage>(() => Browser.Current.Page<TeamSchedulePage>());
 		public static TeamSchedulePage TeamSchedulePage { get { return _teamSchedulePage.Value; } }

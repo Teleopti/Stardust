@@ -1,10 +1,7 @@
 ﻿@using Teleopti.Ccc.UserTexts
-<div id="Request-add-shift-trade" class="well well-small displaynone">
+<div id="Request-add-shift-trade" class="well well-sm displaynone">
 	 
-    <div class="displaynone" data-bind="if: isReadyLoaded">
-        <span id="Request-add-loaded-ready"></span>
-    </div>
-    <span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
+    <span class="ready-loading-flag displaynone" data-bind="css: { 'is-ready-loaded': isReadyLoaded }"></span>
     <div class="shift-trade-missing-wcs-message alert alert-warning" data-bind="visible: missingWorkflowControlSet">
         @Resources.MissingWorkflowControlSet
     </div>
@@ -14,7 +11,7 @@
 				<td>
 					<div style="margin-bottom: 10px" class="input-group">
 						<span class="input-group-btn">
-                            <button class="btn btn-default" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
+                            <button class="previous-date btn btn-default" data-bind="click: previousDate, clickable: previousDateValid, enable: previousDateValid">
                                 <i class="glyphicon glyphicon-chevron-left" data-bind="enable: !IsLoading()"></i>
                             </button>
 						</span>
@@ -23,7 +20,7 @@
 							<button class="btn btn-default" data-bind="datepicker: requestedDate, datepickerOptions: { startDate: openPeriodStartDate(), endDate: openPeriodEndDate(), weekStart: weekStart() }, enable: !IsLoading()">
 								<i class="glyphicon glyphicon-calendar"></i>
 							</button>
-                            <button class="btn btn-default" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
+                            <button class="next-date btn btn-default" data-bind="click: nextDate, clickable: nextDateValid, enable: nextDateValid">
                                 <i class="glyphicon glyphicon-chevron-right" data-bind="enable: !IsLoading()"></i>
                             </button>
 						</span>

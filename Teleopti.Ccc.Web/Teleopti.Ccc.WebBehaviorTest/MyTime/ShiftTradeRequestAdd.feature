@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Shift Trade Request Add
+﻿Feature: Shift Trade Request Add
 	In order to avoid unwanted scheduled shifts
 	As an agent
 	I want to be able to trade shifts with other agents
@@ -52,7 +51,7 @@ Scenario: No access to make shift trade reuquests
 	| Access To Shift Trade Requests	| False						|
 	And I have the role 'No access to Shift Trade'
 	When I view requests
-	Then I should not see the New Shift Trade Request menu item
+	Then I should not be able to make a new shift trade request
 
 Scenario: No workflow control set
 	Given I have the role 'Full access to mytime'
@@ -67,13 +66,19 @@ Scenario: Default to first day of open shift trade period
 	When I view Add Shift Trade Request
 	Then the selected date should be '2030-01-02'
 
-Scenario: Trades can not be made outside the shift trade period
+Scenario: Trades can not be made before the shift trade period
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And the current time is '2030-01-01'
-	When I view Add Shift Trade Request for date '2030-02-01'
-	And I click on the next date
-	Then the selected date should be '2030-02-01'
+	When I view Add Shift Trade Request
+	Then I cannot navigate to the previous date
+
+Scenario: Trades can not be made after the shift trade period
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And the current time is '2030-01-01'
+	When I view Add Shift Trade Request for date '2030-01-31'
+	Then I cannot navigate to the next date
 
 Scenario: Show my scheduled shift
 	Given I have the role 'Full access to mytime'

@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
 			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
-			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
+			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}
 
 		private static void gotoAddRequestToday()
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Browser.Interactions.Click(".shifttrade-request-add");
-			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", "20"); //date 20xx-xx-xx
+			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
@@ -114,14 +113,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.AssertNotExistsUsingJQuery(".shift-trade-my-schedule-row", string.Format(".shift-trade-agent-name:contains('{0}')", name));
 		}
-		
-		[Then(@"I should not see a possible schedule to trade with")]
-		public void ThenIShouldNotSeeAPossibleScheduleToTradeWith()
-		{
-			//Henke todo: stämmer inte riktigt, det kan ju vara mina egna...
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.False);
-		}
-
 
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
@@ -143,10 +134,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.Click(".shift-trade-search");
 		}
 
+		[Then(@"I cannot navigate to the previous date")]
+		public void ThenICannotNavigateToThePreviousDate()
+		{
+			Browser.Interactions.AssertExists(".previous-date:disabled");
+		}
+
+		[Then(@"I cannot navigate to the next date")]
+		public void ThenICannotNavigateToTheNextDate()
+		{
+			Browser.Interactions.AssertExists(".next-date:disabled");
+		}
+
 		[When(@"I click on the next date")]
 		public void WhenIClickOnTheNextDate()
 		{
-            Browser.Interactions.Click(".glyphicon-chevron-right");
+            Browser.Interactions.Click(".next-date");
 		}
 
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]
@@ -156,23 +159,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertFirstContains(".shift-trade-label:last-child", timeLineHourTo);
 		}
 
-		[Then(@"I should see my scheduled day off '(.*)'")]
-		public void ThenIShouldSeeMyScheduledDayOff(string dayOffName)
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.EqualTo(1));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.First().Span(Find.First()).Text, Is.EqualTo(dayOffName));
-		}
-
 		[Then(@"I should see details with a schedule from")]
 		public void ThenIShouldSeeDetailsWithAScheduleFrom(Table table)
 		{
-			var expectedStart = table.Rows[0][1];
-			var expectedEnd = table.Rows[1][1];
-
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.First().GetAttributeValue("scheduleinfo"), Contains.Substring(expectedStart));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Last().GetAttributeValue("scheduleinfo"), Contains.Substring(expectedEnd));
+			var expectedScheduleTimePeriod = table.Rows[0][1] + "-" + table.Rows[1][1];
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(
+				".shift-trade-layer.edit.my:first()[scheduleinfo*='{0}']", expectedScheduleTimePeriod));
 		}
+		[Then(@"I should see details with a schedule to")]
+		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
+		{
+			var expectedScheduleTimePeriod = table.Rows[0][1] + "-" + table.Rows[1][1];
+			Browser.Interactions.AssertExistsUsingJQuery(string.Format(
+				".shift-trade-layer.edit.other:first()[scheduleinfo*='{0}']", expectedScheduleTimePeriod));
+		}
+
 
 		[Then(@"I should see my details scheduled day off '(.*)'")]
 		public void ThenIShouldSeeMyDetailsScheduledDayOff(string dayOffText)
@@ -184,19 +185,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldSeeOtherDetailsScheduledDayOff(string dayOffText)
 		{
 			Browser.Interactions.AssertFirstContains(".shift-trade-swap-detail-schedule-to .shift-trade-dayoff-name", dayOffText);
-		}
-
-		[Then(@"I should see details with a schedule to")]
-		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
-		{
-			
-			var expectedStart = table.Rows[0][1];
-			var expectedEnd = table.Rows[1][1];
-
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.First().GetAttributeValue("scheduleinfo"), Contains.Substring(expectedStart));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Last().GetAttributeValue("scheduleinfo"), Contains.Substring(expectedEnd));
-
 		}
 
 		[Then(@"I should see details with subject '(.*)'")]
@@ -215,15 +203,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I enter subject '(.*)'")]
 		public void WhenIEnterSubject(string subject)
 		{
-			Pages.Pages.RequestsPage.AddShiftTradeSubject.WaitUntilDisplayed();
-			Pages.Pages.RequestsPage.AddShiftTradeSubject.ChangeValue(subject);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-shift-trade-subject-input", subject);
 		}
 
 		[When(@"I enter message '(.*)'")]
 		public void WhenIEnterMessage(string message)
 		{
-			Pages.Pages.RequestsPage.AddShiftTradeMessage.WaitUntilDisplayed();
-			Pages.Pages.RequestsPage.AddShiftTradeMessage.ChangeValue(message);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-add-shift-trade-message-input", message);
 		}
 
 		[When(@"I click send shifttrade button")]
@@ -236,19 +222,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"Add Shift Trade Request view should not be visible")]
 		public void ThenAddShiftTradeRequestViewShouldNotBeVisible()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeContainer.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotVisibleUsingJQuery("#Request-add-shift-trade");
 		}
 
 		[Then(@"I should see details with message that tells the user that the status of the shifttrade is new")]
 		public void ThenIShouldSeeDetailsWithMessageThatTellsTheUserThatTheStatusOfTheShifttradeIsNew()
 		{
-			Browser.Interactions.AssertFirstContains("#Request-shift-trade-detail-info", Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew);
+			Browser.Interactions.AssertVisibleUsingJQuery("#Request-shift-trade-detail-info");
 		}
 
 		[Then(@"I should not see timelines")]
 		public void ThenIShouldNotSeeTimelines()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.Timelines.Any(div=>div.IsDisplayed()), Is.False);
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".shift-trade-swap-detail-timeline");
 		}
 
 		[When(@"I click cancel button")]
@@ -274,8 +260,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I can see '(.*)' possible shift trades")]
 		public void GivenICanSeePossibleShiftTrades(int possibleShiftTradeCount)
 		{
-			var script = string.Format("return $('.shift-trade-person-schedule-row').length == {0}", possibleShiftTradeCount);
-			Browser.Interactions.AssertJavascriptResultContains(script, "true");
+			const string script = "return $('.shift-trade-person-schedule-row').length";
+			Browser.Interactions.AssertJavascriptResultContains(script, possibleShiftTradeCount.ToString(CultureInfo.InvariantCulture));
 		}
 
 		[When(@"I scroll down to the bottom of the shift trade section")]
@@ -296,6 +282,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Select2Box.OpenWhenOptionsAreLoaded("Team-Picker");
 			Select2Box.SelectItemByText("Team-Picker", optionToSelect);
 		}
-
 	}
 }

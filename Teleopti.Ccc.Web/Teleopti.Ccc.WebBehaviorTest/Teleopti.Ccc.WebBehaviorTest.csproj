@@ -327,7 +327,6 @@
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Configurable\BudgetdayConfigurable.cs" />
@@ -550,7 +549,6 @@
       <DependentUpon>MobileReports.feature</DependentUpon>
     </Compile>
     <Compile Include="MobileReports\MobileReportsStepDefinitions.cs" />
-    <Compile Include="Pages\Common\IEditRequestPage.cs" />
     <Compile Include="MyTime\PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -643,7 +641,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Requests.feature</DependentUpon>
     </Compile>
-    <Compile Include="Pages\RequestsPage.cs" />
     <Compile Include="MyTime\RequestsStepDefinition.cs" />
     <Compile Include="MyTime\StudentAvailability.feature.cs">
       <DependentUpon>StudentAvailability.feature</DependentUpon>

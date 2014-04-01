@@ -1,5 +1,4 @@
-﻿@WatiN
-Feature: Text request from requests
+﻿Feature: Text request from requests
 	In order to make requests to my superior
 	As an agent
 	I want to be able to submit requests as text
@@ -42,68 +41,62 @@ Scenario: View text request details
 	Given I am an agent
 	And I have an existing text request
 	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see the detail form for request at position '1' in the list
-	And I should see the text request's values at position '1' in the list
+	When I click on the existing request in the list
+	Then I should see the detail form for the existing request in the list
+	And I should see the values of the existing text request
 	
 Scenario: Edit text request
 	Given I am an agent
 	And I have an existing text request
 	And I am viewing requests
-	When I click on the request at position '1' in the list
-	And I change the text request values with
-	| Field         | Value          |
-	| ListPosistion | 1              |
-	| Subject       | my new subject |
-	And I click the update button on the request at position '1' in the list
-	Then I should see the updated text request values in the list with
-	| Field         | Value          |
-	| ListPosistion | 1              |
-	| Subject       | my new subject |
+	When I click on the existing request in the list
+	And I change the subject to 'my new subject' for the existing request
+	And I submit my changes for the existing text request
+	Then I should see the existing text request in the list with subject 'my new subject'
 
 Scenario: Delete new text request
 	Given I am an agent
 	And I have an existing text request
 	And I am viewing requests
-	When I click the delete button of request at position '1' in the list
+	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
 Scenario: Delete pending text request
 	Given I am an agent
 	And I have a pending text request
 	And I am viewing requests
-	When I click the delete button of request at position '1' in the list
+	When I delete the existing request in the list
 	Then I should not see any requests in the list
 
 Scenario: Can not edit approved text requests
 	Given I am an agent
 	And I have an approved text request
 	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see the detail form for request at position '1' in the list
-	And I should not be able to input values for text request at position '1' in the list
-	And I should not see a save button for request at position '1' in the list
+	When I click on the existing request in the list
+	Then I should see the detail form for the existing request in the list
+	And I should not be able to edit the values for the existing text request
+	And I should not be able to submit possible changes for the existing request
 
 Scenario: Can not edit denied text requests
 	Given I am an agent
 	And I have a denied text request
 	And I am viewing requests
-	When I click on the request at position '1' in the list
-	Then I should see the detail form for request at position '1' in the list
-	And I should not be able to input values for text request at position '1' in the list
-	And I should not see a save button for request at position '1' in the list
+	When I click on the existing request in the list
+	Then I should see the detail form for the existing request in the list
+	And I should not be able to edit the values for the existing text request
+	And I should not be able to submit possible changes for the existing request
 
 Scenario: Can not delete approved text request
 	Given I am an agent
 	And I have an approved text request
 	When I am viewing requests
-	Then I should not see a delete button for request at position '1' in the list
+	Then I should not be able to delete the existing request in the list
 
 Scenario: Can not delete denied text request
 	Given I am an agent
 	And I have a denied text request
 	When I am viewing requests
-	Then I should not see a delete button for request at position '1' in the list
+	Then I should not be able to delete the existing request in the list
 
 Scenario: Cancel adding a new text request
 	Given I am an agent

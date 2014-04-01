@@ -377,22 +377,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click(".glyphicon-random");
 		}
 
-		[Then(@"I should see the add shifttrade section")]
-		public void ThenIShouldSeeTheAddShifttradeSection()
-		{
-			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-		}
-
-		[Then(@"I should see the add shifttrade section for '(.*)'")]
-		public void ThenIShouldSeeTheAddShifttradeSectionFor(DateTime date)
-		{
-			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
-			var script = string.Format("return Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
-			Browser.Interactions.AssertJavascriptResultContains(script, dateAsSwedishString);
-			Browser.Interactions.AssertExists("#Request-add-loaded-ready");
-			Browser.Interactions.AssertFirstContains("#Request-add-loaded-date", dateAsSwedishString);
-		}
-        
         [When(@"I initialize a shift trade")]
         public void WhenIInitializeAShiftTrade()
         {
