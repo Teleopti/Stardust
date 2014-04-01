@@ -503,6 +503,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
             double resource = 0;
             bool isAvail = false;
             bool useShrinkage = false;
+	        double forecastedIncomingHours = 0;
+
             foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriods)
             {
                 tasks += skillStaffPeriod.Payload.TaskData.Tasks;
@@ -516,6 +518,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 if(!isAvail)
                     isAvail = skillStaffPeriod.IsAvailable;
                 useShrinkage = skillStaffPeriod.Payload.UseShrinkage;
+
+	            forecastedIncomingHours += skillStaffPeriod.Payload.ForecastedIncomingDemand;
             }
 	        var skillDay = skillStaffPeriods[0].SkillDay;
             if (tasks == 0)
@@ -535,7 +539,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ret.IsAvailable = isAvail;
             ret.Payload.UseShrinkage = useShrinkage;
             ret.SetCalculatedResource65(resource);
-			ret.SetSkillDay(skillDay); 
+			((SkillStaff)ret.Payload).ForecastedIncomingDemand = forecastedIncomingHours;
+			ret.SetSkillDay(skillDay);
+			
             return ret;
         }
 
