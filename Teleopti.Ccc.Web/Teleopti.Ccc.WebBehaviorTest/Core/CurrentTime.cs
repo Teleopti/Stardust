@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void Set(DateTime time)
 		{
 			_currentTime = time;
-			Navigation.GoToWaitForCompleted("Test/SetCurrentTime?dateSet=" + time);
+			Navigation.GoToWaitForCompleted("Test/SetCurrentTime?ticks=" + time.Ticks);
 		}
 	}
 }

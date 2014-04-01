@@ -66,8 +66,10 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				_formsAuthentication.SetAuthCookie(userName + "§" + dataSourceName);
 			}
 
-			var claims = new List<Claim>();
-			claims.Add(new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName));
+			var claims = new List<Claim>
+			{
+				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + "§" + dataSourceName)
+			};
 			var claimsIdentity = new ClaimsIdentity(claims,"MyType");
 			HttpContext.User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
 
@@ -111,8 +113,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			return View("Message", viewModel);
 		}
 
-		public ViewResult SetCurrentTime(DateTime dateSet)
+		public ViewResult SetCurrentTime(long ticks)
 		{
+			var dateSet = new DateTime(ticks);
 			updateIocNow(dateSet);
 
 			var viewModel = new TestMessageViewModel

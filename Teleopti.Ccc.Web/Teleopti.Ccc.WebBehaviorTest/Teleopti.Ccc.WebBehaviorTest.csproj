@@ -47,7 +47,7 @@
     </Reference>
     <Reference Include="Coypu, Version=0.19.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Coypu.0.19.3\lib\net40\Coypu.dll</HintPath>
+      <HintPath>..\..\packages\Coypu.2.2.0\lib\net40\Coypu.dll</HintPath>
     </Reference>
     <Reference Include="IISExpress.Automation">
       <HintPath>..\..\packages\IISExpress.Automation.0.1.1\lib\net40\IISExpress.Automation.dll</HintPath>
@@ -93,13 +93,13 @@
     <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver, Version=2.35.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver, Version=2.39.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Selenium.WebDriver.2.35.0\lib\net40\WebDriver.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.WebDriver.2.39.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Support, Version=2.35.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver.Support, Version=2.39.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Selenium.Support.2.35.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.Support.2.39.0\lib\net40\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -711,7 +711,7 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.7.0.0\content\chromedriver.exe">
+    <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.9.0.0\content\chromedriver.exe">
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

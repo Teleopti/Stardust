@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			using (var target = new TestController(modifyNow, null, null, null, null, formsAuthentication))
 			{
-				target.SetCurrentTime(dateSet);
+				target.SetCurrentTime(dateSet.Ticks);
 			}
 		}
 
