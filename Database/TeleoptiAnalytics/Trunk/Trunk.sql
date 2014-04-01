@@ -883,14 +883,31 @@ ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_d
 --get old data
 INSERT INTO  [mart].[fact_schedule_day_count] WITH (TABLOCK)
 (shift_startdate_local_id, person_id, scenario_id, starttime, shift_category_id, day_off_id, absence_id, day_count, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date)
-SELECT btz.local_date_id, f.person_id, f.scenario_id, f.starttime, f.shift_category_id, f.day_off_id, f.absence_id, f.day_count, f.business_unit_id, f.datasource_id, f.insert_date, f.update_date, f.datasource_update_date
-FROM [mart].[fact_schedule_day_count_old] f
+SELECT 
+	btz.local_date_id,
+	f.person_id,
+	f.scenario_id,
+	max(f.starttime),
+	max(f.shift_category_id),
+	max(f.day_off_id),
+	max(f.absence_id),
+	max(f.day_count),
+	max(f.business_unit_id),
+	max(f.datasource_id),
+	max(f.insert_date),
+	max(f.update_date),
+	max(f.datasource_update_date)
+FROM [mart].[fact_schedule_day_count] f
 INNER JOIN mart.bridge_time_zone btz 
 	ON f.date_id=btz.date_id 
 	AND f.start_interval_id=btz.interval_id
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
+GROUP BY
+	btz.local_date_id,
+	f.person_id,
+	f.scenario_id
 
 ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_absence] FOREIGN KEY([absence_id])
 REFERENCES [mart].[dim_absence] ([absence_id])
