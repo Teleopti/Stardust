@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Security.AuthorizationEntities
         public void Setup()
         {
             _target = new LicenseActivator(_customerName, _expirationDate, _maxActiveAgents, 100, LicenseType.Agent, _maxActiveAgentsGrace,
-                XmlLicenseService.IsThisAlmostTooManyActiveAgents, XmlLicenseService.IsThisTooManyActiveAgents);
+								XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents);
         }
 
         [Test]

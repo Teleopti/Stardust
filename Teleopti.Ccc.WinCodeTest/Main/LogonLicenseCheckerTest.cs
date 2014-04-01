@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.WinCode.Main;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;

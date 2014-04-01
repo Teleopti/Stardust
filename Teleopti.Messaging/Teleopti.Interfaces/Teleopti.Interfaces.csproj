@@ -650,7 +650,6 @@
     <Compile Include="Domain\IRestrictionSet.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Infrastructure\ILicenseService.cs" />
     <Compile Include="Infrastructure\ILicenseStatusXml.cs" />
     <Compile Include="Infrastructure\ILoadPasswordPolicyService.cs" />
     <Compile Include="Infrastructure\IMainReference.cs" />
@@ -745,7 +744,6 @@
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\IsNotDeadCodeAttribute.cs" />
-    <Compile Include="Infrastructure\LicenseType.cs" />
     <Compile Include="Infrastructure\MessageBrokerException.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />

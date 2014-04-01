@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -94,7 +95,7 @@ namespace Teleopti.Ccc.Win.Main
 					
                     using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                     {
-                        XmlLicenseService.SaveNewLicense(licenseFilePath, unitOfWork, licenseRepository, XmlLicenseService.GetXmlPublicKey(), personRepository);
+                        new XmlLicensePersister().SaveNewLicense(licenseFilePath, unitOfWork, licenseRepository, XmlLicenseService.GetXmlPublicKey(), personRepository);
                     }
                     
                     var licenseStatusUpdater =
