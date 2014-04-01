@@ -897,7 +897,7 @@ SELECT
 	max(f.insert_date),
 	max(f.update_date),
 	max(f.datasource_update_date)
-FROM [mart].[fact_schedule_day_count] f
+FROM [mart].[fact_schedule_day_count_old] f
 INNER JOIN mart.bridge_time_zone btz 
 	ON f.date_id=btz.date_id 
 	AND f.start_interval_id=btz.interval_id
