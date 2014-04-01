@@ -232,7 +232,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
 		[Then(@"I should not see cancel shifttrade button for the request")]
 		public void ThenIShouldNotSeeCancelShifttradeButtonForTheRequest()
+		{
 			Browser.Interactions.AssertNotExists(".request", ".request .cancel-shift-trade");
+		}
 
 		[Then(@"Details should be closed")]
 		public void ThenDetailsShouldBeClosed()
