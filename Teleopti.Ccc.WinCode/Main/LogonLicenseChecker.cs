@@ -19,7 +19,8 @@ namespace Teleopti.Ccc.WinCode.Main
         private readonly ILicenseStatusLoader _licenseStatusLoader;
 
         private readonly ILicenseVerifierFactory _licenseVerifierFactory;
-        
+
+		[CLSCompliant(false)]
         public LogonLicenseChecker(ILicenseFeedback view, ILicenseStatusLoader licenseStatusLoader, ILicenseVerifierFactory licenseVerifierFactory)
         {
             _view = view;
