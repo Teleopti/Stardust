@@ -85,6 +85,7 @@
 	<Name>Teleopti.Ccc.Rta.Interfaces</Name>
 	<Name>Teleopti.Analytics.ReportTexts</Name>
 	<Name>Teleopti.Analytics.Etl.IntegrationTest</Name>
+	<Name>Teleopti.Ccc.Secrets</Name>
   </Assemblies>
   <FrameworkAssemblies>
 	<Name>System.Web.Optimization</Name>
