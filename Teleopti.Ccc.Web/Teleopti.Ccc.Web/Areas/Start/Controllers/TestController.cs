@@ -22,22 +22,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
-		private readonly IFormsAuthentication _formsAuthentication;
 
-		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, IFormsAuthentication formsAuthentication)
+		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
 		{
 			_mutateNow = mutateNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
 			_businessUnitProvider = businessUnitProvider;
-			_formsAuthentication = formsAuthentication;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
-			_formsAuthentication.SignOut();
 
 			updateIocNow(null);
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
@@ -61,11 +58,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var result = _authenticator.AuthenticateApplicationUser(dataSourceName, userName, password);
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
-			if (result.Successful)
-			{
-				_formsAuthentication.SetAuthCookie(userName + "§" + dataSourceName);
-			}
-
+			
 			var claims = new List<Claim>
 			{
 				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + "§" + dataSourceName)
