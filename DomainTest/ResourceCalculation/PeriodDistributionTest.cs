@@ -133,7 +133,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target = new PeriodDistribution(_skillStaffPeriod, _activity, period, 5, _demandedTraff);
 
             var resourceContainer = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
-			resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period)).Return(new[] { new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(67)) });
+	        resourceContainer.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period))
+		        .Return(new[] {new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(67))});
 
 			_target.ProcessLayers(resourceContainer);
 
@@ -147,8 +148,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			IList<IVisualLayer> lst = new List<IVisualLayer> { layerFactory.CreateShiftSetupLayer(_activity, period, PersonFactory.CreatePerson()) };
             IVisualLayerCollection proj = new VisualLayerCollection(null, lst, new ProjectionPayloadMerger());
-            // create one on the other 8 minutes
-            proj = proj.FilterLayers(new DateTimePeriod(_start.AddMinutes(67), _start.AddMinutes(75)));
+            
+			// create one on the other 8 minutes
+			var resourceContainer2 = MockRepository.GenerateMock<IResourceCalculationDataContainerWithSingleOperation>();
+			resourceContainer2.Stub(x => x.IntraIntervalResources(_skillStaffPeriod.SkillDay.Skill, period))
+				.Return(new[] { new DateTimePeriod(_start.AddMinutes(60), _start.AddMinutes(75)) });
+
+			_target.ProcessLayers(resourceContainer2);
 
             Assert.AreEqual(0, _target.DeviationAfterNewLayers(proj));
         }

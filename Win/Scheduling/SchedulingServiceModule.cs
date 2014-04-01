@@ -300,7 +300,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private static void registerTeamBlockCommon(ContainerBuilder builder)
 		{
-			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
+            builder.RegisterType<LocateMissingIntervalsIfMidNightBreak>().As<ILocateMissingIntervalsIfMidNightBreak>();
+            builder.RegisterType<FilterOutIntervalsAfterMidNight>().As<IFilterOutIntervalsAfterMidNight>();
+            builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
 			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>();
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
@@ -335,6 +337,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>();
             builder.RegisterType<TeamBlockMissingDaysOffScheduler>().As<ITeamBlockMissingDaysOffScheduler>();
 
+            builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>();
             builder.RegisterType<TeamBlockMissingDayOffHandler>().As<ITeamBlockMissingDayOffHandler>();
             builder.RegisterType<BestSpotForAddingDayOffFinder>().As<IBestSpotForAddingDayOffFinder>();
             builder.RegisterType<SplitSchedulePeriodToWeekPeriod>();
@@ -406,6 +409,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<RuleSetAccordingToAccessabilityFilter>().As<IRuleSetAccordingToAccessabilityFilter>();
             builder.RegisterType<TeamBlockRuleSetBagExtractor>().As<ITeamBlockRuleSetBagExtractor>();
             builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
+			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
+			//IRuleSetSkillActivityChecker
 	    }
     }
 }

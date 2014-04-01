@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.LicenseOptions;
@@ -20,7 +21,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
         /// <remarks>
         /// Created by: henryg
         /// Created date: 2008-10-07
-        /// </remarks>
+		/// </remarks>
+		[CLSCompliant(false)]
         public static ILicenseActivator LicenseActivator
         {
             get { return _licenseActivator; }

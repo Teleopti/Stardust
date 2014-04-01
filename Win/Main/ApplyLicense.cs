@@ -7,6 +7,7 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -14,7 +15,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Main
 {
-
     /// <summary>
     /// A dialog letting the user apply a license
     /// </summary>
@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Win.Main
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        #region constructors
         public ApplyLicense(string explanation, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -31,35 +30,15 @@ namespace Teleopti.Ccc.Win.Main
                 SetTexts();
             SetColors();
 
-            //const int desiredTextWidth = 100;
-            //if (explanation.Length < desiredTextWidth)
-            //{
-            //    int spaces = desiredTextWidth - explanation.Length;
-            //    for (int i = 0; i < spaces; i++)
-            //    {
-            //        explanation += " ";
-            //    }
-
-            //}
             labelExplanation.Text = explanation;
             textBoxIntructions.Text = Resources.ApplyLicenseInstructions;
         }
 
-        /// <summary>
-        /// Sets the colors.
-        /// </summary>
         private void SetColors()
         {
             BackColor = ColorHelper.FormBackgroundColor();
         }
 
-        #endregion
-
-        /// <summary>
-        /// invoke the filter event of the FilterBoxAdvanced without closing the form
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="eventArgs">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void buttonAdvApply_Click(object sender, EventArgs eventArgs)
         {
             if (File.Exists(textBoxExtLicenseFilePath.Text))
@@ -94,7 +73,7 @@ namespace Teleopti.Ccc.Win.Main
 					
                     using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                     {
-                        XmlLicenseService.SaveNewLicense(licenseFilePath, unitOfWork, licenseRepository, XmlLicenseService.GetXmlPublicKey(), personRepository);
+						new XmlLicensePersister().SaveNewLicense(licenseFilePath, unitOfWork, licenseRepository, new XmlLicensePublicKeyReader().GetXmlPublicKey(), personRepository);
                     }
                     
                     var licenseStatusUpdater =
@@ -158,12 +137,6 @@ namespace Teleopti.Ccc.Win.Main
 
         }
 
-        /// <summary>
-        /// Handles the Click event of the buttonAdvCancel control.
-        /// closes the form without activating the filter
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
         private void buttonAdvCancel_Click(object sender, EventArgs e)
         {
             DialogResult = DialogResult.Cancel;

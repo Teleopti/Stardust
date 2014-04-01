@@ -1,17 +1,21 @@
+using System;
 using System.Linq;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
+	[CLSCompliant(false)]
     public interface ILicenseStatusRepositories
     {
         int NumberOfActiveAgents();
         ILicenseStatusXml LicenseStatus { get; }
-        void SaveLicenseStatus(string value);
+		void SaveLicenseStatus(string value);
+		[CLSCompliant(false)]
         ILicenseService XmlLicenseService(int numberOfActiveAgents);
     }
 
@@ -59,11 +63,12 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             }
         }
 
+		[CLSCompliant(false)]
         public ILicenseService XmlLicenseService(int numberOfActiveAgents)
         {
 	        using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 	        {
-				return new XmlLicenseService(_repositoryFactory.CreateLicenseRepository(uow), numberOfActiveAgents);
+						return new XmlLicenseServiceFactory().Make(_repositoryFactory.CreateLicenseRepository(uow), numberOfActiveAgents);
 	        }
             
         }

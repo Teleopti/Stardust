@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             {
             	const int numberOfActiveAgents = 43289;
 
-            	_licenseService = new XmlLicenseService(licenseRepository, numberOfActiveAgents);
+							_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, numberOfActiveAgents);
             }
         }
 
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
             using (_mocks.Playback())
             {
-                _licenseService = new XmlLicenseService(unitOfWorkFactory, licenseRepository, personRepository);
+							_licenseService = new XmlLicenseServiceFactory().Make(unitOfWorkFactory, licenseRepository, personRepository);
             }
         }
 
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
             using(_mocks.Playback())
             {
-                _licenseService = new XmlLicenseService(licenseRepository, 4329);
+							_licenseService = new XmlLicenseServiceFactory().Make(licenseRepository, 4329);
             }
         }
 
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
             Assert.AreEqual(new TimeSpan(30, 0, 0, 0), _licenseService.ExpirationGracePeriod);
             Assert.AreEqual(10000, _licenseService.MaxActiveAgents);
-            Assert.AreEqual(new Percent(0.1), _licenseService.MaxActiveAgentsGrace);
+            Assert.AreEqual(new Percent(0.1).Value, _licenseService.MaxActiveAgentsGrace);
 
             Assert.IsTrue(_licenseService.TeleoptiCccBaseEnabled);
             Assert.IsTrue(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Assert.GreaterOrEqual(new TimeSpan(31, 0, 0, 0), _licenseService.ExpirationGracePeriod);
             Assert.LessOrEqual(new TimeSpan(28, 0, 0, 0), _licenseService.ExpirationGracePeriod);
             Assert.AreEqual(1000, _licenseService.MaxActiveAgents);
-            Assert.AreEqual(new Percent(1), _licenseService.MaxActiveAgentsGrace);
+            Assert.AreEqual(new Percent(1).Value, _licenseService.MaxActiveAgentsGrace);
 
             Assert.IsFalse(_licenseService.TeleoptiCccBaseEnabled);
             Assert.IsFalse(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
@@ -212,7 +213,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             Assert.AreEqual("This freemium license is stolen!", _licenseService.CustomerName);
             Assert.AreEqual(new TimeSpan(0, 20, 0, 0, 0), _licenseService.ExpirationGracePeriod);
             Assert.AreEqual(1, _licenseService.MaxActiveAgents);
-            Assert.AreEqual(new Percent(0.2), _licenseService.MaxActiveAgentsGrace);
+            Assert.AreEqual(new Percent(0.2).Value, _licenseService.MaxActiveAgentsGrace);
 
             Assert.IsFalse(_licenseService.TeleoptiCccBaseEnabled);
             Assert.IsFalse(_licenseService.TeleoptiCccAgentSelfServiceEnabled);
@@ -294,7 +295,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using(_mocks.Playback())
             {
                 ILicenseService licenseService =
-                    XmlLicenseService.SaveNewLicense(licenseFileName, licenseRepository,
+                    new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository,
                                                      XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
                 Assert.AreEqual(10000, licenseService.MaxActiveAgents);
 				File.Delete(licenseFileName);
@@ -334,7 +335,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
             using(_mocks.Playback())
             {
-                XmlLicenseService.SaveNewLicense(licenseFileName, uow, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
+                new XmlLicensePersister().SaveNewLicense(licenseFileName, uow, licenseRepository, XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
 				File.Delete(licenseFileName);
             }
         }
@@ -372,7 +373,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             }
             using(_mocks.Playback())
             {
-                XmlLicenseService.SaveNewLicense(licenseFileName, uow, licenseRepository,
+                new XmlLicensePersister().SaveNewLicense(licenseFileName, uow, licenseRepository,
                                                  XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
             }
         }
@@ -402,7 +403,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             LastCall.IgnoreArguments();
 
             _mocks.ReplayAll();
-            XmlLicenseService.SaveNewLicense(licenseFileName, licenseRepository,
+            new XmlLicensePersister().SaveNewLicense(licenseFileName, licenseRepository,
                                              XmlLicenseTestSetupFixture.PublicKeyXmlString, personRepository);
         }
 
@@ -455,7 +456,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			Assert.AreEqual("This license is stolen!", _licenseService.CustomerName);
 			Assert.AreEqual(new DateTime(2018, 02, 02, 12, 0, 0), _licenseService.ExpirationDate);
 			Assert.AreEqual(new TimeSpan(30, 0, 0, 0), _licenseService.ExpirationGracePeriod);
-			Assert.AreEqual(new Percent(0.1), _licenseService.MaxActiveAgentsGrace);
+			Assert.AreEqual(new Percent(0.1).Value, _licenseService.MaxActiveAgentsGrace);
 
 			Assert.That(_licenseService.LicenseType, Is.EqualTo(LicenseType.Seat));
 			Assert.That(_licenseService.MaxSeats, Is.EqualTo(1000));

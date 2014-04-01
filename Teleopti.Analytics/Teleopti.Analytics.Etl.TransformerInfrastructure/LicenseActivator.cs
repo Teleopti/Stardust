@@ -11,10 +11,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			//We don't check the agent now, it saves it to database instead
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var xmlLicenseService = new XmlLicenseService(new LicenseRepository(uow), 0);
+
+				var xmlLicenseService = new XmlLicenseServiceFactory().Make(new LicenseRepository(uow), 0);
 
 				LicenseProvider.ProvideLicenseActivator(xmlLicenseService);	
 			}
 		}
+
 	}
 }

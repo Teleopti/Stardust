@@ -9,6 +9,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
+using Teleopti.Ccc.Secrets.Licensing;
 
 namespace Teleopti.Support.LicTool
 {
@@ -223,7 +224,7 @@ namespace Teleopti.Support.LicTool
 							}
 
 						numMaxActiveAgents.Value = xlic.MaxActiveAgents;
-						long grace = Convert.ToInt64(xlic.MaxActiveAgentGrace.Value * 100);
+						long grace = Convert.ToInt64(xlic.MaxActiveAgentGrace * 100);
 						numMaxActiveAgentsGrace.Value = grace; // value in file is a percentage
 						dtpkrExpirationDate.Value = xlic.ExpirationDate;
 

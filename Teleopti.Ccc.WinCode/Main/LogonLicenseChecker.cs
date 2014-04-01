@@ -2,6 +2,7 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,7 +19,8 @@ namespace Teleopti.Ccc.WinCode.Main
         private readonly ILicenseStatusLoader _licenseStatusLoader;
 
         private readonly ILicenseVerifierFactory _licenseVerifierFactory;
-        
+
+		[CLSCompliant(false)]
         public LogonLicenseChecker(ILicenseFeedback view, ILicenseStatusLoader licenseStatusLoader, ILicenseVerifierFactory licenseVerifierFactory)
         {
             _view = view;

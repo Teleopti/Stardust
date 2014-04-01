@@ -409,23 +409,6 @@ item: Edit INI File
   Settings=Count=%COUNT%
   Settings=
 end
-item: Set Variable
-  Variable=FILEPATH1
-  Value=%WORKINGDIR%\FILEPATH1\Detect35SP1.exe
-end
-item: Install File
-  Source=Detect35SP1.exe
-  Destination=%FILEPATH1%
-  Flags=0000000010100010
-end
-item: Set Variable
-  Variable=CMDLINE1
-end
-item: Execute Program
-  Pathname=%FILEPATH1%
-  Command Line=%CMDLINE1%
-  Flags=00000010
-end
 item: End Block
 end
 item: If/While Statement

@@ -696,5 +696,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.AreEqual(0, ret.Count);
         }
 
+		[Test]
+		public void ShouldNotSplitForecastedIncomingDemand()
+		{
+			const int length = 15;
+			const double forecastValue = 42d;
+			var skill = SkillFactory.CreateSkill("skill");
+			var skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(skill, new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc), length, forecastValue, 10d);
+			var result = SkillStaffPeriodHolder.SplitSkillStaffPeriod(skillStaffPeriod, 0.5d, TimeSpan.FromMinutes(5));
+
+			foreach (var staffPeriod in result)
+			{
+				Assert.AreEqual(forecastValue, staffPeriod.Payload.ForecastedIncomingDemand);
+			}
+		}
     }
 }
