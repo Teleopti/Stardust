@@ -7,7 +7,7 @@ GO
 -- Author:		DavidJ
 -- Create date: 2014-01-07
 -- Description:	Remove overlapping shifts
--- Update date: 2014-02-07 Added activity_start in statement related to bug #26828
+-- Update date: 
 -- =============================================
 CREATE PROCEDURE [mart].[stage_schedule_remove_overlapping_shifts]
 AS
@@ -17,11 +17,10 @@ SET NOCOUNT ON
 	--remove potential duplicates from stage
 	delete a
 	from
-	(select schedule_date,person_code,scenario_code,interval_id,shift_start,activity_start,
-		ROW_NUMBER() over (partition by schedule_date,person_code,scenario_code,interval_id,activity_start
+	(select schedule_date_utc,person_code,scenario_code,interval_id,shift_start,
+		ROW_NUMBER() over (partition by schedule_date_utc,person_code,scenario_code,interval_id
 		order by shift_start desc) RowNumber --keep latest shift_start day. E.g "today" wins over "yesterday"
 	from stage.stg_schedule) as a
 	where a.RowNumber > 1
-
 END
 GO
