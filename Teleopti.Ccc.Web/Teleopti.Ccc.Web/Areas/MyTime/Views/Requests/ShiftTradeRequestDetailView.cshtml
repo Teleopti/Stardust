@@ -33,7 +33,7 @@
 				</span>
 			</div>
 			<div class="shift-trade-swap-detail-schedule-to" data-bind="foreach: otherSchedule().layers, hoverToggle: 'hoverBorder', hoverTarget: '#reciever-info'">
-				<span class="shift-trade-layer edit" data-bind="style: styleJson, tooltip: { title: title }, attr: { 'scheduleinfo': title() }, css: { dayoff: $parent.otherSchedule().showDayOffStyle() }">
+				<span class="shift-trade-layer edit other" data-bind="style: styleJson, tooltip: { title: title }, attr: { 'scheduleinfo': title() }, css: { dayoff: $parent.otherSchedule().showDayOffStyle() }">
 					<span class="shift-trade-dayoff-name" data-bind="text: $parent.otherSchedule().dayOffText"></span>
 				</span>					
 			</div>
@@ -53,8 +53,8 @@
 </div>
 
 <div class="shift-trade-swap-detail-send-again"  data-bind="if: isReferred">
-	<button class="btn btn-primary" data-bind="click: reSend, clickBubble: false">@Resources.SendAgain</button>
-	<button class="btn btn-danger"  data-bind="click: cancelReferred, clickBubble: false">@Resources.Cancel</button>
+	<button class="btn btn-primary resend-shift-trade" data-bind="click: reSend, clickBubble: false">@Resources.SendAgain</button>
+	<button class="btn btn-danger cancel-shift-trade"  data-bind="click: cancelReferred, clickBubble: false">@Resources.Cancel</button>
 </div>
 
 <br  data-bind="visible: !IsTradeCreatedByMe()"/>

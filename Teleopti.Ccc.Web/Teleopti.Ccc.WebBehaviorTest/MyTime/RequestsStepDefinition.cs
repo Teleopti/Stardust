@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class RequestsStepDefinition
 	{
-		[When(@"I click on the request at position '(.*)' in the list")]
-		public void WhenIClickOnTheRequestAtPositionInTheList(int position)
+		[When(@"I click on the existing request in the list")]
+		public void WhenIClickOnTheExistingRequestInTheList()
 		{
-			Browser.Interactions.Click(string.Format(".request-body:nth-child({0})", position));
+			Browser.Interactions.Click(".request-body");
 		}
-		
+
 		[When(@"I navigate to the requests page")]
 		public void WhenINavigateToTheRequestsPage()
 		{
@@ -218,17 +218,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".request");
 		}
 
-		[Then(@"I should see that request at position '(.*)' is processing")]
-		public void ThenIShouldSeeThatRequestAtPositionIsProcessing(int position)
+		[Then(@"I should see that the existing request is processing")]
+		public void ThenIShouldSeeThatTheExistingRequestIsProcessing()
 		{
-			Browser.Interactions.AssertFirstContains(".request-body:nth-child("+position+") .label" , Resources.ProcessingDotDotDot);			
+			Browser.Interactions.AssertFirstContains(".request-body .label" , Resources.ProcessingDotDotDot);			
 		}
 
-		[Then(@"I should not see resend shifttrade button for request at position '(.*)'")]
-		public void ThenIShouldNotSeeResendShifttradeButtonForRequestAtPosition(int position)
+		[Then(@"I should not see resend shifttrade button for the request")]
+		public void ThenIShouldNotSeeResendShifttradeButtonForTheRequest()
 		{
-			Browser.Interactions.AssertNotExists(".request:nth-child(" + position + ")", ".request:nth-child(" + position + ") .btn[data-bind*='reSend']");
+			Browser.Interactions.AssertNotExists(".request", ".request .resend-shift-trade");
 		}
 
+		[Then(@"I should not see cancel shifttrade button for the request")]
+		public void ThenIShouldNotSeeCancelShifttradeButtonForTheRequest()
+			Browser.Interactions.AssertNotExists(".request", ".request .cancel-shift-trade");
+
+		[Then(@"Details should be closed")]
+		public void ThenDetailsShouldBeClosed()
+		{
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".request-edit");
+		}
 	}
 }
