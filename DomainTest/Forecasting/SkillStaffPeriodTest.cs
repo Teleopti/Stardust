@@ -392,6 +392,24 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(0.96, Math.Round(result.Payload.ServiceAgreementData.MaxOccupancy.Value, 2));
         }
 
+		[Test]
+		public void ShouldCombineForecastIncomingDemand()
+		{
+			const int length = 15;
+			const double forecastValue1 = 1d;
+			const double forecastValue2 = 2d;
+			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc), length, forecastValue1, 10d);
+			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, new DateTime(2013, 1, 1, 0, 0, 0, DateTimeKind.Utc), length, forecastValue2, 10d);
+			var task = new Task(200, TimeSpan.FromSeconds(60), TimeSpan.FromSeconds(10));
+			skillStaffPeriod1.Payload.TaskData = task;
+			const double expected = forecastValue1 + forecastValue2;
+
+			
+			var list = new List<ISkillStaffPeriod>{skillStaffPeriod1, skillStaffPeriod2};
+			var result = SkillStaffPeriod.Combine(list);
+			Assert.AreEqual(expected, result.Payload.ForecastedIncomingDemand);
+		}
+
         [Test]
         public void VerifyCombineCanHandleZeroTasks()
         {
