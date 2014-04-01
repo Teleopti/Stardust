@@ -383,8 +383,6 @@
     <Compile Include="Domain\IAnnotatableGrid.cs" />
     <Compile Include="Domain\IAbsenceRequest.cs" />
     <Compile Include="Domain\IFilterOnPeriodOptimizer.cs" />
-    <Compile Include="Domain\IFurnessData.cs" />
-    <Compile Include="Domain\IFurnessEvaluator.cs" />
     <Compile Include="Domain\ILicense.cs" />
     <Compile Include="Domain\ILimitation.cs" />
     <Compile Include="Domain\IMemento.cs" />
