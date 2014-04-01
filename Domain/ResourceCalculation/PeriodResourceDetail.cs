@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			get { return _resource; }
 			set
 			{
+				InParameter.ValueMustBePositive("Resource", value);
 				_resource = Math.Round(value, 5);
 			}
 		}

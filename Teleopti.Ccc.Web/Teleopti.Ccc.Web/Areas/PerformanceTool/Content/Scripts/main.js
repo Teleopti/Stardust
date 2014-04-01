@@ -31,5 +31,5 @@ require([
         'bootstrap',
         'view'
     ], function() {
-
-    });
+	
+});

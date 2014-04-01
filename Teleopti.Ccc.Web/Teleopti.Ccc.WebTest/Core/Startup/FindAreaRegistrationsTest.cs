@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			//if for some reason anywhereareregistration is removed, verify against another one
 			new FindAreaRegistrations().AreaRegistrations().Select(x => x.GetType())
 				.Should().Contain(typeof (AnywhereAreaRegistration));
+
 		}
 	}
 }

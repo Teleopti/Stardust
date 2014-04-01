@@ -32,7 +32,7 @@
     header .jumbotron
     {
         background-color: transparent;
-    }
+    } 
     .scenario-selector {
         width: 100%;
     }
