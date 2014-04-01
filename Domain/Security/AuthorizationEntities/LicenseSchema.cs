@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -75,7 +76,8 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// <summary>
         /// Sets the defined license options enabled according to the input list.
         /// </summary>
-        /// <value>The enabled licence options.</value>
+		/// <value>The enabled licence options.</value>
+		[CLSCompliant(false)]
         public void ActivateLicense(ILicenseActivator licenseActivator)
         {
             EnabledLicenseSchema = licenseActivator.EnabledLicenseSchemaName;

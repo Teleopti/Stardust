@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Linq;
 using NHibernate;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 {
 	public class XmlLicenseServiceFactory
 	{
-
+		[CLSCompliant(false)]
 		public XmlLicenseService Make(ILicenseRepository licenseRepository, int numberOfActiveAgents)
 		{
 			IList<ILicense> allLicenses = licenseRepository.LoadAll();
@@ -29,7 +30,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			return new XmlLicenseService(licenseDocument, xmlKey, numberOfActiveAgents);
 		}
 
-
+		[CLSCompliant(false)]
 		public ILicenseService Make(IUnitOfWorkFactory unitOfWorkFactory, ILicenseRepository licenseRepository, IPersonRepository personRepository)
 		{
 			using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -43,17 +44,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 	public class XmlLicensePublicKeyReader
 	{
-
 		private const string publicKeyResourceNameExtention = ".PubKey.xml";
 
-		/// <summary>
-		/// Gets the XML public key that can be used to verify the license signature.
-		/// </summary>
-		/// <returns>public key</returns>
-		/// <remarks>
-		/// Created by: Klas
-		/// Created date: 2008-12-03
-		/// </remarks>
 		public string GetXmlPublicKey()
 		{
 			Stream stream =
@@ -71,17 +63,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 	public class XmlLicensePersister
 	{
-		/// <summary>
-		/// Persists a new license in the database.
-		/// </summary>
-		/// <param name="licenseFilePath">The file path to the new license to be persisted.</param>
-		/// <param name="licenseRepository">The license repository to use for saving.</param>
-		/// <param name="publicKeyXmlContent">The public key XML used for validating the signature.</param>
-		/// <param name="personRepository">The person repository used for validate that the license covers enough active agents.</param>
-		/// <remarks>
-		/// Created by: Klas
-		/// Created date: 2008-12-03
-		/// </remarks>
+		[CLSCompliant(false)]
 		public ILicenseService SaveNewLicense(string licenseFilePath, ILicenseRepository licenseRepository,
 																								 string publicKeyXmlContent, IPersonRepository personRepository)
 		{
@@ -103,25 +85,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			}
 		}
 
-		/// <summary>
-		/// Persist the new license in the database
-		/// </summary>
-		/// <param name="licenseFilePath">The file path to the new license to be persisted.</param>
-		/// <param name="uow">The uow.</param>
-		/// <param name="licenseRepository">The license repository.</param>
-		/// <param name="xmlPublicKey">The XML public key.</param>
-		/// <param name="personRepository">The person repository.</param>
-		/// <exception cref="IOException">when there is a problem reading the license file</exception>
-		/// <exception cref="LicenseExpiredException">when the license has expired</exception>
-		/// <exception cref="SignatureValidationException">when the license signature is invalid, possibly due to attempted fraud through tampering</exception>
-		/// <exception cref="TooManyActiveAgentsException">when there are more active agents in the system than is covered by the license</exception>
-		/// <exception cref="XmlException">when the license xml contains an unrecognized tag</exception>
-		/// <exception cref="DataSourceException">when there is a problem persisting to the database</exception>
-		/// <remarks>
-		/// Created by: Klas
-		/// Created date: 2008-12-03
-		/// Changed:    Henry Greijer 2009-02-14    Had to inject IUnitOfWork, xmlPublicKey and the 2 repositories to achieve better coverage.
-		/// </remarks>
 		public void SaveNewLicense(string licenseFilePath, IUnitOfWork uow, ILicenseRepository licenseRepository, string xmlPublicKey, IPersonRepository personRepository)
 		{
 			try

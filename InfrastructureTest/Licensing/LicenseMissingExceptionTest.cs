@@ -11,7 +11,8 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
     [TestFixture]
-    [Category("LongRunning")]
+	[Category("LongRunning")]
+	[CLSCompliant(false)]
     public class LicenseMissingExceptionTest : ExceptionTest<LicenseMissingException>
     {
         /// <summary>
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         /// <remarks>
         /// Created by: Klas
         /// Created date: 2008-11-18
-        /// </remarks>
+		/// </remarks>
+		[CLSCompliant(false)]
         protected override LicenseMissingException CreateTestInstance(string message, Exception innerException)
         {
             return new LicenseMissingException(message, innerException);
