@@ -540,6 +540,9 @@ ALTER TABLE [mart].[fact_schedule] ADD CONSTRAINT [PK_fact_schedule] PRIMARY KEY
 GO
 
 --Prepare intervals for new column
+PRINT '----'
+PRINT 'new data into: [mart].[fact_schedule]. Working ...'
+GO
 DECLARE @date_min smalldatetime
 SET @date_min='1900-01-01'
 
@@ -575,6 +578,8 @@ INNER JOIN mart.dim_person dp
 INNER JOIN #intervals di
 	ON	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) > di.interval_start
 	AND	dateadd(hour,DATEPART(hour,f.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,f.shift_endtime),@date_min) <= di.interval_end
+GO
+PRINT 'new data into: [mart].[fact_schedule]. Done!'
 GO
 
 --ADD ALL CONSTRAINTS
@@ -713,7 +718,9 @@ GO
 --RENAME TMP KEY
 EXEC sp_rename 'mart.PK_fact_schedule_deviation', 'PK_fact_schedule_deviation_old'
 GO
-
+PRINT '----'
+PRINT 'new data into: [mart].[fact_schedule_deviation]. Working ...'
+GO
 CREATE TABLE [mart].[fact_schedule_deviation](
 	[shift_startdate_local_id] [int] NOT NULL,
 	[date_id] [int] NOT NULL,
@@ -755,6 +762,8 @@ INNER JOIN mart.bridge_time_zone btz
 INNER JOIN mart.dim_person dp
 	ON f.person_id=dp.person_id
 	AND btz.time_zone_id=dp.time_zone_id
+GO
+PRINT '[mart].[fact_schedule_deviation]. Done!'
 GO
 
 --add constraints
@@ -881,6 +890,10 @@ ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_d
 ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_update_date]  DEFAULT (getdate()) FOR [update_date]
 
 --get old data
+GO
+PRINT '----'
+PRINT 'new data into: [mart].[fact_schedule_day_count]. Working ...'
+GO
 INSERT INTO  [mart].[fact_schedule_day_count] WITH (TABLOCK)
 (shift_startdate_local_id, person_id, scenario_id, starttime, shift_category_id, day_off_id, absence_id, day_count, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date)
 SELECT 
@@ -908,7 +921,9 @@ GROUP BY
 	btz.local_date_id,
 	f.person_id,
 	f.scenario_id
-
+GO
+PRINT '[mart].[fact_schedule_day_count]. Done!'
+GO
 ALTER TABLE [mart].[fact_schedule_day_count]  WITH NOCHECK ADD  CONSTRAINT [FK_fact_schedule_day_count_dim_absence] FOREIGN KEY([absence_id])
 REFERENCES [mart].[dim_absence] ([absence_id])
 ALTER TABLE [mart].[fact_schedule_day_count] CHECK CONSTRAINT [FK_fact_schedule_day_count_dim_absence]
