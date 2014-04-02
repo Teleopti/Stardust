@@ -35,7 +35,7 @@
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 		
-	<Target Name="RunETL" DependsOnTargets="PrepareDB">
+	<Target Name="RunETL" DependsOnTargets="PrepareDB;PreCompile">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
 		<!-- Un-Install ETL Service-->
