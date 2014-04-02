@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			// Move these to appSettings or create own configsection
 			AuthenticationCookieDomain = FormsAuthentication.CookieDomain;
 			AuthenticationCookieExpirationTimeSpan = new TimeSpan(0, 30, 0);
-			AuthenticationCookieName = FormsAuthentication.FormsCookieName;
+			AuthenticationCookieName = "TeleoptiAuth";
 			AuthenticationCookiePath = FormsAuthentication.FormsCookiePath;
 			AuthenticationCookieSlidingExpiration = FormsAuthentication.SlidingExpiration;
 			AuthenticationRequireSsl = FormsAuthentication.RequireSSL;
