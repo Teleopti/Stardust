@@ -381,7 +381,7 @@
 		<Message Text="Running NCover for @(ProjectsToNCover)" />
 		<NCover
 			ProjectName="$(CCNetProject)"
-			ToolPath="$(CCNetWorkingDirectory)\ccnet\NCover64"
+			ToolPath="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content"
 			TestRunnerExe="$(NUnitEXE)"
 			TestRunnerArgs="&quot;@(ProjectsToNCover)&quot; $(ExcludedTestCategories) $(NUnitArgs) /xml=&quot;$(CCNetWorkingDirectory)\nunit%(filename).xml&quot;"
 			CoverageFile="$(CCNetWorkingDirectory)\NcoverResult\%(filename).ncov"
@@ -398,7 +398,7 @@
 	<Target Name="NCoverReporting" DependsOnTargets="NCover">
 		<Message Importance="high" Text="Running NCoverReporting..." />
 		<NCoverReporting
-				ToolPath="$(CCNetWorkingDirectory)\ccnet\NCover64"
+				ToolPath="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content"
 				OutputPath="$(CCNetWorkingDirectory)"
 				OutputReport="$(CoverageReports)"
 				CoverageDataPaths="$(CCNetWorkingDirectory)\NcoverResult\*.ncov"
