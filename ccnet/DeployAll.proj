@@ -4,7 +4,7 @@
 
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
-		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
 		<MSBuildMercurialTasksPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialTasksPath>
 		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>

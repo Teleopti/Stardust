@@ -4,8 +4,6 @@
 <Project DefaultTargets="Run" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
 	<PropertyGroup>
-		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
-		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
 		<ETLStuff>$(CCNetWorkingDirectory)\ccnet\ETLNightlyBuild</ETLStuff>
 		<DBNamePrefix>$(Computername)_$(CCNetProject)</DBNamePrefix>
 		<ETLNightlyBuildSql>"$(ETLStuff)\ETLNightlyBuild-Restore.sql"</ETLNightlyBuildSql>

@@ -4,8 +4,6 @@
 
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
-		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
-		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
 		<DBNamePrefix>$(CCNetProject)</DBNamePrefix>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
@@ -36,7 +34,7 @@
 		<NDependTransferDataPath>C:\NDepend\NDependXmlToDb\NDependXmlToDb.exe</NDependTransferDataPath>
 	</PropertyGroup>
 
-	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
+	<Import Project="$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.Targets"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
 	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
