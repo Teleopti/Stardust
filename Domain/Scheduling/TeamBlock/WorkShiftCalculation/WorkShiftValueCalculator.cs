@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		private readonly IWorkShiftPeriodValueCalculator _workShiftPeriodValueCalculator;
 		private readonly IWorkShiftLengthValueCalculator _workShiftLengthValueCalculator;
 
+		[CLSCompliant(false)]
 		public WorkShiftValueCalculator(IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator, IWorkShiftLengthValueCalculator workShiftLengthValueCalculator)
 		{
 			_workShiftPeriodValueCalculator = workShiftPeriodValueCalculator;
