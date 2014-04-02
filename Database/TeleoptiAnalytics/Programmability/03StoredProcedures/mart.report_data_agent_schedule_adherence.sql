@@ -567,7 +567,6 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 		ON b2.local_date_id = d.date_id
 	AND b2.time_zone_id=@time_zone_id
 	WHERE NOT EXISTS (SELECT 1 FROM #result r where r.person_id=fsd.person_id and r.interval_id=i.interval_id and r.date_id=d.date_id)--WHERE NO MATCH ON SCHEDULE
-
 ----------
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
 ----------
@@ -600,10 +599,9 @@ FROM #result
 
 --per person total
 INSERT INTO #person_adh
-SELECT shift_startdate_id,person_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
+SELECT shift_startdate_local_id,person_id,sum(adherence_calc_s)'adherence_calc_s',sum(deviation_s)'deviation_s'
 FROM #result
-GROUP by shift_startdate_id,person_id
-
+GROUP by shift_startdate_local_id,person_id
 
 UPDATE #result
 SET adherence_tot=
@@ -615,7 +613,7 @@ SET adherence_tot=
 	END,
 deviation_tot_s=a.deviation_s
 FROM #person_adh a
-INNER JOIN #result r ON r.shift_startdate_id=a.date_id AND r.person_id=a.person_id
+INNER JOIN #result r ON r.shift_startdate_local_id=a.date_id AND r.person_id=a.person_id
 
 --per interval
 INSERT INTO #team_adh
