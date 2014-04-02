@@ -29,7 +29,6 @@ CREATE PROCEDURE [mart].[report_data_absence_time_per_agent]
 @team_set nvarchar(max),
 @agent_code uniqueidentifier,
 @absence_set nvarchar(max),
-@time_zone_id int,
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
@@ -56,8 +55,7 @@ CREATE TABLE #result(
 	scheduled_work_time_absence_m int,
 	scheduled_paid_time_absence_m int,
 	part_day_count int,
-	full_day_count int,
-	hide_time_zone bit
+	full_day_count int
 )
 
 CREATE TABLE #fact_schedule(
@@ -71,9 +69,7 @@ CREATE TABLE #fact_schedule(
 	[scheduled_work_time_absence_m] [int] NULL,
 	[scheduled_paid_time_absence_m] [int] NULL,
 )
-/* Check if time zone will be hidden (if only one exist then hide) */
-DECLARE @hide_time_zone bit
-SET @hide_time_zone = 1
+
 
 /* Get the agents to report on */
 INSERT INTO #rights_agents
@@ -111,7 +107,7 @@ AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
 IF @report_id =  'C5B88862-F7BE-431B-A63F-3DD5FF8ACE54'  --4
 BEGIN
 	/*** report Absence time per agent***/
-	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,part_day_count,full_day_count,hide_time_zone)
+	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,part_day_count,full_day_count)
 	SELECT      f.person_code,
 				f.person_name,
 				ab.absence_id,
@@ -121,8 +117,7 @@ BEGIN
 				sum(ISNULL(scheduled_work_time_absence_m,0)),
 				sum(ISNULL(scheduled_paid_time_absence_m,0)),
 				1,
-				0,
-				@hide_time_zone
+				0
 	FROM 
 		  #fact_schedule f
 	INNER JOIN mart.dim_absence ab
@@ -134,7 +129,7 @@ END
 ELSE
 BEGIN
 	/*** report Absence time per absence***/
-	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,part_day_count,full_day_count,hide_time_zone)
+	INSERT #result(person_code,person_name,absence_id,absence_name,date,scheduled_contract_time_absence_m,scheduled_work_time_absence_m,scheduled_paid_time_absence_m,part_day_count,full_day_count)
 	SELECT      f.person_code,
 				f.person_name,
 				ab.absence_id,
@@ -144,8 +139,7 @@ BEGIN
 				sum(ISNULL(scheduled_work_time_absence_m,0)),
 				sum(ISNULL(scheduled_paid_time_absence_m,0)),
 				1,
-				0,
-				@hide_time_zone
+				0
 	FROM 
 		  #fact_schedule f
 	INNER JOIN mart.dim_absence ab

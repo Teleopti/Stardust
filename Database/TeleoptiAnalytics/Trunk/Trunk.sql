@@ -992,3 +992,16 @@ GO
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Stage].[etl_stg_schedule_updated_special_load]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [Stage].[etl_stg_schedule_updated_special_load]
 GO
+
+----------------  
+--Name: KJ
+--Date: 2014-04-02
+--Desc: #26422 - Remove time_zone from selection page since now using agent local time zone
+----------------
+
+DELETE from [mart].[report_user_setting] 
+WHERE ReportId in ('C5B88862-F7BE-431B-A63F-3DD5FF8ACE54','D45A8874-57E1-4EB9-826D-E216A4CBC45B')
+AND param_name='@time_zone_id' 
+
+DELETE FROM  mart.report_control_collection where collection_id=25 AND param_name='@time_zone_id'
+GO
