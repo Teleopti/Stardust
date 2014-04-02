@@ -4,78 +4,81 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
-  public interface ISkillIntervalData : IWorkShiftPeriodData
+	[CLSCompliant(false)]
+	public interface ISkillIntervalData : IWorkShiftPeriodData
 	{
 		DateTimePeriod Period { get; }
 		double CurrentHeads { get; }
 		double? MaximumHeads { get; }
-        double? MinimumHeads { get; }
-        double AbsoluteDifference { get; }
+		double? MinimumHeads { get; }
+		double AbsoluteDifference { get; }
 		double RelativeDifference();
 		double RelativeDifferenceMinStaffBoosted();
 		double RelativeDifferenceMaxStaffBoosted();
 		double RelativeDifferenceBoosted();
 	}
 
+	[CLSCompliant(false)]
 	public class SkillIntervalData : ISkillIntervalData
 	{
-	    private double _forecastedDemand;
+		private double _forecastedDemand;
 
-	    public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, double? minimumHeads, double? maximumHeads)
+		public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, double? minimumHeads, double? maximumHeads)
 		{
 			Period = period;
-            _forecastedDemand = forecastedDemand;
+			_forecastedDemand = forecastedDemand;
 			CurrentDemand = currentDemand;
 			CurrentHeads = currentHeads;
 			MinimumHeads = minimumHeads.HasValue && minimumHeads.Value < 0.001 ? null : minimumHeads;
 			MaximumHeads = maximumHeads.HasValue && maximumHeads.Value < 0.001 ? null : maximumHeads;
-            MinMaxBoostFactor = calculateMinMaxBoostFactor();
+			MinMaxBoostFactor = calculateMinMaxBoostFactor();
 		}
 
-	    private double calculateMinMaxBoostFactor()
-	    {
-	        double minHeadValue = 0;
-	        double maxHeadValue = 0;
-            if (MinimumHeads.HasValue)
-	        {
-	            if (CurrentHeads < MinimumHeads.Value)
-	                minHeadValue =  (MinimumHeads.Value - CurrentHeads);
-	        }
-            if (MaximumHeads.HasValue)
-            {
-                if (CurrentHeads >= MaximumHeads.Value)
-                    maxHeadValue = MaximumHeads.Value - (CurrentHeads + 1);
-            }
-	        return minHeadValue + maxHeadValue;
-	    }
+		private double calculateMinMaxBoostFactor()
+		{
+			double minHeadValue = 0;
+			double maxHeadValue = 0;
+			if (MinimumHeads.HasValue)
+			{
+				if (CurrentHeads < MinimumHeads.Value)
+					minHeadValue = (MinimumHeads.Value - CurrentHeads);
+			}
+			if (MaximumHeads.HasValue)
+			{
+				if (CurrentHeads >= MaximumHeads.Value)
+					maxHeadValue = MaximumHeads.Value - (CurrentHeads + 1);
+			}
+			return minHeadValue + maxHeadValue;
+		}
 
-	    public double ForecastedDemand 
-        { get
-	        {
-                if (Math.Abs(_forecastedDemand - 0) < 0.01)
-                    _forecastedDemand = 0.01;
-	            return _forecastedDemand;
-	        }    
-        }
+		public double ForecastedDemand
+		{
+			get
+			{
+				if (Math.Abs(_forecastedDemand - 0) < 0.01)
+					_forecastedDemand = 0.01;
+				return _forecastedDemand;
+			}
+		}
 
 		public DateTimePeriod Period { get; private set; }
 
 		public double CurrentHeads { get; private set; }
 
-        public double? MaximumHeads { get; private set; }
+		public double? MaximumHeads { get; private set; }
 
-        public double? MinimumHeads { get; private set; }
+		public double? MinimumHeads { get; private set; }
 
 		public double CurrentDemand { get; private set; }
 
-        public double MinMaxBoostFactor { get; set; }
+		public double MinMaxBoostFactor { get; set; }
 
 		public TimeSpan Resolution()
 		{
 			return Period.EndDateTime.Subtract(Period.StartDateTime);
 		}
 
-        public double AbsoluteDifference { get { return CurrentDemand - ForecastedDemand; } }
+		public double AbsoluteDifference { get { return CurrentDemand - ForecastedDemand; } }
 
 		public double RelativeDifference()
 		{
