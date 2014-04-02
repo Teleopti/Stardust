@@ -5,10 +5,11 @@
   <PropertyGroup>
     <MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
 	<Mage>\\hebe\Installation\Dependencies\ccc7_server\mage.exe</Mage>
+	<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
   </PropertyGroup>
 
   <Import Project="Microsoft.Sdc.Common.tasks"/>
-  <Import Project="$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools\MSBuild.Community.Tasks.Targets"/>
+  <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
   
   <Target Name="ClientClickOnce" DependsOnTargets="ClientPropertiesSet;VersionCheck;GetPublishContent;PrepareClickOnceDeployment;DeleteRootFiles;CopyFilesToRoot"/>
 
