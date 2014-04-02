@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
 	xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode"
-    xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
     xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
 	xmlns:converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
 	GuiHelpers:HelpProvider.HelpString="IntradayView+IntradayPinUpWindow"
@@ -25,7 +24,7 @@
                 <!--<Setter Property="Margin" Value="4,0,0,0"></Setter>-->
             </Style>
 
-            <Style TargetType="{x:Type Controls:DataGridRow}" BasedOn="{StaticResource RtaScheduleRowStyle}" x:Key="PinnedRowStyle">
+            <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RtaScheduleRowStyle}" x:Key="PinnedRowStyle">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Path=IsPinned}" Value="False">
                         <Setter Property="Visibility" Value="Collapsed"/>
@@ -37,7 +36,7 @@
     </UserControl.Resources>
         <DockPanel LastChildFill="True">
 
-            <Controls:DataGrid x:Name="mainGrid"
+            <DataGrid x:Name="mainGrid"
                                              
                        BorderBrush="{StaticResource RaptorStandardGradientBrush}" 
                        Background="{StaticResource RaptorStandardLightGradientBrush}"  
@@ -50,17 +49,17 @@
                        VerticalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
                        HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}">
                 
-                <Controls:DataGrid.Columns>
-                <Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+                <DataGrid.Columns>
+                <DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=UserTexts:Resources.Name}" 
                                              Width="Auto"
 											 CanUserSort="True"
 											 SortMemberPath="CommonNameDescription"
                                              Binding="{Binding Path=CommonNameDescription, Mode=OneWay}">
                    
-                </Controls:DataGridTextColumn>
+                </DataGridTextColumn>
 
-                <Controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}"
+                <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}"
                                              Header="{x:Static Member=UserTexts:Resources.Time}" 
                                              Width="Auto"
 											 CanUserSort="True"
@@ -68,22 +67,22 @@
                                              Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter},Mode=OneWay}"/>
 
                     <!--Pinned Column-->
-                    <Controls:DataGridTemplateColumn 
+                    <DataGridTemplateColumn 
 						Width="*" 
 						SortMemberPath="IsPinned"
 						CanUserSort="True" 
 						HeaderStyle="{StaticResource HeaderStyle}" 
 						Header="{x:Static Member=UserTexts:Resources.Pin}" >
-                       <Controls:DataGridTemplateColumn.CellTemplate>
+                       <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                               <!--<Grid Height="10" Width="10">-->
                                 <!--<Border Width="10" Height="10" VerticalAlignment="Center" HorizontalAlignment="Center" Background="{StaticResource Raptor_CheckIcon}" Visibility="{Binding Path=IsPinned,Converter={StaticResource visibilityConverter}}"/>-->
                                 <CheckBox IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource simpleConverter}}" Opacity="1" Cursor="Hand"/>
                                 <!--</Grid>-->
                             </DataTemplate>
-                        </Controls:DataGridTemplateColumn.CellTemplate>
-                    </Controls:DataGridTemplateColumn>
-                </Controls:DataGrid.Columns>
-            </Controls:DataGrid>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </DockPanel>
 </UserControl>
