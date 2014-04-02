@@ -6,14 +6,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
+	[CLSCompliant(false)]
 	public interface ISkillIntervalDataSkillFactorApplier
 	{
+		[CLSCompliant(false)]
 		ISkillIntervalData ApplyFactors(ISkillIntervalData skillIntervalData, ISkill skill);
 	}
 
+	[CLSCompliant(false)]
 	public class SkillIntervalDataSkillFactorApplier : ISkillIntervalDataSkillFactorApplier
 	{
 		//PBI 1156 contains an excel-sheet on how to calculate
+		[CLSCompliant(false)]
 		public ISkillIntervalData ApplyFactors(ISkillIntervalData skillIntervalData, ISkill skill)
 		{
 			if (skillIntervalData != null && skill != null)

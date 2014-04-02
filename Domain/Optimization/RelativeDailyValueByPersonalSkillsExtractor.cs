@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
+		[CLSCompliant(false)]
 	    public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix,
 	                                                       IAdvancedPreferences advancedPreferences,
 	                                                       ISkillStaffPeriodToSkillIntervalDataMapper
