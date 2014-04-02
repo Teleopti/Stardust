@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using System.Web;
 using System.Web.Security;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
@@ -13,17 +14,15 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		private readonly ISessionSpecificCookieDataProviderSettings _sessionSpecificCookieDataProviderSettings;
 		private readonly INow _now;
 		private readonly ISessionSpecificDataStringSerializer _dataStringSerializer;
+		private readonly ISessionAuthenticationModule _sessionAuthenticationModule;
 
-		public SessionSpecificCookieDataProvider(ICurrentHttpContext httpContext,
-																ISessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings,
-																INow now,
-																ISessionSpecificDataStringSerializer dataStringSerializer
-			)
+		public SessionSpecificCookieDataProvider(ICurrentHttpContext httpContext, ISessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now, ISessionSpecificDataStringSerializer dataStringSerializer, ISessionAuthenticationModule sessionAuthenticationModule)
 		{
 			_httpContext = httpContext;
 			_sessionSpecificCookieDataProviderSettings = sessionSpecificCookieDataProviderSettings;
 			_now = now;
 			_dataStringSerializer = dataStringSerializer;
+			_sessionAuthenticationModule = sessionAuthenticationModule;
 		}
 
 		public void StoreInCookie(SessionSpecificData data)
@@ -64,11 +63,14 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void ExpireTicket()
 		{
-			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = DateTime.Now.AddDays(-1d) };
+			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddHours(-1d) };
 			_httpContext.Current().Response.Cookies.Add(cookie);
+			_httpContext.Current().Request.Cookies.Remove(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName);
 
-			var fedAuthCookie = new HttpCookie("FedAuth") { Expires = DateTime.Now.AddDays(-1d) };
+			var fedAuthCookieName = _sessionAuthenticationModule.CookieName;
+			var fedAuthCookie = new HttpCookie(fedAuthCookieName) { Expires = _now.LocalDateTime().AddHours(-1d) };
 			_httpContext.Current().Response.Cookies.Add(fedAuthCookie);
+			_httpContext.Current().Request.Cookies.Remove(fedAuthCookieName);
 		}
 
 		public void RemoveCookie()

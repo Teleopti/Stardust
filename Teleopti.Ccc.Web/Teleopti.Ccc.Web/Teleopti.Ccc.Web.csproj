@@ -613,6 +613,8 @@
     <Compile Include="Filters\AuthenticationModule.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
     <Compile Include="Filters\IAuthenticationModule.cs" />
+    <Compile Include="Filters\ISessionAuthenticationModule.cs" />
+    <Compile Include="Filters\SessionAuthenticationModule.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />

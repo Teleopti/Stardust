@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if(HttpContext.Current==null)
 				return;
-			_authenticationModule=FederatedAuthentication.WSFederationAuthenticationModule;
+			_authenticationModule = FederatedAuthentication.WSFederationAuthenticationModule;
 		}
 		public string Issuer
 		{

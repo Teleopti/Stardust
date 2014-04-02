@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
+using Teleopti.Ccc.Web.Filters;
 using Teleopti.Interfaces.Domain;
 using log4net;
 
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			now = new ThisIsNow(new DateTime(2013, 9, 23, 12, 0, 0));
 			
 			_sessionSpecificCookieDataProviderSettings = new DefaultSessionSpecificCookieDataProviderSettings();
-			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()));
+			target = new SessionSpecificCookieDataProvider(new FakeCurrentHttpContext(httpContext), _sessionSpecificCookieDataProviderSettings, now, new SessionSpecificDataStringSerializer(MockRepository.GenerateStub<ILog>()), MockRepository.GenerateMock<ISessionAuthenticationModule>());
 		}
 
 		[Test]
