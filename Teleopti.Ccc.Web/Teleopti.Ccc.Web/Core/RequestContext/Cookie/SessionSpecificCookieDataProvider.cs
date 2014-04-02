@@ -63,9 +63,11 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void ExpireTicket()
 		{
-			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddHours(-1d) };
-			_httpContext.Current().Response.Cookies.Add(cookie);
-			_httpContext.Current().Request.Cookies.Remove(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName);
+			var cookie = getCookie();
+			var ticket = decryptCookie(cookie);
+			ticket = makeTicket(ticket.Name, ticket.UserData, _now.LocalDateTime().AddHours(-1));
+			cookie.Value = encryptTicket(ticket);
+			setCookie(cookie);
 
 			var fedAuthCookieName = _sessionAuthenticationModule.CookieName;
 			var fedAuthCookie = new HttpCookie(fedAuthCookieName) { Expires = _now.LocalDateTime().AddHours(-1d) };

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see an application page")]
 		public void ThenIShouldSeeAnApplicationPage()
 		{
-			Browser.Interactions.AssertExists("#signout, #signout-button");
+			Browser.Interactions.AssertExists("#regional-settings, #signout-button");
 		}
 
 	}

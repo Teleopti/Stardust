@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				target.ExpireMyCookie();
 				target.NonExistingDatasourceCookie();
 			}
-			sessionSpecificDataProvider.AssertWasCalled(x => x.RemoveCookie());
+			sessionSpecificDataProvider.AssertWasCalled(x => x.ExpireTicket());
 		}
 
 		[Test]

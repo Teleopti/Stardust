@@ -66,14 +66,14 @@ Scenario: Signed out when navigating to next period when cookie is expired
 	And I click next virtual schedule period button
 	Then I should see the sign in page
 
-Scenario: Corrupt cookie due to upgrade should be overwritten by an update
+Scenario: Corrupt teleopti cookie due to upgrade should be overwritten by an update
 	Given I am viewing an application page
 	Then I should be signed in
 	When My cookie gets corrupt
 	And I navigate to an application page
 	Then I should be signed in
 
-Scenario: Corrupt cookie due to no longer existing database should be overwritten by an update
+Scenario: Corrupt teleopti cookie due to no longer existing database should be overwritten by an update
 	Given I am viewing an application page
 	Then I should be signed in
 	When My cookie gets pointed to non existing database

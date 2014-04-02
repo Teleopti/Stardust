@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 		private readonly ICurrentHttpContext _httpContext;
+		private readonly IFormsAuthentication _formsAuthentication;
 
-		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext)
+		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext, IFormsAuthentication formsAuthentication)
 		{
 			_mutateNow = mutateNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -33,11 +34,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_logon = logon;
 			_businessUnitProvider = businessUnitProvider;
 			_httpContext = httpContext;
+			_formsAuthentication = formsAuthentication;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
 		{
-			_sessionSpecificDataProvider.RemoveCookie();
+			_sessionSpecificDataProvider.ExpireTicket();
+			_formsAuthentication.SignOut();
 
 			updateIocNow(null);
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
@@ -62,6 +65,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var businessUnits = _businessUnitProvider.RetrieveBusinessUnitsForPerson(result.DataSource, result.Person);
 			var businessUnit = (from b in businessUnits where b.Name == businessUnitName select b).Single();
 			
+			if (result.Successful)
+			{
+				_formsAuthentication.SetAuthCookie(userName + "§" + dataSourceName);
+			}
+
 			var claims = new List<Claim>
 			{
 				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + "§" + dataSourceName)
@@ -81,6 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public EmptyResult ExpireMyCookie()
 		{
 			_sessionSpecificDataProvider.ExpireTicket();
+			_formsAuthentication.SignOut();
 			return new EmptyResult();
 		}
 

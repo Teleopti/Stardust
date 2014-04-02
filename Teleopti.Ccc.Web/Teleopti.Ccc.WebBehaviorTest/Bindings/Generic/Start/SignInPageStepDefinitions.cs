@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should (be|stay) signed in")]
 		public void ThenIShouldBeSignedIn(string beOrStay)
 		{
-			Browser.Interactions.AssertExists("#regional-settings, #signout-button");
+			Browser.Interactions.AssertExists("#regional-settings");
 		}
 
 		[Then(@"I should see a log on error '(.*)'")]
@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 
 		[Then(@"I should see the sign in page")]
 		[Then(@"I should be redirected to the sign in page")]
+		[Then(@"I should not be signed in")]
 		public void ThenIAmNotSignedIn()
 		{
 			Browser.Interactions.AssertExists("#Username-input");
