@@ -532,8 +532,8 @@ ALTER TABLE [mart].[fact_schedule] ADD CONSTRAINT [PK_fact_schedule] PRIMARY KEY
 (
 	[shift_startdate_local_id] ASC,
 	[scenario_id] ASC,
-	[schedule_date_id] ASC,
 	[person_id] ASC,
+	[schedule_date_id] ASC,
 	[interval_id] ASC,
 	[activity_starttime] ASC
 ) ON mart

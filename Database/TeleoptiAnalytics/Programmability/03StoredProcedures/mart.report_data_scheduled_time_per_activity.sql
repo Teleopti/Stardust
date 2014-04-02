@@ -74,10 +74,14 @@ SELECT * FROM mart.SplitStringInt(@activity_set)
 
 /*Snabba upp frǾga mot fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT schedule_date_id, person_id, interval_id, scenario_id, activity_id, scheduled_time_m
+SELECT schedule_date_id, fs.person_id, interval_id, scenario_id, activity_id, scheduled_time_m
 FROM mart.fact_schedule fs
-WHERE schedule_date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
-
+INNER JOIN mart.dim_person p
+	ON fs.person_id=p.person_id
+WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
+AND fs.scenario_id=@scenario_id
+AND p.team_id IN (select right_id from #rights_teams)
+AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
 
 INSERT #result(date_id,date,activity_name,scheduled_time_m,hide_time_zone)
 SELECT	d.date_id,
@@ -87,8 +91,6 @@ SELECT	d.date_id,
 		@hide_time_zone
 FROM 
 	#fact_schedule f
-INNER JOIN mart.dim_person p
-	ON f.person_id=p.person_id
 INNER JOIN mart.dim_activity act
 	ON act.activity_id=f.activity_id
 INNER JOIN mart.bridge_time_zone b
@@ -101,9 +103,6 @@ INNER JOIN mart.dim_interval i
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND i.interval_id BETWEEN @interval_from AND @interval_to
 AND b.time_zone_id = @time_zone_id
-AND f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
 AND act.activity_id IN (SELECT id FROM #activities)
 AND act.activity_id<>-1 --ej absence_time
 GROUP BY d.date_id,	d.date_date,act.activity_name
