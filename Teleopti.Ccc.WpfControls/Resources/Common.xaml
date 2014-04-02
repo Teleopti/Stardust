@@ -1,7 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:s="clr-namespace:System;assembly=mscorlib"
-    xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
     xmlns:Converters1="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
     xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode">
 
@@ -36,7 +35,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="CellStyle" TargetType="{x:Type Controls:DataGridCell}">
+    <Style x:Key="CellStyle" TargetType="{x:Type DataGridCell}">
         <Setter Property="Padding" Value="5"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Style.Triggers>
@@ -51,19 +50,19 @@
     </Style>
 
 	<!-- Style for IntradayCells, NonClickable-->
-	<Style x:Key="UnclickableCellStyle" TargetType="{x:Type Controls:DataGridCell}" BasedOn="{StaticResource CellStyle}">
+	<Style x:Key="UnclickableCellStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource CellStyle}">
 		<Setter Property="IsHitTestVisible" Value="False" />
 	</Style>
 	
 	<!-- Style for Intraday PinnedCell -->
-	<Style x:Key="PinnedCellStyle" TargetType="{x:Type Controls:DataGridCell}" BasedOn="{StaticResource CellStyle}">
+	<Style x:Key="PinnedCellStyle" TargetType="{x:Type DataGridCell}" BasedOn="{StaticResource CellStyle}">
 		<Setter Property="IsHitTestVisible" Value="true"/>
 		<Setter Property="Background" Value="{x:Null}"/>
 		<Setter Property="IsSelected" Value="False"/>
 	</Style>
 	
     <!--Standard rowstyle for grids-->
-    <Style x:Key="RowStyle" TargetType="{x:Type Controls:DataGridRow}">
+    <Style x:Key="RowStyle" TargetType="{x:Type DataGridRow}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="BorderThickness" Value="0" />
@@ -72,7 +71,7 @@
     </Style>
 
     <!--Standard rowstyle for rta grid-->
-    <Style TargetType="{x:Type Controls:DataGridRow}" BasedOn="{StaticResource RowStyle}" x:Key="RtaScheduleRowStyle">
+    <Style TargetType="{x:Type DataGridRow}" BasedOn="{StaticResource RowStyle}" x:Key="RtaScheduleRowStyle">
 		<Setter Property="Height" Value="22"></Setter>
         <Style.Triggers>
             <DataTrigger Binding="{Binding Path=Color, Converter={StaticResource isNullConverter}}" Value="False">

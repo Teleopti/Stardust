@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Controls;
-using Microsoft.Windows.Controls;
 using Teleopti.Ccc.WinCode.Scheduling;  
 
 namespace Teleopti.Ccc.WpfControls.Controls.DateTimePeriodControl
