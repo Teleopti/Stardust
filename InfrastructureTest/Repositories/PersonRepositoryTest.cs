@@ -734,12 +734,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(LazyLoadingManager.IsInitialized(personPeriod.ExternalLogOnCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.PersonSchedulePeriodCollection));
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.PersonSchedulePeriodCollection.First().ShiftCategoryLimitationCollection()));
+			
  
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(person.PersonSchedulePeriodCollection));
 			Assert.AreEqual(2, person.PersonSchedulePeriodCollection.Count);
 			Assert.AreEqual(0, person2.PersonSchedulePeriodCollection.Count);
 			Assert.AreEqual(3, person.PersonPeriodCollection.Count());
 			Assert.AreEqual(1, person2.PersonPeriodCollection.Count());
+
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(person2.PersonPeriodCollection.First().PersonSkillCollection.First().Skill.SkillType));
 		}
 
 		[Test]
