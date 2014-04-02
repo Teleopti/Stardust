@@ -91,7 +91,7 @@
 	
 	</Target>
 
-	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;BuildSSASXmla;PreCompile">
+	<Target Name="Compile" DependsOnTargets="CreateAnalyticsDb;BuildSSASXmla">
 		<Message Importance="high" Text="Compile starting..." />
 
 		<MSBuild Projects="@(SolutionFile)"
@@ -101,11 +101,6 @@
 		</MSBuild>
 
 		<Message Importance="high" Text="Compile finished." />
-	</Target>
-
-	<Target Name="PreCompile" Condition="Exists('$(CCNetWorkingDirectory)\.nuget\packages.config')">
-		<Message Importance="high" Text="Installing solution wide nuget packages (packages.config)"/>
-		<Exec Command=".nuget\nuget.exe install .nuget\packages.config -o packages" WorkingDirectory="$(CCNetWorkingDirectory)"/>
 	</Target>
 	
     <Target Name="BuildSSASXmla" Condition="Exists('$(vs2010ide)') And Exists('$(AsDBDeploy)')">
