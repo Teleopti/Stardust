@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
-using Microsoft.Windows.Controls;
 using Teleopti.Ccc.WinCode.Converters;
 
 namespace Teleopti.Ccc.WpfControls.Converters
