@@ -37,8 +37,8 @@
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
-	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
-	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
+	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll"/>
+	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll" />
 	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<PropertyGroup>
