@@ -353,10 +353,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify({
-			    Date: viewModel.requestedDateInternal().toDate().toJSON(),
-			    Subject: viewModel.subject(),
-			    Message: viewModel.message(),
-			    PersonToId: viewModel.agentChoosed().personId
+				Date: viewModel.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
+				Subject: viewModel.subject(),
+				Message: viewModel.message(),
+				PersonToId: viewModel.agentChoosed().personId
 			}),
 			success: function (data) {
 			    viewModel.agentChoosed(null);
