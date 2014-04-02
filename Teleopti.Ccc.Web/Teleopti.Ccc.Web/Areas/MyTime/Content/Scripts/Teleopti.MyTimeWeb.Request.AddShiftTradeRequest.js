@@ -136,12 +136,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
         self.requestedDate = ko.computed({
         	read: function () {
+                return self.requestedDateInternal();
+            },
+        	write: function (value) {
         		//remove old layer's tooltip if it still exist
         		$("[class='tooltip fade top in']").remove();
         		
-                return self.requestedDateInternal();
-            },
-            write: function (value) {
                 if (self.requestedDateInternal().diff(value) == 0) return;
                 self.prepareLoad();
                 self.requestedDateInternal(value);
@@ -389,7 +389,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function _hideShiftTradeWindow() {
 		$('#Request-add-shift-trade').hide();
 	}
-
+	
 	function setShiftTradeRequestDate(date) {
 	    vm.isReadyLoaded(false);
 		vm.requestedDate(moment(date));
