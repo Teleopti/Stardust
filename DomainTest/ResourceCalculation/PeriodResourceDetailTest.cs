@@ -15,6 +15,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			 target.Resource = 0.00001;
 			 Assert.AreEqual(0.00001, target.Resource);
+
+			 target.Resource = -0.000001;
+			 Assert.AreEqual(0.00000, target.Resource);
 		 }
 
 
@@ -23,6 +26,27 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		 public void ShouldNotAcceptValueValueLowerThanZero()
 		 {
 			 var target = new PeriodResourceDetail(1, -1);
+		 }
+
+		 [Test]
+		 public void ShouldRoundResourceToFiveDecimalsToAvoidLeftOversWhenRemovingCount()
+		 {
+			 var target = new PeriodResourceDetail(0.000004, 1);
+			 Assert.AreEqual(0d, target.Count);
+
+			 target.Count = 0.00001;
+			 Assert.AreEqual(0.00001, target.Count);
+
+			 target.Count = -0.000001;
+			 Assert.AreEqual(0.00000, target.Count);
+		 }
+
+
+		 [Test]
+		 [ExpectedException(typeof(ArgumentOutOfRangeException))]
+		 public void CountShouldNotAcceptValueValueLowerThanZero()
+		 {
+			 var target = new PeriodResourceDetail(-1, 1);
 		 }
 	}
 }
