@@ -1,18 +1,15 @@
 using System;
+using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
-	public interface ISkillIntervalData
+  public interface ISkillIntervalData : IWorkShiftPeriodData
 	{
-		double ForecastedDemand { get; }
 		DateTimePeriod Period { get; }
 		double CurrentHeads { get; }
 		double? MaximumHeads { get; }
         double? MinimumHeads { get; }
-		double CurrentDemand { get; }
-        double MinMaxBoostFactor { get; set; }
-		TimeSpan Resolution();
         double AbsoluteDifference { get; }
 		double RelativeDifference();
 		double RelativeDifferenceMinStaffBoosted();
