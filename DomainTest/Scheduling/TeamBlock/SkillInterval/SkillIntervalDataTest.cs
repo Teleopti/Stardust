@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.SkillInterval
         public void CalculateAbsoluteDifference()
         {
             var skillIntervalData = new SkillIntervalData(_dtp, 3.63, 2, 3, 0, 0);
-            Assert.AreEqual(-1.63, Math.Round(skillIntervalData.AbsoluteDifference, 2));
+            Assert.AreEqual(-2, skillIntervalData.AbsoluteDifference,2);
         }
 
 		[Test]
