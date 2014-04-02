@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"ASM link should not be visible")]
 		public void ThenASMLinkShouldNotBeVisible()
 		{
-			Browser.Interactions.AssertNotExists("#signout", "#asm-link");
+			Browser.Interactions.AssertNotExists("#regional-settings", "#asm-link");
 		}
 
 		[Then(@"The last layer should be '(.*)' hours long")]

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not be able to see student availability link")]
 		public void ThenIShouldNotBeAbleToSeeStudentAvailabilityLink()
 		{
-			Browser.Interactions.AssertNotExists("#signout", "[href*='#StudentAvailabilityTab']");
+			Browser.Interactions.AssertNotExists("#regional-settings", "[href*='#StudentAvailabilityTab']");
 		}
 
 		[Then(@"I should see my existing student availability")]
