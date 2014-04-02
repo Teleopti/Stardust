@@ -11,6 +11,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Controllers
@@ -22,14 +23,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IAuthenticator _authenticator;
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
+		private readonly ICurrentHttpContext _httpContext;
 
-		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
+		public TestController(IMutateNow mutateNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider, ICurrentHttpContext httpContext)
 		{
 			_mutateNow = mutateNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_authenticator = authenticator;
 			_logon = logon;
 			_businessUnitProvider = businessUnitProvider;
+			_httpContext = httpContext;
 		}
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
@@ -39,17 +42,17 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			updateIocNow(null);
 			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 			var viewModel = new TestMessageViewModel
-								{
-									Title = "Setting up for scenario",
-									Message = "Setting up for scenario",
-									ListItems = new[]
-									            	{
-									            		"Restoring Ccc7 database",
-															"Clearing Analytics database",
-															"Removing browser cookie",
-															"Setting default implementation for INow"
-									            	}
-								};
+			{
+				Title = "Setting up for scenario",
+				Message = "Setting up for scenario",
+				ListItems = new[]
+				{
+					"Restoring Ccc7 database",
+					"Clearing Analytics database",
+					"Removing browser cookie",
+					"Setting default implementation for INow"
+				}
+			};
 			return View("Message", viewModel);
 		}
 
@@ -63,9 +66,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			{
 				new Claim(System.IdentityModel.Claims.ClaimTypes.NameIdentifier, userName + "§" + dataSourceName)
 			};
-			var claimsIdentity = new ClaimsIdentity(claims,"MyType");
-			HttpContext.User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
-
+			var claimsIdentity = new ClaimsIdentity(claims, "IssuerForTest");
+			_httpContext.Current().User = new ClaimsPrincipal(new IClaimsIdentity[] { claimsIdentity });
 			_logon.LogOn(dataSourceName, businessUnit.Id.Value, result.Person.Id.Value);
 
 			var viewModel = new TestMessageViewModel
