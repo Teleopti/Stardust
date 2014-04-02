@@ -35,7 +35,7 @@
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
 		
-	<Target Name="RunETL" DependsOnTargets="PrepareDB;PreCompile">
+	<Target Name="RunETL" DependsOnTargets="PrepareDB">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
 		<!-- Un-Install ETL Service-->
@@ -49,48 +49,8 @@
 		<Message Text="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
 		<Exec Command ="$(ETLNightlyBuild-InstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
 		<Message Text="Install ETL service. Done!" Importance="high" />
-
-	<!-- I will remove the ETL Service check for now. Not good! -->	
-	<!--
-		<Message Text="Start ETL service. Working..." Importance="high" />
-		<Message Text="NET START AnalyticsEtlService" Importance="high" />
-		<Exec Command ="NET START AnalyticsEtlService"/>
-		<Message Text="Start ETL service. Done!" Importance="high" />
-	-->
-		<!--
-	This is our Test!!!
-	The SP will Loop until ETL job is finshed. If it finds an error Then a RaisError Should make SQLCMD to bail out
-	-->
-	<!--
-		<Message Text="Start ETL test. Working..." Importance="high" />
-		<Message Text="SQLExecute: Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True Statement: %22EXEC [mart].[etl_nightlyBuild_CheckError]%22" Importance="high" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="[mart].[etl_nightlyBuild_CheckError]" CommandTimeout="1800" ConnectionString="Data Source=$(COMPUTERNAME);Initial Catalog=$(AnalyticsDB);Integrated Security=True"/>
-		<Message Text="Start ETL test. Done!" Importance="high" />
-
-	-->
-		<!-- Clean up-->
-		<!--Sleep for 10 secs then STOP service-->
-	<!--
-		<Message Text="PING 127.0.0.1 -n 10 > NUL" Importance="high" />
-		<Exec Command ="PING 127.0.0.1 -n 10 > NUL"/>
-
-		<Message Text="NET STOP AnalyticsEtlService" Importance="high" />
-		<Exec Command ="NET STOP AnalyticsEtlService"/>
-	-->
-		<!-- Un-Install ETL Service-->
-	
-	<!--
-		<Message Text="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe" Importance="high" />
-		<Exec Command ="$(ETLNightlyBuild-UnInstallSvcCmd) AnalyticsEtlService $(ETLServiceBinDir) Teleopti.Analytics.Etl.ServiceHost.exe"/>
-	-->	
 	</Target>
-
-	<!--
-  <Target Name="DeployCube">
-	<Message Text="I Will deploy cube ..." Importance="high" />
-  </Target>
-  -->
-
+	
   		<!-- 
 	a) Clean out the datamart (exept for Initial load data and sys_datasource)
 	b) Clean out old ETL job history
