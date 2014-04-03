@@ -165,8 +165,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
 
                 return aggregateSkillSkill;
-            }
-            return null;
         }
 
 
