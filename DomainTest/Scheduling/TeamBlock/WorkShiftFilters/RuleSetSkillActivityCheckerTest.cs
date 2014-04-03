@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -15,9 +16,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IRuleSetSkillActivityChecker _target;
 		private IList<ISkill> _skills;
 		private IWorkShiftRuleSet _workShiftRuleSet;
-		private IActivity _act1;
-		private IActivity _act2;
-		private IActivity _act3;
+		private Activity _act1;
+		private Activity _act2;
+		private Activity _act3;
 
 
 		[SetUp]

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain
@@ -10,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-08-07
     /// </remarks>
-	public interface IActivity : IPayload, IDeleteTag, IAggregateRootWithEvents
+	public interface IActivity : IPayload, IDeleteTag, IAggregateRootWithEvents, IWorkShiftCalculatableActivity
     {
 
         /// <summary>
@@ -59,17 +60,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool InReadyTime { get; set; }
 
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [requires skill].
-        /// </summary>
-        /// <value><c>true</c> if [requires skill]; otherwise, <c>false</c>.</value>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2008-11-13    
-        /// /// </remarks>
-        bool RequiresSkill { get; set; }
         /// <summary>
         /// Gets or sets a value indicating whether Activity is calculated as work time.
         /// </summary>

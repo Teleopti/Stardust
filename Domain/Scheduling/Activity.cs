@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			set { _inReadyTime = value; }
 		}
 
-		public virtual bool RequiresSkill
+	    public virtual bool RequiresSkill
 		{
 			get { return _requiresSkill; }
 			set { _requiresSkill = value; }

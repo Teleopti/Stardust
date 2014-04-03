@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         private DateTimePeriod _period1;
         private DateTime _start;
         private DateTime _end;
-        private IActivity _phoneActivity;
+		private Activity _phoneActivity;
         private ISkillIntervalData _data;
         private IDictionary<TimeSpan, ISkillIntervalData> _dic;
 
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         [Test]
         public void ShouldHandleClosedDayOnSameSkillActivityThatRequiresSkill()
         {
-            IActivity activity = new Activity("bo");
+			var activity = new Activity("bo");
             activity.RequiresSkill = true;
             var visualLayerCollection = new MainShiftLayer(activity, _period1).CreateProjection();
 
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         [Test]
         public void ActivityThatNotRequiresSkillCanExistOutsideOpenHours()
         {
-            IActivity otherActivity = new Activity("other");
+			var otherActivity = new Activity("other");
             otherActivity.RequiresSkill = false;
             DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(-15), _end.AddMinutes(15));
             DateTimePeriod period1 = new DateTimePeriod(_start.AddMinutes(10), _end.AddMinutes(-10));
@@ -258,7 +258,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         [Test]
         public void LayerThatIsNotSkillActivityShouldCalculateAsZero()
         {
-            IActivity otherActivity = new Activity("other");
+			var otherActivity = new Activity("other");
             otherActivity.RequiresSkill = true;
             DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(5), _end.AddMinutes(-5));
             var visualLayerCollection = new MainShiftLayer(otherActivity, period2).CreateProjection();
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
         [Test]
         public void LayerThatIsNotSkillActivityShouldCalculateAsZeroEvenIfItIsOutsideOpenHours()
         {
-            IActivity otherActivity = new Activity("other");
+			var otherActivity = new Activity("other");
             otherActivity.RequiresSkill = true;
             DateTimePeriod period2 = new DateTimePeriod(_start.AddMinutes(-5), _end.AddMinutes(-5));
             var visualLayerCollection = new MainShiftLayer(otherActivity, period2).CreateProjection();

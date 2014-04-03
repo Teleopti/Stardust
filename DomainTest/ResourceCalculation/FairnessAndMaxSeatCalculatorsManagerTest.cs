@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var category = new ShiftCategory("theCat");
             var allValues = new List<IWorkShiftCalculationResultHolder>
                               {
-                                  new WorkShiftCalculationResultHolder { Value = 1, ShiftProjection = shiftCache } 
+                                  new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache } 
                               };
 			_options.Fairness = new Percent(0.25d);
             Expect.Call(_shiftCatFairnessManager.GetFactorsForPersonOnDate(_person, dateOnly)).Return(
@@ -99,8 +99,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var category = new ShiftCategory("theCat");
             var allValues = new List<IWorkShiftCalculationResultHolder>
                               {
-                                  new WorkShiftCalculationResultHolder { Value = 1, ShiftProjection = shiftCache },
-                                  new WorkShiftCalculationResultHolder { Value = 1, ShiftProjection = shiftCache }
+                                  new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache },
+                                  new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache }
                               };
 
         	_options.Fairness = new Percent(0.25d);
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var category = new ShiftCategory("theCat");
             var allValues = new List<IWorkShiftCalculationResultHolder>
                               {
-                                  new WorkShiftCalculationResultHolder { Value = 1, ShiftProjection = shiftCache } 
+                                  new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache } 
                               };
 			_options.Fairness = new Percent(0.25d);
             Expect.Call(_shiftCatFairnessManager.GetFactorsForPersonOnDate(_person, dateOnly)).Return(
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var projection = _mocks.StrictMock<IVisualLayerCollection>();
             var allValues = new List<IWorkShiftCalculationResultHolder>
                               {
-                                  new WorkShiftCalculationResultHolder { Value = 1, ShiftProjection = shiftCache } 
+                                  new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache } 
                               };
 			_options.Fairness = new Percent(0.25d);
             var dic = _mocks.StrictMock<IScheduleDictionary>();
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var projection = _mocks.StrictMock<IVisualLayerCollection>();
 			var allValues = new List<IWorkShiftCalculationResultHolder>
                               {
-                                  new WorkShiftCalculationResultHolder { Value = 1, ShiftProjection = shiftCache } 
+                                  new WorkShiftCalculationResult { Value = 1, ShiftProjection = shiftCache } 
                               };
 			_options.Fairness = new Percent(0);
 			Expect.Call(shiftCache.MainShiftProjection).Return(projection).Repeat.AtLeastOnce();

@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
     {
         private ShiftFromMasterActivityService _shiftFromMasterActivityService;
         IList<IWorkShift> _workShiftList;
-        IActivity _activity1;
-        IActivity _activity2;
-        IActivity _activity3;
-        IActivity _activity4;
-        IActivity _activityNotInContractTime;
-        IActivity _activityDontRequireSkill;
+        Activity _activity1;
+        Activity _activity2;
+        Activity _activity3;
+        Activity _activity4;
+        Activity _activityNotInContractTime;
+        Activity _activityDontRequireSkill;
         IMasterActivity _masterActivity1;
         IMasterActivity _masterActivity2;
         IMasterActivity _masterActivity3;

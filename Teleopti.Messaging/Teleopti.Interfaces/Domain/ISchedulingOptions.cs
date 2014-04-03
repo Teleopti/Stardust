@@ -162,7 +162,6 @@ namespace Teleopti.Interfaces.Domain
         /// Gets or sets the work shift length hint, whether the service should find a longer or a shorter workshift if possible.
         /// </summary>
         /// <value>The work shift length hint option.</value>
-        [DefaultValue(typeof (WorkShiftLengthHintOption), "WorkShiftLengthHintOption.AverageWorktime")]
         WorkShiftLengthHintOption WorkShiftLengthHintOption { get; set; }
 
         /// <summary>
