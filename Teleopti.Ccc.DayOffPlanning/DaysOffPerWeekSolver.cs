@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanning

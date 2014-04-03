@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces;

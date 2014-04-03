@@ -822,7 +822,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
+      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
+      <Name>Teleopti.Ccc.Secrets</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

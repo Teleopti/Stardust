@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
