@@ -11,17 +11,18 @@
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd6" namespace="http://schemas.ccc.teleopti.com/sdk/2010/08/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd7" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2013/03/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" namespace="http://schemas.ccc.teleopti.com/sdk/2013/03/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" namespace="http://schemas.ccc.teleopti.com/sdk/2014/04/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/" />
       <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd16" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd17" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
-      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd16" namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd17" namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain" />
+      <xsd:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd19" namespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="TeleoptiCccSdkService_ConvertToUtc_InputMessage">
@@ -152,6 +153,12 @@
   </wsdl:message>
   <wsdl:message name="TeleoptiForecastingService_GetSkillData_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetSkillDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiForecastingService_GetSkillDataByQuery_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkillDataByQuery" />
+  </wsdl:message>
+  <wsdl:message name="TeleoptiForecastingService_GetSkillDataByQuery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSkillDataByQueryResponse" />
   </wsdl:message>
   <wsdl:message name="TeleoptiForecastingService_GetSkills_InputMessage">
     <wsdl:part name="parameters" element="tns:GetSkills" />
@@ -881,6 +888,10 @@
     <wsdl:operation name="GetSkillData">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiForecastingService/GetSkillData" message="tns:TeleoptiForecastingService_GetSkillData_InputMessage" />
       <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiForecastingService/GetSkillDataResponse" message="tns:TeleoptiForecastingService_GetSkillData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSkillDataByQuery">
+      <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiForecastingService/GetSkillDataByQuery" message="tns:TeleoptiForecastingService_GetSkillDataByQuery_InputMessage" />
+      <wsdl:output wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiForecastingService/GetSkillDataByQueryResponse" message="tns:TeleoptiForecastingService_GetSkillDataByQuery_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetSkills">
       <wsdl:input wsaw:Action="http://schemas.ccc.teleopti.com/sdk/2010/04/TeleoptiForecastingService/GetSkills" message="tns:TeleoptiForecastingService_GetSkills_InputMessage" />

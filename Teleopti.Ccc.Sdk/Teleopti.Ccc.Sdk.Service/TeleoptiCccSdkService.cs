@@ -1751,7 +1751,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return true;
 		}
 
-		/// <summary>
+	    public ICollection<SkillDayDto> GetSkillDataByQuery(QueryDto queryDto)
+	    {
+			 var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<SkillDayDto>>>();
+			 return invoker.Invoke(queryDto);
+	    }
+
+	    /// <summary>
 		/// Gets the skills.
 		/// </summary>
 		/// <returns>A collection of SkillDto</returns>
@@ -1779,10 +1785,12 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		[SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public ICollection<SkillDayDto> GetSkillData(DateOnlyDto dateOnlyDto, string timeZoneId)
 		{
-			using (var inner = _lifetimeScope.BeginLifetimeScope())
-			{
-				return inner.Resolve<SkillDataFactory>().GetSkillData(dateOnlyDto, timeZoneId);
-			}
+			return
+				GetSkillDataByQuery(new GetSkillDaysByPeriodQueryDto
+				{
+					Period = new DateOnlyPeriodDto {StartDate = dateOnlyDto, EndDate = dateOnlyDto},
+					TimeZoneId = timeZoneId
+				});
 		}
 
 		/// <summary>

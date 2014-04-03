@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<PersonAbsenceAccountProvider>().As<IPersonAbsenceAccountProvider>();
 			builder.RegisterType<ScheduleIsInvalidSpecification>().As<IScheduleIsInvalidSpecification>();
 			builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>();
-			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>().SingleInstance();
+			builder.RegisterType<ResourceOptimizationHelper>().As<IResourceOptimizationHelper>();
 			builder.RegisterType<PeriodDistributionService>().As<IPeriodDistributionService>();
 			builder.RegisterType<LoadSchedulingStateHolderForResourceCalculation>().As<ILoadSchedulingStateHolderForResourceCalculation>();
 			builder.RegisterType<LoadSchedulesForRequestWithoutResourceCalculation>().As<ILoadSchedulesForRequestWithoutResourceCalculation>();

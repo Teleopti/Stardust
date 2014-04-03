@@ -1,27 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <Results>
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd0" filename="TeleoptiCccSdkService.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" filename="TeleoptiCccSdkService0.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd2" filename="TeleoptiCccSdkService1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" filename="TeleoptiCccSdkService.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd0" filename="TeleoptiCccSdkService0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" filename="TeleoptiCccSdkService1.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd2" filename="TeleoptiCccSdkService2.xsd" />
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?disco" filename="TeleoptiCccSdkService.disco" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" filename="TeleoptiCccSdkService2.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd4" filename="TeleoptiCccSdkService3.xsd" />
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?wsdl=wsdl0" filename="TeleoptiCccSdkService.wsdl" />
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?wsdl" filename="TeleoptiCccSdkService0.wsdl" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd18" filename="TeleoptiCccSdkService3.xsd" />
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd5" filename="TeleoptiCccSdkService4.xsd" />
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd7" filename="TeleoptiCccSdkService5.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" filename="TeleoptiCccSdkService6.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" filename="TeleoptiCccSdkService7.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" filename="TeleoptiCccSdkService6.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd19" filename="TeleoptiCccSdkService7.xsd" />
     <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd3" filename="TeleoptiCccSdkService8.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd16" filename="TeleoptiCccSdkService9.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd17" filename="TeleoptiCccSdkService10.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" filename="TeleoptiCccSdkService11.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" filename="TeleoptiCccSdkService12.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" filename="TeleoptiCccSdkService13.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" filename="TeleoptiCccSdkService14.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd4" filename="TeleoptiCccSdkService15.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" filename="TeleoptiCccSdkService16.xsd" />
-    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd6" filename="TeleoptiCccSdkService17.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd14" filename="TeleoptiCccSdkService9.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd16" filename="TeleoptiCccSdkService10.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd17" filename="TeleoptiCccSdkService11.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd8" filename="TeleoptiCccSdkService12.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd15" filename="TeleoptiCccSdkService13.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd12" filename="TeleoptiCccSdkService14.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd13" filename="TeleoptiCccSdkService15.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd10" filename="TeleoptiCccSdkService16.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd11" filename="TeleoptiCccSdkService17.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd6" filename="TeleoptiCccSdkService18.xsd" />
   </Results>
 </DiscoveryClientResultsFile>

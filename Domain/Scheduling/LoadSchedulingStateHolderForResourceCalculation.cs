@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			personsToAdd.ForEach(p => _schedulingResultStateHolder.PersonsInOrganization.Add(p));
 
 			var personsProvider = _personProviderMaker.Invoke(_schedulingResultStateHolder.PersonsInOrganization);
-		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+		    var scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(false, false);
 
-			var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period, requestedPersons);
+			 var scheduleDateTimePeriod = new ScheduleDateTimePeriod(new DateTimePeriod(period.StartDateTime.AddDays(-9), period.EndDateTime.AddDays(2)));
 			_schedulingResultStateHolder.Schedules =
 				_scheduleRepository.FindSchedulesForPersons(
 					scheduleDateTimePeriod,
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 			    skills.ForEach(_schedulingResultStateHolder.Skills.Add);
 			}
-
+			
 		    _schedulingResultStateHolder.SkillDays =
 		        _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, scenario);
 		}
