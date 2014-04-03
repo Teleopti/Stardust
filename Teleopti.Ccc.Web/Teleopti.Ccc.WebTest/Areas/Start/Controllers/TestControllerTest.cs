@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var modifyNow = MockRepository.GenerateStrictMock<IMutateNow>();
 			modifyNow.Expect(mock => mock.Mutate(dateSet));
 
-			using (var target = new TestController(modifyNow, null, null, null, null, null))
+			using (var target = new TestController(modifyNow, null, null, null, null, null, null))
 			{
 				target.SetCurrentTime(dateSet.Ticks);
 			}
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
 			var httpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			httpContext.Stub(x => x.Current()).Return(new FakeHttpContext(""));
-			using (var target = new TestController(new MutableNow(), sessionSpecificDataProvider, null, null, null, httpContext))
+			using (var target = new TestController(new MutableNow(), sessionSpecificDataProvider, null, null, null, httpContext, MockRepository.GenerateMock<IFormsAuthentication>()))
 			{
 				target.BeforeScenario(true);
 				target.CorruptMyCookie();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			businessUnitProvider.Stub(x => x.RetrieveBusinessUnitsForPerson(null, null)).IgnoreArguments().Return(new[] { businessUnit });
 			var httpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
 			httpContext.Stub(x => x.Current()).Return(new FakeHttpContext(""));
-			using (var target = new TestController(null, null, authenticator, logon, businessUnitProvider, httpContext))
+			using (var target = new TestController(null, null, authenticator, logon, businessUnitProvider, httpContext, null))
 			{
 				target.Logon(null, businessUnit.Name, null, null);
 			}

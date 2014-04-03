@@ -345,6 +345,11 @@
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIdentityProviderProvider.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
+    <Compile Include="Core\RequestContext\Cookie\AbstractCookieDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\IBaseSessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificForIdentityProviderDataProvider.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />

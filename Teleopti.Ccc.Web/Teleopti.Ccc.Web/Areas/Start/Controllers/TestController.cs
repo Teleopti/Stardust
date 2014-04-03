@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 
 		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
 		{
-			_sessionSpecificDataProvider.ExpireTicket();
+			_sessionSpecificDataProvider.RemoveCookie();
 			_formsAuthentication.SignOut();
 
 			updateIocNow(null);

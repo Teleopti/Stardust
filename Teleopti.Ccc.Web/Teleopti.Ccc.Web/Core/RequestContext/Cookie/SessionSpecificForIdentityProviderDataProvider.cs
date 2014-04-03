@@ -3,10 +3,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 {
-	public class SessionSpecificCookieDataProvider : AbstractCookieDataProvider, ISessionSpecificDataProvider
+	public class SessionSpecificForIdentityProviderDataProvider : AbstractCookieDataProvider, ISessionSpecificForIdentityProviderDataProvider
 	{
-		public SessionSpecificCookieDataProvider(ICurrentHttpContext httpContext,
-			ISessionSpecificCookieDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now,
+		public SessionSpecificForIdentityProviderDataProvider(ICurrentHttpContext httpContext,
+			ISessionSpecificCookieForIdentityProviderDataProviderSettings sessionSpecificCookieDataProviderSettings, INow now,
 			ISessionSpecificDataStringSerializer dataStringSerializer, ISessionAuthenticationModule sessionAuthenticationModule)
 			: base(httpContext, sessionSpecificCookieDataProviderSettings, now, dataStringSerializer, sessionAuthenticationModule
 				)
