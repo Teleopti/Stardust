@@ -3,6 +3,8 @@
 using System;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Secrets.Licensing;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 #endregion
@@ -27,8 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
         /// <remarks>
         /// Created by: Klas
         /// Created date: 2008-12-03
-        /// </remarks>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
+		/// </remarks>
+		[CLSCompliant(false)]
 		public static ILicenseActivator GetLicenseActivator(ILicenseService licenseService)
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");
@@ -38,9 +40,9 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
                                                                       licenseService.MaxActiveAgents,
 																	  licenseService.MaxSeats,
 																	  licenseService.LicenseType,
-                                                                      licenseService.MaxActiveAgentsGrace,
-                                                                      XmlLicenseService.IsThisAlmostTooManyActiveAgents,
-                                                                      XmlLicenseService.IsThisTooManyActiveAgents);
+																																			new Percent(licenseService.MaxActiveAgentsGrace), 
+																																			LicenseActivator.IsThisAlmostTooManyActiveAgents,
+																																			LicenseActivator.IsThisTooManyActiveAgents);
 
             if (licenseService.TeleoptiCccPilotCustomersBaseEnabled)
                 licenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBase);
@@ -112,7 +114,8 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
         /// <summary>
         /// Creates the default license activator.
         /// </summary>
-        /// <param name="licenseService">The license service used</param>
+		/// <param name="licenseService">The license service used</param>
+		[CLSCompliant(false)]
         public static void ProvideLicenseActivator(ILicenseService licenseService)
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");

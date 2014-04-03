@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
     {
         private readonly ILicenseStatusRepositories _licenseStatusRepositories;
 
+		[CLSCompliant(false)]
         public LicenseStatusUpdater(ILicenseStatusRepositories licenseStatusRepositories)
         {
             _licenseStatusRepositories = licenseStatusRepositories;

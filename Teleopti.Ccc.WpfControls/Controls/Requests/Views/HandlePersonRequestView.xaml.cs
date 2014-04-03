@@ -3,15 +3,11 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Windows.Controls.Primitives;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
-using DataGrid = Microsoft.Windows.Controls.DataGrid;
-using DataGridRowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode;
-using DataGridSortingEventArgs = Microsoft.Windows.Controls.DataGridSortingEventArgs;
-using SelectedCellsChangedEventArgs = Microsoft.Windows.Controls.SelectedCellsChangedEventArgs;
 
 
 namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views

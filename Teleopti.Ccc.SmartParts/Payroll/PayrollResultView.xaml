@@ -6,7 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:Payroll="clr-namespace:Teleopti.Ccc.SmartParts.Payroll" 
     xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:GridControl="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit" mc:Ignorable="d" 
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d" 
     d:DesignHeight="200" d:DesignWidth="400"
              
     d:DataContext="{x:Static Payroll:SampleData.PayrollResults}"
@@ -43,13 +43,13 @@
             <TextBlock Text=" "/>
             <TextBlock Text="{Binding Path=Owner}"/>
         </StackPanel>
-        <GridControl:DataGrid  CanUserDeleteRows="False" AutoGenerateColumns="False" ItemsSource="{Binding Path=Details}" Grid.Row="2" VerticalAlignment="Top" VerticalGridLinesBrush="#FFEFE5E5" HorizontalGridLinesBrush="#FFEFE5E5">
-            <GridControl:DataGrid.Columns>
-                <GridControl:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Time}" SortMemberPath="Timestamp" Binding="{Binding Path=Timestamp,Mode=OneWay,Converter={StaticResource dateTimeToLocalConverter}}" Width="Auto"/>
-                <GridControl:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Type}" Binding="{Binding Path=DetailLevel,Mode=OneWay}" Width="Auto"/>
-                <GridControl:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Message}" Binding="{Binding Path=Message,Mode=OneWay}" Width="Auto"/>
-                <GridControl:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.ErrorMessage}" Binding="{Binding Path=ExceptionMessage,Mode=OneWay}" Width="*"/>
-            </GridControl:DataGrid.Columns>
-        </GridControl:DataGrid>
+        <DataGrid  CanUserDeleteRows="False" AutoGenerateColumns="False" ItemsSource="{Binding Path=Details}" Grid.Row="2" VerticalAlignment="Top" VerticalGridLinesBrush="#FFEFE5E5" HorizontalGridLinesBrush="#FFEFE5E5">
+            <DataGrid.Columns>
+                <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Time}" SortMemberPath="Timestamp" Binding="{Binding Path=Timestamp,Mode=OneWay,Converter={StaticResource dateTimeToLocalConverter}}" Width="Auto"/>
+                <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Type}" Binding="{Binding Path=DetailLevel,Mode=OneWay}" Width="Auto"/>
+                <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Message}" Binding="{Binding Path=Message,Mode=OneWay}" Width="Auto"/>
+                <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.ErrorMessage}" Binding="{Binding Path=ExceptionMessage,Mode=OneWay}" Width="*"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </UserControl>

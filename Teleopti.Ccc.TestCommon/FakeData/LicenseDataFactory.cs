@@ -1,6 +1,7 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,11 +19,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// <summary>
         /// Creates the default license activator.
         /// </summary>
-        /// <returns></returns>
+		/// <returns></returns>
+		[CLSCompliant(false)]
         public static ILicenseActivator CreateDefaultLicenseActivatorForTest()
         {
             ILicenseActivator licenseActivator = new LicenseActivator(CustomerName, ExpirationDate, MaxActiveAgents, 100, LicenseType.Agent, MaxActiveAgentsGrace,
-                XmlLicenseService.IsThisAlmostTooManyActiveAgents, XmlLicenseService.IsThisTooManyActiveAgents);
+								XmlLicenseService.IsThisAlmostTooManyActiveAgents, LicenseActivator.IsThisTooManyActiveAgents);
             licenseActivator.EnabledLicenseOptionPaths.Add(AllLicenseOption.FakeOptionPath);
             return licenseActivator;
         }

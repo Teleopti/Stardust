@@ -3,8 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:userTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
     xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
-	xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
-    guiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
+             guiHelpers:HelpProvider.HelpString="Schedule+gridRequests" Loaded="UserControl_Loaded">
 	<UserControl.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -15,7 +14,7 @@
 
 			<Style TargetType="{x:Type Control}" BasedOn="{StaticResource HeaderStyle}" x:Key="RtaSpecialHeaderStyle">
 			</Style>
-			<Style TargetType="{x:Type Controls:DataGridRow}" x:Key="RequestRowStyle">
+			<Style TargetType="{x:Type DataGridRow}" x:Key="RequestRowStyle">
 				<Setter Property="IsEnabled" Value="{Binding Path=IsWithinSchedulePeriod}" />
 				<Setter Property="VerticalContentAlignment" Value="Center"/>
 				<Setter Property="Padding" Value="10,10"/>
@@ -39,7 +38,7 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
-	<Controls:DataGrid ItemsSource="{Binding Path=PersonRequestViewModels}"
+	<DataGrid ItemsSource="{Binding Path=PersonRequestViewModels}"
                        RowDetailsVisibilityMode="Collapsed"
                        IsSynchronizedWithCurrentItem="true"
                        BorderBrush="{StaticResource RaptorStandardGradientBrush}" 
@@ -63,48 +62,48 @@
 					   Sorting="RequestGrid_OnSorting">
 
 
-		<Controls:DataGrid.Columns>
-			<Controls:DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+		<DataGrid.Columns>
+			<DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Width="27"
                                              SortMemberPath="Headers"
                                              x:Name="Headers">
-				<Controls:DataGridTemplateColumn.CellTemplate>
+				<DataGridTemplateColumn.CellTemplate>
 					<DataTemplate>
 						<Expander IsExpanded="False" LostFocus="Expander_LostFocus" Expanded="Expander_Expanded" Collapsed="Expander_Collapsed" MinHeight="22"/>
 					</DataTemplate>
-				</Controls:DataGridTemplateColumn.CellTemplate>
-			</Controls:DataGridTemplateColumn>
+				</DataGridTemplateColumn.CellTemplate>
+			</DataGridTemplateColumn>
 
 
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Date}" 
                                              Width="Auto"
                                              SortMemberPath="RequestedDate" 
                                              Binding="{Binding Path=RequestedDate, Mode=OneWay}">
-			</Controls:DataGridTextColumn>
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Agent}" 
                                              Width="*"
 											 SortMemberPath="Name"
                                              Binding="{Binding Path=Name, Mode=OneWay}"/>
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Seniority}" 
                                              Width="*"
 											 SortMemberPath="Seniority"
                                              Binding="{Binding Path=Seniority, Mode=OneWay}">
-			</Controls:DataGridTextColumn>
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.RequestType}" 
                                              Width="*"
 											 SortMemberPath="RequestType"
                                              Binding="{Binding Path=RequestType, Mode=OneWay}">
-			</Controls:DataGridTextColumn>
+			</DataGridTextColumn>
 
-			<Controls:DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			<DataGridTemplateColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.RequestStatus}" 
                                              Width="*"
                                              SortMemberPath="StatusText">
-				<Controls:DataGridTemplateColumn.CellTemplate>
+				<DataGridTemplateColumn.CellTemplate>
 
 					<DataTemplate>
 
@@ -136,43 +135,43 @@
 
 						</DataTemplate.Triggers>
 					</DataTemplate>
-				</Controls:DataGridTemplateColumn.CellTemplate>
-			</Controls:DataGridTemplateColumn>
+				</DataGridTemplateColumn.CellTemplate>
+			</DataGridTemplateColumn>
 
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Details}" 
                                              Width="2*"
                                              SortMemberPath="Details"
                                              Binding="{Binding Path=Details, Mode=OneWay}">
-			</Controls:DataGridTextColumn>
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Subject}" 
                                              Width="*"
 											 SortMemberPath="Subject"
                                              Binding="{Binding Path=Subject, Mode=OneWay}">
-			</Controls:DataGridTextColumn>
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Message}" 
                                              Width="*"
 											 SortMemberPath="Message"
                                              Binding="{Binding Path=Message, Mode=OneWay}">
-			</Controls:DataGridTextColumn>
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.LastUpdated}" 
                                              Width="*"
                                              SortMemberPath="LastUpdatedDisplay"
                                              Binding="{Binding Path=LastUpdatedDisplay, Mode=OneWay}">
-			</Controls:DataGridTextColumn>
-			<Controls:DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
+			</DataGridTextColumn>
+			<DataGridTextColumn HeaderStyle="{StaticResource RtaSpecialHeaderStyle}"
                                              Header="{x:Static Member=userTexts:Resources.Left}" 
                                              Width="*"
                                              SortMemberPath="Left"
                                              Binding="{Binding Path=Left, Mode=OneWay}">
 
-			</Controls:DataGridTextColumn>
-		</Controls:DataGrid.Columns>
+			</DataGridTextColumn>
+		</DataGrid.Columns>
 
-		<Controls:DataGrid.RowDetailsTemplate>
+		<DataGrid.RowDetailsTemplate>
 			<DataTemplate>
 
 				<!-- MouseLeave -->
@@ -198,6 +197,6 @@
 					</Grid>
 				</Border>
 			</DataTemplate>
-		</Controls:DataGrid.RowDetailsTemplate>
-	</Controls:DataGrid>
+		</DataGrid.RowDetailsTemplate>
+	</DataGrid>
 </UserControl>

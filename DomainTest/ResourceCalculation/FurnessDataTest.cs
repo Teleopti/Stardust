@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.Furness;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {

@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         {
             using (
                 ILicenseService licenseService = new stubStandardLicenseService(_expirationDate, _expirationGracePeriod,
-                                                                                _maxActiveAgentsGrace))
+                                                                                _maxActiveAgentsGrace.Value))
             {
                 _mocks.ReplayAll();
                 ILicenseActivator licenseActivator = LicenseProvider.GetLicenseActivator(licenseService);
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         {
             using (
                 ILicenseService licenseService = new stubFreemiumLicenseService(_expirationDate, _expirationGracePeriod,
-                                                                                _maxActiveAgentsGrace))
+                                                                                _maxActiveAgentsGrace.Value))
             {
                 _mocks.ReplayAll();
                 ILicenseActivator licenseActivator = LicenseProvider.GetLicenseActivator(licenseService);
@@ -86,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             using (
                 ILicenseService licenseService = new stubPilotCustomersLicenseService(_expirationDate,
                                                                                       _expirationGracePeriod,
-                                                                                      _maxActiveAgentsGrace))
+                                                                                      _maxActiveAgentsGrace.Value))
             {
                 _mocks.ReplayAll();
                 ILicenseActivator licenseActivator = LicenseProvider.GetLicenseActivator(licenseService);
@@ -128,7 +129,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         private class stubStandardLicenseService : ILicenseService
         {
             public stubStandardLicenseService(DateTime expirationDate, TimeSpan expirationGracePeriod,
-                                              Percent maxActiveAgentsGrace)
+																							double maxActiveAgentsGrace)
             {
                 CustomerName = customerName;
                 ExpirationDate = expirationDate;
@@ -178,7 +179,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public DateTime ExpirationDate { get; private set; }
             public TimeSpan ExpirationGracePeriod { get; private set; }
             public int MaxActiveAgents { get; private set; }
-            public Percent MaxActiveAgentsGrace { get; private set; }
+						public double MaxActiveAgentsGrace { get; private set; }
 
             public bool IsThisTooManyActiveAgents(int activeAgents)
             {
@@ -238,7 +239,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         private class stubFreemiumLicenseService : ILicenseService
         {
             public stubFreemiumLicenseService(DateTime expirationDate, TimeSpan expirationGracePeriod,
-                                              Percent maxActiveAgentsGrace)
+																							double maxActiveAgentsGrace)
             {
                 CustomerName = customerName;
                 ExpirationDate = expirationDate;
@@ -290,7 +291,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public DateTime ExpirationDate { get; private set; }
             public TimeSpan ExpirationGracePeriod { get; private set; }
             public int MaxActiveAgents { get; private set; }
-            public Percent MaxActiveAgentsGrace { get; private set; }
+            public double MaxActiveAgentsGrace { get; private set; }
 
             public bool IsThisTooManyActiveAgents(int activeAgents)
             {
@@ -351,7 +352,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         private class stubPilotCustomersLicenseService : ILicenseService
         {
             public stubPilotCustomersLicenseService(DateTime expirationDate, TimeSpan expirationGracePeriod,
-                                                    Percent maxActiveAgentsGrace)
+																										double maxActiveAgentsGrace)
             {
                 CustomerName = customerName;
                 ExpirationDate = expirationDate;
@@ -403,7 +404,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public DateTime ExpirationDate { get; private set; }
             public TimeSpan ExpirationGracePeriod { get; private set; }
             public int MaxActiveAgents { get; private set; }
-            public Percent MaxActiveAgentsGrace { get; private set; }
+						public double MaxActiveAgentsGrace { get; private set; }
 
             public bool IsThisTooManyActiveAgents(int activeAgents)
             {

@@ -4,8 +4,8 @@
 
 	<PropertyGroup>
 		<MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
-		<MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
-		<MSBuildExtensionPackPath>$(MSBuildPath)\MSBuild.ExtensionPack</MSBuildExtensionPackPath>
+		<MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
+		<MSBuildExtensionPackPath>$(CCNetWorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40</MSBuildExtensionPackPath>
 		<MSBuildMercurialTasksPath>$(MsBuildPath)\MSBuild.Mercurial</MSBuildMercurialTasksPath>
 		<MSBuildMercurialTasksLib>$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.dll</MSBuildMercurialTasksLib>
 		<MSBuildCommunityTasksLib>$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.dll</MSBuildCommunityTasksLib>
@@ -54,10 +54,10 @@
 	<Import Project="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.tasks"/>
 	<Import Project="$(MSBuildMercurialTasksPath)\MSBuild.Mercurial.Tasks"/>
 
-	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll"/>
-	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\nCover64\Build Task Plugins\NCover.MSBuildTasks.dll" />
+	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll"/>
+	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll" />
 	<UsingTask TaskName="ThrowIfWarning" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\FxCopUgly.dll" />
-	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+	<UsingTask AssemblyFile="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<ItemGroup>
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>

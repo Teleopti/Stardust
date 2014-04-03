@@ -4,9 +4,11 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using System.Globalization;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.Furness;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             double valueDelta = 0.0001;
 
             // 1 iteration 
-            Assert.AreEqual(0.6082, _target.Evaluate(1, 1), valueDelta);
+			Assert.AreEqual(0.6082, _target.Evaluate(1, 1, Variances.StandardDeviation), valueDelta);
             Assert.AreEqual(200, _target.Data.TotalProduction(), valueDelta);
             Assert.AreEqual(1500, _target.Data.TotalProductionDemand(), valueDelta);
             Assert.AreEqual(200, _target.Data.TotalProducerResources(), valueDelta);
@@ -69,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             double timeDelta = 0.01;
             double valueDelta = 0.0001;
 
-            Assert.AreEqual(0.6109, _target.Evaluate(1, 2), valueDelta);
+			Assert.AreEqual(0.6109, _target.Evaluate(1, 2, Variances.StandardDeviation), valueDelta);
             Assert.AreEqual(2, _target.InnerIteration);
             DebugWriteMatrix(_target.Data.ResourceMatrix());
             Assert.AreEqual(12.0, _target.Data.ResourceMatrix()[0, 0], timeDelta);
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyEvaluateIterationsTillStabilization()
         {
-            _target.Evaluate(1, 100);
+		  _target.Evaluate(1, 100, Variances.StandardDeviation);
             Assert.AreEqual(20, _target.InnerIteration);
         }
 

@@ -813,6 +813,7 @@
     <Compile Include="Scheduling\TeamBlock\TwoDaysIntervalGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidatedTeamBlockInfoExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ValidSampleDayPickerFromTeamBlockTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\VisualLayerToBaseDateMapperTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftLengthValueCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftPeriodValueCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftCalculation\WorkShiftSelectorTest.cs" />
@@ -1192,6 +1193,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
       <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
       <Name>Teleopti.Ccc.Obfuscated</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
+      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
+      <Name>Teleopti.Ccc.Secrets</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

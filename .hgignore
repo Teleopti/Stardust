@@ -35,6 +35,7 @@ _ReSharper*/
 *.[Pp]ublish.xml
 TeleOpti.Messaging.Bin/
 *.jtconfig
+*.sln
 
 # VS 2012 on old branches
 Backup/

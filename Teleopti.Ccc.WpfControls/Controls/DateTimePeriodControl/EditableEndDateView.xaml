@@ -3,7 +3,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
-    xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
     xmlns:Common="clr-namespace:Teleopti.Ccc.WpfControls.Common"
                  xmlns:guiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode">
     <UserControl.Resources>
@@ -13,22 +12,22 @@
     </UserControl.Resources>
    
         <!--Using DatePicker-->
-		<Controls:DatePicker 
+		<DatePicker 
 								 Common:DatePickerExtensions.IncrementMode="FullIncrement"
 								 TextBoxBase.TextChanged="DatePicker_TextChanged"
 								 DisplayDateStart="{Binding Path=Min}"
 								 DisplayDateEnd="{Binding Path=Max}"
 								 x:Name="endDatePicker" x:FieldModifier="private">
-			<Controls:DatePicker.SelectedDate>
+			<DatePicker.SelectedDate>
 				<MultiBinding Converter="{StaticResource endDateTimeToLocalConverter}" Mode="TwoWay">
 					<MultiBinding.Bindings>
 					<Binding Path="End"/>
 						<Binding RelativeSource="{RelativeSource Self}" Path="(guiHelpers:VisualTreeTimeZoneInfo.TimeZoneInfo)"/>
 					</MultiBinding.Bindings>
 				</MultiBinding>
-			</Controls:DatePicker.SelectedDate>
+			</DatePicker.SelectedDate>
 
-	</Controls:DatePicker>
+	</DatePicker>
 	<!--<Controls:DatePicker SelectedDate="{Binding Path=End, Mode=TwoWay,Converter={StaticResource endDateTimeToLocalConverter}}" 
                              Common:DatePickerExtensions.IncrementMode="FullIncrement"
                               TextBoxBase.TextChanged="DatePicker_TextChanged"

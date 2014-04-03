@@ -112,6 +112,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             }
         }
 
+		[Test]
+		public void ShouldReturnEmptyIntervalDataListIfEmptySkillIntervalDataList()
+		{
+			var result = _target.SplitSkillIntervalData(new List<IOvertimeSkillIntervalData>(), 15);
+			Assert.AreEqual(0, result.Count);
+		}
+
         private static OvertimeSkillIntervalData createSkillIntervalData(int startMin, int endMin, double relativeDifference)
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();

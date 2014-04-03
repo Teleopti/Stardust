@@ -6,11 +6,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
+	[CLSCompliant(false)]
     public interface IMedianCalculatorForSkillInterval
-    {
+	{
+		[CLSCompliant(false)]
         ISkillIntervalData CalculateMedian(TimeSpan timeSpan, IList<ISkillIntervalData> skillIntervalData, double resolution, DateTime baseDate);
     }
 
+	[CLSCompliant(false)]
     public class MedianCalculatorForSkillInterval : IMedianCalculatorForSkillInterval 
     {
         private readonly IIntervalDataCalculator _intervalDataCalculator;
@@ -20,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _intervalDataCalculator = intervalDataCalculator;
         }
 
+		[CLSCompliant(false)]
         public ISkillIntervalData CalculateMedian(TimeSpan timeSpan, IList<ISkillIntervalData> skillIntervalDataList, double resolution, DateTime baseDate)
         {
             var forecastedDemands = new List<double>();

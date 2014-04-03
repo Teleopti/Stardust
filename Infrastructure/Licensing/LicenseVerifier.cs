@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Xml;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 		    _licenseRepository = licenseRepository;
 		}
 
+		[CLSCompliant(false)]
 		public ILicenseService LoadAndVerifyLicense()
 		{
 			using (PerformanceOutput.ForOperation("Verifying license"))
@@ -89,10 +91,11 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 								 e.NumberOfLicensed);
 		}
 
+		[CLSCompliant(false)]
 		protected virtual ILicenseService XmlLicenseService()
 		{
             //dont' check the use of agent here now
-			return new XmlLicenseService(_licenseRepository, 0);
+			return new XmlLicenseServiceFactory().Make(_licenseRepository, 0);
 		}
 	}
 }

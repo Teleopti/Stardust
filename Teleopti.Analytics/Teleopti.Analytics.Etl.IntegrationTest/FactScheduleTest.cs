@@ -33,6 +33,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		}
 
 		[Test]
+		[Ignore]
 		public void ShouldWorkWithOverlappingShifts()
 		{
 			var today = TimeZoneInfo.Local.IsDaylightSavingTime(DateTime.Today.AddDays(0));

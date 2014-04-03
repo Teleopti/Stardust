@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon;
 
 #endregion
@@ -11,7 +12,8 @@ using Teleopti.Ccc.TestCommon;
 namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
     [TestFixture]
-    [Category("LongRunning")]
+	[Category("LongRunning")]
+	[CLSCompliant(false)]
     public class TooManyActiveAgentsExceptionTest : ExceptionTest<TooManyActiveAgentsException>
     {
         /// <summary>
@@ -23,7 +25,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         /// <remarks>
         /// Created by: Klas
         /// Created date: 2008-11-18
-        /// </remarks>
+		/// </remarks>
+		[CLSCompliant(false)]
         protected override TooManyActiveAgentsException CreateTestInstance(string message, Exception innerException)
         {
             return new TooManyActiveAgentsException(message, innerException);
@@ -37,7 +40,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         /// <remarks>
         /// Created by: Klas
         /// Created date: 2008-11-18
-        /// </remarks>
+		/// </remarks>
+		[CLSCompliant(false)]
         protected override TooManyActiveAgentsException CreateTestInstance(string message)
         {
             return new TooManyActiveAgentsException(message);

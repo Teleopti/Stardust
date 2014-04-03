@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Xml;
 using System.Xml.Linq;
 using Teleopti.Ccc.Obfuscated.Security;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing

@@ -10,7 +10,8 @@
              xmlns:Payroll="clr-namespace:Teleopti.Ccc.SmartParts.Payroll" 
              xmlns:Payroll1="clr-namespace:Teleopti.Ccc.Domain.Payroll;assembly=Teleopti.Ccc.Domain" 
              xmlns:DateTimeConverter="clr-namespace:Teleopti.Ccc.WinCode.Converters.DateTimeConverter;assembly=Teleopti.Ccc.WinCode"
-             xmlns:PayrollExportSmartPart="clr-namespace:Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;assembly=Teleopti.Ccc.WinCode" xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit" xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode" xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" xmlns:Domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:PayrollExportSmartPart="clr-namespace:Teleopti.Ccc.WinCode.Payroll.PayrollExportPages.PayrollExportSmartPart;assembly=Teleopti.Ccc.WinCode" 
+				 xmlns:Commands="clr-namespace:Teleopti.Ccc.WinCode.Common.Commands;assembly=Teleopti.Ccc.WinCode" xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts" xmlns:Domain="clr-namespace:Teleopti.Interfaces.Domain;assembly=Teleopti.Interfaces" Background="White" xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
                  xmlns:GuiHelpers="clr-namespace:Teleopti.Ccc.WinCode.Common.GuiHelpers;assembly=Teleopti.Ccc.WinCode"
     GuiHelpers:HelpProvider.HelpString="PayrollExort+Prepare" Loaded="UserControl_Loaded">
 
@@ -68,28 +69,28 @@
         </Grid.RowDefinitions>
 
         <Border Padding="3" Grid.Row="0">
-        <Controls:DataGrid CanUserDeleteRows="False"  AutoGenerateColumns="False" Name="exports" ItemsSource="{Binding Path=PayrollResults.View}" 
+        <DataGrid CanUserDeleteRows="False"  AutoGenerateColumns="False" Name="exports" ItemsSource="{Binding Path=PayrollResults.View}" 
                            VerticalAlignment="Top" VerticalGridLinesBrush="#FFEFE5E5" HorizontalGridLinesBrush="#FFEFE5E5" IsSynchronizedWithCurrentItem="True">
-            <Controls:DataGrid.Columns>
-                    <Controls:DataGridTemplateColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Status}" CanUserSort="False">
-                        <Controls:DataGridTemplateColumn.CellTemplate>
+            <DataGrid.Columns>
+                    <DataGridTemplateColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Status}" CanUserSort="False">
+                        <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ContentControl Content="{Binding Path=Status}"/>
                             </DataTemplate>
-                        </Controls:DataGridTemplateColumn.CellTemplate>
-                    </Controls:DataGridTemplateColumn>
-                    <Controls:DataGridTemplateColumn HeaderStyle="{StaticResource HeaderStyle}" Header="" SortMemberPath="Progress.Percentage" CanUserSort="True" Width="*">
-                        <Controls:DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn HeaderStyle="{StaticResource HeaderStyle}" Header="" SortMemberPath="Progress.Percentage" CanUserSort="True" Width="*">
+                        <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <ContentControl Content="{Binding Path=Progress}"/>
                             </DataTemplate>
-                        </Controls:DataGridTemplateColumn.CellTemplate>
-                    </Controls:DataGridTemplateColumn>
-                    <Controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Information}"  Binding="{Binding Path=Progress.Message, Mode=OneWay}" CanUserSort="True" Width="*"/>
-                    <Controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.CreatedBy}"  Binding="{Binding Path=Owner,Mode=OneWay}" CanUserSort="True" Width="*"/>
-                    <Controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.CreatedDate}" Binding="{Binding Path=Timestamp,Mode=OneWay,Converter={StaticResource dateTimeToLocalConverter}}" CanUserSort="True" Width="*"/>
-                </Controls:DataGrid.Columns>
-        </Controls:DataGrid>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.Information}"  Binding="{Binding Path=Progress.Message, Mode=OneWay}" CanUserSort="True" Width="*"/>
+                    <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.CreatedBy}"  Binding="{Binding Path=Owner,Mode=OneWay}" CanUserSort="True" Width="*"/>
+                    <DataGridTextColumn HeaderStyle="{StaticResource HeaderStyle}" Header="{x:Static UserTexts:Resources.CreatedDate}" Binding="{Binding Path=Timestamp,Mode=OneWay,Converter={StaticResource dateTimeToLocalConverter}}" CanUserSort="True" Width="*"/>
+                </DataGrid.Columns>
+        </DataGrid>
         </Border>
         <Border Grid.Row="1" Padding="3" Style="{StaticResource detailedInfo}">
             <Grid>

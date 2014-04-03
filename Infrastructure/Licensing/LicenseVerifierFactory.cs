@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -8,6 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 	// "#¤%"#¤"#¤"#¤"#¤ static data
 	public class LicenseVerifierFactory : ILicenseVerifierFactory
 	{
+		[CLSCompliant(false)]
 		public ILicenseVerifier Create(ILicenseFeedback licenseFeedback, 
 										IUnitOfWorkFactory unitOfWorkFactory)  
 		{

@@ -2,9 +2,9 @@
 using System.Globalization;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
-using Microsoft.Windows.Controls;
-using Microsoft.Windows.Controls.Primitives;
 
 namespace Teleopti.Ccc.WpfControls.Common
 {

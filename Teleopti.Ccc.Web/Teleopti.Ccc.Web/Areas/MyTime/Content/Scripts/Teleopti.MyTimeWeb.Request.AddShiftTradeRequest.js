@@ -136,12 +136,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
         self.requestedDate = ko.computed({
         	read: function () {
+                return self.requestedDateInternal();
+            },
+        	write: function (value) {
         		//remove old layer's tooltip if it still exist
         		$("[class='tooltip fade top in']").remove();
         		
-                return self.requestedDateInternal();
-            },
-            write: function (value) {
                 if (self.requestedDateInternal().diff(value) == 0) return;
                 self.prepareLoad();
                 self.requestedDateInternal(value);
@@ -202,7 +202,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
                     if (!data) {
                         self.myTeamId(undefined);
                         self.missingMyTeam(true);
-                        self.setScheduleLoadedReady();
                         self.isReadyLoaded(true);
                         return;
                     }
@@ -268,7 +267,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 						self.requestedDate(requestedDate);
 					}
 					else {
-					    self.setScheduleLoadedReady();
 					    self.isReadyLoaded(true);
 					}
 					self.missingWorkflowControlSet(!data.HasWorkflowControlSet);
@@ -304,7 +302,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				    });
 					
 				    self._createPossibleTradeSchedules(self.possibleTradeSchedulesRaw);
-					self.setScheduleLoadedReady();
 					self.isReadyLoaded(true);
 				},
 				error: function(e) {
@@ -328,12 +325,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self.previousDate = function () {
 		    self.changeRequestedDate(-1);
-		};
-
-		self.loadedDateSwedishFormat = ko.observable();
-
-		self.setScheduleLoadedReady = function () {
-			self.loadedDateSwedishFormat(moment(self.requestedDate()).format('YYYY-MM-DD'));
 		};
 	}
 
@@ -362,10 +353,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify({
-			    Date: viewModel.requestedDateInternal().toDate().toJSON(),
-			    Subject: viewModel.subject(),
-			    Message: viewModel.message(),
-			    PersonToId: viewModel.agentChoosed().personId
+				Date: viewModel.requestedDateInternal().format($('#Request-detail-datepicker-format').val().toUpperCase()),
+				Subject: viewModel.subject(),
+				Message: viewModel.message(),
+				PersonToId: viewModel.agentChoosed().personId
 			}),
 			success: function (data) {
 			    viewModel.agentChoosed(null);
@@ -398,10 +389,9 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function _hideShiftTradeWindow() {
 		$('#Request-add-shift-trade').hide();
 	}
-
+	
 	function setShiftTradeRequestDate(date) {
 	    vm.isReadyLoaded(false);
-		vm.loadedDateSwedishFormat(null); //make sure scenarios wait until requested date is bound
 		vm.requestedDate(moment(date));
 	    return vm.requestedDate().format('YYYY-MM-DD');
 	}

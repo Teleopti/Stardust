@@ -248,6 +248,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.IsEditable(data.Link.Methods.indexOf("PUT") != -1);
 	        self.isCreatedByUser(data.IsCreatedByUser);
 	        self.isReferred(data.IsReferred);
+	        self.IsSelected(false);
             if (data.TypeEnum == 2 && !data.IsCreatedByUser) self.CanDelete(false);
         }
     });

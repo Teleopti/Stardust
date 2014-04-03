@@ -25,91 +25,70 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			DataMaker.Data().Apply(new ExistingDeniedAbsenceRequest());
 		}
 
-		[When(@"I click the absence request's delete button for request at position '(.*)' in the list")]
-		public void WhenIClickTheAbsenceRequestSDeleteButtonForRequestAtPositionInTheList(int position)
-		{
-			Browser.Interactions.Click(string.Format(".request-body:nth-child({0}) .request-delete", position));
-		}
-
 		[When(@"I change the absence request values with")]
 		public void WhenIChangeTheAbsenceRequestValuesWith(Table table)
 		{
-			var absence = table.Rows[1][1];
-			var subject = table.Rows[2][1];
-			var position = table.Rows[0][1];
+			var absence = table.Rows[0][1];
+			var subject = table.Rows[1][1];
 
-			Browser.Interactions.SelectOptionByTextUsingJQuery(
-				string.Format(".request:nth-child({0}) .request-edit-absence", position), absence);
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(
-				string.Format(".request:nth-child({0}) .request-edit-subject", position), subject);
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".request .request-edit-absence", absence);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request .request-edit-subject", subject);
 		}
 
-		[Then(@"I should see the updated absence request values in the list with")]
-		public void ThenIShouldSeeTheUpdatedAbsenceRequestValuesInTheListWith(Table table)
+		[Then(@"I should see the updated values for the existing absence request in the list with")]
+		public void ThenIShouldSeeTheUpdatedValuesForTheExistingAbsenceRequestInTheListWith(Table table)
 		{
-			var absence = table.Rows[1][1];
-			var subject = table.Rows[2][1];
-			var position = table.Rows[0][1];
+			var absence = table.Rows[0][1];
+			var subject = table.Rows[1][1];
 
-			Browser.Interactions.AssertNotExists(string.Format(".request-body:nth-child({0})", position), string.Format(".request-body:nth-child({0})", position + 1));
-			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
-			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-type", position), absence);
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-subject", subject);
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-type", absence);
 		}
 
-		[Then(@"I should not be able to input values for absence request at position '(.*)' in the list")]
-		public void ThenIShouldNotBeAbleToInputValuesForAbsenceRequestAtPositionInTheList(int position)
+		[Then(@"I should not be able to edit the values for the existing absence request")]
+		public void ThenIShouldNotBeAbleToEditTheValuesForTheExistingAbsenceRequest()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".request:nth-child({0}) .request-edit-subject", position));
-
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-absence:not(:enabled)", position));
-
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-datefrom:not(:enabled)", position));
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-timefrom:not(:enabled)", position));
-
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-dateto:not(:enabled)", position));
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-timeto:not(:enabled)", position));
-
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-fullday:not(:enabled)", position));
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".request .request-edit-subject");
+			Browser.Interactions.AssertExists(".request .request-edit-absence:not(:enabled)");
+			Browser.Interactions.AssertExists(".request .request-edit-datefrom:not(:enabled)");
+			Browser.Interactions.AssertExists(".request .request-edit-timefrom:not(:enabled)");
+			Browser.Interactions.AssertExists(".request .request-edit-dateto:not(:enabled)");
+			Browser.Interactions.AssertExists(".request .request-edit-timeto:not(:enabled)");
+			Browser.Interactions.AssertExists(".request .request-edit-fullday:not(:enabled)");
 		}
 
-		[Then(@"I should see the absence request containing '(.*)' at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheAbsenceRequestContainingAtPositionInTheList(string absence, int position)
+		[Then(@"I should see the absence request containing '(.*)' in the list")]
+		public void ThenIShouldSeeTheAbsenceRequestContainingInTheList(string absence)
 		{
 			Browser.Interactions.AssertExists(".request-body");
-			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-type", position), absence);
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-type", absence);
 		}
 
-		[Then(@"I should see the absence request's values at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheAbsenceRequestSValuesAtPositionInTheList(int position)
+		[Then(@"I should see the values of the absence request")]
+		public void ThenIShouldSeeTheValuesOfTheAbsenceRequest()
 		{
 			var request = DataMaker.Data().UserData<ExistingAbsenceRequest>();
 
 			var firstFiftyCharsOfMessage = request.PersonRequest.GetMessage(new NoFormatting()).Substring(0, 50);
 
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
-				request.PersonRequest.GetSubject(new NoFormatting()));
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-message", position),
-				firstFiftyCharsOfMessage);
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-subject", request.PersonRequest.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-message", firstFiftyCharsOfMessage);
 
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-type", position),
-				request.AbsenceRequest.Absence.Description.Name);
-			
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-type", request.AbsenceRequest.Absence.Description.Name);
 
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(
+				                                         DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(
+				                                         DataMaker.Data().MyCulture));
+
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(
+				                                         DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(
+				                                         DataMaker.Data().MyCulture));
 		}
 
 		[Given(@"I have a denied absence request beacuse of missing workflow control set")]

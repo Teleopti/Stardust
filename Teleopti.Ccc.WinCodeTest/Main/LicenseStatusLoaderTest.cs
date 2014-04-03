@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Licensing;
+using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.WinCode.Main;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;

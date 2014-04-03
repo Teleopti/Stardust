@@ -1,8 +1,6 @@
 ﻿<UserControl x:Class="Teleopti.Analytics.Etl.ConfigTool.Gui.Control.ManualControl"
 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"    
-    
-xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
 >
 
 	<StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
@@ -20,11 +18,11 @@ xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date from</Label>
-							<Controls:DatePicker Name="FromDatePickerInitial"/>
+							<DatePicker Name="FromDatePickerInitial"/>
 						</StackPanel>
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date to</Label>
-							<Controls:DatePicker  Name="ToDatePickerInitial" />
+							<DatePicker  Name="ToDatePickerInitial" />
 						</StackPanel>
 					</StackPanel>
 				</GroupBox>
@@ -37,11 +35,11 @@ xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date from</Label>
-							<Controls:DatePicker  Name="FromDatePickerQueueStats" />
+							<DatePicker  Name="FromDatePickerQueueStats" />
 						</StackPanel>
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date to</Label>
-							<Controls:DatePicker  Name="ToDatePickerQueueStats" />
+							<DatePicker  Name="ToDatePickerQueueStats" />
 						</StackPanel>
 					</StackPanel>
 				</GroupBox>
@@ -54,11 +52,11 @@ xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date from</Label>
-							<Controls:DatePicker  Name="FromDatePickerAgentStats" />
+							<DatePicker  Name="FromDatePickerAgentStats" />
 						</StackPanel>
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date to</Label>
-							<Controls:DatePicker  Name="ToDatePickerAgentStats" />
+							<DatePicker  Name="ToDatePickerAgentStats" />
 						</StackPanel>
 					</StackPanel>
 				</GroupBox>
@@ -73,11 +71,11 @@ xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date from</Label>
-							<Controls:DatePicker  Name="FromDatePickerSchedule" />
+							<DatePicker  Name="FromDatePickerSchedule" />
 						</StackPanel>
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date to</Label>
-							<Controls:DatePicker  Name="ToDatePickerSchedule" />
+							<DatePicker  Name="ToDatePickerSchedule" />
 						</StackPanel>
 					</StackPanel>
 				</GroupBox>
@@ -90,11 +88,11 @@ xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
 					<StackPanel Orientation="Horizontal">
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date from</Label>
-							<Controls:DatePicker  Name="FromDatePickerForecast" />
+							<DatePicker  Name="FromDatePickerForecast" />
 						</StackPanel>
 						<StackPanel Width="150" Margin="10" VerticalAlignment="Top">
 							<Label>Date to</Label>
-							<Controls:DatePicker  Name="ToDatePickerForecast" />
+							<DatePicker  Name="ToDatePickerForecast" />
 						</StackPanel>
 					</StackPanel>
 				</GroupBox>

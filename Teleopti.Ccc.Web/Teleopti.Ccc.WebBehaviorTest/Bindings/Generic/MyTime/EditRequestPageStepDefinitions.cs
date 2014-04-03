@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.TestCommon;
@@ -21,8 +20,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotExists(".text-request-add", ".absence-request-add");
 		}
 
-		[Then(@"I should not see the New Shift Trade Request menu item")]
-		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
+		[Then(@"I should not be able to make a new shift trade request")]
+		public void ThenIShouldNotBeAbleToMakeANewShiftTradeRequest()
 		{
 			Browser.Interactions.AssertNotExists(".text-request-add", ".shifttrade-request-add");
 		}
@@ -63,18 +62,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 				Browser.Interactions.Click("#Request-add-section .request-new-fullday");
 		}
 
-		[Then(@"I should not be able to input values for text request at position '(.*)' in the list")]
-		public void ThenIShouldNotBeAbleToInputValuesForTextRequestAtPositionInTheList(int position)
+		[Then(@"I should not be able to edit the values for the existing text request")]
+		public void ThenIShouldNotBeAbleToEditTheValuesForTheExistingTextRequest()
 		{
-			Browser.Interactions.AssertNotVisibleUsingJQuery(string.Format(".request:nth-child({0}) .request-edit-subject", position));
- 
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-datefrom:not(:enabled)", position));
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-timefrom:not(:enabled)", position));
+			Browser.Interactions.AssertNotVisibleUsingJQuery(".request .request-edit-subject");
 
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-dateto:not(:enabled)", position));
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-timeto:not(:enabled)", position));
+			Browser.Interactions.AssertExists(".request .request-edit-datefrom:not(:enabled)");
+			Browser.Interactions.AssertExists(".request .request-edit-timefrom:not(:enabled)");
 
-			Browser.Interactions.AssertExists(string.Format(".request:nth-child({0}) .request-edit-fullday:not(:enabled)", position));
+			Browser.Interactions.AssertExists(".request .request-edit-dateto:not(:enabled)");
+			Browser.Interactions.AssertExists(".request .request-edit-timeto:not(:enabled)");
+
+			Browser.Interactions.AssertExists(".request .request-edit-fullday:not(:enabled)");
 		}
 
 		[Then(@"I should see (.*) - (.*) as the default times")]
@@ -123,10 +122,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertInputValueUsingJQuery("#Request-add-section .request-new-dateto", date.ToShortDateString(DataMaker.Data().MyCulture));
 		}
 
-		[Then(@"I should see the detail form for request at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheDetailFormForRequestAtPositionInTheList(int position)
+		[Then(@"I should see the detail form for the existing request in the list")]
+		public void ThenIShouldSeeTheDetailFormForTheExistingRequestInTheList()
 		{
-			Browser.Interactions.AssertVisibleUsingJQuery(string.Format(".request-edit:lt({0})", position));
+			Browser.Interactions.AssertVisibleUsingJQuery(".request-edit");
 		}
 
 		[Then(@"I should see the add text request form")]
@@ -153,16 +152,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".overtime-availability-add");
 		}
 
-		[Then(@"I should see that request at position '(.*)' in the list was denied with reason '(.*)'")]
-		public void ThenIShouldSeeThatRequestAtPositionInTheListWasDeniedWithReason(int position, string reason)
+		[Then(@"I should see that the request was denied with reason '(.*)'")]
+		public void ThenIShouldSeeThatTheRequestWasDeniedWithReason(string reason)
 		{
-			Browser.Interactions.AssertFirstContains(string.Format(".request:nth-child({0}) .request-denyreason", position), reason);
+			Browser.Interactions.AssertFirstContains(".request .request-denyreason", reason);
 		}
 
 		[Then(@"I should see request form with subject '(.*)'")]
 		public void ThenIShouldSeeRequestFormWithSubject(string subject)
 		{
 			Browser.Interactions.AssertInputValueUsingJQuery("#Schedule-addRequest-subject-input", subject);
+		}
+
+		[When(@"I delete the existing request in the list")]
+		public void WhenIDeleteTheExistingRequestInTheList()
+		{
+			Browser.Interactions.Click(".request-list .request .request-delete");
 		}
 
 		[When(@"I change absence to '(.*)'")]
