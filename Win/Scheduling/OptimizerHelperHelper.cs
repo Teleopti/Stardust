@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;

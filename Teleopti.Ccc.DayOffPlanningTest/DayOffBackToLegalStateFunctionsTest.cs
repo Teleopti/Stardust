@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
