@@ -2323,15 +2323,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to At least one day cannot be scheduled.
-        /// </summary>
-        public static string AtLeastOneDayCannotBeScheduled {
-            get {
-                return ResourceManager.GetString("AtLeastOneDayCannotBeScheduled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Time ahead of activity change to alert agent (seconds).
         /// </summary>
         public static string ASMTimeAheadOfActivityChangeToAlert {
@@ -2346,6 +2337,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AssignmentOptions {
             get {
                 return ResourceManager.GetString("AssignmentOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At least one day cannot be scheduled.
+        /// </summary>
+        public static string AtLeastOneDayCannotBeScheduled {
+            get {
+                return ResourceManager.GetString("AtLeastOneDayCannotBeScheduled", resourceCulture);
             }
         }
         
@@ -22395,6 +22395,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign in as another user.
+        /// </summary>
+        public static string SignInAsAnotherUser {
+            get {
+                return ResourceManager.GetString("SignInAsAnotherUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Single Agent Team.
         /// </summary>
         public static string SingleAgentTeam {
@@ -24791,7 +24800,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total out of adherence:.
+        ///   Looks up a localized string similar to Out of adherence:.
         /// </summary>
         public static string TotalOutOfAdherenceColon {
             get {

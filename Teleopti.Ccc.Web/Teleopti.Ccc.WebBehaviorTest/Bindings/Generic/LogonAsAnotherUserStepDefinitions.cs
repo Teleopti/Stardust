@@ -9,8 +9,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should not be able to logon as another user")]
 		public void ThenIShouldNotBeAbleToLogonAsAnotherUser()
 		{
-			Browser.Interactions.AssertNotExists("#regional-settings", "#logon-as-another");
+			Browser.Interactions.AssertNotExists("#regional-settings", "#signin-as-another");
 		}
+
+		[When(@"I choose to logon as another user")]
+		public void WhenIChooseToLogonAsAnotherUser()
+		{
+		}
+
+		[When(@"I choose teleopti identity provider")]
+		public void WhenIChooseTeleoptiIdentityProvider()
+		{
+		}
+
 
 	}
 }
