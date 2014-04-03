@@ -416,6 +416,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<TeamBlockIncludedWorkShiftRuleFilter>().As<ITeamBlockIncludedWorkShiftRuleFilter>();
 			builder.RegisterType<RuleSetSkillActivityChecker>().As<IRuleSetSkillActivityChecker>();
 			//IRuleSetSkillActivityChecker
+        }
 		private static void registerWeeklyRestSolverClasses(ContainerBuilder builder)
 	    {
 			builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
