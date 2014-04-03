@@ -153,6 +153,7 @@ XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiCCC7Agg_Demo.BAK" "%WI
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\ReportViewer2010.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\RegisterEventLogSource.exe" "%WISESOURCEFILE%\Wise\ccc7_server\Logs\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\ntrights.exe" "%WISESOURCEFILE%\Wise\ccc7_server\Logs\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\ntrights.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
 XCOPY "%DEPENDENCIESSRC%\ccc7_server\sqlio.exe" "%WISESOURCEFILE%\SupportTools\SQLServerPerformance\SQLIO\" /D /Y
 
 ::WISE
