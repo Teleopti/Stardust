@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <returns></returns>
         protected override IActivity CreateAggregateWithCorrectBusinessUnit()
         {
-            IActivity act = new Activity("roger"){DisplayColor = Color.White};
+			var act = new Activity("roger") { DisplayColor = Color.White };
             act.RequiresSkill = false;
             return act;
         }

@@ -2,9 +2,10 @@
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 {
-    public  class WorkShiftCalculationResultHolder : IWorkShiftCalculationResultHolder
+    public  class WorkShiftCalculationResult : IWorkShiftCalculationResultHolder
     {
         public double Value { get; set; }
-        public IShiftProjectionCache ShiftProjection { get; set; }
+		public IShiftProjectionCache ShiftProjection { get; set; }
+	    public IWorkShiftCalculatableProjection ShiftProjection2 { get { return ShiftProjection; } }
     }
 }

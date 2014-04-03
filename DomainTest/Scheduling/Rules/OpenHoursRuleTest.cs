@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateCompleteAssignmentWithinOpenHours()
         {
-        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
 			var type = SkillTypeFactory.CreateSkillType();
         	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateActivityStartingBeforeOpenHours()
         {
-        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
             
 			var type = SkillTypeFactory.CreateSkillType();
@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateNotRequiresSkillActivityStartingBeforeOpenHours()
         {
-        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = false;
               
             var period = new DateTimePeriod(_date, _date.AddMinutes(30));
@@ -209,11 +209,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyValidateActivityWithNoSkill()
         {
-        	IActivity activity = ActivityFactory.CreateActivity("Activity1");
+			var activity = ActivityFactory.CreateActivity("Activity1");
 			activity.RequiresSkill = true;
 			var type = SkillTypeFactory.CreateSkillType();
 
-        	IActivity activity2 = ActivityFactory.CreateActivity("Activity2");
+        	var activity2 = ActivityFactory.CreateActivity("Activity2");
 			activity2.RequiresSkill = false;
         	ISkill skill = SkillFactory.CreateSkill("Skill1", type, 15);
 			skill.Activity = activity2;
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void WhenAgentHasNoSkillsRuleReportsError()
         {
-        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
            IList<IPersonSkill> personSkills = new List<IPersonSkill> ();
 
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void WhenNoSkillStaffPeriodsRuleReportsError()
         {
-        	IActivity activity = ActivityFactory.CreateActivity("adf");
+			var activity = ActivityFactory.CreateActivity("adf");
 			activity.RequiresSkill = true;
 			var type = SkillTypeFactory.CreateSkillType();
         	ISkill skill = SkillFactory.CreateSkill("aslfm", type, 15);

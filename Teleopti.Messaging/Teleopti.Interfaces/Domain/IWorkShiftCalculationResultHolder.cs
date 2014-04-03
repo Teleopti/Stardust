@@ -1,10 +1,12 @@
 ﻿
+using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// 
     /// </summary>
-    public interface IWorkShiftCalculationResultHolder
+	public interface IWorkShiftCalculationResultHolder : IImprovableWorkShiftCalculation
     {
         /// <summary>
         /// Gets or sets the value.

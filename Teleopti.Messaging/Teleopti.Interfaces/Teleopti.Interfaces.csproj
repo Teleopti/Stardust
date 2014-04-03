@@ -111,6 +111,7 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
+    <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
     <Compile Include="Domain\IAggregateRootBrokerConditions.cs" />
@@ -346,8 +347,6 @@
     <Compile Include="Domain\IVirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="Domain\IVirtualSkillHelper.cs" />
     <Compile Include="Domain\IWorkflowControlSet.cs" />
-    <Compile Include="Domain\IWorkShiftCalculator.cs" />
-    <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
@@ -585,7 +584,6 @@
     <Compile Include="Domain\DateScenarioPersonId.cs" />
     <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
-    <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />
     <Compile Include="Domain\IReplyOptionsSource.cs" />
     <Compile Include="Domain\IReplyOptionTarget.cs" />
