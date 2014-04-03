@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public IList<IOvertimeSkillIntervalData> SplitSkillIntervalData(IList<IOvertimeSkillIntervalData> skillIntervalDataList, int resolution)
         {
             var resultingskillIntervalDataList = new List<IOvertimeSkillIntervalData>();
-            if (skillIntervalDataList != null)
+            if (skillIntervalDataList != null && skillIntervalDataList.Count > 0)
             {
                 var modDiffInMin = (skillIntervalDataList[0].Period.EndDateTime.Minute -
                                     skillIntervalDataList[0].Period.StartDateTime.Minute) % resolution;

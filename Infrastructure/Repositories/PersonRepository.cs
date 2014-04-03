@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -553,6 +554,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                             throw new InvalidDataException("lazy load elände");
                         if (pSkill.Skill.Activity.Name == "xyyyxxxyyyyx")
 							throw new InvalidDataException("lazy load elände");
+
+						if (!LazyLoadingManager.IsInitialized(pSkill.Skill.SkillType))
+							LazyLoadingManager.Initialize(pSkill.Skill.SkillType);
 					}
 				}
 			}
