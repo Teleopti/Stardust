@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		});
 
 		this.showTeamPicker = ko.computed(function () {
-			return self.availableTeams().length >= 1;
+			return self.availableTeams().length > 1;
 		});
 
 		this.nextDay = function () {
