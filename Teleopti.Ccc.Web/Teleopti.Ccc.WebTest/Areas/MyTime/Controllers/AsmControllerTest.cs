@@ -4,6 +4,8 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
@@ -26,10 +28,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var asmViewModel = new AsmViewModel {Layers = new List<AsmLayer> {new AsmLayer {Payload = payload}}};
 			asmModelFactory.Expect(fac => fac.CreateViewModel(asmZero)).Return(asmViewModel);
 
-			using (var controller = new AsmController(asmModelFactory, layoutFactory))
+			using (var controller = new AsmController(asmModelFactory, layoutFactory,null))
 			{
 				var model = controller.Today(asmZero);
 				((AsmViewModel)model.Data).Layers.First().Payload.Should().Be.EqualTo(payload);
+			}
+		}
+
+		[Test]
+		public void ShouldRetriveAlertTimeSetting()
+		{
+			var globalSettingDataRepo = MockRepository.GenerateMock<IGlobalSettingDataRepository>();
+			var alertTime = new AsmAlertTime { SecondsBeforeChange = 60};
+			globalSettingDataRepo.Expect(fac => fac.FindValueByKey("AsmAlertTime", new AsmAlertTime())).IgnoreArguments().Return(alertTime);
+			using (var controller = new AsmController(null, null, globalSettingDataRepo))
+			{
+				var setting = controller.AlertTimeSetting();
+				((AsmAlertTime)setting.Data).SecondsBeforeChange.Should().Be.EqualTo(60);
 			}
 		}
 
@@ -41,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewBag = new LayoutBaseViewModel{CultureSpecific = new CultureSpecificViewModel()};
 			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger)).Return(viewBag);
 
-			using (var controller = new AsmController(asmModelFactory, layoutFactory))
+			using (var controller = new AsmController(asmModelFactory, layoutFactory,null))
 			{
 				((object)controller.Index().ViewBag.LayoutBase)
 					.Should().Be.SameInstanceAs(viewBag);
@@ -56,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewBag = new LayoutBaseViewModel { CultureSpecific = new CultureSpecificViewModel{Rtl = true} };
 			layoutFactory.Expect(fac => fac.CreateLayoutBaseViewModel(Resources.AgentScheduleMessenger)).Return(viewBag);
 
-			using (var controller = new AsmController(asmModelFactory, layoutFactory))
+			using (var controller = new AsmController(asmModelFactory, layoutFactory, null))
 			{
 				((object)controller.Index().ViewBag.LayoutBase.CultureSpecific.Rtl)
 					.Should().Be.EqualTo(false);
