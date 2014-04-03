@@ -16,7 +16,7 @@
 			{
 				<text>
 
-			Teleopti.MyTimeWeb.Asm.FakeAlert({
+			Teleopti.MyTimeWeb.Asm.StartAlert({
 				notifyText: '@Resources.YourScheduleTheDATEHasChanged',
 				originalDocumentTitle: document.title,
 				baseUrl: '@Url.Content("~/")',
@@ -38,7 +38,7 @@
 		});
 	</script>
 }
-
+<input type="hidden" id="notification" />
 <header dir="ltr"> 
 	@Html.Partial("Navigation", Model)
 </header>
