@@ -14,10 +14,6 @@ using Teleopti.Ccc.WpfControls.Controls.Intraday.Models;
 using Teleopti.Ccc.WpfControls.Controls.Layers;
 using Teleopti.Ccc.WpfControls.Controls.Time.Timeline;
 using Teleopti.Interfaces.Domain;
-using DataGridCellClipboardEventArgs = Microsoft.Windows.Controls.DataGridCellClipboardEventArgs;
-using DataGridClipboardCopyMode = Microsoft.Windows.Controls.DataGridClipboardCopyMode;
-using DataGridSelectionMode = Microsoft.Windows.Controls.DataGridSelectionMode;
-using DataGridSortingEventArgs = Microsoft.Windows.Controls.DataGridSortingEventArgs;
 
 namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 {
@@ -130,7 +126,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 			get { return DataContext as RealTimeScheduleViewModel; }
 		}
 
-		private Microsoft.Windows.Controls.DataGridColumn ScheduleColumn
+		private DataGridColumn ScheduleColumn
 		{
 			get { return RealTimeDataGrid != null ? RealTimeDataGrid.Columns.Last() : null; }
 		}
@@ -201,7 +197,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday.Views
 			var uiElement = sender as UIElement;
 			if (uiElement == null) return;
 
-			var clickedRow = VisualTreeFinder.FindVisualParent<Microsoft.Windows.Controls.DataGridRow>(uiElement);
+			var clickedRow = VisualTreeFinder.FindVisualParent<DataGridRow>(uiElement);
 			if (clickedRow != null)
 				RealTimeDataGrid.SelectedIndex = clickedRow.GetIndex();
 		}

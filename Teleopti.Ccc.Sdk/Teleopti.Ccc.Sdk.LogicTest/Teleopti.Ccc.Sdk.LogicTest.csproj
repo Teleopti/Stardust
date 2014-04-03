@@ -232,6 +232,7 @@
     <Compile Include="QueryHandler\GetSchedulesByPersonQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetPeopleForShiftTradeByGroupPageGroupQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetSchedulesByTeamQueryHandlerTest.cs" />
+    <Compile Include="QueryHandler\GetSkillDaysByPeriodQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetValidatedSchedulePartsForStudentAvailabilityQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetValidatedSchedulePartsForPreferenceQueryHandlerTest.cs" />
     <Compile Include="QueryHandler\GetTeamByIdQueryHandlerTest.cs" />

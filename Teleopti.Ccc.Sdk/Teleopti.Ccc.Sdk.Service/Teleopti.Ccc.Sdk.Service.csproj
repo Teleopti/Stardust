@@ -171,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncResult.cs" />
+    <Compile Include="Factory\ServiceLevelCalculator.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportFactory.cs" />
     <Compile Include="Factory\TeleoptiPayrollExportBuilder.cs" />
     <Compile Include="LogOn\PersonInRoleCache.cs" />
@@ -219,7 +220,6 @@
     <Compile Include="Factory\ScheduleReporting\PersonWithScheduleStream.cs" />
     <Compile Include="Factory\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="Factory\ScheduleReporting\ScheduleToPdfManager.cs" />
-    <Compile Include="Factory\SkillDataFactory.cs" />
     <Compile Include="Factory\WebWindowsUserProvider.cs" />
     <Compile Include="Factory\WriteProtectionFactory.cs" />
     <Compile Include="Factory\LicenseFactory.cs" />

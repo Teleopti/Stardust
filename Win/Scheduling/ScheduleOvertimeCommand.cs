@@ -119,13 +119,16 @@ namespace Teleopti.Ccc.Win.Scheduling
         private double calculatePeriodValue(DateOnly dateOnly, IActivity activity, IPerson person)
         {
             var aggregateSkill = createAggregateSkill(person, dateOnly, activity);
-            if (aggregateSkill == null) return 0;
-            var aggregatedSkillStaffPeriods = skillStaffPeriods(aggregateSkill, dateOnly);
-            double? result = SkillStaffPeriodHelper.SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
-            if (result.HasValue)
-                return result.Value;
 
-            return 0;
+	        if (aggregateSkill != null)
+	        {
+		        var aggregatedSkillStaffPeriods = skillStaffPeriods(aggregateSkill, dateOnly);
+		        double? result = SkillStaffPeriodHelper.SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
+		        if (result.HasValue)
+			        return result.Value;
+	        }
+
+	        return 0;
         }
 
         private static IEnumerable<ISkill> aggregateSkills(IPerson person, DateOnly dateOnly)
@@ -144,8 +147,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private IAggregateSkill createAggregateSkill(IPerson person, DateOnly dateOnly, IActivity activity)
         {
             var skills = aggregateSkills(person, dateOnly).Where(x => x.Activity == activity).ToList();
-            if (skills.Count > 0)
-            {
+
+	        if (skills.IsEmpty()) return null;
+
                 var aggregateSkillSkill = new Skill("", "", Color.Pink, 15, skills[0].SkillType);
                 aggregateSkillSkill.ClearAggregateSkill();
                 foreach (ISkill skill in skills)
@@ -161,8 +165,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
 
                 return aggregateSkillSkill;
-            }
-            return null;
         }
 
 

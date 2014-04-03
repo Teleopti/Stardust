@@ -44,24 +44,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             
         }
 
-		[When(@"I change the text request values with")]
-		public void WhenIChangeTheTextRequestValuesWith(Table table)
+		[When(@"I change the subject to '(.*)' for the existing request")]
+		public void WhenIChangeTheSubjectToForTheExistingRequest(string subject)
 		{
-			var subject = table.Rows[1][1];
-			var position = table.Rows[0][1];
-
-			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(
-				string.Format(".request:nth-child({0}) .request-edit-subject", position), subject);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery(".request .request-edit-subject", subject);
 		}
 
-		[Then(@"I should see the updated text request values in the list with")]
-		public void ThenIShouldSeeTheUpdatedTextRequestValuesInTheListWith(Table table)
+		[Then(@"I should see the existing text request in the list with subject '(.*)'")]
+		public void ThenIShouldSeeTheExistingTextRequestInTheListWithSubject(string subject)
 		{
-			var subject = table.Rows[1][1];
-			var position = table.Rows[0][1];
-
-			Browser.Interactions.AssertNotExists(string.Format(".request-body:nth-child({0})", position), string.Format(".request-body:nth-child({0})", position + 1));
-			Browser.Interactions.AssertFirstContains(string.Format(".request-body:nth-child({0}) .request-data-subject", position), subject);
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-subject", subject);
 		}
 
 		[When(@"I click send request button")]
@@ -82,34 +74,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			Browser.Interactions.AssertNotVisibleUsingJQuery(".request-new-delete");
 		}
-		
-		[Then(@"I should see the text request's values at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheTextRequestSValuesAtPositionInTheList(int position)
+
+		[Then(@"I should see the values of the existing text request")]
+		public void ThenIShouldSeeTheValuesOfTheExistingTextRequest()
 		{
 			var request = DataMaker.Data().UserData<ExistingTextRequest>();
 
-			var firstFiftyCharsOfMessage = request.PersonRequest.GetMessage(new NoFormatting()).Substring(0,50);
+			var firstFiftyCharsOfMessage = request.PersonRequest.GetMessage(new NoFormatting()).Substring(0, 50);
 
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-subject", position),
-				request.PersonRequest.GetSubject(new NoFormatting()));
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-message", position),
-				firstFiftyCharsOfMessage);
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-subject", request.PersonRequest.GetSubject(new NoFormatting()));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-message", firstFiftyCharsOfMessage);
 
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.StartDateTime.Date.ToShortDateString(
+				                                         DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.StartDateTime.ToShortTimeString(
+				                                         DataMaker.Data().MyCulture));
 
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(DataMaker.Data().MyCulture));
-			Browser.Interactions.AssertFirstContains(
-				string.Format(".request-body:nth-child({0}) .request-data-date", position),
-				request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.EndDateTime.Date.ToShortDateString(
+				                                         DataMaker.Data().MyCulture));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-date",
+			                                         request.PersonRequest.Request.Period.EndDateTime.ToShortTimeString(
+				                                         DataMaker.Data().MyCulture));
 		}
 
 		[Then(@"I should see the request form with today's date as default")]
@@ -193,12 +181,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			SetValuesForDateAndTime(date.AddDays(1), date.AddHours(1), date, date.AddHours(-2));
         }
 
-		[When(@"I click the delete button of request at position '(.*)' in the list")]
-		public void WhenIClickTheDeleteButtonOfRequestAtPositionInTheList(int position)
-		{
-			Browser.Interactions.Click(string.Format(".request-list .request:nth-child({0}) .request-delete", position));
-		}
-
 		[Then(@"I should see texts describing my errors")]
 		public void ThenIShouldSeeTextsDescribingMyErrors()
 		{
@@ -224,19 +206,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotExists(".request-list", ".request-list .request");
 		}
 
-
-		[Then(@"I should not see a delete button for request at position '(.*)' in the list")]
-		public void ThenIShouldNotSeeADeleteButtonForRequestAtPositionInTheList(int position)
+		[Then(@"I should not be able to delete the existing request in the list")]
+		public void ThenIShouldNotBeAbleToDeleteTheExistingRequestInTheList()
 		{
-			Browser.Interactions.AssertNotExists(".request-list", string.Format(".request-list .request-body:nth-child({0}) .request-delete", position));
+			Browser.Interactions.AssertNotExists(".request-list", ".request-list .request-body .request-delete");
 		}
 
-		[Then(@"I should not see a save button for request at position '(.*)' in the list")]
-		public void ThenIShouldNotSeeASaveButtonForRequestAtPositionInTheList(int position)
+		[Then(@"I should not be able to submit possible changes for the existing request")]
+		public void ThenIShouldNotBeAbleToSubmitPossibleChangesForTheExistingRequest()
 		{
-			Browser.Interactions.AssertNotExists("#Requests-body-inner",
-			                                     string.Format(
-				                                     ".request-list .request-edit:nth-child({0}) .request-edit-update", position));
+			Browser.Interactions.AssertNotExists("#Requests-body-inner", ".request-list .request-edit .request-edit-update");
 		}
 
 		[When(@"I click the cancel button")]

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -15,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 	public class LoadSchedulingStateHolderForResourceCalculationTest
 	{
 		private LoadSchedulingStateHolderForResourceCalculation _target;
-		private MockRepository _mocks;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPeopleAndSkillLoaderDecider _peopleAndSkillLoadDecider;
 		private ISkillDayLoadHelper _skillDayLoadHelper;
@@ -29,77 +29,112 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
-			_peopleAndSkillLoadDecider = _mocks.DynamicMock<IPeopleAndSkillLoaderDecider>();
-			_skillDayLoadHelper = _mocks.DynamicMock<ISkillDayLoadHelper>();
-			_personRepository = _mocks.DynamicMock<IPersonRepository>();
-			_personAbsenceAccountRepository = _mocks.DynamicMock<IPersonAbsenceAccountRepository>();
-			_skillRepository = _mocks.DynamicMock<ISkillRepository>();
-			_workloadRepository = _mocks.DynamicMock<IWorkloadRepository>();
-			_scheduleRepository = _mocks.DynamicMock<IScheduleRepository>();
-			_personProvider = _mocks.DynamicMock<IPersonProvider>();
+			_peopleAndSkillLoadDecider = MockRepository.GenerateMock<IPeopleAndSkillLoaderDecider>();
+			_skillDayLoadHelper = MockRepository.GenerateMock<ISkillDayLoadHelper>();
+			_personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			_personAbsenceAccountRepository = MockRepository.GenerateMock<IPersonAbsenceAccountRepository>();
+			_skillRepository = MockRepository.GenerateMock<ISkillRepository>();
+			_workloadRepository = MockRepository.GenerateMock<IWorkloadRepository>();
+			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			_personProvider = MockRepository.GenerateMock<IPersonProvider>();
 			_target = new LoadSchedulingStateHolderForResourceCalculation(_personRepository, _personAbsenceAccountRepository, _skillRepository, _workloadRepository, _scheduleRepository, _schedulingResultStateHolder, _peopleAndSkillLoadDecider, _skillDayLoadHelper, p => _personProvider);
 		}
 
 		[Test]
 		public void ShouldLoadPersonAccountsOnExecute()
 		{
-			var accounts = _mocks.Stub<IDictionary<IPerson, IPersonAccountCollection>>();
+			var accounts = new Dictionary<IPerson, IPersonAccountCollection>();
 
-			Expect.Call(_personAbsenceAccountRepository.FindByUsers(null)).Return(accounts).IgnoreArguments();
+			_personAbsenceAccountRepository.Stub(x => x.FindByUsers(null)).Return(accounts).IgnoreArguments();
 			_schedulingResultStateHolder.AllPersonAccounts = accounts;
-
-			_mocks.ReplayAll();
 
 			_target.Execute(null, new DateTimePeriod(2010, 2, 1, 2010, 2, 2), new IPerson[]{});
 
-			_mocks.VerifyAll();
+			_personAbsenceAccountRepository.AssertWasCalled(x => x.FindByUsers(null), o => o.IgnoreArguments());
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		[Test]
 		public void VerifyExecute()
 		{
-			DateTimePeriod period = new DateTimePeriod(2010,2,1,2010,2,2);
-			IScenario scenario = _mocks.StrictMock<IScenario>();
+			var period = new DateTimePeriod(2010, 2, 1, 2010, 2, 2);
+			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPerson person = PersonFactory.CreatePerson();
-			IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			IPersonProvider personsInOrganizationProvider = _mocks.StrictMock<IPersonProvider>();
-		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
+			var scheduleDictionaryLoadOptions = MockRepository.GenerateMock<IScheduleDictionaryLoadOptions>();
 
 			var skills = new List<ISkill> {SkillFactory.CreateSkill("test")};
 			var requestedPeople = new List<IPerson> {person};
 			var peopleInOrganization = new List<IPerson> {person};
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var skillDictionary = new Dictionary<ISkill, IList<ISkillDay>>{{skills[0],new ISkillDay[]{}}};
+			
+			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
+			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
+			_scheduleRepository.Stub(
+				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null))
+				.IgnoreArguments()
+				.Return(scheduleDictionary);
+			_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
+			_peopleAndSkillLoadDecider.Stub(x => x.FilterPeople(peopleInOrganization)).Return(0);
+			_peopleAndSkillLoadDecider.Stub(x => x.FilterSkills(skills)).Return(0);
+			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
+				.Return(skillDictionary).IgnoreArguments();
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, null)).IgnoreArguments
-					().Return(scheduleDictionary);
-				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
-				_peopleAndSkillLoadDecider.Execute(scenario,period,requestedPeople);
-				Expect.Call(_peopleAndSkillLoadDecider.FilterPeople(peopleInOrganization)).Return(0);
-				Expect.Call(_peopleAndSkillLoadDecider.FilterSkills(skills)).Return(0);
-				Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario)).Return(
-																		new Dictionary<ISkill, IList<ISkillDay>>());
-			}
-			using (_mocks.Playback())
-			{
-				_target.Execute(scenario, period, requestedPeople);
-			}
+			_target.Execute(scenario, period, requestedPeople);
+
+			_schedulingResultStateHolder.Schedules.Should().Be.SameInstanceAs(scheduleDictionary);
+			_schedulingResultStateHolder.SkillDays.Should().Be.Equals(skillDictionary);
+		}
+
+		[Test]
+		public void ShouldNotLoadRestrictionAndNotes()
+		{
+			var period = new DateTimePeriod(2010, 2, 1, 2010, 2, 2);
+			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
+			IPerson person = PersonFactory.CreatePerson();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
+
+			var skills = new List<ISkill> { SkillFactory.CreateSkill("test") };
+			var requestedPeople = new List<IPerson> { person };
+			var peopleInOrganization = new List<IPerson> { person };
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
+			var skillDictionary = new Dictionary<ISkill, IList<ISkillDay>> { { skills[0], new ISkillDay[] { } } };
+
+			_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
+			_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
+			_scheduleRepository.Stub(
+				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null))
+				.IgnoreArguments()
+				.Return(scheduleDictionary);
+			_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
+			_peopleAndSkillLoadDecider.Stub(x => x.FilterPeople(peopleInOrganization)).Return(0);
+			_peopleAndSkillLoadDecider.Stub(x => x.FilterSkills(skills)).Return(0);
+			_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario))
+				.Return(skillDictionary);
+
+			_target.Execute(scenario, period, requestedPeople);
+
+			_scheduleRepository.AssertWasCalled(
+				x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, null, null),
+				o =>
+					o.Constraints(Rhino.Mocks.Constraints.Is.Anything(), Rhino.Mocks.Constraints.Is.Same(scenario),
+						Rhino.Mocks.Constraints.Is.Anything(),
+						new Rhino.Mocks.Constraints.PredicateConstraint<IScheduleDictionaryLoadOptions>(
+							x => x.LoadNotes == false && x.LoadRestrictions == false), Rhino.Mocks.Constraints.Is.Anything()));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyExecuteWithAllPersonsFilteredAway()
 		{
-			DateTimePeriod period = new DateTimePeriod(2010, 2, 1, 2010, 2, 2);
-			IScenario scenario = _mocks.StrictMock<IScenario>();
+			var period = new DateTimePeriod(2010, 2, 1, 2010, 2, 2);
+			IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
 			IPerson person = PersonFactory.CreatePerson();
-			IScheduleDictionary scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-			IPersonProvider personsInOrganizationProvider = _mocks.StrictMock<IPersonProvider>();
-		    IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = _mocks.StrictMock<IScheduleDictionaryLoadOptions>();
+			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			var personsInOrganizationProvider = MockRepository.GenerateMock<IPersonProvider>();
+			var scheduleDictionaryLoadOptions = MockRepository.GenerateMock<IScheduleDictionaryLoadOptions>();
 
 			var skills = new List<ISkill> { SkillFactory.CreateSkill("test") }; 
 			var requestedPeople = new List<IPerson> { person };
@@ -107,26 +142,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var visiblePeople = new List<IPerson>();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_workloadRepository.LoadAll()).Return(new List<IWorkload>());
-				Expect.Call(_personRepository.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
-				Expect.Call(_scheduleRepository.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, visiblePeople)).IgnoreArguments
-					().Return(scheduleDictionary);
-				Expect.Call(_skillRepository.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
-				_peopleAndSkillLoadDecider.Execute(scenario, period, requestedPeople);
-				Expect.Call(_peopleAndSkillLoadDecider.FilterPeople(peopleInOrganization)).Return(1);
-				Expect.Call(_peopleAndSkillLoadDecider.FilterSkills(skills)).Return(0);
-				Expect.Call(_skillDayLoadHelper.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario)).Return(
-																		new Dictionary<ISkill, IList<ISkillDay>>());
-			}
-			using (_mocks.Playback())
-			{
+				_workloadRepository.Stub(x => x.LoadAll()).Return(new List<IWorkload>());
+				_personRepository.Stub(x => x.FindPeopleInOrganization(dateOnlyPeriod, false)).Return(peopleInOrganization);
+				_scheduleRepository.Stub(x => x.FindSchedulesForPersons(null, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, visiblePeople)).IgnoreArguments().Return(scheduleDictionary);
+				_skillRepository.Stub(x => x.FindAllWithSkillDays(dateOnlyPeriod)).Return(skills);
+				_peopleAndSkillLoadDecider.Stub(x => x.FilterPeople(peopleInOrganization)).Return(1);
+				_peopleAndSkillLoadDecider.Stub(x => x.FilterSkills(skills)).Return(0);
+				_skillDayLoadHelper.Stub(x => x.LoadSchedulerSkillDays(period.ToDateOnlyPeriod(skills[0].TimeZone), skills, scenario)).Return(new Dictionary<ISkill, IList<ISkillDay>>());
+			
 				Assert.AreEqual(0, _schedulingResultStateHolder.PersonsInOrganization.Count);
 				_target.Execute(scenario, period, requestedPeople);
-				Assert.AreEqual(1, _schedulingResultStateHolder.PersonsInOrganization.Count);
+				
+			_peopleAndSkillLoadDecider.AssertWasCalled(x => x.Execute(scenario, period, requestedPeople));
+			Assert.AreEqual(1, _schedulingResultStateHolder.PersonsInOrganization.Count);
 				Assert.IsTrue(_schedulingResultStateHolder.PersonsInOrganization.Contains(person));
-			}
 		}
 	}
 }

@@ -154,8 +154,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoRequests()
 		{
 			GoToWaitForCompleted("MyTime#Requests/Index", new BustCache(), new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
-			if (Browser.Current != null)
-				Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
 		public static void GotoTeamSchedule()

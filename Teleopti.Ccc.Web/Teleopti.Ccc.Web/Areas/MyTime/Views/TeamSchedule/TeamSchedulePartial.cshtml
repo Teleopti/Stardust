@@ -40,12 +40,12 @@
 		<!-- /ko -->
 
 		@if (Model.ShiftTradePermisssion)
-  {
-			<li data-bind="if: showTeamPicker">
+		{
+			<li class="divider" data-bind="if: showTeamPicker"></li>
+			<li>
 				<a class="initialize-shift-trade" href="#" data-bind="click: initializeShiftTrade"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a>
 			</li>
 		}
-
 	</ul>
 </div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>

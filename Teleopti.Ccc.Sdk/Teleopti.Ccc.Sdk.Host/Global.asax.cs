@@ -201,7 +201,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<AuthenticationFactory>().InstancePerLifetimeScope();
             builder.RegisterType<LicenseFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleFactory>().InstancePerLifetimeScope();
-            builder.RegisterType<SkillDataFactory>().InstancePerLifetimeScope();
             builder.RegisterType<TeleoptiPayrollExportFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ScheduleMailFactory>().InstancePerLifetimeScope();
         	builder.RegisterType<PublicNoteTypeFactory>().InstancePerLifetimeScope();

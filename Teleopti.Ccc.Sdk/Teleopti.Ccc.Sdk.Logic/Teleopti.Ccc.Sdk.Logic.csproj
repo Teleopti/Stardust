@@ -195,6 +195,7 @@
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
     <Compile Include="IMessageBrokerEnablerFactory.cs" />
+    <Compile Include="IServiceLevelCalculator.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />
     <Compile Include="Payroll\PayrollFormatHandler.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="QueryHandler\GetSchedulesByTeamQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByDescriptionNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSkillDaysByPeriodQueryHandler.cs" />
     <Compile Include="QueryHandler\GetTeamByDescriptionNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetTeamByIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetValidatedSchedulePartsForPreferenceQueryHandler.cs" />

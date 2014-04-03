@@ -3,8 +3,7 @@
 <Project DefaultTargets="MyTimeClickOnce" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
   <PropertyGroup>
-    <MsBuildPath>$(CCNetWorkingDirectory)\ccnet\MSBuild</MsBuildPath>
-    <MSBuildCommunityTasksPath>$(MsBuildPath)\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+    <MSBuildCommunityTasksPath>$(CCNetWorkingDirectory)\packages\MSBuildTasks.1.4.0.65\tools</MSBuildCommunityTasksPath>
 	<Mage>\\hebe\Installation\Dependencies\ccc7_server\mage.exe</Mage>
   </PropertyGroup>
 

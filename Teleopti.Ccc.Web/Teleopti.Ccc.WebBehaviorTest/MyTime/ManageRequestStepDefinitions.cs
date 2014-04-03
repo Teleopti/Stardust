@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the text request in the list")]
 		public void ThenIShouldSeeTheTextRequestInTheList()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining("Text"));
+			Browser.Interactions.AssertFirstContains(".request-body .request-data-type", "Text");
 		}
 
 		[Given(@"I am an agent without access to absence requests")]
@@ -83,10 +82,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.Click("#Request-add-section .request-new-send");
 		}
 
-		[When(@"I click the update button on the request at position '(.*)' in the list")]
-		public void WhenIClickTheUpdateButtonOnTheRequestAtPositionInTheList(int position)
+		[When(@"I submit my changes for the existing text request")]
+		public void WhenISubmitMyChangesForTheExistingTextRequest()
 		{
-			Browser.Interactions.Click(string.Format(".request-list .request:nth-child({0}) .request-edit-update", position));
+			Browser.Interactions.Click(".request-list .request .request-edit-update");
 		}
 	}
 }

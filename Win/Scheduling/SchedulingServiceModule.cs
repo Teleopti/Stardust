@@ -31,6 +31,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -384,6 +385,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>();
 		    builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>();
 		    builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>();
+			builder.RegisterType<VisualLayerToBaseDateMapper>().As<IVisualLayerToBaseDateMapper>();
+			//IVisualLayerToBaseDateMapper
 	    }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]

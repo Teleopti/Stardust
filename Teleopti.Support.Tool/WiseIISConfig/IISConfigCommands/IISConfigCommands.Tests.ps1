@@ -46,7 +46,7 @@ $global:insertedLicense=0
 
 function Config-Load {
 	Describe "Shold load config from Hebe "{
-		[string] $serverConfigFile = '\\hebe\Installation\PBImsi\Kanbox\testservers.config'
+		[string] $serverConfigFile = '\\hebe\Installation\PBImsi\testservers.config'
 
         It "Should find the right version from the config file"{
         
