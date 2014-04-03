@@ -213,6 +213,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByPersonQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByTeamQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesForAllPeopleQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetSkillDaysByPeriodQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetValidatedSchedulePartsForStudentAvailabilityQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAgentPortalSettingsQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllPayrollExportsQueryDto.cs" />

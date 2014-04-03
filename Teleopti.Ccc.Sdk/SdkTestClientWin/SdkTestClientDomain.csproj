@@ -354,6 +354,9 @@
     <None Include="Web References\Sdk\TeleoptiCccSdkService17.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Web References\Sdk\TeleoptiCccSdkService18.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web References\Sdk\TeleoptiCccSdkService2.xsd" />
     <None Include="Web References\Sdk\TeleoptiCccSdkService3.xsd" />
     <None Include="Web References\Sdk\TeleoptiCccSdkService4.xsd" />
