@@ -130,9 +130,15 @@
     </Compile>
     <Compile Include="Bindings\Generic\AlarmStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
+    <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="SignInAsAnotherUser.feature.cs">
+      <DependentUpon>SignInAsAnotherUser.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Core\CurrentTime.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
     <Compile Include="Data\Setups\Configurable\PersonAbsenceAccountConfigurable.cs" />
@@ -696,7 +702,7 @@
       <DependentUpon>WeekSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\WeekScheduleStepDefinitions.cs" />
-    <Compile Include="AuthenticationStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\AuthenticationStepDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
@@ -749,6 +755,10 @@
     <None Include="Anywhere\ViewDaysOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="SignInAsAnotherUser.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignInAsAnotherUser.feature.cs</LastGenOutput>
     </None>
     <None Include="Data\iisexpress.config">
       <SubType>Designer</SubType>
