@@ -7,7 +7,6 @@
 	<Mage>\\hebe\Installation\Dependencies\ccc7_server\mage.exe</Mage>
   </PropertyGroup>
 
-  <Import Project="Microsoft.Sdc.Common.tasks"/>
   <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 
   <Target Name="MyTimeClickOnce" DependsOnTargets="MyTimePropertiesSet;VersionCheck;MyTimeGetPublishContent;MyTimePrepareClickOnceDeployment;MyTimeDeleteRootFiles;MyTimeCopyFilesToRoot"/>
