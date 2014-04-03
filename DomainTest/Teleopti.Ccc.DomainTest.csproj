@@ -359,7 +359,18 @@
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockIntradayOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRestrictionOverLimitValidatorTest.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockScheduleClonerTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekOutsideSelectionSpecificationTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\DeleteScheduleDayFromUnsolvedPersonWeekTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\EnsureWeeklyRestRuleTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ExtractDayOffFromGivenWeekTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\IdentifyDayOffWithHighestSpanTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractorTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlierTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeekTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLaterTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManagerTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakTest.cs" />
@@ -870,6 +881,7 @@
     <Compile Include="Scheduling\ShiftCategorySorterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ActivityTimeLimiterTest.cs" />
     <Compile Include="Scheduling\SkillDayHelperTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\DayOffToTimeSpanExtractorTest.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTimeTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxTest.cs" />

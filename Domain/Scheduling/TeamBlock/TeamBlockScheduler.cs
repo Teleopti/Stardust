@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								  DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, 
 								ISchedulePartModifyAndRollbackService rollbackService, 
 								IResourceCalculateDelayer resourceCalculateDelayer,
-								ISchedulingResultStateHolder schedulingResultStateHolder);
+								ISchedulingResultStateHolder schedulingResultStateHolder,
+								IEffectiveRestriction customEffectiveRestriction);
 
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
@@ -40,41 +41,59 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer,
-		                                 ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService,
-								IResourceCalculateDelayer resourceCalculateDelayer,
-								ISchedulingResultStateHolder schedulingResultStateHolder)
-	{
+			ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
+			ISchedulePartModifyAndRollbackService rollbackService,
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEffectiveRestriction customEffectiveRestriction)
+
+		{
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupMembers.Intersect(selectedPersons).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
-			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
+
+			IShiftProjectionCache roleModelShift;
+			if (customEffectiveRestriction == null)
+			{
+				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
+					schedulingOptions);
+
+			}
+			else
+			{
+				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
+					schedulingOptions, customEffectiveRestriction);
+			}
+
 			if (roleModelShift == null)
 			{
 				OnDayScheduledFailed();
 				return false;
 			}
 
-			var selectedBlockDays = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
+			var selectedBlockDays =
+				teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
 				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
+			{
+				schedulingOptions.NotAllowedShiftCategories.Clear();
+				while (roleModelShift != null && !success)
 				{
+					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
+					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
+						schedulingOptions);
+					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
+						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder);
 					schedulingOptions.NotAllowedShiftCategories.Clear();
-					while (roleModelShift != null && !success)
-					{
-						_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-						schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
-						roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
-						success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
-							roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder);
-						schedulingOptions.NotAllowedShiftCategories.Clear();
-					}
 				}
+			}
 
 			return success;
 
-			
+
 		}
 
 		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
