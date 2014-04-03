@@ -39,7 +39,7 @@
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCover"  AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll"/>
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll" />
-	<UsingTask AssemblyFile="$(MsBuildPath)\MSBuild.ExtensionPack\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+	<UsingTask AssemblyFile="$(CCNetWorkingDirectory)\packages\MSBuild.Extension.Pack.1.3.0\tools\net40\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
 
 	<PropertyGroup>
 		<NUnitExe>"$(NugetPackages)\NUnit.Runners.2.6.2\tools\nunit-console.exe"</NUnitExe>
