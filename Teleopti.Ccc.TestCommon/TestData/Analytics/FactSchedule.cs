@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class FactSchedule : IAnalyticsDataSetup
 	{
+		private readonly int _shiftStartdateLocalId;
 		private readonly int _scheduleDateId;
 		private readonly int _personId;
 		private readonly int _intervalId;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly int _shiftEnddateId;
 		private readonly DateTime _shiftEndtime;
 		private readonly int _shiftStartintervalId;
+		private readonly int _shiftEndintervalId;
 		private readonly int _shiftCategoryId;
 		private readonly int _shiftLengthId;
 		private readonly int _scheduledTimeM;
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		private readonly int _businessUnitId;
 
 		public FactSchedule(
+			int shift_startdate_local_id,
 			int schedule_date_id,
 			int person_id,
 			int interval_id,
@@ -58,6 +61,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			int shift_enddate_id,
 			DateTime shift_endtime,
 			int shift_startinterval_id,
+			int shift_endinterval_id,
 			int shift_category_id,
 			int shift_length_id,
 			int scheduled_time_m,
@@ -76,6 +80,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			int scheduled_paid_time_absence_m,
 			int business_unit_id)
 		{
+			_shiftStartdateLocalId = shift_startdate_local_id;
 			_scheduleDateId = schedule_date_id;
 			_personId = person_id;
 			_intervalId = interval_id;
@@ -91,6 +96,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_shiftEnddateId = shift_enddate_id;
 			_shiftEndtime = shift_endtime;
 			_shiftStartintervalId = shift_startinterval_id;
+			_shiftEndintervalId = shift_endinterval_id;
 			_shiftCategoryId = shift_category_id;
 			_shiftLengthId = shift_length_id;
 			_scheduledTimeM = scheduled_time_m;
@@ -110,9 +116,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			_businessUnitId = business_unit_id;
 		}
 
-		public FactSchedule(int personId, int scheduleDateId, int scheduledTimeM, int scheduledReadyTimeMinutes, int intervalId, int scenarioId)
+		public FactSchedule(int personId, int shiftStartdateLocalId, int scheduleDateId, int scheduledTimeM, int scheduledReadyTimeMinutes, int intervalId, int scenarioId)
 		{
 			_personId = personId;
+			_shiftStartdateLocalId = shiftStartdateLocalId;
 			_scheduleDateId = scheduleDateId;
 			_scheduledTimeM = scheduledTimeM;
 			_scheduledReadyTimeM = scheduledReadyTimeMinutes;
@@ -129,6 +136,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			using (var table = fact_schedule.CreateTable())
 			{
 				table.AddFactSchedule(
+					_shiftStartdateLocalId,
 					_scheduleDateId,
 					_personId,
 					_intervalId,
@@ -144,6 +152,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 					_shiftEnddateId,
 					_shiftEndtime,
 					_shiftStartintervalId,
+					_shiftEndintervalId,
 					_shiftCategoryId,
 					_shiftLengthId,
 					_scheduledTimeM,

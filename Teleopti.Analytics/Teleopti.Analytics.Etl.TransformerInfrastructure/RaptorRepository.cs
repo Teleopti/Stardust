@@ -740,7 +740,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			HelperFunctions.TruncateTable("stage.stg_schedule_changed_delete", _dataMartConnectionString);
 			int rowCount = HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
-			HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[stage].[etl_stg_schedule_updated_special_load]", null, _dataMartConnectionString);
 			return rowCount;
 			
 		}
