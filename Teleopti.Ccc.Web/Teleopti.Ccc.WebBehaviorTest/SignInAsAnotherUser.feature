@@ -5,7 +5,7 @@
 
 Background:
 
-@WindowsAndApplicationLogon
+@WindowsAsDefaultIdentityProviderLogon
 Scenario: Not permitted to logon as another user
 	Given I have a role with
 	| Field                     | Value |
@@ -17,7 +17,7 @@ Scenario: Not permitted to logon as another user
 	When I go to mytime web
 	Then I should not be able to logon as another user
 
-@WindowsAndApplicationLogon
+@WindowsAsDefaultIdentityProviderLogon
 Scenario: Logon as another user
 	Given I have a role with
 	| Field                     | Value |

@@ -1,4 +1,3 @@
-using System.Linq;
 using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Web.Core
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public string DefaultProvider()
 		{
-			return _configurationWrapper.AppSettings["IdentityProviders"].Split('|').FirstOrDefault();
+			return _configurationWrapper.AppSettings["DefaultIdentityProvider"];
 		}
 	}
 }
