@@ -128,7 +128,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		self.paddingLeft = (layer.LengthInMinutes * pixelPerHours) / 60 + 'px';
 		self.startTimeText = layer.StartTimeText;
 		self.endTimeText = layer.EndTimeText;
-		self.startMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero;
 		self.title = ko.computed(function () {
 			var nextDayAdder = '';
 			if (layer.StartMinutesSinceAsmZero > 2 * 24 * 60) {
@@ -137,10 +136,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			return layer.StartTimeText + nextDayAdder + '-' + layer.EndTimeText + ' ' + layer.Payload;
 		});
 		self.visible = ko.computed(function () {
-			if($.isFunction(canvasPosition))
-				var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition());
-			else
-				var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
 			var startPos = parseFloat(self.leftPx);
 			var endPos = startPos + parseFloat(self.paddingLeft);
 			return endPos > timelinePosition;
@@ -149,11 +145,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			if (!self.visible)
 				return false;
 			var startPos = parseFloat(self.leftPx);
-			if($.isFunction(canvasPosition))
-				var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition());
-			else {
-				var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
-			}
+			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
 			var isActive = startPos <= timelinePosition;
 			return isActive;
 		});
@@ -226,153 +218,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 	        }
 	    });
 	}
-	///////////
-	function notificationViewModel(yesterday) {
-		var self = this;
-		self.now = new Date().getTeleoptiTime();
-		self.yesterday = yesterday;
-		self.alertTimeSetting = 60; //default setting 60secs
-		self.canvasPosition = function () {
-			var msSinceStart = self.now - self.yesterday.getTime();
-			var hoursSinceStart = msSinceStart / 1000 / 60 / 60;
-			return -(pixelPerHours * hoursSinceStart) + 'px';
-		};
-		self.layers = new Array();
-		self.layersRemovedPassed = function () {
-			return $.grep(self.layers, function (n, i) {
-				return n.visible();
-			});
-		};
-		self.currentLayer = function () {
-			var layer = self.layersRemovedPassed()[0];
-			if (typeof layer != "undefined" && layer != null && layer.active()) {
-				return layer;
-			}
-			return null;
-		};
-		self.nextLayer = function () {
-			var layer;
-			if (self.currentLayer() == null) {
-				layer = self.layersRemovedPassed()[0];
-			} else {
-				layer = self.layersRemovedPassed()[1];
-			}
-			if (typeof layer != "undefined") {
-				return layer;
-			}
-			return null;
-		};
-		self.timeInterval = function (index) {
-			var interval = 0;
-			var length = self.layersRemovedPassed().length;
-			if (index >= 0 && index < length) {
-				var msSinceStart = self.now - self.yesterday.getTime();
-				var secondsSinceStart = msSinceStart / 1000;
-				if (self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart < 0)
-					interval = -1;
-				else if (self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart > self.alertTimeSetting)
-					interval = self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart - self.alertTimeSetting;
-				else {
-					interval = self.alertTimeSetting - self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart;
-				}
-			}
-			return interval;
-		};
-		
-		self.alertMessage = function (index) {
-			return self.layersRemovedPassed()[index].payload + "at" + self.layersRemovedPassed()[index].startTimeText + "!";
-		};
-		
-		self.loadViewModel = function (date, callback) {
-			ajax.Ajax({
-				url: 'Asm/Today',
-				dataType: "json",
-				type: 'GET',
-				//pass as string to make sure no time included due to time zone stuff
-				data: { asmZeroLocal: moment(date).format('YYYY-MM-DD') },
-				success: callback
-			});
-		};
 
-		self.loadSetting = function(callback) {
-			ajax.Ajax({
-				url: 'Asm/AlertTimeSetting',
-				dataType: "json",
-				type: 'GET',
-				success: callback
-			});
-		};
-
-		self._readAlertTimeSetting = function(data) {
-			self.alertTimeSetting = data;
-		};
-		
-		self._createLayers = function (layers) {
-			var newLayers = new Array();
-			var canvasPosition = self.canvasPosition();
-			$.each(layers, function (key, layer) {
-				newLayers.push(new layerViewModel(layer, canvasPosition));
-			});
-			self.layers = newLayers;
-			self.layersRemovedPassed();
-			self.currentLayer();
-			self.nextLayer();
-
-		};
-	}
-	function _initNotificationViewModel() {
-		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
-		alertvm = new notificationViewModel(yesterDayFromNow);
-		var activityData;
-		var alertSetting;
-		
-		var dataLoadDeffered = $.Deferred();
-		alertvm.loadViewModel(
-			yesterDayFromNow,
-			function (data) {
-				activityData = data.Layers;
-				dataLoadDeffered.resolve();
-			});
-		var settingLoadDeffered = $.Deferred();
-		alertvm.loadSetting(function(data) {
-			alertSetting = data.SecondsBeforeChange;
-			settingLoadDeffered.resolve();
-		});
-		$.when(dataLoadDeffered, settingLoadDeffered).done(function () {
-			alertvm._createLayers(tempData);
-			alertvm._readAlertTimeSetting(alertSetting);
-			_startAlert();
-		});
-	}
-
-	var timeInterval = 0;
-	var layerIdx = 0;
-	function _alertActivity() {
-		if (layerIdx < alertvm.layersRemovedPassed().length) {
-			timeInterval = alertvm.timeInterval(layerIdx) * 1000;
-			if (timeInterval < 0) {
-				layerIdx++;
-				timeInterval = alertvm.timeInterval(layerIdx) * 1000;
-			}
-
-			if ((alertvm.timeInterval(layerIdx) <= alertvm.alertTimeSetting) && (alertvm.timeInterval(layerIdx) > 0)) {
-				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(layerIdx));
-			} else if (timeInterval > 0) {
-				console.log("Timer:" + timeInterval);
-				setTimeout(function () {
-					Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(layerIdx-1));
-					 _alertActivity();
-				}, timeInterval);
-			}
-			layerIdx++;
-		}
-		 
-	}
-	
-	function _startAlert() {
-		setTimeout(_alertActivity, timeInterval);
-	}
-	////////////
     function _startPollingToAvoidLogOut() {
         setTimeout(_makeSureWeAreLoggedOn, 20 * 60 * 1000);
     }
@@ -404,10 +250,6 @@ Teleopti.MyTimeWeb.Asm = (function () {
 				vm.unreadMessageCount(data.UnreadMessagesCount);				
 			}
 		},
-		MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn,
-		StartAlert: function (options) {
-			notifyOptions = options;
-			_initNotificationViewModel(options);
-		}
+		MakeSureWeAreLoggedOn: _makeSureWeAreLoggedOn
 	};
 })(jQuery);
