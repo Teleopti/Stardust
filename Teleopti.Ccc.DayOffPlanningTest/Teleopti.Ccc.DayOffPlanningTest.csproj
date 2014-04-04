@@ -119,55 +119,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CMSBCaseSolverTest.cs" />
-    <Compile Include="CMSBOneFreeWeekendMax5WorkingDaysDecisionMakerTest.cs" />
-    <Compile Include="ConsecutiveDayOffValidatorTest.cs" />
-    <Compile Include="ConsecutiveDaysOffSolverTest.cs" />
-    <Compile Include="ConsecutiveWorkdaysSolverTest.cs" />
-    <Compile Include="ConsecutiveWorkdayValidatorTest.cs" />
-    <Compile Include="DayOffOptimizationWeekendLegalStateValidatorListCreatorTest.cs" />
-    <Compile Include="ExtendReduceDaysOffDecisionMakerTest.cs" />
-    <Compile Include="ExtendReduceTimeDecisionMakerTest.cs" />
-    <Compile Include="FiveConsecutiveWorkdaysSolverTest.cs" />
-    <Compile Include="LockableBitArrayChangesTrackerTest.cs" />
-    <Compile Include="Scheduling\DesiredShiftLengthCalculatorTest.cs" />
-    <Compile Include="Scheduling\ShiftLengthDeciderTest.cs" />
-    <Compile Include="TeDataDayOffDecisionMakerTest.cs" />
-    <Compile Include="TuiCaseSolverTest.cs" />
-    <Compile Include="WorkShiftBackToLegalStateBitArrayCreatorTest.cs" />
-    <Compile Include="WorkShiftBackToLegalStateDecisionMakerTest.cs" />
-    <Compile Include="IntradayDecisionMakerTest.cs" />
-    <Compile Include="MoveTimeDecisionMaker2Test.cs" />
-    <Compile Include="DayOffOptimizationLegalStateValidatorListCreatorTest.cs" />
-    <Compile Include="MatrixRestrictionLockerTest.cs" />
-    <Compile Include="MoveWeekendDayOffDecisionMakerTest.cs" />
-    <Compile Include="Scheduling\PossibleMinMaxWorkShiftLengthExtractorTest.cs" />
-    <Compile Include="Scheduling\ShiftCategoryFairnessShiftValueCalculatorTest.cs" />
-    <Compile Include="Scheduling\WorkShiftMinMaxLengthCalculatorTest.cs" />
-    <Compile Include="Scheduling\WorkShiftWeekMinMaxCalculatorTest.cs" />
-    <Compile Include="KeepFreeWeekendValidatorTest.cs" />
-    <Compile Include="KeepFreeWeekendDayValidatorTest.cs" />
-    <Compile Include="DayOffBackToLegalStateFunctionsTest.cs" />
-    <Compile Include="DaysOffPerWeekSolverTest.cs" />
-    <Compile Include="FreeWeekendDaySolverTest.cs" />
-    <Compile Include="FreeWeekendDayValidatorTest.cs" />
-    <Compile Include="FreeWeekendSolverTest.cs" />
-    <Compile Include="FreeWeekendValidatorTest.cs" />
-    <Compile Include="LockableBitArrayTest.cs" />
-    <Compile Include="MoveOneDayOffDecisionMakerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SmartDayOffBackToLegalStateServiceTest.cs" />
-    <Compile Include="WeeklyDayOffValidatorTest.cs" />
-    <Compile Include="WorkShiftLegalStateDayIndexCalculatorTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
       <Project>{ADD1BCDC-CFBB-4632-8FB5-4FF3BD04F666}</Project>
       <Name>Teleopti.Ccc.Domain</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj">
-      <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
-      <Name>Teleopti.Ccc.DayOffPlanning</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
       <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
@@ -183,7 +140,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="FreeWeekendValidatorTestCases.xls" />
     <None Include="packages.config" />
     <None Include="Teleopti.Ccc.snk" />
   </ItemGroup>
