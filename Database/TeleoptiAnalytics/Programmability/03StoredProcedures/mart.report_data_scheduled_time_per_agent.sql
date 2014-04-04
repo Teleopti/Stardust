@@ -49,41 +49,15 @@ CREATE TABLE #fact_schedule(
 	[schedule_date_id] [int] NOT NULL,
 	[person_id] [int] NOT NULL,
 	[interval_id] [smallint] NOT NULL,
-	[activity_starttime] [smalldatetime] NOT NULL,
 	[scenario_id] [smallint] NOT NULL,
 	[activity_id] [int] NULL,
 	[absence_id] [int] NULL,
-	[activity_startdate_id] [int] NULL,
-	[activity_enddate_id] [int] NULL,
-	[activity_endtime] [smalldatetime] NULL,
-	[shift_startdate_id] [int] NULL,
-	[shift_starttime] [smalldatetime] NULL,
-	[shift_enddate_id] [int] NULL,
-	[shift_endtime] [smalldatetime] NULL,
-	[shift_startinterval_id] [smallint] NULL,
-	[shift_category_id] [int] NULL,
-	[shift_length_id] [int] NULL,
 	[scheduled_time_m] [int] NULL,
-	[scheduled_time_absence_m] [int] NULL,
-	[scheduled_time_activity_m] [int] NULL,
 	[scheduled_contract_time_m] [int] NULL,
-	[scheduled_contract_time_activity_m] [int] NULL,
 	[scheduled_contract_time_absence_m] [int] NULL,
 	[scheduled_work_time_m] [int] NULL,
-	[scheduled_work_time_activity_m] [int] NULL,
-	[scheduled_work_time_absence_m] [int] NULL,
 	[scheduled_over_time_m] [int] NULL,
-	[scheduled_ready_time_m] [int] NULL,
-	[scheduled_paid_time_m] [int] NULL,
-	[scheduled_paid_time_activity_m] [int] NULL,
-	[scheduled_paid_time_absence_m] [int] NULL,
-	[last_publish] [smalldatetime] NULL,
-	[business_unit_id] [int] NULL,
-	[datasource_id] [smallint] NULL,
-	[insert_date] [smalldatetime] NULL,
-	[update_date] [smalldatetime] NULL,
-	[datasource_update_date] [smalldatetime] NULL,
-	[overtime_id] [int] NOT NULL
+	[scheduled_paid_time_m] [int] NULL
 )
 CREATE TABLE #result(
 	date_id int,
@@ -128,12 +102,12 @@ SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_i
 
 /*Snabba upp fraga mot fact_schedule*/
 INSERT INTO #fact_schedule
-SELECT *
+SELECT schedule_date_id, person_id, interval_id, scenario_id, activity_id, absence_id, scheduled_time_m, scheduled_contract_time_m, scheduled_contract_time_absence_m, scheduled_work_time_m, scheduled_over_time_m, scheduled_paid_time_m
 FROM mart.fact_schedule fs
 WHERE schedule_date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	
 							ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
 
-/*HÃ¤mta forst all schemalagd tid for aktiviteter*/
+/* Get all schedele time for all activites */
 INSERT #result(date_id,date,team_name,person_id,person_name,activity_absence_name,is_activity,scheduled_contract_time_m,scheduled_work_time_m,paid_time_m,scheduled_over_time_m,scheduled_absence_time_m,scheduled_time_m,hide_time_zone)
 SELECT	d.date_id,
 		d.date_date,

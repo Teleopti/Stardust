@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
-using Teleopti.Analytics.Etl.IntegrationTest.Models;
 using Teleopti.Analytics.Etl.IntegrationTest.TestData;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.Job;
@@ -38,16 +36,27 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForStockholm()
 		{
+			DateTime testDate = new DateTime(2013, 06, 15);
+
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
 			Data.Apply(etlUpdateDate);
 
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>());
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>(), testDate);
 
 			IPerson person;
             BasicShiftSetup.SetupBasicForShifts();
-            BasicShiftSetup.AddPerson(out person, "Ola H","");
-            BasicShiftSetup.AddThreeShifts("Ola H");
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
+
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
+
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 
 			var readModel = new ScheduleDayReadModel
 			{
@@ -55,8 +64,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ColorCode = 0,
 				ContractTimeTicks = 500,
 				Date = DateTime.Today,
-				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
-				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
+				StartDateTime = testDate.AddDays(-15).AddHours(8),
+				EndDateTime = testDate.AddDays(-15).AddHours(17),
 				Label = "LABEL",
 				NotScheduled = false,
 				Workday = true,
@@ -66,15 +75,13 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			// we must manipulate readmodel so it "knows" that the dates on the person are updated
 			var readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
-			//readModel.Date = DateTime.Today.AddDays(-1);
-			//readM = new ScheduleDayReadModelSetup { Model = readModel };
-			//Data.Apply(readM);
+
 			readModel.Date = DateTime.Today.AddDays(1);
 			readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
 
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			dateList.Add(DateTime.Today.AddDays(-3),DateTime.Today.AddDays(3),JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture)
 				{
 					Helper =
@@ -98,21 +105,18 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// now it should have data on all three dates 96 interval
-			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
-			
-			var factSchedules = from s in db.fact_schedule select s;
+			var factSchedules = SqlCommands.RowsInFactSchedule();
 
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 			step = new IntradayStageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
-			factSchedules = from s in db.fact_schedule select s;
-
+			factSchedules = SqlCommands.RowsInFactSchedule();
 			// still it should have data on all three dates 96 interval, in the bug only 64 one day extra before the two was deleted
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 
 			step = new FactScheduleDayCountJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
@@ -121,17 +125,27 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 		[Test]
 		public void ShouldWorkForBrasil()
 		{
+			DateTime testDate = new DateTime(2013, 06, 15);
+
 			// run this to get a date and time in mart.LastUpdatedPerStep
 			var etlUpdateDate = new EtlReadModelSetup { BusinessUnit = TestState.BusinessUnit, StepName = "Schedules" };
 			Data.Apply(etlUpdateDate);
 
 			var brasilTimeZone = new BrasilTimeZone {TimeZoneId = 2};
-			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup>{brasilTimeZone});
+			AnalyticsRunner.RunAnalyticsBaseData(new List<IAnalyticsDataSetup> { brasilTimeZone }, testDate);
+
+			var cat = new ShiftCategoryConfigurable { Name = "Kattegat", Color = "Green" };
+			var activityPhone = new ActivityConfigurable { Name = "Phone", Color = "LightGreen", InReadyTime = true };
+			var activityLunch = new ActivityConfigurable { Name = "Lunch", Color = "Red" };
+
+			Data.Apply(cat);
+			Data.Apply(activityPhone);
+			Data.Apply(activityLunch);
 
 			IPerson person;
             BasicShiftSetup.SetupBasicForShifts();
-            BasicShiftSetup.AddPerson(out person, "Ola H","");
-            BasicShiftSetup.AddThreeShifts("Ola H");
+			BasicShiftSetup.AddPerson(out person, "Ola H", "", testDate);
+			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 
 			Data.Person("Ola H").Apply(new BrasilianTimeZone());
 
@@ -141,8 +155,8 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 				ColorCode = 0,
 				ContractTimeTicks = 500,
 				Date = DateTime.Today,
-				StartDateTime = DateTime.Today.AddDays(-15).AddHours(8),
-				EndDateTime = DateTime.Today.AddDays(-15).AddHours(17),
+				StartDateTime = testDate.AddDays(-15).AddHours(8),
+				EndDateTime = testDate.AddDays(-15).AddHours(17),
 				Label = "LABEL",
 				NotScheduled = false,
 				Workday = true,
@@ -152,15 +166,12 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			// we must manipulate readmodel so it "knows" that the dates on the person are updated
 			var readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
-			readModel.Date = DateTime.Today.AddDays(-1);
+			readModel.Date = DateTime.Today.AddDays(1);
 			readM = new ScheduleDayReadModelSetup { Model = readModel };
 			Data.Apply(readM);
-			//readModel.Date = DateTime.Today.AddDays(1);
-			//readM = new ScheduleDayReadModelSetup { Model = readModel };
-			//Data.Apply(readM);
 
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
 			{
 				Helper =
@@ -180,20 +191,17 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			// now it should have data on all three dates 96 interval
-			var db = new AnalyticsContext(ConnectionStringHelper.ConnectionStringUsedInTestsMatrix);
+			var factSchedules = SqlCommands.RowsInFactSchedule();
 
-			var factSchedules = from s in db.fact_schedule select s;
-
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 			step = new IntradayStageScheduleJobStep(jobParameters);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
 
 			step = new FactScheduleJobStep(jobParameters, true);
 			step.Run(new List<IJobStep>(), TestState.BusinessUnit, result, true);
-			factSchedules = from s in db.fact_schedule select s;
+			factSchedules = SqlCommands.RowsInFactSchedule();
 
-			
-			Assert.That(factSchedules.Count(), Is.EqualTo(96));
+			Assert.That(factSchedules, Is.EqualTo(96));
 		}
 
 		
