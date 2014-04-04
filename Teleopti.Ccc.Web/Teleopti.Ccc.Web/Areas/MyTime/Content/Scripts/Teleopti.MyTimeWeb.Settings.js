@@ -31,6 +31,17 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	    	_setCalendarLinkStatus(false);
 	    };
 
+	    self.IsNotificationSupported = ko.computed(function() {
+		    if (window.webkitNotifications)
+		    	return true;
+		    return false;
+	    });
+	    self.RequestNotificationPermission = function () {
+		    if (window.webkitNotifications && window.webkitNotifications.checkPermission() != 0) {
+			    window.webkitNotifications.requestPermission();
+		    }
+	    };
+
         self.selectedUiCulture.subscribe(function(newValue) {
             if (!self.avoidReload)
                 _selectorChanged(newValue, "Settings/UpdateUiCulture");

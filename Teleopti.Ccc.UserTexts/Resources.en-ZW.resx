@@ -8258,4 +8258,7 @@ Weekday</value>
     <value>Add Hourly Availability...</value>
     <comment>To be used in menus/ribbon when adding student availability</comment>
   </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Allow Desktop Notifications</value>
+  </data>
 </root>
