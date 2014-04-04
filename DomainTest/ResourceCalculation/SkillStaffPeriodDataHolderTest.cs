@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class SkillStaffPeriodDataHolderTest
     {
-        private SkillStaffPeriodDataHolder _target;
+        private SkillStaffPeriodDataInfo _target;
         private DateTimePeriod _period;
 
         [SetUp]
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTime end = new DateTime(2009, 02, 02, 8, 15, 0, DateTimeKind.Utc);
 
             _period = new DateTimePeriod(start,end);
-            _target = new SkillStaffPeriodDataHolder(5, 10, _period, 5, 10, 0, null);
+            _target = new SkillStaffPeriodDataInfo(5, 10, _period, 5, 10, 0, null);
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCalculateValueWithMinutes()
         {
-            _target = new SkillStaffPeriodDataHolder(150, 120, _period, 0, 0, 0, null);
+            _target = new SkillStaffPeriodDataInfo(150, 120, _period, 0, 0, 0, null);
             var result = _target.PeriodValue(10, false, false);
             Assert.AreEqual(3, result);
 
@@ -74,32 +74,32 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             DateTime date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
             DateTimePeriod period1 = new DateTimePeriod(date, date.AddMinutes(15));
             // Not over and not under
-            SkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo data = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
-			double corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true,dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads,dataHolder.MinimumPersons,dataHolder.AssignedResourceInMinutes);
+			double corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true,data.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads,data.MinimumPersons,data.AssignedResourceInMinutes);
             Assert.AreEqual(0, corrFactor);
             // understaffed
-            dataHolder = new SkillStaffPeriodDataHolder(5, 80, period1, 2, 5, -3, null);
-			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+            data = new SkillStaffPeriodDataInfo(5, 80, period1, 2, 5, -3, null);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, data.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, data.MinimumPersons, data.AssignedResourceInMinutes);
 
             Assert.AreEqual(150000, corrFactor);
 
-            dataHolder = new SkillStaffPeriodDataHolder(5, 0, period1, 2, 5, -3, null);
-			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+            data = new SkillStaffPeriodDataInfo(5, 0, period1, 2, 5, -3, null);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, data.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, data.MinimumPersons, data.AssignedResourceInMinutes);
 
             Assert.AreEqual(300000, corrFactor);
 
-			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(false, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(false, true, data.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, data.MinimumPersons, data.AssignedResourceInMinutes);
 
             Assert.AreEqual(0, corrFactor);
 
             // overstaffed
-            dataHolder = new SkillStaffPeriodDataHolder(5, 80, period1, 2, 5, 2, null);
-			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+            data = new SkillStaffPeriodDataInfo(5, 80, period1, 2, 5, 2, null);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, data.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, data.MinimumPersons, data.AssignedResourceInMinutes);
 
             Assert.AreEqual(-200000, corrFactor);
 
-			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, false, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, false, data.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, data.MinimumPersons, data.AssignedResourceInMinutes);
 
             Assert.AreEqual(0, corrFactor);
         }
