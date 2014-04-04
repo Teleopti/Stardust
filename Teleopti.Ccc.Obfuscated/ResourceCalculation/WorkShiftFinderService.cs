@@ -109,7 +109,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         public IWorkShiftCalculationResultHolder FindBestMainShift(
             DateOnly dateOnly,  
             IList<IShiftProjectionCache> shiftProjectionCaches,
-			IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders, 
+			//IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders, 
+			IWorkShiftCalculatorSkillStaffPeriods dataHolders, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			var person = currentSchedulePeriod.Person;
         	IList<IWorkShiftCalculationResultHolder> allValues = _workShiftCalculatorsManager.RunCalculators(person,
         	                                                                                                 shiftProjectionCaches,
-        	                                                                                                 dataHolders,
+																											 dataHolders, 
         	                                                                                                 nonBlendSkillPeriods,
         	                                                                                                 schedulingOptions);
             if (allValues.Count == 0)
@@ -138,12 +139,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             if (person.WorkflowControlSet != null)
                 useShiftCategoryFairness = person.WorkflowControlSet.UseShiftCategoryFairness;
 
-        	IList<IWorkShiftCalculationResultHolder> foundValues =
+        	IEnumerable<IWorkShiftCalculationResultHolder> foundValues =
         		_fairnessAndMaxSeatCalculatorsManager.RecalculateFoundValues(allValues, maxValue, useShiftCategoryFairness,
         		                                                             person, dateOnly, maxSeatSkillPeriods,
         		                                                             currentSchedulePeriod.AverageWorkTimePerDay,
         		                                                             schedulingOptions);
-	        if (foundValues.Count == 0)
+	        if (!foundValues.Any())
 		        return null;
 
 			// if we only want shifts that don't overstaff
@@ -166,12 +167,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					return null;
 				}
 			}
-            
-            
-            foundValues = WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders);
-	        int foundValuesCount = foundValues.Count;
+
+
+			foundValues = WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(foundValues, dataHolders).Cast<IWorkShiftCalculationResultHolder>();
+	        int foundValuesCount = foundValues.Count();
 	        if (foundValuesCount == 1)
-		        return foundValues[0];
+		        return foundValues.First();
 
 			IDictionary<int, int> randomResultList = new Dictionary<int, int>(foundValuesCount);
 			for (int i = 0; i < foundValuesCount; i++)
@@ -182,7 +183,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	        for (int i = 0; i < 100; i++)
 	        {
 				var rndResult = foundValues.GetRandom();
-		        int index = foundValues.IndexOf(rndResult);
+		        var index = foundValues
+					.Select((v, ii) => new {v, ii})
+					.Where(v => v.v == rndResult)
+					.Select(v => v.ii)
+					.First();
+		        //int index = foundValues.IndexOf(rndResult);
 		        randomResultList[index] = randomResultList[index] + 1;
 	        }
 
@@ -191,7 +197,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	        foreach (var keyValuePair in randomResultList)
 	        {
 		        if (keyValuePair.Value == winningIndexValue)
-			        return foundValues[keyValuePair.Key];
+			        return foundValues.ElementAt(keyValuePair.Key);
+			        //return foundValues[keyValuePair.Key];
 	        }
 
 	        return null;
@@ -271,7 +278,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                 var nonBlendPeriods = _personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);
                 var dataholder = _personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, virtualSchedulePeriod);
 
-                result = FindBestMainShift(dateOnly, _shiftList, dataholder,maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions);
+				result = FindBestMainShift(dateOnly, _shiftList, new SkillStaffPeriodDataWrapper(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions);
             }
 
             return result;

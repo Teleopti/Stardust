@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// Object fo caching a shift projection.
     /// </summary>
-    public interface IShiftProjectionCache
+	public interface IShiftProjectionCache : IWorkShiftCalculatableProjection
     {
         /// <summary>
         /// Sets the date.

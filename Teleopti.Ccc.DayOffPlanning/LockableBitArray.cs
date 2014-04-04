@@ -76,7 +76,12 @@ namespace Teleopti.Ccc.DayOffPlanning
             }
         }
 
-        public bool this[int index]
+	    public decimal PeriodAreaMaximum
+	    {
+		    get { return _periodArea.Maximum; }
+	    }
+
+	    public bool this[int index]
         {
             get { return _dayOffBits[index]; }
         }
@@ -96,7 +101,9 @@ namespace Teleopti.Ccc.DayOffPlanning
             return UnlockedIndexes[listIndex];
         }
 
-        private void createUnlockedList()
+		public decimal PeriodAreaMinimum { get { return _periodArea.Minimum; } }
+
+	    private void createUnlockedList()
         {
             _unlockedIndexes = new List<int>();
             for (int i = 0; i < _lockedBits.Count; i++)

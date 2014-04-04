@@ -195,6 +195,7 @@
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
     <Compile Include="IMessageBrokerEnablerFactory.cs" />
+    <Compile Include="IServiceLevelCalculator.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />
     <Compile Include="Payroll\PayrollFormatHandler.cs" />
@@ -226,6 +227,7 @@
     <Compile Include="QueryHandler\GetSchedulesByTeamQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByDescriptionNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSiteByIdQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetSkillDaysByPeriodQueryHandler.cs" />
     <Compile Include="QueryHandler\GetTeamByDescriptionNameQueryHandler.cs" />
     <Compile Include="QueryHandler\GetTeamByIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetValidatedSchedulePartsForPreferenceQueryHandler.cs" />
@@ -254,6 +256,10 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.Payroll\Teleopti.Ccc.PayrollFormatter\Teleopti.Ccc.PayrollFormatter.csproj">
       <Project>{D3A96039-45CD-42CA-BCEC-1AE495651082}</Project>
       <Name>Teleopti.Ccc.PayrollFormatter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
+      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
+      <Name>Teleopti.Ccc.Secrets</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>

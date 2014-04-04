@@ -169,6 +169,10 @@
       <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
       <Name>Teleopti.Ccc.DayOffPlanning</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
+      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
+      <Name>Teleopti.Ccc.Secrets</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>

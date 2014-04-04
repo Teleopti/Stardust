@@ -200,3 +200,115 @@ GO
 
 
 
+----------------  
+--Name: David Jonsson
+--Date: 2013-12-12
+--Desc: Bug #26054 - Remove unique constraint as the read model is update much later by Service bus.
+--					 We don't catch the error and ReadModel never updates again
+--					 Clean up dupliates in PersonGroup when belong to same "Tab"
+---------------- 
+IF EXISTS (
+	SELECT * FROM sys.indexes
+	WHERE object_id = OBJECT_ID(N'[ReadModel].[GroupingReadOnly]')
+	AND name = N'UC_GroupingReadOnly'
+	)
+ALTER TABLE [ReadModel].[GroupingReadOnly] DROP CONSTRAINT UC_GroupingReadOnly
+GO
+
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'dbo.GroupPageParent'))
+DROP VIEW dbo.GroupPageParent
+GO
+
+create view dbo.GroupPageParent
+as
+--a) all 1st level e.g. the ones directly under each GroupPage Tab
+select
+	pgb.Id as 'Id',
+	cast(null as uniqueidentifier) as 'Parent',
+	rpg.Parent as 'TabId'
+from GroupPage gp
+inner join RootPersonGroup rpg
+	on rpg.Parent = gp.Id
+inner join PersonGroupBase pgb
+	on pgb.Id = rpg.PersonGroupBase
+
+union all
+
+--b) and childs futher down
+select
+	pgb.Id as 'Id',
+	c.Parent as 'Parent',
+	cast(null as uniqueidentifier) as 'TabId'
+from PersonGroupBase pgb
+left outer join ChildPersonGroup c
+	on c.PersonGroupBase=pgb.Id
+where not exists (select 1 from RootPersonGroup r where r.PersonGroupBase = pgb.Id)
+go
+
+--views added later, needed now
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'dbo.GroupPageHierarchyCTE'))
+DROP VIEW dbo.GroupPageHierarchyCTE
+GO
+
+-- recursive cte to draw GroupPage hierarchy
+create view dbo.GroupPageHierarchyCTE
+as
+
+WITH GroupPageHierarchyCTE(level,PersonGroup,Parent,TabId)
+AS (
+	SELECT
+		1,
+		e.Id,
+		e.Parent,
+		e.TabId
+	FROM GroupPageParent e
+	WHERE Parent IS NULL
+
+	UNION ALL
+
+	SELECT
+		cte.level+1,
+		e.Id,
+		e.Parent,
+		cte.TabId
+	FROM GroupPageParent e
+	INNER JOIN GroupPageHierarchyCTE cte
+		ON e.Parent = cte.PersonGroup
+	WHERE e.Parent IS NOT NULL
+)
+select * from GroupPageHierarchyCTE
+GO
+
+--temp table to hold OK and not OK personGroup
+declare @personGroup table (person uniqueidentifier, PersonGroup uniqueidentifier, IsOk bit);
+insert into @personGroup
+select
+	a.Person,
+	a.PersonGroup,
+	case a.RowNumer
+		when 1 then 1
+		else 0
+	end as 'IsOk'
+from (
+	SELECT
+		pg.Person,
+		cte.PersonGroup,
+		ROW_NUMBER() OVER(PARTITION BY pg.Person,cte.TabId ORDER BY cte.level ASC) AS RowNumer
+	FROM GroupPageHierarchyCTE cte
+	INNER JOIN PersonGroup pg
+		on pg.PersonGroup = cte.PersonGroup
+) as a
+inner join dbo.Person p
+	on a.Person=p.Id
+
+if exists (select 1 from @personGroup where IsOk=0)
+begin
+	print 'found duplicates in custom Group Page'
+	delete pg
+	from PersonGroup pg
+	inner join @personGroup tmp
+		on tmp.person = pg.Person
+		and tmp.PersonGroup = pg.PersonGroup
+	where tmp.IsOk=0
+end
+GO

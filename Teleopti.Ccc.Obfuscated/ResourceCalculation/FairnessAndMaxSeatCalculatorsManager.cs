@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			var foundValues = new List<IWorkShiftCalculationResultHolder>();
 
 
-            foreach (WorkShiftCalculationResultHolder thisShiftValue in allValues)
+            foreach (WorkShiftCalculationResult thisShiftValue in allValues)
             {
                 IShiftProjectionCache shiftProjection = thisShiftValue.ShiftProjection;
 	            double shiftValue = thisShiftValue.Value;
@@ -102,14 +102,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
                 if (shiftValue > highestShiftValue)
                 {
-                    var workShiftFinderResultHolder = new WorkShiftCalculationResultHolder { ShiftProjection = shiftProjection, Value = shiftValue };
+                    var workShiftFinderResultHolder = new WorkShiftCalculationResult { ShiftProjection = shiftProjection, Value = shiftValue };
                     foundValues = new List<IWorkShiftCalculationResultHolder> { workShiftFinderResultHolder };
                     highestShiftValue = shiftValue;
                     continue;
                 }
                 if (Math.Abs(shiftValue - highestShiftValue) < 0.000001)
                 {
-                    var workShiftFinderResultHolder = new WorkShiftCalculationResultHolder { ShiftProjection = shiftProjection, Value = shiftValue };
+                    var workShiftFinderResultHolder = new WorkShiftCalculationResult { ShiftProjection = shiftProjection, Value = shiftValue };
                     foundValues.Add(workShiftFinderResultHolder);
                 }
             }

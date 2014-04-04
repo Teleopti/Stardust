@@ -1,33 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd0" namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/" />
-  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd9" namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/" />
-  <xs:complexType name="DeletePersonAccountForPersonCommandDto">
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/System.ServiceModel" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/System.ServiceModel" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://localhost:1335/TeleoptiCccSdkService.svc?xsd=xsd5" namespace="http://schemas.datacontract.org/2004/07/System" />
+  <xs:complexType name="FaultException">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q1="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q1:CommandDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AbsenceId" type="ser:guid" />
-          <xs:element xmlns:q2="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DateFrom" nillable="true" type="q2:DateOnlyDto" />
-          <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
+      <xs:extension base="tns:CommunicationException" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DeletePersonAccountForPersonCommandDto" nillable="true" type="tns:DeletePersonAccountForPersonCommandDto" />
-  <xs:complexType name="SetPersonAccountForPersonCommandDto">
+  <xs:element name="FaultException" nillable="true" type="tns:FaultException" />
+  <xs:complexType name="CommunicationException">
     <xs:complexContent mixed="false">
-      <xs:extension xmlns:q3="http://schemas.ccc.teleopti.com/sdk/2011/07/" base="q3:CommandDto">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AbsenceId" type="ser:guid" />
-          <xs:element minOccurs="0" name="Accrued" nillable="true" type="xs:long" />
-          <xs:element minOccurs="0" name="BalanceIn" nillable="true" type="xs:long" />
-          <xs:element xmlns:q4="http://schemas.ccc.teleopti.com/sdk/2010/04/" minOccurs="0" name="DateFrom" nillable="true" type="q4:DateOnlyDto" />
-          <xs:element minOccurs="0" name="Extra" nillable="true" type="xs:long" />
-          <xs:element minOccurs="0" name="PersonId" type="ser:guid" />
-        </xs:sequence>
-      </xs:extension>
+      <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/System" base="q1:SystemException" />
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="SetPersonAccountForPersonCommandDto" nillable="true" type="tns:SetPersonAccountForPersonCommandDto" />
+  <xs:element name="CommunicationException" nillable="true" type="tns:CommunicationException" />
+  <xs:complexType name="FaultException.FaultCodeData">
+    <xs:sequence>
+      <xs:element name="name" nillable="true" type="xs:string" />
+      <xs:element name="ns" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FaultException.FaultCodeData" nillable="true" type="tns:FaultException.FaultCodeData" />
+  <xs:complexType name="ArrayOfFaultException.FaultReasonData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FaultException.FaultReasonData" nillable="true" type="tns:FaultException.FaultReasonData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFaultException.FaultReasonData" nillable="true" type="tns:ArrayOfFaultException.FaultReasonData" />
+  <xs:complexType name="FaultException.FaultReasonData">
+    <xs:sequence>
+      <xs:element name="text" nillable="true" type="xs:string" />
+      <xs:element name="xmlLang" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FaultException.FaultReasonData" nillable="true" type="tns:FaultException.FaultReasonData" />
+  <xs:complexType name="ArrayOfFaultException.FaultCodeData">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FaultException.FaultCodeData" nillable="true" type="tns:FaultException.FaultCodeData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFaultException.FaultCodeData" nillable="true" type="tns:ArrayOfFaultException.FaultCodeData" />
 </xs:schema>

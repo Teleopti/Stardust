@@ -25,7 +25,13 @@ namespace SdkTestClientWin.Domain
             DateOnlyDto dateOnlyDto = new DateOnlyDto();
             dateOnlyDto.DateTime = _dateOnly.Date;
             dateOnlyDto.DateTimeSpecified = true;
-            IList<SkillDayDto> temp = new List<SkillDayDto>(_service.ForecastingService.GetSkillData(dateOnlyDto, _timeZoneInfo.Id));
+            IList<SkillDayDto> temp =
+                new List<SkillDayDto>(
+                    _service.ForecastingService.GetSkillDataByQuery(new GetSkillDaysByPeriodQueryDto
+                    {
+                        Period = new DateOnlyPeriodDto {StartDate = dateOnlyDto, EndDate = dateOnlyDto},
+                        TimeZoneId = _timeZoneInfo.Id
+                    }));
             foreach (SkillDayDto dto in temp)
             {
                 retList.Add(new SkillDay(dto));

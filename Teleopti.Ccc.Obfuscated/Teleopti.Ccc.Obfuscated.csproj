@@ -118,7 +118,6 @@
     <Compile Include="ResourceCalculation\SkillStaffPeriodHelper.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodStatisticsForSkillIntraday.cs" />
     <Compile Include="ResourceCalculation\StudentSchedulingService.cs" />
-    <Compile Include="ResourceCalculation\WorkShiftCalculator.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculationResultHolder.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />

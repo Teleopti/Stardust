@@ -160,6 +160,10 @@
       <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
       <Name>Teleopti.Ccc.Obfuscated</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
+      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
+      <Name>Teleopti.Ccc.Secrets</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Messaging\Teleopti.Interfaces\Teleopti.Interfaces.csproj">
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>

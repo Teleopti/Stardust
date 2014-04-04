@@ -142,7 +142,32 @@ CD "%WISESOURCEFILE%"
 ::--------
 ::Get None Source Controlled stuff
 ::--------
-CALL "%WISEDIR%\GetNoneTFSFiles.bat"
+::CCC_forecast
+XCOPY "%DEPENDENCIESSRC%\ccc7_forecast\SQLEXPR.EXE" "%WISESOURCEFILE%\Wise\ccc7_forecast\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_forecast\ForecastDatabase\TeleoptiCCC_Forecasts.BAK" "%WISESOURCEFILE%\ForecastDatabase\" /D /Y
+
+::CCC_server
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiAnalytics_Demo.bak" "%WISESOURCEFILE%\DemoDatabase\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiCCC7_Demo.bak" "%WISESOURCEFILE%\DemoDatabase\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\DemoDatabase\TeleoptiCCC7Agg_Demo.BAK" "%WISESOURCEFILE%\DemoDatabase\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\ReportViewer2010.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\RegisterEventLogSource.exe" "%WISESOURCEFILE%\Wise\ccc7_server\Logs\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\ntrights.exe" "%WISESOURCEFILE%\Wise\ccc7_server\Logs\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\ntrights.exe" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\ccc7_server\sqlio.exe" "%WISESOURCEFILE%\SupportTools\SQLServerPerformance\SQLIO\" /D /Y
+
+::WISE
+ROBOCOPY "%DEPENDENCIESSRC%\images" "%WISESOURCEFILE%\images" /MIR
+
+if exist "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%" (
+XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_server.wsi" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_mytime.wsi" "%WISESOURCEFILE%\Wise\ccc7_mytime\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_forecast.wsi" "%WISESOURCEFILE%\Wise\ccc7_forecast\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_client.wsi" "%WISESOURCEFILE%\Wise\ccc7_client\" /D /Y
+) else (
+SET ERRORLEV=102
+GOTO Error
+)
 
 ::--------
 ::Create WISE artifact structure
@@ -223,7 +248,8 @@ IF %ERRORLEV% EQU 1 ECHO ECHO ProductId=%ProductId% did not compile!
 IF %ERRORLEV% EQU 2 ECHO Could not find file for machine config on computer: %COMPUTERNAME%
 IF %ERRORLEV% EQU 3 ECHO Failed to create machine config
 IF %ERRORLEV% EQU 4 ECHO Drive %WISEDRIVELETTER% probably exist as fixed drive letter. Abort!
-IF %ERRORLEV% EQU 101 (ECHO Azure compile failed) ELSE (ECHO Unknown error code, ERRORLEV is %ERRORLEV%)
+IF %ERRORLEV% EQU 101 (ECHO Azure compile failed)
+IF %ERRORLEV% EQU 102 (ECHO Could not copy wsi file. Abort!) ELSE (ECHO Unknown error code, ERRORLEV is %ERRORLEV%)
 ECHO.
 ECHO --------
 GOTO :EOF
