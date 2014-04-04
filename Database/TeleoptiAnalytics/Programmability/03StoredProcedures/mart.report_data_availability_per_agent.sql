@@ -29,31 +29,17 @@ CREATE TABLE  #rights_agents (right_id int)
 INSERT INTO #rights_agents
 SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code)
 
-
 /*Get all teams that user has permission to see. */
 CREATE TABLE #rights_teams (right_id int)
            INSERT INTO #rights_teams SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
 
-
-
-CREATE TABLE #RESULT(PersonCode uniqueidentifier,
-					PersonName nvarchar(500),
-					AvailableDays int,
-					AvailableMinutes int,
-					ScheduledDays int,
-					ScheduledMinutes int, 
-					Utilization decimal(18,3))
-
-
-
-INSERT #result(PersonCode,PersonName, AvailableDays,AvailableMinutes,ScheduledDays,ScheduledMinutes,Utilization)
-SELECT	p.person_code,
-		p.person_name,
-		sum(f.available_days), 
-		sum(f.available_time_m),
-		sum(f.scheduled_days),
-		sum(f.scheduled_time_m), 
-		sum(f.scheduled_time_m)/convert(decimal(18,3),sum(f.available_time_m))
+SELECT	p.person_code as 'PersonCode',
+		p.person_name as 'PersonName',
+		sum(f.available_days) as 'AvailableDays', 
+		sum(f.available_time_m) as 'AvailableMinutes',
+		sum(f.scheduled_days) as 'ScheduledDays',
+		sum(f.scheduled_time_m) as 'ScheduledMinutes', 
+		sum(f.scheduled_time_m)/convert(decimal(18,3),sum(f.available_time_m)) as 'Utilization'
 FROM mart.fact_hourly_availability f
 INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
@@ -64,9 +50,8 @@ AND f.scenario_id=@scenario_id
 AND p.team_id IN(select right_id from #rights_teams)
 AND p.person_id in (SELECT right_id FROM #rights_agents)
 GROUP BY p.person_code,p.person_name
+ORDER BY p.person_name
 
-	
-	SELECT * FROM #RESULT order by PersonName
 END
 
 GO

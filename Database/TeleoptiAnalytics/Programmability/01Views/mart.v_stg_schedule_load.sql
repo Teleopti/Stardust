@@ -4,6 +4,7 @@ GO
 CREATE VIEW [Stage].[v_stg_schedule_load]
 AS
 SELECT
+	shift_startdate_local_id			= dl.date_id,
 	schedule_date_id					= dsd.date_id, 
 	person_id							= dp.person_id, 
 	interval_id							= di.interval_id, 
@@ -18,7 +19,8 @@ SELECT
 	shift_starttime						= f.shift_start, 
 	shift_enddate_id					= sed.date_id, 
 	shift_endtime						= f.shift_end, 
-	shift_startinterval_id				= f.shift_startinterval_id, 
+	shift_startinterval_id				= f.shift_startinterval_id,
+	shift_endinterval_id				= f.shift_endinterval_id,
 	shift_category_id					= sc.shift_category_id, 
 	shift_length_id						= sl.shift_length_id, 
 	scheduled_time_m					= f.scheduled_time_m, 
@@ -35,7 +37,6 @@ SELECT
 	scheduled_paid_time_m				= f.scheduled_paid_time_m,
 	scheduled_paid_time_activity_m		= f.scheduled_paid_time_activity_m,
 	scheduled_paid_time_absence_m		= f.scheduled_paid_time_absence_m,
-	last_publish						= f.last_publish, 
 	business_unit_id					= dp.business_unit_id,
 	datasource_id						= f.datasource_id, 
 	datasource_update_date				= f.datasource_update_date,
@@ -47,16 +48,19 @@ ON
 	f.person_code		=			dp.person_code
 	AND --trim
 		(
-				(f.shift_start	>= dp.valid_from_date)
+				(f.schedule_date_local	>= dp.valid_from_date_local)
 
 			AND
-				(f.shift_start < dp.valid_to_date)
+				(f.schedule_date_local < dp.valid_to_date_local)
 		)
-
+INNER JOIN
+	mart.dim_date		dl
+ON
+	f.schedule_date_local	= dl.date_date
 INNER JOIN
 	mart.dim_date		dsd
 ON
-	f.schedule_date	= dsd.date_date
+	f.schedule_date_utc	= dsd.date_date
 	
 INNER JOIN
 	mart.dim_interval	di

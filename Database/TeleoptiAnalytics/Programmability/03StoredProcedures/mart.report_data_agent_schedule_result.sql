@@ -168,7 +168,7 @@ end
 else
 begin
 	declare @me_as_id int
-	select @me_as_id=id from mart.PersonCodeToId(@person_code, @date_from, @date_to, null, null)
+	select @me_as_id=person_id from mart.dimPersonFilterPersonPeriod(@date_from, @date_to,@person_code)
 	INSERT INTO #rights_agents  --Insert the current agent
 	SELECT @me_as_id
 	INSERT INTO #agents --Insert the current agent
