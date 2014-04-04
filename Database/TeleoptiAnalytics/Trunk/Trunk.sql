@@ -374,7 +374,7 @@ CREATE TABLE [stage].[stg_schedule](
 	[update_date] smalldatetime NOT NULL,
 	[datasource_update_date] smalldatetime NOT NULL,
 	[overtime_code] uniqueidentifier NULL
-) ON stage
+)
 
 ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [PK_stg_schedule] PRIMARY KEY CLUSTERED
 (
@@ -385,7 +385,7 @@ ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [PK_stg_schedule] PRIMARY KEY
 	[activity_start] ASC,
 	[scenario_code] ASC,
 	[shift_start] ASC
-) ON stage
+)
 
 ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
 ALTER TABLE [stage].[stg_schedule] ADD  CONSTRAINT [DF_stg_schedule_insert_date]  DEFAULT (getdate()) FOR [insert_date]
@@ -400,14 +400,14 @@ CREATE TABLE [stage].[stg_schedule_changed](
 	[business_unit_code] uniqueidentifier NOT NULL,
 	[datasource_id] smallint NOT NULL,
 	[datasource_update_date] smalldatetime NOT NULL
-) ON stage
+)
 
 ALTER TABLE [stage].[stg_schedule_changed] ADD CONSTRAINT [PK_stg_schedule_changed] PRIMARY KEY CLUSTERED
 (
 	[schedule_date_local] ASC,
 	[person_code] ASC,
 	[scenario_code] ASC
-) ON stage
+)
 
 ----------------  
 --Name: KJ
@@ -526,7 +526,7 @@ CREATE TABLE [mart].[fact_schedule](
 	[update_date] [smalldatetime] NULL,
 	[datasource_update_date] [smalldatetime] NULL,
 	[overtime_id] [int] NOT NULL
-) ON mart
+)
 
 ALTER TABLE [mart].[fact_schedule] ADD CONSTRAINT [PK_fact_schedule] PRIMARY KEY CLUSTERED
 (
@@ -536,7 +536,7 @@ ALTER TABLE [mart].[fact_schedule] ADD CONSTRAINT [PK_fact_schedule] PRIMARY KEY
 	[schedule_date_id] ASC,
 	[interval_id] ASC,
 	[activity_starttime] ASC
-) ON mart
+)
 GO
 
 --Prepare intervals for new column
@@ -739,7 +739,7 @@ CREATE TABLE [mart].[fact_schedule_deviation](
 	[is_logged_in] [bit] NOT NULL,
 	[shift_startdate_id] [int] NULL,
 	[shift_startinterval_id] [smallint] NULL
-) ON mart
+)
 
 ALTER TABLE [mart].[fact_schedule_deviation] ADD CONSTRAINT [PK_fact_schedule_deviation] PRIMARY KEY CLUSTERED 
 (
@@ -747,7 +747,7 @@ ALTER TABLE [mart].[fact_schedule_deviation] ADD CONSTRAINT [PK_fact_schedule_de
 	[date_id] ASC,
 	[interval_id] ASC,
 	[person_id] ASC
-) ON mart
+)
 GO
 
 --move data
@@ -825,7 +825,7 @@ ALTER TABLE [stage].[stg_schedule_day_off_count] ADD CONSTRAINT [PK_stg_schedule
 	[schedule_date_local] ASC,
 	[person_code] ASC,
 	[scenario_code] ASC
-) ON stage
+)
 
 ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
 ALTER TABLE [stage].[stg_schedule_day_off_count] ADD  CONSTRAINT [DF_stg_schedule_day_off_count_insert_date]  DEFAULT (getdate()) FOR [insert_date]
@@ -871,14 +871,14 @@ CREATE TABLE [mart].[fact_schedule_day_count](
 	[insert_date] [smalldatetime] NOT NULL,
 	[update_date] [smalldatetime] NOT NULL,
 	[datasource_update_date] [smalldatetime] NULL
-) on mart
+)
 
 ALTER  TABLE [mart].[fact_schedule_day_count] ADD CONSTRAINT [PK_fact_schedule_day_count] PRIMARY KEY CLUSTERED 
 (
 	[shift_startdate_local_id] ASC,
 	[person_id] ASC,
 	[scenario_id] ASC
-) ON mart
+)
 
 ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_date_id]  DEFAULT ((-1)) FOR [shift_startdate_local_id]
 ALTER TABLE [mart].[fact_schedule_day_count] ADD  CONSTRAINT [DF_fact_schedule_day_count_person_id]  DEFAULT ((-1)) FOR [person_id]
@@ -963,14 +963,14 @@ CREATE TABLE [stage].[stg_schedule_day_absence_count](
 	[insert_date] [smalldatetime] NULL,
 	[update_date] [smalldatetime] NULL,
 	[datasource_update_date] [smalldatetime] NULL
-) ON stage
+)
 
 ALTER TABLE [stage].[stg_schedule_day_absence_count] ADD CONSTRAINT [PK_stg_schedule_day_absence_count] PRIMARY KEY CLUSTERED 
 (
 	[schedule_date_local] ASC,
 	[person_code] ASC,
 	[scenario_code] ASC
-) ON stage
+)
 ALTER TABLE [stage].[stg_schedule_day_absence_count] ADD  CONSTRAINT [DF_stg_schedule_day_absence_count_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
 ALTER TABLE [stage].[stg_schedule_day_absence_count] ADD  CONSTRAINT [DF_stg_schedule_day_absence_count_insert_date]  DEFAULT (getdate()) FOR [insert_date]
 ALTER TABLE [stage].[stg_schedule_day_absence_count] ADD  CONSTRAINT [DF_stg_schedule_day_absence_count_update_date]  DEFAULT (getdate()) FOR [update_date]
