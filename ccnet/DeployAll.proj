@@ -318,8 +318,7 @@
 	/>
 
 			<ETLService
-			  Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*;
-              $(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
+			  Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*"
 			  Exclude="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\*.nhib.xml"
 	/>
 
