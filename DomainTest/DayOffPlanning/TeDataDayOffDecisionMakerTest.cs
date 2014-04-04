@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanningTest
+namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Te"), TestFixture]
 	public class TeDataDayOffDecisionMakerTest
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			bool result = _target.Execute(_array, _values);
 
 			Assert.IsTrue(result);
-			Assert.AreEqual("Teleopti.Ccc.DayOffPlanning.LockableBitArray 00110000011000", _array.ToString());
+			Assert.AreEqual("Teleopti.Ccc.Domain.DayOffPlanning.LockableBitArray 00110000011000", _array.ToString());
 		}
 
 		[Test]
@@ -65,7 +64,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			bool result = _target.Execute(_array, _values);
 
 			Assert.IsTrue(result);
-			Assert.AreEqual("Teleopti.Ccc.DayOffPlanning.LockableBitArray 001100000110000011000", _array.ToString());
+			Assert.AreEqual("Teleopti.Ccc.Domain.DayOffPlanning.LockableBitArray 001100000110000011000", _array.ToString());
 		}
 
 		[Test]
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			bool result = _target.Execute(_array, _values);
 
 			Assert.IsTrue(result);
-			Assert.AreEqual("Teleopti.Ccc.DayOffPlanning.LockableBitArray 0110000011000011000001100000", _array.ToString());
+			Assert.AreEqual("Teleopti.Ccc.Domain.DayOffPlanning.LockableBitArray 0110000011000011000001100000", _array.ToString());
 		}
 	}
 

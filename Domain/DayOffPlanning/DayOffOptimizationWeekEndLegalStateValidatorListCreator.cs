@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanning
+namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
     /// <summary>
     /// Creates a list of <see cref="IDayOffLegalStateValidator"/> for day off optimization functionality.

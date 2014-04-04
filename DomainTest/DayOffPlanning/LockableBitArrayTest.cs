@@ -2,10 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanningTest
+namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 {
     [TestFixture]
     public class LockableBitArrayTest
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DayOffPlanningTest
         public void VerifyToString()
         {
             _target.Set(2, true);
-            string expected = "Teleopti.Ccc.DayOffPlanning.LockableBitArray 0010000";
+			string expected = "Teleopti.Ccc.Domain.DayOffPlanning.LockableBitArray 0010000";
             Assert.AreEqual(expected, _target.ToString());
         }
 

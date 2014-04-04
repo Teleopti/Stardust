@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections;
 using NUnit.Framework;
-using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanningTest
+namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 {
     [TestFixture]
     public class FreeWeekendDayValidatorTest

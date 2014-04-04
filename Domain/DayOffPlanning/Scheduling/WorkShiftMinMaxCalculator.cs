@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanning.Scheduling
+namespace Teleopti.Ccc.Domain.DayOffPlanning.Scheduling
 {
     public class WorkShiftMinMaxCalculator : IWorkShiftMinMaxCalculator
     {

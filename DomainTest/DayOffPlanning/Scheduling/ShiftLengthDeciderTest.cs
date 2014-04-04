@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
+namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 {
 	[TestFixture]
 	public class ShiftLengthDeciderTest
