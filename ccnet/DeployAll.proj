@@ -317,18 +317,10 @@
 			  Exclude="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\bin\$(Configuration)\*.nhib.xml"
 	/>
 
-			<ETLTool
-			  Include="$(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
-	/>
-
 			<ETLService
 			  Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*;
               $(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
 			  Exclude="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\*.nhib.xml"
-	/>
-
-			<ETLService
-				Include="$(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
 	/>
 
 			<!-- MyTimeStandAlone -->
