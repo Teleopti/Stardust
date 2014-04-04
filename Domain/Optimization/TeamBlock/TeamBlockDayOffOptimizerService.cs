@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;

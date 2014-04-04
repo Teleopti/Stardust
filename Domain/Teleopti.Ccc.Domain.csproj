@@ -282,6 +282,49 @@
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
     <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
     <Compile Include="ApplicationLayer\IHandleCommand.cs" />
+    <Compile Include="DayOffPlanning\CMSBCaseSolver.cs" />
+    <Compile Include="DayOffPlanning\CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\ConsecutiveDayOffValidator.cs" />
+    <Compile Include="DayOffPlanning\ConsecutiveDaysOffSolver.cs" />
+    <Compile Include="DayOffPlanning\ConsecutiveWorkdaysSolver.cs" />
+    <Compile Include="DayOffPlanning\ConsecutiveWorkdayValidator.cs" />
+    <Compile Include="DayOffPlanning\DayOffOptimizationLegalStateValidatorListCreator.cs" />
+    <Compile Include="DayOffPlanning\DayOffOptimizationWeekEndLegalStateValidatorListCreator.cs" />
+    <Compile Include="DayOffPlanning\DaysOffPerWeekSolver.cs" />
+    <Compile Include="DayOffPlanning\ExtendReduceDaysOffDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\ExtendReduceTimeDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\FiveConsecutiveWorkDaysSolver.cs" />
+    <Compile Include="DayOffPlanning\FreeWeekendDaySolver.cs" />
+    <Compile Include="DayOffPlanning\FreeWeekendDayValidator.cs" />
+    <Compile Include="DayOffPlanning\FreeWeekendSolver.cs" />
+    <Compile Include="DayOffPlanning\FreeWeekendValidator.cs" />
+    <Compile Include="DayOffPlanning\IDayOffBackToLegalStateSolver.cs" />
+    <Compile Include="DayOffPlanning\IDayOffLegalStateValidatorListCreator.cs" />
+    <Compile Include="DayOffPlanning\IntradayDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\ISmartDayOffBackToLegalStateService.cs" />
+    <Compile Include="DayOffPlanning\IWorkShiftBackToLegalStateDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\KeepFreeWeekendDayValidator.cs" />
+    <Compile Include="DayOffPlanning\KeepFreeWeekendValidator.cs" />
+    <Compile Include="DayOffPlanning\LockableBitArray.cs" />
+    <Compile Include="DayOffPlanning\LockableBitArrayChangesTracker.cs" />
+    <Compile Include="DayOffPlanning\MatrixRestrictionLocker.cs" />
+    <Compile Include="DayOffPlanning\MinMaxNumberOfResult.cs" />
+    <Compile Include="DayOffPlanning\MoveOneDayOffDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\MoveTimeDecisionMaker2.cs" />
+    <Compile Include="DayOffPlanning\MoveWeekendDayOffDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\Scheduling\DesiredShiftLengthCalculator.cs" />
+    <Compile Include="DayOffPlanning\Scheduling\PossibleMinMaxWorkShiftLengthExtractor.cs" />
+    <Compile Include="DayOffPlanning\Scheduling\ShiftCategoryFairnessShiftValueCalculator.cs" />
+    <Compile Include="DayOffPlanning\Scheduling\ShiftLengthDecider.cs" />
+    <Compile Include="DayOffPlanning\Scheduling\WorkShiftMinMaxCalculator.cs" />
+    <Compile Include="DayOffPlanning\Scheduling\WorkShiftWeekMinMaxCalculator.cs" />
+    <Compile Include="DayOffPlanning\SmartDayOffBackToLegalStateService.cs" />
+    <Compile Include="DayOffPlanning\TeDataDayOffDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\TuiCaseSolver.cs" />
+    <Compile Include="DayOffPlanning\WeeklyDayOffValidator.cs" />
+    <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />
+    <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMaker.cs" />
+    <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculator.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonth.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreator.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelper.cs" />
@@ -1617,10 +1660,6 @@
     <EmbeddedResource Include="Kpi\Scorecard.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj">
-      <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
-      <Name>Teleopti.Ccc.DayOffPlanning</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
       <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
       <Name>Teleopti.Ccc.Domain.Calculation</Name>

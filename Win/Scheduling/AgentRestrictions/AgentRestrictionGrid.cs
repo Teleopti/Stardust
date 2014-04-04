@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Autofac;
 using Syncfusion.Windows.Forms.Grid;
-using Teleopti.Ccc.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.DayOffPlanning.Scheduling;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
