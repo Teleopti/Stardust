@@ -1,105 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="DataSource2">
-      <DataSourceReference>DataSource2</DataSourceReference>
-      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet1">
-      <Fields>
-        <Field Name="counter">
-          <DataField>counter</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="date_date">
-          <DataField>date_date</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="category_name">
-          <DataField>category_name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="category_count">
-          <DataField>category_count</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="category_type">
-          <DataField>category_type</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="hide_time_zone">
-          <DataField>hide_time_zone</DataField>
-          <rd:TypeName>System.Bool</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource2</DataSourceName>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>report_data_shift_cat_and_day_abs_per_agent</CommandText>
-        <QueryParameters>
-          <QueryParameter Name="@scenario_id">
-            <Value>=Parameters!scenario_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_from">
-            <Value>=Parameters!date_from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_to">
-            <Value>=Parameters!date_to.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@site_id">
-            <Value>=Parameters!site_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@team_set">
-            <Value>=Parameters!team_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@agent_code">
-            <Value>=Parameters!agent_code.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@shift_category_set">
-            <Value>=Parameters!shift_category_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@day_off_set">
-            <Value>=Parameters!day_off_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@absence_set">
-            <Value>=Parameters!absence_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@time_zone_id">
-            <Value>=Parameters!time_zone_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@person_code">
-            <Value>=Parameters!person_code.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@report_id">
-            <Value>=Parameters!report_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@language_id">
-            <Value>=Parameters!language_id.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-      </Query>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Tablix Name="table1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>2.03236in</Width>
+              <Width>5.16219cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.42913in</Width>
+              <Width>11.24999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>4.13386in</Width>
+              <Width>10.5cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -200,7 +118,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -273,7 +191,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -348,7 +266,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -423,7 +341,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -498,7 +416,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -575,7 +493,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -656,7 +574,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -737,7 +655,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -810,7 +728,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -883,7 +801,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -956,7 +874,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.21768in</Height>
+              <Height>0.55291cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1028,87 +946,6 @@
                 <TablixCell />
               </TablixCells>
             </TablixRow>
-            <TablixRow>
-              <Height>0.19685in</Height>
-              <TablixCells>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox51">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Parameters!ResTimeZoneColon.Value</Value>
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Left</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox51</rd:DefaultName>
-                      <ZIndex>20</ZIndex>
-                      <Visibility>
-                        <ToggleItem>textbox28</ToggleItem>
-                      </Visibility>
-                      <Style>
-                        <Border />
-                        <VerticalAlign>Bottom</VerticalAlign>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox52">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Parameters!time_zone_id.Value</Value>
-                              <Style>
-                                <FontSize>9pt</FontSize>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Left</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox52</rd:DefaultName>
-                      <ZIndex>19</ZIndex>
-                      <Visibility>
-                        <ToggleItem>textbox28</ToggleItem>
-                      </Visibility>
-                      <Style>
-                        <Border />
-                        <VerticalAlign>Bottom</VerticalAlign>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                    <ColSpan>2</ColSpan>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell />
-              </TablixCells>
-            </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
@@ -1121,42 +958,36 @@
         <TablixRowHierarchy>
           <TablixMembers>
             <TablixMember>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <Hidden>=IIF(Parameters!group_page_group_set.Value="",True,False)</Hidden>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <Hidden>=IIF(Parameters!group_page_agent_code.Value="",True,False)</Hidden>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <Hidden>=IIF(Parameters!site_id.Value="",True,False)</Hidden>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
@@ -1164,7 +995,6 @@
                 <Hidden>=IIF(Parameters!team_set.Value="",True,False)</Hidden>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
@@ -1172,42 +1002,30 @@
                 <Hidden>=IIF(Parameters!agent_code.Value="",True,False)</Hidden>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
             <TablixMember>
               <Visibility>
                 <ToggleItem>textbox28</ToggleItem>
               </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
-              <KeepTogether>true</KeepTogether>
-            </TablixMember>
-            <TablixMember>
-              <Visibility>
-                <Hidden>=IIf(IsNothing(Fields!hide_time_zone.Value) , True, IIf(Fields!hide_time_zone.Value = True, True, False))</Hidden>
-              </Visibility>
-              <KeepWithGroup>Before</KeepWithGroup>
               <KeepTogether>true</KeepTogether>
             </TablixMember>
           </TablixMembers>
@@ -1215,7 +1033,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>6.8529cm</Height>
+        <Height>6.3529cm</Height>
         <Width>26.91219cm</Width>
         <Style />
       </Tablix>
@@ -1261,15 +1079,15 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.68898in</Width>
+              <Width>1.75001cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.68898in</Width>
+              <Width>1.75001cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1356,7 +1174,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1458,7 +1276,7 @@
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
-                <Size>0.68898in</Size>
+                <Size>1.75001cm</Size>
                 <CellContents>
                   <Textbox Name="textbox2">
                     <CanGrow>true</CanGrow>
@@ -1503,7 +1321,7 @@
             </TablixMember>
             <TablixMember>
               <TablixHeader>
-                <Size>0.68898in</Size>
+                <Size>1.75001cm</Size>
                 <CellContents>
                   <Textbox Name="textbox5">
                     <CanGrow>true</CanGrow>
@@ -1561,7 +1379,7 @@
                 </SortExpression>
               </SortExpressions>
               <TablixHeader>
-                <Size>1.47638in</Size>
+                <Size>3.75001cm</Size>
                 <CellContents>
                   <Textbox Name="date_date">
                     <CanGrow>true</CanGrow>
@@ -1602,7 +1420,7 @@
             </TablixMember>
             <TablixMember>
               <TablixHeader>
-                <Size>1.47638in</Size>
+                <Size>3.75001cm</Size>
                 <CellContents>
                   <Textbox Name="textbox18">
                     <CanGrow>true</CanGrow>
@@ -1664,196 +1482,6 @@
     <Height>10.19334cm</Height>
     <Style />
   </Body>
-  <ReportParameters>
-    <ReportParameter Name="scenario_id">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>scenario_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="date_from">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>date_from</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="date_to">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>date_to</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="site_id">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>site_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="team_set">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>team_set</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="agent_code">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>agent_code</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="shift_category_set">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>shift_category_set</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="day_off_set">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>day_off_set</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="absence_set">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>absence_set</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="time_zone_id">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>time_zone_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="person_code">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>1E574132-B74C-44BE-8662-9A8A003C7617</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>person_code</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="report_id">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>8</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>report_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="language_id">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>1053</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>language_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="culture">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Report_Parameter_10</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResReportShiftCategoryAndDayAbsencePerDay">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResReportShiftCategoryAndDayAbsencePerAgent</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResScenarioColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResScenarioColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDatePeriodColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDatePeriodColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTotalsColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTotalsColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDate">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDate</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResSiteNameColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResSiteNameColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTeamNameColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTeamNameColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResAgentsColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResAgentsColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDateColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDateColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTimeZoneColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTimeZoneColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResShiftCategoryColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResShiftCategoryColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResAbsenceColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResAbsenceColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDayOffColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDayOffColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResSelections">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResSelections</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResGroupPageColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResGroupPageGroupColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="group_page_code">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="group_page_group_set">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="group_page_agent_code">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
-  <Code>Public Function TimeString(i as integer)as string
-	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
-End function</Code>
   <Width>27.5cm</Width>
   <Page>
     <PageHeader>
@@ -2028,8 +1656,269 @@ End function</Code>
     <ColumnSpacing>1cm</ColumnSpacing>
     <Style />
   </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource2">
+      <DataSourceReference>DataSource2</DataSourceReference>
+      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet1">
+      <Query>
+        <DataSourceName>DataSource2</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@scenario_id">
+            <Value>=Parameters!scenario_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_from">
+            <Value>=Parameters!date_from.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_to">
+            <Value>=Parameters!date_to.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@site_id">
+            <Value>=Parameters!site_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@team_set">
+            <Value>=Parameters!team_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@agent_code">
+            <Value>=Parameters!agent_code.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@shift_category_set">
+            <Value>=Parameters!shift_category_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@day_off_set">
+            <Value>=Parameters!day_off_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@absence_set">
+            <Value>=Parameters!absence_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@person_code">
+            <Value>=Parameters!person_code.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@report_id">
+            <Value>=Parameters!report_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@language_id">
+            <Value>=Parameters!language_id.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>report_data_shift_cat_and_day_abs_per_agent</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="counter">
+          <DataField>counter</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="date_date">
+          <DataField>date_date</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="category_name">
+          <DataField>category_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="category_count">
+          <DataField>category_count</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="category_type">
+          <DataField>category_type</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="scenario_id">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>scenario_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="date_from">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>date_from</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="date_to">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>date_to</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="site_id">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>site_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="team_set">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>team_set</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="agent_code">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>agent_code</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="shift_category_set">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>shift_category_set</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="day_off_set">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>day_off_set</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="absence_set">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>absence_set</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="person_code">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>1E574132-B74C-44BE-8662-9A8A003C7617</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>person_code</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="report_id">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>8</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>report_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="language_id">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>1053</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>language_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="culture">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_10</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResReportShiftCategoryAndDayAbsencePerDay">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResReportShiftCategoryAndDayAbsencePerAgent</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResScenarioColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResScenarioColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResDatePeriodColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResDatePeriodColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResTotalsColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResTotalsColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResDate">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResDate</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResSiteNameColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResSiteNameColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResTeamNameColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResTeamNameColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResAgentsColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResAgentsColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResDateColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResDateColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResTimeZoneColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResTimeZoneColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResShiftCategoryColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResShiftCategoryColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResAbsenceColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResAbsenceColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResDayOffColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResDayOffColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResSelections">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResSelections</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResGroupPageColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResGroupPageGroupColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="group_page_code">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="group_page_group_set">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="group_page_agent_code">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Code>Public Function TimeString(i as integer)as string
+	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
+End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
 </Report>

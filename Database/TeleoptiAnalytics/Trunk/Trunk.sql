@@ -994,7 +994,7 @@ DROP PROCEDURE [Stage].[etl_stg_schedule_updated_special_load]
 GO
 
 ----------------  
---Name: KJ
+--Name: KJ + DJ
 --Date: 2014-04-02
 --Desc: #26422 - Remove time_zone from selection page since now using agent local time zone
 ----------------
@@ -1004,4 +1004,11 @@ WHERE ReportId in ('C5B88862-F7BE-431B-A63F-3DD5FF8ACE54','D45A8874-57E1-4EB9-82
 AND param_name='@time_zone_id' 
 
 DELETE FROM  mart.report_control_collection where collection_id=25 AND param_name='@time_zone_id'
+GO
+
+DELETE FROM [mart].[report_user_setting] 
+WHERE ReportId in ('2F222F0A-4571-4462-8FBE-0C747035994A','35649814-4DE8-4CB3-A51C-DDBA2A073E09')
+AND param_name='@time_zone_id' 
+
+DELETE FROM  mart.report_control_collection where collection_id=26 AND param_name='@time_zone_id'
 GO

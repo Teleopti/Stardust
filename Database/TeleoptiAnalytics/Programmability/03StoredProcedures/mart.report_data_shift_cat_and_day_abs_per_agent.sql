@@ -38,7 +38,6 @@ CREATE PROCEDURE [mart].[report_data_shift_cat_and_day_abs_per_agent]
 @shift_category_set nvarchar(max),
 @day_off_set nvarchar(max),
 @absence_set nvarchar(max),
-@time_zone_id int,
 @person_code uniqueidentifier,
 @report_id uniqueidentifier,
 @language_id int,
@@ -53,8 +52,7 @@ CREATE TABLE #result(
 	person_name nvarchar(200),
 	category_name nvarchar(100),--shift_category/day_off/absence
 	category_count int,
-	category_type nvarchar(30), --'shift_category','day_off','absence'
-	hide_time_zone bit
+	category_type nvarchar(30) --'shift_category','day_off','absence'
 	)
 
 
@@ -91,11 +89,6 @@ SELECT * FROM mart.SplitStringInt(@day_off_set)
 INSERT INTO #absences
 SELECT * FROM mart.SplitStringInt(@absence_set)
 
-/* Check if time zone will be hidden (if only one exist then hide) */
-DECLARE @hide_time_zone bit
-SET @hide_time_zone = 1
-
-
 /* Get data from mart.fact_schedule_day_count */
 INSERT INTO #fact_schedule_day_count (local_date,person_id,person_name,scenario_id,starttime,shift_category_id,day_off_id,absence_id,day_count)
 SELECT
@@ -121,13 +114,12 @@ AND p.person_id in (SELECT right_id FROM #rights_agents)--where viewer has agent
 
 
 /*First Shift Categories*/
-INSERT #result(person_id,person_name,category_name,category_count,category_type,hide_time_zone,date_date)
+INSERT #result(person_id,person_name,category_name,category_count,category_type,date_date)
 SELECT	f.person_id,
 		f.person_name,
 		sc.shift_category_name,
 		1, --will/should only be one (1) per day, agent, scenario
 		'shift_category',
-		@hide_time_zone,
 		f.local_date
 FROM 
 	#fact_schedule_day_count f
@@ -137,13 +129,12 @@ WHERE sc.shift_category_id IN (SELECT id FROM #shift_categories)
 AND f.shift_category_id<>-1 --is a shift
 
 /*Then Day Off*/
-INSERT #result(person_id,person_name,category_name,category_count,category_type,hide_time_zone,date_date)
+INSERT #result(person_id,person_name,category_name,category_count,category_type,date_date)
 SELECT	p.person_id,
 		p.person_name,
 		ISNULL(lt.term_language,dd.day_off_name),
 		1, --will/should only be one (1) per day, agent, scenario
 		'day_off',
-		@hide_time_zone,
 		f.local_date
 FROM 
 	#fact_schedule_day_count f
@@ -157,13 +148,12 @@ WHERE dd.day_off_id in (SELECT id FROM #dayoffs)
 AND f.day_off_id<>-1 --is a dayoff
 
 /*Then Full Day Absences*/
-INSERT #result(person_id,person_name,category_name,category_count,category_type,hide_time_zone,date_date)
+INSERT #result(person_id,person_name,category_name,category_count,category_type,date_date)
 SELECT	p.person_id,
 		p.person_name,
 		da.absence_name,
 		1,
 		'absence',
-		@hide_time_zone,
 		f.local_date
 FROM 
 	#fact_schedule_day_count f
