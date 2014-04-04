@@ -40,13 +40,7 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		return res.length > 0;
 	}
 
-	function requestNotificationPermission() {
-		if (window.webkitNotifications && window.webkitNotifications.checkPermission() == 1) {
-			window.webkitNotifications.requestPermission();
-		}
-	}
 	function _webNotification(notifyText) {
-		requestNotificationPermission();
 		if (window.webkitNotifications) {
 			if (window.webkitNotifications.checkPermission() == 0) { // 0 is PERMISSION_ALLOWED
 				if (webNotification() && !isShowing(notifyText)) {
