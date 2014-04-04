@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.DomainTest.Helper;
+using Teleopti.Ccc.Secrets.SkillStaffPeriodDataHolder;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
@@ -75,26 +76,31 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             // Not over and not under
             SkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
 
-            double corrFactor = dataHolder.GetCorrectionFactor( true, true);
+			double corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true,dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads,dataHolder.MinimumPersons,dataHolder.AssignedResourceInMinutes);
             Assert.AreEqual(0, corrFactor);
             // understaffed
             dataHolder = new SkillStaffPeriodDataHolder(5, 80, period1, 2, 5, -3, null);
-            corrFactor = dataHolder.GetCorrectionFactor( true, true);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+
             Assert.AreEqual(150000, corrFactor);
 
             dataHolder = new SkillStaffPeriodDataHolder(5, 0, period1, 2, 5, -3, null);
-            corrFactor = dataHolder.GetCorrectionFactor( true, true);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+
             Assert.AreEqual(300000, corrFactor);
 
-            corrFactor = dataHolder.GetCorrectionFactor( false, true);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(false, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+
             Assert.AreEqual(0, corrFactor);
 
             // overstaffed
             dataHolder = new SkillStaffPeriodDataHolder(5, 80, period1, 2, 5, 2, null);
-            corrFactor = dataHolder.GetCorrectionFactor( true, true);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, true, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+
             Assert.AreEqual(-200000, corrFactor);
 
-            corrFactor = dataHolder.GetCorrectionFactor( true, false);
+			corrFactor = SkillStaffPeriodCalculator.GetCorrectionFactor(true, false, dataHolder.AbsoluteDifferenceScheduledHeadsAndMinMaxHeads, dataHolder.MinimumPersons, dataHolder.AssignedResourceInMinutes);
+
             Assert.AreEqual(0, corrFactor);
         }
 
@@ -102,39 +108,38 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyTweakedCurrentDemand()
         {
             DateTime date = new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc);
-            DateTimePeriod period1 = new DateTimePeriod(date, date.AddMinutes(15));
-            
-            SkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataHolder(60, 45, period1, 1, 5, 0, null,new Percent(.4),256);
+	        var overstaffing = new Percent(.4);
+	        const int priority = 256;
 
-            var tweaked = dataHolder.GetTweakedCurrentDemand(60, 45);
+			var tweaked = SkillStaffPeriodCalculator.GetTweakedCurrentDemand(60, 45, overstaffing.Value, priority);
             Assert.AreEqual(-2304, tweaked);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyNewCalculationPeriodValue()
         {
-            var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(105, -1890, 15);
+			var valueNew = SkillStaffPeriodCalculator.CalculateWorkShiftPeriodValue(105, -1890, 15);
             Assert.AreEqual(Math.Round(537.8571,4), Math.Round(valueNew,4));
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyNewCalculationPeriodValue1()
 		{
-			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(200, -100, 15);
+			var valueNew = SkillStaffPeriodCalculator.CalculateWorkShiftPeriodValue(200, -100, 15);
 			Assert.AreEqual(Math.Round(13.875, 4), Math.Round(valueNew, 4));
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyNewCalculationPeriodValue2()
 		{
-			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(200, 100, 15);
+			var valueNew = SkillStaffPeriodCalculator.CalculateWorkShiftPeriodValue(200, 100, 15);
 			Assert.AreEqual(Math.Round(-16.125, 4), Math.Round(valueNew, 4));
 		}
 
         [Test]
         public void VerifyNewCalculationPeriodValue3()
 		{
-			var valueNew = SkillStaffPeriodDataHolder.CalculateWorkShiftPeriodValue(0, 1, 15);
+			var valueNew = SkillStaffPeriodCalculator.CalculateWorkShiftPeriodValue(0, 1, 15);
 			Assert.AreEqual(0, valueNew);
 		}
 
