@@ -46,23 +46,12 @@ GOTO :Failed
 ECHO ----------
 ECHO.
 
-"%smartassemblyCmd%" /build "%SMARTASSEMBLYPROJ%\DayOffPlanning.{sa}proj"
-IF %ERRORLEVEL% NEQ 0 (
-SET ERRORMSG=Failed to obfuscate: DayOffPlanning.{sa}proj
-GOTO :Failed
-)
-ECHO ----------
-ECHO.
-
 ::Copy the obfuscated dll+pdbs to all locations where it exists
 FOR /R "%CCNetWorkDir%" %%I IN (*Teleopti.Ccc.Obfuscated.dll*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Obfuscated.dll" "%%I" /Y /V
 FOR /R "%CCNetWorkDir%" %%I IN (*Teleopti.Ccc.Obfuscated.pdb*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Obfuscated.pdb" "%%I" /Y /V
 
 FOR /R "%CCNetWorkDir%"  %%I IN (*Teleopti.Ccc.Infrastructure.dll*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Infrastructure.dll" "%%I" /Y /V
 FOR /R "%CCNetWorkDir%"  %%I IN (*Teleopti.Ccc.Infrastructure.pdb*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.Infrastructure.pdb" "%%I" /Y /V
-
-FOR /R "%CCNetWorkDir%"  %%I IN (*Teleopti.Ccc.DayOffPlanning.dll*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.DayOffPlanning.dll" "%%I" /Y /V
-FOR /R "%CCNetWorkDir%"  %%I IN (*Teleopti.Ccc.DayOffPlanning.pdb*) DO COPY "%OUTPUTFOLDER%\Teleopti.Ccc.DayOffPlanning.pdb" "%%I" /Y /V
 
 GOTO :eof
 
