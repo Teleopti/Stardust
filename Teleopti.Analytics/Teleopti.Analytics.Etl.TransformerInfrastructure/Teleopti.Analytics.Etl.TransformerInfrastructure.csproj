@@ -74,9 +74,8 @@
       <HintPath>..\..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AnalysisServices.AdomdClient, Version=10.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
       <Private>True</Private>
+      <HintPath>..\..\packages\Teleopti.AnalysisServices.10.0.0\lib\net40\Microsoft.AnalysisServices.AdomdClient.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=4.0.0.1000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
