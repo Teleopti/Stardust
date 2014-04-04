@@ -50,6 +50,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			SignInApplication(userName, password);
 		}
 
+		[When(@"I try to signin with")]
+		public void WhenITryToSigninWith(Table table)
+		{
+			var user = table.CreateInstance<UserConfigurable>();
+			var userName = user.UserName;
+			var password = user.Password;
+			SignInApplication(userName, password);
+		}
+
+
 		[Given(@"I select application logon data source")]
 		[When(@"I select application logon data source")]
 		public void WhenISelectApplicationLogonDataSource()
@@ -103,6 +113,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		{
 			Browser.Interactions.AssertExists("#regional-settings");
 		}
+
+		[Then(@"I should be signed in as another user '(.*)'")]
+		public void ThenIShouldBeSignedInAsAnotherUser(string name)
+		{
+			Browser.Interactions.AssertExists("#regional-settings");
+			Browser.Interactions.AssertAnyContains(".user-name-link", name);
+		}
+
 
 		[Then(@"I should see a log on error '(.*)'")]
 		public void ThenIShouldSeeALogOnError(string resourceText)

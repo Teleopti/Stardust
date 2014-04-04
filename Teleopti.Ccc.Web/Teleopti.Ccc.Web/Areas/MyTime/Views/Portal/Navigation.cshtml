@@ -81,7 +81,7 @@
 							@if (Model.HasSignInAsAnotherUser)
 							{
 								<li class="divider"></li>
-								<li><a href="#" id="signin-as-another">@Resources.SignInAsAnotherUser</a></li>
+								<li>@Html.ActionLink(@Resources.SignInAsAnotherUser, "SignInAsAnotherUser", "Authentication", new { area = "Start" }, new { id = "signin-as-another" })</li>
 							}
 						</ul>
 					</li>

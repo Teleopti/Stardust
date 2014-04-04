@@ -4,25 +4,13 @@
 	I want to be able to sign in as another user
 
 Background:
-	Given there is a business unit with
-	| Field | Value           |
-	| Name  | Business Unit 1 |
-	And there is a role with
-	| Field                     | Value                     |
-	| Name                      | Can logon as another user |
-	| Business Unit             | Business Unit 1           |
-	| Access to mytime web      | true                      |
-	| Can logon as another user | true                      |
-	And there is a role with
-	| Field                     | Value                        |
-	| Name                      | Cannot logon as another user |
-	| Business Unit             | Business Unit 1              |
-	| Access to mytime web      | true                         |
-	| Can logon as another user | false                        |
 
 @WindowsAndApplicationLogon
 Scenario: Not permitted to logon as another user
-	Given I have the role 'Cannot logon as another user'
+	Given I have a role with
+	| Field                     | Value |
+	| Access to mytime web      | true  |
+	| Can logon as another user | false |
 	And I am a user with
 	| Field                  | Value |
 	| Windows authentication | true  |
@@ -31,19 +19,27 @@ Scenario: Not permitted to logon as another user
 
 @WindowsAndApplicationLogon
 Scenario: Logon as another user
-	Given I have the role 'Can logon as another user'
-	And there is a user with
-	| Field    | Value    |
-	| UserName | aa       |
-	| Password | password |
+	Given I have a role with
+	| Field                     | Value |
+	| Access to mytime web      | true  |
+	| Can logon as another user | true  |
 	And I am a user with
 	| Field                  | Value |
 	| Windows authentication | true  |
+	And there is a role with
+	| Field                | Value      |
+	| Name                 | Agent role |
+	| Access to mytime web | true       |
+	And 'Ashley' is a user with
+	| Field    | Value      |
+	| UserName | Ashley     |
+	| Password | password   |
+	| Role     | Agent role |
 	When I go to mytime web
 	And I choose to logon as another user
 	And I choose teleopti identity provider
-	When I try to sign in with
+	And I try to signin with
 	| Field    | Value    |
-	| UserName | aa       |
+	| UserName | Ashley   |
 	| Password | password |
-	Then I should be signed in
+	Then I should be signed in as another user 'Ashley'

@@ -77,10 +77,11 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 	};
 
 	this.SignIn = function () {
+		if (!self.UserName() || !self.Password())
+			return;
+
 		var state = data.authenticationState;
-
 		self.ErrorMessage('');
-
 		var selectedDataSource = self.SelectedDataSource();
 		state.TryToSignIn({
 			data: {
@@ -93,7 +94,5 @@ Teleopti.SSO.Authentication.SignInViewModel = function (data) {
 				self.ErrorMessage(message);
 			}
 		});
-
 	};
-
 };
