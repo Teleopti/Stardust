@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		private readonly ISkillIntervalDataAggregator _intervalDataAggregator;
 		private readonly ISkillIntervalDataDivider _intervalDataDivider;
 
-		[CLSCompliant(false)]
 		public CalculateAggregatedDataForActivtyAndDate(
 			ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
 			ISkillIntervalDataSkillFactorApplier skillIntervalDataSkillFactorApplier,

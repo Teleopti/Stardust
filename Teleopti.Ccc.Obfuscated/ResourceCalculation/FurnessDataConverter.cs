@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// <summary>
         /// Converts the inner resource structure to <see cref="FurnessData"/>.
 		/// </summary>
-		[CLSCompliant(false)]
         public IFurnessData ConvertDividedActivityToFurnessData()
         {
             _dividedActivityData.CalculatePersonResourcesSummaForFurnessInitialization();

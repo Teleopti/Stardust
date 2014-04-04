@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
-		[CLSCompliant(false)]
 	    public RelativeDailyValueByPersonalSkillsExtractor(IScheduleMatrixPro scheduleMatrix,
 	                                                       IAdvancedPreferences advancedPreferences,
 	                                                       ISkillStaffPeriodToSkillIntervalDataMapper

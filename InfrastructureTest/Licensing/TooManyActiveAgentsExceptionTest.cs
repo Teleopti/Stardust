@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
     [TestFixture]
 	[Category("LongRunning")]
-	[CLSCompliant(false)]
     public class TooManyActiveAgentsExceptionTest : ExceptionTest<TooManyActiveAgentsException>
     {
         /// <summary>
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         /// Created by: Klas
         /// Created date: 2008-11-18
 		/// </remarks>
-		[CLSCompliant(false)]
         protected override TooManyActiveAgentsException CreateTestInstance(string message, Exception innerException)
         {
             return new TooManyActiveAgentsException(message, innerException);
@@ -41,7 +39,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         /// Created by: Klas
         /// Created date: 2008-11-18
 		/// </remarks>
-		[CLSCompliant(false)]
         protected override TooManyActiveAgentsException CreateTestInstance(string message)
         {
             return new TooManyActiveAgentsException(message);

@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 		    _licenseRepository = licenseRepository;
 		}
 
-		[CLSCompliant(false)]
 		public ILicenseService LoadAndVerifyLicense()
 		{
 			using (PerformanceOutput.ForOperation("Verifying license"))
@@ -91,7 +90,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 								 e.NumberOfLicensed);
 		}
 
-		[CLSCompliant(false)]
 		protected virtual ILicenseService XmlLicenseService()
 		{
             //dont' check the use of agent here now

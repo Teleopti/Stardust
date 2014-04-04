@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 			return XmlLicenseService.IsThisTooManyActiveAgents(maxLicensedActiveAgents, maxActiveAgentsGrace.Value, activeAgents);
 		}
 
-		[CLSCompliant(false)]
 		public LicenseActivator(string customerName, DateTime expirationDate, int maxActiveAgents, int maxSeats, LicenseType licenseType, Percent maxActiveAgentsGrace,
 				IsThisAlmostTooManyActiveAgents isThisAlmostTooManyActiveAgents, IsThisTooManyActiveAgents isThisTooManyActiveAgents)
 		{
@@ -67,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		public int MaxSeats { get; private set; }
 
-		[CLSCompliant(false)]
 		public LicenseType LicenseType { get; private set; }
 
 		public Percent MaxActiveAgentsGrace { get; private set; }

@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// Creates the default license activator.
         /// </summary>
 		/// <returns></returns>
-		[CLSCompliant(false)]
         public static ILicenseActivator CreateDefaultLicenseActivatorForTest()
         {
             ILicenseActivator licenseActivator = new LicenseActivator(CustomerName, ExpirationDate, MaxActiveAgents, 100, LicenseType.Agent, MaxActiveAgentsGrace,

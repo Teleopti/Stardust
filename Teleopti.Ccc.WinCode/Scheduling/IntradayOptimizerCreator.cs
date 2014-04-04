@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 
-		[CLSCompliant(false)]
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
 			IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList,
