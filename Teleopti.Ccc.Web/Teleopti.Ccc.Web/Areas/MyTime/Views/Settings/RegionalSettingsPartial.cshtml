@@ -19,13 +19,15 @@
         </select>
     </div>
 	<br />
+
+	<!-- ko if: IsNotificationSupported() -->
 	<div class="clearfix">		
-		<!-- ko if: IsNotificationSupported() -->
 		<div class="btn-group">
 			<button class="btn btn-lg" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
 		</div>
-		<!-- /ko -->
 	</div>
+	<!-- /ko -->
+
     @if (Model.ShareCalendarPermission)
     {
 		<br />
