@@ -84,25 +84,28 @@ SELECT * FROM mart.SplitStringInt(@overtime_set)
 INSERT INTO #fact_schedule
 SELECT
 	[schedule_date_id],
-	[person_id] [int],
+	p.person_id,
 	[interval_id],
 	[scenario_id],
 	[scheduled_over_time_m],
 	[overtime_id]
 FROM mart.fact_schedule fs
-WHERE schedule_date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	
-							ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
-							
+INNER JOIN mart.dim_person p
+	ON fs.person_id=p.person_id
+WHERE shift_startdate_local_id in (select d.date_id from mart.dim_date d where d.date_date BETWEEN  dateadd(dd, -1, @date_from) AND dateadd(dd,1,@date_to))
+AND fs.scenario_id=@scenario_id
+AND p.team_id IN (select right_id from #rights_teams)
+AND p.person_id IN (SELECT right_id FROM #rights_agents)--check permissions
+
 --Get schedule overtime
-INSERT INTO #result(date_id,date,team_name,person_id,person_name,overtime_name,scheduled_over_time_m,hide_time_zone)
-SELECT	d.date_id,
-		d.date_date,
-		p.team_name,
-		p.person_id,
-		p.person_name,
-		ot.overtime_name,
-		sum(ISNULL(f.scheduled_over_time_m,0)),
-		@hide_time_zone
+SELECT	d.date_id as 'date_id',
+		d.date_date as 'date',
+		p.team_name as 'team_name',
+		p.person_id as 'person_id',
+		p.person_name as 'person_name',
+		ot.overtime_name as 'overtime_name',
+		sum(ISNULL(f.scheduled_over_time_m,0)) as  'scheduled_over_time_m',
+		@hide_time_zone as 'hide_time_zone'
 FROM 
 	#fact_schedule f
 INNER JOIN mart.dim_person p
@@ -119,15 +122,10 @@ INNER JOIN mart.dim_interval i
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND i.interval_id BETWEEN @interval_from AND @interval_to
 AND b.time_zone_id = @time_zone_id
-AND f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--included in my current permissions
 AND ot.overtime_id<>-1 --is overtime
 AND ot.overtime_id in (SELECT * FROM #overtime)
 GROUP BY d.date_id,	d.date_date,p.team_name,p.person_id,p.person_name,ot.overtime_name
-
-SELECT * FROM #result 
-ORDER BY team_name,person_name,date_id,overtime_name
+ORDER BY p.team_name,p.person_name,d.date_id,ot.overtime_name
 
 
 

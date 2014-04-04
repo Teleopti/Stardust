@@ -1,10 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[sys_setupTestData]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[sys_setupTestData]
-GO
-
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON
-GO
-
+--drop proc mart.sys_setupTestData
 create proc mart.sys_setupTestData
 @IntervalsPerDay INT = 96,
 @Culture nvarchar(200) = N'1053',
@@ -16,64 +10,15 @@ create proc mart.sys_setupTestData
 AS
 SET NOCOUNT ON
 
-exec mart.etl_data_mart_delete 1
 truncate table dbo.queue_logg
 truncate table dbo.agent_logg
 
 delete from dbo.queues
 delete from dbo.agent_info
-
-truncate table mart.sys_configuration
-delete from [dbo].[log_object]
+delete from dbo.log_object
 delete from dbo.acd_type
 delete from dbo.ccc_system_info
 
-DECLARE @IntervalLengthMinutes INT
-set @IntervalLengthMinutes=1440/@IntervalsPerDay
-
-exec mart.sys_configuration_save @key=N'Culture',@value=@Culture
-exec mart.sys_configuration_save @key=N'IntervalLengthMinutes',@value=@IntervalLengthMinutes
-exec mart.sys_configuration_save @key=N'TimeZoneCode',@value=@TimeZoneCode
-exec mart.sys_configuration_save @key=N'AdherenceMinutesOutsideShift',@value=@AdherenceMinutesOutsideShift
-
---dim_interval
-delete from mart.dim_interval
-insert into mart.dim_interval(interval_id,interval_name, halfhour_name, hour_name, interval_start, interval_end, datasource_id, insert_date, update_date)
-select
-	n,
-	CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*n,'1900-01-01 00:00:00'),114) + '-' + CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*(n+1),'1900-01-01 00:00:00'),114) as 'interval_name',
-	CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*n,'1900-01-01 00:00:00'),114) + '-' + CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*(n)+30,'1900-01-01 00:00:00'),114) as 'halfhour_name',
-	CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*n,'1900-01-01 00:00:00'),114) + '-' + CONVERT(varchar(5),dateadd(MINUTE,@IntervalLengthMinutes*(n)+60,'1900-01-01 00:00:00'),114) as 'hour_name',
-	dateadd(MINUTE,@IntervalLengthMinutes*(n),'1900-01-01 00:00:00') as 'interval_start',
-	dateadd(MINUTE,@IntervalLengthMinutes*(n+1),'1900-01-01 00:00:00') as 'interval_end',
-	1 as 'datasource_id',
-	getdate() as 'insert_date',
-	getdate() as 'update_date'
-FROM mart.sys_numbers n
-where n<@IntervalsPerDay
-
---dim_date
-delete mart.dim_date
-truncate table stage.stg_date
-exec mart.etl_dim_date_load
---select * from mart.dim_date;select * from mart.dim_interval;select * from mart.sys_datasource
-
---dim_timezone
-truncate table mart.bridge_time_zone
-delete from mart.dim_time_zone
-
-SET IDENTITY_INSERT mart.dim_time_zone ON 
-insert into mart.dim_time_zone (time_zone_id, time_zone_code, time_zone_name, default_zone, utc_conversion, utc_conversion_dst, datasource_id, insert_date, update_date, to_be_deleted)
-select 1,N'UTC',N'UTC',0,0,0,-1,getdate(),getdate(),-1
-union all
-select 2,@TimeZoneCode,@time_zone_name,1,@utc_conversion,@utc_conversion_dst,-1,getdate(),getdate(),-1
-SET IDENTITY_INSERT mart.dim_time_zone OFF
-
-----------------  
---Name: Anders F  
---Date: 2009-03-20  
---Desc: Correct initial data for new aggs  
-----------------  
 INSERT INTO acd_type
 VALUES (0,'Default')
 

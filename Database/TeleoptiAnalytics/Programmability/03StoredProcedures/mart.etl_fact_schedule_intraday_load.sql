@@ -12,8 +12,8 @@ GO
 --	Date		Who		Why
 --	2013-10-25	DJ		#25126 - Remove unwanted UTC days from stg_schedule_updated_ShiftStartDateUTC
 --	2013-10-25	DJ		#25309 - improve performance in mart.etl_fact_schedule_intraday_load
+--  2014-02-11  KJ		#26422 - redesign for stability, load schedule on agent local date
 -- =============================================
---exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
 --exec mart.etl_fact_schedule_intraday_load '928DD0BC-BF40-412E-B970-9B5E015AADEA',1
 /*
 select 1
@@ -30,8 +30,6 @@ WITH EXECUTE AS OWNER
 AS
 
 SET NOCOUNT ON
-
-EXEC [mart].[stage_schedule_remove_overlapping_shifts]
 
 --if no @scenario, no data then break
 DECLARE @scenario_code uniqueidentifier
@@ -56,17 +54,9 @@ begin
 	set @lastStep=getdate();set @step=@step+1
 end
 
---temp table for perf.
-CREATE TABLE #stg_schedule(
-	[scenario_id] [smallint] NOT NULL,
-	[interval_id] [int] NOT NULL,
-	[date_id] [int] NOT NULL,
-	[person_id] [int] NOT NULL
-)
-
 CREATE TABLE #stg_schedule_changed(
 	[person_id] [int] NOT NULL,
-	[shift_startdate_id] [int] NOT NULL,
+	[shift_startdate_local_id] [int] NOT NULL,
 	[scenario_id] [smallint] NOT NULL
 )
 
@@ -97,58 +87,23 @@ end
 
 --prepare a temp table for better performance on delete
 INSERT INTO #stg_schedule_changed
-select DISTINCT
-	f.person_id,
-	f.shift_startdate_id,
-	f.scenario_id
-from mart.fact_schedule f
-inner join mart.dim_person p
-	on p.person_id = f.person_id
-inner join mart.bridge_time_zone btz
-	on f.shift_startdate_id = btz.date_id
-	and f.shift_startinterval_id = btz.interval_id
-	and p.time_zone_id = btz.time_zone_id
-inner join mart.dim_date dd
-	on dd.date_id = btz.local_date_id
-inner join stage.stg_schedule_changed ch
-	on ch.person_code = p.person_code
-	and ch.schedule_date = dd.date_date
+SELECT  p.person_id,
+		dd.date_id,
+		s.scenario_id
+FROM stage.stg_schedule_changed ch
+INNER JOIN mart.dim_person p
+	ON p.person_code = ch.person_code
 		AND --trim
 		(
-				(ch.schedule_date	>= p.valid_from_date_local)
+				(ch.schedule_date_local	>= p.valid_from_date_local)
 
 			AND
-				(ch.schedule_date <= p.valid_to_date_local)
+				(ch.schedule_date_local <= p.valid_to_date_local)
 		)
-
-if @debug=1
-begin
-	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
-	set @lastStep=getdate();set @step=@step+1
-end
-
--- special delete if something is left, a shift over midninght for example
-INSERT INTO #stg_schedule
-SELECT
-	ds.scenario_id,
-	stg.interval_id,
-	dsd.date_id,
-	dp.person_id
-FROM Stage.stg_schedule stg
-INNER JOIN
-	mart.dim_person		dp
-ON
-	stg.person_code		=			dp.person_code
-	AND --trim
-		(
-				(stg.shift_start	>= dp.valid_from_date)
-			AND
-				(stg.shift_start < dp.valid_to_date)
-		)
-INNER JOIN mart.dim_date AS dsd 
-ON stg.schedule_date = dsd.date_date
-INNER JOIN mart.dim_scenario ds
-	ON stg.scenario_code = ds.scenario_code
+INNER JOIN mart.dim_date dd
+	ON dd.date_date = ch.schedule_date_local
+INNER JOIN mart.dim_scenario s
+	ON ch.scenario_code=s.scenario_code
 
 if @debug=1
 begin
@@ -167,10 +122,10 @@ end
 
 DELETE fs
 FROM mart.fact_schedule fs
-INNER JOIN #stg_schedule_changed a
-	ON	a.person_id = fs.person_id
-	AND a.scenario_id = fs.scenario_id
-	AND a.shift_startdate_id = fs.shift_startdate_id
+INNER JOIN #stg_schedule_changed ch
+	ON	ch.person_id = fs.person_id
+	AND ch.scenario_id = fs.scenario_id
+	AND ch.shift_startdate_local_id = fs.shift_startdate_local_id
 
 if @debug=1
 begin
@@ -178,19 +133,6 @@ begin
 	set @lastStep=getdate();set @step=@step+1
 end
 
-DELETE fs
-FROM #stg_schedule tmp
-INNER JOIN mart.fact_schedule fs 
-	ON tmp.person_id	= fs.person_id
-	AND tmp.date_id		= fs.schedule_date_id
-	AND tmp.interval_id = fs.interval_id
-	AND tmp.scenario_id = fs.scenario_id
-
-if @debug=1
-begin
-	insert into @timeStat(step,totalTime,laststep_ms) select @step,datediff(ms,@startTime,getdate()),datediff(ms,@lastStep,getdate())
-	set @lastStep=getdate();set @step=@step+1
-end
 
 --insert new and updated
 --disable FK
@@ -198,6 +140,7 @@ ALTER TABLE mart.fact_schedule NOCHECK CONSTRAINT ALL
 
 INSERT INTO mart.fact_schedule
 	(
+	shift_startdate_local_id,
 	schedule_date_id, 
 	person_id, 
 	interval_id, 
@@ -213,6 +156,7 @@ INSERT INTO mart.fact_schedule
 	shift_enddate_id, 
 	shift_endtime, 
 	shift_startinterval_id, 
+	shift_endinterval_id, 
 	shift_category_id, 
 	shift_length_id, 
 	scheduled_time_m, 
@@ -229,7 +173,6 @@ INSERT INTO mart.fact_schedule
 	scheduled_paid_time_m,
 	scheduled_paid_time_activity_m,
 	scheduled_paid_time_absence_m,
-	last_publish, 
 	business_unit_id,
 	datasource_id, 
 	datasource_update_date,
