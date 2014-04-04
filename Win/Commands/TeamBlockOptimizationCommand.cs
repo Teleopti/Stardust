@@ -178,18 +178,15 @@ namespace Teleopti.Ccc.Win.Commands
 			}
 
 	        solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
-		        teamBlockGenerator, rollbackServiceWithResourceCalculation, allMatrixes);
+                teamBlockGenerator, rollbackServiceWithResourceCalculation, allMatrixes, _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences));
 
         }
 
-	    private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-		    IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer,
-		    ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService,
-		    IList<IScheduleMatrixPro> allMatrixes)
+	    private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer, ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions)
 	    {
 		    _weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
 			    rollbackService, resourceCalculateDelayer, _schedulerStateHolder.SchedulingResultState, allMatrixes,
-			    optimizationPreferences);
+			    optimizationPreferences,schedulingOptions );
 	    }
 
 	    private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, 

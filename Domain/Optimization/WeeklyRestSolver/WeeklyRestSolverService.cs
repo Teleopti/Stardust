@@ -14,10 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
     public interface IWeeklyRestSolverService
     {
-	    void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator,
-		    ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
-		    ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
-		    IOptimizationPreferences optimizationPreferences);
+	    void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions);
         event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
     }
     public class WeeklyRestSolverService : IWeeklyRestSolverService
@@ -59,11 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             }
         }
 
-	    public void Execute(IList<IPerson> selectedPersons, 
-		    DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator,
-		    ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
-		    ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList,
-			IOptimizationPreferences optimizationPreferences)
+	    public void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions)
 	    {
 	        foreach (var person in selectedPersons)
 	        {
@@ -104,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                        success = _shiftNudgeManager.TrySolveForDayOff(personWeek, highProbablePosition,
 	                            teamBlockGenerator,
 	                            allPersonMatrixList, rollbackService, resourceCalculateDelayer,
-	                            schedulingResultStateHolder, selectedPeriod, selectedPersons, optimizationPreferences);
+	                            schedulingResultStateHolder, selectedPeriod, selectedPersons, optimizationPreferences,schedulingOptions );
 
 	                        if (success)
 	                        {

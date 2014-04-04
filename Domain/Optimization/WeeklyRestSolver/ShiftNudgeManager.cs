@@ -10,12 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
 	public interface IShiftNudgeManager
 	{
-		bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
-			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
-			ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-			IOptimizationPreferences optimizationPreferences);
+		bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith, ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions);
 
 	    bool RollbackLastScheduledWeek(ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer);
 	}
@@ -47,13 +42,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
-		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
-			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
-			ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
+		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith, ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions)
 		{
-			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			//var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamSchedulingOptions = new TeamBlockSchedulingOptions();
 			if (teamSchedulingOptions.IsBlockScheduling(schedulingOptions) &&
 			    schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)
@@ -113,8 +104,13 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				return false;
 			}
 
-			bool leftOk = _teamBlockRestrictionOverLimitValidator.Validate(leftTeamBlock, optimizationPreferences);
-			bool rightOk = _teamBlockRestrictionOverLimitValidator.Validate(rightTeamBlock, optimizationPreferences);
+			bool leftOk = true;
+			bool rightOk = true ;
+		    if (optimizationPreferences != null)
+		    {
+                leftOk = _teamBlockRestrictionOverLimitValidator.Validate(leftTeamBlock, optimizationPreferences);
+                rightOk = _teamBlockRestrictionOverLimitValidator.Validate(rightTeamBlock, optimizationPreferences);
+		    }
 			if (!(leftOk && rightOk))
 			{
 				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
