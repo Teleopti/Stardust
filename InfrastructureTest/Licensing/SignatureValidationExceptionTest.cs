@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 {
     [TestFixture]
 	[Category("LongRunning")]
-	[CLSCompliant(false)]
     public class SignatureValidationExceptionTest : ExceptionTest<SignatureValidationException>
     {
         /// <summary>
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
         /// Created by: Klas
         /// Created date: 2008-11-18
 		/// </remarks>
-		[CLSCompliant(false)]
         protected override SignatureValidationException CreateTestInstance(string message, Exception innerException)
         {
             return new SignatureValidationException(message, innerException);

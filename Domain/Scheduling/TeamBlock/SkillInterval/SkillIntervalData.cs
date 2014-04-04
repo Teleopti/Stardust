@@ -4,7 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 {
-	[CLSCompliant(false)]
 	public interface ISkillIntervalData : IWorkShiftPeriodData
 	{
 		DateTimePeriod Period { get; }
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 		double RelativeDifferenceBoosted();
 	}
 
-	[CLSCompliant(false)]
 	public class SkillIntervalData : ISkillIntervalData
 	{
 		private double _forecastedDemand;
