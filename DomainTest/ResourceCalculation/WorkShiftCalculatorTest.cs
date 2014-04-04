@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				mainShiftLayers, 
 				new SkillStaffPeriodDataWrapper(skillStaffPeriods), 
 				lengthFactor,
-				useMaximumPersons, useMaximumPersons);
+				useMaximumPersons, useMaximumPersons,
+				TimeHelper.FitToDefaultResolution);
 		}
 
 		public static double CalculateDeviationImprovementAfterAssignment(IVisualLayerCollection layerCollection, Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods)
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		private static WorkShiftCalculator MakeTarget()
 		{
-			WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+			WorkShiftCalculator calculator = new WorkShiftCalculator();
 			return calculator;
 		}
 	
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity1, dataHolders);
             skillStaffPeriods.Add(activity2, dataHolders2);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+            WorkShiftCalculator calculator = new WorkShiftCalculator();
 			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
@@ -411,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity2, dataHolders);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+            WorkShiftCalculator calculator = new WorkShiftCalculator();
 			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
@@ -444,7 +445,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity1, dataHolders);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+            WorkShiftCalculator calculator = new WorkShiftCalculator();
 			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 

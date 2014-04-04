@@ -92,7 +92,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				double? nonBlendValue = null;
 				double thisValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.MainShiftProjection,
 																			dataHolders, schedulingOptions.WorkShiftLengthHintOption,
-																			schedulingOptions.UseMinimumPersons, schedulingOptions.UseMaximumPersons);
+																			schedulingOptions.UseMinimumPersons, schedulingOptions.UseMaximumPersons,
+																			TimeHelper.FitToDefaultResolution);
 
 				if (nonBlendSkillPeriods.Count > 0)
 					nonBlendValue = _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
