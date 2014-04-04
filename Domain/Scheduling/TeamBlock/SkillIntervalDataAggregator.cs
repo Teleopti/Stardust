@@ -6,13 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	[CLSCompliant(false)]
     public interface ISkillIntervalDataAggregator
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IList<ISkillIntervalData> AggregateSkillIntervalData(IList<IList<ISkillIntervalData>> multipleSkillIntervalDataList);
 
-		[CLSCompliant(false)]
 	    ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1,
 	                                             ISkillIntervalData skillIntervalData2);
     }
@@ -39,7 +37,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return tempPeriodToSkillIntervalData.Values.ToList();
         }
 
-		[CLSCompliant(false)]
         public ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1, ISkillIntervalData skillIntervalData2)
         {
             if (skillIntervalData2 == null)

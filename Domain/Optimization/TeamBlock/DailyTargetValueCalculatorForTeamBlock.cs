@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
         private readonly ILocateMissingIntervalsIfMidNightBreak _locateMissingIntervalsIfMidNightBreak;
         private readonly IFilterOutIntervalsAfterMidNight _filterOutIntervalsAfterMidNight;
 
-		[CLSCompliant(false)]
         public DailyTargetValueCalculatorForTeamBlock(ISkillResolutionProvider resolutionProvider, ISkillIntervalDataDivider intervalDataDivider, 
                                 ISkillIntervalDataAggregator intervalDataAggregator, IDayIntervalDataCalculator dayIntervalDataCalculator, ISkillStaffPeriodToSkillIntervalDataMapper skillStaffPeriodToSkillIntervalDataMapper,
                             ISchedulingResultStateHolder schedulingResultStateHolder, IGroupPersonSkillAggregator groupPersonSkillAggregator,ILocateMissingIntervalsIfMidNightBreak locateMissingIntervalsIfMidNightBreak, IFilterOutIntervalsAfterMidNight filterOutIntervalsAfterMidNight)

@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         private readonly IMedianCalculatorForSkillInterval _medianCalculatorForSkillInterval;
 
-		[CLSCompliant(false)]
         public MedianCalculatorForDays(IMedianCalculatorForSkillInterval medianCalculatorForSkillInterval)
         {
             _medianCalculatorForSkillInterval = medianCalculatorForSkillInterval;

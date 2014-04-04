@@ -9,13 +9,11 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
-	[CLSCompliant(false)]
     public interface ILicenseStatusRepositories
     {
         int NumberOfActiveAgents();
         ILicenseStatusXml LicenseStatus { get; }
 		void SaveLicenseStatus(string value);
-		[CLSCompliant(false)]
         ILicenseService XmlLicenseService(int numberOfActiveAgents);
     }
 
@@ -63,7 +61,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
             }
         }
 
-		[CLSCompliant(false)]
         public ILicenseService XmlLicenseService(int numberOfActiveAgents)
         {
 	        using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())

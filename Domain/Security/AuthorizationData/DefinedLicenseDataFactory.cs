@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
         /// Created by: henryg
         /// Created date: 2008-10-07
 		/// </remarks>
-		[CLSCompliant(false)]
         public static ILicenseActivator LicenseActivator
         {
             get { return _licenseActivator; }
