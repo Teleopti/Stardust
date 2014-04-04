@@ -18,8 +18,18 @@
 			<option data-bind="text: text, value: id"></option>
 		</select>
 	</div>
-    <br/>
-    @if (Model.ShareCalendarPermission)
+	<br/>
+
+	<!-- ko if: IsNotificationSupported() -->
+	<div class="clearfix">
+		<div class="btn-group">
+			<button class="btn btn-lg" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
+		</div>
+	</div>
+	<br/>
+	<!-- /ko -->
+
+	@if (Model.ShareCalendarPermission)
     {
 	    <div class="clearfix">
 		    <div class="btn-group">

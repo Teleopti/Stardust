@@ -1763,6 +1763,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Desktop Notifications.
+        /// </summary>
+        public static string AllowDesktopNotifications {
+            get {
+                return ResourceManager.GetString("AllowDesktopNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Meetings.
         /// </summary>
         public static string AllowMeetings {
@@ -2323,20 +2332,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to At least one day cannot be scheduled.
-        /// </summary>
-        public static string AtLeastOneDayCannotBeScheduled {
-            get {
-                return ResourceManager.GetString("AtLeastOneDayCannotBeScheduled", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Assignment options.
         /// </summary>
         public static string AssignmentOptions {
             get {
                 return ResourceManager.GetString("AssignmentOptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to At least one day cannot be scheduled.
+        /// </summary>
+        public static string AtLeastOneDayCannotBeScheduled {
+            get {
+                return ResourceManager.GetString("AtLeastOneDayCannotBeScheduled", resourceCulture);
             }
         }
         

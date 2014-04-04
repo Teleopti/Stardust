@@ -11898,4 +11898,7 @@ Reduce the complexity to use these shifts.</value>
     <value>At least one day cannot be scheduled</value>
     <comment>Used in scheduler</comment>
   </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Allow Desktop Notifications</value>
+  </data>
 </root>
