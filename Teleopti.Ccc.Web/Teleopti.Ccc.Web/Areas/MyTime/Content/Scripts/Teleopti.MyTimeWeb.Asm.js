@@ -335,7 +335,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 			});
 		var settingLoadDeffered = $.Deferred();
 		alertvm.loadSetting(function(data) {
-			alertSetting = data;
+			alertSetting = data.SecondsBeforeChange;
 			settingLoadDeffered.resolve();
 		});
 		$.when(dataLoadDeffered, settingLoadDeffered).done(function () {
