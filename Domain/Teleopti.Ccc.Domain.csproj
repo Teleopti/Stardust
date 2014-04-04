@@ -488,6 +488,7 @@
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="ResourceCalculation\IPeriodDistributionService.cs" />
     <Compile Include="ApplicationLayer\Events\ActivityAddedEvent.cs" />
+    <Compile Include="ResourceCalculation\SkillStaffPeriodDataInfo.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerDown.cs" />
     <Compile Include="Scheduling\Assignment\MoveShiftLayerUp.cs" />
@@ -1224,7 +1225,6 @@
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackService.cs" />
     <Compile Include="ResourceCalculation\ShiftProjectionCache.cs" />
     <Compile Include="ResourceCalculation\SchedulingOptions.cs" />
-    <Compile Include="ResourceCalculation\SkillStaffPeriodDataHolder.cs" />
     <Compile Include="ResourceCalculation\SwapService.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFilterResult.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderResult.cs" />
