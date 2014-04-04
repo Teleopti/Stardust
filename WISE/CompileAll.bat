@@ -159,11 +159,19 @@ XCOPY "%DEPENDENCIESSRC%\ccc7_server\sqlio.exe" "%WISESOURCEFILE%\SupportTools\S
 ::WISE
 ROBOCOPY "%DEPENDENCIESSRC%\images" "%WISESOURCEFILE%\images" /MIR
 
-if exist "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%" (
-XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_server.wsi" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
-XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_mytime.wsi" "%WISESOURCEFILE%\Wise\ccc7_mytime\" /D /Y
-XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_forecast.wsi" "%WISESOURCEFILE%\Wise\ccc7_forecast\" /D /Y
-XCOPY "%DEPENDENCIESSRC%\wsi\%Version:~0,-6%\ccc7_client.wsi" "%WISESOURCEFILE%\Wise\ccc7_client\" /D /Y
+::get short version
+if not %version:~0,-2%==".0" (
+set shortVersion=%Version:~0,-6%
+) else (
+CALL "%WISEDIR%\head.bat" 1 %SrcShare%\%ActiveMajorVersion%.%ActiveBranchVersion%.* > %temp%\Version.txt
+SET /p shortVersion= < %temp%\Version.txt
+)
+
+if exist "%DEPENDENCIESSRC%\wsi\%shortVersion%" (
+XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_server.wsi" "%WISESOURCEFILE%\Wise\ccc7_server\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_mytime.wsi" "%WISESOURCEFILE%\Wise\ccc7_mytime\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_forecast.wsi" "%WISESOURCEFILE%\Wise\ccc7_forecast\" /D /Y
+XCOPY "%DEPENDENCIESSRC%\wsi\%shortVersion%\ccc7_client.wsi" "%WISESOURCEFILE%\Wise\ccc7_client\" /D /Y
 ) else (
 SET ERRORLEV=102
 GOTO Error
