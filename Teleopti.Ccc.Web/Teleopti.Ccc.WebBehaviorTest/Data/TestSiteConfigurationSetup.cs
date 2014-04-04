@@ -173,8 +173,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			if (File.Exists(BackupWebConfig))
 				File.Copy(BackupWebConfig, TargetWebConfig, true);
-			if (File.Exists(BackupAuthenticationBridgeWebConfig))
-				File.Copy(BackupAuthenticationBridgeWebConfig, TargetAuthenticationBridgeWebConfig, true);
+			if (File.Exists(BackupWindowsIdentityProviderWebConfig))
+				File.Copy(BackupWindowsIdentityProviderWebConfig, TargetWindowsIdentityProviderWebConfig, true);
 			if (File.Exists(BackupAuthenticationBridgeWebConfig))
 				File.Copy(BackupAuthenticationBridgeWebConfig, TargetAuthenticationBridgeWebConfig, true);
 		}

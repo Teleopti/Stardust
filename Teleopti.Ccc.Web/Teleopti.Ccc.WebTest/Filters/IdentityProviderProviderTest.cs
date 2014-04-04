@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		public void ShouldGetDefaultProvider()
 		{
 			var config = new ConfigurationManagerWrapper();
-			config.AppSettings["DefaultIdentityProvider"] = "urn:Windows";
+			config.AppSettings["DefaultIdentityProvider"] = "Windows";
 			var target = new IdentityProviderProvider(config);
 
 			var defaultProvider = target.DefaultProvider();

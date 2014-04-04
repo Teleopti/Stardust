@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public string DefaultProvider()
 		{
-			return _configurationWrapper.AppSettings["DefaultIdentityProvider"];
+			return "urn:" + _configurationWrapper.AppSettings["DefaultIdentityProvider"];
 		}
 	}
 }

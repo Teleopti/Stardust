@@ -3,8 +3,6 @@
 	As a user other than myself
 	I want to be able to sign in as another user
 
-Background:
-
 @WindowsAsDefaultIdentityProviderLogon
 Scenario: Not permitted to logon as another user
 	Given I have a role with

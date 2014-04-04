@@ -204,8 +204,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#Password-change-error", resourceText);
 		}
 
-		private const string TeleoptiAsDefaultIdentityProvider = "<add key=\"DefaultIdentityProvider\" value=\"urn:Teleopti\" />";
-		private const string WindowsAsDefaultIdentityProvider = "<add key=\"DefaultIdentityProvider\" value=\"urn:Windows\" />";
+		private const string TeleoptiAsDefaultIdentityProvider = "<add key=\"DefaultIdentityProvider\" value=\"Teleopti\" />";
+		private const string WindowsAsDefaultIdentityProvider = "<add key=\"DefaultIdentityProvider\" value=\"Windows\" />";
 
 		[BeforeScenario("WindowsAsDefaultIdentityProviderLogon")]
 		public void BeforeWindowsAsDefaultIdentityProviderLogon()
