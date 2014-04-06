@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
+																		  _schedulingOptions.UseMaximumPersons, TimeZoneGuard.Instance.TimeZone)).Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person1, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
@@ -246,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,
 																		  _schedulingOptions.UseMinimumPersons,
-																		  _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
+																		  _schedulingOptions.UseMaximumPersons, TimeZoneGuard.Instance.TimeZone)).Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person2, _dateOnly, _teamBlockInfo, _shift, _blockPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);

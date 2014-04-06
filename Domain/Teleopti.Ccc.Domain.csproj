@@ -636,6 +636,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDataPerDateAndActivity.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\CreateSkillIntervalDatasPerActivtyForDate.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\OpenHourForDate.cs" />
+    <Compile Include="Scheduling\TeamBlock\SkillInterval\ActivityIntervalDataLocalDictionary.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillInterval\TeamBlockOpenHourService.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeTeamSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\Specification\SameOpenHoursInTeamBlockSpecification.cs" />

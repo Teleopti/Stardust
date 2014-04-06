@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -10,8 +11,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 {
     public interface IWorkShiftValueCalculator
     {
-        double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDataList,
-                                                    WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons);
+		double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
+													WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo);
     }
 
     public class WorkShiftValueCalculator : IWorkShiftValueCalculator
@@ -26,49 +27,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
         }
 
         public double? CalculateShiftValue(IVisualLayerCollection mainShiftLayers, IActivity skillActivity,
-                                           IDictionary<TimeSpan, ISkillIntervalData> skillIntervalDataList,
+										   IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic,
                                            WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons,
-                                           bool useMaximumPersons)
+                                           bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
         {
             if (mainShiftLayers == null) throw new ArgumentNullException("mainShiftLayers");
-            if (skillIntervalDataList == null)
+			if (skillIntervalDataDic == null || skillIntervalDataDic.Count == 0)
                 return null;
 
             double periodValue = 0;
             int resourceInMinutes = 0;
-            var dateTimePeriod = mainShiftLayers.Period();
 
-            DateTime shiftStartDate = dateTimePeriod.Value.StartDateTime.Date;
             foreach (IVisualLayer layer in mainShiftLayers)
             {
                 var activity = (IActivity)layer.Payload;
                 if (activity != skillActivity)
                     continue;
-                var baseLayer = layerToBaseDate(layer, shiftStartDate);
-                DateTime layerStart = baseLayer.Period.StartDateTime;
-                DateTime layerEnd = baseLayer.Period.EndDateTime;
 
-                int resolution = getResolution(skillIntervalDataList);
-                int currentResourceInMinutes = resolution;
+	            var layerPeriod = layer.Period;
+				var layerStartLocal = DateTime.SpecifyKind(layerPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
+				var localPeriod = new DateTimePeriod(layerStartLocal, DateTime.SpecifyKind(layerPeriod.EndDateTimeLocal(timeZoneInfo), DateTimeKind.Utc));
 
-                DateTime currentStart =
-                    layerStart.Date.Add(
-                        TimeHelper.FitToDefaultResolution(layerStart.TimeOfDay, resolution));
-                if (currentStart > layerStart)
-                {
-                    currentStart = currentStart.AddMinutes(-resolution);
-                }
-
-                // If the layer doesn't fit to the resolution (maybe a short break of 5 minutes in the start)
-                if (currentStart < layerStart)
-                {
-                    currentResourceInMinutes = currentResourceInMinutes - (layerStart - currentStart).Minutes;
-                }
-
-                // IF the shift is outside opening hours and Activity needs skill dont't use it (otherwise it could be outside opening hours).
+	            int resolution = (int)skillIntervalDataDic.Values.FirstOrDefault().Resolution().TotalMinutes;
+				DateTime currentSkillStaffPeriodKey =
+					localPeriod.StartDateTime.Date.Add(
+						TimeHelper.FitToDefaultResolutionRoundDown(layerStartLocal.TimeOfDay, resolution));
 
                 ISkillIntervalData currentStaffPeriod;
-                if (!skillIntervalDataList.TryGetValue(timeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
+				if (!skillIntervalDataDic.TryGetValue(currentSkillStaffPeriodKey, out currentStaffPeriod))
                 {
                     if (activity.RequiresSkill)
                         return null;
@@ -76,9 +62,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
                     return 0;
                 }
 
-                // only part of the period should count
-                if (currentResourceInMinutes > 0 && currentStaffPeriod.Period.EndDateTime > layerEnd)
-                    currentResourceInMinutes = currentResourceInMinutes - (currentStaffPeriod.Period.EndDateTime - layerEnd).Minutes;
+				var currentResourceInMinutes = 0;
+				var intersection = currentStaffPeriod.Period.Intersection(localPeriod);
+				if (intersection.HasValue)
+					currentResourceInMinutes = (int)intersection.Value.ElapsedTime().TotalMinutes;
 
                 while (currentResourceInMinutes > 0)
                 {
@@ -86,60 +73,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
                                                                                useMinimumPersons, useMaximumPersons);
                     resourceInMinutes += currentResourceInMinutes;
 
-                    currentResourceInMinutes = resolution;
-                    currentStart = currentStart.AddMinutes(resolution);
+	                currentSkillStaffPeriodKey = currentSkillStaffPeriodKey.AddMinutes(resolution);
+					if(!localPeriod.Contains(currentSkillStaffPeriodKey))
+						break;
 
-                    if (currentStart >= baseLayer.Period.EndDateTime)
-                        break;
+					if (!skillIntervalDataDic.TryGetValue(currentSkillStaffPeriodKey, out currentStaffPeriod))
+						return null;
 
-                    if (!skillIntervalDataList.TryGetValue(timeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
-                    {
-                        if (activity.RequiresSkill)
-                            return null;
-                    }
-
-                    // only part of the period should count
-                    if (currentResourceInMinutes > 0 && currentStaffPeriod.Period.EndDateTime > layerEnd)
-                        currentResourceInMinutes = currentResourceInMinutes - (currentStaffPeriod.Period.EndDateTime - layerEnd).Minutes;
+	                currentResourceInMinutes = 0;
+	                intersection = currentStaffPeriod.Period.Intersection(localPeriod);
+	                if (intersection.HasValue)
+		                currentResourceInMinutes = (int)intersection.Value.ElapsedTime().TotalMinutes;
                 }
-
             }
 
             return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
-        }
-
-        private static int getResolution(IEnumerable<KeyValuePair<TimeSpan, ISkillIntervalData>> staffPeriods)
-        {
-            int resolution = 15;
-            foreach (KeyValuePair<TimeSpan, ISkillIntervalData> pair in staffPeriods)
-            {
-                resolution = (int)(pair.Value.Resolution().TotalMinutes);
-                break;
-            }
-            return resolution;
-        }
-
-        private static TimeSpan timeOfDay(DateTime shiftStartDate, DateTime currentStart)
-        {
-            if (currentStart.Date == shiftStartDate.Date)
-                return currentStart.TimeOfDay;
-
-            return currentStart.TimeOfDay.Add(TimeSpan.FromDays(1));
-        }
-
-        private static IVisualLayer layerToBaseDate(IVisualLayer layer, DateTime shiftStartDate)
-        {
-            var movedStart =
-                new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(timeOfDay(shiftStartDate,
-                                                                                                   layer.Period.StartDateTime));
-            var movedEnd =
-                new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(timeOfDay(shiftStartDate,
-                                                                                                   layer.Period.EndDateTime));
-            var
-            movedPeriod = new DateTimePeriod(movedStart, movedEnd);
-            var retLayer = new VisualLayer(layer.Payload, movedPeriod, ((VisualLayer)layer).HighestPriorityActivity,
-                                           layer.Person);
-            return retLayer;
-        }
+        }  
     }
 }
