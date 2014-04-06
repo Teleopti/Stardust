@@ -43,14 +43,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupPerson.GroupMembers.Intersect(selectedPersons).ToList();
 			if (selectedTeamMembers.IsEmpty())
 				return true;
-			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
+			var selectedBlockDays = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
+			DateOnly firstSelectedDayInBlock = selectedBlockDays.First();
+
+			var roleModelShift = _roleModelSelector.Select(teamBlockInfo, firstSelectedDayInBlock, selectedTeamMembers.First(), schedulingOptions);
 			if (roleModelShift == null)
 			{
 				OnDayScheduledFailed();
 				return false;
 			}
 
-			var selectedBlockDays = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
+			
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays, roleModelShift);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
@@ -60,10 +63,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					{
 						_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 						schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
-						roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions);
+						roleModelShift = _roleModelSelector.Select(teamBlockInfo, firstSelectedDayInBlock, selectedTeamMembers.First(), schedulingOptions);
 						success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays, roleModelShift);
-						schedulingOptions.NotAllowedShiftCategories.Clear();
+						
 					}
+					schedulingOptions.NotAllowedShiftCategories.Clear();
 				}
 
 			return success;

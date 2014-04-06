@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 																								 schedulingOptions
 																									 .UseMinimumPersons,
 																								 schedulingOptions
-																									 .UseMaximumPersons);
+																									 .UseMaximumPersons, TimeZoneGuard.Instance.TimeZone);
 					if (bestShiftProjectionCache == null) continue;
 				}
 

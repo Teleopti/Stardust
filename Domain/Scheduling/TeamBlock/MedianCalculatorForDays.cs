@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             var result = new Dictionary<TimeSpan, ISkillIntervalData>();
             var temp = new Dictionary<TimeSpan, IList<ISkillIntervalData>>();
-            var baseDate = DateTime.SpecifyKind(SkillDayTemplate.BaseDate, DateTimeKind.Utc);
+            var baseDate = DateTime.SpecifyKind(days.Keys.First().Date, DateTimeKind.Utc);
 
             foreach (var intervalData in days.SelectMany(day => day.Value))
             {
