@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
@@ -89,7 +90,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 
 				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
-				activityInternalData.Add(activity, dataForActivity);
+				if(dataForActivity.Any())
+					activityInternalData.Add(activity, dataForActivity);
 			}
 
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,

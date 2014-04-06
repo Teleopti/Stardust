@@ -112,7 +112,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						}
 
 						IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
-						activityInternalData.Add(activity, dataForActivity);
+						if (dataForActivity.Any())
+							activityInternalData.Add(activity, dataForActivity);
 					}
 
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
