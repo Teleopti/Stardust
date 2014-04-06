@@ -24,6 +24,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         public Dictionary<TimeSpan, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> days, double resolution)
         {
             var result = new Dictionary<TimeSpan, ISkillIntervalData>();
+	        if (!days.Any())
+		        return result;
+
             var temp = new Dictionary<TimeSpan, IList<ISkillIntervalData>>();
             var baseDate = DateTime.SpecifyKind(days.Keys.First().Date, DateTimeKind.Utc);
 
