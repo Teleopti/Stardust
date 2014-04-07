@@ -8700,7 +8700,7 @@ Las opciones activadas son:
     <value>Este período {0} carece de presupuesto</value>
   </data>
   <data name="NoBudgetGroupForPerson" xml:space="preserve">
-    <value>La persona {0} carece de grup de presupuesto</value>
+    <value>La persona {0} carece de grupo de presupuesto</value>
   </data>
   <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
     <value>Insuficiente tiempo de autorización de presupuesto para la fecha {0}.</value>
@@ -9101,5 +9101,140 @@ Los turnos generados por está regla no estarán disponibles para planificación
   </data>
   <data name="ModifyAvailabilities" xml:space="preserve">
     <value>Modificar disponibilidades</value>
+  </data>
+  <data name="KeepTag" xml:space="preserve">
+    <value>&lt;Mantener&gt;</value>
+  </data>
+  <data name="UseDayOfMonthSeasonality" xml:space="preserve">
+    <value>Usar Estacionalidad mensual (día del mes)</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Skills de los agentes</value>
+  </data>
+  <data name="BudgetGroupMissing" xml:space="preserve">
+    <value>Usted carece de grupo de presupuesto.</value>
+  </data>
+  <data name="TryingToResolveUnscheduledDaysDotDotDot" xml:space="preserve">
+    <value>Intentando resolver los días no planificados...</value>
+  </data>
+  <data name="ShiftTradeDifferentDateDenyReason" xml:space="preserve">
+    <value>Cambio de turno denegado, los turnos tienen fechas diferentes.</value>
+  </data>
+  <data name="AddIntradayAbsence" xml:space="preserve">
+    <value>Añadir ausencia intradía</value>
+  </data>
+  <data name="IntradayAbsence" xml:space="preserve">
+    <value>Ausencia intradía</value>
+  </data>
+  <data name="IllegalTeamBlockCombination" xml:space="preserve">
+    <value>Combinación no admitida: Optimizar bloques entre días libres no manteniendo días libres por equipo</value>
+  </data>
+  <data name="TeamToCompareWith" xml:space="preserve">
+    <value>Euipo de comparación</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tiempo en el estado por agente</value>
+  </data>
+  <data name="DetailedAdherence" xml:space="preserve">
+    <value>Adherencia detallada</value>
+  </data>
+  <data name="MyReportWeb" xml:space="preserve">
+    <value>Mi reporte</value>
+  </data>
+  <data name="ActiveAgents" xml:space="preserve">
+    <value>Agentes Activos</value>
+  </data>
+  <data name="NoPeriodPresent" xml:space="preserve">
+    <value>No hay período</value>
+  </data>
+  <data name="InvalidEndTime" xml:space="preserve">
+    <value>Tiempo de fin inválido.</value>
+  </data>
+  <data name="InvalidIntradayAbsenceTimes" xml:space="preserve">
+    <value>Por favor, añada ausencia intradía en un turno existente.</value>
+  </data>
+  <data name="CannotCreateSecondShiftWhenAddingActivity" xml:space="preserve">
+    <value>No está permitido crear un segundo turno con Añadir Actividad.</value>
+  </data>
+  <data name="OnThisDateYouAreNoLongerAnEmployee" xml:space="preserve">
+    <value>Usted no es empleado en esta fecha</value>
+  </data>
+  <data name="Metric" xml:space="preserve">
+    <value>Métricas</value>
+  </data>
+  <data name="Readiness" xml:space="preserve">
+    <value>Disponibilidad</value>
+  </data>
+  <data name="Value" xml:space="preserve">
+    <value>Valor</value>
+  </data>
+  <data name="Yesterday" xml:space="preserve">
+    <value>Ayer</value>
+  </data>
+  <data name="TaskTime" xml:space="preserve">
+    <value>Tiempo de la tarea</value>
+  </data>
+  <data name="TotalTaskTime" xml:space="preserve">
+    <value>Tiempo total de la tarea</value>
+  </data>
+  <data name="ChatTime" xml:space="preserve">
+    <value>Tiempo de Chat</value>
+  </data>
+  <data name="YouDoNotHaveAccessToAnyTeams" xml:space="preserve">
+    <value>Usted carece de acceso a los equipos.</value>
+  </data>
+  <data name="CompareWithTeamsFrom" xml:space="preserve">
+    <value>Comparar con equipos en</value>
+  </data>
+  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
+    <value>Tiempo disponible / Tiempo disponible planificado (%)</value>
+  </data>
+  <data name="ScheduleMustBeReloaded" xml:space="preserve">
+    <value>Recargue la planificación</value>
+  </data>
+  <data name="DayOffPoints" xml:space="preserve">
+    <value>Puntos de días libres:</value>
+  </data>
+  <data name="SeniorityPoints" xml:space="preserve">
+    <value>Puntos de Antigüedad:</value>
+  </data>
+  <data name="ShiftCategoryPoints" xml:space="preserve">
+    <value>Puntos de Categoría de turnos:</value>
+  </data>
+  <data name="MyReportAdherenceTab" xml:space="preserve">
+    <value>Adherencia detallada</value>
+  </data>
+  <data name="MyReportSummaryTab" xml:space="preserve">
+    <value>Resumen</value>
+  </data>
+  <data name="MonthSchedule" xml:space="preserve">
+    <value>Planificación mensual</value>
+  </data>
+  <data name="Ranking" xml:space="preserve">
+    <value>Clasificación</value>
+  </data>
+  <data name="RealTimeAdherenceOverview" xml:space="preserve">
+    <value>Adherencia en Tiempo Real - visión general</value>
+  </data>
+  <data name="ViewPersonalAccount" xml:space="preserve">
+    <value>Mostrar Cuenta Personal</value>
+  </data>
+  <data name="Navigate" xml:space="preserve">
+    <value>Navegar</value>
+  </data>
+  <data name="SelectAtleastOnePerson" xml:space="preserve">
+    <value>Seleccionar al menos una persona</value>
+  </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>Solo en agentes disponibles</value>
+  </data>
+  <data name="OutOfAdherence" xml:space="preserve">
+    <value>Fuera de adherencia</value>
+  </data>
+  <data name="ASMTimeAheadOfActivityChangeToAlert" xml:space="preserve">
+    <value>Margen de alerta de cambio de actividad (segundos)</value>
+  </data>
+  <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
+    <value>Al menos un día no ha podido ser planificado</value>
   </data>
 </root>
