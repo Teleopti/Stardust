@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Obfuscated.Forecasting
+namespace Teleopti.Ccc.Domain.Forecasting
 {
     /// <summary>
     /// Calculates the start and end point of the trend line

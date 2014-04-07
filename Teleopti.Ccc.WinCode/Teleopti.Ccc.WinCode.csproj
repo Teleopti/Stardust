@@ -1297,10 +1297,6 @@
       <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
       <Name>Teleopti.Ccc.Domain.Calculation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
-      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
-      <Name>Teleopti.Ccc.Obfuscated</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj">
       <Project>{6116fc80-2475-447e-a90a-14b4db59e2a7}</Project>
       <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>

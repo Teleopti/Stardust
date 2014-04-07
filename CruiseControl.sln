@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -82,8 +82,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DbConverter", "Teleopti.Ccc.DbConverter\Teleopti.Ccc.DbConverter.csproj", "{A1338CDB-D557-4D78-9296-3789488EC8A7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ClientProxies", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ClientProxies\Teleopti.Ccc.Sdk.ClientProxies.csproj", "{6116FC80-2475-447E-A90A-14B4DB59E2A7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Obfuscated", "Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj", "{5895BC02-04C8-46E1-A804-43D314A02AD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.AgentPortalCode", "AgentPortal\Teleopti.Ccc.AgentPortalCode\Teleopti.Ccc.AgentPortalCode.csproj", "{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}"
 EndProject
@@ -622,20 +620,6 @@ Global
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6116FC80-2475-447E-A90A-14B4DB59E2A7}.Release|x86.ActiveCfg = Release|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Debug|x86.ActiveCfg = Debug|x86
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Debug|x86.Build.0 = Debug|x86
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Release|.NET.ActiveCfg = Release|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Release|x86.ActiveCfg = Release|x86
-		{5895BC02-04C8-46E1-A804-43D314A02AD9}.Release|x86.Build.0 = Release|x86
 		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B960FB2F-5AF0-4254-83D0-99D1E0465C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU

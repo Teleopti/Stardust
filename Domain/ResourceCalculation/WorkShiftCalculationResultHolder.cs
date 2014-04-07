@@ -1,6 +1,7 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
+namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public  class WorkShiftCalculationResult : IWorkShiftCalculationResultHolder
     {

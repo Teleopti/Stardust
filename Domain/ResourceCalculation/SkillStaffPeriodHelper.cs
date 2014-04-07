@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
+namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     /// <summary>
     /// Helper functions for working with <see cref="ISkillStaffPeriod"/> 

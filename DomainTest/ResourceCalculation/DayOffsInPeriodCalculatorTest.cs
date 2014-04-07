@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation

@@ -1197,10 +1197,6 @@
       <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
       <Name>Teleopti.Ccc.Domain.Calculation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
-      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
-      <Name>Teleopti.Ccc.Obfuscated</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
       <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
       <Name>Teleopti.Ccc.Secrets</Name>

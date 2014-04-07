@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.Secrets.Furness;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
+namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     /// <summary>
     /// Converts the divided activity data into FurnessData, and - provided that you keep a 
