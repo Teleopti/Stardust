@@ -849,10 +849,6 @@
       <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
-      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
-      <Name>Teleopti.Ccc.Obfuscated</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
       <Name>Teleopti.Ccc.Sdk.Common</Name>

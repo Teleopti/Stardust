@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
+namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SchedulingResultService : ISchedulingResultService
 	{

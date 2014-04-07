@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Interfaces.Domain

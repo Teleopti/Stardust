@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Interfaces.Messages.Payroll;
 using log4net;
-using Teleopti.Ccc.Obfuscated.Security;
 using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll

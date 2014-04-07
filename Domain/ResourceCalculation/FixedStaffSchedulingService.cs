@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
+namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public interface IFixedStaffSchedulingService
     {
