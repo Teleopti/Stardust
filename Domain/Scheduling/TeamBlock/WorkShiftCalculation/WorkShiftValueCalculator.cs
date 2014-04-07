@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
                                            bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
         {
             if (mainShiftLayers == null) throw new ArgumentNullException("mainShiftLayers");
-			if (skillIntervalDataDic == null || skillIntervalDataDic.Count == 0)
+			if (skillIntervalDataDic == null)
                 return null;
 
             double periodValue = 0;
@@ -47,6 +47,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	            var layerPeriod = layer.Period;
 				var layerStartLocal = DateTime.SpecifyKind(layerPeriod.StartDateTimeLocal(timeZoneInfo), DateTimeKind.Utc);
 				var localPeriod = new DateTimePeriod(layerStartLocal, DateTime.SpecifyKind(layerPeriod.EndDateTimeLocal(timeZoneInfo), DateTimeKind.Utc));
+
+	            if (!skillIntervalDataDic.Values.Any())
+		            return null;
 
 	            int resolution = (int)skillIntervalDataDic.Values.FirstOrDefault().Resolution().TotalMinutes;
 				DateTime currentSkillStaffPeriodKey =
