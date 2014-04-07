@@ -1065,4 +1065,22 @@
   <data name="ResUtilization" xml:space="preserve">
     <value>Utilización</value>
   </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>El timepo de conexión con la BBDD ha expirado, intente disminuir las condiciones de búsqueda.</value>
+  </data>
+  <data name="ResOnlyActiveSkill" xml:space="preserve">
+    <value>Solo agentes activos</value>
+  </data>
+  <data name="ResReportAgentSkills" xml:space="preserve">
+    <value>Skilles de los agentes</value>
+  </data>
+  <data name="ResOnlyActiveSkillColon" xml:space="preserve">
+    <value>Solo skilles activos:</value>
+  </data>
+  <data name="ResReportTimeInStatePerAgent" xml:space="preserve">
+    <value>Tiempo en el estado por Agente</value>
+  </data>
+  <data name="ResStateGroupColon" xml:space="preserve">
+    <value>Grupos de Esatdos:</value>
+  </data>
 </root>
