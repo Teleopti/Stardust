@@ -12006,4 +12006,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Sign in as another user</value>
     <comment>Sign in as another user</comment>
   </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Sign in with:</value>
+    <comment>Sign in with:</comment>
+  </data>
 </root>

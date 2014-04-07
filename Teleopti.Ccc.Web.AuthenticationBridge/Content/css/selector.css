@@ -32,9 +32,27 @@ a.button:focus
 {
 -moz-outline-style: none;
 }
+
+.login-form {
+	max-width: 300px;
+	margin-right: auto;
+	margin-left: auto;
+}
 	
-.yahoo { background: url("/Content/images/yahoo.gif") no-repeat scroll center center rgb(255, 255, 255);}
+.login-logo 
+{
+	text-align: center;
+	margin-top: 40px;
+    max-width: 300px;
+	margin-right: auto;
+	margin-left: auto;
+}
+body { 
+    color: #444; 
+    background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;
+}
+/*.yahoo { background: url("/Content/images/yahoo.gif") no-repeat scroll center center rgb(255, 255, 255);}
 .google { background: url("/Content/images/google.png") no-repeat scroll center center rgb(255, 255, 255);}
 .liveid { background: url("/Content/images/liveid.png") no-repeat scroll center center rgb(255, 255, 255);}
 .facebook { background: url("/Content/images/facebook.png") no-repeat scroll center center rgb(255, 255, 255);}
-.twitter { background: url("/Content/images/twitter.png") no-repeat scroll center center rgb(255, 255, 255);}
+.twitter { background: url("/Content/images/twitter.png") no-repeat scroll center center rgb(255, 255, 255);}*/
