@@ -43,13 +43,13 @@ a.button:focus
 {
 	text-align: center;
 	margin-top: 40px;
-    max-width: 300px;
+    
 	margin-right: auto;
 	margin-left: auto;
 }
 body { 
-    color: #444; 
-    background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat;
+    color: #444 !important;
+    background: #fbfdfd url(../Images/body_bg.jpg) top center fixed no-repeat !important;
 }
 /*.yahoo { background: url("/Content/images/yahoo.gif") no-repeat scroll center center rgb(255, 255, 255);}
 .google { background: url("/Content/images/google.png") no-repeat scroll center center rgb(255, 255, 255);}
