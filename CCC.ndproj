@@ -26,7 +26,6 @@
     <Name>CccAppConfig</Name>
     <Name>Teleopti.Ccc.DBConverter</Name>
     <Name>Teleopti.Ccc.Sdk.ClientProxies</Name>
-    <Name>Teleopti.Ccc.Obfuscated</Name>
     <Name>Teleopti.Ccc.AgentPortalCode</Name>
     <Name>Teleopti.Analytics.Etl.PerformanceManagerProxy</Name>
     <Name>Teleopti.Ccc.PayrollFormatter</Name>
@@ -43,7 +42,6 @@
     <Name>Teleopti.Analytics.Etl.ConfigToolCode</Name>
     <Name>Teleopti.Support.Tool</Name>
     <Name>Teleopti.Ccc.Sdk.ServiceBus</Name>
-    <Name>Teleopti.Ccc.DayOffPlanning</Name>
     <Name>Teleopti.Ccc.Sdk.ServiceBus.Host</Name>
     <Name>Teleopti.Ccc.IocCommon</Name>
     <Name>Teleopti.Ccc.OnlineReporting</Name>
