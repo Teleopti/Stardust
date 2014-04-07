@@ -374,6 +374,7 @@
     <Compile Include="Commands\OptimizationCommand.cs" />
     <Compile Include="Commands\ScheduleCommand.cs" />
     <Compile Include="Commands\TeamBlockOptimizationCommand.cs" />
+    <Compile Include="Commands\WeeklyRestSolverCommand.cs" />
     <Compile Include="Common\AvailableSkillWithPreselectedSkill.cs" />
     <Compile Include="Common\Configuration\Columns\ColumnCollectionExtensions.cs" />
     <Compile Include="Common\Configuration\Columns\ActivityUpdatedReadOnlyTextColumn.cs" />

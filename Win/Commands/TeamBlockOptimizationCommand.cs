@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.Win.Commands
 	    private readonly ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 	    private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
-	    private readonly IWeeklyRestSolverService _weeklyRestSolverService;
+        private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
 
-	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
+        public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											ITeamBlockClearer teamBlockCleaner,
                                             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
                                             IDayOffDecisionMaker dayOffDecisionMaker,
@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Win.Commands
 											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
 											ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
-											ITeamBlockScheduler teamBlockScheduler,
-											IWeeklyRestSolverService weeklyRestSolverService)
+											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -116,7 +115,7 @@ namespace Teleopti.Ccc.Win.Commands
 		    _teamBlockRestrictionOverLimitValidator = teamBlockRestrictionOverLimitValidator;
 		    _teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
 		    _teamBlockScheduler = teamBlockScheduler;
-		    _weeklyRestSolverService = weeklyRestSolverService;
+            _weeklyRestSolverCommand = weeklyRestSolverCommand;
 	    }
 
         public void Execute(BackgroundWorker backgroundWorker, 
@@ -177,16 +176,16 @@ namespace Teleopti.Ccc.Win.Commands
 				}
 			}
 
-	        solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer,
-                teamBlockGenerator, rollbackServiceWithResourceCalculation, allMatrixes, _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences));
+	        solveWeeklyRestViolations(selectedPeriod, selectedPersons, optimizationPreferences, resourceCalculateDelayer, rollbackServiceWithResourceCalculation, allMatrixes,
+                        _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences) );
 
         }
 
-	    private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer, ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService, IList<IScheduleMatrixPro> allMatrixes, ISchedulingOptions schedulingOptions)
+	    private void solveWeeklyRestViolations(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, 
+                    IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService, IList<IScheduleMatrixPro> allMatrixes,
+                            ISchedulingOptions schedulingOptions)
 	    {
-		    _weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
-			    rollbackService, resourceCalculateDelayer, _schedulerStateHolder.SchedulingResultState, allMatrixes,
-			    optimizationPreferences,schedulingOptions );
+            _weeklyRestSolverCommand.Execute(schedulingOptions,optimizationPreferences, selectedPersons,rollbackService,resourceCalculateDelayer,selectedPeriod,allMatrixes );
 	    }
 
 	    private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, 

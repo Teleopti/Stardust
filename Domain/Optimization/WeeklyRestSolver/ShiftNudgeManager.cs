@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith, ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions)
 		{
-			//var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			if(optimizationPreferences != null)
+                schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamSchedulingOptions = new TeamBlockSchedulingOptions();
 			if (teamSchedulingOptions.IsBlockScheduling(schedulingOptions) &&
 			    schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)

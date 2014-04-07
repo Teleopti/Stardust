@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences,_schedulingOptions );
 				Assert.IsTrue(result);
 			}
 		}
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences,_schedulingOptions );
 				Assert.IsFalse(result);
 			}
 		}
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences,_schedulingOptions );
 				Assert.IsFalse(result);
 			}
 		}
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
+                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions);
 				Assert.IsFalse(result);
 			}
 		}
@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences);
+                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions);
 			Assert.IsFalse(result);
 		}
 

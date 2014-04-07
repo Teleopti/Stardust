@@ -2,6 +2,8 @@
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -39,8 +41,9 @@ namespace Teleopti.Ccc.Win.Commands
 	    private readonly ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
+	    private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
 
-		public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
+	    public TeamBlockScheduleCommand(IFixedStaffSchedulingService fixedStaffSchedulingService,
 			ISchedulerStateHolder schedulerStateHolder,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -53,7 +56,7 @@ namespace Teleopti.Ccc.Win.Commands
 			ITeamBlockMaxSeatChecker teamBlockMaxSeatChecker,
  			ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
-			ITeamBlockScheduler teamBlockScheduler)
+			ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand)
 		{
 			_fixedStaffSchedulingService = fixedStaffSchedulingService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -69,6 +72,7 @@ namespace Teleopti.Ccc.Win.Commands
 	        _teamBlockSchedulingOptions = teamBlockSchedulingOptions;
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 		    _teamBlockScheduler = teamBlockScheduler;
+	        _weeklyRestSolverCommand = weeklyRestSolverCommand;
 		}
 
 		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker, IList<IPerson> selectedPersons, IList<IScheduleDay> selectedSchedules,
@@ -107,10 +111,15 @@ namespace Teleopti.Ccc.Win.Commands
 				                                          rollbackService, resourceCalculateDelayer,
 				                                          _schedulerStateHolder.SchedulingResultState);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
+
+                _weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allVisibleMatrixes);
 			}
 		}
 
-		private void schedulingServiceDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+	   
+
+
+	    private void schedulingServiceDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			if (_backgroundWorker.CancellationPending)
 			{
