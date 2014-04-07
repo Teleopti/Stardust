@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
             double? result = _target.CalculateShiftValue(visualLayerCollection, new Activity("phone"),
                                         new Dictionary<DateTime, ISkillIntervalData>(), WorkShiftLengthHintOption.AverageWorkTime,
                                         false, false, TimeZoneInfo.Utc);
-            Assert.IsFalse(result.HasValue);
+            Assert.IsTrue(result.HasValue);
         }
 
         [Test]

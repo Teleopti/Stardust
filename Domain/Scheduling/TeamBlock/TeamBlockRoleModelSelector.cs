@@ -90,8 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 
 				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
-				if(dataForActivity.Any())
-					activityInternalData.Add(activity, dataForActivity);
+				activityInternalData.Add(activity, dataForActivity);
 			}
 
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
