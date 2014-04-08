@@ -92,7 +92,7 @@ Scenario: Show single page
 	When I view requests
 	Then I should only see one page of requests
 
-
+@ignore
 Scenario: Paging
 	Given I am an agent
 	And I have more than one page of requests
