@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Web.Mvc;
-using DotNetOpenAuth.OpenId;
 using Microsoft.IdentityModel.Protocols.WSFederation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Filters;
 
