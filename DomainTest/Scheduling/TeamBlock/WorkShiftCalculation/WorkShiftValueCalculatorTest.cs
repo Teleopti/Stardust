@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
