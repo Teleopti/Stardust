@@ -84,8 +84,10 @@
         
         <div id="loadingRequestIndicator" class="loading-gradient" data-bind="visible: isLoadingRequests">	   
             <div class="loading"></div>
+
         </div>
-		
+		<span class="ready-loading-requests displaynone" data-bind="css: { 'is-ready-loaded': isLoadingRequests }"></span>
+<div class="ready-loading-requests " data-bind="visible: isLoadingRequests">blabla</div>
         <div class="request-list" data-bind="foreach: ColumnRequests">
             <div class="row" data-bind="foreach: Items">
                 <div class="request col-xs-6">

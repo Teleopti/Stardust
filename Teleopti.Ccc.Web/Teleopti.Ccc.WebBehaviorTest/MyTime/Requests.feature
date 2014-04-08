@@ -92,14 +92,17 @@ Scenario: Show single page
 	When I view requests
 	Then I should only see one page of requests
 
-@ignore
-Scenario: Paging
+
+Scenario Outline: Paging
 	Given I am an agent
 	And I have more than one page of requests
 	When I view requests
 	And I scroll down to the bottom of the page
-	And I wait until requests loaded or timeout
 	Then I should see the page fill with the next page of requests
+	Examples: 
+	| x  |
+	| 1  |
+
 
 Scenario: Indicate that there are more items to load
 	Given I am an agent
