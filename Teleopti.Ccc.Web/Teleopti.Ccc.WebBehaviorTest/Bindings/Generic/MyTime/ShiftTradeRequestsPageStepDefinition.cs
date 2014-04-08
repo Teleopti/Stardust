@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I scroll down to the bottom of the shift trade section")]
 		public void WhenIScrollDownToTheBottomOfTheShiftTradeSection()
 		{
-			Browser.Interactions.Javascript("$('body, html').animate({ scrollTop: $('.shift-trade-person-schedule-row').filter(':last').offset().top }, 1);");
+			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
 			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}
 
