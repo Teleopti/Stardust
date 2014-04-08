@@ -18,10 +18,28 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			bool useMaximumPersons)
 		{
 			return instance.CalculateShiftValue(
-				new WorkShiftCalculatableVisualLayerCollection(mainShiftLayers), 
-				new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods), 
+				new WorkShiftCalculatableVisualLayerCollection(mainShiftLayers),
+				new WorkShiftCalculatorSkillStaffPeriodData(skillStaffPeriods),
 				lengthFactor,
-				useMaximumPersons, useMaximumPersons,
+				useMaximumPersons,
+				useMaximumPersons,
+				TimeHelper.FitToDefaultResolution);
+		}
+
+		public static double CalculateShiftValue(
+			this IWorkShiftCalculator instance,
+			IEnumerable<IWorkShiftCalculatableLayer> mainShiftLayers,
+			IWorkShiftCalculatorSkillStaffPeriodData skillStaffPeriodData,
+			WorkShiftLengthHintOption lengthFactor,
+			bool useMinimumPersons,
+			bool useMaximumPersons)
+		{
+			return instance.CalculateShiftValue(
+				mainShiftLayers,
+				skillStaffPeriodData,
+				lengthFactor,
+				useMaximumPersons,
+				useMaximumPersons,
 				TimeHelper.FitToDefaultResolution);
 		}
 
@@ -37,7 +55,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				new WorkShiftCalculatableVisualLayerCollection(mainShiftLayers),
 				skillStaffPeriodData,
 				lengthFactor,
-				useMaximumPersons, useMaximumPersons,
+				useMaximumPersons,
+				useMaximumPersons,
 				TimeHelper.FitToDefaultResolution);
 		}
 
@@ -76,6 +95,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			return GetEnumerator();
 		}
+
 	}
 
 	public class WorkShiftCalculatableLayer : IWorkShiftCalculatableLayer
@@ -120,7 +140,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public IWorkShiftCalculatorStaffPeriodData ForActivity(IWorkShiftCalculatableActivity activity)
 		{
-			var key = ((WorkShiftCalculatableActivity) activity).Activity;
+			var key = ((WorkShiftCalculatableActivity)activity).Activity;
 			return _data.ContainsKey(key) ? new WorkShiftCalculatorStaffPeriodData(_data[key]) : null;
 		}
 
