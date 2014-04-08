@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (IShiftProjectionCache shiftProjection in shiftProjectionCaches)
 			{
 				double? nonBlendValue = null;
-				double thisValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.MainShiftProjection,
+				double thisValue = _workShiftCalculator.CalculateShiftValue(shiftProjection.WorkShiftCalculatableLayers,
 																			dataHolders,
 																			schedulingOptions.WorkShiftLengthHintOption,
 																			schedulingOptions.UseMinimumPersons,
