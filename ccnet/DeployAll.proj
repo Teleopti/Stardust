@@ -431,6 +431,32 @@
 			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\Web.Debug.config;
 			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\Web.Release.config"
 			/>
+			
+			<!-- Authentication Bridge -->
+			<AuthenticationBridge
+			Include=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\**\*.*"
+			Exclude=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\**\obj\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\**\properties\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\**\*.csproj;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\**\*.cs;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\Web.Debug.config;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.AuthenticationBridge\Web.Release.config"
+			/>
+			
+			<!-- Windows Identity Provider -->
+			<WindowsIdentityProvider
+			Include=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\**\*.*"
+			Exclude=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\**\obj\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\**\properties\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\**\*.csproj;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\**\*.cs;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\Web.Debug.config;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.WindowsIdentityProvider\Web.Release.config"
+			/>
 		</ItemGroup>
 	</Target>
 
@@ -658,10 +684,14 @@
 			  DestinationFiles="@(DemoDatabase->'$(DeployPath)\DemoDatabase\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="@(ForecastDatabase)"
 		  DestinationFiles="@(ForecastDatabase->'$(DeployPath)\ForecastDatabase\%(RecursiveDir)%(Filename)%(Extension)')"/>
-		 <Copy SourceFiles="@(Broker)"
+		<Copy SourceFiles="@(Broker)"
 		  DestinationFiles="@(Broker->'$(DeployPath)\Broker\%(RecursiveDir)%(Filename)%(Extension)')"/>
-		 <Copy SourceFiles="@(BrokerBackplane)"
-		  DestinationFiles="@(BrokerBackplane->'$(DeployPath)\BrokerBackplane\%(RecursiveDir)%(Filename)%(Extension)')"/>		  
+		<Copy SourceFiles="@(BrokerBackplane)"
+		  DestinationFiles="@(BrokerBackplane->'$(DeployPath)\BrokerBackplane\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="@(AuthenticationBridge)"
+		  DestinationFiles="@(AuthenticationBridge->'$(DeployPath)\AuthenticationBridge\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		<Copy SourceFiles="@(WindowsIdentityProvider)"
+		  DestinationFiles="@(WindowsIdentityProvider->'$(DeployPath)\WindowsIdentityProvider\%(RecursiveDir)%(Filename)%(Extension)')"/>			  
 		<Copy SourceFiles="$(SDKDocOutput)"
 			DestinationFiles="$(DeployPath)\SDK\SdkDoc.chm"
 			/>
