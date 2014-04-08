@@ -509,7 +509,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void VerifyFindBestMainShift()
 		{
 			IList<IShiftProjectionCache> shiftList = new List<IShiftProjectionCache> ();
-			var dataHolders = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriods>();
+			var dataHolders = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriodData>();
 			var virtualShedulePeriod = _mocks.DynamicMock<IVirtualSchedulePeriod>();
 		    var nonBlendSkillPeriods = _mocks.StrictMock<IDictionary<ISkill, ISkillStaffPeriodDictionary>>();
 		    var wfcs = _mocks.StrictMock<IWorkflowControlSet>();
@@ -564,7 +564,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
 		public void ShouldNotCalculateMaxSeatValueWhenNoResultFromFirstCalculators()
         {
-			var skillstaffPeriods = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriods>();
+			var skillstaffPeriods = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriodData>();
             var caches = new List<IShiftProjectionCache>();
             var virtualShedulePeriod = _mocks.DynamicMock<IVirtualSchedulePeriod>();
            
@@ -581,7 +581,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void ShouldCalculateMaxSeatValueWhenShiftValueIsHigherThanDoubleMin()
         {
-			var skillstaffPeriods = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriods>();
+			var skillstaffPeriods = MockRepository.GenerateMock<IWorkShiftCalculatorSkillStaffPeriodData>();
             var caches = new List<IShiftProjectionCache> ();
             var virtualShedulePeriod = _mocks.DynamicMock<IVirtualSchedulePeriod>();
             var results = new List<IWorkShiftCalculationResultHolder>

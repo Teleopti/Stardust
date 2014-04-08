@@ -127,9 +127,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			    };
 		    return ret;
 	    }
-
-	    public DateTime PeriodStartDateTime { get { return Period.StartDateTime; } }
-		public DateTime PeriodEndDateTime { get { return Period.EndDateTime; } }
-		public IWorkShiftCalculatableActivity Activity { get { return (IActivity) Payload; } }
     }
 }
