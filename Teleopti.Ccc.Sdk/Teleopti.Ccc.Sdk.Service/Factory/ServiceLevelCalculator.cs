@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.Logic.QueryHandler

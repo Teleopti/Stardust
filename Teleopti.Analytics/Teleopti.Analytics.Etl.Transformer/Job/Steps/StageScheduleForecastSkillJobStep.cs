@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                             var origDemand = skillStaffPeriod.FStaffTime().TotalMinutes;
                             var assignedResource =skillStaffPeriod.Payload.CalculatedResource*
                                            skillStaffPeriod.Period.ElapsedTime().TotalMinutes;
-                            ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataHolder(origDemand,
+                            ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataInfo(origDemand,
                                                                                                     assignedResource,
                                                                                                     skillStaffPeriod.
                                                                                                         Period,
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             {
                 if (!dictionaryToControl.ContainsKey(pair.Key))
                 {
-                    ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataHolder(0, 0, pair.Value.Period, 0, 0,0, null);
+                    ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataInfo(0, 0, pair.Value.Period, 0, 0,0, null);
                     dictionaryToControl.Add(pair.Key, dataHolder);
                 }
             }

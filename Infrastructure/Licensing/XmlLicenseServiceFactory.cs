@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 {
 	public class XmlLicenseServiceFactory
 	{
-		[CLSCompliant(false)]
 		public XmlLicenseService Make(ILicenseRepository licenseRepository, int numberOfActiveAgents)
 		{
 			IList<ILicense> allLicenses = licenseRepository.LoadAll();
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 			return new XmlLicenseService(licenseDocument, xmlKey, numberOfActiveAgents);
 		}
 
-		[CLSCompliant(false)]
 		public ILicenseService Make(IUnitOfWorkFactory unitOfWorkFactory, ILicenseRepository licenseRepository, IPersonRepository personRepository)
 		{
 			using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -63,7 +61,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 
 	public class XmlLicensePersister
 	{
-		[CLSCompliant(false)]
 		public ILicenseService SaveNewLicense(string licenseFilePath, ILicenseRepository licenseRepository,
 																								 string publicKeyXmlContent, IPersonRepository personRepository)
 		{

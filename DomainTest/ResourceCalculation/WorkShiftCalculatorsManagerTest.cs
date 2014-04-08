@@ -5,7 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             Expect.Call(cache1.MainShiftProjection).Return(proj1).Repeat.Twice();
             Expect.Call(cache2.MainShiftProjection).Return(proj2).Repeat.Twice();
-			Expect.Call(_workShiftCalculator.CalculateShiftValue(proj1, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(double.MinValue);
-			Expect.Call(_workShiftCalculator.CalculateShiftValue(proj2, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);
+			Expect.Call(_workShiftCalculator.CalculateShiftValue(proj1, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(double.MinValue);
+			Expect.Call(_workShiftCalculator.CalculateShiftValue(proj2, dataHolders, WorkShiftLengthHintOption.AverageWorkTime, true, true, TimeHelper.FitToDefaultResolution)).Return(5);
 
             Expect.Call(nonBlendSkillPeriods.Count).Return(5).Repeat.Twice();
 			Expect.Call(_nonBlendWorkShiftCalculator.CalculateShiftValue(person, proj1, nonBlendSkillPeriods, WorkShiftLengthHintOption.AverageWorkTime, true, true)).Return(5);

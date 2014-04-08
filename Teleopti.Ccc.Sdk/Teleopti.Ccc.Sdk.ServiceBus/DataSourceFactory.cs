@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Obfuscated.Security;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

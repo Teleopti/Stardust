@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
     /// <summary>
     /// Interface for <see cref="LicenseActivator" /> class.
 	/// </summary>
-	[CLSCompliant(false)]
     public interface ILicenseActivator
     {
         /// <summary>
@@ -87,7 +86,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
 
 		int MaxSeats { get; }
 
-		[CLSCompliant(false)]
 		LicenseType LicenseType { get; }
     }
 }

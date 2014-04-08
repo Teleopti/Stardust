@@ -112,22 +112,23 @@ FROM #person_acd_subSP
 INSERT INTO #person
 SELECT DISTINCT person_id FROM #person_acd_subSP
 
---Create local table from: mart.fact_schedule_deviation
+--Create local table from: mart.fact_schedule_deviation(do a summary in case of overlapping shifts)
 INSERT INTO #fact_schedule_deviation_subSP
 SELECT 
 	fsd.date_id,
 	fsd.person_id,
 	fsd.interval_id,
-	fsd.deviation_schedule_ready_s,
-	fsd.deviation_schedule_s,
-	fsd.deviation_contract_s,
-	fsd.ready_time_s,
-	fsd.is_logged_in,
-	fsd.contract_time_s
+	SUM(fsd.deviation_schedule_ready_s),
+	SUM(fsd.deviation_schedule_s),
+	SUM(fsd.deviation_contract_s),
+	SUM(fsd.ready_time_s),
+	MAX(CAST(fsd.is_logged_in AS INT)),
+	SUM(fsd.contract_time_s)
 FROM mart.fact_schedule_deviation fsd
 INNER JOIN #person a
 	ON fsd.person_id = a.person_id
 WHERE fsd.date_id BETWEEN @date_from_id AND @date_to_id	
+GROUP BY fsd.date_id,fsd.person_id,fsd.interval_id
 
 --Get agent statistics
 INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_code,answered_calls,talk_time_s,after_call_work_time_s)

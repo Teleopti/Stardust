@@ -38,20 +38,14 @@ CREATE TABLE #rights_teams (right_id int)
 CREATE TABLE #rights_agents (right_id int)
 CREATE TABLE #shift_categories(id int)
 CREATE TABLE #fact_schedule_day_count(
-	[date_id] [int] NOT NULL,
-	[start_interval_id] [smallint] NOT NULL,
+	local_date smalldatetime NOT NULL,
 	[person_id] [int] NOT NULL,
 	[scenario_id] [smallint] NOT NULL,
 	[starttime] [smalldatetime] NULL,
 	[shift_category_id] [int] NOT NULL,
 	[day_off_id] [int] NOT NULL,
 	[absence_id] [int] NOT NULL,
-	[day_count] [int] NULL,
-	[business_unit_id] [int] NOT NULL,
-	[datasource_id] [smallint] NOT NULL,
-	[insert_date] [smalldatetime] NOT NULL,
-	[update_date] [smalldatetime] NOT NULL,
-	[datasource_update_date] [smalldatetime] NULL
+	[day_count] [int] NULL
 )
 CREATE TABLE #result(
 	date smalldatetime,
@@ -87,20 +81,31 @@ SELECT * FROM mart.SplitStringInt(@shift_category_set)
 
 /* Check if time zone will be hidden (if only one exist then hide) */
 DECLARE @hide_time_zone bit
-IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
-	SET @hide_time_zone = 1
-ELSE
-	SET @hide_time_zone = 0
+SET @hide_time_zone = 1
 
-/*Snabba upp fr†ga mot fact_schedule_day_count*/
+/*get the data to query by clustered key*/
 INSERT INTO #fact_schedule_day_count
-SELECT *
+SELECT
+	d.date_date,
+	fs.person_id,
+	fs.scenario_id,
+	fs.starttime,
+	fs.shift_category_id,
+	fs.day_off_id,
+	fs.absence_id,
+	fs.day_count
 FROM mart.fact_schedule_day_count fs
-WHERE date_id in (select b.date_id from mart.bridge_time_zone b INNER JOIN mart.dim_date d 	ON b.local_date_id = d.date_id where d.date_date BETWEEN  @date_from AND @date_to AND b.time_zone_id=@time_zone_id)
-
+INNER JOIN mart.dim_person p
+	ON fs.person_id=p.person_id
+INNER JOIN mart.dim_date d
+	ON fs.shift_startdate_local_id = d.date_id
+WHERE d.date_date BETWEEN  @date_from AND @date_to
+AND fs.scenario_id=@scenario_id
+AND p.team_id IN(select right_id from #rights_teams)--where viewer has team permissions
+AND p.person_id in (SELECT right_id FROM #rights_agents)--where viewer has agent permissions
 
 INSERT INTO #result(date,shift_category_name,category_count,hide_time_zone)
-SELECT	d.date_date,
+SELECT	f.local_date,
 		sc.shift_category_name,
 		sum(day_count),
 		@hide_time_zone
@@ -110,21 +115,9 @@ INNER JOIN mart.dim_person p
 	ON f.person_id=p.person_id
 INNER JOIN mart.dim_shift_category sc
 	ON sc.shift_category_id=f.shift_category_id
-INNER JOIN bridge_time_zone b
-	ON	f.start_interval_id= b.interval_id
-	AND f.date_id= b.date_id
-INNER JOIN mart.dim_date d 
-	ON b.local_date_id = d.date_id
-INNER JOIN mart.dim_interval i
-	ON b.local_interval_id = i.interval_id	
-WHERE d.date_date BETWEEN @date_from AND @date_to
-AND b.time_zone_id = @time_zone_id
-AND f.scenario_id=@scenario_id
-AND p.team_id IN(select right_id from #rights_teams)
-AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har r„ttighet p†
-AND sc.shift_category_id IN (SELECT id FROM #shift_categories)
-AND f.shift_category_id<>-1 --d† finns inget shift
-GROUP BY d.date_date,sc.shift_category_name
+WHERE sc.shift_category_id IN (SELECT id FROM #shift_categories)
+AND f.shift_category_id<>-1 --not shifts
+GROUP BY f.local_date,sc.shift_category_name
 
 INSERT INTO #total_count
 SELECT date,

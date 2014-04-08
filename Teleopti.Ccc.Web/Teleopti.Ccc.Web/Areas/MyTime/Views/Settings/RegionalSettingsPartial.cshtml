@@ -18,7 +18,7 @@
             <option data-bind="text: text, value: id"></option>
         </select>
     </div>
-    <br />
+	<br />
     @if (Model.ShareCalendarPermission)
     {
         <div class="clearfix">
@@ -28,11 +28,14 @@
 	        </div>
 
 			<!-- ko if: IsNotificationSupported() -->
+	<div class="clearfix">		
 	        <div class="btn-group">
 		        <button class="btn btn-lg" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
 	        </div>
+	</div>
 	        <!-- /ko -->
 
+		<br />
             <!-- ko if: CalendarSharingActive() -->
             <div>
                 <span>@Resources.ShareMyCalendarHint</span><a href="http://wiki.teleopti.com/TeleoptiCCC/CalendarLink" target="_blank">@Resources.Here</a>

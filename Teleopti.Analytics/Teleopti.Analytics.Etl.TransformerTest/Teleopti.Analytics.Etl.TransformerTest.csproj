@@ -228,10 +228,6 @@
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
-      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
-      <Name>Teleopti.Ccc.Obfuscated</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
       <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
       <Name>Teleopti.Ccc.Secrets</Name>

@@ -90,12 +90,10 @@
 	<Target Name="CompileExtraApps">
 	<ItemGroup>
 		<PreReqTool Include="$(CCNetWorkingDirectory)\Teleopti.Support.PreReqsCheck\CCC.CCC7Prereq.csproj" />
-		<AsCmdProj Include="$(CCNetWorkingDirectory)\Cube\ascmd\ascmd.csproj" />
 		<localWikiReplaceString Include="$(CCNetWorkingDirectory)\WISE\LocalWiki\ReplaceString.sln" />	
 	</ItemGroup>		
 	
 		<MSBuild Projects="@(PreReqTool)" Properties="Configuration=Release" Targets="Build" />
-		<MSBuild Projects="@(AsCmdProj)" Properties="Configuration=Release" Targets="Build" />
 		<MSBuild Projects="@(localWikiReplaceString)" Properties="Configuration=Release" Targets="Build" />
 	</Target>
 
@@ -188,11 +186,6 @@
 			<Wise
 			Include="$(CCNetWorkingDirectory)\Wise\**\*.*"/>
 			
-			<AsCmd
-			Include="$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Ascmd.exe;
-			$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll;
-			$(CCNetWorkingDirectory)\Cube\ascmd\bin\$(Configuration)\Microsoft.AnalysisServices.dll"/>
-
 			<!--AgentPortalWeb-->
 
 			<AgentPortalWeb
@@ -324,18 +317,9 @@
 			  Exclude="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ConfigTool\bin\$(Configuration)\*.nhib.xml"
 	/>
 
-			<ETLTool
-			  Include="$(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
-	/>
-
 			<ETLService
-			  Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*;
-              $(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
+			  Include="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\**\*.*"
 			  Exclude="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\bin\$(Configuration)\*.nhib.xml"
-	/>
-
-			<ETLService
-				Include="$(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
 	/>
 
 			<!-- MyTimeStandAlone -->
@@ -666,8 +650,6 @@
 			DestinationFiles="@(MyTimeClickOnce->'$(DeployPath)\MyTime\ClickOnce\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(Wise)"
 			DestinationFiles="@(Wise->'$(DeployPath)\Wise\%(RecursiveDir)%(Filename)%(Extension)')"/>
-		<Copy	SourceFiles="@(AsCmd)"
-			DestinationFiles="@(AsCmd->'$(DeployPath)\Cube\ascmd\%(RecursiveDir)%(Filename)%(Extension)')"/>		
 		<Copy SourceFiles="@(ClickOnceSign)"
 			DestinationFiles="@(ClickOnceSign->'$(DeployPath)\ClickOnceSignTools\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy SourceFiles="@(AgentPortalWeb)"

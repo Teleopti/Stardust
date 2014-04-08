@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using Teleopti.Ccc.Obfuscated.Security;
 using log4net;
 using log4net.Config;
 using NHibernate;

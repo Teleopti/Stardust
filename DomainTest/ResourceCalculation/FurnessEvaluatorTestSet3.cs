@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Calculation;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.Secrets.Furness;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation

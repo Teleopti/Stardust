@@ -2899,17 +2899,9 @@
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.DayOffPlanning\Teleopti.Ccc.DayOffPlanning.csproj">
-      <Project>{A7D4E66F-4B70-4F7A-A982-01D7E6AFDE7E}</Project>
-      <Name>Teleopti.Ccc.DayOffPlanning</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Obfuscated\Teleopti.Ccc.Obfuscated.csproj">
-      <Project>{5895BC02-04C8-46E1-A804-43D314A02AD9}</Project>
-      <Name>Teleopti.Ccc.Obfuscated</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.OnlineReporting\Teleopti.Ccc.OnlineReporting.csproj">
       <Project>{6A91B93B-AFD0-4074-9908-F582745FF569}</Project>

@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.DomainTest.Time;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +27,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				mainShiftLayers, 
 				new SkillStaffPeriodDataWrapper(skillStaffPeriods), 
 				lengthFactor,
-				useMaximumPersons, useMaximumPersons);
+				useMaximumPersons, useMaximumPersons,
+				TimeHelper.FitToDefaultResolution);
 		}
 
 		public static double CalculateDeviationImprovementAfterAssignment(IVisualLayerCollection layerCollection, Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods)
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 		private static WorkShiftCalculator MakeTarget()
 		{
-			WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+			WorkShiftCalculator calculator = new WorkShiftCalculator();
 			return calculator;
 		}
 	
@@ -92,10 +93,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1, layer2, layer3, layer4 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
-            SkillStaffPeriodDataHolder dataHolder3 = new SkillStaffPeriodDataHolder(0, 0, period3, 1, 5, 0, null);
-            SkillStaffPeriodDataHolder dataHolder4 = new SkillStaffPeriodDataHolder(5, 5, period4, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(0, 0, period3, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
 
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             skillStaffPeriods.Add(activity1, dataHolders);
             skillStaffPeriods.Add(activity2, dataHolders2);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+            WorkShiftCalculator calculator = new WorkShiftCalculator();
 			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
@@ -375,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period2, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
 
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period2.StartDateTime, dataHolder1);
@@ -403,7 +404,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            ISkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
+            ISkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
@@ -411,7 +412,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity2, dataHolders);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+            WorkShiftCalculator calculator = new WorkShiftCalculator();
 			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
@@ -431,9 +432,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
-            SkillStaffPeriodDataHolder dataHolder4 = new SkillStaffPeriodDataHolder(5, 5, period4, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
 
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
@@ -444,7 +445,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods = new Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>>();
             skillStaffPeriods.Add(activity1, dataHolders);
 
-            WorkShiftCalculator calculator = new WorkShiftCalculator(TimeHelper.FitToDefaultResolution);
+            WorkShiftCalculator calculator = new WorkShiftCalculator();
 			calculator.CalculateShiftValue(layerCollection, skillStaffPeriods, WorkShiftLengthHintOption.Free, true, true);
         }
 
@@ -464,10 +465,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layer1 };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(_person, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
 
-            SkillStaffPeriodDataHolder dataHolder3 = new SkillStaffPeriodDataHolder(0, 0, period3, 1, 5, 0, null);
-            SkillStaffPeriodDataHolder dataHolder4 = new SkillStaffPeriodDataHolder(5, 5, period4, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(0, 0, period3, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
 
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
@@ -510,10 +511,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone, layerBreak };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
-            SkillStaffPeriodDataHolder dataHolder2 = new SkillStaffPeriodDataHolder(5, 80, period2, 1, 5, 0, null);
-            SkillStaffPeriodDataHolder dataHolder3 = new SkillStaffPeriodDataHolder(5, 80, period3, 1, 5, 0, null);
-            SkillStaffPeriodDataHolder dataHolder4 = new SkillStaffPeriodDataHolder(5, 5, period4, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder4 = new SkillStaffPeriodDataInfo(5, 5, period4, 1, 5, 0, null);
 
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
             dataHolders.Add(period1.StartDateTime, dataHolder1);
@@ -558,9 +559,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IPeriodDistribution distr2 = _mocks.StrictMock<IPeriodDistribution>();
             IPeriodDistribution distr3 = _mocks.StrictMock<IPeriodDistribution>();
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, distr1);
-            SkillStaffPeriodDataHolder dataHolder2 = new SkillStaffPeriodDataHolder(5, 80, period2, 1, 5, 0, distr2);
-            SkillStaffPeriodDataHolder dataHolder3 = new SkillStaffPeriodDataHolder(5, 80, period3, 1, 5, 0, distr3);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, distr1);
+            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, distr2);
+            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, distr3);
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>
                                                                                 {
                                                                                     {period1.StartDateTime, dataHolder1},
@@ -615,9 +616,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IPeriodDistribution distr2 = _mocks.StrictMock<IPeriodDistribution>();
             IPeriodDistribution distr3 = _mocks.StrictMock<IPeriodDistribution>();
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, distr1);
-            SkillStaffPeriodDataHolder dataHolder2 = new SkillStaffPeriodDataHolder(5, 80, period2, 1, 5, 0, distr2);
-            SkillStaffPeriodDataHolder dataHolder3 = new SkillStaffPeriodDataHolder(5, 80, period3, 1, 5, 0, distr3);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, distr1);
+            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, distr2);
+            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, distr3);
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>
                                                                                 {
                                                                                     {period1.StartDateTime, dataHolder1},
@@ -676,9 +677,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
             IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
 
-            SkillStaffPeriodDataHolder dataHolder1 = new SkillStaffPeriodDataHolder(5, 80, period1, 1, 5, 0, null);
-            SkillStaffPeriodDataHolder dataHolder2 = new SkillStaffPeriodDataHolder(5, 80, period2, 1, 5, 0, null);
-            SkillStaffPeriodDataHolder dataHolder3 = new SkillStaffPeriodDataHolder(5, 80, period3, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder1 = new SkillStaffPeriodDataInfo(5, 80, period1, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder2 = new SkillStaffPeriodDataInfo(5, 80, period2, 1, 5, 0, null);
+            SkillStaffPeriodDataInfo dataHolder3 = new SkillStaffPeriodDataInfo(5, 80, period3, 1, 5, 0, null);
             Dictionary<DateTime, ISkillStaffPeriodDataHolder> dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>
                                                                                 {
                                                                                     {period1.StartDateTime, dataHolder1},

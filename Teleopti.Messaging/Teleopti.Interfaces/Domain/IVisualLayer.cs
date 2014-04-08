@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Drawing;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Interfaces.Domain
 {

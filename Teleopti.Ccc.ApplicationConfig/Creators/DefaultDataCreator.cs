@@ -4,12 +4,11 @@ using System.Globalization;
 using System.Reflection;
 using NHibernate;
 using Teleopti.Ccc.DatabaseConverter;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Kpi;
+using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
-using Teleopti.Ccc.Obfuscated.Security;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ApplicationConfig.Creators

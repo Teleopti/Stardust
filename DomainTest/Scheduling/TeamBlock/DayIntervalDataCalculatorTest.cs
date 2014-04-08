@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
 			list.Add(new DateOnly(2013, 10, 01), new List<ISkillIntervalData>());
 			list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData1, skillIntervalData2, skillIntervalData3, skillIntervalData4 });
+			list.Add(new DateOnly(2013, 10, 03), new List<ISkillIntervalData>());
 
 
 			var result = _target.Calculate(list);

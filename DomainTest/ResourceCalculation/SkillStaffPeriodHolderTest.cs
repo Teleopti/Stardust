@@ -655,17 +655,17 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var key5 = key1.AddHours(3).AddMinutes(15);
             var key6 = key1.AddHours(3).AddMinutes(30);
 
-            var holder1 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key1, key1.AddMinutes(15)), 0, 0, 5,
+            var holder1 = new SkillStaffPeriodDataInfo(10, 10, new DateTimePeriod(key1, key1.AddMinutes(15)), 0, 0, 5,
                                                          null, new Percent(.5), 1);
-            var holder2 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key2, key2.AddMinutes(15)), 0, 0, 5,
+            var holder2 = new SkillStaffPeriodDataInfo(10, 10, new DateTimePeriod(key2, key2.AddMinutes(15)), 0, 0, 5,
                                                                      null, new Percent(.5), 1);
-            var holder3 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key3, key3.AddMinutes(15)), 0, 0, 5,
+            var holder3 = new SkillStaffPeriodDataInfo(10, 10, new DateTimePeriod(key3, key3.AddMinutes(15)), 0, 0, 5,
                                                          null, new Percent(.5), 1);
-            var holder4 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key4, key4.AddMinutes(15)), 0, 0, 5,
+            var holder4 = new SkillStaffPeriodDataInfo(10, 10, new DateTimePeriod(key4, key4.AddMinutes(15)), 0, 0, 5,
                                                          null, new Percent(.5), 1);
-            var holder5 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key5, key5.AddMinutes(15)), 0, 0, 5,
+            var holder5 = new SkillStaffPeriodDataInfo(10, 10, new DateTimePeriod(key5, key5.AddMinutes(15)), 0, 0, 5,
                                                          null, new Percent(.5), 1);
-            var holder6 = new SkillStaffPeriodDataHolder(10, 10, new DateTimePeriod(key6, key6.AddMinutes(15)), 0, 0, 5,
+            var holder6 = new SkillStaffPeriodDataInfo(10, 10, new DateTimePeriod(key6, key6.AddMinutes(15)), 0, 0, 5,
                                                          null, new Percent(.5), 1);
 
             var dataHolders = new Dictionary<DateTime, ISkillStaffPeriodDataHolder>();
