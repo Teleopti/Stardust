@@ -111,6 +111,10 @@
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml" />
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.22\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
@@ -1521,6 +1525,7 @@
     <None Include="Forecasting\SkillStaffStuff.cd" />
     <None Include="Forecasting\TemplateOwners.cd" />
     <None Include="Forecasting\WorkloadDayTemplates.cd" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
