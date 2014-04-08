@@ -10,19 +10,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 	public class Authenticator : IAuthenticator
 	{
 		private readonly IDataSourcesProvider _dataSourceProvider;
-		private readonly IWindowsAccountProvider _windowsAccountProvider;
+		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IFindApplicationUser _findApplicationUser;
 		private readonly IIpAddressResolver _ipAddressResolver;
 
 		public Authenticator(IDataSourcesProvider dataSourceProvider,
-									IWindowsAccountProvider windowsAccountProvider,
+									ITokenIdentityProvider tokenIdentityProvider,
 									IRepositoryFactory repositoryFactory,
 									IFindApplicationUser findApplicationUser,
 									IIpAddressResolver ipAddressResolver)
 		{
 			_dataSourceProvider = dataSourceProvider;
-			_windowsAccountProvider = windowsAccountProvider;
+			_tokenIdentityProvider = tokenIdentityProvider;
 			_repositoryFactory = repositoryFactory;
 			_findApplicationUser = findApplicationUser;
 			_ipAddressResolver = ipAddressResolver;
@@ -35,10 +35,27 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
 			{
 				IPerson foundUser;
-				var winAccount = _windowsAccountProvider.RetrieveWindowsAccount();
-				if (_repositoryFactory.CreatePersonRepository(uow).TryFindWindowsAuthenticatedPerson(winAccount.DomainName,
-																	winAccount.UserName,
-																	out foundUser))
+				var winAccount = _tokenIdentityProvider.RetrieveToken();
+				if (_repositoryFactory.CreatePersonRepository(uow).TryFindWindowsAuthenticatedPerson(winAccount.UserDomain,
+					winAccount.UserIdentifier,
+					out foundUser))
+				{
+					return new AuthenticateResult {Successful = true, Person = foundUser, DataSource = dataSource};
+				}
+			}
+
+			return null;
+		}
+
+		public AuthenticateResult AuthenticateApplicationIdentityUser(string dataSourceName)
+		{
+			var dataSource = _dataSourceProvider.RetrieveDataSourceByName(dataSourceName);
+
+			using (var uow = dataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				var account = _tokenIdentityProvider.RetrieveToken();
+				var foundUser = _repositoryFactory.CreatePersonRepository(uow).TryFindBasicAuthenticatedPerson(account.UserIdentifier);
+				if (foundUser != null)
 				{
 					return new AuthenticateResult { Successful = true, Person = foundUser, DataSource = dataSource };
 				}
@@ -64,8 +81,8 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			var provider = "Application";
 			if (string.IsNullOrEmpty(userName))
 			{
-				var winAccount = _windowsAccountProvider.RetrieveWindowsAccount();
-				userName = winAccount.DomainName + "\\" + winAccount.UserName;
+				var winAccount = _tokenIdentityProvider.RetrieveToken();
+				userName = winAccount.UserDomain + "\\" + winAccount.UserIdentifier;
 				provider = "Windows";
 			}
 			using (var uow = result.DataSource.Application.CreateAndOpenUnitOfWork())
@@ -84,5 +101,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 				uow.PersistAll();
 			}
 		}
+
+		
 	}
 }

@@ -70,16 +70,19 @@
 						<ul class="dropdown-menu">
 							<li><a href="#" id="regional-settings" data-mytime-action="Settings/Index">@Resources.Settings</a></li>
 							@if (Model.ShowChangePassword)
-	   {
+							{
 								<li><a href="#" id="change-your-password" data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
-						}
-							<li class="divider"></li>
+							}
 							@if (Model.HasAsmPermission)
-	   {
-								<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
+							{
 								<li class="divider"></li>
-						}
-							<li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new { area = "Start" }, new { id = "signout" })</li>
+								<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
+							}
+							@if (Model.HasSignInAsAnotherUser)
+							{
+								<li class="divider"></li>
+								<li>@Html.ActionLink(@Resources.SignInAsAnotherUser, "SignInAsAnotherUser", "Authentication", new { area = "Start" }, new { id = "signin-as-another" })</li>
+							}
 						</ul>
 					</li>
 				</ul>

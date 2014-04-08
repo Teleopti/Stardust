@@ -1,0 +1,17 @@
+﻿@{
+	Layout = null;
+	Response.ContentType = "application/xrds+xml";
+	var uri = new Uri(Request.Url, Response.ApplyAppPathModifier("~/OpenId/Provider")).ToString();
+}<?xml version="1.0" encoding="UTF-8"?>
+<xrds:XRDS
+	xmlns:xrds="xri://$xrds"
+	xmlns:openid="http://openid.net/xmlns/1.0"
+	xmlns="xri://$xrd*($v*2.0)">
+	<XRD>
+		<Service priority="10">
+			<Type>http://specs.openid.net/auth/2.0/server</Type>
+			<Type>http://openid.net/extensions/sreg/1.1</Type>
+			<URI>@uri</URI>
+		</Service>
+	</XRD>
+</xrds:XRDS>

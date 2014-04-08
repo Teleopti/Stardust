@@ -1,7 +1,7 @@
-﻿$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
+$(SQL_AUTH_STRING)|Data Source=.;Integrated Security=SSPI
 $(AS_SERVER_NAME)|.
-$(DB_CCC7)|Main_DemoSales_TeleoptiCCC7
-$(DB_ANALYTICS)|Main_DemoSales_TeleoptiAnalytics
+$(DB_CCC7)|PBI2224_DemoSales_TeleoptiCCC7
+$(DB_ANALYTICS)|PBI22249_DemoSales_TeleoptiAnalytics
 $(AS_DATABASE)|Main_DemoSales_TeleoptiAnalytics
 $(IIS_AUTH)|Windows
 $(LOCAL_WIKI)|c:\temp

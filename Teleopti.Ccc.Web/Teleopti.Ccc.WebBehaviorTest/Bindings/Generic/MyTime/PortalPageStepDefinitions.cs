@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			Browser.Interactions.Click(".user-name-link");
 			Browser.Interactions.Click("#signout");
-			Browser.Interactions.AssertUrlContains("Authentication");
+			Browser.Interactions.AssertUrlContains("SSO/OpenId/Provider");
 		}
 
 		[Then(@"I should see MyTime")]
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see an application page")]
 		public void ThenIShouldSeeAnApplicationPage()
 		{
-			Browser.Interactions.AssertExists("#signout, #signout-button");
+			Browser.Interactions.AssertExists("#regional-settings, #signout-button");
 		}
 
 	}

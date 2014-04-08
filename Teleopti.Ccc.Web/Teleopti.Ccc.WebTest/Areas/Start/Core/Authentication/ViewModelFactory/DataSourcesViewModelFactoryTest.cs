@@ -7,7 +7,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
-using Teleopti.Ccc.WebTest.Areas.Start.Controllers;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Authentication.ViewModelFactory
 {
@@ -19,24 +18,24 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Authentication.ViewModelFactory
 			return new DataSourcesViewModelFactory(
 				new IAuthenticationType[]
 					{
-						new ApplicationAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider)),
+						new ApplicationIdentityProviderAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider)), 
 						new WindowsAuthenticationType(null, new Lazy<IDataSourcesProvider>(() => dataSourcesProvider))
 					});
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldRetrieveApplicationDataSources()
+		public void ShouldRetrieveApplicationDataSourcesFromIdentityToken()
 		{
 			var dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
 			var target = Target(dataSourcesProvider);
 			var dataSource = new FakeDataSource {DataSourceName = "Datasource"};
 
-			dataSourcesProvider.Stub(x => x.RetrieveDatasourcesForApplication()).Return(new[] {dataSource});
+			dataSourcesProvider.Stub(x => x.RetrieveDatasourcesForApplicationIdentityToken()).Return(new[] {dataSource});
 
 			var result = target.DataSources();
 
 			result.Single().Name.Should().Be("Datasource");
-			result.Single().Type.Should().Be("application");
+			result.Single().Type.Should().Be("application_token");
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]

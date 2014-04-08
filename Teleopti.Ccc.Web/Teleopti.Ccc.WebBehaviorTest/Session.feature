@@ -21,7 +21,7 @@ Scenario: Signed out when cookie expires
 	Then I should be signed in
 	When my cookie expires
 	And I navigate to an application page
-	Then I should be signed out
+	Then I should see the sign in page
 	
 Scenario: Signed out when time passes
 	Given the time is '2013-09-30 16:00'
@@ -29,7 +29,7 @@ Scenario: Signed out when time passes
 	Then I should be signed in
 	When the time is '2013-09-30 17:00'
 	And I navigate to an application page
-	Then I should be signed out
+	Then I should see the sign in page
 	
 Scenario: Stay signed in when time passes with ASM open
 	Given I have the role 'Full access to mytime'
@@ -47,7 +47,7 @@ Scenario: Signed out when cookie expires while I browse the internet
 	When my cookie expires
 	And I navigate the internet
 	And I navigate to an application page
-	Then I should be signed out
+	Then I should see the sign in page
 
 Scenario: Signed out when saving preference when cookie is expired
 	Given I am an agent without access to extended preferences
@@ -56,7 +56,7 @@ Scenario: Signed out when saving preference when cookie is expired
 	When my cookie expires
 	And I select an editable day without preference
 	And I try to select a standard preference
-	Then I should be signed out
+	Then I should see the sign in page
 
 Scenario: Signed out when navigating to next period when cookie is expired
 	Given I am an agent
@@ -64,23 +64,19 @@ Scenario: Signed out when navigating to next period when cookie is expired
 	And I am viewing preferences
 	When my cookie expires
 	And I click next virtual schedule period button
-	Then I should be signed out
+	Then I should see the sign in page
 
-Scenario: Corrupt cookie due to upgrade should be overwritten by a logon
+Scenario: Corrupt teleopti cookie due to upgrade should be overwritten by an update
 	Given I am viewing an application page
 	Then I should be signed in
 	When My cookie gets corrupt
 	And I navigate to an application page
-	Then I should be signed out
-	When I sign in again
 	Then I should be signed in
 
-Scenario: Corrupt cookie due to no longer existing database should be overwritten by a logon
+Scenario: Corrupt teleopti cookie due to no longer existing database should be overwritten by an update
 	Given I am viewing an application page
 	Then I should be signed in
 	When My cookie gets pointed to non existing database
 	And I navigate to an application page
-	Then I should be signed out
-	When I sign in again
 	Then I should be signed in
 

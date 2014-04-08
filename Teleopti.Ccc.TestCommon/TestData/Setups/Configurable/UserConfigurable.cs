@@ -1,7 +1,9 @@
 using System;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 
 		public string UserName { get; set; }
 		public string Password { get; set; }
+		public string Role { get; set; }
 
 		public bool WindowsAuthentication { get; set; }
 
@@ -59,6 +62,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 						DomainName = Environment.UserDomainName
 					};
 				user.WindowsAuthenticationInfo = authenticationInfo;
+			}
+
+			if (!string.IsNullOrEmpty(Role))
+			{
+				var roleRepository = new ApplicationRoleRepository(uow);
+				var role = roleRepository.LoadAll().Single(b => b.Name ==  Role);
+				user.PermissionInformation.AddApplicationRole(role);
 			}
 		}
 	}

@@ -34,7 +34,8 @@ Scenario: Change my password
 	Given I am an agent
 	When I view my password
 	And I change my password to 'newP@ssw0rd'
-	And I sign out
+	And my cookie expires
+	And I navigate to an application page
 	And I sign in using my new password 'newP@ssw0rd'
 	Then I should be signed in
 

@@ -39,16 +39,6 @@ Scenario: Browse to root
 	Given I am not signed in
 	When I navigate to the site's root
 	Then I should see the global sign in page
-
-Scenario: Browse to MyTime
-	Given I am not signed in
-	When I navigate to MyTime
-	Then I should see MyTime's sign in page
-
-Scenario: Browse to Mobile Reports
-	Given I am not signed in
-	When I navigate to Mobile Reports
-	Then I should see Mobile Report's sign in page
 	
 Scenario: Browse to root and sign in to menu when no Anywhere permission
 	Given I have the role 'Access to all except anywhere'

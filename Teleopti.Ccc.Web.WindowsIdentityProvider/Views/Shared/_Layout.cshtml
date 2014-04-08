@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>@ViewBag.Title</title>
+</head>
+	<body>
+		<div class="page">
+			<div id="header">
+				<div id="title">
+					<h1>PROVIDER</h1>
+				</div>
+				<div id="logindisplay">
+					@if (Request.IsAuthenticated)
+					{
+						<text>Welcome <strong>@Request.ServerVariables["LOGON_USER"]</strong>!</text>
+					}
+					else
+					{
+						<text> <strong>Not Signed in</strong></text>
+					}
+				</div>
+			</div>
+			<div id="main">
+				@RenderBody()
+			</div>
+			<div id="footer">
+			</div>
+		</div>
+	</body>
+</html>

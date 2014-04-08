@@ -12,10 +12,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		public const string MyTimeJs = "~/MyTimeJs";
 		public const string BootstrapCss = "~/Content/bootstrap/Content/bundle";
 		public const string SignInJs = "~/SignInJs";
+		public const string SsoJs = "~/SsoJs";
 		//to get correct paths to our pic links in css - need same structure
 		public const string Select2Css = "~/Content/select2/bundle";
 		public const string MyTimeCss = "~/Areas/MyTime/Content/Css/bundle";
 		public const string SignInCss = "~/Areas/Start/Content/Css/bundle"; 
+		public const string SsoCss = "~/Areas/SSO/Content/Css/bundle"; 
 
 		public Task Execute()
 		{
@@ -24,9 +26,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 			registerMyTimeScripts();
 			registerSigninScripts();
+			registerSsoScripts();
 
 			return null;
 		}
+
+		
 
 		private static void registerMyTimeScripts()
 		{
@@ -107,6 +112,31 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 					"~/Content/hasher/hasher.js",
 					"~/Content/crossroads/crossroads.js")
 				.IncludeDirectory("~/Areas/Start/Content/Scripts", "*.js");
+			BundleTable.Bundles.Add(cssBundle);
+			BundleTable.Bundles.Add(jsBundle);
+		}
+
+		private void registerSsoScripts()
+		{
+			//use requiresJs here instead?
+			var cssBundle = new StyleBundle(SsoCss)
+				.Include(
+					"~/Content/bootstrap/Content/bootstrap.css",
+					"~/Content/bootstrap/Content/bootstrap-theme.css",
+					"~/Areas/SSO/Content/Css/Login.css",
+					"~/Areas/SSO/Content/Css/Site.css"
+				);
+			var jsBundle = new ScriptBundle(SsoJs)
+				.Include(
+					"~/Content/jquery/jquery-1.10.2.js",
+					"~/Content/Scripts/jquery.ba-hashchange.js",
+					"~/Content/Scripts/modernizr-2.6.2.js",
+					"~/Content/bootstrap/Scripts/bootstrap.js",
+					"~/Content/Scripts/knockout-2.2.1.js",
+					"~/Content/signals/signals.js",
+					"~/Content/hasher/hasher.js",
+					"~/Content/crossroads/crossroads.js")
+				.IncludeDirectory("~/Areas/SSO/Content/Scripts", "*.js");
 			BundleTable.Bundles.Add(cssBundle);
 			BundleTable.Bundles.Add(jsBundle);
 		}

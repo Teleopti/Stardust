@@ -18,9 +18,8 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 	{
 		private IDataSourcesProvider dataSourcesProvider;
 		private IRepositoryFactory repositoryFactory;
-		private MockRepository mocks;
 		private IAuthenticator target;
-		private IWindowsAccountProvider windowsAccountProvider;
+		private ITokenIdentityProvider tokenIdentityProvider;
 		private IFindApplicationUser findApplicationUser;
 		private IIpAddressResolver ipFinder;
 		const string dataSourceName = "Gurkmajonääääs";
@@ -28,87 +27,107 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		[SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
-			dataSourcesProvider = mocks.StrictMock<IDataSourcesProvider>();
-			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
-			windowsAccountProvider = mocks.DynamicMock<IWindowsAccountProvider>();
-			findApplicationUser = mocks.DynamicMock<IFindApplicationUser>();
-			ipFinder = mocks.DynamicMock<IIpAddressResolver>();
-			target = new Authenticator(dataSourcesProvider, windowsAccountProvider, repositoryFactory, findApplicationUser, ipFinder);
+			dataSourcesProvider = MockRepository.GenerateMock<IDataSourcesProvider>();
+			repositoryFactory = MockRepository.GenerateMock<IRepositoryFactory>();
+			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
+			findApplicationUser = MockRepository.GenerateMock<IFindApplicationUser>();
+			ipFinder = MockRepository.GenerateMock<IIpAddressResolver>();
+			target = new Authenticator(dataSourcesProvider, tokenIdentityProvider, repositoryFactory, findApplicationUser, ipFinder);
 		}
 
-		
 		[Test]
 		public void AuthenticateWindowsUserShouldReturnSuccessfulAuthenticationResult()
 		{
-			var dataSource = mocks.DynamicMock<IDataSource>();
-			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			var uow = mocks.DynamicMock<IUnitOfWork>();
-			var personRepository = mocks.DynamicMock<IPersonRepository>();
-			var winAccount = new WindowsAccount("domain", "user");
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var personRep = MockRepository.GenerateMock<IPersonRepository>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var winAccount = new TokenIdentity {UserDomain = "domain", UserIdentifier = "user"};
 
-			IPerson person;
+			IPerson person = null;
 
-			using (mocks.Record())
-			{
-				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
-				Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
+			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
 
-				Expect.Call(windowsAccountProvider.RetrieveWindowsAccount()).Return(winAccount);
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
 
-				Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRepository);
+			personRep.Stub(x => x.TryFindWindowsAuthenticatedPerson(winAccount.UserDomain, winAccount.UserIdentifier,
+				out person)).Return(true);
 
-				Expect.Call(personRepository.TryFindWindowsAuthenticatedPerson(winAccount.DomainName, winAccount.UserName, out person)).Return(true);
-			}
+			var result = target.AuthenticateWindowsUser(dataSourceName);
+			result.Person.Should().Be.EqualTo(person);
+			result.Successful.Should().Be.True();
+			result.DataSource.Should().Be.SameInstanceAs(dataSource);
+		}
 
-			using (mocks.Playback())
-			{
-				var result = target.AuthenticateWindowsUser(dataSourceName);
-				result.Person.Should().Be.EqualTo(person);
-				result.Successful.Should().Be.True();
-				result.DataSource.Should().Be.SameInstanceAs(dataSource);
-			}
+		[Test]
+		public void AuthenticateApplicationIdentityUserShouldReturnSuccessfulAuthenticationResult()
+		{
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var personRep = MockRepository.GenerateMock<IPersonRepository>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var account = new TokenIdentity { DataSource = "Teleopti CCC", UserIdentifier = "user" };
+
+			IPerson person = new Person();
+
+			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
+			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
+
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(account);
+
+			personRep.Stub(x => x.TryFindBasicAuthenticatedPerson(account.UserIdentifier)).Return(person);
+
+			var result = target.AuthenticateApplicationIdentityUser(dataSourceName);
+			result.Person.Should().Be.EqualTo(person);
+			result.Successful.Should().Be.True();
+			result.DataSource.Should().Be.SameInstanceAs(dataSource);
 		}
 
 		[Test]
 		public void AuthenticateApplicationUserShouldReturnAuthenticationResult()
 		{
-			var dataSource = mocks.DynamicMock<IDataSource>();
-			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			var uow = mocks.DynamicMock<IUnitOfWork>();
-			var domainAuthResult = new AuthenticationResult { HasMessage = true, Message = "sdf", Person = new Person(), Successful = true , PasswordExpired = true};
-			
-
-			using (mocks.Record())
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var personRep = MockRepository.GenerateMock<IPersonRepository>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
+			var domainAuthResult = new AuthenticationResult
 			{
-				Expect.Call(dataSourcesProvider.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
-				Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+				HasMessage = true,
+				Message = "sdf",
+				Person = new Person(),
+				Successful = true,
+				PasswordExpired = true
+			};
 
-				Expect.Call(findApplicationUser.CheckLogOn(uow, "logon name", "password"))
-					.Return(domainAuthResult);
-			}
+			dataSourcesProvider.Stub(x => x.RetrieveDataSourceByName(dataSourceName)).Return(dataSource);
+			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
 
-			using (mocks.Playback())
-			{
-				var result = target.AuthenticateApplicationUser(dataSourceName, "logon name", "password");
-				result.DataSource.Should().Be.SameInstanceAs(dataSource);
-				result.HasMessage = domainAuthResult.HasMessage;
-				result.Message = domainAuthResult.Message;
-				result.Person = domainAuthResult.Person;
-				result.PasswordExpired = domainAuthResult.PasswordExpired;
-				result.Successful = domainAuthResult.Successful;
-			}
+			findApplicationUser.Stub(x => x.CheckLogOn(uow, "logon name", "password"))
+				.Return(domainAuthResult);
+
+			var result = target.AuthenticateApplicationUser(dataSourceName, "logon name", "password");
+			result.DataSource.Should().Be.SameInstanceAs(dataSource);
+			result.HasMessage = domainAuthResult.HasMessage;
+			result.Message = domainAuthResult.Message;
+			result.Person = domainAuthResult.Person;
+			result.PasswordExpired = domainAuthResult.PasswordExpired;
+			result.Successful = domainAuthResult.Successful;
 		}
 
 		[Test]
 		public void ShouldSaveAuthenticateResult()
 		{
-			var dataSource = mocks.DynamicMock<IDataSource>();
-			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			var personRep = mocks.DynamicMock<IPersonRepository>();
-			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var personRep = MockRepository.GenerateMock<IPersonRepository>();
+			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var result = new AuthenticateResult { Successful = false,DataSource = dataSource};
 
 			var model = new LoginAttemptModel
@@ -119,16 +138,13 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 					Result = "LogonSuccess"
 				};
 			
-			Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
-			Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-			Expect.Call(ipFinder.GetIpAddress()).IgnoreArguments().Return("");
-			Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRep);
-			Expect.Call(personRep.SaveLoginAttempt(model)).IgnoreArguments().Return(1);
-			mocks.ReplayAll();
+			dataSource.Stub(x => x.Application).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
+			ipFinder.Stub(x => x.GetIpAddress()).IgnoreArguments().Return("");
+			repositoryFactory.Stub(x => x.CreatePersonRepository(uow)).Return(personRep);
+			personRep.Stub(x => x.SaveLoginAttempt(model)).IgnoreArguments().Return(1);
+			
 			target.SaveAuthenticateResult("hej", result);
-			mocks.VerifyAll();
 		}
-
-		
 	}
 }

@@ -1,3 +1,4 @@
+using System.IO;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -17,16 +18,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 	public class SignInPageStepDefinitions
 	{
 
-		public void SelectApplicationTestDataSource()
+		public void SelectTestDataSource()
 		{
-			Browser.Interactions.ClickContaining("#DataSources a.application", "TestData");
+			Browser.Interactions.ClickContaining("#DataSources a", "TestData");
 		}
-
-		public void SelectWindowsTestDataSource()
-		{
-			Browser.Interactions.ClickContaining("#DataSources a.windows", "TestData");
-		}
-
+		
 		private void SignInApplication(string username, string password)
 		{
 			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Username-input", username);
@@ -54,23 +50,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			SignInApplication(userName, password);
 		}
 
-		[When(@"I sign in by windows credentials")]
-		public void WhenISignInByWindowsAuthentication()
+		[When(@"I try to signin with")]
+		public void WhenITryToSigninWith(Table table)
 		{
-			Browser.Interactions.Click("#Login-button");
+			var user = table.CreateInstance<UserConfigurable>();
+			var userName = user.UserName;
+			var password = user.Password;
+			SignInApplication(userName, password);
 		}
+
 
 		[Given(@"I select application logon data source")]
 		[When(@"I select application logon data source")]
 		public void WhenISelectApplicationLogonDataSource()
 		{
-			SelectApplicationTestDataSource();
+			SelectTestDataSource();
 		}
 
 		[When(@"I select windows logon data source")]
 		public void WhenISelectWindowsLogonDataSource()
 		{
-			SelectWindowsTestDataSource();
+			SelectTestDataSource();
 		}
 
 		[When(@"I sign in by user name and wrong password")]
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenISignInAgain()
 		{
 			Navigation.GotoGlobalSignInPage();
-			SelectApplicationTestDataSource();
+			SelectTestDataSource();
 			SignInApplication(DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName, TestData.CommonPassword);
 		}
 
@@ -111,8 +111,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should (be|stay) signed in")]
 		public void ThenIShouldBeSignedIn(string beOrStay)
 		{
-			Browser.Interactions.AssertExists("#signout, #signout-button");
+			Browser.Interactions.AssertExists("#regional-settings");
 		}
+
+		[Then(@"I should be signed in as another user '(.*)'")]
+		public void ThenIShouldBeSignedInAsAnotherUser(string name)
+		{
+			Browser.Interactions.AssertExists("#regional-settings");
+			Browser.Interactions.AssertAnyContains(".user-name-link", name);
+		}
+
 
 		[Then(@"I should see a log on error '(.*)'")]
 		public void ThenIShouldSeeALogOnError(string resourceText)
@@ -121,10 +129,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		}
 
 		[Then(@"I should see the sign in page")]
-		[Then(@"I should not be signed in")]
-		[Then(@"I should be signed out")]
-		[Then(@"I should be signed out from MobileReports")]
 		[Then(@"I should be redirected to the sign in page")]
+		[Then(@"I should not be signed in")]
 		public void ThenIAmNotSignedIn()
 		{
 			Browser.Interactions.AssertExists("#Username-input");
@@ -134,22 +140,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{
 			Browser.Interactions.AssertExists("#Username-input");
-			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MyTime");
-			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MobileReports");
-		}
-
-		[Then(@"I should see MyTime's sign in page")]
-		public void ThenIShouldSeeMyTimesSignInPage()
-		{
-			Browser.Interactions.AssertExists("#Username-input");
-			Browser.Interactions.AssertUrlContains("/MyTime/Authentication");
-		}
-
-		[Then(@"I should see Mobile Report's sign in page")]
-		public void ThenIShouldSeeMobileReportsSignInPage()
-		{
-			Browser.Interactions.AssertExists("#Username-input");
-			Browser.Interactions.AssertUrlContains("/MobileReports/Authentication");
+			Browser.Interactions.AssertUrlContains("/SSO/OpenId/Provider");
 		}
 
 		[Then(@"I should see the global menu")]
@@ -162,7 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void WhenISignInUsingMyNewPassword(string newPassword)
 		{
 			var userName = DataMaker.Data().MePerson.ApplicationAuthenticationInfo.ApplicationLogOnName;
-			SelectApplicationTestDataSource();
+			SelectTestDataSource();
 			SignInApplication(userName, newPassword);
 		}
 
@@ -211,6 +202,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void ThenIShouldSeeAnError(string resourceText)
 		{
 			Browser.Interactions.AssertFirstContainsResourceTextUsingJQuery("#Password-change-error", resourceText);
+		}
+
+		private const string TeleoptiAsDefaultIdentityProvider = "<add key=\"DefaultIdentityProvider\" value=\"Teleopti\" />";
+		private const string WindowsAsDefaultIdentityProvider = "<add key=\"DefaultIdentityProvider\" value=\"Windows\" />";
+
+		[BeforeScenario("WindowsAsDefaultIdentityProviderLogon")]
+		public void BeforeWindowsAsDefaultIdentityProviderLogon()
+		{
+			var configPath = Path.Combine(Paths.WebPath(), "web.config");
+			var content = File.ReadAllText(configPath);
+			File.WriteAllText(configPath, content.Replace(TeleoptiAsDefaultIdentityProvider, WindowsAsDefaultIdentityProvider));
+		}
+
+		[AfterScenario("WindowsAsDefaultIdentityProviderLogon")]
+		public void AfterWindowsAsDefaultIdentityProviderLogon()
+		{
+			var configPath = Path.Combine(Paths.WebPath(), "web.config");
+			var content = File.ReadAllText(configPath);
+			File.WriteAllText(configPath, content.Replace(WindowsAsDefaultIdentityProvider, TeleoptiAsDefaultIdentityProvider));
 		}
 	}
 }

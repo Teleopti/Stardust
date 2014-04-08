@@ -3,8 +3,6 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	var self = this;
 
 	this.DataSources = ko.observableArray();
-	this.UserName = ko.observable('');
-	this.Password = ko.observable('');
 	this.ErrorMessage = ko.observable();
 	this.HasErrorMessage = ko.computed(function () {
 		var errorMessage = self.ErrorMessage();
@@ -12,26 +10,10 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 	});
 
 	this.Ajax = new Teleopti.Start.Authentication.JQueryAjaxViewModel();
-
-	this.SelectedDataSource = ko.observable();
-
-	this.DisplayUserNameAndPasswordBoxes = ko.observable(false);
-
-	this.UserNameFocus = ko.observable(false);
 	
-	this.SelectDataSource = function (dataSource) {
-		self.SelectedDataSource(dataSource);
-
-		if (!dataSource.IsWindows) {
-			self.DisplayUserNameAndPasswordBoxes(true);
-			self.UserNameFocus(false);
-			self.UserNameFocus(true);
-		} else {
-			self.DisplayUserNameAndPasswordBoxes(false);
-			self.UserNameFocus(false);
-		}
-		self.ErrorMessage('');
-	};
+	this.HasDataSources = ko.computed(function() {
+		return self.DataSources().length > 0;
+	});
 
 	this.LoadDataSources = function () {
 		$.ajax({
@@ -46,7 +28,15 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 					return new Teleopti.Start.Authentication.DataSourceViewModel(d.Name, d.Type);
 				});
 				self.DataSources.push.apply(self.DataSources, map);
-				self.SelectDataSource(self.DataSources()[0]);
+				var dataSources = self.DataSources();
+				if (dataSources.length == 0) {
+					self.ErrorMessage($('#Signin-error').data('nodatasourcetext'));
+					return;
+				}
+
+				if (dataSources.length == 1) {
+					self.SignIn(dataSources[0]);
+				}
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				try {
@@ -65,19 +55,16 @@ Teleopti.Start.Authentication.SignInViewModel = function (data) {
 		});
 	};
 
-	this.SignIn = function () {
+	this.SignIn = function (selectedDataSource) {
 		var state = data.authenticationState;
 
 		self.ErrorMessage('');
 
-		var selectedDataSource = self.SelectedDataSource();
 		state.TryToSignIn({
 			data: {
 				isWindows: selectedDataSource.IsWindows,
 				type: selectedDataSource.Type,
-				datasource: selectedDataSource.Name,
-				username: self.UserName(),
-				password: self.Password()
+				datasource: selectedDataSource.Name
 			},
 			errormessage: function (message) {
 				self.ErrorMessage(message);

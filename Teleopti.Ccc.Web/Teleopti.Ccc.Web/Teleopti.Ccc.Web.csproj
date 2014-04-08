@@ -25,7 +25,7 @@
     </SccAuxPath>
     <SccProvider>
     </SccProvider>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <FileUpgradeFlags>
@@ -104,14 +104,27 @@
     <Reference Include="DDay.iCal">
       <HintPath>..\..\packages\DDay.iCal.1.0.2.575\lib\DDay.iCal.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core">
-      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.3.4.13329\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId">
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    <Reference Include="DotNetOpenAuth.Core.UI">
+      <HintPath>..\..\packages\DotNetOpenAuth.Core.UI.4.3.4.13329\lib\net40-full\DotNetOpenAuth.Core.UI.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.Provider">
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.3.4.13329\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.Provider, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.3.4.13329\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.Provider.UI">
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.UI.4.3.4.13329\lib\net40-full\DotNetOpenAuth.OpenId.Provider.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.UI">
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.UI.4.3.4.13329\lib\net40-full\DotNetOpenAuth.OpenId.UI.dll</HintPath>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -152,6 +165,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.SystemWeb.1.2.0\lib\net40\Microsoft.AspNet.SignalR.SystemWeb.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.IdentityModel">
+      <HintPath>..\..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.Owin.Host.SystemWeb.1.0.1\lib\net40\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
@@ -182,6 +198,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.10\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
@@ -315,7 +332,24 @@
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\CalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\ViewModelFactory\ICalendarLinkViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleViewModelData.cs" />
+    <Compile Include="Areas\SSO\Controllers\ApplicationAuthenticationApiController.cs" />
+    <Compile Include="Areas\SSO\Controllers\AuthenticationApiController.cs" />
+    <Compile Include="Areas\SSO\Core\ApplicationAuthenticationType.cs" />
+    <Compile Include="Areas\SSO\Core\SsoAuthenticationModelBinder.cs" />
+    <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactory.cs" />
+    <Compile Include="Areas\SSO\Core\IProviderEndpointWrapper.cs" />
+    <Compile Include="Areas\SSO\Core\ProviderEndpointWrapper.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityAuthenticationModel.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
+    <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
+    <Compile Include="Core\IdentityProviderProvider.cs" />
+    <Compile Include="Core\IIdentityProviderProvider.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
+    <Compile Include="Core\RequestContext\Cookie\AbstractCookieDataProvider.cs" />
+    <Compile Include="Core\RequestContext\Cookie\DefaultSessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\IBaseSessionSpecificCookieDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\ISessionSpecificCookieForIdentityProviderDataProviderSettings.cs" />
+    <Compile Include="Core\RequestContext\Cookie\SessionSpecificForIdentityProviderDataProvider.cs" />
     <Compile Include="Core\ResourceVersion.cs" />
     <Compile Include="Areas\MyTime\Models\Settings\CalendarLinkViewModel.cs" />
     <Compile Include="Areas\MyTime\Core\ShareCalendar\CalendarLinkId.cs" />
@@ -398,7 +432,6 @@
     <Compile Include="Areas\SSO\Core\OpenIdProviderWapper.cs" />
     <Compile Include="Areas\SSO\Core\IoC\SSOAreaModule.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistration.cs" />
-    <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Anywhere\Core\IoC\AnywhereAreaModule.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IIpAddressResolver.cs" />
@@ -518,7 +551,6 @@
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinder.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationModel.cs" />
-    <Compile Include="Areas\Start\Models\Authentication\ApplicationAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
@@ -583,7 +615,11 @@
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAttribute.cs" />
+    <Compile Include="Filters\AuthenticationModule.cs" />
     <Compile Include="Filters\HttpRequestBaseExtensions.cs" />
+    <Compile Include="Filters\IAuthenticationModule.cs" />
+    <Compile Include="Filters\ISessionAuthenticationModule.cs" />
+    <Compile Include="Filters\SessionAuthenticationModule.cs" />
     <Compile Include="Models\Shared\Link.cs" />
     <Compile Include="Areas\Start\Controllers\MenuController.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtension.cs" />
@@ -597,14 +633,13 @@
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\DataSourcesProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IBusinessUnitProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\DataProvider\IDataSourcesProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\IWindowsAccountProvider.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\WindowsAccount.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\DataProvider\WindowsAccountProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\ITokenIdentityProvider.cs" />
+    <Compile Include="Areas\Start\Core\Authentication\DataProvider\TokenIdentityProvider.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\AuthenticateResult.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\Authenticator.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\Services\FormsAuthenticationWrapper.cs" />
+    <Compile Include="Core\FormsAuthenticationWrapper.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IAuthenticator.cs" />
-    <Compile Include="Areas\Start\Core\Authentication\Services\IFormsAuthentication.cs" />
+    <Compile Include="Core\IFormsAuthentication.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\IWebLogOn.cs" />
     <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />
     <Compile Include="Areas\Start\Core\IoC\StartAreaModule.cs" />
@@ -856,7 +891,29 @@
     <Content Include="Areas\PerformanceTool\Content\Scripts\main.js" />
     <Content Include="Areas\PerformanceTool\Content\Scripts\require\signalrrr.js" />
     <Content Include="Areas\PerformanceTool\Views\Application\index.aspx" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
+    <Content Include="Areas\SSO\Content\Css\login.css" />
+    <Content Include="Areas\SSO\Content\Css\Site.css" />
+    <Content Include="Areas\SSO\Content\Images\ajax-loader-small.gif" />
+    <Content Include="Areas\SSO\Content\Images\body_bg.jpg" />
+    <Content Include="Areas\SSO\Content\Images\ccc_icon.png" />
+    <Content Include="Areas\SSO\Content\Images\login_logo.png" />
+    <Content Include="Areas\SSO\Content\Images\login_page_bg.png" />
+    <Content Include="Areas\SSO\Content\Images\mobile_logo.png" />
+    <Content Include="Areas\SSO\Content\Images\signin_bg_sprite.png" />
+    <Content Include="Areas\SSO\Content\Images\windows-small-icon.png" />
+    <Content Include="Areas\SSO\Content\Images\Windows8-icon.png" />
+    <Content Include="Areas\SSO\Content\Scripts\jquery.extensions.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.AuthenticationState.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ChangePasswordView.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.ChangePasswordViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.DataSourceViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Init.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.JQueryAjaxViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Navigation.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.Settings.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInView.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Authentication.SignInViewModel.js" />
+    <Content Include="Areas\SSO\Content\Scripts\Teleopti.SSO.Common.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
@@ -931,7 +988,6 @@
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ApplicationViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.AuthenticationState.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitViewModel.js" />
-    <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.MenuView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionView.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.BusinessUnitSelectionViewModel.js" />
@@ -1179,7 +1235,6 @@
     <Content Include="Areas\SSO\Views\OpenId\Xrds.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\AskUser.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\Identifier.cshtml" />
-    <Content Include="Areas\SSO\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\SSO\Views\_ViewStart.cshtml" />
     <Content Include="Areas\SSO\Views\Web.config" />
     <Content Include="..\..\Teleopti.Ccc.Web.Broker\customTimeoutSettings.config.notinuse">
@@ -1202,6 +1257,8 @@
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="Content\bootstrap\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="Areas\Diagnosis\Views\Application\index.aspx" />
+    <Content Include="Areas\SSO\Views\Shared\_LayoutBase.cshtml" />
+    <Content Include="Areas\SSO\Views\OpenId\SignIn.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -1351,6 +1408,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\PerformanceTool\Content\Templates\" />
+    <Folder Include="Areas\SSO\Views\Authentication\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
@@ -1390,12 +1448,11 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>False</UseIIS>
+          <UseIIS>True</UseIIS>
           <AutoAssignPort>False</AutoAssignPort>
           <DevelopmentServerPort>52858</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>
-          </IISUrl>
+          <IISUrl>http://localhost:52858/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		public bool AccessToViewAllGroupPages { get; set; }
 		public bool AccessToMatrixReports { get; set; }
 		public bool AccessToPersonalAbsenceAccount { get; set; }
+		public bool CanLogonAsAnotherUser { get; set; }
 
 		public RoleConfigurable()
 		{
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			AccessToTeamSchedule = true;
 			AccessToMatrixReports = true;
 			AccessToPersonalAbsenceAccount = true;
+			CanLogonAsAnotherUser = true;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -217,7 +219,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 				applicationFunctions = from f in applicationFunctions
 											  where f.ForeignSource != DefinedForeignSourceNames.SourceMatrix
 											  select f;
-
+			if (!CanLogonAsAnotherUser)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.SignInAsAnotherUser
+									   select f;
 			return applicationFunctions;
 		}
 	}

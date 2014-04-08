@@ -9,17 +9,19 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public TeleoptiIdentity(string name,
 		                        IDataSource dataSource,
 		                        IBusinessUnit businessUnit,
-		                        WindowsIdentity windowsIdentity)
+		                        WindowsIdentity windowsIdentity,
+								string tokenIdentity = null)
 			: base(name)
 		{
 			DataSource = dataSource;
 			BusinessUnit = businessUnit;
 			WindowsIdentity = windowsIdentity;
+			TokenIdentity = tokenIdentity;
 		}
 
+		public string TokenIdentity { get; set; }
 		public IDataSource DataSource { get; set; }
 		public IBusinessUnit BusinessUnit { get; set; }
-		public string Ticket { get; set; }
 		public WindowsIdentity WindowsIdentity { get; set; }
 	}
 }

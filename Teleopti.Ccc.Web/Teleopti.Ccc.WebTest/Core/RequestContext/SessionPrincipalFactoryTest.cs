@@ -1,5 +1,7 @@
 using System;
 using System.Security.Principal;
+using System.Web;
+using Microsoft.IdentityModel.Claims;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -8,6 +10,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Interfaces.Domain;
@@ -35,7 +38,11 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
 			dataSourcesProvider = mocks.DynamicMock<IDataSourcesProvider>();
 			roleToPrincipalCommand = mocks.DynamicMock<IRoleToPrincipalCommand>();
-			target = new SessionPrincipalFactory(dataSourcesProvider, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory());
+
+			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
+			var currentHttpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+			currentHttpContext.Stub(x => x.Current()).Return(httpContext);
+			target = new SessionPrincipalFactory(dataSourcesProvider, sessionSpecificDataProvider, repositoryFactory, roleToPrincipalCommand, new TeleoptiPrincipalFactory(), new TokenIdentityProvider(currentHttpContext));
 		}
 
 

@@ -10,33 +10,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 	var gotoSignInView = Teleopti.Start.Authentication.Navigation.GotoSignIn;
 	var gotoBusinessUnitsView = Teleopti.Start.Authentication.Navigation.GotoBusinessUnits;
 	var gotoMenuView = Teleopti.Start.Authentication.Navigation.GotoMenu;
-	var gotoChangePassword = Teleopti.Start.Authentication.Navigation.GotoChangePassword;
-	var gotoMustChangePassword = Teleopti.Start.Authentication.Navigation.GotoMustChangePassword;
-
-
-	var checkPasswordAjax = function (options) {
-		$.extend(options, {
-			url: data.baseUrl + "Start/ApplicationAuthenticationApi/CheckPassword",
-			dataType: "json",
-			type: 'GET',
-			cache: false,
-			data: authenticationModel,
-			success: function (responseData, textStatus, jqXHR) {
-				if (responseData.WillExpireSoon) {
-					gotoChangePassword(authenticationModel.datasource);
-					return;
-				}
-				if (responseData.AlreadyExpired) {
-					gotoMustChangePassword(authenticationModel.datasource);
-					return;
-				}
-				self.AttemptGotoApplicationBySignIn(options);
-			}
-		});
-
-		$.ajax(options);
-	};
-
+	
 	this.AttemptGotoApplicationBySignIn = function (options) {
 		$.extend(options, {
 			success: function (responseData, textStatus, jqXHR) {
@@ -74,34 +48,6 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		} else {
 			return false;
 		}
-	};
-
-	this.ApplyChangePassword = function (options) {
-		options.data.UserName = authenticationModel.username;
-		changePasswordAjax(options);
-	};
-
-	var changePasswordAjax = function (options) {
-
-		$.extend(options, {
-			url: data.baseUrl + "Start/ApplicationAuthenticationApi/ChangePassword",
-			dataType: "json",
-			type: 'POST',
-			cache: false,
-			error: function (jqXHR, textStatus, errorThrown) {
-				if (jqXHR.status == 400) {
-					var response = $.parseJSON(jqXHR.responseText);
-					options.errormessage(response.Errors[0]);
-					return;
-				}
-			},
-			success: function (responseData, textStatus, jqXHR) {
-				authenticationModel.password = options.data.newPassword;
-				self.AttemptGotoApplicationBySignIn(options);
-			}
-		});
-
-		$.ajax(options);
 	};
 
 	var businessUnitsAjax = function (options) {
@@ -181,11 +127,9 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 		$.extend(options, {
 			error: error
 		});
-		if (!authenticationModel.isWindows) {
-			checkPasswordAjax(options);
-		} else {
-			self.AttemptGotoApplicationBySignIn(options);
-		}
+		
+		self.AttemptGotoApplicationBySignIn(options);
+		
 	};
 
 	this.AttemptGotoApplicationBySelectingBusinessUnit = function (options) {
@@ -199,9 +143,7 @@ Teleopti.Start.Authentication.AuthenticationState = function (data) {
 
 				$.extend(options, {
 					success: function (applicationsData, textState, jqXHR) {
-
 						var area;
-
 						var inApplication = ko.utils.arrayFirst(applicationsData, function (a) {
 							var url = "/" + a.Area + "/";
 							return window.location.href.indexOf(url) !== -1;
