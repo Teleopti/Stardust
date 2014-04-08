@@ -93,15 +93,12 @@ Scenario: Show single page
 	Then I should only see one page of requests
 
 
-Scenario Outline: Paging
+Scenario: Paging
 	Given I am an agent
 	And I have more than one page of requests
 	When I view requests
 	And I scroll down to the bottom of the page
 	Then I should see the page fill with the next page of requests
-	Examples: 
-	| x  |
-	| 1  |
 
 
 Scenario: Indicate that there are more items to load
