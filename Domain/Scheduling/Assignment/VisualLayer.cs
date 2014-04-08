@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -126,5 +127,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			    };
 		    return ret;
 	    }
+
+	    public DateTime PeriodStartDateTime { get { return Period.StartDateTime; } }
+		public DateTime PeriodEndDateTime { get { return Period.EndDateTime; } }
+		public IWorkShiftCalculatableActivity Activity { get { return (IActivity) Payload; } }
     }
 }

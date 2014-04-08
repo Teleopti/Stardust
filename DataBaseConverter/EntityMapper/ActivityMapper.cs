@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
             if (absenceActivity(oldEntity)) return null;
 
             string oldName = ConversionHelper.MapString(oldEntity.Name,Description.MaxLengthOfName);
-            IActivity newAct = new Activity(oldName);
+            var newAct = new Activity(oldName);
             newAct.DisplayColor = oldEntity.ColorLayout;
             newAct.RequiresSkill = oldEntity.RequiresSkill;
             newAct.InContractTime = oldEntity.InWorkTime;

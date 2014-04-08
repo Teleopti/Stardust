@@ -1,5 +1,4 @@
 ﻿using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Obfuscated.Security;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
 

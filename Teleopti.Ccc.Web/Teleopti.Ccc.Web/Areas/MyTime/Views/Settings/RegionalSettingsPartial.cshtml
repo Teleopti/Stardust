@@ -18,14 +18,24 @@
             <option data-bind="text: text, value: id"></option>
         </select>
     </div>
-    <br />
+	<br />
+
+	<!-- ko if: IsNotificationSupported() -->
+	<div class="clearfix">		
+		<div class="btn-group">
+			<button class="btn btn-lg" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
+		</div>
+	</div>
+	<!-- /ko -->
+
     @if (Model.ShareCalendarPermission)
     {
+		<br />
         <div class="clearfix">
-            <div class="btn-group">
-                <button class="btn btn-lg share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
-                <button class="btn btn-lg revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
-            </div>
+	        <div class="btn-group">
+		        <button class="btn btn-lg share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
+		        <button class="btn btn-lg revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
+	        </div>
             <!-- ko if: CalendarSharingActive() -->
             <div>
                 <span>@Resources.ShareMyCalendarHint</span><a href="http://wiki.teleopti.com/TeleoptiCCC/CalendarLink" target="_blank">@Resources.Here</a>

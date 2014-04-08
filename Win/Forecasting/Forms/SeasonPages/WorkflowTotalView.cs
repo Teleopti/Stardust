@@ -8,7 +8,6 @@ using Syncfusion.Drawing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Obfuscated.Forecasting;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.Win.Common.Controls.DateSelection;

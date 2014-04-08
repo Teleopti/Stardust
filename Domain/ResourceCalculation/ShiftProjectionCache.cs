@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -13,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     ///  Created by: Ola
     ///  Created date: 2008-09-16    
     /// /// </remarks>
-    public class ShiftProjectionCache : IShiftProjectionCache
+	public class ShiftProjectionCache : IShiftProjectionCache
     {
         private IEditableShift _mainShift;
         private readonly IWorkShift _workShift;
@@ -115,6 +117,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
+		IEnumerable<IWorkShiftCalculatableVisualLayer> IWorkShiftCalculatableProjection.MainShiftProjection2
+		{
+			get { return MainShiftProjection; }
+		}
+
         public DayOfWeek DayOfWeek { get { return _dayOfWeek; } }
 
         public bool PersonalShiftsAndMeetingsAreInWorkTime(ReadOnlyCollection<IPersonMeeting> meetings, IPersonAssignment personAssignment)
@@ -154,5 +161,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				return WorkShiftProjectionPeriod.EndDateTime.TimeOfDay.Add(TimeSpan.FromDays(day));
 			}
     	}
+
     }
 }

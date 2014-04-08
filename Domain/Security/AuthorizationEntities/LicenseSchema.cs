@@ -77,7 +77,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         /// Sets the defined license options enabled according to the input list.
         /// </summary>
 		/// <value>The enabled licence options.</value>
-		[CLSCompliant(false)]
         public void ActivateLicense(ILicenseActivator licenseActivator)
         {
             EnabledLicenseSchema = licenseActivator.EnabledLicenseSchemaName;

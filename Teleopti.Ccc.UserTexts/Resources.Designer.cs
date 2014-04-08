@@ -1763,6 +1763,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow Desktop Notifications.
+        /// </summary>
+        public static string AllowDesktopNotifications {
+            get {
+                return ResourceManager.GetString("AllowDesktopNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Meetings.
         /// </summary>
         public static string AllowMeetings {

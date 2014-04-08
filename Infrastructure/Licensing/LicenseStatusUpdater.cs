@@ -11,7 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
     {
         private readonly ILicenseStatusRepositories _licenseStatusRepositories;
 
-		[CLSCompliant(false)]
         public LicenseStatusUpdater(ILicenseStatusRepositories licenseStatusRepositories)
         {
             _licenseStatusRepositories = licenseStatusRepositories;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -47,7 +48,8 @@ namespace Teleopti.Interfaces.Domain
         IWorkShiftCalculationResultHolder FindBestMainShift(
             DateOnly dateOnly, 
             IList<IShiftProjectionCache> shiftProjectionCaches, 
-            IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders,
+            //IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders,
+			IWorkShiftCalculatorSkillStaffPeriods dataHolders,
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,

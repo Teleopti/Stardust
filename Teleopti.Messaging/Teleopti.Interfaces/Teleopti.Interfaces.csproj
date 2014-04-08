@@ -112,6 +112,7 @@
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\SchedulingServiceSuccessfulEventArgs.cs" />
+    <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\SchedulingServiceFailedEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
@@ -347,8 +348,6 @@
     <Compile Include="Domain\IVirtualSchedulePeriodSplitChecker.cs" />
     <Compile Include="Domain\IVirtualSkillHelper.cs" />
     <Compile Include="Domain\IWorkflowControlSet.cs" />
-    <Compile Include="Domain\IWorkShiftCalculator.cs" />
-    <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
     <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
@@ -583,7 +582,6 @@
     <Compile Include="Domain\DateScenarioPersonId.cs" />
     <Compile Include="Domain\VisualLayerCollectionExtensions.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
-    <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />
     <Compile Include="Domain\IReplyOptionsSource.cs" />
     <Compile Include="Domain\IReplyOptionTarget.cs" />
@@ -822,7 +820,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
+      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
+      <Name>Teleopti.Ccc.Secrets</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

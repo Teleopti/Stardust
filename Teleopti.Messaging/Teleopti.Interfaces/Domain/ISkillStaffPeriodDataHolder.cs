@@ -1,4 +1,6 @@
 
+using Teleopti.Ccc.Secrets.WorkShiftCalculator;
+
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     ///  Created by: Ola
     ///  Created date: 2008-11-17    
     /// /// </remarks>
-    public interface ISkillStaffPeriodDataHolder
+    public interface ISkillStaffPeriodDataHolder : IWorkShiftCalculatableSkillStaffPeriod
     {
         /// <summary>
         /// Gets or sets the original demand in minutes.
@@ -72,20 +74,6 @@ namespace Teleopti.Interfaces.Domain
         ///  Created date: 2009-02-25    
         /// /// </remarks>
         double AbsoluteDifferenceScheduledHeadsAndMinMaxHeads { get; set; }
-
-        /// <summary>
-        /// Periods the value.
-        /// </summary>
-        /// <param name="currentResourceInMinutes">The current resource in minutes.</param>
-        /// <param name="useMinimumPersons"></param>
-        /// <param name="useMaximumPersons"></param>
-        /// <returns></returns>
-        /// /// 
-        /// <remarks>
-        ///  Created by: Ola
-        ///  Created date: 2009-05-04    
-        /// /// </remarks>
-        double PeriodValue(int currentResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons);
 
         /// <summary>
         /// Gets the period distribution.

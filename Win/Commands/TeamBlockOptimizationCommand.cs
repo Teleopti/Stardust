@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Secrets.DayOffPlanning;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces;

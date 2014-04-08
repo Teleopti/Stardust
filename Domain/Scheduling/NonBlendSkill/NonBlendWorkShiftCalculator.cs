@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 								   skillStaffPeriod.Period.ElapsedTime().TotalMinutes);
 					int maximumPersons = skillStaffPeriod.Payload.SkillPersonData.MaximumPersons;
 					int minimumPersons = skillStaffPeriod.Payload.SkillPersonData.MinimumPersons;
-					ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataHolder(origDemand,
+					ISkillStaffPeriodDataHolder dataHolder = new SkillStaffPeriodDataInfo(origDemand,
 																									assignedResource,
 																									skillStaffPeriod.
 																										Period,

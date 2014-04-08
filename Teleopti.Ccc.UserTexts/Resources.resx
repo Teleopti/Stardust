@@ -11152,8 +11152,8 @@ These options are activated:
     <value>After checking against keep activity</value>
   </data>
   <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
-    <value>Your schedule the {0} has changed!</value>
-    <comment>Your schedule the 2/16/2012 has changed!</comment>
+    <value>Your schedule for {0} has changed!</value>
+    <comment>Your schedule for 2/16/2012 has changed!</comment>
   </data>
   <data name="WindowsLogonWithBrackets" xml:space="preserve">
     <value>(Windows)</value>
@@ -11997,6 +11997,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="AtLeastOneDayCannotBeScheduled" xml:space="preserve">
     <value>At least one day cannot be scheduled</value>
     <comment>Used in scheduler</comment>
+  </data>
+  <data name="AllowDesktopNotifications" xml:space="preserve">
+    <value>Allow Desktop Notifications</value>
   </data>
   <data name="NoDatasource" xml:space="preserve">
     <value>No datasource available for you, my friend.</value>

@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ITeamBlockMaxSeatChecker _teamBlockMaxSeatChecker;
 	    private IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
+		private int _reportedProgress;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 
 	    [SetUp]
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			                                                   _teamBlockIntradayDecisionMaker, _restrictionOverLimitValidator,
 			                                                   _teamBlockClearer, _teamBlockMaxSeatChecker,_dailyTargetValueCalculatorForTeamBlock);
 		    _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+		    _reportedProgress = 0;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -218,9 +220,56 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 		}
 
+		[Test]
+		public void ShouldReportProgressWhenNotSuccessful()
+		{
+			var dateOnly = new DateOnly();
+			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
+			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var person = PersonFactory.CreatePerson("Bill");
+			var persons = new List<IPerson> { person };
+			var schedulingOptions = new SchedulingOptions();
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var group = new Group(new List<IPerson> { person }, "Hej");
+			var teaminfo = new TeamInfo(group, groupMatrixList);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
+			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+			var optimizationPreferences = new OptimizationPreferences();
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo };
+			
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
+				Expect.Call(_teamBlockGenerator.Generate(matrixes, selectedPeriod, persons, schedulingOptions)).Return(teamBlocks);
+				Expect.Call(_teamBlockIntradayDecisionMaker.Decide(teamBlocks, optimizationPreferences,schedulingOptions)).Return(teamBlocks);
+				Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod, persons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(true);
+				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences)).Return(false);
+				Expect.Call(_dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced)).Return(5.0);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(dateOnly, schedulingOptions)).Return(true);
+				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
+			}
+			using (_mocks.Playback())
+			{
+				_target.ReportProgress += targetReportProgressNotSuccessful;
+				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+				_target.ReportProgress -= targetReportProgressNotSuccessful;
+				Assert.AreEqual(2, _reportedProgress);
+			}
+		}
+
+		void targetReportProgressNotSuccessful(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			_reportedProgress++;
+		}
+
 		void targetReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
 		{
 			e.Cancel = true;
 		}
+
 	}
 }

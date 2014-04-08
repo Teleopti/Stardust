@@ -8,9 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	public interface IWorkShiftSelector
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList,
-		                             IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataDictionary,
-		                             WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons);
+        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataDictionary, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo);
 	}
 
 	public class WorkShiftSelector : IWorkShiftSelector
@@ -24,62 +22,67 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_equalWorkShiftValueDecider = equalWorkShiftValueDecider;
 		}
 
-        public IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataDictionary, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+		public IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList,
+			IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataLocalDictionary,
+			WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
 		{
+			var activityIntervalDataLocalDictionary = new ActivityIntervalDataLocalDictionary();
+			activityIntervalDataLocalDictionary.Store(skillIntervalDataLocalDictionary);
+
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
-            if (shiftList != null)
-                foreach (var shiftProjectionCache in shiftList)
-                {
-                    double? valueForShift = this.valueForShift(skillIntervalDataDictionary, shiftProjectionCache, lengthFactor, useMinimumPersons,
-                                                               useMaximumPersons);
+			if (shiftList != null)
+				foreach (var shiftProjectionCache in shiftList)
+				{
+					double? valueForShift = this.valueForShift(activityIntervalDataLocalDictionary, shiftProjectionCache, lengthFactor,
+						useMinimumPersons,
+						useMaximumPersons, timeZoneInfo);
 
-                    if (valueForShift.HasValue)
-                    {
-                        if (!bestShiftValue.HasValue)
-                        {
-                            bestShiftValue = valueForShift.Value;
-                            bestShift = shiftProjectionCache;
-							
-                        }
-                        else
-                        {
-                            if (valueForShift.Value == bestShiftValue)
-                            {
-                                bestShiftValue = valueForShift.Value;
-                                bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
-                            }
+					if (valueForShift.HasValue)
+					{
+						if (!bestShiftValue.HasValue)
+						{
+							bestShiftValue = valueForShift.Value;
+							bestShift = shiftProjectionCache;
 
-                            if(valueForShift.Value > bestShiftValue)
-                            {
-                                bestShiftValue = valueForShift.Value;
-                                bestShift = shiftProjectionCache;
-                            }
-							
-                        }
-                    }
-                }
+						}
+						else
+						{
+							if (valueForShift.Value == bestShiftValue)
+							{
+								bestShiftValue = valueForShift.Value;
+								bestShift = _equalWorkShiftValueDecider.Decide(bestShift, shiftProjectionCache);
+							}
 
-            return bestShift;
+							if (valueForShift.Value > bestShiftValue)
+							{
+								bestShiftValue = valueForShift.Value;
+								bestShift = shiftProjectionCache;
+							}
+
+						}
+					}
+				}
+
+			return bestShift;
 		}
 
-		private double? valueForActivity(KeyValuePair<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> keyValuePair, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+		private double? valueForActivity(IActivity activity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
 		{
-			IActivity skillActivity = keyValuePair.Key;
 			double? value = _workShiftValueCalculator.CalculateShiftValue(shiftProjectionCache.MainShiftProjection,
-																		  skillActivity, keyValuePair.Value, lengthFactor,
-																		  useMinimumPersons, useMaximumPersons);
+																		  activity, skillIntervalDataDic, lengthFactor,
+																		  useMinimumPersons, useMaximumPersons, timeZoneInfo);
 			
 
 			return value;
 		}
 
-		private double? valueForShift(IEnumerable<KeyValuePair<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>> skillIntervalDatas, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons)
+		private double? valueForShift(IActivityIntervalDataLocalDictionary skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
 		{
 			double? totalForAllActivitesValue = null;
-			foreach (var keyValuePair in skillIntervalDatas)
+			foreach (var activity in skillIntervalDataLocalDictionary.Keys)
 			{
-				double? skillValue = valueForActivity(keyValuePair, shiftProjectionCache, lengthFactor, useMinimumPersons, useMaximumPersons);
+				double? skillValue = valueForActivity(activity, skillIntervalDataLocalDictionary.SkillIntervalDataDicFor(activity), shiftProjectionCache, lengthFactor, useMinimumPersons, useMaximumPersons, timeZoneInfo);
 				if (!skillValue.HasValue) return null;
 				
 				if (totalForAllActivitesValue.HasValue)

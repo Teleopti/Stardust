@@ -4,7 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1501:AvoidExcessiveInheritance")]
     public class MasterActivity: Activity, IMasterActivity
     {
         private IList<IActivity> _activityCollection = new List<IActivity>();

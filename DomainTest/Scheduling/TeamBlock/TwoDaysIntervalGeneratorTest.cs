@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldAddDataFromDayAfter()
+        public void ShouldAddDataFromDayAfterButNotForLastDate()
         {
             var skillIntervalData0 =
                 new SkillIntervalData(
@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
 			list.Add(new DateOnly(2013, 10, 01), new List<ISkillIntervalData> { skillIntervalData0, skillIntervalData1 });
             list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3 });
+	        list.Add(new DateOnly(2013, 10, 03), new List<ISkillIntervalData>());
 
             var result = _target.GenerateTwoDaysInterval(list);
 
@@ -110,6 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
             list.Add(today, new List<ISkillIntervalData> { skillIntervalData0, skillIntervalData1 });
             list.Add(today.AddDays(1), new List<ISkillIntervalData> { skillIntervalData2, skillIntervalData3 });
+			list.Add(today.AddDays(2), new List<ISkillIntervalData>());
 
             var result = _target.GenerateTwoDaysInterval(list);
 
@@ -152,6 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             list.Add(today.AddDays(1), new List<ISkillIntervalData> { skillIntervalData1 });
             list.Add(today.AddDays(2), new List<ISkillIntervalData> { skillIntervalData2 });
             list.Add(today.AddDays(3), new List<ISkillIntervalData> { skillIntervalData3 });
+			list.Add(today.AddDays(4), new List<ISkillIntervalData>());
 
             var result = _target.GenerateTwoDaysInterval(list);
 
@@ -194,6 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             list.Add(today, new List<ISkillIntervalData> { skillIntervalData0 });
             list.Add(today.AddDays(2), new List<ISkillIntervalData> { skillIntervalData2 });
             list.Add(today.AddDays(3), new List<ISkillIntervalData> { skillIntervalData3 });
+			list.Add(today.AddDays(4), new List<ISkillIntervalData>());
 
             var result = _target.GenerateTwoDaysInterval(list);
 

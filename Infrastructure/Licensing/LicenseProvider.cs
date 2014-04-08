@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
         /// Created by: Klas
         /// Created date: 2008-12-03
 		/// </remarks>
-		[CLSCompliant(false)]
 		public static ILicenseActivator GetLicenseActivator(ILicenseService licenseService)
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");
@@ -115,7 +114,6 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
         /// Creates the default license activator.
         /// </summary>
 		/// <param name="licenseService">The license service used</param>
-		[CLSCompliant(false)]
         public static void ProvideLicenseActivator(ILicenseService licenseService)
         {
             if (licenseService == null) throw new ArgumentNullException("licenseService");

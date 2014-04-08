@@ -12,13 +12,15 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class CurrentBeforeAndAfterWeekDates : IDateData
 	{
+		public DateTime Date { get; set; }
+		
 		public IEnumerable<DataRow> Rows { get; set; }
 
 		public void Apply(SqlConnection connection, CultureInfo userCulture, CultureInfo analyticsDataCulture)
 		{
 			var table = dim_date.CreateTable();
 
-			var startDate = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, userCulture).AddDays(-7);
+			var startDate = DateHelper.GetFirstDateInWeek(Date, userCulture).AddDays(-7);
 			var dates = startDate.DateRange(21);
 
 			var id = 0;

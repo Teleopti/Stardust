@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -30,7 +29,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISkillIntervalDataDivider _skillIntervalDataDivider;
 		private readonly ISkillIntervalDataAggregator _skillIntervalDataAggregator;
 
-		[CLSCompliant(false)]
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
 			IList<IScheduleMatrixOriginalStateContainer> workShiftContainerList,

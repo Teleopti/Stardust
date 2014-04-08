@@ -73,8 +73,7 @@ namespace Teleopti.Ccc.DBConverter.GroupConverter
             Logger.Info("Converting Activities...");
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                ActivityConverter actConverter =
-                    new ActivityConverter(uow, new ActivityMapper(MappedObjectPair));
+                var actConverter = new ActivityConverter(uow, new ActivityMapper(MappedObjectPair));
                 actConverter.ConvertAndPersist(oldActivities.Values);
             }
         }
