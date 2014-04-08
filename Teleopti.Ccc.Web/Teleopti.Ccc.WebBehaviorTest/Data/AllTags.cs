@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("ConfigPath", Paths.WebBinPath());
 			Add("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.Url.ToString());
 			Add("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
-			Add("IDENTITY_PROVIDERS", "Windows|Teleopti");
+			Add("IDENTITY_PROVIDERS", "Windows,Teleopti");
 			Add("MATRIX_WEB_SITE_URL", "http://localhost:52510");
             Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());
 			Add("AGENTPORTALWEB_nhibConfPath", IniFileInfo.AGENTPORTALWEB_nhibConfPath);
