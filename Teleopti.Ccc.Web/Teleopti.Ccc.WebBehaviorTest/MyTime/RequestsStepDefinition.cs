@@ -36,8 +36,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIScrollDownToTheBottomOfThePage()
 		{
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
+			Browser.Interactions.AssertExists(".ready-loading-requests.is-ready-loaded");
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.PageSize-1));
+			
 			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
+
+			Browser.Interactions.AssertExists(".ready-loading-requests.is-ready-loaded");
 		}
 
 		[When(@"I wait until requests loaded or timeout")]
