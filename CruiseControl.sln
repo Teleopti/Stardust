@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7E63604E-871F-4E51-B27A-3501614F25F9}"
 	ProjectSection(SolutionItems) = preProject
@@ -205,8 +205,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Analytics.Etl.IntegrationTest", "Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\Teleopti.Analytics.Etl.IntegrationTest.csproj", "{1CD76BD0-DBBB-42E8-9BD6-D5FE4F0AA2C6}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Teleopti.Ccc.Domain.Calculation", "Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj", "{B957AA85-67DE-4E6E-85C0-FA60564D1B60}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Secrets", "Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj", "{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1292,18 +1290,6 @@ Global
 		{B957AA85-67DE-4E6E-85C0-FA60564D1B60}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B957AA85-67DE-4E6E-85C0-FA60564D1B60}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B957AA85-67DE-4E6E-85C0-FA60564D1B60}.Release|x86.ActiveCfg = Release|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Release|.NET.ActiveCfg = Release|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
