@@ -107,9 +107,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    return PeriodDistribution.CalculateStandardDeviation();
 	    }
 
-	    public double DeviationAfterNewLayers(IEnumerable<IWorkShiftCalculatableVisualLayer> mainShiftLayers)
+	    public double DeviationAfterNewLayers(IEnumerable<IWorkShiftCalculatableLayer> mainShiftLayers)
 	    {
-			return PeriodDistribution.DeviationAfterNewLayers(mainShiftLayers as IVisualLayerCollection);
+			return PeriodDistribution.DeviationAfterNewLayers(((WorkShiftCalculatableVisualLayerCollection) mainShiftLayers).Inner);
 		}
     }
 }
