@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             DateOnly dateOnly,  
             IList<IShiftProjectionCache> shiftProjectionCaches,
 			//IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders, 
-			IWorkShiftCalculatorSkillStaffPeriods dataHolders, 
+			IWorkShiftCalculatorSkillStaffPeriodData dataHolders, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods, 
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 var nonBlendPeriods = _personSkillPeriodsDataHolderManager.GetPersonNonBlendSkillSkillStaffPeriods(dateOnly, virtualSchedulePeriod);
                 var dataholder = _personSkillPeriodsDataHolderManager.GetPersonSkillPeriodsDataHolderDictionary(dateOnly, virtualSchedulePeriod);
 
-				result = FindBestMainShift(dateOnly, _shiftList, new SkillStaffPeriodDataWrapper(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions);
+				result = FindBestMainShift(dateOnly, _shiftList, new WorkShiftCalculatorSkillStaffPeriodData(dataholder), maxSeatPeriods, nonBlendPeriods, virtualSchedulePeriod, schedulingOptions);
             }
 
             return result;

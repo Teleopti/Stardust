@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -12,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
 	/// Created by: rogerkr
 	/// Created date: 2008-02-22
 	/// </remarks>
-  public interface IVisualLayer : ILayer<IPayload>, ICloneableEntity<ILayer<IPayload>>, IWorkShiftCalculatableVisualLayer
+  public interface IVisualLayer : ILayer<IPayload>, ICloneableEntity<ILayer<IPayload>>
 	{
 		/// <summary>
 		/// Displays the color.

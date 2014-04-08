@@ -529,6 +529,7 @@
     <Compile Include="ResourceCalculation\SkillStaffPeriodStatisticsForSkillIntraday.cs" />
     <Compile Include="ResourceCalculation\StudentSchedulingService.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculationResultHolder.cs" />
+    <Compile Include="ResourceCalculation\WorkShiftCalculatorWrap.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManager.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderService.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculator.cs" />

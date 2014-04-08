@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Interfaces.Domain;
@@ -117,9 +118,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
         }
 
-		IEnumerable<IWorkShiftCalculatableVisualLayer> IWorkShiftCalculatableProjection.MainShiftProjection2
+		IEnumerable<IWorkShiftCalculatableLayer> IWorkShiftCalculatableProjection.WorkShiftCalculatableLayers
 		{
-			get { return MainShiftProjection; }
+			get { return new WorkShiftCalculatableVisualLayerCollection(MainShiftProjection); }
 		}
 
         public DayOfWeek DayOfWeek { get { return _dayOfWeek; } }

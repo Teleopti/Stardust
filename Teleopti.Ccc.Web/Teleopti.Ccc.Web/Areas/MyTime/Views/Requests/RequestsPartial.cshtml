@@ -86,40 +86,39 @@
             <div class="loading"></div>
 
         </div>
-		<span class="ready-loading-requests displaynone" data-bind="css: { 'is-ready-loaded': isLoadingRequests }"></span>
-<div class="ready-loading-requests " data-bind="visible: isLoadingRequests">blabla</div>
-        <div class="request-list" data-bind="foreach: ColumnRequests">
-            <div class="row" data-bind="foreach: Items">
-                <div class="request col-xs-6">
-                    <div class="well well-small">
-                        <div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
-                            <div data-bind="if: CanDelete">
-                                <button class="request-delete close" data-bind="click: $root.Delete,clickBubble: false" title="@Resources.Delete">&times;</button>
-                            </div>
-                            <div class="request-subject">
-                                <h5 class="request-data-subject" data-bind="html: Subject"></h5>
-                            </div>
-                            <div class="request-details" >
-                                <div>
-                                    <span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
-                                    <span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing"> (@Resources.ProcessingDotDotDot) </span><span class="label" data-bind="text: Status, css: StatusClass"></span>
+	    <div class="request-list" data-bind="foreach: ColumnRequests">
+		    <div class="row" data-bind="foreach: Items">
+			    <div class="request col-xs-6">
+				    <div class="well well-small">
+					    <div class="request-body" data-bind="click: ShowDetails" style="cursor: pointer">
+						    <div data-bind="if: CanDelete">
+							    <button class="request-delete close" data-bind="click: $root.Delete,clickBubble: false" title="@Resources.Delete">&times;</button>
+						    </div>
+						    <div class="request-subject">
+							    <h5 class="request-data-subject" data-bind="html: Subject"></h5>
+						    </div>
+						    <div class="request-details" >
+							    <div>
+								    <span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
+								    <span class="request-caption">@Resources.Status: </span><span class="request-caption" data-bind="visible: isProcessing"> (@Resources.ProcessingDotDotDot) </span><span class="label" data-bind="text: Status, css: StatusClass"></span>
                        
-                                </div>
-                                <span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
-                                <span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
-                            </div>
-                            <div class="request-data-message request-text" data-bind="text: (IsSelected() && !IsEditable()) ? Text : ListText">
-                            </div>
-                        </div>
-                        <div class="request-edit" data-bind="visible: IsSelected, with: DetailItem">
-                            <hr />
-                            <div data-bind="template : Template">
-                            </div>
-                        </div>
-                    </div>    
-                </div>
-            </div>
-        </div>
+							    </div>
+							    <span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
+							    <span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
+						    </div>
+						    <div class="request-data-message request-text" data-bind="text: (IsSelected() && !IsEditable()) ? Text : ListText">
+						    </div>
+					    </div>
+					    <div class="request-edit" data-bind="visible: IsSelected, with: DetailItem">
+						    <hr />
+						    <div data-bind="template : Template">
+						    </div>
+					    </div>
+				    </div>    
+			    </div>
+		    </div>
+	    </div>
+		 <div class="bottom-of-requests-page"></div>
 
         <div class="loading-gradient" style="display: none">
             <div class="loading">
