@@ -3,13 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
@@ -85,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 						_resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);
 					}
 
-					foreach (ISkill skill in _schedulingResultStateHolder.Skills)
+					foreach (ISkill skill in _schedulingResultStateHolder.VisibleSkills)
 					{
 						foreach (var dateOnly in dateOnlyPeriod.DayCollection())
 						{

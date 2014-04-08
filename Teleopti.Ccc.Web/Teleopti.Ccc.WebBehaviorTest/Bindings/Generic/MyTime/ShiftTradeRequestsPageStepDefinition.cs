@@ -256,6 +256,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIScrollDownToTheBottomOfTheShiftTradeSection()
 		{
 			Browser.Interactions.Javascript("$('body, html').animate({ scrollTop: $('.shift-trade-person-schedule-row').filter(':last').offset().top }, 1);");
+			Browser.Interactions.AssertExists(".ready-loading-flag.is-ready-loaded");
 		}
 
 		[Then(@"the option '(.*)' should be selected")]

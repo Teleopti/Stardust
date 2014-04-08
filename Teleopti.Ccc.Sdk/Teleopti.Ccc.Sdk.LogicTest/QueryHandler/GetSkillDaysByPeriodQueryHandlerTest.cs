@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -55,7 +56,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				MockRepository.GenerateMock<ILoadSchedulingStateHolderForResourceCalculation>();
 			schedulingResultStateHolder = MockRepository.GenerateMock<ISchedulingResultStateHolder>();
 			serviceLevelCalculator = MockRepository.GenerateMock<IServiceLevelCalculator>();
-			target = new GetSkillDaysByPeriodQueryHandler(dateTimePeriodAssembler, assembler, currentScenario,personRepository,  skillRepository,   resourceCalculationPrerequisitesLoader, currentUnitOfWorkFactory,resourceOptimizationHelper,loadSchedulingStateHolderForResourceCalculation,schedulingResultStateHolder,serviceLevelCalculator);
+			target = new GetSkillDaysByPeriodQueryHandler(dateTimePeriodAssembler, assembler, currentScenario, personRepository,
+			                                              skillRepository, resourceCalculationPrerequisitesLoader,
+			                                              currentUnitOfWorkFactory, resourceOptimizationHelper,
+			                                              loadSchedulingStateHolderForResourceCalculation,
+			                                              schedulingResultStateHolder, serviceLevelCalculator);
 		}
 
 		[Test]
@@ -72,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			personRepository.Stub(x => x.FindPeopleInOrganization(period, true)).Return(new List<IPerson>{new Person()});
-			schedulingResultStateHolder.Stub(x => x.Skills).Return(skills);
+			schedulingResultStateHolder.Stub(x => x.VisibleSkills).Return(skills);
 			schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(staffPeriodHolder);
 			staffPeriodHolder.Stub(x => x.SkillStaffPeriodList(skills, new DateOnlyPeriod(2014,4,1,2014,4,1).ToDateTimePeriod(TimeZoneInfo.Utc))).Return(skillStaffPeriods);
 			staffPeriodHolder.Stub(x => x.SkillStaffPeriodList(skills, new DateOnlyPeriod(2014,4,2,2014,4,2).ToDateTimePeriod(TimeZoneInfo.Utc))).Return(skillStaffPeriods);
@@ -83,6 +88,77 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Period = new DateOnlyPeriodDto {StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 2)},
 				TimeZoneId = TimeZoneInfo.Utc.Id
 			}).Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldInitializeAllSkills()
+		{
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var skill = SkillFactory.CreateSkill("skill");
+			var skills = new List<ISkill> { skill };
+			var staffPeriodHolder = MockRepository.GenerateMock<ISkillStaffPeriodHolder>();
+			var skillStaffPeriods = new ISkillStaffPeriod[] { };
+			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 3);
+
+			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			personRepository.Stub(x => x.FindPeopleInOrganization(period, true)).Return(new List<IPerson> { new Person() });
+			schedulingResultStateHolder.Stub(x => x.VisibleSkills).Return(skills);
+			schedulingResultStateHolder.Stub(x => x.SkillStaffPeriodHolder).Return(staffPeriodHolder);
+			staffPeriodHolder.Stub(x => x.SkillStaffPeriodList(skills, new DateOnlyPeriod(2014, 4, 1, 2014, 4, 1).ToDateTimePeriod(TimeZoneInfo.Utc))).Return(skillStaffPeriods);
+			staffPeriodHolder.Stub(x => x.SkillStaffPeriodList(skills, new DateOnlyPeriod(2014, 4, 2, 2014, 4, 2).ToDateTimePeriod(TimeZoneInfo.Utc))).Return(skillStaffPeriods);
+			assembler.Stub(x => x.DomainEntitiesToDtos(skillStaffPeriods)).Return(new List<SkillDataDto>());
+
+			target.Handle(new GetSkillDaysByPeriodQueryDto
+			{
+				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 2) },
+				TimeZoneId = TimeZoneInfo.Utc.Id
+			});
+
+			skillRepository.AssertWasCalled(x => x.LoadAll());
+		}
+
+		[Test]
+		public void ShouldNotIncludeMultisiteSkills()
+		{
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+			var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+			var multisiteSkill = SkillFactory.CreateMultisiteSkill("multi");
+			var skills = new List<ISkill> { skill, multisiteSkill };
+			var skillStaffPeriod = MockRepository.GenerateMock<ISkillStaffPeriod>();
+			var skillStaffPeriods = new[] { skillStaffPeriod };
+			var period = new DateOnlyPeriod(2014, 3, 31, 2014, 4, 2);
+			var skillDay = MockRepository.GenerateMock<ISkillDay>();
+
+			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			personRepository.Stub(x => x.FindPeopleInOrganization(period, true)).Return(new List<IPerson> { new Person() });
+			assembler.Stub(x => x.DomainEntitiesToDtos(skillStaffPeriods)).Return(new List<SkillDataDto>());
+			skillDay.Stub(x => x.SkillStaffPeriodCollection).Return(new ReadOnlyCollection<ISkillStaffPeriod>(skillStaffPeriods));
+			skillStaffPeriod.Stub(x => x.Period)
+			                .Return(new DateTimePeriod(2014, 4, 1, 2014, 4, 1).ChangeEndTime(TimeSpan.FromMinutes(15)));
+
+			schedulingResultStateHolder = new SchedulingResultStateHolder();
+			skills.ForEach(schedulingResultStateHolder.Skills.Add);
+			schedulingResultStateHolder.SkillDays = new Dictionary<ISkill, IList<ISkillDay>>
+				{
+					{skill, new List<ISkillDay> { skillDay}},
+					{multisiteSkill, new List<ISkillDay> { skillDay}}
+				};
+
+			target = new GetSkillDaysByPeriodQueryHandler(dateTimePeriodAssembler, assembler, currentScenario, personRepository,
+											  skillRepository, resourceCalculationPrerequisitesLoader,
+											  currentUnitOfWorkFactory, resourceOptimizationHelper,
+											  loadSchedulingStateHolderForResourceCalculation,
+											  schedulingResultStateHolder, serviceLevelCalculator);
+
+			target.Handle(new GetSkillDaysByPeriodQueryDto
+			{
+				Period = new DateOnlyPeriodDto { StartDate = new DateOnlyDto(2014, 4, 1), EndDate = new DateOnlyDto(2014, 4, 1) },
+				TimeZoneId = TimeZoneInfo.Utc.Id
+			}).Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
