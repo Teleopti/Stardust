@@ -203,18 +203,18 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=DEFAULT_IDENTITY_PROVIDER_TMP
+  Variable Value1=DEFAULT_IDENTITY_PROVIDER
   Variable Name2=_PROP_VAR_
-  Variable Value2=DEFAULT_IDENTITY_PROVIDER
+  Variable Value2=DEFAULT_IDENTITY_PROVIDER_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
-  Variable Value1=IDENTITY_PROVIDERS_TMP
+  Variable Value1=IDENTITY_PROVIDERS
   Variable Name2=_PROP_VAR_
-  Variable Value2=IDENTITY_PROVIDERS
+  Variable Value2=IDENTITY_PROVIDERS_TMP
   Variable Name3=HELPFILE
   Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
 end
