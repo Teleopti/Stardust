@@ -794,9 +794,9 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewConfidentialAbsence.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\AsmActivityNotification.feature">
+    <None Include="SignInWithProviders.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AsmActivityNotification.feature.cs</LastGenOutput>
+      <LastGenOutput>SignInWithProviders.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\AsmActivityNotification.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
