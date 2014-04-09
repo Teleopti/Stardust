@@ -294,11 +294,11 @@ item: Set Variable
 end
 item: Set Variable
   Variable=URLAUTHENTICATIONBRIDGE_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/AuthenticationBridge
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/AuthenticationBridge/
 end
 item: Set Variable
   Variable=URLWINDOWSIDENTITYPROVIDER_TMP
-  Value=%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider/
 end
 item: Set Variable
   Variable=URL_TMP
