@@ -127,8 +127,11 @@
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation">
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.28\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+    </Reference>
     <Reference Include="Teleopti.Ccc.Secrets">
-      <HintPath>..\packages\Teleopti.Secrets.7.5.800.22\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.28\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -1196,10 +1199,6 @@
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
-      <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
-      <Name>Teleopti.Ccc.Domain.Calculation</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
       <Name>Teleopti.Ccc.TestCommon</Name>
@@ -1229,6 +1228,7 @@
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="DayOffPlanning\FreeWeekendValidatorTestCases.xls" />
     <None Include="Helper\StaffingCalculatorServiceModel.xlsm" />
     <None Include="Optimization\RelativeBoostedDailyDifferencesAndPeriodValue.xlsm" />
