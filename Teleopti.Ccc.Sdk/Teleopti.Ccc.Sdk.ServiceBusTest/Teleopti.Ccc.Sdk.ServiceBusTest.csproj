@@ -123,8 +123,14 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Teleopti.Ccc.Secrets">
-      <HintPath>..\..\packages\Teleopti.Secrets.7.5.800.22\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    <Reference Include="Teleopti.Ccc.Domain.Calculation, Version=0.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Teleopti.Secrets.7.5.800.28\lib\net40\Teleopti.Ccc.Domain.Calculation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Teleopti.Ccc.Secrets, Version=1.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Teleopti.Secrets.7.5.800.28\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -204,10 +210,6 @@
     <ProjectReference Include="..\..\Infrastructure\Teleopti.Ccc.Infrastructure.csproj">
       <Project>{AA4A5374-77AF-44F0-85C1-6CABC6701352}</Project>
       <Name>Teleopti.Ccc.Infrastructure</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
-      <Project>{B957AA85-67DE-4E6E-85C0-FA60564D1B60}</Project>
-      <Name>Teleopti.Ccc.Domain.Calculation</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
