@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName);
 		ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period);
 		void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime);
+	    void WorkAroundFor27636();
 	}
 	public class EtlReadModelRepository : IEtlReadModelRepository
 	{
@@ -35,6 +36,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<IScheduleChangedReadModel>();
 		}
+
+        public void WorkAroundFor27636()
+        {
+            ((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery("exec dbo.WorkAroundFor27636");
+        }
 
 		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTimePeriod period)
 		{
