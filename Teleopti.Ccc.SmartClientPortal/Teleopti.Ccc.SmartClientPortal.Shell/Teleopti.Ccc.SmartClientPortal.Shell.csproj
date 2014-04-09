@@ -249,7 +249,6 @@
     <Compile Include="Detector.cs" />
     <Compile Include="OutlookPanelContentWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SqlServerTypes\Loader.cs" />
     <Compile Include="StartupModule.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
@@ -281,22 +280,6 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Resources\ccc_PersonalSettings_32x32.png" />
-    <Content Include="..\..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x64\msvcr100.dll">
-      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x64\SqlServerSpatial110.dll">
-      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x86\msvcr100.dll">
-      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\..\packages\Microsoft.SqlServer.Types.11.0.1\nativeBinaries\x86\SqlServerSpatial110.dll">
-      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Resources\NotifyIconOk.ico" />
     <Content Include="Resources\NotifyIconWarning.ico" />
     <None Include="Resources\ccc_Menu.png" />
@@ -367,7 +350,6 @@
     <Content Include="Resources\Users.png" />
     <None Include="Resources\warning.png" />
     <Content Include="Resources\WorkloadSmartPart.dll" />
-    <Content Include="SqlServerTypes\readme.htm" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>
