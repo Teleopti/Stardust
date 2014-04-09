@@ -854,7 +854,6 @@
     <Compile Include="Forecasting\Template\TemplateReference.cs" />
     <Compile Include="Forecasting\Template\WorkloadDayTemplateReference.cs" />
     <Compile Include="Helper\SerializationHelper.cs" />
-    <Compile Include="Helper\StaffingCalculatorService.cs" />
     <Compile Include="Helper\StaffingEmailCalculatorService.cs" />
     <Compile Include="Optimization\SchedulePeriodListShiftCategoryBackToLegalStateService.cs" />
     <Compile Include="Optimization\SchedulePeriodShiftCategoryBackToLegalStateServiceBuilder.cs" />
