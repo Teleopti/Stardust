@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Calculation;
 
 namespace Teleopti.Interfaces.Domain
 {
