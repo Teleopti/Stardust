@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		[Test]
 		public void ShouldSignInAsAnotherUser()
 		{
-			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
-			request.Stub(x => x.Url).Return(new Uri("http://localhost/"));
+			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/TeleoptiCCC/web/"), new Uri("http://localhost/TeleoptiCCC/web/"));
+			request.Stub(x => x.Url).Return(new Uri("http://localhost/TeleoptiCCC/web/Authentication/SignInAsAnotherUser"));
 			var context = new FakeHttpContext("/");
 			context.SetRequest(request);
 			_target.ControllerContext = new ControllerContext(context, new RouteData(), _target);
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				var result = _target.SignInAsAnotherUser() as RedirectResult;
 
 				result.Url.Should()
-					.Be.EqualTo("http://issuer/?wa=wsignin1.0&wtrealm=testrealm&wctx=ru%3d&wreply=http%3a%2f%2flocalhost");
+					.Be.EqualTo("http://issuer/?wa=wsignin1.0&wtrealm=testrealm&wctx=ru%3d&wreply=http%3a%2f%2flocalhost%2fTeleoptiCCC%2fweb%2f");
 			}
 		}
 	}

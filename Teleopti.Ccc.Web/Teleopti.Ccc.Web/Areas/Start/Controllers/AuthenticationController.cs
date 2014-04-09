@@ -47,10 +47,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_formsAuthentication.SignOut();
 
 			var url = Request.Url;
+			
 			var signIn = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), _authenticationModule.Realm)
 			{
 				Context = "ru=" + Request.Path,
-				Reply = url.Scheme + Uri.SchemeDelimiter + url.Host + (url.IsDefaultPort ? "" : ":" + url.Port)
+				Reply = url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignInAsAnotherUser"))
 			};
 
 			return new RedirectResult(signIn.WriteQueryString());
