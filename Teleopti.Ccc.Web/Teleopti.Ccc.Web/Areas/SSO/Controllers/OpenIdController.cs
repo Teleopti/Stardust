@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		[ValidateInput(false)]
 		public ActionResult Provider()
 		{
-			_logger.Warn("Start of the OpenIdController.Provider()");
+			_logger.Debug("Start of the OpenIdController.Provider()");
 			var request = _openIdProvider.GetRequest();
 			if (request != null)
 			{
