@@ -802,7 +802,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmActivityNotification.feature.cs</LastGenOutput>
     </None>
-    </None>
     <None Include="MyTime\CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>CalendarShare.feature.cs</LastGenOutput>
