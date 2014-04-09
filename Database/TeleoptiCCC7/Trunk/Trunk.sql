@@ -181,3 +181,38 @@ begin
 	where tmp.IsOk=0
 end
 GO
+
+----------------  
+--Name: Asad Mirza
+--Date: 2014-04-09
+--Desc: Bug #27441 - Removed duplicated and added constraints, Keep latests records
+---------------- 
+delete sar 
+	from [dbo].[StudentAvailabilityRestriction] sar
+	inner join 
+	(
+		select [Id],ROW_NUMBER()OVER(PARTITION BY [Person],[RestrictionDate] ORDER BY [UpdatedOn] asc) as 'rn'
+		from [dbo].[StudentAvailabilityDay]
+	) a
+	on a.[Id] = sar.Parent
+where a.rn > 1
+
+
+delete sar 
+	from [dbo].[StudentAvailabilityDay] sar
+	inner join 
+	(
+		select [Id],ROW_NUMBER()OVER(PARTITION BY [Person],[RestrictionDate] ORDER BY [UpdatedOn] asc) as 'rn'
+		from [dbo].[StudentAvailabilityDay]
+	) a
+	on a.[Id] = sar.Id
+where a.rn > 1
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[StudentAvailabilityDay]') AND name = N'IX_StudentAvailabilityDay_Date_Person')
+CREATE NONCLUSTERED INDEX [IX_StudentAvailabilityDay_Date_Person]  ON [dbo].[StudentAvailabilityDay]   
+(
+	[RestrictionDate] ASC,
+	[Person] ASC
+)
+GO
+
