@@ -449,7 +449,6 @@
     <Compile Include="Domain\ISkillTypeEmail.cs" />
     <Compile Include="Domain\ISkillTypePhone.cs" />
     <Compile Include="Domain\ISpecification.cs" />
-    <Compile Include="Domain\IStaffingCalculatorService.cs" />
     <Compile Include="Domain\IStateGroupActivityAlarm.cs" />
     <Compile Include="Domain\IStudentAvailabilityDay.cs" />
     <Compile Include="Domain\ISwapDetail.cs" />
@@ -825,6 +824,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
+      <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
+      <Name>Teleopti.Ccc.Domain.Calculation</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
