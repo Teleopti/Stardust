@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using NHibernate.Transform;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -614,7 +615,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)
 		{
-			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+		    RemoveDuplicatesWorkaroundFor27636();
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load error
 				avoidLazyLoadForLoadSchedule(uow, persons);
@@ -642,6 +644,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				return schedulesDictionary;
 			}
 		}
+
+        public void RemoveDuplicatesWorkaroundFor27636()
+        {
+            using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+            {
+                IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
+                rep.WorkAroundFor27636() ;
+            }	
+            
+        }
+
 		private static void avoidLazyLoadForLoadSchedule(IUnitOfWork uow, IEnumerable<IPerson> persons)
 		{
 			//just dirty fix for now
