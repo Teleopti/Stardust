@@ -300,6 +300,10 @@ item: Set Variable
   Variable=URLWINDOWSIDENTITYPROVIDER_TMP
   Value=%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider
 end
+item: Set Variable
+  Variable=URL_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web/
+end
 item: If/While Statement
   Variable=DMZ_TMP
   Value=YES
@@ -351,6 +355,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(UrlAuthenticationBridge)|%UrlAuthenticationBridge_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(Url)|%Url_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
