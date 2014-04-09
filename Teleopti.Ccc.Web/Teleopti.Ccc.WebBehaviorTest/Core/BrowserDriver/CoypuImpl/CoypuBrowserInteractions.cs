@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 		{
 			_browser.FindCss(selector, new Regex(Regex.Escape(text)), options()).Click(options());
 		}
-
+		
 		public void AssertExists(string selector)
 		{
 			assert(_browser.HasCss(selector, options()), Is.True, "Could not find element matching selector " + selector);
@@ -170,4 +170,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 			return builder.ToString();
 		}
 	}
+
 }

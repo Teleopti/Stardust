@@ -40,10 +40,3 @@ Teleopti.Start.Common = (function ($) {
 
 })(jQuery);
 
-Teleopti.Start.Common.Layout = (function ($) {
-	return {
-		ActivatePlaceHolderText: function () {
-			$(':text, :password').placeholder();
-		}
-	};
-})(jQuery);

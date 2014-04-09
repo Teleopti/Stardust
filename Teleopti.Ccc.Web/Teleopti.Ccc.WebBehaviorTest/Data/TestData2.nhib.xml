@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<datasource>
+	<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
+		<session-factory name="TestData2">
+			<property name="connection.connection_string">$(ConnectionString)</property>
+		</session-factory>
+	</hibernate-configuration>
+	<matrix name="MatrixDatamartDemo">
+		<connectionString>$(ConnectionStringMatrix)</connectionString>
+	</matrix>
+</datasource>

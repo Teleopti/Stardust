@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				useBroker = "true";
 
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			WebRequestOutsideBrowser(string.Format(CultureInfo.InvariantCulture,"Test/BeforeScenario?enableMyTimeMessageBroker={0}",useBroker));
+			Navigation.GoToWaitForCompleted(string.Format(CultureInfo.InvariantCulture, "Test/BeforeScenario?enableMyTimeMessageBroker={0}", useBroker));
 		}
 
 		/// <summary>
@@ -101,19 +101,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return (Teleopti != undefined) ? 'go' : 'no go';", "go");
 			Browser.Interactions.AssertJavascriptResultContains("return Teleopti.MyTimeWeb.Test.GetTestMessages();", "Completely loaded");
-		}
-
-		public static void WebRequestOutsideBrowser(string pageUrl)
-		{
-			var url = new Uri(TestSiteConfigurationSetup.Url, pageUrl);
-			using (var client = new WebClientWithTimeout(TimeSpan.FromSeconds(60)))
-			{
-				var credentials = new CredentialCache();
-				credentials.Add(url, "NTLM", CredentialCache.DefaultNetworkCredentials);
-				credentials.Add(url, "Kerberos", CredentialCache.DefaultNetworkCredentials);
-				client.Credentials = credentials;
-				client.DownloadString(url);
-			}
 		}
 
 		public class WebClientWithTimeout : WebClient

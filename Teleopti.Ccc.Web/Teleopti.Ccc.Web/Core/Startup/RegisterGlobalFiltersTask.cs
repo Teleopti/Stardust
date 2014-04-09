@@ -13,11 +13,15 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	[TaskPriority(1)]
 	public class RegisterGlobalFiltersTask : IBootstrapperTask
 	{
-		private static IErrorMessageProvider _errorMessageProvider;
+		private readonly IErrorMessageProvider _errorMessageProvider;
+		private readonly IAuthenticationModule _authenticationModule;
+		private readonly IIdentityProviderProvider _identityProviderProvider;
 
-		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider) 
+		public RegisterGlobalFiltersTask(IErrorMessageProvider errorMessageProvider, IAuthenticationModule authenticationModule, IIdentityProviderProvider identityProviderProvider)
 		{
 			_errorMessageProvider = errorMessageProvider;
+			_authenticationModule = authenticationModule;
+			_identityProviderProvider = identityProviderProvider;
 		}
 
 		public Task Execute()
@@ -27,17 +31,16 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		}
 
 		//rk - org from global.asax
-		private static void registerGlobalFilters(GlobalFilterCollection filters)
+		private void registerGlobalFilters(GlobalFilterCollection filters)
 		{
 			filters.Add(new AjaxHandleErrorAttribute(_errorMessageProvider));
-			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(new List<Type>
+			filters.Add(new TeleoptiPrincipalAuthorizeAttribute(_authenticationModule, _identityProviderProvider, new List<Type>
 			                                                    	{
-																		typeof(AuthenticationController),
-																		typeof(AuthenticationApiController),
-																		typeof(ApplicationAuthenticationApiController),
 																		typeof(ShareCalendarController),
 																		typeof(TestController),
-																		typeof(OpenIdController)
+																		typeof(OpenIdController),
+																		typeof(Areas.SSO.Controllers.AuthenticationApiController),
+																		typeof(Areas.SSO.Controllers.ApplicationAuthenticationApiController)
 			                                                    	}));
 			filters.Add(new CheckStartupResultAttribute());
 		}

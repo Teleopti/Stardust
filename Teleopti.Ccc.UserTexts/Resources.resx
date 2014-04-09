@@ -12001,4 +12001,16 @@ Reduce the complexity to use these shifts.</value>
   <data name="AllowDesktopNotifications" xml:space="preserve">
     <value>Allow Desktop Notifications</value>
   </data>
+  <data name="NoDatasource" xml:space="preserve">
+    <value>No datasource available for you, my friend.</value>
+    <comment>Message displayed when no datasource is available after sign in</comment>
+  </data>
+  <data name="SignInAsAnotherUser" xml:space="preserve">
+    <value>Sign in as another user</value>
+    <comment>Sign in as another user</comment>
+  </data>
+  <data name="SignInWith" xml:space="preserve">
+    <value>Sign in with:</value>
+    <comment>Sign in with:</comment>
+  </data>
 </root>

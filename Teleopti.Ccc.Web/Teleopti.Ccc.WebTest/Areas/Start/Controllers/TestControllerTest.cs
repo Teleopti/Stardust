@@ -1,4 +1,5 @@
 ﻿using System;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
@@ -6,6 +7,8 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
@@ -21,9 +24,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var modifyNow = MockRepository.GenerateStrictMock<IMutateNow>();
 			modifyNow.Expect(mock => mock.Mutate(dateSet));
 
-			using (var target = new TestController(modifyNow, null, null, null, null))
+			using (var target = new TestController(modifyNow, null, null, null, null, null, null))
 			{
-				target.SetCurrentTime(dateSet);
+				target.SetCurrentTime(dateSet.Ticks);
 			}
 		}
 
@@ -31,13 +34,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		public void PlainStupid()
 		{
 			var sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
-			using (var target = new TestController(new MutableNow(), sessionSpecificDataProvider, null, null, null))
+			var httpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+			httpContext.Stub(x => x.Current()).Return(new FakeHttpContext(""));
+			using (var target = new TestController(new MutableNow(), sessionSpecificDataProvider, null, null, null, httpContext, MockRepository.GenerateMock<IFormsAuthentication>()))
 			{
 				target.BeforeScenario(true);
 				target.CorruptMyCookie();
 				target.ExpireMyCookie();
 				target.NonExistingDatasourceCookie();
 			}
+			sessionSpecificDataProvider.AssertWasCalled(x => x.ExpireTicket());
 		}
 
 		[Test]
@@ -52,7 +58,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			businessUnit.SetId(Guid.NewGuid());
 			var businessUnitProvider = MockRepository.GenerateMock<IBusinessUnitProvider>();
 			businessUnitProvider.Stub(x => x.RetrieveBusinessUnitsForPerson(null, null)).IgnoreArguments().Return(new[] { businessUnit });
-			using (var target = new TestController(null, null, authenticator, logon, businessUnitProvider))
+			var httpContext = MockRepository.GenerateMock<ICurrentHttpContext>();
+			httpContext.Stub(x => x.Current()).Return(new FakeHttpContext(""));
+			using (var target = new TestController(null, null, authenticator, logon, businessUnitProvider, httpContext, null))
 			{
 				target.Logon(null, businessUnit.Name, null, null);
 			}

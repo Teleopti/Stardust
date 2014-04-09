@@ -21,10 +21,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Add("AnalyticsDatabase", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			Add("Url", TestSiteConfigurationSetup.Url.ToString());
 			Add("Port", TestSiteConfigurationSetup.Port.ToString());
+
+			Add("UrlAuthenticationBridge", TestSiteConfigurationSetup.UrlAuthenticationBridge.ToString());
+			Add("PortAuthenticationBridge", TestSiteConfigurationSetup.PortAuthenticationBridge.ToString());
+
+			Add("UrlWindowsIdentityProvider", TestSiteConfigurationSetup.UrlWindowsIdentityProvider.ToString());
+			Add("PortWindowsIdentityProvider", TestSiteConfigurationSetup.PortWindowsIdentityProvider.ToString());
+
 			Add("AgentPortalWebURL", TestSiteConfigurationSetup.Url.ToString());
 			Add("SitePath", Paths.WebPath());
+			Add("SitePathAuthenticationBridge", Paths.FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\"));
+			Add("SitePathWindowsIdentityProvider", Paths.FindProjectPath(@"Teleopti.Ccc.Web.WindowsIdentityProvider\"));
 			Add("ConfigPath", Paths.WebBinPath());
 			Add("WEB_BROKER_FOR_WEB", TestSiteConfigurationSetup.Url.ToString());
+			Add("DEFAULT_IDENTITY_PROVIDER", "Teleopti");
+			Add("IDENTITY_PROVIDERS", "Windows,Teleopti");
 			Add("MATRIX_WEB_SITE_URL", "http://localhost:52510");
             Add("MachineKey", CryptoCreator.MachineKeyCreator.GetConfig());
 			Add("AGENTPORTALWEB_nhibConfPath", IniFileInfo.AGENTPORTALWEB_nhibConfPath);

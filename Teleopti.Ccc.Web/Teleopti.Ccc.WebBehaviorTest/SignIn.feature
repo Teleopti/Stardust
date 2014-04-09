@@ -45,6 +45,7 @@ Scenario: Sign in with a user with multiple business units by user name
 	And I select business unit 'Business Unit 1'
 	Then I should be signed in
 
+
 Scenario: Sign in with a user with one business unit by user name and I should be directed into that business unit direct without having to select it
 	Given I have the role 'Role for business unit 1'
 	And I am viewing the sign in page
@@ -52,6 +53,7 @@ Scenario: Sign in with a user with one business unit by user name and I should b
 	And I sign in by user name
 	Then I should be signed in
 
+@WindowsAsDefaultIdentityProviderLogon
 Scenario: Sign in with a user with multiple business units by Windows credentials
 	Given I have the role 'Role for business unit 1'
 	And I have the role 'Role for business unit 2'
@@ -59,19 +61,7 @@ Scenario: Sign in with a user with multiple business units by Windows credential
 	| Field                  | Value |
 	| Windows authentication | true  |
 	And I am viewing the sign in page
-	When I select windows logon data source
-	And I sign in by windows credentials
-	And I select business unit 'Business Unit 1'
-	Then I should be signed in
-	
-Scenario: Sign in with a user with one business unit by Windows credentials and I should be directed into that business unit direct without having to select it
-	Given I have the role 'Role for business unit 2'
-	And I am a user with
-	| Field                  | Value |
-	| Windows authentication | true  |
-	And I am viewing the sign in page
-	When I select windows logon data source
-	And I sign in by windows credentials
+	When I select business unit 'Business Unit 1'
 	Then I should be signed in
 
 Scenario: Sign in with wrong password should give me an informative error
@@ -86,5 +76,4 @@ Scenario: Sign in without permission
 	And I am viewing the sign in page
 	When I select application logon data source
 	And I sign in by user name
-	Then I should not be signed in
-	And I should see a log on error 'InsufficientPermissionForWeb'
+	Then I should see a log on error 'InsufficientPermissionForWeb'

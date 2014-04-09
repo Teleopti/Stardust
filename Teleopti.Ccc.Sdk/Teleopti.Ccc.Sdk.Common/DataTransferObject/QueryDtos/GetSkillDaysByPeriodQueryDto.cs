@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 		/// <summary>
 		/// Gets or sets the period to get skill days for.
 		/// </summary>
+		/// <remarks>This period is limited to 31 days.</remarks>
 		[DataMember]
 		public DateOnlyPeriodDto Period { get; set; }
 

@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     {
         public double Value { get; set; }
 		public IShiftProjectionCache ShiftProjection { get; set; }
-	    public IWorkShiftCalculatableProjection ShiftProjection2 { get { return ShiftProjection; } }
+	    public IWorkShiftCalculatableProjection WorkShiftCalculatableProjection { get { return ShiftProjection; } }
     }
 }

@@ -93,13 +93,13 @@
     <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver, Version=2.35.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver, Version=2.39.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Selenium.WebDriver.2.35.0\lib\net40\WebDriver.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.WebDriver.2.39.0\lib\net40\WebDriver.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Support, Version=2.35.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver.Support, Version=2.39.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Selenium.Support.2.35.0\lib\net40\WebDriver.Support.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.Support.2.39.0\lib\net40\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -130,9 +130,15 @@
     </Compile>
     <Compile Include="Bindings\Generic\AlarmStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
+    <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="SignInAsAnotherUser.feature.cs">
+      <DependentUpon>SignInAsAnotherUser.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Core\CurrentTime.cs" />
     <Compile Include="Data\Setups\Configurable\AlertTimeSettingConfigurable.cs" />
     <Compile Include="Data\Setups\Configurable\LeavingDateForUser.cs" />
@@ -386,7 +392,7 @@
     <Compile Include="Bindings\Transform.cs" />
     <Compile Include="Core\Legacy\QuicklyFind.cs" />
     <Compile Include="Data\Setups\Legacy\Specific\ExistingShiftTradeRequest.cs" />
-    <Compile Include="MyTime\PasswordPolicy.feature.cs">
+    <Compile Include="PasswordPolicy.feature.cs">
       <DependentUpon>PasswordPolicy.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -675,10 +681,10 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="SignOut.feature.cs">
+    <Compile Include="SignInWithProviders.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>SignOut.feature</DependentUpon>
+      <DependentUpon>SignInWithProviders.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\StudentAvailabilityStepDefinitions.cs" />
     <Compile Include="Data\TestDataSetup.cs" />
@@ -703,13 +709,14 @@
       <DependentUpon>WeekSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="MyTime\WeekScheduleStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\AuthenticationStepDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.7.0.0\content\chromedriver.exe">
+    <Content Include="..\..\packages\WebDriver.ChromeDriver.win32.2.9.0.0\content\chromedriver.exe">
       <Link>chromedriver.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -756,10 +763,18 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
     </None>
+    <None Include="SignInAsAnotherUser.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>SignInAsAnotherUser.feature.cs</LastGenOutput>
+    </None>
     <None Include="Data\iisexpress.config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Data\TestData2.nhib.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Data\PasswordPolicy.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -782,6 +797,11 @@
     <None Include="MyTime\AsmActivityNotification.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>AsmActivityNotification.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\AsmActivityNotification.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AsmActivityNotification.feature.cs</LastGenOutput>
+    </None>
     </None>
     <None Include="MyTime\CalendarShare.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -863,7 +883,7 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignIn.feature.cs</LastGenOutput>
     </None>
-    <None Include="MyTime\PasswordPolicy.feature">
+    <None Include="PasswordPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PasswordPolicy.feature.cs</LastGenOutput>
     </None>
@@ -987,10 +1007,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Security.feature.cs</LastGenOutput>
     </None>
-    <None Include="SignOut.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>SignOut.feature.cs</LastGenOutput>
-    </None>
     <None Include="MyTime\TextRequestFromSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>TextRequestFromSchedule.feature.cs</LastGenOutput>
@@ -1020,10 +1036,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.Rta\Teleopti.Ccc.Rta.Server\Teleopti.Ccc.Rta.Server.csproj">
       <Project>{F8F57C57-06B7-4D63-A2D2-5BBCEF758EBF}</Project>
       <Name>Teleopti.Ccc.Rta.Server</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
-      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
-      <Name>Teleopti.Ccc.Secrets</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

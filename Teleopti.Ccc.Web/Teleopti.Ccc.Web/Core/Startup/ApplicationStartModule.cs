@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using Autofac;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
+using Microsoft.IdentityModel.Protocols.WSFederation;
+using Microsoft.IdentityModel.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Web.Broker;
@@ -117,11 +119,27 @@ namespace Teleopti.Ccc.Web.Core.Startup
 							if (actionThrottle != null) actionThrottle.Dispose();
 						}
 					};
+
+				FederatedAuthentication.WSFederationAuthenticationModule.SignedIn += WSFederationAuthenticationModule_SignedIn;
 			}
 			catch (Exception ex)
 			{
 				log.Error(ex);
 				ErrorAtStartup = ex;
+			}
+		}
+
+		void WSFederationAuthenticationModule_SignedIn(object sender, EventArgs e)
+		{
+			WSFederationMessage wsFederationMessage = WSFederationMessage.CreateFromFormPost(HttpContext.Current.Request);
+			if (wsFederationMessage.Context != null)
+			{
+				var wctx = HttpUtility.ParseQueryString(wsFederationMessage.Context);
+				string returnUrl = wctx["ru"];
+
+				// TODO: check for absolute url and throw to avoid open redirects
+				HttpContext.Current.Response.Redirect(returnUrl, false);
+				HttpContext.Current.ApplicationInstance.CompleteRequest();
 			}
 		}
 	}

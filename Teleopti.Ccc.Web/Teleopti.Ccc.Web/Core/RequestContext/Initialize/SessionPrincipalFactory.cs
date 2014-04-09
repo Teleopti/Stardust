@@ -15,24 +15,22 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
 		private readonly IPrincipalFactory _principalFactory;
+		private readonly ITokenIdentityProvider _tokenIdentityProvider;
 
-		public SessionPrincipalFactory(
-			IDataSourcesProvider dataSourcesProvider,
-			ISessionSpecificDataProvider sessionSpecificDataProvider,
-			IRepositoryFactory repositoryFactory,
-			IRoleToPrincipalCommand roleToPrincipalCommand,
-			IPrincipalFactory principalFactory
-			)
+		public SessionPrincipalFactory(IDataSourcesProvider dataSourcesProvider, ISessionSpecificDataProvider sessionSpecificDataProvider, IRepositoryFactory repositoryFactory, IRoleToPrincipalCommand roleToPrincipalCommand, IPrincipalFactory principalFactory, ITokenIdentityProvider tokenIdentityProvider)
 		{
 			_dataSourcesProvider = dataSourcesProvider;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
 			_repositoryFactory = repositoryFactory;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
 			_principalFactory = principalFactory;
+			_tokenIdentityProvider = tokenIdentityProvider;
 		}
 
 		public ITeleoptiPrincipal Generate()
 		{
+
+
 			var sessionData = _sessionSpecificDataProvider.GrabFromCookie();
 			return sessionData == null ? null : createPrincipal(sessionData);
 		}
@@ -62,7 +60,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 		{
 			try
 			{
-				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit);
+				var token = _tokenIdentityProvider.RetrieveToken();
+				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, token == null ? null : token.OriginalToken);
 				_roleToPrincipalCommand.Execute(principal, uow, personRepository);
 				return principal;
 			}

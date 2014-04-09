@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core
 			return new AuthenticationModelBinder(
 				new IAuthenticationType[]
 					{
-						new ApplicationAuthenticationType(new Lazy<IAuthenticator>(() => null), null),
+						new ApplicationIdentityProviderAuthenticationType(new Lazy<IAuthenticator>(() => null), null),
 						new WindowsAuthenticationType(new Lazy<IAuthenticator>(() => null), null)
 					}
 				);
@@ -36,25 +36,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core
 		}
 
 		[Test]
-		public void ShouldBindApplicationAuthenticationModel()
-		{
-			var target = Target();
-			var bindingContext = BindingContext(new NameValueCollection
-				{
-					{"type", "application"},
-					{"datasource", "mydata"},
-					{"username", "name"},
-					{"password", "pwd"}
-				});
-
-			var result = target.BindModel(null, bindingContext) as ApplicationAuthenticationModel;
-
-			result.DataSourceName.Should().Be("mydata");
-			result.UserName.Should().Be("name");
-			result.Password.Should().Be("pwd");
-		}
-
-		[Test]
 		public void ShouldBindWindowsAuthenticationModel()
 		{
 			var target = Target();
@@ -68,6 +49,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core
 
 			result.DataSourceName.Should().Be("mydata");
 			result.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldBindApplicationIdentityAuthenticationModel()
+		{
+			var target = Target();
+			var bindingContext = BindingContext(new NameValueCollection
+				{
+					{"type", "application_token"},
+					{"datasource", "mydata"}
+				});
+
+			var result = target.BindModel(null, bindingContext) as ApplicationIdentityAuthenticationModel;
+
+			result.Should().Not.Be.Null();
+			result.DataSourceName.Should().Be("mydata");
 		}
 
 		[Test]

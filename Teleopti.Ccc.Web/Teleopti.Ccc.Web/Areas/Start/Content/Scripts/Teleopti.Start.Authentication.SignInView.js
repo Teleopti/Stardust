@@ -8,13 +8,5 @@ Teleopti.Start.Authentication.SignInView = function (args) {
 		data.render(args.html);
 		ko.applyBindings(viewModel, data.element[0]);
 		viewModel.LoadDataSources();
-
-		Teleopti.Start.Common.Layout.ActivatePlaceHolderText();
-
-		viewModel.UserNameFocus.subscribe(function (newValue) {
-			if (newValue == true) {
-				$('#Username-input').focus();
-			}
-		});
 	};
 };

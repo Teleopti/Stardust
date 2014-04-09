@@ -35,12 +35,8 @@ Teleopti.Start.Authentication.Init = function () {
 			html: getTemplate("menu"),
 			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
 			authenticationState: authenticationState
-		}),
-		changepassword: new Teleopti.Start.Authentication.ChangePasswordView({
-			html: getTemplate("changepassword"),
-			baseUrl: Teleopti.Start.Authentication.Settings.baseUrl,
-			authenticationState: authenticationState
 		})
+		
 	};
 
 	function _displayView(viewData) {
@@ -54,7 +50,7 @@ Teleopti.Start.Authentication.Init = function () {
 
 	function _initRoutes() {
 		var viewRegex = 'signin|businessunit|menu';
-		var authenticationTypeRegex = 'windows|application';
+		var authenticationTypeRegex = 'windows|application_token';
 		var dataSourceNameRegex = '.*';
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')/(' + authenticationTypeRegex + ')/(' + dataSourceNameRegex + ')$', "i"),
@@ -65,24 +61,7 @@ Teleopti.Start.Authentication.Init = function () {
 					dataSourceName: decodeURIComponent(dataSourceName)
 				});
 			});
-		crossroads.addRoute(
-			new RegExp('^(changepassword)/(' + dataSourceNameRegex + ')$', "i"),
-			function (view, dataSourceName) {
-				_displayView({
-					view: "changepassword",
-					mustChangePassword: false,
-					dataSourceName: decodeURIComponent(dataSourceName)
-				});
-			});
-		crossroads.addRoute(
-			new RegExp('^(mustchangepassword)/(' + dataSourceNameRegex + ')$', "i"),
-			function (view, dataSourceName) {
-				_displayView({
-					view: "changepassword",
-					mustChangePassword: true,
-					dataSourceName: decodeURIComponent(dataSourceName)
-				});
-			});
+		
 		crossroads.addRoute(
 			new RegExp('^(' + viewRegex + ')$', "i"),
 			function (view) {

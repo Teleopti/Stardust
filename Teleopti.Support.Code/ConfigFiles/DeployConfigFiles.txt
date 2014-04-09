@@ -23,3 +23,5 @@
 ..\TeleoptiCCC\Web\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config
 ..\TeleoptiCCC\Web\TeleoptiCCC7.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 ..\TeleoptiCCC\Web\Web.config,BuildArtifacts\Web.Root.Web.config
+..\TeleoptiCCC\Web.AuthenticationBridge\Web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
+..\TeleoptiCCC\Web.WindowsIdentityProvider\Web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config

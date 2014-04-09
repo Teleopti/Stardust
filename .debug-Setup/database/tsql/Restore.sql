@@ -1,25 +1,73 @@
 USE [master]
 GO
+
 -----
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics')
 ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
 GO
 IF $(LOADSTAT) = 1
 BEGIN
+	declare @path varchar(1000)
+	declare @restoreCommand nvarchar(4000)
+
+	IF OBJECT_ID('tempdb..#tmp') IS NOT NULL DROP TABLE #tmp
+	create table #tmp
+	(
+	LogicalName nvarchar(128)
+	,PhysicalName nvarchar(260)
+	,Type char(1)
+	,FileGroupName nvarchar(128)
+	,Size numeric(20,0)
+	,MaxSize numeric(20,0),
+	FileId tinyint,
+	CreateLSN numeric(25,0),
+	DropLSN numeric(25, 0),
+	UniqueID uniqueidentifier,
+	ReadOnlyLSN numeric(25,0),
+	ReadWriteLSN numeric(25,0),
+	BackupSizeInBytes bigint,
+	SourceBlockSize int,
+	FileGroupId int,
+	LogGroupGUID uniqueidentifier,
+	DifferentialBaseLSN numeric(25,0),
+	DifferentialBaseGUID uniqueidentifier,
+	IsReadOnly bit,
+	IsPresent bit,
+	TDEThumbprint varbinary(32)
+	)
+	set @path = N'$(RARFOLDER)\$(CUSTOMER)_TeleoptiAnalytics.BAK'
+
+	declare @TeleoptiAnalytics_Primary nvarchar(128)
+	declare @TeleoptiAnalytics_Stage nvarchar(128)
+	declare @TeleoptiAnalytics_Mart nvarchar(128)
+	declare @TeleoptiAnalytics_Msg nvarchar(128)
+	declare @TeleoptiAnalytics_Rta nvarchar(128)
+	declare @TeleoptiAnalytics_Log nvarchar(128)
+
+	insert #tmp
+	EXEC ('restore filelistonly from disk = ''' + @path + '''')
+
+	select @TeleoptiAnalytics_Primary	=LogicalName from #tmp where FileGroupName='PRIMARY'
+	select @TeleoptiAnalytics_Stage		=LogicalName from #tmp where FileGroupName='STAGE'
+	select @TeleoptiAnalytics_Mart		=LogicalName from #tmp where FileGroupName='MART'
+	select @TeleoptiAnalytics_Msg		=LogicalName from #tmp where FileGroupName='MSG'
+	select @TeleoptiAnalytics_Rta		=LogicalName from #tmp where FileGroupName='RTA'
+	select @TeleoptiAnalytics_Log		=LogicalName from #tmp where [Type]='L'
+
 	PRINT 'Restoring $(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics'
 
-	RESTORE DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics]
-	FROM  DISK = N'$(RARFOLDER)\$(CUSTOMER)_TeleoptiAnalytics.BAK'
-	WITH  FILE = 1,
-	MOVE N'TeleoptiAnalytics_Primary' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Primary.mdf',
-	MOVE N'TeleoptiAnalytics_Log' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Log.ldf',
-	MOVE N'TeleoptiAnalytics_Stage' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Stage.ndf',
-	MOVE N'TeleoptiAnalytics_Mart' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Mart.ndf',
-	MOVE N'TeleoptiAnalytics_Msg' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Msg.ndf',
-	MOVE N'TeleoptiAnalytics_Rta' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Rta.ndf',
-	NOUNLOAD,
-	REPLACE,
-	STATS = 10
+	SELECT @restoreCommand ='RESTORE DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics]'+
+	' FROM  DISK = N''$(RARFOLDER)\$(CUSTOMER)_TeleoptiAnalytics.BAK'''+
+	' WITH  FILE = 1,'+
+	' MOVE N'''+@TeleoptiAnalytics_Primary+''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Primary.mdf'','+
+	' MOVE N''' +@TeleoptiAnalytics_Log + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Log.ldf'','+
+	' MOVE N''' +@TeleoptiAnalytics_Stage + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Stage.ndf'','+
+	' MOVE N''' +@TeleoptiAnalytics_Mart + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Mart.ndf'','+
+	' MOVE N''' +@TeleoptiAnalytics_Msg + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Msg.ndf'','+
+	' MOVE N''' +@TeleoptiAnalytics_Rta + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiAnalytics_Rta.ndf'','+
+	' NOUNLOAD,	REPLACE, STATS = 10'
+
+	exec sp_executesql @restoreCommand
 
 	--waitfor database to open
 	DECLARE @MultiUserError int
@@ -44,16 +92,55 @@ GO
 
 IF $(LOADSTAT) = 1
 BEGIN
+	declare @path varchar(1000)
+	declare @restoreCommand nvarchar(4000)
+
+	IF OBJECT_ID('tempdb..#tmp') IS NOT NULL DROP TABLE #tmp
+	create table #tmp
+	(
+	LogicalName nvarchar(128)
+	,PhysicalName nvarchar(260)
+	,Type char(1)
+	,FileGroupName nvarchar(128)
+	,Size numeric(20,0)
+	,MaxSize numeric(20,0),
+	FileId tinyint,
+	CreateLSN numeric(25,0),
+	DropLSN numeric(25, 0),
+	UniqueID uniqueidentifier,
+	ReadOnlyLSN numeric(25,0),
+	ReadWriteLSN numeric(25,0),
+	BackupSizeInBytes bigint,
+	SourceBlockSize int,
+	FileGroupId int,
+	LogGroupGUID uniqueidentifier,
+	DifferentialBaseLSN numeric(25,0),
+	DifferentialBaseGUID uniqueidentifier,
+	IsReadOnly bit,
+	IsPresent bit,
+	TDEThumbprint varbinary(32)
+	)
+	set @path = N'$(RARFOLDER)\$(CUSTOMER)_TeleoptiCCCAgg.BAK'
+
+	declare @mdfFile nvarchar(128)
+	declare @ldfFile nvarchar(128)
+
+	insert #tmp
+	EXEC ('restore filelistonly from disk = ''' + @path + '''')
+
+	select @mdfFile=LogicalName from #tmp where [Type]='D'
+	select @ldfFile=LogicalName from #tmp where [Type]='L'
+
 	PRINT 'Restoring $(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg'
 
-	RESTORE DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg]
-	FROM  DISK = N'$(RARFOLDER)\$(CUSTOMER)_TeleoptiCCCAgg.BAK'
-	WITH  FILE = 1,
-	MOVE N'TeleoptiCCCAgg_Data' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg.mdf',
-	MOVE N'TeleoptiCCCAgg_Log' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg.ldf',
-	NOUNLOAD,
-	REPLACE,
-	STATS = 10
+	SELECT @restoreCommand ='RESTORE DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg]'+
+	' FROM  DISK = N''$(RARFOLDER)\$(CUSTOMER)_TeleoptiCCCAgg.BAK''' +
+	' WITH  FILE = 1,' +
+	' MOVE N''' + @mdfFile + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg.mdf'','+
+	' MOVE N''' + @ldfFile + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCCAgg.ldf'','+
+	' NOUNLOAD,REPLACE,STATS = 10'
+
+	exec sp_executesql @restoreCommand
 
 	--waitfor database to open
 	DECLARE @MultiUserError int
@@ -68,26 +155,63 @@ BEGIN
 	END
 
 	print 'done!'
-
 END
 
 GO
-
 --
 IF EXISTS (SELECT Name FROM sys.databases WHERE NAME = '$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7')
 ALTER DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7] SET  SINGLE_USER WITH ROLLBACK IMMEDIATE
 GO
 PRINT 'Restoring $(BRANCH)_$(CUSTOMER)_TeleoptiCCC7'
 
-RESTORE DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7]
-FROM DISK = N'$(RARFOLDER)\$(CUSTOMER)_TeleoptiCCC7.BAK'
-WITH  FILE = 1,
-MOVE N'TeleoptiCCC7_Data' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7.mdf',
-MOVE N'TeleoptiCCC7_Log' TO N'$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7.ldf',
-NOUNLOAD,
-REPLACE,
-STATS = 10
-GO
+	declare @path varchar(1000)
+	declare @restoreCommand nvarchar(4000)
+
+	IF OBJECT_ID('tempdb..#tmp') IS NOT NULL DROP TABLE #tmp
+	create table #tmp
+	(
+	LogicalName nvarchar(128)
+	,PhysicalName nvarchar(260)
+	,Type char(1)
+	,FileGroupName nvarchar(128)
+	,Size numeric(20,0)
+	,MaxSize numeric(20,0),
+	FileId tinyint,
+	CreateLSN numeric(25,0),
+	DropLSN numeric(25, 0),
+	UniqueID uniqueidentifier,
+	ReadOnlyLSN numeric(25,0),
+	ReadWriteLSN numeric(25,0),
+	BackupSizeInBytes bigint,
+	SourceBlockSize int,
+	FileGroupId int,
+	LogGroupGUID uniqueidentifier,
+	DifferentialBaseLSN numeric(25,0),
+	DifferentialBaseGUID uniqueidentifier,
+	IsReadOnly bit,
+	IsPresent bit,
+	TDEThumbprint varbinary(32)
+	)
+
+	set @path = N'$(RARFOLDER)\$(CUSTOMER)_TeleoptiCCC7.BAK'
+
+	declare @mdfFile nvarchar(128)
+	declare @ldfFile nvarchar(128)
+
+	insert #tmp
+	EXEC ('restore filelistonly from disk = ''' + @path + '''')
+
+	select @mdfFile=LogicalName from #tmp where [Type]='D'
+	select @ldfFile=LogicalName from #tmp where [Type]='L'
+
+	SELECT @restoreCommand ='RESTORE DATABASE [$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7]'+
+	' FROM  DISK = N''$(RARFOLDER)\$(CUSTOMER)_TeleoptiCCC7.BAK''' +
+	' WITH  FILE = 1,' +
+	' MOVE N''' + @mdfFile + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7.mdf'','+
+	' MOVE N''' + @ldfFile + ''' TO N''$(DATAFOLDER)\$(BRANCH)_$(CUSTOMER)_TeleoptiCCC7.ldf'','+
+	' NOUNLOAD,REPLACE,STATS = 10'
+
+	exec sp_executesql @restoreCommand
 
 --waitfor database to open
 DECLARE @MultiUserError int

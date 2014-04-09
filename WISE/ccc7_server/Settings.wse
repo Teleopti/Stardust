@@ -203,6 +203,24 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=DEFAULT_IDENTITY_PROVIDER
+  Variable Name2=_PROP_VAR_
+  Variable Value2=DEFAULT_IDENTITY_PROVIDER_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
+  Variable Value1=IDENTITY_PROVIDERS
+  Variable Name2=_PROP_VAR_
+  Variable Value2=IDENTITY_PROVIDERS_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=SQL_AUTH_STRING
   Variable Name2=_PROP_VAR_
   Variable Value2=SQL_AUTH_STRING_TMP
@@ -274,6 +292,14 @@ item: Set Variable
   Variable=WEB_BROKER_FOR_WEB_TMP
   Value=%DNS_ALIAS_TMP%TeleoptiCCC/Web
 end
+item: Set Variable
+  Variable=URLAUTHENTICATIONBRIDGE_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/AuthenticationBridge
+end
+item: Set Variable
+  Variable=URLWINDOWSIDENTITYPROVIDER_TMP
+  Value=%DNS_ALIAS_TMP%TeleoptiCCC/WindowsIdentityProvider
+end
 item: If/While Statement
   Variable=DMZ_TMP
   Value=YES
@@ -315,6 +341,26 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(AS_SERVER_NAME)|%AS_SERVER_NAME_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(UrlWindowsIdentityProvider)|%UrlWindowsIdentityProvider_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(UrlAuthenticationBridge)|%UrlAuthenticationBridge_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(DEFAULT_IDENTITY_PROVIDER)|%DEFAULT_IDENTITY_PROVIDER_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(IDENTITY_PROVIDERS)|%IDENTITY_PROVIDERS_TMP%
   Line Number=0
 end
 item: Insert Line into Text File

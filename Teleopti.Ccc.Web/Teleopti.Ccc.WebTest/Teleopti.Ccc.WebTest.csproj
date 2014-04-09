@@ -67,17 +67,14 @@
     <Reference Include="Common.Logging">
       <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
+    <Reference Include="DotNetOpenAuth.Core">
+      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.3.4.13329\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    <Reference Include="DotNetOpenAuth.OpenId">
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.3.4.13329\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.Provider, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
+    <Reference Include="DotNetOpenAuth.OpenId.Provider">
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.3.4.13329\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -96,6 +93,10 @@
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.2.0\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -130,6 +131,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
     </Reference>
@@ -151,6 +153,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.AspNet.WebPages.2.0.20710.0\lib\net40\System.Web.WebPages.dll</HintPath>
     </Reference>
+    <Reference Include="Teleopti.Ccc.Secrets">
+      <HintPath>..\..\packages\Teleopti.Secrets.7.5.800.22\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <HintPath>..\..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
     </Reference>
@@ -164,13 +169,16 @@
     <Compile Include="Areas\MyTime\Controllers\MyReportControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\Mapping\DailyMetricsMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\MyReport\ViewModelFactory\MyReportViewModelFactoryTest.cs" />
+    <Compile Include="Areas\SSO\Core\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Core\MonthSchedule\Mapping\MonthScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsProviderTest.cs" />
     <Compile Include="Core\Portal\DataProvider\ReportsNavigationProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMyReportTest.cs" />
+    <Compile Include="Core\RequestContext\SessionSpecificForIdentityProviderDataProviderTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceAccountProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceAccountMappingProfileTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeEditScheduleLayerViewModelMapperTest.cs" />
+    <Compile Include="Core\Startup\AuthenticationProviderTaskTest.cs" />
     <Compile Include="Core\Startup\BundleScriptsTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\TeamControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\ViewModelFactory\TeamViewModelFactoryTest.cs" />
@@ -214,7 +222,7 @@
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\SSO\Contollers\OpenIdControllerTest.cs" />
     <Compile Include="Areas\SSO\OpenIdProviderWapperTest.cs" />
-    <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiControllerTest.cs" />
+    <Compile Include="Areas\SSO\Contollers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonControllerTest.cs" />
@@ -326,6 +334,7 @@
     <Compile Include="Core\Common\DataProvider\ScheduleColorProviderTest.cs" />
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
+    <Compile Include="Filters\IdentityProviderProviderTest.cs" />
     <Compile Include="MappingProfileForProbing.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
@@ -358,7 +367,7 @@
     <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\PortalControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\AuthenticationControllerSignOutTest.cs" />
+    <Compile Include="Areas\Start\Controllers\AuthenticationControllerSignOutAndSignInAsAnotherUserTest.cs" />
     <Compile Include="Core\Authentication\Services\AuthenticatorTest.cs" />
     <Compile Include="Core\Authentication\DataProvider\BusinessUnitProviderTest.cs" />
     <Compile Include="Core\DateTimePeriodFormValidatorTest.cs" />
@@ -398,7 +407,7 @@
     <Compile Include="Core\Startup\ApplicationStartModuleTest.cs" />
     <Compile Include="Core\Startup\RegisterModelBindersTaskTest.cs" />
     <Compile Include="Core\Authentication\Services\WebLogOnTest.cs" />
-    <Compile Include="Core\Authentication\DataProvider\WindowsAccountProviderTest.cs" />
+    <Compile Include="Core\Authentication\DataProvider\TokenIdentityProviderTest.cs" />
     <Compile Include="Core\IoC\BootstrapperModuleTest.cs" />
     <Compile Include="Core\IoC\ContainerConfigurationTest.cs" />
     <Compile Include="Core\IoC\MvcModuleTest.cs" />
@@ -452,10 +461,6 @@
     <ProjectReference Include="..\..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
-      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
-      <Name>Teleopti.Ccc.Secrets</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

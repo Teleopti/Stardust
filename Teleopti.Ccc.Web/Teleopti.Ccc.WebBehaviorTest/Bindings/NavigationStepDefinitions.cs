@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I am still viewing ASM")]
 		public void WhenIAmStillViewingASM()
 		{
+			Navigation.GotoAsm();
 			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Asm.MakeSureWeAreLoggedOn();");
 		}
 
@@ -66,6 +67,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoWeekSchedulePage();
 		}
+
+		[When(@"I go to mytime web")]
+		public void WhenIGoToMytimeWeb()
+		{
+			DataMaker.Data().ApplyDelayed();
+			Navigation.GotoWeekSchedulePageNoWait();
+		}
+
+
 
 		[Given(@"I view my week schedule for date '(.*)'")]
 		[When(@"I view my week schedule for date '(.*)'")]

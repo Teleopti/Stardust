@@ -25,6 +25,11 @@ $(LocalWiki)|http://localhost/TeleoptiCCC/LocalWiki/
 $(WEB_BROKER_FOR_WEB)|http://localhost:52858
 $(WEB_BROKER)|http://localhost:54903/
 $(WEB_BROKER_BACKPLANE)|
+$(DEFAULT_IDENTITY_PROVIDER)|Teleopti
+$(IDENTITY_PROVIDERS)|Windows,Teleopti
+$(UrlAuthenticationBridge)|http://localhost:52857/
+$(Url)|http://localhost:52858/
+$(UrlWindowsIdentityProvider)|http://localhost:52859/
 $(ETL_SERVICE_nhibConfPath)|c:\nhib
 $(ETL_TOOL_nhibConfPath)|c:\nhib
 $(AGENTPORTALWEB_nhibConfPath)|c:\nhib

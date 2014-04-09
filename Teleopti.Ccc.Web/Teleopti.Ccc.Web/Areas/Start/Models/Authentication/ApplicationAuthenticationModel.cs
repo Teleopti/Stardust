@@ -2,7 +2,7 @@ using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Models.Authentication
 {
-	public class ApplicationAuthenticationModel : IAuthenticationModel
+	public class ApplicationAuthenticationModel
 	{
 		private readonly IAuthenticator _authenticator;
 		public string DataSourceName { get; set; }

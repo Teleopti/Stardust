@@ -20,6 +20,8 @@
 ..\..\..\InfrastructureTest\App.Config,BuildArtifacts\CruiseControl.config
 ..\..\..\Teleopti.Analytics\Teleopti.Analytics.Etl.IntegrationTest\App.Config,BuildArtifacts\CruiseControl.config
 ..\..\..\Teleopti.Ccc.ApplicationConfigTest\App.Config,BuildArtifacts\CruiseControl.config
+..\..\..\Teleopti.Ccc.Web.AuthenticationBridge\Web.config,BuildArtifacts\Web.AuthenticationBridge.Web.config
+..\..\..\Teleopti.Ccc.Web.WindowsIdentityProvider\Web.config,BuildArtifacts\Web.WindowsIdentityProvider.Web.config
 c:\nhib\FixMyConfig.nhib.xml,BuildArtifacts\TeleoptiCCC7.nhib.xml
 
 

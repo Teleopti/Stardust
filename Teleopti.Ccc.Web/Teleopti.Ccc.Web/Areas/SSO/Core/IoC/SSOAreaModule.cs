@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using DotNetOpenAuth.OpenId.Provider;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
@@ -10,9 +9,12 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<OpenIdProviderWapper>().As<IOpenIdProviderWapper>().SingleInstance();
+			builder.RegisterType<ApplicationAuthenticationType>().As<IApplicationAuthenticationType>().SingleInstance();
+			builder.RegisterType<ApplicationDataSourcesViewModelFactory>().As<IApplicationDataSourcesViewModelFactory>().SingleInstance();
+			builder.RegisterType<ProviderEndpointWrapper>().As<IProviderEndpointWrapper>().SingleInstance();
 			builder.RegisterType<OpenIdProvider>().SingleInstance();
-			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
+			builder.RegisterType<ApplicationAuthenticationType>().As<IApplicationAuthenticationType>().SingleInstance();
 		}
 	}
 }

@@ -130,6 +130,18 @@ atom.prefix = http://atom:5000
 atom.username = ccnet
 atom.password = m8kemew0rk
 
+
+------------------
+Python test and git integration
+------------------
+Install with default options:
+\\a380\Hangaren\#PROGRAM\Develop\Python\Git-1.9.0-preview20140217.exe
+\\a380\Hangaren\#PROGRAM\Develop\Python\python-3.4.0.msi
+
+Verify all three path exists in PATH variable and add them if needed:
+C:\Python34\;C:\Python34\Scripts;C:\Program Files (x86)\Git\cmd
+
+
 ------------------
 CruiseControl
 ------------------

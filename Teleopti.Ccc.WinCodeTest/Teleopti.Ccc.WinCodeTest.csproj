@@ -197,6 +197,10 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Teleopti.Ccc.Secrets">
+      <HintPath>..\packages\Teleopti.Secrets.7.5.800.22\lib\net40\Teleopti.Ccc.Secrets.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="WindowsBase">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -852,10 +856,6 @@
     <ProjectReference Include="..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Common\Teleopti.Ccc.Sdk.Common.csproj">
       <Project>{43BE4B89-AF3F-439E-9C44-58AE0672E410}</Project>
       <Name>Teleopti.Ccc.Sdk.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Teleopti.Ccc.Secrets\Teleopti.Ccc.Secrets.csproj">
-      <Project>{FF6EE795-15F0-4CAE-9DF5-4F2AB5B22C6A}</Project>
-      <Name>Teleopti.Ccc.Secrets</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>

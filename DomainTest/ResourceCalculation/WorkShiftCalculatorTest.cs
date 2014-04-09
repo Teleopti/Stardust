@@ -13,38 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-	public static class WorkShiftCalculatorExtensions
-	{
-		public static double CalculateShiftValue(
-			this IWorkShiftCalculator instance,
-			IEnumerable<IWorkShiftCalculatableVisualLayer> mainShiftLayers,
-			IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods,
-			WorkShiftLengthHintOption lengthFactor,
-			bool useMinimumPersons,
-			bool useMaximumPersons)
-		{
-			return instance.CalculateShiftValue(
-				mainShiftLayers, 
-				new SkillStaffPeriodDataWrapper(skillStaffPeriods), 
-				lengthFactor,
-				useMaximumPersons, useMaximumPersons,
-				TimeHelper.FitToDefaultResolution);
-		}
-
-		public static double CalculateDeviationImprovementAfterAssignment(IVisualLayerCollection layerCollection, Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods)
-		{
-			return WorkShiftCalculator.CalculateDeviationImprovementAfterAssignment(
-				layerCollection,
-				new SkillStaffPeriodDataWrapper(skillStaffPeriods));
-		}
-
-		public static IEnumerable<IImprovableWorkShiftCalculation> CalculateListForBestImprovementAfterAssignment(IList<IWorkShiftCalculationResultHolder> cashes, Dictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> skillStaffPeriods)
-		{
-			return WorkShiftCalculator.CalculateListForBestImprovementAfterAssignment(cashes, new SkillStaffPeriodDataWrapper(skillStaffPeriods));
-		}
-	}
-
-    [TestFixture]
+	[TestFixture]
     public class WorkShiftCalculatorTest
     {
         private DateTime _date;
@@ -605,12 +574,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IVisualLayer layerPhone = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
 
             IList<IVisualLayer> layers = new List<IVisualLayer> { layerPhone };
-            IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(null, layers, new ProjectionPayloadMerger());
+	        IEnumerable<IWorkShiftCalculatableLayer> layerCollectionW = new WorkShiftCalculatableVisualLayerCollection(layerCollection);
 
             IVisualLayer layerPhone2 = _layerFactory.CreateShiftSetupLayer(activityPhone, new DateTimePeriod(_date, _date.AddMinutes(120)),_person);
 
             IList<IVisualLayer> layers2 = new List<IVisualLayer> { layerPhone2 };
             IVisualLayerCollection layerCollection2 = new VisualLayerCollection(null, layers2, new ProjectionPayloadMerger());
+			IEnumerable<IWorkShiftCalculatableLayer> layerCollection2W = new WorkShiftCalculatableVisualLayerCollection(layerCollection2);
 
             IPeriodDistribution distr1 = _mocks.StrictMock<IPeriodDistribution>();
             IPeriodDistribution distr2 = _mocks.StrictMock<IPeriodDistribution>();
@@ -637,8 +608,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Record())
             {
-                Expect.Call(cache1.MainShiftProjection2).Return(layerCollection).Repeat.AtLeastOnce();
-                Expect.Call(cache2.MainShiftProjection2).Return(layerCollection2).Repeat.AtLeastOnce();
+				Expect.Call(cache1.WorkShiftCalculatableLayers).Return(layerCollectionW).Repeat.AtLeastOnce();
+				Expect.Call(cache2.WorkShiftCalculatableLayers).Return(layerCollection2W).Repeat.AtLeastOnce();
 
                 Expect.Call(distr1.CalculateStandardDeviation()).Return(10).Repeat.AtLeastOnce();
                 Expect.Call(distr2.CalculateStandardDeviation()).Return(20).Repeat.AtLeastOnce();
@@ -657,7 +628,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 var result = WorkShiftCalculatorExtensions.CalculateListForBestImprovementAfterAssignment(cashes, skillStaffPeriods);
 
                 Assert.AreEqual(1, result.Count());
-                Assert.AreEqual(cache2, result.First().ShiftProjection2);
+                Assert.AreEqual(cache2, result.First().WorkShiftCalculatableProjection);
             }
         }
 

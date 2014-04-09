@@ -49,7 +49,7 @@ namespace Teleopti.Interfaces.Domain
             DateOnly dateOnly, 
             IList<IShiftProjectionCache> shiftProjectionCaches, 
             //IDictionary<IActivity, IDictionary<DateTime, ISkillStaffPeriodDataHolder>> dataHolders,
-			IWorkShiftCalculatorSkillStaffPeriods dataHolders,
+			IWorkShiftCalculatorSkillStaffPeriodData dataHolders,
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> maxSeatSkillPeriods,
             IDictionary<ISkill, ISkillStaffPeriodDictionary> nonBlendSkillPeriods, 
             IVirtualSchedulePeriod currentSchedulePeriod,

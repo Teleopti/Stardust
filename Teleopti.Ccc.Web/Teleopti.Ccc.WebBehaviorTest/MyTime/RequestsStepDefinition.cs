@@ -37,24 +37,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var data = DataMaker.Data().UserData<MoreThanOnePageOfRequests>();
 			Browser.Interactions.AssertExistsUsingJQuery(string.Format(".request:nth({0})", data.PageSize-1));
-			Browser.Interactions.Javascript("$(document).scrollTop($(document).height());");
-		}
 
-		[When(@"I wait until requests loaded or timeout")]
-		public void WhenIWaitingNextPageOfRequestLoaded()
-		{
-			var count = 0;
-			var isLoading = true;
-			while (isLoading && count < 20)
-			{
-				Thread.Sleep(500);
-				bool isVisible;
-				bool.TryParse(Browser.Interactions.Javascript("return $('#loadingRequestIndicator').is(':visible')").ToString(), out isVisible);
-				var cssDisplay = Browser.Interactions.Javascript("return $('#loadingRequestIndicator').css('display')").ToString();
-
-				isLoading = isVisible || string.Compare(cssDisplay, "none", false, CultureInfo.CurrentCulture) != 0;
-				count++;
-			}
+			var top = Browser.Interactions.Javascript("return $('.bottom-of-requests-page').position().top");
+			Browser.Interactions.AssertJavascriptResultContains("window.scroll(0," + top + "); return '1';", "1");
 		}
 
 		[Then(@"I should see a requests list")]

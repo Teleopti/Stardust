@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 {
 	public interface IPrincipalFactory
 	{
-		ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit);
+		ITeleoptiPrincipal MakePrincipal(IPerson loggedOnUser, IDataSource dataSource, IBusinessUnit businessUnit, string tokenIdentity = null);
 	}
 }

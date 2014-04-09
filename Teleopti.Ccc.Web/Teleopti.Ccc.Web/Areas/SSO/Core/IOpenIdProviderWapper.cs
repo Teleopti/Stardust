@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 		IRequest GetRequest();
 		OutgoingWebResponse PrepareResponse(IRequest request);
 		void SendResponse(IRequest request);
+		Channel Channel();
 	}
 }

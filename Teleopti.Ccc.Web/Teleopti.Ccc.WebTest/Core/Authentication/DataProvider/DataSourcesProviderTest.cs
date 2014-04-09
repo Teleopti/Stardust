@@ -14,19 +14,19 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 	public class DataSourcesProviderTest
 	{
 		private IApplicationData applicationData;
-		private MockRepository mocks;
 		private IDataSourcesProvider target;
 		private IAvailableWindowsDataSources availableWindowsDataSources;
-		private IWindowsAccountProvider windowsAccountProvider;
+		private ITokenIdentityProvider tokenIdentityProvider;
+		private IAvailableApplicationTokenDataSource availableApplicationTokenDataSource;
 
 		[SetUp]
 		public void Setup()
 		{
-			mocks = new MockRepository();
-			applicationData = mocks.StrictMock<IApplicationData>();
-			availableWindowsDataSources = mocks.StrictMock<IAvailableWindowsDataSources>();
-			windowsAccountProvider = mocks.DynamicMock<IWindowsAccountProvider>();
-			target = new DataSourcesProvider(applicationData, availableWindowsDataSources, windowsAccountProvider);
+			applicationData = MockRepository.GenerateMock<IApplicationData>();
+			availableWindowsDataSources = MockRepository.GenerateMock<IAvailableWindowsDataSources>();
+			availableApplicationTokenDataSource = MockRepository.GenerateMock<IAvailableApplicationTokenDataSource>();
+			tokenIdentityProvider = MockRepository.GenerateMock<ITokenIdentityProvider>();
+			target = new DataSourcesProvider(applicationData, availableWindowsDataSources, availableApplicationTokenDataSource, tokenIdentityProvider);
 		}
 
 		[Test]
@@ -34,92 +34,103 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.DataProvider
 		{
 			var dataSources = new List<IDataSource>();
 
-			using (mocks.Record())
-			{
-				Expect.Call(applicationData.RegisteredDataSourceCollection)
-					.Return(dataSources);
-			}
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
 
-			using (mocks.Playback())
-			{
-				target.RetrieveDatasourcesForApplication()
-					.Should().Be.SameInstanceAs(dataSources);
-			}
+			target.RetrieveDatasourcesForApplication()
+				.Should().Be.SameInstanceAs(dataSources);
 		}
 
 		[Test]
 		public void WindowsDatasourcesShouldReturnAvailableDatasource()
 		{
-			var validDs = mocks.StrictMock<IDataSource>();
-			var invalidDs = mocks.StrictMock<IDataSource>();
-			var dsList = new[] { validDs, invalidDs };
-			var winAccount = new WindowsAccount("domain", "user");
+			var validDs = MockRepository.GenerateMock<IDataSource>();
+			var invalidDs = MockRepository.GenerateMock<IDataSource>();
+			var dsList = new[] {validDs, invalidDs};
+			var winAccount = new TokenIdentity {UserIdentifier = "user", UserDomain = "domain"};
 
-			using (mocks.Record())
-			{
-				Expect.Call(applicationData.RegisteredDataSourceCollection)
-					.Return(dsList);
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dsList);
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(winAccount);
+			availableWindowsDataSources.Stub(x => x.AvailableDataSources(dsList, winAccount.UserDomain, winAccount.UserIdentifier)).Return(new[] {validDs});
 
-				Expect.Call(windowsAccountProvider.RetrieveWindowsAccount()).Return(winAccount);
-				Expect.Call(availableWindowsDataSources.AvailableDataSources(dsList, winAccount.DomainName, winAccount.UserName))
-					.Return(new[] { validDs });
-			}
+			target.RetrieveDatasourcesForWindows().Should().Have.SameValuesAs(new[] {validDs});
+		}
 
-			using (mocks.Playback())
-			{
-				target.RetrieveDatasourcesForWindows()
-						.Should().Have.SameValuesAs(new[] { validDs });
-			}
+		[Test]
+		public void ApplicationIdentityTokenDatasourcesShouldReturnAvailableDatasource()
+		{
+			var validDs = MockRepository.GenerateMock<IDataSource>();
+			const string dataSource = "Teleopti CCC";
+			var tokenIdentity = new TokenIdentity {UserIdentifier = "user", DataSource = dataSource};
+
+			validDs.Stub(x => x.DataSourceName).Return(dataSource);
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new []{validDs});
+
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
+			availableApplicationTokenDataSource.Stub(x => x.IsDataSourceAvailable(validDs, tokenIdentity.UserIdentifier)).Return(true);
+
+			target.RetrieveDatasourcesForApplicationIdentityToken().Should().Have.SameValuesAs(new[] {validDs});
+		}
+
+		[Test]
+		public void ApplicationIdentityTokenDatasourcesShouldReturnNullWhenNoAvailableDatasource()
+		{
+			var validDs = MockRepository.GenerateMock<IDataSource>();
+			const string dataSource = "Teleopti CCC";
+			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
+
+			validDs.Stub(x => x.DataSourceName).Return("Wrong Teleopti CCC");
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new[] { validDs });
+
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
+
+			target.RetrieveDatasourcesForApplicationIdentityToken().Should().Be.Null();
+
+			availableApplicationTokenDataSource.AssertWasNotCalled(x => x.IsDataSourceAvailable(null, tokenIdentity.UserIdentifier));
+		}
+
+		[Test]
+		public void ApplicationIdentityTokenDatasourcesShouldReturnNullWhenNoUserFoundInAvailableDatasource()
+		{
+			var validDs = MockRepository.GenerateMock<IDataSource>();
+			const string dataSource = "Teleopti CCC";
+			var tokenIdentity = new TokenIdentity { UserIdentifier = "user", DataSource = dataSource };
+
+			validDs.Stub(x => x.DataSourceName).Return(dataSource);
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(new[] { validDs });
+			availableApplicationTokenDataSource.Stub(x => x.IsDataSourceAvailable(validDs, tokenIdentity.UserIdentifier)).Return(false);
+
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(tokenIdentity);
+
+			target.RetrieveDatasourcesForApplicationIdentityToken().Should().Be.Null();
 		}
 
 		[Test]
 		public void WindowsDatasourcesShouldReturnNullIfWinAccountIsNull()
 		{
-			using (mocks.Record())
-			{
-				Expect.Call(windowsAccountProvider.RetrieveWindowsAccount()).Return(null);
-			}
+			tokenIdentityProvider.Stub(x => x.RetrieveToken()).Return(null);
 
-			using (mocks.Playback())
-			{
-				target.RetrieveDatasourcesForWindows()
-					.Should().Be.Null();
-			}
+			target.RetrieveDatasourcesForWindows().Should().Be.Null();
 		}
 
 		[Test]
 		public void CanFindDataSourceByName()
 		{
 			var hit = new testDataSource("gnaget!");
-			var dataSources = new[] { new testDataSource("heja"), hit };
+			var dataSources = new[] {new testDataSource("heja"), hit};
 
-			using (mocks.Record())
-			{
-				Expect.Call(applicationData.RegisteredDataSourceCollection)
-					.Return(dataSources);
-			}
-			using (mocks.Playback())
-			{
-				target.RetrieveDataSourceByName("gnaget!")
-					.Should().Be.SameInstanceAs(hit);
-			}
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
+
+			target.RetrieveDataSourceByName("gnaget!").Should().Be.SameInstanceAs(hit);
 		}
 
 		[Test]
 		public void DataSourceShouldReturnNullIfNonExisting()
 		{
-			var dataSources = new[] { new testDataSource("heja") };
+			var dataSources = new[] {new testDataSource("heja")};
 
-			using (mocks.Record())
-			{
-				Expect.Call(applicationData.RegisteredDataSourceCollection)
-					.Return(dataSources);
-			}
-			using (mocks.Playback())
-			{
-				target.RetrieveDataSourceByName("gnaget")
-					.Should().Be.Null();
-			}
+			applicationData.Stub(x => x.RegisteredDataSourceCollection).Return(dataSources);
+
+			target.RetrieveDataSourceByName("gnaget").Should().Be.Null();
 		}
 
 		private class testDataSource : IDataSource

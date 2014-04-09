@@ -47,6 +47,7 @@
 		public const string ModifyRestrictedScenario = "0062";
 		public const string ViewActiveAgents = "0086";
 		public const string ModifyAvailabilities = "0087";
+		public const string SignInAsAnotherUser = "0094";
 
 		// PersonAdmin
 		public const string ModifyPersonNameAndPassword = "0007";
