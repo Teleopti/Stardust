@@ -848,7 +848,7 @@
     <ProjectReference Include="..\Teleopti.Ccc.Domain.Calculation\Teleopti.Ccc.Domain.Calculation.fsproj">
       <Project>{b957aa85-67de-4e6e-85c0-fa60564d1b60}</Project>
       <Name>Teleopti.Ccc.Domain.Calculation</Name>
-		</ProjectReference>
+    </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{db42d973-9889-4d51-9fc5-be66aa7f117c}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
