@@ -203,6 +203,15 @@ end
 item: Custom Script Item
   Filename=Get Windows Installer Property.wse
   Variable Name1=_PROPERTYNAME_
+  Variable Value1=HOST_NAME
+  Variable Name2=_PROP_VAR_
+  Variable Value2=HOST_NAME_TMP
+  Variable Name3=HELPFILE
+  Variable Value3=C:\Program Files (x86)\Altiris\Wise\Help\WiseScriptPackageEditor.chm
+end
+item: Custom Script Item
+  Filename=Get Windows Installer Property.wse
+  Variable Name1=_PROPERTYNAME_
   Variable Value1=DEFAULT_IDENTITY_PROVIDER
   Variable Name2=_PROP_VAR_
   Variable Value2=DEFAULT_IDENTITY_PROVIDER_TMP
@@ -360,6 +369,11 @@ end
 item: Insert Line into Text File
   Pathname=%SUPPORTTOOLS_TMP%settings.txt
   New Text=$(Url)|%Url_TMP%
+  Line Number=0
+end
+item: Insert Line into Text File
+  Pathname=%SUPPORTTOOLS_TMP%settings.txt
+  New Text=$(HOST_NAME)|%HOST_NAME_TMP%
   Line Number=0
 end
 item: Insert Line into Text File
