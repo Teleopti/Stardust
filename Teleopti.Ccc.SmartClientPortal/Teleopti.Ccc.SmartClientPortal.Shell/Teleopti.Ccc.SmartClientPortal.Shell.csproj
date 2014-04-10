@@ -248,6 +248,11 @@
     <Compile Include="Common\Services\IWorkspaceLocatorService.cs" />
     <Compile Include="OutlookPanelContentWorker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="StartupModule.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
@@ -258,11 +263,6 @@
       <DependentUpon>SmartClientPortal.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="ShellApplication.cs" />
     <Compile Include="SmartClientPortal.cs">
       <SubType>Form</SubType>
@@ -281,9 +281,6 @@
     <None Include="Resources\ccc_PersonalSettings_32x32.png" />
     <Content Include="Resources\NotifyIconOk.ico" />
     <Content Include="Resources\NotifyIconWarning.ico" />
-    <None Include="Resources\ccc_Menu.png" />
-    <None Include="Resources\ccc_Menu_ButtonDown.png" />
-    <None Include="Resources\ccc_Menu_MouseOver.png" />
     <None Include="Resources\ccc_People.png" />
     <None Include="Resources\ccc_Forecasts.png" />
     <None Include="Resources\ccc_Schedule.png" />
@@ -291,55 +288,12 @@
     <None Include="Resources\ccc_Reports.png" />
     <None Include="Resources\ccc_Settings.png" />
     <None Include="Resources\ccc_temp_Settings.png" />
-    <None Include="Resources\ccc_Open.png" />
-    <None Include="Resources\ccc_Close.png" />
-    <None Include="Resources\ccc_Save.png" />
-    <None Include="Resources\ccc_New.png" />
-    <None Include="Resources\ccc_save_small.png" />
-    <None Include="Resources\ccc_tree_Agent.png" />
-    <None Include="Resources\ccc_tree_BU.png" />
-    <None Include="Resources\ccc_tree_Site.png" />
-    <None Include="Resources\ccc_Tree_Team.png" />
-    <None Include="Resources\ccc_tree_User.png" />
-    <None Include="Resources\ccc_Activities_settings2.png" />
-    <None Include="Resources\ccc_Advanced_settings2.png" />
-    <None Include="Resources\ccc_general_settings2.png" />
-    <None Include="Resources\ccc_temp_DeleteGroup.png" />
-    <Content Include="Resources\1downarrow.png" />
-    <Content Include="Resources\admin.png" />
     <Content Include="Resources\ccc_Intraday.png" />
-    <Content Include="Resources\ccc_MeetingPlanner.png" />
     <None Include="Resources\ccc_payroll.png" />
     <Content Include="Resources\ccc_permission.png" />
-    <Content Include="Resources\client_forecaster.png" />
-    <Content Include="Resources\DeleteHS.png" />
-    <Content Include="Resources\DeleteHS1.png" />
-    <Content Include="Resources\forecaster.png" />
-    <None Include="Resources\help_16.png" />
     <None Include="Resources\help_32.png" />
-    <None Include="Resources\help_128.png" />
     <None Include="Resources\information_16.png" />
-    <None Include="Resources\information_32.png" />
-    <Content Include="Resources\kpackage.png" />
-    <Content Include="Resources\ksirc.png" />
-    <Content Include="Resources\leftarrow.png" />
     <Content Include="Resources\permission.png" />
-    <Content Include="Resources\PropertiesHS.png" />
-    <Content Include="Resources\PropertiesHS1.png" />
-    <Content Include="Resources\rightarrow.png" />
-    <Content Include="Resources\saveHS.png" />
-    <Content Include="Resources\schedule.png" />
-    <Content Include="Resources\Settings.png" />
-    <Content Include="Resources\skills_phone.ico" />
-    <Content Include="Resources\skills_phone.png" />
-    <Content Include="Resources\skills_workload.ico" />
-    <Content Include="Resources\skills_workload.png" />
-    <Content Include="Resources\Skill_Inactive_8bit_BG.png" />
-    <Content Include="Resources\Skill_Inactive_8bit_BG1.png" />
-    <Content Include="Resources\Teleo.rgb.jpg" />
-    <Content Include="Resources\Teleo.rgb_90_x_34.jpg" />
-    <Content Include="Resources\Users.png" />
-    <None Include="Resources\warning.png" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>
   <ItemGroup>
