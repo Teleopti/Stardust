@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 
 			target.CheckPassword(authenticationModel);
 
-			formsAuthentication.AssertWasCalled(x=>x.SetAuthCookie(authenticationModel.UserName+ "§" + authenticationModel.DataSourceName));
+			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + "¡ì" + authenticationModel.DataSourceName));
 		}
 
 		[Test]

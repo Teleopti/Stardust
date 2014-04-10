@@ -1,4 +1,4 @@
-using System.Web;
+ï»¿using System.Web;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				return ModelState.ToJson();
 			}
 
-			_formsAuthentication.SetAuthCookie(model.UserName + "§" + model.DataSourceName);
+			_formsAuthentication.SetAuthCookie(model.UserName + "Â§" + model.DataSourceName);
 			model.SaveAuthenticateResult(result);
 			return Json(new PasswordWarningViewModel { WillExpireSoon = result.HasMessage}, JsonRequestBehavior.AllowGet);
 		}
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 					ModelState.AddModelError("Error", result.IsAuthenticationSuccessful ? Resources.PasswordPolicyWarning : Resources.InvalidUserNameOrPassword);
 					return ModelState.ToJson();
 				}
-				_formsAuthentication.SetAuthCookie(model.UserName + "§" + model.DataSourceName);
+				_formsAuthentication.SetAuthCookie(model.UserName + "Â§" + model.DataSourceName);
 				return Json(result);
 			}
 		}
