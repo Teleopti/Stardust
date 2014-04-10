@@ -67,20 +67,22 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			var interval = 0;
 			var length = self.layersRemovedPassed().length;
 			if (index >= 0 && index < length) {
-				var msSinceStart = self.now - self.yesterday.getTime();
-				var secondsSinceStart = msSinceStart / 1000;
-				if (self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart < 0)
+				var secondsSinceStart = (self.now - self.yesterday.getTime()) / 1000;
+				var timeDiffrenceBetweenAsmZeroAndStart = self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart;
+
+				if (timeDiffrenceBetweenAsmZeroAndStart < 0) {
 					interval = -1;
-				else if (self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart > self.alertTimeSetting)
-					interval = self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart - self.alertTimeSetting;
-				else {
-					interval = self.alertTimeSetting - self.layersRemovedPassed()[index].startMinutesSinceAsmZero * 60 - secondsSinceStart;
+				} else if (timeDiffrenceBetweenAsmZeroAndStart > self.alertTimeSetting) {
+					interval = timeDiffrenceBetweenAsmZeroAndStart - self.alertTimeSetting;
+				} else {
+					interval = self.alertTimeSetting - timeDiffrenceBetweenAsmZeroAndStart;
 				}
 			}
 			return interval;
 		};
 		
 		self.alertMessage = function (index) {
+			// TODO: replace the text with localed text
 			return self.layersRemovedPassed()[index].payload + " at " + self.layersRemovedPassed()[index].startTimeText + "!";
 		};
 		
@@ -119,14 +121,14 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		};
 	}
 	function _initNotificationViewModel() {
-		var yesterDayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
-		alertvm = new notificationActivities(yesterDayFromNow);
+		var yesterdayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
+		alertvm = new notificationActivities(yesterdayFromNow);
 		var activityData;
 		var alertSetting;
 		
 		var dataLoadDeffered = $.Deferred();
 		alertvm.loadViewModel(
-			yesterDayFromNow,
+			yesterdayFromNow,
 			function (data) {
 				activityData = data.Layers;
 				dataLoadDeffered.resolve();
@@ -153,10 +155,9 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				timeInterval = alertvm.timeInterval(layerIdx) * 1000;
 			}
 
-			if ((alertvm.timeInterval(layerIdx) <= alertvm.alertTimeSetting) && (alertvm.timeInterval(layerIdx) > 0)) {
+			if ((timeInterval <= alertvm.alertTimeSetting) && (timeInterval > 0)) {
 				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(layerIdx));
 			} else if (timeInterval > 0) {
-				console.log("Timer:" + timeInterval);
 				setTimeout(function () {
 					Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(layerIdx-1));
 					 _alertActivity();
@@ -164,7 +165,6 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			}
 			layerIdx++;
 		}
-		 
 	}
 	
 	function _startAlert() {
