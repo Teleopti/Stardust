@@ -4,7 +4,9 @@ Broker.backplane;True
 PMService;True
 RTA;True
 SDK;False
-Web;False
+Web;True
 Client;False
 MyTime;False
 TeleoptiCCC;True
+AuthenticationBridge;True
+WindowsIdentityProvider;True

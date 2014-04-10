@@ -8,3 +8,5 @@ Web;True
 Client;True
 MyTime;True
 TeleoptiCCC;True
+AuthenticationBridge;True
+WindowsIdentityProvider;True

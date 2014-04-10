@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			var signIn = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), _authenticationModule.Realm)
 			{
 				Context = "ru=" + Request.Path,
-				Reply = url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignInAsAnotherUser"))
+				Reply = url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignInAsAnotherUser", StringComparison.OrdinalIgnoreCase))
 			};
 
 			return new RedirectResult(signIn.WriteQueryString());
