@@ -118,35 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="ccc_general_settings2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_general_settings2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="help_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\help_16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_permission" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\ccc_permission.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="leftarrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\leftarrow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Settings" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Settings.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_tree_Site" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_tree_Site.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_MeetingPlanner" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\ccc_meetingplanner.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_Reports" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Reports.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_temp_DeleteGroup" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_temp_DeleteGroup.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Advanced_settings2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Advanced_settings2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="NotifyIconWarning" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NotifyIconWarning.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -154,32 +133,11 @@
   <data name="ccc_Forecasts" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Forecasts.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="information_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\information_32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Save" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Save.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_tree_User" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_tree_User.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_People" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_People.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_Menu_ButtonDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Menu_ButtonDown.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Menu_MouseOver" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Menu_MouseOver.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="information_16" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\information_16.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Close" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Close.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Activities_settings2" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Activities_settings2.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Shift" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Shift.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -190,38 +148,14 @@
   <data name="NotifyIconOk" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\NotifyIconOk.ico;System.Drawing.Icon, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_tree_Agent" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_tree_Agent.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Open" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Open.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Menu" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Menu.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_Tree_Team" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_Tree_Team.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_Intraday" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\ccc_intraday.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ccc_Schedule" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_Schedule.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_tree_BU" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_tree_BU.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="permission" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\permission.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="help_128" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\help_128.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="rightarrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\rightarrow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ccc_save_small" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_save_small.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="help_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\help_32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -229,14 +163,8 @@
   <data name="ccc_payroll" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_payroll.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ccc_New" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\ccc_New.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="ccc_PersonalSettings_32x32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\ccc_PersonalSettings_32x32.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="warning" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\warning.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="AddServicesCalled" xml:space="preserve">
     <value>AddServices() method called for Module {0}.</value>

@@ -50,56 +50,50 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
     {
-        /// <summary>
-        /// Shell application entry point.
-        /// </summary>
-        [STAThread]
-        static void Main()
-        {
-            XmlConfigurator.Configure();
+	    /// <summary>
+	    /// Shell application entry point.
+	    /// </summary>
+	    [STAThread]
+	    private static void Main()
+	    {
+		    XmlConfigurator.Configure();
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
+		    Application.EnableVisualStyles();
+		    Application.SetCompatibleTextRenderingDefault(false);
 
-            // WPF should use CurrentCulture
-            FrameworkElement.LanguageProperty.OverrideMetadata(
-                typeof(FrameworkElement),
-                new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+		    // WPF should use CurrentCulture
+		    FrameworkElement.LanguageProperty.OverrideMetadata(
+			    typeof (FrameworkElement),
+			    new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
 
-            IContainer container = configureContainer();
+		    IContainer container = configureContainer();
 #if (!DEBUG)
-            //NHibernateProfiler.Initialize();
-            SetReleaseMode();
-           if (CheckFrameWorkVersion())
-            {
-                ApplicationStartup applicationStarter = container.Resolve<ApplicationStartup>();
-                if (applicationStarter.LogOn())
-                {
-                    try
-                    {
-                        applicationStarter.LoadShellApplication();
-                    }
-                    catch (Exception exception)
-                    {
-                        HandleException(exception);
-                    }
-                }
-            }
+		    //NHibernateProfiler.Initialize();
+		    SetReleaseMode();
+		    var applicationStarter = container.Resolve<ApplicationStartup>();
+		    if (applicationStarter.LogOn())
+		    {
+			    try
+			    {
+				    applicationStarter.LoadShellApplication();
+			    }
+			    catch (Exception exception)
+			    {
+				    HandleException(exception);
+			    }
+		    }
 #endif
 #if (DEBUG)
-            if (CheckFrameWorkVersion())
+            var applicationStarter = container.Resolve<ApplicationStartup>();
+            if (applicationStarter.LogOn())
             {
-                ApplicationStartup applicationStarter = container.Resolve<ApplicationStartup>();
-                if (applicationStarter.LogOn())
-                {
-                	killNotNeededSessionFactories();
-                    applicationStarter.LoadShellApplication();
-                }
+                killNotNeededSessionFactories();
+                applicationStarter.LoadShellApplication();
             }
 #endif
-        }
+	    }
 
-    	private static void killNotNeededSessionFactories()
+	    private static void killNotNeededSessionFactories()
     	{
 			//kan man inte få tag på datasource på nåt lättare sätt?
     		var loggedOnDataSource = ((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource;
@@ -144,8 +138,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 							//////
                 return builder.Build();
             }
-
-            
         }
 
         /// <summary>
@@ -155,19 +147,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
             AppDomain.CurrentDomain.UnhandledException += AppDomainUnhandledException;
             Application.ThreadException += ApplicationThreadException;
-        }
-
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-        private static bool CheckFrameWorkVersion()
-        {
-            bool found = Detector.Found35SP1();
-            if (!found)
-                MessageBox.Show(
-                    ".Net Framework 3.5 SP1 could not be detected. \r\n TeleoptiCCC version 7 requires that .Net Framework 3.5 SP1 is installed",
-                    "TeleoptiCCC version 7 can not start", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            return found;
         }
 
         /// <summary>
