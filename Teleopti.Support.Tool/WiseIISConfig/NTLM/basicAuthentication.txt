@@ -5,3 +5,5 @@ PMService;False
 RTA;False
 SDK;False
 Web;False
+AuthenticationBridge;False
+WindowsIdentityProvider;False

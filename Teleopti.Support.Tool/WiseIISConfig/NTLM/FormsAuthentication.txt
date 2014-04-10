@@ -4,4 +4,6 @@ Broker.backplane;Windows
 PMService;Windows
 RTA;Windows
 SDK;Windows
-Web;Windows
+Web;None
+AuthenticationBridge;None
+WindowsIdentityProvider;Windows
