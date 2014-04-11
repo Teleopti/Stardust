@@ -122,6 +122,11 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private IPerson CreateNewPerson(PersonDto dto)
         {
             IPerson person = new Person();
+	        if (dto.TerminationDate != null)
+	        {
+				  // don´t use a real updater when having a new person, it will crash
+		        person.TerminatePerson(dto.TerminationDate.ToDateOnly(), new PersonAccountUpdaterDummy());
+	        }
             UpdatePerson(dto, person);
 
             return person;
