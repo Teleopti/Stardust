@@ -202,7 +202,7 @@
 							<CheckBox 
 								HorizontalAlignment="Center"
 								VerticalAlignment="Center" 
-								IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource SimpleConverter}, FallbackValue=False}" 
+								IsChecked="{Binding Path=IsPinned,Mode=TwoWay,Converter={StaticResource SimpleConverter}, FallbackValue=False, UpdateSourceTrigger=PropertyChanged}" 
 								Opacity="1" 
 								Cursor="Hand"
 								PreviewMouseDown="CheckBox_OnPreviewMouseDown"/>

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             _mocks = new MockRepository();
             _personRepository = _mocks.StrictMock<IPersonRepository>();
             _workflowControlSetAssembler = _mocks.StrictMock<IAssembler<IWorkflowControlSet, WorkflowControlSetDto>>();
-	        _personAccountUpdater = _mocks.StrictMock<IPersonAccountUpdater>();
+				_personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
             _target = new PersonAssembler(_personRepository, _workflowControlSetAssembler, _personAccountUpdater);
         }
 
@@ -249,5 +249,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             
             _target.DtoToDomainEntity(personDto);
         }
+
+	    [Test]
+	    public void ShouldUseDummyAccountUpdaterWhenNewPerson()
+	    {
+			 var personDto = new PersonDto
+			 {
+				 FirstName = "Personliga",
+				 LastName = "Person",
+				 CultureLanguageId = 1053,
+				 TimeZoneId = "W. Europe Standard Time",
+				 TerminationDate = new DateOnlyDto(2014, 4, 11)
+			 };
+
+			 _target.DtoToDomainEntity(personDto);
+			 _personAccountUpdater.AssertWasNotCalled(x => x.Update(null), y => y.IgnoreArguments());
+	    }
     }
 }
