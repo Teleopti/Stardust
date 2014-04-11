@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 {
     public class AgentStateViewAdapter : INotifyPropertyChanged
     {
-        private static IDayLayerViewModel _dayLayerViewModel;
+		private readonly IDayLayerViewModel _dayLayerViewModel;
         private readonly IRtaStateGroup _stateGroup;
         private int _totalPersons;
 
