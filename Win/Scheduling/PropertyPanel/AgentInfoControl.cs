@@ -427,28 +427,27 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
         {
            foreach (IPreferenceRestriction restriction in preferenceList)
            {
-               var mustHave = "";
                if (restriction.MustHave)
-                   mustHave = " (" + Resources.MustHave + ")"; 
+                   createAndAddItem(listViewRestrictions, Resources.MustHave, "", 2); 
                 addTimeRestriction(restriction, 2);
                 if (restriction.ShiftCategory != null)
-                    createAndAddItem(listViewRestrictions, Resources.ShiftCategory, restriction.ShiftCategory.Description.Name + mustHave, 2);
+                    createAndAddItem(listViewRestrictions, Resources.ShiftCategory, restriction.ShiftCategory.Description.Name, 2);
 
                if (restriction.ActivityRestrictionCollection.Count>0)
                {
                    IActivityRestriction activityRestriction = restriction.ActivityRestrictionCollection[0];
                    createAndAddItem(listViewRestrictions, Resources.Activity,
-                                    activityRestriction.Activity.Name + mustHave, 2);
+                                    activityRestriction.Activity.Name, 2);
                    addTimeRestriction(activityRestriction, 3);
                }
 
 			   if (restriction.Absence != null)
 			   {
-				   createAndAddItem(listViewRestrictions, Resources.Absence, restriction.Absence.Description.Name + mustHave, 2);
+                   createAndAddItem(listViewRestrictions, Resources.Absence, restriction.Absence.Description.Name, 2);
 			   }
 
                 if (restriction.DayOffTemplate != null)
-                    createAndAddItem(listViewRestrictions, Resources.DayOff, restriction.DayOffTemplate.Description.Name + mustHave, 2);
+                    createAndAddItem(listViewRestrictions, Resources.DayOff, restriction.DayOffTemplate.Description.Name, 2);
             }
         }
 
