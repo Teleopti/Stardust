@@ -214,6 +214,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\Log4NetModule.cs" />
+    <Compile Include="Controllers\MachineKeyCookieTransform.cs" />
+    <Compile Include="Controllers\MachineKeySessionSecurityTokenHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
