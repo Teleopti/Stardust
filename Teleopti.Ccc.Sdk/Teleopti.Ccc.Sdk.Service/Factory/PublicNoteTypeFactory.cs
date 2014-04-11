@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
@@ -47,6 +48,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 publicNoteDtosToReturn = _publicNoteAssembler.DomainEntitiesToDtos(publicNotes).ToList();
             }
 
+			if (publicNoteDtosToReturn.Count > 0)
+				return publicNoteDtosToReturn.GroupBy(x => new {x.Date.DateTime, x.Person.Id}).Select(x => x.Last()).ToList();
+			
             return publicNoteDtosToReturn;
         }
 
