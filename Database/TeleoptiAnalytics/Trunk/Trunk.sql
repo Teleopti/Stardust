@@ -92,3 +92,9 @@ CREATE NONCLUSTERED INDEX IX_dim_person_to_be_deleted
 ON [mart].[dim_person] ([to_be_deleted])
 INCLUDE ([person_id],[team_id],[business_unit_code])
 GO
+
+--messed up cross view target found in customer database
+update mart.sys_crossdatabaseview_target
+set target_defaultName='TeleoptiCCCAgg'
+where target_id=4
+GO
