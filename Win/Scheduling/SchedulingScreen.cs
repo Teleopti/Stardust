@@ -6999,9 +6999,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulerSplitters1.RecalculateRestrictions();
 				schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
-				updateSelectionInfo(new List<IScheduleDay> { scheduleDay });
 			}
-
+            updateSelectionInfo(new List<IScheduleDay> { scheduleDay });
 			enableSave();
 		}
 
