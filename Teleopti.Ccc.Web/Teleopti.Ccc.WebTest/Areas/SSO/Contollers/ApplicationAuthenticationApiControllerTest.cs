@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using NUnit.Framework;
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 
 			target.CheckPassword(authenticationModel);
 
-			formsAuthentication.AssertWasCalled(x=>x.SetAuthCookie(authenticationModel.UserName+ "�" + authenticationModel.DataSourceName));
+			formsAuthentication.AssertWasCalled(x => x.SetAuthCookie(authenticationModel.UserName + "§" + authenticationModel.DataSourceName));
 		}
 
 		[Test]
