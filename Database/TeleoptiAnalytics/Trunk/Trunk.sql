@@ -1012,3 +1012,9 @@ AND param_name='@time_zone_id'
 
 DELETE FROM  mart.report_control_collection where collection_id=26 AND param_name='@time_zone_id'
 GO
+
+--messed up cross view target found in customer database
+update mart.sys_crossdatabaseview_target
+set target_defaultName='TeleoptiCCCAgg'
+where target_id=4
+GO
