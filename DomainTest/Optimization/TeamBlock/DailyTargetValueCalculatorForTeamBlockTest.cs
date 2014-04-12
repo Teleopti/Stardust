@@ -93,13 +93,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                 Expect.Call(_skillDay1.CurrentDate).Return(DateOnly.Today);
                 Expect.Call(_skillDay1.Skill ).Return(_baseLineData.SampleSkill );
                 Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollecion).Repeat.Twice() ;
-                Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList))
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList, TimeZoneGuard.Instance.TimeZone))
                       .Return(new List<ISkillIntervalData> {skillIntervalData1});
                 Expect.Call(
                     _intervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData> {skillIntervalData1},15)).Return(new List<ISkillIntervalData>{skillIntervalData1 });
 
-                
-                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+
+				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo,_advancePrefrences), 0.0);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                             skillIntervalList
                         })).IgnoreArguments().Return(skillIntervalList);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
@@ -159,7 +159,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                 Expect.Call(_resolutionProvider.MinimumResolution(_skillList.ToList())).Return(15);
                 Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(_teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())).Return(new List<ISkillDay> { _skillDay1 });
                 Expect.Call(_locateMissingIntervalsIfMidNightBreak.GetMissingSkillStaffPeriods(DateOnly.Today, _baseLineData.SampleSkill, TimeZoneGuard.Instance.TimeZone )).IgnoreArguments() .Return(new List<ISkillStaffPeriod>( ));
-                Expect.Call(_filterOutIntervalsAfterMidNight.Filter(_skillStaffPeriodList, DateOnly.Today,TimeZoneGuard.Instance.TimeZone )).IgnoreArguments().Return(_skillStaffPeriodList);
+	            Expect.Call(_filterOutIntervalsAfterMidNight.Filter(_skillStaffPeriodList, DateOnly.Today, TimeZoneInfo.Utc))
+		            .IgnoreArguments()
+		            .Return(_skillStaffPeriodList);
                 skillDayExpectCalls(_skillDay1, skillIntervalList);
 
                 Expect.Call(
@@ -168,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                             skillIntervalList
                         })).IgnoreArguments().Return(skillIntervalList);
 
-                Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
@@ -181,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             Expect.Call(skillDay.CurrentDate).Return(DateOnly.Today);
             Expect.Call(skillDay.Skill).Return(_baseLineData.SampleSkill);
             Expect.Call(skillDay.SkillStaffPeriodCollection).Return(skillStaffPeriodCollecion).Repeat.Twice();
-            Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList)).Return(skillIntervalList);
+			Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList, TimeZoneGuard.Instance.TimeZone)).Return(skillIntervalList);
             Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(skillIntervalList);
         }
     }
