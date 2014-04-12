@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             intervalData.Add(new TimeSpan(0, 1, 0, 0), skillIntervalData3);
             days.Add(today.AddDays(1), intervalData);
 
-            Assert.AreEqual(_target.CalculateMedian(days, 60).Count, 6);
+            Assert.AreEqual(_target.CalculateMedian(days, 60, today).Count, 6);
         }
 
         [Test]
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             intervalData.Add(new TimeSpan(0, 1, 0, 0), skillIntervalData3);
             days.Add(today.AddDays(1), intervalData);
 
-            var result = _target.CalculateMedian(days, 60);
+            var result = _target.CalculateMedian(days, 60,today);
             Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 3);
             Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 4);
             Assert.AreEqual(result[new TimeSpan(0, 0, 0, 0)].ForecastedDemand, 5);
@@ -159,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             intervalData.Add(new TimeSpan(0, 1, 0, 0), skillIntervalData5);
             days.Add(today.AddDays(2), intervalData);
 
-            var result = _target.CalculateMedian(days, 60);
+            var result = _target.CalculateMedian(days, 60, today);
             Assert.AreEqual(result.Count, 7);
             Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 2);
             Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 5);
