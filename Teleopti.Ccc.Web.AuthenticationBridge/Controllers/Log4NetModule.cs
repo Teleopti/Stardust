@@ -3,6 +3,7 @@ using System.Collections;
 using System.Web;
 using log4net;
 using log4net.Config;
+using Microsoft.IdentityModel.Web;
 
 namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 {
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
 		public void OnStart(HttpApplication application)
 		{
 			_configureLogging.Invoke();
+			FederatedAuthentication.ServiceConfiguration.SecurityTokenHandlers.AddOrReplace(new MachineKeySessionSecurityTokenHandler());
 		}
 
 		public void OnInit(HttpApplication application)

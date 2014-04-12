@@ -16,20 +16,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
             }
         }
 
-        public class MachineKeyCreator
+        public static class MachineKeyCreator
         {
-            const int DecryptionKeyLength = 24;
+	        private static readonly string Config;
+	        const int DecryptionKeyLength = 24;
             const int ValidationKeyLength = 64;
             const string DecryptionType = "AES";
             const string ValidationType = "SHA1";
 
-            public static string GetConfig()
+	        static MachineKeyCreator()
+	        {
+		        Config = string.Format(
+			        "<machineKey validationKey=\"{0}\" decryptionKey=\"{1}\" decryption=\"{2}\" validation=\"{3}\" />",
+			        GetCryptoBytes(ValidationKeyLength), GetCryptoBytes(DecryptionKeyLength), DecryptionType,
+			        ValidationType);
+	        }
+
+	        public static string GetConfig()
             {
-                return
-                    string.Format(
-                        "<machineKey validationKey=\"{0}\" decryptionKey=\"{1}\" decryption=\"{2}\" validation=\"{3}\" />",
-                        GetCryptoBytes(ValidationKeyLength), GetCryptoBytes(DecryptionKeyLength), DecryptionType,
-                        ValidationType);
+                return Config;
             }
         }
     }

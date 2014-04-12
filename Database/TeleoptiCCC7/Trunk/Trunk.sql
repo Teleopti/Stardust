@@ -357,31 +357,11 @@ end
 GO
 
 ----------------  
---Name: Asad Mirza
---Date: 2014-04-09
---Desc: Bug #27441 - Removed duplicated and added constraints, Keep latests records
+--Name: Asad Mirza + David Jonsson
+--Date: 2014-04-11
+--Desc: Bug #27441 + Bug #27534- Removed duplicated data. Keep latests records
 ---------------- 
-delete sar 
-	from [dbo].[StudentAvailabilityRestriction] sar
-	inner join 
-	(
-		select [Id],ROW_NUMBER()OVER(PARTITION BY [Person],[RestrictionDate] ORDER BY [UpdatedOn] asc) as 'rn'
-		from [dbo].[StudentAvailabilityDay]
-	) a
-	on a.[Id] = sar.Parent
-where a.rn > 1
-
-
-delete sar 
-	from [dbo].[StudentAvailabilityDay] sar
-	inner join 
-	(
-		select [Id],ROW_NUMBER()OVER(PARTITION BY [Person],[RestrictionDate] ORDER BY [UpdatedOn] asc) as 'rn'
-		from [dbo].[StudentAvailabilityDay]
-	) a
-	on a.[Id] = sar.Id
-where a.rn > 1
-
+--supporting index for the select and delete
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[StudentAvailabilityDay]') AND name = N'IX_StudentAvailabilityDay_Date_Person')
 CREATE NONCLUSTERED INDEX [IX_StudentAvailabilityDay_Date_Person]  ON [dbo].[StudentAvailabilityDay]   
 (
@@ -390,3 +370,5 @@ CREATE NONCLUSTERED INDEX [IX_StudentAvailabilityDay_Date_Person]  ON [dbo].[Stu
 )
 GO
 
+--Note: This SP will be executed by DBManager right after this Trunk.sql is finished
+--  => EXEC dbo.WorkAroundFor27636
