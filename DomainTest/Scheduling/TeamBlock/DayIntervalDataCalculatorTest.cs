@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ShouldReturnNull()
         {
-            var result = _target.Calculate(null,new DateOnly());
+            var result = _target.Calculate(null);
             Assert.IsNull(result);
         }
 
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			list.Add(new DateOnly(2013, 10, 03), new List<ISkillIntervalData>());
 
 
-			var result = _target.Calculate(list, new DateOnly(2013, 10, 01));
+			var result = _target.Calculate(list);
 			Assert.AreEqual(result.Count, 4);
 			Assert.AreEqual(result[new TimeSpan(0, 15, 0, 0)].ForecastedDemand, 4);
 			Assert.AreEqual(result[new TimeSpan(0, 16, 0, 0)].ForecastedDemand, 6);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			list.Add(new DateOnly(2013, 10, 01), new List<ISkillIntervalData>());
 			list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData>());
 
-			var result = _target.Calculate(list, new DateOnly(2013, 10, 01));
+			var result = _target.Calculate(list);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}
     }
