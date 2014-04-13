@@ -42,7 +42,7 @@
 	</PropertyGroup>
 
 	<!-- Entry point for CCNet -->
-  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;CreateAzure;UploadFTP">
+  <Target Name="DeployAll" DependsOnTargets="GetVersion;UpdateClientAssemblyInfos;UpdateAssemblyInfos;Compile;CompileExtraApps;Obfuscate;GenerateSdkDoc;ClientClickOnce;MyTimeClickOnce;CopyFiles;CreateMSI;MalwareScan;CreateAzure;UploadFTP">
 		<Message Text="Done!" Importance="high"/>
 	</Target>
 
@@ -102,6 +102,13 @@
 		<Message Text="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
 		<Exec Command="&quot;$(DeployShare)\$(CCCVersion)\WISE\CompileAll.bat&quot; $(CCCVersion) $(ProductsToBuild) $(MSIShare) $(DeployShare)"/>
 		<Message Text="Building MSI. Done!" Importance="high" />
+	</Target>
+	
+	<Target Name="MalwareScan">
+		<Message Text="Scanning..." Importance="high" />
+		<Message Text="&quot;$(CCNetWorkingDirectory)\ccnet\MalwareScan.bat&quot; $(CCCVersion) $(MSIShare)"/>
+		<Exec Command="&quot;$(CCNetWorkingDirectory)\ccnet\MalwareScan.bat&quot; $(CCCVersion) $(MSIShare)"/>
+		<Message Text="Scanning done!" Importance="high" />
 	</Target>
 	
 	<Target Name="CreateAzure" Condition="'$(FullBuild)' == 'Yes'">
