@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                     _intervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData> {skillIntervalData1},15)).Return(new List<ISkillIntervalData>{skillIntervalData1 });
 
 
-				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo,_advancePrefrences), 0.0);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                             skillIntervalList
                         })).IgnoreArguments().Return(skillIntervalList);
 
-				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                             skillIntervalList
                         })).IgnoreArguments().Return(skillIntervalList);
 
-				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic)).IgnoreArguments().Return(timeToSkillIntervalDic);
+				Expect.Call(_dayIntervalDataCalculator.Calculate(dateToSkillIntervalDic, DateOnly.Today)).IgnoreArguments().Return(timeToSkillIntervalDic);
 
             }
             Assert.AreEqual(_target.TargetValue(_teamBlockInfo, _advancePrefrences), 0.3);

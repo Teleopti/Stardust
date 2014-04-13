@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
             days.Add(today.AddDays(1), intervalData);
 
-            Assert.AreEqual(_target.CalculateMedian(days, 60).Count, 4);
+            Assert.AreEqual(_target.CalculateMedian(days, 60, today).Count, 6);
         }
 
         [Test]
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
             days.Add(today.AddDays(1), intervalData);
 
-            var result = _target.CalculateMedian(days, 60);
+            var result = _target.CalculateMedian(days, 60, today);
 			Assert.AreEqual(result[skillIntervalData0.Period.StartDateTime].ForecastedDemand, 3);
 			Assert.AreEqual(result[skillIntervalData1.Period.StartDateTime].ForecastedDemand, 4);
 			Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 5);
@@ -158,14 +158,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			intervalData.Add(skillIntervalData5.Period.StartDateTime, skillIntervalData5);
             days.Add(today.AddDays(2), intervalData);
 
-            var result = _target.CalculateMedian(days, 60);
-            Assert.AreEqual(result.Count, 6);
+            var result = _target.CalculateMedian(days, 60, today);
+            Assert.AreEqual(result.Count, 7);
 			Assert.AreEqual(result[skillIntervalData0.Period.StartDateTime].ForecastedDemand, 2);
-			Assert.AreEqual(result[skillIntervalData1.Period.StartDateTime].ForecastedDemand, 4);
-            Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 7);
+			Assert.AreEqual(result[skillIntervalData1.Period.StartDateTime].ForecastedDemand, 5);
+            Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 4.5);
 			Assert.AreEqual(result[skillIntervalData3.Period.StartDateTime].ForecastedDemand, 6);
-			Assert.AreEqual(result[skillIntervalData4.Period.StartDateTime].ForecastedDemand, 2);
-			Assert.AreEqual(result[skillIntervalData5.Period.StartDateTime].ForecastedDemand, 3);
+
 
 
         }
