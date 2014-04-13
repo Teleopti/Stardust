@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                                                        new List<IActivityRestriction>());
 			var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> {_shift};
-			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
 			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
 			using (_mocks.Record())
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 													   new List<IActivityRestriction>());
 			var finderResult = new WorkShiftFinderResult(_groupPerson, _dateOnly);
 			var shifts = new List<IShiftProjectionCache> { _shift };
-			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 			var skillIntervalDataDic = new Dictionary<DateOnly, IDictionary<IActivity, IList<ISkillIntervalData>>>();
 			skillIntervalDataDic.Add(_dateOnly, new Dictionary<IActivity, IList<ISkillIntervalData>>());
 			using (_mocks.Record())

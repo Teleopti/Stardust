@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
@@ -9,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IMedianCalculatorForDays
     {
-        Dictionary<TimeSpan, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> days, double resolution);
+		Dictionary<DateTime, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>> days, double resolution);
     }
 
     public class MedianCalculatorForDays : IMedianCalculatorForDays
@@ -21,13 +20,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _medianCalculatorForSkillInterval = medianCalculatorForSkillInterval;
         }
 
-        public Dictionary<TimeSpan, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>> days, double resolution)
+		public Dictionary<DateTime, ISkillIntervalData> CalculateMedian(Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>> days, double resolution)
         {
-            var result = new Dictionary<TimeSpan, ISkillIntervalData>();
+			var result = new Dictionary<DateTime, ISkillIntervalData>();
 	        if (!days.Any())
 		        return result;
 
-            var temp = new Dictionary<TimeSpan, IList<ISkillIntervalData>>();
+			var temp = new Dictionary<DateTime, IList<ISkillIntervalData>>();
             var baseDate =new DateOnly(days.Keys.First().Date);
 
             foreach (var intervalData in days.SelectMany(day => day.Value))

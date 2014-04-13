@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         {
             var skillIntervalData1 = new SkillIntervalData(_period, 3.63, 2, 2, 0, 0);
             IDictionary<DateOnly, IList<ISkillIntervalData>> dateToSkillIntervalDic = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-            IDictionary<TimeSpan, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<TimeSpan, ISkillIntervalData>();
-            timeToSkillIntervalDic.Add(new TimeSpan(10),skillIntervalData1 );
+            IDictionary<DateTime, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<DateTime, ISkillIntervalData>();
+            timeToSkillIntervalDic.Add(skillIntervalData1.Period.StartDateTime,skillIntervalData1 );
             dateToSkillIntervalDic.Add(DateOnly.Today,new List<ISkillIntervalData>{skillIntervalData1 });
             using (_mock.Record())
             {
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
                 Expect.Call(_skillDay1.CurrentDate).Return(DateOnly.Today);
                 Expect.Call(_skillDay1.Skill ).Return(_baseLineData.SampleSkill );
                 Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollecion).Repeat.Twice() ;
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList))
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList, DateOnly.Today, TimeZoneGuard.Instance.TimeZone))
                       .Return(new List<ISkillIntervalData> {skillIntervalData1});
                 Expect.Call(
                     _intervalDataDivider.SplitSkillIntervalData(new List<ISkillIntervalData> {skillIntervalData1},15)).Return(new List<ISkillIntervalData>{skillIntervalData1 });
@@ -109,14 +109,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         public void TestTargetValueWithOneScheduleDayOneSkillMultipleIervals()
         {
             var skillIntervalData1 = new SkillIntervalData(_period, 5, 3, 3, 0, 0);
-            var skillIntervalData2 = new SkillIntervalData(_period, 6, 0, 0, 0, 0);
+            var skillIntervalData2 = new SkillIntervalData(_period.MovePeriod(TimeSpan.FromMinutes(30)), 6, 0, 0, 0, 0);
             var skillIntervalList = new List<ISkillIntervalData> {skillIntervalData1, skillIntervalData2};
 
             IDictionary<DateOnly, IList<ISkillIntervalData>> dateToSkillIntervalDic = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-            IDictionary<TimeSpan, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<TimeSpan, ISkillIntervalData>();
-            
-            timeToSkillIntervalDic.Add(new TimeSpan(10), skillIntervalData1);
-            timeToSkillIntervalDic.Add(new TimeSpan(20), skillIntervalData2);
+            IDictionary<DateTime, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<DateTime, ISkillIntervalData>();
+
+			timeToSkillIntervalDic.Add(skillIntervalData1.Period.StartDateTime, skillIntervalData1);
+			timeToSkillIntervalDic.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
             dateToSkillIntervalDic.Add(DateOnly.Today, skillIntervalList);
             
             using (_mock.Record())
@@ -143,14 +143,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
         public void TestSkillWithMidnightBreak()
         {
             var skillIntervalData1 = new SkillIntervalData(_period, 5, 3, 3, 0, 0);
-            var skillIntervalData2 = new SkillIntervalData(_period, 6, 0, 0, 0, 0);
+            var skillIntervalData2 = new SkillIntervalData(_period.MovePeriod(TimeSpan.FromMinutes(30)), 6, 0, 0, 0, 0);
             var skillIntervalList = new List<ISkillIntervalData> { skillIntervalData1, skillIntervalData2 };
 
             IDictionary<DateOnly, IList<ISkillIntervalData>> dateToSkillIntervalDic = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-            IDictionary<TimeSpan, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<TimeSpan, ISkillIntervalData>();
+            IDictionary<DateTime, ISkillIntervalData> timeToSkillIntervalDic = new Dictionary<DateTime, ISkillIntervalData>();
 
-            timeToSkillIntervalDic.Add(new TimeSpan(10), skillIntervalData1);
-            timeToSkillIntervalDic.Add(new TimeSpan(20), skillIntervalData2);
+			timeToSkillIntervalDic.Add(skillIntervalData1.Period.StartDateTime, skillIntervalData1);
+			timeToSkillIntervalDic.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
             dateToSkillIntervalDic.Add(DateOnly.Today, skillIntervalList);
             _baseLineData.SampleSkill.MidnightBreakOffset = TimeSpan.FromHours(1);
             using (_mock.Record())
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
             Expect.Call(skillDay.CurrentDate).Return(DateOnly.Today);
             Expect.Call(skillDay.Skill).Return(_baseLineData.SampleSkill);
             Expect.Call(skillDay.SkillStaffPeriodCollection).Return(skillStaffPeriodCollecion).Repeat.Twice();
-			Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList)).Return(skillIntervalList);
+			Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriodList, DateOnly.Today, TimeZoneGuard.Instance.TimeZone)).Return(skillIntervalList);
             Expect.Call(_intervalDataDivider.SplitSkillIntervalData(skillIntervalList, 15)).Return(skillIntervalList);
         }
     }

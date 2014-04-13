@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 	public interface IWorkShiftSelector
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataDictionary, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo);
+        IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList, IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataDictionary, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo);
 	}
 
 	public class WorkShiftSelector : IWorkShiftSelector
@@ -24,18 +24,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		}
 
 		public IShiftProjectionCache SelectShiftProjectionCache(IList<IShiftProjectionCache> shiftList,
-			IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> skillIntervalDataLocalDictionary,
+			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
 			WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
 		{
-			var activityIntervalDataLocalDictionary = new ActivityIntervalDataLocalDictionary();
-			activityIntervalDataLocalDictionary.Store(skillIntervalDataLocalDictionary);
-
 			double? bestShiftValue = null;
 			IShiftProjectionCache bestShift = null;
 			if (shiftList != null)
 				foreach (var shiftProjectionCache in shiftList)
 				{
-					double? valueForShift = this.valueForShift(activityIntervalDataLocalDictionary, shiftProjectionCache, lengthFactor,
+					double? valueForShift = this.valueForShift(skillIntervalDataLocalDictionary, shiftProjectionCache, lengthFactor,
 						useMinimumPersons,
 						useMaximumPersons, timeZoneInfo);
 
@@ -78,12 +75,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			return value;
 		}
 
-		private double? valueForShift(IActivityIntervalDataLocalDictionary skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
+		private double? valueForShift(IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary, IShiftProjectionCache shiftProjectionCache, WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons, bool useMaximumPersons, TimeZoneInfo timeZoneInfo)
 		{
 			double? totalForAllActivitesValue = null;
 			foreach (var activity in skillIntervalDataLocalDictionary.Keys)
 			{
-				double? skillValue = valueForActivity(activity, skillIntervalDataLocalDictionary.SkillIntervalDataDicFor(activity), shiftProjectionCache, lengthFactor, useMinimumPersons, useMaximumPersons, timeZoneInfo);
+				double? skillValue = valueForActivity(activity, skillIntervalDataLocalDictionary[activity], shiftProjectionCache, lengthFactor, useMinimumPersons, useMaximumPersons, timeZoneInfo);
 				if (!skillValue.HasValue) return null;
 				
 				if (totalForAllActivitesValue.HasValue)

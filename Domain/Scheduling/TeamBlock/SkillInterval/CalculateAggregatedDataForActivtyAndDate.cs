@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval
 				if (skill.Activity == skillActivity)
 				{
 					var skillIntervalDatas =
-						_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriods);
+						_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriods, skillDay.CurrentDate, TimeZoneGuard.Instance.TimeZone);
 					var splittedDatas = _intervalDataDivider.SplitSkillIntervalData(skillIntervalDatas, resolution);
 					var adjustedIntervalDatas = new List<ISkillIntervalData>();
 					foreach (var skillIntervalData in splittedDatas)

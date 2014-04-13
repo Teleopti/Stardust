@@ -44,21 +44,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 02, 1, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 02, 2, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
-            var days = new Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>>();
+            var days = new Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>>();
 
-            var intervalData = new Dictionary<TimeSpan, ISkillIntervalData>();
-            intervalData.Add(new TimeSpan(0, 22, 0, 0), skillIntervalData0);
-            intervalData.Add(new TimeSpan(0, 23, 0, 0), skillIntervalData1);
-            intervalData.Add(new TimeSpan(1, 0, 0, 0), skillIntervalData2);
-            intervalData.Add(new TimeSpan(1, 1, 0, 0), skillIntervalData3);
+            var intervalData = new Dictionary<DateTime, ISkillIntervalData>();
+			intervalData.Add(skillIntervalData0.Period.StartDateTime, skillIntervalData0);
+			intervalData.Add(skillIntervalData1.Period.StartDateTime, skillIntervalData1);
+			intervalData.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
+			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
             days.Add(today, intervalData);
 
-            intervalData = new Dictionary<TimeSpan, ISkillIntervalData>();
-            intervalData.Add(new TimeSpan(0, 0, 0, 0), skillIntervalData2);
-            intervalData.Add(new TimeSpan(0, 1, 0, 0), skillIntervalData3);
+			intervalData = new Dictionary<DateTime, ISkillIntervalData>();
+			intervalData.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
+			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
             days.Add(today.AddDays(1), intervalData);
 
-            Assert.AreEqual(_target.CalculateMedian(days, 60).Count, 6);
+            Assert.AreEqual(_target.CalculateMedian(days, 60).Count, 4);
         }
 
         [Test]
@@ -83,27 +83,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 02, 1, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 02, 2, 0, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
-            var days = new Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>>();
+            var days = new Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>>();
 
-            var intervalData = new Dictionary<TimeSpan, ISkillIntervalData>();
-            intervalData.Add(new TimeSpan(0, 22, 0, 0), skillIntervalData0);
-            intervalData.Add(new TimeSpan(0, 23, 0, 0), skillIntervalData1);
-            intervalData.Add(new TimeSpan(1, 0, 0, 0), skillIntervalData2);
-            intervalData.Add(new TimeSpan(1, 1, 0, 0), skillIntervalData3);
+            var intervalData = new Dictionary<DateTime, ISkillIntervalData>();
+			intervalData.Add(skillIntervalData0.Period.StartDateTime, skillIntervalData0);
+			intervalData.Add(skillIntervalData1.Period.StartDateTime, skillIntervalData1);
+			intervalData.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
+			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
             days.Add(today, intervalData);
 
-            intervalData = new Dictionary<TimeSpan, ISkillIntervalData>();
-            intervalData.Add(new TimeSpan(0, 0, 0, 0), skillIntervalData2);
-            intervalData.Add(new TimeSpan(0, 1, 0, 0), skillIntervalData3);
+            intervalData = new Dictionary<DateTime, ISkillIntervalData>();
+			intervalData.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
+			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
             days.Add(today.AddDays(1), intervalData);
 
             var result = _target.CalculateMedian(days, 60);
-            Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 3);
-            Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 4);
-            Assert.AreEqual(result[new TimeSpan(0, 0, 0, 0)].ForecastedDemand, 5);
-            Assert.AreEqual(result[new TimeSpan(0, 1, 0, 0)].ForecastedDemand, 6);
-            Assert.AreEqual(result[new TimeSpan(1, 0, 0, 0)].ForecastedDemand, 5);
-            Assert.AreEqual(result[new TimeSpan(1, 1, 0, 0)].ForecastedDemand, 6);
+			Assert.AreEqual(result[skillIntervalData0.Period.StartDateTime].ForecastedDemand, 3);
+			Assert.AreEqual(result[skillIntervalData1.Period.StartDateTime].ForecastedDemand, 4);
+			Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 5);
+			Assert.AreEqual(result[skillIntervalData3.Period.StartDateTime].ForecastedDemand, 6);
+			Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 5);
+			Assert.AreEqual(result[skillIntervalData3.Period.StartDateTime].ForecastedDemand, 6);
         }
 
         [Test]
@@ -137,36 +137,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 new SkillIntervalData(
                     new DateTimePeriod(new DateTime(2013, 10, 03, 1, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 03, 2, 0, 0, DateTimeKind.Utc)), 3, 3, 0, null, null);
-            var days = new Dictionary<DateOnly, Dictionary<TimeSpan, ISkillIntervalData>>();
+            var days = new Dictionary<DateOnly, Dictionary<DateTime, ISkillIntervalData>>();
 
-            var intervalData = new Dictionary<TimeSpan, ISkillIntervalData>();
-            intervalData.Add(new TimeSpan(0, 22, 0, 0), skillIntervalData0);
-            intervalData.Add(new TimeSpan(0, 23, 0, 0), skillIntervalData1);
-            intervalData.Add(new TimeSpan(1, 0, 0, 0), skillIntervalData2);
-            intervalData.Add(new TimeSpan(1, 23, 0, 0), skillIntervalData3);
+            var intervalData = new Dictionary<DateTime, ISkillIntervalData>();
+			intervalData.Add(skillIntervalData0.Period.StartDateTime, skillIntervalData0);
+			intervalData.Add(skillIntervalData1.Period.StartDateTime, skillIntervalData1);
+			intervalData.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
+			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
             days.Add(today, intervalData);
 
-            intervalData = new Dictionary<TimeSpan, ISkillIntervalData>();
-            intervalData.Add(new TimeSpan(0, 0, 0, 0), skillIntervalData2);
-            intervalData.Add(new TimeSpan(0, 23, 0, 0), skillIntervalData3);
-            intervalData.Add(new TimeSpan(1, 0, 0, 0), skillIntervalData4);
-            intervalData.Add(new TimeSpan(1, 1, 0, 0), skillIntervalData5);
+            intervalData = new Dictionary<DateTime, ISkillIntervalData>();
+			intervalData.Add(skillIntervalData2.Period.StartDateTime, skillIntervalData2);
+			intervalData.Add(skillIntervalData3.Period.StartDateTime, skillIntervalData3);
+			intervalData.Add(skillIntervalData4.Period.StartDateTime, skillIntervalData4);
+			intervalData.Add(skillIntervalData5.Period.StartDateTime, skillIntervalData5);
             days.Add(today.AddDays(1), intervalData);
 
-            intervalData = new Dictionary<TimeSpan, ISkillIntervalData>();
-            intervalData.Add(new TimeSpan(0, 0, 0, 0), skillIntervalData4);
-            intervalData.Add(new TimeSpan(0, 1, 0, 0), skillIntervalData5);
+            intervalData = new Dictionary<DateTime, ISkillIntervalData>();
+			intervalData.Add(skillIntervalData4.Period.StartDateTime, skillIntervalData4);
+			intervalData.Add(skillIntervalData5.Period.StartDateTime, skillIntervalData5);
             days.Add(today.AddDays(2), intervalData);
 
             var result = _target.CalculateMedian(days, 60);
-            Assert.AreEqual(result.Count, 7);
-            Assert.AreEqual(result[new TimeSpan(0, 22, 0, 0)].ForecastedDemand, 2);
-            Assert.AreEqual(result[new TimeSpan(0, 23, 0, 0)].ForecastedDemand, 5);
-            Assert.AreEqual(result[new TimeSpan(1, 0, 0, 0)].ForecastedDemand, 4.5);
-            Assert.AreEqual(result[new TimeSpan(0, 1, 0, 0)].ForecastedDemand, 3);
-            Assert.AreEqual(result[new TimeSpan(1, 23, 0, 0)].ForecastedDemand, 6);
-            Assert.AreEqual(result[new TimeSpan(0, 0, 0, 0)].ForecastedDemand, 4.5);
-            Assert.AreEqual(result[new TimeSpan(0, 1, 0, 0)].ForecastedDemand, 3);
+            Assert.AreEqual(result.Count, 6);
+			Assert.AreEqual(result[skillIntervalData0.Period.StartDateTime].ForecastedDemand, 2);
+			Assert.AreEqual(result[skillIntervalData1.Period.StartDateTime].ForecastedDemand, 4);
+            Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 7);
+			Assert.AreEqual(result[skillIntervalData3.Period.StartDateTime].ForecastedDemand, 6);
+			Assert.AreEqual(result[skillIntervalData4.Period.StartDateTime].ForecastedDemand, 2);
+			Assert.AreEqual(result[skillIntervalData5.Period.StartDateTime].ForecastedDemand, 3);
 
 
         }

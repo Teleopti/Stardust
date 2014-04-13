@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
                     skillStaffPeriodCollection = skillStaffPeriodCollection.Concat(missingIntervals).ToList()  ;
                     skillStaffPeriodCollection = _filterOutIntervalsAfterMidNight.Filter(skillStaffPeriodCollection, currentDate, TimeZoneGuard.Instance.TimeZone);
                 }
-                
-                var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection);
+
+				var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillStaffPeriodCollection, currentDate, TimeZoneGuard.Instance.TimeZone);
                 mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
 
                 if(!result.ContainsKey(currentDate ))

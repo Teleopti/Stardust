@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						}
 					}
 
-					var activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+					var activityInternalData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 					foreach (var activity in activities)
 					{
 						var dateOnlyDicForActivity = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							}
 						}
 
-						IDictionary<TimeSpan, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
+						IDictionary<DateTime, ISkillIntervalData> dataForActivity = _dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
 						activityInternalData.Add(activity, dataForActivity);
 					}
 
