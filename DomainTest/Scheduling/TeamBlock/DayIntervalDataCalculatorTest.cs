@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			var result = _target.Calculate(list);
 			Assert.AreEqual(result.Count, 4);
-			Assert.AreEqual(result[new TimeSpan(0, 15, 0, 0)].ForecastedDemand, 4);
-			Assert.AreEqual(result[new TimeSpan(0, 16, 0, 0)].ForecastedDemand, 6);
-			Assert.AreEqual(result[new TimeSpan(0, 17, 0, 0)].ForecastedDemand, 8);
-			Assert.AreEqual(result[new TimeSpan(0, 18, 0, 0)].ForecastedDemand, 11);
+			Assert.AreEqual(result[skillIntervalData1.Period.StartDateTime].ForecastedDemand, 4);
+			Assert.AreEqual(result[skillIntervalData2.Period.StartDateTime].ForecastedDemand, 6);
+			Assert.AreEqual(result[skillIntervalData3.Period.StartDateTime].ForecastedDemand, 8);
+			Assert.AreEqual(result[skillIntervalData4.Period.StartDateTime].ForecastedDemand, 11);
 
 		}
 

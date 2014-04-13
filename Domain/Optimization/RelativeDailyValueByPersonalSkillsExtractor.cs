@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -99,24 +99,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 					continue;
 
 				var skillIntervalDataList =
-				_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(personsSkillStaffPeriods);
-
+				_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(personsSkillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone);
 				var splittedSkillIntervalDataList = _skillIntervalDataDivider.SplitSkillIntervalData(skillIntervalDataList,
 																									  minResolution);
 				nestedList.Add(splittedSkillIntervalDataList);
 			}
 
-			var aggregatedByPeriodSkillIntevalDataList =
+			var aggregatedByPeriodSkillIntervalDataList =
 				_skillIntervalDataAggregator.AggregateSkillIntervalData(nestedList);
            
             bool useMinPersonnel = _advancedPreferences.UseMinimumStaffing;
             bool useMaxPersonnel = _advancedPreferences.UseMaximumStaffing;
 
-			var resultingList = skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntevalDataList, useMinPersonnel, useMaxPersonnel);
+			var resultingList = skillStaffPeriodsRelativeDifference(aggregatedByPeriodSkillIntervalDataList, useMinPersonnel, useMaxPersonnel);
 	        return resultingList;
         }
 
-		public static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList, bool considerMinStaffing, bool considerMaxStaffing)
+		private static IList<double> skillStaffPeriodsRelativeDifference(IEnumerable<ISkillIntervalData> skillIntervalDataList, bool considerMinStaffing, bool considerMaxStaffing)
         {
 			if (considerMinStaffing && considerMaxStaffing)
 				return skillIntervalDataList.Select(s => s.RelativeDifferenceBoosted()).ToList();

@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 													   new List<IActivityRestriction>());
 			var shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
 			var shifts = new List<IShiftProjectionCache> { shiftProjectionCache };
-			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 
 			using (_mocks.Record())
 			{

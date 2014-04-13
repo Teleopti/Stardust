@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IMedianCalculatorForSkillInterval
 	{
-        ISkillIntervalData CalculateMedian(TimeSpan timeSpan, IList<ISkillIntervalData> skillIntervalData, double resolution, DateOnly baseDate);
+		ISkillIntervalData CalculateMedian(DateTime key, IList<ISkillIntervalData> skillIntervalData, double resolution, DateOnly baseDate);
     }
 
     public class MedianCalculatorForSkillInterval : IMedianCalculatorForSkillInterval 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _intervalDataCalculator = intervalDataCalculator;
         }
 
-        public ISkillIntervalData CalculateMedian(TimeSpan timeSpan, IList<ISkillIntervalData> skillIntervalDataList, double resolution, DateOnly baseDate)
+		public ISkillIntervalData CalculateMedian(DateTime key, IList<ISkillIntervalData> skillIntervalDataList, double resolution, DateOnly baseDate)
         {
             var forecastedDemands = new List<double>();
             var currentDemands = new List<double>();
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var minimumStaff  = _intervalDataCalculator.Calculate(minimumStaffs);
             var maximumStaff  = _intervalDataCalculator.Calculate(maximumStaffs);
 
-            var startTime = DateTime.SpecifyKind(baseDate.Date.Add(timeSpan),DateTimeKind.Utc);
+            var startTime = DateTime.SpecifyKind(baseDate.Date.Add(key.TimeOfDay),DateTimeKind.Utc);
 			var endTime = DateTime.SpecifyKind(startTime.AddMinutes(resolution), DateTimeKind.Utc);
             ISkillIntervalData skillIntervalData = new SkillIntervalData(
                 new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, currentHead , minimumStaff ,maximumStaff);

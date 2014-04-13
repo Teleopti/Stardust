@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface IDayIntervalDataCalculator
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IDictionary<TimeSpan, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
+		IDictionary<DateTime, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
     }
 
     public class DayIntervalDataCalculator : IDayIntervalDataCalculator
@@ -23,12 +23,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _twoDaysIntervalGenerator = twoDaysIntervalGenerator;
         }
 
-        public IDictionary<TimeSpan, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData)
+		public IDictionary<DateTime, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData)
         {
             if (dayIntervalData == null) return null;
 	        var sampleInterval = dayIntervalData.Where(x => x.Value.Count > 0).Select(x => x.Value).FirstOrDefault();
 			if (!dayIntervalData.Any() || sampleInterval == null)
-				return new Dictionary<TimeSpan, ISkillIntervalData>();
+				return new Dictionary<DateTime, ISkillIntervalData>();
 
 			var resolution = sampleInterval.First().Period.ElapsedTime().TotalMinutes;
             var twoDayIntervalsForAllDays =_twoDaysIntervalGenerator.GenerateTwoDaysInterval( dayIntervalData);

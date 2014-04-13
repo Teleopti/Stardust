@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using(_mock.Playback() )
             {
-                var returnList = _target.MapSkillIntervalData(_skillStaffPeriodList);
+                var returnList = _target.MapSkillIntervalData(_skillStaffPeriodList, new DateOnly(), TimeZoneInfo.Utc );
                 Assert.AreEqual(returnList.Count , 3);
                 
                 Assert.That(returnList[0].Period, Is.EqualTo(dateTime));

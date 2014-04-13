@@ -48,41 +48,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(result.Count, 2);
 			Assert.AreEqual(result[new DateOnly(2013, 10, 01)].Count, 4);
 			Assert.AreEqual(result[new DateOnly(2013, 10, 02)].Count, 2);
-			Assert.AreEqual(result[new DateOnly(2013, 10, 01)][TimeSpan.FromHours(23)].ForecastedDemand, 4);
-			Assert.AreEqual(result[new DateOnly(2013, 10, 01)][TimeSpan.FromDays(1)].ForecastedDemand, 5);
-
-        }
-
-        [Test]
-        public void ShouldMapFromUTC()
-        {
-			var skillIntervalData0 =
-							new SkillIntervalData(
-								new DateTimePeriod(new DateTime(2013, 10, 01, 23, 30, 0, DateTimeKind.Utc),
-												   new DateTime(2013, 10, 01, 23, 45, 0, DateTimeKind.Utc)), 3, 3, 0, null, null);
-			var skillIntervalData1 =
-				new SkillIntervalData(
-					new DateTimePeriod(new DateTime(2013, 10, 01, 23, 45, 0, DateTimeKind.Utc),
-									   new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc)), 4, 4, 0, null, null);
-			var skillIntervalData2 =
-				new SkillIntervalData(
-					new DateTimePeriod(new DateTime(2013, 10, 02, 0, 0, 0, DateTimeKind.Utc),
-									   new DateTime(2013, 10, 02, 0, 15, 0, DateTimeKind.Utc)), 5, 5, 0, null, null);
-			var skillIntervalData3 =
-				new SkillIntervalData(
-					new DateTimePeriod(new DateTime(2013, 10, 02, 0, 15, 0, DateTimeKind.Utc),
-									   new DateTime(2013, 10, 02, 0, 30, 0, DateTimeKind.Utc)), 6, 6, 0, null, null);
-
-			IDictionary<DateOnly, IList<ISkillIntervalData>> list = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
-			list.Add(new DateOnly(2013, 10, 02), new List<ISkillIntervalData> { skillIntervalData0, skillIntervalData1, skillIntervalData2, skillIntervalData3 });
-			list.Add(new DateOnly(2013, 10, 03), new List<ISkillIntervalData>());
-
-			var result = _target.GenerateTwoDaysInterval(list);
-
-			Assert.AreEqual(result.Count, 1);
-			Assert.AreEqual(result[new DateOnly(2013, 10, 02)].Count, 4);
-	        Assert.AreEqual(result[new DateOnly(2013, 10, 02)][new TimeSpan(-1, 23, 45, 0)].ForecastedDemand, 4);
-			Assert.AreEqual(result[new DateOnly(2013, 10, 02)][TimeSpan.Zero].ForecastedDemand, 5);
+			Assert.AreEqual(result[new DateOnly(2013, 10, 01)][skillIntervalData1.Period.StartDateTime].ForecastedDemand, 4);
+			Assert.AreEqual(result[new DateOnly(2013, 10, 01)][skillIntervalData2.Period.StartDateTime].ForecastedDemand, 5);
 
         }
 
@@ -117,14 +84,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             Assert.AreEqual(result.Count, 2);
             Assert.AreEqual(4, result[today].Count);
-            Assert.AreEqual(3, result[today][TimeSpan.FromHours(22)].ForecastedDemand);
-            Assert.AreEqual(4, result[today][TimeSpan.FromHours(23)].ForecastedDemand);
-            Assert.AreEqual(5, result[today][new TimeSpan(1, 0, 0, 0)].ForecastedDemand);
-            Assert.AreEqual(6, result[today][new TimeSpan(1, 1, 0, 0)].ForecastedDemand);
+			Assert.AreEqual(3, result[today][skillIntervalData0.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(4, result[today][skillIntervalData1.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(5, result[today][skillIntervalData2.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(6, result[today][skillIntervalData3.Period.StartDateTime].ForecastedDemand);
 
             Assert.AreEqual(2, result[today.AddDays(1)].Count);
-            Assert.AreEqual(5, result[today.AddDays(1)][TimeSpan.FromHours(0)].ForecastedDemand);
-            Assert.AreEqual(6, result[today.AddDays(1)][TimeSpan.FromHours(1)].ForecastedDemand);
+			Assert.AreEqual(5, result[today.AddDays(1)][skillIntervalData2.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(6, result[today.AddDays(1)][skillIntervalData3.Period.StartDateTime].ForecastedDemand);
         }
 
         [Test]
@@ -160,19 +127,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             Assert.AreEqual(result.Count,4);
             Assert.AreEqual(2, result[today].Count);
-            Assert.AreEqual(3, result[today][TimeSpan.FromHours(10)].ForecastedDemand);
-            Assert.AreEqual(4, result[today][new TimeSpan(1,10,0,0)].ForecastedDemand);
+			Assert.AreEqual(3, result[today][skillIntervalData0.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(4, result[today][skillIntervalData1.Period.StartDateTime].ForecastedDemand);
 
             Assert.AreEqual(2, result[today.AddDays(1)].Count);
-            Assert.AreEqual(4, result[today.AddDays(1)][TimeSpan.FromHours(10)].ForecastedDemand);
-            Assert.AreEqual(5, result[today.AddDays(1)][new TimeSpan(1, 10, 0, 0)].ForecastedDemand);
+			Assert.AreEqual(4, result[today.AddDays(1)][skillIntervalData1.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(5, result[today.AddDays(1)][skillIntervalData2.Period.StartDateTime].ForecastedDemand);
             
             Assert.AreEqual(2, result[today.AddDays(2)].Count);
-            Assert.AreEqual(5, result[today.AddDays(2)][TimeSpan.FromHours(10)].ForecastedDemand);
-            Assert.AreEqual(6, result[today.AddDays(2)][new TimeSpan(1, 10, 0, 0)].ForecastedDemand);
+			Assert.AreEqual(5, result[today.AddDays(2)][skillIntervalData2.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(6, result[today.AddDays(2)][skillIntervalData3.Period.StartDateTime].ForecastedDemand);
 
             Assert.AreEqual(1, result[today.AddDays(3)].Count);
-            Assert.AreEqual(6, result[today.AddDays(3)][TimeSpan.FromHours(10)].ForecastedDemand);
+			Assert.AreEqual(6, result[today.AddDays(3)][skillIntervalData3.Period.StartDateTime].ForecastedDemand);
         }
 
         [Test]
@@ -204,14 +171,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(result.Count, 3);
             
             Assert.AreEqual(1, result[today].Count);
-            Assert.AreEqual(3, result[today][TimeSpan.FromHours(10)].ForecastedDemand );
+			Assert.AreEqual(3, result[today][skillIntervalData0.Period.StartDateTime].ForecastedDemand);
             
             Assert.AreEqual(2, result[today.AddDays(2)].Count);
-            Assert.AreEqual(5, result[today.AddDays(2)][TimeSpan.FromHours(10)].ForecastedDemand);
-            Assert.AreEqual(6, result[today.AddDays(2)][new TimeSpan(1,10,0,0)].ForecastedDemand);
+			Assert.AreEqual(5, result[today.AddDays(2)][skillIntervalData2.Period.StartDateTime].ForecastedDemand);
+			Assert.AreEqual(6, result[today.AddDays(2)][skillIntervalData3.Period.StartDateTime].ForecastedDemand);
             
             Assert.AreEqual(1, result[today.AddDays(3)].Count);
-            Assert.AreEqual(6, result[today.AddDays(3)][TimeSpan.FromHours(10)].ForecastedDemand);
+			Assert.AreEqual(6, result[today.AddDays(3)][skillIntervalData3.Period.StartDateTime].ForecastedDemand);
         }
     }
 }
