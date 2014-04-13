@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private List<ISkillIntervalData> _skillIntevalDataList;
 		private Dictionary<DateOnly, IList<ISkillIntervalData>> _skillIntervalDataListPerDate;
 		private IActivity _activity;
-		private Dictionary<TimeSpan, ISkillIntervalData> _skillIntervalDataPerTimeSpan;
+		private Dictionary<DateTime, ISkillIntervalData> _skillIntervalDataPerTimeSpan;
 		private ISkillIntervalData _skillIntervalData;
 
 		[SetUp]
@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_skillIntervalDatasPerActivityAndDate.Add(DateOnly.MinValue, _skillIntervalDatasPerActivity);
 			_skillIntervalDataListPerDate = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
 			_skillIntervalDataListPerDate.Add(DateOnly.MinValue, _skillIntevalDataList);
-			_skillIntervalDataPerTimeSpan = new Dictionary<TimeSpan, ISkillIntervalData>();
-			_skillIntervalDataPerTimeSpan.Add(new DateTimePeriod().ElapsedTime(), _skillIntervalData);
+			_skillIntervalDataPerTimeSpan = new Dictionary<DateTime, ISkillIntervalData>();
+			_skillIntervalDataPerTimeSpan.Add(new DateTimePeriod().StartDateTime, _skillIntervalData);
 		}
 
 		[Test]
@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.CreateFor(_teamBlockInfo, DateOnly.MinValue, _schedulingResultStateHolder);
-				Assert.IsTrue(result[_activity].ContainsKey(new DateTimePeriod().ElapsedTime()));
-				Assert.AreEqual(_skillIntevalDataList[0], result[_activity][new DateTimePeriod().ElapsedTime()]);
+				Assert.IsTrue(result[_activity].ContainsKey(new DateTimePeriod().StartDateTime));
+				Assert.AreEqual(_skillIntevalDataList[0], result[_activity][new DateTimePeriod().StartDateTime]);
 			}
 		}
 	}

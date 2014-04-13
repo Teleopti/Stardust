@@ -1,8 +1,5 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
@@ -10,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IActivityIntervalDataCreator
 	{
-		Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
+		Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
 		                                                                                           DateOnly day,
 		                                                                                           ISchedulingResultStateHolder
 			                                                                                           schedulingResultStateHolder);
@@ -29,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_dayIntervalDataCalculator = dayIntervalDataCalculator;
 		}
 
-		public Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
+		public Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
 		                                                                                  DateOnly day,
 		                                                                                  ISchedulingResultStateHolder
 			                                                                                  schedulingResultStateHolder)
@@ -45,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 			}
 
-			var activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var activityInternalData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 			foreach (var activity in activities)
 			{
 				var dateOnlyDicForActivity = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
@@ -61,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					}
 				}
 
-				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity =
+				IDictionary<DateTime, ISkillIntervalData> dataForActivity =
 					_dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
 
 				activityInternalData.Add(activity, dataForActivity);
