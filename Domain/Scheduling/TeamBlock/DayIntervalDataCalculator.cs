@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface IDayIntervalDataCalculator
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		IDictionary<DateTime, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData);
+		IDictionary<DateTime, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData, DateOnly returnListDateOnly);
     }
 
     public class DayIntervalDataCalculator : IDayIntervalDataCalculator
@@ -25,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _twoDaysIntervalGenerator = twoDaysIntervalGenerator;
         }
 
-		public IDictionary<DateTime, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData)
+		public IDictionary<DateTime, ISkillIntervalData> Calculate(IDictionary<DateOnly, IList<ISkillIntervalData>> dayIntervalData, DateOnly returnListDateOnly)
         {
             if (dayIntervalData == null) return null;
 	        var sampleInterval = dayIntervalData.Where(x => x.Value.Count > 0).Select(x => x.Value).FirstOrDefault();
@@ -35,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var resolution = sampleInterval.First().Period.ElapsedTime().TotalMinutes;
             var twoDayIntervalsForAllDays =_twoDaysIntervalGenerator.GenerateTwoDaysInterval( dayIntervalData);
 
-            return _medianCalculatorForDays.CalculateMedian(twoDayIntervalsForAllDays, resolution);;
+			return _medianCalculatorForDays.CalculateMedian(twoDayIntervalsForAllDays, resolution, returnListDateOnly);
         }
         
     }

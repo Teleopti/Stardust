@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 
             var skillIntervalPerDayList = getSkillIntervalListForEachDay(dateOnlyList,skills ,minimumResolution );
-            var finalSkillIntervalData = calculateMedianValue(skillIntervalPerDayList);
+			var finalSkillIntervalData = calculateMedianValue(skillIntervalPerDayList, dateOnlyList.Min());
             return  getTargetValue(finalSkillIntervalData, advancedPreferences.TargetValueCalculation);
         }
 
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             
         }
 
-        private IList<ISkillIntervalData> calculateMedianValue(IDictionary<DateOnly, IList<ISkillIntervalData>> skillIntervalPerDayList)
+        private IList<ISkillIntervalData> calculateMedianValue(IDictionary<DateOnly, IList<ISkillIntervalData>> skillIntervalPerDayList, DateOnly returnListDateOnly)
         {
-            var intervalData = _dayIntervalDataCalculator.Calculate(skillIntervalPerDayList);
+            var intervalData = _dayIntervalDataCalculator.Calculate(skillIntervalPerDayList, returnListDateOnly);
             return intervalData.Values.ToList();
         }
 

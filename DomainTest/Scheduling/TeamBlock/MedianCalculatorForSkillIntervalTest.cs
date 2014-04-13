@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                     new DateTimePeriod(new DateTime(2013, 10, 16, 07, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 16, 08, 0, 0, DateTimeKind.Utc)), 4, 2, 1, 6, 12);
             IList<ISkillIntervalData> skillIntervalData = new List<ISkillIntervalData>{skillInterval1,skillInterval2,skillInterval3 };
-			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime, skillIntervalData, 60,
+			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60,
 		        new DateOnly(2013, 10, 14));
 	        Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand   ,2);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                     new DateTimePeriod(new DateTime(2013, 10, 16, 07, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 16, 08, 0, 0, DateTimeKind.Utc)), 4, 2, 1, 6, 12);
             IList<ISkillIntervalData> skillIntervalData = new List<ISkillIntervalData> { skillInterval1, skillInterval2, skillInterval3 };
-			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime, skillIntervalData, 60, new DateOnly(2013, 10, 14));
+			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
             Assert.AreEqual(result.CurrentHeads, 6);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                     new DateTimePeriod(new DateTime(2013, 10, 16, 07, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 16, 08, 0, 0, DateTimeKind.Utc)), 4, 2, 1, null, 12);
             IList<ISkillIntervalData> skillIntervalData = new List<ISkillIntervalData> { skillInterval1, skillInterval2, skillInterval3 };
-			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime, skillIntervalData, 60, new DateOnly(2013, 10, 14));
+			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
             Assert.AreEqual(result.CurrentHeads, 6);
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                     new DateTimePeriod(new DateTime(2013, 10, 16, 07, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 16, 08, 0, 0, DateTimeKind.Utc)), 4, 2, 1, 6, 12);
             IList<ISkillIntervalData> skillIntervalData = new List<ISkillIntervalData> { skillInterval1, skillInterval2, skillInterval3 };
-			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime, skillIntervalData, 60, new DateOnly(2013, 10, 14));
+			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
             Assert.AreEqual(result.CurrentHeads, 6);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                     new DateTimePeriod(new DateTime(2013, 10, 16, 07, 0, 0, DateTimeKind.Utc),
                                        new DateTime(2013, 10, 16, 08, 0, 0, DateTimeKind.Utc)), 4, 2, 1, null, null);
             IList<ISkillIntervalData> skillIntervalData = new List<ISkillIntervalData> { skillInterval1, skillInterval2, skillInterval3 };
-			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime, skillIntervalData, 60, new DateOnly(2013, 10, 14));
+			var result = _target.CalculateMedian(skillInterval1.Period.StartDateTime.TimeOfDay, skillIntervalData, 60, new DateOnly(2013, 10, 14));
             Assert.AreEqual(result.ForecastedDemand, 5);
             Assert.AreEqual(result.CurrentDemand, 2);
             Assert.AreEqual(result.CurrentHeads, 6);
