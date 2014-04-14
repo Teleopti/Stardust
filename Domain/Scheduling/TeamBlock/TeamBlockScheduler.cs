@@ -52,18 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return true;
 
-			IShiftProjectionCache roleModelShift;
-			if (customEffectiveRestriction == null)
-			{
-				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-					schedulingOptions);
-
-			}
-			else
-			{
-				roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-					schedulingOptions, customEffectiveRestriction);
-			}
+			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
+				schedulingOptions, customEffectiveRestriction);
 
 			if (roleModelShift == null)
 			{
@@ -73,8 +63,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			var selectedBlockDays =
 				teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
+
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
-				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder);
+				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
 			{
@@ -84,9 +75,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-						schedulingOptions);
+						schedulingOptions, customEffectiveRestriction);
 					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
-						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder);
+						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
 					schedulingOptions.NotAllowedShiftCategories.Clear();
 				}
 					
@@ -100,7 +91,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
 			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IEnumerable<DateOnly> selectedBlockDays,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder)
+			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
+			IEffectiveRestriction customEffectiveRestriction)
 		{
 			foreach (var day in selectedBlockDays)
 			{
@@ -110,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				_singleDayScheduler.DayScheduled += OnDayScheduled;
 				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day,
 					roleModelShift, selectedPeriod, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder);
+					resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
 				_singleDayScheduler.DayScheduled -= OnDayScheduled;
 				if (!successful)
 				{

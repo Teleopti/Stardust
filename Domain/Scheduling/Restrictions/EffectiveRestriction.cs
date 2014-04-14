@@ -43,6 +43,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             _activityRestrictionCollection = activityRestrictionCollection;
         }
 
+	    public EffectiveRestriction()
+	    {
+			_startTimeLimitation = new StartTimeLimitation();
+			_endTimeLimitation = new EndTimeLimitation();
+			_workTimeLimitation = new WorkTimeLimitation();
+		    _shiftCategory = null;
+		    _dayOff = null;
+		    _absence = null;
+			_invalidDayOff = new DayOffTemplate(new Description("__invalid__"));
+			_invalidCategory = new ShiftCategory("__invalid__");
+			_invalidAbsence = new Absence();
+			_activityRestrictionCollection = new List<IActivityRestriction>();
+	    }
+
 		#region Implementation of IIWorkTimeMinMaxRestriction
 
 		public bool MayMatchWithShifts()
