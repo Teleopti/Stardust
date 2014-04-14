@@ -32,9 +32,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             var personRange = _mock.StrictMock<IScheduleRange>();
             var date = new DateOnly(2014,03,26);
             var scheduleDay = _mock.StrictMock<IScheduleDay>();
-            IList<IScheduleDay> scheduleDayList = new IScheduleDay[1];
+            IList<IScheduleDay> scheduleDayList = new List<IScheduleDay>( ) { scheduleDay };
             var deleteOption = new DeleteOption { Default = true };
-            scheduleDayList.Add(scheduleDay );
             var  rollbackService =_mock.StrictMock<ISchedulePartModifyAndRollbackService>();
             using(_mock.Record())
             {
