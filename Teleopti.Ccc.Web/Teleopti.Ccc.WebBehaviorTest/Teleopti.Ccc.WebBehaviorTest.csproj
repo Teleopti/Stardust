@@ -134,6 +134,12 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="MyTime\MobileWeekScheduleStepDefinitions.cs" />
+    <Compile Include="MyTime\MobileWeekSchedule .feature.cs">
+      <DependentUpon>MobileWeekSchedule .feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="SignInAsAnotherUser.feature.cs">
       <DependentUpon>SignInAsAnotherUser.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -755,6 +761,10 @@
     <None Include="Anywhere\ViewDaysOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\MobileWeekSchedule .feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>MobileWeekSchedule .feature.cs</LastGenOutput>
     </None>
     <None Include="SignInAsAnotherUser.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
