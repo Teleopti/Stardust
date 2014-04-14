@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (shifts.IsNullOrEmpty())
 				return null;
 
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer, _schedulingResultStateHolder);
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer, _schedulingResultStateHolder, true);
 
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																		  schedulingOptions

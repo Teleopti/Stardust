@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IMedianCalculatorForSkillInterval
 	{
-        ISkillIntervalData CalculateMedian(TimeSpan timeSpan, IList<ISkillIntervalData> skillIntervalData, double resolution, DateTime baseDate);
+		ISkillIntervalData CalculateMedian(TimeSpan key, IList<ISkillIntervalData> skillIntervalData, double resolution, DateOnly baseDate);
     }
 
     public class MedianCalculatorForSkillInterval : IMedianCalculatorForSkillInterval 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _intervalDataCalculator = intervalDataCalculator;
         }
 
-        public ISkillIntervalData CalculateMedian(TimeSpan timeSpan, IList<ISkillIntervalData> skillIntervalDataList, double resolution, DateTime baseDate)
+		public ISkillIntervalData CalculateMedian(TimeSpan key, IList<ISkillIntervalData> skillIntervalDataList, double resolution, DateOnly baseDate)
         {
             var forecastedDemands = new List<double>();
             var currentDemands = new List<double>();
@@ -47,12 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (forecastedDemands.Count == 0) return null ;
             var calculatedFDemand = _intervalDataCalculator.Calculate(forecastedDemands);
             var calculatedCDemand = _intervalDataCalculator.Calculate(currentDemands);
-            var currentHead = _intervalDataCalculator.Calculate(currentHeads );
+            var currentHead = _intervalDataCalculator.Calculate(currentHeads);
             var minimumStaff  = _intervalDataCalculator.Calculate(minimumStaffs);
             var maximumStaff  = _intervalDataCalculator.Calculate(maximumStaffs);
 
-            var startTime = baseDate.Date.Add(timeSpan);
-            var endTime = startTime.AddMinutes(resolution);
+            var startTime = DateTime.SpecifyKind(baseDate.Date.Add(key),DateTimeKind.Utc);
+			var endTime = DateTime.SpecifyKind(startTime.AddMinutes(resolution), DateTimeKind.Utc);
             ISkillIntervalData skillIntervalData = new SkillIntervalData(
                 new DateTimePeriod(startTime, endTime), calculatedFDemand, calculatedCDemand, currentHead , minimumStaff ,maximumStaff);
             return skillIntervalData;
