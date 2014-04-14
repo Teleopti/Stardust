@@ -42,10 +42,15 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
-		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith, ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions)
+		public bool TrySolveForDayOff(PersonWeek personWeek, DateOnly dayOffDateToWorkWith,
+			ITeamBlockGenerator teamBlockGenerator, IList<IScheduleMatrixPro> allPersonMatrixList,
+			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
+			ISchedulingResultStateHolder schedulingResultStateHolder, DateOnlyPeriod selectedPeriod,
+			IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
+			ISchedulingOptions schedulingOptions)
 		{
-			if(optimizationPreferences != null)
-                schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			if (optimizationPreferences != null)
+				schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			var teamSchedulingOptions = new TeamBlockSchedulingOptions();
 			if (teamSchedulingOptions.IsBlockScheduling(schedulingOptions) &&
 			    schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)
@@ -54,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			var person = personWeek.Person;
 			var leftDate = dayOffDateToWorkWith.AddDays(-1);
 			var rightDate = dayOffDateToWorkWith.AddDays(1);
-			
+
 			var leftTeamBlock =
 				teamBlockGenerator.Generate(allPersonMatrixList, new DateOnlyPeriod(leftDate, leftDate), new List<IPerson> {person},
 					schedulingOptions).First();
@@ -78,11 +83,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			bool rightNudgeSuccess = true;
 			while (!restTimeEnsured)
 			{
-                var leftScheduleDay = personRange.ScheduledDay(leftDate);
-                var rightScheduleDay = personRange.ScheduledDay(rightDate);
-                if(leftNudgeSuccess)
+				var leftScheduleDay = personRange.ScheduledDay(leftDate);
+				var rightScheduleDay = personRange.ScheduledDay(rightDate);
+				if (leftNudgeSuccess)
 				{
-					leftNudgeSuccess =_shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions, resourceCalculateDelayer, leftTeamBlock,
+					leftNudgeSuccess = _shiftNudgeEarlier.Nudge(leftScheduleDay, rollbackService, schedulingOptions,
+						resourceCalculateDelayer, leftTeamBlock,
 						schedulingResultStateHolder, selectedPeriod, selectedPersons);
 					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 				}
@@ -94,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 					restTimeEnsured = _ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personRange, weeklyRestTime);
 				}
 
-				if(!leftNudgeSuccess && !rightNudgeSuccess)
+				if (!leftNudgeSuccess && !rightNudgeSuccess)
 					break;
 			}
 
@@ -106,12 +112,12 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			}
 
 			bool leftOk = true;
-			bool rightOk = true ;
-		    if (optimizationPreferences != null)
-		    {
-                leftOk = _teamBlockRestrictionOverLimitValidator.Validate(leftTeamBlock, optimizationPreferences);
-                rightOk = _teamBlockRestrictionOverLimitValidator.Validate(rightTeamBlock, optimizationPreferences);
-		    }
+			bool rightOk = true;
+			if (optimizationPreferences != null)
+			{
+				leftOk = _teamBlockRestrictionOverLimitValidator.Validate(leftTeamBlock, optimizationPreferences);
+				rightOk = _teamBlockRestrictionOverLimitValidator.Validate(rightTeamBlock, optimizationPreferences);
+			}
 			if (!(leftOk && rightOk))
 			{
 				rollBackAndResourceCalculate(rollbackService, resourceCalculateDelayer, _clonedSchedules);
@@ -121,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			return true;
 		}
 
-	    public  bool RollbackLastScheduledWeek(ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+		public  bool RollbackLastScheduledWeek(ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
 	    {
 	        if (_clonedSchedules != null && _clonedSchedules.Count > 0)
 	        {

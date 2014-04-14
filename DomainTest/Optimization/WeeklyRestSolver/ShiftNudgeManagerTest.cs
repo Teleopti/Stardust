@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		private IDateOnlyAsDateTimePeriod _dateOnlyAsPeriod;
 		private ITeamBlockRestrictionOverLimitValidator _teamBlockRestrictionOverLimitValidator;
 		private IOptimizationPreferences _optimizationPreferences;
+		private ISchedulingOptionsCreator _schedulingOptionsCreator;
 
 		[SetUp]
 		public void Setup()
@@ -60,9 +62,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_teamBlockScheduleCloner = _mocks.StrictMock<ITeamBlockScheduleCloner>();
 			_filterForTeamBlockInSelection = _mocks.StrictMock<IFilterForTeamBlockInSelection>();
 			_teamBlockRestrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
+			_schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
 			_target = new ShiftNudgeManager(_shiftNudgeEarlier, _shiftNudgeLater, _ensureWeeklyRestRule,
 				_contractWeeklyRestForPersonWeek, _teamBlockScheduleCloner, _filterForTeamBlockInSelection,
-				_teamBlockRestrictionOverLimitValidator, new SchedulingOptionsCreator());
+				_teamBlockRestrictionOverLimitValidator, _schedulingOptionsCreator);
 			_person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue);
 			_person.Period(DateOnly.MinValue).PersonContract.Contract.WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
 			_personWeek = new PersonWeek(_person, new DateOnlyPeriod(2014, 03, 24, 2014, 03, 30));
@@ -85,6 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			_rightScheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_dateOnlyAsPeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 			_optimizationPreferences = new OptimizationPreferences();
+			
 		}
 
 		[Test]
@@ -93,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 			using (_mocks.Record())
 			{
-				initialMocks();
+				initialMocks(false);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(
 					new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo}, _selectedPersons, _selectedPeriod))
 					.Return(new List<ITeamBlockInfo> {_leftTeamBlockInfo, _rightTeamBlockInfo});
@@ -110,18 +114,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
 
 				Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek, _range, TimeSpan.FromHours(36))).Return(true);
-
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_leftTeamBlockInfo, _optimizationPreferences))
-					.Return(true);
-				Expect.Call(_teamBlockRestrictionOverLimitValidator.Validate(_rightTeamBlockInfo, _optimizationPreferences))
-					.Return(true);
 			}
 
 			using (_mocks.Playback())
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences,_schedulingOptions );
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null,_schedulingOptions );
 				Assert.IsTrue(result);
 			}
 		}
@@ -131,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		{
 			using (_mocks.Record())
 			{
-				initialMocks();
+				initialMocks(false);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(
 					new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod))
 					.Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo });
@@ -156,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences,_schedulingOptions );
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null,_schedulingOptions );
 				Assert.IsFalse(result);
 			}
 		}
@@ -166,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		{
 			using (_mocks.Record())
 			{
-				initialMocks();
+				initialMocks(false);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(
 					new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod))
 					.Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo });
@@ -177,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences,_schedulingOptions );
+					_schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null,_schedulingOptions );
 				Assert.IsFalse(result);
 			}
 		}
@@ -188,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 			using (_mocks.Record())
 			{
-				initialMocks();
+				initialMocks(true);
 				Expect.Call(_filterForTeamBlockInSelection.Filter(
 					new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo }, _selectedPersons, _selectedPeriod))
 					.Return(new List<ITeamBlockInfo> { _leftTeamBlockInfo, _rightTeamBlockInfo });
@@ -218,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			{
 				bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions);
+                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, null);
 				Assert.IsFalse(result);
 			}
 		}
@@ -231,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 
 			bool result = _target.TrySolveForDayOff(_personWeek, new DateOnly(2014, 03, 30), _teamBlockGenerator,
 					_allPersonMatrixList, _rollbackService, _resourceCalculateDelayer,
-                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, _optimizationPreferences, _schedulingOptions);
+                    _schedulingResultStateHolder, _selectedPeriod, _selectedPersons, null, _schedulingOptions);
 			Assert.IsFalse(result);
 		}
 
@@ -247,14 +246,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 			Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(new DateOnly(2014, 3, 30), null)).Return(true);
 		}
 
-		private void initialMocks()
+		private void initialMocks(bool useOptimizationPreferences)
 		{
-			Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
-				new List<IPerson> {_person}, _schedulingOptions))
-				.Return(_leftTeamBlockInfoList);
-			Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
+			if (useOptimizationPreferences)
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
 				new List<IPerson> { _person }, _schedulingOptions))
-				.Return(_rightTeamBlockInfoList);
+				.Return(_leftTeamBlockInfoList);
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
+					new List<IPerson> { _person }, _schedulingOptions))
+					.Return(_rightTeamBlockInfoList);
+			}
+			else
+			{
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 29, 2014, 3, 29),
+					new List<IPerson> {_person}, _schedulingOptions))
+					.Return(_leftTeamBlockInfoList);
+				Expect.Call(_teamBlockGenerator.Generate(_allPersonMatrixList, new DateOnlyPeriod(2014, 3, 31, 2014, 3, 31),
+					new List<IPerson> { _person }, _schedulingOptions))
+					.Return(_rightTeamBlockInfoList);
+			}
 		}
 
 		private void middleMocks()
