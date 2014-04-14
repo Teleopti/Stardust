@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 													   new List<IActivityRestriction>());
 			var shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
 			var shifts = new List<IShiftProjectionCache> { shiftProjectionCache };
-			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var activityData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 
 			using (_mocks.Record())
 			{
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																	   new WorkShiftFinderResult(_person, _dateOnly), true))
 					  .Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo,_dateOnly, _schedulingResultStateHolder))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo,_dateOnly, _schedulingResultStateHolder, true))
 					  .Return(activityData);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,

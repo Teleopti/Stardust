@@ -5,6 +5,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_skillStaffPeriodHolder).Repeat.Any();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
 					.Return(_skillStaffPeriods).Repeat.Any();
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone))
 					  .Return(_skillIntervalDatas);
 				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
 					  .Return(_skillIntervalDatas);
@@ -146,7 +147,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_skillStaffPeriodHolder).Repeat.Any();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
 					.Return(_skillStaffPeriods).Repeat.Any();
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone))
 					  .Return(_skillIntervalDatas);
 				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
 					  .Return(_skillIntervalDatas);
@@ -205,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_skillStaffPeriodHolder).Repeat.Any();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
 					.Return(_skillStaffPeriods).Repeat.Any();
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone))
 					  .Return(_skillIntervalDatas);
 				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
 					  .Return(_skillIntervalDatas);
@@ -262,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_skillStaffPeriodHolder).Repeat.Any();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
 					.Return(_skillStaffPeriods).Repeat.Any();
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone))
 					  .Return(_skillIntervalDatas);
 				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
 					  .Return(_skillIntervalDatas);
@@ -324,7 +325,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_skillStaffPeriodHolder).Repeat.Any();
 				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skillList, scheduleUtcDateTimePeriod))
 					.Return(_skillStaffPeriods).Repeat.Any();
-				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods))
+				Expect.Call(_skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(_skillStaffPeriods, scheduleDay, TimeZoneGuard.Instance.TimeZone))
 					  .Return(_skillIntervalDatas);
 				Expect.Call(_skillIntervalDataDivider.SplitSkillIntervalData(_skillIntervalDatas, 15))
 					  .Return(_skillIntervalDatas);

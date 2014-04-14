@@ -1,8 +1,5 @@
-﻿
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
 using Teleopti.Interfaces.Domain;
 
@@ -10,10 +7,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IActivityIntervalDataCreator
 	{
-		Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
+		Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
 		                                                                                           DateOnly day,
 		                                                                                           ISchedulingResultStateHolder
-			                                                                                           schedulingResultStateHolder);
+			                                                                                           schedulingResultStateHolder,
+																									bool forRoleModel);
 	}
 
 	public class ActivityIntervalDataCreator : IActivityIntervalDataCreator
@@ -29,10 +27,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_dayIntervalDataCalculator = dayIntervalDataCalculator;
 		}
 
-		public Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
+		public Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> CreateFor(ITeamBlockInfo teamBlockInfo,
 		                                                                                  DateOnly day,
 		                                                                                  ISchedulingResultStateHolder
-			                                                                                  schedulingResultStateHolder)
+			                                                                                  schedulingResultStateHolder,
+																							bool forRoleModel)
 		{
 			var skillIntervalDataPerDateAndActivity = _createSkillIntervalDataPerDateAndActivity.CreateFor(teamBlockInfo,
 			                                                                                               schedulingResultStateHolder);
@@ -45,13 +44,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 			}
 
-			var activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+			var activityInternalData = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
 			foreach (var activity in activities)
 			{
 				var dateOnlyDicForActivity = new Dictionary<DateOnly, IList<ISkillIntervalData>>();
 				foreach (var dateOnly in skillIntervalDataPerDateAndActivity.Keys)
 				{
-					if (dateOnly == day || dateOnly == day.AddDays(1))
+					if ((dateOnly == day || dateOnly == day.AddDays(1)) || forRoleModel)
 					{
 						var dateDic = skillIntervalDataPerDateAndActivity[dateOnly];
 						if (!dateDic.ContainsKey(activity))
@@ -61,8 +60,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					}
 				}
 
-				IDictionary<TimeSpan, ISkillIntervalData> dataForActivity =
-					_dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity);
+				IDictionary<DateTime, ISkillIntervalData> dataForActivity =
+					_dayIntervalDataCalculator.Calculate(dateOnlyDicForActivity, day);
 
 				activityInternalData.Add(activity, dataForActivity);
 			}
