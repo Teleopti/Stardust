@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 		}
 
-		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly firstSelectedDayInBlock, IPerson person, ISchedulingOptions schedulingOptions)
+        public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person, ISchedulingOptions schedulingOptions)
 		{
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo, schedulingOptions);
 			if (effectiveRestriction == null)
@@ -47,15 +47,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return Select(teamBlockInfo, datePointer, person, schedulingOptions, effectiveRestriction);
 		}
 
-		public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person,
+        public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person,
 			ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction)
 		{
 			if (teamBlockInfo == null)
 				return null;
 			if (schedulingOptions == null)
 				return null;
-
-			var datePointer = firstSelectedDayInBlock;
 
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo);
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, effectiveRestriction,
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, datePointer,
-				_schedulingResultStateHolder);
+				_schedulingResultStateHolder,true);
 
 			var roleModel = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 				schedulingOptions
@@ -74,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				schedulingOptions
 					.UseMinimumPersons,
 				schedulingOptions
-					.UseMaximumPersons);
+                    .UseMaximumPersons, TimeZoneGuard.Instance.TimeZone);
 			return roleModel;
 		}
 	}
