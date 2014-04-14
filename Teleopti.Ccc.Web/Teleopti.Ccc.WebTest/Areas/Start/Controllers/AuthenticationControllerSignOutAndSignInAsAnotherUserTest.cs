@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 				var result = _target.SignInAsAnotherUser() as RedirectResult;
 
 				result.Url.Should()
-					.Be.EqualTo("http://issuer/?wa=wsignin1.0&wtrealm=testrealm&wctx=ru%3d&wreply=http%3a%2f%2flocalhost%2fTeleoptiCCC%2fweb%2f");
+					.Be.EqualTo("http://issuer/?wa=wsignout1.0&wreply=http%3a%2f%2fissuer%2f%3fwa%3dwsignin1.0%26wtrealm%3dtestrealm%26wctx%3dru%253dhttp%253a%252f%252flocalhost%252fTeleoptiCCC%252fweb%252f");
 			}
 		}
 	}
