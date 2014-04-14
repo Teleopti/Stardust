@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Commands
                     IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService, IList<IScheduleMatrixPro> allMatrixes,
                             ISchedulingOptions schedulingOptions)
 	    {
-            _weeklyRestSolverCommand.Execute(schedulingOptions,optimizationPreferences, selectedPersons,rollbackService,resourceCalculateDelayer,selectedPeriod,allMatrixes );
+            _weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, _backgroundWorker);
 	    }
 
 	    private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, 

@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Win.Commands
 					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
                     allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
-                    runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,selectedPersons,rollbackService,resourceCalculateDelayer  );
+                    runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,selectedPersons,rollbackService,resourceCalculateDelayer ,backgroundWorker  );
 
 			        break;
 			}
@@ -139,13 +139,12 @@ namespace Teleopti.Ccc.Win.Commands
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
-        private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions,DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes, 
-                        IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer)
+        private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, BackgroundWorker backgroundWorker)
         {
             var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
             optimizationPreferences.Extra.GroupPageOnTeamBlockPer = singleAgentEntry;
             optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization = BlockFinderType.SingleDay;
-            _weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes);
+            _weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker);
         }
 
 	   

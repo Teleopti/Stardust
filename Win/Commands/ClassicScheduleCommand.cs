@@ -80,12 +80,11 @@ namespace Teleopti.Ccc.Win.Commands
 				                                                   allMatrixesOfSelectedPersons, true, backgroundWorker,
 				                                                   schedulingOptions);
 
-            runWeeklyRestSolver(schedulingOptions, selectedSchedules, schedulerStateHolder, selectedPeriod);
+            runWeeklyRestSolver(schedulingOptions, selectedSchedules, schedulerStateHolder, selectedPeriod,backgroundWorker );
 		}
 
 
-	    private void runWeeklyRestSolver(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules,
-	        ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
+	    private void runWeeklyRestSolver(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, BackgroundWorker backgroundWorker)
 	    {
 	        var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
 	            schedulingOptions.ConsiderShortBreaks);
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Win.Commands
 	                new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 	        var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 	        _weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
-	            selectedPeriod, _matrixListFactory.CreateMatrixListAll(selectedPeriod));
+	            selectedPeriod, _matrixListFactory.CreateMatrixListAll(selectedPeriod),backgroundWorker );
 	    }
 
 	    

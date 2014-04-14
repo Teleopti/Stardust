@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Win.Commands
 				                                          _schedulerStateHolder.SchedulingResultState);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
-                _weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allVisibleMatrixes);
+                _weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allVisibleMatrixes, _backgroundWorker);
 			}
 		}
 

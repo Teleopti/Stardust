@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.Optimization;
@@ -13,9 +14,7 @@ namespace Teleopti.Ccc.Win.Commands
 {
     public interface IWeeklyRestSolverCommand
     {
-        void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
-            ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod,
-            IList<IScheduleMatrixPro> allVisibleMatrixes);
+        void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker);
     }
 
     public class WeeklyRestSolverCommand : IWeeklyRestSolverCommand
@@ -25,6 +24,7 @@ namespace Teleopti.Ccc.Win.Commands
         private readonly IWeeklyRestSolverService  _weeklyRestSolverService;
         private readonly ISchedulerStateHolder _schedulerStateHolder;
         private readonly IGroupPersonBuilderForOptimizationFactory  _groupPersonBuilderForOptimizationFactory;
+        private BackgroundWorker  _backgroundWorker;
 
         public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockSchedulingOptions teamBlockSchedulingOptions, IWeeklyRestSolverService weeklyRestSolverService, ISchedulerStateHolder schedulerStateHolder, IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory)
         {
@@ -35,17 +35,33 @@ namespace Teleopti.Ccc.Win.Commands
             _groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
         }
 
-        public  void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences , IList<IPerson> selectedPersons,
-           ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod,
-           IList<IScheduleMatrixPro> allVisibleMatrixes)
+        public  void Execute(ISchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allVisibleMatrixes, BackgroundWorker backgroundWorker)
         {
+            _backgroundWorker = backgroundWorker;
             var groupPersonBuilderForOptimization = _groupPersonBuilderForOptimizationFactory.Create(schedulingOptions);
             var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
             var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory,
                 _teamBlockSchedulingOptions);
+
+            _weeklyRestSolverService.ResolvingWeek += resolvingWeek;
             _weeklyRestSolverService.Execute(selectedPersons, selectedPeriod, teamBlockGenerator,
                 rollbackService, resourceCalculateDelayer, _schedulerStateHolder.SchedulingResultState, allVisibleMatrixes,
                 optimizationPreferences, schedulingOptions);
+            _weeklyRestSolverService.ResolvingWeek -= resolvingWeek;
+        }
+
+        
+        private void resolvingWeek(object sender, BlockSchedulingServiceEventArgs e)
+        {
+            if (_backgroundWorker.CancellationPending)
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                e.Cancel = false;
+            }
+            
         }
     }
 }
