@@ -22413,6 +22413,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sign In As Another User.
+        /// </summary>
+        public static string SignInAsAnotherUserInPermission {
+            get {
+                return ResourceManager.GetString("SignInAsAnotherUserInPermission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sign in with:.
         /// </summary>
         public static string SignInWith {
@@ -27215,7 +27224,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your schedule the {0} has changed!.
+        ///   Looks up a localized string similar to Your schedule for {0} has changed!.
         /// </summary>
         public static string YourScheduleTheDATEHasChanged {
             get {
