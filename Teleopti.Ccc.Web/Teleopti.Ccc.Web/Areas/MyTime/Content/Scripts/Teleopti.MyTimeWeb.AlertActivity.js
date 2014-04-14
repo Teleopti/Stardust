@@ -155,7 +155,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				timeInterval = alertvm.timeInterval(layerIdx) * 1000;
 			}
 
-			if ((timeInterval <= alertvm.alertTimeSetting) && (timeInterval > 0)) {
+			if ((timeInterval <= alertvm.alertTimeSetting * 1000) && (timeInterval > 0)) {
 				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(layerIdx));
 			} else if (timeInterval > 0) {
 				setTimeout(function () {
