@@ -56,45 +56,48 @@ Scenario: Alert agent before next activity happens
 
 @ignore
 Scenario: Do not alert agent without permission for ASM
-         Given I have the role 'No access to ASM'
-        And the current time is '2030-01-01 10:45'
-         And Alert Time setting is '90' seconds                      
-         When I am viewing week schedule
-         Then I should not see any alert
+	Given I have the role 'No access to ASM'
+	And the current time is '2030-01-01 10:45'
+	And Alert Time setting is '90' seconds                      
+	When I am viewing week schedule
+	Then I should not see any alert
 
 @ignore
 Scenario: Do not alert agent Before Alert Time
-         Given I have the role 'Full access to mytime'
-        And the current time is '2030-01-01 10:40'
-         And Alert Time setting is '90' seconds                      
-         When I am viewing week schedule
-         Then I should not see an alert notifying 'Lunch at 11:00 !'
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 10:40'
+	And Alert Time setting is '90' seconds                      
+	When I am viewing week schedule
+	Then I should not see an alert notifying 'Lunch at 11:00 !'
+
 @ignore
 Scenario: Do not alert agent After Alert Time 
-         Given I have the role 'Full access to mytime'
-        And the current time is '2030-01-01 11:45'
-         And Alert Time setting is '120' seconds                      
-         When I am viewing week schedule
-         Then I should not see an alert notifying 'Phone at 12:00 !'
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 11:45'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	Then I should not see an alert notifying 'Phone at 12:00 !'
 @ignore
 Scenario: Alert agent before first activity happens
-         Given I have the role 'Full access to mytime'
-        And the current time is '2030-01-01 07:40'
-         And Alert Time setting is '120' seconds                      
-         When I am viewing week schedule
-         Then I should see one notify message
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 07:40'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	Then I should see one notify message
+
 @ignore
 Scenario: Alert agent before last activity happens
-         Given I have the role 'Full access to mytime'
-        And the current time is '2030-01-01 16:59:20'
-         And Alert Time setting is '40' seconds                     
-         When I am viewing week schedule
-         Then I should see one notify message
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 16:59:20'
+	And Alert Time setting is '40' seconds                     
+	When I am viewing week schedule
+	Then I should see one notify message
+
 @ignore
 Scenario: Pop up box disappear automaticly
-         Given I have the role 'Full access to mytime'
-        And the current time is '2030-01-01 16:59:15'
-         And Alert Time setting is '45 seconds' 
-         And Auto Disappear setting is '30 seconds'                       
-         When I am viewing week schedule
-         Then I should not see pop up box
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 16:59:15'
+	And Alert Time setting is '45 seconds' 
+	And Auto Disappear setting is '30 seconds'                       
+	When I am viewing week schedule
+	Then I should not see pop up box
