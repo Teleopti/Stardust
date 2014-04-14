@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Threading;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Win.Commands
 {
@@ -24,13 +26,14 @@ namespace Teleopti.Ccc.Win.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly ITeamBlockOptimizationCommand _teamBlockOptimizationCommand;
 		private readonly IMatrixListFactory _matrixListFactory;
+	    private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
 
-		public OptimizationCommand(IPersonSkillProvider personSkillProvider, IGroupPageCreator groupPageCreator,
+	    public OptimizationCommand(IPersonSkillProvider personSkillProvider, IGroupPageCreator groupPageCreator,
 		                           IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 		                           IResourceOptimizationHelper resourceOptimizationHelper,
 		                           IScheduleDayChangeCallback scheduleDayChangeCallback,
 								   ITeamBlockOptimizationCommand teamBlockOptimizationCommand,
-		                           IMatrixListFactory matrixListFactory)
+		                           IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand)
 		{
 			_personSkillProvider = personSkillProvider;
 			_groupPageCreator = groupPageCreator;
@@ -39,6 +42,7 @@ namespace Teleopti.Ccc.Win.Commands
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamBlockOptimizationCommand = teamBlockOptimizationCommand;
 			_matrixListFactory = matrixListFactory;
+	        _weeklyRestSolverCommand = weeklyRestSolverCommand;
 		}
 
 		public void Execute(IOptimizerOriginalPreferences optimizerOriginalPreferences, BackgroundWorker backgroundWorker,
@@ -61,8 +65,8 @@ namespace Teleopti.Ccc.Win.Commands
 			DateOnlyPeriod groupPagePeriod = schedulerStateHolder.RequestedPeriod.DateOnlyPeriod;
 
 			IGroupPageLight selectedGroupPage;
-			// ***** temporary cope
-			if (optimizationMethodBackToLegalState)
+
+            if (optimizationMethodBackToLegalState)
 			{
 				selectedGroupPage = optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness;
 			}
@@ -102,22 +106,18 @@ namespace Teleopti.Ccc.Win.Commands
 																											 allMatrixes);
 					break;
 				case false:
-
-					if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
-					{
-						var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
-						var selectedPersons = extractor.ExtractPersons().ToList();
-
-						var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
+                    var extractor = new PersonListExtractorFromScheduleParts(selectedSchedules);
+					var selectedPersons = extractor.ExtractPersons().ToList();
+                    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1,
 																					true,
 																					schedulingOptions.ConsiderShortBreaks);
-
-						var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
-
-						var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
+                    var tagSetter = new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling);
+                    var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
 																					   _scheduleDayChangeCallback,
 																					   tagSetter);
-
+					if (optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeams)
+					{
+						
 
 						_teamBlockOptimizationCommand.Execute(backgroundWorker, selectedPeriod, selectedPersons, optimizationPreferences,
 						                                      rollbackService, tagSetter, schedulingOptions, resourceCalculateDelayer);
@@ -128,14 +128,26 @@ namespace Teleopti.Ccc.Win.Commands
 					// we need it here for fairness opt. for example
 					groupPagePerDateHolder.GroupPersonGroupPagePerDate = groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
 					scheduleOptimizerHelper.ReOptimize(backgroundWorker, selectedSchedules, schedulingOptions);
+                    allMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
-					break;
+                    runWeeklyRestSolver(optimizationPreferences, schedulingOptions, selectedPeriod, allMatrixes,selectedPersons,rollbackService,resourceCalculateDelayer ,backgroundWorker  );
+
+			        break;
 			}
 
 
 			schedulerStateHolder.SchedulingResultState.SkipResourceCalculation = lastCalculationState;
 		}
 
+        private void runWeeklyRestSolver(IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IScheduleMatrixPro> allMatrixes, IList<IPerson> selectedPersons, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, BackgroundWorker backgroundWorker)
+        {
+            var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
+            optimizationPreferences.Extra.GroupPageOnTeamBlockPer = singleAgentEntry;
+            optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization = BlockFinderType.SingleDay;
+            _weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, allMatrixes, backgroundWorker);
+        }
+
+	   
 		private static void setThreadCulture()
 		{
 			Thread.CurrentThread.CurrentCulture = TeleoptiPrincipal.Current.Regional.Culture;

@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,
 	                                                         selectedPersons, schedulePartModifyAndRollbackService,
-	                                                         resourceCalculateDelayer, schedulingResultStateHolder))
+	                                                         resourceCalculateDelayer, schedulingResultStateHolder, null))
 		            verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo);
 				else

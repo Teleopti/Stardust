@@ -128,18 +128,24 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.DayCollection().First();
 				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().FirstOrDefault(x => x >= firstSelectedDay);
-
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod, selectedPersons, schedulePartModifyAndRollbackService, resourceCalculateDelayer, schedulingResultStateHolder)
-								&& _teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions)
-								&& _restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences);
-				
+                                var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod,
+				                                                       selectedPersons, schedulePartModifyAndRollbackService,
+				                                                       resourceCalculateDelayer, schedulingResultStateHolder, null);
 				if (!success)
 				{
-					OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " + teamName);
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
-					continue;	
+					continue;
 				}
+
+				if (!_teamBlockMaxSeatChecker.CheckMaxSeat(datePoint, schedulingOptions) || !_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
+				{
+					teamBlockToRemove.Add(teamBlockInfo);
+					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					continue;
+				}
+
+
 				
                 var newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
 				var isWorse = newTargetValue >= previousTargetValue;
