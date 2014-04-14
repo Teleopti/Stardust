@@ -57,16 +57,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldVerifyParameters()
-		{
-			var result = _target.Select(null, _dateOnly,_person,  new SchedulingOptions());
-			Assert.That(result, Is.Null);
-
-			result = _target.Select(_teamBlockInfo, new DateOnly(), _person, null);
-			Assert.That(result, Is.Null);
-		}
-
-		[Test]
 		public void ShouldAggregateRestrictions()
 		{
 			using (_mocks.Record())
@@ -75,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions);
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
 
 				Assert.That(result, Is.Null);
 			}
@@ -99,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions);
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
 
 				Assert.That(result, Is.Null);
 			}
@@ -135,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions);
+				var result = _target.Select(_teamBlockInfo, _dateOnly, _person, _schedulingOptions, new EffectiveRestriction());
 
 				Assert.That(result, Is.EqualTo(shiftProjectionCache));
 			}

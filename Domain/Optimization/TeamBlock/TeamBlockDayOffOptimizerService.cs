@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -396,7 +397,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 					selectedPersons, rollbackService, resourceCalculateDelayer, 
-				                                                        schedulingResultStateHolder, null);
+				                                                        schedulingResultStateHolder, new EffectiveRestriction());
 				if (!success)
 					return false;
 			}

@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockRoleModelSelector
 	{
-		IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly firstSelectedDayInBlock, IPerson person, ISchedulingOptions schedulingOptions);
-		IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly dateTime, IPerson person, ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction);
+		IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly dateTime, IPerson person, ISchedulingOptions schedulingOptions, IEffectiveRestriction additionalEffectiveRestriction);
 	}
 
 	public class TeamBlockRoleModelSelector : ITeamBlockRoleModelSelector
@@ -38,23 +37,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 		}
 
-        public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person, ISchedulingOptions schedulingOptions)
+        public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person,
+			ISchedulingOptions schedulingOptions, IEffectiveRestriction additionalEffectiveRestriction)
 		{
 			var effectiveRestriction = _teamBlockRestrictionAggregator.Aggregate(datePointer, person, teamBlockInfo, schedulingOptions);
 			if (effectiveRestriction == null)
 				return null;
-
-			return Select(teamBlockInfo, datePointer, person, schedulingOptions, effectiveRestriction);
-		}
-
-        public IShiftProjectionCache Select(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, IPerson person,
-			ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction)
-		{
-			if (teamBlockInfo == null)
-				return null;
-			if (schedulingOptions == null)
-				return null;
-
+	        effectiveRestriction = effectiveRestriction.Combine(additionalEffectiveRestriction);
 			var isSameOpenHoursInBlock = _sameOpenHoursInTeamBlockSpecification.IsSatisfiedBy(teamBlockInfo);
 			var shifts = _workShiftFilterService.FilterForRoleModel(datePointer, teamBlockInfo, effectiveRestriction,
 				schedulingOptions,

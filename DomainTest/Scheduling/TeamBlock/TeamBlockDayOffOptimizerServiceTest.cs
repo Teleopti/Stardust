@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -140,23 +141,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList)).Return(_teamInfo);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person,
+					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList)).Return(_teamInfo);
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(_matrix.Person).Return(_person);
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore, _optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray);
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,
+					_optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray);
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences)).Return(_workingArray);
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,_optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue });
-				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,_optimizationPreferences.DaysOff.ConsiderWeekBefore)).IgnoreArguments().Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,
+					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					.IgnoreArguments()
+					.Return(new List<DateOnly> {DateOnly.MinValue});
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,
+					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					.IgnoreArguments()
+					.Return(new List<DateOnly> {DateOnly.MinValue.AddDays(1)});
 				Expect.Call(() =>_teamDayOffModifier.RemoveDayOffForMember(_rollbackService,_person,DateOnly.MinValue.AddDays(1)));
 				Expect.Call(() =>_teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue,_schedulingOptions.DayOffTemplate, true));
-				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList)).Return(_teamBlockInfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),
+					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList)).Return(_teamBlockInfo);
 				Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
 				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1),
 					_schedulingOptions, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons,
-					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, null)).Return(true);
+					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction())).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
 				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
 				Expect.Call(_restrictionOverLimitValidator.Validate(_teamInfo, _optimizationPreferences)).Return(true);
@@ -400,7 +410,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1), _schedulingOptions,
 				new DateOnlyPeriod(DateOnly.MinValue,
 					DateOnly.MinValue.AddDays(1)),
-				_selectedPersons, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, null))
+				_selectedPersons, _rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction()))
 				.Return(!failOnRescheduling);
 			if (failOnRescheduling)
 				return;
