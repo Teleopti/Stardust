@@ -63,7 +63,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			});
 		};
 
-		self.timeInterval = function (index) {
+		self.getTimeInterval = function (index) {
 			var interval = 0;
 			var length = self.layersRemovedPassed().length;
 			if (index >= 0 && index < length) {
@@ -80,12 +80,12 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			}
 			return interval;
 		};
-		
+
 		self.alertMessage = function (index) {
 			// TODO: replace the text with localed text
 			return self.layersRemovedPassed()[index].payload + " at " + self.layersRemovedPassed()[index].startTimeText + "!";
 		};
-		
+
 		self.loadViewModel = function (date, callback) {
 			ajax.Ajax({
 				url: 'Asm/Today',
@@ -97,7 +97,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			});
 		};
 
-		self.loadSetting = function(callback) {
+		self.loadSetting = function (callback) {
 			ajax.Ajax({
 				url: 'Asm/AlertTimeSetting',
 				dataType: "json",
@@ -106,10 +106,10 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			});
 		};
 
-		self._readAlertTimeSetting = function(data) {
+		self._readAlertTimeSetting = function (data) {
 			self.alertTimeSetting = data;
 		};
-		
+
 		self._createLayers = function (layers) {
 			var newLayers = new Array();
 			var canvasPosition = self.canvasPosition();
@@ -125,7 +125,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		alertvm = new notificationActivities(yesterdayFromNow);
 		var activityData;
 		var alertSetting;
-		
+
 		var dataLoadDeffered = $.Deferred();
 		alertvm.loadViewModel(
 			yesterdayFromNow,
@@ -134,7 +134,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				dataLoadDeffered.resolve();
 			});
 		var settingLoadDeffered = $.Deferred();
-		alertvm.loadSetting(function(data) {
+		alertvm.loadSetting(function (data) {
 			alertSetting = data.SecondsBeforeChange;
 			settingLoadDeffered.resolve();
 		});
@@ -145,30 +145,30 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		});
 	}
 
-	var timeInterval = 0;
-	var layerIdx = 0;
+	var alertTimeInterval = 0;
+	var currentLayerIndex = 0;
 	function _alertActivity() {
-		if (layerIdx < alertvm.layersRemovedPassed().length) {
-			timeInterval = alertvm.timeInterval(layerIdx) * 1000;
-			if (timeInterval < 0) {
-				layerIdx++;
-				timeInterval = alertvm.timeInterval(layerIdx) * 1000;
+		if (currentLayerIndex < alertvm.layersRemovedPassed().length) {
+			alertTimeInterval = alertvm.getTimeInterval(currentLayerIndex) * 1000;
+			if (alertTimeInterval < 0) {
+				currentLayerIndex++;
+				alertTimeInterval = alertvm.getTimeInterval(currentLayerIndex) * 1000;
 			}
 
-			if ((timeInterval <= alertvm.alertTimeSetting * 1000) && (timeInterval > 0)) {
-				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(layerIdx));
-			} else if (timeInterval > 0) {
+			if ((alertTimeInterval <= alertvm.alertTimeSetting * 1000) && (alertTimeInterval > 0)) {
+				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(currentLayerIndex));
+			} else if (alertTimeInterval > 0) {
 				setTimeout(function () {
-					Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(layerIdx-1));
-					 _alertActivity();
-				}, timeInterval);
+					Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage(currentLayerIndex - 1));
+					_alertActivity();
+				}, alertTimeInterval);
 			}
-			layerIdx++;
+			currentLayerIndex++;
 		}
 	}
-	
+
 	function _startAlert() {
-		setTimeout(_alertActivity, timeInterval);
+		setTimeout(_alertActivity, alertTimeInterval);
 	}
 
 	return {
