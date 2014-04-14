@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_workShiftFilterService.FilterForRoleModel(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 																	   new WorkShiftFinderResult(_person, _dateOnly), true))
 					  .Return(shifts);
-				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo,_dateOnly, _schedulingResultStateHolder))
+				Expect.Call(_activityIntervalDataCreator.CreateFor(_teamBlockInfo,_dateOnly, _schedulingResultStateHolder, true))
 					  .Return(activityData);
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,
 																		  _schedulingOptions.WorkShiftLengthHintOption,

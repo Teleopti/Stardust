@@ -56,13 +56,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_createSkillIntervalDataPerDateAndActivity.CreateFor(_teamBlockInfo, _schedulingResultStateHolder))
 					  .Return(_skillIntervalDatasPerActivityAndDate);
-				Expect.Call(_dayIntervalDataCalculator.Calculate(_skillIntervalDataListPerDate))
+				Expect.Call(_dayIntervalDataCalculator.Calculate(_skillIntervalDataListPerDate, DateOnly.MinValue))
 					  .Return(_skillIntervalDataPerTimeSpan);
 			}
 
 			using (_mocks.Playback())
 			{
-				var result = _target.CreateFor(_teamBlockInfo, DateOnly.MinValue, _schedulingResultStateHolder);
+				var result = _target.CreateFor(_teamBlockInfo, DateOnly.MinValue, _schedulingResultStateHolder, true);
 				Assert.IsTrue(result[_activity].ContainsKey(new DateTimePeriod().StartDateTime));
 				Assert.AreEqual(_skillIntevalDataList[0], result[_activity][new DateTimePeriod().StartDateTime]);
 			}

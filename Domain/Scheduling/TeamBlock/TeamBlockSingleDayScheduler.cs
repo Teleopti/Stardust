@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
 					if (shifts.IsNullOrEmpty()) continue;
 
-					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, day, schedulingResultStateHolder);
+					var activityInternalData = _activityIntervalDataCreator.CreateFor(teamBlockInfo, day, schedulingResultStateHolder, false);
 
 					bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																								 schedulingOptions
