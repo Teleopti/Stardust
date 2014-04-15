@@ -332,5 +332,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             _localEventAggregator.GetEvent<RefreshGroupPageClicked>().Publish("");
         }
+
+		  private void toolStripButtonOpen_Click(object sender, EventArgs e)
+		  {
+
+		  }
     }
 }
