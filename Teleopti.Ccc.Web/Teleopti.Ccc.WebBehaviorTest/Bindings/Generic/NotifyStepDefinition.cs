@@ -12,5 +12,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertExists("#notifyLogger .notifyLoggerItem");
 			Browser.Interactions.AssertNotExists("#notifyLogger", ".notifyLoggerItem:nth-child(2)");
 		}
+
+		[Then(@"I should not see any alert")]
+		public void ThenIShouldNotSeeAnyAlert()
+		{
+			Browser.Interactions.AssertNotExists("#notifyLogger", "#notifyLogger .notifyLoggerItem");
+		}
 	}
 }

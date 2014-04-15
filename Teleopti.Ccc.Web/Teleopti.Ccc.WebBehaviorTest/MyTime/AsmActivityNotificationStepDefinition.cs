@@ -24,7 +24,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			DataMaker.Data().Apply(new AlertTimeSettingConfigurable(alertTime));
 		}
-
-
 	}
 }
