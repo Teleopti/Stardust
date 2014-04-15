@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 											   IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod, 
 												ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 												IResourceCalculateDelayer resourceCalculateDelayer,
-												ISchedulingResultStateHolder schedulingResultStateHolder);
+												ISchedulingResultStateHolder schedulingResultStateHolder,
+												IEffectiveRestriction customEffectiveRestriction);
 
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 									  IShiftProjectionCache roleModelShift, DateOnlyPeriod selectedPeriod, 
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 										IResourceCalculateDelayer resourceCalculateDelayer,
-										ISchedulingResultStateHolder schedulingResultStateHolder)
+										ISchedulingResultStateHolder schedulingResultStateHolder,
+										IEffectiveRestriction customEffectiveRestriction)
 		{
 			if (roleModelShift == null) return false;
 			var teamInfo = teamBlockInfo.TeamInfo;
@@ -78,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				{
 					var restriction = _proposedRestrictionAggregator.Aggregate(schedulingOptions, teamBlockInfo, day, person, roleModelShift);
 					if (restriction == null) return false;
+					restriction = restriction.Combine(customEffectiveRestriction);
 					var shifts = _workShiftFilterService.Filter(day, person, teamBlockSingleDayInfo, restriction, schedulingOptions,
 					                                            new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day));
 					if (shifts.IsNullOrEmpty()) continue;

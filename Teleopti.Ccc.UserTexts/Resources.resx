@@ -12013,4 +12013,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Sign in with:</value>
     <comment>Sign in with:</comment>
   </data>
+  <data name="SignInAsAnotherUserInPermission" xml:space="preserve">
+    <value>Sign In As Another User</value>
+    <comment>Sign in as another user used in permission</comment>
+  </data>
 </root>

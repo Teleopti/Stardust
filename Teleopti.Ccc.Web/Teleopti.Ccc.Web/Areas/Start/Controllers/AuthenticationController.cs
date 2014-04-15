@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Microsoft.IdentityModel.Protocols.WSFederation;
+using Microsoft.IdentityModel.Web;
 using Teleopti.Ccc.Web.Areas.Start.Core.Shared;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -47,14 +48,15 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_formsAuthentication.SignOut();
 
 			var url = Request.Url;
-			
-			var signIn = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), _authenticationModule.Realm)
+
+			var signInReply = new SignInRequestMessage(new Uri(_authenticationModule.Issuer), _authenticationModule.Realm)
 			{
-				Context = "ru=" + Request.Path,
-				Reply = url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignInAsAnotherUser", StringComparison.OrdinalIgnoreCase))
+				Context = "ru=" + url.AbsoluteUri.Remove(url.AbsoluteUri.IndexOf("Authentication/SignInAsAnotherUser", StringComparison.OrdinalIgnoreCase)),
 			};
 
-			return new RedirectResult(signIn.WriteQueryString());
+			var signOut = new SignOutRequestMessage(new Uri(_authenticationModule.Issuer), signInReply.WriteQueryString());
+
+			return new RedirectResult(signOut.WriteQueryString());  
 		}
 	}
 

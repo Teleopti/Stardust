@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     OnDayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
                 }
             }
+
         }
 
         private double calculatePeriodValue(DateOnly dateOnly, IActivity activity, IPerson person)

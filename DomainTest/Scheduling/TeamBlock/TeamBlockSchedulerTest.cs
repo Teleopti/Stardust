@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private IEffectiveRestriction _customEffectiveRestriction;
 
 		[SetUp]
 		public void Setup()
@@ -57,28 +60,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+			_customEffectiveRestriction = new EffectiveRestriction();
 		}
 
-		
+
 		[Test]
 		public void ShouldSchedule()
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(_shift);
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(_shift);
 				Expect.Call(() => _singleDayScheduler.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(_singleDayScheduler.ScheduleSingleDay(_teamBlockInfo, _schedulingOptions, _selectedPersons, _dateOnly,
-																  _shift, _blockPeriod, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(true);
+																  _shift, _blockPeriod, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _customEffectiveRestriction)).Return(true);
 				Expect.Call(() => _singleDayScheduler.DayScheduled -= _target.OnDayScheduled);
 			}
 			using (_mocks.Playback())
 			{
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+					_selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, _customEffectiveRestriction);
 				Assert.That(result, Is.True);
 			}
 		}
-
 		
 		[Test]
 		public void ShouldNotifySubscribersWhenScheduleFailed()
@@ -86,13 +89,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target.DayScheduled += targetDayScheduled;
 			using (_mocks.Record())
 			{
-				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions)).Return(null);
+				Expect.Call(_roleModelSelector.Select(_teamBlockInfo, _dateOnly, _person1, _schedulingOptions, new EffectiveRestriction())).Return(null);
 			}
 			using (_mocks.Playback())
 			{
 				Assert.That(_isScheduleFailed, Is.False);
 				var result = _target.ScheduleTeamBlockDay(_teamBlockInfo, _dateOnly, _schedulingOptions, _blockPeriod,
-														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder);
+														  _selectedPersons, _schedulePartModifyAndRollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction());
 
 				Assert.That(result, Is.False);
 				Assert.That(_isScheduleFailed, Is.True);

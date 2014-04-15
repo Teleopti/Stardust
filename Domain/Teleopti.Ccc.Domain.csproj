@@ -519,6 +519,18 @@
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinder.cs" />
+    <Compile Include="Optimization\TeamBlock\TeamBlockScheduleCloner.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\BrokenWeekOutsideSelectionSpecification.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeek.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\DeleteScheduleDayFromUnsolvedPersonWeek.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\EnsureWeeklyRestRule.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ExtractDayOffFromGivenWeek.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\IdentifyDayOffWithHighestSpan.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractor.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlier.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLater.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManager.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
     <Compile Include="ResourceCalculation\FairnessAndMaxSeatCalculatorsManager.cs" />
@@ -1125,6 +1137,7 @@
     <Compile Include="Scheduling\TimeLayer\MultiplicatorLayer.cs" />
     <Compile Include="Scheduling\TimeLayer\MultiplicatorProjectionService.cs" />
     <Compile Include="Scheduling\TimeZoneGuard.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\DayOffToTimeSpanExtractor.cs" />
     <Compile Include="Scheduling\WorkShiftWorkTime.cs" />
     <Compile Include="Scheduling\WorkTimeMinMax.cs" />
     <Compile Include="Scheduling\WorkTimeMinMaxCalculator.cs" />

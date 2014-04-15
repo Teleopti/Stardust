@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -42,11 +43,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		    MessageId = "3"),
-	     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
-		     MessageId = "2")]
 	    public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 	                                 IList<IPerson> selectedPersons,
 	                                 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
@@ -90,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,
 	                                                         selectedPersons, schedulePartModifyAndRollbackService,
-	                                                         resourceCalculateDelayer, schedulingResultStateHolder))
+	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new EffectiveRestriction()))
 		            verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo);
 				else

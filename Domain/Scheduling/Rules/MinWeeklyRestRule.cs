@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             foreach (PersonWeek personWeek in personWeeks)
             {
                 var person = personWeek.Person;
-                IScheduleRange currentSchedules = rangeClones[person];
+                IScheduleRange currentSchedules = rangeClones [person];
                 var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
                 foreach (DateOnly day in personWeek.Week.DayCollection())
                 {
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var scheduleDayBefore2 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-2));
 			var result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayBefore1, scheduleDayBefore2);
 			if (result != null)
-				endOfPeriodBefore = result.Value.EndDateTime; ;
+				endOfPeriodBefore = result.Value.EndDateTime; 
 		
             foreach (IPersonAssignment ass in pAss)
             {
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 			var scheduleDayAfter2 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(2));
 			result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayAfter1, scheduleDayAfter2);
 			if (result != null)
-				endOfPeriodAfter = result.Value.StartDateTime; ;
+				endOfPeriodAfter = result.Value.StartDateTime; 
 
             if ((endOfPeriodAfter - endOfPeriodBefore) >= weeklyRest)
                 return true;
