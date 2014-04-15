@@ -1,4 +1,4 @@
-﻿@WeekSchedule
+﻿@ignore
 Feature: View week schedule on mobile
 	In order to know how to work this week
 	As an agent
@@ -26,31 +26,29 @@ Background:
 	| Name                       | Published schedule |
 	| Schedule published to date | 2040-06-24         |
 	And there is a workflow control set with
-	| Field                                 | Value                            |
-	| Name                                  | Published schedule to 2012-08-28 |
-	| Schedule published to date            | 2012-08-28                       |
-	| Preference period is closed           | true                             |
-	| Student availability period is closed | true                             |
+	| Field                      | Value                               |
+	| Name                       | Published schedule until 2014-04-30 |
+	| Schedule published to date | 2014-04-30                          |
 	And I have a schedule period with 
 	| Field      | Value      |
-	| Start date | 2012-06-18 |
+	| Start date | 2014-04-14 |
 	| Type       | Week       |
 	| Length     | 1          |
 	And I have a person period with 
 	| Field      | Value      |
-	| Start date | 2012-06-18 |
+	| Start date | 2014-04-14 |
 	And there are shift categories
 	| Name  |
-	| Night |
-	| Day   |
-	| Late  |
-	And there are activities
-	| Name           | Color  |
-	| Lunch          | Yellow |
-	| White activity | White  |
-	| Black activity | Black  |
+	| Early |
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
+	And there is an absence with
+	| Field      | Value   |
+	| Name       | Illness |
+	| Short name | IL      |
+	| Color      | Red     |
 
-@ignore
 Scenario: No access to schedule page
 	Given I have the role 'Only access to Anywhere'
 	And I navigate to Anywhere
@@ -60,9 +58,159 @@ Scenario: No access to schedule page
 	When I manually navigate to mobile week schedule page
 	Then I should see an error message
 
-@ignore
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-10-03 12:00'
-	When I view my mobile week schedule for date '2030-10-03'
-	Then I should see mobile view of the week with for date '2030-10-03'
+	When I view my mobile week schedule
+	Then I should see my mobile week schedule for date '2030-10-03'
+
+Scenario: Navigate to desktop view
+	Given I have the role 'Full access to mytime'
+	And I am viewing my mobile week schedule for date '2014-04-15'
+	When I click the desktop link
+	Then I should see my week schedule for date '2014-04-15'
+
+Scenario: View when you are working
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2014-04-15 09:00 |
+	| EndTime        | 2014-04-15 18:00 |
+	| Shift category | Early            |
+	When I view my mobile week schedule for date '2014-04-15'
+	Then I should see the shift with
+	| Field          | Value         |
+	| Date           | 2014-04-15    |
+	| Time span      | 09:00 - 18:00 |
+	| Shift category | Early         |
+
+Scenario: View when you have a day off
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2014-04-15 |
+	When I view my mobile week schedule for date '2014-04-15'
+	Then I should see the day off on '2014-04-15'
+
+Scenario: View when you have a part time absence on working day
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+		| Field          | Value            |
+		| StartTime      | 2014-04-15 09:00 |
+		| EndTime        | 2014-04-15 18:00 |
+		| Shift category | Early            |
+	And I have an absence with
+		| Field		| Value            |
+		| Name      | Illness          |
+		| StartTime | 2014-04-15 09:00 |
+		| EndTime   | 2014-04-15 12:00 |
+	When I view my mobile week schedule for date '2014-04-15'
+	Then I should see the shift with
+		| Field          | Value         |
+		| Date           | 2014-04-15    |
+		| Time span      | 09:00 - 18:00 |
+		| Shift category | Early         |
+	And I should see the absence on date '2014-04-15'
+
+Scenario: View when you have a full day absence on working day
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+		| Field          | Value            |
+		| StartTime      | 2014-04-15 09:00 |
+		| EndTime        | 2014-04-15 18:00 |
+		| Shift category | Early            |
+	And I have an absence with
+		| Field		| Value            |
+		| Name      | Illness          |
+		| StartTime | 2014-04-15 09:00 |
+		| EndTime   | 2014-04-15 18:00 |
+	When I view my mobile week schedule for date '2014-04-15'
+	Then I should not see a shift on date '2014-04-15'
+	And I should see the absence on date '2014-04-15'
+
+Scenario: View when you are in absence on day off
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2014-04-15 |
+	And I have an absence with
+	| Field		| Value            |
+	| Name      | Illness          |
+	| StartTime | 2014-04-15 00:00 |
+	| EndTime   | 2014-04-15 23:59 |
+	When I view my mobile week schedule for date '2014-04-15'
+	Then I should see the absence with 
+	| Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-04-15       |
+
+Scenario: View when you have full day absence
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have an absence with
+	| Field      | Value            |
+	| Name       | Illness          |
+	| Start time | 2014-04-15 00:00 |
+	| End time   | 2014-04-15 23:59 |
+	When I view my mobile week schedule for date '2014-04-15'
+	Then I should see the absence with 
+	| Field		| Value            |
+	| Name      | Illness          |
+	| Date      | 2014-04-15       |
+
+Scenario: Do not show unpublished schedule 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule until 2014-04-30'
+	And I have a shift with
+	| Field          | Value            |
+	| StartTime      | 2014-05-01 09:00 |
+	| EndTime        | 2014-05-01 18:00 |
+	| Shift category | Early            |
+	When I view my mobile week schedule for date '2014-05-01'
+	Then I should not see any shift for day '2014-05-01'
+	
+Scenario: Language
+	Given I have the role 'Full access to mytime'
+    And I have the workflow control set 'Published schedule'
+	And I am german
+	When I view my mobile week schedule for date '2014-01-01'
+	Then I should see a day name being 'Montag'
+
+Scenario: First day of week
+	Given I have the role 'Full access to mytime'
+    And I have the workflow control set 'Published schedule'
+	And I am american
+	When I view my mobile week schedule for date '2014-04-15'
+	Then I should see '2014-04-13' as the first day
+	And I should see '2014-04-19' as the last day
+	And I should see 'Sunday' as the first day of week label
+
+Scenario: Navigate to next week
+	Given I have the role 'Full access to mytime'
+    And I have the workflow control set 'Published schedule'
+	And I view my mobile week schedule for date '2014-04-15'
+	When I navigate to next week
+	Then I should see mobile week schedule for '2014-04-21' 
+
+Scenario: Navigate to previous week
+	Given I have the role 'Full access to mytime'
+    And I have the workflow control set 'Published schedule'
+	And I view my mobile week schedule for date '2014-04-15'
+	When I navigate to previous week
+	Then I should see mobile week schedule for '2014-04-07'
+
+Scenario: Pick a week in the calendar
+	Given I have the role 'Full access to mytime'
+	And I am swedish
+    And I have the workflow control set 'Published schedule'
+	And I view my mobile week schedule for date '2014-04-15'
+	When I select week '17' in the calendar 
+	Then I should end up in month view for '2014-04-21'
+
