@@ -1,8 +1,6 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
+﻿namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
-    public interface IChannelCreator : IDisposable
+    public interface IChannelCreator
     {
         T CreateChannel<T>();
     }
