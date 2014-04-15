@@ -1,6 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Scheduling;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -11,13 +16,19 @@ namespace Teleopti.Ccc.Win.Commands
 	public class ClassicScheduleCommand
 	{
 		private readonly IMatrixListFactory _matrixListFactory;
+	    private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
+	    private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+	    private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-		public ClassicScheduleCommand(IMatrixListFactory matrixListFactory)
-		{
-			_matrixListFactory = matrixListFactory;
-		}
+	    public ClassicScheduleCommand(IMatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, IScheduleDayChangeCallback scheduleDayChangeCallback, IResourceOptimizationHelper resourceOptimizationHelper)
+	    {
+	        _matrixListFactory = matrixListFactory;
+	        _weeklyRestSolverCommand = weeklyRestSolverCommand;
+	        _scheduleDayChangeCallback = scheduleDayChangeCallback;
+	        _resourceOptimizationHelper = resourceOptimizationHelper;
+	    }
 
-		public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker,
+	    public void Execute(ISchedulingOptions schedulingOptions, BackgroundWorker backgroundWorker,
 		                    ScheduleOptimizerHelper scheduleOptimizerHelper, IList<IScheduleDay> selectedSchedules,
 		                    ISchedulerStateHolder schedulerStateHolder)
 		{
@@ -69,6 +80,23 @@ namespace Teleopti.Ccc.Win.Commands
 				                                                   allMatrixesOfSelectedPersons, true, backgroundWorker,
 				                                                   schedulingOptions);
 
+            runWeeklyRestSolver(schedulingOptions, selectedSchedules, schedulerStateHolder, selectedPeriod,backgroundWorker );
 		}
+
+
+	    private void runWeeklyRestSolver(ISchedulingOptions schedulingOptions, IList<IScheduleDay> selectedSchedules, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod, BackgroundWorker backgroundWorker)
+	    {
+	        var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+	            schedulingOptions.ConsiderShortBreaks);
+	        ISchedulePartModifyAndRollbackService rollbackService =
+	            new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState,
+	                _scheduleDayChangeCallback,
+	                new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+	        var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
+	        _weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService, resourceCalculateDelayer,
+	            selectedPeriod, _matrixListFactory.CreateMatrixListAll(selectedPeriod),backgroundWorker );
+	    }
+
+	    
 	}
 }
