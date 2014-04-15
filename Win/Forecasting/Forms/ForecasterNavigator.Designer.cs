@@ -88,6 +88,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripMenuItemActionSkillProperties = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemActionSkillImportForecast = new System.Windows.Forms.ToolStripMenuItem();
 			this.SkillsMenuItemJobHistory = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripQueues = new System.Windows.Forms.ToolStrip();
+			this.toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
+			this.toolStripMenuItemActionQueueSourceNewWorkload = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripMenuItemActionQueueSourceDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripWorkload = new System.Windows.Forms.ToolStrip();
 			this.toolStripLabelActions = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripMenuItemActionWorkloadNewSkill = new System.Windows.Forms.ToolStripMenuItem();
@@ -99,12 +105,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemActionWorkloadDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemActionWorkloadProperties = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripQueues = new System.Windows.Forms.ToolStrip();
-			this.toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
-			this.toolStripMenuItemActionQueueSourceNewWorkload = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripSeparator15 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItemActionQueueSourceDelete = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSkillTypes = new System.Windows.Forms.ToolStrip();
 			this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripMenuItemActionSkillTypeNewSkill = new System.Windows.Forms.ToolStripMenuItem();
@@ -136,8 +136,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
 			this.toolStripSkills.SuspendLayout();
-			this.toolStripWorkload.SuspendLayout();
 			this.toolStripQueues.SuspendLayout();
+			this.toolStripWorkload.SuspendLayout();
 			this.toolStripSkillTypes.SuspendLayout();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.treeViewSkills.Name = "treeViewSkills";
 			this.treeViewSkills.RightToLeftLayout = true;
 			this.treeViewSkills.SelectedImageIndex = 0;
-			this.treeViewSkills.Size = new System.Drawing.Size(212, 339);
+			this.treeViewSkills.Size = new System.Drawing.Size(212, 341);
 			this.treeViewSkills.TabIndex = 1;
 			this.treeViewSkills.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewSkills_BeforeSelect);
 			this.treeViewSkills.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeViewSkills_MouseDown);
@@ -249,22 +249,26 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             this.toolStripMenuItemSkillsProperties,
             this.toolStripMenuItemSkillsImportForecast});
 			this.contextMenuStripSkills.Name = "contextMenuStripForecasts";
-			this.contextMenuStripSkills.Size = new System.Drawing.Size(241, 236);
+			this.contextMenuStripSkills.Size = new System.Drawing.Size(241, 318);
 			this.contextMenuStripSkills.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripSkills_Opening);
 			// 
 			// toolStripMenuItemSkillNew
 			// 
 			this.toolStripMenuItemSkillNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillGeneral;
+			this.toolStripMenuItemSkillNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemSkillNew.Name = "toolStripMenuItemSkillNew";
-			this.toolStripMenuItemSkillNew.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemSkillNew.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemSkillNew.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemSkillNew.Text = "xxNewSkillThreeDots";
 			this.toolStripMenuItemSkillNew.Click += new System.EventHandler(this.toolStripMenuItemSkillsNew_Click);
 			// 
 			// toolStripMenuItemMultisiteSkillNew
 			// 
 			this.toolStripMenuItemMultisiteSkillNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillMultisite;
+			this.toolStripMenuItemMultisiteSkillNew.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemMultisiteSkillNew.Name = "toolStripMenuItemMultisiteSkillNew";
-			this.toolStripMenuItemMultisiteSkillNew.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemMultisiteSkillNew.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemMultisiteSkillNew.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemMultisiteSkillNew.Text = "xxNewMultisiteSkillThreeDots";
 			this.toolStripMenuItemMultisiteSkillNew.Click += new System.EventHandler(this.toolStripMenuItemMultisiteSkillNew_Click);
 			// 
@@ -272,7 +276,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripMenuItemWorkloadNew.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Workload;
 			this.toolStripMenuItemWorkloadNew.Name = "toolStripMenuItemWorkloadNew";
-			this.toolStripMenuItemWorkloadNew.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemWorkloadNew.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemWorkloadNew.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemWorkloadNew.Text = "xxNewWorkloadThreeDots";
 			this.toolStripMenuItemWorkloadNew.Click += new System.EventHandler(this.toolStripMenuItemWorkloadNew_Click);
 			// 
@@ -285,7 +290,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripMenuItemManageDayTemplates.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Template2;
 			this.toolStripMenuItemManageDayTemplates.Name = "toolStripMenuItemManageDayTemplates";
-			this.toolStripMenuItemManageDayTemplates.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemManageDayTemplates.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemManageDayTemplates.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemManageDayTemplates.Text = "xxPrepareSkillThreeDots";
 			this.toolStripMenuItemManageDayTemplates.Click += new System.EventHandler(this.toolStripMenuItemManageDayTemplates_Click);
 			// 
@@ -293,7 +299,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripMenuItemManageMultisiteDistributions.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_SkillMultiSite_16x16;
 			this.toolStripMenuItemManageMultisiteDistributions.Name = "toolStripMenuItemManageMultisiteDistributions";
-			this.toolStripMenuItemManageMultisiteDistributions.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemManageMultisiteDistributions.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemManageMultisiteDistributions.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemManageMultisiteDistributions.Text = "xxManageMultisiteDistributions";
 			this.toolStripMenuItemManageMultisiteDistributions.Click += new System.EventHandler(this.toolStripMenuItemManageDistribution_Click);
 			// 
@@ -301,7 +308,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripMenuCreateForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts;
 			this.toolStripMenuCreateForecast.Name = "toolStripMenuCreateForecast";
-			this.toolStripMenuCreateForecast.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuCreateForecast.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuCreateForecast.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuCreateForecast.Text = "xxOpenForecastThreeDots";
 			this.toolStripMenuCreateForecast.Click += new System.EventHandler(this.toolStripMenuCreateForecast_Click);
 			// 
@@ -309,7 +317,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.xxQuickForecastToolStripMenuItem.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Forecasts_16x16;
 			this.xxQuickForecastToolStripMenuItem.Name = "xxQuickForecastToolStripMenuItem";
-			this.xxQuickForecastToolStripMenuItem.Size = new System.Drawing.Size(240, 22);
+			this.xxQuickForecastToolStripMenuItem.Padding = new System.Windows.Forms.Padding(4);
+			this.xxQuickForecastToolStripMenuItem.Size = new System.Drawing.Size(248, 28);
 			this.xxQuickForecastToolStripMenuItem.Text = "xxQuickForecast";
 			this.xxQuickForecastToolStripMenuItem.Click += new System.EventHandler(this.toolStripMenuItemQuickForecastClick);
 			// 
@@ -322,7 +331,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripMenuItemSkillsDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
 			this.toolStripMenuItemSkillsDelete.Name = "toolStripMenuItemSkillsDelete";
-			this.toolStripMenuItemSkillsDelete.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemSkillsDelete.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemSkillsDelete.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemSkillsDelete.Text = "xxDelete";
 			this.toolStripMenuItemSkillsDelete.Click += new System.EventHandler(this.toolStripMenuItemSkillsDelete_Click);
 			// 
@@ -330,7 +340,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripMenuItemSkillsProperties.Image = ((System.Drawing.Image)(resources.GetObject("toolStripMenuItemSkillsProperties.Image")));
 			this.toolStripMenuItemSkillsProperties.Name = "toolStripMenuItemSkillsProperties";
-			this.toolStripMenuItemSkillsProperties.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemSkillsProperties.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemSkillsProperties.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemSkillsProperties.Text = "xxPropertiesThreeDots";
 			this.toolStripMenuItemSkillsProperties.Click += new System.EventHandler(this.toolStripMenuItemSkillsProperties_Click);
 			// 
@@ -338,7 +349,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			// 
 			this.toolStripMenuItemSkillsImportForecast.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_New2;
 			this.toolStripMenuItemSkillsImportForecast.Name = "toolStripMenuItemSkillsImportForecast";
-			this.toolStripMenuItemSkillsImportForecast.Size = new System.Drawing.Size(240, 22);
+			this.toolStripMenuItemSkillsImportForecast.Padding = new System.Windows.Forms.Padding(4);
+			this.toolStripMenuItemSkillsImportForecast.Size = new System.Drawing.Size(248, 28);
 			this.toolStripMenuItemSkillsImportForecast.Text = "xxImportForecast";
 			this.toolStripMenuItemSkillsImportForecast.Click += new System.EventHandler(this.toolStripMenuItemSkillsImportForecast_Click);
 			// 
@@ -489,7 +501,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.Panel2.Controls.Add(this.toolStrip1);
 			this.splitContainer1.Panel2.Margin = new System.Windows.Forms.Padding(0, 1, 0, 0);
 			this.splitContainer1.Size = new System.Drawing.Size(212, 550);
-			this.splitContainer1.SplitterDistance = 339;
+			this.splitContainer1.SplitterDistance = 341;
 			this.splitContainer1.SplitterWidth = 2;
 			this.splitContainer1.TabIndex = 4;
 			// 
@@ -654,6 +666,62 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.SkillsMenuItemJobHistory.Text = "xxJobHistory";
 			this.SkillsMenuItemJobHistory.Click += new System.EventHandler(this.toolStripMenuItemJobHistory_Click);
 			// 
+			// toolStripQueues
+			// 
+			this.toolStripQueues.BackColor = System.Drawing.Color.Transparent;
+			this.toolStripQueues.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+			this.toolStripQueues.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator20,
+            this.toolStripLabel4,
+            this.toolStripMenuItemActionQueueSourceNewWorkload,
+            this.toolStripSeparator15,
+            this.toolStripMenuItemActionQueueSourceDelete});
+			this.toolStripQueues.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
+			this.toolStripQueues.Location = new System.Drawing.Point(0, 0);
+			this.toolStripQueues.Name = "toolStripQueues";
+			this.toolStripQueues.Padding = new System.Windows.Forms.Padding(1);
+			this.toolStripQueues.Size = new System.Drawing.Size(212, 97);
+			this.toolStripQueues.TabIndex = 5;
+			this.toolStripQueues.Text = "xxActions";
+			this.toolStripQueues.Visible = false;
+			// 
+			// toolStripSeparator20
+			// 
+			this.toolStripSeparator20.Name = "toolStripSeparator20";
+			this.toolStripSeparator20.Size = new System.Drawing.Size(209, 6);
+			// 
+			// toolStripLabel4
+			// 
+			this.toolStripLabel4.Font = new System.Drawing.Font("Segoe UI", 10F);
+			this.toolStripLabel4.Name = "toolStripLabel4";
+			this.toolStripLabel4.Size = new System.Drawing.Size(209, 19);
+			this.toolStripLabel4.Text = "xxActions";
+			// 
+			// toolStripMenuItemActionQueueSourceNewWorkload
+			// 
+			this.toolStripMenuItemActionQueueSourceNewWorkload.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Workload;
+			this.toolStripMenuItemActionQueueSourceNewWorkload.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripMenuItemActionQueueSourceNewWorkload.Name = "toolStripMenuItemActionQueueSourceNewWorkload";
+			this.toolStripMenuItemActionQueueSourceNewWorkload.Size = new System.Drawing.Size(209, 20);
+			this.toolStripMenuItemActionQueueSourceNewWorkload.Text = "xxNewWorkloadThreeDots";
+			this.toolStripMenuItemActionQueueSourceNewWorkload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripMenuItemActionQueueSourceNewWorkload.Click += new System.EventHandler(this.toolStripMenuItemActionQueueSourceNewWorkload_Click);
+			// 
+			// toolStripSeparator15
+			// 
+			this.toolStripSeparator15.Name = "toolStripSeparator15";
+			this.toolStripSeparator15.Size = new System.Drawing.Size(209, 6);
+			// 
+			// toolStripMenuItemActionQueueSourceDelete
+			// 
+			this.toolStripMenuItemActionQueueSourceDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
+			this.toolStripMenuItemActionQueueSourceDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripMenuItemActionQueueSourceDelete.Name = "toolStripMenuItemActionQueueSourceDelete";
+			this.toolStripMenuItemActionQueueSourceDelete.Size = new System.Drawing.Size(209, 20);
+			this.toolStripMenuItemActionQueueSourceDelete.Text = "xxDelete";
+			this.toolStripMenuItemActionQueueSourceDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.toolStripMenuItemActionQueueSourceDelete.Click += new System.EventHandler(this.toolStripMenuItemActionQueueSourceDelete_Click);
+			// 
 			// toolStripWorkload
 			// 
 			this.toolStripWorkload.BackColor = System.Drawing.Color.Transparent;
@@ -767,62 +835,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.toolStripMenuItemActionWorkloadProperties.Text = "xxPropertiesThreeDots";
 			this.toolStripMenuItemActionWorkloadProperties.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripMenuItemActionWorkloadProperties.Click += new System.EventHandler(this.toolStripMenuItemActionWorkloadProperties_Click);
-			// 
-			// toolStripQueues
-			// 
-			this.toolStripQueues.BackColor = System.Drawing.Color.Transparent;
-			this.toolStripQueues.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-			this.toolStripQueues.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripSeparator20,
-            this.toolStripLabel4,
-            this.toolStripMenuItemActionQueueSourceNewWorkload,
-            this.toolStripSeparator15,
-            this.toolStripMenuItemActionQueueSourceDelete});
-			this.toolStripQueues.LayoutStyle = System.Windows.Forms.ToolStripLayoutStyle.VerticalStackWithOverflow;
-			this.toolStripQueues.Location = new System.Drawing.Point(0, 0);
-			this.toolStripQueues.Name = "toolStripQueues";
-			this.toolStripQueues.Padding = new System.Windows.Forms.Padding(1);
-			this.toolStripQueues.Size = new System.Drawing.Size(212, 97);
-			this.toolStripQueues.TabIndex = 5;
-			this.toolStripQueues.Text = "xxActions";
-			this.toolStripQueues.Visible = false;
-			// 
-			// toolStripSeparator20
-			// 
-			this.toolStripSeparator20.Name = "toolStripSeparator20";
-			this.toolStripSeparator20.Size = new System.Drawing.Size(209, 6);
-			// 
-			// toolStripLabel4
-			// 
-			this.toolStripLabel4.Font = new System.Drawing.Font("Segoe UI", 10F);
-			this.toolStripLabel4.Name = "toolStripLabel4";
-			this.toolStripLabel4.Size = new System.Drawing.Size(209, 19);
-			this.toolStripLabel4.Text = "xxActions";
-			// 
-			// toolStripMenuItemActionQueueSourceNewWorkload
-			// 
-			this.toolStripMenuItemActionQueueSourceNewWorkload.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Workload;
-			this.toolStripMenuItemActionQueueSourceNewWorkload.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripMenuItemActionQueueSourceNewWorkload.Name = "toolStripMenuItemActionQueueSourceNewWorkload";
-			this.toolStripMenuItemActionQueueSourceNewWorkload.Size = new System.Drawing.Size(209, 20);
-			this.toolStripMenuItemActionQueueSourceNewWorkload.Text = "xxNewWorkloadThreeDots";
-			this.toolStripMenuItemActionQueueSourceNewWorkload.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripMenuItemActionQueueSourceNewWorkload.Click += new System.EventHandler(this.toolStripMenuItemActionQueueSourceNewWorkload_Click);
-			// 
-			// toolStripSeparator15
-			// 
-			this.toolStripSeparator15.Name = "toolStripSeparator15";
-			this.toolStripSeparator15.Size = new System.Drawing.Size(209, 6);
-			// 
-			// toolStripMenuItemActionQueueSourceDelete
-			// 
-			this.toolStripMenuItemActionQueueSourceDelete.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Delete;
-			this.toolStripMenuItemActionQueueSourceDelete.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripMenuItemActionQueueSourceDelete.Name = "toolStripMenuItemActionQueueSourceDelete";
-			this.toolStripMenuItemActionQueueSourceDelete.Size = new System.Drawing.Size(209, 20);
-			this.toolStripMenuItemActionQueueSourceDelete.Text = "xxDelete";
-			this.toolStripMenuItemActionQueueSourceDelete.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.toolStripMenuItemActionQueueSourceDelete.Click += new System.EventHandler(this.toolStripMenuItemActionQueueSourceDelete_Click);
 			// 
 			// toolStripSkillTypes
 			// 
@@ -1058,10 +1070,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			this.splitContainer1.ResumeLayout(false);
 			this.toolStripSkills.ResumeLayout(false);
 			this.toolStripSkills.PerformLayout();
-			this.toolStripWorkload.ResumeLayout(false);
-			this.toolStripWorkload.PerformLayout();
 			this.toolStripQueues.ResumeLayout(false);
 			this.toolStripQueues.PerformLayout();
+			this.toolStripWorkload.ResumeLayout(false);
+			this.toolStripWorkload.PerformLayout();
 			this.toolStripSkillTypes.ResumeLayout(false);
 			this.toolStripSkillTypes.PerformLayout();
 			this.toolStrip1.ResumeLayout(false);
