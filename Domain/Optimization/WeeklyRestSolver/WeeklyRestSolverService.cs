@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
         private readonly IDeleteScheduleDayFromUnsolvedPersonWeek _deleteScheduleDayFromUnsolvedPersonWeek;
         private readonly IBrokenWeekOutsideSelectionSpecification _brokenWeekOutsideSelectionSpecification;
         private bool _cancelMe;
-        //public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
         public event EventHandler<BlockSchedulingServiceEventArgs> ResolvingWeek;
 
         public WeeklyRestSolverService(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IContractWeeklyRestForPersonWeek contractWeeklyRestForPersonWeek, 
@@ -45,14 +44,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             _brokenWeekOutsideSelectionSpecification = brokenWeekOutsideSelectionSpecification;
         }
 
-        protected virtual void OnDayScheduled(BlockSchedulingServiceEventArgs scheduleServiceBaseEventArgs)
+        protected virtual void OnDayScheduled(BlockSchedulingServiceEventArgs blockSchedulingServiceEventArgs )
         {
             EventHandler<BlockSchedulingServiceEventArgs> temp = ResolvingWeek;
             if (temp != null)
             {
-                temp(this, scheduleServiceBaseEventArgs);
+                temp(this, blockSchedulingServiceEventArgs);
             }
-            _cancelMe = scheduleServiceBaseEventArgs.Cancel;
+            _cancelMe = blockSchedulingServiceEventArgs.Cancel;
         }
 
 	    public void Execute(IList<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod, ITeamBlockGenerator teamBlockGenerator, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences, ISchedulingOptions schedulingOptions)
