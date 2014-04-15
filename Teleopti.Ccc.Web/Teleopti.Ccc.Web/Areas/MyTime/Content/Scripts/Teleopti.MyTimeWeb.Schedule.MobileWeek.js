@@ -21,12 +21,23 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
     var vm;
     var completelyLoaded;
     var _fetchMobileWeekData = function () {
-       
+        ajax.Ajax({
+            url: 'Schedule/FetchMobileWeekData',
+            dataType: "json",
+            type: 'GET',
+            data: {
+                date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+            },
+            success: function (data) {
+                vm.readData(data);
+                completelyLoaded();
+            }
+        });
     };
     function _cleanBindings() {
         ko.cleanNode($('#page')[0]);
         if (vm != null) {
-            vm.weekViewModels([]);
+            vm.dayViewModels([]);
             vm = null;
         }
     }
