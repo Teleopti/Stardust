@@ -12,11 +12,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertExists("#notifyLogger .notifyLoggerItem");
 			Browser.Interactions.AssertNotExists("#notifyLogger", ".notifyLoggerItem:nth-child(2)");
 		}
-
-		[Then(@"I shoud see an popup notify contains (.*)")]
-		public void ThenIShouldSeeAnPopupNotifyContains(string content)
-		{
-			Browser.Interactions.AssertFirstContains(".noty_bar .noty_message .noty_text", content);
-		}
 	}
 }

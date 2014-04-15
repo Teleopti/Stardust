@@ -52,7 +52,7 @@ Scenario: Alert agent before next activity happens
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I shoud see an popup notify contains Lunch
+	Then I should see one notify message
 
 @ignore
 Scenario: Do not alert agent without permission for ASM
