@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -131,12 +130,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyPerson()
         {
             Assert.AreEqual(_person, _target.Person);
-        }
-
-        [Test]
-        public void VerifyPossiblePeriodTime()
-        {
-            Assert.AreEqual(new MinMax<TimeSpan>(), _target.PossiblePeriodTime);
         }
 
         [Test]
@@ -296,8 +289,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(_target.Period.Value.EndDate, _target.EndDate);
             Assert.AreEqual(_target.Period.Value.StartDate, _target.StartDate);
             Assert.AreEqual(_target.NumberOfDatesWithPreferenceOrScheduledDaysOff, _target.NumberOfDatesWithPreferenceOrScheduledDaysOff);
-            Assert.AreEqual(_target.PossiblePeriodTime.Minimum, _target.MinPossiblePeriodTime);
-            Assert.AreEqual(_target.PossiblePeriodTime.Maximum, _target.MaxPossiblePeriodTime);
             Assert.AreEqual("Week", _target.PeriodType);
 
             ISchedulePeriod schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(_dateOnly, SchedulePeriodType.Day, 14);

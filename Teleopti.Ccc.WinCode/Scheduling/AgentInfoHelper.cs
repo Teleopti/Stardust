@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         private IVirtualSchedulePeriod _schedulePeriod;
         private DateOnly _selectedDate;
         private ISchedulingOptions _schedulingOptions;
-        private MinMax<TimeSpan> _possiblePeriodTime;
         private int _numberOfWarnings;
         private IDictionary<string, TimeSpan> _timePerDefinitionSet = new Dictionary<string, TimeSpan>();
         private IScheduleMatrixPro _matrix;
@@ -163,21 +162,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, IncludeScheduling(), _schedulingOptions.UsePreferences, _schedulingOptions.UseRotations); }
         }
 
-        public MinMax<TimeSpan> PossiblePeriodTime
-        {
-            get { return _possiblePeriodTime; }
-        }
-
-        public TimeSpan MinPossiblePeriodTime
-        {
-            get { return _possiblePeriodTime.Minimum; }
-        }
-
-        public TimeSpan MaxPossiblePeriodTime
-        {
-            get { return _possiblePeriodTime.Maximum; }
-        }
-
         public ISchedulingOptions SchedulingOptions
         {
             get { return _schedulingOptions; }
@@ -270,8 +254,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
 			}
 
-
-            _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions);
         }
 
         public void SetRestrictionFullfillment()
