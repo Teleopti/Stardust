@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: View week schedule on mobile
+﻿Feature: View week schedule on mobile
 	In order to know how to work this week
 	As an agent
 	I want to see my schedule details on mobile phone

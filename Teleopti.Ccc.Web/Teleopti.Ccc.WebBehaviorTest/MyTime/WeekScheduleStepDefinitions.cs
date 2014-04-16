@@ -17,7 +17,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 {
 	[Binding]
 	public class WeekScheduleStepDefinitions
-	{
+    {
+        [Then(@"I should see my week schedule for date '(.*)'")]
+        public void ThenIShouldSeeMyWeekScheduleForDate(string p0)
+        {
+            ScenarioContext.Current.Pending();
+        }
+
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
