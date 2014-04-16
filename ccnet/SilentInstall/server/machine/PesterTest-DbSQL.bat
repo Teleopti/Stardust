@@ -25,3 +25,8 @@ SET DB_EndUserAccess=SQL
 ::you must also provide:
 SET DB_ENDUSER_SQLLOGIN=TeleoptiDemoUser
 SET DB_ENDUSER_PWD=TeleoptiDemoPwd2
+
+
+SET DEFAULT_IDENTITY_PROVIDER=Teleopti
+SET IDENTITY_PROVIDERS=Windows,Teleopti
+SET HOST_NAME=%COMPUTERNAME%
