@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             _person.AddSchedulePeriod(_schedulePeriod);
 				_workShiftWorkTime = new WorkShiftWorkTime(new RuleSetProjectionService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())));
             _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void ShouldNotIncreaseCurrentDaysOffByTwoWhenReloadingSchedulePeriodData()
         {
             var currentDaysOff = _target.CurrentDaysOff;
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
             Assert.AreEqual(currentDaysOff,_target.CurrentDaysOff);
         }
 
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyHandleNullSchedulePeriod()
         {
             _target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime);
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
             Assert.IsFalse(_target.WeekInLegalState);
         }
 
@@ -189,8 +189,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             prepareScheduleDictionary();
 
             _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
-            _target.SchedulePeriodData();
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
+            _target.SchedulePeriodData(true);
 
             Assert.AreEqual(4, _target.CurrentOccupiedSlots);
             Assert.AreEqual(TimeSpan.FromHours(13), _target.CurrentContractTime);
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             prepareScheduleDictionary();
 
             _target = new AgentInfoHelper(_person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
 
             Assert.AreEqual(4, _target.CurrentOccupiedSlots);
         }
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             _target = new AgentInfoHelper(_person, new DateOnly(1888, 1, 1), _stateHolder, _schedulingOptions, _workShiftWorkTime)
                              {NumberOfWarnings = 5};
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
             Assert.IsTrue(_target.NumberOfWarnings == 5);
         }
 
@@ -305,14 +305,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             person.RemoveAllSchedulePeriods();
             person.AddSchedulePeriod(schedulePeriod);
             _target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
             Assert.AreEqual("Day", _target.PeriodType);
 
             person.RemoveAllSchedulePeriods();
             schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(_dateOnly, SchedulePeriodType.Month, 1);
             person.AddSchedulePeriod(schedulePeriod);
             _target = new AgentInfoHelper(person, _dateOnly, _stateHolder, _schedulingOptions, _workShiftWorkTime);
-            _target.SchedulePeriodData();
+            _target.SchedulePeriodData(true);
             Assert.AreEqual("Month", _target.PeriodType);
 
             Assert.AreEqual(_target.Person.Name.ToString(), _target.PersonName);

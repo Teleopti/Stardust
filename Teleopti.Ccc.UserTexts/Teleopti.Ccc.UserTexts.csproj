@@ -120,7 +120,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources.cs.resx" />
+    <EmbeddedResource Include="Resources.cs.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources.da.resx" />
     <EmbeddedResource Include="Resources.de.resx">
       <SubType>Designer</SubType>

@@ -5,10 +5,12 @@ using System.Windows.Forms.Integration;
 using Syncfusion.Windows.Forms.Chart;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.Win.Scheduling.PropertyPanel;
 using Teleopti.Ccc.Win.Scheduling.SingleAgentRestriction;
+using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution;
 using Teleopti.Ccc.WpfControls.Controls.Requests.Views;
@@ -195,14 +197,25 @@ namespace Teleopti.Ccc.Win.Scheduling
             lessIntellegentSplitContainerAdvMainContainer.Panel2Collapsed = value;
         }
 
-		public void InsertAgentInfoControl(AgentInfoControl agentInfoControl)
-		{
-			tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
-			agentInfoControl.Dock = DockStyle.Fill;
-			tabInfoPanels.Refresh();
-		}
+	    public void InsertAgentInfoControl(AgentInfoControl agentInfoControl, ISchedulerStateHolder schedulerState,
+		    IEffectiveRestrictionCreator effectiveRestrictionCreator, int maxCalculatedMinMaxCacheEntries)
+	    {
+		    var schedulingOptions = new SchedulingOptions
+		    {
+			    UseAvailability = true,
+			    UsePreferences = true,
+			    UseRotations = true,
+			    UseStudentAvailability = true
+		    };
+		    var calculateMinMaxCacheDecider = new CalculateMinMaxCacheDecider();
+		    agentInfoControl.MbCacheDisabled = calculateMinMaxCacheDecider.ShouldCacheBeDisabled(schedulerState, schedulingOptions,
+			    effectiveRestrictionCreator, maxCalculatedMinMaxCacheEntries);
+		    tabInfoPanels.TabPages[0].Controls.Add(agentInfoControl);
+		    agentInfoControl.Dock = DockStyle.Fill;
+		    tabInfoPanels.Refresh();
+	    }
 
-		public void InsertShiftCategoryDistributionModel(IShiftCategoryDistributionModel model)
+	    public void InsertShiftCategoryDistributionModel(IShiftCategoryDistributionModel model)
 		{
 			var shiftCategoryDistributionControl = (ShiftCategoryDistributionControl)tabInfoPanels.TabPages[1].Controls[0];
 			shiftCategoryDistributionControl.SetModel(model);
