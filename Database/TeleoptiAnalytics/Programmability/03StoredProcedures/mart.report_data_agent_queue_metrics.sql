@@ -89,21 +89,21 @@ INSERT INTO #person_login
 	SELECT DISTINCT
 		dp.person_code,
 		dp.person_name,
-		da.acd_login_id
-	FROM
-		mart.dim_acd_login da
+		bap.acd_login_id
+	FROM mart.dim_person dp
 	INNER JOIN 
 		mart.bridge_acd_login_person bap
 	ON 
-		bap.acd_login_id = da.acd_login_id
-	INNER JOIN 
-		mart.dim_person dp
+		bap.person_id = dp.person_id
+	INNER JOIN	
+		#rights_agents a 
 	ON 
-		dp.person_id = bap.person_id
-	WHERE
-		(dp.team_id IN (select right_id from #rights_teams)OR dp.team_id=-1)
-		AND dp.person_id in (SELECT right_id FROM #rights_agents)
-
+		dp.person_id=a.right_id
+	INNER JOIN 
+		#selected_agents sa 
+	ON 
+		a.right_id=sa.selected_id
+	WHERE (dp.team_id IN (select right_id from #rights_teams)OR dp.team_id=-1)
 
 /* Result select */
 SELECT DISTINCT 
