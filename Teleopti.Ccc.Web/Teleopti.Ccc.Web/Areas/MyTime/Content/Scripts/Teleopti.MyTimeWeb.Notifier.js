@@ -1,4 +1,4 @@
-Teleopti.MyTimeWeb.Notifier = (function () {
+﻿Teleopti.MyTimeWeb.Notifier = (function () {
 	var originalDocumentTitle;
 	var baseUrl;
 	var header = '';
