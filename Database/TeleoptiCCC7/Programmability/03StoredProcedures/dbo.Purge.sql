@@ -10,6 +10,7 @@ GO
 -- Changed		Who			Why
 -- =============================================
 -- 2013-04-29	David J		Re-factor table into key/value, added Security Audit
+-- 2014-04-16	Johan R		Removing purge of PayrollExport, is needed for automatic Payrolls
 -- =============================================
 CREATE PROCEDURE [dbo].[Purge]
 AS
@@ -188,14 +189,6 @@ delete PayrollResult
 from PayrollResult pr
 where pr.UpdatedOn < @PayrollKeepUntil
 and pr.UpdatedOn < @Maxdate
-
-delete PayrollExport
-from PayrollExport pe
-where pe.UpdatedOn < @PayrollKeepUntil
-and pe.UpdatedOn < @Maxdate
-and not exists (select 1
-				from PayrollResult pr
-				where pr.PayrollExport = pe.Id)
 
 --SecurityAudit
 delete [Auditing].[Security]
