@@ -1,4 +1,4 @@
-﻿Feature: 18001 Alert agent before change of activity
+﻿Feature: Alert agent before change of activity
 As an agent 
 I need to be alerted before change in activity,
 so that I do not forget to switch from Backoffice to Phone at the right time,
@@ -45,6 +45,7 @@ Background:
 	| Scheduled activity start time | 2030-01-01 11:00 |
 	| Scheduled activity end time   | 2030-01-01 12:00 |
 
+@ignore
 Scenario: Alert agent before next activity happens
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 10:57:59'
@@ -77,6 +78,7 @@ Scenario: Do not alert agent After Alert Time
 	And current browser time has changed to '2030-01-01 11:45:00'
 	Then I should not see any alert
 
+@ignore
 Scenario: Alert agent before first activity happens
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 07:57:59'
