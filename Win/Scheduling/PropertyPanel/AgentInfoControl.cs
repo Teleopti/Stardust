@@ -811,7 +811,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder, true);
+			updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState, true);
 		}
     }
 }
