@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 		IList<IShiftCategory> GetSortedShiftCategories();
 		IList<IShiftCategory> GetShiftCategoriesSortedByMinMax(bool ascending, bool min);
 		IList<IShiftCategory> GetShiftCategoriesSortedByAverage(bool ascending);
-		IList<IShiftCategory> GetShiftCategoriesSortedByStandardDeviation(bool ascending);
 		string CommonAgentName(IPerson person);
 		void OnResetNeeded();
 		IList<IPerson> GetSortedPersons(bool ascending);
@@ -217,29 +216,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling.ShiftCategoryDistribution
 			{
 				var average = GetAverageForShiftCategory(shiftCategory);
 				result.Add(new shiftCategoryDoubleComparer(shiftCategory, average));	
-			}
-
-			result.Sort();
-			returnList.AddRange(result.Select(shiftCategoryDoubleComparer => shiftCategoryDoubleComparer.ShiftCategory));
-
-
-			if (ascending)
-				returnList.Reverse();
-
-			return returnList;
-		}
-
-		public IList<IShiftCategory> GetShiftCategoriesSortedByStandardDeviation(bool ascending)
-		{
-			var result = new List<shiftCategoryDoubleComparer>();
-			var returnList = new List<IShiftCategory>();
-
-			var shiftCategories = GetSortedShiftCategories();
-
-			foreach (var shiftCategory in shiftCategories)
-			{
-				var std = GetStandardDeviationForShiftCategory(shiftCategory);
-				result.Add(new shiftCategoryDoubleComparer(shiftCategory, std));
 			}
 
 			result.Sort();

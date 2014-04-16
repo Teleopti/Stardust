@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return new Percent(1 -  _mustHavesFulfillment.Value); }
         }
 
-        public void SchedulePeriodData()
+        public void SchedulePeriodData(bool calculateLegalState)
         {
             if (SchedulePeriod == null)
                 return;
@@ -245,11 +245,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             _currentDaysOff =
                     _periodScheduledAndRestrictionDaysOff.CalculatedDaysOff(_matrix, IncludeScheduling(), false, false);
             setCurrentScheduled();
-            setMinMaxData();
+			setMinMaxData(calculateLegalState);
             
         }
 
-        private void setMinMaxData()
+        private void setMinMaxData(bool calculateLegalState)
         {
             ISchedulePeriodTargetTimeCalculator schedulePeriodTargetTimeCalculator =
                        new SchedulePeriodTargetTimeCalculator(); //Out
@@ -264,8 +264,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 new WorkShiftMinMaxCalculator(possibleMinMaxWorkShiftLengthExtractor,
                                               schedulePeriodTargetTimeCalculator, workShiftWeekMinMaxCalculator);
             //TODO kan plockas från AutoFac istället
-            _periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix, _schedulingOptions);
-            _weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
+			if(calculateLegalState)
+			{
+				_periodInLegalState = workShiftMinMaxCalculator.IsPeriodInLegalState(_matrix, _schedulingOptions);
+				_weekInLegalState = workShiftMinMaxCalculator.IsWeekInLegalState(_selectedDate, _matrix, _schedulingOptions);
+			}
 
 
             _possiblePeriodTime = workShiftMinMaxCalculator.PossibleMinMaxTimeForPeriod(_matrix, _schedulingOptions);
