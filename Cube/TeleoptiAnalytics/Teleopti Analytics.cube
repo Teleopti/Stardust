@@ -8,7 +8,7 @@
       <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
       <Value>
         <dds xmlns="">
-          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="384" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="1789" scrolltop="42858" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="50" x="25241" y="21484" backcolor="16185078" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
+          <diagram fontclsid="{0BE35203-8F91-11CE-9DE3-00AA004BB851}" mouseiconclsid="{0BE35204-8F91-11CE-9DE3-00AA004BB851}" defaultlayout="MSDDS.Rectilinear" defaultlineroute="MSDDS.Rectilinear" version="7" nextobject="384" scale="100" pagebreakanchorx="0" pagebreakanchory="0" pagebreaksizex="0" pagebreaksizey="0" scrollleft="1789" scrolltop="42858" gridx="150" gridy="150" marginx="5000" marginy="5000" zoom="50" x="32173" y="13732" backcolor="16185078" defaultpersistence="2" PrintPageNumbersMode="3" PrintMarginTop="0" PrintMarginBottom="635" PrintMarginLeft="0" PrintMarginRight="0" marqueeselectionmode="0" mousepointer="0" snaptogrid="0" autotypeannotation="1" showscrollbars="1" viewpagebreaks="0" donotforceconnectorsbehindshapes="1" backpictureclsid="{00000000-0000-0000-0000-000000000000}">
             <font>
               <ddsxmlobjectstreamwrapper binary="01000000900144420100065461686f6d61" />
             </font>
@@ -9638,7 +9638,7 @@ VISIBLE = 1  ; </Text>
     <Kpi dwd:design-time-name="a6f66ccc-b707-4fe2-a6e7-445497ecae81">
       <ID>KPI</ID>
       <Name>KPI</Name>
-      <Value>iif(ISEMPTY([MEASURES].[KPI Actual]),null,format([MEASURES].[KPI Actual],"#,##0"))</Value>
+      <Value>iif(ISEMPTY([MEASURES].[KPI Actual]),null,[MEASURES].[KPI Actual])</Value>
       <Goal>[Measures].[Target Value]</Goal>
       <Status>CASE
     WHEN [Measures].[KPI Actual] &lt;= [Measures].[Min Value] THEN -1*[Measures].[factor]
@@ -9666,7 +9666,7 @@ END</Trend>
     <Kpi dwd:design-time-name="912212e1-2219-450b-bb19-d938f377065b">
       <ID>KPI 1</ID>
       <Name>Adherence</Name>
-      <Value>[Measures].[Adherence_KPI]</Value>
+      <Value>[Measures].[Adherence]</Value>
       <Goal>[Measures].[Target Value Adherence]/100.0000
 
 
@@ -9698,7 +9698,7 @@ END
     <Kpi dwd:design-time-name="94dae980-067f-47f6-801d-222ad47961e1">
       <ID>KPI 2</ID>
       <Name>Average After Call Work</Name>
-      <Value>Format([Measures].[Average After Call Work s],"#,#")</Value>
+      <Value>[Measures].[Average After Call Work s]</Value>
       <Goal>[Measures].[Target Value Avg After Call Work]</Goal>
       <Status>CASE WHEN [Measures].[Average After Call Work s] &lt;= [Measures].[Min Value Avg After Call Work]
 THEN 1
@@ -9726,7 +9726,7 @@ END</Trend>
     <Kpi dwd:design-time-name="8a4a8275-578d-48ce-b4bd-6b88c2fc6264">
       <ID>KPI 3</ID>
       <Name>Readiness</Name>
-      <Value>[Measures].[Readiness_KPI]</Value>
+      <Value>[Measures].[Readiness]</Value>
       <Goal>[Measures].[Target Value Readiness]/100.0000</Goal>
       <Status>CASE WHEN [Measures].[Readiness_KPI] &lt; [Measures].[Min Value Readiness]/100.0000
 THEN -1
@@ -9760,7 +9760,7 @@ END</Trend>
     <Kpi dwd:design-time-name="a295b97f-fff5-4b40-9593-824bd6239a3f">
       <ID>KPI 4</ID>
       <Name>Absenteeism</Name>
-      <Value>[Measures].[Absenteeism_KPI]</Value>
+      <Value>[Measures].[Absenteeism]</Value>
       <Goal>[Measures].[Target Value Absenteeism]/100.0000</Goal>
       <Status>CASE WHEN [Measures].[Absenteeism_KPI] &lt;= [Measures].[Min Value Absenteeism]/100.0000
     THEN 1
@@ -9794,7 +9794,7 @@ END</Trend>
     <Kpi dwd:design-time-name="9cc08478-a30d-4caa-ad6a-7dedcaa1c470">
       <ID>KPI 5</ID>
       <Name>Average Talk Time</Name>
-      <Value>Format([Measures].[ATT Average Talk Time s],"#,#")</Value>
+      <Value>[Measures].[ATT Average Talk Time s]</Value>
       <Goal>[Measures].[Target Value Avg Talk Time]</Goal>
       <Status>CASE WHEN [Measures].[ATT Average Talk Time s]&lt;= [Measures].[Min Value Avg Talk Time]
 THEN 0
@@ -9826,7 +9826,7 @@ END</Trend>
     <Kpi dwd:design-time-name="8c44a1ec-59ef-47d4-8442-0dce0e62b786">
       <ID>KPI 6</ID>
       <Name>Average Handle Time</Name>
-      <Value>Format([Measures].[AHT Average Handle Time s],"#,#")</Value>
+      <Value>[Measures].[AHT Average Handle Time s]</Value>
       <Goal>[Measures].[Target Value Avg Handle Time]</Goal>
       <Status>CASE WHEN [Measures].[AHT Average Handle Time s] &lt;= [Measures].[Min Value Avg Handle Time]
 THEN 0
@@ -9859,7 +9859,7 @@ END</Trend>
     <Kpi dwd:design-time-name="cc4617de-64f0-4712-b4c7-c0738ada42ee">
       <ID>KPI 7</ID>
       <Name>Answered Calls per Scheduled Ready Hour</Name>
-      <Value>Format([Average Answered Calls per Scheduled Phone Hour],"#,#")</Value>
+      <Value>[Average Answered Calls per Scheduled Phone Hour]</Value>
       <Goal>[Measures].[Target Value Answ Call Ready Hour]</Goal>
       <Status>CASE WHEN [Average Answered Calls per Scheduled Phone Hour] &lt;= [Measures].[Min Value Answ Calls per Ready Hour]
 THEN -1
