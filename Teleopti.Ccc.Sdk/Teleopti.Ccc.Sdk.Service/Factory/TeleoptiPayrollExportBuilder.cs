@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 				}
 
 				var personAssignmentDto = schedulePartDto.PersonAssignmentCollection.FirstOrDefault();
-				if (personAssignmentDto != null)
+				if (personAssignmentDto != null && personAssignmentDto.MainShift != null)
 					payrollTimeExportDataDto.ShiftCategoryName =
 						personAssignmentDto.MainShift.ShiftCategoryName;
 

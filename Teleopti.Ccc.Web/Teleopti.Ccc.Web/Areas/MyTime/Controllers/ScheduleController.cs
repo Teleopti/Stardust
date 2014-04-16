@@ -37,6 +37,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
 		}
 
+		[EnsureInPortal]
+		[UnitOfWorkAction]
+		public ActionResult MobileWeek()
+		{
+			return View("WeekPartial", _requestsViewModelFactory.CreatePageViewModel());
+		}
+
         [EnsureInPortal]
         public ActionResult Month()
         {

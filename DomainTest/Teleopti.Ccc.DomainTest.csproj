@@ -416,6 +416,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeekTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLaterTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManagerTest.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverServiceTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />
     <Compile Include="Optimization\RuleSetBagsOfGroupOfPeopleCanHaveShortBreakTest.cs" />

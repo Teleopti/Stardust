@@ -59,6 +59,7 @@
 			tabPageAdvMainTabPage.ImageSize = new System.Drawing.Size(16, 16);
 			tabPageAdvMainTabPage.Location = new System.Drawing.Point(2, 34);
 			tabPageAdvMainTabPage.Name = "tabPageAdvMainTabPage";
+			tabPageAdvMainTabPage.ShowCloseButton = true;
 			tabPageAdvMainTabPage.Size = new System.Drawing.Size(322, 394);
 			tabPageAdvMainTabPage.TabIndex = 1;
 			tabPageAdvMainTabPage.Text = "xxMain";
@@ -85,9 +86,11 @@
 			this.treeViewAdvMainTabTree.InteractiveCheckBoxes = true;
 			this.treeViewAdvMainTabTree.LeftImageList = this.ImageList;
 			this.treeViewAdvMainTabTree.Location = new System.Drawing.Point(0, 20);
+			this.treeViewAdvMainTabTree.Margin = new System.Windows.Forms.Padding(0);
 			this.treeViewAdvMainTabTree.Name = "treeViewAdvMainTabTree";
 			this.treeViewAdvMainTabTree.Office2007ScrollBars = true;
 			this.treeViewAdvMainTabTree.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectAll;
+			this.treeViewAdvMainTabTree.ShowFocusRect = true;
 			this.treeViewAdvMainTabTree.Size = new System.Drawing.Size(322, 374);
 			this.treeViewAdvMainTabTree.SortWithChildNodes = true;
 			this.treeViewAdvMainTabTree.TabIndex = 7;
@@ -121,6 +124,7 @@
 			// OpenNewPPLAdmintoolStripMenuItem
 			// 
 			this.OpenNewPPLAdmintoolStripMenuItem.Name = "OpenNewPPLAdmintoolStripMenuItem";
+			this.OpenNewPPLAdmintoolStripMenuItem.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.OpenNewPPLAdmintoolStripMenuItem.Size = new System.Drawing.Size(201, 22);
 			this.OpenNewPPLAdmintoolStripMenuItem.Text = "xxOpen";
 			this.OpenNewPPLAdmintoolStripMenuItem.Click += new System.EventHandler(this.openModule);
@@ -128,6 +132,7 @@
 			// toolStripMenuItemSearch
 			// 
 			this.toolStripMenuItemSearch.Name = "toolStripMenuItemSearch";
+			this.toolStripMenuItemSearch.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.toolStripMenuItemSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
 			this.toolStripMenuItemSearch.Size = new System.Drawing.Size(201, 22);
 			this.toolStripMenuItemSearch.Text = "xxFindThreeDots";
@@ -142,6 +147,7 @@
 			// RefreshListToolStripMenuItem
 			// 
 			this.RefreshListToolStripMenuItem.Name = "RefreshListToolStripMenuItem";
+			this.RefreshListToolStripMenuItem.Padding = new System.Windows.Forms.Padding(0, 0, 0, 2);
 			this.RefreshListToolStripMenuItem.Size = new System.Drawing.Size(201, 22);
 			this.RefreshListToolStripMenuItem.Text = "xxRefresh";
 			this.RefreshListToolStripMenuItem.Click += new System.EventHandler(this.refreshListToolStripMenuItemClick);
@@ -178,12 +184,13 @@
 			this.xdtpDate.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
 			this.xdtpDate.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
 			this.xdtpDate.Calendar.HeadGradient = true;
+			this.xdtpDate.Calendar.Iso8601CalenderFormat = false;
 			this.xdtpDate.Calendar.Location = new System.Drawing.Point(0, 0);
 			this.xdtpDate.Calendar.MinValue = new System.DateTime(1990, 12, 31, 0, 0, 0, 0);
 			this.xdtpDate.Calendar.Name = "monthCalendar";
 			this.xdtpDate.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
 			this.xdtpDate.Calendar.SelectedDates = new System.DateTime[0];
-			this.xdtpDate.Calendar.Size = new System.Drawing.Size(202, 174);
+			this.xdtpDate.Calendar.Size = new System.Drawing.Size(198, 174);
 			this.xdtpDate.Calendar.SizeToFit = true;
 			this.xdtpDate.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.xdtpDate.Calendar.TabIndex = 0;
@@ -194,7 +201,7 @@
 			// 
 			// 
 			this.xdtpDate.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.xdtpDate.Calendar.NoneButton.Location = new System.Drawing.Point(130, 0);
+			this.xdtpDate.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
 			this.xdtpDate.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
 			this.xdtpDate.Calendar.NoneButton.Text = "None";
 			this.xdtpDate.Calendar.NoneButton.UseVisualStyle = true;
@@ -203,7 +210,7 @@
 			// 
 			this.xdtpDate.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.xdtpDate.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-			this.xdtpDate.Calendar.TodayButton.Size = new System.Drawing.Size(130, 20);
+			this.xdtpDate.Calendar.TodayButton.Size = new System.Drawing.Size(126, 20);
 			this.xdtpDate.Calendar.TodayButton.Text = "Today";
 			this.xdtpDate.Calendar.TodayButton.UseVisualStyle = true;
 			this.xdtpDate.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
@@ -212,6 +219,7 @@
 			this.xdtpDate.DropDownImage = null;
 			this.xdtpDate.Format = System.Windows.Forms.DateTimePickerFormat.Short;
 			this.xdtpDate.Location = new System.Drawing.Point(0, 0);
+			this.xdtpDate.Margin = new System.Windows.Forms.Padding(0);
 			this.xdtpDate.MinValue = new System.DateTime(1990, 12, 31, 23, 59, 0, 0);
 			this.xdtpDate.Name = "xdtpDate";
 			this.xdtpDate.NoneButtonVisible = false;
