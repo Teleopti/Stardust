@@ -46,6 +46,8 @@
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.tabControlAgentInfo = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageAdvSchedulePeriod = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
+			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.listViewSchedulePeriod = new System.Windows.Forms.ListView();
 			this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -84,6 +86,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.tabControlAgentInfo)).BeginInit();
 			this.tabControlAgentInfo.SuspendLayout();
 			this.tabPageAdvSchedulePeriod.SuspendLayout();
+			this.toolStrip1.SuspendLayout();
 			this.tabPageAdvRestrictions.SuspendLayout();
 			this.tabPageAdvPersonPeriod.SuspendLayout();
 			this.tabPageAdvPerson.SuspendLayout();
@@ -122,6 +125,7 @@
 			// tabPageAdvSchedulePeriod
 			// 
 			this.tabPageAdvSchedulePeriod.AutoSize = true;
+			this.tabPageAdvSchedulePeriod.Controls.Add(this.toolStrip1);
 			this.tabPageAdvSchedulePeriod.Controls.Add(this.listViewSchedulePeriod);
 			this.tabPageAdvSchedulePeriod.Image = null;
 			this.tabPageAdvSchedulePeriod.ImageSize = new System.Drawing.Size(16, 16);
@@ -133,14 +137,38 @@
 			this.tabPageAdvSchedulePeriod.Text = "xxSchedulePeriod";
 			this.tabPageAdvSchedulePeriod.ThemesEnabled = false;
 			// 
+			// toolStrip1
+			// 
+			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton1});
+			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+			this.toolStrip1.Name = "toolStrip1";
+			this.toolStrip1.Size = new System.Drawing.Size(453, 25);
+			this.toolStrip1.Stretch = true;
+			this.toolStrip1.TabIndex = 2;
+			this.toolStrip1.Text = "toolStrip1";
+			this.toolStrip1.Visible = false;
+			// 
+			// toolStripButton1
+			// 
+			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButton1.Name = "toolStripButton1";
+			this.toolStripButton1.Size = new System.Drawing.Size(130, 22);
+			this.toolStripButton1.Text = "xxCalculate Legal State";
+			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+			// 
 			// listViewSchedulePeriod
 			// 
+			this.listViewSchedulePeriod.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.listViewSchedulePeriod.BackColor = System.Drawing.Color.White;
 			this.listViewSchedulePeriod.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.listViewSchedulePeriod.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
-			this.listViewSchedulePeriod.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.listViewSchedulePeriod.FullRowSelect = true;
 			this.listViewSchedulePeriod.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			listViewItem1.IndentCount = 25;
@@ -346,7 +374,7 @@
 			this.comboBoxAgentGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(203, 3);
 			this.comboBoxAgentGrouping.Name = "comboBoxAgentGrouping";
-			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(241, 21);
+			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(241, 19);
 			this.comboBoxAgentGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAgentGrouping.TabIndex = 1;
 			this.comboBoxAgentGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxAgentGrouping_SelectedIndexChanged);
@@ -532,6 +560,9 @@
 			this.tabControlAgentInfo.ResumeLayout(false);
 			this.tabControlAgentInfo.PerformLayout();
 			this.tabPageAdvSchedulePeriod.ResumeLayout(false);
+			this.tabPageAdvSchedulePeriod.PerformLayout();
+			this.toolStrip1.ResumeLayout(false);
+			this.toolStrip1.PerformLayout();
 			this.tabPageAdvRestrictions.ResumeLayout(false);
 			this.tabPageAdvPersonPeriod.ResumeLayout(false);
 			this.tabPageAdvPerson.ResumeLayout(false);
@@ -579,6 +610,8 @@
 		private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelRanking;
         private System.Windows.Forms.Label labelShiftCategoryPoint;
+		private System.Windows.Forms.ToolStrip toolStrip1;
+		private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.Label labelDayOffPoints;
         private System.Windows.Forms.Label labelSeniorityPoints;
         private System.Windows.Forms.Label labelShiftCategoryPointValue;

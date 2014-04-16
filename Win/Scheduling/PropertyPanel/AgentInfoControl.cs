@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 	    private readonly DateOnlyPeriod _requestedPeriod;
 	    private IList<IGroupPageLight> _groupPages;
 	    private IGroupPagePerDate _groupPagePerDate;
+	    private bool _mbCacheDisabled;
 
         public AgentInfoControl()
         {
@@ -67,6 +68,24 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		    _requestedPeriod = requestedPeriod;
 	    }
 
+	    public bool MbCacheDisabled
+	    {
+		    get { return _mbCacheDisabled; }
+		    set
+		    {
+			    _mbCacheDisabled = value;
+			    if (_mbCacheDisabled)
+			    {
+					toolStrip1.Visible = true;
+				    listViewSchedulePeriod.Top = toolStrip1.Height;
+			    }
+			    else
+			    {
+				    listViewSchedulePeriod.Dock = DockStyle.Fill;
+			    }
+		    }
+	    }
+
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void UpdateData(IDictionary<IPerson, IScheduleRange> personDictionary, 
             ICollection<DateOnly> dateOnlyList, ISchedulerStateHolder stateHolder,
@@ -87,6 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             _dateOnlyList = dateOnlyList;
             _stateHolder = stateHolder;
             _allAccounts = allAccounts;
+
             update();
         }
 
@@ -96,7 +116,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             if (tabControlAgentInfo.SelectedTab == tabPageAdvSchedulePeriod && _dateIsSelected)
             {
-                updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState);
+                updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder.SchedulingResultState, !MbCacheDisabled);
                 return;
             }
 
@@ -330,7 +350,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             };
             var helper = new AgentInfoHelper(person, date, _stateHolder.SchedulingResultState, schedulingOptions, _workShiftWorkTime);
 
-            helper.SchedulePeriodData();
+            helper.SchedulePeriodData(false);
 
             var shiftCategoryCollection = helper.SchedulePeriod.ShiftCategoryLimitationCollection();
             var undeletedShiftCategories = new List<IShiftCategoryLimitation>();
@@ -539,7 +559,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
             listViewPersonPeriod.Columns[1].AutoResize(ColumnHeaderAutoResizeStyle.ColumnContent);
         }
 
-        private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state)
+        private void updateSchedulePeriodData(IPerson person, DateOnly dateOnly, ISchedulingResultStateHolder state, bool calculateLegalState)
         {
             listViewSchedulePeriod.Items.Clear();
 
@@ -556,7 +576,7 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 			};
 
 			var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);
-			helper.SchedulePeriodData();
+			helper.SchedulePeriodData(calculateLegalState);
 			if (nullOrZeroPeriod(helper.Period))
 			{
 				var noPeriodPresentItem = new ListViewItem(Resources.NoPeriodPresent);
@@ -646,11 +666,21 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 
             if (employmentType != EmploymentType.HourlyStaff)
             {
-                listViewSchedulePeriod.Items.Add("");
-                createAndAddItem(listViewSchedulePeriod, Resources.PeriodInLegalState,
-                                 helper.PeriodInLegalState.ToString(CultureInfo.CurrentCulture), 2);
-                createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
-                                 helper.WeekInLegalState.ToString(CultureInfo.CurrentCulture), 2);
+				listViewSchedulePeriod.Items.Add("");
+				if(calculateLegalState)
+	            {
+		            createAndAddItem(listViewSchedulePeriod, Resources.PeriodInLegalState,
+			            helper.PeriodInLegalState.ToString(CultureInfo.CurrentCulture), 2);
+		            createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
+			            helper.WeekInLegalState.ToString(CultureInfo.CurrentCulture), 2);
+	            }
+				else
+	            {
+					createAndAddItem(listViewSchedulePeriod, Resources.PeriodInLegalState,
+						Resources.NA, 2);
+					createAndAddItem(listViewSchedulePeriod, Resources.WeekInLegalState,
+						Resources.NA, 2);
+	            }
             }
         }
 
@@ -777,6 +807,11 @@ namespace Teleopti.Ccc.Win.Scheduling.PropertyPanel
 		{
 			resetGroupPageData();
 			update();
+		}
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			updateSchedulePeriodData(_selectedPerson, _dateOnlyList.First(), _stateHolder, true);
 		}
     }
 }

@@ -4600,7 +4600,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var outerPeriod = new DateOnlyPeriod(requestedPeriod.StartDate.AddDays(-7), requestedPeriod.EndDate.AddDays(7));
 
 			_agentInfoControl = new AgentInfoControl(_workShiftWorkTime, _groupPagesProvider, _container, outerPeriod, requestedPeriod);
-			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl);
+			schedulerSplitters1.InsertAgentInfoControl(_agentInfoControl, _schedulerState,
+				_container.Resolve<IEffectiveRestrictionCreator>(), maxCalculatMinMaxCacheEnries);
 
 			//container can fix this to one row
 			ICachedNumberOfEachCategoryPerPerson cachedNumberOfEachCategoryPerPerson =

@@ -198,42 +198,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.ShiftCategoryDistribution
 		}
 
 		[Test]
-		public void ShouldGetShiftCategoriesSortedByStandardDeviation()
-		{
-			var person1 = PersonFactory.CreatePerson("Bertil");
-			var filteredPersons = new List<IPerson> { person1 };
-			var dic = new Dictionary<IShiftCategory, int>();
-
-			var cat1 = new ShiftCategory("B");
-			var cat2 = new ShiftCategory("A");
-			dic.Add(cat1, 2);
-			dic.Add(cat2, 4);
-
-
-			using (_mocks.Record())
-			{
-				Expect.Call(() => _cachedNumberOfEachCategoryPerDate.SetFilteredPersons(filteredPersons));
-				Expect.Call(() => _cachedShiftCategoryDistribution.SetFilteredPersons(filteredPersons));
-				Expect.Call(_cachedShiftCategoryDistribution.AllShiftCategories).Return(new List<IShiftCategory> { cat1, cat2 }).Repeat.AtLeastOnce();
-				Expect.Call(_cachedNumberOfEachCategoryPerPerson.GetValue(person1)).Return(dic).Repeat.AtLeastOnce();
-
-
-			}
-
-			using (_mocks.Playback())
-			{
-				_target.SetFilteredPersons(filteredPersons);
-				var result = _target.GetShiftCategoriesSortedByStandardDeviation(true);
-				Assert.AreEqual(cat2, result[0]);
-				Assert.AreEqual(cat1, result[1]);
-				result = _target.GetShiftCategoriesSortedByStandardDeviation(false);
-				Assert.AreEqual(cat1, result[0]);
-				Assert.AreEqual(cat2, result[1]);
-			}
-		}
-
-
-		[Test]
 		public void ShouldGetShiftCategoryCountForCategoryAndPerson()
 		{
 			var person1 = PersonFactory.CreatePerson("Bertil");
