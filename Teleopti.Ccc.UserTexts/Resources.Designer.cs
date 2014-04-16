@@ -3504,6 +3504,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Calculate Legal State.
+        /// </summary>
+        public static string CalculateLegalState {
+            get {
+                return ResourceManager.GetString("CalculateLegalState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calculating resources....
         /// </summary>
         public static string CalculatingResourcesDotDotDot {
