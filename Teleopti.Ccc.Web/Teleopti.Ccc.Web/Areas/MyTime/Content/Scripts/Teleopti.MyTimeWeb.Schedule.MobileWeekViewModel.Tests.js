@@ -14,6 +14,18 @@ $(document).ready(function () {
         equal(vm.dayViewModels().length, 1);
     });
     
+    test("should read date", function () {
+        var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+        vm.readData({
+            ScheduleDays: [{
+                FixedDate: "2014-04-14"
+            }]
+        });
+
+        equal(vm.dayViewModels()[0].fixedDate(), "2014-04-14");
+    });
+    
     test("should load shift category data", function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
