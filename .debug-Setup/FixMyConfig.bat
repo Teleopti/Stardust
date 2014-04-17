@@ -11,7 +11,7 @@ SET MySettings=%ROOTDIR%\..\Teleopti.Support.Code\settings.txt
 cd %ROOTDIR%
 
 if "%1" == "" (
-SET /P CCC7DB=CCC7B?
+SET /P CCC7DB=CCC7DB?
 )
 
 if "%2" == "" (
