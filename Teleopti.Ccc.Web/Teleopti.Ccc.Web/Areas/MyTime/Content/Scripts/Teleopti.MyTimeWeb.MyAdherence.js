@@ -29,6 +29,10 @@
 		self.dateFormat = function() {
 			return self.datePickerFormat;
 		};
+
+		self.goToOverView = function() {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
+		};
 	}
 
 	function setWeekStart() {
