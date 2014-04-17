@@ -25,3 +25,36 @@ table td.right-align-cell
 .alert-myreport{
 	max-width: 100% !important;
 }
+
+.dashboard {
+	background-image: none;
+	color: white;
+	min-height: 159px;
+	cursor: pointer;
+	margin-bottom: 20px;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+.dashboard-blue {
+	background-color: #428bca;
+}
+.dashboard-green {
+	background-color: #00a300;
+}
+.dashboard-yellow {
+	background-color: #ffc40d;
+}
+.dashboard-purple {
+	background-color: #603cba;
+}
+.dashboard-red {
+	background-color: #eb3c00;
+}
+.dashboard-black {
+	background-color: #222222;
+}
+.dashboard .glyphicon {
+	font-size: 40px;
+	margin-top: 20px;
+	margin-left: 20px;
+}

@@ -38,7 +38,91 @@
 		</div>
 		<div class="row">
 			<div data-bind="if: dataAvailable" class="span6">
-			<table class="table table-striped table-bordered">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-blue">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-stats"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: adherence"></h1>
+									<p class="adherenceValue">@Resources.KpiAdherence</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-green">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-time"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: readyTimePerScheduledReadyTime"></h1>
+									<p class="readyTimePerScheduledReadyTimeValue">@Resources.ReadyTimePerScheduledReadyTimePercent</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-yellow">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-headphones"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: averageHandlingTime"></h1>
+									<p class="handlingTimeValue">@Resources.KpiAverageHandleTime</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-purple">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-earphone"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: averageTalkTime"></h1>
+									<p class="talkTimeValue">@Resources.KpiAverageTalkTime</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-red">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-pencil"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: averageAfterCallWork"></h1>
+									<p class="afterWorkValue">@Resources.KpiAverageAfterCallWork</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-black">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-phone-alt"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: answeredCalls"></h1>
+									<p class="answeredCallsValue">@Resources.AnsweredCalls</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				@*<table class="table table-striped table-bordered">
 				<thead>
 					<tr>
 						<th>@Resources.Metric</th>
@@ -71,8 +155,8 @@
 						<td class="right-align-cell" data-bind="text: answeredCalls"></td>
 					</tr>
 				</tbody>
-			</table>
-		</div>
+			</table>*@
+			</div>
 		<div data-bind="if: dataAvailable" class="span6"></div>
 		</div>
 		
