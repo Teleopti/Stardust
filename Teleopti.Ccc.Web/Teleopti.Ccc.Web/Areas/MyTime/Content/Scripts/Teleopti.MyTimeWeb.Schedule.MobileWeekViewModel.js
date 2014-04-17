@@ -19,6 +19,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function () {
 
     self.dayViewModels = ko.observableArray();
 
+    self.henke = ko.observable('hello world');
+
     self.readData = function(data) {
 
         ko.utils.arrayForEach(data.ScheduleDays, function(scheduleDay) {
