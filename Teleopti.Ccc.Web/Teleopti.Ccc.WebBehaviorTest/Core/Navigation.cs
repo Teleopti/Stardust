@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoAsm()
 		{
-			GoToWaitForCompleted("MyTime/Asm", new OverrideNotifyBehavior());
+			GoToWaitForCompleted("MyTime/Asm");
 		}
 
 		public static void GotoSiteHomePage()
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoWeekSchedulePage()
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
-				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new OverrideNotifyBehavior());
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GotoWeekSchedulePageNoWait()
@@ -127,14 +127,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoPreference()
 		{
 			GoToWaitForCompleted("MyTime#Preference/Index",
-				new ApplicationStartupTimeout(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+				new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoPreference(DateTime date)
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Preference/Index/{0}/{1}/{2}",
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+				new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoRegionalSettings()
@@ -320,18 +320,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				new ApplicationStartupTimeout());
 		}
 
-	    public static void GotoMobileWeekSchedulePageNoWait()
-	    {
-            GoToWaitForCompleted("MyTime#Schedule/MobileWeek",
-                new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new OverrideNotifyBehavior());
-	    }
+		public static void GotoMobileWeekSchedulePageNoWait()
+		{
+			GoToWaitForCompleted("MyTime#Schedule/MobileWeek",
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+		}
 
-	    public static void GotoMobileWeekSchedulePage(DateTime date)
-	    {
-            GoToWaitForCompleted(string.Format("MyTime#Schedule/MobileWeek/{0}/{1}/{2}",
-            date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-            new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
-	    }
+		public static void GotoMobileWeekSchedulePage(DateTime date)
+		{
+			GoToWaitForCompleted(string.Format("MyTime#Schedule/MobileWeek/{0}/{1}/{2}",
+			date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+			new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+		}
 	}
 
 	public class WaitUntilSubscriptionIsCompleted : IGoToInterceptor
@@ -389,24 +389,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			_timeoutScope.Dispose();
 			_timeoutScope = null;
-		}
-	}
-
-	public class OverrideNotifyBehavior : IGoToInterceptor
-	{
-		public void Before(GotoArgs args)
-		{
-		}
-
-		public void After(GotoArgs args)
-		{
-			mockNotifyCall();
-		}
-
-		private static void mockNotifyCall()
-		{
-			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (value) {$('<span/>', {text: value, 'class': 'notifyLoggerItem'}).appendTo('#notifyLogger');};";
-			Browser.Interactions.Javascript(jsCode);
 		}
 	}
 

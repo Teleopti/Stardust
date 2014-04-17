@@ -52,7 +52,7 @@ Scenario: Alert agent before next activity happens
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should see one notify message
+	Then I should see a notify message contains Lunch
 
 Scenario: Do not alert agent without permission for ASM
 	Given I have the role 'No access to ASM'
@@ -85,7 +85,7 @@ Scenario: Alert agent before first activity happens
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 07:58:00'
-	Then I should see one notify message
+	Then I should see a notify message contains Phone
 
 @ignore
 Scenario: Alert agent before last activity happens
@@ -94,7 +94,7 @@ Scenario: Alert agent before last activity happens
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 16:58:00'
-	Then I should see one notify message
+	Then I should see a notify message contains Phone
 
 @ignore
 Scenario: Pop up box disappear automaticly
