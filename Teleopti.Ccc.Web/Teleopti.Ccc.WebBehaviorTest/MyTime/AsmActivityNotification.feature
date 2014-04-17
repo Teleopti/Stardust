@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Alert agent before change of activity
+﻿Feature: Alert agent before change of activity
 As an agent 
 I need to be alerted before change in activity,
 so that I do not forget to switch from Backoffice to Phone at the right time,
