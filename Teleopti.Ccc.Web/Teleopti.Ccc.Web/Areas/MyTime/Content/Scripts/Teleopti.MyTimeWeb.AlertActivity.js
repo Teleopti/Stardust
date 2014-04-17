@@ -14,37 +14,19 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.AlertActivity = (function () {
-	var timeLineMarkerWidth = 40;
 	var pixelPerHours = 40;
 	var alertvm;
 	var notifyOptions;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 
-	function activityLayer(layer, canvasPosition) {
+	function activityLayer(layer) {
 		var self = this;
 
-		self.leftPx = (layer.StartMinutesSinceAsmZero * pixelPerHours / 60 + timeLineMarkerWidth) + 'px';
-		self.paddingLeft = (layer.LengthInMinutes * pixelPerHours) / 60 + 'px';
-		self.payload = layer.Payload;
+		self.activityName = layer.Payload;
 		self.startTimeText = layer.StartTimeText;
 		self.startMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero;
 		self.endTimeText = layer.EndTimeText;
 		self.endMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero + layer.LengthInMinutes;
-
-		self.visible = function () {
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
-			var startPos = parseFloat(self.leftPx);
-			var endPos = startPos + parseFloat(self.paddingLeft);
-			return endPos > timelinePosition;
-		};
-		self.active = function () {
-			if (!self.visible)
-				return false;
-			var startPos = parseFloat(self.leftPx);
-			var timelinePosition = timeLineMarkerWidth - parseFloat(canvasPosition);
-			var isActive = startPos <= timelinePosition;
-			return isActive;
-		};
 	}
 
 	function notificationActivities(yesterday) {
@@ -60,19 +42,13 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			return -(pixelPerHours * hoursSinceStart) + 'px';
 		};
 		self.layers = new Array();
-		self.layersRemovedPassed = function () {
-			return $.grep(self.layers, function (n, i) {
-				return n.visible();
-			});
-		};
 
 		self.getCurrentLayerIndex = function () {
 			var now = (self.now - self.yesterday.getTime()) / 1000;
-			var validLayers = self.layersRemovedPassed();
-			var layerCount = validLayers.length;
+			var layerCount = self.layers.length;
 
-			var shiftStartTime = validLayers[0].startMinutesSinceAsmZero * 60;
-			var shiftEndTime = validLayers[layerCount - 1].endMinutesSinceAsmZero * 60;
+			var shiftStartTime = self.layers[0].startMinutesSinceAsmZero * 60;
+			var shiftEndTime = self.layers[layerCount - 1].endMinutesSinceAsmZero * 60;
 			
 			var currentLayer = -1;
 			if (now < shiftStartTime) {
@@ -83,7 +59,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				currentLayer = layerCount + 1;
 			} else {
 				for (var i = 0; i < layerCount; i++) {
-					var layer = validLayers[i];
+					var layer = self.layers[i];
 					var layerStartTime = layer.startMinutesSinceAsmZero * 60;
 					var layerEndTime = layer.endMinutesSinceAsmZero * 60;
 
@@ -99,8 +75,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 		self.getCurrentAlert = function () {
 			var layerIndex = self.getCurrentLayerIndex();
-			var validLayers = self.layersRemovedPassed();
-			var layerCount = validLayers.length;
+			var layerCount = self.layers.length;
 			var secondsSinceStart = (self.now - self.yesterday.getTime()) / 1000;
 
 			var layer;
@@ -108,27 +83,27 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			var timeDiff;
 			if (layerIndex == -1) {
 				// First activity not started
-				layer = validLayers[0];
-				activityName = layer.payload;
+				layer = self.layers[0];
+				activityName = layer.activityName;
 				alertMessage = notifyOptions.notifyText.format(activityName, layer.startTimeText);
 
 				var shiftStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = shiftStartTime - secondsSinceStart;
 			} else if (layerIndex >= 0 && layerIndex < layerCount - 1) {
 				// The shift is passing...
-				layer = validLayers[layerIndex + 1];
-				activityName = layer.payload;
+				layer = self.layers[layerIndex + 1];
+				activityName = layer.activityName;
 				alertMessage = notifyOptions.notifyText.format(activityName, layer.startTimeText);
 
 				var nextActivityStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = nextActivityStartTime - secondsSinceStart;
 			} else if (layerIndex == layerCount - 1) {
 				// Now is in latest activity
-				layer = validLayers[layerCount - 1];
-				activityName = layer.payload;
+				layer = self.layers[layerCount - 1];
+				activityName = layer.activityName;
 				alertMessage = notifyOptions.notifyText.format(activityName, layer.endTimeText);
 
-				var shiftEndTime = validLayers[layerCount - 1].endMinutesSinceAsmZero * 60;
+				var shiftEndTime = self.layers[layerCount - 1].endMinutesSinceAsmZero * 60;
 				timeDiff = shiftEndTime - secondsSinceStart;
 			} else {
 				// Entire shift already finished!
@@ -173,7 +148,6 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				newLayers.push(new activityLayer(layer, canvasPosition));
 			});
 			self.layers = newLayers;
-			self.layersRemovedPassed();
 		};
 	}
 
