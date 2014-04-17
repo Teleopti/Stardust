@@ -1273,6 +1273,7 @@
     <Content Include="Areas\Diagnosis\Views\Application\index.aspx" />
     <Content Include="Areas\SSO\Views\Shared\_LayoutBase.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\SignIn.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\MobileWeekPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

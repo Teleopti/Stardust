@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I manually navigate to mobile week schedule page")]
 		public void WhenIManuallyNavigateToMobileWeekSchedulePage()
 		{
-			Navigation.GotoMobileWeekSchedulePageNoWait();
+            Navigation.GotoMobileWeekSchedulePageNoWait();
 		}
 
         [When(@"I view my mobile week schedule")]
@@ -388,7 +388,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I view Anywhere")]
-		public void WhenIViewAnywhere()
+        [Given(@"I am viewing Anywhere")]
+        public void WhenIViewAnywhere()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhere();

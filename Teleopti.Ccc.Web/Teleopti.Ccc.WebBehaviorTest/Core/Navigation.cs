@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	    public static void GotoMobileWeekSchedulePageNoWait()
 	    {
             GoToWaitForCompleted("MyTime#Schedule/MobileWeek",
-                new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new OverrideNotifyBehavior());
+                                new ApplicationStartupTimeout());
 	    }
 
 	    public static void GotoMobileWeekSchedulePage(DateTime date)
