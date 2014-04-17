@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		[Then(@"I should see a notify message contains (.*)")]
-		public void ThenIShouldSeeAnAlertContains(string content)
+		public void ThenIShouldSeeANotifyMessageContains(string content)
 		{
 			Browser.Interactions.AssertAnyContains("#noty_bottom_layout_container .noty_bar .noty_message .noty_text", content);
 		}

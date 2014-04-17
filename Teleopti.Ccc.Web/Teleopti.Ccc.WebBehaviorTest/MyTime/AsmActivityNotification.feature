@@ -45,7 +45,6 @@ Background:
 	| Scheduled activity start time | 2030-01-01 11:00 |
 	| Scheduled activity end time   | 2030-01-01 12:00 |
 
-@ignore
 Scenario: Alert agent before next activity happens
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 10:57:59'
@@ -78,7 +77,6 @@ Scenario: Do not alert agent After Alert Time
 	And current browser time has changed to '2030-01-01 11:45:00'
 	Then I should not see any alert
 
-@ignore
 Scenario: Alert agent before first activity happens
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 07:57:59'
@@ -87,7 +85,6 @@ Scenario: Alert agent before first activity happens
 	And current browser time has changed to '2030-01-01 07:58:00'
 	Then I should see a notify message contains Phone
 
-@ignore
 Scenario: Alert agent before last activity happens
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 16:57:59'
@@ -97,7 +94,7 @@ Scenario: Alert agent before last activity happens
 	Then I should see a notify message contains Phone
 
 @ignore
-Scenario: Pop up box disappear automaticly
+Scenario: Pop up box disappear automatically
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 16:59:15'
 	And Alert Time setting is '45 seconds' 
