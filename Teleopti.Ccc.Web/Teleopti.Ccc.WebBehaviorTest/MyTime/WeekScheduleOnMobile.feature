@@ -41,25 +41,25 @@ Background:
 
 Scenario: No access to schedule page
 	Given I have the role 'Only access to Anywhere'
-	And I navigate to Anywhere
-	And I select application logon data source
-	And I sign in
-	And I should see Anywhere
+	And I am viewing Anywhere
 	When I manually navigate to mobile week schedule page
 	Then I should see an error message
 
+@ignore
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-10-03 12:00'
 	When I view my mobile week schedule
 	Then I should see my mobile week schedule for date '2030-10-03'
 
+@ignore
 Scenario: Navigate to desktop view
 	Given I have the role 'Full access to mytime'
 	And I am viewing my mobile week schedule for date '2014-04-15'
 	When I click the desktop link
 	Then I should see my week schedule for date '2014-04-15'
 
+@ignore
 Scenario: View when you are working
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
@@ -75,6 +75,7 @@ Scenario: View when you are working
 	| Time span      | 09:00 - 18:00 |
 	| Shift category | Early         |
 
+@ignore
 Scenario: View when you have a day off
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Published schedule'
