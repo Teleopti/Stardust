@@ -98,6 +98,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             using (_mock.Record())
             {
                 extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
+					 Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(_scheduleDayList, true))
+					  .Return(_personWeekList);
                 Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
                     .Return(true);
             }
@@ -113,9 +115,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         private void extractingPersonWeek(DateOnlyPeriod selectedPeriod, List<IScheduleDay> scheduleDayList, IEnumerable<PersonWeek> personWeekList)
         {
             Expect.Call(_matrix1.Person).Return(_person1);
-            Expect.Call(_matrix1.ActiveScheduleRange).Return(_scheduleRange1);
+            Expect.Call(_schedulingResultStateHolder.Schedules[_person1]).Return(_scheduleRange1);
             Expect.Call(_scheduleRange1.ScheduledDayCollection(selectedPeriod)).Return(scheduleDayList);
-            Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDayList, true))
+            Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(scheduleDayList, false ))
                 .Return(personWeekList);
             Expect.Call(_contractWeeklyRestForPersonWeek.GetWeeklyRestFromContract(_personWeek1))
                 .Return(TimeSpan.FromHours(40));
@@ -130,8 +132,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             using (_mock.Record())
             {
                 extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
-                Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
-                    .Return(false);
+					 Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(_scheduleDayList, true))
+						.Return(_personWeekList);
+	            Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
+		            .Return(false);
                 //analyzing failed weeks
                 Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
                     .Return(false);
@@ -161,8 +165,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             using (_mock.Record())
             {
                 extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
-                Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
-                    .Return(false);
+					 Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(_scheduleDayList, true))
+						.Return(_personWeekList);
+	            Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
+		            .Return(false);
                 //analyzing failed weeks
                 Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
                     .Return(false);
@@ -196,6 +202,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             using (_mock.Record())
             {
                 extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
+	            Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(_scheduleDayList, true))
+		            .Return(_personWeekList);
                 Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
                     .Return(false);
                 //analyzing failed weeks
@@ -227,6 +235,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             using (_mock.Record())
             {
                 extractingPersonWeek(_selectedPeriod, _scheduleDayList, _personWeekList);
+	            Expect.Call(_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(_scheduleDayList, true))
+		            .Return(_personWeekList);
                 Expect.Call(_ensureWeeklyRestRule.HasMinWeeklyRest(_personWeek1, _scheduleRange1, TimeSpan.FromHours(40)))
                     .Return(false);
                 //analyzing failed weeks

@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	            var weeklyRestInPersonWeek = new Dictionary<PersonWeek, TimeSpan>();
 	            if (personMatrix != null)
 	            {
-	                var personScheduleRange = personMatrix.ActiveScheduleRange;
+						var personScheduleRange = schedulingResultStateHolder.Schedules[person];
 	                var selectedPeriodScheduleDays = personScheduleRange.ScheduledDayCollection(selectedPeriod);
-	                List<PersonWeek > selctedPersonWeeks =
+	                var selctedPersonWeeks =
 	                    _weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays,
-	                        true).ToList();
+	                        false).ToList();
 	                var personWeeksVoilatingWeeklyRest = new List<PersonWeek>();
 	                foreach (var personWeek in selctedPersonWeeks)
 	                {
@@ -77,7 +77,9 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	                        personWeeksVoilatingWeeklyRest.Add(personWeek);
 
 	                }
-
+						 var selctedPersonWeeksWithNeighbouringWeeks =
+								_weeksFromScheduleDaysExtractor.CreateWeeksFromScheduleDaysExtractor(selectedPeriodScheduleDays,
+									 true).ToList();
 	                foreach (var personWeek in personWeeksVoilatingWeeklyRest)
 	                {
 	                    if (_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, personScheduleRange,weeklyRestInPersonWeek[personWeek])) continue;
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 	                        if (success)
 	                        {
-                                var foundProblemWithThisWeek = _brokenWeekOutsideSelectionSpecification.IsSatisfy( personWeek, selctedPersonWeeks,  weeklyRestInPersonWeek, personScheduleRange);
+										var foundProblemWithThisWeek = _brokenWeekOutsideSelectionSpecification.IsSatisfy(personWeek, selctedPersonWeeksWithNeighbouringWeeks, weeklyRestInPersonWeek, personScheduleRange);
 	                            if (foundProblemWithThisWeek)
 	                            {
 	                                //rollback this week 
