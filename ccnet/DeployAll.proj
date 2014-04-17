@@ -58,6 +58,8 @@
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll" />
 	<UsingTask TaskName="ThrowIfWarning" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\FxCopUgly.dll" />
 	<UsingTask AssemblyFile="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+	<UsingTask AssemblyFile="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Science.Maths"/>
+	
 
 	<ItemGroup>
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
