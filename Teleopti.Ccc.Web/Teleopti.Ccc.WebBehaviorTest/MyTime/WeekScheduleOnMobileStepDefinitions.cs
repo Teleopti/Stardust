@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
 using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -127,11 +129,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
         private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
         {
-            var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture).ToString("yyyy-MM-dd");
-            var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture).ToString("yyyy-MM-dd");
+            var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture);
 
-            Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", firstDayOfWeek));
-            Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", lastDayOfWeek));
+            foreach (var date in firstDayOfWeek.DateRange(7))
+            {
+                Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd")));
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function () {
 
     self.readData = function(data) {
 
-        ko.utils.arrayForEach(data.ScheduleDays, function(scheduleDay) {
+        ko.utils.arrayForEach(data.Days, function(scheduleDay) {
 
             var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel();
             vm.readData(scheduleDay);
@@ -40,7 +40,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function () {
         self.isDayOff = ko.observable();
         self.hasAbsence = ko.observable();
         self.hasShift = ko.observable();
-        
+        self.fixedDate = ko.observable();
         self.readData = function (data) {
             self.shiftName(data.Shift ? data.Shift.Name : null);
             self.shiftTimeSpan(data.Shift ? data.Shift.TimeSpan : null);
@@ -50,6 +50,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function () {
             self.isDayOff(data.IsDayOff);
             self.hasAbsence(data.Absence ? true : false);
             self.hasShift(data.Shift ? true : false);
+            self.fixedDate(data.FixedDate);
         };
  };
 };

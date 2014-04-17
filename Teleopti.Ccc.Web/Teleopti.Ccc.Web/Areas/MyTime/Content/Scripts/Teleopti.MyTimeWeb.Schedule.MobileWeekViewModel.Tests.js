@@ -7,17 +7,29 @@ $(document).ready(function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
 
         vm.readData({
-            ScheduleDays: [{
+            Days: [{
             }]
         });
 
         equal(vm.dayViewModels().length, 1);
     });
     
+    test("should read date", function () {
+        var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+
+        vm.readData({
+            Days: [{
+                FixedDate: "2014-04-14"
+            }]
+        });
+
+        equal(vm.dayViewModels()[0].fixedDate(), "2014-04-14");
+    });
+    
     test("should load shift category data", function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
-            ScheduleDays: [{
+            Days: [{
                 Shift: {
                     Name: "Early",
                     TimeSpan: "09:00-18:00",
@@ -36,7 +48,7 @@ $(document).ready(function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
 
         vm.readData({
-            ScheduleDays: [{
+            Days: [{
                 Absence: {
                     Name: "Illness",
                     IsFullDayAbsence: true
@@ -53,7 +65,7 @@ $(document).ready(function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
 
         vm.readData({
-            ScheduleDays: [{
+            Days: [{
                 IsDayOff: true
             }]
         });
@@ -64,7 +76,7 @@ $(document).ready(function () {
     test("should not indicate absence when no data", function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
-            ScheduleDays: [{}]
+            Days: [{}]
         });
 
         equal(vm.dayViewModels()[0].hasAbsence(), false);
@@ -74,7 +86,7 @@ $(document).ready(function () {
       
         vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
-            ScheduleDays: [{ Absence: { Name: "Illness" } }]
+            Days: [{ Absence: { Name: "Illness" } }]
         });
         equal(vm.dayViewModels()[0].hasAbsence(), true);
     });
@@ -82,7 +94,7 @@ $(document).ready(function () {
     test("should not indicate shift when no shift data available", function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
-            ScheduleDays: [{}]
+            Days: [{}]
         });
         equal(vm.dayViewModels()[0].hasShift(), false);
     });
@@ -90,7 +102,7 @@ $(document).ready(function () {
     test("should indicate shift when there is shift data", function () {
         vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
-            ScheduleDays: [{ Shift: { Name: "Late" } }]
+            Days: [{ Shift: { Name: "Late" } }]
         });
         equal(vm.dayViewModels()[0].hasShift(), true);
     });
