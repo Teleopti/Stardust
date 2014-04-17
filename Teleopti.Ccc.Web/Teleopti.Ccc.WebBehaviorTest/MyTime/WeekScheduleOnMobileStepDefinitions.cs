@@ -18,21 +18,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
     public class WeekScheduleOnMobileStepDefinitions
     {
         [Then(@"I should see my mobile week schedule for date '(.*)'")]
-        public void ThenIShouldSeeMyMobileWeekScheduleForDate(string p0)
+        public void ThenIShouldSeeMyMobileWeekScheduleForDate(DateTime date)
         {
-            ScenarioContext.Current.Pending();
+            AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture));
         }
 
         [When(@"I click the desktop link")]
         public void WhenIClickTheDesktopLink()
         {
             ScenarioContext.Current.Pending();
-        }
-
-        [Then(@"I should see mobile view of the week with for date '(.*)'")]
-        public void ThenIShouldSeeMobileViewOfTheWeekWithForDate(DateTime date)
-        {
-            AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture));
         }
 
         [Then(@"I should see the shift with")]

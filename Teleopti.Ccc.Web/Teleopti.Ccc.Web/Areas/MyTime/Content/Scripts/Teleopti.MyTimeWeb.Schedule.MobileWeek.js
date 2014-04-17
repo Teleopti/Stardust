@@ -26,6 +26,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
             }
         },
         PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+            completelyLoadedCallback();
             readyForInteractionCallback();
         },
         PartialDispose: function () {

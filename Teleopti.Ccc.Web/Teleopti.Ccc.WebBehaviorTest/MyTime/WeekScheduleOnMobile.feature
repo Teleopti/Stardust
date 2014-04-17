@@ -45,7 +45,6 @@ Scenario: No access to schedule page
 	When I manually navigate to mobile week schedule page
 	Then I should see an error message
 
-@ignore
 Scenario: View current week
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-10-03 12:00'
