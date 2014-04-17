@@ -3,9 +3,6 @@
     Layout = null;
 }
 
-
-<div data-bind="text: henke"></div>
-
-
-<div class="weekview-day" data-mytime-date="2030-09-30"></div>
-<div class="weekview-day" data-mytime-date="2030-10-06"></div>
+<!-- ko foreach: dayViewModels-->
+    <div class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate}"></div>
+<!-- /ko -->

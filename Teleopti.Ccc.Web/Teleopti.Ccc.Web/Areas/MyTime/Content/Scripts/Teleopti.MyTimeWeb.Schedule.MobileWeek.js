@@ -18,6 +18,22 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 
 Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
+    var vm;
+    
+    var _fetchData = function()
+    {
+        ajax.Ajax({
+            url: 'Schedule/FetchData',
+            dataType: "json",
+            type: 'GET',
+            data: {
+                date: Teleopti.MyTimeWeb.Portal.ParseHash().dateHash
+            },
+            success: function (data) {
+                vm.readData(data);
+            }
+        });
+    };
 
     return {
         Init: function () {
@@ -26,10 +42,9 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
             }
         },
         PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-
-            var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+            vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
             ko.applyBindings(vm, $('#page')[0]);
-
+            _fetchData();
             completelyLoadedCallback();
             readyForInteractionCallback();
         },
