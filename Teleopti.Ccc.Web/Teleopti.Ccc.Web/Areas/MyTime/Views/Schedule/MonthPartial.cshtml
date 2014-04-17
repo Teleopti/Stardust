@@ -4,31 +4,33 @@
 }
 
 <div class="navbar navbar-default">
-	<div class="col-xs-4" style="margin-top: 5px">
-		<div class="input-group">
-			<span class="input-group-btn">
-				<button class="btn btn-default" type="button" data-bind="click: previousMonth">
-					<i class="glyphicon glyphicon-chevron-left"></i>
-				</button>
-			</span>
-			<input id="CurrentMonth" class="form-control col-md-2 text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
-			<div class="input-group-btn">
-				<button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
-					<i class="glyphicon glyphicon-calendar"></i>
-				</button>
-				<button class="btn btn-default" type="button" data-bind="click: nextMonth">
-					<i class="glyphicon glyphicon-chevron-right"></i>
-				</button>
-			</div>
-		</div>
-	</div>
-	<ul class="list-inline navbar-nav" style="margin-top: 15px">
-		<li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
-	</ul>
-	<ul class="nav navbar-nav">
-		<li><a href="#" id="month-schedule-week" data-bind="click: week">@Resources.Week</a></li>
-		<li class="active"><a href="#" id="month-schedule-month" data-bind="click: month">@Resources.Month</a></li>
-	</ul>
+    <div class="container">
+        <div class="navbar-left">
+            <div class="navbar-form">
+                <div class="input-group" style="max-width: 294px;">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-bind="click: previousMonth">
+                            <i class="glyphicon glyphicon-chevron-left"></i>
+                        </button>
+                    </span>
+                    <input id="CurrentMonth" class="form-control text-center" type="text" data-bind="value: formattedSelectedDate" value="" readonly="readonly" />
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="button" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, viewMode: 1, minViewMode: 1 }">
+                            <i class="glyphicon glyphicon-calendar"></i>
+                        </button>
+                        <button class="btn btn-default" type="button" data-bind="click: nextMonth">
+                            <i class="glyphicon glyphicon-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="#" id="week-schedule-today" data-bind="click: today">@Resources.Today</a></li>
+            <li><a href="#" id="month-schedule-week" data-bind="click: week">@Resources.Week</a></li>
+            <li class="active"><a href="#" id="month-schedule-month" data-bind="click: month">@Resources.Month</a></li>
+        </ul>
+    </div>
 </div>
 
 <div id="calendar" style="width: 100%;">
