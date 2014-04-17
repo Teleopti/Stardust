@@ -486,16 +486,17 @@
 		<Message Text="MajorVersion: $(CCCMajorMinor)" Importance="high"/>
 
 		<HgVersion LocalPath="$(MSBuildProjectDirectory)" Timeout="5000">
-			<Output TaskParameter="Revision" PropertyName="TmpRevision" />
+			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</HgVersion>
-		<Message Text="HG Revision: $(TmpRevision)" Importance="high"/>
+		<Message Text="HG Revision: $(Revision)" Importance="high"/>
 		
 		<!--Adding 1000 to revision to sync with previous msis now when we moved to a new repo -->
+		<!-- NOT WORKING SO I´LL REMOVE THIS FOR NOW
 		<MSBuild.ExtensionPack.Science.Maths TaskAction="Add" Numbers="$(TmpRevision);1000">
             <Output PropertyName="Revision" TaskParameter="Result"/>
-        </MSBuild.ExtensionPack.Science.Maths>
+        </MSBuild.ExtensionPack.Science.Maths> 
 		
-		<Message Text="HG Revision + 1000: $(Revision)" Importance="high"/>
+		<Message Text="HG Revision + 1000: $(Revision)" Importance="high"/>-->
 		
 		<PropertyGroup Condition="'$(FullBuild)' == 'No'">
 			<CCCVersion>$(CCCMajorMinor).0.0</CCCVersion>
