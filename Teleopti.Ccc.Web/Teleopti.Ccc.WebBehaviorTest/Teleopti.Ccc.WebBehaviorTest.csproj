@@ -134,6 +134,11 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="MyTime\ReportsDetailedAdherence.feature.cs">
+      <DependentUpon>ReportsDetailedAdherence.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
       <DependentUpon>WeekScheduleOnMobile.feature</DependentUpon>
@@ -768,6 +773,10 @@
     <None Include="Anywhere\ViewDaysOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\ReportsDetailedAdherence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ReportsDetailedAdherence.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleOnMobile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

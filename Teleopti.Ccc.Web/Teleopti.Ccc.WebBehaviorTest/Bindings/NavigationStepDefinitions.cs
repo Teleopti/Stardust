@@ -298,6 +298,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToMyReport();
 		}
 
+		[Given(@"I view my adherence report for '(.*)'")]
+		[When(@"I view my adherence report for '(.*)'")]
+		public void GivenIViewMyAdherenceReportFor(DateTime dateTime)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToMyDetailedAdherence(dateTime);
+		}
+
+		[When(@"I view my adherence report")]
+		public void WhenIViewMyAdherenceReport()
+		{
+			GivenIViewMyAdherenceReportFor(DateTime.Now);
+		}
+
+
+
 		[Given(@"I am viewing team schedule for tomorrow")]
 		[Given(@"I am viewing group schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()

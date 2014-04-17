@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[Given(@"I have my report data for '(.*)'")]
+		[Given(@"I have adherence report data for '(.*)'")]
 		public void GivenIHaveMyReportDataFor(DateTime date)
 		{
 			var timeZones = new UtcAndCetTimeZones();
@@ -84,14 +85,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertJavascriptResultContains("return $('.answeredCallsValue').text().length > 0;", "True");
 		}
 
-        [When(@"I click previous button")]
-        public void WhenIClickPreviousButton()
+		[Then(@"I should see the detailed adherence report for '(.*)'")]
+		public void ThenIShouldSeeTheDetailedAdherenceReportFor(DateTime date)
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
+		[When(@"I navigate to the previous day")]
+        public void WhenINavigateToThePreviousDay()
         {
             Browser.Interactions.Click("#report-view-date-nav-prev");
         }
 
-        [When(@"I click next button")]
-        public void WhenIClickNextButton()
+		[When(@"I navigate to the next day")]
+		public void WhenINavigateToTheNextDay()
         {
             Browser.Interactions.Click("#report-view-date-nav-next");
         }
@@ -99,7 +107,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should end up in my report for '(.*)'")]
 		public void ThenIShouldEndUpInMyReportFor(DateTime date)
 		{
-
 			Browser.Interactions.AssertUrlContains(string.Format("Index/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
 		}
 
@@ -112,6 +119,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.ClickUsingJQuery(selector);
 		}
 
+		[When(@"I choose to view my detailed adherence")]
+		public void WhenIChooseToViewMyDetailedAdherence()
+		{
+			Browser.Interactions.Click(".adherence-percentage");
+		}
 
+		[When(@"I choose to go to overview")]
+		public void WhenIChooseToGoToOverview()
+		{
+			Browser.Interactions.Click("#report-overview");
+		}
+
+		[Then(@"I should end up in my adherence report for '(.*)'")]
+		public void ThenIShouldEndUpInMyAdherenceReportFor(DateTime date)
+		{
+			Browser.Interactions.AssertUrlContains(string.Format("Adherence/{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
+		}
 	}
 }

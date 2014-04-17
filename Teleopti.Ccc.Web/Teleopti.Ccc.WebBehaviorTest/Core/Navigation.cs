@@ -300,6 +300,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted("MyTime#MyReport/Index", new ApplicationStartupTimeout());
 		}
 
+		public static void GoToMyDetailedAdherence(DateTime dateTime)
+		{
+			GoToWaitForCompleted("MyTime#MyReport/Adherence", new ApplicationStartupTimeout());
+		}
+
 		public static void GotoMonthSchedulePage(DateTime date)
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Schedule/Month/{0}/{1}/{2}",
