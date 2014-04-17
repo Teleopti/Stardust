@@ -4,19 +4,19 @@ using System.Collections.ObjectModel;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Web;
 
-namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
+namespace Teleopti.Ccc.Web.Core
 {
 	public class MachineKeySessionSecurityTokenHandler : SessionSecurityTokenHandler
 	{
 		public MachineKeySessionSecurityTokenHandler()
-			: base(CreateTransforms())
+			: base(createTransforms())
 		{ }
 
 		public MachineKeySessionSecurityTokenHandler(SecurityTokenCache cache, TimeSpan tokenLifetime)
-			: base(CreateTransforms(), cache, tokenLifetime)
+			: base(createTransforms(), cache, tokenLifetime)
 		{ }
 
-		private static ReadOnlyCollection<CookieTransform> CreateTransforms()
+		private static ReadOnlyCollection<CookieTransform> createTransforms()
 		{
 			return new List<CookieTransform>
 			{
