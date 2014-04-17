@@ -352,6 +352,11 @@
     <Compile Include="AgentPreferenceView\RestrictionViewCellModel.cs" />
     <Compile Include="AgentPreferenceView\RestrictionWeekHeaderViewCellModel.cs" />
     <Compile Include="Main\ViewType.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="PushMessagePopup\MessageOptionsAndText.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -635,18 +640,13 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="AgentSchedule\ScheduleControl.resx">
       <DependentUpon>ScheduleControl.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Content Include="app.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
@@ -654,8 +654,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Resources\boll.png" />
-    <None Include="Resources\box.png" />
     <None Include="Resources\ccc_Advanced_settings2.png" />
     <None Include="AgentPreferenceView\Resources\ccc_Cancel_32x32.png" />
     <None Include="AgentPreferenceView\Resources\ccc_ForecastValidate.png" />
