@@ -330,6 +330,7 @@
     <Compile Include="Helper\MessageBoxHelper.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogOnDetails.cs" />
     <Compile Include="Main\CreateExtendedPreferencesTemplate.cs">
       <SubType>Form</SubType>
     </Compile>
