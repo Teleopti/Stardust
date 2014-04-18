@@ -5,45 +5,42 @@
 	Layout = null;
 }
 <div id="settings" class="well well-small">
-    <div class="clearfix">
-        <label for="CultureUi-Picker">@Resources.Language</label>
-        <select id="CultureUi-Picker" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
-            <option data-bind="text: text, value: id"></option>
-        </select>
-    </div>
-    <br/>
 	<div class="clearfix">
-		<label for="Culture-Picker">@Resources.DateFormat</label>
-                        <select id="Culture-Picker" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
+		<label for="CultureUi-Picker">@Resources.Language</label>
+		<select id="CultureUi-Picker" data-bind="foreach: cultures, select2: { value: selectedUiCulture }, enable: culturesLoaded ">
 			<option data-bind="text: text, value: id"></option>
 		</select>
 	</div>
 	<br/>
-
-	<!-- ko if: IsNotificationSupported() -->
 	<div class="clearfix">
-		<div class="btn-group">
-			<button class="btn btn-lg" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
-		</div>
+		<label for="Culture-Picker">@Resources.DateFormat</label>
+						<select id="Culture-Picker" data-bind="foreach: cultures, select2: { value: selectedCulture }, enable: culturesLoaded">
+			<option data-bind="text: text, value: id"></option>
+		</select>
 	</div>
 	<br/>
-	<!-- /ko -->
+	
+	<div class="clearfix">
+		<!-- ko if: IsNotificationSupported() -->
+		<div class="btn-group">
+			<button class="btn" data-bind="click: RequestNotificationPermission">@Resources.AllowDesktopNotifications</button>
+		</div>
+		<!-- /ko -->
 
 	@if (Model.ShareCalendarPermission)
-    {
-	    <div class="clearfix">
-		    <div class="btn-group">
-			    <button class="btn btn-large share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
-			    <button class="btn btn-large revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
-		    </div>
-		    <!-- ko if: CalendarSharingActive() -->
-			<div>
-			    <span>@Resources.ShareMyCalendarHint</span><a href="http://wiki.teleopti.com/TeleoptiCCC/CalendarLink" target="_blank">@Resources.Here</a>
-		    </div>
-		    <div>
-			    <input class="calendar-url span10" data-bind="value: CalendarUrl, selected: true"/>
-		    </div>
-		    <!-- /ko -->
-	    </div>
-    }
+	{
+		<div class="btn-group">
+			<button class="btn share-my-calendar" data-bind="css: { active: CalendarSharingActive() }, click: ActivateCalendarSharing">@Resources.ShareMyCalendar</button>
+			<button class="btn revoke" data-bind="css: { active: !CalendarSharingActive() }, click: DeactivateCalendarSharing">@Resources.Revoke</button>
+		</div>
+		<!-- ko if: CalendarSharingActive() -->
+		<div>
+			<span>@Resources.ShareMyCalendarHint</span><a href="http://wiki.teleopti.com/TeleoptiCCC/CalendarLink" target="_blank">@Resources.Here</a>
+		</div>
+		<div>
+			<input class="calendar-url span10" data-bind="value: CalendarUrl, selected: true"/>
+		</div>
+		<!-- /ko -->
+	}
+	</div>
 </div>
