@@ -2,7 +2,7 @@
 using System.Web.Security;
 using Microsoft.IdentityModel.Web;
 
-namespace Teleopti.Ccc.Web.AuthenticationBridge.Controllers
+namespace Teleopti.Ccc.Web.Core
 {
 	public class MachineKeyCookieTransform : CookieTransform
 	{

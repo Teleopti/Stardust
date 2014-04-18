@@ -34,5 +34,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(date), JsonRequestBehavior.AllowGet);
 		}
+
+		[EnsureInPortal]
+		public ViewResult Adherence()
+		{
+			return View("AdherencePartial");
+		}
 	}
 }

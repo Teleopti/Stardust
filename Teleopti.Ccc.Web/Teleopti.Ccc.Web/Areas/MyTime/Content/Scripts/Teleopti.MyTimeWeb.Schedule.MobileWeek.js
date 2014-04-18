@@ -19,10 +19,11 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
 Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
     var ajax = new Teleopti.MyTimeWeb.Ajax();
     var vm;
-    var completelyLoaded;
-    var _fetchMobileWeekData = function () {
+    
+    var _fetchData = function()
+    {
         ajax.Ajax({
-            url: 'Schedule/FetchMobileWeekData',
+            url: 'Schedule/FetchData',
             dataType: "json",
             type: 'GET',
             data: {
@@ -30,34 +31,25 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
             },
             success: function (data) {
                 vm.readData(data);
-                completelyLoaded();
             }
         });
     };
-    function _cleanBindings() {
-        ko.cleanNode($('#page')[0]);
-        if (vm != null) {
-            vm.dayViewModels([]);
-            vm = null;
+
+    return {
+        Init: function () {
+            if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
+                Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/MobileWeek', Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialInit, Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialDispose);
+            }
+        },
+        PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
+            vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+            ko.applyBindings(vm, $('#page')[0]);
+            _fetchData();
+            completelyLoadedCallback();
+            readyForInteractionCallback();
+        },
+        PartialDispose: function () {
         }
-    }
-    
-	return {
-		Init: function () {
-			if ($.isFunction(Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack)) {
-				Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Schedule/MobileWeek', Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialInit, Teleopti.MyTimeWeb.Schedule.MobileWeek.PartialDispose);
-			}
-		},
-		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
-		    completelyLoaded = completelyLoadedCallback;
-		    vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(Teleopti.MyTimeWeb.Portal.NavigateTo);
-		    ko.applyBindings(vm, $('#page')[0]);
-		    _fetchMobileWeekData();
-		    readyForInteractionCallback();
-		},
-		PartialDispose: function () {
-		    _cleanBindings();
-		}
-	};
+    };
 
 })(jQuery);

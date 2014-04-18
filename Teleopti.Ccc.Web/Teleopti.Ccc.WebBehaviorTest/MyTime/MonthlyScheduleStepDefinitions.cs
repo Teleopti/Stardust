@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         public void ThenIShouldSeeTheAbsenceOnDate(string date)
         {
 			  Browser.Interactions.AssertExists(string.Format("[data-cal-date='{0}'] .absence", date));
-		  }
+		}
 
 		[Then(@"I should not see a shift on date '(.*)'")]
 		public void ThenIShouldNotSeeAShiftOnDate(string date)

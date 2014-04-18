@@ -62,8 +62,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I manually navigate to mobile week schedule page")]
 		public void WhenIManuallyNavigateToMobileWeekSchedulePage()
 		{
-			Navigation.GotoMobileWeekSchedulePageNoWait();
+            Navigation.GotoMobileWeekSchedulePageNoWait();
 		}
+
+        [When(@"I view my mobile week schedule")]
+		public void WhenIViewMyMobileWeekSchedule()
+		{
+            TestControllerMethods.Logon();
+            Navigation.GotoMobileWeekSchedulePage();
+        }
 
         [When(@"I view my mobile week schedule for date '(.*)'")]
         public void WhenIViewMyMobileWeekScheduleForDate(DateTime date)
@@ -106,6 +113,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoMonthSchedulePage(date);
 		}
+
+        [Given(@"I am viewing my mobile week schedule for date '(.*)'")]
+        public void GivenIAmViewingMyMobileWeekScheduleForDate(string p0)
+        {
+            ScenarioContext.Current.Pending();
+        }
 
 		[When(@"I view my month schedule")]
 		public void WhenIViewMyMonthSchedule()
@@ -285,6 +298,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToMyReport();
 		}
 
+		[Given(@"I view my adherence report for '(.*)'")]
+		[When(@"I view my adherence report for '(.*)'")]
+		public void GivenIViewMyAdherenceReportFor(DateTime dateTime)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToMyDetailedAdherence(dateTime);
+		}
+
 		[Given(@"I am viewing team schedule for tomorrow")]
 		[Given(@"I am viewing group schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
@@ -376,7 +397,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[When(@"I view Anywhere")]
-		public void WhenIViewAnywhere()
+        [Given(@"I am viewing Anywhere")]
+        public void WhenIViewAnywhere()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhere();

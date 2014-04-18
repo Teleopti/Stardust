@@ -17,6 +17,7 @@ function _initMomentLanguageWithFallback() {
 $(function () {
     Teleopti.MyTimeWeb.Schedule.Init();
     Teleopti.MyTimeWeb.Schedule.Month.Init();
+    Teleopti.MyTimeWeb.Schedule.MobileWeek.Init();
 	Teleopti.MyTimeWeb.StudentAvailability.Init();
 	Teleopti.MyTimeWeb.Preference.Init();
 	Teleopti.MyTimeWeb.Request.Init();
@@ -24,6 +25,7 @@ $(function () {
 	Teleopti.MyTimeWeb.Settings.Init();
 	Teleopti.MyTimeWeb.Password.Init();
 	Teleopti.MyTimeWeb.MyReport.Init();
+	Teleopti.MyTimeWeb.MyAdherence.Init();
 	Teleopti.MyTimeWeb.Common.Layout.Init();
 
 	_initMomentLanguageWithFallback();

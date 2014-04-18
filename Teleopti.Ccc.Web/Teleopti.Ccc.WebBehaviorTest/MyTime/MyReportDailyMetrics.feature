@@ -28,13 +28,13 @@ Scenario: Show friendly message when no report data
 Scenario: Navigate within my report view to previous day
 	Given I am an agent
 	And I view my report for '2013-10-04'
-	When I click previous button
+	When I navigate to the previous day
 	Then I should end up in my report for '2013-10-03'
 	
 Scenario: Navigate within my report view to next day
 	Given I am an agent
 	And I view my report for '2013-10-04'
-	When I click next button
+	When I navigate to the next day
 	Then I should end up in my report for '2013-10-05'
 
 Scenario: Navigate within my report using date picker
@@ -43,3 +43,10 @@ Scenario: Navigate within my report using date picker
 	When I select the date '2013-10-10'
 	Then I should end up in my report for '2013-10-10'
 	
+@ignore
+Scenario: Navigate to detailed adherence 
+	Given I am an agent
+	And I have my report data for '2013-10-04'
+	And I view my report for '2013-10-04'
+	When I choose to view my detailed adherence
+	Then I should end up in my adherence report for '2013-10-04'

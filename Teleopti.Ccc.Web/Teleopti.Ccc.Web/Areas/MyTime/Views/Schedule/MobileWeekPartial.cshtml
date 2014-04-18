@@ -1,0 +1,8 @@
+﻿@using Teleopti.Ccc.UserTexts
+@{
+    Layout = null;
+}
+
+<!-- ko foreach: dayViewModels-->
+    <div class="weekview-day" data-bind="attr: {'data-mytime-date': fixedDate}"></div>
+<!-- /ko -->

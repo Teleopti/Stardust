@@ -1,0 +1,41 @@
+﻿@using Teleopti.Ccc.UserTexts
+@{
+    Layout = null;
+}
+
+
+<input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat"/>
+<div class="myadherence">
+	<div class="navbar navbar-default">
+		<div class="container">
+			<div class="navbar-left">
+				<div class="navbar-form">
+					<div class="input-group" style="max-width: 294px;">
+						<span class="input-group-btn">
+							<button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
+								<i class="glyphicon glyphicon-chevron-left"></i>
+							</button>
+						</span>
+						<input class="form-control text-center" style="width: 100%" id="report-view-date-nav-current" data-bind="value: selectedDate().format(datePickerFormat())" type="text" readonly="readonly" />
+						<span class="input-group-btn">
+							<button id="report-view-date-picker" class="btn btn-default moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
+								<i class="glyphicon glyphicon-calendar"></i>
+							</button>
+							<button id="report-view-date-nav-next" class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
+								<i class="glyphicon glyphicon-chevron-right"></i>
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<ul class="nav navbar-nav">
+				<li>
+					<a id="report-overview" data-bind="click: goToOverView">@Resources.OverView</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="container">
+	</div>
+</div>

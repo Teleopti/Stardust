@@ -873,6 +873,7 @@
     <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Images\stripe.png" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.MyAdherence.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AlertActivity.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Asm.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel.Tests.js" />
@@ -1273,6 +1274,8 @@
     <Content Include="Areas\Diagnosis\Views\Application\index.aspx" />
     <Content Include="Areas\SSO\Views\Shared\_LayoutBase.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\SignIn.cshtml" />
+    <Content Include="Areas\MyTime\Views\MyReport\AdherencePartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\MobileWeekPartial.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

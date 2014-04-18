@@ -46,28 +46,4 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
     		return result;
     	}
     }
-
-	public class CheckPasswordWithToken : CheckPassword
-	{
-		private readonly IPassphraseProvider _passphraseProvider;
-
-		public CheckPasswordWithToken(IOneWayEncryption encryption, IPassphraseProvider passphraseProvider, ICheckBruteForce checkBruteForce, ICheckPasswordChange checkPasswordChange) : base(encryption, checkBruteForce, checkPasswordChange)
-		{
-			_passphraseProvider = passphraseProvider;
-		}
-
-		public override AuthenticationResult CheckLogOn(IUserDetail userDetail, string password)
-		{
-			if (Encryption.EncryptStringWithBase64(_passphraseProvider.Passphrase(),userDetail.Person.ApplicationAuthenticationInfo.ApplicationLogOnName.ToLower(CultureInfo.CurrentUICulture)).Equals(password))
-			{
-				return new AuthenticationResult {Person = userDetail.Person, Successful = true};
-			}
-			return base.CheckLogOn(userDetail, password);
-		}
-	}
-
-	public interface IPassphraseProvider
-	{
-		string Passphrase();
-	}
 }

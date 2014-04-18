@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Mvc;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -25,6 +26,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = target.OnDates(date);
 				
 			result.Data.Should().Be.SameInstanceAs(model);
+		}
+
+		[Test]
+		public void AdherenceShouldReturnPartialView()
+		{
+			var controller = new MyReportController(null, null);
+			controller.Adherence().Should().Be.OfType<ViewResult>();
+		}
+
+		[Test]
+		public void IndexShouldReturnPartialView()
+		{
+			var controller = new MyReportController(null, null);
+			controller.Index().Should().Be.OfType<ViewResult>();
 		}
 	}
 }

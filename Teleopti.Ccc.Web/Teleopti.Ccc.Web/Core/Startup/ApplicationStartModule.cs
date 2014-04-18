@@ -11,7 +11,6 @@ using Microsoft.IdentityModel.Protocols.WSFederation;
 using Microsoft.IdentityModel.Web;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Web.AuthenticationBridge.Controllers;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;

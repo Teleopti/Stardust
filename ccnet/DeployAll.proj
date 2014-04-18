@@ -58,6 +58,8 @@
 	<UsingTask TaskName="NCover.MSBuildTasks.NCoverReporting" AssemblyFile="$(CCNetWorkingDirectory)\packages\Teleopti.NCover64.1.0.0\content\Build Task Plugins\NCover.MSBuildTasks.dll" />
 	<UsingTask TaskName="ThrowIfWarning" AssemblyFile="$(CCNetWorkingDirectory)\ccnet\FxCopUgly.dll" />
 	<UsingTask AssemblyFile="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.SqlServer.SqlExecute"/>
+	<UsingTask AssemblyFile="$(MSBuildExtensionPackPath)\MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Science.Maths"/>
+	
 
 	<ItemGroup>
 		<VersionFile Include="$(CCNetWorkingDirectory)\ActiveBranchVersion.txt"/>
@@ -487,6 +489,14 @@
 			<Output TaskParameter="Revision" PropertyName="Revision" />
 		</HgVersion>
 		<Message Text="HG Revision: $(Revision)" Importance="high"/>
+		
+		<!--Adding 1000 to revision to sync with previous msis now when we moved to a new repo -->
+		<!-- NOT WORKING SO I´LL REMOVE THIS FOR NOW
+		<MSBuild.ExtensionPack.Science.Maths TaskAction="Add" Numbers="$(TmpRevision);1000">
+            <Output PropertyName="Revision" TaskParameter="Result"/>
+        </MSBuild.ExtensionPack.Science.Maths> 
+		
+		<Message Text="HG Revision + 1000: $(Revision)" Importance="high"/>-->
 		
 		<PropertyGroup Condition="'$(FullBuild)' == 'No'">
 			<CCCVersion>$(CCCMajorMinor).0.0</CCCVersion>

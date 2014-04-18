@@ -300,6 +300,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoToWaitForCompleted("MyTime#MyReport/Index", new ApplicationStartupTimeout());
 		}
 
+		public static void GoToMyDetailedAdherence(DateTime date)
+		{
+			GoToWaitForCompleted(string.Format("MyTime#MyReport/Adherence/{0}/{1}/{2}",
+					date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+					new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+		}
+
 		public static void GotoMonthSchedulePage(DateTime date)
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Schedule/Month/{0}/{1}/{2}",
@@ -322,15 +329,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoMobileWeekSchedulePageNoWait()
 		{
-			GoToWaitForCompleted("MyTime#Schedule/MobileWeek",
-				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+			GoToWaitForCompleted("MyTime#Schedule/MobileWeek", new ApplicationStartupTimeout());
 		}
+
+        public static void GotoMobileWeekSchedulePage()
+        {
+            GoToWaitForCompleted("MyTime#Schedule/MobileWeek", new ApplicationStartupTimeout());
+        }
 
 		public static void GotoMobileWeekSchedulePage(DateTime date)
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Schedule/MobileWeek/{0}/{1}/{2}",
-			date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-			new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
+				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
+				new ApplicationStartupTimeout());
 		}
 	}
 

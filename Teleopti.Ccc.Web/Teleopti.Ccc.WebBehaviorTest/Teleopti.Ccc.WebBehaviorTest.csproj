@@ -90,6 +90,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\SpecFlow.1.9.0\lib\net35\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
+    <Reference Include="Teleopti.Ccc.Web">
+      <HintPath>..\Teleopti.Ccc.WebTest\bin\Debug\Teleopti.Ccc.Web.dll</HintPath>
+    </Reference>
     <Reference Include="WatiN.Core, Version=2.1.0.1196, Culture=neutral, PublicKeyToken=db7cfd3acb5ad44e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\WatiN.2.1.0\lib\net40\WatiN.Core.dll</HintPath>
     </Reference>
@@ -134,6 +137,11 @@
     <Compile Include="Bindings\Generic\PhoneStateStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\RealTimeAdherencePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\MultiplicatorDefinitionSetStepDefinitions.cs" />
+    <Compile Include="MyTime\ReportsDetailedAdherence.feature.cs">
+      <DependentUpon>ReportsDetailedAdherence.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="MyTime\WeekScheduleOnMobileStepDefinitions.cs" />
     <Compile Include="MyTime\WeekScheduleOnMobile.feature.cs">
       <DependentUpon>WeekScheduleOnMobile.feature</DependentUpon>
@@ -768,6 +776,10 @@
     <None Include="Anywhere\ViewDaysOff.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
+    </None>
+    <None Include="MyTime\ReportsDetailedAdherence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ReportsDetailedAdherence.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\WeekScheduleOnMobile.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

@@ -6,24 +6,25 @@
 <input id="my-report-datepicker-format" type="hidden" value="@ViewBag.DatePickerFormat"/>
 <div class="myreport-daily-metrics">
     <div class="navbar navbar-default">
-        
-        <div class="navbar-left">
-            <div class="navbar-form" style="max-width: 294px;">
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
-                            <i class="glyphicon glyphicon-chevron-left"></i>
-                        </button>
-                    </span>
-                    <input class="form-control text-center" style="width: 100%" id="report-view-date-nav-current" data-bind="value: selectedDate().format(datePickerFormat())" type="text" readonly="readonly" />
-                    <span class="input-group-btn">
-                        <button id="report-view-date-picker" class="btn btn-default moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
-                            <i class="glyphicon glyphicon-calendar"></i>
-                        </button>
-                        <button id="report-view-date-nav-next" class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
-                            <i class="glyphicon glyphicon-chevron-right"></i>
-                        </button>
-                    </span>
+        <div class="container">
+            <div class="navbar-left">
+                <div class="navbar-form">
+                    <div class="input-group" style="max-width: 294px;">
+                        <span class="input-group-btn">
+                            <button id="report-view-date-nav-prev" class="btn btn-default" data-bind="click: previousDay, css: 'done'" type="button">
+                                <i class="glyphicon glyphicon-chevron-left"></i>
+                            </button>
+                        </span>
+                        <input class="form-control text-center" style="width: 100%" id="report-view-date-nav-current" data-bind="value: selectedDate().format(datePickerFormat())" type="text" readonly="readonly" />
+                        <span class="input-group-btn">
+                            <button id="report-view-date-picker" class="btn btn-default moment-datepicker" data-bind="datepicker: selectedDate, datepickerOptions: { autoHide: true, format: datePickerFormat() }" type="button">
+                                <i class="glyphicon glyphicon-calendar"></i>
+                            </button>
+                            <button id="report-view-date-nav-next" class="btn btn-default" data-bind="click: nextDay, css: 'done'" type="button">
+                                <i class="glyphicon glyphicon-chevron-right"></i>
+                            </button>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -37,41 +38,90 @@
 		</div>
 		<div class="row">
 			<div data-bind="if: dataAvailable" class="span6">
-			<table class="table table-striped table-bordered">
-				<thead>
-					<tr>
-						<th>@Resources.Metric</th>
-						<th class="right-align-cell">@Resources.Value</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td class="adherenceValue">@Resources.KpiAdherence</td>
-						<td class="right-align-cell" data-bind="text: adherence"></td>
-					</tr>
-					<tr>
-						<td class="readyTimePerScheduledReadyTimeValue" >@Resources.ReadyTimePerScheduledReadyTimePercent</td>
-						<td class="right-align-cell" data-bind="text: readyTimePerScheduledReadyTime"></td>
-					</tr>
-					<tr>
-						<td class="handlingTimeValue">@Resources.KpiAverageHandleTime</td>
-						<td class="right-align-cell" data-bind="text: averageHandlingTime"></td>
-					</tr>
-					<tr>
-						<td class="talkTimeValue">@Resources.KpiAverageTalkTime</td>
-						<td class="right-align-cell" data-bind="text: averageTalkTime"></td>
-					</tr>
-					<tr>
-						<td class="afterWorkValue">@Resources.KpiAverageAfterCallWork</td>
-						<td class="right-align-cell" data-bind="text: averageAfterCallWork"></td>
-					</tr>
-					<tr>
-						<td class="answeredCallsValue">@Resources.AnsweredCalls</td>
-						<td class="right-align-cell" data-bind="text: answeredCalls"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-blue">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-stats"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: adherence"></h1>
+									<p class="adherenceValue">@Resources.KpiAdherence</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-green">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-time"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: readyTimePerScheduledReadyTime"></h1>
+									<p class="readyTimePerScheduledReadyTimeValue">@Resources.ReadyTimePerScheduledReadyTimePercent</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-yellow">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-headphones"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: averageHandlingTime"></h1>
+									<p class="handlingTimeValue">@Resources.KpiAverageHandleTime</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="row">
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-purple">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-earphone"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: averageTalkTime"></h1>
+									<p class="talkTimeValue">@Resources.KpiAverageTalkTime</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-red">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-pencil"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: averageAfterCallWork"></h1>
+									<p class="afterWorkValue">@Resources.KpiAverageAfterCallWork</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="well well-sm dashboard dashboard-black">
+							<div class="row">
+								<div class="col-xs-3">
+									<div class="glyphicon glyphicon-phone-alt"></div>
+								</div>
+								<div class="text-center col-xs-7">
+									<h1 data-bind="text: answeredCalls"></h1>
+									<p class="answeredCallsValue">@Resources.AnsweredCalls</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		<div data-bind="if: dataAvailable" class="span6"></div>
 		</div>
 		
