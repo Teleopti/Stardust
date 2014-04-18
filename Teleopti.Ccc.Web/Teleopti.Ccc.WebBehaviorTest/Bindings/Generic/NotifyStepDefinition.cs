@@ -23,5 +23,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container");
 		}
+
+		[Then(@"I should not see pop up notify message")]
+		public void ThenIShouldNotSeePopUpNotifyMessage()
+		{
+			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container:visible");
+		}
+
 	}
 }

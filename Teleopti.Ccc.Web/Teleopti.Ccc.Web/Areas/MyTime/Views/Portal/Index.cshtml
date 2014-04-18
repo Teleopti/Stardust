@@ -20,7 +20,8 @@
 					endingMessageTemplate: '@Resources.ActivityEndingMessage',
 					originalDocumentTitle: document.title,
 					baseUrl: '@Url.Content("~/")',
-					header: '@Resources.Teleopti'
+					header: '@Resources.Teleopti',
+					timeout: 30000
 				});
 				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
 					{
