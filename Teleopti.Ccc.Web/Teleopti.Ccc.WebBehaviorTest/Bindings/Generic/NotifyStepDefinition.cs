@@ -1,5 +1,4 @@
 ﻿using TechTalk.SpecFlow;
-using TechTalk.SpecFlow.Assist;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
@@ -22,11 +21,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see a notify message contains all text")]
 		public void ThenIShouldSeeANotifyMessageContainsAllText(Table contentTable)
 		{
-			var contents = contentTable.CreateSet<string>();
-
-			foreach (var content in contents)
+			const string selector = "#noty_bottom_layout_container .noty_bar .noty_message .noty_text";
+			for(var i =0;i<contentTable.RowCount; i++)
 			{
-				Browser.Interactions.AssertAnyContains("#noty_bottom_layout_container .noty_bar .noty_message .noty_text", content);
+				var content = contentTable.Rows[i]["Content"].Trim();
+				Browser.Interactions.AssertAnyContains(selector, content);
 			}
 		}
 
