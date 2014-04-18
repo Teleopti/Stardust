@@ -15,14 +15,15 @@
 			@if(Model.HasAsmPermission)
 			{
 				<text>
-
-			Teleopti.MyTimeWeb.AlertActivity.StartAlert({
-				notifyText: '@Resources.YourScheduleTheDATEHasChanged',
-				originalDocumentTitle: document.title,
-				baseUrl: '@Url.Content("~/")',
-				header: '@Resources.Teleopti'
-			});
-				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges({ 
+				Teleopti.MyTimeWeb.AlertActivity.StartAlert({
+					comingMessageTemplate: '@Resources.NextActivityComingMessage',
+					endingMessageTemplate: '@Resources.ActivityEndingMessage',
+					originalDocumentTitle: document.title,
+					baseUrl: '@Url.Content("~/")',
+					header: '@Resources.Teleopti'
+				});
+				Teleopti.MyTimeWeb.Asm.ListenForScheduleChanges(
+					{
 						notifyText: '@Resources.YourScheduleTheDATEHasChanged', 
 						originalDocumentTitle: document.title,
 						baseUrl: '@Url.Content("~/")', 
@@ -31,8 +32,7 @@
 					function (notification) { Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);}
 				);
 
-			Teleopti.MyTimeWeb.AsmMessage.Init();
-				
+				Teleopti.MyTimeWeb.AsmMessage.Init();
 				</text>
 			}
 		});

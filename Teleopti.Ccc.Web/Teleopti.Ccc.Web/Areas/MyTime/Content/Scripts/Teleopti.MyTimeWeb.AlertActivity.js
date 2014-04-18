@@ -85,7 +85,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				// First activity not started
 				layer = self.layers[0];
 				activityName = layer.activityName;
-				alertMessage = notifyOptions.notifyText.format(activityName, layer.startTimeText);
+				alertMessage = notifyOptions.comingMessageTemplate.format(activityName, layer.startTimeText);
 
 				var shiftStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = shiftStartTime - secondsSinceStart;
@@ -93,7 +93,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				// The shift is passing...
 				layer = self.layers[layerIndex + 1];
 				activityName = layer.activityName;
-				alertMessage = notifyOptions.notifyText.format(activityName, layer.startTimeText);
+				alertMessage = notifyOptions.comingMessageTemplate.format(activityName, layer.startTimeText);
 
 				var nextActivityStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = nextActivityStartTime - secondsSinceStart;
@@ -101,7 +101,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 				// Now is in latest activity
 				layer = self.layers[layerCount - 1];
 				activityName = layer.activityName;
-				alertMessage = notifyOptions.notifyText.format(activityName, layer.endTimeText);
+				alertMessage = notifyOptions.endingMessageTemplate.format(activityName, layer.endTimeText);
 
 				var shiftEndTime = self.layers[layerCount - 1].endMinutesSinceAsmZero * 60;
 				timeDiff = shiftEndTime - secondsSinceStart;

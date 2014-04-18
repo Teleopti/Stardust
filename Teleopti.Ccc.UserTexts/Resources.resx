@@ -12021,4 +12021,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Calculate Legal State</value>
     <comment>Calculate Legal State</comment>
   </data>
+  <data name="ActivityEndingMessage" xml:space="preserve">
+    <value>Current activity {0} will finished at {1}</value>
+    <comment>The notify message show in MyTimeWeb when latest activity ending</comment>
+  </data>
+  <data name="NextActivityComingMessage" xml:space="preserve">
+    <value>Next activity {0} will coming at {1}</value>
+    <comment>The notify message show in MyTimeWeb when next activity coming</comment>
+  </data>
 </root>
