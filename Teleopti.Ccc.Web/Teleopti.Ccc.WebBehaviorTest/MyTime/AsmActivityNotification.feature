@@ -1,4 +1,4 @@
-﻿Feature: Alert agent before change of activity
+﻿Feature: Alert agent activity is changing
 As an agent 
 I need to be alerted before change in activity,
 so that I do not forget to switch from Backoffice to Phone at the right time,
@@ -25,7 +25,7 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 	And there are shift categories
-	| Name  |
+	| Name |
 	| Day  |
 	And there is an activity with
 	| Field | Value |
@@ -45,39 +45,7 @@ Background:
 	| Scheduled activity start time | 2030-01-01 11:00 |
 	| Scheduled activity end time   | 2030-01-01 12:00 |
 
-Scenario: Alert agent before next activity happens
-	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should see a notify message contains Lunch
-
-Scenario: Do not alert agent without permission for ASM
-	Given I have the role 'No access to ASM'
-	And the current time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should not see any alert
-
-Scenario: Do not alert agent Before Alert Time
-	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 10:55:00'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:57:00'
-	Then I should not see any alert
-
-Scenario: Do not alert agent After Alert Time 
-	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 11:45:00'
-	And Alert Time setting is '120' seconds                      
-	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 11:45:00'
-	Then I should not see any alert
-
-Scenario: Alert agent before first activity happens
+Scenario: Alert agent before first activity starts
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 07:57:59'
 	And Alert Time setting is '120' seconds                      
@@ -85,13 +53,45 @@ Scenario: Alert agent before first activity happens
 	And current browser time has changed to '2030-01-01 07:58:00'
 	Then I should see a notify message contains Phone
 
-Scenario: Alert agent before last activity happens
+Scenario: Alert agent before next activity starts
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 10:57:59'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 10:58:00'
+	Then I should see a notify message contains Lunch
+
+Scenario: Alert agent before last activity ends
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 16:57:59'
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 16:58:00'
 	Then I should see a notify message contains Phone
+
+Scenario: Do not alert agent Before Alert Time
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 10:55:00'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 10:57:00'
+	Then I should not see any notify
+
+Scenario: Do not alert agent After Alert Time 
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 11:45:00'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 11:45:00'
+	Then I should not see any notify
+
+Scenario: Do not alert agent without permission for ASM
+	Given I have the role 'No access to ASM'
+	And the current time is '2030-01-01 10:57:59'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 10:58:00'
+	Then I should not see any notify
 
 Scenario: Automatical close pop up notify message
 	Given I have the role 'Full access to mytime'

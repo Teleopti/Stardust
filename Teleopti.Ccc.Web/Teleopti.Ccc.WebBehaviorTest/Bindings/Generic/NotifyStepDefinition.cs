@@ -18,8 +18,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertAnyContains("#noty_bottom_layout_container .noty_bar .noty_message .noty_text", content);
 		}
 
-		[Then(@"I should not see any alert")]
-		public void ThenIShouldNotSeeAnyAlert()
+		[Then(@"I should not see any notify")]
+		public void ThenIShouldNotSeeAnyNotify()
 		{
 			Browser.Interactions.AssertNotExists("#notifyLogger", "#noty_bottom_layout_container");
 		}
