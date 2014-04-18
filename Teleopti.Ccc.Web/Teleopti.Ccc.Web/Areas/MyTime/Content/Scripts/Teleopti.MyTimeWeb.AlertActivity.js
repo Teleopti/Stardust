@@ -3,7 +3,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
-/// <reference path="../../../../Content/moment/moment.js" />
+/// <reference path="~/Content/moment/moment.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/noty/jquery.noty.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -29,10 +29,10 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		self.endMinutesSinceAsmZero = layer.StartMinutesSinceAsmZero + layer.LengthInMinutes;
 	}
 
-	function notificationActivities(yesterday) {
+	function notificationActivities(yesterdayZero) {
 		var self = this;
 		self.now = new Date().getTeleoptiTime();
-		self.yesterday = yesterday;
+		self.yesterday = yesterdayZero;
 		self.alertTimeSetting = 60; //default setting 60secs
 		self.alertMessage = "";
 		self.restartAlertDelayTime = 60;
@@ -81,7 +81,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			var layer;
 			var activityName, alertMessage;
 			var timeDiff;
-			if (layerIndex == -1) {
+			if (layerIndex < 0) {
 				// First activity not started
 				layer = self.layers[0];
 				activityName = layer.activityName;
@@ -152,15 +152,15 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	}
 
 	function initNotificationViewModel() {
-		var yesterdayFromNow = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
-		alertvm = new notificationActivities(yesterdayFromNow);
+		var yesterdayZero = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
+		alertvm = new notificationActivities(yesterdayZero);
 
 		var activityData;
 		var alertSetting;
 
 		var dataLoadDeffered = $.Deferred();
 		alertvm.loadViewModel(
-			yesterdayFromNow,
+			yesterdayZero,
 			function (data) {
 				activityData = data.Layers;
 				dataLoadDeffered.resolve();
@@ -179,7 +179,9 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 	function alertActivity() {
 		Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage);
-		setTimeout(startAlert, alertvm.delayTime * 1000);
+
+		// Restart alert after delayTime.
+		setTimeout(startAlert, alertvm.restartAlertDelayTime * 1000);
 	}
 
 	function startAlert() {
