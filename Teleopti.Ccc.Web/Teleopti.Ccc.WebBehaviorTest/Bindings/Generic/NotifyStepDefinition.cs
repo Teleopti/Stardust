@@ -19,16 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Interactions.AssertAnyContains(notifyTextSelector, content);
 		}
 
-		[Then(@"I should see a notify message contains all text")]
-		public void ThenIShouldSeeANotifyMessageContainsAllText(Table contentTable)
-		{
-			for (var i = 0; i < contentTable.RowCount; i++)
-			{
-				var content = contentTable.Rows[i]["Content"].Trim();
-				Browser.Interactions.AssertAnyContains(notifyTextSelector, content);
-			}
-		}
-
 		[Then(@"I should not see any notify")]
 		public void ThenIShouldNotSeeAnyNotify()
 		{
