@@ -111,7 +111,7 @@ Scenario: Automatical close pop up notify message
 	And current browser time has changed to '2030-01-01 10:58:00'
 	Then I should see a notify message contains all text
 	| Content |
-	| Phone   |
+	| Lunch   |
 	| coming  |
 	When current browser time has changed to '2030-01-01 10:58:30'
 	Then I should not see pop up notify message
