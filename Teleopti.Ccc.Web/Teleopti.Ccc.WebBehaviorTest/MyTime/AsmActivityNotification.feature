@@ -44,6 +44,7 @@ Background:
 	| Scheduled activity            | Lunch            |
 	| Scheduled activity start time | 2030-01-01 11:00 |
 	| Scheduled activity end time   | 2030-01-01 12:00 |
+	And I am american
 
 Scenario: Alert agent before first activity starts
 	Given I have the role 'Full access to mytime'
@@ -51,7 +52,10 @@ Scenario: Alert agent before first activity starts
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 07:58:00'
-	Then I should see a notify message contains Phone
+	Then I should see a notify message contains all text
+	| Content |
+	| Phone   |
+	| coming  |
 
 Scenario: Alert agent before next activity starts
 	Given I have the role 'Full access to mytime'
@@ -59,7 +63,10 @@ Scenario: Alert agent before next activity starts
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should see a notify message contains Lunch
+	Then I should see a notify message contains all text
+	| Content |
+	| Lunch   |
+	| coming  |
 
 Scenario: Alert agent before last activity ends
 	Given I have the role 'Full access to mytime'
@@ -67,7 +74,10 @@ Scenario: Alert agent before last activity ends
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 16:58:00'
-	Then I should see a notify message contains Phone
+	Then I should see a notify message contains all text
+	| Content  |
+	| Phone    |
+	| finished |
 
 Scenario: Do not alert agent Before Alert Time
 	Given I have the role 'Full access to mytime'
@@ -99,6 +109,9 @@ Scenario: Automatical close pop up notify message
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should see a notify message contains Lunch
+	Then I should see a notify message contains all text
+	| Content |
+	| Phone   |
+	| coming  |
 	When current browser time has changed to '2030-01-01 10:58:30'
 	Then I should not see pop up notify message
