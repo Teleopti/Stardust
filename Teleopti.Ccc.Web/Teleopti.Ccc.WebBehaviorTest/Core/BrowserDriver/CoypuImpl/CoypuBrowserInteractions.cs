@@ -73,6 +73,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertAnyContains(string selector, string text)
 		{
+			Console.WriteLine("Assert exists element match selector \"{0}\" contain text \"{1}\"", selector, text);
 			var regex = new Regex(Regex.Escape(text));
 			var hasCss = _browser.HasCss(selector, regex, options());
 			var message = string.Format("Could not find element matching selector \"{0}\" with text \"{1}\"", selector, text);
@@ -81,6 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.CoypuImpl
 
 		public void AssertFirstContains(string selector, string text)
 		{
+			Console.WriteLine("Assert first element match selector \"{0}\" contain text \"{1}\"", selector, text);
 			assert(_browser.FindCss(selector, options()).HasContentMatch(new Regex(Regex.Escape(text))), Is.True, "Failed to assert that " + selector + " contained text " + text);
 		}
 
