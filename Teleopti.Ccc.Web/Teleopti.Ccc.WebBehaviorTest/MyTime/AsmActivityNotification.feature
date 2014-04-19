@@ -52,8 +52,9 @@ Scenario: Alert agent before first activity starts
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 07:58:00'
-	Then I should see a notify message contains text Phone
-	And I should see a notify message contains text coming
+	Then I should see one notify message
+	#Then I should see a notify message contains text Phone
+	#And I should see a notify message contains text coming
 
 Scenario: Alert agent before next activity starts
 	Given I have the role 'Full access to mytime'
@@ -61,8 +62,9 @@ Scenario: Alert agent before next activity starts
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 10:58:00'
-	Then I should see a notify message contains text Lunch
-	And I should see a notify message contains text coming
+	Then I should see one notify message
+	#Then I should see a notify message contains text Lunch
+	#And I should see a notify message contains text coming
 
 Scenario: Alert agent before last activity ends
 	Given I have the role 'Full access to mytime'
@@ -70,8 +72,9 @@ Scenario: Alert agent before last activity ends
 	And Alert Time setting is '120' seconds                      
 	When I am viewing week schedule
 	And current browser time has changed to '2030-01-01 16:58:00'
-	Then I should see a notify message contains text Phone
-	And I should see a notify message contains text finished
+	Then I should see one notify message
+	#Then I should see a notify message contains text Phone
+	#And I should see a notify message contains text finished
 
 Scenario: Do not alert agent Before Alert Time
 	Given I have the role 'Full access to mytime'
