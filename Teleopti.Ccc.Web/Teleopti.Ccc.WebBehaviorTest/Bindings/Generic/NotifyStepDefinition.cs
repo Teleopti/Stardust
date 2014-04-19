@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see a notify message contains text (.*)")]
 		public void ThenIShouldSeeANotifyMessageContainsText(string content)
 		{
-			Browser.Interactions.AssertAnyContains(notifyTextSelector, content);
+			Browser.Interactions.AssertFirstContains(notifyTextSelector, content);
 		}
 
 		[Then(@"I should not see any notify")]
