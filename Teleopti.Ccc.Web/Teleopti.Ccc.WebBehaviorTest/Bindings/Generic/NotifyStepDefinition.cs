@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see one notify message")]
 		public void ThenIShouldSeeAnAlert()
 		{
-			Browser.Interactions.AssertExists(notifyTextSelector);
+			Browser.Interactions.AssertExists("#notifyLogger .notifyLoggerItem");
+			Browser.Interactions.AssertNotExists("#notifyLogger", ".notifyLoggerItem:nth-child(2)");
 		}
-
 		[Then(@"I should see a notify message contains text (.*)")]
 		public void ThenIShouldSeeANotifyMessageContainsText(string content)
 		{
