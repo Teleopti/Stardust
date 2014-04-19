@@ -329,13 +329,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoMobileWeekSchedulePageNoWait()
 		{
-			GoToWaitForCompleted("MyTime#Schedule/MobileWeek",
+			GoToWaitForCompleted("MyTime#Schedule/MobileWeek", new ApplicationStartupTimeout());
 		}
 
-        public static void GotoMobileWeekSchedulePage()
-        {
-            GoToWaitForCompleted("MyTime#Schedule/MobileWeek", new ApplicationStartupTimeout());
-        }
+		public static void GotoMobileWeekSchedulePage()
+		{
+			GoToWaitForCompleted("MyTime#Schedule/MobileWeek", new ApplicationStartupTimeout());
+		}
 
 		public static void GotoMobileWeekSchedulePage(DateTime date)
 		{
