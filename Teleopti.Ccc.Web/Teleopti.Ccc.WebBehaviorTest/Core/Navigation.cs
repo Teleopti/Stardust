@@ -417,14 +417,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static void mockNotifyCall()
 		{
 			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (options, notifyText) {\r\n"
+				+ "    var notyClose = $('<div/>', {'class': 'noty_close'});\r\n"
 				+ "    var notyText = $('<span/>', {text: notifyText, 'class': 'noty_text'});\r\n"
 				+ "    var notyMessage = $('<div/>', {'class': 'noty_message'});\r\n"
 				+ "    var notyBar = $('<div/>', {'class': 'noty_bar'});\r\n"
-				+ "    var notyContainer = $('<div/>', {id: 'noty_bottom_layout_container'});\r\n"
+				+ "    var notyItem = $('<li/>');\r\n"
+				+ "    var notyContainer = $('<ul/>', {id: 'noty_bottom_layout_container'});\r\n"
 				+ "    \r\n"
 				+ "    notyMessage.append(notyText);\r\n"
+				+ "    notyMessage.append(notyClose);\r\n"
 				+ "    notyBar.append(notyMessage);\r\n"
-				+ "    notyContainer.append(notyBar);\r\n"
+				+ "    notyItem.append(notyBar);\r\n"
+				+ "    notyContainer.append(notyItem);\r\n"
 				+ "    $('#notifyLogger').append(notyContainer);\r\n"
 				+ "};";
 			Browser.Interactions.Javascript(jsCode);
