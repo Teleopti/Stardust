@@ -51,7 +51,6 @@ Scenario: View current week
 	When I view my mobile week schedule
 	Then I should see my mobile week schedule for date '2030-10-03'
 
-@ignore
 Scenario: Navigate to desktop view
 	Given I have the role 'Full access to mytime'
 	And the current time is '2014-04-15 12:00'

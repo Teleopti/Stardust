@@ -18,11 +18,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 	[Binding]
 	public class WeekScheduleStepDefinitions
     {
-        [Then(@"I should see my week schedule for date '(.*)'")]
-        public void ThenIShouldSeeMyWeekScheduleForDate(string p0)
-        {
-            ScenarioContext.Current.Pending();
-        }
 
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
@@ -39,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 				                                     date.ToString("yyyy-MM-dd")));
 		}
 
+		[Then(@"I should see my week schedule for date '(.*)'")]
 		[Then(@"I should see the start and end dates of current week for date '(.*)'")]
 		public void ThenIShouldSeeTheStartAndEndDatesOfCurrentWeekForDate(DateTime date)
 		{
