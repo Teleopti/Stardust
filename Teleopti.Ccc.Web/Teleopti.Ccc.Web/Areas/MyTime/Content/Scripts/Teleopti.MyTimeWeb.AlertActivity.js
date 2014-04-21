@@ -74,8 +74,16 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		};
 
 		self.getCurrentAlert = function () {
-			var layerIndex = self.getCurrentLayerIndex();
 			var layerCount = self.layers.length;
+			if (layerCount == 0) {
+				// No shift scheduled today
+				return {
+					message: "",
+					timespan: -1
+				};
+			}
+
+			var layerIndex = self.getCurrentLayerIndex();
 			var secondsSinceStart = (self.now - self.yesterday.getTime()) / 1000;
 
 			var layer;
@@ -189,6 +197,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		var interval = 0;
 		var delayTime = alertvm.alertTimeSetting;
 
+		// timespan in negative number means no schedule today or all activity finished
 		if (alert.timespan >= 0) {
 			if (alert.timespan >= alertvm.alertTimeSetting) {
 				interval = alert.timespan - alertvm.alertTimeSetting;
