@@ -6,7 +6,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
-using Teleopti.Ccc.Web.Areas.MyTime.Core;
+using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 
             foreach (var date in firstDayOfWeek.DateRange(7))
             {
-                Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd")));
+                Browser.Interactions.AssertExistsUsingJQuery(string.Format(".data-mytime-date:contains('{0}')", date.ToString("yyyy-MM-dd")));
             }
         }
     }
