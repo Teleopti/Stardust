@@ -7,9 +7,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class Paths
 	{
+
+		private static Lazy<string> _webPath = new Lazy<string>(() =>
+		{
+			var path = IniFileInfo.SitePath;
+			return new DirectoryInfo(path).FullName;
+		});
+
+		public static string WebPath()
+		{
+			return _webPath.Value;
+		}
+
 		public static string WebBinPath()
 		{
-			var path = Path.Combine(IniFileInfo.SitePath, "bin");
+			var path = Path.Combine(WebPath(), "bin");
 			return new DirectoryInfo(path).FullName;
 		}
 
@@ -18,10 +30,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return WebBinPath();
 		}
 
-		public static string WebPath()
+		public static string WebAuthenticationBridgePath()
 		{
-			var path = IniFileInfo.SitePath;
-			return new DirectoryInfo(path).FullName;
+			return FindProjectPath(@"Teleopti.Ccc.Web.AuthenticationBridge\");
+		}
+
+		public static string WebWindowsIdentityProviderPath()
+		{
+			return FindProjectPath(@"Teleopti.Ccc.Web.WindowsIdentityProvider\");
 		}
 
 		public static string FindProjectPath(params string[] projectPaths)
