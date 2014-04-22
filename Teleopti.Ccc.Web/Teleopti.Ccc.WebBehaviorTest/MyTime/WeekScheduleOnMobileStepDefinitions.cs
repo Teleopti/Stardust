@@ -32,10 +32,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         }
 
         [Then(@"I should see the shift with")]
-        public void ThenIShouldSeeTheShiftWith(Table table)
-        {
-            ScenarioContext.Current.Pending();
-        }
+		public void ThenIShouldSeeTheShiftWith(Table table)
+		{
+			var shift = table.CreateInstance<ShiftListItem>();
+			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .shift", shift.Date), shift.ShiftCategory);
+			Browser.Interactions.AssertAnyContains(string.Format("[data-mytime-date='{0}'] .shift", shift.Date), shift.TimeSpan);
+		}
+
+		public class ShiftListItem
+		{
+			public string Date { get; set; }
+			public string ShiftCategory { get; set; }
+			public string TimeSpan { get; set; }
+		}
 
         [Then(@"I should see the day off on '(.*)'")]
         public void ThenIShouldSeeTheDayOffOn(string date)

@@ -31,6 +31,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 
 			self.dayViewModels.push(vm);
 		});
+
 	};
 };
 Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function () {
@@ -44,16 +45,20 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function () {
         self.hasAbsence = ko.observable();
         self.hasShift = ko.observable();
         self.fixedDate = ko.observable();
+        self.weekDayHeaderTitle = ko.observable();
+        self.shiftColor = ko.observable();
+	
         self.readData = function (data) {
-            self.shiftName(data.Shift ? data.Shift.Name : null);
-            self.shiftTimeSpan(data.Shift ? data.Shift.TimeSpan : null);
-            self.shiftColor(data.Shift ? data.Shift.Color : null);
+            self.shiftName(data.Summary ? data.Summary.Title : null);
+            self.shiftTimeSpan(data.Summary ? data.Summary.TimeSpan : null);
             self.absenceName(data.Absence ? data.Absence.Name : null);
             self.absenceIsFullDayAbsence(data.Absence ? data.Absence.IsFullDayAbsence : null);
             self.isDayOff(data.IsDayOff);
             self.hasAbsence(data.Absence ? true : false);
             self.hasShift(data.Shift ? true : false);
             self.fixedDate(data.FixedDate);
+            self.weekDayHeaderTitle(data.Header ? data.Header.Title : null);
+            self.shiftColor(data.Summary ? data.Summary.Color : null);
         };
  };
 

@@ -30,17 +30,17 @@ $(document).ready(function () {
         var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
             Days: [{
-                Shift: {
-                    Name: "Early",
+                Summary: {
+                    Title: "Early",
                     TimeSpan: "09:00-18:00",
-                    Color: "green"
+                    Color: "rgb(0, 0, 0)"
                 }
             }]
         });
 
         equal(vm.dayViewModels()[0].shiftName(), "Early");
         equal(vm.dayViewModels()[0].shiftTimeSpan(), "09:00-18:00");
-        equal(vm.dayViewModels()[0].shiftColor(), "green");
+        equal(vm.dayViewModels()[0].shiftColor(), "rgb(0, 0, 0)");
     });
     
     test("should read absence data", function () {
@@ -84,7 +84,7 @@ $(document).ready(function () {
     
     test("should indicate absence when the scheduleday has absence", function () {
       
-        vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+        var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
             Days: [{ Absence: { Name: "Illness" } }]
         });
@@ -100,10 +100,18 @@ $(document).ready(function () {
     });
     
     test("should indicate shift when there is shift data", function () {
-        vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+        var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
         vm.readData({
             Days: [{ Shift: { Name: "Late" } }]
         });
         equal(vm.dayViewModels()[0].hasShift(), true);
     });
+
+	test("should read week day header titles", function() {
+		var vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel();
+		vm.readData({
+			Days: [{ Header: { Title: "Monday" } }]
+		});
+		equal(vm.dayViewModels()[0].weekDayHeaderTitle(), "Monday");
+	});
 });
