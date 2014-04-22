@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -37,13 +39,26 @@ namespace Teleopti.Ccc.Win.Grouping
 			xdtpDate.Value = DateTime.Today;
 			xdtpDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
             SetTexts();
-            PreselectedPersonIds = new List<Guid>();
+	        makeSureDropdownButtonWorksInRightToLeftCultures();
+	        PreselectedPersonIds = new List<Guid>();
 			treeViewAdvMainTabTree.SortWithChildNodes = true;
 			treeViewAdvMainTabTree.Root.SortType = TreeNodeAdvSortType.Text;
 			treeViewAdvMainTabTree.Root.SortOrder = SortOrder.Ascending;
         }
 
-        protected override void SetCommonTexts()
+	    private void makeSureDropdownButtonWorksInRightToLeftCultures()
+	    {
+		    if (Thread.CurrentPrincipal is TeleoptiPrincipal)
+		    {
+			    xdtpDate.RightToLeft = RightToLeft.No;
+			    xdtpDate.RightToLeft =
+				    (((IUnsafePerson) TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay)
+					    ? RightToLeft.Yes
+					    : RightToLeft.No;
+		    }
+	    }
+
+	    protected override void SetCommonTexts()
         {
             base.SetCommonTexts();
             if (tabControlAdv.TabPages != null)
