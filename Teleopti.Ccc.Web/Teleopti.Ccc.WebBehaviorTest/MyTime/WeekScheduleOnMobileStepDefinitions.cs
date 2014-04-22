@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [When(@"I click the desktop link")]
         public void WhenIClickTheDesktopLink()
         {
-            ScenarioContext.Current.Pending();
+            Browser.Interactions.Click("#desktop");
         }
 
         [Then(@"I should see the shift with")]

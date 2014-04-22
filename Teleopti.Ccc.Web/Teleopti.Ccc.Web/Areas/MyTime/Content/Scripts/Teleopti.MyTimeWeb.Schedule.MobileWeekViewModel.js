@@ -14,23 +14,26 @@ if (typeof (Teleopti.MyTimeWeb.Schedule) === 'undefined') {
     Teleopti.MyTimeWeb.Schedule = {};
 }
 
-Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function () {
-    var self = this;
+Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
+	var self = this;
 
-    self.dayViewModels = ko.observableArray();
+	self.dayViewModels = ko.observableArray();
+	self.desktop = function () {
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
+	};
 
-    self.readData = function(data) {
+	self.readData = function(data) {
 
-        ko.utils.arrayForEach(data.Days, function(scheduleDay) {
+		ko.utils.arrayForEach(data.Days, function(scheduleDay) {
 
-            var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel();
-            vm.readData(scheduleDay);
+			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel();
+			vm.readData(scheduleDay);
 
-            self.dayViewModels.push(vm);
-        });
-    };
-    
- Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function () {
+			self.dayViewModels.push(vm);
+		});
+	};
+};
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function () {
         var self = this;
         self.shiftName = ko.observable();
         self.shiftTimeSpan = ko.observable();
@@ -53,4 +56,4 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function () {
             self.fixedDate(data.FixedDate);
         };
  };
-};
+

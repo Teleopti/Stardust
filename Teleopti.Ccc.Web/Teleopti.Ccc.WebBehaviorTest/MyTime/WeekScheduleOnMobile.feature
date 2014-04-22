@@ -51,23 +51,32 @@ Scenario: View current week
 	When I view my mobile week schedule
 	Then I should see my mobile week schedule for date '2030-10-03'
 
-@ignore
 Scenario: Navigate to desktop view
 	Given I have the role 'Full access to mytime'
-	And I am viewing my mobile week schedule for date '2014-04-15'
+	And the current time is '2014-04-15 12:00'
+	And I am viewing my mobile week schedule
 	When I click the desktop link
 	Then I should see my week schedule for date '2014-04-15'
+
+@ignore	
+Scenario: Navigate from desktop to mobile view
+	Given I have the role 'Full access to mytime'
+	And the current time is '2014-04-15 12:00'
+	And I am viewing my week schedule
+	When I click the desktop link
+	Then I should see my mobile week schedule for date '2014-04-15'
 
 @ignore
 Scenario: View when you are working
 	Given I have the role 'Full access to mytime'
+	And the current time is '2014-04-15 12:00'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
 	| Field          | Value            |
 	| StartTime      | 2014-04-15 09:00 |
 	| EndTime        | 2014-04-15 18:00 |
 	| Shift category | Early            |
-	When I view my mobile week schedule for date '2014-04-15'
+	When I view my mobile week schedule
 	Then I should see the shift with
 	| Field          | Value         |
 	| Date           | 2014-04-15    |
@@ -77,10 +86,11 @@ Scenario: View when you are working
 @ignore
 Scenario: View when you have a day off
 	Given I have the role 'Full access to mytime'
+	And the current time is '2014-04-15 12:00'
 	And I have the workflow control set 'Published schedule'
 	And I have a day off with
 	| Field | Value      |
 	| Name  | DayOff     |
 	| Date  | 2014-04-15 |
-	When I view my mobile week schedule for date '2014-04-15'
+	When I view my mobile week schedule
 	Then I should see the day off on '2014-04-15'
