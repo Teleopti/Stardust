@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej");
 			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(), shiftCategory);
-			var assEmpty = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
 	
 			using (_mocks.Record())
 			{
@@ -79,6 +78,40 @@ namespace Teleopti.Ccc.DomainTest.Collection
 				Assert.AreEqual(-1, minMaxValue[shiftCategory].Minimum);
 				Assert.AreEqual(0, minMaxValue[shiftCategory].Maximum);
 			}	
+		}
+
+		[Test]
+		public void ShouldHandleDeletedCategories()
+		{
+			var periodToMonitor = new DateOnlyPeriod(2013, 09, 12, 2013, 09, 12);
+			var person1 = PersonFactory.CreatePerson();
+			var person2 = PersonFactory.CreatePerson();
+			var personList = new List<IPerson> { person1, person2 };
+			var range = _mocks.StrictMock<IScheduleRange>();
+			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("hej");
+			shiftCategory.SetDeleted();
+			var assWithShift = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Scenario("hej"), person1, new DateTimePeriod(), shiftCategory);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _dic.PartModified += null).IgnoreArguments().Repeat.Twice();
+				Expect.Call(_dic[person1]).Return(range);
+				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
+				Expect.Call(scheduleDay.PersonAssignment(true)).Return(assWithShift);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
+				Expect.Call(_dic[person2]).Return(range);
+				Expect.Call(range.ScheduledDay(new DateOnly(2013, 09, 12))).Return(scheduleDay);
+				Expect.Call(scheduleDay.SignificantPartForDisplay()).Return(SchedulePartView.None);
+			}
+			using (_mocks.Playback())
+			{
+				var cachedNumberOfEachCategoryPerPerson = new CachedNumberOfEachCategoryPerPerson(_dic, periodToMonitor);
+				_target = new CachedShiftCategoryDistribution(_dic, periodToMonitor, cachedNumberOfEachCategoryPerPerson, new List<IShiftCategory>());
+				_target.SetFilteredPersons(personList);
+				var minMaxValue = _target.GetMinMaxDictionary(personList);
+				Assert.IsFalse(minMaxValue.ContainsKey(shiftCategory));
+			}
 		}
 	}
 }
