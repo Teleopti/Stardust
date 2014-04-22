@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Collection
 {
@@ -94,6 +95,9 @@ namespace Teleopti.Ccc.Domain.Collection
 				foreach (var categoryCountPair in values)
 				{
 					var shiftCategory = categoryCountPair.Key;
+					if (((IDeleteTag)shiftCategory).IsDeleted)
+						continue;
+
 					int count = categoryCountPair.Value;
 					var minMax = _internalDic[shiftCategory];
 					bool changed = false;
