@@ -1,17 +1,6 @@
 ##===========
 ## Functions
 ##===========
-function FindAndReplace {
-    Param(
-      [string]$findString,
-      [string]$replaceString,
-      [string]$fullPath
-      )
-
-(Get-Content "$fullPath") | 
-Foreach-Object {$_ -replace "$findString", "$replaceString"} | 
-Set-Content "$fullPath"
-}
 
 function Test-Administrator
 {
@@ -155,12 +144,14 @@ Try
 
     $SupportToolFolder = $directory + "\..\Tools\SupportTools"
     $settingsFile = "settings.txt"
-    $fullPath =  $SupportToolFolder + "\" + $settingsFile
+    $fullPathsettingsFile =  $SupportToolFolder + "\" + $settingsFile
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
     
-	if (Test-Path "$fullPath") {
-		Remove-Item "$fullPath"
+	
+	Remove-Item "$fullPathsettingsFile"
+	if (Test-Path "$fullPathsettingsFile") {
+		Remove-Item "$fullPathsettingsFile"
 	}
 
     #Get customer specific config from BlobStorage
@@ -205,12 +196,6 @@ Try
     if ($LastExitCode -ne 0) {
         throw "SupportTool generated an error!"
     }
-
-    #replace Data Factory Name
-    FindAndReplace -findString "Teleopti CCC" -replaceString "$DataSourceName" -fullPath "$directory\..\..\sitesroot\1\TeleoptiCCC7.nhib.xml"
-    FindAndReplace -findString "Teleopti CCC" -replaceString "$DataSourceName" -fullPath "$directory\..\..\sitesroot\3\TeleoptiCCC7.nhib.xml"
-    FindAndReplace -findString "Teleopti CCC" -replaceString "$DataSourceName" -fullPath "$directory\..\Services\ETL\Service\TeleoptiCCC7.nhib.xml"
-    FindAndReplace -findString "Teleopti CCC" -replaceString "$DataSourceName" -fullPath "$directory\..\Services\ETL\Tool\TeleoptiCCC7.nhib.xml"
 
     #Sign ClickOnce
     $ClickOnceSignPath="$directory\..\Tools\ClickOnceSign"
