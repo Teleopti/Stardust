@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <datasource>
 	<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
-		<session-factory name="Teleopti CCC">
+		<session-factory name="$(DATESOURCE_NAME)">
 			<!-- properties -->
 			<property name="connection.connection_string">
         $(SQL_AUTH_STRING);Initial Catalog=$(DB_CCC7);Current Language=us_english
