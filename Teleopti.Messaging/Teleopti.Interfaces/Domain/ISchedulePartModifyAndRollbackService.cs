@@ -29,7 +29,5 @@ namespace Teleopti.Interfaces.Domain
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 	    IEnumerable<IBusinessRuleResponse> ModifyParts(IEnumerable<IScheduleDay> scheduleParts);
-
-	    IEnumerable<IBusinessRuleResponse> Modify(IEnumerable<IScheduleDay> schedulePartList, IScheduleTagSetter scheduleTagSetter);
     }
 }
