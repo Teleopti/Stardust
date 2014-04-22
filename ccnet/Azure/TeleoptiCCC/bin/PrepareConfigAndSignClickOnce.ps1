@@ -185,6 +185,7 @@ Try
     Add-Content "$fullPath" "`$(PM_SERVICE|NotImplemented"
     Add-Content "$fullPath" "`$(AS_DATABASE)|NotImplemented"
     Add-Content "$fullPath" "`$(AS_SERVER_NAME)|NotImplemented"
+	Add-Content "$fullPath" "`$(DATESOURCE_NAME)|$DataSourceName"
 
     $SupportTool = $SupportToolFolder + "\Teleopti.Support.Tool.exe"
     Set-Location $SupportToolFolder

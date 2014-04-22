@@ -32,4 +32,5 @@ $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 $(SDK_nhibConfPath)|c:\nhib
 $(SDK_nhibConfPath)|c:\nhib
+$(DATASOURCE_NAME)|Teleopti CCC
 _replace_|c:\InfraTest.ini
