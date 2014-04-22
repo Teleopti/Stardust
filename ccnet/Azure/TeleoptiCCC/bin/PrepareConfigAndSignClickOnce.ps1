@@ -190,8 +190,10 @@ Try
     Set-Location $SupportToolFolder
 
     $cmdArgs = @("-MOAzure")
-	& $SupportTool @cmdArgs
-    $SupportTool = $LastExitCode
+	$p = Start-Process $SupportTool -ArgumentList "-MOAzure" -wait -NoNewWindow -PassThru
+    $p.HasExited
+    $LastExitCode = $p.ExitCode
+
     
     if ($LastExitCode -ne 0) {
         throw "SupportTool generated an error!"
