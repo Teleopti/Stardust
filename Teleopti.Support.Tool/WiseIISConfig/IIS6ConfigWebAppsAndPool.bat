@@ -25,8 +25,20 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ECHO Settings up IIS web sites and applictions ...
 ECHO Call was: IIS6ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
-SET DefaultSite=Default Web Site
+SET "DefaultSite="
+SET "W3SVCPath="
 SET MainSiteName=TeleoptiCCC
+
+FOR /F "delims=[]" %%A IN ('cscript //nologo "%ROOTDIR%\adsutil.vbs" ENUM /P /w3svc') DO FOR /F delims^=^"^ tokens^=2 %%B IN ('cscript //nologo "%ROOTDIR%\adsutil.vbs" GET %%A/ServerComment') DO (
+	setlocal EnableDelayedExpansion
+	CALL:SetDefaultWebSiteName "%SSL%" "%%A" "%%B" "%ROOTDIR%\adsutil.vbs" IsDefault W3SVCPath
+	set DefaultSite=%%B
+	if !IsDefault! equ 1 goto:Break1
+	endlocal
+)
+:Break1
+::if we can't find any site on 80/443 go for "Default Web Site" as site name
+IF "%DefaultSite%"=="" SET DefaultSite=Default Web Site & SET W3SVCPath=W3SVC/1
 
 for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
@@ -41,6 +53,28 @@ GOTO Done
 ::=============
 ::Functions
 ::=============
+:SetDefaultWebSiteName
+SETLOCAL
+SET SSL=%~1
+SET W3SVCPath=%~2
+SET W3SVCPath=%W3SVCPath:~1,100%
+SET SiteName=%~3
+SET adsUtil=%~4
+SET "DefaultSite="
+
+if "%SSL%"=="False" (
+	cscript //nologo "%adsUtil%" GET %W3SVCPath%/ServerBindings | findstr /C:":80:"
+) else (
+	cscript //nologo "%adsUtil%" GET %W3SVCPath%/SecureBindings | findstr /C:":443:"
+)
+set /a output=%errorlevel%
+(
+ENDLOCAL
+set /a "%~5=%output%+1"
+set "%~6=%W3SVCPath%"
+)
+goto:eof
+
 :CreateAppPool
 SET PoolName=%~1
 SET NETVersion=%~2
@@ -75,16 +109,16 @@ if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
 if "%SubSiteName%"=="TeleoptiCCC" SET FolderPath=%MainSiteName%
 
 ::remove old stuff
-echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
-cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
+echo cscript "%ROOTDIR%\adsutil.vbs" delete %W3SVCPath%/root/%MainSiteName%/ContextHelp
+cscript "%ROOTDIR%\adsutil.vbs" delete %W3SVCPath%/root/%MainSiteName%/ContextHelp
 
 ::remove + re-add
 CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%" "%DefaultDocs%"
 
 if "%SiteOrApp%"=="app" (
 	echo Change app pool
-	echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
-	cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
+	echo cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/ROOT/%SitePath%/AppPoolId "%PoolName%"
+	cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/ROOT/%SitePath%/AppPoolId "%PoolName%"
 	echo Set identity on App Pool
 	if "%CustomIISUsr%"=="" (
 		echo using Network Service as identity on AppPool
@@ -103,8 +137,8 @@ if "%SiteOrApp%"=="app" (
 echo.
 
 ::SSL seetings
-echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
-cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
+echo cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%SitePath%/AccessSSL %SSL%
+cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%SitePath%/AccessSSL %SSL%
 echo.
 
 ::Authentication for the virtual dir
@@ -127,16 +161,16 @@ if defined ProgramFiles(x86) set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework
 
 if "%aspnetisapi%"=="aspnet_isapi" (
 	ECHO setting script maps aka isapi filter for: %SitePath% %aspnetisapi%
-	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
-	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" %W3SVCPath%/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" %W3SVCPath%/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
 )
 
 ::disable directoryBrowse
-cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/enabledirbrowsing "False"
+cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%SitePath%/enabledirbrowsing "False"
 
 ::use Ntlm only
 If "%SDKCREDPROT%"=="Ntlm" (
-	cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/root/%SitePath%/NTAuthenticationProviders "NTLM"  
+	cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%SitePath%/NTAuthenticationProviders "NTLM"  
 )
 
 exit /B
@@ -158,43 +192,43 @@ goto:eof
 
 :CreateApplication
 ::delete VirDir
-echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
-cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
+echo cscript "%ROOTDIR%\adsutil.vbs" delete %W3SVCPath%/root/%~1
+cscript "%ROOTDIR%\adsutil.vbs" delete %W3SVCPath%/root/%~1
 
 ::create VirDir and App
-echo cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
-cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
+echo cscript "%ROOTDIR%\adsutil.vbs" create_vdir %W3SVCPath%/root/%~1
+cscript "%ROOTDIR%\adsutil.vbs" create_vdir %W3SVCPath%/root/%~1
 
 if "%~4"=="app" (
-	echo cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
-	cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
+	echo cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc %W3SVCPath%/root/%~1
+	cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc %W3SVCPath%/root/%~1
 
-	echo cscript "%ROOTDIR%\adsutil.vbs" appenable w3svc/1/root/%~1
-	cscript "%ROOTDIR%\adsutil.vbs" appenable w3svc/1/root/%~1
+	echo cscript "%ROOTDIR%\adsutil.vbs" appenable %W3SVCPath%/root/%~1
+	cscript "%ROOTDIR%\adsutil.vbs" appenable %W3SVCPath%/root/%~1
 )
 
-echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
-cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
+echo cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%~1/appfriendlyname "%~2"
+cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%~1/appfriendlyname "%~2"
 
 ::link to disk
-echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
-cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
+echo cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%~1/path "%~3"
+cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/root/%~1/path "%~3"
 
 ::disbable default docs for all
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" ""
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" False
+cscript "%ROOTDIR%\adsutil.vbs" SET "%W3SVCPath%/Root/%~1/DefaultDoc" ""
+cscript "%ROOTDIR%\adsutil.vbs" SET "%W3SVCPath%/Root/%~1/EnableDefaultDoc" False
 
 ::enable default docs for some
 if not "%~5"=="None" (
-	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "%~5"
-	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
+	cscript "%ROOTDIR%\adsutil.vbs" SET "%W3SVCPath%/Root/%~1/DefaultDoc" "%~5"
+	cscript "%ROOTDIR%\adsutil.vbs" SET "%W3SVCPath%/Root/%~1/EnableDefaultDoc" True
 )
 goto:eof
 
 :IISSecuritySet
 ::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/6cc53bc1-6487-412c-ae93-063cd86b4f6e.mspx?mfr=true
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%~1/Authflags %~2
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%~1/Authflags %~2
+echo cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/ROOT/%~1/Authflags %~2
+cscript "%ROOTDIR%\adsutil.vbs" set %W3SVCPath%/ROOT/%~1/Authflags %~2
 exit /B
 
 :Done
