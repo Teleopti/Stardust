@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+﻿using System;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 		{
 			var globalSettingRep = new GlobalSettingDataRepository(uow);
 
+			Console.WriteLine("[Test]AlertTime: {0}", AlertTime);
 			var alertTimeSetting = globalSettingRep.FindValueByKey("AsmAlertTime", new AsmAlertTime());
 			alertTimeSetting.SecondsBeforeChange = AlertTime;
 			new GlobalSettingDataRepository(uow).PersistSettingValue(alertTimeSetting).GetValue(new AsmAlertTime());

@@ -44,9 +44,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult AlertTimeSetting()
 		{
+			var asmAlertTime = _globalSettingDataRepository.FindValueByKey("AsmAlertTime", new AsmAlertTime());
 
-				var asmAlertTime = _globalSettingDataRepository.FindValueByKey("AsmAlertTime", new AsmAlertTime());
-				return Json(asmAlertTime, JsonRequestBehavior.AllowGet);
+			Console.WriteLine("[Test]Get alert time setting: {0}", asmAlertTime.SecondsBeforeChange);
+
+			return Json(asmAlertTime, JsonRequestBehavior.AllowGet);
 		}
 	}
 }
