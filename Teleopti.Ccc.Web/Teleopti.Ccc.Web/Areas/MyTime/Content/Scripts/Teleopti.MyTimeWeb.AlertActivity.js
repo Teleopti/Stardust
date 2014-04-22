@@ -75,7 +75,10 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 		self.getCurrentAlert = function () {
 			var layerCount = self.layers.length;
+			Teleopti.MyTimeWeb.Test.TestMessage("layerCount: " + layerCount);
+
 			if (layerCount == 0) {
+				Teleopti.MyTimeWeb.Test.TestMessage("No layer found");
 				// No shift scheduled today
 				return {
 					message: "",
@@ -85,6 +88,8 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 			var layerIndex = self.getCurrentLayerIndex();
 			var secondsSinceStart = (self.now - self.yesterday.getTime()) / 1000;
+
+			Teleopti.MyTimeWeb.Test.TestMessage("Current Layer Index: " + layerIndex);
 
 			var layer;
 			var activityName, alertMessage;
@@ -97,6 +102,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 				var shiftStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = shiftStartTime - secondsSinceStart;
+				Teleopti.MyTimeWeb.Test.TestMessage("First activity not started");
 			} else if (layerIndex >= 0 && layerIndex < layerCount - 1) {
 				// The shift is passing...
 				layer = self.layers[layerIndex + 1];
@@ -105,6 +111,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 				var nextActivityStartTime = layer.startMinutesSinceAsmZero * 60;
 				timeDiff = nextActivityStartTime - secondsSinceStart;
+				Teleopti.MyTimeWeb.Test.TestMessage("The shift is passing...");
 			} else if (layerIndex == layerCount - 1) {
 				// Now is in latest activity
 				layer = self.layers[layerCount - 1];
@@ -113,11 +120,16 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 				var shiftEndTime = self.layers[layerCount - 1].endMinutesSinceAsmZero * 60;
 				timeDiff = shiftEndTime - secondsSinceStart;
+				Teleopti.MyTimeWeb.Test.TestMessage("Now is in latest activity...");
 			} else {
 				// Entire shift already finished!
 				alertMessage = "";
 				timeDiff = -1;
+				Teleopti.MyTimeWeb.Test.TestMessage("Entire shift already finished!");
 			}
+
+			Teleopti.MyTimeWeb.Test.TestMessage("alert message: " + alertMessage);
+			Teleopti.MyTimeWeb.Test.TestMessage("timeDiff: " + timeDiff);
 
 			return {
 				message: alertMessage, 
@@ -150,6 +162,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		};
 
 		self._createLayers = function (layers) {
+			Teleopti.MyTimeWeb.Test.TestMessage("_createLayers: ");
 			var newLayers = new Array();
 			var canvasPosition = self.canvasPosition();
 			$.each(layers, function (key, layer) {
@@ -162,6 +175,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	function initNotificationViewModel() {
 		Teleopti.MyTimeWeb.Test.TestMessage("initNotificationViewModel");
 		var yesterdayZero = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
+
 		alertvm = new notificationActivities(yesterdayZero);
 
 		var activityData;
@@ -176,6 +190,7 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			});
 		var settingLoadDeffered = $.Deferred();
 		alertvm.loadSetting(function (data) {
+			Teleopti.MyTimeWeb.Test.TestMessage("loading setting...");
 			alertSetting = data.SecondsBeforeChange;
 			settingLoadDeffered.resolve();
 		});
@@ -204,18 +219,24 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 		var alert = alertvm.getCurrentAlert();
 		var interval = 0;
 		var delayTime = alertvm.alertTimeSetting;
+		Teleopti.MyTimeWeb.Test.TestMessage("alertvm.alertTimeSetting: " + alertvm.alertTimeSetting);
 
 		// timespan in negative number means no schedule today or all activity finished
 		if (alert.timespan >= 0) {
 			Teleopti.MyTimeWeb.Test.TestMessage("startAlert!!");
 			if (alert.timespan >= alertvm.alertTimeSetting) {
+				Teleopti.MyTimeWeb.Test.TestMessage("alert.timespan >= alertvm.alertTimeSetting");
 				interval = alert.timespan - alertvm.alertTimeSetting;
 				delayTime = alertvm.alertTimeSetting;
 			}
 			if (alert.timespan >= 0 && alert.timespan < alertvm.alertTimeSetting) {
+				Teleopti.MyTimeWeb.Test.TestMessage("alert.timespan >= 0 && alert.timespan < alertvm.alertTimeSetting");
 				interval = 0;
 				delayTime = alert.timespan == 0 ? 1 : alert.timespan;
 			}
+
+			Teleopti.MyTimeWeb.Test.TestMessage("interval: " + interval);
+			Teleopti.MyTimeWeb.Test.TestMessage("delayTime: " + delayTime);
 
 			alertvm.alertMessage = alert.message;
 			alertvm.restartAlertDelayTime = delayTime;
