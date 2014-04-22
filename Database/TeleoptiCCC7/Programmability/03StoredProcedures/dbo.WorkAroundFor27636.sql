@@ -41,7 +41,7 @@ select a.Id from
 	) a
 where a.rn > 1
 
---Shift category restriction duplicates
+--Shift category and extended restriction duplicates
 union all
 select a.Id from
 (
@@ -49,7 +49,6 @@ select a.Id from
 	from dbo.PreferenceDay pd
 	inner join dbo.PreferenceRestriction pr
 		on pd.Id = pr.Id
-	where pr.ShiftCategory IS NOT NULL
 	) a
 where a.rn > 1
 

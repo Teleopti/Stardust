@@ -59,27 +59,26 @@ Scenario: Navigate to desktop view
 	Then I should see my week schedule for date '2014-04-15'
 
 @ignore	
-Scenario: Navigate from desktop to mobile view
+Scenario: Navigate from desktop
 	Given I have the role 'Full access to mytime'
 	And the current time is '2014-04-15 12:00'
 	And I am viewing my week schedule
-	When I click the desktop link
+	When I click the mobile link
 	Then I should see my mobile week schedule for date '2014-04-15'
 
-@ignore
 Scenario: View when you are working
 	Given I have the role 'Full access to mytime'
-	And the current time is '2014-04-15 12:00'
+	And the current time is '2014-04-21 12:00'
 	And I have the workflow control set 'Published schedule'
 	And I have a shift with
 	| Field          | Value            |
-	| StartTime      | 2014-04-15 09:00 |
-	| EndTime        | 2014-04-15 18:00 |
+	| StartTime      | 2014-04-21 09:00 |
+	| EndTime        | 2014-04-21 18:00 |
 	| Shift category | Early            |
 	When I view my mobile week schedule
 	Then I should see the shift with
 	| Field          | Value         |
-	| Date           | 2014-04-15    |
+	| Date           | 2014-04-21    |
 	| Time span      | 09:00 - 18:00 |
 	| Shift category | Early         |
 
