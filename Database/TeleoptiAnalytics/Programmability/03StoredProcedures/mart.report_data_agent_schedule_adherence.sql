@@ -321,6 +321,9 @@ BEGIN
 	
 	INSERT #rights_teams --Insert the current team
 	SELECT * FROM mart.SplitStringInt(@team_set)
+	
+	INSERT INTO #person_id SELECT dp.person_id
+	FROM mart.dim_person dp WHERE person_code = @agent_person_code
 END
 
 --Join the ResultSets above as:
