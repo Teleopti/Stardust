@@ -46,8 +46,8 @@
 									<div class="glyphicon glyphicon-stats"></div>
 								</div>
 								<div class="text-center col-xs-7">
-									<h1 data-bind="text: adherence"></h1>
-									<p class="adherenceValue">@Resources.KpiAdherence</p>
+									<h1 data-bind="text: adherence + '%'"></h1>
+									<p class="adherenceValue">@Resources.Adherence</p>
 								</div>
 							</div>
 						</div>
@@ -59,8 +59,8 @@
 									<div class="glyphicon glyphicon-time"></div>
 								</div>
 								<div class="text-center col-xs-7">
-									<h1 data-bind="text: readyTimePerScheduledReadyTime"></h1>
-									<p class="readyTimePerScheduledReadyTimeValue">@Resources.ReadyTimePerScheduledReadyTimePercent</p>
+									<h1 data-bind="text: readyTimePerScheduledReadyTime + '%'"></h1>
+									<p class="readyTimePerScheduledReadyTimeValue">@Resources.ReadyTimePerScheduledReadyTime</p>
 								</div>
 							</div>
 						</div>
@@ -72,8 +72,8 @@
 									<div class="glyphicon glyphicon-headphones"></div>
 								</div>
 								<div class="text-center col-xs-7">
-									<h1 data-bind="text: averageHandlingTime"></h1>
-									<p class="handlingTimeValue">@Resources.KpiAverageHandleTime</p>
+									<h1 data-bind="text: averageHandlingTime + '@Resources.SecondShort'"></h1>
+									<p class="handlingTimeValue">@Resources.AverageHandlingTime</p>
 								</div>
 							</div>
 						</div>
@@ -88,8 +88,8 @@
 									<div class="glyphicon glyphicon-earphone"></div>
 								</div>
 								<div class="text-center col-xs-7">
-									<h1 data-bind="text: averageTalkTime"></h1>
-									<p class="talkTimeValue">@Resources.KpiAverageTalkTime</p>
+									<h1 data-bind="text: averageTalkTime + '@Resources.SecondShort'"></h1>
+									<p class="talkTimeValue">@Resources.AverageTalkTime</p>
 								</div>
 							</div>
 						</div>
@@ -101,8 +101,8 @@
 									<div class="glyphicon glyphicon-pencil"></div>
 								</div>
 								<div class="text-center col-xs-7">
-									<h1 data-bind="text: averageAfterCallWork"></h1>
-									<p class="afterWorkValue">@Resources.KpiAverageAfterCallWork</p>
+									<h1 data-bind="text: averageAfterCallWork + '@Resources.SecondShort'"></h1>
+									<p class="afterWorkValue">@Resources.AverageAfterCallWork</p>
 								</div>
 							</div>
 						</div>

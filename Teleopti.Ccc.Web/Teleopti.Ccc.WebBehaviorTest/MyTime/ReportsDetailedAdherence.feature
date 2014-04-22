@@ -1,5 +1,4 @@
-﻿@ignore
-Feature: Reports for detailed adherence
+﻿Feature: Reports for detailed adherence
 	In order to improve my adherence
 	As an agent
 	I want to see my schedule and my adherence interval by interval for any previous day

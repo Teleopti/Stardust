@@ -9186,8 +9186,8 @@ Los turnos generados por está regla no estarán disponibles para planificación
   <data name="CompareWithTeamsFrom" xml:space="preserve">
     <value>Comparar con equipos en</value>
   </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Tiempo disponible / Tiempo disponible planificado (%)</value>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Tiempo disponible / Tiempo disponible planificado</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Recargue la planificación</value>

@@ -18098,11 +18098,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ready Time / Scheduled Ready Time (%).
+        ///   Looks up a localized string similar to Ready Time / Scheduled Ready Time.
         /// </summary>
-        public static string ReadyTimePerScheduledReadyTimePercent {
+        public static string ReadyTimePerScheduledReadyTime {
             get {
-                return ResourceManager.GetString("ReadyTimePerScheduledReadyTimePercent", resourceCulture);
+                return ResourceManager.GetString("ReadyTimePerScheduledReadyTime", resourceCulture);
             }
         }
         
@@ -20849,6 +20849,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SeatLicense {
             get {
                 return ResourceManager.GetString("SeatLicense", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to s.
+        /// </summary>
+        public static string SecondShort {
+            get {
+                return ResourceManager.GetString("SecondShort", resourceCulture);
             }
         }
         
