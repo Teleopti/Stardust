@@ -9,6 +9,7 @@ using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Infrastructure;
+using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -19,6 +20,7 @@ using log4net.Config;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -177,8 +179,21 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
             builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 
+        	registerAlternativePasswordCheckerIfApplicable(builder);
+
             return builder;
         }
+
+    	private static void registerAlternativePasswordCheckerIfApplicable(ContainerBuilder builder)
+    	{
+    		var passphraseProvider = new PassphraseFromConfiguration();
+    		string passphrase = passphraseProvider.Passphrase();
+			if (!string.IsNullOrEmpty(passphrase))
+			{
+				builder.RegisterInstance<IPassphraseProvider>(passphraseProvider);
+				builder.RegisterType<CheckPasswordWithToken>().As<ICheckPassword>().SingleInstance();
+			}
+    	}
 
     	private static void registerSdkFactories(ContainerBuilder builder)
         {
@@ -200,4 +215,19 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<PeopleAndSkillLoaderDecider>().As<IPeopleAndSkillLoaderDecider>().InstancePerLifetimeScope();
         }
     }
+
+	internal class PassphraseFromConfiguration : IPassphraseProvider
+	{
+		private readonly string _passphrase;
+
+		public PassphraseFromConfiguration()
+		{
+			_passphrase = ConfigurationManager.AppSettings["Passphrase"];
+		}
+
+		public string Passphrase()
+		{
+			return _passphrase;
+		}
+	}
 }

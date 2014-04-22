@@ -940,6 +940,7 @@
     <Compile Include="Security\Authentication\CheckPasswordTest.cs" />
     <Compile Include="Security\Authentication\CheckBruteForceTest.cs" />
     <Compile Include="Security\Authentication\CheckPasswordChangeTest.cs" />
+    <Compile Include="Security\Authentication\CheckPasswordWithTokenTest.cs" />
     <Compile Include="Security\Authentication\DummyPasswordPolicyTest.cs" />
     <Compile Include="Security\Authentication\FindUserDetailTest.cs" />
     <Compile Include="Security\Authentication\DataSourceContainerLogOnTest.cs" />
