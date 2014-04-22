@@ -238,7 +238,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IList<IBusinessRuleResponse> validationList = new List<IBusinessRuleResponse>();
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(), new DateOnly());
 			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
-			validationList.Add(new BusinessRuleResponse(typeof(string), "hej", true, false, period, person, dateOnlyPeriod));
 
 			Expect.Call(_stateHolder.AllPersonAccounts).Return(new Dictionary<IPerson, IPersonAccountCollection>());
 			Expect.Call(_stateHolder.Schedules).Return(schedules).Repeat.AtLeastOnce();
