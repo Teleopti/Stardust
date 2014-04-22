@@ -448,6 +448,8 @@
     <Compile Include="WebReports\DailyMetricsForDay\AdherenceForReadyTimeVSScheduledReadyTimeTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\ReadyTimePerScheduledReadyTimeTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\WebReportTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\AdherenceForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\ShiftDateForDateTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

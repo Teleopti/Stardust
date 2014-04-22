@@ -3,7 +3,7 @@ DROP PROCEDURE [mart].[report_data_agent_schedule_web_adherence]
 GO
 
 /* 
-exec mart.report_data_agent_schedule_web_adherence @date_from='2013-02-05', @date_to='2013-02-05', 
+exec mart.report_data_agent_schedule_web_adherence @date_from='2013-02-05',
 @adherence_id=2, @person_code=N'11610fe4-0130-4568-97de-9b5e015b2564', @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 -- =============================================
@@ -17,7 +17,6 @@ exec mart.report_data_agent_schedule_web_adherence @date_from='2013-02-05', @dat
 */
 CREATE proc [mart].[report_data_agent_schedule_web_adherence]
 @date_from datetime,
-@date_to datetime,
 @adherence_id int,
 @person_code uniqueidentifier,
 @business_unit_code uniqueidentifier
@@ -28,7 +27,7 @@ declare @time_zone_id int
 select @time_zone_id = time_zone_id from mart.dim_person where person_code=@person_code
 
 
-CREATE TABLE #result (
+CREATE TABLE #webresult (
 	date datetime,
 	interval_id int,
 	interval_name nvarchar(20),
@@ -61,21 +60,21 @@ CREATE TABLE #result (
 	date_interval_counter int
 	)
 
-	INSERT INTO #result
+	INSERT INTO #webresult
 exec mart.report_data_agent_schedule_adherence 
 @date_from=@date_from,
-@date_to=@date_to,
+@date_to=@date_from,
 @group_page_code=NULL,
 @group_page_group_set=NULL,
 @group_page_agent_code=NULL,
-@site_id=NULL,
-@team_set=null,
+@site_id=-2,
+@team_set=-2,
 @agent_person_code=@person_code,
 @adherence_id=@adherence_id,
 @sort_by=6,
 @time_zone_id=@time_zone_id,
 @person_code=@person_code,
-@report_id=null,
+@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',
 @language_id=null,
 @business_unit_code=@business_unit_code,
 @from_matrix=0
@@ -89,7 +88,7 @@ CAST(ROUND(deviation_m, 0) as int) AS Deviation,
 display_color AS DisplayColor, 
 activity_absence_name AS DisplayName, 
 date_interval_counter AS IntervalCounter
-from #result
+from #webresult
 GO
 
 
