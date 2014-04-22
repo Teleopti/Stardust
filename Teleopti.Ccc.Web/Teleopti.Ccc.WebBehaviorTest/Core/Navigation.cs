@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoAsm()
 		{
-			GoToWaitForCompleted("MyTime/Asm", new OverrideNotifyBehavior());
+			GoToWaitForCompleted("MyTime/Asm");
 		}
 
 		public static void GotoSiteHomePage()
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoWeekSchedulePage()
 		{
 			GoToWaitForCompleted("MyTime#Schedule/Week",
-				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new OverrideNotifyBehavior());
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded());
 		}
 
 		public static void GotoWeekSchedulePageNoWait()
@@ -127,14 +127,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoPreference()
 		{
 			GoToWaitForCompleted("MyTime#Preference/Index",
-				new ApplicationStartupTimeout(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+				new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoPreference(DateTime date)
 		{
 			GoToWaitForCompleted(string.Format("MyTime#Preference/Index/{0}/{1}/{2}",
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+				new ApplicationStartupTimeout(), new WaitUntilReadyForInteraction());
 		}
 
 		public static void GotoRegionalSettings()
@@ -400,38 +400,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			_timeoutScope.Dispose();
 			_timeoutScope = null;
-		}
-	}
-
-	public class OverrideNotifyBehavior : IGoToInterceptor
-	{
-		public void Before(GotoArgs args)
-		{
-		}
-
-		public void After(GotoArgs args)
-		{
-			mockNotifyCall();
-		}
-
-		private static void mockNotifyCall()
-		{
-			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (options, notifyText) {\r\n"
-				+ "    var notyClose = $('<div/>', {'class': 'noty_close'});\r\n"
-				+ "    var notyText = $('<span/>', {text: notifyText, 'class': 'noty_text'});\r\n"
-				+ "    var notyMessage = $('<div/>', {'class': 'noty_message'});\r\n"
-				+ "    var notyBar = $('<div/>', {'class': 'noty_bar'});\r\n"
-				+ "    var notyItem = $('<li/>');\r\n"
-				+ "    var notyContainer = $('<ul/>', {id: 'noty_bottom_layout_container'});\r\n"
-				+ "    \r\n"
-				+ "    notyMessage.append(notyText);\r\n"
-				+ "    notyMessage.append(notyClose);\r\n"
-				+ "    notyBar.append(notyMessage);\r\n"
-				+ "    notyItem.append(notyBar);\r\n"
-				+ "    notyContainer.append(notyItem);\r\n"
-				+ "    $('#notifyLogger').append(notyContainer);\r\n"
-				+ "};";
-			Browser.Interactions.Javascript(jsCode);
 		}
 	}
 
