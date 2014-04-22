@@ -38,4 +38,5 @@ $(AGENTPORTALWEB_nhibConfPath)|c:\nhib
 $(SDK_nhibConfPath)|c:\nhib
 $(SDK_nhibConfPath)|c:\nhib
 $(TOGGLE_FILE)|all
+$(DATASOURCE_NAME)|Teleopti CCC
 _replace_|c:\InfraTest.ini
