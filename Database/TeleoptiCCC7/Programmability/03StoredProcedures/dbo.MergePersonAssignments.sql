@@ -76,6 +76,62 @@ BEGIN
 	INNER JOIN Dubplicates d
 	ON sl.Id = d.Id;
 
+	--bug #27661 - missing ShiftCategory values
+	create table #tmp_missing_shift_category(paID uniqueidentifier, buID uniqueidentifier)
+	create table #tmp_bu(buID uniqueidentifier)
+
+	declare @SuperUserId uniqueidentifier
+	declare @ShortName nvarchar(25)
+	declare @Name nvarchar(50)
+	set @ShortName='?!'
+	set @Name='missing category'
+	set @SuperUserId = '3f0886ab-7b25-4e95-856a-0d726edc2a67'
+
+	insert #tmp_missing_shift_category
+	select distinct
+		pa.Id,
+		sc.BusinessUnit 
+	from ShiftLayer sl
+	inner join PersonAssignment pa
+		on pa.Id = sl.Parent
+	inner join Scenario sc
+		on pa.Scenario = sc.Id
+	where LayerType = 1
+	and pa.ShiftCategory is null
+
+	insert #tmp_bu
+	select cast(max(cast(buId AS binary(16))) as uniqueidentifier)
+	from #tmp_missing_shift_category
+	group by buID
+
+	if exists (select * from #tmp_missing_shift_category)
+	begin
+		--insert a new ShiftCategory for each BU where missing
+		insert into ShiftCategory(id, Version, UpdatedBy, UpdatedOn, Name, ShortName, DisplayColor, BusinessUnit, IsDeleted)
+		select 
+		newid(), 
+		1, 
+		@SuperUserId, 
+		getutcdate(),
+		@Name,
+		@ShortName,
+		0,
+		buID, 
+		1
+		from #tmp_bu
+ 
+		--update all PersonAssignment with missing ShiftCategory
+		update pa
+		set ShiftCategory = sc.Id
+		from shiftCategory sc
+		inner join #tmp_missing_shift_category tmp 
+			on sc.BusinessUnit = tmp.buID
+		inner join PersonAssignment pa
+			on pa.Id = tmp.paID
+		where sc.Name = @Name
+		and sc.ShortName = @ShortName
+	end
+
 	--And finally add Unique constraint
 	ALTER TABLE [dbo].[PersonAssignment] ADD  CONSTRAINT [UQ_PersonAssignment_Date_Scenario_Person] UNIQUE NONCLUSTERED 
 	(
