@@ -99,11 +99,13 @@
 
 	return {
 		Notify: function (options, notifyText) {
+			Teleopti.MyTimeWeb.Test.TestMessage("Notify");
 			_setOptions(options);
 			_notify(notifyText);
 			_webNotification(notifyText);
 			_pinnedNotification();
 			_blinkDocumentTitle(notifyText);
+			Teleopti.MyTimeWeb.Test.TestMessage("/Notify");
 		}
 	};
 })(jQuery);
