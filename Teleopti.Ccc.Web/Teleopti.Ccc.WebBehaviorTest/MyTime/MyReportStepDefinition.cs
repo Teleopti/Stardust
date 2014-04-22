@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the detailed adherence report for '(.*)'")]
 		public void ThenIShouldSeeTheDetailedAdherenceReportFor(DateTime date)
 		{
-			ScenarioContext.Current.Pending();
+			ThenIShouldEndUpInMyAdherenceReportFor(date);
 		}
 
 

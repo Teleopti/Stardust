@@ -10891,8 +10891,8 @@ Diese Optionen sind aktiviert:
   <data name="CompareWithTeamsFrom" xml:space="preserve">
     <value>Vergleiche mit Team vom</value>
   </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Bereitzeit / geplante Bereitzeit (%)</value>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Bereitzeit / geplante Bereitzeit</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Plan muss erneut geladen werden</value>

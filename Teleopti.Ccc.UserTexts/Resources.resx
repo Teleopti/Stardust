@@ -11930,8 +11930,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Compare with teams from</value>
     <comment>What teams to compare , used in Agent Info/Fairness Tab</comment>
   </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Ready Time / Scheduled Ready Time (%)</value>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Ready Time / Scheduled Ready Time</value>
     <comment>Label for value in MyReport in web</comment>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
@@ -12020,5 +12020,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="CalculateLegalState" xml:space="preserve">
     <value>Calculate Legal State</value>
     <comment>Calculate Legal State</comment>
+  </data>
+  <data name="SecondShort" xml:space="preserve">
+    <value>s</value>
+    <comment>Shortening for seconds used in reports</comment>
   </data>
 </root>

@@ -11420,8 +11420,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="CompareWithTeamsFrom" xml:space="preserve">
     <value>Jämför med team från</value>
   </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Redotid / Schemalagd redotid (%)</value>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Redotid / Schemalagd redotid</value>
   </data>
   <data name="TaskTime" xml:space="preserve">
     <value>Uppgiftstid</value>

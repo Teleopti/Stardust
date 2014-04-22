@@ -4,12 +4,13 @@
 	function MyReportViewModel(loadDataMethod, date) {
 		var self = this;
 
-		self.adherence = ko.observable();
-		self.answeredCalls = ko.observable();
-		self.averageAfterCallWork = ko.observable();
-		self.averageHandlingTime = ko.observable();
-		self.averageTalkTime = ko.observable();
-		self.readyTimePerScheduledReadyTime = ko.observable();
+		self.adherence = "";
+		self.answeredCalls = "";
+		self.averageAfterCallWork = "";
+		self.averageHandlingTime = "";
+		self.averageTalkTime = "";
+		self.readyTimePerScheduledReadyTime = "";
+
 		self.selectedDateInternal = ko.observable(date);
 		self.datePickerFormat = ko.observable('YYYYMMDD');
 		var format = $('#my-report-datepicker-format').val().toUpperCase();
@@ -46,12 +47,12 @@
 			data: { date: date.clone().utc().toDate().toJSON() },
 			success: function (data) {
 				vm.selectedDateInternal(date);
-				vm.adherence(data.Adherence);
-				vm.answeredCalls(data.AnsweredCalls);
-				vm.averageAfterCallWork(data.AverageAfterCallWork);
-				vm.averageHandlingTime(data.AverageHandlingTime);
-				vm.averageTalkTime(data.AverageTalkTime);
-				vm.readyTimePerScheduledReadyTime(data.ReadyTimePerScheduledReadyTime);
+				vm.adherence = data.Adherence;
+				vm.answeredCalls = data.AnsweredCalls;
+				vm.averageAfterCallWork = data.AverageAfterCallWork;
+				vm.averageHandlingTime = data.AverageHandlingTime;
+				vm.averageTalkTime = data.AverageTalkTime;
+				vm.readyTimePerScheduledReadyTime = data.ReadyTimePerScheduledReadyTime;
 				vm.dataAvailable(data.DataAvailable);
 			}
 
