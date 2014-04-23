@@ -8,8 +8,4 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.ViewModelFactory
 		DailyMetricsViewModel CreateDailyMetricsViewModel(DateOnly dateOnly);
 		DetailedAdherenceViewModel CreateDetailedAherenceViewModel(DateOnly dateOnly);
 	}
-
-	public class DetailedAdherenceViewModel
-	{
-	}
 }
