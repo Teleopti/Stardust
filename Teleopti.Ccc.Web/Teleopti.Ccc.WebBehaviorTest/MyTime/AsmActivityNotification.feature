@@ -97,13 +97,13 @@ Scenario: Do not alert agent without permission for ASM
 	And current browser time has changed to '2030-01-01 10:58:00'
 	Then I should not see any notify
 
-#Scenario: Automatical close pop up notify message
-#	Given I have the role 'Full access to mytime'
-#	And the current time is '2030-01-01 10:57:59'
-#	And Alert Time setting is '120' seconds                      
-#	When I am viewing week schedule
-#	And current browser time has changed to '2030-01-01 10:58:00'
-#	Then I should see a notify message contains text Lunch
-#	And I should see a notify message contains text coming
-#	When current browser time has changed to '2030-01-01 10:58:30'
-#	Then I should not see pop up notify message
+Scenario: Automatical close pop up notify message
+	Given I have the role 'Full access to mytime'
+	And the current time is '2030-01-01 10:57:59'
+	And Alert Time setting is '120' seconds                      
+	When I am viewing week schedule
+	And current browser time has changed to '2030-01-01 10:58:00'
+	Then I should see a notify message contains text Lunch
+	And I should see a notify message contains text coming
+	When current browser time has changed to '2030-01-01 10:58:30'
+	Then I should not see pop up notify message
