@@ -175,7 +175,6 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			});
 		var settingLoadDeffered = $.Deferred();
 		alertvm.loadSetting(function (data) {
-			Teleopti.MyTimeWeb.Test.TestMessage("AlertTimeSetting data.SecondsBeforeChange: " + data.SecondsBeforeChange);
 			alertSetting = data.SecondsBeforeChange;
 			settingLoadDeffered.resolve();
 		});
