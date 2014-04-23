@@ -48,28 +48,28 @@ Background:
 
 Scenario: Alert agent before first activity starts
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 07:57:59'
-	And Alert Time setting is '120' seconds                      
+	And the current time is '2030-01-01 07:56:59'
+	And Alert Time setting is '180' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 07:58:00'
+	And current browser time has changed to '2030-01-01 07:57:00'
 	Then I should see a notify message contains text Phone
 	And I should see a notify message contains text coming
 
 Scenario: Alert agent before next activity starts
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 10:57:59'
-	And Alert Time setting is '120' seconds                      
+	And the current time is '2030-01-01 10:55:59'
+	And Alert Time setting is '240' seconds    
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 10:58:00'
+	And current browser time has changed to '2030-01-01 10:56:00'
 	Then I should see a notify message contains text Lunch
 	And I should see a notify message contains text coming
 
 Scenario: Alert agent before last activity ends
 	Given I have the role 'Full access to mytime'
-	And the current time is '2030-01-01 16:57:59'
-	And Alert Time setting is '120' seconds                      
+	And the current time is '2030-01-01 16:58:59'
+	And Alert Time setting is '60' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 16:58:00'
+	And current browser time has changed to '2030-01-01 16:59:00'
 	Then I should see a notify message contains text Phone
 	And I should see a notify message contains text finished
 
@@ -84,9 +84,9 @@ Scenario: Do not alert agent Before Alert Time
 Scenario: Do not alert agent After Alert Time 
 	Given I have the role 'Full access to mytime'
 	And the current time is '2030-01-01 11:45:00'
-	And Alert Time setting is '120' seconds                      
+	And Alert Time setting is '60' seconds                      
 	When I am viewing week schedule
-	And current browser time has changed to '2030-01-01 11:45:00'
+	And current browser time has changed to '2030-01-01 11:45:01'
 	Then I should not see any notify
 
 Scenario: Do not alert agent without permission for ASM
