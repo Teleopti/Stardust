@@ -82,14 +82,13 @@ Scenario: View when you are working
 	| Time span      | 09:00 - 18:00 |
 	| Shift category | Early         |
 
-@ignore
 Scenario: View when you have a day off
 	Given I have the role 'Full access to mytime'
-	And the current time is '2014-04-15 12:00'
+	And the current time is '2014-04-22 12:00'
 	And I have the workflow control set 'Published schedule'
 	And I have a day off with
 	| Field | Value      |
 	| Name  | DayOff     |
-	| Date  | 2014-04-15 |
+	| Date  | 2014-04-22 |
 	When I view my mobile week schedule
-	Then I should see the day off on '2014-04-15'
+	Then I should see the day off on '2014-04-22'

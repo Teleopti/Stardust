@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
         [Then(@"I should see the day off on '(.*)'")]
         public void ThenIShouldSeeTheDayOffOn(string date)
         {
-            ScenarioContext.Current.Pending();
+			Browser.Interactions.AssertExists(string.Format("[data-mytime-date='{0}'] .dayoff", date));
         }
 
         [Then(@"I should see the absence on date '(.*)'")]
