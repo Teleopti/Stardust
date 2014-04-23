@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
         MessageId = "OnScreen")]
     public partial class LogOnScreen : Form
     {
-        private readonly LogOnDetails _logOnDetails = new LogOnDetails();
+        private readonly LogOnDetails _logOnDetails;
         private readonly IDictionary<string, string> _appSettings;
 
         private enum LoadingState
@@ -54,9 +54,16 @@ namespace Teleopti.Ccc.AgentPortal.Main
             InitializeComponent();
         }
 
-        public LogOnScreen(IDictionary<string,string> appSettings) : this()
+        public LogOnScreen(LogOnDetails logOnDetails,IDictionary<string,string> appSettings) : this()
         {
+            _logOnDetails = logOnDetails;
             _appSettings = appSettings;
+
+            if (_logOnDetails.DataSource != null)
+            {
+                AuthenticationType = AuthenticationTypeOptionDto.Application;
+                _choosenDataSource = _logOnDetails.DataSource;
+            }
         }
 
         /// <summary>

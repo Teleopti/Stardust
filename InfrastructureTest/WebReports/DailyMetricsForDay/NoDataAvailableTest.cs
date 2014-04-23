@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
@@ -14,7 +15,11 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		[Test]
 		public void ShouldHaveDataAvailableSetToFalse()
 		{
-			Target().Execute(Today.Date)
+
+			Target(
+				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
+					new DailyMetricsForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
+				.Execute(Today.Date)
 				.Should().Be.Null();
 		}
 	}

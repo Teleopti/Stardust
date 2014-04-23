@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>Absence</value>
@@ -10711,8 +10711,8 @@ zkrácených úvazků</value>
   <data name="CompareWithTeamsFrom" xml:space="preserve">
     <value>Porovnat s týmmy z</value>
   </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Dobra připr. / plánovaná doba připr. (%)</value>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Dobra připr. / plánovaná doba připr.</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Plán musí být znovu načten</value>

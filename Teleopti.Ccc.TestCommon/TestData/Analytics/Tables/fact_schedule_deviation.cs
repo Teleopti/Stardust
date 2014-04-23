@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["deviation_schedule_ready_s"] = deviationScheduleReadyS;
 			row["deviation_contract_s"] = deviationContractS;
 			row["is_logged_in"] = isLoggedIn;
+			row["shift_startdate_id"] = shiftStartdateLocalId;
+			row["shift_startinterval_id"] = intervalId;
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
 			dataTable.Rows.Add(row);

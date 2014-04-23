@@ -25,9 +25,20 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ECHO Settings up IIS web sites and applictions ...
 ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
-SET DefaultSite=Default Web Site
+SET "DefaultSite="
 SET MainSiteName=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
+
+for /f "delims==" %%g in ('"%appcmd%" list site /text:name') do (
+	setlocal EnableDelayedExpansion
+	CALL:SetDefaultWebSiteName "%SSL%" "%%g" "%appcmd%" IsDefault
+	set DefaultSite=%%g
+	if !IsDefault! equ 1 goto:Break1
+	endlocal
+)
+:Break1
+::if we can't find any site on 80/443 go for "Default Web Site" as site name
+IF "%DefaultSite%"=="" SET DefaultSite=Default Web Site
 
 ::remove applications
 CALL:DeleteApp "%DefaultSite%" "%MainSiteName%/ContextHelp" "app" >> %logfile%
@@ -56,6 +67,25 @@ GOTO Done
 ::=============
 ::Functions
 ::=============
+:SetDefaultWebSiteName
+SETLOCAL
+SET SSL=%~1
+SET SiteName=%~2
+SET appcmd=%~3
+SET "DefaultSite="
+
+if "%SSL%"=="False" (
+	"%appcmd%" list site /name:"%SiteName%" | findstr /C:":80:"
+	) else (
+	"%appcmd%" list site /name:"%SiteName%" | findstr /C:":443:"
+)
+set /a output=%errorlevel%
+(
+ENDLOCAL
+set /a "%~4=%output%+1"
+)
+goto:eof
+
 :CreateAppPool
 SET PoolName=%~1
 SET NETVersion=%~2

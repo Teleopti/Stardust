@@ -321,6 +321,9 @@ BEGIN
 	
 	INSERT #rights_teams --Insert the current team
 	SELECT * FROM mart.SplitStringInt(@team_set)
+	
+	INSERT INTO #person_id SELECT Distinct dp.person_id
+	FROM mart.dim_person dp WHERE person_code = @agent_person_code
 END
 
 --Join the ResultSets above as:
@@ -390,12 +393,13 @@ SELECT
 		scheduled_ready_time_m
 FROM 
 	mart.fact_schedule fs
-INNER JOIN #person_id a
-	ON fs.person_id = a.person_id
+--INNER JOIN #person_id a
+--	ON fs.person_id = a.person_id
 INNER JOIN #bridge_time_zone b
 	ON	fs.shift_startinterval_id= b.interval_id
 	AND fs.shift_startdate_id = b.date_id
 WHERE fs.scenario_id=@scenario_id
+AND fs.person_id in(SELECT person_id FROM  #person_id)
 
 INSERT #fact_schedule(shift_startdate_local_id,shift_startdate_id,shift_startinterval_id,schedule_date_id,interval_id,person_id,scheduled_time_s,scheduled_ready_time_s,count_activity_per_interval)
 SELECT
@@ -409,11 +413,12 @@ SELECT
 	SUM(fs.scheduled_ready_time_m)*60,
 	COUNT(fs.interval_id)		
 FROM #fact_schedule_raw fs
-INNER JOIN #person_id a
-	ON fs.person_id = a.person_id
+--INNER JOIN #person_id a
+--	ON fs.person_id = a.person_id
 INNER JOIN #bridge_time_zone b
 	ON	fs.shift_startinterval_id= b.interval_id
 	AND fs.shift_startdate_id= b.date_id
+	Where fs.person_id in(SELECT person_id FROM  #person_id)
 GROUP BY fs.shift_startdate_local_id,fs.shift_startdate_id,fs.shift_startinterval_id,fs.schedule_date_id,fs.person_id,fs.interval_id
 
 --Update with activity.

@@ -196,9 +196,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.PersonAssignment(false).ShiftCategory.DisplayColor.ToStyleClass()))
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
-				.ForMember(d => d.Color, c => c.Ignore())
+				.ForMember(d => d.Color, c => c.ResolveUsing(s =>
+					{
+						var personAssignment = s.ScheduleDay.PersonAssignment();
+					var isNullPersonAssignment = personAssignment == null;
+					var isNullShiftCategoryInfo = isNullPersonAssignment || personAssignment.ShiftCategory == null;
+						var color = isNullShiftCategoryInfo ? null : string.Format("rgb({0},{1},{2})", personAssignment.ShiftCategory.DisplayColor.R, personAssignment.ShiftCategory.DisplayColor.G, personAssignment.ShiftCategory.DisplayColor.B);
+						return color;
+					}))
 				;
-
 			CreateMap<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>()
 				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.PersonAbsenceCollection().OrderBy(a => a.Layer.Payload.Priority).ThenByDescending(a => s.ScheduleDay.PersonAbsenceCollection().IndexOf(a)).First().Layer.Payload.Description.Name))
 				.ForMember(d => d.Summary, c => c.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))

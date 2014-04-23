@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
@@ -11,6 +13,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.WebReports
 {
+	public interface IDetailedAdherenceForDayQuery
+	{
+		ICollection<DetailedAdherenceForDayResult> Execute(DateOnly date);
+	}
+
+	public class DetailedAdherenceForDayResult
+	{
+		public DateOnly ShiftDate { get; set; }
+		public Percent TotalAdherence { get; set; }
+		public int IntervalsPerDay { get; set; }
+		public int IntervalId { get; set; }
+		public int IntervalCounter { get; set; }
+		public double Adherence { get; set; }
+		public int Deviation { get; set; }
+		public Color DisplayColor { get; set; }
+		public string DisplayName { get; set; }
+	}
+
 	public class DailyMetricsForDayQuery : IDailyMetricsForDayQuery
 	{
 		private readonly ILoggedOnUser _loggedOnUser;

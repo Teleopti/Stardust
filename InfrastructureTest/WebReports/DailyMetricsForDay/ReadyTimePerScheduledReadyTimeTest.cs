@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Infrastructure.WebReports;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,10 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 		public void ShouldReturnReadyTimePerScheduledReadyTime()
 		{
 			var expectedPercentage = new Percent(0.25);
-			Target().Execute(Today.Date)
+			Target(
+				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
+					new DailyMetricsForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
+				.Execute(Today.Date)
 				.ReadyTimePerScheduledReadyTime.Should().Be.EqualTo(expectedPercentage);
 		}
 	}

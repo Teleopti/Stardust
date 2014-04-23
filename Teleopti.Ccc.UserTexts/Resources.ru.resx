@@ -10911,8 +10911,8 @@ Teleopti R&amp;D</value>
   <data name="CompareWithTeamsFrom" xml:space="preserve">
     <value>Сравнить с группами из</value>
   </data>
-  <data name="ReadyTimePerScheduledReadyTimePercent" xml:space="preserve">
-    <value>Время готовности / Запланированное время готовности (%)</value>
+  <data name="ReadyTimePerScheduledReadyTime" xml:space="preserve">
+    <value>Время готовности / Запланированное время готовности</value>
   </data>
   <data name="ScheduleMustBeReloaded" xml:space="preserve">
     <value>Расписание должно быть загружено еще раз</value>

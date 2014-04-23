@@ -430,6 +430,7 @@
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\DailyMetricsForDayResult.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDayQuery.cs" />
     <Compile Include="WebReports\IDailyMetricsForDayQuery.cs" />
   </ItemGroup>
   <ItemGroup>

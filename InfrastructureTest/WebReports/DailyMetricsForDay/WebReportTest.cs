@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 
 		protected abstract void InsertTestSpecificData(AnalyticsDataFactory analyticsDataFactory);
 
-		protected DailyMetricsForDayQuery Target()
+		protected T Target<T>(Func<ILoggedOnUser, ICurrentDataSource, ICurrentBusinessUnit, IGlobalSettingDataRepository ,T> createTarget )
 		{
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(x => x.CurrentUser()).Return(_loggedOnUser);
@@ -97,7 +98,8 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DailyMetricsForDay
 			var currentBu = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			currentBu.Expect(x => x.Current()).Return(_currentBusinessUnit);
 
-			return new DailyMetricsForDayQuery(loggedOnUser, 
+
+			return createTarget(loggedOnUser, 
 				new CurrentDataSource(new CurrentIdentity()),	
 				currentBu,
 				new GlobalSettingDataRepository(new CurrentUnitOfWork(new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal()))));
