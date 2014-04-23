@@ -55,6 +55,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        checkBoxAllowBreakingMaxTimePerWeek.Checked  = _overtimePreferences.AllowBreakMaxWorkPerWeek;
 	        checkBoxAllowBreakingNightlyRest.Checked  = _overtimePreferences.AllowBreakNightlyRest;
 	        checkBoxAllowBreakingWeeklyRest.Checked = _overtimePreferences.AllowBreakWeeklyRest;
+	        checkBoxOnAvailableAgentsOnly.Checked = _overtimePreferences.AvailableAgentsOnly;
 	    }
 
 	    private void initTags()
@@ -186,6 +187,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        _overtimePreferences.OvertimeType = (IMultiplicatorDefinitionSet) comboBoxAdvOvertimeType.SelectedItem;
             var selectedPeriod =new TimePeriod(fromToTimeDurationPicker1.StartTime.TimeValue(), fromToTimeDurationPicker1.EndTime.TimeValue());
 	        _overtimePreferences.SelectedTimePeriod = selectedPeriod;
+	        _overtimePreferences.AvailableAgentsOnly = checkBoxOnAvailableAgentsOnly.Checked;
 	    }
 	}
 }

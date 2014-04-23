@@ -11905,4 +11905,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Calculate Legal State</value>
     <comment>Calculate Legal State</comment>
   </data>
+  <data name="OnAvailableAgentsOnly" xml:space="preserve">
+    <value>On available agents only</value>
+    <comment>only those agents will be included in schedule overtime who have defined the overtime availability</comment>
+  </data>
 </root>

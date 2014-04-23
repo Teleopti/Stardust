@@ -81,5 +81,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
             _target.OvertimeType = new MultiplicatorDefinitionSet("this",MultiplicatorType.Overtime );
             Assert.AreEqual(_target.OvertimeType.Name,"this" );
         }
+
+        [Test]
+        public void VerifyAvailableAgentsOnlyMapped()
+        {
+            _target.AvailableAgentsOnly = true;
+            Assert.IsTrue(_target.AvailableAgentsOnly);
+        }
     }
 }

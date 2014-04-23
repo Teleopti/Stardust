@@ -211,6 +211,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
             builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>();
             builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>();
+			  builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>();
+	        builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>();
+			 
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
             builder.RegisterType<NightlyRestRule>().As<IAssignmentPeriodRule>();
         }

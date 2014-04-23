@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
@@ -13,5 +12,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public bool AllowBreakMaxWorkPerWeek { get; set; }
         public bool AllowBreakNightlyRest { get; set; }
         public bool AllowBreakWeeklyRest { get; set; }
+        public bool AvailableAgentsOnly { get; set; }
     }
 }

@@ -426,6 +426,8 @@
     <Compile Include="ResourceCalculation\PersonSkillProviderTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffMaxFlexCalculatorTest.cs" />
     <Compile Include="Scheduling\Assignment\DayOffTest.cs" />
+    <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
+    <Compile Include="Scheduling\Overtime\AnalyzePersonAccordingToAvailabilityTest.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertimeTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueMapperTest.cs" />

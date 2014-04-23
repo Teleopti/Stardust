@@ -12,5 +12,6 @@ namespace Teleopti.Interfaces.Domain
         bool AllowBreakMaxWorkPerWeek { get; set; }
         bool AllowBreakNightlyRest { get; set; }
         bool AllowBreakWeeklyRest { get; set; }
+		  bool AvailableAgentsOnly { get; set; }
     }
 }
