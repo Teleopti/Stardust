@@ -378,6 +378,8 @@ GO
 --Date: 2014-04-23
 --Desc: Bug #27661 - missing ShiftCategory values
 ---------------- 
+IF EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAssignment]') AND name = N'UQ_PersonAssignment_Date_Scenario_Person')
+BEGIN
 create table #tmp_missing_shift_category(paID uniqueidentifier, buID uniqueidentifier)
 create table #tmp_bu(buID uniqueidentifier)
 
@@ -432,4 +434,5 @@ begin
 	where sc.Name = @Name
 	and sc.ShortName = @ShortName
 end
+END
 GO
