@@ -160,7 +160,6 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 	}
 
 	function initNotificationViewModel() {
-		Teleopti.MyTimeWeb.Test.TestMessage("initNotificationViewModel");
 		var yesterdayZero = moment(new Date(new Date().getTeleoptiTime())).add('days', -1).startOf('day').toDate();
 		alertvm = new notificationActivities(yesterdayZero);
 
@@ -181,34 +180,26 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 			settingLoadDeffered.resolve();
 		});
 		$.when(dataLoadDeffered, settingLoadDeffered).done(function () {
-			Teleopti.MyTimeWeb.Test.TestMessage("initNotificationViewModel.callback");
 			alertvm._createLayers(activityData);
 			alertvm._readAlertTimeSetting(alertSetting);
 			startAlert();
-			Teleopti.MyTimeWeb.Test.TestMessage("/initNotificationViewModel.callback");
 		});
-		Teleopti.MyTimeWeb.Test.TestMessage("/initNotificationViewModel");
 	}
 
 	function alertActivity() {
-		Teleopti.MyTimeWeb.Test.TestMessage("alertActivity");
-
 		Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, alertvm.alertMessage);
 
 		// Restart alert after delayTime.
 		setTimeout(startAlert, alertvm.restartAlertDelayTime * 1000);
-		Teleopti.MyTimeWeb.Test.TestMessage("/alertActivity");
 	}
 
 	function startAlert() {
-		Teleopti.MyTimeWeb.Test.TestMessage("startAlert");
 		var alert = alertvm.getCurrentAlert();
 		var interval = 0;
 		var delayTime = alertvm.alertTimeSetting;
 
 		// timespan in negative number means no schedule today or all activity finished
 		if (alert.timespan >= 0) {
-			Teleopti.MyTimeWeb.Test.TestMessage("startAlert!!");
 			if (alert.timespan >= alertvm.alertTimeSetting) {
 				interval = alert.timespan - alertvm.alertTimeSetting;
 				delayTime = alertvm.alertTimeSetting;
@@ -223,16 +214,12 @@ Teleopti.MyTimeWeb.AlertActivity = (function () {
 
 			setTimeout(alertActivity, interval * 1000);
 		}
-		Teleopti.MyTimeWeb.Test.TestMessage("/startAlert");
 	}
 
 	return {
 		StartAlert: function (options) {
-			Teleopti.MyTimeWeb.Test.GetTestMessages();
-			Teleopti.MyTimeWeb.Test.TestMessage("StartAlert");
 			notifyOptions = options;
 			initNotificationViewModel(options);
-			Teleopti.MyTimeWeb.Test.TestMessage("/StartAlert");
 		}
 	};
 })(jQuery);
