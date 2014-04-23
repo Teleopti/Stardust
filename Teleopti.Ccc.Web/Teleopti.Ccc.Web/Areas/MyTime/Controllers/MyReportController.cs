@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[HttpGet]
 		[UnitOfWorkAction]
-		public JsonResult OnDates(DateOnly date)
+		public JsonResult Overview(DateOnly date)
 		{
 			return Json(_myReportViewModelFactory.CreateDailyMetricsViewModel(date), JsonRequestBehavior.AllowGet);
 		}
@@ -39,6 +39,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public ViewResult Adherence()
 		{
 			return View("AdherencePartial");
+		}
+
+		[HttpGet]
+		[UnitOfWorkAction]
+		public JsonResult AdherenceDetails(DateOnly date)
+		{
+			return Json(_myReportViewModelFactory.CreateDetailedAherenceViewModel(date), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

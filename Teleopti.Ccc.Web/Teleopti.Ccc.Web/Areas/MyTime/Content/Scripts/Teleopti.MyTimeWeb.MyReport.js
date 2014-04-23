@@ -42,7 +42,7 @@
 
 	function fillData(date) {
 		$.ajax({
-			url: 'MyTime/MyReport/OnDates',
+			url: 'MyTime/MyReport/Overview',
 			dataType: 'json',
 			data: { date: date.clone().utc().toDate().toJSON() },
 			success: function (data) {

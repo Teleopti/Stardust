@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Infrastructure.WebReports;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IDailyMetricsMapper>();
 			var dailyMetricsForDayQuery = MockRepository.GenerateMock<IDailyMetricsForDayQuery>();
-			var target = new MyReportViewModelFactory(dailyMetricsForDayQuery, mapper);
+			var target = new MyReportViewModelFactory(dailyMetricsForDayQuery, null, mapper, null);
 			var dataModel = new DailyMetricsForDayResult();
 			var viewModel = new DailyMetricsViewModel();
 			var date = DateOnly.Today;
@@ -29,5 +30,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.ViewModelFactory
 
 			result.Should().Be.SameInstanceAs(viewModel);
 		}
+
+		[Test]
+		public void ShouldReturnDetailedAdherenceViewModel()
+		{
+			var mapper = MockRepository.GenerateMock<IDetailedAdherenceMapper>();
+			var detailedAdherenceForDayQuery = MockRepository.GenerateMock<IDetailedAdherenceForDayQuery>();
+			var target = new MyReportViewModelFactory(null,detailedAdherenceForDayQuery,null, mapper);
+			var dataModel = new List<DetailedAdherenceForDayResult>();
+			var viewModel = new DetailedAdherenceViewModel();
+			var date = DateOnly.Today;
+
+			detailedAdherenceForDayQuery.Stub(x => x.Execute(date)).Return(dataModel);
+			mapper.Stub(x => x.Map(dataModel)).Return(viewModel);
+
+			var result = target.CreateDetailedAherenceViewModel(date);
+
+			result.Should().Be.SameInstanceAs(viewModel);
+		}
 	}
+
+	
 }
