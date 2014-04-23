@@ -49,6 +49,7 @@
                        SelectionMode="Extended" 
 					   EnableRowVirtualization="true"
 					   EnableColumnVirtualization="true"
+                       VirtualizingStackPanel.VirtualizationMode="Standard" 
                        CellStyle="{StaticResource CellStyle}"
                        RowStyle="{StaticResource RequestRowStyle}"
                        VerticalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"

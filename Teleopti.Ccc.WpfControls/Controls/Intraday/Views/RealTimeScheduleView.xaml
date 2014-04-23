@@ -79,6 +79,7 @@
                        SelectionMode="Single" CanUserSortColumns="True"
                        RowStyle="{StaticResource RtaScheduleRowStyle}"
                        EnableColumnVirtualization="True"
+                       VirtualizingStackPanel.VirtualizationMode="Standard"
 					   EnableRowVirtualization="False"
                        VerticalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
                        HorizontalGridLinesBrush="{StaticResource RaptorStandardCellBorderBrush}"
