@@ -64,8 +64,9 @@ namespace Teleopti.Ccc.Win.Commands
 	    private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationService;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
         private readonly IWeeklyRestSolverCommand  _weeklyRestSolverCommand;
+	    private readonly IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 
-        public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
+	    public TeamBlockOptimizationCommand(ISchedulerStateHolder schedulerStateHolder, 
 											ITeamBlockClearer teamBlockCleaner,
                                             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions,
                                             IDayOffDecisionMaker dayOffDecisionMaker,
@@ -89,7 +90,7 @@ namespace Teleopti.Ccc.Win.Commands
 											ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
 											ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator,
 											ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
-											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand)
+											ITeamBlockScheduler teamBlockScheduler, IWeeklyRestSolverCommand weeklyRestSolverCommand, IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification)
 	    {
 		    _schedulerStateHolder = schedulerStateHolder;
 			_teamBlockCleaner = teamBlockCleaner;
@@ -117,6 +118,7 @@ namespace Teleopti.Ccc.Win.Commands
 		    _teamBlockDayOffFairnessOptimizationService = teamBlockDayOffFairnessOptimizationService;
 		    _teamBlockScheduler = teamBlockScheduler;
             _weeklyRestSolverCommand = weeklyRestSolverCommand;
+		    _allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 	    }
 
         public void Execute(BackgroundWorker backgroundWorker, 
@@ -235,7 +237,7 @@ namespace Teleopti.Ccc.Win.Commands
                     _teamBlockRestrictionOverLimitValidator,
                     _teamBlockMaxSeatChecker,
                     teamBlockDaysOffMoveFinder, 
-					_teamBlockScheudlingOptions
+					_teamBlockScheudlingOptions,_allTeamMembersInSelectionSpecification 
                     );
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerStateHolder.CommonStateHolder.DayOffs

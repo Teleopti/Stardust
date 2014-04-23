@@ -415,6 +415,7 @@
     <Compile Include="Optimization\DayOffRulesValidator.cs" />
     <Compile Include="Optimization\DaysOffLegalStateValidatorsFactory.cs" />
     <Compile Include="Optimization\ScheduleMatrixLockableBitArrayConverterEx.cs" />
+    <Compile Include="Optimization\TeamBlock\AllTeamMembersInSelectionSpecification.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportData.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\DistributionReportService.cs" />
     <Compile Include="Optimization\TeamBlock\FairnessOptimization\EqualNumberOfCategory\EqualCategoryDistributionBestTeamBlockDecider.cs" />
