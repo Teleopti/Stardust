@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -12,14 +13,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
     {
         private bool _haltModify = true;
         private readonly IWeeksFromScheduleDaysExtractor _weeksFromScheduleDaysExtractor;
-    	private readonly IWorkTimeStartEndExtractor _workTimeStartEndExtractor;
-	    private readonly IDayOffMaxFlexCalculator _dayOffMaxFlexCalculator;
+        private readonly IEnsureWeeklyRestRule _ensureWeeklyRestRule;
+        private readonly IVerifyWeeklyRestAroundDayOffSpecification _verifyWeeklyRestAroundDayOffSpecification;
+        private readonly IExtractDayOffFromGivenWeek _extractDayOffFromGivenWeek;
 
-    	public MinWeeklyRestRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IWorkTimeStartEndExtractor workTimeStartEndExtractor, IDayOffMaxFlexCalculator dayOffMaxFlexCalculator)
+        public MinWeeklyRestRule(IWeeksFromScheduleDaysExtractor weeksFromScheduleDaysExtractor, IEnsureWeeklyRestRule ensureWeeklyRestRule, IVerifyWeeklyRestAroundDayOffSpecification verifyWeeklyRestAroundDayOffSpecification, IExtractDayOffFromGivenWeek extractDayOffFromGivenWeek)
 		{
 			_weeksFromScheduleDaysExtractor = weeksFromScheduleDaysExtractor;
-			_workTimeStartEndExtractor = workTimeStartEndExtractor;
-    		_dayOffMaxFlexCalculator = dayOffMaxFlexCalculator;
+            _ensureWeeklyRestRule = ensureWeeklyRestRule;
+            _verifyWeeklyRestAroundDayOffSpecification = verifyWeeklyRestAroundDayOffSpecification;
+            _extractDayOffFromGivenWeek = extractDayOffFromGivenWeek;
 		}
 
     	public string ErrorMessage
@@ -74,17 +77,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 }
                 else
                 {
-                    if (!hasMinWeeklyRest(personWeek, currentSchedules, weeklyRest))
+                    var scheduleDayList = currentSchedules.ScheduledDayCollection(personWeek.Week);
+                    var daysOffInProvidedWeek = _extractDayOffFromGivenWeek.GetDaysOff(scheduleDayList);
+                    if (_verifyWeeklyRestAroundDayOffSpecification.IsSatisfy(daysOffInProvidedWeek, currentSchedules))
                     {
-                        string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
-                        string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
-                                                UserTexts.Resources.BusinessRuleWeeklyRestErrorMessage, weeklyRestString);
-                        foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
+                        if (!_ensureWeeklyRestRule.HasMinWeeklyRest(personWeek, currentSchedules, weeklyRest))
                         {
-                            IBusinessRuleResponse response = createResponse(person, dateOnly, message,
-                                                                            typeof(MinWeeklyRestRule));
-                            responseList.Add(response);
-                            oldResponses.Add(response);
+                            string weeklyRestString = DateHelper.HourMinutesString(weeklyRest.TotalMinutes);
+                            string message = string.Format(TeleoptiPrincipal.Current.Regional.Culture,
+                                UserTexts.Resources.BusinessRuleWeeklyRestErrorMessage, weeklyRestString);
+                            foreach (DateOnly dateOnly in personWeek.Week.DayCollection())
+                            {
+                                IBusinessRuleResponse response = createResponse(person, dateOnly, message,
+                                    typeof (MinWeeklyRestRule));
+                                responseList.Add(response);
+                                oldResponses.Add(response);
+                            }
                         }
                     }
                 }
@@ -93,62 +101,62 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private bool hasMinWeeklyRest(PersonWeek personWeek, IScheduleRange currentSchedules, TimeSpan weeklyRest)
-        {
-            var extendedWeek = new DateOnlyPeriod(personWeek.Week.StartDate.AddDays(-1),
-                                                  personWeek.Week.EndDate.AddDays(1));
-            var pAss = new List<IPersonAssignment>();
-            foreach (var schedule in currentSchedules.ScheduledDayCollection(extendedWeek))
-            {
-	            var ass = schedule.PersonAssignment();
-							if (ass != null)
-							{
-								pAss.Add(ass);
-							}
-            }
-            if (pAss.Count == 0)
-                return true;
+        //private bool hasMinWeeklyRest(PersonWeek personWeek, IScheduleRange currentSchedules, TimeSpan weeklyRest)
+        //{
+        //    var extendedWeek = new DateOnlyPeriod(personWeek.Week.StartDate.AddDays(-1),
+        //                                          personWeek.Week.EndDate.AddDays(1));
+        //    var pAss = new List<IPersonAssignment>();
+        //    foreach (var schedule in currentSchedules.ScheduledDayCollection(extendedWeek))
+        //    {
+        //        var ass = schedule.PersonAssignment();
+        //                    if (ass != null)
+        //                    {
+        //                        pAss.Add(ass);
+        //                    }
+        //    }
+        //    if (pAss.Count == 0)
+        //        return true;
 
-            DateTime endOfPeriodBefore = TimeZoneHelper.ConvertToUtc(extendedWeek.StartDate, personWeek.Person.PermissionInformation.DefaultTimeZone());
+        //    DateTime endOfPeriodBefore = TimeZoneHelper.ConvertToUtc(extendedWeek.StartDate, personWeek.Person.PermissionInformation.DefaultTimeZone());
 
-			var scheduleDayBefore1 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-1));
-			var scheduleDayBefore2 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-2));
-			var result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayBefore1, scheduleDayBefore2);
-			if (result != null)
-				endOfPeriodBefore = result.Value.EndDateTime; 
+        //    var scheduleDayBefore1 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-1));
+        //    var scheduleDayBefore2 = currentSchedules.ScheduledDay(personWeek.Week.StartDate.AddDays(-2));
+        //    var result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayBefore1, scheduleDayBefore2);
+        //    if (result != null)
+        //        endOfPeriodBefore = result.Value.EndDateTime; 
 		
-            foreach (IPersonAssignment ass in pAss)
-            {
-				var proj = ass.ProjectionService().CreateProjection();
-                var nextStartDateTime =
-                	_workTimeStartEndExtractor.WorkTimeStart(proj);
-				if(nextStartDateTime != null)
-				{
-					if ((nextStartDateTime - endOfPeriodBefore) >= weeklyRest)
-					{                   
-                        // the majority must be in this week
-                        if (endOfPeriodBefore.Add(TimeSpan.FromMinutes(weeklyRest.TotalMinutes / 2.0)) <= personWeek.Week.EndDate.AddDays(1) && nextStartDateTime.Value.Add(TimeSpan.FromMinutes(-weeklyRest.TotalMinutes / 2.0)) > personWeek.Week.StartDate)
-					    return true;
-					}
-					var end = _workTimeStartEndExtractor.WorkTimeEnd(proj);
-					if(end.HasValue)
-						endOfPeriodBefore = end.Value;
-				}
-            }
-            DateTime endOfPeriodAfter = TimeZoneHelper.ConvertToUtc(extendedWeek.EndDate.AddDays(1), personWeek.Person.PermissionInformation.DefaultTimeZone());
+        //    foreach (IPersonAssignment ass in pAss)
+        //    {
+        //        var proj = ass.ProjectionService().CreateProjection();
+        //        var nextStartDateTime =
+        //            _workTimeStartEndExtractor.WorkTimeStart(proj);
+        //        if(nextStartDateTime != null)
+        //        {
+        //            if ((nextStartDateTime - endOfPeriodBefore) >= weeklyRest)
+        //            {                   
+        //                // the majority must be in this week
+        //                if (endOfPeriodBefore.Add(TimeSpan.FromMinutes(weeklyRest.TotalMinutes / 2.0)) <= personWeek.Week.EndDate.AddDays(1) && nextStartDateTime.Value.Add(TimeSpan.FromMinutes(-weeklyRest.TotalMinutes / 2.0)) > personWeek.Week.StartDate)
+        //                return true;
+        //            }
+        //            var end = _workTimeStartEndExtractor.WorkTimeEnd(proj);
+        //            if(end.HasValue)
+        //                endOfPeriodBefore = end.Value;
+        //        }
+        //    }
+        //    DateTime endOfPeriodAfter = TimeZoneHelper.ConvertToUtc(extendedWeek.EndDate.AddDays(1), personWeek.Person.PermissionInformation.DefaultTimeZone());
 
 
-			var scheduleDayAfter1 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(1));
-			var scheduleDayAfter2 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(2));
-			result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayAfter1, scheduleDayAfter2);
-			if (result != null)
-				endOfPeriodAfter = result.Value.StartDateTime; 
+        //    var scheduleDayAfter1 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(1));
+        //    var scheduleDayAfter2 = currentSchedules.ScheduledDay(personWeek.Week.EndDate.AddDays(2));
+        //    result = _dayOffMaxFlexCalculator.MaxFlex(scheduleDayAfter1, scheduleDayAfter2);
+        //    if (result != null)
+        //        endOfPeriodAfter = result.Value.StartDateTime; 
 
-            if ((endOfPeriodAfter - endOfPeriodBefore) >= weeklyRest)
-                return true;
+        //    if ((endOfPeriodAfter - endOfPeriodBefore) >= weeklyRest)
+        //        return true;
 
-            return false;
-        }
+        //    return false;
+        //}
 
         private static bool setWeeklyRest(out TimeSpan weeklyRest, PersonWeek personWeek)
         {

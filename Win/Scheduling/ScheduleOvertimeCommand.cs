@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -95,8 +96,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                     if (!overtimePreferences.AllowBreakMaxWorkPerWeek)
                         rules.Add(new NewMaxWeekWorkTimeRule(new WeeksFromScheduleDaysExtractor()));
                     if (!overtimePreferences.AllowBreakWeeklyRest)
+                    {
+                        IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+                        IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
+                        IEnsureWeeklyRestRule ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
                         rules.Add(new MinWeeklyRestRule(
-                                      new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor(), new DayOffMaxFlexCalculator(new WorkTimeStartEndExtractor())));
+                            new WeeksFromScheduleDaysExtractor(), ensureWeeklyRestRule,
+                            new VerifyWeeklyRestAroundDayOffSpecification(), new ExtractDayOffFromGivenWeek()));
+                    }
 
                     _schedulePartModifyAndRollbackService.ClearModificationCollection();
 

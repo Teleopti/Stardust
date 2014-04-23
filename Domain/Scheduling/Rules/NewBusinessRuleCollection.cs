@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
@@ -27,7 +28,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static INewBusinessRuleCollection All(ISchedulingResultStateHolder schedulingResultStateHolder)
-        {
+		{
+		    IWorkTimeStartEndExtractor workTimeStartEndExtractor = new WorkTimeStartEndExtractor();
+		    IDayOffMaxFlexCalculator dayOffMaxFlexCalculator = new DayOffMaxFlexCalculator(workTimeStartEndExtractor);
+		    var ensureWeeklyRestRule = new EnsureWeeklyRestRule(workTimeStartEndExtractor, dayOffMaxFlexCalculator);
             var ret = new NewBusinessRuleCollection
                           {
                               new NewShiftCategoryLimitationRule(
@@ -40,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                               new NewMaxWeekWorkTimeRule(
                                   new WeeksFromScheduleDaysExtractor()),
                               new MinWeeklyRestRule(
-                                  new WeeksFromScheduleDaysExtractor(), new WorkTimeStartEndExtractor(), new DayOffMaxFlexCalculator(new WorkTimeStartEndExtractor())),
+                                  new WeeksFromScheduleDaysExtractor(), ensureWeeklyRestRule,
+                              new VerifyWeeklyRestAroundDayOffSpecification(), new ExtractDayOffFromGivenWeek()),
                               new NewDayOffRule(new WorkTimeStartEndExtractor()),
                               new NewPersonAccountRule(schedulingResultStateHolder, schedulingResultStateHolder.AllPersonAccounts)
 

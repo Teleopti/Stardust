@@ -439,6 +439,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WeeksFromScheduleDaysExtractor>().As<IWeeksFromScheduleDaysExtractor>();
             builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
             builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>();
+            builder.RegisterType<VerifyWeeklyRestAroundDayOffSpecification>().As<IVerifyWeeklyRestAroundDayOffSpecification>();
 	    }
     }
 }

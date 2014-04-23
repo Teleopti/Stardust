@@ -530,6 +530,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlier.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLater.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeManager.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecification.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\WeeklyRestSolverService.cs" />
     <Compile Include="Repositories\IGlobalSettingDataRepository.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculator.cs" />
