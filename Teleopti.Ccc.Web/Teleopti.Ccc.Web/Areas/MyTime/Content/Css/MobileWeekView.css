@@ -1,0 +1,120 @@
+﻿.table-wrapper {
+  display: table;
+  vertical-align: middle;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.table-cell-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  width: 100%;
+  height: 100%;  
+}
+
+.week-dayoff {
+    background-color: beige;
+    background-image: url(../Images/stripe.png);
+}
+
+@media (min-width: 768px) {
+	.week-overview {
+		min-height: 20px;
+		padding: 0px;
+		margin-bottom: 5px;
+		border: 1px solid #e3e3e3;
+		border-radius: 4px;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+		text-align: center;
+		font-size: 15px;
+	}
+
+	.tile {
+		width: 100%;
+		display: inline-block;
+		box-sizing: border-box;
+		margin-bottom: 15px;
+	}
+
+    .ribon-container {
+        height: 80px;
+        position: relative;
+    }
+
+    .week-header {
+        height: 20px;
+        color: #9d9d9d;
+        border-bottom: solid 1px #e3e3e3; 
+    }
+
+	.week-weekday {
+	    float: left;
+	    padding-left: 5px;
+		text-transform: uppercase;
+		font-size: 85%;
+	    display: table-cell;
+	    vertical-align: middle;
+	}  
+    
+    .week-date {
+        float: right;
+	    text-transform: uppercase;
+        padding-right: 5px;
+		font-size: 85%; display: table-cell; vertical-align: middle; 
+	}
+
+}
+
+@media (max-width: 768px) {
+	.mobile-foot {
+		text-align: center;
+	}
+
+	.mobile-height {
+		height:40px;
+	}
+	.week-overview {
+		min-height: 20px;
+		padding: 0px;
+		margin-bottom: 5px;
+		border: 1px solid #e3e3e3;
+		border-radius: 4px;
+		-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+		text-align: center;
+	}
+
+	.tile {
+		width: 100%;
+		display: inline-block;
+		box-sizing: border-box;
+		margin-bottom: 5px;
+	}
+
+    .week-header {
+        height: 20px;
+        color: #9d9d9d;
+        border-bottom: solid 1px #e3e3e3; 
+    }
+
+	.week-weekday {
+	    float: left;
+	    padding-left: 5px;
+		text-transform: uppercase;
+		font-size: 85%;
+	    display: table-cell;
+	    vertical-align: middle;
+	}  
+    
+    .week-date {
+        float: right;
+	    text-transform: uppercase;
+        padding-right: 5px;
+		font-size: 85%; display: table-cell; vertical-align: middle; 
+	}
+
+}
+
