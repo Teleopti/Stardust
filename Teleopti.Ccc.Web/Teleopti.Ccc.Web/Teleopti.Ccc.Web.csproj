@@ -348,6 +348,7 @@
     <Compile Include="Areas\SSO\Core\ProviderEndpointWrapper.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ApplicationIdentityProviderAuthenticationType.cs" />
+    <Compile Include="Areas\Toggle\ToggleHandlerController.cs" />
     <Compile Include="Core\AllowTokenPostRequestValidator.cs" />
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIdentityProviderProvider.cs" />

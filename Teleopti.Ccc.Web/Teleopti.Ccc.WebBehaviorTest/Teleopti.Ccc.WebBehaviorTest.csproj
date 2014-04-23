@@ -721,6 +721,12 @@
     </Compile>
     <Compile Include="MyTime\WeekScheduleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\AuthenticationStepDefinition.cs" />
+    <Compile Include="Toggle\Toggle.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Toggle.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Toggle\ToggleStepDefinition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\packages\phantomjs.exe.1.8.1\tools\phantomjs\phantomjs.exe">
@@ -908,6 +914,10 @@
     <None Include="MyTime\PreferencesFeedbackRefact.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFeedbackRefact.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Toggle\Toggle.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Toggle.feature.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

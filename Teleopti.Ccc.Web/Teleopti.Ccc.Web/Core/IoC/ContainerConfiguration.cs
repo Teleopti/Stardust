@@ -109,9 +109,12 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 
+			//all flags on at the moment
+			builder.RegisterModule(new ToggleNetModule("ALL"));
+
 			return builder.Build();
 		}
-	
+
 		private static void registerAopComponents(ContainerBuilder builder)
 		{
 			builder.RegisterModule<AspectsModule>();
