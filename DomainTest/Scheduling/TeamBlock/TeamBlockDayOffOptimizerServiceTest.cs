@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
@@ -50,6 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private ITeamBlockSchedulingOptions _teamBlockSchedulingOptions;
 		private IResourceCalculateDelayer _resourceCalculateDelayer;
 		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private IAllTeamMembersInSelectionSpecification _allTeamMembersInSelectionSpecification;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -89,14 +91,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_selectedPersons = new List<IPerson> {_person};
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_resourceCalculateDelayer = _mocks.StrictMock<IResourceCalculateDelayer>();
-
+			_allTeamMembersInSelectionSpecification = _mocks.StrictMock<IAllTeamMembersInSelectionSpecification>();
 			_target = new TeamBlockDayOffOptimizerService(_teamInfoFactory, _lockableBitArrayFactory, _lockableBitArrayChangesTracker,
 			                                              _teamBlockScheduler, _teamBlockInfoFactory,
 			                                              _periodValueCalculatorForAllSkills,
 			                                              _safeRollbackAndResourceCalculation, _teamDayOffModifier,
 			                                              _teamTeamBlockSteadyStateValidator, _teamBlockClearer,
 														  _restrictionOverLimitValidator, _teamBlockMaxSeatChecker,
-                                                          _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions);
+                                                          _teamBlockDaysOffMoveFinder, _teamBlockSchedulingOptions,_allTeamMembersInSelectionSpecification );
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 		}
 
@@ -135,6 +137,72 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
+		[Test]
+		public void ShouldExcludePersonWhoAreNotInSelection()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person,
+					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList)).Return(_teamInfo);
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
+				Expect.Call(_matrix.Person).Return(_person ) ;
+				Expect.Call(_matrix.Person).Return(PersonFactory.CreatePerson("test") ) ;
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,
+					_optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray);
+				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences)).Return(_workingArray);
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffAdded(_originalArray, _workingArray, _matrix,
+					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					.IgnoreArguments()
+					.Return(new List<DateOnly> { DateOnly.MinValue });
+				Expect.Call(_lockableBitArrayChangesTracker.DaysOffRemoved(_originalArray, _workingArray, _matrix,
+					_optimizationPreferences.DaysOff.ConsiderWeekBefore))
+					.IgnoreArguments()
+					.Return(new List<DateOnly> { DateOnly.MinValue.AddDays(1) });
+				Expect.Call(() => _teamDayOffModifier.RemoveDayOffForMember(_rollbackService, _person, DateOnly.MinValue.AddDays(1))).IgnoreArguments()  ;
+				Expect.Call(() => _teamDayOffModifier.AddDayOffForMember(_rollbackService, _person, DateOnly.MinValue, _schedulingOptions.DayOffTemplate, true)).IgnoreArguments() ;
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),
+					_schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, _matrixList)).Return(_teamBlockInfo);
+				Expect.Call(_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(false);
+				Expect.Call(() => _teamBlockClearer.ClearTeamBlock(_schedulingOptions, _rollbackService, _teamBlockInfo));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, DateOnly.MinValue.AddDays(1),
+					_schedulingOptions, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons,
+					_rollbackService, _resourceCalculateDelayer, _schedulingResultStateHolder, new EffectiveRestriction())).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue, _schedulingOptions)).Return(true);
+				Expect.Call(_teamBlockMaxSeatChecker.CheckMaxSeat(DateOnly.MinValue.AddDays(1), _schedulingOptions)).Return(true);
+				Expect.Call(_restrictionOverLimitValidator.Validate(_teamInfo, _optimizationPreferences)).Return(true);
+				Expect.Call(() => _safeRollbackAndResourceCalculation.Execute(_rollbackService, _schedulingOptions));
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
+			}
+
+			using (_mocks.Playback())
+			{
+				_optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
+				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, _optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _schedulingResultStateHolder);
+			}
+		}
+
+		[Test]
+		public void ShouldExcludeTeamThatIsNotFullySelected()
+		{
+			var teamInfo = _mocks.StrictMock<ITeamInfo>();
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person,
+					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList)).Return(teamInfo);
+				Expect.Call(_allTeamMembersInSelectionSpecification.IsSatifyBy(teamInfo, _selectedPersons)).Return(false);
+			}
+
+			using (_mocks.Playback())
+			{
+				IOptimizationPreferences optimizationPreferences = new OptimizationPreferences();
+				optimizationPreferences.Extra.UseTeamBlockOption = true;
+				optimizationPreferences.Extra.KeepSameDaysOffInTeam = true;
+				_target.OptimizeDaysOff(_matrixList, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _selectedPersons, optimizationPreferences, _rollbackService, _schedulingOptions, _resourceCalculateDelayer, _schedulingResultStateHolder);
+			}
+		}
+
 
 		[Test]
 		public void ShouldOptimizeWithFreeDayOffs()
@@ -146,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
-				Expect.Call(_matrix.Person).Return(_person);
+				Expect.Call(_matrix.Person).Return(_person).Repeat.Twice();
 				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(_optimizationPreferences.DaysOff.ConsiderWeekBefore,
 					_optimizationPreferences.DaysOff.ConsiderWeekAfter, _matrix)).Return(_originalArray);
 				Expect.Call(_teamBlockDaysOffMoveFinder.TryFindMoves(_matrix, _originalArray, _optimizationPreferences)).Return(_workingArray);
