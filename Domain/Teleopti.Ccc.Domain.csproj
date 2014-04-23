@@ -333,6 +333,8 @@
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateBitArrayCreator.cs" />
     <Compile Include="DayOffPlanning\WorkShiftBackToLegalStateDecisionMaker.cs" />
     <Compile Include="DayOffPlanning\WorkShiftLegalStateDayIndexCalculator.cs" />
+    <Compile Include="FeatureFlags\IToggleManager.cs" />
+    <Compile Include="FeatureFlags\Toggles.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonth.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthCreator.cs" />
     <Compile Include="Forecasting\DayInMonthIndex\DayInMonthHelper.cs" />

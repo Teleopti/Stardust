@@ -126,6 +126,10 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Toggle.Net">
+      <HintPath>..\packages\Toggle.Net.0.3.1\lib\net40\Toggle.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\AuthenticationCachedModule.cs" />
@@ -146,6 +150,7 @@
     <Compile Include="Configuration\ScheduleScreenRefresherModule.cs" />
     <Compile Include="Configuration\ShiftTradeModule.cs" />
     <Compile Include="Configuration\TeleoptiCacheKey.cs" />
+    <Compile Include="Configuration\ToggleNetModule.cs" />
     <Compile Include="Configuration\UnitOfWorkModule.cs" />
     <Compile Include="Configuration\MbCacheModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
