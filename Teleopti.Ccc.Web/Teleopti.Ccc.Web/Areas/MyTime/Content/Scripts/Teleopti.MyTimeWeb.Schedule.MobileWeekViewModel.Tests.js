@@ -33,6 +33,7 @@ $(document).ready(function () {
                 Summary: {
                     Title: "Early",
                     TimeSpan: "09:00-18:00",
+                    StyleClassName: "dayoff striped",
                     Color: "rgb(0, 0, 0)"
                 }
             }]
@@ -50,11 +51,14 @@ $(document).ready(function () {
 
         vm.readData({
             Days: [{
-                IsDayOff: true
+            	Summary: {
+            		Title: "Dayoff",
+            		StyleClassName: "dayoff striped",
+            	}
             }]
         });
 
-        //equal(vm.dayViewModels()[0].isDayOff(), true);
+        equal(vm.dayViewModels()[0].summaryStyleClassName(), "dayoff striped");
     });
 
 	test("should read week day header titles", function() {

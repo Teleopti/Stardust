@@ -39,7 +39,15 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay) {
     self.summaryTimeSpan = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.TimeSpan : null);
     self.summaryColor = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Color : null);
 	self.fixedDate = ko.observable(scheduleDay.FixedDate);
-    self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
+	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
+	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
+	self.isDayoff = ko.computed(function() {
+		if(self.summaryStyleClassName() != undefined && self.summaryStyleClassName() != null)
+		{
+			return self.summaryStyleClassName() == "dayoff striped";
+		}
+		return false;
+	});
 
     self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
     self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
