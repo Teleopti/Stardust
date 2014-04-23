@@ -431,7 +431,9 @@
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\DailyMetricsForDayResult.cs" />
     <Compile Include="WebReports\DetailedAdherenceForDayQuery.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDayResult.cs" />
     <Compile Include="WebReports\IDailyMetricsForDayQuery.cs" />
+    <Compile Include="WebReports\IDetailedAdherenceForDayQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />

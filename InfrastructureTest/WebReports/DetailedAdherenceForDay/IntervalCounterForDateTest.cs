@@ -9,7 +9,7 @@ using Teleopti.Ccc.TestCommon.TestData.Core;
 namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 {
 	[TestFixture]
-	public class AdherenceForDateTest : WebReportTest
+	public class IntervalCounterForDateTest : WebReportTest
 	{
 		private const int scheduledReadyTimeOneMinutes = 1;
 		private const int scheduledReadyTimeTwoMinutes = 3;
@@ -25,13 +25,13 @@ namespace Teleopti.Ccc.InfrastructureTest.WebReports.DetailedAdherenceForDay
 		}
 
 		[Test]
-		public void ShouldReturnAdherenceForDate()
+		public void ShouldReturnIntervalCounterForDate()
 		{
 			Target(
 				(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository) =>
 					new DetailedAdherenceForDayQuery(loggedOnUser, currentDataSource, currentBusinessUnit, globalSettingDataRepository))
-				.Execute(Today.Date).Last()
-				.Adherence.Should().Be.EqualTo(0.333);
+				.Execute(Today.Date).First()
+				.IntervalCounter.Should().Be.EqualTo(1);
 		}
 	}
 }

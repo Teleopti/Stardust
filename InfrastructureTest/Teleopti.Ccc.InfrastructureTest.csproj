@@ -449,7 +449,14 @@
     <Compile Include="WebReports\DailyMetricsForDay\ReadyTimePerScheduledReadyTimeTest.cs" />
     <Compile Include="WebReports\DailyMetricsForDay\WebReportTest.cs" />
     <Compile Include="WebReports\DetailedAdherenceForDay\AdherenceForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\DeviationForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\DisplayColorForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\DisplayNameForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\IntervalCounterForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\IntervalIdForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\IntervalsPerDayForDateTest.cs" />
     <Compile Include="WebReports\DetailedAdherenceForDay\ShiftDateForDateTest.cs" />
+    <Compile Include="WebReports\DetailedAdherenceForDay\TotalAdherenceForDateTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
