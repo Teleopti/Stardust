@@ -868,6 +868,7 @@
     <Content Include="Areas\MobileReports\Content\moment\moment.js" />
     <Content Include="Areas\MobileReports\Content\moment\moment.min.js" />
     <Content Include="Areas\MobileReports\Content\Scripts\json2.js" />
+    <Content Include="Areas\MyTime\Content\Css\MobileWeekView.css" />
     <Content Include="Areas\MyTime\Content\Css\Rtl4Bootstrap.css" />
     <Content Include="Areas\MyTime\Content\Css\MyReport.css" />
     <Content Include="Areas\MyTime\Content\Css\MonthView.css" />
