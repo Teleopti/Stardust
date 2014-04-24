@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.IntegrationTest
 {
-	[Ignore,TestFixture]
+	[TestFixture]
 	public class Bug27672
 	{
 		[SetUp]
@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
 			
 			var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			dateList.Add(DateTime.Today.AddDays(-3),DateTime.Today.AddDays(3),JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
 			var jobParameters = new JobParameters(dateList, 1, "UTC",15,"","False",CultureInfo.CurrentCulture)
 				{
 					Helper =
@@ -76,7 +76,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
             
             //run again now with fewer days
             dateList.Clear();
-            dateList.Add(DateTime.Today.AddDays(0), DateTime.Today.AddDays(0), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(0), testDate.AddDays(0), JobCategoryType.Schedule);
             jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
             {
                 Helper =
@@ -116,7 +116,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			BasicShiftSetup.AddThreeShifts("Ola H", cat.ShiftCategory, activityLunch.Activity, activityPhone.Activity, testDate);
            
             var dateList = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-            dateList.Add(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(3), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(-3), testDate.AddDays(3), JobCategoryType.Schedule);
             var jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
             {
                 Helper =
@@ -132,7 +132,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 
             //run again now with fewer days
             dateList.Clear();
-            dateList.Add(DateTime.Today.AddDays(0), DateTime.Today.AddDays(0), JobCategoryType.Schedule);
+			dateList.Add(testDate.AddDays(0), testDate.AddDays(0), JobCategoryType.Schedule);
             jobParameters = new JobParameters(dateList, 1, "UTC", 15, "", "False", CultureInfo.CurrentCulture)
             {
                 Helper =
