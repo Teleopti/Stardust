@@ -256,9 +256,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
         }
 
 
-        private void targetWeekScheduledScheduled(object sender, BlockSchedulingServiceEventArgs  blockSchedulingServiceEventArgs )
+		  private void targetWeekScheduledScheduled(object sender, ResourceOptimizerProgressEventArgs resourceOptimizerProgressEventArgs)
         {
-            blockSchedulingServiceEventArgs.Cancel  = true;
+			  resourceOptimizerProgressEventArgs.Cancel = true;
         }
         
     }

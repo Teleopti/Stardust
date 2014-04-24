@@ -12025,4 +12025,8 @@ Reduce the complexity to use these shifts.</value>
     <value>s</value>
     <comment>Shortening for seconds used in reports</comment>
   </data>
+  <data name="ResolvingWeeklyRestFor" xml:space="preserve">
+    <value>Resolving weekly rest for {0} {1}</value>
+    <comment>A message that will shown when the weekly rest resolver service is kicked.</comment>
+  </data>
 </root>

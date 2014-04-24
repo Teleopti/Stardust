@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Win.Commands
             _weeklyRestSolverService.ResolvingWeek -= resolvingWeek;
         }
 
-        
-        private void resolvingWeek(object sender, BlockSchedulingServiceEventArgs e)
+
+		  private void resolvingWeek(object sender, ResourceOptimizerProgressEventArgs e)
         {
             if (_backgroundWorker.CancellationPending)
             {
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Win.Commands
             {
                 e.Cancel = false;
             }
-            
+            _backgroundWorker.ReportProgress(1, e);
         }
     }
 }
