@@ -82,7 +82,6 @@ Scenario: View when you are working
 	| Time span      | 09:00 - 18:00 |
 	| Shift category | Early         |
 
-	@ignore
 Scenario: View when you have a day off
 	Given I have the role 'Full access to mytime'
 	And the current time is '2014-04-22 12:00'
