@@ -1,1 +1,3 @@
 ﻿# default flag settings for customers
+#
+# Note: If you change this file in production, app pool will recycle!

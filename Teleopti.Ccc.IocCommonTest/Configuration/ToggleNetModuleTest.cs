@@ -23,6 +23,19 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
+		public void DefinedShouldBeEnabledIfEndWithAll()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule(new ToggleNetModule(@"c:\blablablab\aLl  "));
+			using (var container = containerBuilder.Build())
+			{
+				var toggleChecker = container.Resolve<IToggleManager>();
+				toggleChecker.IsEnabled(Toggles.EnabledFeature)
+					.Should().Be.True();
+			}
+		}
+
+		[Test]
 		public void EnabledFeatureInFileShouldBeEnabled()
 		{
 			var tempFile = Path.GetTempFileName();

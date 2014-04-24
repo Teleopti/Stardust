@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Toggle.Net;
@@ -14,12 +13,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		public ToggleNetModule(string pathToToggleFile)
 		{
-			_pathToToggleFile = pathToToggleFile;
+			_pathToToggleFile = pathToToggleFile.Trim();
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			if (_pathToToggleFile.Equals("ALL", StringComparison.OrdinalIgnoreCase))
+			if (_pathToToggleFile.EndsWith("ALL", StringComparison.OrdinalIgnoreCase))
 			{
 				builder.Register(_ => new toggleManagerFullAccess())
 					.SingleInstance()

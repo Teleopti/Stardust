@@ -1,5 +1,6 @@
 ﻿using System.Configuration;
 using System.Reflection;
+using System.Web;
 using Autofac;
 using Autofac.Configuration;
 using Autofac.Extras.DynamicProxy2;
@@ -110,7 +111,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new ConfigurationSettingsReader());
 
 			//all flags on at the moment
-			builder.RegisterModule(new ToggleNetModule("ALL"));
+			builder.RegisterModule(new ToggleNetModule(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FeatureToggle"])));
 
 			return builder.Build();
 		}
