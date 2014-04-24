@@ -18,9 +18,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 	var self = this;
 
 	self.dayViewModels = ko.observableArray();
-	self.desktop = function () {
-		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
-	};
 
 	self.readData = function(data) {
 

@@ -25,19 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             AssertShowingWeekForDay(DateHelper.GetFirstDateInWeek(date.Date, DataMaker.Data().MyCulture));
         }
 
-        [When(@"I click the desktop link")]
-        public void WhenIClickTheDesktopLink()
-        {
-            Browser.Interactions.Click("#desktop");
-        }
-
-		[When(@"I click the mobile link")]
-		public void WhenIClickTheMobileLink()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-
         [Then(@"I should see the shift with")]
 		public void ThenIShouldSeeTheShiftWith(Table table)
 		{
