@@ -78,9 +78,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						schedulingOptions, customEffectiveRestriction);
 					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
 						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
-					schedulingOptions.NotAllowedShiftCategories.Clear();
 				}
-					
+				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}
 
 			return success;

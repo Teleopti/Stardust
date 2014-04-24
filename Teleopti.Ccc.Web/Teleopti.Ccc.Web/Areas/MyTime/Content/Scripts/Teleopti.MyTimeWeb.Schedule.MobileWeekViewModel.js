@@ -26,39 +26,31 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 
 		ko.utils.arrayForEach(data.Days, function(scheduleDay) {
 
-			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel();
-			vm.readData(scheduleDay);
+			var vm = new Teleopti.MyTimeWeb.Schedule.MobileDayViewModel(scheduleDay);
 
 			self.dayViewModels.push(vm);
 		});
 
 	};
 };
-Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function () {
-        var self = this;
-        self.shiftName = ko.observable();
-        self.shiftTimeSpan = ko.observable();
-        self.shiftColor = ko.observable();
-        self.absenceName = ko.observable();
-        self.absenceIsFullDayAbsence = ko.observable();
-        self.isDayOff = ko.observable();
-        self.hasAbsence = ko.observable();
-        self.hasShift = ko.observable();
-        self.fixedDate = ko.observable();
-        self.weekDayHeaderTitle = ko.observable();
-        self.shiftColor = ko.observable();
-	
-        self.readData = function (data) {
-            self.shiftName(data.Summary ? data.Summary.Title : null);
-            self.shiftTimeSpan(data.Summary ? data.Summary.TimeSpan : null);
-            self.absenceName(data.Absence ? data.Absence.Name : null);
-            self.absenceIsFullDayAbsence(data.Absence ? data.Absence.IsFullDayAbsence : null);
-            self.isDayOff(data.IsDayOff);
-            self.hasAbsence(data.Absence ? true : false);
-            self.hasShift(data.Shift ? true : false);
-            self.fixedDate(data.FixedDate);
-            self.weekDayHeaderTitle(data.Header ? data.Header.Title : null);
-            self.shiftColor(data.Summary ? data.Summary.Color : null);
-        };
+Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay) {
+    var self = this;
+    self.summaryName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Title : null);
+    self.summaryTimeSpan = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.TimeSpan : null);
+    self.summaryColor = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.Color : null);
+	self.fixedDate = ko.observable(scheduleDay.FixedDate);
+	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
+	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
+	self.isDayoff = ko.computed(function() {
+		if(self.summaryStyleClassName() != undefined && self.summaryStyleClassName() != null)
+		{
+			return self.summaryStyleClassName() == "dayoff striped";
+		}
+		return false;
+	});
+
+    self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
+    self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
+
  };
 
