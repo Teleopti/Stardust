@@ -69,7 +69,7 @@
 
 		function intervalLeftPos(intervalId) {
 			if (intervalId < self.startInterval().IntervalId) {
-				intervalId = intervalId + self.intervalsPerDay() -1;
+				intervalId = intervalId + self.intervalsPerDay();
 			}
 			var number = intervalId - self.startInterval().IntervalId;
 			return (number * 15) + 'px';
@@ -85,9 +85,13 @@
 				if (end < start)
 					end += self.intervalsPerDay();
 				while (time < end + 1) {
+					var currentInterval = intervals[time - start];
+					var barLength = currentInterval ? 80 * currentInterval.Adherence : 0;
 					schedules.push({
-						'Color': intervals[time - start] ? intervals[time - start].Color : "",
-						'Position': intervals[time - start] ? intervalLeftPos(intervals[time - start].IntervalId) : '0px'
+						'Color': currentInterval ? currentInterval.Color : "",
+						'Position': currentInterval ? intervalLeftPos(currentInterval.IntervalId) : '0px',
+						'BarLength': barLength + 'px',
+						'Margin': (80 - barLength) + 'px',
 					});
 					
 					time = time + 1;

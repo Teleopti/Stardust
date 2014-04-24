@@ -92,7 +92,7 @@ table td.right-align-cell
 		{
 			overflow: hidden;
 			height: 80px;
-			width: 12px;
+			width: 11px;
 			background-color: #f5f5f5;
 			border-radius: 4px;
 			-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
@@ -116,6 +116,15 @@ table td.right-align-cell
 			box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 			-webkit-transition: width 0.6s ease;
 			transition: width 0.6s ease;
+		}
+
+		.bar-chart {
+			margin-top: 84px;
+		}
+
+		.time-line-margin {
+			margin-top: 5px;
+			margin-bottom: 50px;
 		}
 
 		.time-line .label,
