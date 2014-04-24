@@ -18,9 +18,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function() {
 	var self = this;
 
 	self.dayViewModels = ko.observableArray();
-	self.desktop = function () {
-		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
-	};
 
 	self.readData = function(data) {
 
@@ -41,13 +38,18 @@ Teleopti.MyTimeWeb.Schedule.MobileDayViewModel = function (scheduleDay) {
 	self.fixedDate = ko.observable(scheduleDay.FixedDate);
 	self.weekDayHeaderTitle = ko.observable(scheduleDay.Header ? scheduleDay.Header.Title : null);
 	self.summaryStyleClassName = ko.observable(scheduleDay.Summary ? scheduleDay.Summary.StyleClassName : null);
-	self.isDayoff = ko.computed(function() {
+	self.isDayoff = function() {
 		if(self.summaryStyleClassName() != undefined && self.summaryStyleClassName() != null)
 		{
 			return self.summaryStyleClassName() == "dayoff striped";
 		}
 		return false;
-	});
+	};
+	self.hasShift = function() {
+		if (scheduleDay.Periods != null && scheduleDay.Periods.length > 0)
+			return true;
+		return false;
+	};
 
     self.backgroundColor = scheduleDay.Summary ? scheduleDay.Summary.Color : null;
     self.summaryTextColor = ko.observable(self.backgroundColor ? Teleopti.MyTimeWeb.Common.GetTextColorBasedOnBackgroundColor(self.backgroundColor) : 'black');
