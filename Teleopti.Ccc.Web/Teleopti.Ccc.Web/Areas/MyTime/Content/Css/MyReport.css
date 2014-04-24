@@ -34,6 +34,9 @@ table td.right-align-cell
 	border: 1px solid transparent;
 	border-radius: 4px;
 }
+.dashboard-clickable {
+	cursor: pointer;
+}
 .dashboard-blue {
 	background-color: #428bca;
 }

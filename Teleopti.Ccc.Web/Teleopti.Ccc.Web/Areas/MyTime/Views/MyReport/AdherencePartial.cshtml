@@ -30,7 +30,7 @@
 			</div>
 			<ul class="nav navbar-nav">
 				<li>
-					<a id="report-overview" data-bind="click: goToOverview">@Resources.OverView</a>
+					<a href="#" id="report-overview" data-bind="click: goToOverview">@Resources.OverView</a>
 				</li>
 			</ul>
 		</div>
@@ -58,7 +58,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-8" style="overflow-x: scroll;">
+					<div class="col-md-8" style="overflow-x: auto;">
 						<div class="col-xs-12 no-padding" data-bind="foreach: schedules">
 							<div class="vertical-progress absolute" data-bind="style: { left: Position }">
 								<div class="vertical-progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { height: BarLength, marginTop: Margin }"></div>

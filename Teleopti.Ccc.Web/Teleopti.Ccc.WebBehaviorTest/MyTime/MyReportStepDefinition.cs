@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I choose to view my detailed adherence")]
 		public void WhenIChooseToViewMyDetailedAdherence()
 		{
-			Browser.Interactions.Click(".adherence-percentage");
+			Browser.Interactions.Click(".adherenceValue");
 		}
 
 		[When(@"I choose to go to overview")]

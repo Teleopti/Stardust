@@ -19,6 +19,9 @@
 		self.goToAnotherDay = function (toDate) {
 			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(toDate.format('YYYY-MM-DD')));
 		};
+		self.goToAdherence = function () {
+			Teleopti.MyTimeWeb.Portal.NavigateTo("MyReport/Adherence" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(self.selectedDateInternal().format('YYYY-MM-DD')));
+		};
 		self.selectedDate = ko.computed({
 			read: function () {
 				return self.selectedDateInternal();

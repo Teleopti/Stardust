@@ -43,7 +43,6 @@ Scenario: Navigate within my report using date picker
 	When I select the date '2013-10-10'
 	Then I should end up in my report for '2013-10-10'
 	
-@ignore
 Scenario: Navigate to detailed adherence 
 	Given I am an agent
 	And I have my report data for '2013-10-04'
