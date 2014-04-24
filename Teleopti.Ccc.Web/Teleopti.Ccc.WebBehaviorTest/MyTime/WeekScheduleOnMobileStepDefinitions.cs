@@ -31,6 +31,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
             Browser.Interactions.Click("#desktop");
         }
 
+		[When(@"I click the mobile link")]
+		public void WhenIClickTheMobileLink()
+		{
+			ScenarioContext.Current.Pending();
+		}
+
+
         [Then(@"I should see the shift with")]
 		public void ThenIShouldSeeTheShiftWith(Table table)
 		{

@@ -62,7 +62,7 @@ Scenario: Navigate to desktop view
 Scenario: Navigate from desktop
 	Given I have the role 'Full access to mytime'
 	And the current time is '2014-04-15 12:00'
-	And I am viewing my week schedule
+	And I am viewing week schedule
 	When I click the mobile link
 	Then I should see my mobile week schedule for date '2014-04-15'
 
