@@ -69,15 +69,25 @@ table td.right-align-cell
 				height: 20px;
 				position: absolute;
 			}
+
+			.bar-chart {
+				margin-top: 84px;
+			}
 		}
 		@media (max-width: 767px)
 		{
-			
+			.schedule-margin {
+			}
+
+			.bar-chart {
+				margin-left: 20px;
+			}
 			.schedule-interval
 			{
 				width: 20px;
-				height: 16px;
+				height: 15px;
 			}
+
 		}
 
 
@@ -121,10 +131,6 @@ table td.right-align-cell
 			transition: width 0.6s ease;
 		}
 
-		.bar-chart {
-			margin-top: 84px;
-		}
-
 		.time-line-margin {
 			margin-top: 5px;
 			margin-bottom: 50px;
@@ -155,12 +161,6 @@ table td.right-align-cell
 		margin-top:-25px;
 	}
 
-			.time-line-vertical
-	{
-		left: 121px; /* 105 + 8 + 8    first column with paddings */
-		width: 100%;
-	}
-
 	.time-line-vertical,
 	.time-line-vertical div
 	{
@@ -179,11 +179,8 @@ table td.right-align-cell
 	.progress{
 		width: 80px;
 		margin-bottom: 0px;
-		margin-top: 4px;
+		margin-top: 2px;
+		margin-bottom: 2px;
 		margin-left:4px;
-		height: 12px;
-	}
-	.progress:first-of-type
-	{
-		margin-top: 34px;
+		height: 11px;
 	}
