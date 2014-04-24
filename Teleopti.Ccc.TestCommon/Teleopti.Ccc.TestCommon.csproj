@@ -262,6 +262,7 @@
     <Compile Include="TestData\Setups\Specific\BusinessUnitFromFakeState.cs" />
     <Compile Include="TestData\Setups\Specific\BrasilianTimeZone.cs" />
     <Compile Include="TestData\DefaultName.cs" />
+    <Compile Include="TestData\Setups\Specific\AustralianTimeZone.cs" />
     <Compile Include="TestData\Setups\Specific\HawaiiTimeZone.cs" />
     <Compile Include="TestData\Setups\Specific\LicenseFromFile.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonAbsenceConfigurable.cs" />

@@ -44,6 +44,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
         }
 
+		public static TimeZoneInfo AustralianTimeZoneInfo()
+		{
+			return TimeZoneInfo.FindSystemTimeZoneById("AUS Eastern Standard Time");
+		}
+
 		public static TimeZoneInfo TimeZone(string timeZone)
 		{
 			var timeZones = TimeZoneInfo.GetSystemTimeZones();
