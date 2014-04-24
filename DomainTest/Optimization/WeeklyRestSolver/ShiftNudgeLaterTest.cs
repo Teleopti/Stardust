@@ -54,13 +54,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		[Test]
 		public void ShouldReturnTrueIfNudgeSuccess()
 		{
-			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-				new WorkTimeLimitation(), null, new DayOffTemplate(), null,
-				new List<IActivityRestriction>());
-
-			var adjustedEffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-				new WorkTimeLimitation(), null, new DayOffTemplate(), null,
-				new List<IActivityRestriction>());
+			var effectiveRestriction = new EffectiveRestriction();
+			var adjustedEffectiveRestriction = new EffectiveRestriction();
 
 			using (_mocks.Record())
 			{
@@ -68,7 +63,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					new DateOnlyPeriod(), _selectedPersons, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, adjustedEffectiveRestriction)).IgnoreArguments().Return(true);
+					_schedulingResultStateHolder,
+					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right)))
+					.IgnoreArguments()
+					.Return(true);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 
@@ -83,13 +81,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 		[Test]
 		public void ShouldReturnFalseIfNotNudgeSuccess()
 		{
-			var effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-				new WorkTimeLimitation(), null, new DayOffTemplate(), null,
-				new List<IActivityRestriction>());
+			var effectiveRestriction = new EffectiveRestriction();
 
-			var adjustedEffectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-				new WorkTimeLimitation(), null, new DayOffTemplate(), null,
-				new List<IActivityRestriction>());
+			var adjustedEffectiveRestriction = new EffectiveRestriction();
 
 			using (_mocks.Record())
 			{
@@ -97,7 +91,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _personAssignment.Date, _schedulingOptions,
 					new DateOnlyPeriod(), _selectedPersons, _rollbackService, _resourceCalculateDelayer,
-					_schedulingResultStateHolder, adjustedEffectiveRestriction)).IgnoreArguments().Return(false);
+					_schedulingResultStateHolder,
+					new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right)))
+					.IgnoreArguments()
+					.Return(false);
 				Expect.Call(() => _rollbackService.ClearModificationCollection());
 			}
 

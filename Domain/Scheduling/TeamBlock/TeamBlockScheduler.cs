@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -15,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 								ISchedulePartModifyAndRollbackService rollbackService, 
 								IResourceCalculateDelayer resourceCalculateDelayer,
 								ISchedulingResultStateHolder schedulingResultStateHolder,
-								IEffectiveRestriction customEffectiveRestriction);
+								ShiftNudgeDirective shiftNudgeDirective);
 
 		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEffectiveRestriction customEffectiveRestriction)
+			ShiftNudgeDirective shiftNudgeDirective)
 
 		{
 			var selectedTeamMembers = teamBlockInfo.TeamInfo.GroupMembers.Intersect(selectedPersons).ToList();
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return true;
 
 			IShiftProjectionCache roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-				schedulingOptions, customEffectiveRestriction);
+				schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
 
 			if (roleModelShift == null)
 			{
@@ -65,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().Where(x => selectedPeriod.DayCollection().Contains(x)).ToList();
 
 			bool success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
-				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
+				roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
 			{
@@ -75,9 +77,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(teamBlockInfo, datePointer, selectedTeamMembers.First(),
-						schedulingOptions, customEffectiveRestriction);
+						schedulingOptions, shiftNudgeDirective.EffectiveRestriction);
 					success = tryScheduleBlock(teamBlockInfo, schedulingOptions, selectedPeriod, selectedPersons, selectedBlockDays,
-						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
+						roleModelShift, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeDirective);
 				}
 				schedulingOptions.NotAllowedShiftCategories.Clear();	
 			}
@@ -88,27 +90,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		private bool tryScheduleBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IEnumerable<DateOnly> selectedBlockDays,
+			DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<DateOnly> selectedBlockDays,
 			IShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IEffectiveRestriction customEffectiveRestriction)
+			ShiftNudgeDirective shiftNudgeDirective)
 		{
-			foreach (var day in selectedBlockDays)
+			var lastIndex = selectedBlockDays.Count - 1;
+			IEffectiveRestriction shiftNudgeRestriction = new EffectiveRestriction();
+			if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right)
+				shiftNudgeRestriction = shiftNudgeDirective.EffectiveRestriction;
+
+			for (int dayIndex = 0; dayIndex <= lastIndex; dayIndex++)
 			{
+				var day = selectedBlockDays[dayIndex];
 				if (_cancelMe)
 					return false;
 
+				if (shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Left && dayIndex == lastIndex)
+				
 				_singleDayScheduler.DayScheduled += OnDayScheduled;
 				bool successful = _singleDayScheduler.ScheduleSingleDay(teamBlockInfo, schedulingOptions, selectedPersons, day,
 					roleModelShift, selectedPeriod, rollbackService,
-					resourceCalculateDelayer, schedulingResultStateHolder, customEffectiveRestriction);
+					resourceCalculateDelayer, schedulingResultStateHolder, shiftNudgeRestriction);
 				_singleDayScheduler.DayScheduled -= OnDayScheduled;
+
+				if(shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right && dayIndex == 0)
+					shiftNudgeRestriction = new EffectiveRestriction();
+
 				if (!successful)
 				{
 					OnDayScheduledFailed();
 					return false;
 				}
 			}
+			
 			return true;
 		}
 

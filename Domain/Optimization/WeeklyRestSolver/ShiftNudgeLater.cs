@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			rollbackService.ClearModificationCollection();
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, shiftDate, schedulingOptions, selectedPeriod,
-				selectedPersons, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder, adjustedEffectiveRestriction);
+				selectedPersons, rollbackService, resourceCalculateDelayer, schedulingResultStateHolder,
+				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right));
 			rollbackService.ClearModificationCollection();
 			
 			return result;

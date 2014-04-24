@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
 	            if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,
 	                                                         selectedPersons, schedulePartModifyAndRollbackService,
-	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new EffectiveRestriction()))
+	                                                         resourceCalculateDelayer, schedulingResultStateHolder, new ShiftNudgeDirective()))
 		            verfiyScheduledTeamBlock(selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo);
 				else
