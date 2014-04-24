@@ -36,14 +36,14 @@
 		</div>
 	</div>
 
-	<div class="container">
+	<div class="container fixed-non-responsive">
 		<div data-bind="ifnot: dataAvailable">
 			<div id="friendly-message" class="alert alert-info alert-myreport">
 				@Resources.NoDataAvailable
 			</div>
 		</div>
 		<div class="row">
-			<div class="container hidden-xs" data-bind="if: dataAvailable">
+			<div class="container fixed-non-responsive" data-bind="if: dataAvailable">
 				<div class="row">
 					<div class="col-md-4">
 						<div class="well well-sm dashboard dashboard-blue">
@@ -58,20 +58,17 @@
 							</div>
 						</div>
 					</div>
-					<div>
+					<div class="col-md-8" style="overflow-x: scroll;">
 						<div class="col-xs-12 no-padding" data-bind="foreach: schedules">
 							<div class="vertical-progress absolute" data-bind="style: { left: Position }">
 								<div class="vertical-progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" data-bind="style: { height: BarLength, marginTop: Margin }"></div>
 							</div>
 						</div>
-						<div class="col-xs-12 no-padding bar-chart">
-							<div data-bind="foreach: schedules">
+						<div class="col-xs-12 no-padding bar-chart" data-bind="foreach: schedules">
 								<div class="schedule-interval" data-bind="style: {backgroundColor: Color, left: Position}"></div>
-							</div>
 						</div>
 
-						<div class="col-xs-12 no-padding time-line-margin">
-							<div class="time-line">
+						<div class="col-xs-12 no-padding time-line-margin time-line">
 								<div class="absolute">
 									<div data-bind="foreach: timeLines">
 										<div class="absolute" data-bind="style: { left: Position }">
@@ -80,7 +77,6 @@
 										</div>
 									</div>
 								</div>
-							</div>
 						</div>
 					</div>
 				</div>
