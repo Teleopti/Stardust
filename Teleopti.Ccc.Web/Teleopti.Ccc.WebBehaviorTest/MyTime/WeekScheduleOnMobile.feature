@@ -62,7 +62,7 @@ Scenario: Navigate to desktop view
 Scenario: Navigate from desktop
 	Given I have the role 'Full access to mytime'
 	And the current time is '2014-04-15 12:00'
-	And I am viewing my week schedule
+	And I am viewing week schedule
 	When I click the mobile link
 	Then I should see my mobile week schedule for date '2014-04-15'
 
@@ -82,7 +82,6 @@ Scenario: View when you are working
 	| Time span      | 09:00 - 18:00 |
 	| Shift category | Early         |
 
-	@ignore
 Scenario: View when you have a day off
 	Given I have the role 'Full access to mytime'
 	And the current time is '2014-04-22 12:00'

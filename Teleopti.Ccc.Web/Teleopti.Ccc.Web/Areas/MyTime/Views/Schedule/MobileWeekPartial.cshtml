@@ -13,12 +13,16 @@
 				<div class="week-date data-mytime-date" data-bind="text: fixedDate"></div>
 			</div>
 			</div>
-			<div class="mobile-height mobile-shift" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }">
-				<div>
-					<strong data-bind="text: summaryName"></strong>
+		<div class="mobile-height mobile-shift" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'week-dayoff': isDayoff}">
+			<div class="table-wrapper">
+				<div class="table-cell-wrapper">
+					<div>
+						<strong data-bind="text: summaryName"></strong>
+					</div>
+					<div data-bind="text: summaryTimeSpan"></div>
 				</div>
-				<div data-bind="text: summaryTimeSpan"></div>
-			</div>
+				</div>
+		</div>
 
 	</div>
 	</div>
