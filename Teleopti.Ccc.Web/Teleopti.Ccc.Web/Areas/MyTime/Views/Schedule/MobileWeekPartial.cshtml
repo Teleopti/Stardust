@@ -1,30 +1,21 @@
 ﻿@using Teleopti.Ccc.UserTexts
 @{
-    Layout = null;
+	Layout = null;
 }
 
 <div class="weekview-mobile row">
-<!-- ko foreach: dayViewModels-->
-<div class="col-md-3 col-sm-4 col-xs-12" data-bind="attr: { 'data-mytime-date': fixedDate}">
-	<div class="tile week-overview">
-		<div class="week-header table-wrapper">
-			<div class="table-cell-wrapper">
-				<div class="week-weekday" data-bind="text: weekDayHeaderTitle"></div>
-				<div class="week-date data-mytime-date" data-bind="text: fixedDate"></div>
-			</div>
-			</div>
-		<div class="mobile-height mobile-shift" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: {'week-dayoff': isDayoff}">
-			<div class="table-wrapper">
-				<div class="table-cell-wrapper">
-					<div>
-						<strong data-bind="text: summaryName"></strong>
-					</div>
-					<div data-bind="text: summaryTimeSpan"></div>
-				</div>
-				</div>
+	<!-- ko foreach: dayViewModels-->
+	<div class="day" data-bind="attr: { 'data-mytime-date': fixedDate }">
+		<div class="header">
+			<div class="weekday" data-bind="text: weekDayHeaderTitle"></div>
+			<div class="date" data-bind="text: fixedDate"></div>
 		</div>
-
-	</div>
+		<div class="summary shift" data-bind="style: { backgroundColor: summaryColor, color: summaryTextColor }, css: { 'dayoff': isDayoff }">
+			<div>
+				<strong data-bind="text: summaryName"></strong>
+			</div>
+			<div data-bind="text: summaryTimeSpan"></div>
+		</div>
 	</div>
 	<!-- /ko -->
-		</div>
+</div>

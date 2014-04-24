@@ -1,4 +1,4 @@
-﻿.weekview-mobile .table-wrapper {
+﻿/*.weekview-mobile .table-wrapper {
   display: table;
   vertical-align: middle;
   text-align: center;
@@ -13,8 +13,8 @@
   width: 100%;
   height: 100%;  
 }
-
-.weekview-mobile .week-dayoff {
+	*/
+.weekview-mobile .dayoff {
     background-color: beige;
     background-image: url(../Images/stripe.png);
 }
