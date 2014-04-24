@@ -110,10 +110,19 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule(new ConfigurationSettingsReader());
 
-			//all flags on at the moment
-			builder.RegisterModule(new ToggleNetModule(HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FeatureToggle"])));
+			var featureTogglePath = inRealWebEnvironment() ? 
+				HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["FeatureToggle"]) : 
+				string.Empty;
+			builder.RegisterModule(new ToggleNetModule(featureTogglePath));
+
+
 
 			return builder.Build();
+		}
+
+		private static bool inRealWebEnvironment()
+		{
+			return HttpContext.Current != null;
 		}
 
 		private static void registerAopComponents(ContainerBuilder builder)
