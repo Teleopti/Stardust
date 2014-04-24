@@ -70,31 +70,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.MyReport.Mapping
 			};
 			var viewModel = _target.Map(dataModel);
 
-			viewModel.Intervals.First().IntervalId.Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldMapEmptyIntervalId()
-		{
-			var dataModel = new[]
-			{
-				new DetailedAdherenceForDayResult
-				{
-					IntervalId = 3,
-					IntervalsPerDay = 96
-				},
-
-				new DetailedAdherenceForDayResult
-				{
-					IntervalId = 26,
-					IntervalsPerDay = 96
-				}
-			};
-			var viewModel = _target.Map(dataModel);
-
-			viewModel.Intervals.First().IntervalId.Should().Be.EqualTo(0);
-			viewModel.Intervals.Last().IntervalId.Should().Be.EqualTo(28);
-			viewModel.Intervals.Count.Should().Be.EqualTo(4);
+			viewModel.Intervals.First().IntervalId.Should().Be.EqualTo(3);
 		}
 
 		[Test]

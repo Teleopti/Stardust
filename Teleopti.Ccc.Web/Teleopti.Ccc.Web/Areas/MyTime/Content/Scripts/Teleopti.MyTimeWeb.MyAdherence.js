@@ -49,14 +49,16 @@
 
 		self.timeLines = ko.computed(function() {
 			var times = [];
-			var intervals = self.intervalAdherence();
-			if (self.startInterval() && self.lastInterval()) {
-				var start = self.startInterval().IntervalId;
-				var time = start;
-				var end = self.lastInterval().IntervalId;
+			var startInterval = self.startInterval();
+			var lastInterval = self.lastInterval();
+			if (startInterval && lastInterval) {
+				var start = startInterval.IntervalId;
+				var rest = start % self.intervalsPerHour();
+				var time = start - rest;
+				var end = lastInterval.IntervalId + self.intervalsPerHour() - (lastInterval.IntervalId % self.intervalsPerHour());
 				if (end < start)
 					end += self.intervalsPerDay();
-				while (time < end + 1) {
+				while (time <= end) {
 					times.push({
 						'Time': moment().startOf('day').add('minutes', time * self.intervalMinutes()).format("HH:mm"),
 						'Position': intervalLeftPos(time)
@@ -68,10 +70,13 @@
 		});
 
 		function intervalLeftPos(intervalId) {
-			if (intervalId < self.startInterval().IntervalId) {
-				intervalId = intervalId + self.intervalsPerDay();
+			var intervalsPerDay = self.intervalsPerDay();
+			var startInterval = self.startInterval().IntervalId;
+			startInterval = startInterval - startInterval % self.intervalsPerHour();
+			if (intervalId < startInterval) {
+				intervalId = intervalId + intervalsPerDay;
 			}
-			var number = intervalId - self.startInterval().IntervalId;
+			var number = intervalId - startInterval;
 			return (number * 15) + 'px';
 		};
 
@@ -86,14 +91,15 @@
 					end += self.intervalsPerDay();
 				while (time < end + 1) {
 					var currentInterval = intervals[time - start];
-					var barLength = currentInterval ? 80 * currentInterval.Adherence : 0;
-					schedules.push({
-						'Color': currentInterval ? currentInterval.Color : "",
-						'Position': currentInterval ? intervalLeftPos(currentInterval.IntervalId) : '0px',
-						'BarLength': barLength + 'px',
-						'Margin': (80 - barLength) + 'px',
-					});
-					
+					if (currentInterval) {
+						var barLength = 80 * currentInterval.Adherence;
+						schedules.push({
+							'Color': currentInterval.Color,
+							'Position': intervalLeftPos(currentInterval.IntervalId),
+							'BarLength': barLength + 'px',
+							'Margin': (80 - barLength) + 'px',
+						});
+					}
 					time = time + 1;
 				}
 			}

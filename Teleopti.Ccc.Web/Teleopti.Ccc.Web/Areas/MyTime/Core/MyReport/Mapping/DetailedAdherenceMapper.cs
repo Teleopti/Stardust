@@ -47,12 +47,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 		private List<AdherenceIntervalViewModel> setWholeHoursInStartAndEnd(
 			ICollection<DetailedAdherenceForDayResult> dataModels, int intervalsPerDay)
 		{
-			var startIdForSchedule = dataModels.First().IntervalId;
-			var intervalsPerHour = intervalsPerDay/24;
-			var startId = startIdForSchedule - startIdForSchedule%intervalsPerHour;
-			var endIdForSchedule = dataModels.Last().IntervalId;
-			var endId = endIdForSchedule + intervalsPerHour - endIdForSchedule%intervalsPerHour;
-
 			var result = dataModels.Select(model => new AdherenceIntervalViewModel
 			{
 				IntervalId = model.IntervalId,
@@ -62,16 +56,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.MyReport.Mapping
 				Name = model.DisplayName,
 				Color = model.DisplayColor.ToHtml()
 			}).ToList();
-			if (startId != startIdForSchedule)
-				result.Insert(0, new AdherenceIntervalViewModel
-				{
-					IntervalId = startId
-				});
-			if (endId != endIdForSchedule)
-				result.Add(new AdherenceIntervalViewModel
-				{
-					IntervalId = endId
-				});
 			return result;
 		}
 	}
